@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 09:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
 #define DBACCESS_CORE_API_ROWSETBASE_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx>
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
@@ -121,7 +124,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper9<                ::com::sun::star::sdbcx::XRowLocate,
+    typedef ::cppu::ImplHelper10<               ::com::sun::star::sdbcx::XRowLocate,
                                                 ::com::sun::star::sdbc::XRow,
                                                 ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                 ::com::sun::star::sdbc::XWarningsSupplier,
@@ -129,7 +132,8 @@ namespace dbaccess
                                                 ::com::sun::star::sdbcx::XColumnsSupplier,
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::sdbc::XRowSet,
-                                                ::com::sun::star::sdbc::XCloseable> ORowSetBase_BASE;
+                                                ::com::sun::star::sdbc::XCloseable,
+                                                ::com::sun::star::lang::XUnoTunnel> ORowSetBase_BASE;
     class ORowSetCache;
     class ORowSetDataColumns;
 
@@ -159,6 +163,7 @@ namespace dbaccess
 
         sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
+        sal_Int32                               m_nPosition;        // is set only when a row was deleted
         sal_Bool                                m_bClone;           // I'm clone or not
         sal_Bool                                m_bRowCountFinal;
         sal_Bool                                m_bBeforeFirst  : 1;

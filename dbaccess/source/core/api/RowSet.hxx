@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 14:16:46 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 09:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
+#include <com/sun/star/sdbc/XRowSetListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
@@ -168,7 +171,6 @@ namespace dbaccess
         sal_Int32                   m_nCommandType;
         sal_Int32                   m_nTransactionIsolation;
         sal_Int32                   m_nPrivileges;
-        sal_Int32                   m_nPosition;
         sal_Int32                   m_nAsyncUpdateRowCount;
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
@@ -198,6 +200,10 @@ namespace dbaccess
         // fire a change for one column
         // _nPos starts at zero
         void firePropertyChange(sal_Int32 _nPos,const ::com::sun::star::uno::Any& _rNewValue);
+        // inform the clones that we have deleted some records
+        void notifyClonesRowDeleted(const ::com::sun::star::uno::Any& _rBookmark);
+        // inform the clones that we will delete some records
+        void notifyClonesRowDelete(const ::com::sun::star::uno::Any& _rBookmark);
 
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
@@ -384,7 +390,6 @@ namespace dbaccess
         sal_Int32                   m_nFetchSize;
         sal_Int32                   m_nResultSetConcurrency;
         sal_Int32                   m_nResultSetType;
-        sal_Int32                   m_nPosition;
         sal_Bool                    m_bIsBookmarable;
         sal_Bool                    m_bFirst : 1;
         sal_Bool                    m_bLast : 1;
@@ -400,7 +405,10 @@ namespace dbaccess
 
     // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+        {
+            return getUnoTunnelImplementationId();
+        }
 
     // com::sun::star::uno::XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
@@ -414,6 +422,7 @@ namespace dbaccess
 
     // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);
@@ -432,6 +441,11 @@ namespace dbaccess
 
     // cppu::OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+        // is called when the rowset is going to delete this bookmark _rBookmark
+        void rowDelete(const ::com::sun::star::uno::Any& _rBookmark);
+        // is called when the rowset has deleted this bookmark _rBookmark
+        void rowDeleted(const ::com::sun::star::uno::Any& _rBookmark);
     };
 
 }
@@ -439,6 +453,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2000/12/01 14:16:46  oj
+    #81017# use of xinteractionhandler
+
     Revision 1.10  2000/11/22 14:56:33  oj
     #80276# resolve some trouble with positioning
 

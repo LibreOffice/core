@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 09:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,17 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 
         // check privileges
         m_nPrivileges = Privilege::SELECT;
-        if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())
-            m_nPrivileges |= Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
+        if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
+        {
+            Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
+            if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+            {
+                m_nPrivileges = 0;
+                xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
+                if(!m_nPrivileges)
+                    m_nPrivileges = Privilege::SELECT;
+            }
+        }
     }
     else
     {
@@ -227,8 +236,17 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             m_pCacheSet = new OKeySet(_xRs);
             // check privileges
             m_nPrivileges = Privilege::SELECT;
-            if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())
-                m_nPrivileges |= Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
+            if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
+            {
+                Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
+                if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                {
+                    m_nPrivileges = 0;
+                    xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
+                    if(!m_nPrivileges)
+                        m_nPrivileges = Privilege::SELECT;
+                }
+            }
         }
 
     }
@@ -542,9 +560,32 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
 
     if(m_pCacheSet->moveToBookmark(bookmark))
     {
+        m_bDeleted  = m_bBeforeFirst    = sal_False;
         m_nPosition = m_pCacheSet->getRow();
-        moveWindow();
-        m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
+        if(m_bRowCountFinal)
+        {
+            m_bAfterLast    = m_nPosition > m_nRowCount;
+            m_bLast         = m_nPosition == m_nRowCount;
+            if(m_bAfterLast)
+                m_nPosition = 0;//m_nRowCount;
+        }
+        if(!m_bAfterLast)
+        {
+            moveWindow();
+            if(m_bRowCountFinal) // check again
+            {
+                m_bAfterLast    = m_nPosition > m_nRowCount;
+                m_bLast         = m_nPosition == m_nRowCount;
+                if(m_bAfterLast)
+                    m_nPosition = 0;//m_nRowCount;
+            }
+            if(!m_bAfterLast)
+                m_aMatrixIter = m_pMatrix->begin() + (m_nPosition - m_nStartPos) - 1; // must be -1
+            else
+                m_aMatrixIter = m_pMatrix->end();
+        }
+        else
+            m_aMatrixIter = m_pMatrix->end();
         if(!m_bNew)
             m_aInsertRow = m_aMatrixIter;
     }
@@ -827,8 +868,9 @@ void SAL_CALL ORowSetCache::beforeFirst(  ) throw(SQLException, RuntimeException
 //  if(m_bInserted)
 //      m_bInserted = sal_False;
 
-    m_bAfterLast = m_bLast = sal_False;
-    m_nPosition = 0;
+    m_bAfterLast    = m_bLast = sal_False;
+    m_nPosition     = 0;
+    m_bBeforeFirst  = sal_True;
     m_pCacheSet->beforeFirst();
     moveWindow();
     m_aMatrixIter = m_pMatrix->end();
@@ -1327,7 +1369,8 @@ sal_Bool SAL_CALL ORowSetCache::rowInserted(  ) throw(SQLException, RuntimeExcep
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
-    return m_pCacheSet->rowDeleted();
+    //  return m_pCacheSet->rowDeleted();
+    return m_bDeleted;
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ORowSetCache::getStatement(  ) throw(SQLException, RuntimeException)
@@ -1345,23 +1388,26 @@ void SAL_CALL ORowSetCache::insertRow(  ) throw(SQLException, RuntimeException)
         throw SQLException();
 
     m_pCacheSet->insertRow(*m_aInsertRow,m_aUpdateTable);
+
     if(rowInserted())
     {
         ++m_nRowCount;
         moveToBookmark((*(*m_aInsertRow))[0].makeAny());
+        m_bAfterLast = m_bBeforeFirst = sal_False;
     }
 
     m_bNew      = sal_False;
     m_bModified = sal_False;
     m_bInserted = sal_False;
+
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::cancelInsert()
 {
-    m_bNew      = sal_False;
-    m_bModified = sal_False;
-    m_bInserted = sal_False;
-    m_aInsertRow = m_aMatrixIter;
+    m_bNew          = sal_False;
+    m_bModified     = sal_False;
+    m_bInserted     = sal_False;
+    m_aInsertRow    = m_aMatrixIter;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::updateRow(  ) throw(SQLException, RuntimeException)
@@ -1387,13 +1433,24 @@ void SAL_CALL ORowSetCache::deleteRow(  ) throw(SQLException, RuntimeException)
 
     //  m_pCacheSet->absolute(m_nPosition);
     m_pCacheSet->deleteRow(*m_aMatrixIter,m_aUpdateTable);
-    if(m_pCacheSet->rowDeleted())
+    if(m_bDeleted = m_pCacheSet->rowDeleted())
     {
         --m_nRowCount;
-        m_aMatrixIter = NULL;
 
-        m_aMatrixIter = m_pMatrix->begin() + m_nPosition;
+        ORowSetMatrix::iterator aPos = m_pMatrix->begin() + m_nPosition - m_nStartPos - 1;
+        (*aPos)   = NULL;
+        //  (*m_pMatrix)[(m_nPosition - m_nStartPos)] = NULL; // set the deleted row to NULL
+
+
+        for(++aPos;aPos->isValid() && aPos != m_pMatrix->end();++aPos)
+        {
+            *(aPos-1) = *aPos;
+            (*aPos)   = NULL;
+        }
+        m_aMatrixIter = m_pMatrix->end();
+
         --m_nPosition;
+
         if(!m_bNew)
             m_aInsertRow = m_aMatrixIter;
     }
@@ -1416,7 +1473,7 @@ void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeExcep
 
     m_bNew      = sal_True;
     m_bInserted = sal_True;
-    m_bAfterLast= sal_False;
+    m_bUpdated  = m_bDeleted = m_bAfterLast = sal_False;
 
     m_aInsertRow = m_pInsertMatrix->begin();
     if(!m_aInsertRow->isValid())
@@ -1427,6 +1484,7 @@ void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeExcep
     for(;aIter != (*m_aInsertRow)->end();++aIter)
     {
         aIter->setBound(sal_False);
+        aIter->setModified(sal_False);
         aIter->setNull();
     }
 }
@@ -1496,6 +1554,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.15  2000/11/22 14:56:33  oj
+    #80276# resolve some trouble with positioning
+
     Revision 1.14  2000/11/15 15:57:40  oj
     change for rowset
 
