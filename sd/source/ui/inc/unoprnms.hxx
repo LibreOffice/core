@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 13:05:18 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #define UNO_NAME_OBJ_VERB               "Verb"
 #define UNO_NAME_OBJ_STYLE              "Style"
 #define UNO_NAME_OBJ_MASTERDEPENDENT    "IsPlaceholderDependent"
+#define UNO_NAME_OBJ_ANIMATIONPATH      "AnimationPath"
 
 #define UNO_NAME_LAYER_LOCKED           "IsLocked"
 #define UNO_NAME_LAYER_PRINTABLE        "IsPrintable"

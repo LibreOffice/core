@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-08 13:09:58 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,11 @@
 #ifndef _SVDOTEXT_HXX
 #include <svx/svdotext.hxx>
 #endif
+#include <svx/unoapi.hxx>
+
+#ifndef _SVDOPATH_HXX
+#include <svx/svdopath.hxx>
+#endif
 
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
@@ -139,6 +144,7 @@ using namespace ::com::sun::star;
 #define WID_DIMPREV         13
 #define WID_PRESORDER       14
 #define WID_STYLE           15
+#define WID_ANIMPATH        16
 
 #define WID_ISEMPTYPRESOBJ  20
 #define WID_ISPRESOBJ       21
@@ -151,6 +157,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress )
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static const SfxItemPropertyMap aImpress_SdXShapePropertyMap_Impl[] =
     {
+        { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMHIDE),       WID_DIMHIDE,         &::getBooleanCppuType(),                                   0, 0},
@@ -169,7 +176,6 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress )
         { MAP_CHAR_LEN(UNO_NAME_OBJ_TEXTEFFECT),    WID_TEXTEFFECT,      &::getCppuType((const presentation::AnimationEffect*)0),   0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},
-
         { 0,0,0,0,0}
     };
 
@@ -405,6 +411,34 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         case WID_MASTERDEPEND:
             SetMasterDepend( ::cppu::any2bool(aValue) );
             break;
+        case WID_ANIMPATH:
+        {
+            uno::Reference< drawing::XShape > xShape;
+            aValue >>= xShape;
+
+            SdrObject* pObj = NULL;
+            if(xShape.is())
+                pObj = GetSdrObjectFromXShape( xShape );
+
+            if( pObj == NULL || !pObj->ISA( SdrPathObj ) )
+                throw lang::IllegalArgumentException();
+
+            pInfo->pPathObj = (SdrPathObj*)pObj;
+
+            SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
+            if( pDoc )
+            {
+                pInfo = pDoc->GetAnimationInfo(pObj);
+                if( pInfo == NULL )
+                {
+                    pInfo = new SdAnimationInfo(pDoc);
+                    pObj->InsertUserData( pInfo );
+                }
+                pInfo->bInvisibleInPresentation = sal_True;
+            }
+
+            break;
+        }
         }
     }
     else
@@ -500,6 +534,10 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             break;
         case WID_STYLE:
             aRet = GetStyleSheet();
+            break;
+        case WID_ANIMPATH:
+            if( pInfo && pInfo->pPathObj )
+                aRet <<= pInfo->pPathObj->getUnoShape();
             break;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:24:16 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 16:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,13 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( Index < 0 || Index > mpSdCustomShow->Count() )
+    if( Index < 0 || Index > ( mpSdCustomShow ? mpSdCustomShow->Count() : 0 ) )
         throw lang::IndexOutOfBoundsException();
 
     uno::Reference< drawing::XDrawPage > xPage;
-    if(!::cppu::extractInterface(xPage, Element ))
+    Element >>= xPage;
+
+    if(!xPage.is())
         throw lang::IllegalArgumentException();
 
     SdDrawPage* pPage = SdDrawPage::getImplementation( xPage );
