@@ -159,6 +159,7 @@ hedabu: ..\inc\sbxobj.hxx %_DEST%\inc%_EXT%\svtools\sbxobj.hxx
 hedabu: ..\inc\sbxprop.hxx %_DEST%\inc%_EXT%\svtools\sbxprop.hxx
 hedabu: ..\inc\sbxvar.hxx %_DEST%\inc%_EXT%\svtools\sbxvar.hxx
 hedabu: ..\source\search\levdis.hxx %_DEST%\inc%_EXT%\svtools\levdis.hxx
+hedabu: ..\inc\transfer.hxx %_DEST%\inc%_EXT%\svtools\transfer.hxx
 hedabu: ..\inc\txtcmp.hxx %_DEST%\inc%_EXT%\svtools\txtcmp.hxx
 hedabu: ..\inc\urlbmk.hxx %_DEST%\inc%_EXT%\svtools\urlbmk.hxx
 hedabu: ..\source\urlobj\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
