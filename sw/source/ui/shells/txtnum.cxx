@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     {
     case FN_NUM_NUMBERING_ON:
     {
+        rReq.Done();
         if(!GetShell().GetCurNumRule())
             GetShell().NumOn();
         else
@@ -177,12 +178,13 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                             GetView().GetWindow(), &aSet, GetShell() );
 
         USHORT nRet = pDlg->Execute();
-        if(RET_OK == nRet )
+        const SfxPoolItem* pItem;
+        if( RET_OK == nRet )
         {
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState(
-                                    SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
+            if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
             {
+                rReq.AppendItem(*pItem);
+                rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 pSetRule->UnLinkGraphics();
                 SwNumRule aSetRule( pCurRule
@@ -195,10 +197,10 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             // wenn der Dialog mit OK verlassen wurde, aber nichts ausgewaehlt
             // wurde dann muss die Numerierung zumindest eingeschaltet werden,
             // wenn sie das noch nicht ist
-            else if( !pCurRule &&
-                SFX_ITEM_SET == aSet.GetItemState(
-                                    SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
+            else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, FALSE, &pItem ))
             {
+                rReq.AppendItem( *pItem );
+                rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 SwNumRule aSetRule(GetShell().GetUniqueNumRuleName());
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
@@ -295,6 +297,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/23 12:45:29  os
+    Complete use of DefaultNumbering component
+
     Revision 1.1.1.1  2000/09/18 17:14:47  hr
     initial import
 
