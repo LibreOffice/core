@@ -46,9 +46,9 @@ Window WIN_HELP_INDEX
                 Text[ polish ] = "Contents";
                 Text[ portuguese_brazilian ] = "Contents";
                 Text[ japanese ] = "Contents";
-                Text[ korean ] = "Contents";
+                Text[ korean ] = "¸ñÂ÷";
                 Text[ chinese_simplified ] = "ÄÚÈÝ";
-                Text[ chinese_traditional ] = "Contents";
+                Text[ chinese_traditional ] = "¤º®e";
                 Text[ turkish ] = "Contents";
                 Text[ arabic ] = "ÇáãÍÊæíÇÊ";
             };
@@ -71,9 +71,9 @@ Window WIN_HELP_INDEX
                 Text[ polish ] = "Index";
                 Text[ portuguese_brazilian ] = "Index";
                 Text[ japanese ] = "Index";
-                Text[ korean ] = "Index";
+                Text[ korean ] = "»öÀÎ";
                 Text[ chinese_simplified ] = "Ë÷Òý";
-                Text[ chinese_traditional ] = "Index";
+                Text[ chinese_traditional ] = "¯Á¤Þ";
                 Text[ turkish ] = "Index";
                 Text[ arabic ] = "ÝåÑÓ";
             };
@@ -96,9 +96,9 @@ Window WIN_HELP_INDEX
                 Text[ polish ] = "Search";
                 Text[ portuguese_brazilian ] = "Search";
                 Text[ japanese ] = "Search";
-                Text[ korean ] = "Search";
+                Text[ korean ] = "°Ë»ö";
                 Text[ chinese_simplified ] = "ËÑÑ°";
-                Text[ chinese_traditional ] = "Search";
+                Text[ chinese_traditional ] = "·j´M";
                 Text[ turkish ] = "Search";
                 Text[ arabic ] = "ÈÍË";
             };
