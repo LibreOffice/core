@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 10:32:24 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -943,6 +943,10 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
 
+#define PALETTE_X 10
+#define PALETTE_Y 10
+#define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
+
 SvxColorWindow_Impl::SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
                                 const String& rWndTitle,
                                 SfxBindings& rBindings ) :
@@ -956,7 +960,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
-    const Size aSize12( 12, 12 );
+    const Size aSize12( 13, 13 );
 
     if ( pDocSh )
         if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
@@ -986,8 +990,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
         Color aColWhite( COL_WHITE );
         String aStrWhite( SVX_RES(RID_SVXITEMS_COLOR_WHITE) );
 
-        if ( nCount > 80 )
-            // bei mehr als 80 Farben ScrollBar anzeigen
+        if ( nCount > PALETTE_SIZE )
+            // Show scrollbar if more than PALLETTE_SIZE colors are available
             aColorSet.SetStyle( aColorSet.GetStyle() | WB_VSCROLL );
 
         for ( i = 0; i < nCount; i++ )
@@ -996,17 +1000,17 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( USHORT nId, USHORT nSlotId,
             aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
         }
 
-        while ( i < 80 )
+        while ( i < PALETTE_SIZE )
         {
-            // bei weniger als 80 Farben, mit Weiss auff"ullen
+            // fill empty elements if less then PALLETTE_SIZE colors are available
             aColorSet.InsertItem( i+1, aColWhite, aStrWhite );
             i++;
         }
     }
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
-    aColorSet.SetColCount( 8 );
-    aColorSet.SetLineCount( 10 );
+    aColorSet.SetColCount( PALETTE_X );
+    aColorSet.SetLineCount( PALETTE_Y );
 
     lcl_CalcSizeValueSet( *this, aColorSet, aSize12 );
 
@@ -1098,7 +1102,7 @@ void SvxColorWindow_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         // ScrollBar an oder aus
         WinBits nBits = aColorSet.GetStyle();
-        if ( nCount > 80 )
+        if ( nCount > PALETTE_SIZE )
             nBits &= ~WB_VSCROLL;
         else
             nBits |= WB_VSCROLL;
@@ -1111,7 +1115,7 @@ void SvxColorWindow_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             aColorSet.SetItemText ( i + 1, pEntry->GetName() );
         }
 
-        while ( i < 80 )
+        while ( i < PALETTE_SIZE )
         {
             aColorSet.SetItemColor( i + 1, aColWhite );
             aColorSet.SetItemText ( i + 1, aStrWhite );
