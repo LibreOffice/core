@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:03:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,9 +1296,10 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
                 pTObj->SetModel( pSdrModel );
                 SfxItemSet aSet( pSdrModel->GetItemPool() );
-                ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+                if ( !pRet )
+                    ((SdrEscherImport*)this)->ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
                 pTObj->SetMergedItemSet( aSet );
-                if ( eTextKind != OBJ_RECT )
+                if ( pRet )
                 {
                     pTObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
                     pTObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
@@ -4229,7 +4230,6 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     UINT32 nOldFilePos = rIn.Tell();
 
     // default stylesheets
-    BOOL bFoundTxMasterStyleAtom04 = FALSE;
     mpCharSheet[ TSS_TYPE_PAGETITLE ] = new PPTCharSheet( TSS_TYPE_PAGETITLE );
     mpCharSheet[ TSS_TYPE_BODY ] = new PPTCharSheet( TSS_TYPE_BODY );
     mpCharSheet[ TSS_TYPE_NOTES ] = new PPTCharSheet(  TSS_TYPE_NOTES );
@@ -4243,6 +4243,62 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     mpCharSheet[ TSS_TYPE_QUARTERBODY ] = mpCharSheet[ TSS_TYPE_HALFBODY ] = mpCharSheet[ TSS_TYPE_TITLE ] = mpCharSheet[ TSS_TYPE_SUBTITLE ] = NULL;
     mpParaSheet[ TSS_TYPE_QUARTERBODY ] = mpParaSheet[ TSS_TYPE_HALFBODY ] = mpParaSheet[ TSS_TYPE_TITLE ] = mpParaSheet[ TSS_TYPE_SUBTITLE ] = NULL;
 
+    /* SJ: try to locate the txMasterStyleAtom in the Environment
+
+       it seems that the environment TextStyle is having a higher priority
+       than the TextStyle that can be found within the master page
+    */
+    sal_Bool bFoundTxMasterStyleAtom04 = sal_False;
+    DffRecordHeader* pEnvHeader = rManager.aDocRecManager.GetRecordHeader( PPT_PST_Environment );
+    if ( pEnvHeader )
+    {
+        pEnvHeader->SeekToContent( rIn );
+        DffRecordHeader aTxMasterStyleHd;
+        while ( rIn.Tell() < pEnvHeader->GetRecEndFilePos() )
+        {
+            rIn >> aTxMasterStyleHd;
+            if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
+            {
+                sal_uInt16 nLevelAnz;
+                rIn >> nLevelAnz;
+
+                sal_uInt16 nLev = 0;
+                sal_Bool bFirst = sal_True;
+                bFoundTxMasterStyleAtom04 = sal_True;
+                while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
+                {
+                    if ( nLev )
+                    {
+                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
+                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
+                    }
+                    mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, sal_True, nLev, bFirst );
+                    if ( !nLev )
+                    {
+                        // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
+                        if ( rTxPFStyle.bValid )
+                        {
+                            PPTParaLevel& rParaLevel = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ 0 ];
+                            rParaLevel.mnAsianLineBreak = 0;
+                            if ( rTxPFStyle.bForbiddenRules )
+                                rParaLevel.mnAsianLineBreak |= 1;
+                            if ( !rTxPFStyle.bLatinTextWrap )
+                                rParaLevel.mnAsianLineBreak |= 2;
+                            if ( rTxPFStyle.bHangingPunctuation )
+                                rParaLevel.mnAsianLineBreak |= 4;
+                        }
+                    }
+                    mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, sal_True, nLev, bFirst );
+                    bFirst = sal_False;
+                    nLev++;
+                }
+                break;
+            }
+            else
+                aTxMasterStyleHd.SeekToEndOfRecord( rIn );
+        }
+    }
+
     rSlideHd.SeekToContent( rIn );
     DffRecordHeader aTxMasterStyleHd;
     while ( rIn.Tell() < rSlideHd.GetRecEndFilePos() )
@@ -4255,8 +4311,9 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
     while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < rSlideHd.GetRecEndFilePos() ) )
     {
-        UINT32 nInstance = aTxMasterStyleHd.nRecInstance;
-        if ( nInstance < PPT_STYLESHEETENTRYS )
+        sal_uInt32 nInstance = aTxMasterStyleHd.nRecInstance;
+        if ( ( nInstance < PPT_STYLESHEETENTRYS ) &&
+            ( ( nInstance != TSS_TYPE_TEXT_IN_SHAPE ) || ( bFoundTxMasterStyleAtom04 == sal_False ) ) )
         {
             if ( nInstance > 4 )
             {
@@ -4292,9 +4349,6 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     break;
                 }
             }
-            else if ( nInstance == 4 )
-                bFoundTxMasterStyleAtom04 = TRUE;
-
             sal_uInt16 nLevelAnz;
             rIn >> nLevelAnz;
             if ( nLevelAnz > 5 )
@@ -4378,57 +4432,6 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     {
         mpCharSheet[ TSS_TYPE_QUARTERBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
         mpParaSheet[ TSS_TYPE_QUARTERBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
-    }
-    if ( !bFoundTxMasterStyleAtom04 )
-    {   // try to locate the txMasterStyleAtom in the Environment
-        DffRecordHeader* pEnvHeader = rManager.aDocRecManager.GetRecordHeader( PPT_PST_Environment );
-        if ( pEnvHeader )
-        {
-            pEnvHeader->SeekToContent( rIn );
-            DffRecordHeader aTxMasterStyleHd;
-            while ( rIn.Tell() < pEnvHeader->GetRecEndFilePos() )
-            {
-                rIn >> aTxMasterStyleHd;
-                if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
-                {
-                    sal_uInt16 nLevelAnz;
-                    rIn >> nLevelAnz;
-
-                    sal_uInt16 nLev = 0;
-                    sal_Bool bFirst = sal_True;
-                    while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
-                    {
-                        if ( nLev )
-                        {
-                            mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
-                            mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
-                        }
-                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, sal_True, nLev, bFirst );
-                        if ( !nLev )
-                        {
-                            // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
-                            if ( rTxPFStyle.bValid )
-                            {
-                                PPTParaLevel& rParaLevel = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ 0 ];
-                                rParaLevel.mnAsianLineBreak = 0;
-                                if ( rTxPFStyle.bForbiddenRules )
-                                    rParaLevel.mnAsianLineBreak |= 1;
-                                if ( !rTxPFStyle.bLatinTextWrap )
-                                    rParaLevel.mnAsianLineBreak |= 2;
-                                if ( rTxPFStyle.bHangingPunctuation )
-                                    rParaLevel.mnAsianLineBreak |= 4;
-                            }
-                        }
-                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, sal_True, nLev, bFirst );
-                        bFirst = sal_False;
-                        nLev++;
-                    }
-                    break;
-                }
-                else
-                    aTxMasterStyleHd.SeekToEndOfRecord( rIn );
-            }
-        }
     }
     rIn.Seek( nOldFilePos );
 
@@ -5154,6 +5157,10 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             sal_uInt32 nBuFlags, nNumberingType, nLatestParaUpdate = 0xffffffff;
             sal_uInt16 nBuInstance, nBuStart;
 
+            sal_uInt32  nDontKnow1;
+            sal_uInt32  nDontKnow2;
+            sal_uInt16  nDontKnow2bit06;
+
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
             {
@@ -5271,7 +5278,13 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         rIn >> nNumberingType;
                     if ( nBuFlags & 0x02000000 )
                         rIn >> nBuStart;
-                    nExtParaPos = rIn.Tell() + 8;
+
+                    rIn >> nDontKnow1
+                        >> nDontKnow2;
+
+                    if ( nDontKnow2 & 0x00000040 )
+                        rIn >> nDontKnow2bit06;
+                    nExtParaPos = rIn.Tell();
                     rIn.Seek( nOldPos );
                 }
             }
@@ -5289,6 +5302,9 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         pPropSet->pParaSet->nNumberingType = nNumberingType;
                     if ( nBuFlags & 0x02000000 )
                         pPropSet->pParaSet->nBuStart = nBuStart;
+                    pPropSet->pParaSet->nDontKnow1 = nDontKnow1;
+                    pPropSet->pParaSet->nDontKnow2 = nDontKnow2;
+                    pPropSet->pParaSet->nDontKnow2bit06 = nDontKnow2bit06;
                     nLatestParaUpdate = nCurrentPara;
                 }
 
@@ -6699,7 +6715,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                 rIn >> nBuFlags;
                                 aHex.Append( Implgethex( nBuFlags, 4 ) );
-                                if ( nBuFlags & 0x800000 )
+                                if ( nBuFlags & 0x00800000 )
                                 {
                                     rIn >> nBuInstance;
                                     aHex.Append( Implgethex( nBuInstance, 2 ) );
