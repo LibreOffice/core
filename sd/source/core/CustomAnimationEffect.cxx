@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:45:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1946,6 +1946,23 @@ void EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
 
 // --------------------------------------------------------------------
 
+bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
+{
+    bool bChanges = false;
+
+    EffectSequence::iterator aIter( maEffects.begin() );
+    while( aIter != maEffects.end() )
+    {
+        if( (*aIter)->getTargetShape() == xShape )
+            return true;
+        aIter++;
+    }
+
+    return false;
+}
+
+// --------------------------------------------------------------------
+
 void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
     ParagraphTarget aParaTarget;
@@ -2901,6 +2918,26 @@ void MainSequence::disposeShape( const Reference< XShape >& xShape )
             (*aIter++)->disposeShape( xShape );
         }
     }
+}
+
+// --------------------------------------------------------------------
+
+bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
+{
+    if( EffectSequenceHelper::hasEffect( xShape ) )
+        return true;
+
+    InteractiveSequenceList::iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end();  )
+    {
+        if( (*aIter)->getTriggerShape() == xShape )
+            return true;
+
+        if( (*aIter++)->hasEffect( xShape ) )
+            return true;
+    }
+
+    return false;
 }
 
 // --------------------------------------------------------------------
