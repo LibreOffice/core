@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:42:27 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ namespace sdr
             if(bDoGhostedDisplaying)
             {
                 // display contents normal
-                rDisplayInfo.RestoreOriginalDrawMode();
+                rDisplayInfo.ClearGhostedDrawMode();
             }
 
             // handle pre-paint of ViewObjectContact
