@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
+ *  last change: $Author: os $ $Date: 2000-10-10 07:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,18 +443,15 @@ void SwSrcView::Init()
     SetName(C2S("Source"));
     SetWindow( &aEditWin );
     pSrcViewConfig = SW_MOD()->GetSourceViewConfig();
-    if(!pSrcViewConfig->IsDefault())
-    {
+    if(pSrcViewConfig->GetFontName().getLength())
         lcl_SetFont( this, pSrcViewConfig->GetFontName());
-
-        TextViewOutWin* pOutWin = aEditWin.GetOutWin();
-        Font aFont(aEditWin.GetTextEngine()->GetFont());
-        Size aSize(aFont.GetSize());
-        aSize.Height() = pSrcViewConfig->GetFontHeight();
-        aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
-        aEditWin.GetTextEngine()->SetFont(aFont);
-        pOutWin->SetFont(aFont);
-    }
+    TextViewOutWin* pOutWin = aEditWin.GetOutWin();
+    Font aFont(aEditWin.GetTextEngine()->GetFont());
+    Size aSize(aFont.GetSize());
+    aSize.Height() = pSrcViewConfig->GetFontHeight();
+    aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));
+    aEditWin.GetTextEngine()->SetFont(aFont);
+    pOutWin->SetFont(aFont);
     SwDocShell* pDocShell = GetDocShell();
     // wird das Doc noch geladen, dann muss die DocShell das Load
     // anwerfen, wenn das Laden abgeschlossen ist
@@ -1161,191 +1158,5 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     aEditWin.GetTextEngine()->ResetUndo();
     aEditWin.GetOutWin()->GrabFocus();
 }
-
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:48  hr
-    initial import
-
-    Revision 1.109  2000/09/18 16:06:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.108  2000/09/14 10:37:04  os
-    SfxMedium::CloseIn/OutStream removed
-
-    Revision 1.107  2000/08/30 16:13:02  os
-    #78341# save document before switching to source view
-
-    Revision 1.106  2000/06/22 11:20:25  os
-    use TempFile instead of GetTmpFileName()
-
-    Revision 1.105  2000/06/09 08:10:41  os
-    using tools/tempfile
-
-    Revision 1.104  2000/06/08 09:44:58  os
-    ContentBroker not in SwModule
-
-    Revision 1.103  2000/06/07 13:28:12  os
-    using UCB
-
-    Revision 1.102  2000/05/26 07:21:34  os
-    old SW Basic API Slots removed
-
-    Revision 1.101  2000/05/23 19:42:42  jp
-    Bugfixes for Unicode
-
-    Revision 1.100  2000/05/10 11:53:20  os
-    Basic API removed
-
-    Revision 1.99  2000/05/09 14:43:13  os
-    BASIC interface partially removed
-
-    Revision 1.98  2000/05/04 11:11:26  os
-    #75552# set correct charset in source view
-
-    Revision 1.97  2000/04/18 15:02:50  os
-    UNICODE
-
-    Revision 1.96  2000/03/14 13:43:43  jp
-    GetAppWindow() - misuse as parent window eliminated
-
-    Revision 1.95  2000/03/03 15:48:01  pl
-    #73771# workaround for c50 intel compiler
-
-    Revision 1.94  2000/03/03 15:17:04  os
-    StarView remainders removed
-
-    Revision 1.93  2000/02/11 14:59:12  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.92  2000/01/24 12:43:16  os
-    #72153# call SfxFileDialog::DisableSaveLastDirectory
-
-    Revision 1.91  1999/10/21 17:49:09  jp
-    have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-    Revision 1.90  1999/08/17 07:17:54  OS
-    #67248# DocShell::SetModified after replace
-
-
-      Rev 1.89   17 Aug 1999 09:17:54   OS
-   #67248# DocShell::SetModified after replace
-
-      Rev 1.88   20 May 1999 08:15:22   OS
-   #62641# Fehlermeldung auch beim Umschalten in die SourceView
-
-      Rev 1.87   04 May 1999 14:59:06   JP
-   FilterExportklasse Writer von SvRef abgeleitet, damit sie immer zerstoert wird
-
-      Rev 1.86   31 Mar 1999 06:42:58   OS
-   #64111# Font fuers drucken auf schwarz setzen
-
-      Rev 1.85   18 Mar 1999 14:55:02   OS
-   #57911# Listener am Doc statt am ViewFrame
-
-      Rev 1.84   25 Nov 1998 12:42:06   OS
-   #59826# temp. Datei in der DocShell loeschen
-
-      Rev 1.83   24 Nov 1998 08:55:58   OS
-   #58996# bSourceSaved-Flag initialisieren
-
-      Rev 1.82   05 Nov 1998 10:07:56   OS
-   #58996# Stream nach dem Speichern zuruecksetzen, Flag fuers speichern
-
-      Rev 1.81   03 Nov 1998 11:28:00   OS
-   #58680# nach SID_SAVEDOC ClearModifyFlag an der TextView rufen
-
-      Rev 1.80   08 Sep 1998 17:57:30   OS
-   #56083# .html fuer sourceview default
-
-      Rev 1.79   08 Sep 1998 16:55:42   MI
-   #55602# DocInfo vor Ausdruck setzen und ggf. hinterher resetten (ErrorCode bei Abort)
-
-      Rev 1.78   02 Sep 1998 14:12:18   OM
-   #45378# HelpIDs fuer Dateidialoge
-
-      Rev 1.77   12 Aug 1998 18:47:20   HR
-   #54781#: GCC braucht Temporary
-
-      Rev 1.76   17 Jul 1998 09:53:42   OS
-   Stream vor dem Schreiben auf Null setzen #53143#
-
-      Rev 1.75   11 Jul 1998 15:28:04   OS
-   HTML-Quelltext ins Medium der DocShell speichern #52379#
-
-      Rev 1.74   07 Jul 1998 14:26:38   AMA
-   Chg: DoPrint uebernimmt das Drucken
-
-      Rev 1.73   03 Jul 1998 15:04:20   AMA
-   Chg: DoPrint uebernimmt das Drucken
-
-      Rev 1.72   29 Jun 1998 12:56:06   OS
-   SW_MOD statt GetActiveModule
-
-      Rev 1.71   29 Jun 1998 09:40:08   OS
-   htm/html-Extension fuer SaveAs #48933#
-
-      Rev 1.70   29 May 1998 08:28:46   OS
-   Undo/Redo-Texte, Repeat disabled #50652##50653#
-
-      Rev 1.69   15 May 1998 18:40:46   HJS
-   syntax os2
-
-      Rev 1.68   24 Apr 1998 16:53:04   OS
-   Fonts aus der Docshell-Fontlist holen #49431#
-
-      Rev 1.67   01 Apr 1998 11:58:04   OS
-   Font mit aktueller Groesse setzen #49122#
-
-      Rev 1.66   12 Mar 1998 13:01:08   OS
-   SID_NEWWINDOW nicht mehr ueberladen
-
-      Rev 1.65   17 Dec 1997 16:52:36   ER
-   cast fuer IRIX
-
-      Rev 1.64   29 Nov 1997 16:48:36   MA
-   includes
-
-      Rev 1.63   27 Nov 1997 09:02:48   OS
-   jetzt auch mit SID_PRINTDOC #45786#
-
-      Rev 1.62   21 Nov 1997 15:00:28   MA
-   includes
-
-      Rev 1.61   03 Nov 1997 13:58:28   MA
-   precomp entfernt
-
-      Rev 1.60   31 Oct 1997 10:45:54   OS
-   Undo stimmt jetzt #44501#
-
-      Rev 1.59   24 Oct 1997 15:21:36   OS
-   ReloadFromHtml nur noch rufen, wenn das Doc im SourceMode veraendert wurde #44971#
-
-      Rev 1.58   09 Oct 1997 12:16:06   OS
-   Undo/Redo richtig enablen, beim Start zuruecksetzen #44501#
-
-      Rev 1.57   06 Sep 1997 10:59:04   OS
-   Suchen liefert Meldungen #43197#
-
-      Rev 1.56   01 Sep 1997 13:13:52   OS
-   DLL-Umstellung
-
-      Rev 1.55   11 Aug 1997 10:27:24   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.54   08 Aug 1997 17:26:08   OM
-   Headerfile-Umstellung
-
-      Rev 1.53   07 Aug 1997 19:59:54   HJS
-   includes
-
-      Rev 1.52   05 Aug 1997 16:36:38   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.51   31 Jul 1997 14:59:42   MH
-   chg: header
-
-------------------------------------------------------------------------*/
 
 
