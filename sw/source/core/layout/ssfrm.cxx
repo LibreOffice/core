@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:07:32 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:09:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
+#endif
+// OD 2004-03-10 #i11860#
+#ifndef _FLOWFRM_HXX
+#include <flowfrm.hxx>
 #endif
 
     // No inline cause we need the function pointers
@@ -422,7 +426,8 @@ void SwFrm::CheckDirChange()
  * SwFrm::GetAnchorPos(..)
  * returns the position for anchors based on frame direction
  * --------------------------------------------------*/
-
+// OD 2004-03-10 #i11860# - consider lower space and line spacing of
+// previous frame according to new option 'Use former object positioning'
 Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 {
     Point aAnchor = Frm().Pos();
@@ -437,6 +442,21 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
             aAnchor.Y() += nBaseOfstForFly;
         else
             aAnchor.X() += nBaseOfstForFly;
+
+        // OD 2004-03-10 #i11860# - if option 'Use former object positioning'
+        // is OFF, consider the lower space and the line spacing of the
+        // previous frame and the spacing considered for the page grid
+        const SwTxtFrm* pThisTxtFrm = static_cast<const SwTxtFrm*>(this);
+        const SwTwips nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
+                pThisTxtFrm->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        if ( IsVertical() )
+        {
+            aAnchor.X() -= nUpperSpaceAmountConsideredForPrevFrmAndPageGrid;
+        }
+        else
+        {
+            aAnchor.Y() += nUpperSpaceAmountConsideredForPrevFrmAndPageGrid;
+        }
     }
 
     return aAnchor;
