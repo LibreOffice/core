@@ -18611,3 +18611,6 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?Invalidate@SvxCtrDial@@UAEXXZ
 _real@8@40088f3d4c83f2e79800
 ?getDataModeIdentifier@fmgridif@@YA?BVOUString@rtl@@XZ
+?getDataModeIdentifier@fmctrlr@@YAABVOUString@rtl@@XZ
+??0FmSearchEngine@@QAE@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXResultSet@sdbc@star@sun@com@@@2345@ABVOUString@rtl@@ABV?$Reference@VXNumberFormatsSupplier@util@star@sun@com@@@2345@W4SEARCH_MODE@FmSearchDialog@@@Z
+??0FmSearchEngine@@QAE@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXResultSet@sdbc@star@sun@com@@@2345@ABVOUString@rtl@@ABV?$vector@V?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@W4SEARCH_MODE@FmSearchDialog@@@Z
