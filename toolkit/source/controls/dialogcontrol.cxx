@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:51:56 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,6 +1166,12 @@ void UnoDialogControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
     Reference< XControl >* pControls = xCtrls.getArray();
     for ( sal_Int32 n = 0; n < nControls; n++ )
         pControls[n]->setDesignMode( bOn );
+
+    // #109067# in design mode the tab controller is not notified about
+    // tab index changes, therefore the tab order must be activated
+    // when switching from design mode to live mode
+    if ( mxTabController.is() && !bOn )
+        mxTabController->activateTabOrder();
 }
 
 void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
@@ -1376,6 +1382,9 @@ void UnoDialogControl::removingControl( const Reference< XControl >& _rxControl 
 void SAL_CALL UnoDialogControl::changesOccurred( const ChangesEvent& Event ) throw (RuntimeException)
 {
     // a tab controller model may have changed
-    if ( mxTabController.is() )
+
+    // #109067# in design mode don't notify the tab controller
+    // about tab index changes
+    if ( mxTabController.is() && !mbDesignMode )
         mxTabController->activateTabOrder();
 }
