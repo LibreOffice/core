@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,6 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell aShell( *this, 0 );
-
-    aShell.pRef = new SfxPrinter( *pPrt );
 
     SET_CURR_SHELL( &aShell );
 
@@ -536,7 +534,6 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
 
     // eine neue Shell fuer den Printer erzeugen
     ViewShell aShell( *this, 0 );
-    aShell.pRef = new SfxPrinter( *pPrt );
 
     SET_CURR_SHELL( &aShell );
 
