@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,6 +521,25 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                 case FRMDIR_HORI_RIGHT_TOP:
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, FALSE ) );
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, TRUE ) );
+                break;
+
+                // #107865#
+                // The case for the superordinate object is missing.
+                case FRMDIR_ENVIRONMENT:
+                {
+                    SdDrawDocument* pDoc = pView->GetDoc();
+                    ::com::sun::star::text::WritingMode eMode = pDoc->GetDefaultWritingMode();
+                    sal_Bool bIsLeftToRight(sal_False);
+
+                    if(::com::sun::star::text::WritingMode_LR_TB == eMode
+                        || ::com::sun::star::text::WritingMode_TB_RL == eMode)
+                    {
+                        bIsLeftToRight = sal_True;
+                    }
+
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, bIsLeftToRight ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, !bIsLeftToRight ) );
+                }
                 break;
             }
         }
