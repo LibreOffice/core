@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-23 10:16:10 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -1397,7 +1400,33 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         if ( !xProps->containsAllNames( rProperties, aMissingProps ) )
         {
             // Add props contained in cache...
-            xProps->add( aMissingProps, *m_xCachedProps );
+            xProps->addProperties( aMissingProps, *m_xCachedProps );
+        }
+    }
+
+    // Add BaseURI property, if requested.
+    if ( !xProps->contains(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ) ) )
+    {
+        sal_Int32 nCount = rProperties.getLength();
+        if ( nCount )
+        {
+            const beans::Property* pProps = rProperties.getConstArray();
+            for ( sal_Int32 n = 0; n < nCount; ++n )
+            {
+                const rtl::OUString & rName = pProps[ n ].Name;
+
+                if ( rName.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
+                {
+                    // BaseURI requested! Append value.
+                    xProps->addProperty( rtl::OUString(
+                                            RTL_CONSTASCII_USTRINGPARAM(
+                                                "BaseURI" ) ),
+                                         uno::makeAny( getBaseURI() ) );
+                    break;
+                }
+            }
         }
     }
 
@@ -2485,5 +2514,38 @@ void Content::cancelCommandExecution(
 {
     ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );
     // Unreachable
+}
+
+//=========================================================================
+const rtl::OUString Content::getBaseURI()
+{
+    // First, try to obtain value of response header "Content-Location".
+    if ( m_xCachedProps.get() )
+    {
+        rtl::OUString aLocation;
+        m_xCachedProps->getValue( rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "Content-Location" ) ) ) >>= aLocation;
+        if ( aLocation.getLength() )
+        {
+#if 0
+    // @@@ rtl::Uri::convertRelToAbs not yet available, will be after release
+    //     of 6.1 EA2.
+            try
+            {
+                // Do not use m_xIdentifier->getContentIdentifier() because it
+                // for example does not reflect redirects applied to requests
+                // done using the original URI but m_xResAccess' URI does.
+                return rtl::Uri::convertRelToAbs( m_xResAccess->getURL(),
+                                                  aLocation );
+            }
+            catch ( rtl::MalformedUriException const & )
+            {
+            }
+#endif
+        }
+    }
+
+    return rtl::OUString( m_xResAccess->getURL() );
 }
 

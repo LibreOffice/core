@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-23 10:16:10 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 14:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,14 @@ bool ContentProvider::getProperty(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
+            m_pProps->insert(
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ),
+                    -1,
+                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY ) );
+
             // Standard DAV properties.
 
             m_pProps->insert(
@@ -384,6 +392,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     sal_Bool bHasIsDocument       = sal_False;
     sal_Bool bHasIsFolder         = sal_False;
     sal_Bool bHasTitle            = sal_False;
+    sal_Bool bHasBaseURI          = sal_False;
     sal_Bool bHasDateCreated      = sal_False;
     sal_Bool bHasDateModified     = sal_False;
     sal_Bool bHasMediaType        = sal_False;
@@ -438,6 +447,12 @@ uno::Sequence< beans::Property > Content::getProperties(
             {
                 bHasTitle = sal_True;
             }
+            else if ( !bHasBaseURI &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
+            {
+                bHasBaseURI = sal_True;
+            }
             else if ( !bHasDateCreated &&
                       (*it).equalsAsciiL(
                             RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
@@ -481,10 +496,21 @@ uno::Sequence< beans::Property > Content::getProperties(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ) );
 
     if ( !bHasTitle )
+    {
+        // Always present since it can be calculated from content's URI.
         aPropSet.insert(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) );
+    }
 
     // Add optional properties.
+
+    if ( !bHasBaseURI )
+    {
+        // Always present since it can be calculated from content's URI.
+        aPropSet.insert(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" ) ) );
+    }
+
     if ( !bHasDateCreated && bHasCreationDate )
         aPropSet.insert(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ) ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:09 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,10 +288,7 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 
     if ( rResource.uri.getStr()[ rResource.uri.getLength() - 1 ]
         == sal_Unicode( '/' ) )
-    {
-//        if ( pIsFolder && *pIsFolder )
-            m_bTrailingSlash = sal_True;
-    }
+        m_bTrailingSlash = sal_True;
 }
 
 //=========================================================================
@@ -320,10 +317,11 @@ ContentProperties::ContentProperties( const rtl::OUString & rTitle )
 //=========================================================================
 ContentProperties::ContentProperties( const ContentProperties & rOther )
 : m_aEscapedTitle( rOther.m_aEscapedTitle ),
+  m_xProps( rOther.m_xProps.get()
+            ? new PropertyValueMap( *rOther.m_xProps )
+            : new PropertyValueMap ),
   m_bTrailingSlash( rOther.m_bTrailingSlash )
 {
-    if ( rOther.m_xProps.get() )
-        m_xProps.reset( new PropertyValueMap( *rOther.m_xProps ) );
 }
 
 //=========================================================================
@@ -505,18 +503,27 @@ void ContentProperties::UCBNamesToHTTPNames(
 void ContentProperties::getMappableHTTPHeaders(
                             std::vector< rtl::OUString > & rHeaderNames )
 {
+    // -> DateModified
     rHeaderNames.push_back(
         rtl::OUString::createFromAscii( "Last-Modified" ) );
+
+    // -> MediaType
     rHeaderNames.push_back(
         rtl::OUString::createFromAscii( "Content-Type" ) );
+
+    // -> Size
     rHeaderNames.push_back(
         rtl::OUString::createFromAscii( "Content-Length" ) );
+
+    // -> BaseURI
+    rHeaderNames.push_back(
+        rtl::OUString::createFromAscii( "Content-Location" ) );
 }
 
 //=========================================================================
 bool ContentProperties::containsAllNames(
-                            const uno::Sequence< beans::Property >& rProps,
-                            std::vector< rtl::OUString > & rNamesNotContained )
+                    const uno::Sequence< beans::Property >& rProps,
+                    std::vector< rtl::OUString > & rNamesNotContained ) const
 {
     rNamesNotContained.clear();
 
@@ -535,8 +542,9 @@ bool ContentProperties::containsAllNames(
 }
 
 //=========================================================================
-void ContentProperties::add( const std::vector< rtl::OUString > & rProps,
-                             const ContentProperties & rContentProps )
+void ContentProperties::addProperties(
+                                const std::vector< rtl::OUString > & rProps,
+                                const ContentProperties & rContentProps )
 {
     std::vector< rtl::OUString >::const_iterator it  = rProps.begin();
     std::vector< rtl::OUString >::const_iterator end = rProps.end();
@@ -557,5 +565,12 @@ void ContentProperties::add( const std::vector< rtl::OUString > & rProps,
 
         ++it;
     }
+}
+
+//=========================================================================
+void ContentProperties::addProperty( const rtl::OUString & rName,
+                                     const com::sun::star::uno::Any & rValue )
+{
+    (*m_xProps)[ rName ] = rValue;
 }
 

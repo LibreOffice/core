@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVRequestEnvironment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-24 13:20:37 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,6 @@
  ************************************************************************/
 #ifndef _DAVREQUESTENVIRONMENT_HXX_
 #define _DAVREQUESTENVIRONMENT_HXX_
-
-#include <memory>
 
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>

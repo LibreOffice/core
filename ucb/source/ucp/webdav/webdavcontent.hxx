@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:14 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 14:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@ private:
       sal_Bool exchangeIdentity(
                 const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
+
+    const rtl::OUString getBaseURI();
 
       // Command "insert"
       void insert( const ::com::sun::star::uno::Reference<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 16:01:07 $
+ *  last change: $Author: kso $ $Date: 2002-09-24 14:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,20 +173,27 @@ public:
     // return true, if all properties contained in rProps are contained in
     // this ContentProperties instance. Otherwiese, false will be returned.
     // rNamesNotContained contain the missing names.
-    bool containsAllNames( const com::sun::star::uno::Sequence<
-                            com::sun::star::beans::Property >& rProps,
-                           std::vector< rtl::OUString > & rNamesNotContained );
+    bool containsAllNames(
+                    const com::sun::star::uno::Sequence<
+                        com::sun::star::beans::Property >& rProps,
+                    std::vector< rtl::OUString > & rNamesNotContained ) const;
 
     // adds all properties described by rProps that are actually contained in
     // rContentProps to this instance. In case of duplicates the value
     // already contained in this will left anchanged.
-    void add( const std::vector< rtl::OUString > & rProps,
-              const ContentProperties & rContentProps );
+    void addProperties( const std::vector< rtl::OUString > & rProps,
+                        const ContentProperties & rContentProps );
+
+    // overwrites probably existing entry.
+    void addProperty( const rtl::OUString & rName,
+                      const com::sun::star::uno::Any & rValue );
 
     bool isTrailingSlash() const { return m_bTrailingSlash; }
 
     const rtl::OUString & getEscapedTitle() const { return m_aEscapedTitle; }
 
+    // Not good to expose implementation details, but this is actually an
+    // internal class.
     const std::auto_ptr< PropertyValueMap > & getProperties() const
     { return m_xProps; }
 
