@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:45:15 $
+ *  last change: $Author: rt $ $Date: 2000-11-09 12:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,10 +315,10 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ portuguese ] = "Foco automαtico de controlo";
             Text[ russian ] = "ΐβςξτξκσρ κξνςπξλόνξγξ ύλεμενςΰ";
             Text[ greek ] = "Αυτόματη εστίαση στοιχείου ελέγχου";
-            Text[ dutch ] = "Automatic control focus";
+            Text[ dutch ] = "Automatische controle focus";
             Text[ french ] = "Focalisation automatique sur l'ιlιment de contrτle";
             Text[ spanish ] = "Foco automαtico de control";
-            Text[ italian ] = "Automatic control focus";
+            Text[ italian ] = "Punto focale automatico di controllo";
             Text[ danish ] = "Automatic control focus";
             Text[ swedish ] = "Automatisk fokus fφr kontrollelement";
             Text[ polish ] = "Automatyczne ognisko kontrolne";
@@ -436,7 +436,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ korean ] = "±Χ·μ ΉΪ½Ί(~R)";
             Text[ chinese_simplified ] = "Π‘ΧιΏς(~R)";
             Text[ chinese_traditional ] = "Έs²Υ®Ψ(~R)";
-            Text[ arabic ] = "ΕΨΗΡ ΚΜγνΪ";
+            Text[ arabic ] = "ίΗΟΡ ΚΜγνΪ";
             Text[ turkish ] = "Grup ηerηevesi";
         };
         MenuItem
@@ -499,7 +499,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ english_us ] = "~Radio Button";
             Text[ portuguese ] = "Botγo de ~selecηγo";
             Text[ russian ] = "~Οεπεκλώχΰςελό";
-            Text[ greek ] = "Πεδί~ο επιλογής";
+            Text[ greek ] = "Πεδί~ο επιλογών";
             Text[ dutch ] = "~Optieveld";
             Text[ french ] = "Bouton ~radio";
             Text[ spanish ] = "~Botσn radio";
@@ -550,7 +550,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ english_us ] = "I~mage Button";
             Text[ portuguese ] = "Botγo ~grαfico";
             Text[ russian ] = "Γπΰτθχερκΰÿ κνξοκΰ";
-            Text[ greek ] = "~Γραφικό πεδίο εντολής";
+            Text[ greek ] = "~Γραφικό πεδίο επιλογής";
             Text[ dutch ] = "~Afbeeldingenknop";
             Text[ french ] = "Bouton ~imagι";
             Text[ spanish ] = "Botσn g~rαfico";
