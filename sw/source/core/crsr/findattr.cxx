@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:22:18 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,20 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
@@ -119,6 +133,9 @@
 #include <swundo.hxx>
 #endif
 
+using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 
 SV_DECL_PTRARR_SORT( SwpFmts, SwFmt*, 0, 4 )
 SV_IMPL_PTRARR_SORT( SwpFmts, SwFmt* )
@@ -1251,15 +1268,15 @@ struct SwFindParaAttr : public SwFindParas
 {
     BOOL bValue;
     const SfxItemSet *pSet, *pReplSet;
-    const utl::SearchParam *pTxtPara;
+    const SearchOptions *pSearchOpt;
     SwCursor& rCursor;
     utl::TextSearch* pSTxt;
 
     SwFindParaAttr( const SfxItemSet& rSet, BOOL bNoCollection,
-                    const utl::SearchParam* pTextParam, const SfxItemSet* pRSet,
+                    const SearchOptions* pOpt, const SfxItemSet* pRSet,
                     SwCursor& rCrsr )
         : pSet( &rSet ), pReplSet( pRSet ), rCursor( rCrsr ),
-            bValue( bNoCollection ), pTxtPara( pTextParam ), pSTxt( 0 )
+            bValue( bNoCollection ), pSearchOpt( pOpt ), pSTxt( 0 )
         {}
     ~SwFindParaAttr()   { delete pSTxt; }
 
@@ -1273,7 +1290,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 {
     // String ersetzen ?? (nur wenn Text angegeben oder nicht attributiert
     //                      gesucht wird)
-    BOOL bReplaceTxt = pTxtPara && ( pTxtPara->GetReplaceStr().Len() ||
+    BOOL bReplaceTxt = pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !pSet->Count() );
     BOOL bReplaceAttr = pReplSet && pReplSet->Count();
     if( bInReadOnly && (bReplaceAttr || bReplaceTxt ))
@@ -1294,23 +1311,31 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 //                  || *pCrsr->GetMark() == *pCrsr->GetPoint() )    // kein Bereich ??
                     return FIND_NOT_FOUND;
 
-                if( !pTxtPara )
+                if( !pSearchOpt )
                     break;      // ok, nur Attribute, also gefunden
 
                 pTextRegion = pCrsr;
             }
-            else if( !pTxtPara )
+            else if( !pSearchOpt )
                 return FIND_NOT_FOUND;
 
             // dann darin den Text
             if( !pSTxt )
             {
-                utl::SearchParam aTmp( *pTxtPara );
-                aTmp.SetSrchInSelection( TRUE );
-                pSTxt = new utl::TextSearch( aTmp, LANGUAGE_SYSTEM );
+                SearchOptions aTmp( *pSearchOpt );
+
+                // search in selection
+                aTmp.searchFlag |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                                    SearchFlags::REG_NOT_ENDOFLINE);
+
+                String aLang, aCntry;
+                ConvertLanguageToIsoNames( LANGUAGE_SYSTEM, aLang, aCntry );
+                aTmp.Locale = Locale( aLang, aCntry, rtl::OUString() );
+
+                pSTxt = new utl::TextSearch( aTmp );
             }
             // Bug 24665: suche im richtigen Bereich weiter (pTextRegion!)
-            if( pCrsr->Find( *pTxtPara, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
+            if( pCrsr->Find( *pSearchOpt, *pSTxt, fnMove, pTextRegion, bInReadOnly ) &&
                 *pCrsr->GetMark() != *pCrsr->GetPoint() )   // gefunden ?
                 break;                                      // also raus
             else if( !pSet->Count() )
@@ -1346,7 +1371,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
     if( bReplaceTxt )
     {
-        int bRegExp = utl::SearchParam::SRCH_REGEXP == pTxtPara->GetSrchType();
+        int bRegExp = SearchAlgorithms_REGEXP == pSearchOpt->algorithmType;
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
 
@@ -1359,7 +1384,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        rCursor.GetDoc()->Replace( *pCrsr, pTxtPara->GetReplaceStr(), bRegExp );
+        rCursor.GetDoc()->Replace( *pCrsr, pSearchOpt->replaceString, bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -1420,7 +1445,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
 
 int SwFindParaAttr::IsReplaceMode() const
 {
-    return ( pTxtPara && pTxtPara->GetReplaceStr().Len() ) ||
+    return ( pSearchOpt && pSearchOpt->replaceString.getLength() ) ||
            ( pReplSet && pReplSet->Count() );
 }
 
@@ -1430,21 +1455,21 @@ int SwFindParaAttr::IsReplaceMode() const
 ULONG SwCursor::Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                     SwDocPositions nStart, SwDocPositions nEnde,
                     FindRanges eFndRngs,
-                    const utl::SearchParam* pTextPara, const SfxItemSet* pReplSet )
+                    const SearchOptions* pSearchOpt, const SfxItemSet* pReplSet )
 {
     // OLE-Benachrichtigung abschalten !!
     SwDoc* pDoc = GetDoc();
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    BOOL bReplace = ( pTextPara && ( pTextPara->GetReplaceStr().Len() ||
+    BOOL bReplace = ( pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !rSet.Count() ) ) ||
                     (pReplSet && pReplSet->Count());
     BOOL bSttUndo = pDoc->DoesUndo() && bReplace;
     if( bSttUndo )
         pDoc->StartUndo( UNDO_REPLACE );
 
-    SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pTextPara,
+    SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
 
     ULONG nRet = FindAll(aSwFindParaAttr, nStart, nEnde, eFndRngs );

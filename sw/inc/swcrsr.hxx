@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:20:40 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@ class SwUnoCrsr;
 class SwUnoTableCrsr;
 struct _SwCursor_SavePos;
 
+namespace com { namespace sun { namespace star { namespace util {
+    struct SearchOptions;
+} } } }
+
+
 // ein Basis-Struktur fuer die Parameter der Find-Methoden
 // return - Werte vom Found-Aufruf.
 const int FIND_NOT_FOUND    = 0;
@@ -141,7 +146,7 @@ public:
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
-    ULONG Find( const utl::SearchParam& rParam,
+    ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 FindRanges = FND_IN_BODY,
                 int bReplace = FALSE );
@@ -154,7 +159,7 @@ public:
     ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 FindRanges = FND_IN_BODY,
-                const utl::SearchParam* pTextPara = 0,
+                const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );
 
     FASTBOOL IsStartWord()const;

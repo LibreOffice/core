@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-15 18:46:53 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,15 @@
 #include <uiparam.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -232,6 +241,8 @@
 #include "swslots.hxx"
 
 using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 using namespace com::sun::star::uno;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -827,6 +838,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
             pTextView->SetSelection( TextSelection( TextPaM( 0xFFFFFFFF, 0xFFFF ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
     }
 
+#ifdef NEVER
     utl::SearchParam    aSearchParam( rSearchItem.GetSearchString(),
                         utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
                         rSearchItem.GetWordOnly(), rSearchItem.GetSelection() );
@@ -840,18 +852,60 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
         aSearchParam.SetLEVShorter( rSearchItem.GetLEVShorter() );
         aSearchParam.SetLEVLonger( rSearchItem.GetLEVLonger() );
     }
+#endif
+
+    SearchAlgorithms eSrchType  = SearchAlgorithms_ABSOLUTE;
+    //OUString aSrchStr = rText;
+    BOOL bCaseSensitive = rSearchItem.GetExact();
+    BOOL bWordOnly      = rSearchItem.GetWordOnly();
+    BOOL bSrchInSel     = rSearchItem.GetSelection();
+    BOOL bLEV_Relaxed   = TRUE;
+    INT32 nLEV_Other    = 2;    //  -> changedChars;
+    INT32 nLEV_Longer   = 3;    //! -> deletedChars;
+    INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
+    INT32 nTransliterationFlags = 0;
+    //
+    if ( rSearchItem.GetRegExp() )
+        eSrchType = SearchAlgorithms_REGEXP;
+    else if ( rSearchItem.IsLevenshtein() )
+    {
+        eSrchType       = SearchAlgorithms_APPROXIMATE;
+        bLEV_Relaxed    = rSearchItem.IsLEVRelaxed();
+        nLEV_Other      = rSearchItem.GetLEVOther();
+        nLEV_Longer     = rSearchItem.GetLEVLonger();
+        nLEV_Shorter    = rSearchItem.GetLEVShorter();
+    }
+    //
+    INT32 nSrchFlags = 0;
+    if (!bCaseSensitive)
+        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+    if ( bWordOnly)
+        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
+    if ( bLEV_Relaxed)
+        nSrchFlags |= SearchFlags::LEV_RELAXED;
+    if ( bSrchInSel)
+        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                       SearchFlags::REG_NOT_ENDOFLINE );
+    //
+    SearchOptions aSearchOpt(
+                        eSrchType, nSrchFlags,
+                        rSearchItem.GetSearchString(), rtl::OUString(),
+                        CreateLocale( LANGUAGE_SYSTEM ),
+                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
+                        nTransliterationFlags );
+
     USHORT nFound = 0;
     if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
          ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
     {
-        nFound = pTextView->Search( aSearchParam, bForward );
+        nFound = pTextView->Search( aSearchOpt, bForward );
     }
     else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
               ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )
     {
-        aSearchParam.SetReplaceStr( rSearchItem.GetReplaceString() );
+        aSearchOpt.replaceString = rSearchItem.GetReplaceString();
         BOOL bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
-        nFound = pTextView->Replace( aSearchParam, bAll, bForward );
+        nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
     }
     if(!nFound)
     {

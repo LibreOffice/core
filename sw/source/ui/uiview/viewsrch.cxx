@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:26:31 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,15 @@
 #include "hintids.hxx"
 #include "uiparam.hxx"
 
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 #ifndef _SVX_PAGEITEM_HXX //autogen
 #include <svx/pageitem.hxx>
@@ -126,6 +135,10 @@
 #include "docsh.hxx"
 
 #include "view.hrc"
+
+using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 
 #define SRCH_ATTR_OFF   0
 #define SRCH_ATTR_ON    1
@@ -663,9 +676,50 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
             DELETEZ( pReplSet );        // kennen wir nicht
     }
 
+    //
+    // build SearchOptions to be used
+    //
+    SearchAlgorithms eSrchType  = SearchAlgorithms_ABSOLUTE;
+    rtl::OUString aSrchStr      = pSrchItem->GetSearchString();
+    rtl::OUString aRplcStr;
+    BOOL bCaseSensitive = pSrchItem->GetExact();
+    BOOL bWordOnly      = pSrchItem->GetWordOnly();
+    BOOL bSrchInSel     = pSrchItem->GetSelection();
+    BOOL bLEV_Relaxed   = pSrchItem->IsLEVRelaxed();
+    INT32 nLEV_Other    = pSrchItem->GetLEVOther();     //  -> changedChars;
+    INT32 nLEV_Longer   = pSrchItem->GetLEVLonger();    //! -> deletedChars;
+    INT32 nLEV_Shorter  = pSrchItem->GetLEVShorter();   //! -> insertedChars;
+    INT32 nTransliterationFlags = 0;
+    //
+    if (bDoReplace)
+        aRplcStr = pSrchItem->GetReplaceString();
+    if (pSrchItem->IsLevenshtein())
+        eSrchType = SearchAlgorithms_APPROXIMATE;
+    if (pSrchItem->GetRegExp())
+        eSrchType = SearchAlgorithms_REGEXP;
+    //
+    INT32 nSrchFlags = 0;
+    if (!bCaseSensitive)
+        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+    if ( bWordOnly)
+        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
+    if ( bLEV_Relaxed)
+        nSrchFlags |= SearchFlags::LEV_RELAXED;
+    if ( bSrchInSel)
+        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                        SearchFlags::REG_NOT_ENDOFLINE );
+    //
+    SearchOptions aSearchOpt(
+                        eSrchType, nSrchFlags,
+                        aSrchStr, aRplcStr,
+                        CreateLocale( LANGUAGE_SYSTEM ),
+                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
+                        nTransliterationFlags );
+
     ULONG nFound;
     if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))
     {
+#ifdef NEVER
         // Suche nach Attributen
         utl::SearchParam aPar( pSrchItem->GetSearchString() );
         if( aPar.GetSrchStr().Len() )
@@ -686,6 +740,7 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
             aPar.SetLEVShorter(     pSrchItem->GetLEVShorter());
             aPar.SetLEVLonger(      pSrchItem->GetLEVLonger());
         }
+#endif
 
         nFound = pWrtShell->SearchAttr(
             aSrchSet,
@@ -693,7 +748,7 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
             rOptions.eStart,
             rOptions.eEnd,
             FindRanges(eRanges),
-            pSrchItem->GetSearchString().Len() ? &aPar : 0,
+            pSrchItem->GetSearchString().Len() ? &aSearchOpt : 0,
             pReplSet );
     }
     else if( pSrchItem->GetPattern() )
@@ -709,6 +764,7 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     {
         // Normale Suche
 
+#ifdef NEVER
         utl::SearchParam aParam( pSrchItem->GetSearchString(),
                             pSrchItem->GetRegExp()
                                 ? utl::SearchParam::SRCH_REGEXP :
@@ -725,8 +781,9 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
 
         if (bDoReplace)
             aParam.SetReplaceStr(pSrchItem->GetReplaceString());
+#endif
 
-        nFound = pWrtShell->SearchPattern(aParam,
+        nFound = pWrtShell->SearchPattern(aSearchOpt,
                                           rOptions.eStart,
                                           rOptions.eEnd,
                                           FindRanges(eRanges),
@@ -834,6 +891,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/20 09:26:31  jp
+    must change: SearchText->TextSearch and use namespace
+
     Revision 1.2  2000/10/20 14:52:05  jp
     Bug #79645#: ExecSearch - RepeatSearch without SearchItem must create it's own item
 

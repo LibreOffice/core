@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-09 14:59:31 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,13 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
 #endif
@@ -99,6 +106,10 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
+
+using namespace com::sun::star;
+using namespace com::sun::star::util;
+
 
 String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         xub_StrLen& rEnde, SvULongs& rArr, String& rRet )
@@ -191,11 +202,11 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
 
 
-BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
+BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     SwMoveFn fnMove, const SwPaM * pRegion,
                     FASTBOOL bInReadOnly )
 {
-    if( !rParam.GetSrchStr().Len() )
+    if( !rSearchOpt.searchString.getLength() )
         return FALSE;
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
@@ -302,7 +313,8 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
                 else
 */                  GetPoint()->nContent = nEnde;
 
-                if( utl::SearchParam::SRCH_REGEXP == rParam.GetSrchType() &&
+                BOOL bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+                if( bRegSearch &&
                     1 < Abs( (int)(GetPoint()->nNode.GetIndex() - GetMark()->nNode.GetIndex())))
                     // Fehler: es koennen maximal 2 Nodes selektiert werden !!
                     continue;
@@ -322,14 +334,14 @@ BYTE SwPaM::Find( const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
 // Parameter fuers Suchen und Ersetzen von Text
 struct SwFindParaText : public SwFindParas
 {
-    const utl::SearchParam& rParam;
+    const SearchOptions& rSearchOpt;
     SwCursor& rCursor;
     utl::TextSearch aSTxt;
     BOOL bReplace;
 
-    SwFindParaText( const utl::SearchParam& rPara, int bRepl, SwCursor& rCrsr )
-        : rCursor( rCrsr ), bReplace( bRepl ), rParam( rPara ),
-        aSTxt( rPara, LANGUAGE_SYSTEM )
+    SwFindParaText( const SearchOptions& rOpt, int bRepl, SwCursor& rCrsr )
+        : rCursor( rCrsr ), bReplace( bRepl ),
+        rSearchOpt( rOpt ), aSTxt( rOpt )
     {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, FASTBOOL bInReadOnly );
     virtual int IsReplaceMode() const;
@@ -342,7 +354,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bInReadOnly && bReplace )
         bInReadOnly = FALSE;
 
-    BOOL bFnd = (BOOL)pCrsr->Find( rParam, aSTxt, fnMove, pRegion, bInReadOnly );
+    BOOL bFnd = (BOOL)pCrsr->Find( rSearchOpt, aSTxt, fnMove, pRegion, bInReadOnly );
     // kein Bereich ??
     if( bFnd && *pCrsr->GetMark() == *pCrsr->GetPoint() )
         return FIND_NOT_FOUND;
@@ -350,7 +362,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bFnd && bReplace )          // String ersetzen ??
     {
         // Replace-Methode vom SwDoc benutzen
-        int bRegExp = utl::SearchParam::SRCH_REGEXP == rParam.GetSrchType();
+        int bRegExp = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
         // damit die Region auch verschoben wird, in den Shell-Cursr-Ring
@@ -362,7 +374,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        rCursor.GetDoc()->Replace( *pCrsr, rParam.GetReplaceStr(), bRegExp );
+        rCursor.GetDoc()->Replace( *pCrsr, rSearchOpt.replaceString, bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -388,7 +400,7 @@ int SwFindParaText::IsReplaceMode() const
 }
 
 
-ULONG SwCursor::Find( const utl::SearchParam& rParam,
+ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
                         SwDocPositions nStart, SwDocPositions nEnde,
                         FindRanges eFndRngs, int bReplace )
 {
@@ -401,9 +413,10 @@ ULONG SwCursor::Find( const utl::SearchParam& rParam,
     if( bSttUndo )
         pDoc->StartUndo( UNDO_REPLACE );
 
-    if( rParam.IsSrchInSelection() )
+    BOOL bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
+    if( bSearchSel )
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
-    SwFindParaText aSwFindParaText( rParam, bReplace, *this );
+    SwFindParaText aSwFindParaText( rSearchOpt, bReplace, *this );
     ULONG nRet = FindAll( aSwFindParaText, nStart, nEnde, eFndRngs );
     pDoc->SetOle2Link( aLnk );
     if( nRet && bReplace )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:07:34 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,11 @@ class SwCntntNode;
 class SwNodes;
 class SwPaM;
 
+namespace com { namespace sun { namespace star { namespace util {
+    struct SearchOptions;
+} } } }
+
 namespace utl {
-    class SearchParam;
     class TextSearch;
 };
 
@@ -190,7 +193,8 @@ public:
                     SwGoInDoc fnGo = fnGoCntnt );
 
     // Suchen
-    BYTE Find(  const utl::SearchParam& rParam, utl::TextSearch& rSTxt,
+    BYTE Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
+                utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
                 const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE);
     FASTBOOL Find(  const SwFmt& rFmt,

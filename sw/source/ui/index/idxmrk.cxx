@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 10:14:44 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,15 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 #include "helpid.h"
 #define _SVSTDARR_STRINGSSORT
@@ -103,6 +112,11 @@
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
+#endif
+
+
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
 #endif
 #ifndef _IDXMRK_HXX
 #include <idxmrk.hxx>
@@ -161,10 +175,15 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
+using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
+
 #define C2U(cChar) OUString::createFromAscii(cChar)
+
 /*--------------------------------------------------------------------
      Beschreibung:  Dialog zum Einfuegen einer Verzeichnismarkierung
  --------------------------------------------------------------------*/
@@ -447,14 +466,44 @@ void SwIndexMarkDlg::InsertUpdate()
 void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
 {
     rSh.Push();
-    utl::SearchParam aParam( rSh.GetSelTxt(), utl::SearchParam::SRCH_NORMAL,
-                                                TRUE, FALSE, FALSE );
 
-    aParam.SetCaseSensitive( bCaseSensitive );
-    aParam.SetSrchWordOnly( bWordOnly );
+//  utl::SearchParam aParam( rSh.GetSelTxt(), utl::SearchParam::SRCH_NORMAL,
+//                                              TRUE, FALSE, FALSE );
+
+//  aParam.SetCaseSensitive( bCaseSensitive );
+//  aParam.SetSrchWordOnly( bWordOnly );
+
+    //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
+    //OUString aSrchStr = rText;
+    //BOOL bCaseSensitive   = TRUE;
+    //BOOL bWordOnly        = FALSE;
+    BOOL bSrchInSel     = FALSE;
+    BOOL bLEV_Relaxed   = TRUE;
+    INT32 nLEV_Other    = 2;    //  -> changedChars;
+    INT32 nLEV_Longer   = 3;    //! -> deletedChars;
+    INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
+    INT32 nTransliterationFlags = 0;
+    //
+    INT32 nSrchFlags = 0;
+    if (!bCaseSensitive)
+        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+    if ( bWordOnly)
+        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
+    if ( bLEV_Relaxed)
+        nSrchFlags |= SearchFlags::LEV_RELAXED;
+    if ( bSrchInSel)
+        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                        SearchFlags::REG_NOT_ENDOFLINE );
+    //
+    SearchOptions aSearchOpt(
+                        SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                        rSh.GetSelTxt(), OUString(),
+                        CreateLocale( LANGUAGE_SYSTEM ),
+                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
+                        nTransliterationFlags );
 
     rSh.ClearMark();
-    ULONG nRet = rSh.Find( aParam,  DOCPOS_START, DOCPOS_END,
+    ULONG nRet = rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
 }
 
@@ -1754,6 +1803,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/13 10:14:44  os
+    #83826# String::CreateFromAscii added
+
     Revision 1.4  2000/11/20 09:18:54  jp
     must change: processfactory moved
 

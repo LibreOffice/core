@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:22:49 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,16 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -151,6 +161,9 @@
 #include <unotools/testsearch.hxx>
 #endif
 
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
@@ -272,6 +285,8 @@ static String sLstPg;
 static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
 
+using namespace com::sun::star;
+using namespace com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
@@ -1167,10 +1182,40 @@ BOOL SwView::JumpToSwMark( const String& rMark )
             {
                 // Normale Textsuche
                 pWrtShell->EnterStdMode();
-                utl::SearchParam aParam( sName, utl::SearchParam::SRCH_NORMAL,
-                                    TRUE, FALSE, FALSE );
 
-                if( pWrtShell->SearchPattern( aParam, DOCPOS_START, DOCPOS_END ))
+//              utl::SearchParam aParam( sName, utl::SearchParam::SRCH_NORMAL,
+//                                  TRUE, FALSE, FALSE );
+
+                //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
+                //OUString aSrchStr = rText;
+                BOOL bCaseSensitive = TRUE;
+                BOOL bWordOnly      = FALSE;
+                BOOL bSrchInSel     = FALSE;
+                BOOL bLEV_Relaxed   = TRUE;
+                INT32 nLEV_Other    = 2;    //  -> changedChars;
+                INT32 nLEV_Longer   = 3;    //! -> deletedChars;
+                INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
+                INT32 nTransliterationFlags = 0;
+                //
+                INT32 nSrchFlags = 0;
+                if (!bCaseSensitive)
+                    nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+                if ( bWordOnly)
+                    nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
+                if ( bLEV_Relaxed)
+                    nSrchFlags |= SearchFlags::LEV_RELAXED;
+                if ( bSrchInSel)
+                    nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                                   SearchFlags::REG_NOT_ENDOFLINE );
+                //
+                SearchOptions aSearchOpt(
+                                    SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                                    sName, rtl::OUString(),
+                                    CreateLocale( LANGUAGE_SYSTEM ),
+                                    nLEV_Other, nLEV_Longer, nLEV_Shorter,
+                                    nTransliterationFlags );
+
+                if( pWrtShell->SearchPattern( aSearchOpt, DOCPOS_START, DOCPOS_END ))
                 {
                     pWrtShell->EnterStdMode();      // Selektion wieder aufheben
                     bRet = TRUE;

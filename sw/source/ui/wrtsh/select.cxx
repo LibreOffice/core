@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 18:46:55 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,13 @@
 #endif
 #endif
 
+namespace com { namespace sun { namespace star { namespace util {
+    struct SearchOptions;
+} } } }
+
+using namespace com::sun::star::util;
+
+
 static long nStartDragX = 0, nStartDragY = 0;
 static BOOL  bStartDrag = FALSE;
 
@@ -235,14 +242,14 @@ long SwWrtShell::SelAll()
 ------------------------------------------------------------------------*/
 
 
-ULONG SwWrtShell::SearchPattern( const utl::SearchParam& rParam,
+ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt,
                                 SwDocPositions eStt, SwDocPositions eEnd,
                                 FindRanges eFlags, int bReplace )
 {
         // keine Erweiterung bestehender Selektionen
     if(!(eFlags & FND_IN_SEL))
         ClearMark();
-    return Find( rParam, eStt, eEnd, eFlags, bReplace );
+    return Find( rSearchOpt, eStt, eEnd, eFlags, bReplace );
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Suche nach Vorlagen
@@ -272,7 +279,7 @@ ULONG SwWrtShell::SearchTempl( const String &rTempl,
 
 ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
                                 SwDocPositions eStart, SwDocPositions eEnde,
-                                FindRanges eFlags, const utl::SearchParam* pParam,
+                                FindRanges eFlags, const SearchOptions* pSearchOpt,
                                 const SfxItemSet* pReplaceSet )
 {
     // Keine Erweiterung bestehender Selektionen
@@ -280,7 +287,7 @@ ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
         ClearMark();
 
     // Suchen
-    return Find( rFindSet, bNoColls, eStart, eEnde, eFlags, pParam, pReplaceSet);
+    return Find( rFindSet, bNoColls, eStart, eEnde, eFlags, pSearchOpt, pReplaceSet);
 }
 
 // ---------- Selektionsmodi ----------
@@ -966,11 +973,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.5 2000-11-28 18:46:55 jp Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.6 2001-03-12 08:18:49 tl Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.5  2000/11/28 18:46:55  jp
+          Bug #80312#: OverwriteCursor for CJK
+
           Revision 1.4  2000/11/21 08:49:57  os
           #80521# prevent creation of illegal strings
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:05:09 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+
 #include <limits.h>     //fuer LONG_MAX
 
 #ifdef PM20
@@ -71,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef _HORIORNT_HXX
 #include <horiornt.hxx>
@@ -227,6 +234,9 @@ extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
 #if defined( WIN ) || defined( WNT ) || defined( PM2 )
 #define DDE_AVAILABLE
 #endif
+
+
+com::sun::star::lang::Locale    CreateLocale( LanguageType eLanguage );
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();

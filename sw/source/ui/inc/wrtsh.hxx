@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:21:32 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@ class NaviContentBookmark;
 struct SwCallMouseEvent;
 class DropEvent;
 struct ChartSelectionInfo;
+
+namespace com { namespace sun { namespace star { namespace util {
+    struct SearchOptions;
+} } } }
 
 
 class SwWrtShell: public SwFEShell
@@ -351,7 +355,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     String  GetRepeatString() const;
 
     //Suchen oder Ersetzen
-    ULONG SearchPattern(const utl::SearchParam& rParam,
+    ULONG SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
                          SwDocPositions eStart, SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
                          int bReplace = FALSE );
@@ -365,7 +369,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                          BOOL bNoColls,
                          SwDocPositions eStart,SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
-                         const utl::SearchParam* pParam = 0,
+                         const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                          const SfxItemSet* pReplaceSet = 0);
 
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar = ' ' );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:24:41 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,16 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
 #endif
@@ -68,7 +78,7 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _TXTCMP_HXX //autogen wg. SearchParam
+#ifndef _TXTCMP_HXX
 #include <svtools/txtcmp.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
@@ -78,6 +88,9 @@
 #include <sfx2/docfile.hxx>
 #endif
 
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -121,7 +134,9 @@
 #include <statstr.hrc>
 #endif
 
-using namespace ::com::sun::star;
+using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::util;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -498,15 +513,37 @@ void SwEditShell::ApplyAutoMark()
                     String sWordOnly    = sLine.GetToken(0, ';', nTokenPos);
 
                     //3.
-                    utl::SearchParam aParam( sToSelect, utl::SearchParam::SRCH_NORMAL,
-                                                TRUE, FALSE, FALSE );
+                    //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
+                    //OUString aSrchStr = rText;
                     BOOL bCaseSensitive = sCase.Len() && sCase != sZero;
-                    BOOL bWordOnly = sWordOnly.Len() && sWordOnly != sZero;
-                    aParam.SetCaseSensitive( bCaseSensitive );
-                    aParam.SetSrchWordOnly( bWordOnly );
+                    BOOL bWordOnly      = sWordOnly.Len() && sWordOnly != sZero;
+                    BOOL bSrchInSel     = FALSE;
+                    BOOL bLEV_Relaxed   = TRUE;
+                    INT32 nLEV_Other    = 2;    //  -> changedChars;
+                    INT32 nLEV_Longer   = 3;    //! -> deletedChars;
+                    INT32 nLEV_Shorter  = 1;    //! -> insertedChars;
+                    INT32 nTransliterationFlags = 0;
+                    //
+                    INT32 nSrchFlags = 0;
+                    if (!bCaseSensitive)
+                        nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
+                    if ( bWordOnly)
+                        nSrchFlags |= SearchFlags::NORM_WORD_ONLY;
+                    if ( bLEV_Relaxed)
+                        nSrchFlags |= SearchFlags::LEV_RELAXED;
+                    if ( bSrchInSel)
+                        nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
+                                        SearchFlags::REG_NOT_ENDOFLINE );
+                    //
+                    SearchOptions aSearchOpt(
+                                        SearchAlgorithms_ABSOLUTE, nSrchFlags,
+                                        sToSelect, OUString(),
+                                        CreateLocale( LANGUAGE_SYSTEM ),
+                                        nLEV_Other, nLEV_Longer, nLEV_Shorter,
+                                        nTransliterationFlags );
 
                     KillPams();
-                    ULONG nRet = Find( aParam,  DOCPOS_START, DOCPOS_END,
+                    ULONG nRet = Find( aSearchOpt,  DOCPOS_START, DOCPOS_END,
                                     (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY),
                                     FALSE );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:47:52 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 08:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,18 @@
 #ifndef _OFA_OSPLCFG_HXX //autogen
 #include <offmgr/osplcfg.hxx>
 #endif
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -159,6 +168,9 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::comphelper;
 
@@ -224,27 +236,41 @@ Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
 }
 
 
-uno::Reference< XSpellChecker1 >  GetSpellChecker()
+Locale CreateLocale( LanguageType eLanguage )
+{
+    String aLangStr, aCtryStr;
+    if (LANGUAGE_NONE != eLanguage)
+        ConvertLanguageToIsoNames( eLanguage, aLangStr, aCtryStr );
+
+    return Locale( aLangStr, aCtryStr, rtl::OUString() );
+}
+
+
+Reference< XSpellChecker1 >  GetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
-uno::Reference< XHyphenator >  GetHyphenator()
+
+Reference< XHyphenator >  GetHyphenator()
 {
     return LinguMgr::GetHyphenator();
 }
 
-uno::Reference< XThesaurus >  GetThesaurus()
+
+Reference< XThesaurus >  GetThesaurus()
 {
     return LinguMgr::GetThesaurus();
 }
 
-uno::Reference< XDictionaryList >  GetDictionaryList()
+
+Reference< XDictionaryList >  GetDictionaryList()
 {
     return LinguMgr::GetDictionaryList();
 }
 
-uno::Reference< beans::XPropertySet >   GetLinguPropertySet()
+
+Reference< beans::XPropertySet >    GetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }
