@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:55:48 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ english_us ] = "Main index entry";
     Text[ portuguese ] = "Entrada principal de νndice remissivo";
     Text[ russian ] = "Οπεδμεςνϋι σκΰηΰςελό: ξρνξβνξι ύλεμενς";
-    Text[ greek ] = "Κύρια εγγραφή ευρετηρίου λέξεων";
+    Text[ greek ] = "Κύρια καταχώριση ευρετηρίου λέξεων";
     Text[ dutch ] = "Index hoofditem";
     Text[ french ] = "Index lexical : entrιe principale";
     Text[ spanish ] = "Entrada principal νndice alfabιtico";
@@ -762,7 +762,7 @@ String STR_POOLFRM_FRAME
     Text[ japanese ] = "g";
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ";
-    Text[ arabic ] = "ΕΨΗΡ";
+    Text[ arabic ] = "ίΗΟΡ";
     Text[ greek ] = "Περίγραμμα";
     Text[ korean ] = "ΕΨ½ΊΖ® »σΐΪ";
     Text[ turkish ] = "Ηerηeve";
@@ -2684,7 +2684,7 @@ String STR_POOLCOLL_FRAME
     Text[ polish ] = "Zawartoζ ramki";
     Text[ japanese ] = "g‚Μ“ΰ—e";
     Text[ chinese_traditional ] = "°T®Ψ¤Ί®e";
-    Text[ arabic ] = "γΝΚζνΗΚ ΗαΕΨΗΡ";
+    Text[ arabic ] = "γΝΚζνΗΚ ΗαίΗΟΡ";
     Text[ greek ] = "Περιεχόμενα πλαισίου";
     Text[ korean ] = "ΗΑ·ΉΐΣ ³»Ώλ";
     Text[ turkish ] = "Ηerηeve iηeriπi";
@@ -2760,7 +2760,7 @@ String STR_POOLCOLL_LABEL
     Text[ arabic ] = "ΚΣγνΙ ΚζΦνΝνΙ";
     Text[ greek ] = "Επιγραφή";
     Text[ korean ] = "ΔΈΌΗ";
-    Text[ turkish ] = "Etiket";
+    Text[ turkish ] = "Yazύ";
     Text[ language_user1 ] = " ";
 };
 String STR_POOLCOLL_LABEL_ABB
@@ -2781,7 +2781,7 @@ String STR_POOLCOLL_LABEL_ABB
     Text[ polish ] = "Ilustracja";
     Text[ japanese ] = "²Χ½Δ";
     Text[ chinese_traditional ] = "΄΅ΉΟ";
-    Text[ arabic ] = "ΥζΡΙ ΕνΦΗΝνΙ";
+    Text[ arabic ] = "ΡΣγ ΚζΦνΝν";
     Text[ greek ] = "Εικόνα";
     Text[ korean ] = "»πΘ­";
     Text[ turkish ] = "Resim";
@@ -2805,7 +2805,7 @@ String STR_POOLCOLL_LABEL_TABLE
     Text[ polish ] = "Tabela";
     Text[ japanese ] = "•\\";
     Text[ chinese_traditional ] = "ªν®ζ";
-    Text[ arabic ] = "ΗαΜΟζα";
+    Text[ arabic ] = "ΜΟζα";
     Text[ greek ] = "Πίνακας";
     Text[ korean ] = "Η¥";
     Text[ turkish ] = "Tablo";
@@ -2829,7 +2829,7 @@ String STR_POOLCOLL_LABEL_FRAME
     Text[ polish ] = "Tekst";
     Text[ japanese ] = "Γ·½Δ";
     Text[ chinese_traditional ] = "¤Ί¤ε";
-    Text[ arabic ] = "ΗαδΥ";
+    Text[ arabic ] = "δΥ";
     Text[ greek ] = "Κείμενο";
     Text[ korean ] = "ΕΨ½ΊΖ®";
     Text[ turkish ] = "Metin";
@@ -3773,7 +3773,7 @@ String STR_POOLCOLL_DOC_TITEL
     Text[ arabic ] = "ΗαΪδζΗδ";
     Text[ greek ] = "Τίτλος";
     Text[ korean ] = "Α¦Έρ";
-    Text[ turkish ] = "Baώlύk";
+    Text[ turkish ] = "Bφlόm baώlύπύ";
     Text[ language_user1 ] = " ";
 };
 String STR_POOLCOLL_DOC_SUBTITEL
@@ -4960,13 +4960,13 @@ String STR_POOLCHR_RUBYTEXT
     Text = "Phonetische Symbole" ;
     Text [ English ] = "Phonetic Symbols" ;
     Text[ english_us ] = "Phonetic Symbols";
-    Text[ portuguese ] = "Phonetic Symbols";
+    Text[ portuguese ] = "Sνmbolos fonιticos";
     Text[ russian ] = "Τξνεςθχερκθε ηνΰκθ";
     Text[ greek ] = "Φωνητικά σύμβολα";
-    Text[ dutch ] = "Phonetic Symbols";
+    Text[ dutch ] = "Fonetische tekens";
     Text[ french ] = "Symboles phonιtiques";
     Text[ spanish ] = "Sνmbolos fonιticos";
-    Text[ italian ] = "Phonetic Symbols";
+    Text[ italian ] = "Simboli fonetici";
     Text[ danish ] = "Phonetic Symbols";
     Text[ swedish ] = "Fonetiska symboler";
     Text[ polish ] = "Symbole fonetyczne";
