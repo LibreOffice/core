@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldta.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:13:40 $
+ *  last change: $Author: hr $ $Date: 2004-06-21 16:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _LINGUISTIC_SPELLDTA_HXX_
 #define _LINGUISTIC_SPELLDTA_HXX_
 
+#include <vector>
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
