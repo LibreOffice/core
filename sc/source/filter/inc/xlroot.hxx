@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:29:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
-class XclAddInNameTranslator;
 
 struct RootData;//!
 
@@ -86,13 +85,13 @@ struct XclRootData
 {
     typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEngineDefaulterPtr;
     typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEditEnginePtr;
-    typedef ::std::auto_ptr< XclAddInNameTranslator >   XclAddInNameTranslatorPtr;
 
     XclBiff                     meBiff;         /// Current BIFF version.
     ScDocument&                 mrDoc;          /// The source or destination document.
     String                      maBasePath;     /// Base path of imported/exported file.
     CharSet                     meCharSet;      /// Character set to import/export byte strings.
-    LanguageType                meLang;         /// Document language.
+    LanguageType                meDocLang;      /// Document language (import: from file, export: from system).
+    LanguageType                meUILang;       /// UI language (import: from file, export: from system).
     ScAddress                   maScMaxPos;     /// Highest Calc cell position.
     ScAddress                   maXclMaxPos;    /// Highest Excel cell position.
     long                        mnCharWidth;    /// Width of '0' in default font (twips).
@@ -101,7 +100,6 @@ struct XclRootData
 
     ScEditEngineDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
     ScHeaderEditEnginePtr       mpHFEditEngine; /// Edit engine for header/footer.
-    XclAddInNameTranslatorPtr   mpAddInNames;   /// Translates Excel/Calc add-in function names.
 
     ::std::auto_ptr< RootData > mpRDP;//!
 
@@ -146,10 +144,10 @@ public:
     inline const XclRoot&       GetRoot() const { return *this; }
     /** Returns the current BIFF version of the importer/exporter. */
     inline XclBiff              GetBiff() const { return mrData.meBiff; }
-    /** Returns the document language. */
-    inline LanguageType         GetLanguage() const { return mrData.meLang; }
-    /** Returns the default language from ScGlobal. */
-    inline LanguageType         GetDefLanguage() const { return ScGlobal::eLnge; }
+    /** Returns the document language, i.e. for number formats. */
+    inline LanguageType         GetDocLanguage() const { return mrData.meDocLang; }
+    /** Returns the UI language. */
+    inline LanguageType         GetUILanguage() const { return mrData.meUILang; }
     /** Returns the current Calc sheet index. */
     inline sal_uInt16           GetScTab() const { return mrData.mnScTab; }
     /** Returns whether the "some cells have been cut" warning box should show. */
@@ -188,9 +186,6 @@ public:
     /** Returns the edit engine for import/export of headers/footers. */
     ScHeaderEditEngine&         GetHFEditEngine() const;
 
-    /** Returns the translator for Excel/Calc add-in function names. */
-    XclAddInNameTranslator&     GetAddInNames() const;
-
     /** Returns the highest possible cell address in a Calc document. */
     inline const ScAddress&     GetScMaxPos() const { return mrData.maScMaxPos; }
     /** Returns the highest possible cell address in an Excel document (using current BIFF version). */
@@ -201,8 +196,10 @@ protected:
 
     /** Sets the BIFF version. */
     void                        SetBiff( XclBiff eBiff );
-    /** Sets the character set to import/export byte strings. */
-    inline void                 SetLanguage( LanguageType eLang ) { mrData.meLang = eLang; }
+    /** Sets the document language, i.e. for number formats. */
+    inline void                 SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
+    /** Sets the UI language, i.e. if it has been read from a file. */
+    inline void                 SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
     /** Sets the character set to import/export byte strings. */
     inline void                 SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
     /** Sets the width of the '0' character (default font) for the current printer (twips). */
