@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:48:17 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@
 #include "topfrm.hxx"
 #include "mailmodel.hxx"
 #include "event.hxx"
+#include "appdata.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -578,13 +579,14 @@ void SfxViewShell::Activate( BOOL bMDI )
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
         }
 
-        if ( SFX_APP()->IsInBasicCall() )
+        StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
+        if ( pBas )
         {
-            BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
+            SFX_APP()->Get_Impl()->pThisDocument = pSh;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
             ::com::sun::star::uno::Any aComponent;
             aComponent <<= xInterface;
-            SbxVariable *pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+            SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
             if ( pCompVar )
             {
                 pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
@@ -593,7 +595,6 @@ void SfxViewShell::Activate( BOOL bMDI )
             {
                 SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
                 xUnoObj->SetFlag( SBX_DONTSTORE );
-                StarBASIC *pBas = pAppMgr->GetLib(0);
                 pBas->Insert( xUnoObj );
             }
         }
