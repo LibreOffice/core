@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:28:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 10:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,4 +139,4 @@ public:
 
 };
 
-#endif 
+#endif
