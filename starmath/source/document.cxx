@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-17 13:45:51 $
+ *  last change: $Author: jp $ $Date: 2001-05-21 07:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,7 +1307,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
                         xTnnl->getSomething(
                                 TransferableHelper::getUnoTunnelId() );
                     if( pTrans )
-                        pTrans->CopyToClipboard();
+                        pTrans->CopyToClipboard( pViewSh
+                                            ? pViewSh->GetEditWindow() : 0 );
                 }
             }
         }
