@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:39:01 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 
 namespace basegfx
 {
+    // predeclarations
+    class B2IRange;
+
     class B2DRange
     {
         typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
@@ -258,6 +261,11 @@ namespace basegfx
         }
     };
 
+    /** Round double to nearest integer for 2D range
+
+        @return the nearest integer for this range
+    */
+    B2IRange fround(const B2DRange& rRange);
 } // end of namespace basegfx
 
 
