@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-20 09:24:15 $
+ *  last change: $Author: kso $ $Date: 2000-11-20 12:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 //      m_aProps.aMediaType   =
         m_aProps.bIsFolder    = sal_True;
         m_aProps.bIsDocument  = sal_False;
+        m_aProps.nSize        = 0;
     }
     else
     {
@@ -258,6 +259,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 //      m_aProps.aMediaType   =
         m_aProps.bIsFolder    = sal_False;
         m_aProps.bIsDocument  = sal_True;
+        m_aProps.nSize        = 0;
     }
 }
 
@@ -518,6 +520,9 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         // Remove own and all children's Additional Core Properties.
         removeAdditionalPropertySet( sal_True );
     }
+#if 0
+    N.Y.I.
+
     else if ( aCommand.Name.compareToAscii( "transfer" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
@@ -538,6 +543,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             throw CommandAbortedException();
         }
     }
+#endif
     else if ( aCommand.Name.compareToAscii( "flush" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
@@ -754,6 +760,10 @@ Reference< XRow > Content::getPropertyValues(
             {
                 xRow->appendString ( rProp, rData.aMediaType );
             }
+            else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
+            {
+                xRow->appendLong   ( rProp, rData.nSize );
+            }
             else
             {
                 // Not a Core Property! Maybe it's an Additional Core Property?!
@@ -819,6 +829,12 @@ Reference< XRow > Content::getPropertyValues(
                       getCppuType( static_cast< const OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             rData.aMediaType );
+        xRow->appendLong   (
+            Property( OUString::createFromAscii( "Size" ),
+                      -1,
+                      getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                      PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
+            rData.nSize );
 
         // Append all Additional Core Properties.
 
@@ -921,6 +937,10 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                     bStore = sal_True;
                 }
             }
+        }
+        else if ( rValue.Name.compareToAscii( "Size" ) == 0 )
+        {
+            // Read-only property!
         }
         else
         {
@@ -1403,9 +1423,10 @@ sal_Bool Content::loadData( const Reference< XMultiServiceFactory >& rxSMgr,
                 return sal_False;
             }
 
-            // Setup properties...
+            // Title
             rProps.aTitle = rURI.getName();
 
+            // MediaType
             try
             {
                 Any aMediaType
@@ -1431,9 +1452,36 @@ sal_Bool Content::loadData( const Reference< XMultiServiceFactory >& rxSMgr,
                 return sal_False;
             }
 
+            // Size
+            try
+            {
+                Any aSize
+                    = xPropSet->getPropertyValue(
+                        OUString::createFromAscii( "Size" ) );
+                if ( !( aSize >>= rProps.nSize ) )
+                {
+                    VOS_ENSURE( sal_False,
+                                "Content::loadData - Got no Size value!" );
+                    return sal_False;
+                }
+            }
+            catch ( UnknownPropertyException & )
+            {
+                VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Size value!" );
+                return sal_False;
+            }
+            catch ( WrappedTargetException & )
+            {
+                VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Size value!" );
+                return sal_False;
+            }
+
             Reference< XEnumerationAccess > xEnumAccess;
             aEntry >>= xEnumAccess;
 
+            // ContentType / IsFolder / IsDocument
             if ( xEnumAccess.is() )
             {
                 // folder
@@ -1597,12 +1645,14 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
         //////////////////////////////////////////////////////////////////
         // Store property values...
         //////////////////////////////////////////////////////////////////
+
         xPropSet->setPropertyValue( OUString::createFromAscii( "MediaType" ),
                                     makeAny( m_aProps.aMediaType ) );
 
         //////////////////////////////////////////////////////////////////
         // Store data stream...
         //////////////////////////////////////////////////////////////////
+
         if ( xStream.is() && !isFolder() )
         {
             Reference< XActiveDataSink > xSink( xPropSet, UNO_QUERY );

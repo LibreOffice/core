@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-20 09:24:15 $
+ *  last change: $Author: kso $ $Date: 2000-11-20 12:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ struct ContentProperties
     sal_Bool         bIsDocument;  // IsDocument
     sal_Bool         bIsFolder;    // IsFolder
     ::rtl::OUString  aMediaType;   // MediaType
+    sal_Int64        nSize;        // Size
 
     ContentProperties()
     : bIsDocument( sal_True ), bIsFolder( sal_False ) {}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-20 12:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
     IsDocument            x       x
     IsFolder              x       x
     MediaType            (x)      x
+    Size                  x       x
     Title                 x       x
 
     getCommandInfo        x       x
@@ -177,6 +178,12 @@ const ::ucb::PropertyInfoTableEntry& Content::getPropertyInfoTable()
             &getCppuType( static_cast< const OUString * >( 0 ) ),
             PropertyAttribute::BOUND
         },
+        {
+            "Size",
+            -1,
+            &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY
+        },
         ///////////////////////////////////////////////////////////////
         // New properties
         ///////////////////////////////////////////////////////////////
@@ -241,6 +248,11 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
                 &getCppuBooleanType()
             },
             {
+                "flush",
+                -1,
+                &getCppuVoidType()
+            },
+            {
                 "insert",
                 -1,
                 &getCppuVoidType()
@@ -250,11 +262,14 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
                 -1,
                 &getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
             },
+#if 0
+    N.Y.I.
             {
                 "transfer",
                 -1,
                 &getCppuType( static_cast< TransferInfo * >( 0 ) )
             },
+#endif
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
@@ -324,11 +339,6 @@ const ::ucb::CommandInfoTableEntry& Content::getCommandInfoTable()
             ///////////////////////////////////////////////////////////////
             // New commands
             ///////////////////////////////////////////////////////////////
-            {
-                "flush",
-                -1,
-                &getCppuVoidType()
-            },
             ///////////////////////////////////////////////////////////////
             // EOT
             ///////////////////////////////////////////////////////////////
