@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 14:03:04 $
+ *  last change: $Author: os $ $Date: 2002-04-22 14:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,23 +141,19 @@ SFX_IMPL_TOOLBOX_CONTROL( SwTbxAutoTextCtrl, SfxBoolItem );
 /**********************************************************************
 
 **********************************************************************/
-
-
-
 SwTbxInsertCtrl::SwTbxInsertCtrl( USHORT nId,
                                     ToolBox& rTbx,
                                     SfxBindings& rBind ) :
         SfxToolBoxControl( nId, rTbx, rBind ),
         nLastSlotId(FN_INSERT_CTRL == nId ? FN_INSERT_TABLE : SID_INSERT_DIAGRAM)
 {
-    Image aImage = GetBindings().GetImageManager()->GetImage( nLastSlotId, SW_MOD() );
+    sal_Bool bHighContrast = rTbx.GetBackground().GetColor().IsDark();
+    Image aImage = GetBindings().GetImageManager()->GetImage( nLastSlotId, bHighContrast, SW_MOD() );
     rTbx.SetItemImage(GetId(), aImage);
 }
 /**********************************************************************
 
 **********************************************************************/
-
-
 SwTbxInsertCtrl::~SwTbxInsertCtrl()
 {
 }
@@ -182,8 +178,10 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
             nLastSlotId = pItem->GetValue();
             if( nLastSlotId )
                 nId = nLastSlotId;
-            Image aImage = GetBindings().GetImageManager()->GetImage( nId, SW_MOD() );
-            GetToolBox().SetItemImage(GetId(), aImage);
+
+            BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
+            Image aImage = GetBindings().GetImageManager()->GetImage( nId, bHiContrast, SW_MOD() );
+            GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
 
