@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include "valuenode.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/TemplateIdentifier.hpp>
+#include <com/sun/star/configuration/backend/TemplateIdentifier.hpp>
 
 #ifndef INCLUDED_MEMORY
 #include <memory>
@@ -83,7 +83,7 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        namespace backenduno = ::drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 
         using  backenduno::TemplateIdentifier;
 
