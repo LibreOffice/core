@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:38:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ class XclImpAutoFilterData : private ExcRoot
 private:
     ScDBData*                   pCurrDBData;
     ScQueryParam                aParam;
-    UINT16                      nFirstEmpty;
+    SCSIZE                      nFirstEmpty;
     BOOL                        bActive;
     BOOL                        bHasDropDown;
     BOOL                        bHasConflict;
@@ -218,12 +218,12 @@ public:
                                     const ScRange& rRange,
                                     const String& rName );
 
-    inline UINT16               Tab() const         { return aParam.nTab; }
-    inline UINT16               StartCol() const    { return aParam.nCol1; }
-    inline UINT16               StartRow() const    { return aParam.nRow1; }
-    inline UINT16               EndCol() const      { return aParam.nCol2; }
-    inline UINT16               EndRow() const      { return aParam.nRow2; }
-    BOOL                        HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab ) const;
+    inline SCTAB                Tab() const         { return aParam.nTab; }
+    inline SCCOL                StartCol() const    { return aParam.nCol1; }
+    inline SCROW                StartRow() const    { return aParam.nRow1; }
+    inline SCCOL                EndCol() const      { return aParam.nCol2; }
+    inline SCROW                EndRow() const      { return aParam.nRow2; }
+    BOOL                        HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
     void                        ReadAutoFilter( XclImpStream& rStrm );
 
@@ -258,8 +258,8 @@ public:
     void                        AddExtractPos( const ScRange& rRange );
     void                        Apply();
 
-    XclImpAutoFilterData*       GetByTab( UINT16 nTab );
-    BOOL                        HasDropDown( UINT16 nCol, UINT16 nRow, UINT16 nTab );
+    XclImpAutoFilterData*       GetByTab( SCTAB nTab );
+    BOOL                        HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab );
     inline void                 IncrementActiveAF() { nAFActiveCount++; }
     inline BOOL                 UseUnNamed() { return nAFActiveCount == 1; }
 };
