@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2001-02-15 17:00:49 $
+#   last change: $Author: gh $ $Date: 2001-05-29 08:51:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,10 @@ TARGET=communi
 
 CXXFILES=   simplecm.cxx	bcst.cxx
 
-OBJFILES=   $(OBJ)$/simplecm.obj	\
+OBJFILES=   \
+            $(OBJ)$/tcpio.obj		\
+            $(OBJ)$/packethandler.obj \
+            $(OBJ)$/simplecm.obj	\
             $(OBJ)$/bcst.obj		\
             $(OBJ)$/persbcst.obj	\
             $(OBJ)$/iiclient.obj	\
@@ -86,7 +89,10 @@ OBJFILES=   $(OBJ)$/simplecm.obj	\
             $(OBJ)$/parser.obj		\
             $(OBJ)$/geninfo.obj		\
 
-SLOFILES=   $(SLO)$/simplecm.obj	\
+SLOFILES=   \
+            $(SLO)$/tcpio.obj       \
+            $(SLO)$/packethandler.obj \
+            $(SLO)$/simplecm.obj	\
             $(SLO)$/bcst.obj		\
             $(SLO)$/persbcst.obj	\
             $(SLO)$/iiclient.obj	\
