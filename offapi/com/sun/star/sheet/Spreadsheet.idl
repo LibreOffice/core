@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Spreadsheet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,31 @@ service Spreadsheet
     /** specifies the page style of the sheet.
      */
     [readonly, property] string PageStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the sheet has an automatic print area.
+
+    <p> The automatic print area is used to print a sheet without
+        explicit print areas, also if other sheets have print areas.</p>
+
+    <p> If the property is true, and there are print areas on other sheets,
+        the used area of this sheet is also printed.</p>
+
+    <p> If the property is false, and there are print areas on other sheets,
+        only these specified print areas are printed.</p>
+
+    <p> If there are no print areas on the other sheets it does not matter
+        whether property is true or false.</p>
+
+    <p> This property can only be true, if there are no print areas given
+        on this sheet. If the property is set to true the print areas of
+        this sheet will be removed.</p>
+
+        @see XPrintAreas
+
+     */
+    [optional, property] boolean AutomaticPrintArea;
 
 };
 
