@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:29:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ class SwTxtFly
     sal_Bool bOn : 1;
     sal_Bool bLeftSide : 1;
     sal_Bool bTopRule: 1;
+    sal_Bool mbIgnoreCurrentFrame: 1;
+    sal_Bool mbIgnoreContour: 1;
     SwRect _GetFrm( const SwRect &rPortion, sal_Bool bTop ) const;
     SwFlyList* InitFlyList();
     // iteriert ueber die Fly-Liste
@@ -187,12 +189,11 @@ class SwTxtFly
     const SwCntntFrm* _GetMaster();
 
 public:
-    inline SwTxtFly() { pFlyList = 0; pMaster = 0; }
-#ifdef VERTICAL_LAYOUT
-    inline SwTxtFly( const SwTxtFrm *pFrm ) { CtorInit( pFrm ); }
-#else
-    inline SwTxtFly( const SwCntntFrm *pFrm ) { CtorInit( pFrm ); }
-#endif
+    inline SwTxtFly() { mbIgnoreCurrentFrame = sal_False;
+                        mbIgnoreCurrentFrame = sal_False;
+                        pFlyList = 0; pMaster = 0; }
+    inline SwTxtFly( const SwTxtFrm *pFrm )
+        { CtorInit( pFrm ); }
 
     SwTxtFly( const SwTxtFly& rTxtFly );
     inline ~SwTxtFly() { delete pFlyList; }
@@ -234,6 +235,9 @@ public:
     sal_Bool IsAnyFrm() const;
     //Das Rechteck kann leer sein, es gilt dann der Frm.
     sal_Bool IsAnyObj( const SwRect& ) const;
+
+    void SetIgnoreCurrentFrame( sal_Bool bNew ) { mbIgnoreCurrentFrame = bNew; }
+    void SetIgnoreContour( sal_Bool bNew ) { mbIgnoreContour = bNew; }
 
 #ifndef PRODUCT
     void ShowContour( OutputDevice* pOut );
