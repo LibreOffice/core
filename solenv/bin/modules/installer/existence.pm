@@ -2,9 +2,9 @@
 #
 #   $RCSfile: existence.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:26:44 $
+#   last change: $Author: rt $ $Date: 2005-04-04 09:59:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,6 +134,88 @@ sub get_specified_file
     }
 
     return $onefile;
+}
+
+#####################################################################
+# Returning a specified file as base for a new file,
+# defined by its "Name"
+#####################################################################
+
+sub get_specified_file_by_name
+{
+    my ($filesarrayref, $searchname) = @_;
+
+    my $foundfile = 0;
+    my $onefile;
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        $onefile = ${$filesarrayref}[$i];
+        my $filename = $onefile->{'Name'};
+
+        if ( $filename eq $searchname )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    if (!($foundfile))
+    {
+        installer::exiter::exit_program("ERROR: Could not find file $searchname in list of files!", "get_specified_file_by_name");
+    }
+
+    return $onefile;
+}
+
+#####################################################################
+# Checking existence of a specific file, defined by its "Name"
+#####################################################################
+
+sub filename_exists_in_filesarray
+{
+    my ($filesarrayref, $searchname) = @_;
+
+    my $foundfile = 0;
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+        my $filename = $onefile->{'Name'};
+
+        if ( $filename eq $searchname )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    return $foundfile;
+}
+
+#####################################################################
+# Checking existence of a specific file, defined by its "gid"
+#####################################################################
+
+sub filegid_exists_in_filesarray
+{
+    my ($filesarrayref, $searchgid) = @_;
+
+    my $foundfile = 0;
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+        my $filegid = $onefile->{'gid'};
+
+        if ( $filegid eq $searchgid )
+        {
+            $foundfile = 1;
+            last;
+        }
+    }
+
+    return $foundfile;
 }
 
 1;
