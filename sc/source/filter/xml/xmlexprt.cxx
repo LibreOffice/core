@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-30 16:54:48 $
+ *  last change: $Author: sab $ $Date: 2001-05-31 07:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2654,7 +2654,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                     AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_VALUE, sDate.makeStringAndClear());
                     SvXMLElementExport aElemNullDate(*this, XML_NAMESPACE_TABLE, XML_NULL_DATE, sal_True, sal_True);
                 }
-                if (bIsIterationEnabled || nIterationCount != 100 || fIterationEpsilon != 0.001)
+                if (bIsIterationEnabled || nIterationCount != 100 || !SolarMath::ApproxEqual(fIterationEpsilon, 0.001))
                 {
                     rtl::OUStringBuffer sBuffer;
                     if (bIsIterationEnabled)
@@ -2664,7 +2664,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                         GetMM100UnitConverter().convertNumber(sBuffer, nIterationCount);
                         AddAttribute(XML_NAMESPACE_TABLE, XML_STEPS, sBuffer.makeStringAndClear());
                     }
-                    if (fIterationEpsilon != 0.001)
+                    if (!SolarMath::ApproxEqual(fIterationEpsilon, 0.001))
                     {
                         GetMM100UnitConverter().convertDouble(sBuffer, fIterationEpsilon);
                         AddAttribute(XML_NAMESPACE_TABLE, XML_MAXIMUM_DIFFERENCE, sBuffer.makeStringAndClear());
