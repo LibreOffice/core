@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:03:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,9 @@
 
 #ifndef _EXTENSIONS_FORMCTRLR_FORMHELPID_HRC_
 #include "formhelpid.hrc"
+#endif
+#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#include "extensio.hrc"
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -588,6 +591,10 @@ namespace pcr
                     sal_Int32 nIntValue = -1;
                     if ( ::cppu::enum2int( nIntValue, rValue ) )
                     {
+                        if ( PROPERTY_ID_LINEEND_FORMAT == _nPropId )
+                            // for the LineEndFormat, we do not have a UI corresponding to the value "0"
+                            --nIntValue;
+
                         ::std::vector< String > aEnumStrings = m_pPropertyInfo->getPropertyEnumRepresentations( _nPropId );
                         if ( ( nIntValue >= 0 ) && ( nIntValue < (sal_Int32)aEnumStrings.size() ) )
                         {
@@ -798,6 +805,10 @@ namespace pcr
                     sal_Int32 nPos = GetStringPos( _rString, aEnumStrings );
                     if ( -1 != nPos )
                     {
+                        if ( PROPERTY_ID_LINEEND_FORMAT == _nPropId )
+                            // for the LineEndFormat, we do not have a UI corresponding to the value "0"
+                            ++nPos;
+
                         switch ( aPropertyType.getTypeClass() )
                         {
                             case TypeClass_ENUM:
@@ -1794,7 +1805,7 @@ namespace pcr
                         {
                             aProperty.sTitle = pEventDescription->sDisplayName;
                             aProperty.nHelpId = pEventDescription->nHelpId;
-                            aProperty.nUniqueButtonId = UID_EVT_MACRODLG;
+                            aProperty.nUniqueButtonId = pEventDescription->nUniqueBrowseId;
                             aProperty.nMinValue = pEventDescription->nIndex;    // misuse for sorting
                             aEventLines.insert(aProperty);
                         }
@@ -3296,6 +3307,8 @@ namespace pcr
             getPropertyBox()->EnablePropertyLine( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
             getPropertyBox()->EnablePropertyLine( ::rtl::OUString::createFromAscii( "Font" ), nTextType != TEXTTYPE_RICHTEXT );
             getPropertyBox()->EnablePropertyLine( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
+
             getPropertyBox()->ShowPropertyPage( m_nDataPageId, nTextType != TEXTTYPE_RICHTEXT );
         }
         break;
@@ -3433,6 +3446,7 @@ namespace pcr
 
             getPropertyBox()->EnablePropertyLine( PROPERTY_SHOW_SCROLLBARS, bIsMultiline );
             getPropertyBox()->EnablePropertyLine( PROPERTY_ECHO_CHAR, !bIsMultiline );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_LINEEND_FORMAT, bIsMultiline );
         }
         break;
 
@@ -3549,9 +3563,14 @@ namespace pcr
 
             {
                 Sequence< ::rtl::OUString > aListSource;
-                OSL_VERIFY( GetUnoPropertyValue( PROPERTY_LISTSOURCE ) >>= aListSource );
-                if ( aListSource.getLength() )
-                    sStringValue = aListSource[0];
+                Any aListSourceValue( GetUnoPropertyValue( PROPERTY_LISTSOURCE ) );
+                if ( aListSourceValue >>= aListSource )
+                {
+                    if ( aListSource.getLength() )
+                        sStringValue = aListSource[0];
+                }
+                else
+                    OSL_VERIFY( aListSourceValue >>= sStringValue );
             }
 
             bIsEnabled = ( !xSource.is() )
