@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:22:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,6 +531,95 @@ void SwXMLImport::startDocument( void )
 
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+
+    Reference< XPropertySet > xImportInfo( getImportInfo() );
+    Reference< XPropertySetInfo > xPropertySetInfo;
+       if( xImportInfo.is() )
+        xPropertySetInfo = xImportInfo->getPropertySetInfo();
+    if( xPropertySetInfo.is() )
+    {
+        Any aAny;
+        // insert style mode?
+        OUString sStyleInsertModeFamilies(
+                RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeFamilies"));
+        if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeFamilies) )
+        {
+            aAny = xImportInfo->getPropertyValue(sStyleInsertModeFamilies);
+            Sequence< OUString> aFamiliesSeq;
+            if( aAny >>= aFamiliesSeq )
+            {
+                OUString sFrameStyles( RTL_CONSTASCII_USTRINGPARAM ( "FrameStyles" ) );
+                OUString sPageStyles( RTL_CONSTASCII_USTRINGPARAM ( "PageStyles" ) );
+                OUString sCharacterStyles( RTL_CONSTASCII_USTRINGPARAM ( "CharacterStyles" ) );
+                OUString sParagraphStyles( RTL_CONSTASCII_USTRINGPARAM ( "ParagraphStyles" ) );
+                OUString sNumberingStyles( RTL_CONSTASCII_USTRINGPARAM ( "NumberingStyles" ) );
+                sal_uInt16 nFamilyMask = 0U;
+                sal_Int32 nCount = aFamiliesSeq.getLength();
+                const OUString *pSeq = aFamiliesSeq.getConstArray();
+                for( sal_Int32 i=0; i < nCount; i++ )
+                {
+                    const OUString& rFamily = pSeq[i];
+                    if( rFamily==sFrameStyles )
+                        nFamilyMask |= SFX_STYLE_FAMILY_FRAME;
+                    else if( rFamily==sPageStyles )
+                        nFamilyMask |= SFX_STYLE_FAMILY_PAGE;
+                    else if( rFamily==sCharacterStyles )
+                        nFamilyMask |= SFX_STYLE_FAMILY_CHAR;
+                    else if( rFamily==sParagraphStyles )
+                        nFamilyMask |= SFX_STYLE_FAMILY_PARA;
+                    else if( rFamily==sNumberingStyles )
+                        nFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
+                }
+
+                sal_Bool bOverwrite = sal_False;
+                OUString sStyleInsertModeOverwrite(
+                    RTL_CONSTASCII_USTRINGPARAM("StyleInsertModeOverwrite"));
+                if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
+                {
+                    aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
+                    if( aAny.getValueType() == ::getBooleanCppuType() &&
+                        *static_cast<const sal_Bool*>(aAny.getValue()) )
+                        bOverwrite = sal_True;
+                }
+
+                setStyleInsertMode( nFamilyMask, bOverwrite );
+            }
+        }
+
+        // text insert mode?
+        OUString sTextInsertModeRange(
+                RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
+        if( xPropertySetInfo->hasPropertyByName(sTextInsertModeRange) )
+        {
+            aAny = xImportInfo->getPropertyValue(sTextInsertModeRange);
+            Reference<XTextRange> xInsertTextRange;
+            if( aAny >>= xInsertTextRange )
+                setTextInsertMode( xInsertTextRange );
+        }
+
+        // auto text mode
+        OUString sAutoTextMode(
+                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+        if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
+        {
+            aAny = xImportInfo->getPropertyValue(sAutoTextMode);
+            if( aAny.getValueType() == ::getBooleanCppuType() &&
+                *static_cast<const sal_Bool*>(aAny.getValue()) )
+                    setBlockMode();
+        }
+
+        // organizer mode
+        OUString sOrganizerMode(
+                RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
+        if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
+        {
+            aAny = xImportInfo->getPropertyValue(sOrganizerMode);
+            if( aAny.getValueType() == ::getBooleanCppuType() &&
+                *static_cast<const sal_Bool*>(aAny.getValue()) )
+                    setOrganizerMode();
+        }
+    }
 
     // There only is a text cursor by now if we are in insert mode. In any
     // other case we have to create one at the start of the document.
