@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:22:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,6 @@ protected:
 
     XclImpStream            maStrm;             // input stream
     XclImpStream&           aIn;                // input stream
-    String                  maPassword;
 
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // Formel-Konverter
@@ -231,7 +230,6 @@ protected:
     void                    Externname25( void );           // 0x23
     void                    Colwidth( void );               // 0x24
     void                    Defrowheight2( void );          // 0x25
-    BOOL                    Filepass( void );               // 0x2F
 //      void                Window1( void );                // 0x3D
     void                    Pane( void );                   // 0x41
     void                    Codepage( void );               // 0x42
@@ -351,12 +349,9 @@ protected:
                                             // Achtung: rUnconvertedText wird moeglicherweise veraendert
 
 public:
-                            ImportExcel( SvStream&, XclBiff, ScDocument*, const String& rDocUrl );
+                            ImportExcel( SfxMedium&, SvStream&, XclBiff, ScDocument* );
 
     virtual                 ~ImportExcel( void );
-
-    /** Sets a password for stream decryption. */
-    inline void             SetPassword( const String& rPassword ) { maPassword = rPassword; }
 
     virtual FltError        Read( void );
 };
