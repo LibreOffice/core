@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:19:36 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
     SDBThreadAttach t;
     if( t.pEnv )
     {
-        ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_ASCII_US);
+        ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
         sClassName = sClassName.replace('.','/');
         out = t.pEnv->FindClass(sClassName);
         ThrowSQLException(t.pEnv,0);
