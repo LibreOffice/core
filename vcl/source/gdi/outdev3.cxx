@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-19 16:18:48 $
+ *  last change: $Author: hdu $ $Date: 2002-06-21 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5555,6 +5555,19 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         nLayoutFlags |= SAL_LAYOUT_BIDI_RTL;
     if( mnLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
         nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
+    else if( 0 == (mnLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
+    {
+        // disable Bidi if no RTL hint and no RTL codes used
+        const xub_Unicode* pStr = aStr.GetBuffer() + nFirstIndex;
+        const xub_Unicode* pEnd = pStr + (nEndIndex - nFirstIndex);
+        for( ; pStr < pEnd; ++pStr )
+            if( (*pStr >= 0x0580) && (*pStr < 0x0800)   // middle eastern scripts
+            ||  (*pStr >= 0xFB50) && (*pStr < 0xFEFF) ) // arabic presentation forms
+                break;
+        if( pStr >= pEnd )
+            nLayoutFlags |= SAL_LAYOUT_BIDI_STRONG;
+    }
+
     if( mbKerning )
         nLayoutFlags |= SAL_LAYOUT_KERNING_PAIRS;
     if( maFont.GetKerning() & KERNING_ASIAN )
@@ -5569,8 +5582,8 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         // disable CTL for non-CTL text
         const xub_Unicode* pStr = aStr.GetBuffer() + nFirstIndex;
         const xub_Unicode* pEnd = pStr + (nEndIndex-nFirstIndex);
-        for( int nLen = nEndIndex - nFirstIndex; --nLen >= 0; ++pStr )
-            if( (*pStr >= 0x0500) && (*pStr < 0x2000) )
+        for( ; pStr < pEnd; ++pStr )
+            if( (*pStr >= 0x0590) && (*pStr < 0x1900) )
                 break;
         if( pStr >= pEnd )
             nLayoutFlags |= SAL_LAYOUT_COMPLEX_DISABLED;
