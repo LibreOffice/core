@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:14:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,8 @@ ModalDialog DLG_COL_WIDTH
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 149 , 60 ) ;
-    Text = "Spaltenbreite" ;
-    Text [ ENGLISH ] = "Column width" ;
-    Text [ norwegian ] = "Bredde pÂ kolonne " ;
-    Text [ italian ] = "Larghezza colonna" ;
-    Text [ portuguese_brazilian ] = "Largura da Coluna" ;
-    Text [ portuguese ] = "Largura da coluna" ;
-    Text [ finnish ] = "Sarakkeen leveys" ;
-    Text [ danish ] = "Kolonnebredde" ;
-    Text [ french ] = "Largeur de colonne" ;
-    Text [ swedish ] = "Kolumnbredd" ;
-    Text [ dutch ] = "Kolombreedte" ;
-    Text [ spanish ] = "Ancho de columna" ;
-    Text [ english_us ] = "Column Width" ;
+    Text [ de ] = "Spaltenbreite" ;
+    Text [ en-US ] = "Column Width" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -107,38 +96,10 @@ ModalDialog DLG_COL_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 22 , 8 ) ;
-        Text = "~Breite" ;
-        Text [ ENGLISH ] = "~Width" ;
-        Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "Larghezza" ;
-        Text [ portuguese_brazilian ] = "~Largura" ;
-        Text [ portuguese ] = "~Largura" ;
-        Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "~Bredde" ;
-        Text [ french ] = "Largeur" ;
-        Text [ swedish ] = "~Bredd" ;
-        Text [ dutch ] = "B~reedte" ;
-        Text [ spanish ] = "Ancho" ;
-        Text [ english_us ] = "~Width" ;
+        Text [ de ] = "~Breite" ;
+        Text [ en-US ] = "~Width" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÂÆΩÂ∫¶(~W)";
-        Text[ russian ] = "ÿËËÌ‡";
-        Text[ polish ] = "~SzerokoúÊ";
-        Text[ japanese ] = "ÂπÖ(~W)";
-        Text[ chinese_traditional ] = "ÂØ¨Â∫¶(~W)";
-        Text[ arabic ] = "«·⁄—÷";
-        Text[ greek ] = "–Î‹ÙÔÚ";
-        Text[ korean ] = "ÎÑàÎπÑ(~W)";
-        Text[ turkish ] = "~Geni˛lik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Amplada";
-        Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°~‡∏Å‡∏ß‡πâ‡∏≤‡∏á";
-        Text[ czech ] = "≈†√≠≈ôka";
-        Text[ hebrew ] = "‚ÄÆ◊®◊ï◊ó◊ë‚Ä¨";
-        Text[ hindi ] = "~‡§ö‡•å‡§°‡§æ‡§à";
-        Text[ slovak ] = "≈†√≠~rka";
-        Text[ hungarian ] = "~Sz√©less√©g";
-        Text[ slovenian ] = "~≈†irina";
+        Text [ x-comment ] = " ";
     };
     MetricField ED_WIDTH
     {
@@ -162,74 +123,18 @@ ModalDialog DLG_COL_WIDTH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 81 , 8 ) ;
-        Text = "Breite" ;
-        Text [ ENGLISH ] = "Width" ;
-        Text [ norwegian ] = "Bredde " ;
-        Text [ italian ] = "Larghezza" ;
-        Text [ portuguese_brazilian ] = "Largura" ;
-        Text [ portuguese ] = "Largura" ;
-        Text [ finnish ] = "Leveys" ;
-        Text [ danish ] = "Bredde" ;
-        Text [ french ] = "Largeur" ;
-        Text [ swedish ] = "Bredd" ;
-        Text [ dutch ] = "Breedte" ;
-        Text [ spanish ] = "Ancho" ;
-        Text [ english_us ] = "Width" ;
-        Text[ chinese_simplified ] = "ÂÆΩÂ∫¶";
-        Text[ russian ] = "ÿËËÌ‡";
-        Text[ polish ] = "SzerokoúÊ";
-        Text[ japanese ] = "ÂπÖ";
-        Text[ chinese_traditional ] = "ÂØ¨Â∫¶";
-        Text[ arabic ] = "«·⁄—÷";
-        Text[ greek ] = "–Î‹ÙÔÚ";
-        Text[ korean ] = "ÎÑàÎπÑ";
-        Text[ turkish ] = "Geni˛lik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Llargada";
-        Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏Å‡∏ß‡πâ‡∏≤‡∏á";
-        Text[ czech ] = "≈†√≠≈ôka";
-        Text[ hebrew ] = "‚ÄÆ◊®◊ï◊ó◊ë‚Ä¨";
-        Text[ hindi ] = "‡§ö‡•å‡§°‡§º‡§æ‡§à";
-        Text[ slovak ] = "≈†√≠rka";
-        Text[ hungarian ] = "Sz√©less√©g";
-        Text[ slovenian ] = "≈†irina";
+        Text [ de ] = "Breite" ;
+        Text [ en-US ] = "Width" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_COL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
-        Text = "~Spalte" ;
-        Text [ ENGLISH ] = "~Column" ;
-        Text [ norwegian ] = "~Kolonne" ;
-        Text [ italian ] = "Colonna" ;
-        Text [ portuguese_brazilian ] = "~Coluna" ;
-        Text [ portuguese ] = "~Coluna" ;
-        Text [ finnish ] = "~Sarake" ;
-        Text [ danish ] = "~Kolonne" ;
-        Text [ french ] = "Colonne" ;
-        Text [ swedish ] = "~Kolumn" ;
-        Text [ dutch ] = "~Kolom" ;
-        Text [ spanish ] = "Colu~mna" ;
-        Text [ english_us ] = "~Column" ;
+        Text [ de ] = "~Spalte" ;
+        Text [ en-US ] = "~Column" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ê†è(~C)";
-        Text[ russian ] = "—ÚÓÎ·Âˆ";
-        Text[ polish ] = "~Kolumna";
-        Text[ japanese ] = "Âàó(~C)";
-        Text[ chinese_traditional ] = "Ê¨Ñ(~C)";
-        Text[ arabic ] = "«·⁄„Êœ";
-        Text[ greek ] = "”ÙﬁÎÁ";
-        Text[ korean ] = "Ïó¥(~C)";
-        Text[ turkish ] = "~S¸tun";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Columna";
-        Text[ thai ] = "~‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
-        Text[ czech ] = "Sloupec";
-        Text[ hebrew ] = "~Spalte";
-        Text[ hindi ] = "~‡§∏‡•ç‡§§‡§Ç‡§≠";
-        Text[ slovak ] = "~Stƒ∫pec";
-        Text[ hungarian ] = "~Oszlop";
-        Text[ slovenian ] = "~Stolpec";
+        Text [ x-comment ] = " ";
     };
     NumericField ED_COL
     {
@@ -243,24 +148,7 @@ ModalDialog DLG_COL_WIDTH
         Maximum = 99 ;
         Repeat = TRUE ;
     };
-    Text[ chinese_simplified ] = "Ê†èÂÆΩ";
-    Text[ russian ] = "ÿËËÌ‡ ÒÚÓÎ·ˆ‡";
-    Text[ polish ] = "SzerokoúÊ kolumny";
-    Text[ japanese ] = "ÂàóÂπÖ";
-    Text[ chinese_traditional ] = "Ê¨ÑÂØ¨";
-    Text[ arabic ] = "⁄—÷ «·√⁄„œ…";
-    Text[ greek ] = "–Î‹ÙÔÚ ÛÙﬁÎÁÚ";
-    Text[ korean ] = "Ïó¥ ÎÑàÎπÑ";
-    Text[ turkish ] = "S¸tun geni˛lii";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Amplada de la columna";
-    Text[ thai ] = "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏Å‡∏ß‡πâ‡∏≤‡∏á‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
-    Text[ czech ] = "≈†√≠≈ôka sloupce";
-    Text[ hebrew ] = "Spaltenbreite";
-    Text[ hindi ] = "‡§∏‡•ç‡§§‡§Ç‡§≠ ‡§ö‡•å‡§°‡§º‡§æ‡§à";
-    Text[ slovak ] = "≈†√≠rka stƒ∫pca";
-    Text[ hungarian ] = "Oszlopsz√©less√©g";
-    Text[ slovenian ] = "≈†irina stolpca";
+    Text [ x-comment ] = " ";
 };
 
 
