@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: os $ $Date: 2002-09-18 10:39:27 $
+ *  last change: $Author: os $ $Date: 2002-10-10 13:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,13 +728,12 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     BOOL bRet = FALSE;
     String sOldTableName(pListBox->GetSelectEntry());
     pListBox->Clear();
-    Reference< XDataSource> xSource;
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
     Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
-        xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+        xConnection = RegisterConnection(rtl::OUString(rDBName));
     if(xConnection.is())
     {
         Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
@@ -776,13 +775,12 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 {
     if (!bAppend)
         pListBox->Clear();
-    Reference< XDataSource> xSource;
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
     Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
-        xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+        xConnection = RegisterConnection(rtl::OUString(rDBName));
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
@@ -1279,7 +1277,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             if(pParam && pParam->xConnection.is())
                 xConnection = pParam->xConnection;
             else
-                xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+                xConnection = RegisterConnection(rtl::OUString(rDBName));
             if(bUseMergeData)
                 pImpl->pMergeData->xConnection = xConnection;
         }
@@ -1394,13 +1392,12 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
                           const String& rColNm )
 {
     sal_Int32 nRet = DataType::SQLNULL;
-    Reference< XDataSource> xSource;
     SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
     Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
     else
-        xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
+        xConnection = RegisterConnection(rtl::OUString(rDBName));
     Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
     if(xColsSupp.is())
     {
@@ -1818,7 +1815,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
     else
-        pFound->xConnection = SwNewDBMgr::GetConnection(rDataSource, xSource );
+        pFound->xConnection = RegisterConnection(rtl::OUString(rDataSource));
     if(pFound->xConnection.is())
     {
         try
