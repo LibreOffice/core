@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:16:48 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 13:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,8 @@ enum ScXMLDetectiveHighlightedAttrTokens
 {
     XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE,
     XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION,
-    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR
+    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR,
+    XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_MARKED_INVALID
 };
 
 enum ScXMLDetectiveOperationAttrTokens
