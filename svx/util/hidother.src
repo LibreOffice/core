@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:27:51 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 10:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ hidspecial HID_PROP_ALLOW_EDITS             { HelpID = HID_PROP_ALLOW_EDITS ; };
 hidspecial HID_PROP_ALLOW_DELETIONS         { HelpID = HID_PROP_ALLOW_DELETIONS ; };
 hidspecial HID_PROP_DIRTY                   { HelpID = HID_PROP_DIRTY; };
 hidspecial HID_PROP_OLDVALUE                { HelpID = HID_PROP_OLDVALUE; };
-hidspecial HID_PROP_VALUE                   { HelpID = HID_PROP_VALUE; };
 hidspecial HID_PROP_LOCKED                  { HelpID = HID_PROP_LOCKED; };
 hidspecial HID_PROP_FORMATKEY               { HelpID = HID_PROP_FORMATKEY   ; };
 hidspecial HID_PROP_REQUIRED                { HelpID = HID_PROP_REQUIRED; };
