@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,6 @@
 #endif
 #ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
-#endif
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
 #endif
 #ifndef SVX_DBTOOLSCLIENT_HXX
 #include "dbtoolsclient.hxx"
