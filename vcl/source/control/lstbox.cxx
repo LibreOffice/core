@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:53 $
+ *  last change: $Author: rt $ $Date: 2003-05-02 14:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@ ListBox::ListBox( Window* pParent, const ResId& rResId ) :
 
 ListBox::~ListBox()
 {
+    //#109201#
+    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
+
     delete mpImplLB;
 
     // Beim zerstoeren des FloatWins macht TH ein GrabFocus auf den Parent,
