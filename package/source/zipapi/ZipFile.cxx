@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-01 10:49:47 $
+ *  last change: $Author: mtg $ $Date: 2000-12-01 11:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
     aGrabber >> nNameLen;
     aGrabber >> nExtraLen;
     package::ZipEntry *pNonConstEntry = const_cast < package::ZipEntry* > (&rEntry);
-    pNonConstEntry->nOffset =  static_cast < sal_Int8 > (aGrabber.getPosition()) + nNameLen + nExtraLen;
+    pNonConstEntry->nOffset =  static_cast < sal_Int32 > (aGrabber.getPosition()) + nNameLen + nExtraLen;
     return sal_True;
 
 /*
