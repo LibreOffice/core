@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:41:53 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
     if (sPrintRanges.getLength())
     {
         sal_Int16 nTable = GetScImport().GetTables().GetCurrentSheet();
@@ -232,54 +233,46 @@ void ScXMLTableContext::EndElement()
                     if( xPrintAreas.is() )
                     {
                         uno::Sequence< table::CellRangeAddress > aRangeList;
-                        ScXMLConverter::GetRangeListFromString(
-                            aRangeList, sPrintRanges, GetScImport().GetDocument() );
+                        ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
                         xPrintAreas->setPrintAreas( aRangeList );
                     }
                 }
             }
         }
     }
-    ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
-    if( pDocObj )
+
+    ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
+    if (pOutlineTable)
     {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if( pDoc )
+        ScOutlineArray* pColArray = pOutlineTable->GetColArray();
+        sal_Int32 nDepth = pColArray->GetDepth();
+        for (sal_Int32 i = 0; i < nDepth; i++)
         {
-            ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
-            if (pOutlineTable)
+            sal_Int32 nCount = pColArray->GetCount(i);
+            sal_Bool bChanged(sal_False);
+            for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
             {
-                ScOutlineArray* pColArray = pOutlineTable->GetColArray();
-                sal_Int32 nDepth = pColArray->GetDepth();
-                for (sal_Int32 i = 0; i < nDepth; i++)
+                ScOutlineEntry* pEntry = pColArray->GetEntry(i, j);
+                if (pEntry->IsHidden())
                 {
-                    sal_Int32 nCount = pColArray->GetCount(i);
-                    sal_Bool bChanged(sal_False);
-                    for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
-                    {
-                        ScOutlineEntry* pEntry = pColArray->GetEntry(i, j);
-                        if (pEntry->IsHidden())
-                        {
-                            pColArray->SetVisibleBelow(i, j, sal_False);
-                            bChanged = sal_True;
-                        }
-                    }
+                    pColArray->SetVisibleBelow(i, j, sal_False);
+                    bChanged = sal_True;
                 }
-                ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
-                nDepth = pRowArray->GetDepth();
-                for (i = 0; i < nDepth; i++)
+            }
+        }
+        ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
+        nDepth = pRowArray->GetDepth();
+        for (i = 0; i < nDepth; i++)
+        {
+            sal_Int32 nCount = pRowArray->GetCount(i);
+            sal_Bool bChanged(sal_False);
+            for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+            {
+                ScOutlineEntry* pEntry = pRowArray->GetEntry(i, j);
+                if (pEntry->IsHidden())
                 {
-                    sal_Int32 nCount = pRowArray->GetCount(i);
-                    sal_Bool bChanged(sal_False);
-                    for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
-                    {
-                        ScOutlineEntry* pEntry = pRowArray->GetEntry(i, j);
-                        if (pEntry->IsHidden())
-                        {
-                            pRowArray->SetVisibleBelow(i, j, sal_False);
-                            bChanged = sal_True;
-                        }
-                    }
+                    pRowArray->SetVisibleBelow(i, j, sal_False);
+                    bChanged = sal_True;
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@
 #include <com/sun/star/sheet/XSubTotalField.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/sheet/CellFlags.hpp>
-//#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
@@ -149,10 +148,12 @@
 #include "dpsdbtab.hxx"
 #include "dociter.hxx"
 #include "patattr.hxx"
-#include "unonames.hxx"
 #include "olinetab.hxx"
 #include "rangeutl.hxx"
 
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
 #endif
@@ -1132,11 +1133,10 @@ rtl::OUString ScMyValidations::GetCondition(const ScMyValidation& aValidation)
 
 rtl::OUString ScMyValidations::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
 {
+    OUString sAddress;
     ScAddress aAddress(aCell.Column, aCell.Row, aCell.Sheet);
-    String sCellAddress;
-    aAddress.Format(sCellAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-    rtl::OUString sTemp(sCellAddress);
-    return sTemp;
+    ScXMLConverter::GetStringFromAddress( sAddress, aAddress, pDoc );
+    return sAddress;
 }
 
 void ScMyValidations::WriteMessage(ScXMLExport& rExport,
@@ -3790,6 +3790,12 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                             {
                                 rtl::OUString sOUName = xNamed->getName();
                                 AddAttribute(XML_NAMESPACE_TABLE, sXML_name, sOUName);
+
+                                OUString sOUBaseCellAddress;
+                                ScXMLConverter::GetStringFromAddress( sOUBaseCellAddress,
+                                    xNamedRange->getReferencePosition(), pDoc, sal_False, SCA_ABS_3D );
+                                AddAttribute(XML_NAMESPACE_TABLE, sXML_base_cell_address, sOUBaseCellAddress);
+
                                 sal_uInt16 nRangeIndex;
                                 String sName(sOUName);
                                 pNamedRanges->SearchName(sName, nRangeIndex);
@@ -3798,12 +3804,6 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                                 pNamedRange->GetEnglishSymbol(sContent, sal_True);
                                 rtl::OUString sOUTempContent(sContent);
                                 uno::Reference <table::XCellRange> xCellRange = xCellRangeReferrer->getReferredCells();
-                                table::CellAddress aCellAddress = xNamedRange->getReferencePosition();
-                                ScAddress aBaseCellAddress(aCellAddress.Column, aCellAddress.Row, aCellAddress.Sheet);
-                                String sBaseCellAddress;
-                                aBaseCellAddress.Format(sBaseCellAddress, SCA_ABS_3D, pDoc);
-                                rtl::OUString sOUBaseCellAddress(sBaseCellAddress);
-                                AddAttribute(XML_NAMESPACE_TABLE, sXML_base_cell_address, sOUBaseCellAddress);
                                 if(xCellRange.is())
                                 {
                                     rtl::OUString sOUContent = sOUTempContent.copy(1, sOUTempContent.getLength() - 2);
@@ -4005,10 +4005,8 @@ void ScXMLExport::WriteFilterDescriptor(const uno::Reference <sheet::XSheetFilte
                     uno::Any aTempOutputPosition = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_OUTPUTPOSITION)));
                     if (aTempOutputPosition >>= aOutputPosition)
                     {
-                        ScAddress aTempCellAddress(aOutputPosition.Column, aOutputPosition.Row, aOutputPosition.Sheet);
-                        String sCellAddress;
-                        aTempCellAddress.Format(sCellAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-                        rtl::OUString sOUCellAddress(sCellAddress);
+                        OUString sOUCellAddress;
+                        ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
                         AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
                     }
                 }
@@ -4187,10 +4185,8 @@ void ScXMLExport::WriteSortDescriptor(const uno::Sequence <beans::PropertyValue>
             AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_bind_styles_to_content, sXML_false);
         if (bCopyOutputData)
         {
-            ScAddress aTempCellAddress(aOutputPosition.Column, aOutputPosition.Row, aOutputPosition.Sheet);
-            String sCellAddress;
-            aTempCellAddress.Format(sCellAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-            rtl::OUString sOUCellAddress(sCellAddress);
+            OUString sOUCellAddress;
+            ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
             AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
         }
         if (bIsCaseSensitive)
@@ -4516,9 +4512,9 @@ void ScXMLExport::WriteDPFilter(const ScQueryParam& aQueryParam)
             if (!aQueryParam.bInplace)
             {
                 ScAddress aTargetAddress(aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab);
-                String sTargetAddress;
-                aTargetAddress.Format(sTargetAddress, SCA_VALID | SCA_TAB_3D, pDoc);
-                AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, rtl::OUString(sTargetAddress));
+                OUString sAddress;
+                ScXMLConverter::GetStringFromAddress( sAddress, aTargetAddress, pDoc );
+                AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sAddress);
             }
             if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) && (aQueryParam.nCol1 == aQueryParam.nRow1)
                 && (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == USHRT_MAX)))
@@ -4643,7 +4639,7 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
                         sal_uInt16 nCol, nRow1, nRow2;
-                        String sButtonList;
+                        OUString sOUButtonList;
                         const ScPatternAttr* pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
                         while (pAttr)
                         {
@@ -4653,16 +4649,12 @@ void ScXMLExport::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocum
                                 for (sal_Int32 nButtonRow = nRow1; nButtonRow <= nRow2; nButtonRow++)
                                 {
                                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
-                                    String sButtonAddr;
-                                    aButtonAddr.Format(sButtonAddr, SCA_VALID | SCA_TAB_3D, pDoc);
-                                    if (sButtonList.Len())
-                                        sButtonList += ' ';
-                                    sButtonList += sButtonAddr;
+                                    ScXMLConverter::GetStringFromAddress(
+                                        sOUButtonList, aButtonAddr, pDoc, sal_True );
                                 }
                             }
                             pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
                         }
-                        rtl::OUString sOUButtonList(sButtonList);
                         rtl::OUString sName((*pDPs)[i]->GetName());
                         rtl::OUString sApplicationData((*pDPs)[i]->GetTag());
                         sal_Bool bRowGrand = pDPSave->GetRowGrand();

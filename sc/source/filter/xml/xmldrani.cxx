@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,13 @@
 #include "dbcolect.hxx"
 #include "datauno.hxx"
 
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
@@ -85,26 +92,9 @@
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
-#define SC_DATABASERANGES "DatabaseRanges"
-#define SC_KEEPFORMATS "KeepFormats"
-#define SC_MOVECELLS "MoveCells"
-#define SC_STRIPDATA "StripData"
-#define SC_DATABASENAME "DatabaseName"
-#define SC_SOURCEOBJECT "SourceObject"
-#define SC_SOURCETYPE "SourceType"
-#define SC_NATIVE "Native"
-#define SC_CONTAINSHEADER "ContainsHeader"
-#define SC_ORIENTATION "Orientation"
-#define SC_COPYOUTPUTDATA "CopyOutputData"
-#define SC_ISCASESENSITIVE "IsCaseSensitive"
-#define SC_OUTPUTPOSITION "OutputPosition"
-#define SC_SKIPDUPLICATES "SkipDuplicates"
-#define SC_USEREGULAREXPRESSIONS "UseRegularExpressions"
-#define SC_BINDFORMATSTOCONTENT "BindFormatstoContent"
-#define SC_ENABLEUSERSORTLIST "EnableUserSortList"
-#define SC_USERSORTLISTINDEX "UserSortListIndex"
-#define SC_USERLIST "UserList"
-#define SC_INSERTPAGEBREAKS "InsertPageBreaks"
+#define SC_ENABLEUSERSORTLIST   "EnableUserSortList"
+#define SC_USERSORTLISTINDEX    "UserSortListIndex"
+#define SC_USERLIST             "UserList"
 
 using namespace com::sun::star;
 
@@ -306,152 +296,128 @@ SvXMLImportContext *ScXMLDatabaseRangeContext::CreateChildContext( USHORT nPrefi
 
 void ScXMLDatabaseRangeContext::EndElement()
 {
-    ScXMLImport& rXMLImport = GetScImport();
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rXMLImport.GetModel(), uno::UNO_QUERY );
-    ScModelObj* pDocObj = ScModelObj::getImplementation( xSpreadDoc );
-    if ( pDocObj && xSpreadDoc.is() )
+    uno::Reference <beans::XPropertySet> xPropertySet( GetScImport().GetModel(), uno::UNO_QUERY );
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if (xPropertySet.is())
     {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-        if (xPropertySet.is())
+        uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG)));
+        uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
+        if (aDatabaseRanges >>= xDatabaseRanges)
         {
-            uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DATABASERANGES)));
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
-            if (aDatabaseRanges >>= xDatabaseRanges)
+            table::CellRangeAddress aCellRangeAddress;
+            ScXMLConverter::GetRangeFromString( aCellRangeAddress, sRangeAddress, pDoc );
+            xDatabaseRanges->addNewByName(sDatabaseRangeName, aCellRangeAddress);
+            uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
+            uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
+            if (aDatabaseRange >>= xDatabaseRange)
             {
-                ScAddress aStartCellAddress;
-                ScAddress aEndCellAddress;
-                sal_Int16 i = 0;
-                while ((sRangeAddress[i] != ':') && (i < sRangeAddress.getLength()))
-                    i++;
-                rtl::OUString sStartCellAddress = sRangeAddress.copy(0, i);
-                rtl::OUString sEndCellAddress = sRangeAddress.copy(i + 1);
-                aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                table::CellRangeAddress aCellRangeAddress;
-                aCellRangeAddress.StartColumn = aStartCellAddress.Col();
-                aCellRangeAddress.EndColumn = aEndCellAddress.Col();
-                aCellRangeAddress.StartRow = aStartCellAddress.Row();
-                aCellRangeAddress.EndRow = aEndCellAddress.Row();
-                aCellRangeAddress.Sheet = aStartCellAddress.Tab();
-                xDatabaseRanges->addNewByName(sDatabaseRangeName, aCellRangeAddress);
-                uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
-                uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
-                if (aDatabaseRange >>= xDatabaseRange)
+                uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
+                if (xDatabaseRangePropertySet.is())
                 {
-                    uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
-                    if (xDatabaseRangePropertySet.is())
+                    uno::Any aTempValue;
+                    aTempValue <<= bKeepFormats;
+                    xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_KEEPFORM)), aTempValue);
+                    aTempValue <<= bMoveCells;
+                    xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)), aTempValue);
+                    aTempValue <<= bStripData;
+                    xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)), aTempValue);
+                }
+                uno::Sequence <beans::PropertyValue> aImportDescriptor = xDatabaseRange->getImportDescriptor();
+                sal_Int32 nImportProperties = aImportDescriptor.getLength();
+                for (sal_Int16 i = 0; i < nImportProperties; i++)
+                {
+                    if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_DBNAME)))
                     {
-                        uno::Any aTempValue;
-                        aTempValue <<= bKeepFormats;
-                        xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_KEEPFORMATS)), aTempValue);
-                        aTempValue <<= bMoveCells;
-                        xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_MOVECELLS)), aTempValue);
-                        aTempValue <<= bStripData;
-                        xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STRIPDATA)), aTempValue);
+                        uno::Any aDatabaseName;
+                        aDatabaseName <<= sDatabaseName;
+                        aImportDescriptor[i].Value = aDatabaseName;
                     }
-                    uno::Sequence <beans::PropertyValue> aImportDescriptor = xDatabaseRange->getImportDescriptor();
-                    sal_Int32 nImportProperties = aImportDescriptor.getLength();
-                    for (sal_Int16 i = 0; i < nImportProperties; i++)
+                    else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCOBJ)))
                     {
-                        if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DATABASENAME)))
-                        {
-                            uno::Any aDatabaseName;
-                            aDatabaseName <<= sDatabaseName;
-                            aImportDescriptor[i].Value = aDatabaseName;
-                        }
-                        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SOURCEOBJECT)))
-                        {
-                            uno::Any aSourceObject;
-                            aSourceObject <<= sSourceObject;
-                            aImportDescriptor[i].Value = aSourceObject;
-                        }
-                        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SOURCETYPE)))
-                        {
-                            uno::Any aSourceType;
-                            aSourceType <<= nSourceType;
-                            aImportDescriptor[i].Value = aSourceType;
-                        }
-                        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NATIVE)))
-                        {
-                            uno::Any aNative;
-                            aNative <<= bNative;
-                            aImportDescriptor[i].Value = aNative;
-                        }
+                        uno::Any aSourceObject;
+                        aSourceObject <<= sSourceObject;
+                        aImportDescriptor[i].Value = aSourceObject;
                     }
-                    ScDBCollection* pDBCollection = pDoc->GetDBCollection();
-                    sal_uInt16 nIndex;
-                    pDBCollection->SearchName(sDatabaseRangeName, nIndex);
-                    ScDBData* pDBData = (*pDBCollection)[nIndex];
-                    pDBData->SetImportSelection(bIsSelection);
-                    pDBData->SetAutoFilter(bAutoFilter);
-                    ScImportParam aImportParam;
-                    ScImportDescriptor::FillImportParam(aImportParam, aImportDescriptor);
-                    pDBData->SetImportParam(aImportParam);
-                    ScSortParam aSortParam;
-                    ScSortDescriptor::FillSortParam(aSortParam, aSortSequence);
-                    pDBData->SetSortParam(aSortParam);
-                    uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
-                    if (xSheetFilterDescriptor.is())
+                    else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
                     {
-                        uno::Reference <beans::XPropertySet> xFilterPropertySet (xSheetFilterDescriptor, uno::UNO_QUERY);
-                        if (xFilterPropertySet.is())
-                        {
-                            uno::Any aTemp;
-                            aTemp <<= bOrientation;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ORIENTATION)), aTemp);
-                            aTemp <<= bContainsHeader;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONTAINSHEADER)), aTemp);
-                            aTemp <<= bFilterCopyOutputData;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_COPYOUTPUTDATA)), aTemp);
-                            aTemp <<= bFilterIsCaseSensitive;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISCASESENSITIVE)), aTemp);
-                            aTemp <<= bFilterSkipDuplicates;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SKIPDUPLICATES)), aTemp);
-                            aTemp <<= bFilterUseRegularExpressions;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USEREGULAREXPRESSIONS)), aTemp);
-                            aTemp <<= aFilterOutputPosition;
-                            xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_OUTPUTPOSITION)), aTemp);
-                            if (bFilterConditionSourceRange)
-                            {
-                                ScRange aAdvSource;
-                                aAdvSource.aStart.SetCol(aFilterConditionSourceRangeAddress.StartColumn);
-                                aAdvSource.aStart.SetRow(aFilterConditionSourceRangeAddress.StartColumn);
-                                aAdvSource.aStart.SetTab(aFilterConditionSourceRangeAddress.Sheet);
-                                aAdvSource.aEnd.SetCol(aFilterConditionSourceRangeAddress.EndColumn);
-                                aAdvSource.aEnd.SetRow(aFilterConditionSourceRangeAddress.EndRow);
-                                aAdvSource.aEnd.SetTab(aFilterConditionSourceRangeAddress.Sheet);
-                                pDBData->SetAdvancedQuerySource(&aAdvSource);
-                            }
-                        }
-                        xSheetFilterDescriptor->setFilterFields(aFilterFields);
+                        uno::Any aSourceType;
+                        aSourceType <<= nSourceType;
+                        aImportDescriptor[i].Value = aSourceType;
                     }
-                    uno::Reference <sheet::XSubTotalDescriptor> xSubTotalDescriptor = xDatabaseRange->getSubTotalDescriptor();
-                    if (xSubTotalDescriptor.is())
+                    else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NATIVE)))
                     {
-                        uno::Reference <beans::XPropertySet> xSubTotalPropertySet (xSubTotalDescriptor, uno::UNO_QUERY);
-                        if( xSubTotalPropertySet.is())
-                        {
-                            uno::Any aTemp;
-                            aTemp <<= bSubTotalsBindFormatsToContent;
-                            xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_BINDFORMATSTOCONTENT)), aTemp);
-                            aTemp <<= bSubTotalsEnabledUserList;
-                            xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)), aTemp);
-                            aTemp <<= nSubTotalsUserListIndex;
-                            xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX)), aTemp);
-                            aTemp <<= bSubTotalsInsertPageBreaks;
-                            xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_INSERTPAGEBREAKS)), aTemp);
-                            aTemp <<= bSubTotalsIsCaseSensitive;
-                            xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISCASESENSITIVE)), aTemp);
-                        }
-                        ScSubTotalParam aSubTotalParam;
-                        aSubTotalParam.bDoSort = bSubTotalsSortGroups;
-                        aSubTotalParam.bAscending = bSubTotalsAscending;
-                        aSubTotalParam.bUserDef = bSubTotalsEnabledUserList;
-                        aSubTotalParam.nUserIndex = nSubTotalsUserListIndex;
-                        pDBData->SetSubTotalParam(aSubTotalParam);
-                        xSubTotalDescriptor->addNew(aSubTotalColumns, nSubTotalRuleGroupFieldNumber);
+                        uno::Any aNative;
+                        aNative <<= bNative;
+                        aImportDescriptor[i].Value = aNative;
                     }
+                }
+                ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+                sal_uInt16 nIndex;
+                pDBCollection->SearchName(sDatabaseRangeName, nIndex);
+                ScDBData* pDBData = (*pDBCollection)[nIndex];
+                pDBData->SetImportSelection(bIsSelection);
+                pDBData->SetAutoFilter(bAutoFilter);
+                ScImportParam aImportParam;
+                ScImportDescriptor::FillImportParam(aImportParam, aImportDescriptor);
+                pDBData->SetImportParam(aImportParam);
+                ScSortParam aSortParam;
+                ScSortDescriptor::FillSortParam(aSortParam, aSortSequence);
+                pDBData->SetSortParam(aSortParam);
+                uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
+                if (xSheetFilterDescriptor.is())
+                {
+                    uno::Reference <beans::XPropertySet> xFilterPropertySet (xSheetFilterDescriptor, uno::UNO_QUERY);
+                    if (xFilterPropertySet.is())
+                    {
+                        uno::Any aTemp;
+                        aTemp <<= bOrientation;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)), aTemp);
+                        aTemp <<= bContainsHeader;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)), aTemp);
+                        aTemp <<= bFilterCopyOutputData;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)), aTemp);
+                        aTemp <<= bFilterIsCaseSensitive;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), aTemp);
+                        aTemp <<= bFilterSkipDuplicates;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SKIPDUP)), aTemp);
+                        aTemp <<= bFilterUseRegularExpressions;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)), aTemp);
+                        aTemp <<= aFilterOutputPosition;
+                        xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)), aTemp);
+                        if (bFilterConditionSourceRange)
+                        {
+                            ScRange aAdvSource;
+                            ScXMLConverter::GetScRangeFromApiRange( aAdvSource, aFilterConditionSourceRangeAddress );
+                            pDBData->SetAdvancedQuerySource(&aAdvSource);
+                        }
+                    }
+                    xSheetFilterDescriptor->setFilterFields(aFilterFields);
+                }
+                uno::Reference <sheet::XSubTotalDescriptor> xSubTotalDescriptor = xDatabaseRange->getSubTotalDescriptor();
+                if (xSubTotalDescriptor.is())
+                {
+                    uno::Reference <beans::XPropertySet> xSubTotalPropertySet (xSubTotalDescriptor, uno::UNO_QUERY);
+                    if( xSubTotalPropertySet.is())
+                    {
+                        uno::Any aTemp;
+                        aTemp <<= bSubTotalsBindFormatsToContent;
+                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)), aTemp);
+                        aTemp <<= bSubTotalsEnabledUserList;
+                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)), aTemp);
+                        aTemp <<= nSubTotalsUserListIndex;
+                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX)), aTemp);
+                        aTemp <<= bSubTotalsInsertPageBreaks;
+                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INSBRK)), aTemp);
+                        aTemp <<= bSubTotalsIsCaseSensitive;
+                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), aTemp);
+                    }
+                    ScSubTotalParam aSubTotalParam;
+                    aSubTotalParam.bDoSort = bSubTotalsSortGroups;
+                    aSubTotalParam.bAscending = bSubTotalsAscending;
+                    aSubTotalParam.bUserDef = bSubTotalsEnabledUserList;
+                    aSubTotalParam.nUserIndex = nSubTotalsUserListIndex;
+                    pDBData->SetSubTotalParam(aSubTotalParam);
+                    xSubTotalDescriptor->addNew(aSubTotalColumns, nSubTotalRuleGroupFieldNumber);
                 }
             }
         }
@@ -933,32 +899,7 @@ void ScXMLSubTotalFieldContext::EndElement()
 {
     sheet::SubTotalColumn aSubTotalColumn;
     aSubTotalColumn.Column = sFieldNumber.toInt32();
-    if (sFunction.compareToAscii("auto") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_AUTO;
-    else if (sFunction.compareToAscii("average") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_AVERAGE;
-    else if (sFunction.compareToAscii("count") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_COUNT;
-    else if (sFunction.compareToAscii("countnums") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_COUNTNUMS;
-    else if (sFunction.compareToAscii("max") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_MAX;
-    else if (sFunction.compareToAscii("min") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_MIN;
-    else if (sFunction.compareToAscii("none") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_NONE;
-    else if (sFunction.compareToAscii("product") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_PRODUCT;
-    else if (sFunction.compareToAscii("stdev") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_STDEV;
-    else if (sFunction.compareToAscii("stdevp") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_STDEVP;
-    else if (sFunction.compareToAscii("sum") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_SUM;
-    else if (sFunction.compareToAscii("var") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_VAR;
-    else if (sFunction.compareToAscii("varp") == 0)
-        aSubTotalColumn.Function = sheet::GeneralFunction_VARP;
+    aSubTotalColumn.Function = ScXMLConverter::GetFunctionFromString( sFunction );
     pDatabaseRangeContext->AddSubTotalColumn(aSubTotalColumn);
 }
 

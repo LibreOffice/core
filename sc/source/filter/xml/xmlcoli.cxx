@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include "docuno.hxx"
 #include "olinetab.hxx"
 
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -97,8 +101,6 @@
 #ifndef _COM_SUN_STAR_SHEET_XPRINTAREAS_HPP_
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #endif
-
-#define SC_ISVISIBLE "IsVisible"
 
 using namespace com::sun::star;
 
@@ -222,7 +224,7 @@ void ScXMLTableColContext::EndElement()
                                         {
                                             pStyle->FillPropertySet(xColumnProperties);
                                         }
-                                        uno::Any aAny = xColumnProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
+                                        uno::Any aAny = xColumnProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS)));
                                         if (sVisibility.compareToAscii(sXML_visible) == 0)
                                         {
                                             sal_Bool bValue = sal_True;
@@ -381,18 +383,11 @@ void ScXMLTableColsContext::EndElement()
         nGroupEndCol--;
         if (nGroupStartCol <= nGroupEndCol)
         {
-            ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-            if( pDocObj )
-            {
-                ScDocument* pDoc = pDocObj->GetDocument();
-                if( pDoc )
-                {
-                    ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
-                    ScOutlineArray* pColArray = pOutlineTable->GetColArray();
-                    sal_Bool bResized;
-                    pColArray->Insert(nGroupStartCol, nGroupEndCol, bResized, !bGroupDisplay, sal_True);
-                }
-            }
+            ScDocument* pDoc = GetScImport().GetDocument();
+            ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+            ScOutlineArray* pColArray = pOutlineTable->GetColArray();
+            sal_Bool bResized;
+            pColArray->Insert(nGroupStartCol, nGroupEndCol, bResized, !bGroupDisplay, sal_True);
         }
     }
 }

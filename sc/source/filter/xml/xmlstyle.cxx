@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 10:44:29 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 /*#ifndef _PROPIMP0_HXX
 #include "propimp0.hxx"
 #endif*/
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlkywd.hxx>
@@ -320,11 +323,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_condition, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_apply_style_name, sStyleName);
-                                                table::CellAddress aBase = xSheetCondition->getSourcePosition();
-                                                ScAddress aBaseAddress(aBase.Column, aBase.Row, aBase.Sheet);
-                                                String sBaseAddress;
-                                                aBaseAddress.Format(sBaseAddress, SCA_VALID | SCA_TAB_3D, rScXMLExport.GetDocument());
-                                                rtl::OUString sOUBaseAddress(sBaseAddress);
+                                                OUString sOUBaseAddress;
+                                                ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
+                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_base_cell_address, sOUBaseAddress);
                                                 SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, sXML_map, sal_True, sal_True);
                                             }
@@ -371,11 +372,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 }
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_condition, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_apply_style_name, sStyleName);
-                                                table::CellAddress aBase = xSheetCondition->getSourcePosition();
-                                                ScAddress aBaseAddress(aBase.Column, aBase.Row, aBase.Sheet);
-                                                String sBaseAddress;
-                                                aBaseAddress.Format(sBaseAddress, SCA_VALID | SCA_TAB_3D, rScXMLExport.GetDocument());
-                                                rtl::OUString sOUBaseAddress(sBaseAddress);
+                                                OUString sOUBaseAddress;
+                                                ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
+                                                    xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_base_cell_address, sOUBaseAddress);
                                                 SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, sXML_map, sal_True, sal_True);
                                             }

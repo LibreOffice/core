@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,36 +181,26 @@ sal_Int32 ScXMLNamedExpressionsContext::GetRangeType(const rtl::OUString sRangeT
 
 void ScXMLNamedExpressionsContext::EndElement()
 {
-    ScXMLImport& rXMLImport = GetScImport();
-    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rXMLImport.GetModel(), uno::UNO_QUERY );
-    ScModelObj* pDocObj = ScModelObj::getImplementation( xSpreadDoc );
-    if ( pDocObj && xSpreadDoc.is() )
+    uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
+    if (xPropertySet.is())
     {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-        if (xPropertySet.is())
+        uno::Any aNamedRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES)));
+        uno::Reference <sheet::XNamedRanges> xNamedRanges;
+        if (aNamedRanges >>= xNamedRanges)
         {
-            uno::Any aNamedRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES)));
-            uno::Reference <sheet::XNamedRanges> xNamedRanges;
-            if (aNamedRanges >>= xNamedRanges)
+            ScMyNamedExpressions* pNamedExpressions = GetScImport().GetNamedExpressions();
+            ScMyNamedExpressions::const_iterator i = pNamedExpressions->begin();
+            table::CellAddress aCellAddress;
+            rtl::OUString sTempContent;
+            while (i != pNamedExpressions->end())
             {
-                ScMyNamedExpressions* pNamedExpressions = rXMLImport.GetNamedExpressions();
-                ScMyNamedExpressions::const_iterator i = pNamedExpressions->begin();
-                table::CellAddress aCellAddress;
-                ScAddress aBaseCellAddress;
-                rtl::OUString sTempContent;
-                while (i != pNamedExpressions->end())
-                {
-                    aBaseCellAddress.Parse((*i)->sBaseCellAddress, pDoc);
-                    aCellAddress.Column = aBaseCellAddress.Col();
-                    aCellAddress.Row = aBaseCellAddress.Row();
-                    aCellAddress.Sheet = aBaseCellAddress.Tab();
-                    sTempContent = (*i)->sContent;
-                    ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
-                    xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
-                    delete *i;
-                    i++;
-                }
+                ScXMLConverter::GetAddressFromString(
+                    aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument() );
+                sTempContent = (*i)->sContent;
+                ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
+                xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
+                delete *i;
+                i++;
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,79 +129,100 @@ public:
     static ScDocument*  GetScDocument(
                             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel );
 
+    static inline void  GetScAddressFromApiAddress(
+                            ScAddress& rScAddress,
+                            const ::com::sun::star::table::CellAddress& rApiAddress );
+    static inline void  GetApiAddressFromScAddress(
+                            ::com::sun::star::table::CellAddress& rApiAddress,
+                            const ScAddress& rScAddress );
+
+    static inline void  GetScRangeFromApiRange(
+                            ScRange& rScRange,
+                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
+    static inline void  GetApiRangeFromScRange(
+                            ::com::sun::star::table::CellRangeAddress& rApiRange,
+                            const ScRange& rScRange );
+
 // IMPORT: CellAddress / CellRange
     static sal_Int32    GetAddressFromString(
                             ScAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
-                            ScDocument* pDocument,
+                            const ScDocument* pDocument,
                             sal_Int32 nOffset = 0 );
     static sal_Int32    GetRangeFromString(
                             ScRange& rRange,
                             const ::rtl::OUString& rRangeStr,
-                            ScDocument* pDocument,
+                            const ScDocument* pDocument,
                             sal_Int32 nOffset = 0 );
     static void         GetRangeListFromString(
                             ScRangeList& rRangeList,
                             const ::rtl::OUString& rRangeListStr,
-                            ScDocument* pDocument );
+                            const ScDocument* pDocument );
 
     static sal_Int32    GetAreaFromString(
                             ScArea& rArea,
                             const ::rtl::OUString& rRangeStr,
-                            ScDocument* pDocument,
+                            const ScDocument* pDocument,
                             sal_Int32 nOffset = 0 );
 
     static sal_Int32    GetAddressFromString(
                             ::com::sun::star::table::CellAddress& rAddress,
                             const ::rtl::OUString& rAddressStr,
-                            ScDocument* pDocument,
+                            const ScDocument* pDocument,
                             sal_Int32 nOffset = 0 );
     static sal_Int32    GetRangeFromString(
                             ::com::sun::star::table::CellRangeAddress& rRange,
                             const ::rtl::OUString& rRangeStr,
-                            ScDocument* pDocument,
+                            const ScDocument* pDocument,
                             sal_Int32 nOffset = 0 );
     static void         GetRangeListFromString(
                             ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
                             const ::rtl::OUString& rRangeListStr,
-                            ScDocument* pDocument );
+                            const ScDocument* pDocument );
 
 // EXPORT: CellAddress / CellRange
     static void         GetStringFromAddress(
                             ::rtl::OUString& rString,
                             const ScAddress& rAddress,
-                            ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False );
+                            const ScDocument* pDocument,
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             ::rtl::OUString& rString,
                             const ScRange& rRange,
-                            ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False );
+                            const ScDocument* pDocument,
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             ::rtl::OUString& rString,
                             const ScRangeList* pRangeList,
-                            ScDocument* pDocument );
+                            const ScDocument* pDocument,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
     static void         GetStringFromArea(
                             ::rtl::OUString& rString,
                             const ScArea& rArea,
-                            ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False );
+                            const ScDocument* pDocument,
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
     static void         GetStringFromAddress(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::table::CellAddress& rAddress,
-                            ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False );
+                            const ScDocument* pDocument,
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::table::CellRangeAddress& rRange,
-                            ScDocument* pDocument,
-                            sal_Bool bAppendStr = sal_False );
+                            const ScDocument* pDocument,
+                            sal_Bool bAppendStr = sal_False,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >& rRangeSeq,
-                            ScDocument* pDocument );
+                            const ScDocument* pDocument,
+                            sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static ::com::sun::star::sheet::GeneralFunction
@@ -236,6 +257,42 @@ public:
                             ::rtl::OUString& sFormula,
                             const sal_Bool bIsFormula = sal_True);
 };
+
+
+inline void ScXMLConverter::GetScAddressFromApiAddress(
+        ScAddress& rScAddress,
+        const ::com::sun::star::table::CellAddress& rApiAddress )
+{
+    rScAddress.Set( rApiAddress.Column, rApiAddress.Row, rApiAddress.Sheet );
+}
+
+inline void ScXMLConverter::GetApiAddressFromScAddress(
+        ::com::sun::star::table::CellAddress& rApiAddress,
+        const ScAddress& rScAddress )
+{
+    rApiAddress.Column = rScAddress.Col();
+    rApiAddress.Row = rScAddress.Row();
+    rApiAddress.Sheet = rScAddress.Tab();
+}
+
+inline void ScXMLConverter::GetScRangeFromApiRange(
+        ScRange& rScRange,
+        const ::com::sun::star::table::CellRangeAddress& rApiRange )
+{
+    rScRange.aStart.Set( rApiRange.StartColumn, rApiRange.StartRow, rApiRange.Sheet );
+    rScRange.aEnd.Set( rApiRange.EndColumn, rApiRange.EndRow, rApiRange.Sheet );
+}
+
+inline void ScXMLConverter::GetApiRangeFromScRange(
+        ::com::sun::star::table::CellRangeAddress& rApiRange,
+        const ScRange& rScRange )
+{
+    rApiRange.StartColumn = rScRange.aStart.Col();
+    rApiRange.StartRow = rScRange.aStart.Row();
+    rApiRange.Sheet = rScRange.aStart.Tab();
+    rApiRange.EndColumn = rScRange.aEnd.Col();
+    rApiRange.EndRow = rScRange.aEnd.Row();
+}
 
 
 #endif

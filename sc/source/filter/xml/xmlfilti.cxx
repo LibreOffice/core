@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include "xmlimprt.hxx"
 #include "docuno.hxx"
 
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
@@ -94,6 +98,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
     aFilterFields(),
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
     pDatabaseRangeContext = pTempDatabaseRangeContext;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -111,51 +116,16 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
         {
             case XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    ScAddress aStartCellAddress;
-                    //ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    //rtl::OUString sEndCellAddress = sRangeAddress.copy(i + 1);
-                    aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                    //aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    aOutputPosition.Column = aStartCellAddress.Col();
-                    aOutputPosition.Row = aStartCellAddress.Row();
-                    aOutputPosition.Sheet = aStartCellAddress.Tab();
-                    bCopyOutputData = sal_True;
-                }
+                ScRange aScRange;
+                ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc );
+                ScXMLConverter::GetApiAddressFromScAddress( aOutputPosition, aScRange.aStart );
+                bCopyOutputData = sal_True;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    ScAddress aStartCellAddress;
-                    ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    rtl::OUString sEndCellAddress = sValue.copy(i + 1);
-                    aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                    aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    aConditionSourceRangeAddress.StartColumn = aStartCellAddress.Col();
-                    aConditionSourceRangeAddress.StartRow = aStartCellAddress.Row();
-                    aConditionSourceRangeAddress.Sheet = aStartCellAddress.Tab();
-                    aConditionSourceRangeAddress.EndColumn = aEndCellAddress.Col();
-                    aConditionSourceRangeAddress.EndRow = aEndCellAddress.Row();
-                    bConditionSourceRange = sal_True;
-                }
-
+                ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc );
+                bConditionSourceRange = sal_True;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
@@ -484,6 +454,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     aFilterFields(),
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    ScDocument* pDoc = GetScImport().GetDocument();
     pDataPilotTable = pTempDataPilotTableContext;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -501,42 +472,16 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
         {
             case XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    //ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    //rtl::OUString sEndCellAddress = sRangeAddress.copy(i + 1);
-                    aOutputPosition.Parse(sStartCellAddress, pDoc);
-                    //aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    bCopyOutputData = sal_True;
-                }
+                ScRange aScRange;
+                ScXMLConverter::GetRangeFromString( aScRange, sValue, pDoc );
+                aOutputPosition = aScRange.aStart;
+                bCopyOutputData = sal_True;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    ScAddress aStartCellAddress;
-                    ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    rtl::OUString sEndCellAddress = sValue.copy(i + 1);
-                    aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                    aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    aConditionSourceRangeAddress = ScRange(aStartCellAddress, aEndCellAddress);
-                    bConditionSourceRange = sal_True;
-                }
+                ScXMLConverter::GetRangeFromString( aConditionSourceRangeAddress, sValue, pDoc );
+                bConditionSourceRange = sal_True;
             }
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :

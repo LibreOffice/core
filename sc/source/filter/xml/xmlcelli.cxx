@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 16:39:51 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,10 @@
 #include "document.hxx"
 #include "cellsuno.hxx"
 #include "docuno.hxx"
-#include "unonames.hxx"
 
+#ifndef SC_UNONAMES_HXX
+#include "unonames.hxx"
+#endif
 // core implementation
 #ifndef SC_AREALINK_HXX
 #include "arealink.hxx"
@@ -149,13 +151,9 @@
 #endif
 #include <tools/intn.hxx>
 
-#define SC_NUMBERFORMAT "NumberFormat"
-#define SC_LOCALE "Locale"
-#define SC_NULLDATE "NullDate"
-#define SC_CURRENCYSYMBOL "CurrencySymbol"
-#define SC_CELLSTYLE "CellStyle"
-#define SC_TYPE "Type"
-#define SC_STANDARDFORMAT "StandardFormat"
+#define SC_LOCALE           "Locale"
+#define SC_CURRENCYSYMBOL   "CurrencySymbol"
+#define SC_STANDARDFORMAT   "StandardFormat"
 
 using namespace com::sun::star;
 
@@ -416,45 +414,35 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rXMLImport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
         {
-            ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
-            if ( pDocObj )
+            uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+            uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+            if ( xIndex.is() )
             {
-                ScDocument* pDoc = pDocObj->GetDocument();
-                if (pDoc)
+                uno::Any aTable = xIndex->getByIndex(aCellPos.Sheet);
+                uno::Reference<sheet::XSpreadsheet> xTable;
+                if (aTable>>=xTable)
                 {
-                    uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-                    uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-                    if ( xIndex.is() )
+                    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
+                    if (xDrawPageSupplier.is())
                     {
-                        uno::Any aTable = xIndex->getByIndex(aCellPos.Sheet);
-                        uno::Reference<sheet::XSpreadsheet> xTable;
-                        if (aTable>>=xTable)
+                        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+                        uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
+                        if (xShapes.is())
                         {
-                            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
-                            if (xDrawPageSupplier.is())
-                            {
-                                uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-                                if (xDrawPage.is())
-                                {
-                                    uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
-                                    if (xShapes.is())
-                                    {
-                                        if (aCellPos.Column > MAXCOL)
-                                            aCellPos.Column = MAXCOL;
-                                        if (aCellPos.Row > MAXROW)
-                                            aCellPos.Row = MAXROW;
-                                        Rectangle aRec = pDoc->GetMMRect(aCellPos.Column, aCellPos.Row, aCellPos.Column, aCellPos.Row, aCellPos.Sheet);
-                                        awt::Point aPoint;
-                                        aPoint.X = aRec.Left();
-                                        aPoint.Y = aRec.Top();
-                                        awt::Point* pPoint = &aPoint;
-                                        pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
-                                            rXMLImport, nPrefix, rLName, xAttrList, xShapes/*, pPoint*/);
-                                        if (pContext)
-                                            bIsEmpty = sal_False;
-                                    }
-                                }
-                            }
+                            if (aCellPos.Column > MAXCOL)
+                                aCellPos.Column = MAXCOL;
+                            if (aCellPos.Row > MAXROW)
+                                aCellPos.Row = MAXROW;
+                            ScDocument* pDoc = GetScImport().GetDocument();
+                            Rectangle aRec = pDoc->GetMMRect(aCellPos.Column, aCellPos.Row, aCellPos.Column, aCellPos.Row, aCellPos.Sheet);
+                            awt::Point aPoint;
+                            aPoint.X = aRec.Left();
+                            aPoint.Y = aRec.Top();
+                            awt::Point* pPoint = &aPoint;
+                            pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
+                                rXMLImport, nPrefix, rLName, xAttrList, xShapes/*, pPoint*/);
+                            if (pContext)
+                                bIsEmpty = sal_False;
                         }
                     }
                 }
@@ -481,7 +469,7 @@ sal_Int16 ScXMLTableRowCellContext::GetCellType(const sal_Int32 nNumberFormat, s
                 uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
                 uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
                 aIsStandardFormat >>= bIsStandard;
-                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TYPE)));
+                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)));
                 sal_Int16 nNumberFormat;
                 if ( aNumberFormat >>= nNumberFormat )
                 {
@@ -522,7 +510,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                     uno::Reference <beans::XPropertySet> xCellPropertySet (xPropCellRange, uno::UNO_QUERY);
                     if (xCellPropertySet.is() && xNumberFormatTypes.is())
                     {
-                        uno::Any aKey = xCellPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT) ));
+                        uno::Any aKey = xCellPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT) ));
                         sal_Int32 nKey;
                         if ( aKey >>= nKey )
                         {
@@ -543,7 +531,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                                                 sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
                                                 uno::Any aNumberFormatPropertyKey;
                                                 aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                                xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormatPropertyKey );
+                                                xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aNumberFormatPropertyKey );
                                             }
                                         }
                                         else
@@ -551,7 +539,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                                             nKey = SetCurrencySymbol(nKey);
                                             uno::Any aAny;
                                             aAny <<= nKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
+                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
                                         }
                                     }
                                 }
@@ -572,7 +560,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCellRange>& 
                                             nKey = SetCurrencySymbol(nKey);
                                             uno::Any aAny;
                                             aAny <<= nKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
+                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
                                         }
                                     }
                                 }
@@ -599,7 +587,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                 uno::Reference <beans::XPropertySet> xCellPropertySet (xCell, uno::UNO_QUERY);
                 if (xCellPropertySet.is() && xNumberFormatTypes.is())
                 {
-                    uno::Any aKey = xCellPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT) ));
+                    uno::Any aKey = xCellPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT) ));
                     sal_Int32 nKey;
                     if ( aKey >>= nKey )
                     {
@@ -620,7 +608,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                                             sal_Int32 nNumberFormatPropertyKey = xNumberFormatTypes->getStandardFormat(nCellType, aLocale);
                                             uno::Any aNumberFormatPropertyKey;
                                             aNumberFormatPropertyKey <<= nNumberFormatPropertyKey;
-                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormatPropertyKey );
+                                            xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aNumberFormatPropertyKey );
                                         }
                                     }
                                     else
@@ -628,7 +616,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                                         nKey = SetCurrencySymbol(nKey);
                                         uno::Any aAny;
                                         aAny <<= nKey;
-                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
+                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
                                     }
                                 }
                             }
@@ -649,7 +637,7 @@ void ScXMLTableRowCellContext::SetType(const uno::Reference<table::XCell>& xCell
                                         nKey = SetCurrencySymbol(nKey);
                                         uno::Any aAny;
                                         aAny <<= nKey;
-                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aAny);
+                                        xCellPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT)), aAny);
                                     }
                                 }
                             }
@@ -855,14 +843,14 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
                 rtl::OUString sParentName = pStyle->GetParent();
                 uno::Any aStyleName;
                 aStyleName <<= sParentName;
-                xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CELLSTYLE)), aStyleName);
+                xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
                 pStyle->FillPropertySet(xProperties);
             }
             else
             {
                 uno::Any aStyleName;
                 aStyleName <<= sStyleName;
-                xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CELLSTYLE)), aStyleName);
+                xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
             }
             SetContentValidation(xProperties);
         }
@@ -883,14 +871,14 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
             rtl::OUString sParentName = pStyle->GetParent();
             uno::Any aStyleName;
             aStyleName <<= sParentName;
-            xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CELLSTYLE)), aStyleName);
+            xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
             pStyle->FillPropertySet(xProperties);
         }
         else
         {
             uno::Any aStyleName;
             aStyleName <<= sStyleName;
-            xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CELLSTYLE)), aStyleName);
+            xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
         }
         SetContentValidation(xProperties);
     }
@@ -915,48 +903,33 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
     if (xCellAddressable.is())
     {
         table::CellAddress aCellAddress = xCellAddressable->getCellAddress();
-        ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
-        if ( pDocObj )
-        {
-            ScDocument* pDoc = pDocObj->GetDocument();
-            if (pDoc)
-            {
-                double fDate;
-                GetScImport().GetMM100UnitConverter().convertDateTime(fDate, aMyAnnotation.sCreateDate);
-                SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-                sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-                String sDate;
-                Color* pColor = NULL;
-                Color** ppColor = &pColor;
-                pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
-                ScPostIt aNote(String(aMyAnnotation.sText), sDate, String(aMyAnnotation.sAuthor));
-                aNote.SetShown(aMyAnnotation.bDisplay);
-                pDoc->SetNote(aCellAddress.Column, aCellAddress.Row, aCellAddress.Sheet, aNote);
-            }
-        }
+        double fDate;
+        GetScImport().GetMM100UnitConverter().convertDateTime(fDate, aMyAnnotation.sCreateDate);
+        ScDocument* pDoc = GetScImport().GetDocument();
+        SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+        sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+        String sDate;
+        Color* pColor = NULL;
+        Color** ppColor = &pColor;
+        pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
+        ScPostIt aNote(String(aMyAnnotation.sText), sDate, String(aMyAnnotation.sAuthor));
+        aNote.SetShown(aMyAnnotation.bDisplay);
+        pDoc->SetNote(aCellAddress.Column, aCellAddress.Row, aCellAddress.Sheet, aNote);
     }
 }
 
 // core implementation
 void ScXMLTableRowCellContext::SetCellRangeSource( sal_Int16 nSheet, sal_Int32 nColumnPos, sal_Int32 nRowPos )
 {
-    ScXMLImport& rXMLImport = GetScImport();
-    ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-    if ( pDocObj )
-    {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if( pDoc )
-        {
-            ScRange aDestRange( nColumnPos, nRowPos, nSheet, nColumnPos + aCellRangeSource.nColumns - 1,
-                nRowPos + aCellRangeSource.nRows - 1, nSheet );
-            String sFilterName( aCellRangeSource.sFilterName );
-            String sSourceStr( aCellRangeSource.sSourceStr );
-            ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), aCellRangeSource.sURL,
-                sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange );
-            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-            pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
-        }
-    }
+    ScRange aDestRange( nColumnPos, nRowPos, nSheet, nColumnPos + aCellRangeSource.nColumns - 1,
+        nRowPos + aCellRangeSource.nRows - 1, nSheet );
+    String sFilterName( aCellRangeSource.sFilterName );
+    String sSourceStr( aCellRangeSource.sSourceStr );
+    ScDocument* pDoc = GetScImport().GetDocument();
+    ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), aCellRangeSource.sURL,
+        sFilterName, aCellRangeSource.sFilterOptions, sSourceStr, aDestRange );
+    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aCellRangeSource.sURL, &sFilterName, &sSourceStr );
 }
 
 void ScXMLTableRowCellContext::EndElement()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include "xmlimprt.hxx"
 #include "docuno.hxx"
 
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
@@ -124,25 +128,10 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             break;
             case XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS :
             {
-                ScXMLImport& rXMLImport = GetScImport();
-                ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
-                if ( pDocObj )
-                {
-                    ScDocument* pDoc = pDocObj->GetDocument();
-                    ScAddress aStartCellAddress;
-                    //ScAddress aEndCellAddress;
-                    sal_Int16 i = 0;
-                    while ((sValue[i] != ':') && (i < sValue.getLength()))
-                        i++;
-                    rtl::OUString sStartCellAddress = sValue.copy(0, i);
-                    //rtl::OUString sEndCellAddress = sRangeAddress.copy(i + 1);
-                    aStartCellAddress.Parse(sStartCellAddress, pDoc);
-                    //aEndCellAddress.Parse(sEndCellAddress, pDoc);
-                    aOutputPosition.Column = aStartCellAddress.Col();
-                    aOutputPosition.Row = aStartCellAddress.Row();
-                    aOutputPosition.Sheet = aStartCellAddress.Tab();
-                    bCopyOutputData = sal_True;
-                }
+                ScRange aScRange;
+                ScXMLConverter::GetRangeFromString( aScRange, sValue, GetScImport().GetDocument() );
+                ScXMLConverter::GetApiAddressFromScAddress( aOutputPosition, aScRange.aStart );
+                bCopyOutputData = sal_True;
             }
             break;
             case XML_TOK_SORT_ATTR_CASE_SENSITIVE :

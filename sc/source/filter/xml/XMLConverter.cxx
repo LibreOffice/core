@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 12:59:32 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,20 +210,20 @@ ScDocument* ScXMLConverter::GetScDocument( uno::Reference< frame::XModel > xMode
 sal_Int32 ScXMLConverter::GetAddressFromString(
         ScAddress& rAddress,
         const OUString& rAddressStr,
-        ScDocument* pDocument,
+        const ScDocument* pDocument,
         sal_Int32 nOffset )
 {
     OUString sToken;
     nOffset = GetTokenByOffset( sToken, rAddressStr, nOffset );
     if( nOffset >= 0 )
-        rAddress.Parse( sToken, pDocument );
+        rAddress.Parse( sToken, (ScDocument*) pDocument );
     return nOffset;
 }
 
 sal_Int32 ScXMLConverter::GetRangeFromString(
         ScRange& rRange,
         const OUString& rRangeStr,
-        ScDocument* pDocument,
+        const ScDocument* pDocument,
         sal_Int32 nOffset )
 {
     OUString sToken;
@@ -234,13 +234,13 @@ sal_Int32 ScXMLConverter::GetRangeFromString(
         sal_Int32 nIndex = sToken.indexOf( ':' );
         if( nIndex < 0 )
         {
-            rRange.aStart.Parse( sToken, pDocument );
+            rRange.aStart.Parse( sToken, (ScDocument*) pDocument );
             rRange.aEnd = rRange.aStart;
         }
         else
         {
-            rRange.aStart.Parse( sToken.copy( 0, nIndex ), pDocument );
-            rRange.aEnd.Parse( sToken.copy( nIndex + 1 ), pDocument );
+            rRange.aStart.Parse( sToken.copy( 0, nIndex ), (ScDocument*) pDocument );
+            rRange.aEnd.Parse( sToken.copy( nIndex + 1 ), (ScDocument*) pDocument );
         }
     }
     return nOffset;
@@ -249,7 +249,7 @@ sal_Int32 ScXMLConverter::GetRangeFromString(
 void ScXMLConverter::GetRangeListFromString(
         ScRangeList& rRangeList,
         const OUString& rRangeListStr,
-        ScDocument* pDocument )
+        const ScDocument* pDocument )
 {
     DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     sal_Int32 nOffset = 0;
@@ -268,7 +268,7 @@ void ScXMLConverter::GetRangeListFromString(
 sal_Int32 ScXMLConverter::GetAreaFromString(
         ScArea& rArea,
         const OUString& rRangeStr,
-        ScDocument* pDocument,
+        const ScDocument* pDocument,
         sal_Int32 nOffset )
 {
     ScRange aScRange;
@@ -290,43 +290,33 @@ sal_Int32 ScXMLConverter::GetAreaFromString(
 sal_Int32 ScXMLConverter::GetAddressFromString(
         table::CellAddress& rAddress,
         const OUString& rAddressStr,
-        ScDocument* pDocument,
+        const ScDocument* pDocument,
         sal_Int32 nOffset )
 {
     ScAddress aScAddress;
     nOffset = GetAddressFromString( aScAddress, rAddressStr, pDocument, nOffset );
     if( nOffset >= 0 )
-    {
-        rAddress.Column = aScAddress.Col();
-        rAddress.Row = aScAddress.Row();
-        rAddress.Sheet = aScAddress.Tab();
-    }
+        GetApiAddressFromScAddress( rAddress, aScAddress );
     return nOffset;
 }
 
 sal_Int32 ScXMLConverter::GetRangeFromString(
         table::CellRangeAddress& rRange,
         const OUString& rRangeStr,
-        ScDocument* pDocument,
+        const ScDocument* pDocument,
         sal_Int32 nOffset )
 {
     ScRange aScRange;
     nOffset = GetRangeFromString( aScRange, rRangeStr, pDocument, nOffset );
     if( nOffset >= 0 )
-    {
-        rRange.Sheet = aScRange.aStart.Tab();
-        rRange.StartColumn = aScRange.aStart.Col();
-        rRange.EndColumn = aScRange.aEnd.Col();
-        rRange.StartRow = aScRange.aStart.Row();
-        rRange.EndRow = aScRange.aEnd.Row();
-    }
+        GetApiRangeFromScRange( rRange, aScRange );
     return nOffset;
 }
 
 void ScXMLConverter::GetRangeListFromString(
         uno::Sequence< table::CellRangeAddress >& rRangeSeq,
         const OUString& rRangeListStr,
-        ScDocument* pDocument )
+        const ScDocument* pDocument )
 {
     DBG_ASSERT( rRangeListStr.getLength(), "ScXMLConverter::GetRangeListFromString - empty string!" );
     table::CellRangeAddress aRange;
@@ -348,26 +338,28 @@ void ScXMLConverter::GetRangeListFromString(
 void ScXMLConverter::GetStringFromAddress(
         OUString& rString,
         const ScAddress& rAddress,
-        ScDocument* pDocument,
-        sal_Bool bAppendStr )
+        const ScDocument* pDocument,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
 {
     String sAddress;
-    rAddress.Format( sAddress, SCA_VALID | SCA_TAB_3D, pDocument );
+    rAddress.Format( sAddress, nFormatFlags, (ScDocument*) pDocument );
     AssignString( rString, sAddress, bAppendStr );
 }
 
 void ScXMLConverter::GetStringFromRange(
         OUString& rString,
         const ScRange& rRange,
-        ScDocument* pDocument,
-        sal_Bool bAppendStr )
+        const ScDocument* pDocument,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
 {
     ScAddress aStartAddress( rRange.aStart );
     ScAddress aEndAddress( rRange.aEnd );
     String sStartAddress;
     String sEndAddress;
-    aStartAddress.Format( sStartAddress, SCA_VALID | SCA_TAB_3D, pDocument );
-    aEndAddress.Format( sEndAddress, SCA_VALID | SCA_TAB_3D, pDocument );
+    aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument );
+    aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument );
     OUString sOUStartAddress( sStartAddress );
     sOUStartAddress += OUString( RTL_CONSTASCII_USTRINGPARAM( sXML__colon ) );
     sOUStartAddress += OUString( sEndAddress );
@@ -377,7 +369,8 @@ void ScXMLConverter::GetStringFromRange(
 void ScXMLConverter::GetStringFromRangeList(
         OUString& rString,
         const ScRangeList* pRangeList,
-        ScDocument* pDocument )
+        const ScDocument* pDocument,
+        sal_uInt16 nFormatFlags )
 {
     OUString sRangeListStr;
     if( pRangeList )
@@ -387,7 +380,7 @@ void ScXMLConverter::GetStringFromRangeList(
         {
             const ScRange* pRange = pRangeList->GetObject( nIndex );
             if( pRange )
-                GetStringFromRange( sRangeListStr, *pRange, pDocument, sal_True );
+                GetStringFromRange( sRangeListStr, *pRange, pDocument, sal_True, nFormatFlags );
         }
     }
     rString = sRangeListStr;
@@ -399,11 +392,12 @@ void ScXMLConverter::GetStringFromRangeList(
 void ScXMLConverter::GetStringFromArea(
         OUString& rString,
         const ScArea& rArea,
-        ScDocument* pDocument,
-        sal_Bool bAppendStr )
+        const ScDocument* pDocument,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
 {
     ScRange aRange( rArea.nColStart, rArea.nRowStart, rArea.nTab, rArea.nColEnd, rArea.nRowEnd, rArea.nTab );
-    GetStringFromRange( rString, aRange, pDocument, bAppendStr );
+    GetStringFromRange( rString, aRange, pDocument, bAppendStr, nFormatFlags );
 }
 
 
@@ -412,35 +406,38 @@ void ScXMLConverter::GetStringFromArea(
 void ScXMLConverter::GetStringFromAddress(
         OUString& rString,
         const table::CellAddress& rAddress,
-        ScDocument* pDocument,
-        sal_Bool bAppendStr )
+        const ScDocument* pDocument,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
 {
     ScAddress aScAddress( rAddress.Column, rAddress.Row, rAddress.Sheet );
-    GetStringFromAddress( rString, aScAddress, pDocument, bAppendStr );
+    GetStringFromAddress( rString, aScAddress, pDocument, bAppendStr, nFormatFlags );
 }
 
 void ScXMLConverter::GetStringFromRange(
         OUString& rString,
         const table::CellRangeAddress& rRange,
-        ScDocument* pDocument,
-        sal_Bool bAppendStr )
+        const ScDocument* pDocument,
+        sal_Bool bAppendStr,
+        sal_uInt16 nFormatFlags )
 {
     ScRange aScRange( rRange.StartColumn, rRange.StartRow, rRange.Sheet,
         rRange.EndColumn, rRange.EndRow, rRange.Sheet );
-    GetStringFromRange( rString, aScRange, pDocument, bAppendStr );
+    GetStringFromRange( rString, aScRange, pDocument, bAppendStr, nFormatFlags );
 }
 
 void ScXMLConverter::GetStringFromRangeList(
         OUString& rString,
         const uno::Sequence< table::CellRangeAddress >& rRangeSeq,
-        ScDocument* pDocument )
+        const ScDocument* pDocument,
+        sal_uInt16 nFormatFlags )
 {
     OUString sRangeListStr;
     sal_Int32 nCount = rRangeSeq.getLength();
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
-        GetStringFromRange( sRangeListStr, rRange, pDocument, sal_True );
+        GetStringFromRange( sRangeListStr, rRange, pDocument, sal_True, nFormatFlags );
     }
     rString = sRangeListStr;
 }
