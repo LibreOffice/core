@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
+ *  last change: $Author: cl $ $Date: 2001-03-28 14:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,6 +1166,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                                         if( pPersist->Move( xSub, aStr ) ) // Eigentuemer Uebergang
                                         {
                                             bOk = sal_True;
+                                            aName = aStr;
                                             break;
                                         }
                                     }
