@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-06 11:45:03 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 18:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2011,18 +2011,21 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
     }
 }
 
-void TransferDataContainer::CopyString( const String& rStr )
+void TransferDataContainer::CopyString( USHORT nFmt, const String& rStr )
 {
     if( rStr.Len() )
     {
         TDataCntnrEntry_Impl aEntry;
-        aEntry.nId = SOT_FORMAT_STRING;
-
+        aEntry.nId = nFmt;
         rtl::OUString aStr( rStr );
         aEntry.aAny <<= aStr;
         pImpl->aFmtList.push_back( aEntry );
          AddFormat( aEntry.nId );
     }
+}
+void TransferDataContainer::CopyString( const String& rStr )
+{
+    CopyString( SOT_FORMAT_STRING, rStr );
 }
 
 void TransferDataContainer::CopyAny( USHORT nFmt,
