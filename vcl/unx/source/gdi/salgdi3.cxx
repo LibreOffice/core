@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-20 08:24:30 $
+ *  last change: $Author: hdu $ $Date: 2001-07-25 17:11:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,8 +1971,7 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
         if( maGraphicsData.mpServerSideFont != NULL )
         {
             long rDummyFactor;
-            maGraphicsData.mpServerSideFont->FetchFontMetric( *pMetric,
-                                                              rDummyFactor );
+            maGraphicsData.mpServerSideFont->FetchFontMetric( *pMetric, rDummyFactor );
             return;
         }
 #endif //USE_BUILTIN_RASTERIZER
@@ -2178,6 +2177,7 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
         PairKernData*   pPKD   = pXpPKD->pkd;
 
         for( i = 0, nCurPair=0; i < pXpPKD->numOfPairs; i++ )
+
         {
             unsigned char c1 = TranslateCharName( pPKD[i].name1 );
             unsigned char c2 = TranslateCharName( pPKD[i].name2 );
@@ -2222,9 +2222,12 @@ SalGraphics::GetGlyphBoundRect( xub_Unicode cChar,
         const int nGlyphIndex = rSF.GetGlyphIndex( cChar );
         const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
 
-        int nHeight = maGraphicsData.mpServerSideFont->GetFontSelData().mnHeight;
+        long rFactor;
+        ImplFontMetricData rTo;
+        rSF.FetchFontMetric( rTo, rFactor );
+
         *pX = rGM.GetOffset().X();
-        *pY = nHeight - rGM.GetOffset().Y();
+        *pY = rTo.mnAscent + rGM.GetOffset().Y();
         *pDX = rGM.GetSize().Width();
         *pDY = rGM.GetSize().Height();
 
