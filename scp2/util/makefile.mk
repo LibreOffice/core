@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 14:38:01 $
+#   last change: $Author: kz $ $Date: 2005-01-21 12:16:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,14 +154,11 @@ SCP1FILES +=                           \
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_GNOMEVFS)" != ""
 SCP1FILES += \
-             module_gnome.par       \
-             directory_gnome.par    \
-             file_gnome.par         \
-             module_kde.par         \
-             file_kde.par           \
-             module_mailcap.par     \
-             file_mailcap.par
+             module_gnome.par   \
+             file_gnome.par
+.ENDIF
 .ENDIF
 
 .IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == "" 
