@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 11:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,13 +148,16 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                                 aItr->nEndX += pRect->Left();
                                 Y = pRect->Bottom() - Y;
                                 awt::Point aPoint = aItr->xShape->getPosition();
-                                awt::Size aSize = aItr->xShape->getSize();
+                                awt::Size aOldSize = aItr->xShape->getSize();
+                                awt::Size aSize(aOldSize);
                                 aPoint.X += aRefPoint.X;
                                 aPoint.Y += aRefPoint.Y;
                                 aSize.Width = aItr->nEndX - aPoint.X;
                                 aSize.Height = Y - aPoint.Y;
                                 aItr->xShape->setPosition(aPoint);
-                                aItr->xShape->setSize(aSize);
+                                if( (aSize.Width != aOldSize.Width) ||
+                                    (aSize.Height != aOldSize.Height) )
+                                    aItr->xShape->setSize(aSize);
                                 delete pRect;
                             }
                         }
