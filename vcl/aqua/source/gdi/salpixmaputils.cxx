@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salpixmaputils.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-21 20:48:47 $
+ *  last change: $Author: bmahbod $ $Date: 2001-02-22 18:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
                         // Get the color table based on the desired screen depth
 
                         (**hPixMap).pmTable = GetPixMapCTab( nPixMapBitDepth,
-                                                             nPixMapColorDepth,
+                                                                         nPixMapColorDepth,
                                                              nPixMapCmpSize,
                                                              rBitmapPalette
                                                            );
@@ -488,16 +488,9 @@ PixMapHandle CopyPixMap ( PixMapHandle  hPixMap )
     {
         if ( LockPixels( hPixMap ) )
         {
-            OSStatus nOSStatus = noErr;
-
             CopyPixMap( hPixMap, hPixMapCopy );
 
-            nOSStatus = QDErr();
-
-            if (    (  nOSStatus   == noErr )
-                             && (  hPixMapCopy != NULL  )
-                             && ( *hPixMapCopy != NULL  )
-                          )
+            if ( hPixMapCopy == NULL )
             {
                 hPixMapCopy = NewPixMap();
 
@@ -592,9 +585,9 @@ PixMapHandle GetCGrafPortPixMap ( const Size           &rPixMapSize,
     if ( hNewPixMap == NULL )
     {
         hNewPixMap = GetNewPixMap( rPixMapSize,
-                                   nPixMapBits,
-                                   rBitmapPalette
-                                 );
+                                           nPixMapBits,
+                                           rBitmapPalette
+                                         );
 
         if ( hNewPixMap == NULL )
         {
