@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:28:55 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,8 @@ namespace
         : public rtl::Static< String, Extension > {};
     struct XMLFileFormatVersion
         : public rtl::Static< String, XMLFileFormatVersion > {};
+    struct WriterCompatibilityVersionOOo11
+        : public rtl::Static< String, WriterCompatibilityVersionOOo11 > {};
 }
 
 void ReplaceStringHookProc( UniString& rStr )
@@ -548,6 +550,7 @@ void ReplaceStringHookProc( UniString& rStr )
     String &rVersion = Version::get();
     String &rExtension = Extension::get();
     String &rXMLFileFormatVersion = XMLFileFormatVersion::get();
+    String &rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
     if ( !rBrandName.Len() )
     {
         Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
@@ -569,6 +572,14 @@ void ReplaceStringHookProc( UniString& rStr )
             aRet >>= aTmp;
             rExtension = aTmp;
         }
+
+        if ( !rWriterCompatibilityVersionOOo11.Len() )
+        {
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty(
+                ::utl::ConfigManager::WRITERCOMPATIBILITYVERSIONOOO11 );
+            aRet >>= aTmp;
+            rWriterCompatibilityVersionOOo11 = aTmp;
+}
     }
 
     nAll++;
@@ -580,6 +591,10 @@ void ReplaceStringHookProc( UniString& rStr )
         rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
         rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
     }
+
+    if ( rStr.SearchAscii( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != STRING_NOTFOUND )
+        rStr.SearchAndReplaceAllAscii( "%WRITERCOMPATIBILITYVERSIONOOO11",
+                                       rWriterCompatibilityVersionOOo11 );
 }
 
 Desktop::Desktop()
