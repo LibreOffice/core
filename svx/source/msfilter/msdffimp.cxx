@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-27 12:26:12 $
+ *  last change: $Author: sj $ $Date: 2001-04-12 10:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,28 +306,7 @@
 using namespace vos;
 #endif
 
-//---------------------------------------------------------------------------
-//  Hilfs Routinen
-//---------------------------------------------------------------------------
-
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-
-BOOL SvxMSDffManager::ReadINT32( SvStream& rStrm, INT32& rTarget )
-{
-    rStrm >> rTarget;
-    return 0 == rStrm.GetError();
-}
-BOOL SvxMSDffManager::ReadINT16( SvStream& rStrm, INT16& rTarget )
-{
-    rStrm >> rTarget;
-    return 0 == rStrm.GetError();
-}
-BOOL SvxMSDffManager::ReadBYTE( SvStream& rStrm, BYTE& rTarget )
-{
-    rStrm >> rTarget;
-    return 0 == rStrm.GetError();
-}
-
 
 //---------------------------------------------------------------------------
 //  Hilfs Klassen aus MSDFFDEF.HXX
@@ -2030,15 +2009,12 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
 
             SdrOutliner& rOutliner=pText->ImpGetDrawOutliner();
             USHORT nMinDepth = rOutliner.GetMinDepth();
-#if SUPD>601
             USHORT nOutlMode = rOutliner.GetMode();
-#endif
+
             { // Wohl 'nen kleiner Bug der EditEngine, das die
               // Absastzattribute bei Clear() nicht entfernt werden.
                 FASTBOOL bClearParaAttribs = TRUE;
-#if SUPD>601
                 rOutliner.SetStyleSheet( 0, NULL );
-#endif
                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                 aSet.Put(SvxColorItem( COL_BLACK ));
                 rOutliner.SetParaAttribs(0,aSet);
@@ -2052,9 +2028,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                     rOutliner.SetParaAttribs(0,rOutliner.GetEmptyItemSet());
                 }
             }
-#if SUPD>601
             rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-#endif
             rOutliner.SetMinDepth(0);
 
             ULONG nFilePosMerker=rSt.Tell();
@@ -2180,12 +2154,10 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
                     }
                 }
             }
-#if SUPD>601
             OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
             rOutliner.Init( nOutlMode );
             rOutliner.SetMinDepth(nMinDepth);
             pText->NbcSetOutlinerParaObject(pNewText);
-#endif
         }
         else
             aTextHd.SeekToBegOfRecord(rSt);
@@ -2193,62 +2165,6 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
     }
     return bRet;
 }
-
-
-void SvxMSDffManager::RetrieveNameOfBLIP(SvStream&      rSt,
-                                         String&        rGraphName,
-                                         ULONG          nMaxRead)
-{
-    rGraphName.Erase();
-    DffPropSet* pProps = 0;
-    ULONG nOldPosData = rSt.Tell();
-    DffRecordHeader aRecHd;
-    ULONG nRead = 0;
-    while( nRead < nMaxRead )
-    {
-        if( !ReadCommonRecordHeader(aRecHd, rSt) )
-        {
-            rSt.Seek( aRecHd.nFilePos );
-            break;
-        }
-        else
-        {
-            switch( aRecHd.nRecType )
-            {
-                case DFF_msofbtOPT:
-                {
-                    aRecHd.SeekToBegOfRecord( rSt );
-                    pProps = new DffPropSet( TRUE );
-                    if ( pProps )
-                        rSt >> *pProps;
-                }
-                break;
-            }
-            aRecHd.SeekToEndOfRecord( rSt );
-            nRead += aRecHd.nRecLen;
-        }
-    }
-    if( pProps )
-    {
-        MSO_BlipFlags eFlags = (MSO_BlipFlags)pProps->GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
-        String aFileName;
-        if( pProps->SeekToContent( DFF_Prop_pibName, rSt ) )
-            MSDFFReadZString( rSt, aFileName,
-                        pProps->GetPropertyValue( DFF_Prop_pibName ), TRUE );
-        if ((eFlags & mso_blipflagType) == mso_blipflagComment)
-            rGraphName = aFileName;
-        else
-        {
-            INetURLObject aURL;
-            aURL.SetSmartURL( aFileName );
-            rGraphName = aURL.getBase();
-        }
-        delete pProps;
-    }
-    rSt.Seek( nOldPosData );
-}
-
-
 
 void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
                                     ULONG nRecLen, FASTBOOL bUniCode ) const
@@ -2594,8 +2510,6 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         // UpperLeft uebertragen
         pScene->NbcSetSnapRect( aNewSize );
         pScene->SetModel( pSdrModel );
-
-//-/        pScene->NbcSetAttributes( aSet, FALSE );
         pScene->SetItemSet(aSet);
     }
     else
@@ -2772,20 +2686,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         }
 
         sal_Int32 nContrast = GetPropertyValue( DFF_Prop_pictureContrast, 0x10000 );
-#if 0
-        if ( nContrast <= 0x10000 )
-            nContrast = ( nContrast / 656 ) - 99;
-        else if ( nContrast < 0x14835 )
-            nContrast = ( nContrast - 0x10000 ) / 800;
-        else if ( nContrast < 0x1b961 )
-            nContrast = ( nContrast - 0x14835 ) / 1350 + 21;
-        else
-        {
-            nContrast = nContrast / 5000 + 40;
-            if ( nContrast > 100 )
-                nContrast = 100;
-        }
-#else
         /*
         0x10000 is msoffice 50%
         < 0x10000 is in units of 1/50th of 0x10000 per 1%
@@ -2814,8 +2714,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             nContrast /= 0x10000;
             nContrast -= 100;
         }
-#endif
-
         sal_Int16   nBrightness     = (sal_Int16)( (sal_Int32)GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) / 327 );
         sal_Int32   nGamma          = GetPropertyValue( DFF_Prop_pictureGamma, 0x10000 );
         GraphicDrawMode eDrawMode   = GRAPHICDRAWMODE_STANDARD;
@@ -2825,15 +2723,10 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             case 6 : eDrawMode = GRAPHICDRAWMODE_MONO; break;
             case 0 :
             {
-#if 0
-                if ( ( GetPropertyValue( DFF_Prop_pictureContrast, 0 ) == 0x4ccd )
-                    && ( GetPropertyValue( DFF_Prop_pictureBrightness, 0 ) == 0x599a ) )
-#else
                 //office considers the converted values of (in OOo) 70 to be the
                 //"watermark" values, which can vary slightly due to rounding from the
                 //above values
                 if (( nContrast == -70 ) && ( nBrightness == 70 ))
-#endif
                 {
                     nContrast = 0;
                     nBrightness = 0;
@@ -2911,7 +2804,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
         pRet = new SdrGrafObj;
         if( bGrfRead )
             ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
-#if SUPD>601
         if( bLinkGrf )
         {
             UniString aName( ::URIHelper::SmartRelToAbs( aFilename, FALSE,
@@ -2949,7 +2841,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             if ( bSetFileName )
                 ((SdrGrafObj*)pRet)->SetFileName( aName );
         }
-#endif
     }
     if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
     {                                               // name is already set in ImportOLE !!
@@ -3433,28 +3324,27 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             && maShapeRecords.Current()->nRecLen )
         {
             UINT32  nBytesLeft = maShapeRecords.Current()->nRecLen;
-            UINT32  nLongDummy;
-            UINT32* pUDData;
+            UINT32  nUDData;
             UINT16  nPID;
             while( 5 < nBytesLeft )
             {
-                if( !ReadUINT16(rSt, nPID) )
+                rSt >> nPID;
+                if ( rSt.GetError() != 0 )
                     break;
+                rSt >> nUDData;
                 switch( nPID )
                 {
-                case 0x038F: pUDData = &pImpRec->nXAlign; break;
-                case 0x0390: pUDData = &pImpRec->nXRelTo; break;
-                case 0x0391: pUDData = &pImpRec->nYAlign; break;
-                case 0x0392: pUDData = &pImpRec->nYRelTo; break;
-                default: pUDData = &nLongDummy;
+                    case 0x038F: pImpRec->nXAlign = nUDData; break;
+                    case 0x0390: pImpRec->nXRelTo = nUDData; break;
+                    case 0x0391: pImpRec->nYAlign = nUDData; break;
+                    case 0x0392: pImpRec->nYRelTo = nUDData; break;
                 }
-                if( !ReadUINT32(rSt, *pUDData) )
+                if ( rSt.GetError() != 0 )
                     break;
                 pImpRec->bHasUDefProp = TRUE;
                 nBytesLeft  -= 6;
             }
         }
-
 
         //  Textrahmen, auch Title oder Outline
         SdrObject*  pOrgObj  = pObj;
@@ -4164,7 +4054,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
         {
             nLenBStoreCont = nLength;       break;
         }
-        if(!SkipBytes( rSt, nLength))   return;
+        rSt.SeekRel( nLength );
     }
     while( nRead < nLenDgg );
 
@@ -4190,12 +4080,13 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
             // ist FBSE gross genug fuer unsere Daten
             BOOL bOk = ( nSkipBLIPLen + 4 + nSkipBLIPPos + 4 <= nLenFBSE );
 
-            if(     bOk )
+            if( bOk )
             {
-                bOk =   (          ( SkipBytes( rSt, nSkipBLIPLen) )
-                            && ( ReadUINT32(rSt, nBLIPLen    ) )
-                        && ( SkipBytes( rSt, nSkipBLIPPos) )
-                            && ( ReadUINT32(rSt, nBLIPPos    ) )    );
+                rSt.SeekRel( nSkipBLIPLen );
+                rSt >> nBLIPLen;
+                rSt.SeekRel( nSkipBLIPPos );
+                rSt >> nBLIPPos;
+                bOk = rSt.GetError() == 0;
 
                 nLength -= nSkipBLIPLen+ 4 + nSkipBLIPPos + 4;
                 if( 0 > nLength )
@@ -4224,7 +4115,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, ULONG nLenDgg
                                                           pBLIPInfos->Count() );
             }
         }
-        if(!SkipBytes( rSt, nLength))   return;
+        rSt.SeekRel( nLength );
     }
     while( nRead < nLenBStoreCont );
 }
@@ -4258,9 +4149,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, ULONG nLenDg )
             if(!this->GetShapeContainerData( rSt, nLength)) return;
         }
         else
-        {
-            if(!SkipBytes( rSt, nLength)) return;
-        }
+            rSt.SeekRel( nLength );
         nReadDg += nLength;
     }
     while( nReadDg < nLenDg );
@@ -4297,8 +4186,8 @@ BOOL SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
             if ( !this->GetShapeGroupContainerData( rSt, nLength, FALSE ) )
                 return FALSE;
         }
-        else if( !SkipBytes( rSt, nLength ) )
-            return FALSE;
+        else
+            rSt.SeekRel( nLength );
         nReadSpGrCont += nLength;
     }
     while( nReadSpGrCont < nLenShapeGroupCont );
@@ -4345,9 +4234,8 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
         {
             // Wir haben den FSP gefunden: Shape Typ und Id vermerken!
             eShapeType = (MSO_SPT)nInst;
-            ReadUINT32(rSt, aInfo.nShapeId);
-            if ( !SkipBytes( rSt, nLength - 4 ) )
-                return FALSE;
+            rSt >> aInfo.nShapeId;
+            rSt.SeekRel( nLength - 4 );
             nReadSpCont += nLength;
         }
         else if( DFF_msofbtOPT == nFbt ) // Shape Property Table ?
@@ -4363,8 +4251,8 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
             UINT32 nComplexDataFilePos = nStartShapePropTbl + ( nPropCount * 6 );
             do
             {
-                ReadUINT16(rSt, nPropId);
-                ReadUINT32(rSt, nPropVal);
+                rSt >> nPropId
+                    >> nPropVal;
                 nPropRead += 6;
 
                 switch( nPropId )
@@ -4459,12 +4347,11 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt, ULONG nLenShapeCont,
         }
         else if( ( DFF_msofbtClientTextbox == nFbt ) && ( 4 == nLength ) )  // Text-Box-Story-Eintrag gefunden
         {
-            ReadUINT32(rSt, aInfo.nTxBxComp);
+            rSt >> aInfo.nTxBxComp;
         }
         else
         {
-            if ( !SkipBytes( rSt, nLength ) )
-                return FALSE;
+            rSt.SeekRel( nLength );
             nReadSpCont += nLength;
         }
     }
@@ -4628,7 +4515,7 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
             case 0x3D4 :            // Metafile header then compressed EMF
             case 0x542 :            // Metafile hd. then compressed PICT
             {
-                SkipBytes( rBLIPStream, nSkip + 20 );
+                rBLIPStream.SeekRel( nSkip + 20 );
 
                 // read in size of metafile in EMUS
                 rBLIPStream >> aMtfSize100.Width() >> aMtfSize100.Height();
@@ -4647,110 +4534,109 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
                 nSkip += 1;         // One byte tag then DIB data
             break;
         }
-        if( SkipBytes( rBLIPStream, nSkip ) )
+        rBLIPStream.SeekRel( nSkip );
+
+        SvStream* pGrStream = &rBLIPStream;
+        SvMemoryStream* pOut = 0;
+        if( bZCodecCompression )
         {
-            SvStream* pGrStream = &rBLIPStream;
-            SvMemoryStream* pOut = 0;
-            if( bZCodecCompression )
-            {
-                pOut = new SvMemoryStream( 0x8000, 0x4000 );
-                if ( ZCodecDecompressed( rBLIPStream, *pOut, TRUE ) )
-                    pGrStream = pOut;
-            }
+            pOut = new SvMemoryStream( 0x8000, 0x4000 );
+            if ( ZCodecDecompressed( rBLIPStream, *pOut, TRUE ) )
+                pGrStream = pOut;
+        }
 
 #ifdef DBG_EXTRACTGRAPHICS
 
-            static sal_Int32 nCount;
+        static sal_Int32 nCount;
 
-            String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbggfx" ) ) );
-            aFileName.Append( String::CreateFromInt32( nCount++ ) );
-            switch( nInst &~ 1 )
+        String aFileName( String( RTL_CONSTASCII_STRINGPARAM( "dbggfx" ) ) );
+        aFileName.Append( String::CreateFromInt32( nCount++ ) );
+        switch( nInst &~ 1 )
+        {
+            case 0x216 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".wmf" ) ) ); break;
+            case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".emf" ) ) ); break;
+            case 0x542 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".pct" ) ) ); break;
+            case 0x46a : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".jpg" ) ) ); break;
+            case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".png" ) ) ); break;
+            case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".bmp" ) ) ); break;
+        }
+
+        String aURLStr;
+
+        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
+        {
+            INetURLObject aURL( aURLStr );
+
+            aURL.removeSegment();
+            aURL.removeFinalSlash();
+            aURL.Append( aFileName );
+
+            SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
+
+            if( pDbgOut )
             {
-                case 0x216 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".wmf" ) ) ); break;
-                case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".emf" ) ) ); break;
-                case 0x542 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".pct" ) ) ); break;
-                case 0x46a : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".jpg" ) ) ); break;
-                case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".png" ) ) ); break;
-                case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".bmp" ) ) ); break;
-            }
-
-            String aURLStr;
-
-            if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aURLStr ) )
-            {
-                INetURLObject aURL( aURLStr );
-
-                aURL.removeSegment();
-                aURL.removeFinalSlash();
-                aURL.Append( aFileName );
-
-                SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_TRUNC | STREAM_WRITE );
-
-                if( pDbgOut )
+                if ( bZCodecCompression )
                 {
-                    if ( bZCodecCompression )
-                    {
-                        pOut->Seek( STREAM_SEEK_TO_END );
-                        pDbgOut->Write( pOut->GetData(), pOut->Tell() );
-                        pOut->Seek( STREAM_SEEK_TO_BEGIN );
-                    }
-                    else
-                    {
-                        sal_Int32 nDbgLen = nLength - nSkip;
-                        if ( nDbgLen )
-                        {
-                            sal_Char* pDat = new sal_Char[ nDbgLen ];
-                            pGrStream->Read( pDat, nDbgLen );
-                            pDbgOut->Write( pDat, nDbgLen );
-                            pGrStream->SeekRel( -nDbgLen );
-                            delete pDat;
-                        }
-                    }
-
-                    delete pDbgOut;
+                    pOut->Seek( STREAM_SEEK_TO_END );
+                    pDbgOut->Write( pOut->GetData(), pOut->Tell() );
+                    pOut->Seek( STREAM_SEEK_TO_BEGIN );
                 }
+                else
+                {
+                    sal_Int32 nDbgLen = nLength - nSkip;
+                    if ( nDbgLen )
+                    {
+                        sal_Char* pDat = new sal_Char[ nDbgLen ];
+                        pGrStream->Read( pDat, nDbgLen );
+                        pDbgOut->Write( pDat, nDbgLen );
+                        pGrStream->SeekRel( -nDbgLen );
+                        delete pDat;
+                    }
+                }
+
+                delete pDbgOut;
             }
+        }
 #endif
 
-            if( ( nInst & 0xFFFE ) == 0x7A8 )
-            {   // DIBs direkt holen
-                Bitmap aNew;
-                if( aNew.Read( *pGrStream, FALSE ) )
-                {
-                    rData = Graphic( aNew );
-                    nRes = GRFILTER_OK;
-                }
+        if( ( nInst & 0xFFFE ) == 0x7A8 )
+        {   // DIBs direkt holen
+            Bitmap aNew;
+            if( aNew.Read( *pGrStream, FALSE ) )
+            {
+                rData = Graphic( aNew );
+                nRes = GRFILTER_OK;
             }
-            else
-            {   // und unsere feinen Filter darauf loslassen
-                GraphicFilter* pGF = GetGrfFilter();
-                String aEmptyStr;
-                nRes = pGF->ImportGraphic( rData, aEmptyStr, *pGrStream, GRFILTER_FORMAT_DONTKNOW );
+        }
+        else
+        {   // und unsere feinen Filter darauf loslassen
+            GraphicFilter* pGF = GetGrfFilter();
+            String aEmptyStr;
+            nRes = pGF->ImportGraphic( rData, aEmptyStr, *pGrStream, GRFILTER_FORMAT_DONTKNOW );
 
-                if( bMtfBLIP && ( GRFILTER_OK == nRes ) && ( rData.GetType() == GRAPHIC_GDIMETAFILE ) )
-                {
-                    if ( ( aMtfSize100.Width() >= 1000 ) && ( aMtfSize100.Height() >= 1000 ) )
-                    {   // #75956#, scaling does not work properly, if the graphic is less than 1cm
-                        GDIMetaFile aMtf( rData.GetGDIMetaFile() );
-                        const Size  aOldSize( aMtf.GetPrefSize() );
+            if( bMtfBLIP && ( GRFILTER_OK == nRes ) && ( rData.GetType() == GRAPHIC_GDIMETAFILE ) )
+            {
+                if ( ( aMtfSize100.Width() >= 1000 ) && ( aMtfSize100.Height() >= 1000 ) )
+                {   // #75956#, scaling does not work properly, if the graphic is less than 1cm
+                    GDIMetaFile aMtf( rData.GetGDIMetaFile() );
+                    const Size  aOldSize( aMtf.GetPrefSize() );
 
-                        if( aOldSize.Width() && ( aOldSize.Width() != aMtfSize100.Width() ) &&
-                            aOldSize.Height() && ( aOldSize.Height() != aMtfSize100.Height() ) )
-                        {
-                            aMtf.Scale( (double) aMtfSize100.Width() / aOldSize.Width(),
-                                        (double) aMtfSize100.Height() / aOldSize.Height() );
-                            aMtf.SetPrefSize( aMtfSize100 );
-                            aMtf.SetPrefMapMode( MAP_100TH_MM );
-                            rData = aMtf;
-                        }
+                    if( aOldSize.Width() && ( aOldSize.Width() != aMtfSize100.Width() ) &&
+                        aOldSize.Height() && ( aOldSize.Height() != aMtfSize100.Height() ) )
+                    {
+                        aMtf.Scale( (double) aMtfSize100.Width() / aOldSize.Width(),
+                                    (double) aMtfSize100.Height() / aOldSize.Height() );
+                        aMtf.SetPrefSize( aMtfSize100 );
+                        aMtf.SetPrefMapMode( MAP_100TH_MM );
+                        rData = aMtf;
                     }
                 }
             }
-            // ggfs. Fehlerstatus zuruecksetzen
-            if ( ERRCODE_IO_PENDING == pGrStream->GetError() )
-              pGrStream->ResetError();
-            delete pOut;
         }
+        // ggfs. Fehlerstatus zuruecksetzen
+        if ( ERRCODE_IO_PENDING == pGrStream->GetError() )
+          pGrStream->ResetError();
+        delete pOut;
     }
     rBLIPStream.Seek( nOldPos );    // alte FilePos des Streams restaurieren
 
@@ -4815,19 +4701,11 @@ BOOL SvxMSDffManager::ReadCommonRecordHeader( SvStream& rSt,
                                               USHORT&   rFbt,
                                               ULONG&    rLength )
 {
-    //----------------------------------------------
-    UINT16 aBits;
-    if( !ReadUINT16( rSt, aBits ) )
-        return FALSE;
-    rVer  =  aBits & 0x000F;
-    rInst = (aBits & 0xFFF0) >> 4;
-    //----------------------------------------------
-    if( !ReadUINT16( rSt, rFbt ) )
-        return FALSE;
-    //----------------------------------------------
-    if( 0 != rSt.IsEof() )
-        return FALSE;
-    return ReadUINT32( rSt, rLength );
+    sal_uInt16 nTmp;
+    rSt >> nTmp >> rFbt >> rLength;
+    rVer = nTmp & 15;
+    rInst = nTmp >> 4;
+    return rSt.GetError() == 0;
 }
 
 
