@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:42:06 $
+#   last change: $Author: rt $ $Date: 2004-02-10 14:27:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,13 +152,13 @@ sub check_needed_directories
 # definitions are defined.
 ##################################################
 
-sub check_directories_in_file_definitions
+sub check_directories_in_item_definitions
 {
-    my ($setupscript) = @_;
+    my ($setupscript, $item) = @_;
 
-    print "Checking files ... ";
+    print "Checking $item ... ";
 
-    my $allfiles = par2script::work::get_all_items_from_script($setupscript, "File");
+    my $allfiles = par2script::work::get_all_items_from_script($setupscript, $item);
     my $alldirectorygids = par2script::work::get_all_gids_from_script($setupscript, "Directory");
 
     for ( my $i = 0; $i <= $#{$allfiles}; $i++ )
@@ -177,7 +177,7 @@ sub check_directories_in_file_definitions
 
         if ( ! par2script::existence::exists_in_array($filedir, $alldirectorygids) )
         {
-            die "ERROR: Directory $filedir in file $onefile->{'gid'} not defined!\n";
+            die "ERROR: Directory $filedir in $item $onefile->{'gid'} not defined!\n";
         }
     }
 
