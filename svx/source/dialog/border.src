@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:46:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 12:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,10 +352,9 @@ TabPage RID_SVXPAGE_BORDER
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
-        Text = "Be~nachbarte Linienstile zusammenführen" ;
-        Text [ english_us ] = "~Merge adjacent line styles" ;
+        Text [ de ] = "Be~nachbarte Linienstile zusammenführen" ;
+        Text [ en-US ] = "~Merge adjacent line styles" ;
     };
-
 
 #define _PREVIEW_IDLIST_\
         IdList =                    \
