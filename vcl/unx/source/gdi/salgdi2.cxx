@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-19 14:51:28 $
+ *  last change: $Author: oisin $ $Date: 2001-01-23 17:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include <salgdi.hxx>
 #endif
 
-#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY) && !defined(_USE_PRINT_EXTENSION_)
+#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY)
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
@@ -780,7 +780,7 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
     aNewVal.foreground = rColMap.GetWhitePixel(), aNewVal.background = rColMap.GetBlackPixel();
     XChangeGC( pXDisp, aGC, nValues, &aNewVal );
 
-    #if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
+    #if !defined(USE_PSPRINT)
     if( _IsPrinter() )
     {
         SalTwoRect  aTwoRect = { pPosAry->mnSrcX, pPosAry->mnSrcY, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight,
@@ -799,11 +799,7 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
     }
     else
     #endif
-    #if defined(_USE_PRINT_EXTENSION_)
-        rSalBitmap.ImplDraw( pSalDisp, aDrawable, nDepth, *pPosAry,  aGC );
-    #else
         rSalBitmap.ImplDraw( aDrawable, nDepth, *pPosAry, aGC );
-    #endif
 
     XChangeGC( pXDisp, aGC, nValues, &aOldVal );
     XFlush( pXDisp );
@@ -850,11 +846,7 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
         // draw paint bitmap in pixmap #1
         aValues.function = GXcopy, aValues.foreground = nWhite, aValues.background = nBlack;
         aTmpGC = XCreateGC( pXDisp, aFG, nValues, &aValues );
-        #ifdef _USE_PRINT_EXTENSION_
-                        rSalBitmap.ImplDraw( pSalDisp, aFG, nDepth, aTmpRect, aTmpGC );
-                #else
-                        rSalBitmap.ImplDraw( aFG, nDepth, aTmpRect, aTmpGC );
-                #endif
+        rSalBitmap.ImplDraw( aFG, nDepth, aTmpRect, aTmpGC );
         DBG_TESTTRANS( aFG );
 
         // draw background in pixmap #2
@@ -867,23 +859,13 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
         // mask out paint bitmap in pixmap #1 (transparent areas 0)
         aValues.function = GXand, aValues.foreground = 0x00000000, aValues.background = 0xffffffff;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-                #ifdef _USE_PRINT_EXTENSION_
-                        rTransBitmap.ImplDraw( pSalDisp, aFG, 1, aTmpRect, aTmpGC );
-                #else
-                        rTransBitmap.ImplDraw( aFG, 1, aTmpRect, aTmpGC );
-                #endif
-
+        rTransBitmap.ImplDraw( aFG, 1, aTmpRect, aTmpGC );
         DBG_TESTTRANS( aFG );
 
         // mask out background in pixmap #2 (nontransparent areas 0)
         aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
         XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
-                #ifdef _USE_PRINT_EXTENSION_
-                        rTransBitmap.ImplDraw( pSalDisp, aBG, 1, aTmpRect, aTmpGC );
-                #else
-                        rTransBitmap.ImplDraw( aBG, 1, aTmpRect, aTmpGC );
-                #endif
-
+        rTransBitmap.ImplDraw( aBG, 1, aTmpRect, aTmpGC );
         DBG_TESTTRANS( aBG );
 
         // merge pixmap #1 and pixmap #2 in pixmap #2
@@ -969,12 +951,7 @@ final void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rS
         aValues.function = GXcopyInverted;
         aValues.foreground = 1, aValues.background = 0;
         aTmpGC = XCreateGC( pXDisp, aStipple, GCFunction | GCForeground | GCBackground, &aValues );
-                #ifdef _USE_PRINT_EXTENSION_
-                        rSalBitmap.ImplDraw( pSalDisp, aStipple, 1, aTwoRect, aTmpGC );
-                #else
-                        rSalBitmap.ImplDraw( aStipple, 1, aTwoRect, aTmpGC );
-                #endif
-
+        rSalBitmap.ImplDraw( aStipple, 1, aTwoRect, aTmpGC );
         XFreeGC( pXDisp, aTmpGC );
 
         // Set stipple and draw rectangle
@@ -1067,13 +1044,7 @@ final SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
     if( &_GetDisplay()->GetColormap() != &_GetColormap() )
         nBitCount = 1;
 
-
-        #if defined(_USE_PRINT_EXTENSION_)
-                pSalBitmap->ImplCreateFromDrawable( _GetDisplay(), _GetDrawable(), nBitCount, nX, nY, nDX, nDY );
-        #else
-                pSalBitmap->ImplCreateFromDrawable( _GetDrawable(), nBitCount, nX, nY, nDX, nDY );
-        #endif
-
+    pSalBitmap->ImplCreateFromDrawable( _GetDrawable(), nBitCount, nX, nY, nDX, nDY );
 
     return pSalBitmap;
 
