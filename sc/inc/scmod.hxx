@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:28:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef SC_SHELLIDS_HXX
 #include "shellids.hxx"
 #endif
+
+#include <tools/shl.hxx>
+
 
 class KeyEvent;
 class SdrModel;
