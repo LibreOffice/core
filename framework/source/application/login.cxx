@@ -2,9 +2,9 @@
  *
  *  $RCSfile: login.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:13:00 $
+ *  last change: $Author: cd $ $Date: 2001-10-12 06:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ void LoginApplication::Main()
         }
 
         Any aConnectionType;
-        aConnectionType <<= PROPERTYNAME_COMPRESSEDSECURE;
+        aConnectionType <<= PROPERTYNAME_HTTPS;
         xPropertySet->setPropertyValue( PROPERTYNAME_CONNECTIONTYPE, aConnectionType );
 
         // Show login dialog and get decision of user.
