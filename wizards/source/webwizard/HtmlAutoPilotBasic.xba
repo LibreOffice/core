@@ -269,7 +269,7 @@ Dim sNewFileUrl as String
 	sFileName = FileNameoutofPath(SourceUrl)
 	sNewFileUrl = TargetDir &amp; sFileName
 	oUcb.Copy(SourceUrl, sNewFileUrl)
-	CopyFile() = sFileName
+	CopyFile() = sNewFileUrl
 End Function
 
 
