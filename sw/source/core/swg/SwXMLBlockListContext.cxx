@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-26 18:14:26 $
+ *  last change: $Author: dvo $ $Date: 2001-11-01 19:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
 #endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
