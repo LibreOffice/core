@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:48:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Forsiden opad" ;
         Text [ ENGLISH_US ] = "~Print from top" ;
         Text [ SPANISH ] = "Imprimir r~everso" ;
-        Text [ FINNISH ] = "Tulosta ylõpuoli" ;
+        Text [ FINNISH ] = "~Tulosta alusta" ;
         Text [ FRENCH ] = "Imprimer du ~haut" ;
         Text [ ITALIAN ] = "Stampa da sopra" ;
         Text [ DUTCH ] = "B~ovenkant bedrukken" ;
@@ -154,7 +154,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Forsiden nedad" ;
         Text [ ENGLISH_US ] = "Print from ~bottom" ;
         Text [ SPANISH ] = "Imprimir ~anverso" ;
-        Text [ FINNISH ] = "Tulosta alapuoli" ;
+        Text [ FINNISH ] = "~Tulosta lopusta" ;
         Text [ FRENCH ] = "Imprimer du ~bas" ;
         Text [ ITALIAN ] = "Stampa da sotto" ;
         Text [ DUTCH ] = "~Onderkant bedrukken" ;
@@ -184,7 +184,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Mod højre" ;
         Text [ ENGLISH_US ] = "~Shift right" ;
         Text [ SPANISH ] = "Hacia la ~derecha" ;
-        Text [ FINNISH ] = "Siirrõ oikealle" ;
+        Text [ FINNISH ] = "~Siirrä oikealle" ;
         Text [ FRENCH ] = "Vers la ~droite" ;
         Text [ ITALIAN ] = "Sposta a destra" ;
         Text [ DUTCH ] = "Naar re~chts" ;
@@ -231,7 +231,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "Nedad" ;
         Text [ ENGLISH_US ] = "Shift ~down" ;
         Text [ SPANISH ] = "Hacia a~bajo" ;
-        Text [ FINNISH ] = "Siirrõ alas" ;
+        Text [ FINNISH ] = "~Siirrä alas" ;
         Text [ FRENCH ] = "Vers le ~bas" ;
         Text [ ITALIAN ] = "Sposta in basso" ;
         Text [ DUTCH ] = "~Naar beneden" ;
@@ -278,7 +278,7 @@ TabPage TP_ENV_PRT
         Text [ DANISH ] = "- Ingen printer installeret -" ;
         Text [ ENGLISH_US ] = "- No printer installed -" ;
         Text [ SPANISH ] = "- No hay instalada ninguna impresora -" ;
-        Text [ FINNISH ] = "- Kirjoitinta ei asennettu -" ;
+        Text [ FINNISH ] = "- Tulostinta ei ole asennettu -" ;
         Text [ FRENCH ] = "- Aucune imprimante installée -" ;
         Text [ ITALIAN ] = "- Nessuna stampante installata -." ;
         Text [ DUTCH ] = "- Geen printer geïnstalleerd -" ;
@@ -325,6 +325,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "¼Â¾÷...";
         Text[ turkish ] = "Ayarlar...";
         Text[ catalan ] = "Configurar...";
+        Text[ finnish ] = "Asennus";
     };
 };
  // Bitmaps ******************************************************************
