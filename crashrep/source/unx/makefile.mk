@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hro $ $Date: 2003-06-11 12:16:11 $
+#   last change: $Author: vg $ $Date: 2003-07-02 14:11:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,12 +76,20 @@ LIBSALCPPRT=$(0)
 # ------------------------------------------------------------------
 
 .IF "$(ENABLE_STATIC_GTK)" == "FALSE"
+ONLYMODLIBS=
 GTKLINKFLAGS=
+.ELSE
+ONLYMODLIBS=--only-mod-libs
+.IF "$(COM)" == "GCC"
+GTKLINKFLAGS=-Wl,-Bstatic
 .ELSE
 GTKLINKFLAGS=-Bstatic
 .ENDIF
+.ENDIF
 
 CFLAGS+=`pkg-config --cflags gtk+-2.0`
+
+SOLARLIB!:=$(SOLARLIB:s/jre/jnore/)
 
 OBJFILES=\
     $(OBJ)$/interface.obj            \
@@ -92,9 +100,9 @@ APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 .IF "$(COM)" == "GCC"
-APP1STDLIBS=-Wl,$(GTKLINKFLAGS) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Wl,-Bdynamic -lXext -lX11 -ldl -lnsl
+APP1STDLIBS=$(GTKLINKFLAGS) `pkg-config $(ONLYMODLIBS) --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Wl,-Bdynamic -lXext -lX11 -ldl -lnsl
 .ELSE
-APP1STDLIBS=$(GTKLINKFLAGS) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Bdynamic -lXext -lX11 -ldl -lsocket -lnsl
+APP1STDLIBS=$(GTKLINKFLAGS) `pkg-config $(ONLYMODLIBS) --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Bdynamic -lXext -lX11 -ldl -lsocket -lnsl
 .ENDIF
 
 ALL: ALLTAR $(BIN)$/crash_dump.res.01
