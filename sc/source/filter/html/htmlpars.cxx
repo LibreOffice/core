@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:30 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2065,7 +2065,7 @@ ScHTMLTable::ScHTMLTable( SfxItemPool& rPool, EditEngine& rEditEngine, ScEEParse
     // open the first "cell" of the document
     ImplRowOn();
     ImplDataOn( ScHTMLSize( 1, 1 ) );
-    mpCurrEntry.reset( CreateEntry() );
+    mpCurrEntry = CreateEntry();
 }
 
 ScHTMLTable::~ScHTMLTable()
@@ -2078,7 +2078,7 @@ const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
     return mpDataItemSet.get() ? *mpDataItemSet : (mpRowItemSet.get() ? *mpRowItemSet : maTableItemSet);
 }
 
-ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos )
+ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 {
     ScHTMLSize aSpan( 1, 1 );
     if( ScRange* pRange = maLockList.Find( rCellPos.MakeAddr() ) )
@@ -2095,7 +2095,7 @@ void ScHTMLTable::PutItem( const SfxPoolItem& rItem )
 {
     DBG_ASSERT( mpCurrEntry.get(), "ScHTMLTable::PutItem - no current entry" );
     if( mpCurrEntry.get() && mpCurrEntry->IsEmpty() )
-        mpCurrEntry->aItemSet.Put( rItem );
+        mpCurrEntry->GetItemSet().Put( rItem );
 }
 
 void ScHTMLTable::PutText( const ImportInfo& rInfo )
@@ -2276,6 +2276,14 @@ sal_uInt16 ScHTMLTable::GetDocSize( ScHTMLOrient eOrient ) const
     return GetDocSize( eOrient, 0, maSize.Get( eOrient ) );
 }
 
+ScHTMLSize ScHTMLTable::GetDocSize( const ScHTMLPos& rCellPos ) const
+{
+    ScHTMLSize aCellSpan( GetSpan( rCellPos ) );
+    return ScHTMLSize(
+        GetDocSize( tdCol, rCellPos.mnCol, rCellPos.mnCol + aCellSpan.mnCols ),
+        GetDocSize( tdRow, rCellPos.mnRow, rCellPos.mnRow + aCellSpan.mnRows ) );
+}
+
 sal_uInt16 ScHTMLTable::GetDocPos( ScHTMLOrient eOrient, sal_uInt16 nCellPos ) const
 {
     return maDocBasePos.Get( eOrient ) + GetDocSize( eOrient, 0, nCellPos );
@@ -2352,15 +2360,15 @@ bool ScHTMLTable::IsSpaceCharInfo( const ImportInfo& rInfo )
     return (rInfo.nToken == HTML_TEXTTOKEN) && (rInfo.aText.Len() == 1) && (rInfo.aText.GetChar( 0 ) == ' ');
 }
 
-ScHTMLEntry* ScHTMLTable::CreateEntry() const
+ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
 {
-    return new ScHTMLEntry( GetCurrItemSet() );
+    return ScHTMLEntryPtr( new ScHTMLEntry( GetCurrItemSet() ) );
 }
 
 void ScHTMLTable::CreateNewEntry( const ImportInfo& rInfo )
 {
     DBG_ASSERT( !mpCurrEntry.get(), "ScHTMLTable::CreateNewEntry - old entry still present" );
-    mpCurrEntry.reset( CreateEntry() );
+    mpCurrEntry = CreateEntry();
     mpCurrEntry->aSel = rInfo.aSelection;
 }
 
@@ -2381,7 +2389,7 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rpEntry )
         {
             if( mbPushEmptyLine )
             {
-                ScHTMLEntryPtr pEmptyEntry( CreateEntry() );
+                ScHTMLEntryPtr pEmptyEntry = CreateEntry();
                 ImplPushEntryToList( *mpCurrEntryList, pEmptyEntry );
                 mbPushEmptyLine = false;
             }
@@ -2637,7 +2645,7 @@ void ScHTMLTable::FillEmptyCells()
                 maLockList.Append( aRange );
 
                 // insert a dummy entry
-                ScHTMLEntryPtr pEntry( CreateEntry() );
+                ScHTMLEntryPtr pEntry = CreateEntry();
                 ImplPushEntryToList( maEntryMap[ ScHTMLPos( aAddr ) ], pEntry );
             }
         }
@@ -2708,9 +2716,13 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
     ScHTMLEntryMap::iterator aMapIterEnd = maEntryMap.end();
     for( ScHTMLEntryMap::iterator aMapIter = maEntryMap.begin(); aMapIter != aMapIterEnd; ++aMapIter )
     {
-        const ScHTMLPos& rCellPos = aMapIter->first;
-        ScHTMLSize aCellSpan( GetSpan( rCellPos ) );
-        ScHTMLPos aEntryDocPos( GetDocPos( rCellPos ) );
+        // fixed doc position of the entire cell (first entry)
+        const ScHTMLPos aCellDocPos( GetDocPos( aMapIter->first ) );
+        // fixed doc size of the entire cell
+        const ScHTMLSize aCellDocSize( GetDocSize( aMapIter->first ) );
+
+        // running doc position for single entries
+        ScHTMLPos aEntryDocPos( aCellDocPos );
 
         ScHTMLEntryList& rEntryList = aMapIter->second;
         ScHTMLEntry* pEntry = 0;
@@ -2722,37 +2734,56 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
             {
                 pTable->RecalcDocPos( aEntryDocPos );   // recalc nested table
                 pEntry->nCol = pEntry->nRow = 0xFFFF;
-                sal_uInt16 nRows = pTable->GetDocSize( tdRow );
+                sal_uInt16 nTableRows = pTable->GetDocSize( tdRow );
 
                 // use this entry to pad empty space right of table
                 if( mpParentTable )     // ... but not in global table
                 {
-                    sal_uInt16 nStartCol = GetDocPos( tdCol, rCellPos.mnCol ) + pTable->GetDocSize( tdCol );
-                    sal_uInt16 nNextCol = GetDocPos( tdCol, rCellPos.mnCol + 1 );
+                    sal_uInt16 nStartCol = aEntryDocPos.mnCol + pTable->GetDocSize( tdCol );
+                    sal_uInt16 nNextCol = aEntryDocPos.mnCol + aCellDocSize.mnCols;
                     if( nStartCol < nNextCol )
                     {
                         pEntry->nCol = nStartCol;
                         pEntry->nRow = aEntryDocPos.mnRow;
                         pEntry->nColOverlap = nNextCol - nStartCol;
-                        pEntry->nRowOverlap = nRows;
+                        pEntry->nRowOverlap = nTableRows;
                     }
                 }
-                aEntryDocPos.mnRow += nRows;
+                aEntryDocPos.mnRow += nTableRows;
             }
             else
             {
                 pEntry->nCol = aEntryDocPos.mnCol;
                 pEntry->nRow = aEntryDocPos.mnRow;
                 if( mpParentTable )    // do not merge in global table
-                    pEntry->nColOverlap = GetDocSize( tdCol, rCellPos.mnCol, rCellPos.mnCol + aCellSpan.mnCols );
+                    pEntry->nColOverlap = aCellDocSize.mnCols;
                 ++aEntryDocPos.mnRow;
             }
         }
 
-        /*  pEntry points now to last entry - test if it is the only entry in this cell.
-            Merge rows of cell with single non-table entry. */
-        if( pEntry && (pEntry == rEntryList.front()) && (pEntry->GetTableId() == SC_HTML_NO_TABLE) )
-            pEntry->nRowOverlap = GetDocSize( tdRow, rCellPos.mnRow, rCellPos.mnRow + aCellSpan.mnRows );
+        // pEntry points now to last entry.
+        if( pEntry )
+        {
+            if( (pEntry == rEntryList.front()) && (pEntry->GetTableId() == SC_HTML_NO_TABLE) )
+            {
+                // pEntry is the only entry in this cell - merge rows of cell with single non-table entry.
+                pEntry->nRowOverlap = aCellDocSize.mnRows;
+            }
+            else
+            {
+                // #111667# fill up incomplete entry lists
+                sal_uInt16 nFirstUnusedRow = aCellDocPos.mnRow + aCellDocSize.mnRows;
+                while( aEntryDocPos.mnRow < nFirstUnusedRow )
+                {
+                    ScHTMLEntryPtr pDummyEntry( new ScHTMLEntry( pEntry->GetItemSet() ) );
+                    pDummyEntry->nCol = aEntryDocPos.mnCol;
+                    pDummyEntry->nRow = aEntryDocPos.mnRow;
+                    pDummyEntry->nColOverlap = aCellDocSize.mnCols;
+                    ImplPushEntryToList( rEntryList, pDummyEntry );
+                    ++aEntryDocPos.mnRow;
+                }
+            }
+        }
     }
 }
 
