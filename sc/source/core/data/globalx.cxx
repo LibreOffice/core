@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-12 11:38:39 $
+ *  last change: $Author: hr $ $Date: 2001-01-04 15:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 
 #pragma hdrstop
 
