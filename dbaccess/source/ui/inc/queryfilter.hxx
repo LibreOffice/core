@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:02:20 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ namespace com
         {
             namespace sdb
             {
-                class XSQLQueryComposer;
+                class XSingleSelectQueryComposer;
+                class XSingleSelectQueryAnalyzer;
             }
             namespace sdbc
             {
@@ -153,7 +154,8 @@ namespace dbaui
         String          aSTR_NOENTRY;
         String          aSTR_COMPARE_OPERATORS;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>     m_xQueryComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer>    m_xQueryAnalyzer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
@@ -168,8 +170,8 @@ namespace dbaui
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType(USHORT nPos,USHORT nCount) const;
         USHORT          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
-        void            getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
-        void            addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition)  const;
+        sal_Bool        getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
+        void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getColumn( const ::rtl::OUString& _rFieldName ) const;
@@ -179,7 +181,7 @@ namespace dbaui
         DlgFilterCrit(  Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>& _rxQueryComposer,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer>& _xAnalyzer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols
                     );
         ~DlgFilterCrit();
