@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: ssa $ $Date: 2002-06-28 08:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3135,6 +3135,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
          (pSVData->maCtrlData.mnCheckStyle != nStyle) ||
          (pSVData->maCtrlData.mnLastCheckFColor != rStyleSettings.GetFaceColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastCheckWColor != rStyleSettings.GetWindowColor().GetColor()) ||
+         (pSVData->maCtrlData.mnLastCheckWTextColor != rStyleSettings.GetWindowTextColor().GetColor()) ||
          (pSVData->maCtrlData.mnLastCheckLColor != rStyleSettings.GetLightColor().GetColor()) )
     {
         if ( pSVData->maCtrlData.mpCheckImgList )
@@ -3142,6 +3143,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
 
         pSVData->maCtrlData.mnLastCheckFColor = rStyleSettings.GetFaceColor().GetColor();
         pSVData->maCtrlData.mnLastCheckWColor = rStyleSettings.GetWindowColor().GetColor();
+        pSVData->maCtrlData.mnLastCheckWTextColor = rStyleSettings.GetWindowTextColor().GetColor();
         pSVData->maCtrlData.mnLastCheckLColor = rStyleSettings.GetLightColor().GetColor();
 
         long    aTempAry1[(6*sizeof(Color))/sizeof(long)];
