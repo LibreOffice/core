@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:36:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2232,3 +2232,16 @@ void ScInterpreter::ScArabic()
 }
 
 
+void ScInterpreter::ScHyperLink()
+{
+    BYTE nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 2 ) )
+    {
+        String aCellText = GetString();
+        ScMatrixRef pResMat = GetNewMat(1,2);
+        pResMat->PutString(aCellText,0);
+        pResMat->PutString((nParamCount == 2) ? GetString() : aCellText, 1);
+        bMatrixFormula = true;
+        PushMatrix(pResMat);
+    }
+}
