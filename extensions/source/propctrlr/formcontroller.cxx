@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 10:26:46 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 13:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2184,10 +2184,10 @@ namespace pcr
             if (xController.is())
             {
                 // do a preview by default
-                xController->setValue(0, ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, ::cppu::bool2any(sal_True));
+                xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
 
                 // "as link" is checked, but disabled
-                xController->setValue(0, ExtendedFilePickerElementIds::CHECKBOX_LINK, ::cppu::bool2any(sal_True));
+                xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any(sal_True));
                 xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
             }
 
@@ -2519,6 +2519,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36  2001/06/15 10:26:46  fs
+ *  #86986# moved css/ui/* to css/ui/dialogs/*
+ *
  *  Revision 1.35  2001/06/15 09:51:11  fs
  *  #86986# moved css/ui/* to css/ui/dialogs/*
  *
