@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:36:35 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,7 +975,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Inne style";
         Text[ portuguese_brazilian ] = "additional styles";
         Text[ japanese ] = "‚»‚Ì‘¼‚Ì½À²Ù";
-        Text[ korean ] = "ºÎ°¡ÀûÀÎ À¯Çü(~A)";
+        Text[ korean ] = "ºÎ°¡ÀûÀÎ À¯Çü";
         Text[ chinese_simplified ] = "ÆäËüÑùÊ½";
         Text[ chinese_traditional ] = "¨ä¥L¼Ë¦¡";
         Text[ arabic ] = "ÃäãÇØ ÅÖÇİíÉ";
@@ -1277,7 +1277,7 @@ TabPage TP_TOX_SELECT
         Text[ polish ] = "Zaz~naczanie indeksów";
         Text[ portuguese_brazilian ] = "Index entries";
         Text[ japanese ] = "õˆø‘I‘ğ€–Ú";
-        Text[ korean ] = "»öÀÎ ¸¶Å© (~X)";
+        Text[ korean ] = "»öÀÎ ¸¶Å©";
         Text[ chinese_simplified ] = "±ê¼ÇÄ¿Â¼ÌõÄ¿";
         Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O";
         Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
@@ -3276,7 +3276,7 @@ TabPage TP_TOX_ENTRY
         Text[ polish ] = "Pozycja relatywna do wciêcia ze stylu akapitu";
         Text[ portuguese_brazilian ] = "Position relativ to the paragraph style indent";
         Text[ japanese ] = "ÀÌŞˆÊ’u‚Í’i—½À²Ù‚Ì²İÃŞİÄ‚©‚ç";
-        Text[ korean ] = "´Ü¶ôÀÇ Ã¹¹®Àå ¶ç¾î¾²±â¿¡ °ü·ÃµÈ ÅÇ À§Ä¡";
+        Text[ korean ] = "´Ü¶ôÀÇ Ã¹¹®Àå µé¿©¾²±â¿¡ °ü·ÃµÈ ÅÇ À§Ä¡";
         Text[ chinese_simplified ] = "ÖÆ±í·ûÎ»ÖÃºÍ¶ÎÂäÑùÊ½µÄËõ½ø±£³ÖÏà¶ÔÎ»ÖÃ";
         Text[ chinese_traditional ] = "©M¬q¸¨¼Ë¦¡ªºÁY±Æ«O«ù¬Û¹ï¦ì¸m";
         Text[ arabic ] = "ãæÖÚ ÚáÇãÇÊ ÇáÌÏæáÉ äÓÈÉ áÅÒÇÍÉ äãØ ÇáİŞÑÉ";
@@ -3310,7 +3310,7 @@ TabPage TP_TOX_ENTRY
         Text[ polish ] = "Styl znaku wpisów g³ównych";
         Text[ portuguese_brazilian ] = "Character style of main entries";
         Text[ japanese ] = "å“ü—Í—p•¶š½À²Ù";
-        Text[ korean ] = "ÁÖ Ç×¸ñ¿¡´ëÇÑ ¹®ÀÚ À¯Çü";
+        Text[ korean ] = "ÁÖ Ç×¸ñÀÇ ¹®ÀÚ À¯Çü";
         Text[ chinese_simplified ] = "Ö÷ÌõÄ¿µÄ×Ö·ûÑùÊ½";
         Text[ chinese_traditional ] = "¥D¶µ¥Øªº¦r«¬¼Ë¦¡";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ ááÅÏÎÇáÇÊ ÇáÑÆíÓíÉ";
@@ -3886,7 +3886,7 @@ TabPage TP_TOX_STYLES
         Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡(~S)";
         Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
         Text[ greek ] = "Ğñüôõğ~á ğáñáãñÜöïõ";
-        Text[ korean ] = "´Ü¶ô À¯Çü(~S)";
+        Text[ korean ] = "´Ü¶ô À¯Çü";
         Text[ turkish ] = "Paragraf şablonları";
         Text[ language_user1 ] = " ";
     };
@@ -4283,7 +4283,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ polish ] = "Komentarz";
             Text[ portuguese_brazilian ] = "Comment";
             Text[ japanese ] = "ºÒİÄ";
-            Text[ korean ] = "¸Ş¸ğ";
+            Text[ korean ] = "ÁÖ";
             Text[ chinese_simplified ] = "×¢½â";
             Text[ chinese_traditional ] = "ª`¸Ñ";
             Text[ arabic ] = "ÊÚáíŞ";
