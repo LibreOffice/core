@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:24:47 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,6 +1104,19 @@ ToolBox RID_TEXT_TOOLBOX
         {
             Identifier = SID_SET_SUB_SCRIPT ;
             HelpID = SID_SET_SUB_SCRIPT ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
         };
          //---------------------------------------------
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
