@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleContextWrapper::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
     {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         if ( AccessibleEventId::ACCESSIBLE_STATE_EVENT == _rEvent.EventId )
         {
             sal_Bool bChildTransienceChanged = sal_False;
