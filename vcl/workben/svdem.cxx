@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-05 12:39:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#ifdef REMOTE_APPSERVER
-#include "officeacceptthread.hxx"
-#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -93,29 +90,10 @@ SAL_IMPLEMENT_MAIN()
                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
 
-#ifdef REMOTE_APPSERVER
-    // allow remote clients to connect from any host (0) on the given port
-    ::desktop::OOfficeAcceptorThread *pOfficeAcceptThread = new ::desktop::OOfficeAcceptorThread( xMS,
-        ::rtl::OUString::createFromAscii("socket,host=0,port=8081;urp;"), false, ::rtl::OUString(), ::rtl::OUString() );
-    pOfficeAcceptThread->create();
-#endif
 
     InitVCL( xMS );
-    GetpApp()->WaitForClientConnect();  // is a no-op in local case
     ::Main();
     DeInitVCL();
-
-#ifdef REMOTE_APPSERVER
-    if( pOfficeAcceptThread )
-    {
-        pOfficeAcceptThread->stopAccepting();
-#ifndef LINUX
-        pOfficeAcceptThread->join();
-        delete pOfficeAcceptThread;
-#endif
-        pOfficeAcceptThread = 0;
-    }
-#endif
 
     return 0;
 }
