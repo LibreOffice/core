@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 22:59:51 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 17:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,12 +169,11 @@ namespace
             case OBJECTTYPE_DIAGRAM:
                     break;
             case OBJECTTYPE_DIAGRAM_WALL:
+            case OBJECTTYPE_DIAGRAM_FLOOR:
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel,
                                         wrapper::GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES );
-                    break;
-            case OBJECTTYPE_DIAGRAM_FLOOR:
                     break;
             case OBJECTTYPE_AXIS:
             {

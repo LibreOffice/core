@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:23 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 17:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
     m_xContext( xContext ),
     m_xWall( new Wall()),
+    m_xFloor( new Wall()),//@todo maybe other Constructor for different default values ...
     m_xTitle( NULL ),
     m_aIdentifier( C2U( "@diagram" ))
 {
@@ -217,6 +218,15 @@ uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     // /--
     MutexGuard aGuard( GetMutex() );
     return m_xWall;
+    // \--
+}
+
+uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
+    throw (uno::RuntimeException)
+{
+    // /--
+    MutexGuard aGuard( GetMutex() );
+    return m_xFloor;
     // \--
 }
 
