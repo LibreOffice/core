@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 12:40:35 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 17:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,12 +1712,12 @@ void WW8TabDesc::CalcDefaults()
     long nRight   = pIo->nPgWidth - pIo->nPgRight - pIo->nPgLeft;
 
      // set Position if not on adjusted to left border
-    if((MINLAY < abs( nMinLeft )) && (HORI_LEFT == eOri))
+    if (nMinLeft && (HORI_LEFT == eOri))
     {
         if(MINLAY > abs(nMidTab - nRight/2))
             eOri = HORI_CENTER; // very near the center IS centered
-        else if(MINLAY > abs(nMaxRight - nRight))
-            eOri = HORI_RIGHT; // very near r.border IS r.adjusted
+        else if ((nMaxRight - nRight) == 0)
+            eOri = HORI_RIGHT;
         else
             eOri = HORI_LEFT_AND_WIDTH; //  absolutely positioned
     }

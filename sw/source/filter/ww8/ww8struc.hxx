@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 13:56:22 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 17:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,9 @@ struct WW8_BRCVer6  // alter Border Code
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
 };
 
-struct WW8_BRC : public WW8_BRCVer6 // Border Code
+struct WW8_BRC      // Border Code
 {
+    SVBT16 aBits1;
     SVBT16 aBits2;
 //  UINT16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
                             //      a single line of border in units of 0.75 points
@@ -210,7 +211,6 @@ struct WW8_BRC : public WW8_BRCVer6 // Border Code
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
     short DetermineBorderProperties ( BOOL bVer67, short *pSpace=0,
         BYTE *pCol=0, short *pIdx=0 ) const;
-    void clear();
 };
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 17:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,14 +563,12 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
                 for( BYTE i = 0; i < 4; ++i )
                 {
                     const SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
-                    WW8_BRC aBrc;
+                    WW8_BRC aBrc={0};
                     if (pLn)
                     {
                         aBrc = rWrt.TranslateBorderLine( *pLn,
                             pBox->GetDistance( aLnArr[ i ] ), bShadow );
                     }
-                    else
-                        aBrc.clear();
 
                     //use importer logic to determine how large the exported
                     //border will really be in word and adjust accordingly
