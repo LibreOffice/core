@@ -96,15 +96,19 @@ fi
 
 # set search path for shared libraries
 sd_platform=`uname -s`
+moz_lib=
+for moz_lib_path in $MOZILLA_LIBRARY_PATH /usr/lib /usr/lib/mozilla /usr/lib/mozilla-firefox /usr/lib/mozilla-thunderbird /opt/mozilla/lib /opt/MozillaFirefox/lib /opt/MozillaThunderbird/lib; do
+    test -f $moz_lib_path/libnss3.so && moz_lib="$moz_lib_path" && break;
+done
 case $sd_platform in
   AIX)
     # this is a temporary hack until we can live with the default search paths
     if [ $LIBPATH ]; then
       SYSTEM_LIBPATH=$LIBPATH
       export SYSTEM_LIBPATH
-      LIBPATH="$sd_prog":$LIBPATH
+      LIBPATH="$sd_prog:$moz_lib":$LIBPATH
     else
-      LIBPATH="$sd_prog"
+      LIBPATH="$sd_prog:$moz_lib"
     fi
     export LIBPATH
     ;;
@@ -114,9 +118,9 @@ case $sd_platform in
     if [ $DYLD_LIBRARY_PATH ]; then
       SYSTEM_DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
       export SYSTEM_DYLD_LIBRARY_PATH
-      DYLD_LIBRARY_PATH="$sd_prog":$DYLD_LIBRARY_PATH
+      DYLD_LIBRARY_PATH="$sd_prog:$moz_lib":$DYLD_LIBRARY_PATH
     else
-      DYLD_LIBRARY_PATH="$sd_prog"
+      DYLD_LIBRARY_PATH="$sd_prog:$moz_lib"
     fi
     export DYLD_LIBRARY_PATH
     ;;
@@ -126,9 +130,9 @@ case $sd_platform in
     if [ $SHLIB_PATH ]; then
       SYSTEM_SHLIB_PATH=$SHLIB_PATH
       export SYSTEM_SHLIB_PATH
-      SHLIB_PATH="$sd_prog":/usr/openwin/lib:$SHLIB_PATH
+      SHLIB_PATH="$sd_prog:$moz_lib":/usr/openwin/lib:$SHLIB_PATH
     else
-      SHLIB_PATH="$sd_prog":/usr/openwin/lib
+      SHLIB_PATH="$sd_prog:$moz_lib":/usr/openwin/lib
     fi
     export SHLIB_PATH
     ;;
@@ -138,9 +142,9 @@ case $sd_platform in
     if [ $LD_LIBRARYN32_PATH ]; then
        SYSTEM_LD_LIBRARYN32_PATH=$LD_LIBRARYN32_PATH
        export SYSTEM_LD_LIBRARYN32_PATH
-       LD_LIBRARYN32_PATH=:"$sd_prog":$LD_LIBRARYN32_PATH
+       LD_LIBRARYN32_PATH=:"$sd_prog:$moz_lib":$LD_LIBRARYN32_PATH
     else
-       LD_LIBRARYN32_PATH=:"$sd_prog"
+       LD_LIBRARYN32_PATH=:"$sd_prog:$moz_lib"
     fi
     export LD_LIBRARYN32_PATH
     ;;
@@ -150,9 +154,9 @@ case $sd_platform in
     if [ $LD_LIBRARY_PATH ]; then
       SYSTEM_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
       export SYSTEM_LD_LIBRARY_PATH
-      LD_LIBRARY_PATH="$sd_prog":$LD_LIBRARY_PATH
+      LD_LIBRARY_PATH="$sd_prog:$moz_lib":$LD_LIBRARY_PATH
     else
-      LD_LIBRARY_PATH="$sd_prog"
+      LD_LIBRARY_PATH="$sd_prog:$moz_lib"
     fi
     export LD_LIBRARY_PATH
     ;;
