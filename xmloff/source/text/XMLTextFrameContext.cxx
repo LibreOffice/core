@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 12:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,8 @@ XMLTextFrameContext::XMLTextFrameContext(
         if( sURL.getLength() )
             xPropSet = GetImport().GetTextImport()->createAndInsertOLEObject(
                                                         GetImport(), sURL,
-                                                        sClassId );
+                                                        sClassId, nWidth,
+                                                        nHeight );
     }
     else
     {

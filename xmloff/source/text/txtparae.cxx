@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 12:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1918,17 +1918,13 @@ void XMLTextParagraphExport::_exportTextEmbedded(
                                   sAutoStyle );
     addTextFrameAttributes( rPropSet, sal_False );
 
-    Reference < XModel > xEmbeddedModel;
-    Reference < XEmbeddedObjectSupplier > xEOSupplier( rPropSet, UNO_QUERY );
-//  if( xEOSupplier.is() )
-//      xEmbeddedModel = Reference < XModel >( xEOSupplier->getEmbeddedObject(),
-//                                             UNO_QUERY );
-    const sal_Char *pElem = xEmbeddedModel.is() ? sXML_object
-                                                : sXML_object_ole;
 
     // xlink:href
     OUString sURL, sClassId;
     getTextEmbeddedObjectProperties( rPropSet, sURL, sClassId );
+
+    if( sClassId.getLength() )
+        GetExport().AddAttribute(XML_NAMESPACE_DRAW, sXML_class_id, sClassId );
     sURL = GetExport().AddEmbeddedObject( sURL );
 
     GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
@@ -1939,9 +1935,8 @@ void XMLTextParagraphExport::_exportTextEmbedded(
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
                                    sXML_onLoad );
 
-    if( !xEmbeddedModel.is() )
-        GetExport().AddAttribute(XML_NAMESPACE_DRAW, sXML_class_id, sClassId );
-
+    const sal_Char *pElem = sClassId.getLength() ? sXML_object_ole
+                                                : sXML_object;
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               pElem, sal_False, sal_True );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:07:14 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 12:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,7 +1537,8 @@ sal_Bool XMLTextImportHelper::IsInHeaderFooter() const
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
                                         SvXMLImport& rImport,
                                         const OUString& rHRef,
-                                          const OUString& rClassId )
+                                          const OUString& rClassId,
+                                        sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference< XPropertySet> xPropSet;
     return xPropSet;
