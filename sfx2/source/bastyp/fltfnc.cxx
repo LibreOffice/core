@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,7 @@ void SfxAsyncChaosFactory_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHin
             if( eStatus == CNT_STATUS_DONE )
             {
                 pArgs->Put( SfxStringItem ( SID_FILE_NAME, xAnchor->GetViewURL() ), SID_FILE_NAME );
-                SFX_APP()->GetDispatcher().Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, *pArgs );
+                SFX_APP()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, *pArgs );
                 delete this;
             }
             else if( eStatus == CNT_STATUS_ERROR )
@@ -1538,7 +1538,7 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
                 aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
             }
 
-            pApp->GetDispatcher().Execute( SID_MAIL_SENDDOC, SFX_CALLMODE_SYNCHRON, aSet );
+            pApp->GetDispatcher_Impl()->Execute( SID_MAIL_SENDDOC, SFX_CALLMODE_SYNCHRON, aSet );
             return ERRCODE_ABORT;
         }
         case SFX_EXE_FILTER_HELPENTRY:
@@ -2038,7 +2038,7 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
             for ( sal_uInt16 nSlot=0; nSlot<nCount; nSlot++ )
             {
                 sal_uInt16 nSlotId = (sal_uInt16) aSlots.GetToken( nSlot, ',' ).ToInt32();
-                pApp->GetDispatcher().Execute( nSlotId, SFX_CALLMODE_SYNCHRON, pArgs, 0, ppInternalArgs );
+                pApp->GetDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_SYNCHRON, pArgs, 0, ppInternalArgs );
             }
 
             return ERRCODE_ABORT;
