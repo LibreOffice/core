@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:30:45 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ swedish ] = "Inställningar" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
-        Text [ portuguese ] = "Predefinições" ;
+        Text [ portuguese ] = "Definições" ;
         Text[ chinese_simplified ] = "Éè¶¨";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ polish ] = "Ustawienia";
@@ -242,7 +242,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
             < "µL" ; > ;
         < "¦Û°Ê" ; > ;
-        < "¤â¤u" ; > ;
+        < "¤â°Ê" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -1278,7 +1278,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text[ russian ] = "Äîñòóï ê ñåòè";
         Text[ polish ] = "Dostêp do sieci";
         Text[ japanese ] = "È¯ÄÜ°¸‚Ö‚Ì±¸¾½(~A)";
-        Text[ chinese_traditional ] = "³X°İºôµ¸(~A)";
+        Text[ chinese_traditional ] = "¦s¨úºô¸ô(~A)";
         Text[ arabic ] = "ÇáæÕæá Åáì ÇáÔÈßÉ";
         Text[ greek ] = "Ğñüóâáóç óôï äßêôõï";
         Text[ korean ] = "³×Æ®¿¡ Á¢±Ù(~A)";
@@ -1602,7 +1602,7 @@ TabPage RID_SVXPAGE_INET_OTHER
     Text[ russian ] = "Ïğîòîêîëû";
     Text[ polish ] = "Protoko³y";
     Text[ japanese ] = "ÌßÛÄºÙ";
-    Text[ chinese_traditional ] = "¨óÄ³";
+    Text[ chinese_traditional ] = "¨ó©w";
     GroupBox GB_DNS
     {
         Pos = MAP_APPFONT( 6, 3 );
@@ -1674,7 +1674,7 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text[ russian ] = "Âğó÷íóş";
         Text[ polish ] = "Rêcznie";
         Text[ japanese ] = "è“®(~M)";
-        Text[ chinese_traditional ] = "¤â¤u(~M)";
+        Text[ chinese_traditional ] = "¤â°Ê(~M)";
         Text[ arabic ] = "íÏæí";
         Text[ greek ] = "×åéñïêßíçôá";
         Text[ korean ] = "¼öµ¿(~M)";
