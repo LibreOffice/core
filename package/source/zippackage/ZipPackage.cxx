@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:42:43 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 21:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xFactory( xNewFactory )
 , bHasEncryptedEntries ( sal_False )
 , eMode ( e_IMode_None )
+, nSegmentSize ( 0 )
 {
     xRootFolder = pRootFolder = new ZipPackageFolder();
 }
