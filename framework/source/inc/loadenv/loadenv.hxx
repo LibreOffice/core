@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:07:28 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,21 @@ class LoadEnv : private ThreadHelpBase
                     the whole runtime cant be used any longer.
          */
         void impl_detectTypeAndFilter()
+            throw(LoadEnvException, css::uno::RuntimeException);
+
+        //_______________________________________
+
+        /** @short  tries to ask user for it's filter decision in case
+                    normal detection failed.
+
+            @descr  We use a may existing interaction handler to do so.
+
+            @return [string]
+                    the type selected by the user.
+
+            @attention  Internaly we update the member m_lMediaDescriptor!
+         */
+        ::rtl::OUString impl_askUserForTypeAndFilterIfAllowed()
             throw(LoadEnvException, css::uno::RuntimeException);
 
         //_______________________________________
