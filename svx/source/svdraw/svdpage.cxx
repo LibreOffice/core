@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
+ *  last change: $Author: obo $ $Date: 2001-02-13 12:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,8 +771,13 @@ FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     BOOL bIsPath = pObj->TRGetBaseGeometry(aOrigMat, aTRPolyPolygon);
     aOrigMat.DecomposeAndCorrect(aTRScale, fTRShear, fTRRotate, aTRTranslate);
+    Vector2D aVectorTranslate;
+    aVectorTranslate.X() = FRound(aTRTranslate.X());
+    aVectorTranslate.Y() = FRound(aTRTranslate.Y());
+
+    Point aPoint(aVectorTranslate.X(), aVectorTranslate.Y());
     Rectangle aTRBaseRect(
-        Point(FRound(aTRTranslate.X()), FRound(aTRTranslate.Y())),
+        aPoint,
         Size(FRound(aTRScale.X()), FRound(aTRScale.Y())));
 
     Color aLineColorMerk(rXOut.GetOutDev()->GetLineColor());
