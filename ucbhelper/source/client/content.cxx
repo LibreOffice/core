@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-30 10:08:43 $
+ *  last change: $Author: kso $ $Date: 2000-11-01 08:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,7 +1007,6 @@ sal_Bool Content::isFolder()
         >>= bFolder )
         return bFolder;
 
-    VOS_ENSURE( sal_False, "Content::isFolder - Got no property value!" );
     throw CommandAbortedException();
 }
 
@@ -1020,7 +1019,6 @@ sal_Bool Content::isDocument()
         >>= bDoc )
         return bDoc;
 
-    VOS_ENSURE( sal_False, "Content::isDocument - Got no property value!" );
     throw CommandAbortedException();
 }
 
