@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:41:30 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #define CONFIGMGR_API_FACTORY_HXX_
 
+#include <sal/types.h>
+
 namespace com { namespace sun { namespace star {
     namespace uno
     {
@@ -80,23 +82,77 @@ namespace configmgr
     namespace uno = css::uno;
     namespace lang = css::lang;
     struct ServiceInfo;
+    class ConnectionSettings;
 
-    // instantiation
-    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
-    uno::Reference< uno::XInterface > SAL_CALL instantiateAdminProvider(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+    typedef uno::Reference< uno::XInterface > (SAL_CALL * ProviderInstantiation)
+            (
+                uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+                ConnectionSettings const& _rConnectionSettings
+            );
 
-    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+// provider instantiation
+    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            ConnectionSettings const& _rConnectionSettings
+        );
+
+    uno::Reference< uno::XInterface > SAL_CALL instantiateAdminProvider
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            ConnectionSettings const& _rConnectionSettings
+        );
+
+    uno::Reference< uno::XInterface > SAL_CALL instantiateUserAdminProvider
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            ConnectionSettings const& _rConnectionSettings
+        );
+
+    uno::Reference< uno::XInterface > SAL_CALL instantiateLocalAdminProvider
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            ConnectionSettings const& _rConnectionSettings
+        );
+
+    uno::Reference< uno::XInterface > SAL_CALL instantiateRemoteAdminProvider
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager,
+            ConnectionSettings const& _rConnectionSettings
+        );
+
+
+// provider service info
+    const ServiceInfo* getConfigurationProviderServices();
+    const ServiceInfo* getAdminProviderServices();
+    const ServiceInfo* getUserAdminProviderServices();
+
+    const ServiceInfo* getLocalAdminProviderServices();
+    const ServiceInfo* getRemoteAdminProviderServices();
+
+    const ServiceInfo* getConfigurationProviderServiceInfo(ConnectionSettings const& _rConnectionSettings);
+    const ServiceInfo* getAdminProviderServiceInfo(ConnectionSettings const& _rConnectionSettings);
+
+// other services - instantiation and info
+    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigRegistry
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
+        );
+    const ServiceInfo* getConfigurationRegistryServiceInfo();
 
     // Import / export
-    uno::Reference< uno::XInterface > SAL_CALL instantiateDataExport(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+    uno::Reference< uno::XInterface > SAL_CALL instantiateDataExport
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
+        );
     const ServiceInfo* getDataExportServiceInfo();
 
-    uno::Reference< uno::XInterface > SAL_CALL instantiateDataImport(uno::Reference< lang::XMultiServiceFactory > const& rServiceManager );
+    uno::Reference< uno::XInterface > SAL_CALL instantiateDataImport
+        (
+            uno::Reference< lang::XMultiServiceFactory > const& rServiceManager
+        );
     const ServiceInfo* getDataImportServiceInfo();
 
-    // service infos
-    const ServiceInfo* getConfigurationProviderServiceInfo();
-    const ServiceInfo* getConfigurationRegistryServiceInfo();
 
 } //  namespace configmgr
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
+#   last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/confapifactory.obj		\
         $(SLO)$/broadcaster.obj		\
         $(SLO)$/listenercontainer.obj		\
         $(SLO)$/groupimpl.obj		\

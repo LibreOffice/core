@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2001-01-29 08:51:11 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,8 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
+
+#include "confapifactory.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -94,7 +93,7 @@ namespace configmgr
         createProviderFactory(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
             const ::rtl::OUString& _rComponentName,
-            ::cppu::ComponentInstantiation _pCreateFunction,
+            ::configmgr::ProviderInstantiation _pCreateFunction,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames
         );
 
@@ -113,7 +112,7 @@ namespace configmgr
         friend class ODisposingListener;
     protected:
         ::osl::Mutex                        m_aMutex;
-        ::cppu::ComponentInstantiation      m_pObjectCreator;
+        ProviderInstantiation               m_pObjectCreator;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xEventListener; // must be the first uno::object
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -131,7 +130,7 @@ namespace configmgr
     public:
         OProviderFactory(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            ::cppu::ComponentInstantiation _pObjectCreator);
+            ProviderInstantiation _pObjectCreator);
         ~OProviderFactory();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(  ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -163,6 +162,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/29 08:51:11  dg
+ *  #82336# invalid syntax for template
+ *
  *  Revision 1.2  2001/01/26 07:54:21  lla
  *  #82734# disposing with lasy writing necessary
  *

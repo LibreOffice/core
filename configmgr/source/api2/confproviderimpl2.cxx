@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@ namespace configmgr
     //= OConfigurationProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------------
-    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, IConfigSession* _pSession, const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory, const ConnectionSettings& _rSettings)
-                               :OProviderImpl(_pProvider, _pSession, _xServiceFactory, _rSettings)
+    OConfigurationProviderImpl::OConfigurationProviderImpl(OConfigurationProvider* _pProvider, const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory)
+                               :OProviderImpl(_pProvider, _xServiceFactory)
     {
     }
     //--------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,19 @@ namespace configmgr
             "com.sun.star.configuration.ConfigurationProvider",
             0
         };
+        AsciiServiceName const aLocalAdminProviderServices[] =
+        {
+            "com.sun.star.configuration.AdministrationProvider",
+            0
+        };
         ServiceInfo const aProviderInfo =
         {
             "com.sun.star.comp.configuration.ConfigurationProvider",
+            aProviderServices
+        };
+        ServiceInfo const aLocalAdminProviderInfo =
+        {
+            "com.sun.star.comp.configuration.LocalAdministrationProvider",
             aProviderServices
         };
 
@@ -174,13 +184,56 @@ namespace configmgr
     //=============================================================================
     //= OConfigurationProvider
     //=============================================================================
-    ServiceInfo const& OConfigurationProvider::staticServiceInfo = aProviderInfo;
+    // service info export
+    const ServiceInfo* getConfigurationProviderServices()
+    {
+        return &aProviderInfo;
+    }
+
+    const ServiceInfo* getLocalAdminProviderServices()
+    {
+        return &aLocalAdminProviderInfo;
+    }
+
     //-----------------------------------------------------------------------------
-    OConfigurationProvider::OConfigurationProvider(const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory)
-                           :OProvider(_xServiceFactory,&aProviderInfo)
+    // provider instantiation
+    uno::Reference< uno::XInterface > SAL_CALL instantiateConfigProvider( uno::Reference< lang::XMultiServiceFactory > const& rServiceManager, ConnectionSettings const& _aSettings )
+    {
+        OConfigurationProvider* pNewProvider = new OConfigurationProvider(rServiceManager,&aProviderInfo);
+        uno::Reference< lang::XMultiServiceFactory > aRet( pNewProvider );
+
+        ::rtl::OUString const sService(RTL_CONSTASCII_USTRINGPARAM("configuration"));
+
+        ConnectionSettings aSettings(_aSettings);
+        aSettings.setUserSession(sService);
+
+        pNewProvider->connect(aSettings);
+
+        return  aRet;
+    }
+
+    uno::Reference< uno::XInterface > SAL_CALL instantiateLocalAdminProvider( uno::Reference< lang::XMultiServiceFactory > const& rServiceManager, ConnectionSettings const& _aSettings )
+    {
+        OConfigurationProvider* pNewProvider = new OConfigurationProvider(rServiceManager,&aLocalAdminProviderInfo);
+        uno::Reference< lang::XMultiServiceFactory > aRet( pNewProvider );
+
+        ConnectionSettings aSettings(_aSettings);
+        aSettings.setAdminSession();
+
+        pNewProvider->connect(aSettings);
+
+        return  aRet;
+    }
+
+    //-----------------------------------------------------------------------------
+    OConfigurationProvider::OConfigurationProvider(
+        const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
+        const ServiceInfo* pServices
+        )
+                           :OProvider(_xServiceFactory,pServices)
                            ,m_pImpl(NULL)
     {
-        registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH,            0,&m_aPrefetchNodes, ::getCppuType(static_cast< uno::Sequence< rtl::OUString > const * >(0) ));
+        registerProperty(rtl::OUString::createFromAscii("PrefetchNodes"),   ID_PREFETCH, 0,&m_aPrefetchNodes, ::getCppuType(static_cast< uno::Sequence< rtl::OUString > const * >(0) ));
     }
 
     //-----------------------------------------------------------------------------
@@ -192,14 +245,13 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void OConfigurationProvider::connect(const ConnectionSettings& _rSettings) throw (uno::Exception)
     {
-        ::rtl::OUString sService(RTL_CONSTASCII_USTRINGPARAM("configuration"));
-        ConnectionSettings aSettings(_rSettings);
-        aSettings.setService(sService);
+        OSL_ENSURE( m_pImpl == NULL, "Error: Configuration Provider already is connected");
 
-        IConfigSession* pNewSession = aSettings.createConnection(m_xServiceFactory);
-        if (!pNewSession)
-            throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration registry. Please check your settings."), NULL);
-        m_pImpl = new OConfigurationProviderImpl(this, pNewSession, m_xServiceFactory, _rSettings);
+        std::auto_ptr<OConfigurationProviderImpl> pNewImpl( new OConfigurationProviderImpl(this, m_xServiceFactory) );
+
+        implConnect(*pNewImpl,_rSettings);
+
+        m_pImpl = pNewImpl.release();
     }
 
     //-----------------------------------------------------------------------------

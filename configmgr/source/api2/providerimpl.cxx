@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,23 +143,31 @@ namespace configmgr
     //=============================================================================
     //-----------------------------------------------------------------------------
     OProviderImpl::OProviderImpl(OProvider* _pProvider,
-                                 IConfigSession* _pSession,
-                                 const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
-                                 const ConnectionSettings& _rSettings)
+                                 const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory)
                   :m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
-                  ,m_pSession(_pSession)
+                  ,m_pSession(NULL)
     {
         uno::Reference< script::XTypeConverter > xConverter(
             _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))), uno::UNO_QUERY);
         OSL_ENSURE(xConverter.is(), "Module::Module : could not create an instance of the type converter !");
 
         m_xDefaultOptions = new OOptions(xConverter);
+    }
+    //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::initSession(IConfigSession* _pSession,const ConnectionSettings& _rSettings)
+    {
+        m_pSession = _pSession;
 
+    // prepare the options
         // this is a hack asking the session if caching should be supported or not
         // at the time we have complete notification support this hack isn't necessary anymore
         if (!_pSession->allowsCachingHack())
             m_xDefaultOptions->setNoCache(sal_True);
+
+        bool bNeedProfile = false;
+        this->implInitFromSettings(_rSettings,bNeedProfile);
 
         m_pTreeMgr = new TreeManager(_pSession, m_xDefaultOptions); //new OOptions(xConverter));
         m_pTreeMgr->acquire();
@@ -167,42 +175,86 @@ namespace configmgr
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
         m_pNewProviders   = new configapi::ApiProviderInstances(*this,*m_pTreeMgr);
 
-        // read the default locale for the user
-        rtl::OUString sDefaultLocale(ssDefaultLocale);
-        rtl::OUString sDefaultUser;
+    // now complete our state from the user's profile, if necessary
+        if (bNeedProfile)
         try
         {
-            // if we have a user name, we have to add it for the request and we remember it for the session
-            if (_rSettings.hasUser())
-            {
-                // the username is also part of the connection settings
-                sDefaultUser = _rSettings.getUser();
-            }
+            if (ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions))
+                implInitFromProfile(pSubTree);
 
-            ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions);
-            if (pSubTree)
-            {
-                INode* pNode = pSubTree->getChild(ssInternational);
-                pSubTree = pNode ? pNode->asISubtree() : NULL;
-                if (pSubTree)
-                {
-                    pNode = pSubTree->getChild(ssLocale);
-                    ValueNode* pValueNode = pNode ? pNode->asValueNode() : NULL;
-                    if (pValueNode)
-                        pValueNode->getValue() >>= sDefaultLocale;
-                }
-
-                // should we clean this up ?
-                // m_pTreeMgr->releaseSubtree(ssUserProfile, m_xDefaultOptions);
-            }
+            // should we clean this up ?
+            // m_pTreeMgr->releaseSubtree(ssUserProfile, m_xDefaultOptions);
         }
         catch (uno::Exception&)
         {
-            // could not read default locale
-            // default locale is en-US
+            // could not read profile
         }
-        m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
-        m_xDefaultOptions->setDefaultUser(sDefaultUser);
+    }
+    //-----------------------------------------------------------------------------
+
+    // these can be overridden. default does nothing
+    void OProviderImpl::initFromSettings(const ConnectionSettings& , bool& )
+    {
+    }
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::initFromProfile(ISubtree const* )
+    {
+    }
+    //-----------------------------------------------------------------------------
+    // these implement the base class behavior
+    void OProviderImpl::implInitFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile)
+    {
+        bool bIntrinsicNeedProfile = true;
+
+        // if we have a user name, we have to add and remember it for the session
+        if (_rSettings.hasUser())
+        {
+            // the username is also part of the connection settings
+            rtl::OUString sDefaultUser = _rSettings.getUser();
+            m_xDefaultOptions->setDefaultUser(sDefaultUser);
+        }
+
+#if 0
+        if  (_rSettings.hasLocale())
+        {
+            bIntrinsicNeedProfile = false;
+            rtl::OUString sDefaultLocale = _rSettings.getLocale();
+            m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
+        }
+#endif
+
+    // call the template method
+        this->initFromSettings(_rSettings, rNeedProfile);
+
+        if (bIntrinsicNeedProfile)
+            rNeedProfile = true; // to get locale
+    }
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::implInitFromProfile(ISubtree const* pProfile)
+    {
+        OSL_ASSERT(pProfile);
+
+        // read the default locale for the user
+        INode const* pNode = pProfile->getChild(ssInternational);
+        ISubtree const* pSubTree = pNode ? pNode->asISubtree() : NULL;
+        if (pSubTree)
+        {
+            pNode = pSubTree->getChild(ssLocale);
+            ValueNode const * pValueNode = pNode ? pNode->asValueNode() : NULL;
+            if (pValueNode)
+            {
+                rtl::OUString sDefaultLocale;
+                if (pValueNode->getValue() >>= sDefaultLocale)
+                {
+                    m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
+                }
+                else
+                    OSL_ENSURE(false, "Could not extract locale parameter into string");
+            }
+        }
+
+    // call the template method
+        this->initFromProfile(pProfile);
     }
 
     //-----------------------------------------------------------------------------

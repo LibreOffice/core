@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-07 16:45:09 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,12 +150,12 @@ namespace configmgr
         ConnectionSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rRuntimeOverrides );
 
         /// merge the given overrides into a new ConnectionSettings object
-        const ConnectionSettings& merge(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides);
+        ConnectionSettings& mergeOverrides(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides);
 
         /// merge the given overrides into the object itself
-        ConnectionSettings merge(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides) const
+        ConnectionSettings createMergedSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOverrides) const
         {
-            return ConnectionSettings(*this).merge(_rOverrides);
+            return ConnectionSettings(*this).mergeOverrides(_rOverrides);
         }
 
         // check setting existence
@@ -166,6 +166,9 @@ namespace configmgr
         sal_Bool            hasPort() const;
         sal_Bool            hasTimeout() const;
         sal_Bool            hasService() const;
+
+        sal_Bool            isLocalSession() const;
+        sal_Bool            isRemoteSession() const;
 
         sal_Bool            isValidSourcePath() const;
         sal_Bool            isValidUpdatePath() const;
@@ -181,9 +184,18 @@ namespace configmgr
         sal_Int32           getPort() const;
         sal_Int32           getTimeout() const;
 
+        // make sure this behaves as a user session
+        void setUserSession();
+        void setUserSession(const ::rtl::OUString& _rRemoteServiceName);
+
+        // make sure this behaves as an administrative session
+        void setAdminSession();
+        void setAdminSession(const ::rtl::OUString& _rRemoteServiceName);
+
         // set a new session type. Must be one of the *_SESSION_IDENTIFIER defines
         void                setSessionType(const ::rtl::OUString& _rSessionIdentifier);
         // set a desired service, only necessary in remote environments
+        sal_Bool            isServiceRequired() const;
         void                setService(const ::rtl::OUString& _rService);
 
 

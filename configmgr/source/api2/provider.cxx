@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-07 17:19:01 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,13 @@
  *
  ************************************************************************/
 #include "provider.hxx"
+#include "providerimpl.hxx"
 
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
+#endif
+#ifndef CONFIGMGR_BOOTSTRAP_HXX_
+#include "bootstrap.hxx"
 #endif
 
 #ifndef CONFIGMGR_CMTREEMODEL_HXX
@@ -170,6 +174,16 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
+    void OProvider::implConnect(OProviderImpl& _rFreshProviderImpl, const ConnectionSettings& _rSettings) throw(uno::Exception)
+    {
+        IConfigSession* pNewSession = _rSettings.createConnection(m_xServiceFactory);
+        if (pNewSession == NULL)
+            throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration. Please check your settings."), THISREF() );
+
+        _rFreshProviderImpl.initSession( pNewSession, _rSettings);
+    }
+
+    //-----------------------------------------------------------------------------
     void SAL_CALL OProvider::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
     {
         {
@@ -199,7 +213,7 @@ namespace configmgr
         ServiceComponentImpl::disposing();
         OPropertyContainer::disposing();
     }
-
+/*
     // com::sun::star::lang::XUnoTunnel
     //------------------------------------------------------------------
     sal_Int64 OProvider::getSomething( const uno::Sequence< sal_Int8 > & _rId ) throw (uno::RuntimeException)
@@ -228,6 +242,7 @@ namespace configmgr
         }
         return pId->getImplementationId();
     }
+*/
 } // namespace configmgr
 
 

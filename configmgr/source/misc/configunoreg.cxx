@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,8 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
 #endif
-#ifndef CONFIGMGR_API_PROVIDER2_HXX_
-#include "confprovider2.hxx"
-#endif
-#ifndef CONFIGMGR_API_ADMINPROVIDER_HXX_
-#include "adminprovider.hxx"
+#ifndef _CPPUHELPER_FACTORY_HXX_
+#include <cppuhelper/factory.hxx>
 #endif
 
 using ::rtl::OUString;
@@ -95,29 +92,19 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL * createFactoryFunc)
             const Sequence< OUString > & rServiceNames
         );
 
+typedef Reference< XSingleServiceFactory > (SAL_CALL * createProviderFactoryFunc)
+        (
+            const Reference< XMultiServiceFactory > & rServiceManager,
+            const OUString & rComponentName,
+            ::configmgr::ProviderInstantiation pCreateFunction,
+            const Sequence< OUString > & rServiceNames
+        );
+
 // ***************************************************************************************
 //
 // Die vorgeschriebene C-Api muss erfuellt werden!
 // Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
 //
-
-//---------------------------------------------------------------------------------------
-void REGISTER_PROVIDER(
-        const OUString& aServiceImplName,
-        const Sequence<OUString>& Services,
-        const Reference< XRegistryKey > & xKey)
-{
-    OUString aMainKeyName(OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
-    aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
-
-    Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
-
-    for (sal_Int32 i=0; i<Services.getLength(); ++i)
-        xNewKey->createKey(Services[i]);
-}
-
 
 //---------------------------------------------------------------------------------------
 void RegisterService(
@@ -142,14 +129,15 @@ void RegisterService(
         }
 }
 
-//---------------------------------------------------------------------------------------
-struct ProviderRequest
+//-----------------------------------------------------------------------------
+struct ServiceImplementationRequest
 {
     Reference< XSingleServiceFactory > xRet;
     Reference< XMultiServiceFactory > const m_xServiceManager;
     OUString const sImplementationName;
 
-    ProviderRequest(
+    //-------------------------------------------------------------------------
+    ServiceImplementationRequest(
         void* pServiceManager,
         sal_Char const* pImplementationName
     )
@@ -157,57 +145,31 @@ struct ProviderRequest
     , sImplementationName(OUString::createFromAscii(pImplementationName))
     {
     }
-
+    //-------------------------------------------------------------------------
     inline
-    sal_Bool CREATE_PROVIDER(
-                const OUString& Implname,
-                const Sequence< OUString > & Services,
-                ::cppu::ComponentInstantiation Factory,
-                createFactoryFunc creator
-            )
+    sal_Bool shouldCreate(const ServiceInfo* pInfo) const
     {
-        if (!xRet.is() && (Implname == sImplementationName))
-        try
-        {
-            OSL_ENSURE(!xRet.is(), "CREATE_PROVIDER : invalid : already have a return value !");
-            if (xRet.is())
-                xRet->release();
-
-            xRet = creator( m_xServiceManager, sImplementationName,Factory, Services);
-            OSL_ENSURE(xRet.is(), "CREATE_PROVIDER : invalid return value !");
-
-            if (xRet.is())
-                xRet->acquire();
-                // we want to transport the interface pointer as flat C void pointer, so this prevents deletion
-        }
-        catch(Exception&)
-        {
-        }
-        return xRet.is();
+        OSL_ENSURE(!xRet.is(), "CreateProvider : invalid creation request: we already have a return value !");
+        return !xRet.is()   &&
+                pInfo != 0  &&
+                0 == sImplementationName.compareToAscii(pInfo->implementationName);
     }
 
-    inline
-    sal_Bool CreateProvider(
+    //-------------------------------------------------------------------------
+
+    sal_Bool CreateService(
                 const ServiceInfo* pInfo,
                 ::cppu::ComponentInstantiation Factory,
                 createFactoryFunc creator
             )
     {
-        OSL_ENSURE(!xRet.is(), "CreateProvider : invalid : we already have a return value !");
-        if (xRet.is())
-            return true; //xRet->release();
-
-        if (!xRet.is() && pInfo!=0 && (0 == sImplementationName.compareToAscii(pInfo->implementationName)))
+        if (this->shouldCreate(pInfo))
         try
         {
             const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
 
             xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
-
-            if (xRet.is())
-                xRet->acquire();
-                // we want to transport the interface pointer as flat C void pointer, so this prevents deletion
         }
         catch(Exception&)
         {
@@ -215,7 +177,37 @@ struct ProviderRequest
         return xRet.is();
     }
 
-    void* getProvider() const { return xRet.get(); }
+    //-------------------------------------------------------------------------
+
+    sal_Bool CreateProvider(
+                const ServiceInfo* pInfo,
+                ::configmgr::ProviderInstantiation Factory,
+                createProviderFactoryFunc creator
+            )
+    {
+        if (this->shouldCreate(pInfo))
+        try
+        {
+            const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
+
+            xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
+            OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
+        }
+        catch(Exception&)
+        {
+        }
+        return xRet.is();
+    }
+
+    //-------------------------------------------------------------------------
+    void* getProvider() const
+    {
+        // we want to transport the interface pointer as flat C void pointer, so this prevents deletion
+        if (xRet.is())
+            xRet->acquire();
+
+        return xRet.get();
+    }
 };
 
 //---------------------------------------------------------------------------------------
@@ -239,8 +231,8 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         Reference< XRegistryKey > xKey(reinterpret_cast<XRegistryKey*>(pRegistryKey));
 
-        RegisterService(&configmgr::OConfigurationProvider::staticServiceInfo, xKey);
-        RegisterService(&configmgr::OAdminProvider::staticServiceInfo, xKey);
+        RegisterService(configmgr::getConfigurationProviderServices(), xKey);
+        RegisterService(configmgr::getAdminProviderServices(), xKey);
 
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
@@ -258,22 +250,6 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     return sal_False;
 }
 
-namespace configmgr
-{
-    // ------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL instantiateAdminProvider( Reference< XMultiServiceFactory > const& rServiceManager )
-    {
-        return Reference< XMultiServiceFactory >( new configmgr::OAdminProvider( rServiceManager ) );
-    }
-
-    // ------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL instantiateConfigProvider( Reference< XMultiServiceFactory > const& rServiceManager )
-    {
-        return Reference< XMultiServiceFactory > ( new configmgr::OConfigurationProvider(rServiceManager) );
-    }
-};
-
-
 //---------------------------------------------------------------------------------------
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
@@ -283,31 +259,36 @@ extern "C" void* SAL_CALL component_getFactory(
     void* pRet = 0;
     if (pServiceManager)
     {
-        ProviderRequest aReq(pServiceManager,pImplementationName);
+        ServiceImplementationRequest aReq(pServiceManager,pImplementationName);
 
         aReq.CreateProvider(
-            &configmgr::OConfigurationProvider::staticServiceInfo,
+            configmgr::getConfigurationProviderServices(),
             &configmgr::instantiateConfigProvider,
             ::configmgr::createProviderFactory)
         ||
         aReq.CreateProvider(
-            &configmgr::OAdminProvider::staticServiceInfo,
+            configmgr::getAdminProviderServices(),
             &configmgr::instantiateAdminProvider,
             ::configmgr::createProviderFactory)
         ||
         aReq.CreateProvider(
+            configmgr::getUserAdminProviderServices(),
+            &configmgr::instantiateUserAdminProvider,
+            ::configmgr::createProviderFactory)
+        ||
+        aReq.CreateService(
             configmgr::getConfigurationRegistryServiceInfo(),
             &configmgr::instantiateConfigRegistry,
             ::cppu::createSingleFactory)
         ||
             /* Export */
-        aReq.CreateProvider(
+        aReq.CreateService(
             configmgr::getDataExportServiceInfo(),
             &configmgr::instantiateDataExport,
             ::cppu::createSingleFactory)
         ||
             /* Import */
-        aReq.CreateProvider(
+        aReq.CreateService(
             configmgr::getDataImportServiceInfo(),
             &configmgr::instantiateDataImport,
             ::cppu::createSingleFactory)

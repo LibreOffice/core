@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
+ *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,6 @@
 #ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
 #include "confsvccomponent.hxx"
 #endif
-#ifndef CONFIGMGR_API_PROVIDER2_HXX_
-#include "confprovider2.hxx"
-#endif
-#ifndef CONFIGMGR_API_PROVIDER_HXX_
-#include "provider.hxx"
-#endif
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
 #endif
@@ -130,7 +124,7 @@ namespace configmgr
     //= OProviderFactory
     //=======================================================================================
     //---------------------------------------------------------------------------------------
-    OProviderFactory::OProviderFactory(const Reference< XMultiServiceFactory >& _rxORB, ::cppu::ComponentInstantiation _pObjectCreator)
+    OProviderFactory::OProviderFactory(const Reference< XMultiServiceFactory >& _rxORB, ProviderInstantiation _pObjectCreator)
         :m_pObjectCreator(_pObjectCreator)
         ,m_xORB(_rxORB)
         ,m_pPureSettings(NULL)
@@ -195,13 +189,8 @@ namespace configmgr
 
         if (!xReturn.is())
         {
-            xReturn = (*m_pObjectCreator)(m_xORB);
-
-            // let the provider connect (may still throw exceptions)
-            Reference< XUnoTunnel > xProvImpl(xReturn, UNO_QUERY);
-            OProvider* pProvImpl = reinterpret_cast<OProvider*>(xProvImpl->getSomething(OProvider::getUnoTunnelImplementationId()));
-            pProvImpl->connect(_rSettings);
-
+            // create and connect the provider (may still throw exceptions)
+            xReturn = (*m_pObjectCreator)(m_xORB, _rSettings);
             // remember it for later usage
             if (!_bCreateWithPassword)
                 rProviders[sUser] = xReturn;
@@ -242,8 +231,7 @@ namespace configmgr
         MutexGuard aGuard(m_aMutex);
 
         ensureSettings();
-        ConnectionSettings aThisRoundSettings = const_cast<const ConnectionSettings*>(m_pPureSettings)->merge(_rArguments);
-            // const cast to ensure that the correct merge method is called
+        ConnectionSettings aThisRoundSettings = m_pPureSettings->createMergedSettings(_rArguments);
 
         ::rtl::OUString sSessionType = aThisRoundSettings.getSessionType();
         sal_Bool bIsPluginSession = (0 == sSessionType.compareToAscii(PLUGIN_SESSION_IDENTIFIER));
@@ -308,7 +296,7 @@ namespace configmgr
     Reference< XSingleServiceFactory > SAL_CALL createProviderFactory(
             const Reference< XMultiServiceFactory > & rServiceManager,
             const OUString & rComponentName,
-            ::cppu::ComponentInstantiation pCreateFunction,
+            ProviderInstantiation pCreateFunction,
             const Sequence< OUString > & rServiceNames
         )
     {
@@ -343,6 +331,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/21 12:15:40  jl
+ *  OSL_ENSHURE replaced by OSL_ENSURE
+ *
  *  Revision 1.6  2001/01/26 07:54:21  lla
  *  #82734# disposing with lasy writing necessary
  *
