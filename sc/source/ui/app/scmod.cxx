@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
+ *  last change: $Author: nn $ $Date: 2000-10-13 11:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,8 +1414,11 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis )
     if(nCurRefDlgId==0 || (nId==nCurRefDlgId && !bVis))
     {
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-        if ( pViewFrm )
-            pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
+
+        // #79379# bindings update causes problems with update of stylist if
+        // current style family has changed
+        //if ( pViewFrm )
+        //  pViewFrm->GetBindings().Update();       // to avoid trouble in LockDispatcher
 
         nCurRefDlgId = bVis ? nId : 0 ;             // before SetChildWindow
 
