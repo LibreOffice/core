@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.62 $
+*  $Revision: 1.63 $
 *
-*  last change: $Author: hjs $ $Date: 2004-06-26 17:33:04 $
+*  last change: $Author: hr $ $Date: 2004-08-02 16:09:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -69,14 +69,153 @@
 //-------------------------------------------------------------------------
 Resource RSC_DATASOURCE_TYPES
 {
-    String STR_CONNTYPES
+    String STR_MYSQL_ODBC
     {
-        Text = "sdbc:mysql:odbc:;sdbc:mysql:jdbc:;sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:;sdbc:address:" ;
+        Text  ="sdbc:mysql:odbc:";
     };
-    String STR_CONNUINAMES
+    String STR_MYSQL_JDBC
     {
-        Text [ de ] = "MySQL;MySQL;Adabas D;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
-        Text [ en-US ] = "MySQL;MySQL;Adabas D;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+        Text  ="sdbc:mysql:jdbc:";
+    };
+    String STR_ADABAS
+    {
+        Text  ="sdbc:adabas:";
+    };
+    String STR_ORACLE_JDBC
+    {
+        Text  ="jdbc:oracle:thin:";
+    };
+    String STR_JDBC
+    {
+        Text  ="jdbc:";
+    };
+    String STR_ODBC
+    {
+        Text  ="sdbc:odbc:";
+    };
+    String STR_DBASE
+    {
+        Text  ="sdbc:dbase:";
+    };
+    String STR_ADO
+    {
+        Text  ="sdbc:ado:";
+    };
+    String STR_MSACCESS
+    {
+        Text  ="sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=";
+    };
+    String STR_FLAT
+    {
+        Text  ="sdbc:flat:";
+    };
+    String STR_CALC
+    {
+        Text  ="sdbc:calc:";
+    };
+    String STR_MOZILLA
+    {
+        Text  ="sdbc:address:mozilla";
+    };
+    String STR_LDAP
+    {
+        Text  ="sdbc:address:ldap:";
+    };
+    String STR_OUTLOOK
+    {
+        Text  ="sdbc:address:outlook";
+    };
+    String STR_OUTLOOKEXP
+    {
+        Text  ="sdbc:address:outlookexp";
+    };
+    String STR_EVOLUTION
+    {
+        Text  ="sdbc:address:evolution";
+    };
+};
+Resource RSC_DATASOURCE_TYPE_UINAMES
+{
+    String STR_MYSQL_ODBC
+    {
+        Text [ de ] = "MySQL (ODBC)";
+        Text[ en-US ] = "MySQL (ODBC)";
+    };
+    String STR_MYSQL_JDBC
+    {
+        Text [ de ] = "MySQL (JDBC)";
+        Text[ en-US ] = "MySQL (JDBC)";
+    };
+    String STR_ADABAS
+    {
+        Text [ de ] = "Adabas D";
+        Text[ en-US ] = "Adabas D";
+    };
+    String STR_ORACLE_JDBC
+    {
+        Text [ de ] = "Oracle JDBC";
+        Text[ en-US ] = "Oracle JDBC";
+    };
+
+    String STR_JDBC
+    {
+        Text [ de ] = "JDBC";
+        Text[ en-US ] = "JDBC";
+    };
+    String STR_ODBC
+    {
+        Text [ de ] = "ODBC";
+        Text[ en-US ] = "ODBC";
+    };
+    String STR_DBASE
+    {
+        Text [ de ] = "dBASE";
+        Text[ en-US ] = "dBASE";
+    };
+    String STR_ADO
+    {
+        Text [ de ] = "ADO";
+        Text[ en-US ] = "ADO";
+    };
+    String STR_MSACCESS
+    {
+        Text [ de ] = "Microsoft Access";
+        Text[ en-US ] = "Microsoft Access";
+    };
+    String STR_FLAT
+    {
+        Text [ de ] = "Text";
+        Text[ en-US ] = "Text";
+    };
+    String STR_CALC
+    {
+        Text [ de ] = "Tabellendokument";
+        Text[ en-US ] = "Spreadsheet";
+    };
+    String STR_MOZILLA
+    {
+        Text [ de ] = "Mozilla Adressbuch";
+        Text[ en-US ] = "Mozilla Address Book";
+    };
+    String STR_LDAP
+    {
+        Text [ de ] = "LDAP Adressbuch";
+        Text[ en-US ] = "LDAP Address Book";
+    };
+    String STR_OUTLOOK
+    {
+        Text [ de ] = "Microsoft Outlook Adressbuch";
+        Text[ en-US ] = "Microsoft Outlook Address Book";
+    };
+    String STR_OUTLOOKEXP
+    {
+        Text [ de ] = "Microsoft Windows Adressbuch";
+        Text[ en-US ] = "Microsoft Windows Address Book";
+    };
+    String STR_EVOLUTION
+    {
+        Text [ de ] = "Evolution Adressbuch";
+        Text[ en-US ] = "Evolution Address Book";
     };
 };
 
