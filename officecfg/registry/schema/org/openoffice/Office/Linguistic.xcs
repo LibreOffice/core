@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:54:56 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,51 @@
 				</prop>
 			</group>
 		</group>
+        <group oor:name="TextConversion">
+            <info>
+                    <desc xml:lang="en-US">Defines settings used by the text conversion.</desc>
+            </info>
+            <prop oor:name="ActiveConversionDictionaries" oor:type="oor:string-list">
+                    <!-- OldLocation: NEW -->
+                    <info>
+                            <desc xml:lang="en-US">Specifies the user dictionaries to be used. </desc>
+                            <label xml:lang="en-US">Active text conversion user dictionaries</label>
+                    </info>
+                    <value/>
+            </prop>
+            <prop oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean">
+                    <!-- OldLocation: NEW -->
+                    <info>
+                            <desc xml:lang="en-US">Specifies if post positionals should be ignored when looking for Korean entries.</desc>
+                            <label xml:lang="en-US">Ignore post positional word</label>
+                    </info>
+                    <value>true</value>
+            </prop>
+            <prop oor:name="IsAutoCloseDialog" oor:type="xs:boolean">
+                    <!-- OldLocation: NEW -->
+                    <info>
+                            <desc xml:lang="en-US">Specifies if the dialog should be closed automatically after the conversion of the current text portion is processed.</desc>
+                            <label xml:lang="en-US">Auto close dialog</label>
+                    </info>
+                    <value>false</value>
+            </prop>
+            <prop oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean">
+                    <!-- OldLocation: NEW -->
+                    <info>
+                            <desc xml:lang="en-US">Specifies if entries that were recently used as replacements should be listed first.</desc>
+                            <label xml:lang="en-US">Show entries recently used first</label>
+                    </info>
+                    <value>false</value>
+            </prop>
+            <prop oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean">
+                    <!-- OldLocation: NEW -->
+                    <info>
+                            <desc xml:lang="en-US">Specifies if entries for which have only one possible replacement should be replaced automatically.</desc>
+                            <label xml:lang="en-US">Auto replace unique entries</label>
+                    </info>
+                    <value>false</value>
+            </prop>
+        </group>
 		<group oor:name="SpellChecking">
 			<info>
 				<desc xml:lang="en-US">Contains spell checking-relevant settings.</desc>
