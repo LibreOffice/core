@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-04 16:09:33 $
+ *  last change: $Author: mt $ $Date: 2001-12-12 15:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
             ImplActivateTabControllers();
         }
 
-        if( bVis )
+        if( bVis && !isDesignMode() )
             UnoControl::setVisible( sal_True );
     }
 }
