@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-13 11:26:15 $
+ *  last change: $Author: sab $ $Date: 2002-11-15 09:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ void BrowseBox::FillAccessibleStateSet(
             if ( IsReallyVisible() )
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( eObjType == ::svt::BBTYPE_TABLE )
-                rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+                rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
 
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
@@ -366,14 +366,14 @@ void BrowseBox::FillAccessibleStateSet(
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectRowCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
-            rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectColumnCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
-            rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
             break;
         case ::svt::BBTYPE_TABLECELL:
             {

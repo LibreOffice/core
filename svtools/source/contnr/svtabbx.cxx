@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-31 12:14:19 $
+ *  last change: $Author: sab $ $Date: 2002-11-15 09:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,7 +1041,7 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
                 _rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( _eType == ::svt::BBTYPE_TABLE )
             {
-                _rStateSet.AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+                _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
                 _rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
             }
             break;
