@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 13:54:33 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace comphelper
 
     public:
         OPropertyChangeListener(::osl::Mutex& _rMutex)
-            :m_rMutex(_rMutex) ,m_pAdapter(NULL) { }
+            : m_pAdapter(NULL), m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) = 0;
