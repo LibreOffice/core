@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:31:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,11 +380,11 @@ Any ProxyRoot::queryAggregation( Type const & rType )
             uno_ExtEnvironment * cpp_env = m_factory->m_cpp_env.get()->pExtEnv;
             OSL_ASSERT( cpp_env != 0 );
 
+            // mind a new delegator, calculate current root:
+            Reference< XInterface > xRoot(
+                static_cast< OWeakObject * >(this), UNO_QUERY_THROW );
             OUString oid;
-            (*cpp_env->getObjectIdentifier)(
-                cpp_env, &oid.pData,
-                static_cast< XInterface * >(
-                    static_cast< ::cppu::OWeakObject * >(this) ) );
+            (*cpp_env->getObjectIdentifier)( cpp_env, &oid.pData, xRoot.get() );
             OSL_ASSERT( oid.getLength() > 0 );
 
             (*cpp_env->getRegisteredInterface)(
@@ -401,8 +401,6 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                 if (proxy_target.is())
                 {
                     // ensure root's object entries:
-                    Reference< XInterface > xRoot(
-                        static_cast< OWeakObject * >(this), UNO_QUERY_THROW );
                     UnoInterfaceReference root;
                     m_factory->m_cpp2uno.mapInterface(
                         reinterpret_cast< void ** >( &root.m_pUnoI ),
