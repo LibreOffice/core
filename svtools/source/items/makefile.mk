@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:42:33 $
+#   last change: $Author: obo $ $Date: 2004-11-17 13:22:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,8 @@ LIB2OBJFILES=\
     $(SLO)$/tfrmitem.obj	\
     $(SLO)$/tresitem.obj	\
         $(SLO)$/whiter.obj              \
-        $(SLO)$/ilstitem.obj
+        $(SLO)$/ilstitem.obj    \
+        $(SLO)$/visitem.obj
 
 LIB3TARGET=$(SLB)$/items2.lib
 LIB3OBJFILES=\
