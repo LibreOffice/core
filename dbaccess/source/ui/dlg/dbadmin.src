@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:39:56 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 20:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,8 +680,26 @@ TabPage PAGE_GENERAL
         HelpId = HID_DSADMIN_BROWSECONN;
         Text = "~..." ;
         Text [ english ] = "~..." ;
-        Text [ english_us ] = "~..." ;
-        Text [ portuguese ] = "~...";
+        Text [ english_us ] = "..." ;
+        Text [ portuguese ] = "...";
+        Text[ russian ] = "...";
+        Text[ greek ] = "...";
+        Text[ dutch ] = "~...";
+        Text[ french ] = "...";
+        Text[ spanish ] = "...";
+        Text[ finnish ] = "...";
+        Text[ italian ] = "...";
+        Text[ danish ] = "Gennemse...";
+        Text[ swedish ] = "~...";
+        Text[ polish ] = "~...";
+        Text[ portuguese_brazilian ] = "Durchsuchen...";
+        Text[ japanese ] = "...";
+        Text[ korean ] = "...";
+        Text[ chinese_simplified ] = "...";
+        Text[ chinese_traditional ] = "...";
+        Text[ turkish ] = "Tara...";
+        Text[ arabic ] = "...";
+        Text[ catalan ] = "...";
     };
     FixedText FT_LOGINTIMEOUT
     {
@@ -2100,11 +2118,11 @@ TabPage PAGE_TEXT
         Text [ PORTUGUESE_BRAZILIAN ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;
         Text [ SWEDISH ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{tom}\t32" ;
         Text [ PORTUGUESE ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{vazio}\t32" ;
-        Text [ chinese_simplified ] = ";\t59\t,\t44\t:\t58\t{ÖÆ±í¼ü}\t9\t{¿Õ°×}\t32";
+        Text [ chinese_simplified ] = ";\t59\t,\t44\t:\t58\t{ÖÆ±í¼ü}\t9\t{¿ÕÈ±}\t32";
         Text [ russian ] = ";\t59\t,\t44\t:\t58\t{Taá}\t9\t{ïóñòî}\t32";
         Text [ polish ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Pusty}\t32";
         Text [ japanese ] = ";\t59\t,\t44\t:\t58\t{ÀÌÞ}\t9\t{‹ó”’}\t32";
-        Text [ chinese_traditional ] = ";\t59\t,\t44\t:\t58\t{»sªíÁä}\t9\t{ªÅ¥Õ}\t32";
+        Text [ chinese_traditional ] = ";\t59\t,\t44\t:\t58\t{»sªíÁä}\t9\t{ªÅ¯Ê}\t32";
         Text [ arabic ] = ";\t59\t,\t44\t:\t58\t{ÚáÇãÉ ÌÏæáÉ}\t9\t{ÝÇÑÛ\t32";
         Text [ greek ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{êåíü}\t32";
         Text [ korean ] = ";\t59\t,\t44\t:\t58\t{ÅÇ}\t9\t{°ø¹é}\t32";
@@ -3266,6 +3284,9 @@ String STR_CALCDOC_DOESNOTEXIST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.66  2001/07/24 06:39:56  oj
+ *  #89358# enable single line for tabcontrol
+ *
  *  Revision 1.65  2001/07/23 13:13:38  oj
  *  #90074# check if calc doc exists
  *
@@ -3352,6 +3373,7 @@ String STR_CALCDOC_DOESNOTEXIST
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
