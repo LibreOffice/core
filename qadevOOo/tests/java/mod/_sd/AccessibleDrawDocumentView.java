@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 13:21:33 $
+ *  last change:$Date: 2003-09-08 12:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,32 +61,33 @@
 
 package mod._sd;
 
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.awt.XWindow;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XDrawPages;
-import com.sun.star.drawing.XDrawPagesSupplier;
-import com.sun.star.drawing.XDrawView;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.XAccessible;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.AccessibilityTools;
+import util.DrawTools;
 import util.SOfficeFactory;
 import util.utils;
-import util.DrawTools;
 
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XDrawPages;
+import com.sun.star.drawing.XDrawPagesSupplier;
+import com.sun.star.drawing.XDrawView;
+import com.sun.star.drawing.XShape;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class AccessibleDrawDocumentView extends TestCase {
 
@@ -152,7 +153,7 @@ public class AccessibleDrawDocumentView extends TestCase {
         //com.sun.star.accessibility.AccessibleRole
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
 
-        oObj = at.SearchedContext;
+        oObj = AccessibilityTools.SearchedContext;
 
         log.println("ImplementationName "+utils.getImplName(oObj));
 
