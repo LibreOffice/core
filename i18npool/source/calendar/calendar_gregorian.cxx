@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:32:29 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,36 @@ Calendar_gregorian::setValue( sal_Int16 fieldIndex, sal_Int16 value ) throw(Runt
         fieldValue[fieldIndex] = value;
 }
 
+void SAL_CALL Calendar_gregorian::submitValues( sal_Int32 nYear,
+        sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute,
+        sal_Int32 nSecond, sal_Int32 nMilliSecond ) throw(com::sun::star::uno::RuntimeException)
+{
+    for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++)
+    {
+        if (fieldSet & (1 << fieldIndex))
+        {
+            if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
+                body->set(fieldNameConverter(fieldIndex), (sal_Int32) fieldSetValue[fieldIndex] * 60000);
+            else
+                body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
+        }
+    }
+    if (nYear >= 0)
+        body->set( UCAL_YEAR, nYear);
+    if (nMonth >= 0)
+        body->set( UCAL_MONTH, nMonth);
+    if (nDay >= 0)
+        body->set( UCAL_DATE, nDay);
+    if (nHour >= 0)
+        body->set( UCAL_HOUR_OF_DAY, nHour);
+    if (nMinute >= 0)
+        body->set( UCAL_MINUTE, nMinute);
+    if (nSecond >= 0)
+        body->set( UCAL_SECOND, nSecond);
+    if (nMilliSecond >= 0)
+        body->set( UCAL_MILLISECOND, nMilliSecond);
+}
+
 void SAL_CALL
 Calendar_gregorian::setValue() throw(RuntimeException)
 {
@@ -325,15 +355,15 @@ Calendar_gregorian::setValue() throw(RuntimeException)
             }
         }
         bool bNeedDST = !(fieldSet & (1 << CalendarFieldIndex::DST_OFFSET));
-        sal_Int32 nValDST, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond;
-        nValDST = 0;
+        sal_Int32 nDST1, nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond;
+        nDST1 = 0;
         nYear = nMonth = nDay = nHour = nMinute = nSecond = nMilliSecond = -1;
         if ( bNeedDST )
         {
             UErrorCode status;
-            nValDST = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
+            nDST1 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
-                nValDST = 0;
+                nDST1 = 0;
             if ( !(fieldSet & (1 << CalendarFieldIndex::YEAR)) )
             {
                 nYear = body->get( UCAL_YEAR, status = U_ZERO_ERROR);
@@ -390,10 +420,10 @@ Calendar_gregorian::setValue() throw(RuntimeException)
         if ( bNeedDST )
         {
             UErrorCode status;
-            sal_Int32 value = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
+            sal_Int32 nDST2 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
             if ( !U_SUCCESS(status) )
-                value = nValDST;
-            if ( value != nValDST )
+                nDST2 = nDST1;
+            if ( nDST2 != nDST1 )
             {
                 // Due to different DSTs, resulting date values may differ if
                 // DST is onset at 00:00 and the very onsetRule date was
@@ -402,31 +432,23 @@ Calendar_gregorian::setValue() throw(RuntimeException)
                 // Resubmit all values, this time including DST => date 01:00
                 fieldSet |= (1 << CalendarFieldIndex::DST_OFFSET);
                 fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
-                    fieldValue[CalendarFieldIndex::DST_OFFSET] = value / 60000;
-                for (sal_Int16 fieldIndex = 0; fieldIndex < CalendarFieldIndex::FIELD_COUNT; fieldIndex++)
+                    fieldValue[CalendarFieldIndex::DST_OFFSET] = nDST2 / 60000;
+                submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond);
+
+                // If the DST onset rule says to switch from 00:00 to 01:00 and
+                // we tried to set onsetDay 00:00 with DST, the result was
+                // onsetDay-1 23:00 and no DST, which is not what we want. So
+                // once again without DST, resulting in onsetDay 01:00 and DST.
+                // Yes, this seems to be weird, but logically correct.
+                sal_Int32 nDST3 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
+                if ( !U_SUCCESS(status) )
+                    nDST3 = nDST2;
+                if (nDST2 != nDST3 && !nDST3)
                 {
-                    if (fieldSet & (1 << fieldIndex))
-                    {
-                        if (fieldIndex == CalendarFieldIndex::ZONE_OFFSET || fieldIndex == CalendarFieldIndex::DST_OFFSET)
-                            body->set(fieldNameConverter(fieldIndex), (sal_Int32) fieldSetValue[fieldIndex] * 60000);
-                        else
-                            body->set(fieldNameConverter(fieldIndex), fieldSetValue[fieldIndex]);
-                    }
+                    fieldSetValue[CalendarFieldIndex::DST_OFFSET] =
+                        fieldValue[CalendarFieldIndex::DST_OFFSET] = 0;
+                    submitValues( nYear, nMonth, nDay, nHour, nMinute, nSecond, nMilliSecond);
                 }
-                if (nYear >= 0)
-                    body->set( UCAL_YEAR, nYear);
-                if (nMonth >= 0)
-                    body->set( UCAL_MONTH, nMonth);
-                if (nDay >= 0)
-                    body->set( UCAL_DATE, nDay);
-                if (nHour >= 0)
-                    body->set( UCAL_HOUR_OF_DAY, nHour);
-                if (nMinute >= 0)
-                    body->set( UCAL_MINUTE, nMinute);
-                if (nSecond >= 0)
-                    body->set( UCAL_SECOND, nSecond);
-                if (nMilliSecond >= 0)
-                    body->set( UCAL_MILLISECOND, nMilliSecond);
             }
         }
 }
