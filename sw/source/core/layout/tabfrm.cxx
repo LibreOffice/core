@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: ama $ $Date: 2002-05-13 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2008,8 +2008,16 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
     while ( pRet && !pRet->IsCntntFrm() )
     {
         SwFrm *pOld = pRet;
+
+        SwFrm *pTmp = pRet;             // To skip empty section frames
         while ( pRet->GetNext() )
+        {
             pRet = pRet->GetNext();
+            if( !pRet->IsSctFrm() || ((SwSectionFrm*)pRet)->GetSection() )
+                pTmp = pRet;
+        }
+        pRet = pTmp;
+
         if ( pRet->GetLower() )
             pRet = pRet->GetLower();
         if ( pRet == pOld )
