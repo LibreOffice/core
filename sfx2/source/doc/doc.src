@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-23 20:11:43 $
+ *  last change: $Author: rt $ $Date: 2002-06-10 15:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message[ chinese_simplified ] = "δΈ€δΈªεεη„ζ ·εΌε·²η»ε­ε¨γ€‚\nθ¦ζ”Ήε†™ε®ƒοΌ";
     Message[ russian ] = "Σζε ρσωερςβσες ψΰαλξν ρ ςΰκθμ θμενεμ.\nΗΰμενθςό?";
     Message[ polish ] = "JuΏ istnieje szablon o tej nazwie.\nCzy go zastΉpiζ innym?";
-    Message[ japanese ] = "γ™γ§γ«γ“γ®εε‰γ®γƒ†γƒ³γƒ—γƒ¬γƒΌγƒγγ‚γ‚γΎγ™γ€‚\nδΈζ›Έγγ—γ¦γ‚‚γ‚γ‚γ—γ„γ§γ™γ‹?";
+    Message[ japanese ] = "γ“γ®εε‰γ®γƒ†γƒ³γƒ—γƒ¬γƒΌγƒγ―γ™γ§γ«γ‚γ‚γΎγ™γ€‚\nδΈζ›Έγγ—γΎγ™γ‹γ€‚";
     Message[ chinese_traditional ] = "δΈ€ε€‹εεη„ζ¨£εΌε·²η¶“ε­ε¨γ€‚\nζ‚¨θ¦θ¦†ε―«ε®ƒοΌ";
     Message[ arabic ] = "νζΜΟ ΘΗαέΪα ήΗαΘ ΘεΠΗ ΗαΗΣγ.\nεα ΚΡνΟ ΗαίΚΗΘΙ έζήεΏ";
     Message[ dutch ] = "Er bestaat reeds een sjabloon met deze naam.\nOverschrijven?";
@@ -759,14 +759,14 @@ ErrorBox MSG_ERROR_RESCAN
     Message [ dutch ] = "De wijzigingen kunnen niet worden opgeslagen." ;
     Message [ spanish ] = "No se pudieron guardar las actualizaciones." ;
     Message [ english_us ] = "The update could not be saved." ;
-    Message[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ›΄ζ–°γ€‚";
+    Message[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ›΄ζ–°ε†…ε®Ήγ€‚";
     Message[ russian ] = "Ρξυπΰνθςό ξανξβλενθÿ νε σδΰεςρÿ.";
     Message[ polish ] = "Aktualizacje nie mog³y zostaζ zapisane.";
-    Message[ japanese ] = "ζ›΄ζ–°γ―δΏε­γ§γγ¦γ„γΎγ›γ‚“γ€‚";
+    Message[ japanese ] = "ζ›΄ζ–°γ—γε†…ε®Ήγ―δΏε­γ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Message[ chinese_traditional ] = "η„΅ζ³•ε„²ε­ζ›΄ζ–°ε…§ε®Ήγ€‚";
     Message[ arabic ] = "ΚΪΠΡ ΝέΩ ΗαΚΝΟνΛΗΚ.";
     Message[ dutch ] = "De wijzigingen kunnen niet worden opgeslagen.";
-    Message[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ›΄ζ–°γ€‚";
+    Message[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ›΄ζ–°ε†…ε®Ήγ€‚";
     Message[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτούν τα δεδομένα των ενημερώσεων.";
     Message[ korean ] = "μ—…λ°μ΄νΈλ¥Ό μ €μ¥ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Message[ turkish ] = "Gόncellemeler kaydedilemedi.";
