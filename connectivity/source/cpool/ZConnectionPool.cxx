@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,14 +131,10 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
         xProp->addPropertyChangeListener(getTimeoutNodeName(),this);
 
     OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
-    sal_Int32 nError = 10;
-    if(m_nALiveCount < 100)
-        nError = 20;
+    calculateTimeOuts(m_nALiveCount);
 
-    m_nTimeOut      = m_nALiveCount / nError;
-    m_nALiveCount   = m_nALiveCount / m_nTimeOut;
-    m_xTimer = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
-    m_xTimer->start();
+    m_xInvalidator = new OPoolTimer(this,::vos::TTimeValue(m_nTimeOut,0));
+    m_xInvalidator->start();
 }
 // -----------------------------------------------------------------------------
 OConnectionPool::~OConnectionPool()
@@ -146,42 +142,80 @@ OConnectionPool::~OConnectionPool()
     clear();
 }
 // -----------------------------------------------------------------------------
+struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::value_type,void>
+                                    ,::std::unary_function<TActiveConnectionMap::value_type,void>
+{
+    OConnectionPool* m_pConnectionPool;
+
+    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool) : m_pConnectionPool(_pConnectionPool)
+    {
+        OSL_ENSURE(m_pConnectionPool,"No connection pool!");
+    }
+    // -----------------------------------------------------------------------------
+    void dispose(const Reference<XInterface>& _xComponent)
+    {
+        Reference< XComponent >  xComponent(_xComponent, UNO_QUERY);
+
+        if (xComponent.is())
+            xComponent->removeEventListener(m_pConnectionPool);
+    }
+    // -----------------------------------------------------------------------------
+    void operator()(const TPooledConnections::value_type& _aValue)
+    {
+        dispose(_aValue);
+    }
+    // -----------------------------------------------------------------------------
+    void operator()(const TActiveConnectionMap::value_type& _aValue)
+    {
+        dispose(_aValue.first);
+    }
+};
+// -----------------------------------------------------------------------------
+struct TDisposeFunctor : ::std::unary_function<TPooledConnections::value_type,void>
+{
+    void operator()(const TPooledConnections::value_type& _aValue)
+    {
+        Reference< XComponent >  xComponent(_aValue, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+};
+// -----------------------------------------------------------------------------
+struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type,void>
+{
+    OConnectionPool* m_pConnectionPool;
+
+
+    TConnectionPoolFunctor(OConnectionPool* _pConnectionPool) : m_pConnectionPool(_pConnectionPool)
+    {
+        OSL_ENSURE(m_pConnectionPool,"No connection pool!");
+    }
+    void operator()(const TConnectionMap::value_type& _aValue)
+    {
+        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool));
+        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TDisposeFunctor());
+    }
+};
+// -----------------------------------------------------------------------------
 void OConnectionPool::clear()
 {
     MutexGuard aGuard(m_aMutex);
 
-    if(m_xTimer->isTicking())
-        m_xTimer->stop();
+    if(m_xInvalidator->isTicking())
+        m_xInvalidator->stop();
 
-    TConnectionMap::iterator aIter = m_aPool.begin();
-    for(;aIter != m_aPool.end();++aIter)
-    {
-        TPooledConnections::iterator aIter2 = aIter->second.aConnections.begin();
-        for(;aIter2 != aIter->second.aConnections.end();++aIter2)
-        {
-            Reference< XComponent >  xComponent(*aIter2, UNO_QUERY);
-            if (xComponent.is())
-            {
-                xComponent->removeEventListener(this);
-                ::comphelper::disposeComponent(xComponent);
-            }
-        }
-        aIter->second.aConnections.clear();
-    }
+    ::std::for_each(m_aPool.begin(),m_aPool.end(),TConnectionPoolFunctor(this));
     m_aPool.clear();
 
-    TActiveConnectionMap::iterator aIter3 = m_aActiveConnections.begin();
-    for(;aIter3 != m_aActiveConnections.end();++aIter3)
-    {
-        Reference< XComponent >  xComponent(aIter3->first, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->removeEventListener(this);
-    }
+    ::std::for_each(m_aActiveConnections.begin(),m_aActiveConnections.end(),TRemoveEventListenerFunctor(this));
     m_aActiveConnections.clear();
 
     Reference< XComponent >  xComponent(m_xDriverNode, UNO_QUERY);
     if (xComponent.is())
         xComponent->removeEventListener(this);
+    Reference< XPropertySet >  xProp(m_xDriverNode, UNO_QUERY);
+    if (xProp.is())
+        xProp->removePropertyChangeListener(getTimeoutNodeName(),this);
 
     m_xDriverNode   = NULL;
     m_xDriver       = NULL;
@@ -203,7 +237,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
 
         do
         {
-            if (checkSequences(aIter->second.aProps,aMap))
+            if (compareSequences(aIter->second.aProps,aMap))
                 xConnection = getPooledConnection(aIter);
         }
         while ((++aIter != aThisURLConns.second) && !xConnection.is());
@@ -231,10 +265,11 @@ void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObj
     }
     else
     {
+        m_xDriverNode = NULL;
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OConnectionPool::checkSequences(const PropertyMap& _rLh,const PropertyMap& _rRh)
+sal_Bool OConnectionPool::compareSequences(const PropertyMap& _rLh,const PropertyMap& _rRh)
 {
     if(_rLh.size() != _rRh.size())
         return sal_False;
@@ -262,18 +297,18 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
             xComponent->addEventListener(this);
 
         // save some information to find the right pool later on
-        PropertyMap aMap;
-        createPropertyMap(_rInfo,aMap); // by ref to avoid copying
         TConnectionPool aPack;
-        aPack.aProps        = aMap;
-        aPack.nALiveCount   = m_nALiveCount;
-        TActiveConnectionInfo aActiveInfo;
-        aActiveInfo.aPos = m_aPool.insert(TConnectionMap::value_type(_rURL,aPack));
-        aActiveInfo.xPooledConnection = xPooledConnection;
-        m_aActiveConnections[xConnection] = aActiveInfo;
+        createPropertyMap(_rInfo,aPack.aProps); // by ref to avoid copying
 
-        if(m_xTimer->isExpired())
-            m_xTimer->start();
+        // insert the new connection and struct into the active connection map
+        aPack.nALiveCount               = m_nALiveCount;
+        TActiveConnectionInfo aActiveInfo;
+        aActiveInfo.aPos                = m_aPool.insert(TConnectionMap::value_type(_rURL,aPack));
+        aActiveInfo.xPooledConnection   = xPooledConnection;
+        m_aActiveConnections.insert(TActiveConnectionMap::value_type(xConnection,aActiveInfo));
+
+        if(m_xInvalidator->isExpired())
+            m_xInvalidator->start();
     }
 
     return xConnection;
@@ -281,12 +316,11 @@ Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUStri
 // -----------------------------------------------------------------------------
 void OConnectionPool::createPropertyMap(const Sequence< PropertyValue >& _rInfo,PropertyMap& _rMap)
 {
+    OSL_ENSURE(_rMap.empty(),"Map not empty");
     const PropertyValue* pBegin   = _rInfo.getConstArray();
     const PropertyValue* pEnd     = pBegin + _rInfo.getLength();
     for(;pBegin != pEnd;++pBegin)
-    {
-        _rMap[pBegin->Name] = pBegin->Value;
-    }
+        _rMap.insert(PropertyMap::value_type(pBegin->Name,pBegin->Value));
 }
 // -----------------------------------------------------------------------------
 void OConnectionPool::invalidatePooledConnections()
@@ -295,15 +329,14 @@ void OConnectionPool::invalidatePooledConnections()
     TConnectionMap::iterator aIter = m_aPool.begin();
     for (; aIter != m_aPool.end(); )
     {
-        --(aIter->second.nALiveCount);
-        if(!(aIter->second.nALiveCount)) // connections are invalid
+        if(!(--(aIter->second.nALiveCount))) // connections are invalid
         {
-            TPooledConnections::iterator aLoop = aIter->second.aConnections.begin();
-            for (; aLoop != aIter->second.aConnections.end();++aLoop )
-                ::comphelper::disposeComponent(*aLoop);
+            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TRemoveEventListenerFunctor(this));
+            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TDisposeFunctor());
+
             aIter->second.aConnections.clear();
 
-            // look if the itertaor aIter is still present in the active connection map
+            // look if the iterator aIter is still present in the active connection map
             TActiveConnectionMap::iterator aActIter = m_aActiveConnections.begin();
             for (; aActIter != m_aActiveConnections.end(); ++aActIter)
             {
@@ -322,15 +355,15 @@ void OConnectionPool::invalidatePooledConnections()
         else
             ++aIter;
     }
-    if(m_aPool.size())
-        m_xTimer->start();
+    if(!m_aPool.empty())
+        m_xInvalidator->start();
 }
 // -----------------------------------------------------------------------------
 Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::iterator& _rIter)
 {
     Reference<XConnection> xConnection;
 
-    if(_rIter->second.aConnections.size())
+    if(!_rIter->second.aConnections.empty())
     {
         Reference< XPooledConnection > xPooledConnection = _rIter->second.aConnections.back();
         _rIter->second.aConnections.pop_back();
@@ -349,13 +382,22 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
     return xConnection;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OConnectionPool::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
 {
-    evt.NewValue >>= m_nALiveCount;
-    sal_Int32 nError = 10;
+    if(getTimeoutNodeName() == evt.PropertyName)
+    {
+        evt.NewValue >>= m_nALiveCount;
+        calculateTimeOuts(m_nALiveCount);
+    }
+}
+// -----------------------------------------------------------------------------
+void OConnectionPool::calculateTimeOuts(sal_Int32 _nTimeOut)
+{
+    sal_Int32 nTimeOutCorrection = 10;
     if(m_nALiveCount < 100)
-        nError = 20;
-    m_nTimeOut      = m_nALiveCount / nError;
+        nTimeOutCorrection = 20;
+
+    m_nTimeOut      = m_nALiveCount / nTimeOutCorrection;
     m_nALiveCount   = m_nALiveCount / m_nTimeOut;
 }
 // -----------------------------------------------------------------------------

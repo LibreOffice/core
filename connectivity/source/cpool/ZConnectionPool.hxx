@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace connectivity
 {
     class OConnectionPool;
     //==========================================================================
-    //= OPoolTimer - Invalidates the connection pool
+    /// OPoolTimer - Invalidates the connection pool
     //==========================================================================
     class OPoolTimer : public ::vos::OTimer
     {
@@ -112,9 +112,6 @@ namespace connectivity
     protected:
         virtual void SAL_CALL onShot();
     };
-
-    //==========================================================================
-    typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
 
     //==========================================================================
     //= OConnectionPool - the one-instance service for PooledConnections
@@ -143,7 +140,8 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> xPooledConnection;
     } TActiveConnectionInfo;
 
-    typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>,TActiveConnectionInfo> TActiveConnectionMap;
+    typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>,
+                        TActiveConnectionInfo> TActiveConnectionMap;
 
     class OConnectionPool : public OConnectionPool_Base
     {
@@ -151,21 +149,23 @@ namespace connectivity
         TActiveConnectionMap    m_aActiveConnections;   // the currently active connections
 
         ::osl::Mutex            m_aMutex;
-        ::vos::ORef<OPoolTimer> m_xTimer;
+        ::vos::ORef<OPoolTimer> m_xInvalidator;         // invalidates the conntection pool when shot
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >     m_xDriver;      // the one and only driver for this connectionpool
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xDriverNode;  // config node entry
-        sal_Int32 m_nTimeOut;
-        sal_Int32 m_nALiveCount;
+        sal_Int32               m_nTimeOut;
+        sal_Int32               m_nALiveCount;
 
     private:
         // check two maps
-        sal_Bool checkSequences(const PropertyMap& _rLh,const PropertyMap& _rRh);
+        sal_Bool compareSequences(const PropertyMap& _rLh,const PropertyMap& _rRh);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> createNewConnection(const ::rtl::OUString& _rURL,
                                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator& _rIter);
         // creates a map from a sequence of propertyValue
         void createPropertyMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo,PropertyMap& _rMap);
+        // calculate the timeout and the corresponding ALiveCount
+        void calculateTimeOuts(sal_Int32 _nTimeOut);
 
     protected:
         // the dtor will be called from the last instance  (last release call)

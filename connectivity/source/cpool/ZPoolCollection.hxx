@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:01:58 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ namespace connectivity
                                         ::com::sun::star::beans::XPropertyChangeListener
                                         >   OPoolCollection_Base;
 
+    /// OPoolCollection: controll the whole connection pooling for oo
     class OPoolCollection : public OPoolCollection_Base
     {
 
@@ -129,13 +130,12 @@ namespace connectivity
 
         MapDriver2DriverRef                                                                 m_aDriverProxies;
         ::osl::Mutex                                                                        m_aMutex;
-        OConnectionPools                                                                    m_aPools;
+        OConnectionPools                                                                    m_aPools;          // the driver pools
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager >          m_xManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >           m_xDriverAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;
-
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for generel connection pooling
 
     private:
         OPoolCollection(

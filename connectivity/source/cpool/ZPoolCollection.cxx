@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 06:03:21 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,9 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
 // -----------------------------------------------------------------------------
 void SAL_CALL OPoolCollection::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
 {
+    MutexGuard aGuard(m_aMutex);
+    if(Source.Source == m_xConfigNode)
+        m_xConfigNode = NULL;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
@@ -533,13 +536,6 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             }
             m_aPools.clear();
             m_aPools         = OConnectionPools();
-    //      for (   MapDriver2DriverRefIterator aLookup = m_aDriverProxies.begin();
-    //              aLookup != m_aDriverProxies.end();
-    //              ++aLookup
-    //          )
-    //      {
-    //          aLookup = NULL;
-    //      }
         }
     }
     else if(evt.Source.is())
