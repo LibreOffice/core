@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:12 $
+#   last change: $Author: sb $ $Date: 2001-01-18 12:58:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,60 +60,59 @@
 #
 #*************************************************************************
 
-PRJ=..
+PRJ = ..
+PRJNAME = tl
+TARGET = tldem
+LIBTARGET = NO
+TARGETTYPE = CUI
 
-PRJNAME=tl
-TARGET=tldem
-LIBTARGET=NO
-TARGETTYPE=CUI
+.INCLUDE: settings.mk
 
-# --- Settings -----------------------------------------------------
+OBJFILES = \
+    $(OBJ)$/solar.obj \
+    $(OBJ)$/urltest.obj
+#	$(OBJ)$/demostor.obj \
+#	$(OBJ)$/fstest.obj \
+#	$(OBJ)$/tldem.obj \
 
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-
-# --- Files --------------------------------------------------------
-
-CXXFILES=   tldem.cxx solar.c demostor.cxx fstest.cxx
-
-OBJFILES=   $(OBJ)$/tldem.obj $(OBJ)$/solar.obj $(OBJ)$/demostor.obj $(OBJ)$/fstest.obj
-
-APP1TARGET= $(TARGET)
-APP1OBJS=   $(OBJ)$/tldem.obj
+APP1TARGET = solar
+APP1OBJS = $(OBJ)$/solar.obj
 .IF "$(GUI)" == "UNX"
-APP1LIBS=    $(TOOLSLIB)
+APP1STDLIBS = $(TOOLSLIB)
 .ELSE
-APP1LIBS=   $(LB)$/itools.lib
-# APP1DEPN=   $(LB)$/$(TOOLSLIB)
+APP1LIBS = $(LB)$/itools.lib
 .ENDIF
 
-APP2TARGET= solar
-APP2OBJS=   $(OBJ)$/solar.obj
+APP2TARGET = urltest
+APP2OBJS = $(OBJ)$/urltest.obj
 .IF "$(GUI)" == "UNX"
-APP2STDLIBS=    $(TOOLSLIB)
+APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
 .ELSE
-APP2LIBS=   $(LB)$/itools.lib
-APP2DEPN=   $(LB)$/itools.lib
+APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
 .ENDIF
 
-APP3TARGET=     demostor
-APP3OBJS=       $(OBJ)$/demostor.obj
-.IF "$(GUI)" == "UNX"
-APP3STDLIBS=    $(TOOLSLIB) $(VOSLIB) $(SALLIB)
-.ELSE
-APP3STDLIBS=    $(LB)$/itools.lib ivos.lib isal.lib
-.ENDIF
+# APP3TARGET = tldem
+# APP3OBJS = $(OBJ)$/tldem.obj
+# .IF "$(GUI)" == "UNX"
+# APP3STDLIBS = $(TOOLSLIB)
+# .ELSE
+# APP3STDLIBS = $(LB)$/itools.lib
+# .ENDIF
 
-APP4TARGET=     fstest
-APP4OBJS=       $(OBJ)$/fstest.obj
-.IF "$(GUI)" == "UNX"
-APP4STDLIBS=    $(TOOLSLIB) $(VOSLIB) $(SALLIB)
-.ELSE
-APP4STDLIBS=    $(LB)$/itools.lib ivos.lib isal.lib
-.ENDIF
+# APP4TARGET = demostor
+# APP4OBJS = $(OBJ)$/demostor.obj
+# .IF "$(GUI)" == "UNX"
+# APP4STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
+# .ELSE
+# APP4STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
+# .ENDIF
 
-# --- Targets ------------------------------------------------------
+# APP5TARGET = fstest
+# APP5OBJS = $(OBJ)$/fstest.obj
+# .IF "$(GUI)" == "UNX"
+# APP5STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
+# .ELSE
+# APP5STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
+# .ENDIF
 
-.INCLUDE :  target.mk
-
+.INCLUDE: target.mk
