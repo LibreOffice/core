@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:06:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,16 @@
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
 #endif
+#ifndef _CELLFRM_HXX //autogen
+#include <cellfrm.hxx>
+#endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+
 #include "tabfrm.hxx"
 #include "sectfrm.hxx"
 #include "flyfrms.hxx"
@@ -353,23 +363,26 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetPrevLayoutLeaf()
-|*
-|*  Beschreibung        Findet das vorhergehende Layout-Blatt. Ein Layout-
-|*      Blatt ist ein LayoutFrm, der keinen LayoutFrm in seinen Unterbaum hat;
-|*      genau gesagt, darf pLower kein LayoutFrm sein.
-|*      Anders ausgedrueckt: pLower darf 0 sein oder auf einen CntntFrm
-|*      zeigen.
-|*      pLower darf allerdings auf einen TabFrm zeigen, denn diese stehen
-|*      direkt neben den CntntFrms.
-|*  Ersterstellung      MA 29. May. 92
-|*  Letzte Aenderung    MA 30. Oct. 97
-|*
-|*************************************************************************/
-const SwFrm * MA_FASTCALL lcl_LastLower( const SwFrm *pFrm )
+//
+// Local helper functions for GetNextLayoutLeaf
+//
+
+const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext, bool bFollowCell )
 {
+    const SwFrm* pRet = 0;
+    if ( pFrm->IsFlyFrm() )
+        pRet = bNext ? ((SwFlyFrm*)pFrm)->GetNextLink() : ((SwFlyFrm*)pFrm)->GetPrevLink();
+    else
+        pRet = bNext ? pFrm->GetNext() : pFrm->GetPrev();
+
+    return pRet;
+}
+
+const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
+{
+    if ( bFwd )
+        return pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0;
+
     const SwFrm *pLower = pFrm->GetLower();
     if ( pLower )
         while ( pLower->GetNext() )
@@ -377,68 +390,128 @@ const SwFrm * MA_FASTCALL lcl_LastLower( const SwFrm *pFrm )
     return pLower;
 }
 
-const SwLayoutFrm *SwFrm::GetPrevLayoutLeaf() const
-{
-    const SwFrm       *pFrm = this;
-    const SwLayoutFrm *pLayoutFrm = 0;
-    const SwFrm       *p;
-    FASTBOOL bGoingUp = TRUE;
-    do {
-        FASTBOOL bGoingBwd = FALSE, bGoingDown = FALSE;
-        if( !(bGoingDown = (!bGoingUp && ( 0 != (p = ::lcl_LastLower( pFrm ))))) &&
-            !(bGoingBwd = (0 != (p = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetPrevLink()
-                                                      : pFrm->GetPrev()))) &&
-            !(bGoingUp = (0 != (p = pFrm->GetUpper()))))
-            return 0;
-        bGoingUp = !( bGoingBwd || bGoingDown );
-        pFrm = p;
-        p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0;
-    } while( (p && !p->IsFlowFrm()) ||
-             pFrm == this ||
-             0 == (pLayoutFrm = pFrm->IsLayoutFrm() ? (SwLayoutFrm*)pFrm:0) ||
-             pLayoutFrm->IsAnLower( this ) );
 
-    return pLayoutFrm;
-}
+
 /*************************************************************************
 |*
-|*  SwFrm::GetNextLayoutLeaf
+|*  SwFrm::ImplGetNextLayoutLeaf
 |*
-|*  Beschreibung        Findet das naechste Layout-Blatt. Ein Layout-Blatt
-|*          ist ein LayoutFrm, der kein LayoutFrm in seinen Unterbaum hat;
-|*          genau gesagt, darf pLower kein LayoutFrm sein.
-|*          Anders ausgedrueckt: pLower darf 0 sein oder auf einen CntntFrm
-|*          zeigen.
-|*          pLower darf allerdings auf einen TabFrm zeigen, denn diese stehen
-|*          direkt neben den CntntFrms.
-|*  Ersterstellung      MA 13. May. 92
-|*  Letzte Aenderung    MA 30. Oct. 97
-|*
+|* Finds the next layout leaf. This is a layout frame, which does not
+ * have a lower which is a LayoutFrame. That means, pLower can be 0 or a
+ * content frame.
+ *
+ * However, pLower may be a TabFrm
+ *
 |*************************************************************************/
-const SwLayoutFrm *SwFrm::GetNextLayoutLeaf() const
+
+const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 {
     const SwFrm       *pFrm = this;
     const SwLayoutFrm *pLayoutFrm = 0;
     const SwFrm       *p;
-    FASTBOOL bGoingUp = FALSE;
+    bool bGoingUp = !bFwd;          // false for forward, true for backward
     do {
-        FASTBOOL bGoingFwd = FALSE, bGoingDown = FALSE;
-        if( !(bGoingDown = (!bGoingUp && ( 0 !=
-            (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
-            !(bGoingFwd = (0 != (p = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink()
-                                                      : pFrm->GetNext()))) &&
-            !(bGoingUp = (0 != (p = pFrm->GetUpper()))))
-            return 0;
-        bGoingUp = !( bGoingFwd || bGoingDown );
+
+         bool bGoingFwdOrBwd = false, bGoingDown = false;
+
+         bGoingDown = ( !bGoingUp && ( 0 != (p = lcl_GetLower( pFrm, bFwd ) ) ) );
+         if ( !bGoingDown )
+         {
+             // I cannot go down, because either I'm currently going up or
+             // because the is no lower.
+             // I'll try to go forward:
+             bGoingFwdOrBwd = (0 != (p = lcl_FindLayoutFrame( pFrm, bFwd, true ) ) );
+             if ( !bGoingFwdOrBwd )
+             {
+                 // I cannot go forward, because there is no next frame.
+                 // I'll try to go up:
+                 bGoingUp = (0 != (p = pFrm->GetUpper() ) );
+                 if ( !bGoingUp )
+                 {
+                    // I cannot go up, because there is no upper frame.
+                    return 0;
+                 }
+             }
+         }
+
+        // If I could not go down or forward, I'll have to go up
+        bGoingUp = !bGoingFwdOrBwd && !bGoingDown;
+
         pFrm = p;
-        p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0;
-    } while( (p && !p->IsFlowFrm()) ||
+        p = lcl_GetLower( pFrm, true );
+
+    } while( ( p && !p->IsFlowFrm() ) ||
              pFrm == this ||
-             0 == (pLayoutFrm = pFrm->IsLayoutFrm() ? (SwLayoutFrm*)pFrm:0 ) ||
+             0 == ( pLayoutFrm = pFrm->IsLayoutFrm() ? (SwLayoutFrm*)pFrm : 0 ) ||
              pLayoutFrm->IsAnLower( this ) );
 
     return pLayoutFrm;
 }
+
+
+
+/*************************************************************************
+|*
+|*    SwFrm::ImplGetNextCntntFrm( bool )
+|*
+|*      Rueckwaertswandern im Baum: Den untergeordneten Frm greifen,
+|*      wenn es einen gibt und nicht gerade zuvor um eine Ebene
+|*      aufgestiegen wurde (das wuerde zu einem endlosen Auf und Ab
+|*      fuehren!). Damit wird sichergestellt, dass beim
+|*      Rueckwaertswandern alle Unterbaeume durchsucht werden. Wenn
+|*      abgestiegen wurde, wird zuerst an das Ende der Kette gegangen,
+|*      weil im weiteren ja vom letzten Frm innerhalb eines anderen
+|*      Frms rueckwaerts gegangen wird.
+|*      Vorwaetzwander funktioniert analog.
+|*
+|*    Ersterstellung    ??
+|*    Letzte Aenderung  MA 30. Oct. 97
+|*
+|*************************************************************************/
+
+// Achtung: Fixes in ImplGetNextCntntFrm() muessen moeglicherweise auch in
+// die weiter oben stehende Methode lcl_NextFrm(..) eingepflegt werden
+const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
+{
+    const SwFrm *pFrm = this;
+    // #100926#
+    SwCntntFrm *pCntntFrm = 0;
+    FASTBOOL bGoingUp = FALSE;
+    do {
+        const SwFrm *p;
+        FASTBOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
+
+        bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
+        if ( !bGoingDown )
+        {
+            bGoingFwdOrBwd = ( 0 != ( p = lcl_FindLayoutFrame( pFrm, bFwd, false ) ) );
+            if ( !bGoingFwdOrBwd )
+            {
+                bGoingUp = ( 0 != ( p = pFrm->GetUpper() ) );
+                if ( !bGoingUp )
+                {
+                    return 0;
+                }
+            }
+        }
+
+        bGoingUp = !(bGoingFwdOrBwd || bGoingDown);
+
+        if ( !bFwd )
+        {
+            if( bGoingDown && p )
+                while ( p->GetNext() )
+                    p = p->GetNext();
+        }
+
+        pFrm = p;
+    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? (SwCntntFrm*)pFrm:0) ));
+
+    return pCntntFrm;
+}
+
+
+
 
 /*************************************************************************
 |*
@@ -686,10 +759,8 @@ SwFrm* lcl_NextFrm( SwFrm* pFrm )
     do {
         SwFrm *p;
         FASTBOOL bGoingFwd = FALSE, bGoingDown = FALSE;
-        if( !(bGoingDown = (!bGoingUp && ( 0 !=
-             (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
-            !(bGoingFwd = (0 != (p = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink()
-                                                      : pFrm->GetNext()))) &&
+        if( !(bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
+            !(bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink() : pFrm->GetNext())))) &&
             !(bGoingUp = (0 != (p = pFrm->GetUpper()))))
             return 0;
         bGoingUp = !(bGoingFwd || bGoingDown);
@@ -751,8 +822,16 @@ SwFrm *SwFrm::_FindNext()
         while ( !pUp->IsCellFrm() )
             pUp = pUp->GetUpper();
         ASSERT( pUp, "Cntnt in Tabelle aber nicht in Zelle." );
-        SwFrm *pNxt = lcl_NextFrm( pThis );
-        if ( pUp->IsAnLower( pNxt ) )
+        SwFrm* pNxt = ((SwCellFrm*)pUp)->GetFollowCell();
+        if ( pNxt )
+            pNxt = ((SwCellFrm*)pNxt)->ContainsCntnt();
+        if ( !pNxt )
+        {
+            pNxt = lcl_NextFrm( pThis );
+            if ( pUp->IsAnLower( pNxt ) )
+                pRet = pNxt;
+        }
+        else
             pRet = pNxt;
     }
     else
@@ -900,11 +979,14 @@ SwFrm *SwFrm::_FindPrev()
         //Der erste Cntnt der Tabelle wird
         //gegriffen und dessen Vorgaenger geliefert. Um die Spezialbeh.
         //Fuer Tabellen (s.u.) auszuschalten wird bIgnoreTab gesetzt.
-        pThis = ((SwTabFrm*)this)->ContainsCntnt();
+        if ( ((SwTabFrm*)this)->IsFollow() )
+            return ((SwTabFrm*)this)->FindMaster();
+        else
+            pThis = ((SwTabFrm*)this)->ContainsCntnt();
         bIgnoreTab = TRUE;
     }
 
-    if ( pThis->IsCntntFrm() )
+    if ( pThis && pThis->IsCntntFrm() )
     {
         SwCntntFrm *pPrvCnt = ((SwCntntFrm*)pThis)->GetPrevCntntFrm();
         if( !pPrvCnt )
@@ -1046,9 +1128,12 @@ BOOL SwFrm::IsMoveable() const
             return TRUE;
         if( IsInFly() || IsInDocBody() || IsInFtn() )
         {
-            if ( IsInTab() && !IsTabFrm() )
-                return FALSE;
             BOOL bRet = TRUE;
+
+            if ( IsInTab() && !IsTabFrm() &&
+                    ( !IsCntntFrm() || ( NULL == IsInSplitTableRow() ) ) )
+                return FALSE;
+
             if ( IsInFly() )
             {
                 //Wenn der Fly noch einen Follow hat ist der Inhalt auf jeden
@@ -1070,73 +1155,6 @@ BOOL SwFrm::IsMoveable() const
     return FALSE;
 }
 
-/*************************************************************************
-|*
-|*    SwFrm::ImplGetNextCntntFrm(), ImplGetPrevCntntFrm()
-|*
-|*      Rueckwaertswandern im Baum: Den untergeordneten Frm greifen,
-|*      wenn es einen gibt und nicht gerade zuvor um eine Ebene
-|*      aufgestiegen wurde (das wuerde zu einem endlosen Auf und Ab
-|*      fuehren!). Damit wird sichergestellt, dass beim
-|*      Rueckwaertswandern alle Unterbaeume durchsucht werden. Wenn
-|*      abgestiegen wurde, wird zuerst an das Ende der Kette gegangen,
-|*      weil im weiteren ja vom letzten Frm innerhalb eines anderen
-|*      Frms rueckwaerts gegangen wird.
-|*      Vorwaetzwander funktioniert analog.
-|*
-|*    Ersterstellung    ??
-|*    Letzte Aenderung  MA 30. Oct. 97
-|*
-|*************************************************************************/
-
-
-// Achtung: Fixes in ImplGetNextCntntFrm() muessen moeglicherweise auch in
-// die weiter oben stehende Methode lcl_NextFrm(..) eingepflegt werden
-SwCntntFrm* SwFrm::ImplGetNextCntntFrm() const
-{
-    const SwFrm *pFrm = this;
-    // #100926#
-    SwCntntFrm *pCntntFrm = 0;
-    FASTBOOL bGoingUp = ! IsCntntFrm();
-    do {
-        const SwFrm *p;
-        FASTBOOL bGoingFwd = FALSE, bGoingDown = FALSE;
-        if( !(bGoingDown = (!bGoingUp && ( 0 !=
-             (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
-            !(bGoingFwd = (0 != (p = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink()
-                                                      : pFrm->GetNext()))) &&
-            !(bGoingUp = (0 != (p = pFrm->GetUpper()))))
-            return 0;
-        bGoingUp = !(bGoingFwd || bGoingDown);
-        pFrm = p;
-    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? (SwCntntFrm*)pFrm:0) ));
-    return pCntntFrm;
-
-}
-
-SwCntntFrm* SwFrm::ImplGetPrevCntntFrm() const
-{
-    const SwFrm *pFrm = this;
-    SwCntntFrm *pCntntFrm = 0;
-    // #100926#
-    FASTBOOL bGoingUp = ! IsCntntFrm();
-    do {
-        const SwFrm *p;
-        FASTBOOL bGoingBack = FALSE, bGoingDown = FALSE;
-        if( !(bGoingDown = (!bGoingUp && (0 !=
-             (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
-            !(bGoingBack = (0 != (p = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetPrevLink()
-                                                       : pFrm->GetPrev()))) &&
-            !(bGoingUp = (0 != (p = pFrm->GetUpper()))))
-            return 0;
-        bGoingUp = !(bGoingBack || bGoingDown);
-        if( bGoingDown && p )
-            while ( p->GetNext() )
-                p = p->GetNext();
-        pFrm = p;
-    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? (SwCntntFrm*)pFrm:0) ));
-    return pCntntFrm;
-}
 
 /*************************************************************************
 |*
@@ -1202,7 +1220,6 @@ void SwFrm::SetDirFlags( BOOL bVert )
 {
     if( bVert )
     {
-        USHORT bInv = 0;
         if( bDerivedVert )
         {
             SwFrm* pAsk = IsFlyFrm() ?
@@ -1211,13 +1228,12 @@ void SwFrm::SetDirFlags( BOOL bVert )
             {
                 bVertical = pAsk->IsVertical() ? 1 : 0;
                 bReverse  = pAsk->IsReverse()  ? 1 : 0;
+                if ( !pAsk->bInvalidVert )
+                    bInvalidVert = FALSE;
             }
-            if( !pAsk || pAsk->bInvalidVert )
-                bInv = bInvalidVert;
         }
         else
             CheckDirection( bVert );
-        bInvalidVert = bInv;
     }
     else
     {
@@ -1235,6 +1251,194 @@ void SwFrm::SetDirFlags( BOOL bVert )
         }
         bInvalidR2L = bInv;
     }
+}
+
+SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType eMakePage )
+{
+    SwFrm* pTmpFrm = this;
+    while ( !pTmpFrm->IsCellFrm() )
+        pTmpFrm = pTmpFrm->GetUpper();
+
+    ASSERT( pTmpFrm, "SwFrm::GetNextCellLeaf() without cell" )
+    return ((SwCellFrm*)pTmpFrm)->GetFollowCell();
+}
+
+SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType eMakePage )
+{
+    SwFrm* pTmpFrm = this;
+    while ( !pTmpFrm->IsCellFrm() )
+        pTmpFrm = pTmpFrm->GetUpper();
+
+    ASSERT( pTmpFrm, "SwFrm::GetNextPreviousLeaf() without cell" )
+    return ((SwCellFrm*)pTmpFrm)->GetPreviousCell();
+}
+
+
+SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
+                                         const SwCellFrm& rOrigCell,
+                                         const SwRowFrm& rCorrRow,
+                                         bool bInFollow )
+{
+    SwCellFrm* pRet = NULL;
+    SwCellFrm* pCell = (SwCellFrm*)rOrigRow.Lower();
+    SwCellFrm* pCorrCell = (SwCellFrm*)rCorrRow.Lower();
+
+    while ( pCell != &rOrigCell && !pCell->IsAnLower( &rOrigCell ) )
+    {
+        pCell = (SwCellFrm*)pCell->GetNext();
+        pCorrCell = (SwCellFrm*)pCorrCell->GetNext();
+    }
+
+    ASSERT( pCell && pCorrCell, "lcl_FindCorrespondingCellFrm does not work" )
+
+    if ( pCell != &rOrigCell )
+    {
+        // rOrigCell must be a lower of pCell. We need to recurse into the rows:
+        ASSERT( pCell->Lower() && pCell->Lower()->IsRowFrm(),
+                "lcl_FindCorrespondingCellFrm does not work" )
+
+        SwRowFrm* pRow = (SwRowFrm*)pCell->Lower();
+        while ( !pRow->IsAnLower( &rOrigCell ) )
+            pRow = (SwRowFrm*)pRow->GetNext();
+
+        SwRowFrm* pCorrRow = 0;
+        if ( bInFollow )
+            pCorrRow = pRow->GetFollowRow();
+        else
+        {
+            SwRowFrm* pTmpRow = (SwRowFrm*)pCorrCell->Lower();
+            while ( pTmpRow->GetNext() )
+                pTmpRow = (SwRowFrm*)pTmpRow->GetNext();
+
+            if ( pTmpRow->GetFollowRow() == pRow )
+                pCorrRow = pTmpRow;
+        }
+
+        if ( pCorrRow )
+            pRet = lcl_FindCorrespondingCellFrm( *pRow, rOrigCell, *pCorrRow, bInFollow );
+    }
+    else
+        pRet = pCorrCell;
+
+    return pRet;
+}
+
+
+SwCellFrm* SwCellFrm::GetFollowCell() const
+{
+    SwCellFrm* pRet = NULL;
+
+    // find most upper row frame
+    const SwFrm* pRow = GetUpper();
+    while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
+        pRow = pRow->GetUpper();
+
+    const SwRowFrm* pFollowRow = NULL;
+    if ( !pRow->GetNext() &&
+         NULL != ( pFollowRow = pRow->IsInSplitTableRow() ) )
+        pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pFollowRow, true );
+
+    return pRet;
+}
+
+
+SwCellFrm* SwCellFrm::GetPreviousCell() const
+{
+    SwCellFrm* pRet = NULL;
+
+    // find most upper row frame
+    const SwFrm* pRow = GetUpper();
+    while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
+        pRow = pRow->GetUpper();
+
+    SwFrm* pTmpTab = (SwTabFrm*)pRow->GetUpper();
+
+    ASSERT( pTmpTab && pTmpTab->IsTabFrm(), "GetPreviousCell without Table" );
+    SwTabFrm* pTab = (SwTabFrm*)pTmpTab;
+
+    const SwFrm* pPrev = pRow->GetPrev();
+    const bool bRepeat = pTab->GetTable()->IsHeadlineRepeat();
+    const bool bIsInFirstLine = bRepeat ?
+                                pPrev && !pPrev->GetPrev() :
+                               !pPrev;
+
+    if ( bIsInFirstLine && pTab->IsFollow() )
+    {
+        SwTabFrm *pMaster = (SwTabFrm*)pTab->FindMaster();
+        if ( pMaster && pMaster->HasFollowFlowLine() )
+        {
+            SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
+            while ( pMasterRow->GetNext() )
+            {
+                pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
+            }
+
+            pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
+        }
+    }
+    return pRet;
+}
+
+
+const SwRowFrm* SwFrm::IsInSplitTableRow() const
+{
+    ASSERT( IsInTab(), "IsInSplitTableRow should only be called for frames in tables" )
+
+    // find most upper row frame
+    const SwFrm* pRow = this;
+    while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
+        pRow = pRow->GetUpper();
+
+    if ( !pRow ) return NULL;
+
+    ASSERT( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" )
+
+    const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+    if ( pRow->GetNext() ||
+        !pTab->HasFollowFlowLine() ||
+        !pTab->GetFollow() )
+        return NULL;
+
+    SwRowFrm* pFollowRow = (SwRowFrm*)pTab->GetFollow()->Lower();
+
+    ASSERT( pFollowRow, "SwFrm::IsInSplitTableRow() does not work" )
+
+    // skip headline
+    if ( pTab->GetTable()->IsHeadlineRepeat() )
+        pFollowRow = (SwRowFrm*)pFollowRow->GetNext();
+
+    return pFollowRow;
+}
+
+const SwRowFrm* SwFrm::IsInFollowFlowRow() const
+{
+    ASSERT( IsInTab(), "IsInSplitTableRow should only be called for frames in tables" )
+
+    // find most upper row frame
+    const SwFrm* pRow = this;
+    while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
+        pRow = pRow->GetUpper();
+
+    if ( !pRow ) return NULL;
+
+    ASSERT( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" )
+
+    const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+    const SwTabFrm* pMaster = pTab->IsFollow() ? pTab->FindMaster() : 0;
+
+    const bool bIsInFirstLine = pTab->GetTable()->IsHeadlineRepeat() ?
+                                pRow->GetPrev() && !pRow->GetPrev()->GetPrev() :
+                               !pRow->GetPrev();
+
+    if ( !pMaster || !pMaster->HasFollowFlowLine() || !bIsInFirstLine )
+        return NULL;
+
+    SwRowFrm* pMasterRow = (SwRowFrm*)pMaster->Lower();
+
+    while ( pMasterRow && pMasterRow->GetNext() )
+        pMasterRow = (SwRowFrm*)pMasterRow->GetNext();
+
+    return pMasterRow;
 }
 
 
