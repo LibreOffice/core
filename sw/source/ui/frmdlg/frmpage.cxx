@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:07:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,6 @@
 #endif
 #ifndef _FRMPAGE_HRC
 #include <frmpage.hrc>
-#endif
-#ifndef _GLOBALS_HRC
-#include <globals.hrc>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -747,12 +744,25 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
     Beschreibung:   StandardRahmenTabPage
  --------------------------------------------------------------------*/
 
+namespace
+{
+    void HandleAutoCB( BOOL _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto )
+    {
+        _rFT_man.Show( !_bChecked );
+        _rFT_auto.Show( _bChecked );
+    }
+}
+
+
 SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage      (pParent, SW_RES(TP_FRM_STD), rSet),
     aWidthFT        (this, SW_RES(FT_WIDTH)),
+    aWidthAutoFT    (this, SW_RES(FT_WIDTH_AUTO)),
     aWidthED        (this, SW_RES(ED_WIDTH)),
     aRelWidthCB     (this, SW_RES(CB_REL_WIDTH)),
+    aAutoWidthCB    (this, SW_RES(CB_AUTOWIDTH)),
     aHeightFT       (this, SW_RES(FT_HEIGHT)),
+    aHeightAutoFT   (this, SW_RES(FT_HEIGHT_AUTO)),
     aHeightED       (this, SW_RES(ED_HEIGHT)),
     aRelHeightCB    (this, SW_RES(CB_REL_HEIGHT)),
     aAutoHeightCB   (this, SW_RES(CB_AUTOHEIGHT)),
@@ -842,6 +852,9 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aRelWidthCB.SetClickHdl( aLk );
     aRelHeightCB.SetClickHdl( aLk );
 
+    aAutoWidthCB.SetClickHdl( LINK( this, SwFrmPage, AutoWidthClickHdl ) );
+    aAutoHeightCB.SetClickHdl( LINK( this, SwFrmPage, AutoHeightClickHdl ) );
+
 //  aFixedRatioCB.SetClickHdl(LINK(this, SwFrmPage, AspectRatioCheckHdl));
 }
 
@@ -858,9 +871,36 @@ SfxTabPage* SwFrmPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwFrmPage( pParent, rSet );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+namespace
+{
+    void MoveControl( Control& _rCtrl, long _nOffsetY )
+    {
+        Point aPt( _rCtrl.GetPosPixel() );
+        aPt.Move( 0, _nOffsetY );
+        _rCtrl.SetPosPixel( aPt );
+    }
+}
+
+void SwFrmPage::EnableGraficMode( void )
+{
+    long nOffset1 = aRelWidthCB.GetPosPixel().Y() - aAutoWidthCB.GetPosPixel().Y();
+    long nOffset2 = nOffset1 + aRelHeightCB.GetPosPixel().Y() - aAutoHeightCB.GetPosPixel().Y();
+
+    MoveControl( aHeightFT, nOffset1 );
+    MoveControl( aHeightED, nOffset1 );
+    MoveControl( aRelHeightCB, nOffset1 );
+    MoveControl( aFixedRatioCB, nOffset2 );
+
+    aWidthFT.Show();
+    aWidthAutoFT.Hide();
+    aAutoHeightCB.Hide();
+
+    aHeightFT.Show();
+    aHeightAutoFT.Hide();
+    aAutoWidthCB.Hide();
+
+    aRealSizeBT.Show();
+}
 
 void SwFrmPage::Reset( const SfxItemSet &rSet )
 {
@@ -916,8 +956,8 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
         if ( !bNew )
         {
-            aRealSizeBT.Show();
             aRealSizeBT.SetClickHdl(LINK(this, SwFrmPage, RealSizeHdl));
+            EnableGraficMode();
         }
 //      else
 //          aTypeFL.SetSizePixel(Size(aTypeFL.GetSizePixel().Width(), aSizeFL.GetSizePixel().Height()));
@@ -981,6 +1021,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             aAnchorAtPageRB.Enable(FALSE);
         }
         aAutoHeightCB.Enable(FALSE);
+        aAutoWidthCB.Enable(FALSE);
         aMirrorPagesCB.Show(FALSE);
         if(nDlgType == DLG_FRM_STD)
             aFixedRatioCB.Enable(FALSE);
@@ -1015,6 +1056,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     aWidthED.LockAutoCalculation(sal_False);
 
     aAutoHeightCB.SaveValue();
+    aAutoWidthCB.SaveValue();
 
     SwTwips nWidth = aWidthED.Denormalize(aWidthED.GetValue(FUNIT_TWIP));
     SwTwips nHeight = aHeightED.Denormalize(aHeightED.GetValue(FUNIT_TWIP));
@@ -1183,16 +1225,19 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
                 aSz.SetWidthPercent(0xff);
         }
     }
-    if ( nDlgType != DLG_FRM_GRF )
+    if( !IsInGraficMode() )
     {
-        if (aAutoHeightCB.GetState() != aAutoHeightCB.GetSavedValue())
+        if( aAutoHeightCB.GetState() != aAutoHeightCB.GetSavedValue() )
         {
-            SwFrmSize eFrmSize = (SwFrmSize) aAutoHeightCB.IsChecked() ?
-                                                    ATT_MIN_SIZE : ATT_FIX_SIZE;
-            if(eFrmSize != aSz.GetSizeType())
-            {
-                aSz.SetSizeType(eFrmSize);
-            }
+            SwFrmSize eFrmSize = (SwFrmSize) aAutoHeightCB.IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
+            if( eFrmSize != aSz.GetHeightSizeType() )
+                aSz.SetHeightSizeType(eFrmSize);
+        }
+        if( aAutoWidthCB.GetState() != aAutoWidthCB.GetSavedValue() )
+        {
+            SwFrmSize eFrmSize = (SwFrmSize) aAutoWidthCB.IsChecked()? ATT_MIN_SIZE : ATT_FIX_SIZE;
+            if( eFrmSize != aSz.GetWidthSizeType() )
+                aSz.SetWidthSizeType( eFrmSize );
         }
     }
     if( !bFormat && aFixedRatioCB.GetSavedValue() != aFixedRatioCB.IsChecked())
@@ -1205,8 +1250,8 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
                 (aSz.GetWidth() > 0 || aSz.GetWidthPercent() > 0) &&
                     (aSz.GetHeight() > 0 || aSz.GetHeightPercent() > 0)))
     {
-        if (aSz.GetSizeType() == ATT_VAR_SIZE)  // VAR_SIZE gibts nicht bei Rahmen
-            aSz.SetSizeType(ATT_MIN_SIZE);      // Bug #45776 (Vorlagen ohne Breite/Hoehe)
+        if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // VAR_SIZE gibts nicht bei Rahmen
+            aSz.SetHeightSizeType(ATT_MIN_SIZE);        // Bug #45776 (Vorlagen ohne Breite/Hoehe)
 
         bRet |= 0 != rSet.Put( aSz );
     }
@@ -1776,7 +1821,8 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, pEdit )
     SwFrmValid      aVal;
 
     aVal.eArea = (RndStdIds)GetAnchor();
-    aVal.bAuto = aAutoHeightCB.IsChecked();
+    aVal.bAutoHeight = aAutoHeightCB.IsChecked();
+    aVal.bAutoWidth = aAutoWidthCB.IsChecked();
     aVal.bMirror = aMirrorPagesCB.IsChecked();
     // OD 18.09.2003 #i18732#
     aVal.bFollowTextFlow = aFollowTextFlowCB.IsChecked();
@@ -1858,7 +1904,7 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, pEdit )
     SwTwips nMaxWidth(aVal.nMaxWidth);
     SwTwips nMaxHeight(aVal.nMaxHeight);
 
-    if (aVal.bAuto && (nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE))
+    if (aVal.bAutoHeight && (nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE))
     {
         SwTwips nTmp = Min(nWidth * nMaxHeight / Max(nHeight, 1L), nMaxHeight);
         aWidthED.SetMax(aWidthED.Normalize(nTmp), FUNIT_TWIP);
@@ -2161,6 +2207,21 @@ IMPL_LINK_INLINE_START( SwFrmPage, ManualHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwFrmPage, ManualHdl, Button *, EMPTYARG )
 
+
+IMPL_LINK( SwFrmPage, AutoWidthClickHdl, void*, EMPTYARG )
+{
+    if( !IsInGraficMode() )
+        HandleAutoCB( aAutoWidthCB.IsChecked(), aWidthFT, aWidthAutoFT );
+    return 0;
+}
+
+IMPL_LINK( SwFrmPage, AutoHeightClickHdl, void*, EMPTYARG )
+{
+    if( !IsInGraficMode() )
+        HandleAutoCB( aAutoHeightCB.IsChecked(), aHeightFT, aHeightAutoFT );
+    return 0;
+}
+
 IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
 {
     if (pEdit == &aWidthED)
@@ -2308,9 +2369,22 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
             aHeightED.SetPrcntValue(nHeight, FUNIT_TWIP);
     }
 
-    if (nDlgType != DLG_FRM_GRF && nDlgType != DLG_FRM_OLE)
+    if (!IsInGraficMode())
     {
-        aAutoHeightCB.Check(rSize.GetSizeType() != ATT_FIX_SIZE);
+        SwFrmSize eSize = rSize.GetHeightSizeType();
+        BOOL bCheck = eSize != ATT_FIX_SIZE;
+        aAutoHeightCB.Check( bCheck );
+        HandleAutoCB( bCheck, aHeightFT, aHeightAutoFT );
+        if( eSize == ATT_VAR_SIZE )
+            aHeightED.SetValue( aHeightED.GetMin() );
+
+        eSize = rSize.GetWidthSizeType();
+        bCheck = eSize != ATT_FIX_SIZE;
+        aAutoWidthCB.Check( bCheck );
+        HandleAutoCB( bCheck, aWidthFT, aWidthAutoFT );
+        if( eSize == ATT_VAR_SIZE )
+            aWidthED.SetValue( aWidthED.GetMin() );
+
         if ( !bFormat )
         {
             SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
