@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkgallery.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:46:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ class FontWorkGalleryDialog : public ModalDialog
     FixedLine           maFLFavorites;
     OKButton            maOKButton;
     CancelButton        maCancelButton;
+    HelpButton          maHelpButton;
 
     sal_uInt16          mnThemeId;
 
