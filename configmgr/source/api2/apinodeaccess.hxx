@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
+#endif
+
+#if defined(_MSC_VER) && (_MSC_VER >=1310)
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
+#include "noderef.hxx"
+#endif
 #endif
 
 namespace osl { class Mutex; }
@@ -243,7 +249,7 @@ namespace configmgr
         template <class Access>
         configuration::Tree GuardedNodeData<Access>::getTree() const
         {
-            return m_aViewLock.getTree(m_aDataAccess);
+            return (configuration::Tree) m_aViewLock.getTree(m_aDataAccess);
         }
 
         template <class Access>
