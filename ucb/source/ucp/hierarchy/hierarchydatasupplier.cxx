@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-10 15:13:51 $
+ *  last change: $Author: kso $ $Date: 2001-03-13 14:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,17 +411,18 @@ Reference< XRow > HierarchyResultSetDataSupplier::queryPropertyValues(
 
     if ( getResult( nIndex ) )
     {
+        static OUString aFolderType( OUString::createFromAscii(
+                                           HIERARCHY_FOLDER_CONTENT_TYPE ) );
+        static OUString aLinkType( OUString::createFromAscii(
+                                           HIERARCHY_LINK_CONTENT_TYPE ) );
+
         HierarchyContentProperties aData;
 
         aData.aTitle       = m_pImpl->m_aResults[ nIndex ]->aData.aTitle;
         aData.aTargetURL   = m_pImpl->m_aResults[ nIndex ]->aData.aTargetURL;
         aData.bIsDocument  = ( aData.aTargetURL.getLength() > 0 );
         aData.bIsFolder    = !aData.bIsDocument;
-        aData.aContentType = aData.bIsFolder
-                           ? OUString::createFromAscii(
-                                           HIERARCHY_FOLDER_CONTENT_TYPE )
-                           : OUString::createFromAscii(
-                                           HIERARCHY_LINK_CONTENT_TYPE );
+        aData.aContentType = aData.bIsFolder ? aFolderType : aLinkType;
 
         Reference< XRow > xRow = HierarchyContent::getPropertyValues(
                         m_pImpl->m_xSMgr,
