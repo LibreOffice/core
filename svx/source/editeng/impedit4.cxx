@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-07 14:10:47 $
+ *  last change: $Author: mt $ $Date: 2002-11-01 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,6 +1322,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
         sal_uInt16 nNewAttribs = pC->GetAttribs().Count();
         if ( nNewAttribs )
         {
+            BOOL bUpdateFields = FALSE;
             for ( sal_uInt16 nAttr = 0; nAttr < nNewAttribs; nAttr++ )
             {
                 XEditAttribute* pX = pC->GetAttribs().GetObject( nAttr );
@@ -1347,7 +1348,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                         DBG_ASSERT( pAttr->GetEnd() <= aPaM.GetNode()->Len(), "InsertBinTextObject: Attribut passt nicht! (1)" );
                         aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttr );
                         if ( pAttr->Which() == EE_FEATURE_FIELD )
-                            UpdateFields();
+                            bUpdateFields = TRUE;
                     }
                     else
                     {
@@ -1357,6 +1358,9 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
                     }
                 }
             }
+            if ( bUpdateFields )
+                UpdateFields();
+
             // Sonst QuickFormat => Keine Attribute!
             pPortion->MarkSelectionInvalid( nStartPos, pC->GetText().Len() );
         }
