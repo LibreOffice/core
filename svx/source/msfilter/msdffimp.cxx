@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-17 13:36:12 $
+ *  last change: $Author: sj $ $Date: 2002-05-30 14:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3430,11 +3430,6 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                         // Rotieren
                         if ( pRet->ISA( SdrCaptionObj ) )       // sj: #96758# SetModel is changing
                             pRet->SetSnapRect( aBoundRect );    // the original snaprect
-                        if( mnFix16Angle && !bIsConnector )
-                        {
-                            double a = mnFix16Angle * nPi180;
-                            pRet->NbcRotate( aBoundRect.Center(), mnFix16Angle, sin( a ), cos( a ) );
-                        }
                     }
                     // FillStyle != XFILL_NONE und nicht geschlossenes Polygon-Objekt?
                     if( pRet->ISA( SdrPathObj ) )
@@ -3457,6 +3452,11 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                 }
                 if ( pRet )
                 {
+                    if( mnFix16Angle && !bIsConnector )
+                    {
+                        double a = mnFix16Angle * nPi180;
+                        pRet->NbcRotate( aBoundRect.Center(), mnFix16Angle, sin( a ), cos( a ) );
+                    }
                     if ( nSpecialGroupSettings )
                     {
                         SdrObjList* pObjectList = pObjectList = pRet->GetSubList();
