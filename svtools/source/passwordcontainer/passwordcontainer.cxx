@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-15 10:12:36 $
+ *  last change: $Author: mav $ $Date: 2001-05-16 12:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,19 +292,21 @@ void StorageItem::update( const OUString& url, const NamePassRecord& rec )
 
 //-------------------------------------------------------------------------
 
-PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory )
+PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory ):
+storageFile( NULL )
 {
     ::osl::MutexGuard aGuard( mMutex );
 
-    storageFile = new StorageItem( this, OUString::createFromAscii( "Office.Common/Passwords" ) );
-    container = storageFile->getInfo();
+//  storageFile = new StorageItem( this, OUString::createFromAscii( "Office.Common/Passwords" ) );
+//  container = storageFile->getInfo();
 }
 
 //-------------------------------------------------------------------------
 
 PasswordContainer::~PasswordContainer()
 {
-    delete storageFile;
+    if( storageFile )
+        delete storageFile;
 }
 //-------------------------------------------------------------------------
 
@@ -319,23 +321,15 @@ void PasswordContainer::updateVector( const OUString& url, vector< NamePassRecor
                 rec.mStatus = PERSISTENT_RECORD;
 
             toUpdate[i] = rec;
-            if( rec.mStatus == PERSISTENT_RECORD && writeFile )
-            {
+            if( rec.mStatus == PERSISTENT_RECORD && writeFile && storageFile )
                 storageFile->update( url, rec ); // change existing ( url, name ) record in the configfile
-                delete storageFile;
-                storageFile = new StorageItem( this, OUString::createFromAscii( "Office.Common/Passwords" ) );
-            }
             return;
         }
 
     toUpdate.insert( toUpdate.begin(), rec );
 
-    if( rec.mStatus == PERSISTENT_RECORD && writeFile )
-    {
+    if( rec.mStatus == PERSISTENT_RECORD && writeFile && storageFile)
         storageFile->update( url, rec ); // add new name to the existing url
-        delete storageFile;
-        storageFile = new StorageItem( this, OUString::createFromAscii( "Office.Common/Passwords" ) );
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -409,12 +403,8 @@ void SAL_CALL PasswordContainer::privateAdd( const OUString& Url, const OUString
     vector< NamePassRecord > vectorToAdd( 1, aNewRecord );
     container.insert( PairUrlRecord( Url, vectorToAdd ) );
 
-    if( Mode == PERSISTENT_RECORD )
-    {
+    if( Mode == PERSISTENT_RECORD && storageFile )
         storageFile->update( Url, aNewRecord );
-        delete storageFile;
-        storageFile = new StorageItem( this, OUString::createFromAscii( "Office.Common/Passwords" ) );
-    }
 
 }
 
@@ -547,7 +537,7 @@ void SAL_CALL PasswordContainer::remove( const OUString& url, const OUString& na
             for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
                 if( aVIter->mName.equals( name ) )
                 {
-                    if( aVIter->mStatus == PERSISTENT_RECORD )
+                    if( aVIter->mStatus == PERSISTENT_RECORD && storageFile )
                         storageFile->remove( url, name ); // remove record ( url, name )
 
                     aIter->second.erase( aVIter );
@@ -592,7 +582,7 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& url, const OU
             for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
                 if( aVIter->mName.equals( name ) )
                 {
-                    if( aVIter->mStatus == PERSISTENT_RECORD )
+                    if( aVIter->mStatus == PERSISTENT_RECORD && storageFile )
                     {
                         aVIter->mStatus = SINGLE_RECORD;
                         storageFile->remove( url, name ); // remove record ( url, name )
@@ -611,7 +601,8 @@ void SAL_CALL PasswordContainer::removeAllPersistent(  ) throw(RuntimeException)
 
     ::osl::MutexGuard aGuard( mMutex );
 
-    storageFile->clear();
+    if( storageFile )
+        storageFile->clear();
 
     for( PassMap::iterator aIter = container.begin(); aIter != container.end(); aIter++ )
     {
@@ -668,7 +659,9 @@ void PasswordContainer::Notify()
                 aVIter->mStatus = SINGLE_RECORD;
     }
 
-    PassMap addon = storageFile->getInfo();
+    PassMap addon;
+    if( storageFile )
+        addon = storageFile->getInfo();
 
     for( aIter = addon.begin(); aIter != addon.end(); aIter++ )
     {
