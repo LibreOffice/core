@@ -616,6 +616,7 @@ hedabu: ..\inc\SvxShapeTypes.hxx %_DEST%\inc%_EXT%\svx\SvxShapeTypes.hxx
 hedabu: ..\inc\DescriptionGenerator.hxx %_DEST%\inc%_EXT%\svx\DescriptionGenerator.hxx
 hedabu: ..\inc\pgrditem.hxx %_DEST%\inc%_EXT%\svx\pgrditem.hxx
 hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
+hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
