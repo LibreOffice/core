@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3266,9 +3266,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
 
         ((sOut = ' ') += sHTML_O_href) += "=\"";
         rWrt.Strm() << sOut.GetBuffer();
-        aURL = INetURLObject::AbsToRel( aURL, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aURL, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+        rHTMLWrt.OutHyperlinkHRefValue( aURL );
         sOut = '\"';
     }
     else
