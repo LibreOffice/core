@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:32:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,7 +1497,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
     // merge the fallback levels
     long nXPos = 0;
-    int nFallbackUnitsPerPixel = 1;
+    double fUnitMul = 1.0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
     while( nValid[0] )
@@ -1512,12 +1512,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         {
             // use base(n==0) or fallback(n>=1) level
             long nNewPos = nXPos;
-            nFallbackUnitsPerPixel = mpLayouts[n]->GetUnitsPerPixel();
-            if( nFallbackUnitsPerPixel != mnUnitsPerPixel )
-            {
-                nNewPos *= nFallbackUnitsPerPixel;
-                nNewPos /= mnUnitsPerPixel;
-            }
+            fUnitMul = mnUnitsPerPixel;
+            fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
+            nNewPos = static_cast<long>(nNewPos/fUnitMul + 0.5);
             mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
         }
         else
@@ -1528,18 +1525,14 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 n = 0;  // keep NotDef in base level
             else
                 n = -1; // drop NotDef in base level
-            nFallbackUnitsPerPixel = mnUnitsPerPixel;
+            fUnitMul = 1.0;
         }
 
         if( n >= 0 )
         {
             // use glyph from best matching layout
             int nCurrentGlyphAdv = nGlyphAdv[n];
-            if( nFallbackUnitsPerPixel != mnUnitsPerPixel )
-            {
-                nCurrentGlyphAdv *= mnUnitsPerPixel;
-                nCurrentGlyphAdv /= nFallbackUnitsPerPixel;
-            }
+            nCurrentGlyphAdv = static_cast<long>(nCurrentGlyphAdv*fUnitMul + 0.5);
             nXPos += nCurrentGlyphAdv;
 
             // complete this glyph cluster, then advance to next
@@ -1551,11 +1544,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 if( !nValid[n] || (nCharPos[n] != nActivePos) )
                     break;
                 int nCurrentGlyphAdv = nGlyphAdv[n];
-                if( nFallbackUnitsPerPixel != mnUnitsPerPixel )
-                {
-                    nCurrentGlyphAdv *= mnUnitsPerPixel;
-                    nCurrentGlyphAdv /= nFallbackUnitsPerPixel;
-                }
+                nCurrentGlyphAdv = static_cast<long>(nCurrentGlyphAdv*fUnitMul + 0.5);
                 nXPos += nCurrentGlyphAdv;
             }
 
@@ -1631,10 +1620,12 @@ int MultiSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor )
     {
         SalLayout& rLayout = *mpLayouts[ n ];
         rLayout.FillDXArray( pCharWidths + nCharCount );
+        double fUnitMul = mnUnitsPerPixel;
+        fUnitMul /= rLayout.GetUnitsPerPixel();
         for( int i = 0; i < nCharCount; ++i )
         {
-            long w = pCharWidths[i+nCharCount] * mnUnitsPerPixel;
-            w /= rLayout.GetUnitsPerPixel();
+            long w = pCharWidths[ i + nCharCount ];
+            w = static_cast<long>(w*fUnitMul + 0.5);
             pCharWidths[ i ] += w;
         }
     }
@@ -1670,14 +1661,15 @@ long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
     for( int n = mnLevel; --n >= 0; )
     {
         // query every fallback level
-        long nWidth = mpLayouts[n]->FillDXArray( pTempWidths );
-        if( !nWidth )
+        long nTextWidth = mpLayouts[n]->FillDXArray( pTempWidths );
+        if( !nTextWidth )
             continue;
         // merge results from current level
-        nWidth *= mnUnitsPerPixel;
-        nWidth /= mpLayouts[n]->GetUnitsPerPixel();
-        if( nMaxWidth < nWidth )
-            nMaxWidth = nWidth;
+        double fUnitMul = mnUnitsPerPixel;
+        fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
+        nTextWidth = static_cast<long>(nTextWidth * fUnitMul + 0.5);
+        if( nMaxWidth < nTextWidth )
+            nMaxWidth = nTextWidth;
         if( !pCharWidths )
             continue;
         // calculate virtual char widths using most probable fallback layout
@@ -1690,8 +1682,7 @@ long MultiSalLayout::FillDXArray( sal_Int32* pCharWidths ) const
             long nCharWidth = pTempWidths[i];
             if( !nCharWidth )
                 continue;
-            nCharWidth *= mnUnitsPerPixel;
-            nCharWidth /= mpLayouts[n]->GetUnitsPerPixel();
+            nCharWidth = static_cast<long>(nCharWidth * fUnitMul + 0.5);
             pCharWidths[i] = nCharWidth;
         }
     }
@@ -1712,12 +1703,13 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
-            long nDivisor = mpLayouts[n]->GetUnitsPerPixel();
+            double fUnitMul = mnUnitsPerPixel;
+            fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
             for( int i = 0; i < nMaxIndex; ++i )
                 if( pTempPos[i] >= 0 )
                 {
                     long w = pTempPos[i];
-                    w = (w  * mnUnitsPerPixel) / nDivisor;
+                    w = static_cast<long>(w*fUnitMul + 0.5);
                     pCaretXArray[i] = w;
                 }
         }
@@ -1746,12 +1738,14 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPo
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
             nStart |= nFontTag;
+            double fUnitMul = mnUnitsPerPixel;
+            fUnitMul /= mpLayouts[nLevel]->GetUnitsPerPixel();
             for( int i = 0; i < nRetVal; ++i )
             {
                 if( pGlyphAdvAry )
                 {
-                    long w = pGlyphAdvAry[i] * mnUnitsPerPixel;
-                    w /= mpLayouts[nLevel]->GetUnitsPerPixel();
+                    long w = pGlyphAdvAry[i];
+                    w = static_cast<long>(w * fUnitMul + 0.5);
                     pGlyphAdvAry[i] = w;
                 }
                 pGlyphIdxAry[ i ] |= nFontTag;
