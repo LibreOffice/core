@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 10:00:07 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4166,8 +4166,7 @@ void SwEditWin::LoseFocus()
 
 void SwEditWin::Command( const CommandEvent& rCEvt )
 {
-    if ( !rView.GetViewFrame() || !rView.GetViewFrame()->GetFrame() ||
-          rView.GetViewFrame()->GetFrame()->TransferForReplaceInProgress())
+    if ( !rView.GetViewFrame() || !rView.GetViewFrame()->GetFrame() )
     {
         //Wenn der ViewFrame in Kuerze stirbt kein Popup mehr!
         Window::Command(rCEvt);
