@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2001-10-31 12:53:53 $
+ *  last change: $Author: as $ $Date: 2001-11-01 09:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -809,7 +809,6 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
             ::rtl::OUString sUserName     ;
             ::rtl::OUString sTemp         ;
             sal_Int32       nToken        ;
-            IMPL_TViewData  aEntry        ;
                             nAllStep      = 0;
 
             while( nAllStep<nAllCount )
@@ -846,7 +845,7 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
                 {
                     ::rtl::OUString sTemp;
                     lAllValues[nAllStep] >>= sTemp;
-                    aEntry.setWindowState( sTemp );
+                    m_aList[sEntryName].setWindowState( sTemp );
                     ++nAllStep;
 
                 }
@@ -855,7 +854,7 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
                 {
                     sal_Int32 nTemp;
                     lAllValues[nAllStep] >>= nTemp;
-                    aEntry.setPageID( nTemp );
+                    m_aList[sEntryName].setPageID( nTemp );
                     ++nAllStep;
                 }
                 else
@@ -863,7 +862,7 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
                 {
                     sal_Bool bTemp;
                     lAllValues[nAllStep] >>= bTemp;
-                    aEntry.setVisible(bTemp);
+                    m_aList[sEntryName].setVisible(bTemp);
                     ++nAllStep;
                 }
                 else
@@ -874,7 +873,7 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
                         // ... extract "<username>" from sEntryName!
                         sUserName = lAllNames[nAllStep].getToken( 0, (sal_Unicode)'/', nToken );
                         sUserName = ::utl::extractFirstFromConfigurationPath(sUserName);
-                        aEntry.setUserItem( sUserName, lAllValues[nAllStep] );
+                        m_aList[sEntryName].setUserItem( sUserName, lAllValues[nAllStep] );
 
                         ++nAllStep;
 
@@ -902,8 +901,6 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
                     bBreaked = sal_True;
                     break;
                 }
-
-                m_aList[sEntryName] = aEntry;
             }
         }
     }
