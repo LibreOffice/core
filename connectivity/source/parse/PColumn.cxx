@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:27:57 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
                                 )
     , m_bFunction(sal_False)
     , m_bDbasePrecisionChanged(sal_False)
+    , m_bAggregateFunction(sal_False)
 {
     construct();
 }
@@ -118,6 +119,7 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
                                   _bCase)
     , m_bFunction(sal_False)
     , m_bDbasePrecisionChanged(sal_False)
+    , m_bAggregateFunction(sal_False)
 {
     construct();
 }
@@ -131,6 +133,7 @@ void OParseColumn::construct()
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION),                PROPERTY_ID_FUNCTION,               0,&m_bFunction,     ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_AGGREGATEFUNCTION),       PROPERTY_ID_AGGREGATEFUNCTION,      0,&m_bAggregateFunction,        ::getCppuType(reinterpret_cast< sal_Bool*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),               PROPERTY_ID_TABLENAME,              nAttrib,&m_aTableName,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME),                PROPERTY_ID_REALNAME,               0,&m_aRealName,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DBASEPRECISIONCHANGED),   PROPERTY_ID_DBASEPRECISIONCHANGED,  nAttrib,&m_bDbasePrecisionChanged,      ::getCppuType(reinterpret_cast<sal_Bool*>(NULL)));
