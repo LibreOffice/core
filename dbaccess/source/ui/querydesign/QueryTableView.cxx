@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 07:46:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #ifndef DBACCESS_JACCESS_HXX
 #include "JAccess.hxx"
 #endif
@@ -157,7 +157,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 TYPEINIT1(OQueryTableView, OJoinTableView);
 
@@ -606,7 +606,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
     {
         modified();
         if ( m_pAccessible )
-            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+            m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                     Any(),
                                                     makeAny(pNewTabWin->GetAccessible())
                                                     );
@@ -905,7 +905,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 
     modified();
     if ( m_pAccessible )
-        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
+        m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                 makeAny(pTabWin->GetAccessible()),
                                                 Any()
                                                 );
