@@ -18,7 +18,7 @@ st	svtools\source\sbx				nmake	-	all	st_sbx NULL
 st	svtools\source\config				nmake	-	all	st_conf NULL
 st	svtools\unx\source\eaimp			nmake	-	u	st_ueaimp NULL
 st	svtools\unx\source\filter			nmake	-	u	st_ufilt NULL
-st	svtools\unx\source\svdde			nmake	-	u	st_usdde NULL
+st	svtools\unx\source\svdde			nmake	-	u	st_usdde st_sbx NULL
 st	svtools\os2\source\eaimp			nmake	-	p	st_ea NULL
 st	svtools\mac\source\svdde			nmake	-	m	st_msdde NULL
 st	svtools\mac\source\misc				nmake	-	m	st_msc NULL
