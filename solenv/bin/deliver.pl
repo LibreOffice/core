@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-13 16:55:50 $
+#   last change: $Author: vg $ $Date: 2004-04-27 16:41:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.55 $ ';
+$id_str = ' $Revision: 1.56 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -691,6 +691,14 @@ sub execute_system {
     close(COMMAND);
 }
 
+sub do_execute {
+    my $command = shift;
+    if (system($command)) {
+        print_error("Failed to execute $command");
+        exit($?);
+    };
+};
+
 sub do_strip {
     my $file = shift;
     my $temp_file = shift;
@@ -706,14 +714,16 @@ sub do_strip {
         if ( !$rc ) {
             die "Error - Could not copy $file to $local_temp_file\n";
         }
+        # Use here old-style error handlig, while there's no documented
+        # return value from $gcdynstr
         execute_system("$gcdynstr $local_temp_file");
-        execute_system("$strip $local_temp_file");
+        do_execute("$strip $local_temp_file");
         $rc = copy($local_temp_file, $temp_file);
         unlink $local_temp_file;
         # no need to copy back if garbage collection failed
     } else {
         $rc = copy($file, $temp_file);
-        execute_system("$strip $temp_file");
+        do_execute("$strip $temp_file");
     };
     return $rc;
 };
