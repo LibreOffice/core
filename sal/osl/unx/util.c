@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-12-17 12:28:33 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     ret=osl_checkAddr(hard_addr);
 
     if (ret < 0) {
-        fprintf(stderr, "SIOCGIFADDR got '00:00:00:00:00:00'\n");
+/*      fprintf(stderr, "SIOCGIFADDR got '00:00:00:00:00:00'\n"); */
         return ret;
     }
 
