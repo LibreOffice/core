@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-09-18 10:42:03 $
+ *  last change: $Author: od $ $Date: 2002-10-17 14:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1233,7 +1233,10 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
             (aFrm.*fnRect->fnSetWidth)( nWidth );
             (aPrt.*fnRect->fnSetWidth)( nWidth );
-            _CheckClipping( FALSE, bMaximize );
+            /// OD 15.10.2002 #103517# - allow grow in online layout
+            /// Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
+            /// method <_CheckClipping(..)>.
+            _CheckClipping( GetFmt()->GetDoc()->IsBrowseMode(), bMaximize );
             bMaximize = ToMaximize( FALSE );
             bValidSize = TRUE;
         }
