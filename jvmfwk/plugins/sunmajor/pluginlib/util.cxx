@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:45:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "osl/module.hxx"
 #include "rtl/byteseq.hxx"
 #include "rtl/ustrbuf.hxx"
+#include "rtl/instance.hxx"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include <utility>
@@ -99,7 +100,8 @@ char const *g_arJavaNames[] = {
     "j2sdk",
     "jdk",
     "jre",
-    "java"
+    "java",
+    "Home"
 };
 /* These are directory names which could contain multiple java installations.
  */
@@ -110,18 +112,24 @@ char const *g_arCollectDirs[] = {
     "j2sdk/",
     "jdk/",
     "jre/",
-    "java/"
+    "java/",
+    "jvm/"
 };
 
 /* These are directories in which a java installation is
    looked for.
 */
 char const *g_arSearchPaths[] = {
+#ifdef MACOSX
+    "",
+    "System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/"
+#else
     "",
     "usr/",
     "usr/local/",
     "usr/lib/",
     "usr/bin/"
+#endif
 };
 }
 #endif //  UNX
@@ -133,6 +141,55 @@ extern VendorSupportMapEntry gVendorMap[];
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
 rtl::OUString decodeOutput(const rtl::OString& s);
+
+
+
+namespace
+{
+    rtl::OUString getLibraryLocation()
+    {
+        rtl::OUString libraryFileUrl;
+        OSL_VERIFY(osl::Module::getUrlFromAddress((void *) getLibraryLocation, libraryFileUrl));
+        return getDirFromFile(libraryFileUrl);
+    }
+
+    struct InitBootstrap
+    {
+        rtl::Bootstrap * operator()(const OUString& sIni)
+        {
+            static rtl::Bootstrap aInstance(sIni);
+            return & aInstance;
+
+        }
+   };
+
+   struct InitBootstrapData
+   {
+       OUString const & operator()()
+       {
+           //  osl::Guard<osl::Mutex> g(osl::GetGlobalMutex());
+           static OUString sIni;
+            rtl::OUStringBuffer buf( 255);
+            buf.append( getLibraryLocation());
+            buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
+            sIni = buf.makeStringAndClear();
+            JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
+                             "Using configuration file \n") +  sIni);
+            return sIni;
+        }
+   };
+}
+
+rtl::Bootstrap * getBootstrap()
+{
+    return rtl_Instance< rtl::Bootstrap, InitBootstrap,
+        ::osl::MutexGuard, ::osl::GetGlobalMutex,
+        OUString, InitBootstrapData >::create(
+            InitBootstrap(), ::osl::GetGlobalMutex(), InitBootstrapData());
+}
+
+
+
 
 class FileHandleGuard
 {
@@ -241,7 +298,7 @@ FileHandleReader::readLine(rtl::OString * pLine)
 
 class AsynchReader: public Thread
 {
-    unsigned int  m_nDataSize;
+    size_t  m_nDataSize;
     boost::scoped_array<sal_Char> m_arData;
 
     bool m_bError;
@@ -279,6 +336,7 @@ void AsynchReader::run()
     while (true)
     {
         sal_uInt64 nRead;
+        //the function blocks until something could be read or the pipe closed.
         switch (osl_readFile(
                     m_aGuard.getHandle(), aBuffer, BUFFER_SIZE, &nRead))
         {
@@ -302,17 +360,12 @@ void AsynchReader::run()
             boost::scoped_array<sal_Char> arTmp( new sal_Char[m_nDataSize]);
             memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
             //Enlarge m_arData to hold the newly read data
-            m_arData.reset(new sal_Char[m_nDataSize + nRead]);
+            m_arData.reset(new sal_Char[(size_t)(m_nDataSize + nRead)]);
             //Copy back the data that was already in m_arData
             memcpy(m_arData.get(), arTmp.get(), m_nDataSize);
             //Add the newly read data to m_arData
-            memcpy(m_arData.get() + m_nDataSize, aBuffer, nRead);
-            m_nDataSize += nRead;
-            if (nRead < BUFFER_SIZE)
-            {
-                m_bDone = true;
-                break;
-            }
+            memcpy(m_arData.get() + m_nDataSize, aBuffer, (size_t) nRead);
+            m_nDataSize += (size_t) nRead;
         }
     }
 }
@@ -338,11 +391,28 @@ bool getJavaProps(const OUString & exePath,
     if (osl_getSystemPathFromFileURL(sThisLib.pData, & sClassPath.pData)
         != osl_File_E_None)
         return false;
+
+    //check if we shall examine a Java for accessibility support
+    //If the bootstrap variable is "1" then we pass the argument
+    //"noaccessibility" to JREProperties.class. This will prevent
+    //that it calls   java.awt.Toolkit.getDefaultToolkit();
+    OUString sValue;
+    getBootstrap()->getFrom(OUSTR("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY"), sValue);
+
     //prepare the arguments
+    sal_Int32 cArgs = 3;
     OUString arg1 = OUString(RTL_CONSTASCII_USTRINGPARAM("-classpath"));// + sClassPath;
     OUString arg2 = sClassPath;
     OUString arg3(RTL_CONSTASCII_USTRINGPARAM("JREProperties"));
-    rtl_uString *args[] = {arg1.pData, arg2.pData, arg3.pData};
+    OUString arg4 = OUSTR("noaccessibility");
+    rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
+
+    // Only add the fourth param if the bootstrap parameter is set.
+    if (sValue.equals(OUString::valueOf((sal_Int32) 1)))
+    {
+        args[3] = arg4.pData;
+        cArgs = 4;
+    }
 
     oslProcess javaProcess= 0;
     oslFileHandle fileOut= 0;
@@ -355,7 +425,7 @@ bool getJavaProps(const OUString & exePath,
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
-                                             3,                 //sal_uInt32   nArguments,
+                                             cArgs,                 //sal_uInt32   nArguments,
                                              osl_Process_HIDDEN, //oslProcessOption Options,
                                              NULL, //oslSecurity Security,
                                              usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
@@ -1060,6 +1130,8 @@ bool makeDriveLetterSame(OUString * fileURL)
 #ifdef UNX
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
+    OUString excMessage = OUSTR("[Java framework] sunjavaplugin: "
+                                "Error in function createJavaInfoDirScan in util.cxx.");
     int cJavaNames= sizeof(g_arJavaNames) / sizeof(char*);
     boost::scoped_array<OUString> sarJavaNames(new OUString[cJavaNames]);
     OUString *arNames = sarJavaNames.get();
@@ -1090,30 +1162,86 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
         DirectoryItem item;
         if(DirectoryItem::get(usDir1, item) == File::E_None)
         {
-            for(int j= 0; j < cJavaNames; j++)
+            for(int j= 0; j < cCollectDirs; j++)
             {
-                // /usr/java/
                 OUString usDir2(usDir1 + arCollectDirs[j]);
-                DirectoryItem item2;
-                if(DirectoryItem::get(usDir2, item2) == File::E_None)
+                // prevent that we scan the whole /usr, /usr/lib, etc directories
+                if (arCollectDirs[j] != OUString())
                 {
-                    for( int k= 0; k < cJavaNames; k++)
+                    //usr/java/xxx
+                    //Examin every subdirectory
+                    Directory aCollectionDir(usDir2);
+
+                    Directory::RC openErr = aCollectionDir.open();
+                    switch (openErr)
                     {
-                        // /usr/java/j2re1.4.0
-                        OUString usDir3(usDir2 + arNames[k]);
+                    case File::E_None:
+                        break;
+                    case File::E_NOENT:
+                    case File::E_NOTDIR:
+                        continue;
+                    case File::E_ACCES:
+                        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
+                                         "Could not read directory ") + usDir2 +
+                                   OUSTR(" because of missing access rights."));
+                        continue;
+                    default:
+                        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
+                                         "Could not read directory ")
+                                   + usDir2 + OUSTR(". Osl file error: ")
+                                   + OUString::valueOf((sal_Int32) openErr));
+                        continue;
+                    }
 
-//                         OString _s = OUStringToOString(usDir3, osl_getThreadTextEncoding());
-//                         fprintf(stderr,"###directory: %s\n", _s.getStr());
-
-                        DirectoryItem item3;
-                        if(DirectoryItem::get(usDir3, item) == File::E_None)
+                    DirectoryItem curIt;
+                    File::RC errNext = File::E_None;
+                    while( (errNext = aCollectionDir.getNextItem(curIt)) == File::E_None)
+                    {
+                        FileStatus aStatus(FileStatusMask_FileURL);
+                        File::RC errStatus = File::E_None;
+                        if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {
-                            //remove trailing '/'
-                            sal_Int32 islash = usDir3.lastIndexOf('/');
-                            if (islash == usDir3.getLength() - 1
-                                && islash > sizeof("file:///") - 2)
-                                usDir3 = usDir3.copy(0, islash);
-                            getJREInfoByPath(usDir3,vecInfos);
+                            JFW_TRACE2(excMessage + OUSTR("getFileStatus failed with error ")
+                                + OUString::valueOf((sal_Int32) errStatus));
+                            continue;
+                        }
+                        JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin: "
+                                         "Checking if directory: ") + aStatus.getFileURL() +
+                                   OUSTR(" is a Java."));
+
+                        getJREInfoByPath(aStatus.getFileURL(),vecInfos);
+                    }
+
+                    JFW_ENSURE(errNext == File::E_None || errNext == File::E_NOENT,
+                                OUSTR("[Java framework] sunjavaplugin: "
+                                      "Error while iterating over contens of ")
+                                + usDir2 + OUSTR(". Osl file error: ")
+                                + OUString::valueOf((sal_Int32) openErr));
+                }
+                else
+                {
+                    //usr/java
+                    //When we look directly into a dir like /usr, /usr/lib, etc. then we only
+                    //look for certain java directories, such as jre, jdk, etc. Whe do not want
+                    //to examine the whole directory because of performance reasons.
+                    DirectoryItem item2;
+                    if(DirectoryItem::get(usDir2, item2) == File::E_None)
+                    {
+                        for( int k= 0; k < cJavaNames; k++)
+                        {
+                            // /usr/java/j2re1.4.0
+                            OUString usDir3(usDir2 + arNames[k]);
+
+                            DirectoryItem item3;
+                            if(DirectoryItem::get(usDir3, item) == File::E_None)
+                            {
+                                //remove trailing '/'
+                                sal_Int32 islash = usDir3.lastIndexOf('/');
+                                if (islash == usDir3.getLength() - 1
+                                    && islash > sizeof("file:///") - 2)
+                                    usDir3 = usDir3.copy(0, islash);
+                                getJREInfoByPath(usDir3,vecInfos);
+                            }
                         }
                     }
                 }
