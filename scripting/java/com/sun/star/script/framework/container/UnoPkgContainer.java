@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoPkgContainer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 13:56:59 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ public class UnoPkgContainer extends ParcelContainer
         uri =  dPackage.getURL();
         LogUtils.DEBUG("** processUnoPackage getURL() -> " + uri );
         LogUtils.DEBUG("** processUnoPackage getName() -> " + dPackage.getName() );
-        LogUtils.DEBUG("** processUnoPackage getMediaType() -> " + dPackage.getMediaType() );
+        LogUtils.DEBUG("** processUnoPackage getMediaType() -> " + dPackage.getPackageType().getMediaType() );
         LogUtils.DEBUG("** processUnoPackage getDisplayName() -> " + dPackage.getDisplayName() );
         processUnoPackage( uri, language );
         db = getUnoPackagesDB();
