@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 07:45:19 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 class SfxItemSet;
 
-class ExtOutputDevice;
+class XOutputDevice;
 class SdrEdgeObj;
 class SdrView;
 class SdrObjList;
@@ -84,7 +84,7 @@ class SvxXConnectionPreview : public Control
 
 private:
     const SfxItemSet&   rAttrs;
-    ExtOutputDevice*    pExtOutDev;
+    XOutputDevice*  pExtOutDev;
     SdrEdgeObj*         pEdgeObj;
     SdrObjList*         pObjList;
     const SdrView*      pView;
