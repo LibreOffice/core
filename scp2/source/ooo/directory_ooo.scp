@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: hr $ $Date: 2004-04-14 11:54:29 $
+*  last change: $Author: obo $ $Date: 2004-04-27 13:10:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -370,8 +370,38 @@ Directory gid_Dir_Share_Xslt_Docbook
     DosName = "docbook";
 End
 
-Directory gid_Dir_Share_Xslt_Xhtml
+Directory gid_Dir_Share_Xslt_Common
     ParentID = gid_Dir_Share_Xslt;
+    DosName = "common";
+End
+
+Directory gid_Dir_Share_Xslt_Export
+    ParentID = gid_Dir_Share_Xslt;
+    DosName = "export";
+End
+
+Directory gid_Dir_Share_Xslt_Export_Common
+    ParentID = gid_Dir_Share_Xslt_Export;
+    DosName = "common";
+End
+
+Directory gid_Dir_Share_Xslt_Export_Common_Body
+    ParentID = gid_Dir_Share_Xslt_Export_Common;
+    DosName = "body";
+End
+
+Directory gid_Dir_Share_Xslt_Export_Common_Styles
+    ParentID = gid_Dir_Share_Xslt_Export_Common;
+    DosName = "styles";
+End
+
+Directory gid_Dir_Share_Xslt_Export_Common_Table
+    ParentID = gid_Dir_Share_Xslt_Export_Common;
+    DosName = "table";
+End
+
+Directory gid_Dir_Share_Xslt_Export_Xhtml
+    ParentID = gid_Dir_Share_Xslt_Export;
     DosName = "xhtml";
 End
 
