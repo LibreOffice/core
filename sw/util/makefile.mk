@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oisin $ $Date: 2000-10-11 13:07:44 $
+#   last change: $Author: hr $ $Date: 2000-10-11 17:05:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,9 +153,9 @@ LIB1OBJFILES= \
         $(OUT)$/obj$/swcomlib.obj \
         $(OUT)$/obj$/w4wflt.obj
 
-#.IF "$(OS)$(CPU)"=="SOLARISS"
-#LIB1OBJFILES += $(SOLARLIBDIR)$/autorec.o
-#.ENDIF
+.IF "$(OS)$(CPU)"=="SOLARISS"
+LIB1OBJFILES += $(SOLARLIBDIR)$/autorec.o
+.ENDIF
 
 
 
