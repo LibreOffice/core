@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:12:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,54 +114,34 @@ using namespace ::com::sun::star::lang;
     return xVM;
 }
 // -----------------------------------------------------------------------------
-typedef ::std::map<oslThreadIdentifier,TGuard> TGuardMap;
-TGuardMap& lcl_getGuardMap()
-{
-    static TGuardMap s_sMap;
-    return s_sMap;
-}
-// -----------------------------------------------------------------------------
-TGuard getVMGuard()
-{
-    TGuardMap& s_sMap = lcl_getGuardMap();
-
-    oslThreadIdentifier id = osl_getThreadIdentifier(NULL);
-    TGuardMap::iterator aFind = s_sMap.find(id);
-    if ( aFind == s_sMap.end() )
-        aFind = s_sMap.insert(TGuardMap::value_type(id,TGuard(new jvmaccess::VirtualMachine::AttachGuard(java_lang_Object::getVM())))).first;
-    return aFind->second;
-}
-// -----------------------------------------------------------------------------
 SDBThreadAttach::SDBThreadAttach()
- : pEnv(NULL)
+ : m_aGuard(java_lang_Object::getVM())
+ , pEnv(NULL)
 {
-    m_aGuard = getVMGuard();
-    if ( m_aGuard.get() )
-        pEnv = m_aGuard->getEnvironment();
+    pEnv = m_aGuard.getEnvironment();
+    OSL_ENSURE(pEnv,"Environment is nULL!");
 }
 // -----------------------------------------------------------------------------
 SDBThreadAttach::~SDBThreadAttach()
 {
 }
 // -----------------------------------------------------------------------------
-sal_Int32& getJavaVMRefCount()
+oslInterlockedCount& getJavaVMRefCount()
 {
-    static sal_Int32 s_nRefCount = 0;
+    static oslInterlockedCount s_nRefCount = 0;
     return s_nRefCount;
 }
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::addRef()
 {
-    getJavaVMRefCount()++;
+    osl_incrementInterlockedCount(&getJavaVMRefCount());
 }
 // -----------------------------------------------------------------------------
 void SDBThreadAttach::releaseRef()
 {
-    getJavaVMRefCount()--;
+    osl_decrementInterlockedCount(&getJavaVMRefCount());
     if ( getJavaVMRefCount() == 0 )
     {
-        TGuardMap& s_sMap = lcl_getGuardMap();
-        s_sMap.clear();
         getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
     }
 }
@@ -186,12 +166,14 @@ jclass java_lang_Object::getMyClass()
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
             : object( 0 ),m_xFactory(_rxFactory)
 {
+    SDBThreadAttach::addRef();
 }
 
 // der protected-Konstruktor fuer abgeleitete Klassen
 java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
     : object( NULL )
 {
+    SDBThreadAttach::addRef();
     if( pXEnv && myObj )
         object = pXEnv->NewGlobalRef( myObj );
 }
@@ -203,7 +185,9 @@ java_lang_Object::~java_lang_Object()
         SDBThreadAttach t;
         if( t.pEnv )
             t.pEnv->DeleteGlobalRef( object );
+        object = NULL;
     }
+    SDBThreadAttach::releaseRef();
 }
 void java_lang_Object::clearObject(JNIEnv& rEnv)
 {
