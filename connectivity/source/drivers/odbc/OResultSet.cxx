@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 07:41:49 $
+ *  last change: $Author: oj $ $Date: 2001-08-06 10:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 _nColumnIndex,SQLSMALLINT _nT
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     sal_Int8 nVal(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_BIT,&nVal,sizeof sal_Int8);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_BIT,&nVal,sizeof nVal);
     return (&aValue == &m_aEmptyValue) ? (sal_Bool)nVal : (sal_Bool)aValue;
 }
 // -------------------------------------------------------------------------
@@ -436,7 +436,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     sal_Int8 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_CHAR,&nRet,sizeof sal_Int8);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_CHAR,&nRet,sizeof nVal);
     return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int8)aValue;
 }
 // -------------------------------------------------------------------------
@@ -493,7 +493,7 @@ Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, R
     aDate.month = 0;
     aDate.year  = 0;
 
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_DATE,&aDate,sizeof DATE_STRUCT);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_DATE,&aDate,sizeof aDate);
     return (&aValue == &m_aEmptyValue)  ? Date(aDate.day,aDate.month,aDate.year) : (Date)aValue;
 }
 // -------------------------------------------------------------------------
@@ -592,7 +592,7 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::co
 sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     sal_Int16 nRet(0);
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SHORT,&nRet,sizeof sal_Int16);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SHORT,&nRet,sizeof nRet);
     return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int16)aValue;
 }
 // -------------------------------------------------------------------------
@@ -617,7 +617,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     TIME_STRUCT aTime={0,0,0};
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIME,&aTime,sizeof TIME_STRUCT);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIME,&aTime,sizeof aTime);
     return (&aValue == &m_aEmptyValue) ? Time(0,aTime.second,aTime.minute,aTime.hour) : (Time)aValue;
 }
 // -------------------------------------------------------------------------
@@ -626,7 +626,7 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     TIMESTAMP_STRUCT aTime={0,0,0,0,0,0,0};
-    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIMESTAMP,&aTime,sizeof TIMESTAMP_STRUCT);
+    const ORowSetValue& aValue = getValue(columnIndex,SQL_C_TIMESTAMP,&aTime,sizeof aTime);
     return (&aValue == &m_aEmptyValue)
             ?
             DateTime(aTime.fraction*1000,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year)
