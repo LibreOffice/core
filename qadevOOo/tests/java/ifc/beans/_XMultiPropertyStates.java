@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XMultiPropertyStates.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:15:28 $
+ *  last change:$Date: 2003-12-11 11:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,12 +169,13 @@ public class _XMultiPropertyStates extends MultiMethodTest {
                 Property prop = null;
                 try {
                     prop = xPropSetInfo.getPropertyByName(names[i]);
-                } catch(com.sun.star.beans.UnknownPropertyException e) {
+                }
+                catch(com.sun.star.beans.UnknownPropertyException e) {
                     log.println("couldn't get property info");
                     throw new StatusException(Status.failed
                         ("couldn't get property info"));
                 }
-                if ( (prop.Attributes & PropertyAttribute.MAYBEDEFAULT) == 1 ){
+                if ( (prop.Attributes & PropertyAttribute.MAYBEDEFAULT) != 0){
                     log.println("Property " + names[i] +
                         " 'may be default' and doesn't have default value");
                     mayBeDef = true;
@@ -217,7 +218,11 @@ public class _XMultiPropertyStates extends MultiMethodTest {
         requiredMethod("setPropertiesToDefault()");
         boolean result = true;
 
-        oObj.setAllPropertiesToDefault();
+       try {
+            oObj.setAllPropertiesToDefault();
+       } catch(RuntimeException e) {
+           log.println("Ignore Runtime Exception: " + e.getMessage());
+       }
         log.println("Checking that all properties are now in DEFAULT state" +
             " excepting may be those which 'cann't be default'");
 
@@ -235,7 +240,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
                         xPropSet.getPropertySetInfo();
                     Property prop = xPropSetInfo.getPropertyByName(names[i]);
                     if ( (prop.Attributes &
-                            PropertyAttribute.MAYBEDEFAULT) == 1 ) {
+                            PropertyAttribute.MAYBEDEFAULT) != 0 ) {
                         log.println("   ... and it has MAYBEDEFAULT "+
                             "attribute - FAILED");
                     } else {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPropertyState.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:16:05 $
+ *  last change:$Date: 2003-12-11 11:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,12 @@ public class _XPropertyState extends MultiMethodTest {
 
             boolean result = true ;
             try {
-                oObj.setPropertyToDefault(pName);
+                try {
+                    oObj.setPropertyToDefault(pName);
+                }
+                catch(RuntimeException e) {
+                    System.out.println("Ignoring RuntimeException: " + e.getMessage());
+                }
                 if ((properties[0].Attributes &
                         PropertyAttribute.MAYBEDEFAULT) != 0) {
                     Object actualDef = propDef ;
