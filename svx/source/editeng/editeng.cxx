@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-03 13:53:10 $
+ *  last change: $Author: mt $ $Date: 2002-06-06 12:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1648,7 +1648,7 @@ long EditEngine::GetFirstLineStartX( sal_uInt16 nParagraph )
     ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
     if ( pPPortion )
     {
-        DBG_ASSERT( pImpEditEngine->IsFormatted(), "GetDocPosTopLeft: Doc nicht formatiert" );
+        DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatDoc();
         EditLine* pFirstLine = pPPortion->GetLines()[0];
@@ -1672,13 +1672,13 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
 Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    DBG_ASSERT( pImpEditEngine->IsFormatted(), "GetDocPosTopLeft: Doc nicht formatiert" );
     ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "Absatz nicht gefunden: GetWindowPosTopLeft" );
     Point aPoint;
     if ( pPPortion )
     {
         // Falls jemand mit einer leeren Engine ein GetLineHeight() macht.
+        DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatDoc();
         if ( pPPortion->GetLines().Count() )
