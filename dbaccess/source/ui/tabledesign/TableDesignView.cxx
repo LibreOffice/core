@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 07:06:51 $
+ *  last change: $Author: fs $ $Date: 2002-06-05 08:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,8 @@ OTableDesignView::OTableDesignView( Window* pParent,
                                     OTableController* _pController
                                    ) :
     ODataView( pParent ,_pController,_rxOrb )
-    ,m_pController(_pController)
+    ,m_pController( _pController )
+    ,m_xController( _pController )
     ,m_eChildFocus(NONE)
 {
     DBG_CTOR(OTableDesignView,NULL);
@@ -286,9 +287,16 @@ OTableDesignView::~OTableDesignView()
 {
     DBG_DTOR(OTableDesignView,NULL);
     m_pWin->Hide();
-    ::std::auto_ptr<Window> aTemp(m_pWin);
-    m_pWin = NULL;
+
+    {
+        ::std::auto_ptr<Window> aTemp(m_pWin);
+        m_pWin = NULL;
+    }
+
+    m_pController = NULL;
+    m_xController.clear();
 }
+
 // -----------------------------------------------------------------------------
 void OTableDesignView::initialize()
 {
@@ -343,10 +351,12 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
-            if( m_pWin && GetDescWin()->HasChildPathFocus() )
+            if( GetDescWin() && GetDescWin()->HasChildPathFocus() )
                 m_eChildFocus = DESCRIPTION;
-            else
+            else if ( GetEditorCtrl() && GetEditorCtrl()->HasChildPathFocus() )
                 m_eChildFocus = EDITOR;
+            else
+                m_eChildFocus = NONE;
             break;
     }
 
@@ -437,7 +447,7 @@ void OTableDesignView::reSync()
 // -----------------------------------------------------------------------------
 void OTableDesignView::GetFocus()
 {
-    if ( m_pWin && GetEditorCtrl() )
+    if ( GetEditorCtrl() )
         GetEditorCtrl()->GrabFocus();
 }
 // -----------------------------------------------------------------------------
