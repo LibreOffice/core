@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:44:01 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ enum ScXMLContentValidationAttrTokens
     XML_TOK_CONTENT_VALIDATION_NAME,
     XML_TOK_CONTENT_VALIDATION_CONDITION,
     XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS,
-    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL
+    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL,
+    XML_TOK_CONTENT_VALIDATION_SHOW_LIST
 };
 
 enum ScXMLContentValidationMessageElemTokens
@@ -660,9 +661,10 @@ struct ScMyImportValidation
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
-    sal_Bool                                        bShowErrorMessage : 1;
-    sal_Bool                                        bShowImputMessage : 1;
-    sal_Bool                                        bIgnoreBlanks : 1;
+    sal_Int16                                       nShowList;
+    sal_Bool                                        bShowErrorMessage;
+    sal_Bool                                        bShowImputMessage;
+    sal_Bool                                        bIgnoreBlanks;
 };
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
