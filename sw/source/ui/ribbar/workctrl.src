@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:18:03 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,7 +591,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "­Ά";
         Text[ arabic ] = "ΥέΝΙ";
         Text[ greek ] = "Σελίδα";
-        Text[ korean ] = "ΒΚ";
+        Text[ korean ] = "ΖδΐΜΑφ";
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pαgina";
@@ -630,7 +630,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ chinese_traditional ] = "ΓΈΉΟͺ«₯σ";
         Text[ arabic ] = "ίΗΖδ ΡΣζγν";
         Text[ greek ] = "Αντικείμενο σχεδίασης";
-        Text[ korean ] = "±ΧΈ®±β °³ΓΌ";
+        Text[ korean ] = "Ή®ΐΪ °³ΓΌ";
         Text[ turkish ] = "Ηizim nesnesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objeto de dibujo";
@@ -787,7 +787,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ΌΠΓD";
         Text[ arabic ] = "ΪδζΗδ";
         Text[ greek ] = "Επικεφαλίδα";
-        Text[ korean ] = "Η₯Α¦";
+        Text[ korean ] = "Α¦Έρ";
         Text[ turkish ] = "Baώlύk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Encabezado";
@@ -1137,7 +1137,7 @@ String STR_IMGBTN_PGE_DOWN
     Text[ chinese_traditional ] = "€U€@­Ά";
     Text[ arabic ] = "ΗαΥέΝΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενη σελίδα";
-    Text[ korean ] = "΄Ωΐ½ ΒΚ";
+    Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφ";
     Text[ turkish ] = "Sonraki sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pαgina siguiente";
@@ -1164,7 +1164,7 @@ String STR_IMGBTN_DRW_DOWN
     Text[ chinese_traditional ] = "€U€@­ΣΓΈΉΟͺ«₯σ";
     Text[ arabic ] = "ΗαίΗΖδ ΗαΡΣζγν ΗαΚΗαν";
     Text[ greek ] = "Επόμενο αντικείμενο σχεδίασης";
-    Text[ korean ] = "΄Ωΐ½ ±ΧΈ®±β °³ΓΌ";
+    Text[ korean ] = "΄Ωΐ½ Ή®ΐΪ °³ΓΌ";
     Text[ turkish ] = "Sonraki ηizim nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de dibujo siguiente";
@@ -1327,7 +1327,7 @@ String STR_IMGBTN_OUTL_DOWN
     Text[ chinese_traditional ] = "€U€@­ΣΌΠΓD";
     Text[ arabic ] = "ΗαΪδζΗδ ΗαΚΗαν";
     Text[ greek ] = "Επόμενη επικεφαλίδα";
-    Text[ korean ] = "΄Ωΐ½ Η₯Α¦";
+    Text[ korean ] = "΄Ωΐ½ Α¦Έρ";
     Text[ turkish ] = "Sonraki baώlύk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezado siguiente";
@@ -1521,7 +1521,7 @@ String STR_IMGBTN_TBL_UP
     Text[ chinese_traditional ] = "€W€@­Σͺν®ζ";
     Text[ arabic ] = "ΗαΜΟζα ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενος πίνακας";
-    Text[ korean ] = "ΐΜΐό Η₯";
+    Text[ korean ] = "ΐΜΐό ΕΧΐΜΊν";
     Text[ turkish ] = "Φnceki tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla anterior";
@@ -1573,7 +1573,7 @@ String STR_IMGBTN_PGE_UP
     Text[ chinese_traditional ] = "€W€@­Ά";
     Text[ arabic ] = "ΗαΥέΝΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενη σελίδα";
-    Text[ korean ] = "ΐΜΐό ΒΚ";
+    Text[ korean ] = "ΐΜΐό ΖδΐΜΑφ";
     Text[ turkish ] = "Φnceki sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pαgina anterior";
@@ -1599,7 +1599,7 @@ String STR_IMGBTN_DRW_UP
     Text[ chinese_traditional ] = "€W€@­ΣΓΈΉΟͺ«₯σ";
     Text[ arabic ] = "ΗαίΗΖδ ΗαΡΣζγν ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενο αντικείμενο σχεδίασης";
-    Text[ korean ] = "ΐΜΐό ±ΧΈ®±β °³ΓΌ";
+    Text[ korean ] = "ΐΜΐό Ή®ΐΪ °³ΓΌ";
     Text[ turkish ] = "Φnceki ηizim nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de dibujo anterior";
@@ -1757,7 +1757,7 @@ String STR_IMGBTN_OUTL_UP
     Text[ chinese_traditional ] = "€W€@­ΣΌΠΓD";
     Text[ arabic ] = "ΗαΪδζΗδ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη επικεφαλίδα";
-    Text[ korean ] = "ΐΜΐό Η₯Α¦";
+    Text[ korean ] = "ΐΜΐό Α¦Έρ";
     Text[ turkish ] = "Φnceki baώlύk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezado anterior";
@@ -2061,5 +2061,6 @@ ImageButton BTN_NAVI
         Text[ finnish ] = "Siirtyminen";
     };
 };
+
 
 
