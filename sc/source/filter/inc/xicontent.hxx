@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:19:26 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ class XclImpStream;
 Classes to import the big Excel document contents (related to several cells or
 globals for the document).
 - Shared string tables
-- Background bitmap
 - Hyperlinks
 - Label ranges
 - Conditional formatting
@@ -122,18 +121,6 @@ inline const XclImpString*      XclImpSst::GetString( sal_uInt32 nSstIndex ) con
 {
     return maStringList.GetObject( nSstIndex );
 }
-
-
-// Background bitmap ==========================================================
-
-/** Provides importing a page background bitmap. */
-class XclImpBitmap : ScfNoInstance
-{
-public:
-    /** Reads a BITMAP record and inserts it into the current sheet.
-        @descr  Import stream must be located at start of a BITMAP record. */
-    static void                 ReadBitmap( XclImpStream& rStrm );
-};
 
 
 // Hyperlinks =================================================================
