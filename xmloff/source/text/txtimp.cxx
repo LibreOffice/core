@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-23 10:17:35 $
+ *  last change: $Author: sab $ $Date: 2000-10-23 10:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,22 @@ XMLPropStyleContext* XMLTextImportHelper::FindSectionStyle(
                            ((SvXMLStylesContext *)&xAutoStyles)->
                            FindStyleChildContext(
                                XML_STYLE_FAMILY_TEXT_SECTION,
+                               rName, sal_True ) );
+    }
+
+    return pStyle;
+}
+
+XMLPropStyleContext* XMLTextImportHelper::FindPageMaster(
+    const OUString& rName ) const
+{
+    XMLPropStyleContext* pStyle = NULL;
+    if (xAutoStyles.Is() )
+    {
+        pStyle = PTR_CAST( XMLPropStyleContext,
+                           ((SvXMLStylesContext *)&xAutoStyles)->
+                           FindStyleChildContext(
+                               XML_STYLE_FAMILY_PAGE_MASTER,
                                rName, sal_True ) );
     }
 
