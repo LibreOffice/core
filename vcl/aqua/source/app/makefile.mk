@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-27 11:34:06 $
+#   last change: $Author: kz $ $Date: 2005-01-13 17:24:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,7 @@ TARGET=salapp
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE :	$(PRJ)$/util$/makefile2.pmk
 
 # --- Files --------------------------------------------------------
 
