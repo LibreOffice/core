@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,6 +1455,8 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(sPropertyDataTableName, rPropSet));
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
+        ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
+                       sal_False);
         ExportElement(XML_DATABASE_NAME, sPresentation);
         break;
 
@@ -1468,6 +1470,8 @@ void XMLTextFieldExport::ExportFieldHelper(
             GetInt16Property(sPropertyNumberingType,rPropSet));
         ProcessInteger(XML_VALUE,
                        GetIntProperty(sPropertySetNumber, rPropSet));
+        ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
+                       sal_False);
         ExportElement(XML_DATABASE_ROW_NUMBER, sPresentation);
         break;
 
@@ -1518,6 +1522,8 @@ void XMLTextFieldExport::ExportFieldHelper(
                                 sEmpty, sEmpty, 0.0, // not used
                                 sal_False, sal_False, sal_True, sal_False);
         }
+        ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
+                       sal_False);
         ExportElement(XML_DATABASE_DISPLAY, sPresentation);
         break;
     }
