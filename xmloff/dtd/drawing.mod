@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.50 2001-05-16 14:04:04 cl Exp $
+	$Id: drawing.mod,v 1.51 2001-05-18 07:21:40 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -425,6 +425,16 @@
 <!ATTLIST style:properties draw:fontwork-form (none|top-circle|bottom-circle|left-circle|right-circle|top-arc|bottom-arc|left-arc|right-arc|button1|button2|button3|button4) #IMPLIED>
 <!ATTLIST style:properties draw:fontwork-hide-form %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:fontwork-shadow-transparence %percentage; #IMPLIED>
+
+<!-- caption attributes -->
+<!ATTLIST style:properties draw:caption-type (straight-line|angled-line|angled-connector-line) #IMPLIED>
+<!ATTLIST style:properties draw:caption-angle-type (fixed|free) #IMPLIED>
+<!ATTLIST style:properties draw:caption-angle %nonNegativeInteger; #IMPLIED>
+<!ATTLIST style:properties draw:caption-gap %distance; #IMPLIED>
+<!ATTLIST style:properties draw:caption-escape-direction (horizontal|vertical|auto) #IMPLIED>
+<!ATTLIST style:properties draw:caption-escape %lengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties draw:caption-line-length %distance; #IMPLIED>
+<!ATTLIST style:properties draw:caption-fit-line-length %boolean; #IMPLIED>
 
 <!-- Animations -->
 <!ELEMENT presentation:sound EMPTY>
