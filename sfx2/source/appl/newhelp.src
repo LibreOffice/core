@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 12:02:45 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ TabPage TP_HELP_SEARCH
         Text[ spanish ] = "~Término de búsqueda";
         Text[ italian ] = "~Termine cercato";
         Text[ danish ] = "~Suchbegriff";
-        Text[ swedish ] = "~Sökord";
+        Text[ swedish ] = "Sö~kord";
         Text[ polish ] = "Szukane has³o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
         Text[ japanese ] = "ŒŸõ·°(~E)";
@@ -319,6 +319,23 @@ TabPage TP_HELP_SEARCH
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Nur Titel suchen" ;
         Text [ english_us ] = "~Search headings only";
+        Text[ portuguese ] = "~Procurar só título";
+        Text[ russian ] = "~Èñêàòü òîëüêî çàãîëîâêè";
+        Text[ greek ] = "~Search headings only";
+        Text[ dutch ] = "~Search headings only";
+        Text[ french ] = "~Search headings only";
+        Text[ spanish ] = "~Buscar solo título";
+        Text[ italian ] = "~Cerca solo intestazioni";
+        Text[ danish ] = "~Search headings only";
+        Text[ swedish ] = "Sök bara ~rubriker";
+        Text[ polish ] = "Szukaj tylko tytu³ów";
+        Text[ portuguese_brazilian ] = "~Search headings only";
+        Text[ japanese ] = "~Search headings only";
+        Text[ korean ] = "~Search headings only";
+        Text[ chinese_simplified ] = "~Search headings only";
+        Text[ chinese_traditional ] = "~Search headings only";
+        Text[ turkish ] = "~Search headings only";
+        Text[ arabic ] = "~Search headings only";
     };
 };
 
@@ -491,7 +508,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text = "HTML-Quelltext";
     Text[ english_us ] = "HTML Source";
     Text[ portuguese ] = "Fonte HTML";
-    Text[ russian ] = "Èñòî÷íèê HTML";
+    Text[ russian ] = "Èñõîäíûé òåêñò HTML";
     Text[ dutch ] = "HTLM-brontekst";
     Text[ french ] = "Texte source HTML";
     Text[ spanish ] = "Texto fuente HTML";
@@ -514,7 +531,24 @@ String STR_HELP_BUTTON_SOURCEVIEW
 String STR_HELP_FIRST_MESSAGE
 {
     Text = "Die Hilfe wird gestartet...";
-    Text[ english_us ] = "Help is started...";
+    Text[ english_us ] = "The Help is being started...";
+    Text[ portuguese ] = "A iniciar Ajuda...";
+    Text[ russian ] = "Çàïóñê ñïğàâêè...";
+    Text[ greek ] = "Help is started...";
+    Text[ dutch ] = "Help is started...";
+    Text[ french ] = "Help is started...";
+    Text[ spanish ] = "Se ha iniciado la Ayuda...";
+    Text[ italian ] = "Avvio della Guida...";
+    Text[ danish ] = "Help is started...";
+    Text[ swedish ] = "Hjälpen startas...";
+    Text[ polish ] = "Uruchamianie Pomocy...";
+    Text[ portuguese_brazilian ] = "Help is started...";
+    Text[ japanese ] = "Help is started...";
+    Text[ korean ] = "Help is started...";
+    Text[ chinese_simplified ] = "Help is started...";
+    Text[ chinese_traditional ] = "Help is started...";
+    Text[ turkish ] = "Help is started...";
+    Text[ arabic ] = "Help is started...";
 };
 
 String STR_HELP_FIRST_HTML
