@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+#   last change: $Author: mfe $ $Date: 2000-10-18 16:13:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,9 @@ SLOFILES=   $(SLO)$/daemprot.obj	\
             $(SLO)$/isocket.obj		\
             $(SLO)$/types.obj		\
             $(SLO)$/nspr.obj		\
-            $(SLO)$/omutex.obj
+            $(SLO)$/omutex.obj      \
+            $(SLO)$/utility.obj
+
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/daemman.obj  	\
@@ -105,7 +107,8 @@ OBJFILES=   $(OBJ)$/daemman.obj  	\
             $(OBJ)$/chanpool.obj	\
             $(OBJ)$/isocket.obj		\
             $(OBJ)$/types.obj		\
-            $(OBJ)$/omutex.obj
+            $(OBJ)$/omutex.obj      \
+            $(OBJ)$/utility.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
