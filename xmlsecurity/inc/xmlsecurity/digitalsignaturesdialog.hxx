@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:20 $
+ *  last change: $Author: mt $ $Date: 2004-07-13 11:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,26 @@ namespace sun {
 namespace star {
 namespace lang {
     class XMultiServiceFactory; }
+namespace io {
+    class XStream; }
 namespace embed {
     class XStorage; }
 }}}
 
 namespace css = com::sun::star;
 namespace cssu = com::sun::star::uno;
-namespace dcss = ::com::sun::star;
 
 class HeaderBar;
 
 enum DocumentSignatureMode { SignatureModeDocumentContent, SignatureModeMacros, SignatureModePackage };
+
+struct SignatureStreamHelper
+{
+    cssu::Reference < css::embed::XStorage >    xSignatureStorage;
+    cssu::Reference < css::io::XStream >        xSignatureStream;
+
+    void Dispose();
+};
 
 class DigitalSignaturesDialog : public ModalDialog
 {
@@ -145,6 +154,7 @@ public:
             // Execute the dialog...
     short   Execute();
 
+    static SignatureStreamHelper OpenSignatureStream( css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode );
     static std::vector< rtl::OUString > CreateElementList( css::uno::Reference < css::embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode );
 };
 

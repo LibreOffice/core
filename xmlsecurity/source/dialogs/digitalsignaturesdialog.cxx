@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:24 $
+ *  last change: $Author: mt $ $Date: 2004-07-13 11:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,27 +72,14 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-
-// Only needed until sig is in storage:
-#include <unotools/streamhelper.hxx>
-
-/*-
- * deleted by AF. base64.h is a mozilla nss file, this file should not depend
- * on nss/nspr.
- */
-//#include <external/base64.h>
-
-#if OSL_DEBUG_LEVEL > 1
-#include <vcl/msgbox.hxx>
-#endif
+#include <com/sun/star/security/NoPasswordException.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <tools/intn.hxx>
 
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
 
-// MM : added for password exception
-#include <com/sun/star/security/NoPasswordException.hpp>
 using namespace ::com::sun::star::security;
 
 /* HACK: disable some warnings for MS-C */
@@ -216,7 +203,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
         maSignatureHelper.GetSecurityEnvironment()->getPersonalCertificates();
 
         uno::Reference<com::sun::star::xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureHelper.GetSecurityEnvironment();
-        CertificateChooser aChooser( (Window*)this, xSecEnv, aCurrentSignatureInformations );
+        CertificateChooser aChooser( this, xSecEnv, aCurrentSignatureInformations );
         if( aChooser.Execute() )
         {
             maSignatureHelper.StartMission();
@@ -242,52 +229,28 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.AddForSigning( nSecurityId, aElements[n], aElements[n], bBinaryMode );
             }
 
-            bool bDone = false;
-            bool bRefreshInformations = false;
+            SignatureStreamHelper aStreamHelper = OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
+            uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+            uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            if ( !maSigFileName.getLength() )
-            {
-                ::rtl::OUString aSIGStreamName( RTL_CONSTASCII_USTRINGPARAM( "SIGNATURES" ) );
-                uno::Reference < io::XStream > xStream = mxStore->openStreamElement( aSIGStreamName, embed::ElementModes::WRITE );
-                uno::Reference< io::XOutputStream > xOutputStream( xStream, uno::UNO_QUERY );
-                // CHANGE TO KEEP OLD SIGS WHEN SIG IN STREAM WORKS!
-                //bDone = maSignatureHelper.CreateAndWriteSignatue( xOutputStream );
+            // Export old signatures...
+            int nInfos = aCurrentSignatureInformations.size();
+            for ( int n = 0; n < nInfos; n++ )
+                maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[n]);
 
-                uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
-                // Export old signatures...
-                int nInfos = aCurrentSignatureInformations.size();
-                for ( int n = 0; n < nInfos; n++ )
-                    maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[n]);
+            // Create a new one...
+            bool bDone = maSignatureHelper.CreateAndWriteSignatue( xDocumentHandler );
 
-                // Create a new one...
-                bDone = maSignatureHelper.CreateAndWriteSignatue( xDocumentHandler );
+            // That's it...
+            maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
-                // That's it...
-                maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
+            uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+            xTrans->commit();
 
-                uno::Reference< embed::XTransactedObject > xTrans( mxStore, uno::UNO_QUERY );
-                xTrans->commit();
-                uno::Reference< lang::XComponent > xComp( mxStore, uno::UNO_QUERY );
-                xComp->dispose();
-            }
-            else
-            {
-                SvFileStream* pStream = new SvFileStream( maSigFileName, STREAM_WRITE|STREAM_TRUNC );
-                SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
-                 uno::Reference< io::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
+            uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
+            xTrans2->commit();
 
-                uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
-                // Export old signatures...
-                int nInfos = aCurrentSignatureInformations.size();
-                for ( int n = 0; n < nInfos; n++ )
-                    maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[n]);
-
-                // Create a new one...
-                bDone = maSignatureHelper.CreateAndWriteSignatue( xDocumentHandler );
-
-                // That's it...
-                maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
-            }
+            aStreamHelper.Dispose();
 
             maSignatureHelper.EndMission();
 
@@ -315,25 +278,23 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         aCurrentSignatureInformations.erase( aCurrentSignatureInformations.begin()+nSelected );
 
         // Export all other signatures...
-        if ( !maSigFileName.getLength() )
-        {
-            // See AddButtonHdl, later....
-        }
-        else
-        {
-            SvFileStream*   pStream = new SvFileStream( maSigFileName, STREAM_WRITE|STREAM_TRUNC );
-            SvLockBytesRef  xLockBytes = new SvLockBytes( pStream, TRUE );
-             uno::Reference< io::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
+        SignatureStreamHelper aStreamHelper = OpenSignatureStream( mxStore, embed::ElementModes::WRITE|embed::ElementModes::TRUNCATE, meSignatureMode );
+        uno::Reference< io::XOutputStream > xOutputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+        uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            uno::Reference< css::xml::sax::XDocumentHandler> xDocumentHandler = maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream);
+        int nInfos = aCurrentSignatureInformations.size();
+        for( int n = 0 ; n < nInfos ; ++n )
+            maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[ n ] );
 
-            int nInfos = aCurrentSignatureInformations.size();
-            for( int n = 0 ; n < nInfos ; ++n )
-                maSignatureHelper.ExportSignature( xDocumentHandler, aCurrentSignatureInformations[ n ] );
+        maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
 
-            // That's it...
-            maSignatureHelper.CloseDocumentHandler( xDocumentHandler );
-        }
+        uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+        xTrans->commit();
+
+        uno::Reference< embed::XTransactedObject > xTrans2( mxStore, uno::UNO_QUERY );
+        xTrans2->commit();
+
+        aStreamHelper.Dispose();
 
         ImplFillSignaturesBox();
     }
@@ -397,35 +358,17 @@ void DigitalSignaturesDialog::ImplGetSignatureInformations()
 
     maSignatureHelper.StartMission();
 
-    bool bVerifyOK = false;
+    SignatureStreamHelper aStreamHelper = OpenSignatureStream( mxStore, embed::ElementModes::READ, meSignatureMode );
+    if ( aStreamHelper.xSignatureStream.is() )
+    {
+        uno::Reference< io::XInputStream > xInputStream( aStreamHelper.xSignatureStream, uno::UNO_QUERY );
+        bool bVerifyOK = maSignatureHelper.ReadAndVerifySignatue( xInputStream );
 
-    if ( maSigFileName.getLength() )
-    {
-        SvFileStream* pStream = new SvFileStream( maSigFileName, STREAM_READ );
-        pStream->Seek( STREAM_SEEK_TO_END );
-        ULONG nBytes = pStream->Tell();
-        pStream->Seek( STREAM_SEEK_TO_BEGIN );
-        SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
-        if ( nBytes )
-        {
-             uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
-            bVerifyOK = maSignatureHelper.ReadAndVerifySignatue( xInputStream );
-            xInputStream->closeInput();
-        }
-    }
-    else
-    {
-        ::rtl::OUString aSIGStreamName( RTL_CONSTASCII_USTRINGPARAM( "SIGNATURE" ) );
-        if ( mxStore->isStreamElement( aSIGStreamName ) )
-        {
-            uno::Reference < io::XStream > xStream = mxStore->openStreamElement( aSIGStreamName, embed::ElementModes::READ );
-            uno::Reference< io::XInputStream > xInputStream( xStream, uno::UNO_QUERY );
-            bVerifyOK = maSignatureHelper.ReadAndVerifySignatue( xInputStream );
-        }
+        if ( bVerifyOK )
+            aCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
     }
 
-    if ( bVerifyOK )
-        aCurrentSignatureInformations = maSignatureHelper.GetSignatureInformations();
+    aStreamHelper.Dispose();
 
     maSignatureHelper.EndMission();
 
@@ -542,4 +485,65 @@ std::vector< rtl::OUString > DigitalSignaturesDialog::CreateElementList( uno::Re
     }
 
     return aElements;
+}
+
+SignatureStreamHelper DigitalSignaturesDialog::OpenSignatureStream( uno::Reference < embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode )
+{
+    sal_Int32 nSubStorageOpenMode = embed::ElementModes::READ;
+    if ( nOpenMode & embed::ElementModes::WRITE )
+        nSubStorageOpenMode = embed::ElementModes::WRITE;
+
+    SignatureStreamHelper aHelper;
+
+    try
+    {
+        ::rtl::OUString aSIGStoreName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
+        aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
+        if ( aHelper.xSignatureStorage.is() )
+        {
+            ::rtl::OUString aSIGStreamName;
+            if ( eDocSigMode == SignatureModeDocumentContent )
+                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentSignatures.xml" ) );
+            else if ( eDocSigMode == SignatureModeMacros )
+                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroSignatures.xml" ) );
+            else
+                aSIGStreamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PackageSignatures.xml" ) );
+
+            aHelper.xSignatureStream = aHelper.xSignatureStorage->openStreamElement( aSIGStreamName, nOpenMode );
+        }
+    }
+    catch( com::sun::star::io::IOException& )
+    {
+        // Doesn't have to exist...
+        DBG_ASSERT( nOpenMode == embed::ElementModes::READ, "Error creating signature stream..." );
+    }
+
+    return aHelper;
+}
+
+void SignatureStreamHelper::Dispose()
+{
+    if ( xSignatureStorage.is() )
+    {
+        try
+        {
+            uno::Reference< lang::XComponent > xComp( xSignatureStorage, uno::UNO_QUERY );
+            xComp->dispose();
+        }
+        catch ( lang::DisposedException )
+        {
+        }
+    }
+
+    if ( xSignatureStream.is() )
+    {
+        try
+        {
+            uno::Reference< lang::XComponent > xComp( xSignatureStream, uno::UNO_QUERY );
+            xComp->dispose();
+        }
+        catch ( lang::DisposedException )
+        {
+        }
+    }
 }
