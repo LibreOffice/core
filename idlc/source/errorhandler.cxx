@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jbu $ $Date: 2001-05-09 07:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
     case EIDL_SERVICEMEMBER_LOOKUP:
         return "error in lookup of symbol, expected service is not defined: ";
     case EIDL_MULTIBLE_INHERITANCE:
-        return "multible inheritance is not allowed, in inheritance tree: ";
+        return "multiple inheritance is not allowed, in inheritance tree: ";
     case EIDL_TYPE_IDENT_CONFLICT:
         return "type and parameter/member name are equal: ";
     case EIDL_ONEWAY_RAISE_CONFLICT:

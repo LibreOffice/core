@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-19 09:31:13 $
+ *  last change: $Author: jbu $ $Date: 2001-05-09 07:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ OString Options::prepareHelp()
     help += "                 the same name as the idl input file.\n";
     help += "    -I<path>   = path specifies a directory where are include\n";
     help += "                 files will be searched by the preprocessor.\n";
-    help += "                 Multible directories could be combined with ';'.\n";
+    help += "                 Multiple directories could be combined with ';'.\n";
     help += "    -D<name>   = name defines a macro for the preprocessor.\n";
     help += "    -C         = generate complete type information, including\n";
     help += "                 additional service information and documentation.\n";
