@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-09 15:28:08 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 13:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,6 +1284,35 @@ UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
 ::rtl::OUString UnoControlFormattedFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
+}
+
+sal_Bool UnoControlFormattedFieldModel::convertFastPropertyValue(
+            ::com::sun::star::uno::Any& rConvertedValue,
+            ::com::sun::star::uno::Any& rOldValue,
+            sal_Int32 nPropId,
+            const ::com::sun::star::uno::Any& rValue
+        ) throw (::com::sun::star::lang::IllegalArgumentException)
+{
+    if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId )
+    {
+        double dVal = 0;
+        sal_Int32  nVal = 0;
+        ::rtl::OUString sVal;
+        if ( ( rValue >>= dVal ) || ( rValue >>= nVal ) || ( rValue >>= sVal ) )
+        {
+            getFastPropertyValue( rOldValue, nPropId );
+            return !CompareProperties( rConvertedValue, rOldValue );
+        }
+
+        throw ::com::sun::star::lang::IllegalArgumentException(
+                    ( ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
+                +=  GetPropertyName((sal_uInt16)nPropId) )
+                +=  ::rtl::OUString::createFromAscii(" (double, integer, or string expected)."),
+            static_cast< ::com::sun::star::beans::XPropertySet* >(this),
+            1);
+    }
+
+    return UnoControlModel::convertFastPropertyValue( rConvertedValue, rOldValue, nPropId, rValue );
 }
 
 uno::Any UnoControlFormattedFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 05:47:45 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 13:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,14 @@ class UnoControlFormattedFieldModel : public UnoControlModel
 protected:
     ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+protected:
+    sal_Bool SAL_CALL convertFastPropertyValue(
+                ::com::sun::star::uno::Any& rConvertedValue,
+                ::com::sun::star::uno::Any& rOldValue,
+                sal_Int32 nPropId,
+                const ::com::sun::star::uno::Any& rValue
+            ) throw (::com::sun::star::lang::IllegalArgumentException);
 
 public:
                         UnoControlFormattedFieldModel();
