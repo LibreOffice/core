@@ -25,6 +25,7 @@ mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb
 
 ..\data\org\openoffice\Office\Bibliography.xcd %_DEST%\xml%_EXT%\office\definition\org.openoffice.Office.Bibliography.xcd
 ..\data\org\openoffice\Office\Calc.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Calc.xcd
+..\data\org\openoffice\Office\Player.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Player.xcd
 ..\data\org\openoffice\Office\Chart.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Chart.xcd
 ..\data\org\openoffice\Office\Common.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Common.xcd
 ..\data\org\openoffice\Office\DataAccess.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\DataAccess.xcd
@@ -45,6 +46,7 @@ mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb
 
 ..\%__SRC%\misc\instance\org\openoffice\Office\Bibliography.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Bibliography.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Calc.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Calc.xml
+..\%__SRC%\misc\instance\org\openoffice\Office\Player.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Player.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Chart.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Chart.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Common.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Common.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\DataAccess.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\DataAccess.xml
@@ -67,6 +69,7 @@ mkdir: %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb
 
 ..\%__SRC%\misc\template\org\openoffice\Office\Bibliography.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Bibliography.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Calc.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Calc.xml
+..\%__SRC%\misc\template\org\openoffice\Office\Player.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Player.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Chart.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Chart.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Common.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Common.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\DataAccess.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\DataAccess.xml
