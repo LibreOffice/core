@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:44:07 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 12:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,10 +173,10 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (registry::InvalidRegistryException &)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
-    return True;
+    return sal_True;
 }
 
 void * SAL_CALL component_getFactory( const sal_Char * pImplName,
