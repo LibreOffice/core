@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-30 13:16:29 $
+ *  last change: $Author: jp $ $Date: 2001-04-05 14:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,8 +856,12 @@ void SwDoc::SetForbiddenCharacters( USHORT nLang,
                 const com::sun::star::i18n::ForbiddenCharacters& rFChars )
 {
     if( !xForbiddenCharsTable.isValid() )
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable(
-                                ::comphelper::getProcessServiceFactory() );
+    {
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+    }
     xForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
     if( pDrawModel )
     {
