@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2464,6 +2464,7 @@ void ScCompiler::Factor()
                 // wird die referierte verschoben, aendert sich der Wert
                 case ocColumn :
                 case ocRow :
+                case ocCell :   // CELL needs recalc on move for some possible type values
                     pArr->SetRecalcModeOnRefMove();
                 break;
             }
