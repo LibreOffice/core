@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-08 12:38:21 $
+ *  last change: $Author: nn $ $Date: 2002-05-22 10:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,14 +1418,19 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 
         if ( bAutoDec )         // automatic decimal places
         {
-            if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText )
+            //  #99391# adjust only if the format contains no text elements, no conditions
+            //  and no color definition (detected by the '[' at the start)
+
+            if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+                    aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
                 nIndex = pFormatter->GetStandardIndex( nFormatLang );
         }
         if ( bAutoInt )         // automatic integer digits
         {
             //! only if two decimal places was set?
 
-            if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText )
+            if ( nType == XML_TOK_STYLES_NUMBER_STYLE && !bHasExtraText &&
+                    aMyConditions.size() == 0 && sFormat.toChar() != (sal_Unicode)'[' )
                 nIndex = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, nFormatLang );
         }
 
