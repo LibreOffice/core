@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:03:44 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ provoking error here, because PP ignores #error
 #elif (__GNUC__ == 2)
 #error "Tested gcc 2 versions are 2.91 and 2.95.  Patch uno/lbnames.h to try your gcc 2 version."
 #elif (__GNUC__ == 3 && __GNUC_MINOR__ <= 4)
+#define __CPPU_ENV gcc3
+#elif (__GNUC__ == 4 && __GNUC_MINOR__ == 0)
 #define __CPPU_ENV gcc3
 #elif (__GNUC__ == 3)
 #error "Tested gcc 3 version is <= 3.4.  Patch uno/lbnames.h to try your gcc 3 version."
