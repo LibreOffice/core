@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 19:15:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-11 05:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Abrir";
+            Text[ finnish ] = "~Avaa";
         };
         MenuItem
         {
@@ -124,6 +125,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Yeni bir pencerede aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Abrir en nueva ~ventana";
+            Text[ finnish ] = "Avaa uudessa ikkunassa";
         };
         MenuItem
         {
@@ -153,6 +155,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "D~üzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Editar";
+            Text[ finnish ] = "~Muokkaa";
         };
         MenuItem
         {
@@ -182,6 +185,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Yeniden yükle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Recargar";
+            Text[ finnish ] = "~Lataa uudelleen";
         };
         MenuItem
         {
@@ -211,6 +215,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Frame'i yeniden yükle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Recargar frame";
+            Text[ finnish ] = "Lataa kehys uudelleen";
         };
         MenuItem
         {
@@ -240,6 +245,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "HTM~L  kaynak kodu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Texto fuente ~HTML";
+            Text[ finnish ] = "~HTML-lähde";
         };
         SEPARATOR
         MenuItem
@@ -270,6 +276,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Dur";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Stop";
+            Text[ finnish ] = "~Seis";
         };
         MenuItem
         {
@@ -299,6 +306,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "µÚ·Î";
             Text[ turkish ] = "Geri";
             Text[ catalan ] = "~Retroceder";
+            Text[ finnish ] = "Taaksepäin";
         };
         MenuItem
         {
@@ -328,6 +336,7 @@ Menu MN_READONLY_POPUP
             Text[ korean ] = "¾ÕÀ¸·Î(~F)";
             Text[ turkish ] = "Ýleri";
             Text[ catalan ] = "~Avanzar";
+            Text[ finnish ] = "~Eteenpäin";
         };
         SEPARATOR
         MenuItem
@@ -358,6 +367,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafiði kaydet...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Guardar ~imagen...";
+            Text[ finnish ] = "Tallenna kuvat";
         };
         MenuItem
         {
@@ -397,6 +407,7 @@ Menu MN_READONLY_POPUP
                         Text[ korean ] = "¸µÅ©·Î¼­";
                         Text[ turkish ] = "Baðlantý olarak";
                         Text[ catalan ] = "Como vínculo";
+                        Text[ finnish ] = "Linkkinä";
                     };
                     MenuItem
                     {
@@ -426,6 +437,7 @@ Menu MN_READONLY_POPUP
                         Text[ turkish ] = "Kopyala";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Copiar";
+                        Text[ finnish ] = "Kopioi";
                     };
                     SEPARATOR
                 };
@@ -452,6 +464,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafik ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Añadir imagen";
+            Text[ finnish ] = "Lisää kuva";
         };
         MenuItem
         {
@@ -481,6 +494,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Artalaný kaydet";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Guardar ~fondo...";
+            Text[ finnish ] = "Tallenna tausta";
         };
         MenuItem
         {
@@ -520,6 +534,7 @@ Menu MN_READONLY_POPUP
                         Text[ turkish ] = "Baðlantý olarak";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Como vínculo";
+                        Text[ finnish ] = "Linkkinä";
                     };
                     MenuItem
                     {
@@ -549,6 +564,7 @@ Menu MN_READONLY_POPUP
                         Text[ turkish ] = "Kopyala";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Copiar";
+                        Text[ finnish ] = "Kopioi";
                     };
                     SEPARATOR
                 };
@@ -575,6 +591,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Artalaný ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Añadir ~fondo";
+            Text[ finnish ] = "Lisää tausta";
         };
         SEPARATOR
         MenuItem
@@ -605,6 +622,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Baðlantýyý kopyala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Copiar vínculo";
+            Text[ finnish ] = "~Kopioi linkki";
         };
         MenuItem
         {
@@ -637,6 +655,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafiði kopyala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Copiar imagen";
+            Text[ finnish ] = "~Kopioi kuva";
         };
         SEPARATOR
         MenuItem
@@ -667,6 +686,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafikleri yükle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cargar ~imágenes";
+            Text[ finnish ] = "Lataa kuvat";
         };
         MenuItem
         {
@@ -696,6 +716,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Grafikleri kapat";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Desactivar ~imágenes";
+            Text[ finnish ] = "Grafiikka pois käytöstä";
         };
 #ifdef WNT
         MenuItem
@@ -726,6 +747,7 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Plug-in'leri kapat";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Desactivar ~Plug-ins";
+            Text[ finnish ] = "Lisäosat pois käytöstä";
         };
 #endif
     };
@@ -756,6 +778,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ turkish ] = "Grafik ver";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Exportar imagen";
+    Text[ finnish ] = "Grafiikan tuonti";
 };
 String STR_CHAIN_OK
 {
@@ -783,6 +806,7 @@ String STR_CHAIN_OK
     Text[ turkish ] = "Çerçeveler arasý baðlantý oluþturmak için sol fare tuþunu kullanýn.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pulse el botón izquierdo del ratón para vincular las marcos.";
+    Text[ finnish ] = "Linkitä kehykset napsauttamalla hiiren kakkospainiketta.";
 };
 String STR_CHAIN_NOT_EMPTY
 {
@@ -810,6 +834,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ turkish ] = "Hedef çerçeve boþ deðil.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco destino no está vacío.";
+    Text[ finnish ] = "Kohdekehys ei ole tyhjä.";
 };
 String STR_CHAIN_IS_IN_CHAIN
 {
@@ -837,6 +862,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ turkish ] = "Hedef çerçeve baðlantýsý oluþturulmuþ durumda.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco destino ya está vinculado.";
+    Text[ finnish ] = "Kohdekehys on jo linkitetty.";
 };
 String STR_CHAIN_WRONG_AREA
 {
@@ -864,6 +890,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ turkish ] = "Hedef çerçeve baðlantý oluþturulamayacak bir alanda bulunuyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco destino se encuentra en un área en la que los vínculos no son posibles.";
+    Text[ finnish ] = "Linkin kohdekehys on virheellisellä alueella.";
 };
 String STR_CHAIN_NOT_FOUND
 {
@@ -891,6 +918,7 @@ String STR_CHAIN_NOT_FOUND
     Text[ turkish ] = "Yürürlükteki konumda hedef çerçeve bulunamýyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "En la posición actual no se puede encontrar ningún marco destino.";
+    Text[ finnish ] = "Kohdekehystä ei löytynyt nykyisestä sijainnista.";
 };
 String STR_CHAIN_SOURCE_CHAINED
 {
@@ -918,6 +946,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ turkish ] = "Kaynak çerçeve zaten bir baðlantý zincirinin kaynaðý.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco origen ya es la fuente de un vínculo.";
+    Text[ finnish ] = "Kohdekehys on jo linkin lähde.";
 };
 String STR_CHAIN_SELF
 {
@@ -945,6 +974,7 @@ String STR_CHAIN_SELF
     Text[ turkish ] = "Kapalý bir zincir oluþturulamaz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es posible una secuencia cerrada.";
+    Text[ finnish ] = "Suljettu linkki ei ole mahdollinen.";
 };
 String STR_REDLINE_INSERT
 {
@@ -972,6 +1002,7 @@ String STR_REDLINE_INSERT
     Text[ korean ] = "»ðÀÔµÊ";
     Text[ turkish ] = "Eklendi";
     Text[ catalan ] = "Insertado";
+    Text[ finnish ] = "Lisätty";
 };
 String STR_REDLINE_DELETE
 {
@@ -999,6 +1030,7 @@ String STR_REDLINE_DELETE
     Text[ turkish ] = "Silindi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminado";
+    Text[ finnish ] = "Poistettu";
 };
 String STR_REDLINE_FORMAT
 {
@@ -1026,6 +1058,7 @@ String STR_REDLINE_FORMAT
     Text[ korean ] = "¼­½Ä Àû¿ë";
     Text[ turkish ] = "Faormatlandý";
     Text[ catalan ] = "Formateado";
+    Text[ finnish ] = "Muotoiltu";
 };
 String STR_REDLINE_TABLE
 {
@@ -1053,6 +1086,7 @@ String STR_REDLINE_TABLE
     Text[ turkish ] = "Tablo deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla modificada";
+    Text[ finnish ] = "Taulukko muuttunut";
 };
 String STR_REDLINE_FMTCOLL
 {
@@ -1080,6 +1114,7 @@ String STR_REDLINE_FMTCOLL
     Text[ turkish ] = "Paragraf þablonu belirlendi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicado estilo de párrafo";
+    Text[ finnish ] = "Käytetyt kappaletyylit";
 };
 String STR_ENDNOTE
 {
@@ -1107,6 +1142,7 @@ String STR_ENDNOTE
     Text[ turkish ] = "Son not: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota final:  ";
+    Text[ finnish ] = "Loppuhuomautus: ";
 };
 String STR_FTNNOTE
 {
@@ -1134,6 +1170,7 @@ String STR_FTNNOTE
     Text[ turkish ] = "Dipnot: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota al pie:  ";
+    Text[ finnish ] = "Alaviite: ";
 };
 
 InfoBox MSG_READONLY_CONTENT
@@ -1162,5 +1199,6 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ turkish ] = "Salt okunur bir içerik deðiþtirilemez.\nYapýlan deðiþiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La marca o selección se encuentra en una posición protegida.\nPor ello no se puede aceptar una modificación.";
+    MESSAGE[ finnish ] = "Vain luku -sisältöä ei voi muuttaa.\nMuokkauksia ei hyväksytä";
 };
 
