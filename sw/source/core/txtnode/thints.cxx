@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-06 13:20:55 $
+ *  last change: $Author: jp $ $Date: 2001-09-24 15:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,17 +72,9 @@
 #ifndef _SOT_FACTORY_HXX
 #include <sot/factory.hxx>
 #endif
-
-#if SUPD<=637
-#ifndef _SVX_XMLCNITM_HXX
-#include <xmloff/xmlcnitm.hxx>
-#endif
-#else
 #ifndef _SVX_XMLCNITM_HXX
 #include <svx/xmlcnitm.hxx>
 #endif
-#endif
-
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
@@ -103,9 +95,6 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
-#endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
 #ifndef _TXTINET_HXX //autogen
@@ -2250,16 +2239,8 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
     USHORT nRet = LANGUAGE_DONTKNOW;
     if( pSwpHints )
     {
-        if( pBreakIt->xBreak.is() )
-        {
-            // if the interessted position is at the String end, then use
-            // the previous character; if exist!
-            USHORT nAskPos = nBegin;
-            if( nAskPos && nAskPos == aText.Len() )
-                --nAskPos;
-            nWhichId = GetWhichOfScript( nWhichId,
-                        pBreakIt->xBreak->getScriptType( aText, nAskPos ) );
-        }
+        nWhichId = GetWhichOfScript( nWhichId,
+                        pBreakIt->GetRealScriptOfText( aText, nBegin ));
 
         xub_StrLen nEnd = nBegin + nLen;
         for( USHORT i = 0, nSize = pSwpHints->Count(); i < nSize; ++i )
@@ -2307,14 +2288,9 @@ USHORT SwTxtNode::GetLang( const xub_StrLen nBegin, const xub_StrLen nLen) const
     }
     if( LANGUAGE_DONTKNOW == nRet )
     {
-//??        if( nBegin )
         if( !pSwpHints )
-        {
-            nWhichId = RES_CHRATR_LANGUAGE;
-            if( aText.Len() && pBreakIt->xBreak.is() )
-                nWhichId = GetWhichOfScript( nWhichId,
-                            pBreakIt->xBreak->getScriptType( aText, 0 ) );
-        }
+            nWhichId = GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                        pBreakIt->GetRealScriptOfText( aText, 0 ));
 
         nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
