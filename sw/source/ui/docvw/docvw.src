@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:39:26 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "×°ÈëÍ¼ĞÎ";
             Text[ russian ] = "Çàãğóçèòü ğèñóíêè";
             Text[ polish ] = "Za³aduj grafiki";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ(~L)";
+            Text[ japanese ] = "}‚Ì“Ç‚İ‚İ";
             Text[ chinese_traditional ] = "¸ü¤J¹Ï§Î";
             Text[ arabic ] = "ÊÍãíá ÇáÕæÑ";
             Text[ dutch ] = "A~fbeeldingen laden";
@@ -754,7 +754,7 @@ Menu MN_READONLY_POPUP
             Text[ chinese_simplified ] = "ÒşÈëÍ¼ĞÎ";
             Text[ russian ] = "Îòêëş÷èòü ğèñóíêè";
             Text[ polish ] = "Wy³¹cz grafiki";
-            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì”ñ•\\¦(~O)";
+            Text[ japanese ] = "}‚Ì”ñ•\\¦(~O)";
             Text[ chinese_traditional ] = "Áô¤J¹Ï§Î";
             Text[ arabic ] = "ÅÎİÇÁ ÇáÕæÑ";
             Text[ dutch ] = "~Afbeeldingen uitschakelen";
@@ -812,7 +812,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ chinese_simplified ] = "Í¼ĞÎ-Êä³ö";
     Text[ russian ] = "İêñïîğò ğèñóíêà";
     Text[ polish ] = "Eksport grafiki";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸´¸½Îß°Ä";
+    Text[ japanese ] = "}‚Ì´¸½Îß°Ä";
     Text[ chinese_traditional ] = "¿é¥X¹Ï§Î";
     Text[ arabic ] = "ÊÕÏíÑ ÕæÑ";
     Text[ dutch ] = "Afbeelding exporteren";
