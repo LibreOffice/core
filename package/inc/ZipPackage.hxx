@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-19 17:00:52 $
+ *  last change: $Author: mav $ $Date: 2002-02-27 15:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class ZipFile;
 class ByteGrabber;
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
-    namespace io { class XStream; class XOutputStream; class XInputStream; class XSeekable; }
+    namespace io { class XStream; class XOutputStream; class XInputStream; class XSeekable; class XActiveDataStreamer; }
     namespace lang { class XMultiServiceFactory; }
     namespace task { class XInteractionHandler; }
 } } }
@@ -147,7 +147,8 @@ protected:
     ZipFile          *pZipFile;
 
     void getZipFileContents();
-    sal_Bool writeFileIsTemp( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& );
+    sal_Bool writeFileIsTemp();
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XActiveDataStreamer > openOriginalForOutput();
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);

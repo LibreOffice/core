@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-22 16:00:56 $
+ *  last change: $Author: mav $ $Date: 2002-02-27 15:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,8 @@
 #include <memory>
 #include <vector>
 
+#include <unotools/localfilehelper.hxx>
+#include <tools/debug.hxx>
 
 using namespace rtl;
 using namespace ucb;
@@ -201,6 +203,29 @@ public:
     virtual void SAL_CALL setStream( const Reference< XStream >& stream )
             throw( RuntimeException )
             { mStream = stream; }
+};
+
+class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
+{
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        { return 0; }
+
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        { return 0; }
+
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        {}
+
+    virtual sal_Int32 SAL_CALL available()
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        { return 0; }
+
+    virtual void SAL_CALL closeInput()
+            throw ( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
+        {}
 };
 
 //===========================================================================
@@ -686,20 +711,28 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     return xRef;
 }
 
-sal_Bool ZipPackage::writeFileIsTemp( Reference< XOutputStream >& aOrigStream )
+sal_Bool ZipPackage::writeFileIsTemp()
 {
     // In case the target local file does not exist or empty
     // write directly to it otherwize create a temporary file to write to
 
     sal_Bool aUseTemp = sal_True;
     Reference < XOutputStream > xTempOut;
+    Reference< XActiveDataStreamer > xSink;
 
-    if ( eMode == e_IMode_URL && !pZipFile && aOrigStream.is() )
+    if ( eMode == e_IMode_URL && !pZipFile
+        && ::utl::LocalFileHelper::IsLocalFile( sURL ) )
     {
-        xTempOut = aOrigStream;
-        aUseTemp = sal_False;
+        xSink = openOriginalForOutput();
+        if( xSink.is() )
+        {
+            xTempOut = xSink->getStream()->getOutputStream();
+            if( xTempOut.is() )
+                aUseTemp = sal_False;
+        }
     }
-    else
+
+    if( aUseTemp )
     {
         // create temporary file
         const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
@@ -823,8 +856,29 @@ sal_Bool ZipPackage::writeFileIsTemp( Reference< XOutputStream >& aOrigStream )
     }
 
     // Update our References to point to the new temp file
-    xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY );
-    xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
+    if( aUseTemp )
+    {
+        xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY );
+        xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
+    }
+    else
+    {
+        // the case when the original file was written directly
+
+        try
+        {
+            // the output should be closed after request fo input
+            // to avoid file closing
+            xContentStream = xSink->getStream()->getInputStream();
+            xTempOut->closeOutput();
+            xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
+        }
+        catch( Exception& )
+        {
+        }
+
+        DBG_ASSERT( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
+    }
 
     // seek back to the beginning of the temp file so we can read segments from it
     xContentSeek->seek ( 0 );
@@ -834,6 +888,48 @@ sal_Bool ZipPackage::writeFileIsTemp( Reference< XOutputStream >& aOrigStream )
         pZipFile = new ZipFile ( xContentStream, xFactory, sal_False );
 
     return aUseTemp;
+}
+
+Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
+{
+    // open and truncate the original file
+    Content aOriginalContent (sURL, Reference < XCommandEnvironment >() );
+    Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
+
+    if ( eMode == e_IMode_URL )
+    {
+        try
+        {
+            try
+            {
+                sal_Int64 aSize = 0;
+                aOriginalContent.setPropertyValue( OUString::createFromAscii( "Size" ), makeAny( aSize ) );
+            }
+            catch( Exception& )
+            {
+                // the file is not accessible
+                // just try to write an empty stream to it
+
+                Reference< XInputStream > xTempIn = new DummyInputStream; //Reference< XInputStream >( xTempOut, UNO_QUERY );
+                aOriginalContent.writeStream( xTempIn , sal_True );
+            }
+
+            OpenCommandArgument2 aArg;
+               aArg.Mode        = OpenMode::DOCUMENT;
+               aArg.Priority    = 0; // unused
+               aArg.Sink       = xSink;
+               aArg.Properties = Sequence< Property >( 0 ); // unused
+
+            aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
+        }
+        catch( Exception& )
+        {
+            // seems to be nonlocal file
+            // temporary file mechanics should be used
+        }
+    }
+
+    return xSink;
 }
 
 // XChangesBatch
@@ -847,53 +943,33 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
     }
 
-    Content aOriginalContent (sURL, Reference < XCommandEnvironment >() );
-    Reference< XOutputStream > aOrigFileStream;
-
-    if ( eMode == e_IMode_URL )
-    {
-        // local file can be written directly if it empty or does not exist
-
-        Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
-
-        try
-        {
-            // to be sure that the file exists
-            if( !pZipFile )
-                aOriginalContent.writeStream( Reference< XInputStream >(), sal_False );
-
-            OpenCommandArgument2 aArg;
-               aArg.Mode        = OpenMode::DOCUMENT;
-               aArg.Priority    = 0; // unused
-               aArg.Sink       = xSink;
-               aArg.Properties = Sequence< Property >( 0 ); // unused
-
-            aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
-
-            aOrigFileStream = xSink->getStream()->getOutputStream();
-        }
-        catch( Exception& )
-        {
-            // seems to be nonlocal file
-            // temporary file mechanics should be used
-        }
-    }
-
     RTL_LOGFILE_TRACE_AUTHOR ( "package", LOGFILE_AUTHOR, "{ ZipPackage::commitChanges" );
     // First we write the entire package to a temporary file. After writeTempFile,
     // xContentSeek and xContentStream will reference the new temporary file.
     // Exception - empty or nonexistent local file that is written directly
 
-    if ( writeFileIsTemp( aOrigFileStream ) && eMode == e_IMode_URL )
+    if ( writeFileIsTemp() && eMode == e_IMode_URL )
     {
-        if( aOrigFileStream.is() )
+        Reference< XOutputStream > aOrigFileStream;
+
+        if( ::utl::LocalFileHelper::IsLocalFile( sURL ) )
         {
             // write directly in case of local file
-            copyInputToOutput( xContentStream, aOrigFileStream );
-            aOrigFileStream->closeOutput();
-            xContentSeek->seek ( 0 );
+            Reference< XActiveDataStreamer > xSink = openOriginalForOutput();
+
+            if( xSink.is() )
+            {
+                aOrigFileStream = xSink->getStream()->getOutputStream();
+                if( aOrigFileStream.is() )
+                {
+                    copyInputToOutput( xContentStream, aOrigFileStream );
+                    aOrigFileStream->closeOutput();
+                    xContentSeek->seek ( 0 );
+                }
+            }
         }
-        else
+
+        if( !aOrigFileStream.is() )
         {
             Reference < XPropertySet > xPropSet ( xContentStream, UNO_QUERY );
             if ( xPropSet.is() )
@@ -927,6 +1003,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
             {
                 // not quite sure how it could happen that xContentStream WOULDN'T support
                 // XPropertySet, but just in case... :)
+
+                Content aOriginalContent (sURL, Reference < XCommandEnvironment >() );
 
                 try
                 {
