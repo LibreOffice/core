@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:51:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
             if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )
             {
                 SdrObject* pSObj = aUndoIter.pSelFmt->FindSdrObject();
-                ((SwFEShell*)this)->SelectObj( pSObj->GetBoundRect().Center() );
+                ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
             }
             else
             {
@@ -250,7 +250,7 @@ USHORT SwEditShell::Redo( USHORT nCnt )
             if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )
             {
                 SdrObject* pSObj = aUndoIter.pSelFmt->FindSdrObject();
-                ((SwFEShell*)this)->SelectObj( pSObj->GetBoundRect().Center() );
+                ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
             }
             else
             {
