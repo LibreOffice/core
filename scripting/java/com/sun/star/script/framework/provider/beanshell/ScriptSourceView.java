@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSourceView.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 13:28:39 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:29:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -64,5 +64,6 @@ public interface ScriptSourceView {
     public void clear();
     public void update();
     public boolean isModified();
+    public void setModified(boolean value);
     public String getText();
 }
