@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-24 12:15:35 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,6 +770,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_nResetsPending(0)
         ,m_bForwardingConnection(sal_False)
         ,m_pAggregatePropertyMultiplexer(NULL)
+        ,m_bSharingConnection ( sal_False )
 {
     DBG_CTOR(ODatabaseForm,NULL);
 
@@ -1929,16 +1930,9 @@ void ODatabaseForm::disposing()
 //------------------------------------------------------------------------------
 Reference< XConnection >  ODatabaseForm::getConnection()
 {
-    Reference< XConnection >  xReturn;
-    try
-    {
-        ::cppu::extractInterface(xReturn, getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
-    }
-    catch(Exception&)
-    {
-    }
-
-    return xReturn;
+    Reference< XConnection > xConn;
+    m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConn;
+    return xConn;
 }
 
 //==============================================================================
@@ -2950,7 +2944,24 @@ void SAL_CALL ODatabaseForm::getGroupByName(const ::rtl::OUString& Name, Sequenc
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::disposing(const EventObject& Source) throw( RuntimeException )
 {
+    // does the call come from the connection which we are sharing with our parent?
+    if ( isSharingConnection() )
+    {
+        Reference< XConnection > xConnSource( Source.Source, UNO_QUERY );
+        if ( xConnSource.is() )
+        {
+#ifdef _DEBUG
+            Reference< XConnection > xActiveConn;
+            m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xActiveConn;
+            OSL_ENSURE( xActiveConn.get() == xConnSource.get(), "ODatabaseForm::disposing: where did this come from?" );
+                // there should be exactly one XConnection object we're listening at - our aggregate connection
+#endif
+            disposingSharedConnection( xConnSource );
+        }
+    }
+
     OInterfaceContainer::disposing(Source);
+
     // does the disposing come from the aggregate ?
     if (m_xAggregate.is())
     {   // no -> forward it
@@ -2991,6 +3002,7 @@ void SAL_CALL ODatabaseForm::unloading(const EventObject& aEvent) throw( Runtime
         if (xParentRowSet.is())
             xParentRowSet->removeRowSetListener(this);
     }
+
     unload();
 }
 
@@ -3041,10 +3053,157 @@ void SAL_CALL ODatabaseForm::load() throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
+sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rxParentProps )
+{
+    // our own data source
+    ::rtl::OUString sOwnDatasource;
+    m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCE ) >>= sOwnDatasource;
+
+    // our parents data source
+    ::rtl::OUString sParentDataSource;
+    OSL_ENSURE( _rxParentProps.is() && _rxParentProps->getPropertySetInfo().is() && _rxParentProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_DATASOURCE ),
+        "ODatabaseForm::doShareConnection: invalid parent form!" );
+    if ( _rxParentProps.is() )
+        _rxParentProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sParentDataSource;
+
+    sal_Bool bCanShareConnection = sal_False;
+
+    // both rowsets share are connected to the same data source
+    if ( sParentDataSource == sOwnDatasource )
+    {
+        if ( 0 != sParentDataSource.getLength() )
+            // and it's really a data source name (not empty)
+            bCanShareConnection = sal_True;
+        else
+        {   // the data source name is empty
+            // -> ook for the URL
+            ::rtl::OUString sParentURL;
+            ::rtl::OUString sMyURL;
+            _rxParentProps->getPropertyValue( PROPERTY_URL ) >>= sParentURL;
+            m_xAggregateSet->getPropertyValue( PROPERTY_URL ) >>= sMyURL;
+
+            bCanShareConnection = (sParentURL == sMyURL);
+        }
+    }
+
+    if ( bCanShareConnection )
+    {
+        // check for the user/password
+
+        // take the user property on the rowset (if any) into account
+        ::rtl::OUString sParentUser, sParentPwd;
+        _rxParentProps->getPropertyValue( PROPERTY_USER ) >>= sParentUser;
+        _rxParentProps->getPropertyValue( PROPERTY_PASSWORD ) >>= sParentPwd;
+
+        ::rtl::OUString sMyUser, sMyPwd;
+        m_xAggregateSet->getPropertyValue( PROPERTY_USER ) >>= sMyUser;
+        m_xAggregateSet->getPropertyValue( PROPERTY_PASSWORD ) >>= sMyPwd;
+
+        bCanShareConnection =
+                ( sParentUser == sMyUser )
+            &&  ( sParentPwd == sMyPwd );
+    }
+
+    return bCanShareConnection;
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseForm::doShareConnection( const Reference< XPropertySet >& _rxParentProps )
+{
+    // get the conneciton of the parent
+    Reference< XConnection > xParentConn;
+    _rxParentProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xParentConn;
+    OSL_ENSURE( xParentConn.is(), "ODatabaseForm::doShareConnection: we're a valid sub-form, but the parent has no connection??!!!" );
+
+    if ( xParentConn.is() )
+    {
+        // add as dispose listener to the connection
+        Reference< XComponent > xParentConnComp( xParentConn, UNO_QUERY );
+        OSL_ENSURE( xParentConnComp.is(), "ODatabaseForm::doShareConnection: invalid connection!" );
+        xParentConnComp->addEventListener( static_cast< XLoadListener* >( this ) );
+
+        // forward the connection to our own aggreagte
+        m_bForwardingConnection = sal_True;
+        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xParentConn ) );
+        m_bForwardingConnection = sal_False;
+
+        m_bSharingConnection = sal_True;
+    }
+    else
+        m_bSharingConnection = sal_False;
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseForm::disposingSharedConnection( const Reference< XConnection >& _rxConn )
+{
+    stopSharingConnection();
+
+    // TODO: we could think about whether or not to re-connect.
+    unload( );
+}
+
+//------------------------------------------------------------------------------
+void ODatabaseForm::stopSharingConnection( )
+{
+    OSL_ENSURE( m_bSharingConnection, "ODatabaseForm::stopSharingConnection: invalid call!" );
+
+    if ( m_bSharingConnection )
+    {
+        // get the connection
+        Reference< XConnection > xSharedConn;
+        m_xAggregateSet->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xSharedConn;
+        OSL_ENSURE( xSharedConn.is(), "ODatabaseForm::stopSharingConnection: there's no conn!" );
+
+        // remove ourself as event listener
+        Reference< XComponent > xSharedConnComp( xSharedConn, UNO_QUERY );
+        if ( xSharedConnComp.is() )
+            xSharedConnComp->removeEventListener( static_cast< XLoadListener* >( this ) );
+
+        // no need to dispose the conn: we're not the owner, this is our parent
+        // (in addition, this method may be called if the connection is beeing disposed while we use it)
+
+        // reset the property
+        xSharedConn.clear();
+        m_bForwardingConnection = sal_True;
+        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSharedConn ) );
+        m_bForwardingConnection = sal_False;
+
+        // reset the flag
+        m_bSharingConnection = sal_False;
+    }
+}
+
+//------------------------------------------------------------------------------
 sal_Bool ODatabaseForm::implEnsureConnection()
 {
     try
     {
+        if ( getConnection( ).is() )
+            // if our aggregate already has a connection, nothing needs to be done about it
+            return sal_True;
+
+        m_bSharingConnection = sal_False;
+
+        // if we're a sub form, we try to re-use the connection of our parent
+        if (m_bSubForm)
+        {
+            OSL_ENSURE( Reference< XForm >( getParent(), UNO_QUERY ).is(),
+                "ODatabaseForm::implEnsureConnection: m_bSubForm is TRUE, but the parent is no form?" );
+
+            Reference< XPropertySet > xParentProps( getParent(), UNO_QUERY );
+
+            // can we re-use (aka share) the connection of the parent?
+            if ( canShareConnection( xParentProps ) )
+            {
+                // yep -> do it
+                doShareConnection( xParentProps );
+                // success?
+                if ( m_bSharingConnection )
+                    // yes -> outta here
+                    return sal_True;
+            }
+        }
+
         if (m_xAggregateSet.is())
         {
             // do we have a connection in the hierarchy than take that connection
@@ -3149,6 +3308,11 @@ void SAL_CALL ODatabaseForm::unload() throw( RuntimeException )
     }
 
     m_bLoaded = sal_False;
+
+    // if the connection we used while we were loaded is only shared with our parent, we
+    // reset it
+    if ( isSharingConnection() )
+        stopSharingConnection();
 
     aGuard.clear();
     NOTIFY_LISTENERS(m_aLoadListeners, XLoadListener, unloaded, aEvt);
