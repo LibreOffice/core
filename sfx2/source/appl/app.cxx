@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,7 @@ SfxApplication::SfxApplication()
     aSettings.SetUILanguage( eUILanguage );
     aSettings.SetLanguage( eLanguage );
     Application::SetSettings( aSettings );
+
     // Create instance of SvtSysLocale _after_ setting the locale at the application,
     // so that it can initialize itself correctly.
     pSysLocale = new SvtSysLocale;
@@ -579,6 +580,7 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
+    // delete global options
     SvtViewOptions::ReleaseOptions();
     delete pSaveOptions;
     delete pUndoOptions;
