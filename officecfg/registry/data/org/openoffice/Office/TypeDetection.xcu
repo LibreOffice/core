@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-06-04 09:38:32 $
+ *  last change: $Author: as $ $Date: 2002-06-05 06:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3308,7 +3308,7 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Webseiten Abfrage (%productname% Calc)</value>
+        <value xml:lang="de">Webseiten-Abfrage (%productname% Calc)</value>
         <value xml:lang="x-translate">Web Page Query (%productname% Calc)</value>
         <value xml:lang="x-comment">Web Page Query (%productname% Calc)</value>
         <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
