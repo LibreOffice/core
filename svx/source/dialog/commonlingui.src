@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:11:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Size = MAP_APPFONT( 42, 10 );
         Text = "~Original" ;
         Text[ italian ] = "Originale";
-        Text[ portuguese_brazilian ] = "Palavra";
+        Text[ portuguese_brazilian ] = "Original";
         Text[ portuguese ] = "~Original";
         Text[ danish ] = "Oprindelig";
         Text[ french ] = "Original";
@@ -117,7 +117,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ ENGLISH ] = "~Word" ;
         Text [ norwegian ] = "Word" ;
         Text [ italian ] = "Parola" ;
-        Text [ portuguese_brazilian ] = "~Sugerir." ;
+        Text [ portuguese_brazilian ] = "Palavra" ;
         Text [ portuguese ] = "~Palavra" ;
         Text [ finnish ] = "Sa~na" ;
         Text [ danish ] = "Ord" ;
@@ -157,7 +157,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text = "~Vorschläge" ;
         Text [ ENGLISH ] = "~Suggestions" ;
         Text [ english_us ] = "~Suggestions" ;
-        Text [ portuguese_brazilian ] = "~Vorschl?ge" ;
+        Text [ portuguese_brazilian ] = "Sugestão" ;
         Text [ swedish ] = "~Förslag" ;
         Text [ danish ] = "Forslag" ;
         Text [ italian ] = "~Proposte" ;
@@ -374,6 +374,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ slovak ] = "~ZavrieÅ¥";
     };
 };
+
 
 
 
