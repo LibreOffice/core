@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:36:38 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ namespace cppu_threadpool {
     ORequestThread::ORequestThread( JobQueue *pQueue,
                                     const ByteSequence &aThreadId,
                                     sal_Bool bAsynchron )
-        : m_pQueue( pQueue )
-        , m_thread( 0 )
+        : m_thread( 0 )
+        , m_pQueue( pQueue )
         , m_aThreadId( aThreadId )
         , m_bAsynchron( bAsynchron )
         , m_bDeleteSelf( sal_True )
@@ -181,7 +181,8 @@ namespace cppu_threadpool {
     {
         OSL_ASSERT(m_thread == 0);  // only one running thread per instance
 
-        if ( m_thread = osl_createSuspendedThread( cppu_requestThreadWorker, (void*)this))
+        m_thread = osl_createSuspendedThread( cppu_requestThreadWorker, (void*)this);
+        if ( m_thread )
         {
             osl_resumeThread( m_thread );
         }
