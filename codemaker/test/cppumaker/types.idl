@@ -1,0 +1,559 @@
+/*************************************************************************
+ *
+ *  $RCSfile: types.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:54:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "com/sun/star/lang/ClassNotFoundException.idl"
+#include "com/sun/star/lang/IllegalAccessException.idl"
+#include "com/sun/star/lang/Locale.idl"
+#include "com/sun/star/uno/DeploymentException.idl"
+#include "com/sun/star/uno/Exception.idl"
+#include "com/sun/star/uno/RuntimeException.idl"
+#include "com/sun/star/uno/XInterface.idl"
+#include "com/sun/star/uno/XNamingService.idl"
+
+singleton FILE: com::sun::star::uno::XNamingService;
+singleton lconv: com::sun::star::uno::XNamingService;
+singleton tm: com::sun::star::uno::XNamingService;
+
+singleton std: com::sun::star::uno::XNamingService;
+
+module test { module codemaker { module cppumaker {
+
+interface XTest {
+    boolean test();
+
+    [attribute, bound] long A1;
+    [attribute, bound, readonly] long A2;
+    [attribute] long A3 {
+        get raises
+            (com::sun::star::uno::Exception,
+             com::sun::star::lang::ClassNotFoundException);
+        set raises (com::sun::star::uno::RuntimeException);
+    };
+    [attribute, readonly] long A4 {
+        get raises (com::sun::star::uno::DeploymentException);
+    };
+};
+
+typedef boolean Boolean;
+typedef byte Byte;
+typedef short Short;
+typedef unsigned short UnsignedShort;
+typedef long Long;
+typedef unsigned long UnsignedLong;
+typedef hyper Hyper;
+typedef unsigned hyper UnsignedHyper;
+typedef float Float;
+typedef double Double;
+typedef char Char;
+typedef string String;
+typedef type Type;
+typedef any Any;
+typedef com::sun::star::lang::Locale Locale;
+typedef com::sun::star::uno::XInterface XInterface;
+typedef com::sun::star::uno::XNamingService XNamingService;
+
+typedef sequence< Boolean > SequenceBoolean;
+typedef sequence< Byte > SequenceByte;
+typedef sequence< Short > SequenceShort;
+typedef sequence< UnsignedShort > SequenceUnsignedShort;
+typedef sequence< Long > SequenceLong;
+typedef sequence< UnsignedLong > SequenceUnsignedLong;
+typedef sequence< Hyper > SequenceHyper;
+typedef sequence< UnsignedHyper > SequenceUnsignedHyper;
+typedef sequence< Float > SequenceFloat;
+typedef sequence< Double > SequenceDouble;
+typedef sequence< Char > SequenceChar;
+typedef sequence< String > SequenceString;
+typedef sequence< Type > SequenceType;
+typedef sequence< Any > SequenceAny;
+typedef sequence< Locale > SequenceLocale;
+typedef sequence< XInterface > SequenceXInterface;
+typedef sequence< XNamingService > SequenceXNamingService;
+
+service S1: XTest {
+    create1();
+
+    create2([in] any... create2)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::uno::Exception,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create3([in] sequence<any> S1)
+        raises (com::sun::star::uno::RuntimeException,
+                com::sun::star::lang::ClassNotFoundException,
+                com::sun::star::lang::IllegalAccessException,
+                com::sun::star::uno::DeploymentException);
+
+    create4([in] long javamaker, [in] long S1, [in] long create4);
+
+    create5(
+        [in] boolean p1,
+        [in] byte p2,
+        [in] short p3,
+        [in] unsigned short p4,
+        [in] long p5,
+        [in] unsigned long p6,
+        [in] hyper p7,
+        [in] unsigned hyper p8,
+        [in] float p9,
+        [in] double p10,
+        [in] char p11,
+        [in] string p12,
+        [in] type p13,
+        [in] any p14,
+        [in] com::sun::star::lang::Locale p15,
+        [in] com::sun::star::uno::XInterface p16,
+        [in] com::sun::star::uno::XNamingService p17,
+        [in] Boolean t1,
+        [in] Byte t2,
+        [in] Short t3,
+        [in] UnsignedShort t4,
+        [in] Long t5,
+        [in] UnsignedLong t6,
+        [in] Hyper t7,
+        [in] UnsignedHyper t8,
+        [in] Float t9,
+        [in] Double t10,
+        [in] Char t11,
+        [in] String t12,
+        [in] Type t13,
+        [in] Any t14,
+        [in] Locale t15,
+        [in] XInterface t16,
+        [in] XNamingService t17,
+        [in] sequence< sequence< boolean > > a1,
+        [in] sequence< sequence< byte > > a2,
+        [in] sequence< sequence< short > > a3,
+        [in] sequence< sequence< unsigned short > > a4,
+        [in] sequence< sequence< long > > a5,
+        [in] sequence< sequence< unsigned long > > a6,
+        [in] sequence< sequence< hyper > > a7,
+        [in] sequence< sequence< unsigned hyper > > a8,
+        [in] sequence< sequence< float > > a9,
+        [in] sequence< sequence< double > > a10,
+        [in] sequence< sequence< char > > a11,
+        [in] sequence< sequence< string > > a12,
+        [in] sequence< sequence< type > > a13,
+        [in] sequence< sequence< any > > a14,
+        [in] sequence< sequence< com::sun::star::lang::Locale > > a15,
+        [in] sequence< sequence< com::sun::star::uno::XInterface > > a16,
+        [in] sequence< sequence<
+            com::sun::star::uno::XNamingService > > a17,
+        [in] sequence< SequenceBoolean > at1,
+        [in] sequence< SequenceByte > at2,
+        [in] sequence< SequenceShort > at3,
+        [in] sequence< SequenceUnsignedShort > at4,
+        [in] sequence< SequenceLong > at5,
+        [in] sequence< SequenceUnsignedLong > at6,
+        [in] sequence< SequenceHyper > at7,
+        [in] sequence< SequenceUnsignedHyper > at8,
+        [in] sequence< SequenceFloat > at9,
+        [in] sequence< SequenceDouble > at10,
+        [in] sequence< SequenceChar > at11,
+        [in] sequence< SequenceString > at12,
+        [in] sequence< SequenceType > at13,
+        [in] sequence< SequenceAny > at14,
+        [in] sequence< SequenceLocale > at15,
+        [in] sequence< SequenceXInterface > at16,
+        [in] sequence< SequenceXNamingService > at17);
+
+    asm([in] long asm);
+    auto([in] long auto);
+    bool([in] long bool);
+    break([in] long break);
+    //TODO: case([in] long case);
+    catch([in] long catch);
+    //TODO: char([in] long char);
+    class([in] long class);
+    //TODO: const([in] long const);
+    continue([in] long continue);
+    //TODO: default([in] long default);
+    delete([in] long delete);
+    do([in] long do);
+    //TODO: double([in] long double);
+    else([in] long else);
+    //TODO: enum([in] long enum);
+    explicit([in] long explicit);
+    export([in] long export);
+    extern([in] long extern);
+    false([in] long false);
+    //TODO: float([in] long float);
+    for([in] long for);
+    friend([in] long friend);
+    goto([in] long goto);
+    if([in] long if);
+    inline([in] long inline);
+    int([in] long int);
+    //TODO: long([in] long long);
+    mutable([in] long mutable);
+    namespace([in] long namespace);
+    new([in] long new);
+    operator([in] long operator);
+    private([in] long private);
+    protected([in] long protected);
+    public([in] long public);
+    register([in] long register);
+    return([in] long return);
+    //TODO: short([in] long short);
+    signed([in] long signed);
+    sizeof([in] long sizeof);
+    static([in] long static);
+    //TODO: struct([in] long struct);
+    //TODO: switch([in] long switch);
+    template([in] long template);
+    this([in] long this);
+    throw([in] long throw);
+    true([in] long true);
+    try([in] long try);
+    //TODO: typedef([in] long typedef);
+    typeid([in] long typeid);
+    typename([in] long typename);
+    //TODO: union([in] long union);
+    //TODO: unsigned([in] long unsigned);
+    using([in] long using);
+    virtual([in] long virtual);
+    //TODO: void([in] long void);
+    volatile([in] long volatile);
+    while([in] long while);
+
+    and([in] long and);
+    bitand([in] long bitand);
+    bitor([in] long bitor);
+    compl([in] long compl);
+    not([in] long not);
+    or([in] long or);
+    xor([in] long xor);
+
+    BUFSIZ([in] long BUFSIZ);
+    CLOCKS_PER_SEC([in] long CLOCKS_PER_SEC);
+    EDOM([in] long EDOM);
+    EOF([in] long EOF);
+    ERANGE([in] long ERANGE);
+    EXIT_FAILURE([in] long EXIT_FAILURE);
+    EXIT_SUCCESS([in] long EXIT_SUCCESS);
+    FILENAME_MAX([in] long FILENAME_MAX);
+    FOPEN_MAX([in] long FOPEN_MAX);
+    HUGE_VAL([in] long HUGE_VAL);
+    LC_ALL([in] long LC_ALL);
+    LC_COLLATE([in] long LC_COLLATE);
+    LC_CTYPE([in] long LC_CTYPE);
+    LC_MONETARY([in] long LC_MONETARY);
+    LC_NUMERIC([in] long LC_NUMERIC);
+    LC_TIME([in] long LC_TIME);
+    L_tmpnam([in] long L_tmpnam);
+    MB_CUR_MAX([in] long MB_CUR_MAX);
+    NULL([in] long NULL);
+    RAND_MAX([in] long RAND_MAX);
+    SEEK_CUR([in] long SEEK_CUR);
+    SEEK_END([in] long SEEK_END);
+    SEEK_SET([in] long SEEK_SET);
+    SIGABRT([in] long SIGABRT);
+    SIGFPE([in] long SIGFPE);
+    SIGILL([in] long SIGILL);
+    SIGINT([in] long SIGINT);
+    SIGSEGV([in] long SIGSEGV);
+    SIGTERM([in] long SIGTERM);
+    SIG_DFL([in] long SIG_DFL);
+    SIG_ERR([in] long SIG_ERR);
+    SIG_IGN([in] long SIG_IGN);
+    TMP_MAX([in] long TMP_MAX);
+    WCHAR_MAX([in] long WCHAR_MAX);
+    WCHAR_MIN([in] long WCHAR_MIN);
+    WEOF([in] long WEOF);
+    assert([in] long assert);
+    errno([in] long errno);
+    offsetof([in] long offsetof);
+    setjmp([in] long setjmp);
+    stderr([in] long stderr);
+    stdin([in] long stdin);
+    stdout([in] long stdout);
+
+    CHAR_BIT([in] long CHAR_BIT);
+    CHAR_MAX([in] long CHAR_MAX);
+    CHAR_MIN([in] long CHAR_MIN);
+    DBL_DIG([in] long DBL_DIG);
+    DBL_EPSILON([in] long DBL_EPSILON);
+    DBL_MANT_DIG([in] long DBL_MANT_DIG);
+    DBL_MAX([in] long DBL_MAX);
+    DBL_MAX_10_EXP([in] long DBL_MAX_10_EXP);
+    DBL_MAX_EXP([in] long DBL_MAX_EXP);
+    DBL_MIN([in] long DBL_MIN);
+    DBL_MIN_10_EXP([in] long DBL_MIN_10_EXP);
+    DBL_MIN_EXP([in] long DBL_MIN_EXP);
+    FLT_DIG([in] long FLT_DIG);
+    FLT_EPSILON([in] long FLT_EPSILON);
+    FLT_MANT_DIG([in] long FLT_MANT_DIG);
+    FLT_MAX([in] long FLT_MAX);
+    FLT_MAX_10_EXP([in] long FLT_MAX_10_EXP);
+    FLT_MAX_EXP([in] long FLT_MAX_EXP);
+    FLT_MIN([in] long FLT_MIN);
+    FLT_MIN_10_EXP([in] long FLT_MIN_10_EXP);
+    FLT_MIN_EXP([in] long FLT_MIN_EXP);
+    FLT_RADIX([in] long FLT_RADIX);
+    FLT_ROUNDS([in] long FLT_ROUNDS);
+    INT_MAX([in] long INT_MAX);
+    INT_MIN([in] long INT_MIN);
+    LDBL_DIG([in] long LDBL_DIG);
+    LDBL_EPSILON([in] long LDBL_EPSILON);
+    LDBL_MANT_DIG([in] long LDBL_MANT_DIG);
+    LDBL_MAX([in] long LDBL_MAX);
+    LDBL_MAX_10_EXP([in] long LDBL_MAX_10_EXP);
+    LDBL_MAX_EXP([in] long LDBL_MAX_EXP);
+    LDBL_MIN([in] long LDBL_MIN);
+    LDBL_MIN_10_EXP([in] long LDBL_MIN_10_EXP);
+    LDBL_MIN_EXP([in] long LDBL_MIN_EXP);
+    LONG_MAX([in] long LONG_MAX);
+    LONG_MIN([in] long LONG_MIN);
+    MB_LEN_MAX([in] long MB_LEN_MAX);
+    SCHAR_MAX([in] long SCHAR_MAX);
+    SCHAR_MIN([in] long SCHAR_MIN);
+    SHRT_MAX([in] long SHRT_MAX);
+    SHRT_MIN([in] long SHRT_MIN);
+    UCHAR_MAX([in] long UCHAR_MAX);
+    UINT_MAX([in] long UINT_MAX);
+    ULONG_MAX([in] long ULONG_MAX);
+    USHRT_MAX([in] long USHRT_MAX);
+
+    FILE([in] long FILE);
+    lconv([in] long lconv);
+    tm([in] long tm);
+
+    std([in] long std);
+
+    NDEBUG([in] long NDEBUG);
+};
+
+service S2: XTest;
+
+service S3 { interface XTest; };
+
+singleton S4 { service S2; };
+
+singleton asm: com::sun::star::uno::XNamingService;
+singleton auto: com::sun::star::uno::XNamingService;
+singleton bool: com::sun::star::uno::XNamingService;
+singleton break: com::sun::star::uno::XNamingService;
+//TODO: singleton case: com::sun::star::uno::XNamingService;
+singleton catch: com::sun::star::uno::XNamingService;
+//TODO: singleton char: com::sun::star::uno::XNamingService;
+singleton class: com::sun::star::uno::XNamingService;
+//TODO: singleton const: com::sun::star::uno::XNamingService;
+singleton continue: com::sun::star::uno::XNamingService;
+//TODO: singleton default: com::sun::star::uno::XNamingService;
+singleton delete: com::sun::star::uno::XNamingService;
+singleton do: com::sun::star::uno::XNamingService;
+//TODO: singleton double: com::sun::star::uno::XNamingService;
+singleton else: com::sun::star::uno::XNamingService;
+//TODO: singleton enum: com::sun::star::uno::XNamingService;
+singleton explicit: com::sun::star::uno::XNamingService;
+singleton export: com::sun::star::uno::XNamingService;
+singleton extern: com::sun::star::uno::XNamingService;
+singleton false: com::sun::star::uno::XNamingService;
+//TODO: singleton float: com::sun::star::uno::XNamingService;
+singleton for: com::sun::star::uno::XNamingService;
+singleton friend: com::sun::star::uno::XNamingService;
+singleton goto: com::sun::star::uno::XNamingService;
+singleton if: com::sun::star::uno::XNamingService;
+singleton inline: com::sun::star::uno::XNamingService;
+singleton int: com::sun::star::uno::XNamingService;
+//TODO: singleton long: com::sun::star::uno::XNamingService;
+singleton mutable: com::sun::star::uno::XNamingService;
+singleton namespace: com::sun::star::uno::XNamingService;
+singleton new: com::sun::star::uno::XNamingService;
+singleton operator: com::sun::star::uno::XNamingService;
+singleton private: com::sun::star::uno::XNamingService;
+singleton protected: com::sun::star::uno::XNamingService;
+singleton public: com::sun::star::uno::XNamingService;
+singleton register: com::sun::star::uno::XNamingService;
+singleton return: com::sun::star::uno::XNamingService;
+//TODO: singleton short: com::sun::star::uno::XNamingService;
+singleton signed: com::sun::star::uno::XNamingService;
+singleton sizeof: com::sun::star::uno::XNamingService;
+singleton static: com::sun::star::uno::XNamingService;
+//TODO: singleton struct: com::sun::star::uno::XNamingService;
+//TODO: singleton switch: com::sun::star::uno::XNamingService;
+singleton template: com::sun::star::uno::XNamingService;
+singleton this: com::sun::star::uno::XNamingService;
+singleton throw: com::sun::star::uno::XNamingService;
+singleton true: com::sun::star::uno::XNamingService;
+singleton try: com::sun::star::uno::XNamingService;
+//TODO: singleton typedef: com::sun::star::uno::XNamingService;
+singleton typeid: com::sun::star::uno::XNamingService;
+singleton typename: com::sun::star::uno::XNamingService;
+//TODO: singleton union: com::sun::star::uno::XNamingService;
+//TODO: singleton unsigned: com::sun::star::uno::XNamingService;
+singleton using: com::sun::star::uno::XNamingService;
+singleton virtual: com::sun::star::uno::XNamingService;
+//TODO: singleton void: com::sun::star::uno::XNamingService;
+singleton volatile: com::sun::star::uno::XNamingService;
+singleton while: com::sun::star::uno::XNamingService;
+
+singleton and: com::sun::star::uno::XNamingService;
+singleton bitand: com::sun::star::uno::XNamingService;
+singleton bitor: com::sun::star::uno::XNamingService;
+singleton compl: com::sun::star::uno::XNamingService;
+singleton not: com::sun::star::uno::XNamingService;
+singleton or: com::sun::star::uno::XNamingService;
+singleton xor: com::sun::star::uno::XNamingService;
+
+singleton BUFSIZ: com::sun::star::uno::XNamingService;
+singleton CLOCKS_PER_SEC: com::sun::star::uno::XNamingService;
+singleton EDOM: com::sun::star::uno::XNamingService;
+singleton EOF: com::sun::star::uno::XNamingService;
+singleton ERANGE: com::sun::star::uno::XNamingService;
+singleton EXIT_FAILURE: com::sun::star::uno::XNamingService;
+singleton EXIT_SUCCESS: com::sun::star::uno::XNamingService;
+singleton FILENAME_MAX: com::sun::star::uno::XNamingService;
+singleton FOPEN_MAX: com::sun::star::uno::XNamingService;
+singleton HUGE_VAL: com::sun::star::uno::XNamingService;
+singleton LC_ALL: com::sun::star::uno::XNamingService;
+singleton LC_COLLATE: com::sun::star::uno::XNamingService;
+singleton LC_CTYPE: com::sun::star::uno::XNamingService;
+singleton LC_MONETARY: com::sun::star::uno::XNamingService;
+singleton LC_NUMERIC: com::sun::star::uno::XNamingService;
+singleton LC_TIME: com::sun::star::uno::XNamingService;
+singleton L_tmpnam: com::sun::star::uno::XNamingService;
+singleton MB_CUR_MAX: com::sun::star::uno::XNamingService;
+singleton NULL: com::sun::star::uno::XNamingService;
+singleton RAND_MAX: com::sun::star::uno::XNamingService;
+singleton SEEK_CUR: com::sun::star::uno::XNamingService;
+singleton SEEK_END: com::sun::star::uno::XNamingService;
+singleton SEEK_SET: com::sun::star::uno::XNamingService;
+singleton SIGABRT: com::sun::star::uno::XNamingService;
+singleton SIGFPE: com::sun::star::uno::XNamingService;
+singleton SIGILL: com::sun::star::uno::XNamingService;
+singleton SIGINT: com::sun::star::uno::XNamingService;
+singleton SIGSEGV: com::sun::star::uno::XNamingService;
+singleton SIGTERM: com::sun::star::uno::XNamingService;
+singleton SIG_DFL: com::sun::star::uno::XNamingService;
+singleton SIG_ERR: com::sun::star::uno::XNamingService;
+singleton SIG_IGN: com::sun::star::uno::XNamingService;
+singleton TMP_MAX: com::sun::star::uno::XNamingService;
+singleton WCHAR_MAX: com::sun::star::uno::XNamingService;
+singleton WCHAR_MIN: com::sun::star::uno::XNamingService;
+singleton WEOF: com::sun::star::uno::XNamingService;
+singleton assert: com::sun::star::uno::XNamingService;
+singleton errno: com::sun::star::uno::XNamingService;
+singleton offsetof: com::sun::star::uno::XNamingService;
+singleton setjmp: com::sun::star::uno::XNamingService;
+singleton stderr: com::sun::star::uno::XNamingService;
+singleton stdin: com::sun::star::uno::XNamingService;
+singleton stdout: com::sun::star::uno::XNamingService;
+
+singleton CHAR_BIT: com::sun::star::uno::XNamingService;
+singleton CHAR_MAX: com::sun::star::uno::XNamingService;
+singleton CHAR_MIN: com::sun::star::uno::XNamingService;
+singleton DBL_DIG: com::sun::star::uno::XNamingService;
+singleton DBL_EPSILON: com::sun::star::uno::XNamingService;
+singleton DBL_MANT_DIG: com::sun::star::uno::XNamingService;
+singleton DBL_MAX: com::sun::star::uno::XNamingService;
+singleton DBL_MAX_10_EXP: com::sun::star::uno::XNamingService;
+singleton DBL_MAX_EXP: com::sun::star::uno::XNamingService;
+singleton DBL_MIN: com::sun::star::uno::XNamingService;
+singleton DBL_MIN_10_EXP: com::sun::star::uno::XNamingService;
+singleton DBL_MIN_EXP: com::sun::star::uno::XNamingService;
+singleton FLT_DIG: com::sun::star::uno::XNamingService;
+singleton FLT_EPSILON: com::sun::star::uno::XNamingService;
+singleton FLT_MANT_DIG: com::sun::star::uno::XNamingService;
+singleton FLT_MAX: com::sun::star::uno::XNamingService;
+singleton FLT_MAX_10_EXP: com::sun::star::uno::XNamingService;
+singleton FLT_MAX_EXP: com::sun::star::uno::XNamingService;
+singleton FLT_MIN: com::sun::star::uno::XNamingService;
+singleton FLT_MIN_10_EXP: com::sun::star::uno::XNamingService;
+singleton FLT_MIN_EXP: com::sun::star::uno::XNamingService;
+singleton FLT_RADIX: com::sun::star::uno::XNamingService;
+singleton FLT_ROUNDS: com::sun::star::uno::XNamingService;
+singleton INT_MAX: com::sun::star::uno::XNamingService;
+singleton INT_MIN: com::sun::star::uno::XNamingService;
+singleton LDBL_DIG: com::sun::star::uno::XNamingService;
+singleton LDBL_EPSILON: com::sun::star::uno::XNamingService;
+singleton LDBL_MANT_DIG: com::sun::star::uno::XNamingService;
+singleton LDBL_MAX: com::sun::star::uno::XNamingService;
+singleton LDBL_MAX_10_EXP: com::sun::star::uno::XNamingService;
+singleton LDBL_MAX_EXP: com::sun::star::uno::XNamingService;
+singleton LDBL_MIN: com::sun::star::uno::XNamingService;
+singleton LDBL_MIN_10_EXP: com::sun::star::uno::XNamingService;
+singleton LDBL_MIN_EXP: com::sun::star::uno::XNamingService;
+singleton LONG_MAX: com::sun::star::uno::XNamingService;
+singleton LONG_MIN: com::sun::star::uno::XNamingService;
+singleton MB_LEN_MAX: com::sun::star::uno::XNamingService;
+singleton SCHAR_MAX: com::sun::star::uno::XNamingService;
+singleton SCHAR_MIN: com::sun::star::uno::XNamingService;
+singleton SHRT_MAX: com::sun::star::uno::XNamingService;
+singleton SHRT_MIN: com::sun::star::uno::XNamingService;
+singleton UCHAR_MAX: com::sun::star::uno::XNamingService;
+singleton UINT_MAX: com::sun::star::uno::XNamingService;
+singleton ULONG_MAX: com::sun::star::uno::XNamingService;
+singleton USHRT_MAX: com::sun::star::uno::XNamingService;
+
+singleton FILE: com::sun::star::uno::XNamingService;
+singleton lconv: com::sun::star::uno::XNamingService;
+singleton tm: com::sun::star::uno::XNamingService;
+
+singleton std: com::sun::star::uno::XNamingService;
+
+singleton NDEBUG: com::sun::star::uno::XNamingService;
+
+singleton get: com::sun::star::uno::XNamingService;
+
+}; }; };
