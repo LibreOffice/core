@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:10 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ class SfxBindings;
 class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
     sal_Bool        m_bInitialStateChange;
+    ::rtl::OUString m_sLastActivePage;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     m_xORB;
@@ -120,10 +121,16 @@ protected:
     void implSetNewObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
     void implDetachController();
+    ::rtl::OUString getCurrentPage() const;
 
 public:
-    FmPropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&   _xORB,
-              SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent);
+    FmPropBrw(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB,
+        SfxBindings* pBindings,
+        SfxChildWindow* pMgr,
+        Window* pParent,
+        const SfxChildWinInfo* _pInfo
+    );
     virtual ~FmPropBrw();
 };
 #endif //SVX_FMPROPBRW_HXX
