@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:52 $
+ *  last change: $Author: mib $ $Date: 2000-11-16 13:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,8 @@ XML_CONSTASCII_ACTION( sXML_content_validation_name, "validation-name");
 XML_CONSTASCII_ACTION( sXML_content_validations, "content-validations");
 XML_CONSTASCII_ACTION( sXML_continue, "continue" );
 XML_CONSTASCII_ACTION( sXML_continue_numbering, "continue-numbering" );
+XML_CONSTASCII_ACTION( sXML_contour_polygon, "contour-polygon" );
+XML_CONSTASCII_ACTION( sXML_contour_path, "contour-path" );
 XML_CONSTASCII_ACTION( sXML_contrast , "contrast" );
 XML_CONSTASCII_ACTION( sXML_control, "control" );
 XML_CONSTASCII_ACTION( sXML_copy_back, "copy-back" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 15:34:21 $
+ *  last change: $Author: mib $ $Date: 2000-11-16 13:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,19 @@
 #ifndef _XMLOFF_I18NMAP_HXX
 #include "i18nmap.hxx"
 #endif
+#ifndef _XEXPTRANSFORM_HXX
+#include "xexptran.hxx"
+#endif
+#ifndef _XMLOFF_SHAPEIMPORT_HXX_
+#include "shapeimport.hxx"
+#endif
 
 #ifndef _XMLTEXTLISTBLOCKCONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
 
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
@@ -157,6 +164,128 @@ void XMLTextFrameDescContext_Impl::Characters( const OUString& rText )
 {
     rDesc += rText;
 }
+
+// ------------------------------------------------------------------------
+
+class XMLTextFrameContourContext_Impl : public SvXMLImportContext
+{
+    Reference < XPropertySet > xPropSet;
+
+public:
+
+    TYPEINFO();
+
+    XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                                  const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            const Reference < XPropertySet >& rPropSet,
+            sal_Bool bPath );
+    virtual ~XMLTextFrameContourContext_Impl();
+};
+
+TYPEINIT1( XMLTextFrameContourContext_Impl, SvXMLImportContext );
+
+XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx, const OUString& rLName,
+        const Reference< XAttributeList > & xAttrList,
+        const Reference < XPropertySet >& rPropSet,
+        sal_Bool bPath ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    xPropSet( rPropSet )
+{
+    OUString sD, sPoints, sViewBox;
+    sal_Int32 nWidth, nHeight;
+
+    const SvXMLTokenMap& rTokenMap =
+        bPath ? GetImport().GetShapeImport()->GetPathShapeAttrTokenMap()
+              : GetImport().GetShapeImport()->GetPolygonShapeAttrTokenMap();
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
+
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                            &aLocalName );
+        if( bPath )
+        {
+            switch( rTokenMap.Get( nPrefix, aLocalName ) )
+            {
+            case XML_TOK_PATHSHAPE_VIEWBOX:
+                sViewBox = rValue;
+                break;
+            case XML_TOK_PATHSHAPE_D:
+                sD = rValue;
+                break;
+            case XML_TOK_PATHSHAPE_WIDTH:
+                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+                                                                    rValue);
+                break;
+            case XML_TOK_PATHSHAPE_HEIGHT:
+                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+                                                                    rValue);
+                break;
+            }
+        }
+        else
+        {
+            switch( rTokenMap.Get( nPrefix, aLocalName ) )
+            {
+            case XML_TOK_POLYGONSHAPE_VIEWBOX:
+                sViewBox = rValue;
+                break;
+            case XML_TOK_POLYGONSHAPE_POINTS:
+                sPoints = rValue;
+                break;
+            case XML_TOK_POLYGONSHAPE_WIDTH:
+                GetImport().GetMM100UnitConverter().convertMeasure( nWidth,
+                                                                    rValue);
+                break;
+            case XML_TOK_POLYGONSHAPE_HEIGHT:
+                GetImport().GetMM100UnitConverter().convertMeasure( nHeight,
+                                                                    rValue);
+                break;
+            }
+        }
+    }
+
+    OUString sContourPolyPolygon(
+            RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon") );
+    if( rPropSet->getPropertySetInfo()->hasPropertyByName(
+                                                    sContourPolyPolygon ) &&
+        nWidth > 0 && nHeight > 0 && (bPath ? sD : sPoints).getLength() )
+    {
+        awt::Point aPoint( 0,  0 );
+        awt::Size aSize( nWidth, nHeight );
+        SdXMLImExViewBox aViewBox( sViewBox,
+                                   GetImport().GetMM100UnitConverter());
+        Any aAny;
+        if( bPath )
+        {
+            SdXMLImExSvgDElement aPoints( sD, aViewBox, aPoint, aSize,
+                                          GetImport().GetMM100UnitConverter() );
+            aAny <<= aPoints.GetPointSequenceSequence();
+        }
+        else
+        {
+            SdXMLImExPointsElement aPoints( sPoints, aViewBox, aPoint, aSize,
+                                        GetImport().GetMM100UnitConverter() );
+            aAny <<= aPoints.GetPointSequenceSequence();
+        }
+
+        xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
+    }
+}
+
+XMLTextFrameContourContext_Impl::~XMLTextFrameContourContext_Impl()
+{
+}
+
 
 // ------------------------------------------------------------------------
 
@@ -510,9 +639,27 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
     if( XML_NAMESPACE_SVG == nPrefix &&
         rLocalName.equalsAsciiL( sXML_desc, sizeof(sXML_desc)-1 ) )
+    {
         pContext = new XMLTextFrameDescContext_Impl( GetImport(),
                                               nPrefix, rLocalName,
                                                xAttrList, sDesc );
+    }
+    else if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( xPropSet.is() )
+        {
+            if( rLocalName.equalsAsciiL( sXML_contour_polygon,
+                                         sizeof(sXML_contour_polygon)-1 ) )
+                pContext = new XMLTextFrameContourContext_Impl( GetImport(),
+                                              nPrefix, rLocalName,
+                                               xAttrList, xPropSet, sal_False );
+            else if( rLocalName.equalsAsciiL( sXML_contour_path,
+                                         sizeof(sXML_contour_path)-1 ) )
+                pContext = new XMLTextFrameContourContext_Impl( GetImport(),
+                                              nPrefix, rLocalName,
+                                               xAttrList, xPropSet, sal_True );
+        }
+    }
     else if( xOldTextCursor.is() )  // text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,

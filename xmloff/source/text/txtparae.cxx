@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:01:55 $
+ *  last change: $Author: mib $ $Date: 2000-11-16 13:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #endif
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
+#endif
+#ifndef _XEXPTRANSFORM_HXX
+#include "xexptran.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -625,7 +628,9 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
     sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
     sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
-    sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark"))
+    sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
+    sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
+    sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon"))
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
@@ -1462,6 +1467,92 @@ void XMLTextParagraphExport::exportTextFrame(
     }
 }
 
+void XMLTextParagraphExport::exportContour(
+        const Reference < XPropertySet > & rPropSet,
+        const Reference < XPropertySetInfo > & rPropSetInfo )
+{
+    if( !rPropSetInfo->hasPropertyByName( sContourPolyPolygon ) )
+        return;
+
+    Any aAny = rPropSet->getPropertyValue( sContourPolyPolygon );
+
+    PointSequenceSequence aSourcePolyPolygon;
+    aAny >>= aSourcePolyPolygon;
+
+    if( !aSourcePolyPolygon.getLength() )
+        return;
+
+    awt::Point aPoint( 0, 0 );
+    awt::Size aSize;
+    aAny = rPropSet->getPropertyValue( sActualSize );
+    aAny >>= aSize;
+
+    // svg: width
+    OUStringBuffer aStringBuffer( 10 );
+    GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Width);
+    GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_width,
+                              aStringBuffer.makeStringAndClear() );
+
+    // svg: height
+    GetExport().GetMM100UnitConverter().convertMeasure(aStringBuffer, aSize.Height);
+    GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_height,
+                              aStringBuffer.makeStringAndClear() );
+
+    // svg:viewbox
+    SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
+    GetExport().AddAttribute(XML_NAMESPACE_SVG, sXML_viewBox,
+                aViewBox.GetExportString(GetExport().GetMM100UnitConverter()));
+
+    sal_Int32 nOuterCnt( aSourcePolyPolygon.getLength() );
+
+    const sal_Char *pElem = 0;
+    if( 1L == nOuterCnt )
+    {
+        // simple polygon shape, can be written as svg:points sequence
+        /*const*/ PointSequence* pSequence =
+                            (PointSequence*)aSourcePolyPolygon.getConstArray();
+
+        SdXMLImExPointsElement aPoints( pSequence, aViewBox, aPoint,
+                                aSize, GetExport().GetMM100UnitConverter() );
+
+        // write point array
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_points,
+                                      aPoints.GetExportString());
+        pElem = sXML_contour_polygon;
+    }
+    else
+    {
+        // polypolygon, needs to be written as a svg:path sequence
+        /*const*/ PointSequence* pOuterSequence =
+                        (PointSequence*)aSourcePolyPolygon.getConstArray();
+        if(pOuterSequence)
+        {
+            // prepare svx:d element export
+            SdXMLImExSvgDElement aSvgDElement( aViewBox );
+
+            for(sal_Int32 a(0L); a < nOuterCnt; a++)
+            {
+                /*const*/ PointSequence* pSequence = pOuterSequence++;
+                if(pSequence)
+                {
+                    aSvgDElement.AddPolygon(pSequence, 0L, aPoint,
+                        aSize, GetExport().GetMM100UnitConverter(),
+                        sal_True );
+                }
+            }
+
+            // write point array
+            GetExport().AddAttribute( XML_NAMESPACE_SVG, sXML_d,
+                                      aSvgDElement.GetExportString());
+            pElem = sXML_contour_path;
+        }
+    }
+
+    // write object now
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW, pElem,
+                              sal_True, sal_True );
+}
+
 void XMLTextParagraphExport::_exportTextGraphic(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
@@ -1514,6 +1605,9 @@ void XMLTextParagraphExport::_exportTextGraphic(
                                   sXML_desc, sal_True, sal_False );
         GetExport().GetDocHandler()->characters( sAltText );
     }
+
+    // draw:contour
+    exportContour( rPropSet, rPropSetInfo );
 }
 
 void XMLTextParagraphExport::exportTextGraphic(
