@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextContent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-12 14:06:16 $
+ *  last change: $Author: cl $ $Date: 2000-12-19 14:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,19 +110,19 @@ service TextContent
     /** specifies how the text content is attached to its surrounding
         <type scope="com::sun::star::drawing">Text</type>.
     */
-    [property] com::sun::star::text::TextContentAnchorType AnchorType;
+    [optional, property] com::sun::star::text::TextContentAnchorType AnchorType;
 
     //-------------------------------------------------------------------------
     /** contains the anchor type of the text content.
      @see com::sun::star::text::TextContentAnchorType
      */
-    [readonly, property] sequence<com::sun::star::text::TextContentAnchorType> AnchorTypes;
+    [optional, readonly, property] sequence<com::sun::star::text::TextContentAnchorType> AnchorTypes;
 
     //-------------------------------------------------------------------------
     /** specifies if the text content is a shape
         and how the text is wrapped around the shape.
     */
-    [property] com::sun::star::text::WrapTextMode TextWrap;
+    [optional, property] com::sun::star::text::WrapTextMode TextWrap;
 
 };
 
