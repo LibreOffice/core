@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-14 17:34:43 $
+ *  last change: $Author: sj $ $Date: 2001-06-20 10:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5047,7 +5047,7 @@ sal_Bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn,
                 case 4 : rIn >> nVal2; break;
                 default :
                 {
-                    rIn.Seek( 2 );
+                    rIn.SeekRel( 2 );
                     DBG_ERROR( "SdrTextSpecInfoAtomInterpreter::Ctor(): parsing error, this document needs to be analysed (SJ)" );
                 }
             }
@@ -5949,8 +5949,9 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
         {
             if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontHeight ) )
             {
-                nBulletRelSize *= pPortion->pCharSet->mnFontHeight;
-                nBulletRelSize /= mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
+                sal_uInt32 nFontHeight = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontHeight;
+                if ( nFontHeight )
+                    nBulletRelSize = ( nBulletRelSize * pPortion->pCharSet->mnFontHeight ) / nFontHeight;
             }
         }
     }
@@ -6855,13 +6856,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                     pSet->mpFieldItem = pFE->pField1, pFE->pField1 = NULL;
                                                 }
                                                 else if ( pFE->pString )
-                                                {
-                                                    String aString( *pFE->pString );
-                                                    if ( aString.Len() )
-                                                        pSet->maString = aString;
-                                                    else
-                                                        delete (PPTCharPropSet*)aCharPropList.Remove( n );
-                                                }
+                                                    pSet->maString = *pFE->pString;
                                             }
                                             else
                                             {
