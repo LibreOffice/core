@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:40:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,6 +641,15 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
         aOldCalcFieldValueLink=pTextEditOutliner->GetCalcFieldValueHdl();
         // Der FieldHdl muss von BegTextEdit gesetzt sein, da dor ein UpdateFields gerufen wird.
         pTextEditOutliner->SetCalcFieldValueHdl(LINK(this,SdrObjEditView,ImpOutlinerCalcFieldValueHdl));
+
+        // we set a SdrPaintInfoRec temporarely at the outliner so the calc field value hdl from
+        // the application knows the context
+        SdrPaintInfoRec aPaintInfoRec;
+        aPaintInfoRec.pPV = pTextEditPV;
+        aPaintInfoRec.nPaintMode = 0;
+        pTextEditOutliner->SetPaintInfoRec( &aPaintInfoRec );
+        pTextEditOutliner->SetTextObjNoInit( (SdrTextObj*)pTextEditObj );
+
         if (pTextEditObj->BegTextEdit(*pTextEditOutliner))
         {
             // #111096#
@@ -743,12 +752,15 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
                 GetModel()->Broadcast(aHint);
             }
 
+            pTextEditOutliner->ClearPaintInfoRec();
             return TRUE; // Gut gelaufen, TextEdit laeuft nun
         } else {
             bBrk=TRUE;
             pTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
         }
     }
+    pTextEditOutliner->ClearPaintInfoRec();
+
     // wenn hier angekommen, dann ist irgendwas schief gelaufen
     if (!bDontDeleteOutliner) {
         if (pGivenOutliner!=NULL) { delete pGivenOutliner; pTextEditOutliner=NULL; }
