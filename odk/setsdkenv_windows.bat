@@ -38,25 +38,25 @@ REM Check installation path for the office.
 if not defined OFFICE_HOME goto error
 
 REM Set library path.
-set LIB=%LIB%;%SDK_HOME%\windows\lib
+set LIB=%SDK_HOME%\windows\lib;%SDK_HOME%\WINexample.out\lib;%LIB
 
 REM Set office program path.
 set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\program
 
 REM Add directory of the SDK tools to the path.
-set PATH=%PATH%;%SDK_HOME%\windows\bin;%OFFICE_PROGRAM_PATH
+set PATH=%SDK_HOME%\windows\bin;%OFFICE_PROGRAM_PATH;%SDK_HOME%\WINexample.out\bin;%PATH%
 
 REM Add directory of the command make to the path, if necessary.
-if defined SDK_MAKE set PATH=%PATH%;%SDK_MAKE%
+if defined SDK_MAKE set PATH=%SDK_MAKE%;%PATH%
 
 REM Add directory of the C++ tools to the path, if necessary.
-if defined SDK_CPP_HOME set PATH=%PATH%;%SDK_CPP_HOME%
+if defined SDK_CPP_HOME set PATH=%SDK_CPP_HOME%;%PATH%
 
 REM Add directory of the Java tools to the path, if necessary.
-if defined SDK_JAVA_HOME set PATH=%PATH%;%SDK_JAVA_HOME%\bin;%SDK_JAVA_HOME%\jre\bin
+if defined SDK_JAVA_HOME set PATH=%SDK_JAVA_HOME%\bin;%SDK_JAVA_HOME%\jre\bin;%PATH%
 
 REM Add directory of the ANT tools to the path, if necessary.
-if defined SDK_ANT set PATH=%PATH%;%SDK_ANT%\bin
+if defined SDK_ANT set PATH=%SDK_ANT%\bin;%PATH%
 
 REM Set environment for C++ tools, if necessary.
 if defined SDK_CPP_HOME call "%SDK_CPP_HOME%"\VCVARS32.bat

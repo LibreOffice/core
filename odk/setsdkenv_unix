@@ -8,23 +8,23 @@
 
 # Installation directory of the Software Development Kit.
 # Example: SDK_HOME=/work/odk641
-SDK_HOME=/work/odk641
+SDK_HOME=
 
 # Office installation directory.
 # Example: OFFICE_HOME=/opt/staroffice6.0
-OFFICE_HOME=/opt/staroffice6.0
+OFFICE_HOME=
 
 # Directory of the make command.
 # Example: SDK_MAKE=/usr/bin
-SDK_MAKE=/usr/bin
+SDK_MAKE=
 
 # Directory of the C++ tools.
 # Example: SDK_CPP_HOME=/usr/bin
-SDK_CPP_HOME=/usr/bin
+SDK_CPP_HOME=
 
 # Java installation directory.
 # Example: SDK_JAVA_HOME=/usr/local/j2sdk1.4.0
-SDK_JAVA_HOME=/usr/local/j2sdk1.4.0
+SDK_JAVA_HOME=
 
 # ANT installation directory.
 # Example: SDK_ANT=/windows/daten/moving/jakarta-ant-1.4
@@ -45,21 +45,6 @@ then
     exit 0
 fi
 
-# Set library path.
-if [ -n "$LD_LIBRARY_PATH" ]
-then
-    # path not empty: append colon.
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:
-fi
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH$OFFICE_HOME/program
-
-export LD_LIBRARY_PATH
-
-# Set office program path.
-OFFICE_PROGRAM_PATH=$OFFICE_HOME/program
-
-export OFFICE_PROGRAM_PATH
-
 # Get the operating system.
 sd_platform=`uname -s`
 
@@ -74,36 +59,42 @@ case $sd_platform in
     ;;
 esac
 
+# Set library path.
+LD_LIBRARY_PATH=$SDK_HOME/$directoryname/lib:$OFFICE_HOME/program:$LD_LIBRARY_PATH
+
+export LD_LIBRARY_PATH
+
+# Set office program path.
+OFFICE_PROGRAM_PATH=$OFFICE_HOME/program
+
+export OFFICE_PROGRAM_PATH
+
+
 # Add directory of the SDK tools to the path.
-if [ -n "$PATH" ]
-then
-    # Path not empty: append colon.
-    PATH=$PATH:
-fi
-PATH=$PATH$SDK_HOME/$directoryname/bin:$OFFICE_PROGRAM_PATH
+PATH=$SDK_HOME/$directoryname/bin:$OFFICE_PROGRAM_PATH:$PATH
 
 # Add directory of the command make to the path, if necessary.
 if [ -n "$SDK_MAKE" ]
 then
-    PATH=$PATH:$SDK_MAKE
+    PATH=$SDK_MAKE:$PATH
 fi
 
 # Add directory of the C++ tools to the path, if necessary.
 if [ -n "$SDK_CPP_HOME" ]
 then
-    PATH=$PATH:$SDK_CPP_HOME
+    PATH=$SDK_CPP_HOME:$PATH
 fi
 
 # Add directory of the Java tools to the path, if necessary.
 if [ -n "$SDK_JAVA_HOME" ]
 then
-    PATH=$PATH:$SDK_JAVA_HOME/bin
+    PATH=$SDK_JAVA_HOME/bin:$PATH
 fi
 
 # Add directory of the ANT tools to the path, if necessary.
 if [ -n "$SDK_ANT" ]
 then
-    PATH=$PATH:$SDK_ANT/bin
+    PATH=$SDK_ANT/bin:PATH
 fi
 
 export PATH
