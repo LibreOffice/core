@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 14:11:31 $
+ *  last change: $Author: pb $ $Date: 2002-06-26 11:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2263,10 +2263,16 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
     sal_Bool    bEqual = sal_False;
 
     if ( aOne->mbIsFolder != aTwo->mbIsFolder )
+    {
         if ( aOne->mbIsFolder )
             bRet = sal_True;
         else
             bRet = sal_False;
+
+        // !!! pb: #100376# folder always on top
+        if ( !gbAscending )
+            bRet = !bRet;
+    }
     else
     {
         switch ( gnColumn )
@@ -2318,10 +2324,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
     if ( bEqual )
         return sal_False;
 
-    if ( gbAscending )
-        return bRet;
-
-    return ! bRet;
+    return gbAscending ? bRet : !bRet;
 }
 
 // -----------------------------------------------------------------------
