@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2001-12-19 09:59:42 $
+#   last change: $Author: hr $ $Date: 2002-08-14 16:22:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,13 @@ TARGET=moz_unzip
 
 # --- Files --------------------------------------------------------
 
+.IF "$(OS)" == "MACOSX"
+
+dummy:
+    @echo "Nothing to build for OS $(OS)"
+
+.ELSE	"$(OS)" == "MACOSX"
+
 all: \
     $(MISC)$/unpacked_$(TARGET)_inc \
     $(MISC)$/unpacked_$(TARGET)_lib \
@@ -99,6 +106,8 @@ $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
 
 $(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
     +$(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
+
+.ENDIF	# "$(OS)" == "MACOSX"
 
 .INCLUDE :  target.mk
 
