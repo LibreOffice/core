@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 17:57:38 $
+ *  last change: $Author: jp $ $Date: 2000-11-17 14:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@
 #include "blnkitem.hxx"
 #include "emphitem.hxx"
 #include "twolinesitem.hxx"
+#include "scripttypeitem.hxx"
 #include "itemtype.hxx"
 #include "dialmgr.hxx"
 #include "langtab.hxx"
@@ -242,6 +243,7 @@ TYPEINIT1_AUTOFACTORY(SvxLineColorItem, SvxColorItem);
 TYPEINIT1_AUTOFACTORY(SvxBlinkItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxEmphasisMarkItem, SfxEnumItem);
 TYPEINIT1_AUTOFACTORY(SvxTwoLinesItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxScriptTypeItem, SfxUInt16Item);
 
 
 // class SvxFontListItem -------------------------------------------------
@@ -3827,6 +3829,16 @@ sal_Bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return bRet;
 }
 
+USHORT SvxEmphasisMarkItem::GetVersion( USHORT nFFVer ) const
+{
+    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
+            SOFFICE_FILEFORMAT_40==nFFVer ||
+            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            "SvxEmphasisMarkItem: Gibt es ein neues Fileformat?" );
+
+    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+}
+
 
 /*************************************************************************
 |*    class SvxTwoLinesItem
@@ -3977,4 +3989,19 @@ USHORT SvxTwoLinesItem::GetVersion( USHORT nFFVer ) const
 
     return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
 }
+
+
+/*************************************************************************
+|*    class SvxScriptTypeItemItem
+*************************************************************************/
+
+SvxScriptTypeItem::SvxScriptTypeItem( sal_uInt16 nType )
+    : SfxUInt16Item( SID_ATTR_CHAR_SCRIPTTYPE, nType )
+{
+}
+SfxPoolItem* SvxScriptTypeItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SvxScriptTypeItem( GetValue() );
+}
+
 

@@ -552,6 +552,9 @@ hedabu: ..\inc\svx3ditems.hxx %_DEST%\inc%_EXT%\svx\svx3ditems.hxx
 hedabu: ..\inc\msocximex.hxx %_DEST%\inc%_EXT%\svx\msocximex.hxx
 hedabu: ..\inc\emphitem.hxx %_DEST%\inc%_EXT%\svx\emphitem.hxx
 hedabu: ..\inc\twolinesitem.hxx %_DEST%\inc%_EXT%\svx\twolinesitem.hxx
+hedabu: ..\inc\scripttypeitem.hxx %_DEST%\inc%_EXT%\svx\scripttypeitem.hxx
+hedabu: ..\inc\scriptspaceitem.hxx %_DEST%\inc%_EXT%\svx\scriptspaceitem.hxx
+hedabu: ..\inc\hngpnctsitem.hxx %_DEST%\inc%_EXT%\svx\hngpnctitem.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml

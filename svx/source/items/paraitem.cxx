@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 10:15:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-17 14:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ using namespace ::com::sun::star;
 #define ITEMID_PAGEMODEL    0
 #define ITEMID_FMTSPLIT     0
 #define ITEMID_HYPHENZONE   0
+#define ITEMID_SCRIPTSPACE  0
+#define ITEMID_HANGINGPUNCTUATION 0
 
 #include <tools/rtti.hxx>
 #include <svtools/sbx.hxx>
@@ -111,6 +113,8 @@ using namespace ::com::sun::star;
 #include "pmdlitem.hxx"
 #include "spltitem.hxx"
 #include "hyznitem.hxx"
+#include "scriptspaceitem.hxx"
+#include "hngpnctitem.hxx"
 
 
 // xml stuff
@@ -157,6 +161,8 @@ TYPEINIT1_AUTOFACTORY(SvxHyphenZoneItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxTabStopItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxFmtSplitItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxPageModelItem, SfxStringItem);
+TYPEINIT1_AUTOFACTORY(SvxScriptSpaceItem, SfxBoolItem);
+TYPEINIT1_AUTOFACTORY(SvxHangingPunctuationItem, SfxEnumItem);
 
 
 SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
@@ -1715,6 +1721,111 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
                 rText += GetValue();
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+//------------------------------------------------------------------------
+
+SvxScriptSpaceItem::SvxScriptSpaceItem( sal_Bool bOn, const sal_uInt16 nId )
+    : SfxBoolItem( nId, bOn )
+{
+}
+
+SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SvxScriptSpaceItem( GetValue(), Which() );
+}
+
+SfxPoolItem* SvxScriptSpaceItem::Create(SvStream & rStrm, USHORT) const
+{
+    sal_Bool bFlag;
+    rStrm >> bFlag;
+    return new SvxScriptSpaceItem( bFlag, Which() );
+}
+
+USHORT  SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
+{
+    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
+            SOFFICE_FILEFORMAT_40==nFFVer ||
+            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            "SvxTwoLinesItem: Gibt es ein neues Fileformat?" );
+
+    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const International* pIntl ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            rText = SVX_RESSTR( !GetValue()
+                                    ? RID_SVXITEMS_SCRPTSPC_OFF
+                                    : RID_SVXITEMS_SCRPTSPC_ON );
+            return ePres;
+        }
+        break;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
+//------------------------------------------------------------------------
+
+SvxHangingPunctuationItem::SvxHangingPunctuationItem(
+                                    sal_Bool bOn, const sal_uInt16 nId )
+    : SfxBoolItem( nId, bOn )
+{
+}
+
+SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SvxHangingPunctuationItem( GetValue(), Which() );
+}
+
+SfxPoolItem* SvxHangingPunctuationItem::Create(SvStream & rStrm, USHORT) const
+{
+    sal_Bool nValue;
+    rStrm >> nValue;
+    return new SvxHangingPunctuationItem( nValue, Which() );
+}
+
+USHORT SvxHangingPunctuationItem::GetVersion( USHORT nFFVer ) const
+{
+    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
+            SOFFICE_FILEFORMAT_40==nFFVer ||
+            SOFFICE_FILEFORMAT_NOW==nFFVer,
+            "SvxHangingPunctuationItem: Gibt es ein neues Fileformat?" );
+
+    return SOFFICE_FILEFORMAT_NOW > nFFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const International* pIntl ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            rText = SVX_RESSTR( !GetValue()
+                                    ? RID_SVXITEMS_HNGPNCT_OFF
+                                    : RID_SVXITEMS_HNGPNCT_ON );
+            return ePres;
+        }
+        break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 17:59:42 $
+ *  last change: $Author: jp $ $Date: 2000-11-17 14:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7213,12 +7213,35 @@ String RID_SVXITEMS_EMPHASIS_BELOW_POS
 String RID_SVXITEMS_TWOLINES_OFF
 {
     Text = "Zweilig aus";
-    Text [ English ] = "Two line off" ;
+    Text [ English ] = "Two lines off" ;
 };
 String RID_SVXITEMS_TWOLINES
 {
     Text = "Zeilig";
-    Text [ English ] = "Two line with %1" ;
+    Text [ English ] = "Two lines" ;
 };
+
+String RID_SVXITEMS_SCRPTSPC_OFF
+{
+    Text = "Kein automatischer Zeichenabstand";
+    Text [ English ] = "No automatic character distance" ;
+};
+String RID_SVXITEMS_SCRPTSPC_ON
+{
+    Text = "Kein automatischer Zeichenabstand";
+    Text [ English ] = "Automatic character distance" ;
+};
+
+String RID_SVXITEMS_HNGPNCT_OFF
+{
+    Text = "Keine hängende Interpunktion am Zeilenende";
+    Text [ English ] = "No hanging punctuation at line end" ;
+};
+String RID_SVXITEMS_HNGPNCT_ON
+{
+    Text = "Hängende Interpunktion am Zeilenende";
+    Text [ English ] = "Hanging punctuation at line end" ;
+};
+
 
  // ********************************************************************** EOF
