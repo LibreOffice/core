@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:39:53 $
+ *  last change:$Date: 2003-12-11 11:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,17 @@
  *
  *
  ************************************************************************/
-
 package ifc.frame;
-
-import lib.MultiMethodTest;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XModel;
 import com.sun.star.view.XSelectionSupplier;
+
+import lib.MultiMethodTest;
+
+import util.ValueComparer;
+
 
 /**
 * Testing <code>com.sun.star.frame.XModel</code>
@@ -98,16 +100,17 @@ import com.sun.star.view.XSelectionSupplier;
 */
 public class _XModel extends MultiMethodTest {
     public XModel oObj = null;
-    boolean    result = true;
+    boolean result = true;
 
     /**
     * Test calls the method. <p>
     * Has <b> OK </b> status if the method returns true.
     */
     public void _attachResource() {
-        log.println( "opening DataSourceBrowser" );
+        log.println("opening DataSourceBrowser");
+
         PropertyValue[] noArgs = new PropertyValue[0];
-        result = oObj.attachResource(".component:DB/DataSourceBrowser",noArgs);
+        result = oObj.attachResource(".component:DB/DataSourceBrowser", noArgs);
         tRes.tested("attachResource()", result);
     }
 
@@ -121,12 +124,17 @@ public class _XModel extends MultiMethodTest {
         XController cont2 = (XController) tEnv.getObjRelation("CONT2");
         XController old = oObj.getCurrentController();
         result = false;
+
         if (cont2 == null) {
             log.println("No controller no show");
         } else {
             oObj.connectController(cont2);
-            result = (oObj.getCurrentController() != old);
+
+            String oldFrame = old.getFrame().getName();
+            String newFrame = cont2.getFrame().getName();
+            result = (!oldFrame.equals(newFrame));
         }
+
         tRes.tested("connectController()", result);
     }
 
@@ -139,12 +147,14 @@ public class _XModel extends MultiMethodTest {
     public void _disconnectController() {
         XController cont2 = (XController) tEnv.getObjRelation("CONT2");
         result = false;
+
         if (cont2 == null) {
             log.println("No controller no show");
         } else {
             oObj.disconnectController(cont2);
             result = (oObj.getCurrentController() != cont2);
         }
+
         tRes.tested("disconnectController()", result);
     }
 
@@ -171,11 +181,12 @@ public class _XModel extends MultiMethodTest {
     * Has <b> OK </b> status if the method does not return null.
     */
     public void _getCurrentSelection() {
-        XSelectionSupplier selsupp = (XSelectionSupplier)
-            tEnv.getObjRelation("SELSUPP");
+        XSelectionSupplier selsupp = (XSelectionSupplier) tEnv.getObjRelation(
+                                             "SELSUPP");
         Object toSelect = tEnv.getObjRelation("TOSELECT");
         result = false;
-        if ( selsupp == null ) {
+
+        if (selsupp == null) {
             log.println("No Selection Supplier no show");
         } else {
             try {
@@ -183,8 +194,10 @@ public class _XModel extends MultiMethodTest {
             } catch (com.sun.star.lang.IllegalArgumentException e) {
                 log.println("Exception occured while select:");
                 e.printStackTrace(log);
+
                 return;
             }
+
             Object sel = oObj.getCurrentSelection();
             result = (sel != null);
         }
@@ -236,17 +249,21 @@ public class _XModel extends MultiMethodTest {
         XController cont2 = (XController) tEnv.getObjRelation("CONT2");
         XController old = oObj.getCurrentController();
         result = false;
+
         if (cont2 == null) {
             log.println("No controller no show");
         } else {
             oObj.connectController(cont2);
+
             try {
                 oObj.setCurrentController(cont2);
             } catch (com.sun.star.container.NoSuchElementException e) {
                 log.print("Cannot set current controller:");
                 e.printStackTrace(log);
             }
+
             result = (oObj.getCurrentController() != old);
+
             try {
                 oObj.setCurrentController(old);
             } catch (com.sun.star.container.NoSuchElementException e) {
@@ -254,6 +271,7 @@ public class _XModel extends MultiMethodTest {
                 e.printStackTrace(log);
             }
         }
+
         tRes.tested("setCurrentController()", result);
     }
 
@@ -270,10 +288,7 @@ public class _XModel extends MultiMethodTest {
     public void _unlockControllers() {
         requiredMethod("hasControllersLocked()");
         oObj.unlockControllers();
-        result = ! oObj.hasControllersLocked();
+        result = !oObj.hasControllersLocked();
         tRes.tested("unlockControllers()", result);
     }
-
 }
-
-
