@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cc50_solaris_intel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 13:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,12 @@ namespace CPPU_CURRENT_NAMESPACE
 //#### exceptions ##################################################################################
 //##################################################################################################
 
-void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
-void cc50_solaris_intel_fillUnoException( void*, const char*, uno_Any*, uno_Mapping * pCpp2Uno );
+void cc50_solaris_intel_raiseException(
+    uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
+void cc50_solaris_intel_fillUnoException(
+    void*, const char*,
+    typelib_TypeDescription * pExcTypeDescr,
+    uno_Any*, uno_Mapping * pCpp2Uno );
 }
 
