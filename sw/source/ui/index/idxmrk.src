@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:52:32 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@
             Text[ japanese ] = "€–Ϊ(~E)";                         \
             Text[ chinese_traditional ] = "¶µ¥Ψ(~E)";              \
             Text[ arabic ] = "ΗαΕΟΞΗα";                               \
-            Text[ greek ] = "Εγγραφή";\
+            Text[ greek ] = "Καταχώριση";\
             Text[ korean ] = "ΗΧΈρ(~E)";\
             Text[ turkish ] = "~Giriώ";\
             Text[ language_user1 ] = " ";\
@@ -443,7 +443,7 @@
             Text[ english_us ] = "~Main entry";\
             Text[ portuguese ] = "~Entrada principal";\
             Text[ russian ] = "Ξρνξβνξι ύλεμενς";\
-            Text[ greek ] = "Κύρια εγγραφή";\
+            Text[ greek ] = "Κύρια καταχώριση";\
             Text[ dutch ] = "~Hoofditem";\
             Text[ french ] = "~Entrιe principale";\
             Text[ spanish ] = "~Entrada principal";\
@@ -703,7 +703,7 @@ String STR_IDXMRK_EDIT
     Text[ japanese ] = "υψ€–Ϊ‚Μ•ÒW";
     Text[ chinese_traditional ] = "½sΏθ¥ΨΏύ¶µ¥Ψ";
     Text[ arabic ] = "ΚΝΡνΡ ΕΟΞΗα έεΡΣν";
-    Text[ greek ] = "Επεξεργασία εγγραφής ευρετηρίου";
+    Text[ greek ] = "Επεξεργασία καταχώρισης ευρετηρίου";
     Text[ korean ] = "»φΐΞ ΗΧΈρ ΖνΑύ";
     Text[ turkish ] = "Dizin giriώini dόzenle";
     Text[ language_user1 ] = " ";
@@ -730,7 +730,7 @@ String STR_IDXMRK_INSERT
     Text[ japanese ] = "–Ϊ‚Ζυψ€–Ϊ‚Μ‘}“ό";
     Text[ chinese_traditional ] = "΄΅¤J¥ΨΏύ±ψ¥Ψ";
     Text[ arabic ] = "ΕΟΡΗΜ ΕΟΞΗα έεΡΣν";
-    Text[ greek ] = "Προσθήκη εγγραφής ευρετηρίου";
+    Text[ greek ] = "Εισαγωγή καταχώρισης ευρετηρίου";
     Text[ korean ] = "»φΐΞ ΗΧΈρ »πΐΤ";
     Text[ turkish ] = "Dizin giriώi ekle";
     Text[ language_user1 ] = " ";
@@ -1120,7 +1120,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ english_us ] = "Entry data";
         Text[ portuguese ] = "Dados da entrada";
         Text[ russian ] = "Δΰννϋε ύλεμενςΰ";
-        Text[ greek ] = "Δεδομένα εγγραφής";
+        Text[ greek ] = "Δεδομένα καταχώρισης";
         Text[ dutch ] = "Itemgegevens";
         Text[ french ] = "Donnιes de l'entrιe";
         Text[ spanish ] = "Datos de la entrada";
@@ -1140,7 +1140,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliogrαfica";
     Text[ russian ] = "Ηΰδΰςό ύλεμενς ροθρκΰ λθςεπΰςσπϋ";
-    Text[ greek ] = "Ορισμός εγγραφής βιβλιογραφίας";
+    Text[ greek ] = "Ορισμός καταχώρισης βιβλιογραφίας";
     Text[ dutch ] = "Item voor literatuurlijst definiλren";
     Text[ french ] = "Dιfinir une entrιe de bibliographie";
     Text[ spanish ] = "Definir entrada de bibliografνa";
@@ -1164,7 +1164,7 @@ String STR_AUTHMRK_EDIT
     Text[ english_us ] = "Edit bibliography entry";
     Text[ portuguese ] = "Editar entrada bibliogrαfica";
     Text[ russian ] = "Οπΰβκΰ ύλεμενςΰ ροθρκΰ λθςεπΰςσπϋ";
-    Text[ greek ] = "Επεξεργασία εγγραφής βιβλιογραφίας";
+    Text[ greek ] = "Επεξεργασία καταχώρισης βιβλιογραφίας";
     Text[ dutch ] = "Item voor literatuurlijst bewerken";
     Text[ french ] = "Ιditer une entrιe de bibliographie";
     Text[ spanish ] = "Editar entrada de bibliografνa";
@@ -1189,7 +1189,7 @@ String STR_AUTHMRK_INSERT
     Text[ english_us ] = "Insert bibliography entry";
     Text[ portuguese ] = "Inserir entrada bibliogrαfica";
     Text[ russian ] = "Βρςΰβθςό ύλεμενς ροθρκΰ λθςεπΰςσπϋ";
-    Text[ greek ] = "Προσθήκη εγγραφής βιβλιογραφίας";
+    Text[ greek ] = "Εισαγωγή καταχώρισης βιβλιογραφίας";
     Text[ dutch ] = "Item invoegen in literatuurlijst";
     Text[ french ] = "Insιrer une entrιe de bibliographie";
     Text[ spanish ] = "Insertar entrada de bibliografνa";
@@ -1217,7 +1217,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ english_us ] = "The bibliography entry is already contained in the document with different data. ";
     MESSAGE[ portuguese ] = "A entrada bibliogrαfica jα existe no documento com dados diferentes. ";
     MESSAGE[ russian ] = "έςξς ύλεμενς αθαλθξγπΰτθθ ρ νεκξςξπϋμθ ξςλθχνϋμθ δΰννϋμθ σζε ρξδεπζθςρÿ β δξκσμενςε. ";
-    MESSAGE[ greek ] = "Η εγγραφή βιβλιοθήκης περιέχεται με ήδη μη συμπίπτοντα δεδομένα στο έγγραφο. ";
+    MESSAGE[ greek ] = "Η καταχώριση βιβλιοθήκης περιέχεται ήδη στο έγγραφο με διαφορετικά δεδομένα. ";
     MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. ";
     MESSAGE[ french ] = "L'entrιe de bibliographie existe dιjΰ en relation avec des donnιes diffιrentes dans le document.  ";
     MESSAGE[ spanish ] = "La entrada de bibliografνa existe ya con datos diferentes en el documento. ";
