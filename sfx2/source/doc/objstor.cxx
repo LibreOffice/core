@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:54:37 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,14 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 }
 
 //-------------------------------------------------------------------------
+void SfxObjectShell::PrepareSecondTryLoad_Impl()
+{
+    // only for internal use
+    pImp->m_bIsInit = sal_False;
+    ResetError();
+}
+
+//-------------------------------------------------------------------------
 sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                             sal_Bool bTypeMustBeSetAlready )
 {
@@ -542,7 +550,11 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
             if ( !(a>>=aMediaType) || !aMediaType.getLength() )
             {
                 if ( bTypeMustBeSetAlready )
-                    OSL_ENSURE( sal_False, "The mediatype must be set already!\n" );
+                {
+                    SetError( ERRCODE_IO_BROKENPACKAGE );
+                    return sal_False;
+                }
+
                 SetupStorage( xStorage, SOFFICE_FILEFORMAT_CURRENT, sal_False );
             }
         }
@@ -856,40 +868,10 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     // the mediatype was retrieved by using fallback solution but this is a repairing mode
                     // so it is acceptable to open the document if there is no contents that required manifest.xml
-                    bWarnMediaTypeFallback = !NoDependencyFromManifest_Impl( xStorage );
+                    bWarnMediaTypeFallback = sal_False; //!NoDependencyFromManifest_Impl( xStorage );
                 }
 
-                if ( !bWarnMediaTypeFallback && xStorage->getElementNames().getLength() )
-                {
-                    BOOL bHasMacros = StorageHasMacros( xStorage );
-
-                    if ( bHasMacros )
-                    {
-                        // --> PB 2004-11-09 #i35190#
-                        if ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-                        {
-                            // if the signature is broken, show here the warning before
-                            // the macro warning
-                            WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-                            aBox.Execute();
-                            bShowBrokenSignatureWarningAlready = true;
-                        }
-                        // <--
-                        AdjustMacroMode( String() );
-                        if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
-                            && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
-                        {
-                            WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                            aBox.Execute();
-                        }
-                    }
-                    else
-                    {
-                        // if macros will be added by the user later, the security check is obsolete
-                        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-                    }
-                }
-                else
+                if ( bWarnMediaTypeFallback || !xStorage->getElementNames().getLength() )
                     SetError( ERRCODE_IO_BROKENPACKAGE );
             }
             catch( uno::Exception& )
@@ -927,8 +909,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         bHasName = sal_True;
         SetName( SfxResId( STR_NONAME ) );
 
-        // Importieren
-        sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
         if( !bHasStorage )
             pMedium->GetInStream();
         else
@@ -966,23 +946,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             else
             {
                 bOk = ConvertFrom(*pMedium);
-            }
-
-            if ( HasMacrosLib_Impl() )
-            {
-                // no signing in alien formats!
-                AdjustMacroMode( String() );
-                if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
-                    && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
-                {
-                    WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                    aBox.Execute();
-                }
-            }
-            else
-            {
-                // if macros will be added by the user later, the security check is obsolete
-                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
             }
         }
     }
@@ -1087,19 +1050,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
                 }
             }
-        }
-
-        // MAV: the code below is moved here since this is the only central place where the object shell is visible
-        //      in case of pick list for example OpenDocExec_Impl() is not used.
-
-        // xmlsec05, check with SFX team
-        // Check if there is a broken signature...
-        // After EA change to interaction handler...
-        if ( !bShowBrokenSignatureWarningAlready
-            && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-        {
-            WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-            aBox.Execute();
         }
     }
     else
