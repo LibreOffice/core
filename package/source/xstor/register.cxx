@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:15:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
                                         OStorageFactory::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
 
-            uno::Sequence< ::rtl::OUString > &rServices = OStorageFactory::impl_staticGetSupportedServiceNames();
+            const uno::Sequence< ::rtl::OUString > &rServices = OStorageFactory::impl_staticGetSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
