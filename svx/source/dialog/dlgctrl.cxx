@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-06 09:45:41 $
+ *  last change: $Author: gt $ $Date: 2002-03-19 08:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,7 @@ Rectangle SvxRectCtl::CalculateFocusRectangle( RECT_POINT eRectPoint ) const
 
 Reference< XAccessible > SvxRectCtl::CreateAccessible()
 {
-    Window*                     pParent = GetParent();
+    Window*                     pParent = GetAccessibleParentWindow();
 
     DBG_ASSERT( pParent, "-SvxRectCtl::CreateAccessible(): No Parent!" );
 
