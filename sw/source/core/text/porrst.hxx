@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-27 08:30:48 $
+ *  last change: $Author: fme $ $Date: 2002-04-05 07:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 #ifdef VERTICAL_LAYOUT
 #define LINE_BREAK_WIDTH        150
-#define SPECIAL_FONT_HEIGHT     220
+#define SPECIAL_FONT_HEIGHT     200
 #endif
 
 class SwTxtFormatInfo;
