@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 10:30:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,9 +243,9 @@ void ScViewFunc::ShowNote()
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nCol = GetViewData()->GetCurX();
-    USHORT nRow = GetViewData()->GetCurY();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCCOL nCol = GetViewData()->GetCurX();
+    SCROW nRow = GetViewData()->GetCurY();
+    SCTAB nTab = GetViewData()->GetTabNo();
     BOOL bUndo (pDoc->IsUndoEnabled());
 
     ScPostIt aNote;
@@ -289,9 +289,9 @@ void ScViewFunc::HideNote()
         return;         // da is nix
     BOOL bUndo (pDoc->IsUndoEnabled());
 
-    USHORT nCol = GetViewData()->GetCurX();
-    USHORT nRow = GetViewData()->GetCurY();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCCOL nCol = GetViewData()->GetCurX();
+    SCROW nRow = GetViewData()->GetCurY();
+    SCTAB nTab = GetViewData()->GetTabNo();
 
     ScPostIt aNote;
     if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
@@ -326,9 +326,9 @@ void ScViewFunc::EditNote()
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nCol = GetViewData()->GetCurX();
-    USHORT nRow = GetViewData()->GetCurY();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCCOL nCol = GetViewData()->GetCurX();
+    SCROW nRow = GetViewData()->GetCurY();
+    SCTAB nTab = GetViewData()->GetTabNo();
 
     ScPostIt aNote;
     BOOL bFound = pDoc->GetNote( nCol, nRow, nTab, aNote );
