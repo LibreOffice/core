@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDataPilotTableObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 18:59:14 $
+ *  last change:$Date: 2004-03-19 14:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,13 +230,13 @@ public class ScDataPilotTableObj extends TestCase {
         filterFields[0].Connection = com.sun.star.sheet.FilterConnection.AND;
         filterFields[0].Field = 1;
         filterFields[0].IsNumeric = true;
-        filterFields[0].StringValue = "4";
+        filterFields[0].NumericValue = 4;
         filterFields[0].Operator = com.sun.star.sheet.FilterOperator.GREATER;
         filterFields[1] = new TableFilterField();
         filterFields[1].Connection = com.sun.star.sheet.FilterConnection.AND;
         filterFields[1].Field = 1;
         filterFields[1].IsNumeric = true;
-        filterFields[1].StringValue = "12";
+        filterFields[1].NumericValue = 12;
         filterFields[1].Operator = com.sun.star.sheet.FilterOperator.LESS_EQUAL;
 
         XDataPilotTablesSupplier DPTS = (XDataPilotTablesSupplier)
