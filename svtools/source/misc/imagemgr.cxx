@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 12:49:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,12 +180,12 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "mml",   FALSE, STR_DESCRIPTION_MATHML_DOC,            IMG_MATH },
     { "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE },
     { "odb",   FALSE, STR_DESCRIPTION_OO_DATABASE_DOC,       IMG_OO_DATABASE_DOC },
-    { "ood",   FALSE, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
-    { "oof",   FALSE, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
-    { "oom",   FALSE, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
-    { "oop",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
-    { "oos",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
-    { "oot",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
+    { "odg",   FALSE, STR_DESCRIPTION_OO_DRAW_DOC,           IMG_OO_DRAW_DOC },
+    { "odf",   FALSE, STR_DESCRIPTION_OO_MATH_DOC,           IMG_OO_MATH_DOC },
+    { "odm",   FALSE, STR_DESCRIPTION_OO_GLOBAL_DOC,         IMG_OO_GLOBAL_DOC },
+    { "odp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_DOC,        IMG_OO_IMPRESS_DOC },
+    { "ods",   FALSE, STR_DESCRIPTION_OO_CALC_DOC,           IMG_OO_CALC_DOC },
+    { "odt",   FALSE, STR_DESCRIPTION_OO_WRITER_DOC,         IMG_OO_WRITER_DOC },
     { "otd",   FALSE, STR_DESCRIPTION_OO_DRAW_TEMPLATE,      IMG_OO_DRAW_TEMPLATE },
     { "otp",   FALSE, STR_DESCRIPTION_OO_IMPRESS_TEMPLATE,   IMG_OO_IMPRESS_TEMPLATE },
     { "ots",   FALSE, STR_DESCRIPTION_OO_CALC_TEMPLATE,      IMG_OO_CALC_TEMPLATE },
@@ -252,14 +252,14 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 #ifdef MAC
     SvtExtensionResIdMapping_Impl Mappings[] =
     {
-    {"SW/©0", FALSE, STR_DESCRIPTION_SWRITER_DOC,    IMG_WRITER},
+    {"SW/ï¿½0", FALSE, STR_DESCRIPTION_SWRITER_DOC,    IMG_WRITER},
     {"SVsa0", FALSE, STR_DESCRIPTION_SDRAW_DOC,      IMG_DRAW},
     {"SVsd0", FALSE, STR_DESCRIPTION_SIMPRESS_DOC,   IMG_IMPRESS},
     {"SVsc0", FALSE, STR_DESCRIPTION_SCALC_DOC,      IMG_CALC},
     {"SVch0", FALSE, STR_DESCRIPTION_SCHART_DOC,     IMG_CHART},
     {"SVsm0", FALSE, STR_DESCRIPTION_SMATH_DOC,      IMG_MATH},
     ("SVsb0", FALSE, STR_DESCRIPTION_SDATABASE_DOC,  IMG_DATABASE),
-    {"sW/©1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_WRITERTEMPLATE},
+    {"sW/ï¿½1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_WRITERTEMPLATE},
     {"sVsa1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_DRAWTEMPLATE},
     {"sVsd1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_IMPRESSTEMPLATE},
     {"sVsc1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_CALCTEMPLATE},
