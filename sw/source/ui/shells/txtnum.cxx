@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:37:26 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,36 +101,38 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     case FN_NUM_NUMBERING_ON:
     {
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
-        BOOL bMode = !GetShell().GetCurNumRule();
+        BOOL bMode = !GetShell().HasNumber(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
         else
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
-        if ( bMode != (GetShell().GetCurNumRule()!=NULL) )
+
+        if ( bMode != (GetShell().HasNumber()) ) // #i29560#
         {
             rReq.Done();
             if( bMode )
                 GetShell().NumOn();
             else
-                GetShell().DelNumRules();
+                GetShell().NumOrBulletOff(); // #i29560#
         }
     }
     break;
     case FN_NUM_BULLET_ON:
     {
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
-        BOOL bMode = !GetShell().GetCurNumRule();
+        BOOL bMode = !GetShell().HasBullet(); // #i29560#
         if ( pItem )
             bMode = pItem->GetValue();
         else
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
-        if ( bMode != (GetShell().GetCurNumRule()!=NULL) )
+
+        if ( bMode != (GetShell().HasBullet()) ) // #i29560#
         {
             rReq.Done();
             if( bMode )
                 GetShell().BulletOn();
             else
-                GetShell().DelNumRules();
+                GetShell().NumOrBulletOff(); // #i29560#
         }
     }
     break;
