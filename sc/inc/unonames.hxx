@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-24 17:29:34 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,10 @@
 #define SC_UNONAME_CHROWHDR         "ChartRowAsLabel"
 #define SC_UNONAME_CONDFMT          "ConditionalFormat"
 #define SC_UNONAME_CONDLOC          "ConditionalFormatLocal"
+#define SC_UNONAME_CONDXML          "ConditionalFormatXML"
 #define SC_UNONAME_VALIDAT          "Validation"
 #define SC_UNONAME_VALILOC          "ValidationLocal"
+#define SC_UNONAME_VALIXML          "ValidationXML"
 #define SC_UNONAME_FORMLOC          "FormulaLocal"
 #define SC_UNONAME_FORMRT           "FormulaResultType"
 
