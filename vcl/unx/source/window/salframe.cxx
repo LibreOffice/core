@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 16:28:31 $
+ *  last change: $Author: cp $ $Date: 2002-09-24 14:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1996,7 +1996,8 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
 
 void SalFrame::EndExtTextInput( USHORT nFlags )
 {
-      maFrameData.mpInputContext->EndExtTextInput( nFlags );
+    if (maFrameData.mpInputContext != NULL)
+          maFrameData.mpInputContext->EndExtTextInput( nFlags );
 }
 
 // -----------------------------------------------------------------------
