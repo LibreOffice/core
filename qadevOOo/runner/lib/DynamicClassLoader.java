@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DynamicClassLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:03:27 $
+ *  last change:$Date: 2003-10-06 12:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@ package lib ;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * @deprecated: moved to util package.
+ */
 public class DynamicClassLoader {
 
     /**
