@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:36:03 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1507,7 +1507,7 @@ void ViewShell::SetPreview( bool bVisible )
     2. Use the model to create a new page or duplicate an existing one.
     3. Update the tab control and switch to the new page.
 */
-void ViewShell::CreateOrDuplicatePage (
+SdPage* ViewShell::CreateOrDuplicatePage (
     SfxRequest& rRequest,
     PageKind ePageKind,
     SdPage* pPage)
@@ -1584,7 +1584,7 @@ void ViewShell::CreateOrDuplicatePage (
 
             delete pDlg;
             rRequest.Ignore ();
-            return;
+            return NULL;
         }
         else
         {
@@ -1626,7 +1626,7 @@ void ViewShell::CreateOrDuplicatePage (
 
         StarBASIC::FatalError (SbERR_WRONG_ARGS);
         rRequest.Ignore ();
-        return;
+        return NULL;
     }
     else
     {
@@ -1663,7 +1663,7 @@ void ViewShell::CreateOrDuplicatePage (
 
             StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
             rRequest.Ignore ();
-            return;
+            return NULL;
         }
     }
 
@@ -1747,37 +1747,16 @@ void ViewShell::CreateOrDuplicatePage (
             // Try to handle another slot id gracefully.
             nNewPageIndex = 0xffff;
     }
+    SdPage* pNewPage = NULL;
     if (nNewPageIndex != 0xffff)
     {
-        pDrView->AddUndo (new SdrUndoNewPage (
-            *pDocument->GetSdPage (nNewPageIndex, PK_STANDARD)));
-        pDrView->AddUndo (new SdrUndoNewPage (
-            *pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
+        pNewPage = pDocument->GetSdPage (nNewPageIndex, PK_STANDARD);
+        pDrView->AddUndo (new SdrUndoNewPage (*pNewPage));
+        pDrView->AddUndo (new SdrUndoNewPage (*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
     }
-
     pDrView->EndUndo();
-#if 0
-    // 3. Update the tab control.
-    aTabControl.Clear();
 
-    SdPage* pPage;
-    String aPageName;
-    USHORT nPageCnt = pDocument->GetSdPageCount(ePageKind);
-
-    for (USHORT i = 0; i < nPageCnt; i++)
-    {
-        pPage = pDocument->GetSdPage(i, ePageKind);
-
-        aPageName = pPage->GetName();
-        aTabControl.InsertPage(i + 1, aPageName);
-    }
-
-    aTabControl.SetCurPageId (nNewPageIndex + 1);
-
-    GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-        (rRequest.IsSynchronCall() ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON)
-        | SFX_CALLMODE_RECORD);
-#endif
+    return pNewPage;
 }
 
 
