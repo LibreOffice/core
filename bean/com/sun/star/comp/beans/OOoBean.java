@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-23 14:56:58 $
+ *  last change: $Author: mi $ $Date: 2004-09-27 14:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,7 +673,7 @@ public class OOoBean
     {
         // wrap Java stream into UNO stream
         com.sun.star.io.XInputStream xStream =
-                new InputStreamToXInputStreamAdapter(
+                new com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter(
                     iInStream );
 
         // add stream to arguments
@@ -704,7 +704,7 @@ public class OOoBean
     {
         // wrap byte arrray into UNO stream
         com.sun.star.io.XInputStream xStream =
-                new ByteArrayToXInputStreamAdapter(
+                new com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter(
                     aInBuffer );
 
         // add stream to arguments
