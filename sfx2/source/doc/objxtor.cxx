@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:14:49 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,8 @@ SfxObjectShell::SfxObjectShell
     bHasName = sal_False;
     SfxShell::SetName( GetTitle() );
     nViewNo = 0;
+
+    pImp->bWaitingForPicklist = sal_True;
 
     // Aggregation InPlaceObject+Automation
 //(mba)    AddInterface( SvDispatch::ClassFactory() );
