@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-14 08:08:31 $
+ *  last change: $Author: tra $ $Date: 2001-10-15 10:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ class CSmplMailClient :
     public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailClient >
 {
 public:
-    CSmplMailClient( );
+    CSmplMailClient( LHANDLE hMapiSession );
+    ~CSmplMailClient( );
 
     //------------------------------------------------
     //
@@ -135,6 +136,7 @@ private:
     rtl::OUString getMapiErrorMsg( ULONG ulMapiError );
 
 private:
+    LHANDLE                         m_hMapiSession;
     CSimpleMapi*                    m_pSimpleMapi;
     rtl::OString                    m_Subject;
     rtl::OString                    m_SmtpAddressOriginator;

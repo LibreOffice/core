@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-25 08:21:23 $
+ *  last change: $Author: tra $ $Date: 2001-10-15 10:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,21 @@ namespace // private
 //
 //------------------------------------------------
 
-CSmplMailClient::CSmplMailClient( ) :
+CSmplMailClient::CSmplMailClient( LHANDLE hMapiSession ) :
+    m_hMapiSession( hMapiSession ),
     m_pSimpleMapi( CSimpleMapi::create( ) )
 {
+    OSL_ASSERT( m_hMapiSession );
+}
+
+//------------------------------------------------
+//
+//------------------------------------------------
+
+CSmplMailClient::~CSmplMailClient( )
+{
+    ULONG ulRet = m_pSimpleMapi->MAPILogoff( m_hMapiSession, 0, 0, 0 );
+    OSL_ASSERT( SUCCESS_SUCCESS == ulRet );
 }
 
 //------------------------------------------------
@@ -166,16 +178,18 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage( const Reference< XSimpleMa
         initMapiSendMailFlags( aFlag, flFlags );
 
         ULONG ulRet = m_pSimpleMapi->MAPISendMail(
-            0,          // no session, create a new one
+            m_hMapiSession,          // we use an existing session #93077#
             0,          // no parent window
             &mapiMsg,   // a configured mapi message struct
             flFlags,    // some flags
             0 );        // reserved
 
         if ( SUCCESS_SUCCESS != ulRet )
+        {
             throw Exception(
                 getMapiErrorMsg( ulRet ),
                 static_cast< XSimpleMailClient* >( this ) );
+        }
     }
     catch( RuntimeException& )
     {
@@ -390,7 +404,10 @@ void CSmplMailClient::initAttachementList(
 
 void CSmplMailClient::initMapiSendMailFlags( sal_Int32 aFlags, FLAGS& aMapiFlags )
 {
-    aMapiFlags = MAPI_NEW_SESSION | MAPI_UNICODE;
+    // #93077#
+    OSL_ASSERT( !( aFlags & NO_LOGON_DIALOG ), "Flag NO_LOGON_DIALOG has currently no effect" );
+
+    aMapiFlags = MAPI_UNICODE; // #93077# MAPI_NEW_SESSION
 
     if ( !( aFlags & NO_USER_INTERFACE ) )
         aMapiFlags |= MAPI_DIALOG;
