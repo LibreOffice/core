@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:38:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-11 11:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,9 +231,16 @@ icu::BreakIterator* SAL_CALL BreakIterator_ca::loadICUWordBreakIterator(const OU
 icu::BreakIterator* SAL_CALL BreakIterator_hu::loadICUWordBreakIterator(const OUString& Text, sal_Int32 nStartPos, const lang::Locale& rLocale,
         sal_Int16 rWordType) throw(RuntimeException)
 {
+        sal_Bool newBreak = sal_False;
         if (rWordType == WordType::DICTIONARY_WORD) {
-            if (! dictWordBreak)
+            if (!dictWordBreak) {
+                newBreak = sal_True;
                 dictWordBreak = loadICURuleBasedBreakIterator(dict_word_hu_brk);
+            }
+            if (newBreak || !dictWordText.equals(Text)) {
+                dictWordText = Text;
+                dictWordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
+            }
             return dictWordBreak;
         } else
             return BreakIterator_Unicode::loadICUWordBreakIterator(Text, nStartPos, rLocale, rWordType);
