@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:13:22 $
+ *  last change: $Author: obo $ $Date: 2001-10-24 20:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -13990,18 +13990,18 @@ String SIP_SA_XMLATTRIBUTES
 {
     Text = "Benutzerdefinierte Attribute";
     Text [ ENGLISH ] = "User definied Attributes" ;
-    Text[ english_us ] = "User definied Attributes";
+    Text[ english_us ] = "User-defined attributes";
     Text[ portuguese ] = "User definied Attributes";
-    Text[ russian ] = "User definied Attributes";
+    Text[ russian ] = "Атрибуты пользователя";
     Text[ greek ] = "User definied Attributes";
-    Text[ dutch ] = "User definied Attributes";
+    Text[ dutch ] = "Door gebruiker gedefinieerde attributen";
     Text[ french ] = "Attributs utilisateur";
     Text[ spanish ] = "Atributos definidos por el usuario";
     Text[ finnish ] = "User definied Attributes";
     Text[ italian ] = "User definied Attributes";
     Text[ danish ] = "User definied Attributes";
     Text[ swedish ] = "Anvдndardefinierade attribut";
-    Text[ polish ] = "User definied Attributes";
+    Text[ polish ] = "Atrybuty indywidualne";
     Text[ portuguese_brazilian ] = "User definied Attributes";
     Text[ japanese ] = "User definied Attributes";
     Text[ korean ] = "User definied Attributes";
@@ -15763,7 +15763,7 @@ String SIP_SA_LAYERID
     Text [ ENGLISH ] = "Layer ID" ;
     Text[ english_us ] = "Level ID";
     Text[ portuguese ] = "Identificar nнveis";
-    Text[ russian ] = "Иденитфикация слоя";
+    Text[ russian ] = "Идентификация слоя";
     Text[ dutch ] = "Niveau-ID";
     Text[ french ] = "Identification de niveau";
     Text[ spanish ] = "Identificaciуn de niveles";
@@ -17160,7 +17160,7 @@ String SIP_EE_CHAR_OUTLINE
     Text [ ENGLISH ] = "Contour" ;
     Text[ english_us ] = "Outline";
     Text[ portuguese ] = "Contorno";
-    Text[ russian ] = "Контур";
+    Text[ russian ] = "Контурный шрифт";
     Text[ dutch ] = "Contour";
     Text[ french ] = "Contour";
     Text[ spanish ] = "Contorno";
@@ -17730,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
