@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 17:31:09 $
+ *  last change: $Author: mt $ $Date: 2001-11-28 11:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,44 +1229,52 @@ void EditDoc::RemoveItemsFromPool( ContentNode* pNode )
     }
 }
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent, short nScriptType )
 {
     Font aPrevFont( rFont );
     rFont.SetAlign( ALIGN_BASELINE );
     rFont.SetTransparent( TRUE );
 
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SFX_ITEM_ON ) )
-        rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( EE_CHAR_LANGUAGE )).GetLanguage() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON ) )
-        rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON ) )
+    USHORT nWhich_FontInfo = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
+    USHORT nWhich_Language = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
+    USHORT nWhich_FontHeight = GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType );
+    USHORT nWhich_Weight = GetScriptItemId( EE_CHAR_WEIGHT, nScriptType );
+    USHORT nWhich_Italic = GetScriptItemId( EE_CHAR_ITALIC, nScriptType );
+
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontInfo ) == SFX_ITEM_ON ) )
     {
-        const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( EE_CHAR_FONTINFO );
+        const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( nWhich_FontInfo );
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
     }
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) == SFX_ITEM_ON ) )
-        rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() ) );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_ON ) )
-        rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Language ) == SFX_ITEM_ON ) )
+        rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( nWhich_Language )).GetLanguage() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON ) )
+        rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SFX_ITEM_ON ) )
+        rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SFX_ITEM_ON ) )
+        rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( nWhich_Weight )).GetWeight() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON ) )
         rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON ) )
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_ON ) )
-        rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( EE_CHAR_ITALIC )).GetPosture() );
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SFX_ITEM_ON ) )
+        rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( nWhich_Italic )).GetPosture() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_ON ) )
         rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_SHADOW ) == SFX_ITEM_ON ) )
         rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SFX_ITEM_ON ) )
     {
-        USHORT nProp = ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetProp();
+        const SvxEscapementItem& rEsc = (const SvxEscapementItem&) rSet.Get( EE_CHAR_ESCAPEMENT );
+
+        USHORT nProp = rEsc.GetProp();
         rFont.SetPropr( (BYTE)nProp );
 
-        short nEsc = ((const SvxEscapementItem&)rSet.Get( EE_CHAR_ESCAPEMENT)).GetEsc();
+        short nEsc = rEsc.GetEsc();
         if ( nEsc == DFLT_ESC_AUTO_SUPER )
             nEsc = 100 - nProp;
         else if ( nEsc == DFLT_ESC_AUTO_SUB )

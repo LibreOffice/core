@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-16 12:29:12 $
+ *  last change: $Author: mt $ $Date: 2001-11-28 11:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,6 +833,9 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     if ( nCode == KEY_END )
                         bEndKey = sal_True;
                 }
+#ifdef DEBUG
+                GetLanguage( pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() ), aCurSel.Max().GetIndex() );
+#endif
             }
             break;
             case KEY_BACKSPACE:
@@ -1391,7 +1394,7 @@ SfxItemSet EditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal
     return pImpEditEngine->GetAttribs( nPara, nStart, nEnd, nFlags );
 }
 
-
+// MT: Can be remved after 6.x?
 Font EditEngine::GetStandardFont( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2207,6 +2210,14 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxCharReliefItem( rFont.GetRelief(), EE_CHAR_RELIEF ) );
 }
 
+Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, USHORT nScriptType )
+{
+    SvxFont aFont;
+    CreateFont( aFont, rItemSet, nScriptType );
+    return aFont;
+}
+
+// Maybe we can remove the next two methods, check after 6.x
 Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet )
 {
     return CreateSvxFontFromItemSet( rItemSet );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
+ *  last change: $Author: mt $ $Date: 2001-11-28 11:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ DBG_NAMEEX( EE_TextPortion );
 #define CHARPOSGROW     16
 #define DEFTAB          720
 
-void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent = TRUE );
+void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent = TRUE, short nScriptType = 0 );
 USHORT GetScriptItemId( USHORT nItemId, short nScriptType );
 BOOL IsScriptItemValid( USHORT nItemId, short nScriptType );
 
