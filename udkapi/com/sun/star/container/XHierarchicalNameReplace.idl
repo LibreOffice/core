@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalNameReplace.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ module com {  module sun {  module star {  module container {
 /**
  * Replacement of hierarchical elements.
  */
-interface XHierarchicalNameReplace : com::sun::star::container::XHierarchicalNameAccess
+published interface XHierarchicalNameReplace : com::sun::star::container::XHierarchicalNameAccess
 {
 
     /** replaces the element at the specified name.
