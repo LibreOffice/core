@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_stat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:13:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,3 +363,4 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
        }
     return osl_File_E_None;
 }
+
