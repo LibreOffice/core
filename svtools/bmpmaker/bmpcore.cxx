@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:30:30 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,8 +325,8 @@ void BmpCreator::ImplCreate( SvStream& rStm,
                 {
                     if( aOutFileName.Search( String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) ) != STRING_NOTFOUND )
                     {
-                        ::vcl::PNGWriter aPNGWriter( aOutStream );
-                        aPNGWriter.Write( aTotalBmpEx );
+                        ::vcl::PNGWriter aPNGWriter( aTotalBmpEx );
+                        aPNGWriter.Write( aOutStream );
                     }
                     else
                         aOutStream << aTotalBmpEx;
