@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:11:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 class ScMarkArray;
 class ScRangeList;
 
@@ -77,7 +81,7 @@ class ScRangeList;
 //!     damit "alle suchen" ueber mehrere Tabellen wieder funktioniert!
 
 
-class ScMarkData
+class SC_DLLPUBLIC ScMarkData
 {
 private:
     ScRange         aMarkRange;             // Bereich
