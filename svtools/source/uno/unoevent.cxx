@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-19 16:18:01 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,9 +304,32 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 bRetValueOK = sal_True;
                 break;
             }
-
-            case JAVASCRIPT:
             case EXTENDED_STYPE:
+            {
+                // create sequence
+                Sequence<PropertyValue> aSequence(2);
+                Any aTmp;
+
+                // create type
+                PropertyValue aTypeValue;
+                aTypeValue.Name = sEventType;
+                aTmp <<= sScript;
+                aTypeValue.Value = aTmp;
+                aSequence[0] = aTypeValue;
+
+                // macro name
+                PropertyValue aNameValue;
+                aNameValue.Name = sScript;
+                OUString sNameTmp(rMacro.GetMacName());
+                aTmp <<= sNameTmp;
+                aNameValue.Value = aTmp;
+                aSequence[1] = aNameValue;
+
+                rAny <<= aSequence;
+                bRetValueOK = sal_True;
+                break;
+                        }
+            case JAVASCRIPT:
             default:
                 DBG_ERROR("not implemented");
         }
@@ -366,6 +389,11 @@ void SvBaseEventDescriptor::getMacroFromAny(
                 eType = JAVASCRIPT;
                 bTypeOK = sal_True;
             }
+            else if (sTmp.equals(sScript))
+            {
+                eType = EXTENDED_STYPE;
+                bTypeOK = sal_True;
+            }
             else if (sTmp.equals(sNone))
             {
                 bNone = sal_True;
@@ -401,6 +429,11 @@ void SvBaseEventDescriptor::getMacroFromAny(
             {
                 // create macro and return
                 SvxMacro aMacro(sMacroVal, sLibVal, eType);
+                rMacro = aMacro;
+            }
+            else if (eType == EXTENDED_STYPE)
+            {
+                SvxMacro aMacro(sScriptVal, sScript);
                 rMacro = aMacro;
             }
             else
