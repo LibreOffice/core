@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:40:51 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,11 +190,11 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ dutch ] = "\"Rechte\" aanhalingstekens vervangen door %1 typografische%2" ;
         Text [ spanish ] = "Reemplazar comillas \"rectas\" con comillas %1tipográficas%2" ;
         Text [ english_us ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
-        Text[ chinese_simplified ] = "\"Ö±ĞÍ\"ÒıºÅÓÉ%1¸öÈËÒıºÅ%2 ´úÌæ";
+        Text[ chinese_simplified ] = "\"Ö±ĞÍ\"ÒıºÅÓÉ%1×ÖĞÍÒıºÅ%2 ´úÌæ";
         Text[ russian ] = "Çàìåíÿòü \"ïğÿìûå\" êàâû÷êè %1òèïîãğàôñêèìè %2";
         Text[ polish ] = "Zamieniaj cudzys³owy \"proste\" na %1 \"drukarskie\" %2";
         Text[ japanese ] = "\"ºİËß­°À—p\"¸«°Ã°¼®İÏ°¸‚ğ%1ˆóü—p%2‚É’uŠ·";
-        Text[ chinese_traditional ] = "¡uª½«¬¤Ş¸¹¡v¥Ñ%1­Ó¤H¤Ş¸¹%2 ´À¥N";
+        Text[ chinese_traditional ] = "ª½«¬¤Ş¸¹¥Ñ%1¦r«¬¤Ş¸¹%2 ´À¥N";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÇÊ ÊäÕíÕ \"ÚÇÏíÉ\" ÈÜÚáÇãÇÊ ÊäÕíÕ%1ØÈæÛÑÇİíøÉ%2";
         Text[ greek ] = "ÁíôéêáôÜóôáóç \"ßóùí\" åéóáãùãéêşí ìå %1ôõğïãñáöéêÜ%2";
         Text[ korean ] = "\"Á÷¼±\" ÀÎ¿ëºÎÈ£¸¦ %1ÀÎ¼âÃ¼%2 ÀÎ¿ëºÎÈ£·Î ´ëÃ¼";
@@ -268,7 +268,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ english_us ] = "Automatic _underline_";
         Text[ chinese_simplified ] = "×Ô¶¯_ÏÂ»®Ïß_";
         Text[ russian ] = "Àâòîìàòè÷åñêîå _ïîä÷åğêèâàíèå_";
-        Text[ polish ] = "Automatyczne _podkre?lenie_";
+        Text[ polish ] = "Automatyczne _podkreœlenie_";
         Text[ japanese ] = "©“®_‰ºü_";
         Text[ chinese_traditional ] = "¦Û°Ê¥[©³½u";
         Text[ arabic ] = "_ÎØ ÊÍÊí_ ÊáŞÇÆíÇğ";
@@ -318,11 +318,11 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese_brazilian ] = "1/2 ... gegen ? ... ersetzen" ;
         Text [ french ] = "Remplacer 1/2 ... par ½ ..." ;
         Text [ portuguese ] = "Substituir 1/2 ... por ½ ..." ;
-        Text[ chinese_simplified ] = "ÓÃ ?... ¸üÌæ 1/2 ...";
-        Text[ russian ] = "Çàìåíÿòü 1/2 ... íà ñèìâîëû";
-        Text[ polish ] = "Zamieñ 1/2 ... na \" ... ";
-        Text[ japanese ] = "1/2 ... ‚ğ  ½  ... ‚É’u‚«Š·‚¦‚é";
-        Text[ chinese_traditional ] = "¥Î ?... ¥N´À 1/2 ...";
+        Text[ chinese_simplified ] = "ÓÃ ? ... ¸üÌæ 1/2 ...";
+        Text[ russian ] = "Çàìåíÿòü 1/2 ... íà ? ...";
+        Text[ polish ] = "Zamieñ 1/2 ... na ? ... ";
+        Text[ japanese ] = "1/2 ...‚ğ ? ...‚É’uŠ·";
+        Text[ chinese_traditional ] = "¥Î ? ... ¥N´À 1/2 ...";
         Text[ arabic ] = "ÇÓÊÈÏÇá 1/2 ... ÈÜ ½...";
         Text[ greek ] = "ÁíôéêáôÜóôáóç 1/2 ... ìå ½ ...";
         Text[ korean ] = "1/2 ...À»£¨¸¦£©...·Î ´ëÃ¼";
@@ -372,7 +372,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese ] = "Substituir hífens" ;
         Text[ chinese_simplified ] = "¸üÌæÆÆÕÛºÅ";
         Text[ russian ] = "Çàìåíèòü òèğå";
-        Text[ polish ] = "Zamieniaj my?lniki";
+        Text[ polish ] = "Zamieniaj myœlniki";
         Text[ japanese ] = "ÀŞ¯¼­‚É’uŠ·";
         Text[ chinese_traditional ] = "¥N´À¯}§é¸¹";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÔõÑóØ";
@@ -801,7 +801,7 @@ String STR_EVENT_IMAGE_LOAD
     Text [ portuguese_brazilian ] = "Grafik laden erfolgreich" ;
     Text[ chinese_simplified ] = "×°ÈëÍ¼ĞÎ³É¹¦";
     Text[ russian ] = "Óñïåøíàÿ çàãğóçêà ãğàôèêè ";
-    Text[ polish ] = "Pomy?lne za³adowanie grafiki";
+    Text[ polish ] = "Pomyœlne za³adowanie grafiki";
     Text[ japanese ] = "}‚Ì“Ç‚İ‚İŠ®—¹";
     Text[ chinese_traditional ] = "¸ü¤J¹Ï§Î¦¨¥\\";
     Text[ arabic ] = "ÊÍãíá ÇáÕæÑÉ ÈäÌÇÍ";
@@ -958,7 +958,7 @@ String STR_EVENT_FRM_MOVE
     Text [ dutch ] = "Kader verplaatsen" ;
     Text[ chinese_simplified ] = "ÒÆ¶¯¿ò";
     Text[ russian ] = "Ïåğåìåñòèòü ğàìêó";
-    Text[ polish ] = "Przenie? ramkê";
+    Text[ polish ] = "Przenieœ ramkê";
     Text[ japanese ] = "˜g‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Ê®Ø";
     Text[ arabic ] = "ÅÒÇÍÉ ÇáßÇÏÑ";
@@ -1690,7 +1690,7 @@ String STR_MULT_INTERACT_HYPH_WARN
     Text[ japanese ] = "²İÀ×¸Ã¨ÌŞÊ²ÌÈ°¼®İ‚Í‚·‚Å‚É\n‚Ù‚©‚ÌÄŞ·­ÒİÄ‚Å±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·";
     Text[ korean ] = "´ëÈ­Çü ÇÏÀÌÇÂ ³Ö±â´Â \nÀÌ¹Ì ´Ù¸¥ ¹®¼­¿¡¼­ È°¼º»óÅÂÀÔ´Ï´Ù.";
     Text[ chinese_simplified ] = "½»»¥Ê½Á¬×Ö·û\nÒÑ¾­Ê¹ÓÃÔÚÒ»¸öÆäËüÎÄµµÖĞ";
-    Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡³s¦r¸¹¥\\¯à";
+    Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡³s¦r²Å¥\\¯à";
     Text[ arabic ] = "İÕá ÇáãŞÇØÚ ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
     Text[ turkish ] = "Etkileşimli heceleme\nşu an başka bir belgede etkin";
     Text[ catalan ] = "La separación silábica interactiva\nya está activa en otro documento";
@@ -1740,7 +1740,7 @@ String STR_HYPH_TITLE
     Text[ japanese ] = "Ê²ÌÈ°¼®İ";
     Text[ korean ] = "ÇÏÀÌÇÂ ³Ö±â";
     Text[ chinese_simplified ] = "Á¬×Ö·û";
-    Text[ chinese_traditional ] = "³s¦r¸¹";
+    Text[ chinese_traditional ] = "³s¦r²Å";
     Text[ arabic ] = "İÕá ÇáãŞÇØÚ";
     Text[ turkish ] = "Heceleme";
     Text[ catalan ] = "Separación silábica";
