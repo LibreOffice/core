@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:40:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ french ] = "Ins�rer une couche..." ;
             Text [ dutch ] = "~Niveau invoegen..." ;
             Text [ spanish ] = "~Insertar capa..." ;
-            Text [ danish ] = "Inds�t niveau..." ;
+            Text [ danish ] = "~Inds�t lag..." ;
             Text [ swedish ] = "~Infoga niv�..." ;
             Text [ finnish ] = "~Lis�� kerros..." ;
             Text [ english_us ] = "~Insert Layer..." ;
@@ -300,6 +300,8 @@ Menu RID_LAYERTAB_POPUP
             Text[ hebrew ] = "~Ebene einfügen...";
             Text[ hindi ] = "~परत जोड़ो...";
             Text[ slovak ] = "Vlož~iť vrstvu...";
+            Text[ hungarian ] = "~Réteg beszúrása...";
+            Text[ slovenian ] = "~Vstavi plast...";
         };
         MenuItem
         {
@@ -315,7 +317,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ french ] = "Modifier la couche..." ;
             Text [ dutch ] = "Niveau wij~zigen..." ;
             Text [ spanish ] = "~Modificar capa..." ;
-            Text [ danish ] = "Rediger niveau..." ;
+            Text [ danish ] = "~Modificer lag..." ;
             Text [ swedish ] = "~�ndra niv�..." ;
             Text [ finnish ] = "~Muuta kerroksen asetuksia..." ;
             Text [ english_us ] = "Modify La~yer..." ;
@@ -335,6 +337,8 @@ Menu RID_LAYERTAB_POPUP
             Text[ hebrew ] = "E~bene ändern...";
             Text[ hindi ] = "~परत सुधारो...";
             Text[ slovak ] = "Upraviť v~rstvu...";
+            Text[ hungarian ] = "~Réteg módosítása...";
+            Text[ slovenian ] = "Spremeni ~plast...";
         };
         MenuItem
         {
@@ -350,7 +354,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ french ] = "Supprimer la couche..." ;
             Text [ dutch ] = "Niveau ~wissen..." ;
             Text [ spanish ] = "~Borrar capa..." ;
-            Text [ danish ] = "Slet niveau..." ;
+            Text [ danish ] = "~Slet lag..." ;
             Text [ swedish ] = "Radera ~niv�..." ;
             Text [ finnish ] = "~Poista kerros..." ;
             Text [ english_us ] = "Delete ~Layer..." ;
@@ -370,10 +374,13 @@ Menu RID_LAYERTAB_POPUP
             Text[ hebrew ] = "Ebe~ne löschen...";
             Text[ hindi ] = "~परत मिटाओ...";
             Text[ slovak ] = "Zmazať ~vrstvu...";
+            Text[ hungarian ] = "Réteg ~törlése...";
+            Text[ slovenian ] = "Izbriši p~last...";
         };
         MN_RENAME_LAYER
     };
 };
+
 
 
 
