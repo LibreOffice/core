@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:05:37 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
-#ifndef __DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#ifndef __COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
@@ -113,12 +113,6 @@ namespace svt
     #error "Who define css? I need it as namespace alias."
 #else
     #define css ::com::sun::star
-#endif
-
-#ifdef dcss
-    #error "Who define dcss? I need it as namespace alias."
-#else
-    #define dcss ::drafts::com::sun::star
 #endif
 
 //===============================================
@@ -176,9 +170,9 @@ class AcceleratorExecute : private TMutexInit
         css::uno::Reference< css::frame::XDispatchProvider > m_xDispatcher;
 
         /** TODO document me */
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xGlobalCfg;
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xModuleCfg;
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > m_xDocCfg;
+        css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalCfg;
+        css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleCfg;
+        css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocCfg;
 
         /** TODO document me */
         TCommandQueue m_lCommandQueue;
@@ -276,12 +270,12 @@ class AcceleratorExecute : private TMutexInit
 
         //---------------------------------------
         /** TODO document me */
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > impl_st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        css::uno::Reference< css::ui::XAcceleratorConfiguration > impl_st_openGlobalConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > impl_st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+        css::uno::Reference< css::ui::XAcceleratorConfiguration > impl_st_openModuleConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
                                                                                             const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
-        css::uno::Reference< dcss::ui::XAcceleratorConfiguration > impl_st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);
+        css::uno::Reference< css::ui::XAcceleratorConfiguration > impl_st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);
 
         //---------------------------------------
         /** TODO document me */
@@ -297,7 +291,7 @@ class AcceleratorExecute : private TMutexInit
 };
 
 #undef  css
-#undef dcss
+#undef css
 
 } // namespace svt
 
