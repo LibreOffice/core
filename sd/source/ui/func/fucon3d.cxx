@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #endif
 
 #include <svx/svxids.hrc>
-#include <basctl/idetemp.hxx>
+//#include <basctl/idetemp.hxx>
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif

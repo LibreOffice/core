@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _IDETEMP_HXX
-#include <basctl/idetemp.hxx>
-#endif
+//#ifndef _IDETEMP_HXX
+//#include <basctl/idetemp.hxx>
+//#endif
 
 #pragma hdrstop
 

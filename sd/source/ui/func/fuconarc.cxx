@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 
-#include <basctl/idetemp.hxx>
+//#include <basctl/idetemp.hxx>
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif

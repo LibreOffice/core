@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-20 14:19:56 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <svx/dialmgr.hxx>
 
 #include "app.hrc"
-#include <basctl/idetemp.hxx>
+//#include <basctl/idetemp.hxx>
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif

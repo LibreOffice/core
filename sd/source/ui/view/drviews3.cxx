@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:43 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 10:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,9 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _IDETEMP_HXX //autogen
-#include <basctl/idetemp.hxx>
-#endif
+//#ifndef _IDETEMP_HXX //autogen
+//#include <basctl/idetemp.hxx>
+//#endif
 #ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
 #endif
