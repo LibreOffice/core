@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:55:00 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ enum XMLUserDefinedTransformerAction
 {
     XML_ETACTION_META=XML_ETACTION_USER_DEFINED,
     XML_ETACTION_DOCUMENT,
+    XML_ETACTION_BODY,
     XML_ETACTION_NOTES,
     XML_ETACTION_TABLE,
     XML_ETACTION_STYLE,
@@ -198,6 +199,8 @@ static XMLTransformerActionInit aActionTable[] =
     // rename <office:script> to <office:scripts>
     ENTRY1Q( OFFICE, SCRIPTS, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OFFICE, XML_SCRIPT ),
+
+    ENTRY0( OFFICE, BODY, XML_ETACTION_BODY ),
 
     // rename <office:font-face-decls> to <office:font-decl>,
     // rename <style:font-face> to <style:font-decl>, process attrs
@@ -506,8 +509,10 @@ static XMLTransformerActionInit aActionTable[] =
 //      OASIS_XLINK_ACTIONS ), /* generated entry */
 //  ENTRY1( SVG, DEFINITION_SRC, XML_ETACTION_PROC_ATTRS,
 //      OASIS_XLINK_ACTIONS ), /* generated entry */
-    ENTRY1( CHART, SYMBOL_IMAGE, XML_ETACTION_PROC_ATTRS,
-        OASIS_XLINK_ACTIONS ), /* generated entry */
+    ENTRY2QN( CHART, SYMBOL_IMAGE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
+              XML_NAMESPACE_STYLE, XML_SYMBOL_IMAGE,
+              OASIS_BACKGROUND_IMAGE_ACTIONS ),
+//      OASIS_XLINK_ACTIONS ), /* generated entry */
 //  events don't have real URIs
 //  ENTRY1( PRESENTATION, EVENT_LISTENER, XML_ETACTION_PROC_ATTRS,
 //      OASIS_XLINK_ACTIONS ), /* generated entry */
@@ -1067,6 +1072,70 @@ void XMLTableTransformerContext_Impl::EndElement()
     GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
+// -----------------------------------------------------------------------------
+
+class XMLBodyOASISTransformerContext_Impl : public XMLTransformerContext
+{
+    sal_Bool m_bFirstChild;
+
+public:
+    TYPEINFO();
+
+    XMLBodyOASISTransformerContext_Impl( XMLTransformerBase& rTransformer,
+                           const ::rtl::OUString& rQName );
+
+    virtual ~XMLBodyOASISTransformerContext_Impl();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::rtl::OUString& rQName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
+};
+
+TYPEINIT1( XMLBodyOASISTransformerContext_Impl, XMLTransformerContext );
+
+XMLBodyOASISTransformerContext_Impl::XMLBodyOASISTransformerContext_Impl(
+        XMLTransformerBase& rImp,
+        const OUString& rQName ) :
+    XMLTransformerContext( rImp, rQName ),
+    m_bFirstChild( sal_False )
+{
+}
+
+XMLBodyOASISTransformerContext_Impl::~XMLBodyOASISTransformerContext_Impl()
+{
+}
+
+void XMLBodyOASISTransformerContext_Impl::StartElement(
+        const Reference< XAttributeList >& rAttrList )
+{
+}
+
+XMLTransformerContext* XMLBodyOASISTransformerContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::rtl::OUString& rQName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    if (!m_bFirstChild)
+    {
+        m_bFirstChild = sal_True;
+        XMLTransformerContext::StartElement(xAttrList);
+    }
+
+    return XMLTransformerContext::CreateChildContext(nPrefix, rLocalName, rQName, xAttrList);
+}
+
+void XMLBodyOASISTransformerContext_Impl::EndElement()
+{
+    if (!m_bFirstChild)
+        XMLTransformerContext::StartElement(Reference< XAttributeList >());
+
+    XMLTransformerContext::EndElement();
+}
+
 //-----------------------------------------------------------------------------
 
 class XMLTabStopOASISTContext_Impl : public XMLPersElemContentTContext
@@ -1377,6 +1446,9 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
         break;
     case XML_ETACTION_DOCUMENT:
         return new XMLDocumentTransformerContext( *this, rQName );
+        break;
+    case XML_ETACTION_BODY:
+        return new XMLBodyOASISTransformerContext_Impl( *this, rQName );
         break;
     case XML_ETACTION_NOTES:
         return new XMLNotesTransformerContext( *this, rQName,
