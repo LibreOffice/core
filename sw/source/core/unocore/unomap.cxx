@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-25 09:04:51 $
+ *  last change: $Author: tl $ $Date: 2002-10-08 14:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_PAGENUMBERTYPE_HPP_
 #include <com/sun/star/text/PageNumberType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -1589,6 +1592,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aDocMap_Impl[] =
                 {
+                    { SW_PROP_NMID(UNO_NAME_BASIC_LIBRARIES), WID_DOC_BASIC_LIBRARIES,  CPPU_E2T(CPPUTYPE_REFLIBCONTAINER), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_NAME), RES_CHRATR_FONT,       CPPU_E2T(CPPUTYPE_OUSTRING),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_STYLE_NAME), RES_CHRATR_FONT,     CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_FAMILY), RES_CHRATR_FONT,     CPPU_E2T(CPPUTYPE_INT16),                   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },

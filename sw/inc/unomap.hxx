@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-24 11:34:01 $
+ *  last change: $Author: tl $ $Date: 2002-10-08 14:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@
 #define WID_DOC_TWO_DIGIT_YEAR                  1011
 #define WID_DOC_AUTOMATIC_CONTROL_FOCUS         1012
 #define WID_DOC_APPLY_FORM_DESIGN_MODE          1013
+#define WID_DOC_BASIC_LIBRARIES                 1014
 
 
 //AutoText
