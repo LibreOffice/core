@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 10:55:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 10:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,14 @@
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
 #endif
+#ifndef SVTOOLS_WIZARDHEADER_HXX
+#include "wizardheader.hxx"
+#endif
+#ifndef _SV_BITMAP_HXX
+#include <vcl/bitmap.hxx>
+#endif
+
+#define HEADER_SIZE_Y   30
 
 //.........................................................................
 namespace svt
@@ -81,18 +89,96 @@ namespace svt
 //.........................................................................
 
     //=====================================================================
+    //= WizardPageImplData
+    //=====================================================================
+    struct WizardPageImplData
+    {
+        WizardHeader*       pHeader;
+
+        WizardPageImplData()
+            :pHeader( NULL )
+        {
+        }
+    };
+
+    //=====================================================================
     //= OWizardPage
     //=====================================================================
     //---------------------------------------------------------------------
     OWizardPage::OWizardPage( OWizardMachine* _pParent, WinBits _nStyle )
         :TabPage( _pParent, _nStyle )
+        ,m_pImpl( new WizardPageImplData )
     {
     }
 
     //---------------------------------------------------------------------
     OWizardPage::OWizardPage( OWizardMachine* _pParent, const ResId& _rResId )
         :TabPage( _pParent, _rResId )
+        ,m_pImpl( new WizardPageImplData )
     {
+    }
+
+    //---------------------------------------------------------------------
+    OWizardPage::~OWizardPage()
+    {
+        delete m_pImpl->pHeader;
+        delete m_pImpl;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OWizardPage::isHeaderEnabled( ) const
+    {
+        return NULL != m_pImpl->pHeader;
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardPage::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight, GrantAccess )
+    {
+        //.................................................................
+        // create the header control
+        m_pImpl->pHeader = new WizardHeader( this );
+
+        // move it to the upper left corner
+        m_pImpl->pHeader->SetPosPixel( Point( 0, 0 ) );
+
+        // size it: as wide as we are, and 30 APPFONT units high
+        Size aHeaderSize( GetSizePixel().Width(), _nPixelHeight );
+        m_pImpl->pHeader->SetSizePixel( aHeaderSize );
+
+        // set bitmap / text of the control
+        m_pImpl->pHeader->setHeaderBitmap( _rBitmap );
+        m_pImpl->pHeader->setHeaderText( GetText() );
+
+        // show
+        m_pImpl->pHeader->Show( );
+
+        //.................................................................
+        // move all the other controls down
+        Point aChildPos;
+        // loop through the children
+        Window* pChildLoop = GetWindow( WINDOW_FIRSTCHILD );
+        while ( pChildLoop )
+        {
+            if ( pChildLoop != m_pImpl->pHeader )
+            {   // it's not the header itself
+                aChildPos = pChildLoop->GetPosPixel();
+                aChildPos.Y() += aHeaderSize.Height();
+                pChildLoop->SetPosPixel( aChildPos );
+            }
+
+            pChildLoop = pChildLoop->GetWindow( WINDOW_NEXT );
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardPage::setHeaderText( const String& _rHeaderText )
+    {
+        if ( !isHeaderEnabled() )
+        {
+            DBG_ERROR( "OWizardPage::setHeaderText: have no header!" );
+            return;
+        }
+        m_pImpl->pHeader->setHeaderText( _rHeaderText );
     }
 
     //---------------------------------------------------------------------
@@ -126,6 +212,30 @@ namespace svt
     }
 
     //=====================================================================
+    //= WizardMachineImplData
+    //=====================================================================
+    struct WizardMachineImplData
+    {
+        String                          sTitleBase;         // the base for the title
+        ::std::stack< sal_uInt16 >      aStateHistory;      // the history of all states (used for implementing "Back")
+        Bitmap                          aHeaderBitmap;      // the bitmap to use for the page header
+
+        sal_Int32                       nHeaderHeight;      // the height (in pixels) of the page header
+
+        sal_uInt16                      nFirstUnknownPage;
+            // the WizardDialog does not allow non-linear transitions (e.g. it's
+            // not possible to add pages in a non-linear order), so we need some own maintainance data
+
+        sal_Bool                        bUsingHeaders;      // do we use page headers?
+
+        WizardMachineImplData()
+            :nFirstUnknownPage( 0 )
+            ,bUsingHeaders( sal_False )
+        {
+        }
+    };
+
+    //=====================================================================
     //= OWizardMachine
     //=====================================================================
     //---------------------------------------------------------------------
@@ -136,9 +246,9 @@ namespace svt
         ,m_pNextPage(NULL)
         ,m_pPrevPage(NULL)
         ,m_pHelp(NULL)
-        ,m_nFirstUnknownPage(0)
+        ,m_pImpl( new WizardMachineImplData )
     {
-        m_sTitleBase = GetText();
+        m_pImpl->sTitleBase = GetText();
 
         // create the buttons according to the wizard button flags
         // the cancel button
@@ -213,27 +323,65 @@ namespace svt
         delete m_pPrevPage;
         delete m_pHelp;
 
-        for (sal_uInt16 i=0; i<m_nFirstUnknownPage; ++i)
+        for (sal_uInt16 i=0; i<m_pImpl->nFirstUnknownPage; ++i)
             delete GetPage(i);
+
+        delete m_pImpl;
     }
 
     //---------------------------------------------------------------------
     void OWizardMachine::implUpdateTitle()
     {
-        String sCompleteTitle(m_sTitleBase);
-        OWizardPage* pCurrentPage = getPage(getCurrentState());
-        if (pCurrentPage)
-        {
-            sCompleteTitle += String::CreateFromAscii(" - ");
-            sCompleteTitle += pCurrentPage->GetText();
+        String sCompleteTitle(m_pImpl->sTitleBase);
+        if ( !m_pImpl->bUsingHeaders )
+        {   // append the page title only if we're not using headers - in this case, the title
+            // would be part of the header
+            OWizardPage* pCurrentPage = getPage(getCurrentState());
+            if (pCurrentPage)
+            {
+                sCompleteTitle += String::CreateFromAscii(" - ");
+                sCompleteTitle += pCurrentPage->GetText();
+            }
         }
         SetText(sCompleteTitle);
     }
 
     //---------------------------------------------------------------------
+    void OWizardMachine::enableHeader( const Bitmap& _rBitmap, sal_Int32 _nPixelHeight )
+    {
+        if ( m_pImpl->bUsingHeaders )
+            // nothing to do
+            return;
+
+        // is the height defaulted?
+        if ( -1 == _nPixelHeight )
+        {
+            _nPixelHeight = LogicToPixel( Size( 0, 30 ), MAP_APPFONT ).Height();
+        }
+
+        m_pImpl->bUsingHeaders = sal_True;
+        m_pImpl->aHeaderBitmap = _rBitmap;
+        m_pImpl->nHeaderHeight = _nPixelHeight;
+
+#ifdef DBG_UTIL
+        for (sal_uInt16 i=0; i<m_pImpl->nFirstUnknownPage; ++i)
+        {
+            DBG_ASSERT( NULL == GetPage( i ), "OWizardMachine::enableHeader: there already are pages!" );
+            // this method has not to be called if there already have been created any pages
+        }
+#endif
+    }
+
+    //---------------------------------------------------------------------
+    const String& OWizardMachine::getTitleBase() const
+    {
+        return m_pImpl->sTitleBase;
+    }
+
+    //---------------------------------------------------------------------
     void OWizardMachine::setTitleBase(const String& _rTitleBase)
     {
-        m_sTitleBase = _rTitleBase;
+        m_pImpl->sTitleBase = _rTitleBase;
         implUpdateTitle();
     }
 
@@ -245,21 +393,25 @@ namespace svt
         sal_uInt16 nCurrentLevel = GetCurLevel();
         if (NULL == GetPage(nCurrentLevel))
         {
-            TabPage* pNewPage = createPage(nCurrentLevel);
+            OWizardPage* pNewPage = createPage(nCurrentLevel);
             DBG_ASSERT(pNewPage, "OWizardMachine::ActivatePage: invalid new page (NULL)!");
 
+            // announce our header bitmap to the page
+            if ( m_pImpl->bUsingHeaders )
+                pNewPage->enableHeader( m_pImpl->aHeaderBitmap, m_pImpl->nHeaderHeight, OWizardPage::GrantAccess() );
+
             // fill up the page sequence of our base class (with dummies)
-            while (m_nFirstUnknownPage < nCurrentLevel)
+            while (m_pImpl->nFirstUnknownPage < nCurrentLevel)
             {
                 AddPage(NULL);
-                ++m_nFirstUnknownPage;
+                ++m_pImpl->nFirstUnknownPage;
             }
 
-            if (m_nFirstUnknownPage == nCurrentLevel)
+            if (m_pImpl->nFirstUnknownPage == nCurrentLevel)
             {
                 // encountered this page number the first time
                 AddPage(pNewPage);
-                ++m_nFirstUnknownPage;
+                ++m_pImpl->nFirstUnknownPage;
             }
             else
                 // already had this page - just change it
@@ -435,7 +587,7 @@ namespace svt
                 return sal_False;
 
             // remember the skipped state in the history
-            m_aStateHistory.push(nCurrentState);
+            m_pImpl->aStateHistory.push(nCurrentState);
 
             // get the next state
             nCurrentState = nNextState;
@@ -475,28 +627,28 @@ namespace svt
             return sal_False;
 
         // all fine
-        m_aStateHistory.push(nCurrentState);
+        m_pImpl->aStateHistory.push(nCurrentState);
         return sal_True;
     }
 
     //---------------------------------------------------------------------
     sal_Bool OWizardMachine::travelPrevious()
     {
-        DBG_ASSERT(m_aStateHistory.size() > 0, "OWizardMachine::travelPrevious: have no previous page!");
+        DBG_ASSERT(m_pImpl->aStateHistory.size() > 0, "OWizardMachine::travelPrevious: have no previous page!");
 
         // alowed to leave the current page?
         if (!implCommitCurrentPage(OWizardPage::CR_TRAVEL_PREVIOUS))
             return sal_False;
 
         // the next state to switch to
-        sal_uInt16 nPreviousState = m_aStateHistory.top();
+        sal_uInt16 nPreviousState = m_pImpl->aStateHistory.top();
 
         // show this page
         if (!ShowPage(nPreviousState))
             return sal_False;
 
         // all fine
-        m_aStateHistory.pop();
+        m_pImpl->aStateHistory.pop();
         return sal_True;
     }
 
@@ -519,6 +671,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/23 10:55:00  fs
+ *  small fixes in skip
+ *
  *  Revision 1.3  2001/02/23 08:21:21  fs
  *  +skip / +implCheckNextButton / +determineNextButtonState
  *
