@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1699,6 +1699,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetCntntNode(), 0 );
 
             SwRedlineMode eOld = GetRedlineMode();
+            checkRedlining(eOld);
             if( DoesUndo() )
             {
 //JP 06.01.98: MUSS noch optimiert werden!!!
