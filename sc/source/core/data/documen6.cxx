@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 09:57:07 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "cellform.hxx"
 #include "patattr.hxx"
 #include "scrdata.hxx"
+#include "poolhelp.hxx"
 
 using namespace com::sun::star;
 
@@ -111,7 +112,7 @@ BYTE ScDocument::GetCellScriptType( ScBaseCell* pCell, ULONG nNumberFormat )
 
     String aStr;
     Color* pColor;
-    ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *pFormTable );
+    ScCellFormat::GetString( pCell, nNumberFormat, aStr, &pColor, *xPoolHelper->GetFormTable() );
 
     if (aStr.Len())
     {
@@ -174,7 +175,7 @@ BYTE ScDocument::GetScriptType( USHORT nCol, USHORT nRow, USHORT nTab, ScBaseCel
     if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
-    ULONG nFormat = pPattern->GetNumberFormat( pFormTable, pCondSet );
+    ULONG nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );
     return GetCellScriptType( pCell, nFormat );
 }
 

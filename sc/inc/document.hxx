@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-22 14:08:25 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
 
 #ifndef SC_TABLE_HXX
 #include "table.hxx"        // FastGetRowHeight (inline)
@@ -151,6 +154,7 @@ class ScDPObject;
 class ScDPCollection;
 class ScMatrix;
 class ScScriptTypeData;
+class ScPoolHelper;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -319,18 +323,16 @@ friend class ScPivot;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
-    ScDocumentPool*     pDocPool;
-    ScStyleSheetPool*   pStylePool;
-    SfxItemPool*        pEditPool;                      // EditTextObjectPool
-    SfxItemPool*        pEnginePool;                    // EditEnginePool
-    ScFieldEditEngine*  pEditEngine;                    // mit pEditPool
+
+    vos::ORef<ScPoolHelper> xPoolHelper;
+
+    ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
     SfxObjectShell*     pShell;
     SfxPrinter*         pPrinter;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
     XColorTable*        pColorTable;
     ScConditionalFormatList* pCondFormList;             // bedingte Formate
     ScValidationDataList* pValidationList;              // Gueltigkeit
-    SvNumberFormatter*  pFormTable;
     SvULONGTable*       pFormatExchangeList;            // zum Umsetzen von Zahlenformaten
     ScTable*            pTab[MAXTAB+1];
     ScRangeName*        pRangeName;
@@ -353,7 +355,6 @@ private:
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
 
-    Link                aColorLink;                     // fuer Farben in Z.Formaten
     String              aProtectPass;
     String              aDocName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
@@ -389,7 +390,6 @@ private:
     USHORT              nVisibleTab;                    // fuer OLE etc.
 
     BOOL                bProtected;
-    BOOL                bOwner;
     BOOL                bAutoCalc;                      // Automatisch Berechnen
     BOOL                bAutoCalcShellDisabled;         // in/von/fuer ScDocShell disabled
     // ob noch ForcedFormulas berechnet werden muessen,
@@ -1219,7 +1219,7 @@ public:
                         BOOL bPageMode, BOOL bFormulaMode,
                         const ScMarkData* pMarkData = NULL );
 
-    SvNumberFormatter*  GetFormatTable() const { return pFormTable; }
+    SvNumberFormatter*  GetFormatTable() const;
 
     void            Sort( USHORT nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     USHORT          Query( USHORT nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );
@@ -1442,8 +1442,8 @@ public:
     void            SetInLinkUpdate(BOOL bSet);             // TableLink or AreaLink
     BOOL            IsInLinkUpdate() const;                 // including DdeLink
 
-    SfxItemPool*        GetEditPool() const { return pEditPool; }
-    SfxItemPool*        GetEnginePool() const { return pEnginePool; }
+    SfxItemPool*        GetEditPool() const;
+    SfxItemPool*        GetEnginePool() const;
     ScFieldEditEngine&  GetEditEngine();
 
 private: // CLOOK-Impl-Methoden

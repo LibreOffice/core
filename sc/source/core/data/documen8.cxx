@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:26:20 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include "table.hxx"
 #include "column.hxx"
 #include "cell.hxx"
+#include "poolhelp.hxx"
 #include "docpool.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -132,7 +133,6 @@ void ScDocument::ImplLoadDocOptions( SvStream& rStream )
     USHORT d,m,y;
 
     DBG_ASSERT( pDocOptions, "No DocOptions to load! :-(" );
-    DBG_ASSERT( pFormTable,  "Missing NumberFormatter :-(" );
 
     pDocOptions->Load( rStream );
 
@@ -143,9 +143,10 @@ void ScDocument::ImplLoadDocOptions( SvStream& rStream )
     }
 
     pDocOptions->GetDate( d,m,y );
-    pFormTable->ChangeNullDate( d,m,y );
-    pFormTable->ChangeStandardPrec( pDocOptions->GetStdPrecision() );
-    pFormTable->SetYear2000( pDocOptions->GetYear2000() );
+    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
+    pFormatter->ChangeNullDate( d,m,y );
+    pFormatter->ChangeStandardPrec( pDocOptions->GetStdPrecision() );
+    pFormatter->SetYear2000( pDocOptions->GetYear2000() );
 }
 
 //------------------------------------------------------------------------
@@ -196,7 +197,7 @@ SfxPrinter* ScDocument::GetPrinter()
     if ( !pPrinter )
     {
         SfxItemSet* pSet =
-            new SfxItemSet( *pDocPool,
+            new SfxItemSet( *xPoolHelper->GetDocPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                             NULL );
@@ -329,7 +330,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
-    pStylePool->CopyStdStylesFrom( pSrcDoc->pStylePool );
+    xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
 }
 
 //------------------------------------------------------------------------
@@ -468,6 +469,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
     //  damit z.B. der Organizer nicht durcheinanderkommt, wenn zwischendurch eine
     //  Query-Box aufgemacht wird !!!
 
+    ScStyleSheetPool* pStylePool = xPoolHelper->GetStylePool();
     USHORT nOldMask = pStylePool->GetSearchMask();
     SfxStyleFamily eOldFam = pStylePool->GetSearchFamily();
 

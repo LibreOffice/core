@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-24 14:25:20 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "markarr.hxx"
 #include "patattr.hxx"
 #include "rangenam.hxx"
+#include "poolhelp.hxx"
 #include "docpool.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
@@ -1012,13 +1013,8 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, USHORT nTab1, USHORT nTab2,
     if (bIsUndo)
     {
         Clear();
-        DBG_ASSERT( !bOwner, "Pool gehoert Undo-Doc" );
-        bOwner = FALSE;
-        pDocPool = pSrcDoc->pDocPool;
-        pStylePool = pSrcDoc->pStylePool;
-        pFormTable = pSrcDoc->pFormTable;
-        pEditPool = pSrcDoc->pEditPool;
-        pEnginePool = pSrcDoc->pEnginePool;
+
+        xPoolHelper = pSrcDoc->xPoolHelper;
 
         String aString;
         for (USHORT nTab = nTab1; nTab <= nTab2; nTab++)
@@ -1300,7 +1296,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 BOOL ScDocument::IsClipboardSource() const
 {
     ScDocument* pClipDoc = ScGlobal::GetClipDoc();
-    return pDocPool == pClipDoc->pDocPool;
+    return xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
 }
 
 
@@ -1380,11 +1376,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         if (pClipDoc->bIsClip && pClipDoc->GetTableCount())
         {
             BOOL bOldAutoCalc = GetAutoCalc();
-            SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
-            if (pClipDoc->pFormTable && pClipDoc->pFormTable != pFormTable)
+            SetAutoCalc( FALSE );   // avoid multiple recalculations
+
+            SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
+            SvNumberFormatter* pOtherFormatter = pClipDoc->xPoolHelper->GetFormTable();
+            if (pOtherFormatter && pOtherFormatter != pThisFormatter)
             {
                 SvULONGTable* pExchangeList =
-                         pFormTable->MergeFormatter(*(pClipDoc->pFormTable));
+                         pThisFormatter->MergeFormatter(*(pOtherFormatter));
                 if (pExchangeList->Count() > 0)
                     pFormatExchangeList = pExchangeList;
             }
@@ -2354,7 +2353,7 @@ const SfxPoolItem* ScDocument::GetAttr( USHORT nCol, USHORT nRow, USHORT nTab, U
         else
             DBG_ERROR( "Attribut Null" );
     }
-    return &pDocPool->GetDefaultItem( nWhich );
+    return &xPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
 }
 
 
@@ -2714,10 +2713,12 @@ BOOL ScDocument::HasAttrib( USHORT nCol1, USHORT nRow1, USHORT nTab1,
         //  Attribut im Dokument ueberhaupt verwendet?
         //  (wie in fillinfo)
 
+        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+
         BOOL bAnyItem = FALSE;
-        USHORT nRotCount = pDocPool->GetItemCount( ATTR_ROTATE_VALUE );
+        USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
         for (USHORT nItem=0; nItem<nRotCount; nItem++)
-            if (pDocPool->GetItem( ATTR_ROTATE_VALUE, nItem ))
+            if (pPool->GetItem( ATTR_ROTATE_VALUE, nItem ))
             {
                 bAnyItem = TRUE;
                 break;
@@ -3322,7 +3323,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
         }
         else
         {
-            SfxItemPoolCache aCache( pDocPool, pSet );
+            SfxItemPoolCache aCache( xPoolHelper->GetDocPool(), pSet );
             for (USHORT i=0; i<=MAXTAB; i++)
                 if (pTab[i])
                     if (rMark.GetTableSelect(i))
@@ -3367,20 +3368,20 @@ void ScDocument::DeleteSelectionTab( USHORT nTab, USHORT nDelFlag, const ScMarkD
 
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
-    return (ScPatternAttr*) &pDocPool->GetDefaultItem(ATTR_PATTERN);
+    return (ScPatternAttr*) &xPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN);
 }
 
 
 ScDocumentPool* ScDocument::GetPool()
 {
-    return pDocPool;
+    return xPoolHelper->GetDocPool();
 }
 
 
 
 ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
 {
-    return pStylePool;
+    return xPoolHelper->GetStylePool();
 }
 
 
@@ -3431,15 +3432,17 @@ void ScDocument::UpdStlShtPtrsFrmNms()
 {
     ScPatternAttr::pDoc = this;
 
-    USHORT nCount = pDocPool->GetItemCount(ATTR_PATTERN);
+    ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+
+    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
     ScPatternAttr* pPattern;
     for (USHORT i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pDocPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->UpdateStyleSheet();
     }
-    ((ScPatternAttr&)pDocPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet();
+    ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet();
 }
 
 
@@ -3447,15 +3450,17 @@ void ScDocument::StylesToNames()
 {
     ScPatternAttr::pDoc = this;
 
-    USHORT nCount = pDocPool->GetItemCount(ATTR_PATTERN);
+    ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+
+    USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
     ScPatternAttr* pPattern;
     for (USHORT i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pDocPool->GetItem(ATTR_PATTERN, i);
+        pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
         if (pPattern)
             pPattern->StyleToName();
     }
-    ((ScPatternAttr&)pDocPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
+    ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
 }
 
 
@@ -3534,36 +3539,13 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
     SetPrinter( NULL );
 
     ScPatternAttr::pDoc = this;
-//  pStylePool->Clear();
-//  pDocPool->Cleanup();
 
-    ScDocument* pClipDoc = ScGlobal::GetClipDoc();
-    if (bOwner && !bIsClip && pClipDoc->pDocPool == pDocPool)
-    {
-        pClipDoc->bOwner = TRUE;
-        pStylePool->SetDocument(pClipDoc);      // #67178# don't keep old document pointer
-    }
-    else
-    {
-        delete pStylePool;
-        delete pDocPool;
-        delete pFormTable;
-        delete pEditPool;
-        delete pEnginePool;
-    }
-    pFormTable = new SvNumberFormatter( GetServiceManager(), ScGlobal::eLnge );
-    pFormTable->SetColorLink(&aColorLink);
-    pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-    pDocPool = new ScDocumentPool( NULL, bLoadRefCounts );
-    pDocPool->FreezeIdRanges();
-    pDocPool->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
-    pStylePool = new ScStyleSheetPool( *pDocPool, this );
-    pEditPool = EditEngine::CreatePool();
-    pEditPool->FreezeIdRanges();
-    pEnginePool = EditEngine::CreatePool();
-    pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-    pEnginePool->FreezeIdRanges();
+    if ( xPoolHelper.isValid() && !bIsClip )
+        xPoolHelper->SourceDocumentGone();
 
+    xPoolHelper = new ScPoolHelper( this );
+
+    xPoolHelper->GetDocPool()->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
     BOOL bStylesFound = FALSE;
 
     BOOL bRet = FALSE;
@@ -3588,21 +3570,21 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
                     }
                     break;
                 case SCID_DOCPOOL:
-                    pDocPool->Load( rStream );
+                    xPoolHelper->GetDocPool()->Load( rStream );
                     break;
                 case SCID_STYLEPOOL:
                     {
                         //  StylePool konvertiert beim Laden selber
                         CharSet eOld = rStream.GetStreamCharSet();
                         rStream.SetStreamCharSet( gsl_getSystemTextEncoding() );    //! ???
-                        pStylePool->Load( rStream );
+                        xPoolHelper->GetStylePool()->Load( rStream );
                         rStream.SetStreamCharSet( eOld );
-                        lcl_RemoveMergeFromStyles( pStylePool );    // setzt auch ReadOnly zurueck
+                        lcl_RemoveMergeFromStyles( xPoolHelper->GetStylePool() );   // setzt auch ReadOnly zurueck
                         bStylesFound = TRUE;
                     }
                     break;
                 case SCID_EDITPOOL :
-                    pEditPool->Load( rStream );
+                    xPoolHelper->GetEditPool()->Load( rStream );
                     break;
                 default:
                     DBG_ERROR("unbekannter Sub-Record in ScDocument::LoadPool");
@@ -3616,7 +3598,7 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
         DBG_ERROR("LoadPool: SCID_POOLS nicht gefunden");
 
     if (!bStylesFound)
-        pStylePool->CreateStandardStyles();
+        xPoolHelper->GetStylePool()->CreateStandardStyles();
 
     rStream.SetStreamCharSet( eOldSet );
     rStream.SetBufferSize( nOldBufSize );
@@ -3633,7 +3615,7 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
 
 BOOL ScDocument::SavePool( SvStream& rStream ) const
 {
-    pDocPool->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
+    xPoolHelper->GetDocPool()->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
 
     USHORT nOldBufSize = rStream.GetBufferSize();
     rStream.SetBufferSize( 32768 );
@@ -3668,13 +3650,13 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
         {
             rStream << (USHORT) SCID_DOCPOOL;
             ScWriteHeader aDocPoolHdr( rStream );
-            pDocPool->Store( rStream );
+            xPoolHelper->GetDocPool()->Store( rStream );
         }
 
         {
             rStream << (USHORT) SCID_STYLEPOOL;
             ScWriteHeader aStylePoolHdr( rStream );
-            pStylePool->SetSearchMask( SFX_STYLE_FAMILY_ALL );
+            xPoolHelper->GetStylePool()->SetSearchMask( SFX_STYLE_FAMILY_ALL );
 
             //  Um bisherige 5.0 und 5.1 Versionen nicht durcheinander zu bringen,
             //  muss die Standardvorlage unter dem Namen "Standard" in der Datei
@@ -3685,19 +3667,19 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
 
             String aFileStdName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_STANDARD));
             if ( aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
-                pStylePool->SetForceStdName( &aFileStdName );
+                xPoolHelper->GetStylePool()->SetForceStdName( &aFileStdName );
 
-            pStylePool->Store( rStream, FALSE );
+            xPoolHelper->GetStylePool()->Store( rStream, FALSE );
 
-            pStylePool->SetForceStdName( NULL );
+            xPoolHelper->GetStylePool()->SetForceStdName( NULL );
         }
 
         if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_50 )
         {
             rStream << (USHORT) SCID_EDITPOOL;
             ScWriteHeader aEditPoolHdr( rStream );
-            pEditPool->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
-            pEditPool->Store( rStream );
+            xPoolHelper->GetEditPool()->SetFileFormatVersion( (USHORT)rStream.GetVersion() );
+            xPoolHelper->GetEditPool()->Store( rStream );
         }
     }
 
@@ -3941,7 +3923,7 @@ BOOL ScDocument::NeedPageResetAfterTab( USHORT nTab ) const
         String aNew = pTab[nTab+1]->GetPageStyle();
         if ( aNew != pTab[nTab]->GetPageStyle() )
         {
-            SfxStyleSheetBase* pStyle = pStylePool->Find( aNew, SFX_STYLE_FAMILY_PAGE );
+            SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aNew, SFX_STYLE_FAMILY_PAGE );
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-22 14:10:25 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@
 #include "dbcolect.hxx"
 #include "pivot.hxx"
 #include "docpool.hxx"
+#include "poolhelp.hxx"
 #include "autoform.hxx"
 #include "rangelst.hxx"
 #include "chartarr.hxx"
@@ -1604,9 +1605,11 @@ void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
     DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
     *pDocOptions = rOpt;
     rOpt.GetDate( d,m,y );
-    pFormTable->ChangeNullDate( d,m,y );
-    pFormTable->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
-    pFormTable->SetYear2000( rOpt.GetYear2000() );
+
+    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
+    pFormatter->ChangeNullDate( d,m,y );
+    pFormatter->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
+    pFormatter->SetYear2000( rOpt.GetYear2000() );
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const
@@ -1633,11 +1636,12 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
     eLanguage = eLatin;
     eCjkLanguage = eCjk;
     eCtlLanguage = eCtl;
-    if ( pDocPool )
+    if ( xPoolHelper.isValid() )
     {
-        pDocPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
-        pDocPool->SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
-        pDocPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
+        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+        pPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, ATTR_FONT_LANGUAGE ) );
+        pPool->SetPoolDefaultItem( SvxLanguageItem( eCjkLanguage, ATTR_CJK_FONT_LANGUAGE ) );
+        pPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
     }
 }
 
@@ -1755,7 +1759,7 @@ void ScDocument::RemoveMerge( USHORT nCol, USHORT nRow, USHORT nTab )
     RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
 
     const ScMergeAttr* pDefAttr = (const ScMergeAttr*)
-                                        &pDocPool->GetDefaultItem( ATTR_MERGE );
+                                        &xPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE );
     ApplyAttr( nCol, nRow, nTab, *pDefAttr );
 }
 

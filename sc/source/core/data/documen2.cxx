@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2000-12-13 12:43:43 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@
 #include "dpobject.hxx"
 #include "indexmap.hxx"
 #include "scrdata.hxx"
+#include "poolhelp.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -303,10 +304,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         xServiceManager( ::comphelper::getProcessServiceFactory() ),
         pDrawLayer( NULL ),
         pColorTable( NULL ),
-        bOwner( FALSE ),
-        pDocPool( NULL ),
-        pStylePool( NULL ),
-        pFormTable( NULL ),
         pShell( pDocShell ),
         pPrinter( NULL ),
         bAutoCalc( eMode == SCDOCMODE_DOCUMENT ),
@@ -360,8 +357,6 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pUnoBroadcaster( NULL ),
         pChangeTrack( NULL ),
         pChangeViewSettings( NULL ),
-        pEditPool( NULL ),
-        pEnginePool( NULL ),
         pEditEngine( NULL ),
         eLinkMode(LM_UNKNOWN),
         pDPCollection( NULL ),
@@ -376,36 +371,17 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         if ( pDocShell )
             pLinkManager = new SvxLinkManager( pDocShell );
 
-        bOwner = TRUE;
-        pDocPool = new ScDocumentPool;
-        pDocPool->FreezeIdRanges();
-        pStylePool = new ScStyleSheetPool( *pDocPool, this );
-        pFormTable = new SvNumberFormatter( GetServiceManager(), ScGlobal::eLnge );
-        aColorLink = LINK(this, ScDocument, GetUserDefinedColor);
-        pFormTable->SetColorLink(&aColorLink);
-        pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+        xPoolHelper = new ScPoolHelper( this );
+
         pTab[0]  = NULL;
         pBASM = new ScBroadcastAreaSlotMachine( this );
         pChartListenerCollection = new ScChartListenerCollection( this );
-        pEditPool = EditEngine::CreatePool();
-        pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-        pEditPool->FreezeIdRanges();
-        pEnginePool = EditEngine::CreatePool();
-        pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-        pEnginePool->FreezeIdRanges();
     }
     else
     {
-        pDrawLayer  = NULL;
-        bOwner      = FALSE;
-        pDocPool    = NULL;
-        pStylePool  = NULL;
-        pFormTable  = NULL;
         pTab[0]     = NULL;
         pBASM       = NULL;
         pChartListenerCollection = NULL;
-        pEditPool   = NULL;
-        pEnginePool = NULL;
     }
 
     for (USHORT i=1; i<=MAXTAB; i++)
@@ -533,7 +509,6 @@ ScDocument::~ScDocument()
     delete pPivotCollection;
     delete pSelectionAttr;
     delete pChartCollection;
-//  delete pDrawLayer;
     DeleteDrawLayer();
     delete pFormatExchangeList;
     delete pPrinter;
@@ -548,36 +523,10 @@ ScDocument::~ScDocument()
 
     delete pDPCollection;
 
-    if (bOwner)
-    {
-        BOOL bDoDelete = FALSE;
-        if (bIsClip)
-            bDoDelete = TRUE;
-        else
-        {
-            ScDocument* pClipDoc = NULL;
-            if (ScGlobal::HasClipDoc())                 // GetClipDoc legt das ClipDoc an
-                pClipDoc = ScGlobal::GetClipDoc();
-            if (pClipDoc && pClipDoc->pDocPool == pDocPool)
-            {
-                pClipDoc->bOwner = TRUE;
-                pStylePool->SetDocument(pClipDoc);      // #67178# don't keep old document pointer
-            }
-            else
-                bDoDelete = TRUE;
-        }
+    if ( xPoolHelper.isValid() && !bIsClip )
+        xPoolHelper->SourceDocumentGone();
+    xPoolHelper.unbind();
 
-        if (bDoDelete)
-        {
-            delete pStylePool;
-            delete pDocPool;
-            delete pFormTable;
-            delete pEditPool;
-            delete pEnginePool;
-        }
-    }
-
-//  delete pColorTable;
     DeleteColorTable();
     delete pScriptTypeData;
 }
@@ -598,20 +547,8 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     }
 
     Clear();
-    if (bOwner)
-    {
-        delete pStylePool;
-        delete pDocPool;
-        delete pFormTable;
-        delete pEditPool;
-        delete pEnginePool;
-    }
-    bOwner = FALSE;
-    pDocPool = pSourceDoc->pDocPool;
-    pStylePool = pSourceDoc->pStylePool;
-    pFormTable = pSourceDoc->pFormTable;
-    pEditPool = pSourceDoc->pEditPool;
-    pEnginePool = pSourceDoc->pEnginePool;
+
+    xPoolHelper = pSourceDoc->xPoolHelper;
 
     //  bedingte Formate / Gueltigkeiten
     //! Vorlagen kopieren?
@@ -631,6 +568,21 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     }
     else
         pClipData = NULL;
+}
+
+SvNumberFormatter* ScDocument::GetFormatTable() const
+{
+    return xPoolHelper->GetFormTable();
+}
+
+SfxItemPool* ScDocument::GetEditPool() const
+{
+    return xPoolHelper->GetEditPool();
+}
+
+SfxItemPool* ScDocument::GetEnginePool() const
+{
+    return xPoolHelper->GetEnginePool();
 }
 
 ScFieldEditEngine& ScDocument::GetEditEngine()
@@ -866,7 +818,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                 case SCID_NUMFORMAT:
                     {
                         ScReadHeader aNumHeader(rStream);
-                        pFormTable->Load(rStream);
+                        xPoolHelper->GetFormTable()->Load(rStream);
                     }
                     break;
                 case SCID_DOCOPTIONS:
@@ -878,7 +830,7 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                 case SCID_PRINTSETUP:
                     {
                         ScReadHeader aJobHeader(rStream);
-                        SfxItemSet* pSet = new SfxItemSet( *pDocPool,
+                        SfxItemSet* pSet = new SfxItemSet( *xPoolHelper->GetDocPool(),
                                 SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                                 SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
                                 NULL );
@@ -925,14 +877,13 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
 
     if (!bError)                                    // Neuberechnungen
     {
-        DBG_ASSERT( pStylePool, "Oops. No StyleSheetPool :-(" );
-
-        pStylePool->UpdateStdNames();   // falls mit Version in anderer Sprache gespeichert
+        xPoolHelper->GetStylePool()->UpdateStdNames();  // falls mit Version in anderer Sprache gespeichert
 
         //  Zahlformat-Sprache
         //  (kann nicht in LoadPool passieren, weil der Numberformatter geladen sein muss)
 
-        if ( pDocPool->GetLoadingVersion() == 0 )       // 0 = Pool-Version bis 3.1
+        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+        if ( pPool->GetLoadingVersion() == 0 )              // 0 = Pool-Version bis 3.1
         {
             //  in 3.1-Dokumenten gibt es ATTR_LANGUAGE_FORMAT noch nicht
             //  darum bei Bedarf zu ATTR_VALUE_FORMAT noch die Sprache dazutun
@@ -940,25 +891,26 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
 
             //  harte Attribute:
 
-            USHORT nCount = pDocPool->GetItemCount(ATTR_PATTERN);
+            SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
+            USHORT nCount = pPool->GetItemCount(ATTR_PATTERN);
             ScPatternAttr* pPattern;
             for (USHORT i=0; i<nCount; i++)
             {
-                pPattern = (ScPatternAttr*)pDocPool->GetItem(ATTR_PATTERN, i);
+                pPattern = (ScPatternAttr*)pPool->GetItem(ATTR_PATTERN, i);
                 if (pPattern)
-                    lcl_AddLanguage( pPattern->GetItemSet(), *pFormTable );
+                    lcl_AddLanguage( pPattern->GetItemSet(), *pFormatter );
             }
 
             //  Vorlagen:
 
-            SfxStyleSheetIterator aIter( pStylePool, SFX_STYLE_FAMILY_PARA );
+            SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(), SFX_STYLE_FAMILY_PARA );
             for ( SfxStyleSheetBase* pStyle = aIter.First(); pStyle; pStyle = aIter.Next() )
-                lcl_AddLanguage( pStyle->GetItemSet(), *pFormTable );
+                lcl_AddLanguage( pStyle->GetItemSet(), *pFormatter );
         }
 
         //  Druckbereiche etc.
 
-        SfxStyleSheetIterator   aIter( pStylePool, SFX_STYLE_FAMILY_PAGE );
+        SfxStyleSheetIterator   aIter( xPoolHelper->GetStylePool(), SFX_STYLE_FAMILY_PAGE );
         ScStyleSheet*           pStyleSheet = NULL;
 
         nMaxTableNumber = 0;
@@ -1159,7 +1111,7 @@ BOOL ScDocument::Save( SvStream& rStream, ScProgress* pProgress ) const
         {
             rStream << (USHORT) SCID_NUMFORMAT;
             ScWriteHeader aNumHeader(rStream);
-            pFormTable->Save(rStream);
+            xPoolHelper->GetFormTable()->Save(rStream);
         }
 
         if ( xColNameRanges->Count() )
@@ -1299,7 +1251,7 @@ void ScDocument::DeleteNumberFormat( const ULONG* pDelKeys, ULONG nCount )
 {
 /*
     for (ULONG i = 0; i < nCount; i++)
-        pFormTable->DeleteEntry(pDelKeys[i]);
+        xPoolHelper->GetFormTable()->DeleteEntry(pDelKeys[i]);
 */
 }
 
@@ -1661,10 +1613,12 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, USHORT nSrcPos,
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
             pSrcDoc->SetAutoCalc( TRUE );   // falls was berechnet werden muss
         }
-        if (pSrcDoc->pFormTable && pSrcDoc->pFormTable != pFormTable)
+        SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
+        SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
+        if (pOtherFormatter && pOtherFormatter != pThisFormatter)
         {
             SvULONGTable* pExchangeList =
-                     pFormTable->MergeFormatter(*(pSrcDoc->pFormTable));
+                     pThisFormatter->MergeFormatter(*(pOtherFormatter));
             if (pExchangeList->Count() > 0)
                 pFormatExchangeList = pExchangeList;
         }

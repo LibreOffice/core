@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "markarr.hxx"
 #include "markdata.hxx"
 #include "patattr.hxx"
+#include "poolhelp.hxx"
 #include "docpool.hxx"
 #include "conditio.hxx"
 #include "stlpool.hxx"
@@ -197,14 +198,17 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
 {
     DBG_ASSERT( pTab[nTab], "Tabelle existiert nicht" );
 
+    ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+    ScStyleSheetPool* pStlPool = xPoolHelper->GetStylePool();
+
     const SvxBrushItem* pDefBackground =
-            (const SvxBrushItem*) &pDocPool->GetDefaultItem( ATTR_BACKGROUND );
+            (const SvxBrushItem*) &pPool->GetDefaultItem( ATTR_BACKGROUND );
     const ScMergeAttr* pDefMerge =
-            (const ScMergeAttr*) &pDocPool->GetDefaultItem( ATTR_MERGE );
+            (const ScMergeAttr*) &pPool->GetDefaultItem( ATTR_MERGE );
     const SvxBoxItem* pDefLines =
-            (const SvxBoxItem*) &pDocPool->GetDefaultItem( ATTR_BORDER );
+            (const SvxBoxItem*) &pPool->GetDefaultItem( ATTR_BORDER );
     const SvxShadowItem* pDefShadow =
-            (const SvxShadowItem*) &pDocPool->GetDefaultItem( ATTR_SHADOW );
+            (const SvxShadowItem*) &pPool->GetDefaultItem( ATTR_SHADOW );
 
     USHORT nThisRow;
     USHORT nX;
@@ -296,9 +300,9 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
 
     //  Attribut im Dokument ueberhaupt verwendet?
     BOOL bAnyItem = FALSE;
-    USHORT nRotCount = pDocPool->GetItemCount( ATTR_ROTATE_VALUE );
+    USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
     for (USHORT nItem=0; nItem<nRotCount; nItem++)
-        if (pDocPool->GetItem( ATTR_ROTATE_VALUE, nItem ))
+        if (pPool->GetItem( ATTR_ROTATE_VALUE, nItem ))
         {
             bAnyItem = TRUE;
             break;
@@ -547,7 +551,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                                     if (aStyle.Len())
                                     {
                                         SfxStyleSheetBase* pStyleSheet =
-                                                pStylePool->Find( aStyle, SFX_STYLE_FAMILY_PARA );
+                                                pStlPool->Find( aStyle, SFX_STYLE_FAMILY_PARA );
                                         if ( pStyleSheet )
                                         {
                                             //! Style-Sets cachen !!!

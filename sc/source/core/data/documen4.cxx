@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-31 17:23:14 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "validat.hxx"
 #include "scitems.hxx"
 #include "stlpool.hxx"
+#include "poolhelp.hxx"
 #include "detdata.hxx"
 #include "patattr.hxx"
 #include "chgtrack.hxx"
@@ -673,7 +674,8 @@ const SfxPoolItem* ScDocument::GetEffItem(
                     String aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
                     if (aStyle.Len())
                     {
-                        SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyle, SFX_STYLE_FAMILY_PARA );
+                        SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
+                                                                aStyle, SFX_STYLE_FAMILY_PARA );
                         if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
                                                 nWhich, TRUE, &pItem ) == SFX_ITEM_SET )
                             return pItem;
@@ -696,7 +698,7 @@ const SfxItemSet* ScDocument::GetCondResult( USHORT nCol, USHORT nRow, USHORT nT
         String aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
         if (aStyle.Len())
         {
-            SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyle, SFX_STYLE_FAMILY_PARA );
+            SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
             if ( pStyleSheet )
                 return &pStyleSheet->GetItemSet();
             DBG_ERROR("Style nicht gefunden");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-24 14:25:20 $
+ *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include "userdat.hxx"
 #include "patattr.hxx"
 #include "rechead.hxx"
+#include "poolhelp.hxx"
 #include "docpool.hxx"
 #include "chartarr.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
@@ -250,12 +251,6 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
     if (!pDrawLayer)
     {
-        if ( !pDocPool )        // der Pool wird fuer den Drucker gebraucht
-        {
-            DBG_ERROR("InitDrawLayer ohne DocPool");
-            return;
-        }
-
         SdrEngineDefaults::SetFontHeight(423);      // 12pt
         String aName;
         if (pShell)
@@ -821,10 +816,11 @@ void ScDocument::UpdateFontCharSet()
         USHORT nCount,i;
         SvxFontItem* pItem;
 
-        nCount = pDocPool->GetItemCount(ATTR_FONT);
+        ScDocumentPool* pPool = xPoolHelper->GetDocPool();
+        nCount = pPool->GetItemCount(ATTR_FONT);
         for (i=0; i<nCount; i++)
         {
-            pItem = (SvxFontItem*)pDocPool->GetItem(ATTR_FONT, i);
+            pItem = (SvxFontItem*)pPool->GetItem(ATTR_FONT, i);
             if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                             ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 pItem->GetCharSet() = eSysSet;
