@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-06 11:04:06 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 11:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1072,10 +1072,11 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                 if( refStrm->GetError() == SVSTREAM_OK )
                 {
                     refStrm->SetVersion( refRoot->GetVersion() );
-                    bGraphic ? aTmpGrf.SwapIn( refStrm )
-                             : GetGrfFilter()->ImportGraphic( aTmpGrf,
-                                                               String(),
-                                                              *refStrm );
+                    if( bGraphic )
+                        aTmpGrf.SwapIn( refStrm );
+                    else
+                        GetGrfFilter()->ImportGraphic( aTmpGrf, String(),
+                                                       *refStrm );
                 }
             }
         }
