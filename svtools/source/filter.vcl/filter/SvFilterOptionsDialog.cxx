@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-07 15:45:13 $
+ *  last change: $Author: sj $ $Date: 2002-05-13 15:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SV_FILTER_OPTIONS_DIALOG_HXX_
 #include "SvFilterOptionsDialog.hxx"
 #endif
+#ifndef _FILTER_CONFIG_ITEM_HXX_
+#include "FilterConfigItem.hxx"
+#endif
 #ifndef _FILTER_HXX
 #include "filter.hxx"
 #endif
@@ -88,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
@@ -318,37 +324,21 @@ sal_Int16 SvFilterOptionsDialog::execute()
 void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
         throw ( lang::IllegalArgumentException, uno::RuntimeException )
 {
-
-// todo: take the current unit from the model, but the metric is not yet available within the ViewData propseq
-
-/*
-    uno::Reference< frame::XModel > xModel
+    // try to set the corresponding metric unit
+    String aConfigPath;
+    uno::Reference< lang::XServiceInfo > xServiceInfo
             ( xDoc, uno::UNO_QUERY );
-    if ( xModel.is() )
+    if ( xServiceInfo.is() )
     {
-        // print all available properties of first view
-        uno::Reference< document::XViewDataSupplier > xViewDataSupplier
-            ( xModel, uno::UNO_QUERY );
-        if ( xViewDataSupplier.is() )
-    -   {
-            uno::Reference< container::XIndexAccess > xIndexAccess = xViewDataSupplier->getViewData();
-            if ( xIndexAccess.is() && xIndexAccess->getCount() )
-            {
-                uno::Any aView( xIndexAccess->getByIndex( 0 ) );
-                uno::Sequence< beans::PropertyValue > aViewData;
-                aView >>= aViewData;
-                sal_Int32 i, nLen = aViewData.getLength();
-                for ( i = 0; i < nLen; i++ )
-                {
-                    if ( aViewData[ i ].Name == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MetricUnit" ) ) )
-                    {
-
-
-                    }
-                }
-            }
+        if ( xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
+            aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Impress/Layout/Other/MeasureUnit" ) );
+        else if ( xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+            aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Draw/Layout/Other/MeasureUnit" ) );
+        if ( aConfigPath.Len() )
+        {
+            FilterConfigItem aConfigItem( aConfigPath );
+            eFieldUnit = (FieldUnit)aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Metric" ) ), FUNIT_CM );
         }
     }
-*/
 }
 
