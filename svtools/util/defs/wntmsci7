@@ -8633,3 +8633,13 @@ lpfnInsertMenuItemW
 ?GetImportFilterTypeName@FilterConfigCache@@QAE?AVString@@G@Z
 ??0?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?MailUIEnabled@SvtInternalOptions@@QBEEXZ
+?GetLanguageType@SvtPathOptions@@QBEGXZ
+?resetAgentIgnoreURLCounter@SvtHelpOptions@@QAEXXZ
+?AddListener@SvtMiscOptions@@QAEXABVLink@@@Z
+?GetSymbolSet@SvtMiscOptions@@QBEFXZ
+?GetToolboxStyle@SvtMiscOptions@@QBEFXZ
+?RemoveListener@SvtMiscOptions@@QAEXABVLink@@@Z
+?SetSymbolSet@SvtMiscOptions@@QAEXF@Z
+?SetToolboxStyle@SvtMiscOptions@@QAEXF@Z
+?getPropertyValue@SfxItemPropertySet@@QBEXABUSfxItemPropertyMap@@ABVSfxItemSet@@AAVAny@uno@star@sun@com@@@Z
+?getPropertyValue@SfxItemPropertySet@@QBEXABVOUString@rtl@@ABVSfxItemSet@@AAVAny@uno@star@sun@com@@@Z
