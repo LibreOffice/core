@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-21 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,16 @@ throw( RuntimeException )
     try
     {
         Reference< XInterface > xInterface;
-        Any a = m_xContext->getValueByName( OUString::createFromAscii(
-            "/singletons/drafts.com.sun.star.script.framework.theScriptRuntimeForJava" ) );
+
+        Reference< storage::XScriptInfo > sinfo =
+            Reference< storage::XScriptInfo >( scriptInfo, UNO_QUERY_THROW );
+
+        OUStringBuffer *buf = new OUStringBuffer(80);
+        buf->appendAscii("/singletons/drafts.com.sun.star.script.framework.theScriptRuntimeFor");
+        buf->append(sinfo->getLanguage());
+
+        Any a = m_xContext->getValueByName(buf->makeStringAndClear());
+
         if ( sal_False == ( a >>= xInterface ) )
         {
             throw RuntimeException(

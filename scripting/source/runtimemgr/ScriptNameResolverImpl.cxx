@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-11-06 16:26:30 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-21 15:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_runtimemgr
 {
 
-const sal_Char* const LANGUAGE_TO_RESOLVE_ON = "Java"; // should be configurable
+const sal_Char* const LANGUAGE_TO_RESOLVE_ON[] = { "Java", "BeanShell" }; // should be configurable
 OUString nrs_implName = OUString::createFromAscii(
     "drafts.com.sun.star.script.framework.DefaultScriptNameResolver" );
 OUString nrs_serviceName = OUString::createFromAscii(
@@ -348,11 +348,13 @@ SAL_THROW ( ( lang::IllegalArgumentException, RuntimeException ) )
             // just choose first one that has language=LANGUAGE_TO_RESOLVE_ON
             ::rtl::OUString language( scriptInfo->getLanguage() );
 
-            if ( ( language.compareToAscii( LANGUAGE_TO_RESOLVE_ON ) == 0 ) )
-            {
-                OSL_TRACE( "Found desired language\n" );
-                resolvedScriptInfo = scriptInfo;
-                break;
+            for ( sal_Int32 i = (sizeof LANGUAGE_TO_RESOLVE_ON / sizeof *LANGUAGE_TO_RESOLVE_ON); i--; ) {
+                if ( ( language.compareToAscii( LANGUAGE_TO_RESOLVE_ON[i] ) == 0 ) )
+                {
+                    OSL_TRACE( "Found desired language\n" );
+                    resolvedScriptInfo = scriptInfo;
+                    break;
+                }
             }
         }
     }
