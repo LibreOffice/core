@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_sfwk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:13:06 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,14 +267,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         if (create_ucb_content( &ucbContent, url, xCmdEnv ) &&
             ucbContent.isFolder())
         {
-            // probe for script.xlb:
+            // probe for parcel-descriptor.xml:
             if (create_ucb_content(
                     0, makeURL( url, OUSTR("parcel-descriptor.xml") ),
                     xCmdEnv, false /* no throw */ ))
-        {
+            {
                 mediaType = OUSTR("application/vnd.sun.star.framework-script");
-
-        }
+            }
         }
         if (mediaType.getLength() == 0)
             throw lang::IllegalArgumentException(
@@ -290,31 +289,40 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         {
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.framework-script"))
             {
+                OUString lang = OUString::createFromAscii("Script");
                 OUString sParcelDescURL = makeURL(
                     url, OUSTR("parcel-descriptor.xml") );
-                ::ucb::Content ucb_content( sParcelDescURL, xCmdEnv );
-                ParcelDescDocHandler* pHandler =
-                    new ParcelDescDocHandler();
-                Reference< xml::sax::XDocumentHandler > xDocHandler =  pHandler;
-                Reference<XComponentContext> xContext( getComponentContext() );
-                Reference< xml::sax::XParser > xParser(
-                    xContext->getServiceManager()->createInstanceWithContext(
-                        OUSTR("com.sun.star.xml.sax.Parser"), xContext ),
-                            UNO_QUERY_THROW );
-                xParser->setDocumentHandler( xDocHandler );
-                xml::sax::InputSource source;
-                source.aInputStream = ucb_content.openStream();
-                source.sSystemId = ucb_content.getURL();
-                xParser->parseStream( source );
-                OUString lang;
 
-                if ( !pHandler->isParsed() )
+                ::ucb::Content ucb_content;
+
+                if (create_ucb_content( &ucb_content, sParcelDescURL,
+                        xCmdEnv, false /* no throw */ ))
                 {
-                    throw lang::IllegalArgumentException(
-                        StrCannotDetectMediaType::get() + url,
-                        static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
+                    ParcelDescDocHandler* pHandler =
+                        new ParcelDescDocHandler();
+                    Reference< xml::sax::XDocumentHandler >
+                        xDocHandler = pHandler;
+
+                    Reference<XComponentContext>
+                        xContext( getComponentContext() );
+
+                    Reference< xml::sax::XParser > xParser(
+                      xContext->getServiceManager()->createInstanceWithContext(
+                            OUSTR("com.sun.star.xml.sax.Parser"), xContext ),
+                                UNO_QUERY_THROW );
+
+                    xParser->setDocumentHandler( xDocHandler );
+                    xml::sax::InputSource source;
+                    source.aInputStream = ucb_content.openStream();
+                    source.sSystemId = ucb_content.getURL();
+                    xParser->parseStream( source );
+
+                    if ( pHandler->isParsed() )
+                    {
+                        lang = pHandler->getParcelLanguage();
+                    }
                 }
-                lang =  pHandler->getParcelLanguage();
+
                 OUString sfwkLibType = getResourceString( RID_STR_SFWK_LIB );
                 // replace %MACRONAME placeholder with language name
                 OUString MACRONAME( OUSTR("%MACROLANG" ) );
@@ -325,7 +333,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 OSL_TRACE(" BackEnd detected lang = %s  ",
                      rtl::OUStringToOString( lang, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE(" for url %s",
-                     rtl::OUStringToOString( source.sSystemId, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                     rtl::OUStringToOString( sParcelDescURL, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 OSL_TRACE("******************************");
                 return new PackageImpl( this, url, sfwkLibType, xCmdEnv );
             }
