@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:37:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,11 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 namespace framework
 {
 
@@ -156,26 +161,41 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
                        public ::cppu::OWeakObject
 {
     protected:
-        MenuBarManager( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                        BmkMenu*            pBmkMenu,
-                        sal_Bool            bDelete,
-                        sal_Bool            bDeleteChildren );
+        // #110897#
+        MenuBarManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            BmkMenu*            pBmkMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 
-        MenuBarManager( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                        AddonMenu*          pAddonMenu,
-                        sal_Bool            bDelete,
-                        sal_Bool            bDeleteChildren );
+        // #110897#
+        MenuBarManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            AddonMenu*          pAddonMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 
-        MenuBarManager( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                        AddonPopupMenu*     pAddonMenu,
-                        sal_Bool            bDelete,
-                        sal_Bool            bDeleteChildren );
+        // #110897#
+        MenuBarManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            AddonPopupMenu*     pAddonMenu,
+            sal_Bool            bDelete,
+            sal_Bool            bDeleteChildren );
 
     public:
-        MenuBarManager( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                        Menu* pMenu,
-                        sal_Bool bDelete,
-                        sal_Bool bDeleteChildren );
+        // #110897#
+        MenuBarManager(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            Menu* pMenu,
+            sal_Bool bDelete,
+            sal_Bool bDeleteChildren );
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         virtual ~MenuBarManager();
 
@@ -266,6 +286,9 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener        ,
         ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration > m_xPopupMenuControllerRegistration;
         ::std::vector< MenuItemHandler* >                                                              m_aMenuItemHandlerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                     m_aListenerContainer;   /// container for ALL Listener
+
+        // #110897#
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
 };
 
 } // namespace
