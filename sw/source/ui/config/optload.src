@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-13 20:39:41 $
+ *  last change: $Author: vg $ $Date: 2001-08-24 10:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "Refresh links";
         Text[ japanese ] = "自動";
-        Text[ korean ] = "자동";
+        Text[ korean ] = "자동으로";
         Text[ chinese_simplified ] = "自动";
         Text[ chinese_traditional ] = "自動";
         Text[ turkish ] = "Alan ve �emalar";
@@ -264,7 +264,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Pola";
         Text[ portuguese_brazilian ] = "Update fields automatically";
         Text[ japanese ] = "ﾌｨｰﾙﾄﾞ(~F)";
-        Text[ korean ] = "필드 명령어(~F)";
+        Text[ korean ] = "필드 명령어";
         Text[ chinese_simplified ] = "字段指令(~F)";
         Text[ chinese_traditional ] = "欄位指令(~F)";
         Text[ turkish ] = "Alan ��elerini otomatik olarak g�ncelle";
@@ -292,7 +292,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Wykresy";
         Text[ portuguese_brazilian ] = "Update charts automatically";
         Text[ japanese ] = "ｸﾞﾗﾌ(~C)";
-        Text[ korean ] = "차트(~C)";
+        Text[ korean ] = "차트";
         Text[ chinese_simplified ] = "图表(~C)";
         Text[ chinese_traditional ] = "圖表(~C)";
         Text[ turkish ] = "�emalar� otomatik olarak g�ncelle";
@@ -1512,6 +1512,7 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
