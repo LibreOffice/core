@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:19:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,9 +187,13 @@ void wwZOrderer::OutsideEscher()
     maIndexes.pop();
 }
 
-void wwZOrderer::InsertEscherObject(SdrObject* pObject, ULONG nSpId)
+// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+void wwZOrderer::InsertEscherObject( SdrObject* pObject,
+                                     ULONG nSpId,
+                                     const bool _bInHeaderFooter )
 {
-    ULONG nInsertPos = GetEscherObjectPos(nSpId);
+    ULONG nInsertPos = GetEscherObjectPos( nSpId, _bInHeaderFooter );
+// <--
     InsertObject(pObject, nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
@@ -223,7 +227,9 @@ USHORT wwZOrderer::GetEscherObjectIdx(ULONG nSpId)
     return nFound;
 }
 
-ULONG wwZOrderer::GetEscherObjectPos(ULONG nSpId)
+// --> OD 2004-12-13 #117915# - consider new parameter <_bInHeaderFooter>
+ULONG wwZOrderer::GetEscherObjectPos( ULONG nSpId,
+                                      const bool _bInHeaderFooter )
 {
     /*
     #97824# EscherObjects have their own ordering which needs to be matched to
@@ -238,16 +244,39 @@ ULONG wwZOrderer::GetEscherObjectPos(ULONG nSpId)
     ULONG nRet=0;
     myeiter aIter = maEscherLayer.begin();
     myeiter aEnd = maEscherLayer.end();
+    // --> OD 2004-12-13 #117915# - skip objects in page header|footer, if
+    // current object isn't in page header|footer
+    if ( !_bInHeaderFooter )
+    {
+        while ( aIter != aEnd )
+        {
+            if ( !aIter->mbInHeaderFooter )
+            {
+                break;
+            }
+            nRet += aIter->mnNoInlines + 1;
+            ++aIter;
+        }
+    }
+    // <--
     while (aIter != aEnd)
     {
-        if (aIter->mnEscherShapeOrder > nFound)
+        // --> OD 2004-12-13 #117915# - insert object in page header|footer
+        // before objects in page body
+        if ( _bInHeaderFooter && !aIter->mbInHeaderFooter )
+        {
+            break;
+        }
+        // <--
+        if ( aIter->mnEscherShapeOrder > nFound )
             break;
         nRet += aIter->mnNoInlines+1;
         ++aIter;
     }
-    maEscherLayer.insert(aIter, EscherShape(nFound));
+    maEscherLayer.insert(aIter, EscherShape( nFound, _bInHeaderFooter ) );
     return nRet;
 }
+// <--
 
 // InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
 // einem VarArr
