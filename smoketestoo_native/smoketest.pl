@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-17 13:50:09 $
+#   last change: $Author: kz $ $Date: 2004-08-20 09:43:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -272,7 +272,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.4 $ ';
+$id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -420,7 +420,7 @@ sub doTest {
     $basedir = doInstall ("$INSTALLSET$INSTSETNAME$PathSeparator", $installpath);
     print "$basedir\n";
     $programpath = "$basedir". "program$PathSeparator";
-    $userinstallpath_without = $basedir . $userinstalldir;
+    $userinstallpath_without = $installpath . $userinstalldir;
     $userinstallpath = $userinstallpath_without . $PathSeparator;
     $userpath = "$userinstallpath" . "user$PathSeparator";
     $basicpath = $userpath . "basic$PathSeparator";
@@ -497,6 +497,9 @@ sub doInstall {
         }
         foreach $file (@DirArray) {
             $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+            if (!$is_oo) {
+                $Command .= " TRANSFORMS=$DATA" . "staroffice.mst";
+            }
             execute_Command ($Command, $error_setup, $show_Message,  $command_normal);
         }
         @DirArray = ();
@@ -570,7 +573,7 @@ sub doInstall {
                 $Command = "pkgparam -d $installsetpath $file BASEDIR";
                 $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
                 if (($#{@$output_ref} > -1) and ($$output_ref[0] ne "") ) {
-                    createPath ("$dest_installdir$$output[0]", $error_setup);
+                    createPath ("$dest_installdir$$output_ref[0]", $error_setup);
                 }
                 $Command = "pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
