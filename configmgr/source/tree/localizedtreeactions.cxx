@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 09:33:08 $
+ *  last change: $Author: lla $ $Date: 2001-06-12 07:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUS
 
     std::auto_ptr<INode> aResult;
 
-    if ( _pNode.get == NULL ||                           // nothing to reduce
+    if ( _pNode.get() == NULL ||                           // nothing to reduce
          designatesAllLocales(makeLocale(_sLocale)) ) // from expanded to expanded
     {
         aResult.reset( _pNode.release() );
