@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-02 10:27:28 $
+ *  last change: $Author: fme $ $Date: 2002-05-27 09:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,14 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
 #ifndef _FLYFRMS_HXX
 #include <flyfrms.hxx>
+#endif
+#ifndef _FMTANCHR_HXX //autogen
+#include <fmtanchr.hxx>
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
@@ -2251,7 +2257,17 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                                 ++nAutoCnt;
                                 ASSERT( pFly->IsFlyAtCntFrm(), "Not at content, but autopos.?" );
                                 ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
-                                if( !pFly->IsValid() )
+
+                                // we have to check if the anchor of the fly
+                                // is inside this frame before calling
+                                // pFly->Calc. Otherwise the master could
+                                // be invalidated -> loop
+                                const SwFlyFrmFmt *pFmt =
+                                        (SwFlyFrmFmt*)pFly->GetFmt();
+                                const SwPosition* pPos = pFmt->GetAnchor().GetCntntAnchor();
+
+                                if( !pFly->IsValid() && pPos &&
+                                     pPos->nContent.GetIndex() > GetOfst() )
                                 {
 #ifdef VERTICAL_LAYOUT
                                     SwTwips nOldTop = (pFly->Frm().*fnRect->fnGetTop)();
