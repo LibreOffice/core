@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-15 20:19:05 $
+ *  last change: $Author: bm $ $Date: 2001-03-22 12:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,9 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
         mrCategoriesAddress( rCategoriesAddress ),
-        mnDomainOffset( 0 )
+        mnDomainOffset( 0 ),
+        mnSeries( 0 ),
+        mnMaxSeriesLength( 0 )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
@@ -240,12 +242,12 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
         case XML_TOK_PA_SERIES:
             {
-                sal_Int32 nIndex = mrSeriesAddresses.getLength();
-                mrSeriesAddresses.realloc( nIndex + 1 );
-
+                mrSeriesAddresses.realloc( mnSeries + 1 );
                 pContext = new SchXMLSeriesContext( mrImportHelper, GetImport(), rLocalName,
-                                                    mxDiagram, maAxes, mrSeriesAddresses[ nIndex ],
-                                                    nIndex, mnDomainOffset );
+                                                    mxDiagram, maAxes, mrSeriesAddresses[ mnSeries ],
+                                                    maSeriesStyleList,
+                                                    mnSeries, mnMaxSeriesLength, mnDomainOffset );
+                mnSeries++;
             }
             break;
 
@@ -386,6 +388,103 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     {
         xDiaShape->setSize( aSize );
         xDiaShape->setPosition( aPosition );
+    }
+}
+
+void SchXMLPlotAreaContext::EndElement()
+{
+    mrImportHelper.ResizeChartData( mnSeries, mnMaxSeriesLength );
+
+    uno::Reference< beans::XPropertySet > xProp;
+    sal_Int32 i;
+
+    // set autostyles for series and data points
+    const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+    const SvXMLStyleContext* pStyle = NULL;
+    ::rtl::OUString sCurrStyleName;
+
+    if( pStylesCtxt )
+    {
+        for( ::std::list< ::chartxml::DataRowPointStyle >::iterator iStyle = maSeriesStyleList.begin();
+             iStyle != maSeriesStyleList.end();
+             iStyle++ )
+        {
+            if( iStyle->mnIndex == -1 )
+            {
+                // data row style
+                for( i = 0; i < iStyle->mnRepeat; i++ )
+                {
+                    try
+                    {
+                        xProp = mxDiagram->getDataRowProperties( iStyle->mnSeries + i );
+
+                        if( xProp.is())
+                        {
+                            if( (iStyle->msStyleName).getLength())
+                            {
+                                if( ! sCurrStyleName.equals( iStyle->msStyleName ))
+                                {
+                                    sCurrStyleName = iStyle->msStyleName;
+                                    pStyle = pStylesCtxt->FindStyleChildContext(
+                                        mrImportHelper.GetChartFamilyID(), sCurrStyleName );
+                                }
+
+                                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                            }
+
+                            if( iStyle->mnAttachedAxis != 1 )
+                            {
+                                uno::Any aAny;
+                                aAny <<= chart::ChartAxisAssign::SECONDARY_Y;
+
+                                xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Axis" )), aAny );
+                            }
+                        }
+                    }
+                    catch( uno::Exception aEx )
+                    {
+#ifdef DBG_UTIL
+                        String aStr( aEx.Message );
+                        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+                        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
+#endif
+                    }
+                }
+            }
+            else
+            {
+                // data point style
+                for( i = 0; i < iStyle->mnRepeat; i++ )
+                {
+                    try
+                    {
+                        xProp = mxDiagram->getDataPointProperties( iStyle->mnIndex + i, iStyle->mnSeries );
+
+                        if( xProp.is())
+                        {
+                            if( ! sCurrStyleName.equals( iStyle->msStyleName ))
+                            {
+                                sCurrStyleName = iStyle->msStyleName;
+                                pStyle = pStylesCtxt->FindStyleChildContext(
+                                    mrImportHelper.GetChartFamilyID(), sCurrStyleName );
+                            }
+
+                            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                        }
+                    }
+                    catch( uno::Exception aEx )
+                    {
+#ifdef DBG_UTIL
+                        String aStr( aEx.Message );
+                        ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+                        DBG_ERROR1( "PlotAreaContext:EndElement(): Exception caught: %s", aBStr.GetBuffer());
+#endif
+                    }
+                }
+            }
+        }   // styles iterator
     }
 }
 
@@ -843,16 +942,20 @@ SchXMLSeriesContext::SchXMLSeriesContext(
     uno::Reference< chart::XDiagram >& xDiagram,
     std::vector< SchXMLAxis >& rAxes,
     com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
+    ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
     sal_Int32 nSeriesIndex,
+    sal_Int32& rMaxSeriesLength,
     sal_Int32& rDomainOffset ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mxDiagram( xDiagram ),
         mrAxes( rAxes ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddress( rSeriesAddress ),
+        mrStyleList( rStyleList ),
         mnSeriesIndex( nSeriesIndex ),
-        mnDataPointIndex( -1 ),
+        mnDataPointIndex( 0 ),
         mrDomainOffset( rDomainOffset ),
+        mrMaxSeriesLength( rMaxSeriesLength ),
         mpAttachedAxis( NULL )
 {
 }
@@ -865,8 +968,10 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
+    ::rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetSeriesAttrTokenMap();
+    ::rtl::OUString sAutoStyleName;
+    sal_Int32 nAttachedAxis = 1;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -897,72 +1002,35 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 }
                 break;
             case XML_TOK_SERIES_STYLE_NAME:
-                msAutoStyleName = aValue;
+                sAutoStyleName = aValue;
                 break;
             case XML_TOK_SERIES_CHART_CLASS:
                 // not supported yet
                 break;
         }
     }
+
+    if( mpAttachedAxis )
+    {
+        if( mpAttachedAxis->nIndexInCategory > 0 )
+        {
+            // secondary axis => property has to be set (primary is default)
+            nAttachedAxis = 2;
+        }
+    }
+
+    if( sAutoStyleName.getLength() ||
+        nAttachedAxis != 1 )
+    {
+        ::chartxml::DataRowPointStyle aStyle( mnSeriesIndex, -1, 1, sAutoStyleName, nAttachedAxis );
+        mrStyleList.push_back( aStyle );
+    }
 }
 
 void SchXMLSeriesContext::EndElement()
 {
-    if( msAutoStyleName.getLength() &&
-        mxDiagram.is())
-    {
-        uno::Reference< beans::XPropertySet > xProp;
-
-        try
-        {
-            if( mrImportHelper.GetNumberOfSeries() < mnSeriesIndex + mrDomainOffset + 1 )
-                mrImportHelper.ResizeChartData( mnSeriesIndex + mrDomainOffset + 1 );
-
-            xProp = mxDiagram->getDataRowProperties( mnSeriesIndex + mrDomainOffset );
-        }
-        catch( lang::IndexOutOfBoundsException aEx )
-        {
-#ifdef DBG_UTIL
-            String aStr( aEx.Message );
-            ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR1( "SeriesContext: Exception caught: %s", aBStr.GetBuffer());
-#endif
-        }
-
-        if( xProp.is())
-        {
-            // attach to correct axis
-            if( mpAttachedAxis )
-            {
-                // assume attachement to primary axis
-                if( mpAttachedAxis->nIndexInCategory > 0 )
-                {
-                    // attach to secondary axis
-                    try
-                    {
-                        uno::Any aAny;
-                        aAny <<= chart::ChartAxisAssign::SECONDARY_Y;
-
-                        xProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Axis" )), aAny );
-                    }
-                    catch( beans::UnknownPropertyException )
-                    {
-                        DBG_ERROR( "Couldn't set secondary axis property" );
-                    }
-                }
-            }
-
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
-            {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
-
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-            }
-        }
-    }
+    if( mrMaxSeriesLength < mnDataPointIndex )
+        mrMaxSeriesLength = mnDataPointIndex;
 }
 
 SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
@@ -987,9 +1055,8 @@ SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
             }
             break;
         case XML_TOK_SERIES_DATA_POINT:
-            mnDataPointIndex++;
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName, mxDiagram,
-                                                   mnSeriesIndex + mrDomainOffset, mnDataPointIndex );
+                                                   mrStyleList, mnSeriesIndex + mrDomainOffset, mnDataPointIndex );
             break;
 
         default:
@@ -1004,10 +1071,12 @@ SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
 SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
                                                  SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                                  uno::Reference< chart::XDiagram >& xDiagram,
+                                                 ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
                                                  sal_Int32 nSeries, sal_Int32& rIndex ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mxDiagram( xDiagram ),
+        mrStyleList( rStyleList ),
         mnSeries( nSeries ),
         mrIndex( rIndex )
 {
@@ -1020,7 +1089,9 @@ SchXMLDataPointContext::~SchXMLDataPointContext()
 void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
+    ::rtl::OUString aValue;
+    ::rtl::OUString sAutoStyleName;
+    sal_Int32 nRepeat = 1;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -1031,51 +1102,18 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
         if( nPrefix == XML_NAMESPACE_CHART )
         {
             if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style_name )))
-                msAutoStyleName = xAttrList->getValueByIndex( i );
+                sAutoStyleName = xAttrList->getValueByIndex( i );
             else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_repeated )))
-                mrIndex += xAttrList->getValueByIndex( i ).toInt32() - 1;
+                nRepeat = xAttrList->getValueByIndex( i ).toInt32();
         }
     }
-}
 
-void SchXMLDataPointContext::EndElement()
-{
-    if( msAutoStyleName.getLength() &&
-        mxDiagram.is())
+    if( sAutoStyleName.getLength())
     {
-        uno::Reference< beans::XPropertySet > xProp;
-
-        try
-        {
-            if( mrImportHelper.GetNumberOfSeries() < mnSeries + 1 ||
-                mrImportHelper.GetLengthOfSeries() < mrIndex + 1  )
-                mrImportHelper.ResizeChartData( mnSeries + 1, mrIndex + 1 );
-
-            xProp = mxDiagram->getDataPointProperties( mnSeries, mrIndex );
-        }
-        catch( lang::IndexOutOfBoundsException aEx )
-        {
-#ifdef DBG_UTIL
-            String aStr( aEx.Message );
-            ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR1( "SeriesContext: Exception caught: %s", aBStr.GetBuffer());
-#endif
-        }
-
-        // set properties
-        if( xProp.is())
-        {
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
-            {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
-
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-            }
-        }
+        ::chartxml::DataRowPointStyle aStyle( mnSeries, mrIndex, nRepeat, sAutoStyleName );
+        mrStyleList.push_back( aStyle );
     }
+    mrIndex += nRepeat;
 }
 
 // ========================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-15 08:58:30 $
+ *  last change: $Author: bm $ $Date: 2001-03-22 12:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #endif
 
+#include <list>
+
 #include "transporttypes.hxx"
 
 class SvXMLImport;
@@ -87,6 +89,32 @@ namespace com { namespace sun { namespace star {
 
 // ----------------------------------------
 
+namespace chartxml
+{
+
+struct DataRowPointStyle
+{
+    sal_Int32 mnSeries;
+    sal_Int32 mnIndex;
+    sal_Int32 mnRepeat;
+    ::rtl::OUString msStyleName;
+    sal_Int32 mnAttachedAxis;
+
+    DataRowPointStyle( sal_Int32 nSeries, sal_Int32 nIndex, sal_Int32 nRepeat, ::rtl::OUString sStyleName,
+                       sal_Int32 nAttachedAxis = 0 ) :
+            mnSeries( nSeries ),
+            mnIndex( nIndex ),
+            mnRepeat( nRepeat ),
+            msStyleName( sStyleName ),
+            mnAttachedAxis( nAttachedAxis )
+        {}
+};
+
+}   // namespace
+
+
+// ----------------------------------------
+
 class SchXMLPlotAreaContext : public SvXMLImportContext
 {
 private:
@@ -95,7 +123,10 @@ private:
     std::vector< SchXMLAxis > maAxes;
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress >& mrSeriesAddresses;
     rtl::OUString& mrCategoriesAddress;
+    ::std::list< ::chartxml::DataRowPointStyle > maSeriesStyleList;
     sal_Int32 mnDomainOffset;
+    sal_Int32 mnSeries;
+    sal_Int32 mnMaxSeriesLength;
 
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
@@ -110,6 +141,7 @@ public:
         USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
 };
 
 // ----------------------------------------
@@ -150,9 +182,10 @@ private:
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
     std::vector< SchXMLAxis >& mrAxes;
     com::sun::star::chart::ChartSeriesAddress& mrSeriesAddress;
-    rtl::OUString msAutoStyleName;
+    ::std::list< ::chartxml::DataRowPointStyle >& mrStyleList;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
+    sal_Int32& mrMaxSeriesLength;
     sal_Int32& mrDomainOffset;
     SchXMLAxis* mpAttachedAxis;
 
@@ -162,16 +195,18 @@ public:
                          com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
                          std::vector< SchXMLAxis >& rAxes,
                          com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
+                         ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
                          sal_Int32 nSeriesIndex,
+                         sal_Int32& rMaxSeriesLength,
                          sal_Int32& rDomainOffset );
     ~SchXMLSeriesContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
     virtual SvXMLImportContext* CreateChildContext(
         USHORT nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
 };
 
 //----------------------------------------
@@ -181,7 +216,7 @@ class SchXMLDataPointContext : public SvXMLImportContext
 private:
     SchXMLImportHelper& mrImportHelper;
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
-    rtl::OUString msAutoStyleName;
+    ::std::list< ::chartxml::DataRowPointStyle >& mrStyleList;
     sal_Int32 mnSeries;
     sal_Int32& mrIndex;
 
@@ -189,11 +224,11 @@ public:
     SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
                              SvXMLImport& rImport, const rtl::OUString& rLocalName,
                              com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
+                             ::std::list< ::chartxml::DataRowPointStyle >& rStyleList,
                              sal_Int32 nSeries, sal_Int32& rIndex );
     virtual ~SchXMLDataPointContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
 };
 
 // ----------------------------------------
