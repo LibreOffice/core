@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-05 16:38:51 $
+ *  last change: $Author: iha $ $Date: 2004-01-06 19:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,6 +1166,8 @@ uno::Reference< drawing::XShape >
             //Segments
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
                 , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
+            xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
+                , uno::makeAny((sal_Int32)20) );//@todo replace this expensive count by 1 if draw bug is fixed
         }
         catch( uno::Exception& e )
         {
