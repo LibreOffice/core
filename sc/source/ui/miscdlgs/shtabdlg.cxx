@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shtabdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 07:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 //==================================================================
 
-ScShowTabDlg::ScShowTabDlg( Window* pParent, List& aEntryList ) :
+ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_SHOW_TAB ) ),
     aLb             ( this, ScResId( LB_ENTRYLIST ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
@@ -87,18 +87,27 @@ ScShowTabDlg::ScShowTabDlg( Window* pParent, List& aEntryList ) :
     aLb.Clear();
     aLb.SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );
 
-    void*   pListEntry = aEntryList.First();
-    while ( pListEntry )
-    {
-        aLb.InsertEntry( *((String*)pListEntry ) );
-        pListEntry = aEntryList.Next();
-    }
-
-    if ( aLb.GetEntryCount() > 0 )
-        aLb.SelectEntryPos( 0 );
-
     //-------------
     FreeResource();
+}
+
+//------------------------------------------------------------------------
+
+void ScShowTabDlg::SetDescription(
+        const String& rTitle, const String& rFixedText,
+        ULONG nDlgHelpId, ULONG nLbHelpId )
+{
+    SetText( rTitle );
+    aFtLbTitle.SetText( rFixedText );
+    SetHelpId( nDlgHelpId );
+    aLb.SetHelpId( nLbHelpId );
+}
+
+void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )
+{
+    aLb.InsertEntry( rString );
+    if( bSelected )
+        aLb.SelectEntryPos( aLb.GetEntryCount() - 1 );
 }
 
 //------------------------------------------------------------------------
@@ -111,6 +120,11 @@ USHORT ScShowTabDlg::GetSelectEntryCount() const
 String ScShowTabDlg::GetSelectEntry(USHORT nPos) const
 {
     return aLb.GetSelectEntry(nPos);
+}
+
+USHORT ScShowTabDlg::GetSelectEntryPos(USHORT nPos) const
+{
+    return aLb.GetSelectEntryPos(nPos);
 }
 
 //------------------------------------------------------------------------

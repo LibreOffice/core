@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shtabdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 07:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef SC_SHTABDLG_HXX
 #define SC_SHTABDLG_HXX
 
-#ifndef _LIST_HXX //autogen
-#include <tools/list.hxx>
-#endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -92,11 +89,20 @@ private:
     DECL_LINK( DblClkHdl, void * );
 
 public:
-            ScShowTabDlg( Window* pParent, List& aEntryList );
+            ScShowTabDlg( Window* pParent );
             ~ScShowTabDlg();
+
+    /** Sets dialog title, fixed text for listbox and help IDs. */
+    void    SetDescription(
+                const String& rTitle, const String& rFixedText,
+                ULONG nDlgHelpId, ULONG nLbHelpId );
+
+    /** Inserts a string into the ListBox. */
+    void    Insert( const String& rString, BOOL bSelected );
 
     USHORT  GetSelectEntryCount() const;
     String  GetSelectEntry(USHORT nPos) const;
+    USHORT  GetSelectEntryPos(USHORT nPos) const;
 };
 
 

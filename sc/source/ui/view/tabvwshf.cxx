@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 07:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,19 +195,20 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    List aList;
+                    ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
 
+                    String aTabName;
+                    BOOL bFirst = TRUE;
                     for ( USHORT i=0; i != nTabCount; i++ )
                     {
                         if (!pDoc->IsVisible(i))
                         {
-                            String* pNewEntry = new String;
-                            pDoc->GetName( i, *pNewEntry );
-                            aList.Insert( pNewEntry );
+                            pDoc->GetName( i, aTabName );
+                            pDlg->Insert( aTabName, bFirst );
+                            bFirst = FALSE;
                         }
                     }
 
-                    ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent(), aList );
                     if ( pDlg->Execute() == RET_OK )
                     {
                         USHORT nCount = pDlg->GetSelectEntryCount();
@@ -220,13 +221,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         rReq.Done();
                     }
                     delete pDlg;
-
-                    void* pEntry = aList.First();
-                    while ( pEntry )
-                    {
-                        delete (String*) aList.Remove( pEntry );
-                        pEntry = aList.Next();
-                    }
                 }
             }
             break;

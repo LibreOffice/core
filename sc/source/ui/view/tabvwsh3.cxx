@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 07:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "dwfunctr.hxx"
+#include "shtabdlg.hxx"
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 #define IS_AVAILABLE(WhichId,ppItem) \
@@ -707,6 +708,65 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
+        case SID_SELECT_TABLES:
+        {
+            ScViewData& rViewData = *GetViewData();
+            ScDocument& rDoc = *rViewData.GetDocument();
+            ScMarkData& rMark = rViewData.GetMarkData();
+            sal_uInt16 nTabCount = rDoc.GetTableCount();
+            sal_uInt16 nTab;
+
+            ScShowTabDlg* pDlg = new ScShowTabDlg( GetDialogParent() );
+            pDlg->SetDescription(
+                String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
+                String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
+                SID_SELECT_TABLES, HID_SELECTTABLES );
+
+            // fill all table names with selection state
+            String aTabName;
+            for( nTab = 0; nTab < nTabCount; ++nTab )
+            {
+                rDoc.GetName( nTab, aTabName );
+                pDlg->Insert( aTabName, rMark.GetTableSelect( nTab ) );
+            }
+
+            if( pDlg->Execute() == RET_OK )
+            {
+                sal_uInt16 nSelCount = pDlg->GetSelectEntryCount();
+                sal_uInt16 nSelIx;
+                sal_uInt16 nSelTab = nSelCount ? pDlg->GetSelectEntryPos( 0 ) : 0;
+                sal_uInt16 nFirstVisTab = 0;
+
+                // special case: only hidden tables selected -> do nothing
+                sal_Bool bVisSelected = sal_False;
+                for( nSelIx = 0; !bVisSelected && (nSelIx < nSelCount); ++nSelIx )
+                    bVisSelected = rDoc.IsVisible( nFirstVisTab = pDlg->GetSelectEntryPos( nSelIx ) );
+                if( !bVisSelected )
+                    nSelCount = 0;
+
+                // select the tables
+                if( nSelCount )
+                {
+                    for( nTab = 0; nTab < nTabCount; ++nTab )
+                        rMark.SelectTable( nTab, sal_False );
+
+                    for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
+                        rMark.SelectTable( pDlg->GetSelectEntryPos( nSelIx ), sal_True );
+
+                    // activate another table, if current is deselected
+                    if( !rMark.GetTableSelect( rViewData.GetTabNo() ) )
+                    {
+                        rMark.SelectTable( nFirstVisTab, sal_True );
+                        SetTabNo( nFirstVisTab );
+                    }
+
+                    rViewData.GetDocShell()->PostPaintExtras();
+                    rViewData.GetBindings().Invalidate( FID_FILL_TAB );
+                }
+            }
+            delete pDlg;
+        }
+        break;
 
 
         case SID_OUTLINE_DELETEALL:
