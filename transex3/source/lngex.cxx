@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@ void Help()
     fprintf( stdout, " -u: no function\n" );
     fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
+    fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
+    fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
+    fprintf( stdout, "     Example: -L 01,99=35\n" );
+    fprintf( stdout, "              Restriction to 01 and 99, 35 will be fallback for 99\n" );
 }
 
 /*****************************************************************************/

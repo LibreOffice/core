@@ -3,9 +3,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-22 14:11:52 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,15 @@
 // SourceTreeLocalizer
 //
 
-const char *ExeTable[][4] = {
-    { "src", "transex3", "-UTF8", "negative" },
-    { "hrc", "transex3", "-UTF8", "positive" },
-    { "lng", "lngex", "-UTF8", "negative" },
-    { "xrb", "xmlex", "-UTF8", "negative" },
-    { "xxl", "xmlex", "-UTF8", "negative" },
-    { "xgf", "xmlex", "-UTF8 -t:xgf", "negative" },
-    { "xcd", "cfgex", "-UTF8", "negative" },
-    { "NULL", "NULL", "NULL", "NULL" }
+const char *ExeTable[][5] = {
+    { "src", "transex3", "-UTF8", "negative", "noiso" },
+    { "hrc", "transex3", "-UTF8", "positive", "noiso" },
+    { "lng", "lngex", "-UTF8", "negative", "noiso" },
+    { "xrb", "xmlex", "-UTF8", "negative", "iso" },
+    { "xxl", "xmlex", "-UTF8", "negative", "iso" },
+    { "xgf", "xmlex", "-UTF8 -t:xgf", "negative", "iso" },
+    { "xcd", "cfgex", "-UTF8", "negative", "iso" },
+    { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
 const char *NegativeList[] = {
@@ -110,6 +110,9 @@ private:
     SvFileStream aSDF;
     USHORT nMode;
 
+    ByteString sLanguageRestriction;
+    ByteString sIsoCode99;
+
     const DirEntry GetTempFile();
     const ByteString GetProjectName( BOOL bAbs = FALSE );
     const ByteString GetProjectRootRel();
@@ -120,7 +123,8 @@ private:
     void WorkOnFile(
         const ByteString &rFileName,
         const ByteString &rExecutable,
-        const ByteString &rParameter
+        const ByteString &rParameter,
+        const ByteString &rIso
     );
 
     void WorkOnFileType(
@@ -128,13 +132,19 @@ private:
         const ByteString &rExtension,
         const ByteString &rExecutable,
         const ByteString &rParameter,
-        const ByteString &rCollectMode
+        const ByteString &rCollectMode,
+        const ByteString &rIso
     );
     void WorkOnDirectory( const ByteString &rDirectory );
 
 public:
     SourceTreeLocalizer( const ByteString &rRoot, const ByteString &rVersion );
     ~SourceTreeLocalizer();
+
+    void SetLanguageRestriction( const ByteString& rRestrictions )
+        { sLanguageRestriction = rRestrictions; }
+    void SetIsoCode99( const ByteString& rIsoCode )
+        { sIsoCode99 = rIsoCode; }
 
     BOOL Extract( const ByteString &rDestinationFile );
     BOOL Merge( const ByteString &rSourceFile );
@@ -227,64 +237,77 @@ const DirEntry SourceTreeLocalizer::GetTempFile()
 /*****************************************************************************/
 void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rFileName, const ByteString &rExecutable,
-    const ByteString &rParameter )
+    const ByteString &rParameter, const ByteString &rIso )
 /*****************************************************************************/
 {
-    String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
-    DirEntry aEntry( sFull );
-    ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
+    if (( rIso == "noiso" ) || sIsoCode99.Len()) {
+        String sFull( rFileName, RTL_TEXTENCODING_ASCII_US );
+        DirEntry aEntry( sFull );
+        ByteString sFileName( aEntry.GetName(), RTL_TEXTENCODING_ASCII_US );
 
-    // set current working directory
-    DirEntry aPath( aEntry.GetPath());
-    DirEntry aOldCWD;
-    aPath.SetCWD();
+        // set current working directory
+        DirEntry aPath( aEntry.GetPath());
+        DirEntry aOldCWD;
+        aPath.SetCWD();
 
-    ByteString sPrj( GetProjectName());
-    if ( sPrj.Len()) {
-        ByteString sRoot( GetProjectRootRel());
+        ByteString sPrj( GetProjectName());
+        if ( sPrj.Len()) {
+            ByteString sRoot( GetProjectRootRel());
 
-        // get temp file
-        DirEntry aTemp( GetTempFile());
-        ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            // get temp file
+            DirEntry aTemp( GetTempFile());
+            ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-        ByteString sExecutable( rExecutable );
+            ByteString sExecutable( rExecutable );
 #ifdef WNT
-        sExecutable += ".exe";
-        String sPath( GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
+            sExecutable += ".exe";
+            String sPath( GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
 #else
-        String sPath( GetEnv( "LD_LIBRARY_PATH" ), RTL_TEXTENCODING_ASCII_US );
+            String sPath( GetEnv( "LD_LIBRARY_PATH" ), RTL_TEXTENCODING_ASCII_US );
 #endif
 
-        DirEntry aExecutable( String( sExecutable, RTL_TEXTENCODING_ASCII_US ));
-        aExecutable.Find( sPath );
+            DirEntry aExecutable( String( sExecutable, RTL_TEXTENCODING_ASCII_US ));
+            aExecutable.Find( sPath );
 
-        ByteString sCommand( aExecutable.GetFull(), RTL_TEXTENCODING_ASCII_US );
-        sCommand += " ";
-        sCommand += rParameter;
-        sCommand += " -p ";
-        sCommand += sPrj;
-        sCommand += " -r ";
-        sCommand += sRoot;
-        sCommand += " -i ";
-        sCommand += sFileName;
-        sCommand += " -o ";
-        sCommand += sTempFile;
+            ByteString sCommand( aExecutable.GetFull(), RTL_TEXTENCODING_ASCII_US );
+            sCommand += " ";
+            sCommand += rParameter;
+            sCommand += " -p ";
+            sCommand += sPrj;
+            sCommand += " -r ";
+            sCommand += sRoot;
+            sCommand += " -i ";
+            sCommand += sFileName;
+            sCommand += " -o ";
+            sCommand += sTempFile;
+            if ( sLanguageRestriction.Len()) {
+                sCommand += " -l ";
+                sCommand += sLanguageRestriction;
+            }
+            if ( rIso == "iso" ) {
+                sCommand += "-ISO99";
+                sCommand += sIsoCode99;
+            }
 
-        system( sCommand.GetBuffer());
+            system( sCommand.GetBuffer());
 
-        SvFileStream aSDFIn( aTemp.GetFull(), STREAM_STD_READ );
-        ByteString sLine;
-        while ( !aSDFIn.IsEof()) {
-            aSDFIn.ReadLine( sLine );
-            if ( sLine.Len())
-                aSDF.WriteLine( sLine );
+            SvFileStream aSDFIn( aTemp.GetFull(), STREAM_STD_READ );
+            ByteString sLine;
+            while ( !aSDFIn.IsEof()) {
+                aSDFIn.ReadLine( sLine );
+                if ( sLine.Len())
+                    aSDF.WriteLine( sLine );
+            }
+            aSDFIn.Close();
+
+            aTemp.Kill();
         }
-        aSDFIn.Close();
-
-        aTemp.Kill();
+        // reset current working directory
+        aOldCWD.SetCWD();
     }
-    // reset current working directory
-    aOldCWD.SetCWD();
+    else {
+        fprintf( stdout, "ERROR: Iso code required for file %s\n", rFileName.GetBuffer());
+    }
 }
 
 /*****************************************************************************/
@@ -347,7 +370,7 @@ BOOL SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
 void SourceTreeLocalizer::WorkOnFileType(
     const ByteString &rDirectory, const ByteString &rExtension,
     const ByteString &rExecutable, const ByteString &rParameter,
-    const ByteString &rCollectMode
+    const ByteString &rCollectMode, const ByteString &rIso
 )
 /*****************************************************************************/
 {
@@ -370,10 +393,8 @@ void SourceTreeLocalizer::WorkOnFileType(
         else if ( rCollectMode == "positive" )
             bAllowed = CheckPositiveList( sFile );
 
-        if ( bAllowed ) {
-            fprintf( stdout, "%s\n", sFile.GetBuffer());
-            WorkOnFile( sFile, rExecutable, rParameter );
-        }
+        if ( bAllowed )
+            WorkOnFile( sFile, rExecutable, rParameter, rIso );
     }
 }
 
@@ -386,6 +407,7 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
     ByteString sExecutable( ExeTable[ nIndex ][ 1 ] );
     ByteString sParameter( ExeTable[ nIndex ][ 2 ] );
     ByteString sCollectMode( ExeTable[ nIndex ][ 3 ] );
+    ByteString sIso( ExeTable[ nIndex ][ 4 ] );
 
     while( sExtension != "NULL" ) {
         WorkOnFileType(
@@ -393,7 +415,8 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
             sExtension,
             sExecutable,
             sParameter,
-            sCollectMode
+            sCollectMode,
+            sIso
         );
 
         nIndex++;
@@ -402,6 +425,7 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
         sExecutable = ExeTable[ nIndex ][ 1 ];
         sParameter = ExeTable[ nIndex ][ 2 ];
         sCollectMode = ExeTable[ nIndex ][ 3 ];
+        sIso = ExeTable[ nIndex ][ 4 ];
     }
 }
 
@@ -471,7 +495,9 @@ int _cdecl main( int argc, char *argv[] )
     }
 
     SourceTreeLocalizer aIter( sRoot, sVersion );
-    aIter.Extract( "x:\\nf\\test.txt" );
+    aIter.SetLanguageRestriction( "01,99=35" );
+     aIter.SetIsoCode99( "de-CH" );
+      aIter.Extract( "x:\\nf\\test.txt" );
 
     return 0;
 }

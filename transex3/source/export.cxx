@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,30 +124,30 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
-        if (( ByteString( argv[ i ]) == "-i" ) || ( argv[ i ] == "-I" )) {
+        if (( ByteString( argv[ i ]) == "-i" ) || ( ByteString( argv[ i ] ) == "-I" )) {
             nState = STATE_INPUT; // next tokens specifies source files
         }
-        else if (( ByteString( argv[ i ]) == "-o" ) || ( argv[ i ] == "-O" )) {
+        else if (( ByteString( argv[ i ]) == "-o" ) || ( ByteString( argv[ i ] ) == "-O" )) {
             nState = STATE_OUTPUT; // next token specifies the dest file
         }
-        else if (( ByteString( argv[ i ]) == "-p" ) || ( argv[ i ] == "-P" )) {
+        else if (( ByteString( argv[ i ]) == "-p" ) || ( ByteString( argv[ i ] ) == "-P" )) {
             nState = STATE_PRJ; // next token specifies the cur. project
         }
-        else if (( ByteString( argv[ i ]) == "-r" ) || ( argv[ i ] == "-R" )) {
+        else if (( ByteString( argv[ i ]) == "-r" ) || ( ByteString( argv[ i ] ) == "-R" )) {
             nState = STATE_ROOT; // next token specifies path to project root
         }
-        else if (( ByteString( argv[ i ]) == "-m" ) || ( argv[ i ] == "-M" )) {
+        else if (( ByteString( argv[ i ]) == "-m" ) || ( ByteString( argv[ i ] ) == "-M" )) {
             nState = STATE_MERGESRC; // next token specifies the merge database
         }
-        else if (( ByteString( argv[ i ]) == "-e" ) || ( argv[ i ] == "-E" )) {
+        else if (( ByteString( argv[ i ]) == "-e" ) || ( ByteString( argv[ i ] ) == "-E" )) {
             nState = STATE_ERRORLOG;
             bErrorLog = FALSE;
         }
-        else if (( ByteString( argv[ i ]) == "-b" ) || ( argv[ i ] == "-B" )) {
+        else if (( ByteString( argv[ i ] ) == "-b" ) || ( ByteString( argv[ i ] ) == "-B" )) {
             nState = STATE_BREAKHELP;
             bBreakWhenHelpText = TRUE;
         }
-        else if (( ByteString( argv[ i ]) == "-u" ) || ( argv[ i ] == "-U" )) {
+        else if (( ByteString( argv[ i ]) == "-u" ) || ( ByteString( argv[ i ] ) == "-U" )) {
             nState = STATE_UNMERGE;
             bUnmerge = TRUE;
             bMergeMode = TRUE;
@@ -156,7 +156,7 @@ extern char *GetOutputFile( int argc, char* argv[])
             nState = STATE_UTF8;
             bUTF8 = TRUE;
         }
-        else if (( ByteString( argv[ i ]) == "-l" ) || ( argv[ i ] == "-L" )) {
+        else if (( ByteString( argv[ i ]) == "-l" ) || ( ByteString( argv[ i ]) == "-L" )) {
             nState = STATE_LANGUAGES;
         }
         else {
@@ -1228,6 +1228,8 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
     if ( bUnmerge )
         return TRUE;
 //  fprintf( stdout, "." );
+
+    FillInFallbacks( pResData );
 
        // mandatory to export: german and eng. and/or enus
     if (( pResData->sText[ GERMAN_INDEX ].Len() &&

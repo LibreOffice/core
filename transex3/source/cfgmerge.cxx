@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ extern "C" { YYWarning( char * ); }
 #define STATE_ERRORLOG  0x0007
 #define STATE_UTF8      0x0008
 #define STATE_LANGUAGES 0X0009
+#define STATE_ISOCODE99 0x000A
 
 // set of global variables
 BOOL bEnableExport;
@@ -144,6 +145,9 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
         }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-ISO99" ) {
+            nState = STATE_ISOCODE99;
+        }
         else {
             switch ( nState ) {
                 case STATE_NON: {
@@ -175,6 +179,10 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_LANGUAGES: {
                     Export::sLanguages = ByteString( argv[ i ]);
+                }
+                break;
+                case STATE_ISOCODE99: {
+                    Export::sIsoCode99 = ByteString( argv[ i ]);
                 }
                 break;
             }
@@ -280,6 +288,27 @@ int GetError()
 {
     return 0;
 }
+}
+
+//
+// class CfgStackData
+//
+
+/*****************************************************************************/
+void CfgStackData::FillInFallbacks()
+/*****************************************************************************/
+{
+    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
+        if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
+            USHORT nFallbackIndex =
+                Export::GetLangIndex(
+                    Export::GetFallbackLanguage( Export::LangId[ i ] ));
+            if ( nFallbackIndex < LANGUAGES ) {
+                if ( !sText[ i ].Len())
+                    sText[ i ] = sText[ nFallbackIndex ];
+            }
+        }
+    }
 }
 
 //
@@ -585,6 +614,8 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
+        pStackData->FillInFallbacks();
+
         if ( pStackData->sText[ GERMAN_INDEX ].Len() &&
             ( pStackData->sText[ ENGLISH_US_INDEX ].Len() ||
                 pStackData->sText[ ENGLISH_INDEX ].Len())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-23 08:05:40 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ResData::~ResData()
 
 /*****************************************************************************/
 ByteString Export::sLanguages;
+ByteString Export::sIsoCode99;
 /*****************************************************************************/
 
 /*****************************************************************************/
@@ -139,7 +140,8 @@ USHORT Export::LangId[ LANGUAGES ] =
     TURKISH,
     ARABIC,
     HEBREW,
-    CATALAN
+    CATALAN,
+    EXTERN
 };
 
 
@@ -186,6 +188,7 @@ CharSet Export::GetCharSet( USHORT nLangId )
         case ARABIC: return RTL_TEXTENCODING_MS_1256;
         case HEBREW: return RTL_TEXTENCODING_MS_1255;
         case CATALAN: return RTL_TEXTENCODING_MS_1252;
+        case EXTERN: return RTL_TEXTENCODING_UTF8;
     }
     return 0xFFFF;
 }
@@ -254,6 +257,8 @@ USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
         return HEBREW;
     else if ( sLang == ByteString( CATALAN_ISO ).ToUpperAscii())
         return CATALAN;
+    else if ( sLang == sIsoCode99 )
+        return EXTERN;
 
     return 0xFFFF;
 }
@@ -291,6 +296,7 @@ ByteString Export::GetIsoLangByIndex( USHORT nIndex )
         case ARABIC_INDEX: return ARABIC_ISO;
         case HEBREW_INDEX: return HEBREW_ISO;
         case CATALAN_INDEX: return CATALAN_ISO;
+        case EXTERN_INDEX: return sIsoCode99;
     }
     return "";
 }
@@ -414,19 +420,90 @@ const ByteString Export::LangName[ LANGUAGES ] =
     "turkish",
     "arabic",
     "hebrew",
-    "catalan"
+    "catalan",
+    "extern"
 };
 
 /*****************************************************************************/
 BOOL Export::LanguageAllowed( USHORT nLanguage )
 /*****************************************************************************/
 {
-    if ( !sLanguages.Len())
+    if ( !sLanguages.Len() && ( nLanguage != 99 ))
         return TRUE;
 
     for ( ULONG i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
-        if ( nLanguage == sLanguages.GetToken( i, ',' ).ToInt32())
+        if ( nLanguage ==
+            sLanguages.GetToken( i, ',' ).GetToken( 0, '=' ).ToInt32())
             return TRUE;
 
     return FALSE;
+}
+
+/*****************************************************************************/
+USHORT Export::GetFallbackLanguage( USHORT nLanguage )
+/*****************************************************************************/
+{
+    for ( ULONG i = 0; i < sLanguages.GetTokenCount( ',' ); i++ )
+        if ( nLanguage ==
+            sLanguages.GetToken( i, ',' ).GetToken( 0, '=' ).ToInt32())
+        {
+            if ( sLanguages.GetToken( i, ',' ).GetTokenCount( '=' ) > 1 )
+                return
+                    sLanguages.GetToken( i, ',' ).GetToken( 1, '=' ).ToInt32();
+            else
+                return nLanguage;
+        }
+
+    return nLanguage;
+}
+
+/*****************************************************************************/
+void Export::FillInFallbacks( ResData *pResData )
+/*****************************************************************************/
+{
+    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
+        if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
+            USHORT nFallbackIndex =
+                GetLangIndex( GetFallbackLanguage( LangId[ i ] ));
+            if ( nFallbackIndex < LANGUAGES ) {
+                if ( !pResData->sText[ i ].Len())
+                    pResData->sText[ i ] =
+                        pResData->sText[ nFallbackIndex ];
+                if ( !pResData->sHelpText[ i ].Len())
+                    pResData->sHelpText[ i ] =
+                        pResData->sHelpText[ nFallbackIndex ];
+                if ( !pResData->sQuickHelpText[ i ].Len())
+                    pResData->sQuickHelpText[ i ] =
+                        pResData->sQuickHelpText[ nFallbackIndex ];
+                if ( !pResData->sTitle[ i ].Len())
+                    pResData->sTitle[ i ] =
+                        pResData->sTitle[ nFallbackIndex ];
+
+                if ( pResData->pStringList )
+                    FillInListFallbacks(
+                        pResData->pStringList, i, nFallbackIndex );
+                if ( pResData->pFilterList )
+                    FillInListFallbacks(
+                        pResData->pFilterList, i, nFallbackIndex );
+                if ( pResData->pItemList )
+                    FillInListFallbacks(
+                        pResData->pItemList, i, nFallbackIndex );
+                if ( pResData->pUIEntries )
+                    FillInListFallbacks(
+                        pResData->pUIEntries, i, nFallbackIndex );
+            }
+        }
+    }
+}
+
+/*****************************************************************************/
+void Export::FillInListFallbacks(
+    ExportList *pList, USHORT nSource, USHORT nFallback )
+/*****************************************************************************/
+{
+    for ( ULONG i = 0; i < pList->Count(); i++ ) {
+        ExportListEntry *pEntry = pList->GetObject( i );
+        if ( !( *pEntry )[ nSource ].Len())
+            ( *pEntry )[ nSource ] = ( *pEntry )[ nFallback ];
+    }
 }

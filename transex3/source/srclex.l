@@ -259,6 +259,10 @@ main( int argc, char* argv[])
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
 		fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
 		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
+		fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
+		fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
+		fprintf( stdout, "     Example: -L 01,99=35\n" );
+		fprintf( stdout, "              Restriction to 01 and 99, 35 will be fallback for 99\n" );
 		return 1;
 	}
 

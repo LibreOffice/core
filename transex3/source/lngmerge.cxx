@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-16 13:06:14 $
+ *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,23 @@ LngParser::~LngParser()
 }
 
 /*****************************************************************************/
+void LngParser::FillInFallbacks( ByteString *Text )
+/*****************************************************************************/
+{
+    for ( USHORT i = 0; i < LANGUAGES; i++ ) {
+        if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
+            USHORT nFallbackIndex =
+                Export::GetLangIndex(
+                    Export::GetFallbackLanguage( Export::LangId[ i ] ));
+            if ( nFallbackIndex < LANGUAGES ) {
+                if ( !Text[ i ].Len())
+                    Text[ i ] = Text[ nFallbackIndex ];
+            }
+        }
+    }
+}
+
+/*****************************************************************************/
 BOOL LngParser::CreateSDF(
     const ByteString &rSDFFile, const ByteString &rPrj,
     const ByteString &rRoot )
@@ -194,6 +211,8 @@ BOOL LngParser::CreateSDF(
             sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
             sTimeStamp += ":";
             sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+
+            FillInFallbacks( Text );
 
             for ( ULONG i = 0; i < LANGUAGES; i++ ) {
                 if ( LANGUAGE_ALLOWED( i )) {
