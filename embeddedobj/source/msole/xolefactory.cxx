@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xolefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 15:18:36 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,15 +90,15 @@ using namespace ::com::sun::star;
 uno::Sequence< ::rtl::OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.OleEmbeddedObjectFactory");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OleEmbeddedObjectFactory");
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.OLEEmbeddedObjectFactory");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OleEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OleEmbeddedObjectFactory");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
 }
 
 //-------------------------------------------------------------------------
@@ -112,7 +112,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::impl_static
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const ::rtl::OUString& sEntName,
-                                                                    sal_Bool bIsReadonly,
+                                                                    const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -155,8 +155,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_DEFAULT_INIT,
-                                    uno::Sequence< beans::PropertyValue >(),
+                                    embed::EntryInitModes::DEFAULT_INIT,
+                                    aMedDescr,
                                     lObjArgs );
 
     return xResult;
@@ -194,7 +194,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
+                                    embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT,
                                     aMediaDescr,
                                     lObjArgs );
 
@@ -234,7 +234,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_TRUNCATE_INIT,
+                                    embed::EntryInitModes::TRUNCATE_INIT,
                                     uno::Sequence< beans::PropertyValue >(),
                                     lObjArgs );
 
@@ -275,7 +275,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_MEDIA_DESCRIPTOR_INIT,
+                                    embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT,
                                     aMediaDescr,
                                     lObjArgs );
 
@@ -316,7 +316,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     {
         xPersist->setPersistentEntry( xStorage,
                                     sEntName,
-                                    embed::EntryInitModes::ENTRY_DEFAULT_INIT,
+                                    embed::EntryInitModes::DEFAULT_INIT,
                                     uno::Sequence< beans::PropertyValue >(),
                                     lObjArgs );
 
