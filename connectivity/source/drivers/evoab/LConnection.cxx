@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:24:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ using namespace ::com::sun::star::lang;
 
 // --------------------------------------------------------------------------------
 OEvoabConnection::OEvoabConnection(OEvoabDriver*    _pDriver) : OConnection(_pDriver)
-    ,m_bFixedLength(sal_False)
     ,m_bHeaderLine(sal_True)
     ,m_cFieldDelimiter(',')
     ,m_cStringDelimiter('"')
