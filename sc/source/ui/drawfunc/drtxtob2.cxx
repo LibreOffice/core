@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:51:21 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,8 @@
 #include "tabvwsh.hxx"
 #include "impex.hxx"
 #include "docsh.hxx"
+#include "transobj.hxx"
+#include "drwtrans.hxx"
 
 //------------------------------------------------------------------------
 
@@ -419,7 +421,7 @@ void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
 // SID_PASTE
 // FID_PASTE_CONTENTS
 
-    if ( ScGlobal::IsClipCaptured() || ScGlobal::IsClipDraw() )
+    if ( ScTransferObj::GetOwnClipboard() || ScDrawTransferObj::GetOwnClipboard() )
         bDisable = FALSE;
     else
     {
