@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:12:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,55 +59,53 @@
  *
  ************************************************************************/
 
-#define FL_UPDATE               1
-#define RB_ALWAYS               2
-#define RB_REQUEST              3
-#define RB_NEVER                4
-#define CB_PRINTER_METRICS      5
-#define CB_MERGE_PARA_DIST      6
-#define FL_COMPAT               7
-#define CB_AUTO_UPDATE_FIELDS   8
-#define CB_AUTO_UPDATE_CHARTS   9
-#define FT_UPDATE_LINKS         10
+// SwLoadOptPage --------------------------------
 
-#define CB_MERGE_PARA_DIST_PAGESTART 14
-#define FL_SETTINGS_2     14
-#define FL_SETTINGS     15
-#define CB_TAB_ALIGNMENT 16
+#define FL_UPDATE               10
+#define FT_LINK                 11
+#define RB_ALWAYS               12
+#define RB_REQUEST              13
+#define RB_NEVER                14
+#define FT_FIELD                15
+#define CB_AUTO_UPDATE_FIELDS   16
+#define CB_AUTO_UPDATE_CHARTS   17
+#define FL_SETTINGS             18
+#define LB_METRIC               19
+#define FT_METRIC               20
+#define FT_TAB                  21
+#define MF_TAB                  22
 
-#define FT_TAB          17
-#define MF_TAB          18
-#define LB_METRIC       19
-#define FT_LINK         20
-#define FT_FIELD        21
-#define FT_METRIC       22
-#define CB_CAPTION      23
-#define PB_OPTIONS      24
-#define TXT_OPTIONS     25
-#define FL_CAPTION      26
+// SwCaptionOptPage -----------------------------
 
-#define CLB_OBJECTS         1
-#define STR_TABLE           2
-#define STR_FRAME           3
-#define STR_GRAPHIC         4
-#define STR_OLE             5
+#define FT_OBJECTS              10
+#define CLB_OBJECTS             11
+#define FL_SETTINGS_2           12
+#define TXT_CATEGORY            13
+#define BOX_CATEGORY            14
+#define TXT_FORMAT              15
+#define BOX_FORMAT              16
+#define TXT_TEXT                17
+#define EDT_TEXT                18
+#define TXT_POS                 19
+#define BOX_POS                 20
+#define FL_NUMCAPT              21
+#define FT_LEVEL                22
+#define LB_LEVEL                23
+#define FT_SEPARATOR            24
+#define ED_SEPARATOR            25
+#define FL_CATEGORY             26
+#define FT_CHARSTYLE            27
+#define LB_CHARSTYLE            28
+#define CB_APPLYBORDER          29
+#define WIN_PREVIEW             30
+#define STR_CATEGORY_NONE       31
 
-#define TXT_CATEGORY        5
-#define BOX_CATEGORY        6
-#define TXT_FORMAT          7
-#define BOX_FORMAT          8
-#define TXT_TEXT            9
-#define EDT_TEXT           10
-#define TXT_POS            11
-#define BOX_POS            12
-#define TXT_SAMPLE         13
-#define STR_BEGINNING      15
-#define STR_END            16
-#define STR_ABOVE          17
-#define STR_CP_BELOW       18
-#define FT_LEVEL           19
-#define LB_LEVEL           20
-#define FT_SEPARATOR       21
-#define ED_SEPARATOR       22
-
+#define STR_TABLE               10
+#define STR_FRAME               11
+#define STR_GRAPHIC             12
+#define STR_OLE                 13
+#define STR_BEGINNING           14
+#define STR_END                 15
+#define STR_ABOVE               16
+#define STR_CP_BELOW            17
 
