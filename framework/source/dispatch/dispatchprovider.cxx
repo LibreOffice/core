@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:36 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,16 +69,12 @@
 #include <dispatch/dispatchprovider.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DISPATCH_BLANKDISPATCHER_HXX_
-#include <dispatch/blankdispatcher.hxx>
+#ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
+#include <loadenv/loadenv.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DISPATCH_CREATEDISPATCHER_HXX_
-#include <dispatch/createdispatcher.hxx>
-#endif
-
-#ifndef __FRAMEWORK_DISPATCH_SELFDISPATCHER_HXX_
-#include <dispatch/selfdispatcher.hxx>
+#ifndef __FRAMEWORK_DISPATCH_LOADDISPATCHER_HXX_
+#include <dispatch/loaddispatcher.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DISPATCH_CLOSEDISPATCHER_HXX_
@@ -229,8 +225,6 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
 {
 }
 
-css::uno::WeakReference< css::mozilla::XPluginInstance > DispatchProvider::m_xPluginInterceptor=css::uno::WeakReference< css::mozilla::XPluginInstance >();
-
 //_________________________________________________________________________________________________________________
 
 /**
@@ -252,7 +246,7 @@ DispatchProvider::~DispatchProvider()
                 If no frame was found, we do nothing.
                 But we doesn't do it directly here. We detect the type of our owner frame and calls
                 specialized queryDispatch() helper dependen from that. Because a Desktop handle some
-                requests in another way then a plugin or normal frame.
+                requests in another way then a normal frame.
 
     @param      aURL
                     URL to dispatch.
@@ -277,14 +271,10 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
     aReadLock.unlock();
     /* } SAFE */
 
-    css::uno::Reference< css::frame::XDesktop >          xDesktopCheck( xOwner, css::uno::UNO_QUERY );
-    css::uno::Reference< css::mozilla::XPluginInstance > xPluginCheck ( xOwner, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XDesktop > xDesktopCheck( xOwner, css::uno::UNO_QUERY );
 
     if (xDesktopCheck.is())
         xDispatcher = implts_queryDesktopDispatch(xOwner, aURL, sTargetFrameName, nSearchFlags);
-    else
-    if (xPluginCheck.is())
-        xDispatcher = implts_queryPluginDispatch(xOwner, aURL, sTargetFrameName, nSearchFlags);
     else
         xDispatcher = implts_queryFrameDispatch(xOwner, aURL, sTargetFrameName, nSearchFlags);
 
@@ -330,37 +320,12 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
 //_________________________________________________________________________________________________________________
 
 /**
-    @short      set a new plugin frame for intercepting special queryDispatch() requests directly
-    @descr      Some requests (e.g. creation of new tasks) must be done by forwarding it to the
-                used browser. Normaly we can start a search for any existing plugin instance on our
-                desktop container to detect (a) if we run in plugin mode and (b) to use one of such
-                plugins to send the request to the browser. It can be very expensive. So
-                we optimize this process. If the desktop gets a new child frame which represent a plugin
-                he set it as a static member on this class. So all dispatch objects inside the frame tree
-                knows them and can can use it. But we hold a weak reference only. So we the plugin mustn't
-                be deregistered again. We can try to get the real reference and if it failed we don't use it.
-
-    @threadsafe yes
-    @modified   17.05.2002 08:25, as96863
- */
-void DispatchProvider::setPluginInterceptor( const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin )
-{
-    /* STATIC SAFE { */
-    WriteGuard aExclusivLock( LockHelper::getGlobalLock() );
-    m_xPluginInterceptor = xPlugin;
-    aExclusivLock.unlock();
-    /* } STATIC SAFE */
-}
-
-//_________________________________________________________________________________________________________________
-
-/**
     @short      helper for queryDispatch()
-    @descr      Every member of the frame tree (frame, task, plugin, desktop) must handle such request
+    @descr      Every member of the frame tree (frame, desktop) must handle such request
                 in another way. So we implement different specialized metods for every one.
 
     @threadsafe yes
-    @modified   17.05.2002 08:38, as96863
+    @modified   20.08.2003 08:32, as96863
  */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const css::uno::Reference< css::frame::XFrame > xDesktop         ,
                                                                                             const css::util::URL&                           aURL             ,
@@ -381,17 +346,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         return NULL;
     }
 
-    /*  TODO: In special plugin mode we must use the already found plugin frame to forward the request
-            to the browser. Thats the only solution till we get the functionality to create
-            an emtpy browser task synchronously.
-     */
-
-    /* STATIC SAFE { */
-    ReadGuard aGlobalReadLock( LockHelper::getGlobalLock() );
-    css::uno::Reference< css::frame::XDispatchProvider > xPlugin( m_xPluginInterceptor.get(), css::uno::UNO_QUERY );
-    aGlobalReadLock.unlock();
-    /* } STATIC SAFE */
-
     //-----------------------------------------------------------------------------------------------------
     // I) handle special cases which not right for using findFrame() first
     //-----------------------------------------------------------------------------------------------------
@@ -406,40 +360,18 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     if (sTargetFrameName==SPECIALTARGET_BLANK)
     {
         if (implts_isLoadableContent(aURL))
-        {
-            if (xPlugin.is())
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider( xPlugin, css::uno::UNO_QUERY );
-                xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_BLANK,0); // ask him for _blank ... not for _self!
-            }
-            else
-            {
-                xDispatcher = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER, xDesktop );
-            }
-        }
+            xDispatcher = implts_getOrCreateDispatchHelper( E_BLANKDISPATCHER, xDesktop );
     }
 
     //-----------------------------------------------------------------------------------------------------
     // I.II) "_default"
     //  This is a combination of search an empty task for recycling - or create a new one.
-    //  Normaly we can use a specialized dispatch object for that ... but not for plugin mode.
-    //  Such search isn't provided there.
     //-----------------------------------------------------------------------------------------------------
     else
     if (sTargetFrameName==SPECIALTARGET_DEFAULT)
     {
         if (implts_isLoadableContent(aURL))
-        {
-            if (xPlugin.is())
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider( xPlugin, css::uno::UNO_QUERY );
-                xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_BLANK,0); // ask him for _blank ... not for _default!
-            }
-            else
-            {
-                xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
-            }
-        }
+            xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -480,19 +412,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         // if it couldn't be found - but creation was allowed
         // use special dispatcher for creatio or froward it to the browser
         if (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
-        {
-            if (xPlugin.is())
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider( xPlugin, css::uno::UNO_QUERY );
-                xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_BLANK,0);
-            }
-            else
-            {
-                css::uno::Any aParameter;
-                aParameter <<= sTargetFrameName;
-                xDispatcher = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, xDesktop, aParameter );
-            }
-        }
+            xDispatcher = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, xDesktop, sTargetFrameName, nSearchFlags );
     }
 
     return xDispatcher;
@@ -506,17 +426,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
                                                                                                 sal_Int32                                 nSearchFlags     )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
-
-    /*  TODO: In special plugin mode we must use the already found plugin frame to forward the request
-            to the browser. Thats the only solution till we get the functionality to create
-            an emtpy browser task synchronously.
-     */
-
-    /* STATIC SAFE { */
-    ReadGuard aGlobalReadLock( LockHelper::getGlobalLock() );
-    css::uno::Reference< css::frame::XDispatchProvider > xPlugin( m_xPluginInterceptor.get(), css::uno::UNO_QUERY );
-    aGlobalReadLock.unlock();
-    /* } STATIC SAFE */
 
     //-----------------------------------------------------------------------------------------------------
     // 0) Some URLs are dispatched in a generic way (e.g. by the menu) using the default target "".
@@ -542,24 +451,15 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  It's not the right place to create a new task here. Only the desktop can do that.
     //  Normaly the functionality for "_blank" is provided by findFrame() - but that would create it directly
     //  here. Thats why we must "intercept" here.
-    //  Another eason is a possible plugin mode!
     //-----------------------------------------------------------------------------------------------------
     if (
         (sTargetName==SPECIALTARGET_BLANK  ) ||
         (sTargetName==SPECIALTARGET_DEFAULT)
        )
     {
-        if (xPlugin.is())
-        {
-            css::uno::Reference< css::frame::XDispatchProvider > xProvider( xPlugin, css::uno::UNO_QUERY );
-            xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_BLANK,0); // ask him for _blank ... not for _default!
-        }
-        else
-        {
-            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
-            if (xParent.is())
-                xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // its a special target - ignore search flags
-        }
+        css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+        if (xParent.is())
+            xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // its a special target - ignore search flags
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -737,79 +637,17 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
         else
         // if it couldn't be found - but creation was allowed
-        // forward request to the browser (for plugin mode) or to the desktop
-        // (for nomal mode).
+        // forward request to the desktop.
         // Note: The given target name must be used to set the name on new created task!
         //       Don't forward request by changing it to a special one e.g _blank.
         //       Use the CREATE flag only to prevent call against further searches.
         //       We already know it - the target must be created new.
         if (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
         {
-            if (xPlugin.is())
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider( xPlugin, css::uno::UNO_QUERY );
-                xDispatcher = xProvider->queryDispatch(aURL, sTargetName, css::frame::FrameSearchFlag::CREATE);
-            }
-            else
-            {
-                css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
-                if (xParent.is())
-                    xDispatcher = xParent->queryDispatch(aURL, sTargetName, css::frame::FrameSearchFlag::CREATE);
-            }
+            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+            if (xParent.is())
+                xDispatcher = xParent->queryDispatch(aURL, sTargetName, css::frame::FrameSearchFlag::CREATE);
         }
-    }
-
-    return xDispatcher;
-}
-
-//_________________________________________________________________________________________________________________
-
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPluginDispatch( const css::uno::Reference< css::frame::XFrame > xPlugin          ,
-                                                                                           const css::util::URL&                           aURL             ,
-                                                                                           const ::rtl::OUString&                          sTargetFrameName ,
-                                                                                                 sal_Int32                                 nSearchFlags     )
-{
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
-
-    //-----------------------------------------------------------------------------------------------------
-    // I.I) "_blank", "_default", "_self", ""
-    //  Such requests must be forwarded to the browser!
-    //  Normaly the _default mode search for any target which can be recycled or try to find out
-    //  if requested ressource was already loaded. But currently we can't support that for plugin mode.
-    //-----------------------------------------------------------------------------------------------------
-    if (
-        (sTargetFrameName==SPECIALTARGET_BLANK  ) ||
-        (sTargetFrameName==SPECIALTARGET_DEFAULT) ||
-        (sTargetFrameName==SPECIALTARGET_SELF   ) ||
-        (sTargetFrameName.getLength()<1         )
-       )
-    {
-        if (implts_isLoadableContent(aURL))
-            xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xPlugin );
-        fprintf(stderr,"plugin query for _self return %d\n", xDispatcher.is());
-    }
-
-    //-----------------------------------------------------------------------------------------------------
-    // I.II) Most other targets or flags can be handled by the base class functionality
-    //  of a PlugInFrame - the Frame. But look for case of not found target in combination with
-    //  the CREATE flag. Such request must be forwarded to the browser too!
-    //-----------------------------------------------------------------------------------------------------
-    else
-    {
-        sal_Int32 nRightFlags  = nSearchFlags;
-                  nRightFlags &= ~css::frame::FrameSearchFlag::CREATE;
-
-        xDispatcher = implts_queryFrameDispatch(xPlugin, aURL, sTargetFrameName, nRightFlags);
-        if ( !xDispatcher.is() && ( nSearchFlags & css::frame::FrameSearchFlag::CREATE ) )
-        {
-            if ( implts_isLoadableContent ( aURL ) )
-            {
-                ::com::sun::star::uno::Any aParam;
-                aParam <<= sTargetFrameName;
-                xDispatcher = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, xPlugin, aParam );
-            }
-        }
-        fprintf(stderr,"plugin query for possible CREATE return %d\n", xDispatcher.is());
     }
 
     return xDispatcher;
@@ -893,20 +731,27 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 We should create it on demand ...
                 Thats why we implement this method. It return an already existing helper or create a new one otherwise.
 
+    @attention  The parameter sTarget and nSearchFlags are defaulted to "" and 0!
+                Please use it only, if you can be shure, that the realy given by the outside calli!
+                Mostly it depends from the parameter eHelper is they are required or not.
+
     @param      eHelper
                     specify the requested dispatch helper
     @param      xOwner
                     the target of possible dispatch() call on created dispatch helper
-    @param      aParameters
-                    some of such helpers need special (optional) parameters
+    @param      sTarget
+                    the target parameter of the original queryDispatch() request
+    @param      nSearchFlags
+                    the flags parameter of the original queryDispatch() request
     @return     A reference to a dispatch helper.
 
     @threadsafe yes
-    @modified   17.05.2002 10:14, as96863
+    @modified   20.08.2003 10:22, as96863
 */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper                                  eHelper     ,
                                                                                                  const css::uno::Reference< css::frame::XFrame >& xOwner      ,
-                                                                                                 const css::uno::Any&                             aParameters )
+                                                                                                 const ::rtl::OUString&                           sTarget     ,
+                                                                                                       sal_Int32                                  nSearchFlags)
 {
     css::uno::Reference< css::frame::XDispatch > xDispatchHelper;
 
@@ -956,9 +801,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_CREATEDISPATCHER :
                 {
-                    ::rtl::OUString sTargetName;
-                    aParameters >>= sTargetName;
-                    CreateDispatcher* pDispatcher = new CreateDispatcher( xFactory, xOwner, sTargetName );
+                    LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, sTarget, nSearchFlags);
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
@@ -968,7 +811,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
                     if (xDesktop.is())
                     {
-                        BlankDispatcher* pDispatcher = new BlankDispatcher( xFactory, xDesktop, sal_False );
+                        LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, SPECIALTARGET_BLANK, 0);
                         xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
@@ -979,7 +822,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
                     if (xDesktop.is())
                     {
-                        BlankDispatcher* pDispatcher = new BlankDispatcher( xFactory, xDesktop, sal_True );
+                        LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, SPECIALTARGET_DEFAULT, 0);
                         xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
@@ -987,7 +830,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_SELFDISPATCHER :
                 {
-                    SelfDispatcher* pDispatcher = new SelfDispatcher( xFactory, xOwner );
+                    LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, SPECIALTARGET_SELF, 0);
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
@@ -996,12 +839,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                 {
                     CloseDispatcher* pDispatcher = new CloseDispatcher( xFactory, xOwner );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
-                }
-                break;
-
-        case E_PLUGINDISPATCHER :
-                {
-                    LOG_WARNING( "DispatchProvider::implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER )", "Not implemented yet!" )
                 }
                 break;
     }
@@ -1026,6 +863,9 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 */
 sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
 {
+    LoadEnv::EContentType eType = LoadEnv::classifyContent(aURL.Complete, css::uno::Sequence< css::beans::PropertyValue >());
+    sal_Bool bLoadableNew = (/*eType == LoadEnv::E_CAN_BE_HANDLED || */eType == LoadEnv::E_CAN_BE_LOADED);
+
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::document::XTypeDetection >     xDetection( m_xFactory->createInstance( SERVICENAME_TYPEDETECTION    ), css::uno::UNO_QUERY );
@@ -1052,6 +892,8 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
     // (c) such special URL indicates a given input stream - it should be loadable too
     if( !bLoadable && ProtocolCheck::isProtocol(aURL.Complete,ProtocolCheck::E_PRIVATE_STREAM) )
         bLoadable = sal_True;
+
+    LOG_ASSERT((bLoadableNew==bLoadable), "mismatch between old and new implementation :-)")
 
     return bLoadable;
 }
