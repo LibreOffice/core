@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-14 10:46:03 $
+ *  last change: $Author: ssa $ $Date: 2001-11-14 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ struct MenuItemData
     Menu*           pAutoSubMenu;   // Pointer auf SubMenu aus Resource
     XubString       aText;          // Menu-Text
     XubString       aHelpText;      // Help-String
+    XubString       aTipHelpText;   // TipHelp-String (eg, expanded filenames)
     XubString       aCommandStr;    // CommandString
     ULONG           nHelpId;        // Help-Id
     ULONG           nUserValue;     // User value
@@ -461,11 +462,18 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
     if ( ( rHEvt.GetMode() & HELPMODE_BALLOON ) && pMenuWindow )
     {
         Point aPos = rHEvt.GetMousePosPixel();
-        // Pos etwas nach unter-rechts korrigieren, wegen Pointer
-        // will be corrected in ImplSetHelpWIndowPos()
-//        aPos.X() += 15;
-//      aPos.Y() += 20;
-        Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
+        Rectangle aRect( aPos, Size() );
+        if( pMenu->GetHelpText( nId ).Len() )
+            Help::ShowBalloon( pMenuWindow, aPos, pMenu->GetHelpText( nId ) );
+        else
+            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+        bDone = TRUE;
+    }
+    else if ( ( rHEvt.GetMode() & HELPMODE_QUICK ) && pMenuWindow )
+    {
+        Point aPos = rHEvt.GetMousePosPixel();
+        Rectangle aRect( aPos, Size() );
+        Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
         bDone = TRUE;
     }
     else if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
@@ -1228,6 +1236,24 @@ const XubString& Menu::GetHelpText( USHORT nItemId ) const
 
         return pData->aHelpText;
     }
+    else
+        return ImplGetSVEmptyStr();
+}
+
+void Menu::SetTipHelpText( USHORT nItemId, const XubString& rStr )
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        pData->aTipHelpText = rStr;
+}
+
+const XubString& Menu::GetTipHelpText( USHORT nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->aTipHelpText;
     else
         return ImplGetSVEmptyStr();
 }
