@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+ *  last change: $Author: mib $ $Date: 2000-09-26 13:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,12 +379,13 @@ XMLTextImportHelper::XMLTextImportHelper(
     pTextPAttrTokenMap( 0 ),
     pTextListBlockAttrTokenMap( 0 ),
     pTextListBlockElemTokenMap( 0 ),
-    pTextFieldAttrTokenMap( NULL ),
-    pTextFrameAttrTokenMap( NULL ),
-    pTextHyperlinkAttrTokenMap( NULL ),
+    pTextFieldAttrTokenMap( 0 ),
+    pTextFrameAttrTokenMap( 0 ),
+    pTextHyperlinkAttrTokenMap( 0 ),
     pPrevFrmNames( 0 ),
     pNextFrmNames( 0 ),
-    pRenameMap( NULL ),
+    pRenameMap( 0 ),
+    pOutlineStyles( 0 ),
     bInsertMode( bInsertM ),
     bStylesOnlyMode( bStylesOnlyM ),
     sParaStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")),
@@ -714,14 +715,29 @@ void XMLTextImportHelper::SetOutlineStyle(
         xChapterNumbering.is() &&
         nLevel > 0 && nLevel <= xChapterNumbering->getCount() )
     {
-        Sequence < PropertyValue > aProps( 1 );
-        PropertyValue *pProps = aProps.getArray();
-        pProps->Name = sHeadingStyleName;
-        pProps->Value <<= rStyleName;
+        if( !pOutlineStyles )
+            pOutlineStyles = new OUString[xChapterNumbering->getCount()];
+        pOutlineStyles[nLevel-1] = rStyleName;
+    }
+}
 
-        Any aAny;
-           aAny <<= aProps;
-        xChapterNumbering->replaceByIndex( (sal_Int32)nLevel-1, aAny );
+void XMLTextImportHelper::SetOutlineStyles()
+{
+    if( pOutlineStyles &&
+        xChapterNumbering.is() )
+    {
+        sal_Int32 nCount = xChapterNumbering->getCount();
+        for( sal_Int32 i=0; i < nCount; i++ )
+        {
+            Sequence < PropertyValue > aProps( 1 );
+            PropertyValue *pProps = aProps.getArray();
+            pProps->Name = sHeadingStyleName;
+            pProps->Value <<= pOutlineStyles[i];
+
+            Any aAny;
+            aAny <<= aProps;
+            xChapterNumbering->replaceByIndex( i, aAny );
+        }
     }
 }
 
@@ -903,7 +919,7 @@ sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName)
                                               sStyleName, sal_True ) );
 
     // return key or default (-1)
-    return (NULL != pStyle) ? pStyle->GetKey() : -1;
+    return (0 != pStyle) ? pStyle->GetKey() : -1;
 }
 
 const SvxXMLListStyleContext *XMLTextImportHelper::FindAutoListStyle( const OUString& rName ) const
@@ -973,7 +989,8 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockElemTokenMap()
 
 SvI18NMap& XMLTextImportHelper::GetRenameMap()
 {
-    if (NULL == pRenameMap) pRenameMap = new SvI18NMap();
+    if( 0 == pRenameMap )
+        pRenameMap = new SvI18NMap();
     return *pRenameMap;
 }
 
