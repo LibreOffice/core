@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-28 12:46:07 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,11 @@
       <info>
         <desc xml:lang="en-US">Contains information for displaying the data of a table.</desc>
       </info>
-      <node-ref oor:name="Settings" oor:node-type="DataSettings"/>
+      <node-ref oor:name="Settings" oor:node-type="DataSettings">
+		<info>
+          <desc xml:lang="en-US">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+        </info>
+	  </node-ref>
       <set oor:name="Columns" oor:node-type="Column">
         <info>
           <desc xml:lang="en-US">Contains a list of column layout information.</desc>
@@ -251,7 +255,11 @@
       <info>
         <desc xml:lang="en-US">Specifies a database query according to the rules of SQL and contains information for displaying the query result data.</desc>
       </info>
-      <node-ref oor:name="Settings" oor:node-type="DataSettings"/>
+      <node-ref oor:name="Settings" oor:node-type="DataSettings">
+	  <info>
+          <desc xml:lang="en-US">Extends the database table with additional display information, sorting and filtering criterias.</desc>
+        </info>
+	  </node-ref>
       <set oor:name="Columns" oor:node-type="Column">
         <info>
           <desc xml:lang="en-US">Contains a list of column layout information.</desc>
@@ -345,7 +353,11 @@
           <desc xml:lang="en-US">Contains a list of database queries.</desc>
         </info>
       </set>
-      <set oor:name="Bookmarks" oor:node-type="Bookmark"/>
+      <set oor:name="Bookmarks" oor:node-type="Bookmark">
+		<info>
+          <desc xml:lang="en-US">Contains a list of links to documents associated.</desc>
+        </info>
+	  </set>
     </group>
     <group oor:name="DataSource">
       <prop oor:name="DataSourceName" oor:type="xs:string">
@@ -366,7 +378,11 @@
       <info>
         <desc xml:lang="en-US">Specifies the data source to be used for the bibliography.</desc>
       </info>
-      <set oor:name="Fields" oor:node-type="FieldAssignment"/>
+      <set oor:name="Fields" oor:node-type="FieldAssignment">
+		<info>
+		  <desc xml:lang="en-US">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+		</info>
+	  </set>
     </group>
     <group oor:name="FieldAssignment">
       <prop oor:name="ProgrammaticFieldName" oor:type="xs:string">
@@ -459,12 +475,17 @@
           <desc xml:lang="en-US">Specifies if the auto pilot is completed or not.</desc>
         </info>
       </prop>
-      <set oor:name="Fields" oor:node-type="FieldAssignment"/>
+      <set oor:name="Fields" oor:node-type="FieldAssignment">
+		<info>
+		  <desc xml:lang="en-US">Specifies the column name mapping between the programatic column name and the logical column name.</desc>
+		</info>
+	  </set>
 	  <info>
         <desc xml:lang="en-US">Specifies the data source that can be used as a AddressBook.</desc>
 	  </info>
     </group>
     <group oor:name="Bibliography">
+	  <!-- Responsible: OS-->
       <prop oor:name="BeamerHeight" oor:type="xs:int"/>
       <prop oor:name="ViewHeight" oor:type="xs:int"/>
       <prop oor:name="QueryText" oor:type="xs:string"/>
