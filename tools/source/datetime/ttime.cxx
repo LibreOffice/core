@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:15:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,18 +104,18 @@ struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
 
 // =======================================================================
 
-static long TimeToSec100( const Time& rTime )
+static sal_Int32 TimeToSec100( const Time& rTime )
 {
     short  nSign   = (rTime.GetTime() >= 0) ? +1 : -1;
-    long   nHour   = rTime.GetHour();
-    long   nMin    = rTime.GetMin();
-    long   nSec    = rTime.GetSec();
-    long   n100Sec = rTime.Get100Sec();
+    sal_Int32   nHour   = rTime.GetHour();
+    sal_Int32   nMin    = rTime.GetMin();
+    sal_Int32   nSec    = rTime.GetSec();
+    sal_Int32   n100Sec = rTime.Get100Sec();
 
 //  Wegen Interal Compiler Error bei MSC, etwas komplizierter
 //  return (n100Sec + (nSec*100) + (nMin*60*100) + (nHour*60*60*100) * nSign);
 
-    long nRet = n100Sec;
+    sal_Int32 nRet = n100Sec;
     nRet     += nSec*100;
     nRet     += nMin*60*100;
     nRet     += nHour*60*60*100;
@@ -125,7 +125,7 @@ static long TimeToSec100( const Time& rTime )
 
 // -----------------------------------------------------------------------
 
-static Time Sec100ToTime( long nSec100 )
+static Time Sec100ToTime( sal_Int32 nSec100 )
 {
     short nSign;
     if ( nSec100 < 0 )
@@ -150,43 +150,43 @@ Time::Time()
     DosGetDateTime( &aDateTime );
 
     // Zeit zusammenbauen
-    nTime = (((long)aDateTime.hours)*1000000) +
-            (((long)aDateTime.minutes)*10000) +
-            (((long)aDateTime.seconds)*100) +
-            ((long)aDateTime.hundredths);
+    nTime = (((sal_Int32)aDateTime.hours)*1000000) +
+            (((sal_Int32)aDateTime.minutes)*10000) +
+            (((sal_Int32)aDateTime.seconds)*100) +
+            ((sal_Int32)aDateTime.hundredths);
 #elif defined( WNT )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
     // Zeit zusammenbauen
-    nTime = (((long)aDateTime.wHour)*1000000) +
-            (((long)aDateTime.wMinute)*10000) +
-            (((long)aDateTime.wSecond)*100) +
-            ((long)aDateTime.wMilliseconds/10);
+    nTime = (((sal_Int32)aDateTime.wHour)*1000000) +
+            (((sal_Int32)aDateTime.wMinute)*10000) +
+            (((sal_Int32)aDateTime.wSecond)*100) +
+            ((sal_Int32)aDateTime.wMilliseconds/10);
 #elif ( defined( WIN ) || defined( DOS ) ) && !defined ( BLC )
     _dostime_t aTime;
     _dos_gettime( &aTime );
 
     // Zeit zusammenbauen
-    nTime = (((long)aTime.hour)*1000000) +
-            (((long)aTime.minute)*10000) +
-            (((long)aTime.second)*100) +
-            ((long)aTime.hsecond);
+    nTime = (((sal_Int32)aTime.hour)*1000000) +
+            (((sal_Int32)aTime.minute)*10000) +
+            (((sal_Int32)aTime.second)*100) +
+            ((sal_Int32)aTime.hsecond);
 #elif ( defined( WIN ) || defined( DOS ) ) && defined ( BLC )
     dostime_t aTime;
     _dos_gettime( &aTime );
 
     // Zeit zusammenbauen
-    nTime = (((long)aTime.hour)*1000000) +
-            (((long)aTime.minute)*10000) +
-            (((long)aTime.second)*100) +
-            ((long)aTime.hsecond);
+    nTime = (((sal_Int32)aTime.hour)*1000000) +
+            (((sal_Int32)aTime.minute)*10000) +
+            (((sal_Int32)aTime.second)*100) +
+            ((sal_Int32)aTime.hsecond);
 #elif defined( MAC )
     DateTimeRec dt;
     ::GetTime(&dt);
-    nTime = (((long)dt.hour)*1000000) +
-            (((long)dt.minute)*10000) +
-            (((long)dt.second)*100);
+    nTime = (((sal_Int32)dt.hour)*1000000) +
+            (((sal_Int32)dt.minute)*10000) +
+            (((sal_Int32)dt.second)*100);
 #else
     time_t     nTmpTime;
     struct tm aTime;
@@ -197,9 +197,9 @@ Time::Time()
     // Zeit zusammenbauen
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
-        nTime = (((long)aTime.tm_hour)*1000000) +
-                (((long)aTime.tm_min)*10000) +
-                (((long)aTime.tm_sec)*100);
+        nTime = (((sal_Int32)aTime.tm_hour)*1000000) +
+                (((sal_Int32)aTime.tm_min)*10000) +
+                (((sal_Int32)aTime.tm_sec)*100);
     }
     else
         nTime = 0;
@@ -226,7 +226,7 @@ Time::Time( ULONG nHour, ULONG nMin, ULONG nSec, ULONG n100Sec )
     nMin     = nMin % 60;
 
     // Zeit zusammenbauen
-    nTime = (long)(n100Sec + (nSec*100) + (nMin*10000) + (nHour*1000000));
+    nTime = (sal_Int32)(n100Sec + (nSec*100) + (nMin*10000) + (nHour*1000000));
 }
 
 // -----------------------------------------------------------------------
@@ -234,12 +234,12 @@ Time::Time( ULONG nHour, ULONG nMin, ULONG nSec, ULONG n100Sec )
 void Time::SetHour( USHORT nNewHour )
 {
     short  nSign      = (nTime >= 0) ? +1 : -1;
-    long   nMin       = GetMin();
-    long   nSec       = GetSec();
-    long   n100Sec    = Get100Sec();
+    sal_Int32   nMin      = GetMin();
+    sal_Int32   nSec      = GetSec();
+    sal_Int32   n100Sec   = Get100Sec();
 
     nTime = (n100Sec + (nSec*100) + (nMin*10000) +
-            (((long)nNewHour)*1000000)) * nSign;
+            (((sal_Int32)nNewHour)*1000000)) * nSign;
 }
 
 // -----------------------------------------------------------------------
@@ -247,14 +247,14 @@ void Time::SetHour( USHORT nNewHour )
 void Time::SetMin( USHORT nNewMin )
 {
     short  nSign      = (nTime >= 0) ? +1 : -1;
-    long   nHour      = GetHour();
-    long   nSec       = GetSec();
-    long   n100Sec    = Get100Sec();
+    sal_Int32   nHour     = GetHour();
+    sal_Int32   nSec      = GetSec();
+    sal_Int32   n100Sec   = Get100Sec();
 
     // kein Ueberlauf
     nNewMin = nNewMin % 60;
 
-    nTime = (n100Sec + (nSec*100) + (((long)nNewMin)*10000) +
+    nTime = (n100Sec + (nSec*100) + (((sal_Int32)nNewMin)*10000) +
             (nHour*1000000)) * nSign;
 }
 
@@ -262,15 +262,15 @@ void Time::SetMin( USHORT nNewMin )
 
 void Time::SetSec( USHORT nNewSec )
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
-    long   nHour      = GetHour();
-    long   nMin       = GetMin();
-    long   n100Sec    = Get100Sec();
+    short       nSign     = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour     = GetHour();
+    sal_Int32   nMin      = GetMin();
+    sal_Int32   n100Sec   = Get100Sec();
 
     // kein Ueberlauf
     nNewSec = nNewSec % 60;
 
-    nTime = (n100Sec + (((long)nNewSec)*100) + (nMin*10000) +
+    nTime = (n100Sec + (((sal_Int32)nNewSec)*100) + (nMin*10000) +
             (nHour*1000000)) * nSign;
 }
 
@@ -278,34 +278,34 @@ void Time::SetSec( USHORT nNewSec )
 
 void Time::Set100Sec( USHORT nNew100Sec )
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
-    long   nHour      = GetHour();
-    long   nMin       = GetMin();
-    long   nSec       = GetSec();
+    short       nSign     = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour     = GetHour();
+    sal_Int32   nMin      = GetMin();
+    sal_Int32   nSec      = GetSec();
 
     // kein Ueberlauf
     nNew100Sec = nNew100Sec % 100;
 
-    nTime = (((long)nNew100Sec) + (nSec*100) + (nMin*10000) +
+    nTime = (((sal_Int32)nNew100Sec) + (nSec*100) + (nMin*10000) +
             (nHour*1000000)) * nSign;
 }
 
 // -----------------------------------------------------------------------
 
-long Time::GetMSFromTime() const
+sal_Int32 Time::GetMSFromTime() const
 {
-    short  nSign      = (nTime >= 0) ? +1 : -1;
-    long   nHour      = GetHour();
-    long   nMin       = GetMin();
-    long   nSec       = GetSec();
-    long   n100Sec    = Get100Sec();
+    short       nSign     = (nTime >= 0) ? +1 : -1;
+    sal_Int32   nHour     = GetHour();
+    sal_Int32   nMin      = GetMin();
+    sal_Int32   nSec      = GetSec();
+    sal_Int32   n100Sec   = Get100Sec();
 
     return (((nHour*3600000)+(nMin*60000)+(nSec*1000)+(n100Sec*10))*nSign);
 }
 
 // -----------------------------------------------------------------------
 
-void Time::MakeTimeFromMS( long nMS )
+void Time::MakeTimeFromMS( sal_Int32 nMS )
 {
     short nSign;
     if ( nMS < 0 )
@@ -379,8 +379,8 @@ Time operator -( const Time& rTime1, const Time& rTime2 )
 
 BOOL Time::IsEqualIgnore100Sec( const Time& rTime ) const
 {
-    long n1 = (nTime < 0 ? -Get100Sec() : Get100Sec() );
-    long n2 = (rTime.nTime < 0 ? -rTime.Get100Sec() : rTime.Get100Sec() );
+    sal_Int32 n1 = (nTime < 0 ? -Get100Sec() : Get100Sec() );
+    sal_Int32 n2 = (rTime.nTime < 0 ? -rTime.Get100Sec() : rTime.Get100Sec() );
     return (nTime - n1) == (rTime.nTime - n2);
 }
 
@@ -408,7 +408,7 @@ Time Time::GetUTCOffset()
     TIME_ZONE_INFORMATION   aTimeZone;
     aTimeZone.Bias = 0;
     DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
-    long nTempTime = aTimeZone.Bias;
+    sal_Int32 nTempTime = aTimeZone.Bias;
     if ( nTimeZoneRet == TIME_ZONE_ID_STANDARD )
         nTempTime += aTimeZone.StandardBias;
     else if ( nTimeZoneRet == TIME_ZONE_ID_DAYLIGHT )
@@ -419,12 +419,12 @@ Time Time::GetUTCOffset()
     return aTime;
 #elif ( defined( WIN ) || defined( DOS ) ) && defined ( BLC )
     static ULONG    nCacheTicks = 0;
-    static long     nCacheSecOffset = -1;
+    static sal_Int32    nCacheSecOffset = -1;
     ULONG           nTicks = Time::GetSystemTicks();
     time_t          nTime;
     tm              aTM;
-    long            nLocalTime;
-    long            nUTC;
+    sal_Int32           nLocalTime;
+    sal_Int32           nUTC;
     short           nTempTime;
 
     // Evt. Wert neu ermitteln
@@ -447,12 +447,12 @@ Time Time::GetUTCOffset()
     return aTime;
 #else
     static ULONG    nCacheTicks = 0;
-    static long     nCacheSecOffset = -1;
+    static sal_Int32    nCacheSecOffset = -1;
     ULONG           nTicks = Time::GetSystemTicks();
     time_t          nTime;
     tm              aTM;
-    long            nLocalTime;
-    long            nUTC;
+    sal_Int32           nLocalTime;
+    sal_Int32           nUTC;
     short           nTempTime;
 
     // Evt. Wert neu ermitteln
