@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:45:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,8 +431,8 @@
             </node>
             <node oor:name=".uno:SymbolShapes.forbidden" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">“Verboten” Symbol</value>
-                    <value xml:lang="en-US">“Prohibited” Symbol</value>
+                    <value xml:lang="de">&quot;Verboten&quot; Symbol</value>
+                    <value xml:lang="en-US">&quot;Prohibited&quot; Symbol</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
