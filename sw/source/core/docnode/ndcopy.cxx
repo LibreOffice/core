@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:37:15 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,7 +863,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
                     // Nummerierung korrigieren, SplitNode erzeugt immer einen
                     // neuen Level
-                    if( NO_NUMLEVEL & nNumLevel )
+                    if( ! IsNum(nNumLevel) )
                         pDestNd->UpdateNum( SwNodeNum( nNumLevel ));
 
                     if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
@@ -969,7 +969,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
                 // Nummerierung korrigieren, SplitNode erzeugt immer einen
                 // neuen Level
-                if( NO_NUMLEVEL & nNumLevel )
+                if( ! IsNum(nNumLevel ) )
                     pDestNd->UpdateNum( SwNodeNum( nNumLevel ));
 
                 if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
