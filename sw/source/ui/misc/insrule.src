@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:21:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ModalDialog DLG_INSERT_RULER
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     Control VS_EXAMPLE
     {
@@ -160,6 +161,7 @@ ModalDialog DLG_INSERT_RULER
         Text[ czech ] = "Prosté";
         Text[ hebrew ] = "Einfach";
         Text[ hindi ] = "खाली";
+        Text[ slovak ] = "Jednoduché";
     };
     Text [ english_us ] = "Insert Horizontal Ruler" ;
     Text [ portuguese_brazilian ] = "Inserir R�gua Horizontal" ;
@@ -186,7 +188,10 @@ ModalDialog DLG_INSERT_RULER
     Text[ czech ] = "Vložit vodorovnou čáru";
     Text[ hebrew ] = "‮הוספת סרגל אופקי‬";
     Text[ hindi ] = "समतल रूलर जोड़ो";
+    Text[ slovak ] = "Vložiť vodorovné pravítko";
 };
+
+
 
 
 
