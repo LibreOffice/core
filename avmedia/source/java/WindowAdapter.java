@@ -95,8 +95,6 @@ public class WindowAdapter
     {
         short nRet = 0;
 
-        System.out.println( nJavaKeyCode );
-
         switch( nJavaKeyCode )
         {
             case( java.awt.event.KeyEvent.VK_NUMPAD0 ):
