@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:33:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 
 // ---------------------------------------------------------------------------
 
-struct RowInfo;
+struct ScTableInfo;
 class ScViewSelectionEngine;
 class ScPivot;
 class ScDPObject;
@@ -360,7 +360,7 @@ public:
     void            DoPageFieldMenue( SCCOL nCol, SCROW nRow );
 
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    RowInfo* pRowInfo, SCSIZE nArrCount );
+                                    ScTableInfo& rTabInfo );
 
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         ScUpdateMode eMode = SC_UPDATE_ALL );
