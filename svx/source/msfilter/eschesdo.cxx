@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-18 09:52:58 $
+ *  last change: $Author: cmc $ $Date: 2001-12-11 14:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,9 +666,9 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             const Rectangle& rRect = rObj.GetRect();
             UINT32 nFlags = 0xa00;          // Flags: Connector | HasSpt
-            if( rRect.Top() > rRect.Bottom() )
+            if( aNewRect.Height < 0 )
                 nFlags |= 0x80;             // Flags: VertMirror
-            if( rRect.Left() > rRect.Right() )
+            if( aNewRect.Width < 0 )
                 nFlags |= 0x40;             // Flags: HorzMirror
 
             ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
