@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:20:53 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,16 @@
 #include "conform.hxx"
 #include "dselect.hxx"
 #include "edtwin.hxx"
+
+// #108784#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+
+// #108784#
+#ifndef _SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
+#endif
 
 using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
@@ -470,9 +480,18 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
     if( pSdrView->IsMarkedHit( aDocPos ) &&
         !pSdrView->HitHandle( aDocPos, *pSh->GetOut() ) && IsTextTool() &&
         pSdrView->PickObj( aDocPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT ) &&
-        pObj->ISA( SdrTextObj ) &&
+
+        // #108784#
+        // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
+        //pObj->ISA( SdrTextObj ) &&
+        ( pObj->ISA( SdrTextObj ) ||
+          ( pObj->ISA(SwDrawVirtObj) &&
+            ((SwDrawVirtObj*)pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
+
         !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
+    {
         bReturn = BeginTextEdit(pObj, pPV, pEditWin, FALSE );
+    }
 
     pSdrView->SetHitTolerancePixel( nOld );
 
@@ -482,9 +501,6 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 /******************************************************************************
  *  Beschreibung: DrawTextEditMode einschalten
  ******************************************************************************/
-
-
-
 sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
                                 Window* pWin, sal_Bool bIsNewObj )
 {
@@ -538,7 +554,31 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
             pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
         pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
-    sal_Bool bRet = pSdrView->BegTextEdit( pObj, pPV, pWin, TRUE, pOutliner );
+
+    // #108784#
+    // To allow editing the referenced object from a SwDrawVirtObj here
+    // the original needs to be fetched evenually. This ATM activates the
+    // text edit mode for the original object.
+    SdrObject* pToBeActivated = pObj;
+
+    // #108784#
+    // Always the original object is edited. To allow the TextEdit to happen
+    // where the VirtObj is positioned, on demand a occurring offset is set at
+    // the TextEdit object. That offset is used for creating and managing the
+    // OutlinerView.
+    Point aNewTextEditOffset(0, 0);
+
+    if(pObj->ISA(SwDrawVirtObj))
+    {
+        SwDrawVirtObj* pVirtObj = (SwDrawVirtObj*)pObj;
+        pToBeActivated = &((SdrObject&)pVirtObj->GetReferencedObj());
+        aNewTextEditOffset = pVirtObj->GetOffset();
+    }
+
+    // set in each case, thus it will be correct for all objects
+    ((SdrTextObj*)pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
+
+    sal_Bool bRet = pSdrView->BegTextEdit( pToBeActivated, pPV, pWin, TRUE, pOutliner );
 
     // #i7672#
     // Since BegTextEdit actually creates the OutlinerView and thus also
