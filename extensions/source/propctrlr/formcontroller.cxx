@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:47:33 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include <svtools/filenotation.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -226,6 +229,9 @@
 #endif
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
+#endif
+#ifndef _SFX_DOCFILT_HACK_HXX
+#include <sfx2/docfilt.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -695,6 +701,16 @@ class EventsNameReplace_Impl:
                     // the only value binding we support so far is linking to spreadsheet cells
                     CellBindingHelper aHelper( m_xPropValueAccess );
                     sReturn = aHelper.getStringAddressFromCellListSource( xSource );
+                }
+                break;
+                case PROPERTY_ID_DATASOURCE:
+                {
+                    rValue >>= sReturn;
+                    if ( sReturn.getLength() )
+                    {
+                        ::svt::OFileNotation aTransformer(sReturn);
+                        sReturn = aTransformer.get(::svt::OFileNotation::N_SYSTEM);
+                    }
                 }
                 break;
             }
@@ -1176,9 +1192,8 @@ class EventsNameReplace_Impl:
     //------------------------------------------------------------------------
     void OPropertyBrowserController::connectRowset()
     {
-        // if we have a previous connection, dispose it
-        if ( haveRowsetConnection() )
-            cleanupRowsetConnection();
+        // if we have an own previous connection, dispose it
+        cleanupRowsetConnection();
 
         SQLExceptionInfo aErrorInfo;
         try
@@ -1270,7 +1285,7 @@ class EventsNameReplace_Impl:
             if ( _bInit )
                 aProperty.sValue = GetPropertyValue(PROPERTY_COMMAND);
 
-            if ( _bConnect )
+            if ( _bConnect)
                 connectRowset();
 
             ////////////////////////////////////////////////////////////
@@ -1305,6 +1320,15 @@ class EventsNameReplace_Impl:
         {
             DBG_ERROR("OPropertyBrowserController::SetCursorSource : caught an exception !")
         }
+    }
+    //------------------------------------------------------------------------
+    sal_Bool OPropertyBrowserController::haveRowsetConnection( ) const
+    {
+        Reference< XConnection > xConnection = m_xRowsetConnection;
+        Reference< XPropertySet > xProps( getRowSet( ), UNO_QUERY );
+        if ( xProps.is() )
+            xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
+        return xConnection.is();
     }
 
     //------------------------------------------------------------------------
@@ -2030,6 +2054,11 @@ class EventsNameReplace_Impl:
                    || ( nControlType == CONTROL_TYPE_DIALOG && !bIsVisibleForDialogs )
                    )
                    continue;
+                if ( nPropId == PROPERTY_ID_DATASOURCE )
+                {
+                    if ( m_xPropValueAccess.is() && ::dbtools::getActiveConnectionFromParent(m_xPropValueAccess).is() )
+                        continue;
+                }
 
                 pProperty = new OLineDescriptor();
 
@@ -2574,7 +2603,18 @@ class EventsNameReplace_Impl:
                     // DataSource
                     case PROPERTY_ID_DATASOURCE:
                     {
+                        pProperty->nUniqueButtonId = UID_PROP_DLG_ATTR_DATASOURCE;
+                        // if the form already belong to a Database, don't set this property
+                        Reference< XInterface > xInter;
+                        m_aIntrospectee >>= xInter;
+
                         pProperty->eControlType = BCT_COMBOBOX;
+
+                        if ( xInter.is() && ::dbtools::getActiveConnectionFromParent(xInter).is() )
+                        {
+                            nPropertyUIFlags = nPropertyUIFlags & ~(PROP_FLAG_FORM_VISIBLE | PROP_FLAG_DIALOG_VISIBLE);
+                            getPropertyBox()->EnablePropertyLine( PROPERTY_DATASOURCE, sal_False );
+                        }
 
                         Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_DATABASE_CONTEXT), UNO_QUERY);
                         if (xDatabaseContext.is())
@@ -2582,8 +2622,7 @@ class EventsNameReplace_Impl:
                             Sequence< ::rtl::OUString > aDatasources = xDatabaseContext->getElementNames();
                             const ::rtl::OUString* pBegin = aDatasources.getConstArray();
                             const ::rtl::OUString* pEnd = pBegin + aDatasources.getLength();
-                            for (; pBegin != pEnd;++pBegin)
-                                pProperty->aListValues.push_back(*pBegin);
+                            pProperty->aListValues.insert(pProperty->aListValues.begin(),pBegin,pEnd);
                         }
                     }
                     break;
@@ -2790,6 +2829,39 @@ class EventsNameReplace_Impl:
                 OnImageURLClicked( aName, aVal, pData );
                 break;
 
+            //////////////////////////////////////////////////////////////////////
+            // Bei Datenquelle auch Cursor-/ListSource fuellen
+            case PROPERTY_ID_DATASOURCE:
+            {
+                String aUserVal=aVal;
+
+                ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
+
+                INetURLObject aParser( aVal );
+                if ( INET_PROT_FILE == aParser.GetProtocol() )
+                    // set the initial directory only for file-URLs. Everything else
+                    // is considered to be potentially expensive
+                    // 106126 - 2002/12/10 - fs@openoffice.org
+                    aFileDlg.SetDisplayDirectory( aVal );
+
+                static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
+                const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
+                OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
+                if ( pFilter )
+                {
+                    aFileDlg.AddFilter(pFilter->GetFilterName(),pFilter->GetDefaultExtension());
+                }
+
+                if (0 == aFileDlg.Execute())
+                {
+                    String aDataSource = aFileDlg.GetPath();
+                    Commit( aName, aDataSource, pData );
+                }
+            }
+            break;
+
+            //////////////////////////////////////////////////////////////////////
+            // Color
             case PROPERTY_ID_BACKGROUNDCOLOR:
             case PROPERTY_ID_FILLCOLOR:
             case PROPERTY_ID_SYMBOLCOLOR:
@@ -3068,7 +3140,18 @@ class EventsNameReplace_Impl:
                 sal_Bool bFlag= !(aProp.Attributes & PropertyAttribute::MAYBEVOID) && !aValue.hasValue();
 
                 if (!bFlag)
+                {
+                    ::rtl::OUString sDataSource;
+                    aValue >>= sDataSource;
+                    Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_DATABASE_CONTEXT), UNO_QUERY);
+                    if ( !xDatabaseContext.is() || !xDatabaseContext->hasByName(sDataSource) )
+                    {
+                        ::svt::OFileNotation aTransformer(sDataSource);
+                        sDataSource = aTransformer.get(::svt::OFileNotation::N_URL);
+                        aValue <<= sDataSource;
+                    }
                     m_xPropValueAccess->setPropertyValue(rName, aValue );
+                }
 
                 if (m_xPropStateAccess.is()&& !aValue.hasValue())
                 {
