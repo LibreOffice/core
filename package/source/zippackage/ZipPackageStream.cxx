@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-19 15:43:48 $
+ *  last change: $Author: mtg $ $Date: 2001-09-24 18:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 , bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
 , bPackageMember ( sal_False )
+, bHaveOwnKey ( sal_False )
 , xEncryptionData ( )
 , ZipPackageEntry ( false )
 {
@@ -162,7 +163,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
     {
         try
         {
-            if (!xEncryptionData.isEmpty())
+            if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData);
         }
@@ -183,7 +184,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     {
         try
         {
-            if ( IsToBeEncrypted() && rZipPackage.getEncryptionKey().getLength() )
+            if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData);
         }
@@ -247,15 +248,24 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( bToBeEncrypted && xEncryptionData.isEmpty())
             xEncryptionData = new EncryptionData;
     }
+    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
+    {
+        if ( xEncryptionData.isEmpty())
+            xEncryptionData = new EncryptionData;
+        bHaveOwnKey = bToBeEncrypted = sal_True;
+        if ( !( aValue >>= xEncryptionData->aKey ) )
+            throw IllegalArgumentException();
+    }
 #if SUPD>617
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
+    else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
 #else
-    else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compress") ) )
+    else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
 #endif
         aValue >>= bToBeCompressed;
     else
         throw beans::UnknownPropertyException();
 }
+
 Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -282,6 +292,11 @@ Any SAL_CALL ZipPackageStream::getPropertyValue( const OUString& PropertyName )
 #endif
     {
         aAny <<= bToBeCompressed;
+        return aAny;
+    }
+    else if (PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EncryptionKey" ) ) )
+    {
+        aAny <<= xEncryptionData.isEmpty () ? Sequence < sal_Int8 > () : xEncryptionData->aKey;
         return aAny;
     }
     else
