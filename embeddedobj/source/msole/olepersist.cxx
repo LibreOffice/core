@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 16:44:04 $
+ *  last change: $Author: mav $ $Date: 2003-12-02 15:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,11 +98,27 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
 
 
 using namespace ::com::sun::star;
+
+
+//------------------------------------------------------
+void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const ::rtl::OUString& aMediaType )
+{
+    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
+    if ( !xPropSet.is() )
+        throw uno::RuntimeException(); // TODO: all the storage streams must support XPropertySet
+
+    xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( aMediaType ) );
+}
 
 //------------------------------------------------------
 void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStorage >& xNewParentStorage,
@@ -418,6 +434,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
     if ( !m_xObjectStream.is() )
         throw io::IOException(); //TODO: access denied
 
+    SetStreamMediaType_Impl( m_xObjectStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
     uno::Reference< io::XOutputStream > xOutStream = m_xObjectStream->getOutputStream();
     if ( !xOutStream.is() )
         throw io::IOException(); //TODO: access denied
@@ -481,6 +498,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
     if ( !xTargetStream.is() )
         throw io::IOException(); //TODO: access denied
 
+    SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
     uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
     if ( !xOutStream.is() )
         throw io::IOException(); //TODO: access denied
@@ -533,6 +551,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
     if ( !xTargetStream.is() )
         throw io::IOException(); //TODO: access denied
 
+    SetStreamMediaType_Impl( xTargetStream, ::rtl::OUString::createFromAscii( "application/vnd.sun.star.oleobject" ) );
     uno::Reference< io::XOutputStream > xOutStream = xTargetStream->getOutputStream();
     if ( !xOutStream.is() )
         throw io::IOException(); //TODO: access denied
