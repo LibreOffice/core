@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-12 07:17:14 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1533,7 +1533,11 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         }
 
         if ( bRotation )
+#ifdef VERTICAL_LAYOUT
+            pNewFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
+#else
             pNewFnt->SetVertical( 0 );
+#endif
 
         pInf = &((SwTxtSizeInfo&)rInf);
         pNewFnt->Invalidate();
