@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ *  $RCSfile: UriReferenceFactory.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-01-19 18:19:01 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_uri_UriReferenceFactory_idl__
+#define __com_sun_star_uri_UriReferenceFactory_idl__
+
+#include <com/sun/star/uri/XUriReferenceFactory.idl>
+
+module com { module sun { module star { module uri {
+
+/**
+   creates URI references.
+
+   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   description of URI references and related terms.</p>
+
+   <p>For parsing absolute URI references, this service tries to use a
+   scheme-specific parser.  Such a scheme-specific parser will typically enforce
+   additional restrictions during parsing, and will typically return objects
+   that support extra, scheme-specific interfaces in addition to
+   <type scope="com::sun::star::uri">XUriReference</type>.  If no such parser
+   is found, and for relative URI references, a generic parser is used, which
+   returns objects that only support
+   <type scope="com::sun::star::uri">XUriReference</type>.</p>
+
+   <p>Locating a scheme-specific parser works as follows:  A scheme consists of
+   Latin captial letters
+   &ldquo;<code>A</code>&rdquo;&ndash;&ldquo;<code>Z</code>&rdquo;, Latin small
+   letters &ldquo;<code>a</code>&rdquo;&ndash;&ldquo;<code>z</code>&rdquo;,
+   digits &ldquo;<code>0</code>&rdquo;&ndash;&ldquo;<code>9</code>&rdquo;,
+   &ldquo;<code>+</code>&rdquo;, &ldquo;<code>-</code>&rdquo;, and
+   &ldquo;<code>.</code>&rdquo;.  A scheme&nbsp;<var>s</var> is transformed into
+   a string&nbsp;<var>s</var>&prime; character-by-character, by translating
+   Lating capital letters to their small counterparts, translating
+   &ldquo;<code>+</code>&rdquo; to &ldquo;<code>PLUS</code>&rdquo;,
+   &ldquo;<code>-</code>&rdquo; to &ldquo;<code>HYPHEN</code>&rdquo;,
+   &ldquo;<code>.</code>&rdquo; to &ldquo;<code>DOT</code>&rdquo;, and copying
+   Latin small letters and digits unchanged.  If the component context used
+   while creating this <code>UriReferenceFactory</code> instance offers a
+   service manager, and there is a service available at that service manager
+   whose name is the concatenation of
+   &ldquo;<code>com.sun.star.uri.UriSchemeParser_</code>&rdquo; and
+   <var>s</var>&prime;, then that service is used.  It is an error if that
+   service does not support
+   <type scope="com::sun::star::uri">XUriSchemeParser</type>.</p>
+ */
+service UriReferenceFactory {
+    /**
+       used to create URI references.
+     */
+    interface XUriReferenceFactory;
+};
+
+}; }; }; };
+
+#endif
