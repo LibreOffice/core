@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-18 15:58:42 $
+ *  last change: $Author: nn $ $Date: 2001-01-18 19:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,31 +97,38 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-//  wie SVX_UNOEDIT_CHAR_PROPERTIES, aber mit CONVERT_TWIPS bei der Font-Hoehe
-//  (Kopf-/Fusszeilen sind in Twips)
-
-#define SC_TWIPS_CHAR_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_COLOR),           EE_CHAR_COLOR,      &::getCppuType((const sal_Int32*)0),    0, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_CROSSEDOUT),  EE_CHAR_STRIKEOUT,  &::getBooleanCppuType(),        0, MID_CROSSED_OUT }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_ESCAPEMENT),  EE_CHAR_ESCAPEMENT, &::getCppuType((const sal_Int16*)0),    0, MID_ESC }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_FONTNAME),        EE_CHAR_FONTINFO,   &::getCppuType((const ::rtl::OUString*)0),  0, MID_FONT_FAMILY_NAME },\
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_HEIGHT),      EE_CHAR_FONTHEIGHT, &::getCppuType((const Float*)0),    0, MID_FONTHEIGHT | CONVERT_TWIPS }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_POSTURE),     EE_CHAR_ITALIC,     &::getCppuType((const ::com::sun::star::awt::FontSlant*)0),0, MID_POSTURE }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_SHADOWED),        EE_CHAR_SHADOW,     &::getBooleanCppuType(),        0, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_STYLE),           EE_CHAR_FONTINFO,   &::getCppuType((const ::rtl::OUString*)0),  0, MID_FONT_STYLE_NAME }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_UNDERLINE),       EE_CHAR_UNDERLINE,  &::getCppuType((const sal_Int16*)0),    0, MID_UNDERLINE }, \
-    { MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_WEIGHT),      EE_CHAR_WEIGHT,     &::getCppuType((const Float*)0),    0, MID_WEIGHT }
-
-
 const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
 {
     static SfxItemPropertyMap aHdFtPropertyMap_Impl[] =
     {
-        SC_TWIPS_CHAR_PROPERTIES,
+        SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         {0,0,0,0}
     };
+    static BOOL bTwipsSet = FALSE;
+
+    if (!bTwipsSet)
+    {
+        //  modify PropertyMap to include CONVERT_TWIPS flag for font height
+        //  (headers/footers are in twips)
+
+        SfxItemPropertyMap* pEntry = aHdFtPropertyMap_Impl;
+        while (pEntry->pName)
+        {
+            if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
+                   pEntry->nWID == EE_CHAR_FONTHEIGHT_CJK ||
+                   pEntry->nWID == EE_CHAR_FONTHEIGHT_CTL ) &&
+                 pEntry->nMemberId == MID_FONTHEIGHT )
+            {
+                pEntry->nMemberId |= CONVERT_TWIPS;
+            }
+
+            ++pEntry;
+        }
+        bTwipsSet = TRUE;
+    }
+
     return aHdFtPropertyMap_Impl;
 }
 
