@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-22 18:03:40 $
+#   last change: $Author: hr $ $Date: 2002-10-09 17:08:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,9 +106,9 @@ sub name
 {
     my $self = shift;
     if ( @_ ) {
-        $self->{name} = shift;
+        $self->{NAME} = shift;
     }
-    return $self->{name};
+    return $self->{NAME};
 }
 
 sub cvs_binary
@@ -356,14 +356,13 @@ sub parse_log
                 next;
             };
 
-            (/^----------------------------$/o || /^=============================================================================$/o) && do {
-                $rev_data = {
-                    DATE => $date,
-                    AUTHOR => $author,
-                    STATE => $state,
-                    COMMENT => $comment,
-                    BRANCHES => [ @branches ]
-                };
+            (/^----------------------------$/o || /^=============================================================================$/o) && do
+            {
+                $rev_data = {DATE => $date,
+                             AUTHOR => $author,
+                             STATE => $state,
+                             COMMENT => $comment,
+                             BRANCHES => [ @branches ]};
                 $self->{REV_DATA}->{$rev} = $rev_data;
                 $comment = undef;
                 @branches = ();
@@ -371,7 +370,8 @@ sub parse_log
             };
 
             $comment .= $_ . "\n" ;
-        } elsif ( $in_tags ) {
+        }
+        elsif ( $in_tags ) {
             /^keyword\ssubstitution:/o && do { $self->{FLAGS} = $'; $in_tags--; next; };
             /^\t(\w+):\s((\d|\.)+)$/o && do { $self->{TAGS}->{$1} = $2; next; };
         }
