@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotimpop.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,12 +139,12 @@ inline void ImportLotus::Read( ScAddress& rAddr )
 {
     UINT16 nRow;
     *pIn >> nRow;
-    rAddr.SetRow( nRow );
+    rAddr.SetRow( static_cast<SCROW>(nRow) );
     BYTE nByte;
     *pIn >> nByte;
-    rAddr.SetTab( nByte );
+    rAddr.SetTab( static_cast<SCTAB>(nByte) );
     *pIn >> nByte;
-    rAddr.SetCol( nByte );
+    rAddr.SetCol( static_cast<SCCOL>(nByte) );
 }
 
 
