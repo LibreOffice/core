@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-17 03:24:22 $
+ *  last change: $Author: pluby $ $Date: 2000-11-17 07:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
 void SalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    VCLWindow_release( pFrame->maFrameData.mhWnd );
+    delete ( pFrame );
 }
 
 // -----------------------------------------------------------------------
