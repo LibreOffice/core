@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderAcceptor.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 module com { module sun { module star { module ucb {
 
-interface XRemoteContentProviderDoneListener;
+ published interface XRemoteContentProviderDoneListener;
 
 //=============================================================================
 /** Accept remote content providers that want to make themselves known to the
@@ -83,7 +83,7 @@ interface XRemoteContentProviderDoneListener;
     @version 1.0
     @author Stephan Bergmann
 */
-interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
+published interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Add a remote content provider.
