@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
+ *  last change: $Author: ka $ $Date: 2000-12-05 17:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,7 +1275,11 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
         if(!(aValue >>= aURL))
             throw lang::IllegalArgumentException();
 
-        if( aURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) ) )
+        String aGrafURL( aURL );
+
+        if( ( aGrafURL.GetTokenCount( ':' ) == 2 ) &&
+            ( aGrafURL.GetToken( 0, ':' ) ==
+              String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPREFIX ) ).GetToken( 0, ':' ) ) )
         {
             // graphic manager url
             aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
