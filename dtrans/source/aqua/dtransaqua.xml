@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Tino Rachui </Author>
+
+<Name>  com.sun.star.comp.datatransfer.clipboard </Name>
+
+<Description>
+    The win32 implementation of the datatransfer service.
+</Description>
+
+<ModuleName>    sysdtrans   </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="experimental"/>
+
+<SupportedService>  com.sun.star.datatransfer.clipboard.SystemClipboard </SupportedService>
+
+<ServiceDependency> ... </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+<Type>   com.sun.star.datatransfer.clipboard.XClipboardEx   </Type>
+<Type>   com.sun.star.datatransfer.XTransferable            </Type>
+<Type>   com.sun.star.datatransfer.XTransferableEx          </Type>
+<Type>   com.sun.star.datatransfer.clipboard.XClipboardOwner</Type>
+<Type>   com.sun.star.datatransfer.clipboard.XClipboardListener</Type>
+<Type>   com.sun.star.datatransfer.clipboard.XClipboardNotifier</Type>
+<Type>   com.sun.star.datatransfer.XTransferDataAccess      </Type>
+<Type>   com.sun.star.lang.XComponent                       </Type>
+<Type>   com.sun.star.lang.XMultiServiceFactory             </Type>
+<Type>   com.sun.star.lang.XSingleServiceFactory            </Type>
+<Type>   com.sun.star.lang.XServiceInfo                     </Type>
+<Type>   com.sun.star.lang.XTypeProvider                    </Type>
+<Type>   com.sun.star.lang.IllegalArgumentException         </Type>
+<Type>   com.sun.star.uno.TypeClass                         </Type>
+<Type>   com.sun.star.uno.XWeak                             </Type>
+<Type>   com.sun.star.uno.XAggregation                      </Type>
+<Type>   com.sun.star.registry.XRegistryKey                 </Type>
+<Type>   com.sun.star.container.XSet                        </Type>
+
+</COMPONENTDESCRIPTION>
+
