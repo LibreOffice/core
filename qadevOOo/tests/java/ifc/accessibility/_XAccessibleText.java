@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-03-26 14:54:56 $
+ *  last change:$Date: 2003-03-31 12:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ public class _XAccessibleText extends MultiMethodTest {
 
             }
             int x = aRect.X+aRect.Width/2;
-            int y = bounds.Height/2;
+            int y = aRect.Height/2;
             Point aPoint = new Point( x,y);
             int nIndex = oObj.getIndexAtPoint( aPoint );
             if ( nIndex != i )
