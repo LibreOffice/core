@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:30:50 $
+ *  last change: $Author: oj $ $Date: 2001-07-25 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,7 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if (0 == sConnectionURL.CompareToAscii("sdbc:address:ldap:"))
+                if (0 == sConnectionURL.CompareToAscii("sdbc:address:ldap"))
                     addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
             }
             _pTabPage->disableConnectionURL();
@@ -1297,7 +1297,7 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if(String::CreateFromAscii("sdbc:address:ldap:") == sConnectionURL)
+                if(String::CreateFromAscii("sdbc:address:ldap") == sConnectionURL)
                     pRelevantItems = OLDAPDetailsPage::getDetailIds();
                 else
                 {
@@ -1900,6 +1900,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.65  2001/07/17 07:30:50  oj
+ *  #89533# GetMainURL changed
+ *
  *  Revision 1.64  2001/07/11 10:10:30  oj
  *  #87257# change GetUILanguage
  *
