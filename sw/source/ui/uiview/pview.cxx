@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:11:19 $
+ *  last change: $Author: os $ $Date: 2002-07-05 12:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,9 +1712,9 @@ void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
 //  const long nAdd = bInner ? 0 : ScrollBar::GetWindowOverlapPixel();
     const StyleSettings &rSet = aViewWin.GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();// - nAdd;
-    if ( pVScrollbar )
+    if ( pVScrollbar->IsVisible())
         rToFill.Right()  = nTmp;
-    if ( pHScrollbar )
+    if ( pHScrollbar->IsVisible() )
         rToFill.Bottom() = nTmp;
     SetBorderPixel( rToFill );
 }
@@ -2256,9 +2256,10 @@ void SwPagePreView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibi
 /* -----------------------------2002/06/26 14:30------------------------------
 
  ---------------------------------------------------------------------------*/
-void            SwPagePreView::ShowHScrollbar(sal_Bool bShow)
+void SwPagePreView::ShowHScrollbar(sal_Bool bShow)
 {
-    pHScrollbar->Show();
+    pHScrollbar->Show(bShow);
+    InvalidateBorder();
 }
 /* -----------------------------2002/06/26 14:30------------------------------
 
@@ -2272,7 +2273,8 @@ sal_Bool SwPagePreView::IsHScrollbarVisible()const
  ---------------------------------------------------------------------------*/
 void SwPagePreView::ShowVScrollbar(sal_Bool bShow)
 {
-    pVScrollbar->Show();
+    pVScrollbar->Show(bShow);
+    InvalidateBorder();
 }
 /* -----------------------------2002/06/26 14:30------------------------------
 
