@@ -11703,3 +11703,5 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_DecoratedFilter@?%O:\SRC655\src\svtools\source\filepicker\iodlgimp.cxx1159726240@@YA?AVString@@ABV2@@Z
 ?StopCommunication@InformationBrooker@@UAEEXZ
 ?StopCommunication@CommunicationLinkViaSocket@@UAEEXZ
+?CreateCommunicationLink@CommonSocketFunctions@@MAEPAVCommunicationLink@@PAVCommunicationManager@@PAVOConnectorSocket@vos@@@Z
+?StartCommunication@CommunicationManager@@UAEEXZ
