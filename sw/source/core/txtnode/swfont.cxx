@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:23:31 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,16 @@ USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
             nDir = 2700;
             break;
         case 900 :
-        case 2700 :
             nDir = 0;
             break;
+        case 2700 :
+            nDir = 1800;
+            break;
+#ifdef DEBUG
+        default :
+            ASSERT( sal_False, "Unsupported direction" );
+            break;
+#endif
         }
     }
     return nDir;
