@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:21:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-start" ))
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
                     {
                             // open in viewmode
                             bOpenEvent      = sal_False;
