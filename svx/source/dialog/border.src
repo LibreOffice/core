@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-23 08:10:36 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ russian ] = "–‡ÏÍ‡";
         Text[ polish ] = "Ramka";
         Text[ japanese ] = "òg";
-        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ chinese_traditional ] = "Ωu±¯±∆ß«";
         Text[ arabic ] = "ﬂ«œ—";
         Text[ greek ] = "–Î·ﬂÛÈÔ";
         Text[ korean ] = "«¡∑π¿”";
@@ -201,7 +201,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ japanese ] = "ç∂(~L)";
         Text[ korean ] = "øﬁ¬ (~L)";
         Text[ chinese_simplified ] = "◊Û(~L)";
-        Text[ chinese_traditional ] = "•™(~L)";
+        Text[ chinese_traditional ] = "•™";
         Text[ arabic ] = "Ì”«—";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
@@ -283,7 +283,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ japanese ] = "è„(~T)";
         Text[ korean ] = "¿ß(~T)";
         Text[ chinese_simplified ] = "…œ(~T)";
-        Text[ chinese_traditional ] = "§W(~T)";
+        Text[ chinese_traditional ] = "§W";
         Text[ arabic ] = "√⁄·Ï";
         Text[ turkish ] = "~‹st";
         Text[ language_user1 ] = " ";
@@ -324,7 +324,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ japanese ] = "â∫(~B)";
         Text[ korean ] = "æ∆∑°(~B)";
         Text[ chinese_simplified ] = "œ¬(~B)";
-        Text[ chinese_traditional ] = "§U(~B)";
+        Text[ chinese_traditional ] = "§U";
         Text[ arabic ] = "√”›·";
         Text[ turkish ] = "Al~t";
     };
@@ -390,7 +390,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ japanese ] = "ê›íË";
         Text[ korean ] = "º≥¡§";
         Text[ chinese_simplified ] = "…Ë∂®";
-        Text[ chinese_traditional ] = "≥]©w";
+        Text[ chinese_traditional ] = "¶‹§∫Æe™∫∂Z¬˜";
         Text[ arabic ] = "«·≈⁄œ«œ« ";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
