@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:59:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-17 11:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumenthandler.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 
 namespace configmgr
