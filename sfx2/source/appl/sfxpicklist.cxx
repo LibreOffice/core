@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: cd $ $Date: 2002-04-03 05:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ void SfxPickList::CreatePickListEntries()
         aURL.SetSmartURL( sURL );
         aURL.SetPass( SfxStringDecode( sPassword ) );
 
-        PickListEntry *pPick = new PickListEntry( aURL.GetMainURL(), sFilter, sTitle );
+        PickListEntry *pPick = new PickListEntry( aURL.GetMainURL( INetURLObject::NO_DECODE ), sFilter, sTitle );
         m_aPicklistVector.push_back( pPick );
     }
 }
@@ -463,7 +463,7 @@ void SfxPickList::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     // add to svtool history options
                     SvtHistoryOptions().AppendItem( ePICKLIST,
-                            aURL.GetURLNoPass(),
+                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
                             aFilter,
                             aTitle,
                             SfxStringEncode( aURL.GetPass() ) );
