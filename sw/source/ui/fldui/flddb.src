@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:19:07 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ TabPage TP_FLD_DB
         Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ(~T)";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚Ìí—Ş(~T)";
+        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
