@@ -13,9 +13,6 @@ common
 	}
 	reset
 	{
-        *o
-        *r
-        *s
         *o:
         *r:
         *s:
@@ -214,6 +211,16 @@ wntmsci
 			SOLARSRC o:\%UPD%
 		}
 	}
+}
+
+wntmsci8
+{
+    reset
+    {
+        *o
+        *r
+        *s
+    }
 }
 
 wntmsci3
