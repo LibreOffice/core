@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-09 13:53:13 $
+ *  last change: $Author: sj $ $Date: 2001-03-09 14:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                                 F_PI18000 ) ) * 100.0 ) );
                 aEnd.Y() = - (INT32)( ( sin( (double)( nEndAngle *
                                                 F_PI18000 ) ) * 100.0 ) );
-                const Rectangle& rRect = rObj.GetRect();
+                const Rectangle& rRect = aRect100thmm;
                 aCenter.X() = rRect.Left() + ( rRect.GetWidth() / 2 );
                 aCenter.Y() = rRect.Top() + ( rRect.GetHeight() / 2 );
                 aStart.X() += aCenter.X();
