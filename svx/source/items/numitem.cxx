@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 08:30:21 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 10:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,7 +1100,7 @@ sal_Bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE 
             pNumRule = pNewRule;
             return sal_True;
         }
-        catch(...)
+        catch(lang::IllegalArgumentException&)
         {
         }
     }
