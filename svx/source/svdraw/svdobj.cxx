@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:42:16 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,6 +2819,15 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
     ExtOutputDevice aXOut( &aBlackHole );
     SdrObject*      pClone = Clone();
+
+    // #114164#
+    // there was a loop when asking the contour from a shape with textanimation.
+    // therefore we disable textanimation here since it doesn't add to the actual
+    // contour of this clone
+    if(pClone && ISA(SdrTextObj))
+    {
+        pClone->SetMergedItem( SdrTextAniKindItem(SDRTEXTANI_NONE));
+    }
 
     if(pClone && ISA(SdrEdgeObj))
     {
