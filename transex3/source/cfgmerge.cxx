@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-22 13:56:02 $
+ *  last change: $Author: nf $ $Date: 2000-11-28 14:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,9 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 {
     ByteString sToken( pToken );
 
+    if ( sToken == " " || sToken == "\t" )
+        sLastWhitespace += sToken;
+
     ByteString sTokenName;
     ByteString sTokenId;
 
@@ -427,7 +430,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case CFG_CLOSETAG:
             sTokenName = sToken.GetToken( 1, '/' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
                if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName )) {
-                WorkOnRessourceEnd();
+                if ( ! sCurrentText.Len())
+                    WorkOnRessourceEnd();
                 aStack.Pop();
                 pStackData = aStack.GetStackData();
             }
@@ -453,6 +457,9 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
     if ( bOutput )
         Output( sToken );
+
+    if ( sToken != " " && sToken != "\t" )
+        sLastWhitespace = "";
 
     return 1;
 }
@@ -721,13 +728,29 @@ void CfgMerge::WorkOnRessourceEnd()
 
                     Export::QuotHTML( sText );
 
-                    ByteString sAdditionalLine;
-                    for ( ULONG i = 0; i < aStack.Count() - 1; i++ )
-                        sAdditionalLine += "\t";
+                    ByteString sAdditionalLine( "\t" );
 
-                    sAdditionalLine += pStackData->sTextTag;
+                    ByteString sTextTag = pStackData->sTextTag;
+                    ByteString sTemp = sTextTag.Copy( sTextTag.Search( "xml:lang=" ));
+
+                    ByteString sSearch = sTemp.GetToken( 0, '\"' );
+                    sSearch += "\"";
+                    sSearch += sTemp.GetToken( 1, '\"' );
+                    sSearch += "\"";
+
+                    ByteString sReplace = sTemp.GetToken( 0, '\"' );
+                    sReplace += "\"";
+                    sReplace += Export::GetIsoLangByIndex( nIndex );
+                    sReplace += "\"";
+
+                    sTextTag.SearchAndReplace( sSearch, sReplace );
+
+                    sAdditionalLine += sTextTag;
                     sAdditionalLine += sText;
                     sAdditionalLine += pStackData->sEndTextTag;
+
+                    sAdditionalLine += "\n";
+                    sAdditionalLine += sLastWhitespace;
 
                     Output( sAdditionalLine );
                 }
