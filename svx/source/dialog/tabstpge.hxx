@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:54:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ private:
     FixedText       aDezCharLabel;
     Edit            aDezChar;
     FixedLine       aTabTypeLabel;
-    FixedLine       aTabTypeLabelVert;
 
     // Fuellzeichen
     RadioButton     aNoFillChar;
