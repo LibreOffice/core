@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 15:48:54 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 07:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Modus";
         Text[ chinese_simplified ] = "ΐΰΠΝ";
         Text[ greek ] = "Τρόπος";
-        Text[ korean ] = "°θ»κ Έπµε";
+        Text[ korean ] = "Έπµε";
         Text[ turkish ] = "Tόr";
     };
 
@@ -187,7 +187,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Interne waarde van de datum";
         Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΚύΧΦ";
         Text[ greek ] = "Εσωτερικός αριθμός της ημερομηνίας";
-        Text[ korean ] = "ΐΟΐΪΐΗ ³»ΊΞΐϋ ΉψΘ£";
+        Text[ korean ] = "ΐΟΐΪΐΗ ³»ΊΞ ΌύΐΪ";
         Text[ turkish ] = "Dahili tarih sayύsύ";
     };
 
@@ -239,14 +239,14 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Bepaalt het aantal weken tussen twee datums";
         Text[ chinese_simplified ] = "ΌΖΛγΑ½ΈφΚύΎέµΔΦά²ξ¶ξ";
         Text[ greek ] = "Ορίζει την διαφορά εβδομάδων δύο ημερομηνιών";
-        Text[ korean ] = "µΞ ΐΟΐΪ »ηΐΜΐΗ ΑΦ΄άΐ§ ΒχΐΜ";
+        Text[ korean ] = "µΞ ΐΟΐΪ »ηΐΜΐΗ ΑΦ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "έki veri arasύndaki hafta farkύnύ bulur";
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
         Text = "Jόngeres Datum fόr die Wochendifferenz" ;
         Text [ english ] = "the older date for the week difference" ;
-        Text[ language_user1 ] = "Jόngeres Datum ist das Gegenteil von older date";
+        Text[ language_user1 ] = "J?geres Datum ist das Gegenteil von older date";
         Text[ english_us ] = "The end date for calculating the difference in weeks";
         Text[ portuguese ] = "Data mais recente para a diferenηa em semanas";
         Text[ russian ] = "Κξνεχνΰÿ δΰςΰ δλÿ ξοπεδελενθÿ πΰηνθφϋ β κξλθχερςβε νεδελό.";
@@ -265,7 +265,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "De vroegere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΦά²ξ¶ξµΔ½ΟΤηµΔΘΥΖΪ";
         Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς σε εβδομάδες";
-        Text[ korean ] = "ΑΦ »ηΐΜΏ΅ ΒχΐΜΈ¦ °θ»κΗΟ±β ΐ§ΗΡ Έ¶ΑφΈ· ³―";
+        Text[ korean ] = "µΞ ΐΟΐΪ »ηΐΜΐΗ ΑΦ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ";
         Text[ turkish ] = "Hafta farkύ hesabύ iηin daha geη olan tarih";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
@@ -290,7 +290,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "De latere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΦά²ξ¶ξµΔ½ΟΝνµΔΘΥΖΪ";
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε εβδομάδες";
-        Text[ korean ] = "ΑΦ ΒχΐΜΈ¦ °θ»κΗΟ±β ΐ§ΗΡ ½ΓΐΫΐΟ";
+        Text[ korean ] = "µΞ ΐΟΐΪ »ηΐΜΐΗ ΑΦ °θ»κΏ΅Ό­ΐΗ  ½ΓΐΫΐΟΐΪ";
         Text[ turkish ] = "Hafta farkύ hesabύ iηin daha erken olan tarih";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
@@ -315,7 +315,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Modus=0 betekent aantal , Modus=1 betekent in kalenderweken";
         Text[ chinese_simplified ] = "µΓ³φ²ξ¶ξµΔΐΰΠΝ Mode=0 ±νΚΎΌδΈτ£¬ Mode=1 ±νΚΎÒ»ΔκµΔΠΗΖΪΚύ";
         Text[ greek ] = "Τρόπος υπολογισμού της διαφοράς: Τρόπος=0 σημαίνει διάστημα, Τρόπος=1 σημαίνει ημερολογιακές εβδομάδες";
-        Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1 ΐΟΑ¤ΐΜ ΐΦ΄Β ΑΦΈ¦ ΐΗΉΜ";
+        Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1 ΐΊ ΑΦΈ¦ ΐΗΉΜΗΡ΄Ω";
         Text[ turkish ] = "Fark hesabύ tόrό, tόr=0 aralύk, tόr=1 ise takvim haftasύ cinsinden anlamύna gelir";
     };
 
@@ -393,7 +393,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "de vroegere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΤΒ²ξ¶ξµΔ½ΟΤηµΔΘΥΖΪ";
         Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς σε μήνες";
-        Text[ korean ] = "Ώω »ηΐΜΏ΅ ΒχΐΜΈ¦ °θ»κΗΟ±β ΐ§ΗΡ Έ¶ΑφΈ· ³―";
+        Text[ korean ] = "°³Ώω »ηΐΜΐΗ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ";
         Text[ turkish ] = "Ay farkύ hesabύ iηin daha geη olan tarih";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
@@ -418,7 +418,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Latere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΤΒ²ξ¶ξµΔ½ΟΝνµΔΘΥΖΪ";
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε μήνες";
-        Text[ korean ] = "Ώω ΒχΐΜΈ¦ °θ»κΗΟ±β ΐ§ΗΡ ½ΓΐΫΐΟ";
+        Text[ korean ] = "°³Ώω »ηΐΜΐΗ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
         Text[ turkish ] = "Ay farkύ hesabύ iηin daha erken olan tarih";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
@@ -443,7 +443,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Modus=0 betekent aantal, Modus=1 betekent in kalendermaanden";
         Text[ chinese_simplified ] = "µΓ³φ²ξ¶ξ Mode=0 ±νΚΎΌδΈτ£¬ Mode=1 ±νΚΎÒ»ΔκµΔΤΒΚύ";
         Text[ greek ] = "Τρόπος υπολογισμού διαφοράς: Τρόπος=0 σημαίνει διάστημα, Τρόπος=1 σημαίνει ημερολογιακοί μήνες";
-        Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1 ΐΟΑ¤ΐΜ ΐΦ΄Β Ώωΐ» ΐΗΉΜ";
+        Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1ΐΊ °³Ώωΐ» ΐΗΉΜΗΡ΄Ω";
         Text[ turkish ] = "Fark hesabύ tόrό, tόr=0 aralύk, tόr=1 ise takvim ayύ cinsinden anlamύna gelir";
     };
 
@@ -496,7 +496,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Bepaalt het aantal jaren tussen twee datums";
         Text[ chinese_simplified ] = "ΌΖΛγΑ½ΈφΚύΎέµΔΔκ²ξ¶ξ";
         Text[ greek ] = "Ορίζει την διαφορά δύο ημερομηνιών σε έτη";
-        Text[ korean ] = "µΞ ΐΟΐΪ »ηΐΜΐΗ ³β ΒχΐΜ";
+        Text[ korean ] = "µΞ ΐΟΐΪ »ηΐΜΐΗ ³β ΒχΐΜ °αΑ¤";
         Text[ turkish ] = "έki veri arasύndaki yύl farkύnύ bulur";
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
@@ -521,7 +521,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "De vroegere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΔκ²ξ¶ξµΔ½ΟΤηµΔΘΥΖΪ";
         Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς σε έτη";
-        Text[ korean ] = "³β »ηΐΜΏ΅ ΒχΐΜΈ¦ °θ»κΗΟ±β ΐ§ΗΡ Έ¶ΑφΈ· ³―";
+        Text[ korean ] = "³β »ηΐΜΏ΅ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ";
         Text[ turkish ] = "Yύl farkύ hesabύ iηin daha geη olan tarih";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
@@ -546,7 +546,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "De latere datum";
         Text[ chinese_simplified ] = "ΚτΣΪÒ»ΈφΔκ²ξ¶ξµΔ½ΟΝνµΔΘΥΖΪ";
         Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς σε έτη";
-        Text[ korean ] = "³β ΒχΐΜΈ¦ °θ»κΗΟ±β ΐ§ΗΡ ½ΓΐΫΐΟ";
+        Text[ korean ] = "³β»ηΐΜΐΗ  ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
         Text[ turkish ] = "Yύl farkύ hesabύ iηin daha erken olan tarih";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
@@ -571,7 +571,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Modus=0 betekent aantal, modus=1 betekent in kalenderjaren";
         Text[ chinese_simplified ] = "µΓ³φ²ξ¶ξµΔΐΰΠΝ Mode=0 ±νΚΎΔκΌδΈτ£¬ Mode=1 ±νΚΎΠΗΖΪΔκΚύ";
         Text[ greek ] = "Τρόπος του υπολογισμού της διαφοράς: Τρόπος=0 σημαίνει διάστημα, Τρόπος=1 σημαίνει σε ημερολογιακά έτη";
-        Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1 ΐΟΑ¤ΐΜ ΐΦ΄Β ³βΐ» ΐΗΉΜ.";
+        Text[ korean ] = "ΒχΐΜ °θ»κ ΗόΕΒ: Έπµε=0 ΐΊ  °£°έΐ» ΐΗΉΜΗΟ°ν, Έπµε=1ΐΊ ³βΐ» ΐΗΉΜΗΡ΄Ω.";
         Text[ turkish ] = "Fark hesabύ tόrό, tόr=0 aralύk, tόr=1 ise takvim yύlύ cinsinden anlamύna gelir";
     };
 
@@ -599,7 +599,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "IsSchrikkelJaar";
         Text[ chinese_simplified ] = "IsLeapYear";
         Text[ greek ] = "ΕίναιΔίσεκτοΈτος";
-        Text[ korean ] = "°Η³Κ ¶Ϊ ³β";
+        Text[ korean ] = "ΐ±³β";
         Text[ turkish ] = "Artύkyύldύr";
     };
     String DFA_ISLEAPYEAR_DESC // Description
@@ -624,7 +624,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Geeft als resultaat 1(WAAR) als het jaar een schrikkeljaar is, andrs 0(ONWAAR)";
         Text[ chinese_simplified ] = "ΘηΉϋΚΗΘςΔκΎΝ·΄ΐ΅ 1(TRUE) £¬·ρΤςΎΝ·΄ΐ΅ 0 (FALSE)";
         Text[ greek ] = "Αποδίδει 1 (ΑΛΗΘΗΣ) όταν πρόκειται για δίσεκτο έτος, αλλιώς 0 (ΨΕΥΔΗΣ)";
-        Text[ korean ] = "°Η³Κ ¶Ϊ ³βµµ°΅ »ηΏλµΗΎϊΐΈΈι 1ΐ» ΉέΘ―(Βό), ΎΖ΄ΟΈι 0ΐ» ΉέΘ―(°ΕΑώ)";
+        Text[ korean ] = "ΐ±³βΏ΅Ό­΄Β 1ΐ» ΉέΘ―(Βό)ΗΟ°ν, ±Χ·ΈΑφ  ΎΚΐΈΈι 0ΐ» ΉέΘ―(°ΕΑώ)ΗΡ΄Ω.";
         Text[ turkish ] = "Yύl, artύkyύl ise 1(DOΠRU) aksi halde 0(YANLIή) verir";
     };
 
@@ -652,7 +652,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "DagenInMaand";
         Text[ chinese_simplified ] = "DaysInMonth";
         Text[ greek ] = "ΗμέρεςΑνάΜήνα";
-        Text[ korean ] = "ΏωΐΗ ΐΟΌφ";
+        Text[ korean ] = "ΏωΐΗ ΐΟ Όφ";
         Text[ turkish ] = "AydakiGόnSayύsύ";
     };
     String DFA_DAYSINMONTH_DESC // Description
@@ -677,7 +677,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Geeft als resultaat het aantal dagen in een maand bij een bepaalde datum";
         Text[ chinese_simplified ] = "ΌΖΛγÒ»ΈφΚτΣΪΈψ¶¨ΘΥΖΪµΔΤΒµΔΜμΚύ";
         Text[ greek ] = "Ορίζει για μια ημερομηνία τον αριθμό ημερών ανά μήνα";
-        Text[ korean ] = "ΐΤ·ΒµΘ ³―Β¥Ώ΅ °ό°θµΗ΄Β ΄ήΐΗ ΐΟΌφΈ¦ ΉέΘ―";
+        Text[ korean ] = "ΐΤ·ΒµΘ ³―Β¥ΏΝ °ό·Γ, ±Χ ΄ήΏ΅Ό­ΐΗ ΐΟΐΪ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "Girilen tarihe gφre ayύn gόn sayύsύnύ bulur";
     };
 
@@ -705,7 +705,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "DagenInJaar";
         Text[ chinese_simplified ] = "DaysInYear";
         Text[ greek ] = "ΗμέρεςΣτοΈτος";
-        Text[ korean ] = "³βΐΗ ΐΟΌφ";
+        Text[ korean ] = "³βΐΗ ³―Β¥ Όφ";
         Text[ turkish ] = "YύldakiGόnSayύsύ";
     };
     String DFA_DAYSINYEAR_DESC // Description
@@ -730,7 +730,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Geeft als resultaat het aantal dagen in een jaar bij een bepaalde datum";
         Text[ chinese_simplified ] = "ΌΖΛγÒ»ΈφΚτΣΪΈψ¶¨ΘΥΖΪµΔΔκµΔΜμΚύ";
         Text[ greek ] = "Ορίζει τον αριθμό ημερών ανά έτος για μία ημερομηνία";
-        Text[ korean ] = "ΐΤ·ΒµΘ ³―Β¥Ώ΅ °ό°θµΗ΄Β ³βΐΗ ΐΟΌφΈ¦ ΉέΘ―";
+        Text[ korean ] = "ΐΤ·ΒµΘ ³―Β¥ΏΝ °ό·Γ, ³βΐΗ ΄ÒΒ¥ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "Girilen tarihe gφre yύlύn gόn sayύsύnύ bulur";
     };
 
@@ -758,7 +758,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "WekenInJaar";
         Text[ chinese_simplified ] = "WeeksInYear";
         Text[ greek ] = "ΕβδομάδεςΑνάΈτος";
-        Text[ korean ] = "³βΐΗ ΑΦΌφ";
+        Text[ korean ] = "³βΐΗ ΑΦ Όφ";
         Text[ turkish ] = "YύldakiHaftaSayύsύ";
     };
     String DFA_WEEKSINYEAR_DESC // Description
@@ -783,7 +783,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ dutch ] = "Geeft als resultaat het aantal weken in een jaar bij een datum";
         Text[ chinese_simplified ] = "ΌΖΛγÒ»ΈφΚτΣΪΈψ¶¨ΘΥΖΪµΔΔκµΔΠΗΖΪΚύ";
         Text[ greek ] = "Ορίζει για μία ημερομηνία τον αριθμό εβδομάδων ανά έτος";
-        Text[ korean ] = "ΐΤ·ΒµΘ ³―Β¥Ώ΅ °ό°θµΗ΄Β ΄ήΐΗ ΑΦΌφΈ¦ ΉέΘ―";
+        Text[ korean ] = "ΐΤ·ΒµΘ ³―Β¥ΏΝ °ό·Γ,³βΐΗ ΑΦ ΌφΈ¦ °αΑ¤";
         Text[ turkish ] = "Girilen tarihe gφre yύlύn hafta sayύsύnύ bulur";
     };
 
