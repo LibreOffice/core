@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 17:00:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,8 @@ public:
 };
 
 SbiInputDialog::SbiInputDialog( Window* pParent, const String& rPrompt )
-            :ModalDialog( pParent, WB_SVLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
-             aInput( this, WB_SVLOOK | WB_LEFT | WB_BORDER ),
+            :ModalDialog( pParent, WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
+             aInput( this, WB_3DLOOK | WB_LEFT | WB_BORDER ),
              aOk( this ), aCancel( this )
 {
     SetText( rPrompt );
@@ -967,10 +967,10 @@ void SbiIoSystem::Shutdown()
     {
         String aOutStr( aOut, gsl_getSystemTextEncoding() );
 #if defined GCC
-        Window* pParent = Application::GetDefModalDialogParent();
+        Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), String(), aOutStr ).Execute();
 #else
-        MessBox( GetpApp()->GetDefModalDialogParent(), WinBits( WB_OK ), String(), aOutStr ).Execute();
+        MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), String(), aOutStr ).Execute();
 #endif
     }
     aOut.Erase();
@@ -1093,7 +1093,7 @@ void SbiIoSystem::WriteCon( const ByteString& rText )
         String aStr( s, gsl_getSystemTextEncoding() );
         {
             vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-            if( !MessBox( GetpApp()->GetDefModalDialogParent(),
+            if( !MessBox( GetpApp()->GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                         String(), aStr ).Execute() )
                 nError = SbERR_USER_ABORT;
