@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpreader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-12 08:03:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,12 +342,18 @@ void HwpReader::makeMeta()
             year = (pDate[0]-0x30) * 1000 + (pDate[1]-0x30) * 100 +
                 (pDate[2]-0x30) * 10 + (pDate[3]-0x30);
         }
+        else {
+            year = 0;
+        }
         if( ISNUMBER( pDate[6] ))
         {
             if( ISNUMBER( pDate[7] ) )
                 month = (pDate[6] - 0x30) * 10 + (pDate[6+ ++gab]-0x30);
             else
                 month = (pDate[6] - 0x30);
+        }
+        else {
+            month = 0;
         }
         if( ISNUMBER( pDate[9 + gab] ) )
         {
@@ -356,6 +362,9 @@ void HwpReader::makeMeta()
             else
                 day = (pDate[9+gab]-0x30);
         }
+        else {
+            day = 0;
+        }
         if( ISNUMBER( pDate[17 + gab] ) )
         {
             if( ISNUMBER( pDate[18 + gab]))
@@ -363,12 +372,18 @@ void HwpReader::makeMeta()
             else
                 hour = (pDate[17+gab]-0x30);
         }
+        else {
+            hour = 0;
+        }
         if( ISNUMBER( pDate[20 + gab] ) )
         {
             if( ISNUMBER( pDate[21 + gab]))
                 minute = ( pDate[20 + gab] - 0x30 ) * 10 + (pDate[20+ ++gab]-0x30);
             else
                 minute = (pDate[20+gab]-0x30);
+        }
+        else {
+            minute = 0;
         }
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
@@ -3352,7 +3367,8 @@ void HwpReader::makeDateFormat(DateCode * hbox)
     rstartEl(ascii("number:date-style"), rList);
     pList->clear();
 
-    bool is_pm, add_zero;
+    bool is_pm;
+    bool add_zero = false;
     int zero_check = 0, i=0;
     hbox->format[DATE_SIZE -1] = 0;
 
