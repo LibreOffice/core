@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 18:29:44 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
-#ifndef _CRSRSH_HXX
-#include <crsrsh.hxx>
+#ifndef _FESH_HXX
+#include "fesh.hxx"
 #endif
 
 
@@ -349,8 +349,14 @@ SwPaM* SwAccessibleParagraph::GetCrsr()
     SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
     if( pCrsrShell != NULL )
     {
-        // get the selection, and test whether it affects our text node
-        pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
+        SwFEShell *pFESh = pCrsrShell->ISA( SwFEShell )
+                            ? static_cast< SwFEShell * >( pCrsrShell ) : 0;
+        if( !pFESh ||
+            !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
+        {
+            // get the selection, and test whether it affects our text node
+            pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
+        }
     }
 
     return pCrsr;
@@ -389,9 +395,6 @@ void SwAccessibleParagraph::GetStates(
     // MULTILINE
     rStateSet.AddState( AccessibleStateType::MULTILINE );
 
-    // SELECTABLE
-    rStateSet.AddState( AccessibleStateType::SELECTABLE );
-
     // FOCUSABLE
     rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
@@ -404,10 +407,8 @@ void SwAccessibleParagraph::GetStates(
         rStateSet.AddState( AccessibleStateType::FOCUSED );
         ASSERT( -1 != nOldCaretPos, "caret pos invalid" );
         ::vos::ORef < SwAccessibleContext > xThis( this );
-        GetMap()->SetCaretContext( xThis );
+        GetMap()->SetCursorContext( xThis );
     }
-
-    // TODO: SELECTED
 }
 
 void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
@@ -465,7 +466,7 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
     }
 }
 
-void SwAccessibleParagraph::_InvalidateCaretPos()
+void SwAccessibleParagraph::_InvalidateCursorPos()
 {
     // The text is changed
     sal_Int32 nNew = GetCaretPos();
@@ -480,7 +481,7 @@ void SwAccessibleParagraph::_InvalidateCaretPos()
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
         ::vos::ORef < SwAccessibleContext > xThis( this );
-        GetMap()->SetCaretContext( xThis );
+        GetMap()->SetCursorContext( xThis );
     }
 
     if( nOld != nNew )
@@ -528,10 +529,10 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
     delete pPortionData;
 }
 
-sal_Bool SwAccessibleParagraph::HasFocus()
+sal_Bool SwAccessibleParagraph::HasCursor()
 {
     vos::OGuard aGuard( aMutex );
-    return nOldCaretPos != 1;
+    return nOldCaretPos != -1;
 }
 
 void SwAccessibleParagraph::UpdatePortionData()
@@ -821,9 +822,9 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 
     // get cursor shell
     SwCrsrShell *pCrsrSh = GetCrsrShell();
-    SwPaM *pCrsr = pCrsrSh ? pCrsrSh->GetCrsr( sal_False ) : 0;
+    SwPaM *pCrsr = GetCrsr();
     SwTxtNode* pTxtNd = const_cast<SwTxtNode*>( GetTxtNode() );
-    if( pCrsrSh != 0 && pCrsr != 0 && pTxtNd != 0 &&
+    if( pCrsrSh != 0 && pTxtNd != 0 && pCrsr != 0 &&
          pCrsr->GetPoint()->nNode.GetIndex() != pTxtNd->GetIndex() )
     {
         // create pam for selection
@@ -948,7 +949,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     if( -1 != nRet )
     {
         ::vos::ORef < SwAccessibleContext > xThis( this );
-        GetMap()->SetCaretContext( xThis );
+        GetMap()->SetCursorContext( xThis );
     }
 
     return nRet;

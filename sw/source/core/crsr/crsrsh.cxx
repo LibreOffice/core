@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:58:46 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1485,7 +1485,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
 #ifdef ACCESSIBLE_LAYOUT
     if( pFrm && Imp()->IsAccessible() )
-        Imp()->InvalidateAccessibleCaretPosition( pFrm );
+        Imp()->InvalidateAccessibleCursorPosition( pFrm );
 #endif
 
     if( bSVCrsrVis )

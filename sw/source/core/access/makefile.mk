@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mib $ $Date: 2002-03-06 08:14:51 $
+#   last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,22 +89,36 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 SLOFILES =	\
         $(SLO)$/acccontext.obj \
         $(SLO)$/accdoc.obj \
+        $(SLO)$/accembedded.obj \
         $(SLO)$/accfootnote.obj \
         $(SLO)$/accframe.obj \
+        $(SLO)$/accframebase.obj \
+        $(SLO)$/accfrmobjmap.obj \
+        $(SLO)$/accfrmobjslist.obj \
+        $(SLO)$/accgraphic.obj \
         $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
+        $(SLO)$/accnotextframe.obj \
         $(SLO)$/accpara.obj \
-        $(SLO)$/accportions.obj
+        $(SLO)$/accportions.obj \
+        $(SLO)$/acctextframe.obj
 
 EXCEPTIONSFILES=	\
         $(SLO)$/acccontext.obj \
         $(SLO)$/accdoc.obj \
+        $(SLO)$/accembedded.obj \
         $(SLO)$/accfootnote.obj \
         $(SLO)$/accframe.obj \
+        $(SLO)$/accframebase.obj \
+        $(SLO)$/accfrmobjmap.obj \
+        $(SLO)$/accfrmobjslist.obj \
+        $(SLO)$/accgraphic.obj \
         $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
+        $(SLO)$/accnotextframe.obj \
         $(SLO)$/accpara.obj \
-        $(SLO)$/accportions.obj
+        $(SLO)$/accportions.obj \
+        $(SLO)$/acctextframe.obj
 
 # --- Targets -------------------------------------------------------
 

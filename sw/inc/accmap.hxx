@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:56:53 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ class SwAccessibleMap
     static void FireEvent( const SwAccessibleEvent_Impl& rEvent );
     void AppendEvent( const SwAccessibleEvent_Impl& rEvent );
 
-    void InvalidateCaretPosition(
+    void InvalidateCursorPosition(
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>& rAcc );
 
@@ -131,16 +131,16 @@ public:
 
     void RemoveContext( const SwFrm *pFrm );
 
-    void DisposeFrm( const SwFrm *pFrm );
+    void DisposeFrm( const SwFrm *pFrm, sal_Bool bRecursive=sal_False );
 
     void MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
 
     void InvalidateFrmContent( const SwFrm *pFrm );
 
-    void InvalidateCaretPosition( const SwFrm *pFrm );
+    void InvalidateCursorPosition( const SwFrm *pFrm );
 
-    void SetCaretContext(
-        const ::vos::ORef < SwAccessibleContext >& rCaretContext );
+    void SetCursorContext(
+        const ::vos::ORef < SwAccessibleContext >& rCursorContext );
 
     void InvalidateStates( sal_uInt8 nStates );
 

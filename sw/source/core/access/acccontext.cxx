@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,13 @@ void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
     xWeakParent = xParent;
 }
 
+Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
+{
+    vos::OGuard aGuard( aMutex );
+
+    Reference< XAccessible > xParent( xWeakParent );
+    return xParent;
+}
 
 sal_Bool SwAccessibleContext::ChildScrolledIn( const SwFrm *pFrm )
 {
@@ -389,16 +396,14 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    bDisposing = sal_True;
+
     // dispose children
     if( bRecursive )
         DisposeChildren( bRecursive );
 
     // get parent
-    Reference< XAccessible > xParent;
-    {
-        vos::OGuard aGuard( aMutex );
-        xParent = xWeakParent;
-    }
+    Reference< XAccessible > xParent( GetWeakParent() );
     Reference < XAccessibleContext > xThis( this );
 
     // send child event at parent
@@ -436,6 +441,8 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         GetMap()->RemoveContext( GetFrm() );
     ClearFrm();
     pMap = 0;
+
+    bDisposing = sal_False;
 }
 
 void SwAccessibleContext::PosChanged()
@@ -500,11 +507,11 @@ void SwAccessibleContext::InvalidateContent()
     _InvalidateContent( sal_False );
 }
 
-void SwAccessibleContext::InvalidateCaretPos()
+void SwAccessibleContext::InvalidateCursorPos()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    _InvalidateCaretPos();
+    _InvalidateCursorPos();
 }
 
 void SwAccessibleContext::SetVisArea( const Rectangle& rNewVisArea )
@@ -578,7 +585,7 @@ void SwAccessibleContext::_InvalidateContent( sal_Bool )
 {
 }
 
-void SwAccessibleContext::_InvalidateCaretPos()
+void SwAccessibleContext::_InvalidateCursorPos()
 {
 }
 
@@ -626,7 +633,7 @@ Window *SwAccessibleContext::GetWindow()
     return pWin;
 }
 
-sal_Bool SwAccessibleContext::HasFocus()
+sal_Bool SwAccessibleContext::HasCursor()
 {
     return sal_False;
 }
@@ -649,7 +656,8 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     aAccessibleEventListeners( aListenerMutex ),
     aFocusListeners( aListenerMutex ),
     pMap( pM ),
-    nRole( nR )
+    nRole( nR ),
+    bDisposing( sal_False )
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -664,7 +672,8 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     aAccessibleEventListeners( aListenerMutex ),
     aFocusListeners( aListenerMutex ),
     pMap( pM ),
-    nRole( nR )
+    nRole( nR ),
+    bDisposing( sal_False )
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -687,14 +696,14 @@ Reference< XAccessibleContext > SAL_CALL
     return xRet;
 }
 
-long SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
+sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount( void )
         throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    return GetChildCount();
+    return bDisposing ? 0 : GetChildCount();
 }
 
 Reference< XAccessible> SAL_CALL
@@ -706,8 +715,8 @@ Reference< XAccessible> SAL_CALL
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    const SwFrm *pChild = GetChild( nIndex );
-    if( 0 == pChild )
+    const SwFrmOrObj aChild( GetChild( nIndex ) );
+    if( !aChild.IsValid() )
     {
         Reference < XAccessibleContext > xThis( this );
         IndexOutOfBoundsException aExcept(
@@ -716,10 +725,21 @@ Reference< XAccessible> SAL_CALL
         throw aExcept;
     }
 
-    ::vos::ORef < SwAccessibleContext > xChildImpl(
-            GetMap()->GetContextImpl( pChild )  );
-    xChildImpl->SetParent( this );
-    Reference< XAccessible > xChild( xChildImpl.getBodyPtr() );
+    Reference< XAccessible > xChild;
+    if( aChild.GetSwFrm() )
+    {
+        ::vos::ORef < SwAccessibleContext > xChildImpl(
+                GetMap()->GetContextImpl( aChild.GetSwFrm(), !bDisposing )  );
+        if( xChildImpl.isValid() )
+        {
+            xChildImpl->SetParent( this );
+            xChild = xChildImpl.getBodyPtr();
+        }
+    }
+    else
+    {
+        // TODO: SdrObjects
+    }
 
     return xChild;
 }
@@ -732,17 +752,13 @@ Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (void)
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     const SwFrm *pUpper = GetParent();
-    ASSERT( pUpper, "no upper found" );
+    ASSERT( pUpper != 0 || bDisposing, "no upper found" );
 
     Reference< XAccessible > xAcc;
     if( pUpper )
-        xAcc = GetMap()->GetContext( pUpper );
+        xAcc = GetMap()->GetContext( pUpper, !bDisposing );
 
-    ASSERT( xAcc.is(), "no parent found" );
-    if( !xAcc.is() )
-    {
-        THROW_RUNTIME_EXCEPTION( XAccessibleContext, "parent missing" );
-    }
+    ASSERT( xAcc.is() || bDisposing, "no parent found" );
 
     // Remember the parent as weak ref.
     {
@@ -761,21 +777,17 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleIndexInParent (void)
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
     const SwFrm *pUpper = GetParent();
-    ASSERT( pUpper, "no upper found" );
+    ASSERT( pUpper != 0 || bDisposing, "no upper found" );
 
     sal_Int32 nIndex = -1;
     if( pUpper )
     {
         ::vos::ORef < SwAccessibleContext > xAccImpl(
-            GetMap()->GetContextImpl( pUpper )  );
-        ASSERT( xAccImpl.isValid(), "no parent found" );
+            GetMap()->GetContextImpl( pUpper, !bDisposing )  );
+        ASSERT( xAccImpl.isValid() || bDisposing, "no parent found" );
         if( xAccImpl.isValid() )
             nIndex = xAccImpl->GetChildIndex( GetFrm() );
     }
-//  if( -1 == nIndex )
-//  {
-//      THROW_RUNTIME_EXCEPTION( XAccessibleContext, "child not contained in parent" );
-//  }
 
     return nIndex;
 }
@@ -882,9 +894,15 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
     Point aLogPoint( pWin->PixelToLogic( aPixPoint ) ); // twip rel to doc root
 
-    const SwFrm *pFrm = GetChildAt( aLogPoint );
-    if( pFrm )
-        xAcc = GetMap()->GetContext( pFrm );
+    const SwFrmOrObj aChild( GetChildAt( aLogPoint ) );
+    if( aChild.GetSwFrm() )
+    {
+        xAcc = GetMap()->GetContext( aChild.GetSwFrm() );
+    }
+    else if( aChild.GetSdrObject() )
+    {
+        // TODO: SdrObjects
+    }
 
     return xAcc;
 }

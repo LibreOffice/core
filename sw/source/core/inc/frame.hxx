@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:36:47 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ struct SwCrsrMoveState;
 #define FRM_CNTNT       0xC000
 #define FRM_FTNBOSS     0x0006
 #ifdef ACCESSIBLE_LAYOUT
-#define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT)
+#define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_FTN|FRM_TXT|FRM_ROOT|FRM_FLY)
 #endif
 
         //Weils so schon ist das ganze als Bitfeld....

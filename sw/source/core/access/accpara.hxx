@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 15:23:20 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,13 +148,12 @@ public:
 protected:
 
     // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets MULTILINE(1), SELECTABLE(1) and
-    // SELECTED(0/1)
+    // This drived class additinaly sets MULTILINE(1)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
-    virtual void _InvalidateCaretPos();
+    virtual void _InvalidateCursorPos();
 
     virtual ~SwAccessibleParagraph();
 
@@ -219,7 +218,7 @@ public:
     SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
                            const SwTxtFrm *pTxtFrm );
 
-    sal_Bool HasFocus();    // required by map to remember that object
+    virtual sal_Bool HasCursor();   // required by map to remember that object
 
     //=====  XAccessibleContext  ==============================================
 

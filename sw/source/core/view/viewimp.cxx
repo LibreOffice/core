@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:53:04 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:11:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ void SwViewImp::UpdateAccessible()
         GetAccessibleMap().GetDocumentView();
 }
 
-void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm )
+void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm, sal_Bool bRecursive )
 {
     ASSERT( pFrm->IsAccessibleFrm(), "frame is not accessible" );
     ViewShell *pVSh = GetShell();
@@ -400,7 +400,7 @@ void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm )
     do
     {
         if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().DisposeFrm( pFrm );
+            pTmp->Imp()->GetAccessibleMap().DisposeFrm( pFrm, bRecursive );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
@@ -431,11 +431,10 @@ void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
     } while ( pTmp != pVSh );
 }
 
-void SwViewImp::InvalidateAccessibleCaretPosition( const SwFrm *pFrm )
+void SwViewImp::InvalidateAccessibleCursorPosition( const SwFrm *pFrm )
 {
-    ASSERT( pFrm->IsAccessibleFrm(), "frame is not accessible" );
     if( IsAccessible() )
-        GetAccessibleMap().InvalidateCaretPosition( pFrm );
+        GetAccessibleMap().InvalidateCursorPosition( pFrm );
 }
 
 void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells )

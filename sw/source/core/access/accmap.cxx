@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 11:28:07 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,17 @@
 #ifndef _ACCFOOTNOTE_HXX
 #include <accfootnote.hxx>
 #endif
-#ifndef _VIEWSH_HXX
-#include <viewsh.hxx>
+#ifndef _ACCTEXTFRAME_HXX
+#include <acctextframe.hxx>
+#endif
+#ifndef _ACCGRAPHIC_HXX
+#include <accgraphic.hxx>
+#endif
+#ifndef _ACCEMBEDDED_HXX
+#include <accembedded.hxx>
+#endif
+#ifndef _FESH_HXX
+#include "fesh.hxx"
 #endif
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
@@ -106,6 +115,9 @@
 #endif
 #ifndef _FTNFRM_HXX
 #include <ftnfrm.hxx>
+#endif
+#ifndef _NDTYP_HXX
+#include <ndtyp.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -130,7 +142,7 @@ public:
 #ifndef PRODUCT
     sal_Bool bLocked;
 #endif
-    WeakReference < XAccessible > xCaretContext;
+    WeakReference < XAccessible > xCursorContext;
 
     SwAccessibleContextMap_Impl()
 #ifndef PRODUCT
@@ -193,7 +205,7 @@ public:
     inline const SwFrm *GetFrm() const { return pFrm; }
 
     inline void SetStates( sal_uInt8 nSt ) { nStates |= nSt; }
-    inline sal_Bool IsUpdateCaretPos() const { return (nStates & ACC_STATE_CARET) != 0; }
+    inline sal_Bool IsUpdateCursorPos() const { return (nStates & ACC_STATE_CARET) != 0; }
     inline sal_Bool IsCheckStates() const { return (nStates & ACC_STATE_MASK) != 0; }
     inline sal_uInt8 GetStates() const { return nStates & ACC_STATE_MASK; }
     inline sal_uInt8 GetAllStates() const { return nStates; }
@@ -264,8 +276,23 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         vos::OGuard aGuard( aMutex );
+#ifndef PRODUCT
         ASSERT( !pMap || pMap->empty(),
                 "Map should be empty after disposing the root frame" );
+        if( pMap )
+        {
+            SwAccessibleContextMap_Impl::iterator aIter = pMap->begin();
+            while( aIter != pMap->end() )
+            {
+                Reference < XAccessible > xTmp = (*aIter).second;
+                if( xTmp.is() )
+                {
+                    SwAccessibleContext *pTmp =
+                        static_cast< SwAccessibleContext * >( xTmp.get() );
+                }
+            }
+        }
+#endif
         delete pMap;
         pMap = 0;
     }
@@ -402,15 +429,15 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
         }
         if( SwAccessibleEvent_Impl::DISPOSE != rEvent.GetType() )
         {
-            if( rEvent.IsUpdateCaretPos() )
-                xAccImpl->InvalidateCaretPos();
+            if( rEvent.IsUpdateCursorPos() )
+                xAccImpl->InvalidateCursorPos();
             if( rEvent.IsCheckStates() )
                 xAccImpl->CheckStates( rEvent.GetStates() );
         }
     }
 }
 
-void SwAccessibleMap::InvalidateCaretPosition(
+void SwAccessibleMap::InvalidateCursorPosition(
         const Reference< XAccessible >& rAcc )
 {
     SwAccessibleContext *pAccImpl =
@@ -426,7 +453,7 @@ void SwAccessibleMap::InvalidateCaretPosition(
     }
     else
     {
-        pAccImpl->InvalidateCaretPos();
+        pAccImpl->InvalidateCursorPos();
     }
 }
 
@@ -493,7 +520,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                                      sal_Bool bCreate )
 {
     Reference < XAccessible > xAcc;
-    Reference < XAccessible > xOldCaretAcc;
+    Reference < XAccessible > xOldCursorAcc;
 
     {
         vos::OGuard aGuard( aMutex );
@@ -534,6 +561,24 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                     pFtnFrm );
                     }
                     break;
+                case FRM_FLY:
+                    {
+                        const SwFlyFrm *pFlyFrm =
+                            static_cast < const SwFlyFrm * >( pFrm );
+                        switch( SwAccessibleFrameBase::GetNodeType( pFlyFrm ) )
+                        {
+                        case ND_GRFNODE:
+                            pAcc = new SwAccessibleGraphic( this, pFlyFrm );
+                            break;
+                        case ND_OLENODE:
+                            pAcc = new SwAccessibleEmbeddedObject( this, pFlyFrm );
+                            break;
+                        default:
+                            pAcc = new SwAccessibleTextFrame( this, pFlyFrm );
+                            break;
+                        }
+                    }
+                    break;
                 }
                 xAcc = pAcc;
 
@@ -550,7 +595,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         pMap->insert( aEntry );
                     }
 
-                    if( pAcc->HasFocus() )
+                    if( pAcc->HasCursor() )
                     {
                         // If the new context has the focus, and if we know
                         // another context that had the focus, then the focus
@@ -566,8 +611,8 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // the new context as the one that has the focus
                         // currently.
 
-                        xOldCaretAcc = pMap->xCaretContext;
-                        pMap->xCaretContext = xAcc;
+                        xOldCursorAcc = pMap->xCursorContext;
+                        pMap->xCursorContext = xAcc;
                     }
                 }
             }
@@ -575,8 +620,8 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     }
 
     // Invalidate focus for old object when map is not locked
-    if( xOldCaretAcc.is() )
-        InvalidateCaretPosition( xOldCaretAcc );
+    if( xOldCursorAcc.is() )
+        InvalidateCursorPosition( xOldCursorAcc );
 
     return xAcc;
 }
@@ -606,7 +651,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
             pMap->erase( aIter );
 
             // Remove reference to old caret object
-            Reference < XAccessible > xOldAcc( pMap->xCaretContext );
+            Reference < XAccessible > xOldAcc( pMap->xCursorContext );
             if( xOldAcc.is() )
             {
                 SwAccessibleContext *pOldAccImpl =
@@ -615,7 +660,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
                 if( pOldAccImpl->GetFrm() == pFrm )
                 {
                     xOldAcc.clear();    // get an empty ref
-                    pMap->xCaretContext = xOldAcc;
+                    pMap->xCursorContext = xOldAcc;
                 }
             }
 
@@ -628,7 +673,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
     }
 }
 
-void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm )
+void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm, sal_Bool bRecursive )
 {
     if( pFrm->IsAccessibleFrm() )
     {
@@ -665,7 +710,7 @@ void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm )
         {
             SwAccessibleContext *pAccImpl =
                 static_cast< SwAccessibleContext *>( xAcc.get() );
-            pAccImpl->Dispose();
+            pAccImpl->Dispose( bRecursive );
         }
     }
 }
@@ -692,13 +737,11 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
                 {
                     // Otherwise we look if the parent is accessible.
                     // If not, there is nothing to do.
-                    const SwLayoutFrm *pUpper = pFrm->GetUpper();
-                    while( pUpper && !pUpper->IsAccessibleFrm() )
-                        pUpper = pUpper->GetUpper();
+                    const SwFrm *pParent = SwAccessibleFrame::GetParent( pFrm );
 
-                    if( pUpper )
+                    if( pParent )
                     {
-                        aIter = pMap->find( pUpper );
+                        aIter = pMap->find( pParent );
                         if( aIter != pMap->end() )
                         {
                             xParentAcc = (*aIter).second;
@@ -710,6 +753,8 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
 
         if( xAcc.is() )
         {
+            ASSERT( !rOldFrm.IsEmpty(),
+                    "new context has already a size" );
             SwAccessibleContext *pAccImpl =
                 static_cast< SwAccessibleContext *>( xAcc.get() );
             if( GetShell()->ActionPend() )
@@ -778,45 +823,61 @@ void SwAccessibleMap::InvalidateFrmContent( const SwFrm *pFrm )
     }
 }
 
-void SwAccessibleMap::InvalidateCaretPosition( const SwFrm *pFrm )
+void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
 {
-    ASSERT( pFrm->IsAccessibleFrm(),
-            "Unnecessary call to InvalidateCaretPosition" );
-
-    if( pFrm->IsAccessibleFrm() )
+    ViewShell *pVSh = GetShell();
+    if( pVSh->ISA( SwFEShell ) )
     {
-        Reference < XAccessible > xOldAcc;
-        Reference < XAccessible > xAcc;
-
+        sal_uInt16 nObjCount;
+        SwFEShell *pFESh = static_cast< SwFEShell * >( pVSh );
+        const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
+        if( pFlyFrm )
         {
-            vos::OGuard aGuard( aMutex );
+            pFrm = pFlyFrm;
+        }
+        else if( (nObjCount = pFESh->IsObjSelected()) > 0 )
+        {
+            pFrm = 0;
+        }
+    }
 
-            if( pMap )
+    ASSERT( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
+
+    Reference < XAccessible > xOldAcc;
+    Reference < XAccessible > xAcc;
+
+    {
+        vos::OGuard aGuard( aMutex );
+
+        if( pMap )
+        {
+            xOldAcc = pMap->xCursorContext;
+            pMap->xCursorContext = xAcc;    // clear reference
+
+            if( pFrm && pFrm->IsAccessibleFrm() )
             {
-                xOldAcc = pMap->xCaretContext;
-                pMap->xCaretContext = xAcc; // clear reference
-
                 SwAccessibleContextMap_Impl::iterator aIter =
                     pMap->find( pFrm );
                 if( aIter != pMap->end() )
                     xAcc = (*aIter).second;
             }
         }
-        if( xOldAcc.is() && xOldAcc != xAcc )
-            InvalidateCaretPosition( xOldAcc );
-        if( xAcc.is() )
-            InvalidateCaretPosition( xAcc );
     }
+
+    if( xOldAcc.is() && xOldAcc != xAcc )
+        InvalidateCursorPosition( xOldAcc );
+    if( xAcc.is() )
+        InvalidateCursorPosition( xAcc );
 }
 
-void SwAccessibleMap::SetCaretContext(
-        const ::vos::ORef < SwAccessibleContext >& rCaretContext )
+void SwAccessibleMap::SetCursorContext(
+        const ::vos::ORef < SwAccessibleContext >& rCursorContext )
 {
     vos::OGuard aGuard( aMutex );
     if( pMap )
     {
-        Reference < XAccessible > xAcc( rCaretContext.getBodyPtr() );
-        pMap->xCaretContext = xAcc;
+        Reference < XAccessible > xAcc( rCursorContext.getBodyPtr() );
+        pMap->xCursorContext = xAcc;
     }
 }
 

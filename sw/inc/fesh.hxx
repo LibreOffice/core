@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 15:11:15 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,9 @@ public:
 
     SwFrmFmt* GetCurFrmFmt() const; //Wenn Rahmen, dann Rahmenvorlage, sonst 0
     void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 ); //Wenn Rahmen, dann Rahmenvorlage setzen
+#ifdef ACCESSIBLE_LAYOUT
+    const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
+#endif
 
     // finde/loeschen den Fly, in dem der Cursor steht
     SwFrmFmt* WizzardGetFly();

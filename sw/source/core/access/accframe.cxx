@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-19 12:49:27 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #pragma hdrstop
 
+
 #include <hintids.hxx>
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
@@ -85,6 +86,9 @@
 #ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
 #endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
 #endif
@@ -100,9 +104,6 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _DOCSH_HXX
-#include <docsh.hxx>
-#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
@@ -110,9 +111,16 @@
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
+#ifndef _ACCFRMOBJSLIST_HXX
+#include <accfrmobjslist.hxx>
+#endif
+#ifndef _ACCFRMOBJMAP_HXX
+#include <accfrmobjmap.hxx>
+#endif
 #ifndef _ACCFRAME_HXX
 #include <accframe.hxx>
 #endif
+
 
 // Regarding visibilily (or in terms of accessibility: regarding the showing
 // state): A frame is visible and therfor contained in the tree if its frame
@@ -122,110 +130,205 @@ sal_Int32 SwAccessibleFrame::GetChildCount( const Rectangle& rVisArea,
                                             const SwFrm *pFrm )
 {
     sal_Int32 nCount = 0;
-    const SwFrm *pLower = pFrm->GetLower();
-    while( pLower )
+
+    const SwFrmOrObjSList aList( pFrm );
+    SwFrmOrObjSList::const_iterator aIter( aList.begin() );
+    while( aIter != aList.end() )
     {
-        if( pLower->Frm().IsOver( rVisArea ) )
+        const SwFrmOrObj& rLower = *aIter;
+        if( rLower.GetBox().IsOver( rVisArea ) )
         {
-            if( pLower->IsAccessibleFrm() )
+            if( rLower.IsAccessible() )
+            {
                 nCount++;
-            else
-                nCount += GetChildCount( rVisArea, pLower );
+            }
+            else if( rLower.GetSwFrm() )
+            {
+                // There are no unaccessible SdrObjects that count
+                nCount += GetChildCount( rVisArea, rLower.GetSwFrm() );
+            }
         }
-        pLower = pLower->GetNext();
+        ++aIter;
     }
 
     return nCount;
 }
 
-const SwFrm *SwAccessibleFrame::GetChild( const Rectangle& rVisArea,
-                                         const SwFrm *pFrm,
-                                         sal_Int32& rPos )
+SwFrmOrObj SwAccessibleFrame::GetChild( const Rectangle& rVisArea,
+                                           const SwFrm *pFrm,
+                                           sal_Int32& rPos )
 {
-    const SwFrm *pDesc = 0;
+    SwFrmOrObj aRet;
 
     if( rPos >= 0 )
     {
-        const SwFrm *pLower = pFrm->GetLower();
-        while( pLower && !pDesc )
+        if( SwFrmOrObjMap::IsSortingRequired( pFrm ) )
         {
-            if( pLower->Frm().IsOver( rVisArea ) )
+            // We need a sorted list here
+            const SwFrmOrObjMap aVisMap( rVisArea, pFrm );
+            SwFrmOrObjMap::const_iterator aIter( aVisMap.begin() );
+            while( aIter != aVisMap.end() && !aRet.IsValid() )
             {
-                if( pLower->IsAccessibleFrm() )
+                const SwFrmOrObj& rLower = (*aIter).second;
+                if( rLower.IsAccessible() )
                 {
                     if( 0 == rPos )
-                        pDesc = pLower;
+                        aRet = rLower;
                     else
                         rPos--;
                 }
-                else
+                else if( rLower.GetSwFrm() )
                 {
-                    pDesc = GetChild( rVisArea, pLower, rPos );
+                    // There are no unaccessible SdrObjects that count
+                    aRet = GetChild( rVisArea, rLower.GetSwFrm(), rPos );
                 }
+                ++aIter;
             }
-            pLower = pLower->GetNext();
+        }
+        else
+        {
+            // The unsorted list is sorted enough, because it return lower
+            // frames in the correct order.
+            const SwFrmOrObjSList aVisList( rVisArea, pFrm );
+            SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
+            while( aIter != aVisList.end() && !aRet.IsValid() )
+            {
+                const SwFrmOrObj& rLower = *aIter;
+                if( rLower.IsAccessible() )
+                {
+                    if( 0 == rPos )
+                        aRet = rLower;
+                    else
+                        rPos--;
+                }
+                else if( rLower.GetSwFrm() )
+                {
+                    // There are no unaccessible SdrObjects that count
+                    aRet = GetChild( rVisArea, rLower.GetSwFrm(), rPos );
+                }
+                ++aIter;
+            }
         }
     }
 
-    return pDesc;
+    return aRet;
 }
 
 sal_Bool SwAccessibleFrame::GetChildIndex( const Rectangle& rVisArea,
-                                                 const SwFrm *pFrm,
-                                                  const SwFrm *pChild,
-                                                 sal_Int32& rPos )
+                                           const SwFrm *pFrm,
+                                           const SwFrmOrObj& rChild,
+                                           sal_Int32& rPos )
 {
-    const SwFrm *pLower = pFrm->GetLower();
     sal_Bool bFound = sal_False;
-    while( pLower && !bFound )
+
+    if( SwFrmOrObjMap::IsSortingRequired( pFrm ) )
     {
-        if( pLower->Frm().IsOver( rVisArea ) )
+        // We need a sorted list here
+        const SwFrmOrObjMap aVisMap( rVisArea, pFrm );
+        SwFrmOrObjMap::const_iterator aIter( aVisMap.begin() );
+        while( aIter != aVisMap.end() && !bFound )
         {
-            if( pLower->IsAccessibleFrm() )
+            const SwFrmOrObj& rLower = (*aIter).second;
+            if( rLower.IsAccessible() )
             {
-                if( pLower == pChild )
+                if( rChild == rLower )
                     bFound = sal_True;
                 else
                     rPos++;
             }
-            else
+            else if( rLower.GetSwFrm() )
             {
-                bFound = GetChildIndex( rVisArea, pLower, pChild, rPos );
+                // There are no unaccessible SdrObjects that count
+                bFound = GetChildIndex( rVisArea, rLower.GetSwFrm(), rChild, rPos );
             }
+            ++aIter;
         }
-        pLower = pLower->GetNext();
+    }
+    else
+    {
+        // The unsorted list is sorted enough, because it return lower
+        // frames in the correct order.
+        const SwFrmOrObjSList aVisList( rVisArea, pFrm );
+        SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
+        while( aIter != aVisList.end() && !bFound )
+        {
+            const SwFrmOrObj& rLower = *aIter;
+            if( rLower.IsAccessible() )
+            {
+                if( rChild == rLower )
+                    bFound = sal_True;
+                else
+                    rPos++;
+            }
+            else if( rLower.GetSwFrm() )
+            {
+                // There are no unaccessible SdrObjects that count
+                bFound = GetChildIndex( rVisArea, rLower.GetSwFrm(), rChild, rPos );
+            }
+            ++aIter;
+        }
     }
 
     return bFound;
 }
 
-const SwFrm *SwAccessibleFrame::GetChildAt(
-                                        const Rectangle& rVisArea,
-                                        const SwFrm *pFrm,
-                                        const Point& rPos )
+SwFrmOrObj SwAccessibleFrame::GetChildAt( const Rectangle& rVisArea,
+                                            const SwFrm *pFrm,
+                                            const Point& rPos )
 {
-    const SwFrm *pLower = pFrm->GetLower();
-    const SwFrm *pDesc = 0;
-    while( pLower && !pDesc )
+    SwFrmOrObj aRet;
+
+    if( SwFrmOrObjMap::IsSortingRequired( pFrm ) )
     {
-        // A frame is returned if it's frame size is inside the visarea
-        // and the positiion is inside the frame's paint area.
-        if( pFrm->Frm().IsOver( rVisArea ) )
+        // We need a sorted list here, and we have to reverse iterate,
+        // because objects in front should be returned.
+        const SwFrmOrObjMap aVisMap( rVisArea, pFrm );
+        SwFrmOrObjMap::const_reverse_iterator aRIter( aVisMap.rbegin() );
+        while( aRIter != aVisMap.rend() && !aRet.IsValid() )
         {
-            if( pLower->IsAccessibleFrm() )
+            const SwFrmOrObj& rLower = (*aRIter).second;
+            // A frame is returned if it's frame size is inside the visarea
+            // and the positiion is inside the frame's paint area.
+            if( rLower.IsAccessible() )
             {
-                if( pLower->PaintArea().IsInside( rPos ) )
-                    pDesc = pLower;
+                if( rLower.GetBounds().IsInside( rPos ) )
+                    aRet = rLower;
             }
-            else
+            else if( rLower.GetSwFrm() )
             {
-                pDesc = GetChildAt( rVisArea, pLower, rPos );
+                // There are no unaccessible SdrObjects that count
+                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos );
             }
+            aRIter++;
         }
-        pLower = pLower->GetNext();
+    }
+    else
+    {
+        // The unsorted list is sorted enough, because it returns lower
+        // frames in the correct order. Morover, we can iterate forward,
+        // because the lowers don't overlap!
+        const SwFrmOrObjSList aVisList( rVisArea, pFrm );
+        SwFrmOrObjSList::const_iterator aIter( aVisList.begin() );
+        while( aIter != aVisList.end() && !aRet.IsValid() )
+        {
+            const SwFrmOrObj& rLower = *aIter;
+            // A frame is returned if it's frame size is inside the visarea
+            // and the positiion is inside the frame's paint area.
+            if( rLower.IsAccessible() )
+            {
+                if( rLower.GetBounds().IsInside( rPos ) )
+                    aRet = rLower;
+            }
+            else if( rLower.GetSwFrm() )
+            {
+                // There are no unaccessible SdrObjects that count
+                aRet = GetChildAt( rVisArea, rLower.GetSwFrm(), rPos );
+            }
+            ++aIter;
+        }
     }
 
-    return pDesc;
+    return aRet;
 }
 
 void SwAccessibleFrame::MergeLowerBounds( SwRect& rBounds,
@@ -257,42 +360,52 @@ void SwAccessibleFrame::SetVisArea( const SwFrm *pFrm,
                                     const Rectangle& rNewVisArea,
                                     SwAccessibleFrame *pAcc )
 {
-    const SwFrm *pLower = pFrm->GetLower();
-    while( pLower )
+    const SwFrmOrObjSList aList( pFrm );
+    SwFrmOrObjSList::const_iterator aIter( aList.begin() );
+    while( aIter != aList.end() )
     {
-        SwRect aFrm( pLower->Frm() );
-        if( pLower->IsAccessibleFrm() )
+        const SwFrmOrObj& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        SwRect aFrm( rLower.GetBox() );
+        if( rLower.IsAccessible() )
         {
-            sal_Bool bUpdateLower = sal_False;
-            if( aFrm.IsOver( rNewVisArea ) )
+            if( pLower  )
             {
-                if( pAcc )
+                sal_Bool bUpdateLower = sal_False;
+                if( aFrm.IsOver( rNewVisArea ) )
                 {
-                    if( aFrm.IsOver( rOldVisArea ) )
-                        bUpdateLower = pAcc->ChildScrolled( pLower );
+                    if( pAcc )
+                    {
+                        if( aFrm.IsOver( rOldVisArea ) )
+                            bUpdateLower = pAcc->ChildScrolled( pLower );
+                        else
+                            bUpdateLower = pAcc->ChildScrolledIn( pLower );
+                    }
                     else
-                        bUpdateLower = pAcc->ChildScrolledIn( pLower );
+                        bUpdateLower = sal_True;
                 }
-                else
-                    bUpdateLower = sal_True;
+                else if( aFrm.IsOver( rOldVisArea ) )
+                {
+                    if( pAcc )
+                        bUpdateLower = pAcc->ChildScrolledOut( pLower );
+                    else
+                        bUpdateLower = sal_True;
+                }
+                if( bUpdateLower )
+                    SetVisArea( pLower, rOldVisArea, rNewVisArea  );
             }
-            else if( aFrm.IsOver( rOldVisArea ) )
+            else
             {
-                if( pAcc )
-                    bUpdateLower = pAcc->ChildScrolledOut( pLower );
-                else
-                    bUpdateLower = sal_True;
+                // TODO: SdrObjects
             }
-            if( bUpdateLower )
-                SetVisArea( pLower, rOldVisArea, rNewVisArea  );
         }
-        else if( aFrm.IsOver( rOldVisArea ) ||
-                 aFrm.IsOver( rNewVisArea ) )
+        else if( pLower && (aFrm.IsOver( rOldVisArea ) ||
+                              aFrm.IsOver( rNewVisArea )) )
         {
+            // There are no unaccessible SdrObjects that need to be notified
             SetVisArea( pLower, rOldVisArea, rNewVisArea, pAcc );
         }
-
-        pLower = pLower->GetNext();
+        ++aIter;
     }
 }
 
@@ -301,29 +414,39 @@ void SwAccessibleFrame::CheckStatesChildren( const SwFrm *pFrm,
                                              sal_uInt8 nStates,
                                               SwAccessibleFrame *pAcc )
 {
-    const SwFrm *pLower = pFrm->GetLower();
-    while( pLower )
+    const SwFrmOrObjSList aList( pFrm );
+    SwFrmOrObjSList::const_iterator aIter( aList.begin() );
+    while( aIter != aList.end() )
     {
-        SwRect aFrm( pLower->Frm() );
-        if( pLower->IsAccessibleFrm() )
+        const SwFrmOrObj& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        SwRect aFrm( rLower.GetBox() );
+        if( rLower.IsAccessible() )
         {
-            sal_Bool bCheckLower = sal_False;
-            if( aFrm.IsOver( rOldVisArea ) )
+            if( pLower )
             {
-                if( pAcc )
-                    bCheckLower = pAcc->CheckStatesChild( pLower, nStates );
-                else
-                    bCheckLower = sal_True;
+                sal_Bool bCheckLower = sal_False;
+                if( aFrm.IsOver( rOldVisArea ) )
+                {
+                    if( pAcc )
+                        bCheckLower = pAcc->CheckStatesChild( pLower, nStates );
+                    else
+                        bCheckLower = sal_True;
+                }
+                if( bCheckLower )
+                    CheckStatesChildren( pLower, rOldVisArea, nStates );
             }
-            if( bCheckLower )
-                CheckStatesChildren( pLower, rOldVisArea, nStates );
+            else
+            {
+                // TODO: SdrObjects
+            }
         }
-        else if( aFrm.IsOver( rOldVisArea ) )
+        else if( pLower && rLower.GetBox().IsOver( rOldVisArea ) )
         {
+            // There are no unaccessible SdrObjects that need to be notified
             CheckStatesChildren( pLower, rOldVisArea, nStates, pAcc );
         }
-
-        pLower = pLower->GetNext();
+        ++aIter;
     }
 }
 
@@ -332,29 +455,39 @@ void SwAccessibleFrame::DisposeChildren( const SwFrm *pFrm,
                                          sal_Bool bRecursive,
                                          SwAccessibleFrame *pAcc )
 {
-    const SwFrm *pLower = pFrm->GetLower();
-    while( pLower )
+    const SwFrmOrObjSList aList( pFrm );
+    SwFrmOrObjSList::const_iterator aIter( aList.begin() );
+    while( aIter != aList.end() )
     {
-        SwRect aFrm( pLower->Frm() );
-        if( pLower->IsAccessibleFrm() )
+        const SwFrmOrObj& rLower = *aIter;
+        const SwFrm *pLower = rLower.GetSwFrm();
+        SwRect aFrm( rLower.GetBox() );
+        if( rLower.IsAccessible() )
         {
-            sal_Bool bDisposeLower = sal_False;
-            if( aFrm.IsOver( rOldVisArea ) )
+            if( pLower )
             {
-                if( pAcc )
-                    bDisposeLower = pAcc->DisposeChild( pLower, bRecursive );
-                else
-                    bDisposeLower = sal_True;
+                sal_Bool bDisposeLower = sal_False;
+                if( aFrm.IsOver( rOldVisArea ) )
+                {
+                    if( pAcc )
+                        bDisposeLower = pAcc->DisposeChild( pLower, bRecursive );
+                    else
+                        bDisposeLower = sal_True;
+                }
+                if( bDisposeLower && bRecursive )
+                    DisposeChildren( pLower, rOldVisArea, bRecursive );
             }
-            if( bDisposeLower && bRecursive )
-                DisposeChildren( pLower, rOldVisArea, bRecursive );
+            else
+            {
+                // TODO: SdrObjects
+            }
         }
-        else if( aFrm.IsOver( rOldVisArea ) )
+        else if( pLower && aFrm.IsOver( rOldVisArea ) )
         {
+            // There are no unaccessible SdrObjects that need to be notified
             DisposeChildren( pLower, rOldVisArea, bRecursive, pAcc );
         }
-
-        pLower = pLower->GetNext();
+        ++aIter;
     }
 }
 
@@ -447,7 +580,7 @@ sal_Bool SwAccessibleFrame::IsOpaque( ViewShell *pVSh ) const
                 return sal_True;
         }
         if ( pFrm->IsFlyFrm() )
-            pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
+            pFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchor();
         else
             pFrm = pFrm->GetUpper();
     } while( pFrm && !pFrm->IsAccessibleFrm() );
@@ -466,13 +599,34 @@ SwAccessibleFrame::~SwAccessibleFrame()
 {
 }
 
-const SwFrm *SwAccessibleFrame::GetParent() const
+const SwFrm *SwAccessibleFrame::GetParent( const SwFrm *pFrm )
 {
-    const SwLayoutFrm *pUpper = pFrm->GetUpper();
-    while( pUpper && !pUpper->IsAccessibleFrm() )
-        pUpper = pUpper->GetUpper();
+    const SwFrm *pParent;
+    if ( pFrm->IsFlyFrm() )
+    {
+        const SwFlyFrm *pFly = static_cast< const SwFlyFrm *>( pFrm );
+        if( pFly->IsFlyInCntFrm() )
+        {
+            // For FLY_IN_CNTNT the parent is the anchor
+            pParent = pFly->GetAnchor();
+            ASSERT( !pParent || pParent->IsAccessibleFrm(),
+                    "parent is not accessible" );
+        }
+        else
+        {
+            // In any other case the parent is the root frm
+            pParent = pFly->FindRootFrm();
+        }
+    }
+    else
+    {
+        const SwLayoutFrm *pUpper = pFrm->GetUpper();
+        while( pUpper && !pUpper->IsAccessibleFrm() )
+            pUpper = pUpper->GetUpper();
+        pParent = pUpper;
+    }
 
-    return pUpper;
+    return pParent;
 }
 
 void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )

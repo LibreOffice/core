@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:54:23 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,16 +255,20 @@ public:
     void UpdateAccessible();
 
     // Remove a frame from the accessible view
-    void DisposeAccessibleFrm( const SwFrm *pFrm );
+    void DisposeAccessibleFrm( const SwFrm *pFrm,
+                               sal_Bool bRecursive=sal_False );
 
     // Move a frame's position in the accessible view
     void MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
+
+    // Add a frame in the accessible view
+    inline void AddAccessibleFrm( const SwFrm *pFrm );
 
     // Invalidate accessible frame's frame's content
     void InvalidateAccessibleFrmContent( const SwFrm *pFrm );
 
     // Invalidate accessible frame's cursor position
-    void InvalidateAccessibleCaretPosition( const SwFrm *pFrm );
+    void InvalidateAccessibleCursorPosition( const SwFrm *pFrm );
 
     // Invalidate editable state for all accessible frames
     void InvalidateAccessibleEditableState( sal_Bool bAllShells=sal_True );
@@ -306,6 +310,7 @@ inline const SwPageFrm *SwViewImp::GetFirstVisPage() const
     return pFirstVisPage;
 }
 
+#ifdef ACCESSIBLE_LAYOUT
 inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
 {
     if( !pAccMap )
@@ -314,6 +319,13 @@ inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
     return *pAccMap;
 }
 
+inline void SwViewImp::AddAccessibleFrm( const SwFrm *pFrm )
+{
+    SwRect aEmptyRect;
+    MoveAccessibleFrm( pFrm, aEmptyRect );
+}
+
+#endif
 
 #endif //_VIEWIMP_HXX
 

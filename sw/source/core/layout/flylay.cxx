@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-20 16:26:16 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,18 @@
 #include "ndole.hxx"
 #include "tabfrm.hxx"
 #include "flyfrms.hxx"
+
+#ifdef ACCESSIBLE_LAYOUT
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _VIEWIMP_HXX
+#include <viewimp.hxx>
+#endif
+#ifndef _FRMSH_HXX
+#include <frmsh.hxx>
+#endif
+#endif
 
 /*************************************************************************
 |*
@@ -600,6 +612,15 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
 
         ((SwFlyFreeFrm*)pNew)->SetPage( this );
         pNew->InvalidatePage( this );
+
+#ifdef ACCESSIBLE_LAYOUT
+        // Notify accessible layout. That's required at this place for
+        // frames only where the anchor is moved. Creation of new frames
+        // is additionally handled by the SwFrmNotify class.
+        if( GetShell() )
+            GetShell()->Imp()->AddAccessibleFrm( pNew );
+#endif
+
     }
 
     if( pNew->GetDrawObjs() )
@@ -647,6 +668,14 @@ void SwPageFrm::RemoveFly( SwFlyFrm *pToRemove )
     if ( pToRemove->IsFlyInCntFrm() )
         return;
 
+#ifdef ACCESSIBLE_LAYOUT
+    // Notify accessible layout. That's required at this place for
+    // frames only where the anchor is moved. Creation of new frames
+    // is additionally handled by the SwFrmNotify class.
+    if( GetShell() )
+        GetShell()->Imp()->DisposeAccessibleFrm( pToRemove, sal_True );
+#endif
+
     //Collections noch nicht loeschen. Das passiert am Ende
     //der Action im RemoveSuperfluous der Seite - angestossen von gleich-
     //namiger Methode der Root.
@@ -689,6 +718,14 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         return;
     }
 
+#ifdef ACCESSIBLE_LAYOUT
+    // Notify accessible layout. That's required at this place for
+    // frames only where the anchor is moved. Creation of new frames
+    // is additionally handled by the SwFrmNotify class.
+    if( GetShell() )
+        GetShell()->Imp()->DisposeAccessibleFrm( pToMove, sal_True );
+#endif
+
     //Die FlyColl kann bereits weg sein, weil der DTor der Seite
     //gerade 'laeuft'
     const SdrObjectPtr pObj = pToMove->GetVirtDrawObj();
@@ -710,6 +747,14 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     pToMove->InvalidatePage( pDest );
     pToMove->SetNotifyBack();
     pDest->InvalidateFlyCntnt();
+
+#ifdef ACCESSIBLE_LAYOUT
+    // Notify accessible layout. That's required at this place for
+    // frames only where the anchor is moved. Creation of new frames
+    // is additionally handled by the SwFrmNotify class.
+    if( GetShell() )
+        GetShell()->Imp()->AddAccessibleFrm( pToMove );
+#endif
 }
 
 /*************************************************************************

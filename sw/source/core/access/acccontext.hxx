@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@ class SwAccessibleContext :
 {
 protected:
 
-    ::osl::Mutex aListenerMutex;
-    ::vos::OMutex aMutex;
+    mutable ::osl::Mutex aListenerMutex;
+    mutable ::vos::OMutex aMutex;
 
 private:
 
@@ -140,6 +140,9 @@ private:
     sal_Bool bIsOpaqueState : 1;
     sal_Bool bIsDefuncState : 1;
 
+    // Are we currently disposing that object (protected by solar mutex)?
+    sal_Bool bDisposing : 1;
+
     void InitStates();
 
 protected:
@@ -147,6 +150,7 @@ protected:
     sal_Int16 GetRole() const { return nRole; }
 
     void SetParent( SwAccessibleContext *pParent );
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> GetWeakParent() const;
 
     void UpdateStateSet( sal_Bool bSetToDefunc=sal_False );
 
@@ -166,9 +170,9 @@ protected:
     virtual sal_Bool DisposeChild( const SwFrm *pFrm,
                                    sal_Bool bRecursive );
 
+public:
     void FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
-public:
     static ::rtl::OUString GetResource( sal_uInt16 nResId,
                                  const ::rtl::OUString *pArg1 = 0,
                                  const ::rtl::OUString *pArg2 = 0 );
@@ -181,7 +185,7 @@ protected:
 
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
-    virtual void _InvalidateCaretPos();
+    virtual void _InvalidateCursorPos();
 
     // broadcast visual data event
     void FireVisibleDataEvent();
@@ -357,7 +361,7 @@ public:
     void InvalidateContent();
 
     // The caretPos has changed
-    void InvalidateCaretPos();
+    void InvalidateCursorPos();
 
     // Scroll (update vis area)
     virtual void SetVisArea( const Rectangle& rNewVisArea );
@@ -367,7 +371,7 @@ public:
 
     const ::rtl::OUString& GetName() const { return sName; }
 
-    virtual sal_Bool HasFocus();    // required by map to remember that object
+    virtual sal_Bool HasCursor();   // required by map to remember that object
 };
 
 // some heaviliy used exception support
