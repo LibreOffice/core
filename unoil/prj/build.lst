@@ -1,6 +1,8 @@
 ul	unoil	::	offapi jurt NULL
 ul	unoil						usr1	-	all	ul_mkout NULL
 ul	unoil						nmake	-	all	ul_genall NULL
+ul	unoil\com\sun\star\accessibility    nmake	-	all	ul_accessibility ul_awt NULL
+ul	unoil\drafts\com\sun\star\accessibility\bridge    nmake	-	all	ul_accessbridge ul_accessibility NULL
 ul	unoil\com\sun\star\awt				nmake	-	all	ul_awt ul_dattrans_clip ul_dattrans_dnd NULL
 ul	unoil\com\sun\star\util				nmake	-	all	ul_cssutil ul_genall NULL
 ul	unoil\com\sun\star\frame			nmake	-	all	ul_frame ul_awt ul_cssutil ul_ucb NULL
@@ -44,7 +46,4 @@ ul	unoil\com\sun\star\view				nmake	-	all	ul_view ul_awt NULL
 ul	unoil\com\sun\star\ui				nmake	-	all	ul_ui ul_awt ul_view NULL
 ul	unoil\com\sun\star\xml				nmake	-	all	ul_xml ul_xml_sax ul_genall NULL
 ul	unoil\com\sun\star\xml\sax			nmake	-	all	ul_xml_sax ul_genall NULL
-ul	unoil\drafts\com\sun\star\accessibility		nmake	-	all	ul_accessibility ul_awt ul_awt_drafts NULL
-ul	unoil\drafts\com\sun\star\accessibility\bridge nmake	-	all	ul_accessbridge ul_accessibility NULL
-ul	unoil\drafts\com\sun\star\awt		nmake	-	all	ul_awt_drafts ul_awt NULL
-ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility ul_accessbridge ul_awt_drafts NULL
+ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility ul_accessbridge NULL
