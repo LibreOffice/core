@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2000-09-28 17:29:53 $
+ *  last change: $Author: mba $ $Date: 2000-10-05 17:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,10 @@ void UcbLockBytes::terminate_Impl()
     m_aInitialized.set();
     m_aTerminated.set();
 
-    m_aLinkList->Done();
+    if ( GetError() == ERRCODE_NONE && !xStream.is() )
+        SetError( ERRCODE_IO_NOTEXISTS );
+
+    m_aLinkList->Done( GetError() );
 }
 
 //----------------------------------------------------------------------------
@@ -636,12 +639,12 @@ void UCB_Link_Helper::SetCancelLink( const Link& rLink )
 }
 
 //----------------------------------------------------------------------------
-void UCB_Link_Helper::Done()
+void UCB_Link_Helper::Done( ErrCode nError )
 {
     ::vos::OGuard aGuard( maMutex );
 
     if ( maDoneLink.IsSet() )
-        maDoneLink.Call( 0 );
+        maDoneLink.Call( (void*) nError );
 }
 
 //----------------------------------------------------------------------------

@@ -16,6 +16,7 @@
 #include <vos/mutex.hxx>
 #include <tools/stream.hxx>
 #include <tools/link.hxx>
+#include <tools/errcode.hxx>
 
 class UCB_Link_Helper : public SvRefBase
 {
@@ -36,7 +37,7 @@ public:
     void            SetDataAvailLink( const Link& rLink );
     void            SetCancelLink( const Link& rLink );
 
-    void            Done();
+    void            Done( ErrCode nError );
     void            DataAvail();
     void            Cancel();
 
@@ -67,6 +68,8 @@ class UcbLockBytes : public virtual SvLockBytes
     sal_uInt32              m_nRead;
     sal_uInt32              m_nSize;
 
+    ErrCode                 m_nError;
+
     UCB_Link_HelperRef      m_aLinkList;
 
     DECL_LINK(              DataAvailHdl, void * );
@@ -87,6 +90,7 @@ public:
                                 , m_nRead (0)
                                 , m_nSize (0)
                                 , m_aLinkList( xLink )
+                                , m_nError( ERRCODE_NONE )
                             {}
 
     // SvLockBytes
@@ -96,6 +100,12 @@ public:
     virtual ErrCode         Flush (void) const;
     virtual ErrCode         SetSize (ULONG);
     virtual ErrCode         Stat ( SvLockBytesStat *pStat, SvLockBytesStatFlag) const;
+
+    void                    SetError( ErrCode nError )
+                            { m_nError = nError; }
+
+    ErrCode                 GetError() const
+                            { return m_nError; }
 
     void                    Cancel();
 
