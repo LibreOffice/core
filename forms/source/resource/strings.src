@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-20 16:16:17 $
+ *  last change: $Author: kz $ $Date: 2002-11-05 06:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
     Text[ turkish ] = "The contents of a combo box or list field could not be determined.";
     Text[ catalan ] = "No s'ha pogut determinar el contingut d'un camp de llista o quadre combinat.";
     Text[ finnish ] = "Yhdistelm�ruudun tai luettelokent�n sis�lt�� ei voitu m��ritt��.";
+    Text[ thai ] = "ไม่สามารถกำหนดเนื้อหาของกล่องคอมโบ้หรือเขตข้อมูลรายการได้";
 };
 
 String RID_STR_IMPORT_GRAPHIC
@@ -113,6 +114,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ turkish ] = "Insert graphics";
     Text[ catalan ] = "Insereix gr�fics";
     Text[ finnish ] = "Lis�� kuva";
+    Text[ thai ] = "แทรกกราฟิค";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_NAME
@@ -139,6 +141,7 @@ String RID_STR_CONTROL_SUBSTITUTED_NAME
     Text[ turkish ] = "substituted";
     Text[ catalan ] = "substitu�t";
     Text[ finnish ] = "korvattu";
+    Text[ thai ] = "แทน";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
@@ -165,6 +168,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ turkish ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
     Text[ catalan ] = "S'ha produ�t un error mentre aquest control es carregava. Per tant, s'ha reempla�at per un marcador.";
     Text[ finnish ] = "Ohjainta ladattaessa ilmeni virhe, joten ohjain korvattiin paikkamerkill�.";
+    Text[ thai ] = "เกิดข้อผิดพลาดขณะกำลังโหลดตัวควบคุม เนื่องจากมันถูกแทนที่ด้วยตำแหน่งวางวัตถุ";
 };
 
 String RID_STR_READERROR
@@ -192,6 +196,7 @@ String RID_STR_READERROR
     Text[ arabic ] = "��� ��� ����� ����� ������ �� ����� ��������";
     Text[ turkish ] = "Error reading data from database";
     Text[ catalan ] = "S'ha produ�t un error en llegir les dades de la base de dades";
+    Text[ thai ] = "อ่านข้อมูลจากฐานข้อมูลผิดพลาด";
 };
 
 String RID_STR_CONNECTERROR
@@ -219,6 +224,7 @@ String RID_STR_CONNECTERROR
     Text[ arabic ] = "����� ������� ����";
     Text[ turkish ] = "Connection failed";
     Text[ catalan ] = "La connexi� ha fallat";
+    Text[ thai ] = "การเชื่อมต่อล้มเหลว";
 };
 
 String RID_ERR_LOADING_FORM
@@ -245,6 +251,7 @@ String RID_ERR_LOADING_FORM
     Text[ turkish ] = "The data content could not be loaded.";
     Text[ catalan ] = "No s'ha pogut carregar el contingut de les dades.";
     Text[ finnish ] = "Tietosis�ll�n lataaminen ei onnistunut.";
+    Text[ thai ] = "ไม่สามารถโหลดเนื้อหาข้อมูลได้";
 };
 
 String RID_ERR_REFRESHING_FORM
@@ -272,6 +279,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ language_user1 ] = "The meaning here is 'refresh', not 'update'.";
     Text[ catalan ] = "No s'ha pogut actualitzar el contingut de les dades";
     Text[ finnish ] = "Tietosis�ll�n p�ivitt�minen ei onnistunut.";
+    Text[ thai ] = "ไม่สามารถปรับปรุงเนื้อหาข้อมูลได้";
 };
 
 String RID_STR_ERR_INSERTRECORD
@@ -298,6 +306,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ turkish ] = "Error inserting the new record";
     Text[ catalan ] = "S'ha produ�t un error en inserir el nou registre";
     Text[ finnish ] = "Virhe lis�tt�ess� uutta tietuetta";
+    Text[ thai ] = "แทรกระเบียนใหม่ผิดพลาด";
 };
 
 String RID_STR_ERR_UPDATERECORD
@@ -324,6 +333,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ turkish ] = "Error updating the current record";
     Text[ catalan ] = "S'ha produ�t un error en actualitzar el registre actual";
     Text[ finnish ] = "Virhe p�ivitett�ess� nykyist� tietuetta";
+    Text[ thai ] = "ปรับปรุงระเบียนปัจจุบันผิดพลาด";
 };
 
 String RID_STR_ERR_DELETERECORD
@@ -350,6 +360,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ turkish ] = "Error deleting the current record";
     Text[ catalan ] = "S'ha produ�t un error en suprimir el registre actual";
     Text[ finnish ] = "Virhe poistettaessa nykyist� tietuetta";
+    Text[ thai ] = "ลบระเบียนปัจจุบันผิดพลาด";
 };
 
 String RID_STR_ERR_DELETERECORDS
@@ -376,6 +387,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ turkish ] = "Error deleting the specified records";
     Text[ catalan ] = "S'ha produ�t un error en suprimir els registres indicats";
     Text[ finnish ] = "Virhe poistettaessa m��ritettyj� tietueita";
+    Text[ thai ] = "ลบระเบียนที่ระบุผิดพลาด";
 };
 
 String RID_STR_NEED_NON_NULL_OBJECT
@@ -391,7 +403,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ spanish ] = "El objeto no puede ser NULL.";
     Text[ finnish ] = "The object must not be NULL.";
     Text[ italian ] = "L'oggetto non deve essere NULL.";
-    Text[ danish ] = "The object must not be NULL.";
+    Text[ danish ] = "Objektet m� ikke v�re NUL.";
     Text[ swedish ] = "Objektet f�r inte vara NULL.";
     Text[ polish ] = "Obiekt nie mo�e by� r�wny ZERO.";
     Text[ portuguese_brazilian ] = "The object must not be NULL.";
@@ -402,6 +414,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text[ turkish ] = "The object must not be NULL.";
     Text[ arabic ] = "The object must not be NULL.";
     Text[ catalan ] = "L'objecte no pot ser NULL.";
+    Text[ thai ] = "วัตถุไม่สามารถเป็น NULL ได้";
 };
 
 String RID_STR_OPEN_GRAPHICS
@@ -417,7 +430,7 @@ String RID_STR_OPEN_GRAPHICS
     Text[ spanish ] = "Insertar imagen de...";
     Text[ finnish ] = "Insert graphics from...";
     Text[ italian ] = "Inserisci l'immagine da...";
-    Text[ danish ] = "Insert graphics from...";
+    Text[ danish ] = "Inds�t grafik fra...";
     Text[ swedish ] = "Infoga grafik fr�n...";
     Text[ polish ] = "Wstaw grafik� z...";
     Text[ portuguese_brazilian ] = "Insert graphics from...";
@@ -427,7 +440,8 @@ String RID_STR_OPEN_GRAPHICS
     Text[ chinese_traditional ] = "插入圖形從...";
     Text[ turkish ] = "Insert graphics from...";
     Text[ arabic ] = "Insert graphics from...";
-    Text[ catalan ] = "Insert graphics from...";
+    Text[ catalan ] = "Inserta un gr�fic des de...";
+    Text[ thai ] = "แทรกกราฟฟิคจาก...";
 };
 
 String RID_STR_CLEAR_GRAPHICS
@@ -443,7 +457,7 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ spanish ] = "Eliminar imagen";
     Text[ finnish ] = "Remove graphics";
     Text[ italian ] = "Elimina l'immagine";
-    Text[ danish ] = "Remove graphics";
+    Text[ danish ] = "Fjern grafik";
     Text[ swedish ] = "Ta bort grafik";
     Text[ polish ] = "Usu� grafik�";
     Text[ portuguese_brazilian ] = "Remove graphics";
@@ -453,7 +467,8 @@ String RID_STR_CLEAR_GRAPHICS
     Text[ chinese_traditional ] = "刪除圖形";
     Text[ turkish ] = "Remove graphics";
     Text[ arabic ] = "Remove graphics";
-    Text[ catalan ] = "Remove graphics";
+    Text[ catalan ] = "Elimina els gr�fics";
+    Text[ thai ] = "เอากราฟฟิคออก";
 };
 
 
