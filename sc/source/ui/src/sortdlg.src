@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:27:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~Sensível a maiúsculas/minúsculas" ;
+        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
         Text [ portuguese ] = "~Maiúsculas/Minúsculas" ;
         Text [ finnish ] = "Kirjainkoon ~erottelu" ;
         Text [ danish ] = "Forskel på store og små bogstaver" ;
@@ -407,7 +407,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "~XX headers" ;
         Text [ norwegian ] = "~XX topptekster" ;
         Text [ italian ] = "L'area contiene le intestazioni ~XX" ;
-        Text [ portuguese_brazilian ] = "~cabeçalhos XX" ;
+        Text [ portuguese_brazilian ] = "~cabe?alhos XX" ;
         Text [ portuguese ] = "Área contém XX ~cabeçalhos" ;
         Text [ finnish ] = "~Alue sisältää sarakeotsikkoja" ;
         Text [ danish ] = "Området indeholder XXoverskrifter" ;
@@ -436,7 +436,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "Source with ~column headers" ;
         Text [ norwegian ] = "Kilde med  ~kolonne topptekst" ;
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
-        Text [ portuguese_brazilian ] = "Fonte com ~cabeçalhos de colunas" ;
+        Text [ portuguese_brazilian ] = "Fonte com ~cabe?alhos de colunas" ;
         Text [ portuguese ] = "Área contém ~cabeçalhos de colunas" ;
         Text [ finnish ] = "Alue sisältää sarake~otsikkoja" ;
         Text [ danish ] = "Området indeholder kolonneoverskrifter" ;
@@ -464,7 +464,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "Source with ~row headers" ;
         Text [ norwegian ] = "Kilde med rad topptekst" ;
         Text [ italian ] = "Origine con intestazioni ~riga" ;
-        Text [ portuguese_brazilian ] = "Fonte com ~cabeçalhos de fileiras" ;
+        Text [ portuguese_brazilian ] = "Fonte com ~cabe?alhos de fileiras" ;
         Text [ portuguese ] = "Área contém ~cabeçalhos de linhas" ;
         Text [ finnish ] = "Alue sisältää ~riviotsikkoja" ;
         Text [ danish ] = "Området indeholder rækkeoverskrifter" ;
@@ -524,7 +524,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "Result destinat~ion area" ;
         Text [ norwegian ] = "Resultat målområde" ;
         Text [ italian ] = "Area destina~zione risultato" ;
-        Text [ portuguese_brazilian ] = "~Área de destino do resultado" ;
+        Text [ portuguese_brazilian ] = "~?rea de destino do resultado" ;
         Text [ portuguese ] = "~Copiar resultados da classificação para:" ;
         Text [ finnish ] = "~Kopioi lajittelutulokset:" ;
         Text [ danish ] = "Sorteringsresultat-output til" ;
@@ -570,7 +570,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "~Userdefined sort precedence" ;
         Text [ norwegian ] = "~Brukerdefinert sorteringsrekkefølge " ;
         Text [ italian ] = "Sequenza d'ordine ~definita dall'utente" ;
-        Text [ portuguese_brazilian ] = "~Precedência de ordenação definida pelo usuário" ;
+        Text [ portuguese_brazilian ] = "~Preced?ncia de ordena??o definida pelo usu?rio" ;
         Text [ portuguese ] = "Ordem de classificação definida pelo ~utilizador" ;
         Text [ finnish ] = "Mukautettu lajittelu~järjestys" ;
         Text [ danish ] = "Brugerdefineret sorteringsrækkefølge" ;
@@ -582,7 +582,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~O)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè, îïğåäåëåííûé ïîëüçîâàòåëåì";
-        Text[ polish ] = "Kolejnoœæ sortowania okreœlona przez u¿ytkownika";
+        Text[ polish ] = "Kolejno?æ sortowania okre?lona przez u¿ytkownika";
         Text[ japanese ] = "‡˜‚Ìw’è(~O)";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~O)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
@@ -653,7 +653,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ ENGLISH ] = "Direction" ;
         Text [ norwegian ] = "Retning" ;
         Text [ italian ] = "Direzione" ;
-        Text [ portuguese_brazilian ] = "Direção" ;
+        Text [ portuguese_brazilian ] = "Dire??o" ;
         Text [ portuguese ] = "Direcção" ;
         Text [ finnish ] = "Suunta" ;
         Text [ danish ] = "Retning" ;
@@ -799,7 +799,7 @@ TabDialog RID_SCDLG_SORT
                 Text [ ENGLISH ] = "Criteria" ;
                 Text [ norwegian ] = "Criteria" ;
                 Text [ italian ] = "Criteri" ;
-                Text [ portuguese_brazilian ] = "Critérios" ;
+                Text [ portuguese_brazilian ] = "Crit?rios" ;
                 Text [ portuguese ] = "Critérios de classificação" ;
                 Text [ finnish ] = "Lajitteluperuste" ;
                 Text [ danish ] = "Sorteringskriterier" ;
@@ -828,7 +828,7 @@ TabDialog RID_SCDLG_SORT
                 Text [ ENGLISH ] = "Options" ;
                 Text [ norwegian ] = "Options" ;
                 Text [ italian ] = "Opzioni" ;
-                Text [ portuguese_brazilian ] = "Opções" ;
+                Text [ portuguese_brazilian ] = "Op??s" ;
                 Text [ portuguese ] = "Opções" ;
                 Text [ finnish ] = "Asetukset" ;
                 Text [ danish ] = "Indstillinger" ;
