@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 08:59:11 $
+#   last change: $Author: rt $ $Date: 2004-07-29 16:36:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,14 @@ INSTALLDIR=$(OUT)
 
 .IF "$(BSCLIENT)"==""
 
+.IF "$(UPDATER)"!=""
+ALLTAR : updatepack
+.ELSE			# "$(UPDATER)"!=""
 ALLTAR : openoffice
+.ENDIF			# "$(UPDATER)"!=""
+
+updatepack:
+    +$(PERL) -w $(SOLARENV)$/bin$/packager.pl
 
 .IF "$(alllangiso)"!=""
 
