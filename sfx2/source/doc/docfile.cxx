@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 14:11:51 $
+ *  last change: $Author: mba $ $Date: 2000-10-18 13:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,58 @@ using namespace ::com::sun::star::ucb;
 #include "inimgr.hxx"       // Backup Path
 
 #define MAX_REDIRECT 5
+
+class SfxLockBytesHandler_Impl : public ::utl::UcbLockBytesHandler
+{
+    ULONG           m_nAcquireCount;
+    SfxMediumWeak   m_wMedium;
+public:
+                    SfxLockBytesHandler_Impl( SfxMedium* pMedium )
+                        : m_wMedium( pMedium )
+                        , m_nAcquireCount( 0 )
+                    {}
+
+    virtual void    Handle( ::utl::UcbLockBytesHandler::LoadHandlerItem nWhich, ::utl::UcbLockBytesRef xLockBytes );
+};
+
+void SfxLockBytesHandler_Impl::Handle( ::utl::UcbLockBytesHandler::LoadHandlerItem nWhich, ::utl::UcbLockBytesRef xLockBytes )
+{
+    if ( IsActive() && m_wMedium.Is() && xLockBytes.Is() )
+    {
+        switch( nWhich )
+        {
+            case BEFOREWAIT :
+                if ( xLockBytes->IsSynchronMode() )
+                {
+                    DBG_ASSERT( !m_nAcquireCount, "BeforeWait inside beforewait!" );
+                    ::vos::IMutex& rMutex = Application::GetSolarMutex();
+                    if ( rMutex.tryToAcquire() )
+                        m_nAcquireCount = Application::ReleaseSolarMutex() - 1;
+                }
+
+                break;
+            case AFTERWAIT :
+                if ( xLockBytes->IsSynchronMode() )
+                {
+                    if ( m_nAcquireCount )
+                        Application::AcquireSolarMutex( m_nAcquireCount );
+                }
+
+                break;
+            case DATA_AVAILABLE :
+                m_wMedium->DataAvailable_Impl();
+                break;
+            case DONE :
+                m_wMedium->Done_Impl( xLockBytes->GetError() );
+                break;
+            case CANCEL :
+                m_wMedium->Cancel_Impl();
+                break;
+            default:
+                break;
+        }
+    }
+}
 
 class UcbLockBytesCancellable_Impl : public SfxCancellable
 {
@@ -501,11 +553,7 @@ public:
 
     AsynchronLink       aDoneLink;
     AsynchronLink       aAvailableLink;
-    ::utl::UCB_Link_HelperRef  aLinkList;
-
-    DECL_LINK(          Done_Impl, ErrCode );
-    DECL_LINK(          DataAvailable_Impl, void* );
-    DECL_LINK(          Cancel_Impl, void* );
+    ::utl::UcbLockBytesHandlerRef  aHandler;
 
     SfxVersionTableDtor*    pVersions;
     FileSource_Impl*    pSource;
@@ -519,31 +567,27 @@ public:
     ~SfxMedium_Impl();
 };
 
-IMPL_LINK( SfxMedium_Impl, Done_Impl, ErrCode, nError )
+void SfxMedium::Done_Impl( ErrCode nError )
 {
-    DELETEZ( pCancellable );
-    bDownloadDone = sal_True;
-    pAntiImpl->SetError( nError );
-    if ( bStreamReady )
+    DELETEZ( pImp->pCancellable );
+    pImp->bDownloadDone = sal_True;
+    SetError( nError );
+    if ( pImp->bStreamReady )
     {
-        aDoneLink.ClearPendingCall();
-        aDoneLink.Call( (void*) nError );
+        pImp->aDoneLink.ClearPendingCall();
+        pImp->aDoneLink.Call( (void*) nError );
     }
-
-    return 0;
 }
 
-IMPL_LINK( SfxMedium_Impl, DataAvailable_Impl, void*, pVoid )
+void SfxMedium::DataAvailable_Impl()
 {
-    aAvailableLink.ClearPendingCall();
-    aAvailableLink.Call( pVoid );
-    return 0;
+    pImp->aAvailableLink.ClearPendingCall();
+    pImp->aAvailableLink.Call( NULL );
 }
 
-IMPL_LINK( SfxMedium_Impl, Cancel_Impl, void*, pVoid )
+void SfxMedium::Cancel_Impl()
 {
-    pAntiImpl->SetError( ERRCODE_IO_GENERAL );
-    return 0;
+    SetError( ERRCODE_IO_GENERAL );
 }
 
 SfxPoolCancelManager* SfxMedium_Impl::GetCancelManager()
@@ -581,8 +625,8 @@ SfxMedium_Impl::~SfxMedium_Impl()
 {
     delete pCancellable;
 
-    if ( aLinkList.Is() )
-        aLinkList->Clear();
+    if ( aHandler.Is() )
+        aHandler->Activate( sal_False );
 
     aDoneLink.ClearPendingCall();
     aAvailableLink.ClearPendingCall();
@@ -1342,13 +1386,8 @@ void SfxMedium::GetMedium_Impl()
         pImp->bStreamReady = sal_False;
 
         ::utl::UcbLockBytesRef xLockBytes;
-        if ( !pImp->aLinkList.Is() )
-        {
-            pImp->aLinkList = new ::utl::UCB_Link_Helper;
-            pImp->aLinkList->SetDoneLink( LINK( pImp, SfxMedium_Impl, Done_Impl ) );
-            pImp->aLinkList->SetDataAvailLink( LINK( pImp, SfxMedium_Impl, DataAvailable_Impl ) );
-            pImp->aLinkList->SetCancelLink( LINK( pImp, SfxMedium_Impl, Cancel_Impl ) );
-        }
+        if ( !pImp->aHandler.Is() )
+            pImp->aHandler = new SfxLockBytesHandler_Impl( this );
 
         SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
 
@@ -1356,13 +1395,13 @@ void SfxMedium::GetMedium_Impl()
         {
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
-                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream, pImp->aLinkList );
+                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream, pImp->aHandler );
         }
         else
         {
             xLockBytes = ::utl::UcbLockBytes::CreateInputLockBytes(
                         GetContent(),
-                        pImp->aLinkList );
+                        pImp->aHandler );
         }
 
         if ( xLockBytes.Is() )
@@ -1380,7 +1419,7 @@ void SfxMedium::GetMedium_Impl()
 
     // Download complete happened while pInStream was constructed
     if ( pImp->bDownloadDone )
-        pImp->Done_Impl(0);
+        Done_Impl(0);
 
 #ifdef OLD_CODE_FOR_POSTING
 
