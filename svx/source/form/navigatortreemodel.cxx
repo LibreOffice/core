@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ namespace svxform
         else if (rHint.ISA(FmNavViewMarksChanged))
         {
             FmNavViewMarksChanged* pvmcHint = (FmNavViewMarksChanged*)&rHint;
-            BroadcastMarkedObjects( pvmcHint->GetAffectedView()->GetMarkList() );
+            BroadcastMarkedObjects( pvmcHint->GetAffectedView()->GetMarkedObjectList() );
         }
     }
 
@@ -905,7 +905,7 @@ namespace svxform
 
             FmFormView* pFormView = m_pFormShell->GetFormView();
             DBG_ASSERT(pFormView != NULL, "NavigatorTreeModel::Update : keine FormView");
-            BroadcastMarkedObjects(pFormView->GetMarkList());
+            BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
         }
     }
 
