@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:13:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #include "doctemplates.hxx"
 
 #ifndef _VOS_MUTEX_HXX_
@@ -81,9 +80,6 @@
 #endif
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
-#ifndef _SV_SETTINGS_HXX
-#include <vcl/settings.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -156,6 +152,8 @@
 #ifndef  _COM_SUN_STAR_UTIL_XOFFICEINSTALLATIONDIRECTORIES_HPP_
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #endif
+
+#include "unotools/configmgr.hxx"
 
 #include "sfxresid.hxx"
 #include "doc.hrc"
@@ -316,7 +314,7 @@ public:
     sal_Bool                    init() { if ( !mbIsInitialized ) init_Impl(); return mbIsInitialized; }
     Content                     getContent() { return maRootContent; }
 
-    void                        setLocale( const LOCALE & rLocale );
+    void                        setLocale( const Locale & rLocale );
     Locale                      getLocale();
 
     sal_Bool                    storeTemplate( const OUString& rGroupName,
@@ -508,10 +506,42 @@ void SfxDocTplService_Impl::init_Impl()
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::getDefaultLocale()
 {
-    AllSettings aSettings;
+    if ( !mbLocaleSet )
+    {
+        ::osl::MutexGuard aGuard( maMutex );
+        if ( !mbLocaleSet )
+        {
+            rtl::OUString aLocale;
+            utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::LOCALE )
+                >>= aLocale;
 
-    maLocale    = aSettings.GetLocale();
-    mbLocaleSet = sal_True;
+            if ( aLocale.getLength() > 0 )
+            {
+                sal_Int32 nPos = aLocale.indexOf( sal_Unicode( '-' ) );
+                if ( nPos != -1 )
+                {
+                    maLocale.Language = aLocale.copy( 0, nPos );
+                    nPos = aLocale.indexOf( sal_Unicode( '_' ), nPos + 1 );
+                    if ( nPos != -1 )
+                    {
+                        maLocale.Country
+                            = aLocale.copy( maLocale.Language.getLength() + 1,
+                                            nPos - maLocale.Language.getLength() - 1 );
+                        maLocale.Variant
+                            = aLocale.copy( nPos + 1 );
+                    }
+                    else
+                    {
+                        maLocale.Country
+                            = aLocale.copy( maLocale.Language.getLength() + 1 );
+                    }
+                }
+
+            }
+
+            mbLocaleSet = sal_True;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1709,7 +1739,7 @@ SfxDocTplService::~SfxDocTplService()
 //--- XLocalizable ---
 //-----------------------------------------------------------------------------
 
-LOCALE SAL_CALL SfxDocTplService::getLocale()
+Locale SAL_CALL SfxDocTplService::getLocale()
     throw( RUNTIMEEXCEPTION )
 {
     return pImp->getLocale();
@@ -1717,7 +1747,7 @@ LOCALE SAL_CALL SfxDocTplService::getLocale()
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL SfxDocTplService::setLocale( const LOCALE & rLocale )
+void SAL_CALL SfxDocTplService::setLocale( const Locale & rLocale )
     throw( RUNTIMEEXCEPTION )
 {
     pImp->setLocale( rLocale );
