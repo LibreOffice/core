@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 11:34:35 $
+ *  last change: $Author: oj $ $Date: 2001-04-17 06:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,7 +1162,7 @@ void OTableController::loadData()
             for(;aIter != aPair.second;++aIter)
             {
                 // search the best matching type
-                if( aIter->second->aTypeName == sTypeName   &&
+                if( (!sTypeName.getLength() || aIter->second->aTypeName == sTypeName)   &&
                     aIter->second->nPrecision >= nPrecision &&
                     aIter->second->nMaximumScale >= nScale)
                     break;
