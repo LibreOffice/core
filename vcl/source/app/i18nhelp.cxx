@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18nhelp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-03 13:46:15 $
+ *  last change: $Author: mt $ $Date: 2001-08-08 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ vcl::I18nHelper::I18nHelper(  ::com::sun::star::uno::Reference< ::com::sun::star
 
 vcl::I18nHelper::~I18nHelper()
 {
+    ImplDestroyWrappers();
 }
 
 void vcl::I18nHelper::ImplDestroyWrappers()
@@ -128,21 +129,11 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
         sal_Int32 nModules = i18n::TransliterationModules_IGNORE_WIDTH;
         if ( mbTransliterateIgnoreCase )
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
+
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( mxMSF, (i18n::TransliterationModules)nModules );
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( ConvertIsoNamesToLanguage( maLocale.Language, maLocale.Country ) );
     }
     return *mpTransliterationWrapper;
-}
-
-void vcl::I18nHelper::setLocale( const ::com::sun::star::lang::Locale& rLocale )
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
-
-//    if ( maLocale != rLocale )
-    {
-        maLocale = rLocale;
-        ImplDestroyWrappers();
-    }
 }
 
 const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
@@ -150,45 +141,39 @@ const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
     return maLocale;
 }
 
-sal_Bool vcl::I18nHelper::equals( const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Bool bIgnoreCase ) const
+sal_Bool vcl::I18nHelper::MatchString( const String& rStr1, const String& rStr2 ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
-    // !!! TRANSLITERATION DOESN'T WORK !!!
-    /*
-    if ( bIgnoreCase != mbTransliterateIgnoreCase )
+    if ( !mbTransliterateIgnoreCase )
     {
         // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
         // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
-        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = bIgnoreCase;
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = TRUE;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
     }
 
-    if ( nCount1 > ( rStr1.Len() - nPos1 ) )
-        nCount1 = rStr1.Len() - nPos1;
-    if ( nCount2 > ( rStr2.Len() - nPos2 ) )
-        nCount2 = rStr2.Len() - nPos2;
+    return ImplGetTransliterationWrapper().isMatch( rStr1, rStr2 );
+}
 
+sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
-    sal_Int32 nMatch1, nMatch2;
-    return ImplGetTransliterationWrapper().equals( rStr1, nPos1, nCount1, nMatch1, rStr2, nPos2, nCount2, nMatch2 );
-    */
-
-    BOOL bEqual;
-    if ( bIgnoreCase )
+    BOOL bEqual = FALSE;
+    USHORT n = rString.Search( '~' );
+    if ( n != STRING_NOTFOUND )
     {
-        bEqual = String( rStr1, nPos1, nCount1 ).EqualsIgnoreCaseAscii( rStr2, nPos2, nCount2 );
-    }
-    else
-    {
-        bEqual = String( rStr1, nPos1, nCount1 ).Equals( rStr2, nPos2, nCount2 );
+        String aMatchStr( rString, n+1, STRING_LEN );   // not only one char, because of transliteration...
+        sal_Int32 nMatch1, nMatch2;
+        bEqual = MatchString( cMnemonicChar, aMatchStr );
     }
     return bEqual;
 }
 
 
-String vcl::I18nHelper::getDate( const Date& rDate, sal_Bool bLongFormat ) const
+String vcl::I18nHelper::GetDate( const Date& rDate, sal_Bool bLongFormat ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
