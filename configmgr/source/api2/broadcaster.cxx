@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2002-02-18 17:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace configmgr
         struct LessORefBodyPtr
         {
             typedef vos::ORef<T> Ref;
-            bool operator()(Ref const& lhs, Ref const& rhs)
+            bool operator()(Ref const& lhs, Ref const& rhs) const
             {
                 return ptr_less(lhs.getBodyPtr(), rhs.getBodyPtr());
             }
