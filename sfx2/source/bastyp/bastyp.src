@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,4 +430,112 @@ String STR_DOWNLOAD_STATEFORMAT
     Text[ chinese_traditional ] = "$(READ) Á`­p $(TOTAL) [ $(TIME) ]";
     Text[ arabic ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
     Text[ turkish ] = "$(READ) Toplam $(TOTAL) [ $(TIME) ]";
+};
+
+Resource RID_DLSTATUS2
+{
+    String SVBINDSTATUS_FINDINGRESOURCE
+    {
+        Text = "Verbindung zu: $(HOST). Warten auf Antwort..." ;
+        Text [ ENGLISH ] = "Connection to: $(HOST). Waiting for response..." ;
+        Text [ dutch ] = "Verbinding met: $(HOST). Wacht op antwoord..." ;
+        Text [ english_us ] = "Connection to: $(HOST). Waiting for response..." ;
+        Text [ italian ] = "Collegamento con: $(HOST). in attesa di risposta..." ;
+        Text [ spanish ] = "Conexión con: $(HOST). Esperando respuesta..." ;
+        Text [ french ] = "Connexion à : $(HOST). Attend réponse..." ;
+        Text [ swedish ] = "Ansluter till: $(HOST). Väntar på svar..." ;
+        Text [ danish ] = "Forbindelse til: $(HOST). Venter på svar..." ;
+        Text [ portuguese_brazilian ] = "Verbindung zu: $(HOST). Warten auf Antwort..." ;
+        Text [ portuguese ] = "Ligação com: $(HOST). Esperando resposta ..." ;
+        Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò´ğ¸´...";
+        Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Æäèòå îòâåòà...";
+        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowiedŸ...";
+        Text[ japanese ] = "Ú‘±:$(HOST)B‰“š‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·...";
+        Text[ chinese_traditional ] = "³s½u¡G$(HOST)¡C¥¿¦bµ¥­Ôµª´_...";
+        Text[ arabic ] = "ÇáÇÊÕÇá ÈÜ: $(HOST). İí ÇäÊÙÇÑ ÇáÑÏ...";
+        Text[ dutch ] = "Verbinding met: $(HOST). Wacht op antwoord...";
+        Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò´ğ¸´...";
+        Text[ greek ] = "Óıíäåóç ìå: $(HOST). Ğåñéìİíïíôáò áğÜíôçóç...";
+        Text[ korean ] = "¿¬°á ´ë»ó: $(HOST). È¸´äÀ» ±â´Ù¸®½Ê½Ã¿À...";
+        Text[ turkish ] = "Bağlanılan: $(HOST). Yanıt bekleniyor...";
+        Text[ language_user1 ] = " ";
+    };
+    String SVBINDSTATUS_CONNECTING
+    {
+        Text = "Geöffnet wird: $(TARGET) auf $(HOST)" ;
+        Text [ ENGLISH ] = "Opening $(TARGET) at $(HOST)" ;
+        Text [ dutch ] = "Geopend wordt: $(TARGET) op $(HOST)" ;
+        Text [ english_us ] = "Opening $(TARGET) at $(HOST)" ;
+        Text [ italian ] = "Viene aperto: $(TARGET) su $(HOST)" ;
+        Text [ spanish ] = "Abriendo: $(TARGET) en $(HOST)" ;
+        Text [ french ] = "En cours d'ouverture : $(TARGET) sur $(HOST)" ;
+        Text [ swedish ] = "$(TARGET) öppnas på $(HOST)" ;
+        Text [ danish ] = "Åbner: $(TARGET) på $(HOST)" ;
+        Text [ portuguese ] = "Abrir: $(TARGET) em $(HOST)" ;
+        Text [ portuguese_brazilian ] = "Geöffnet wird: $(TARGET) auf $(HOST)" ;
+        Text[ chinese_simplified ] = "´ò¿ª£º $(HOST)ÉÏµÄ$(TARGET)";
+        Text[ russian ] = "$(TARGET) áóäåò îòêğûò â $(HOST)";
+        Text[ polish ] = "Otwieranie: $(TARGET) na $(HOST)";
+        Text[ japanese ] = "ŠJ‚©‚ê‚é:$(HOST)‚Ì$(TARGET)";
+        Text[ chinese_traditional ] = "¶}±Ò¡G$(HOST)¤Wªº$(TARGET)";
+        Text[ arabic ] = "íÊã İÊÍ: $(TARGET) Úáì $(HOST)";
+        Text[ dutch ] = "Geopend wordt: $(TARGET) op $(HOST)";
+        Text[ chinese_simplified ] = "´ò¿ª£º $(HOST)ÉÏµÄ$(TARGET)";
+        Text[ greek ] = "¢íïéãìá: $(TARGET) óôï $(HOST)";
+        Text[ korean ] = "$(HOST)¿¡¼­ $(TARGET)¸¦ ¿©´Â Áß";
+        Text[ turkish ] = "Açılan:  $(HOST) üzerinde bulunan $(TARGET)";
+        Text[ language_user1 ] = " ";
+    };
+    String SVBINDSTATUS_DOWNLOADINGDATA
+    {
+        Text = "Übertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
+        Text [ ENGLISH ] = "Loading: $(TARGET) Loaded: $(BYTE)" ;
+        Text [ english_us ] = "Loading: $(TARGET) Loaded: $(BYTE)" ;
+        Text [ italian ] = "Viene trasferito: $(TARGET) Letti: $(BYTE)" ;
+        Text [ spanish ] = "Transfiriendo: $(TARGET) Leído: $(BYTE)" ;
+        Text [ french ] = "En cours de transfert : $(TARGET) Lu : $(BYTE)" ;
+        Text [ dutch ] = "Geladen wordt: $(TARGET) Gelezen: $(BYTE)" ;
+        Text [ swedish ] = "Överförs: $(TARGET) Läst: $(BYTE)" ;
+        Text [ danish ] = "Overfører: $(TARGET) Indlæst: $(BYTE)" ;
+        Text [ portuguese_brazilian ] = "Übertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
+        Text [ portuguese ] = "Transferir: $(TARGET) Lidos: $(BYTE)" ;
+        Text[ chinese_simplified ] = "´«µİ£º$(TARGET)ÒÑ¾­ÔÄ¶Á£º$(BYTE)";
+        Text[ russian ] = "Ïåğåäàåòñÿ: $(TARGET) Ïğî÷èòàíî: $(BYTE)";
+        Text[ polish ] = "£adowanie: $(TARGET) Za³adowano: $(BYTE)";
+        Text[ japanese ] = "“]‘—‚·‚é:$(TARGET) “Ç‚İæ‚è:$(BYTE)";
+        Text[ chinese_traditional ] = "¶Ç»¼¡G$(TARGET)¤w¸g¾\\Åª¡G$(BYTE)";
+        Text[ arabic ] = "íÊã ÊÍãíá: $(TARGET) ÊãÊ ŞÑÇÁÉ: $(BYTE)";
+        Text[ dutch ] = "Geladen wordt: $(TARGET) Gelezen: $(BYTE)";
+        Text[ chinese_simplified ] = "´«µİ£º$(TARGET)ÒÑ¾­ÔÄ¶Á£º$(BYTE)";
+        Text[ greek ] = "ÌåôÜäïóç: $(TARGET) ¸ãéíå áíÜãíùóç: $(BYTE)";
+        Text[ korean ] = "Àü¼Û Áß: $(TARGET) ·ÎµåµÊ: $(BYTE)";
+        Text[ turkish ] = "Aktarılan: $(TARGET) Okunan: $(BYTE)";
+        Text[ language_user1 ] = " ";
+    };
+    String SVBINDSTATUS_ENDDOWNLOADDATA
+    {
+        Text = "Verbindung abgebaut" ;
+        Text [ ENGLISH ] = "Disconnected" ;
+        Text [ english_us ] = "Disconnected" ;
+        Text [ italian ] = "Collegamento interrotto" ;
+        Text [ spanish ] = "Desconectado" ;
+        Text [ french ] = "Déconnexion connexion" ;
+        Text [ dutch ] = "Verbinding verbroken" ;
+        Text [ swedish ] = "Nedkopplad" ;
+        Text [ danish ] = "Forbindelse afbrudt" ;
+        Text [ portuguese_brazilian ] = "Verbindung abgebaut" ;
+        Text [ portuguese ] = "Ligação cancelada" ;
+        Text[ chinese_simplified ] = "ÒÑ¾­½áÊøÁ¬½Ó";
+        Text[ russian ] = "Ñâÿçü îòêëş÷åíà";
+        Text[ polish ] = "Po³¹czenie roz³¹czone";
+        Text[ japanese ] = "Ú‘±‚ª’†~‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "¤w¸gµ²§ô³s½u";
+        Text[ arabic ] = "Êã ŞØÚ ÇáÇÊÕÇá";
+        Text[ dutch ] = "Verbinding verbroken";
+        Text[ chinese_simplified ] = "ÒÑ¾­½áÊøÁ¬½Ó";
+        Text[ greek ] = "Ôåñìáôéóìüò óıíäåóçò";
+        Text[ korean ] = "¿¬°á ÇØÁ¦";
+        Text[ turkish ] = "Bağlantı kesildi";
+        Text[ language_user1 ] = " ";
+    };
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,12 @@
  ************************************************************************/
 
 #include "sfx.hrc"
+#include <so3/so2defs.hxx>
 
 //fuer das Mapping Fehlercode -> ResId
 
 #define RC_BASTYP               RID_SFX_BASTYP_START
 #define DLG_FILTER_SELECT           (RC_BASTYP)
-#if SUPD<552
-#define STR_ERR_HDLMESS                 (RC_BASTYP+1)
-#define RID_ERRHDL_CLASS                (RC_BASTYP+2)
-#endif
 #define STR_FILTER_DOWNLOAD             (RC_BASTYP+3)
 #define STR_FILTER_CHOOSER              (RC_BASTYP+4)
 #define STR_FILTER_OTHERS               (RC_BASTYP+5)
@@ -111,4 +108,5 @@
 #define STR_DOWNLOAD_STATE          (RC_BASTYP + 25)
 #define STR_DOWNLOAD_REMAININGTIME      (RC_BASTYP + 26)
 #define STR_DOWNLOAD_STATEFORMAT        (RC_BASTYP + 27)
+#define RID_DLSTATUS2                    (RC_BASTYP+ 28)
 
