@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:09:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ namespace xmloff
             // did you use setAutoStyleContext?
 
         const SvXMLStyleContext* pControlStyle =
-            m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_CONTROL_ID, _rStyleName ) : NULL;
+            m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : NULL;
         OSL_ENSURE( pControlStyle || !m_pAutoStyles,
                     ::rtl::OString( "OFormLayerXMLImport_Impl::getStyleElement: did not find the style named \"" )
                 +=  ::rtl::OString( _rStyleName.getStr(), _rStyleName.getLength(), RTL_TEXTENCODING_ASCII_US )
@@ -633,14 +633,6 @@ namespace xmloff
         }
 
         return new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xForms );
-    }
-
-    //---------------------------------------------------------------------
-    XMLPropStyleContext* OFormLayerXMLImport_Impl::createControlStyleContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList, SvXMLStylesContext& _rParentStyles,
-        sal_uInt16 _nFamily, sal_Bool _bDefaultStyle )
-    {
-        return new OControlStyleContext( m_rImporter, _nPrefix, _rLocalName, _rxAttrList, _rParentStyles, _nFamily, _bDefaultStyle );
     }
 
     //---------------------------------------------------------------------
