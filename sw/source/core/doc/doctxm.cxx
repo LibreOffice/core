@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:41:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1879,7 +1879,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     if( !GetTOXForm().IsRelTabPos() && rLR.GetTxtLeft() )
                         nTabPosition -= rLR.GetTxtLeft();
                     aTStops.Insert( SvxTabStop( nTabPosition,
-                                                SVX_TAB_ADJUST_LEFT,
+                                                (SvxTabAdjust)aToken.eTabAlign,
                                                 cDfltDecimalChar,
                                                 aToken.cTabFillChar ));
                 }
