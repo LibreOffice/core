@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-14 16:30:03 $
+ *  last change: $Author: dv $ $Date: 2001-02-15 14:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,6 +799,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // Einen Stream aufmachen, auf den dann der Storage gesetzt wird,
             // in den gespeichert wird
 //            SvMemoryStream aTmp;
+
             ::utl::TempFile aTmpFile;
             aTmpFile.EnableKillingFile( TRUE );
             SvStorageRef xTmp = new SvStorage( ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ), aTmpFile.GetURL() );
@@ -825,10 +826,18 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             // Den Stream mit dem Storage komprimiert abspeichern
             SvStorageStreamRef xStrm = xVersion->OpenStream( aInfo.aName );
-            ZCodec aCodec;
-            aCodec.BeginCompression( ZCODEC_BEST_COMPRESSION );
-            aCodec.Compress( *aTmpFile.GetStream( STREAM_READ ), *xStrm );
-            aCodec.EndCompression();
+
+            if ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() )
+            {
+                *xStrm << *aTmpFile.GetStream( STREAM_READ );
+            }
+            else
+            {
+                ZCodec aCodec;
+                aCodec.BeginCompression( ZCODEC_BEST_COMPRESSION );
+                aCodec.Compress( *aTmpFile.GetStream( STREAM_READ ), *xStrm );
+                aCodec.EndCompression();
+            }
 
             // Versionen-Storage committen
             xVersion->Commit();
