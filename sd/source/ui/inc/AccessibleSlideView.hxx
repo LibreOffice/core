@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:42:17 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLESLIDEVIEW_HXX
-#define _SD_ACCESSIBILITY_ACCESSIBLESLIDEVIEW_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_SLIDE_VIEW_HXX
+#define SD_ACCESSIBILITY_ACCESSIBLE_SLIDE_VIEW_HXX
 
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
@@ -68,7 +68,9 @@
 #ifndef _CPPUHELPER_IMPLBASE7_HXX_
 #include <cppuhelper/implbase7.hxx>
 #endif
-#include "slidview.hxx"
+#ifndef SD_SLIDE_VIEW_HXX
+#include "SlideView.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -95,9 +97,12 @@
 #include <vector>
 
 class SdDrawDocument;
-class SdSlideView;
-class SdWindow;
 class AccessibleSlideView;
+
+namespace sd {
+class SlideView;
+class Window;
+}
 
 // -----------------------------
 // - AccessibleSlideViewObject -
@@ -219,15 +224,40 @@ class AccessibleSlideView : public ::cppu::WeakImplHelper7<
     ::com::sun::star::accessibility::XAccessibleSelection,
     ::com::sun::star::lang::XServiceInfo >
 {
-private:
+public:
 
-    ::osl::Mutex                                                                                                            maMutex;
+    static AccessibleSlideView* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
+
+    AccessibleSlideView(
+        SdDrawDocument& rDoc,
+        ::sd::SlideView& rView,
+        ::sd::Window& rParentWindow);
+    virtual ~AccessibleSlideView (void);
+
+    void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+
+    /** This method acts like a dispose call.  It sends a disposing to all
+        of its listeners.  It may be called twice.
+    */
+    void Destroyed (void);
+
+    SdDrawDocument*             GetDrawDocument() const { return mpDoc; }
+    ::sd::SlideView* GetSlideView() const { return mpView; }
+    ::sd::Window* GetParentWindow() const { return mpParentWindow; }
+
+    void                        SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
+    void                        Reset();
+    void                        FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
+
+
+private:
+    ::osl::Mutex maMutex;
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > >               maSlidePageObjects;
-    SdDrawDocument*                                                                                                         mpDoc;
-    SdSlideView*                                                                                                            mpView;
-    SdWindow*                                                                                                               mpParentWindow;
+    SdDrawDocument* mpDoc;
+    ::sd::SlideView* mpView;
+    ::sd::Window* mpParentWindow;
      /// client id in the AccessibleEventNotifier queue
-    sal_uInt32                                                                                                              mnClientId;
+    sal_uInt32 mnClientId;
 
     // internal
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&                                   getUnoTunnelId();
@@ -300,29 +330,6 @@ private:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-public:
-
-    static AccessibleSlideView* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
-
-public:
-
-                                AccessibleSlideView( SdDrawDocument& rDoc, SdSlideView& rView, SdWindow& rParentWindow );
-                                ~AccessibleSlideView();
-
-    void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-
-    /** This method acts like a dispose call.  It sends a disposing to all
-        of its listeners.  It may be called twice.
-    */
-    void Destroyed (void);
-
-    SdDrawDocument*             GetDrawDocument() const { return mpDoc; }
-    SdSlideView*                GetSlideView() const { return mpView; }
-    SdWindow*                   GetParentWindow() const { return mpParentWindow; }
-
-    void                        SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
-    void                        Reset();
-    void                        FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
 };
 
-#endif // _SD_ACCESSIBILITY_ACCESSIBLESLIDEVIEW_HXX
+#endif
