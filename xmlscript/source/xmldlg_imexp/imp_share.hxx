@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-27 17:44:31 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
     {
-        nVal = rStr.toInt32( 16 );
+        nVal = rStr.copy( 2 ).toInt32( 16 );
     }
     else
     {
@@ -145,13 +145,13 @@ inline bool getLongAttr(
     return false;
 }
 
-class ControlImportContext;
+class ImportContext;
 
 //==================================================================================================
 struct DialogImport
     : public ::cppu::WeakImplHelper1< xml::XImporter >
 {
-    friend class ControlImportContext;
+    friend class ImportContext;
 
     vector< OUString > _styleNames;
     vector< Reference< xml::XImportContext > > _styles;
@@ -341,33 +341,21 @@ public:
         SAL_THROW( () );
 };
 //==================================================================================================
-class ControlImportContext
+class ImportContext
 {
-    DialogImport * _pImport;
-    OUString _aId;
-
+protected:
     Reference< beans::XPropertySet > _xControlModel;
 
 public:
-    inline ControlImportContext( DialogImport * pImport,
-                                 OUString const & rId, OUString const & rControlName )
-        : _pImport( pImport )
-        , _aId( rId )
-        , _xControlModel( pImport->_xDialogModelFactory->createInstance( rControlName ), UNO_QUERY )
+    inline ImportContext( Reference< beans::XPropertySet > const & xControlModel_ )
+        : _xControlModel( xControlModel_ )
         { OSL_ASSERT( _xControlModel.is() ); }
-    inline ~ControlImportContext()
-        { _pImport->_xDialogModel->insertByName( _aId, makeAny( Reference< awt::XControlModel >::query( _xControlModel ) ) ); }
 
     inline Reference< beans::XPropertySet > getControlModel()
         { return _xControlModel; }
 
     void importEvents(
         vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents );
-
-    void importDefaults(
-        sal_Int32 nBaseX, sal_Int32 nBaseY,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
-
     bool importStringProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
@@ -397,6 +385,27 @@ public:
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };
+//==================================================================================================
+class ControlImportContext : public ImportContext
+{
+    DialogImport * _pImport;
+    OUString _aId;
+public:
+    inline ControlImportContext( DialogImport * pImport,
+                                 OUString const & rId, OUString const & rControlName )
+        : ImportContext( Reference< beans::XPropertySet >(
+            pImport->_xDialogModelFactory->createInstance( rControlName ), UNO_QUERY ) )
+        , _pImport( pImport )
+        , _aId( rId )
+        {}
+    inline ~ControlImportContext()
+        { _pImport->_xDialogModel->insertByName( _aId, makeAny( Reference< awt::XControlModel >::query( _xControlModel ) ) ); }
+
+    void importDefaults(
+        sal_Int32 nBaseX, sal_Int32 nBaseY,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+};
+
 //==================================================================================================
 class WindowElement
     : public ControlElement

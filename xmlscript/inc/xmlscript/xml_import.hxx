@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: xmlmod_imexp.hxx,v $
+ *  $RCSfile: xml_import.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:07 $
  *
@@ -58,48 +58,70 @@
  *
  *
  ************************************************************************/
-#ifndef _XMLSCRIPT_XMLMOD_IMEXP_HXX_
-#define _XMLSCRIPT_XMLMOD_IMEXP_HXX_
+#ifndef _XMLSCRIPT_XML_IMPORT_HXX_
+#define _XMLSCRIPT_XML_IMPORT_HXX_
 
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#ifndef _COM_SUN_STAR_XML_XIMPORTER_HPP_
+#include <com/sun/star/xml/XImporter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
 
 
 namespace xmlscript
 {
 
-#define XMLNS_SCRIPT_URI "http://openoffice.org/2000/script"
-#define XMLNS_SCRIPT_UID 1
-#define XMLNS_SCRIPT_PREFIX "script"
+/*##################################################################################################
+
+    IMPORTING
+
+##################################################################################################*/
 
 //==================================================================================================
-// Script module import/export
-
-// HACK C++ struct to transport info. Later the container
-// itself should do the export/import and use exportet XML
-// functionality from xmlscript
-struct ModuleDescriptor
+struct NameSpaceUid
 {
-    ::rtl::OUString aName;
-    ::rtl::OUString aLanguage;
-    ::rtl::OUString aCode;
+    /** URI defining XML namespace
+    */
+    ::rtl::OUString     sURI;
+    /** Identifier given for URI (given back in createRootContext(), createChildContext() callbacks
+    */
+    sal_Int32           nUid;
+
+    inline NameSpaceUid( ::rtl::OUString const & sURI_, sal_Int32 nUid_ ) SAL_THROW( () )
+        : sURI( sURI_ )
+        , nUid( nUid_ )
+        {}
 };
 
-SAL_DLLEXPORT void
-SAL_CALL exportScriptModule(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
-    const ModuleDescriptor& rMod )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+/** Creates a document handler to be used for SAX1 parser that can handle namespaces.
+    Give a list of NameSpaceUid structs defining namespace mappings to integers (performance).
+    Implementing the XImporter interface, you will get a createRootContext() for the root
+    element of your XML document and subsequent createChildContext() callbacks for each
+    sub element.
+    Namespaces of tags are identified by their integer value.
 
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL importScriptModule( ModuleDescriptor& rMod )
-    SAL_THROW( (::com::sun::star::uno::Exception) );
-
-//==================================================================================================
+    @param pNamespaceUids
+           array of namespace mappings
+    @param nNameSpaceUids
+           number of element in namespace mappings array
+    @param nUnknownNamespaceUid
+           namespace id given for unrecognized namespace prefix
+           (one that is not given via pNamespaceUids)
+    @param xImporter
+           initial import object being called for root context
+    @param bSingleThreadedUse
+           flag whether context management is synchronized.
+    @return
+            document handler for parser
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
+SAL_CALL createDocumentHandler(
+    NameSpaceUid const * pNamespaceUids, sal_Int32 nNameSpaceUids,
+    sal_Int32 nUnknownNamespaceUid,
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::XImporter > const & xImporter,
+    bool bSingleThreadedUse = true )
+    SAL_THROW( () );
 
 }
 

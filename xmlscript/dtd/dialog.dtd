@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.10 2001-03-22 15:43:06 dbo Exp $
+	$Id: dialog.dtd,v 1.11 2001-04-04 14:35:07 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -68,7 +68,8 @@
 			       dlg:printable %boolean; #IMPLIED
 			       dlg:page %numeric; #IMPLIED
 			       dlg:tag CDATA #IMPLIED
-			       dlg:helptext CDATA #IMPLIED
+			       dlg:help-text CDATA #IMPLIED
+			       dlg:help-url CDATA #IMPLIED
 			       ">
 
 <!ENTITY % control "(dlg:bulletinboard|
@@ -89,12 +90,13 @@
 		     dlg:patternfield
 		    )">
 
-<!ELEMENT dlg:window (dlg:styles*, dlg:bulletinboard*)>
+<!ELEMENT dlg:window (dlg:styles*, dlg:event*, dlg:bulletinboard*)>
 <!ATTLIST dlg:window dlg:id CDATA #REQUIRED
 		     dlg:left %numeric; #IMPLIED
 		     dlg:top %numeric; #IMPLIED
 		     dlg:width %numeric; #IMPLIED
 		     dlg:height %numeric; #IMPLIED
+		     dlg:style-id CDATA #IMPLIED
 		     dlg:title CDATA #IMPLIED
 		     dlg:page %numeric; #IMPLIED
 		     dlg:tag CDATA #IMPLIED
@@ -185,7 +187,6 @@
 		    dlg:tabstop %boolean; #IMPLIED
 		    dlg:value CDATA #IMPLIED
 		    dlg:checked %boolean; #IMPLIED
-		    dlg:tristate %boolean; #IMPLIED
 		    >
 
 <!ELEMENT dlg:titledbox (dlg:title?, dlg:radio*, (%control;)*)>

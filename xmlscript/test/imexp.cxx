@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-21 12:30:25 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,11 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
         OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
         aDllName, Reference< registry::XSimpleRegistry > () );
 #ifdef SAL_W32
-    aDllName = OUString::createFromAscii( "int" );
+    aDllName = OUString::createFromAscii( "i18n" );
     aDllName += OUString::valueOf( (sal_Int32)SUPD );
     aDllName += OUString::createFromAscii( "mi.dll" );
 #else
-    aDllName = OUString::createFromAscii( "libint" );
+    aDllName = OUString::createFromAscii( "libi18n" );
     aDllName += OUString::valueOf( (sal_Int32)SUPD );
     aDllName += OUString::createFromAscii( ".so" );
 #endif

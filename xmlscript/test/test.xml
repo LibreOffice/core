@@ -3,12 +3,14 @@
 
 <window xmlns="http://openoffice.org/2000/dialog"
     xmlns:dlg="http://openoffice.org/2000/dialog"
+    style-id="dialog"
     id="window1" title="Test-Dialog" left="50" top="50" height="660" width="400">
 
     <dlg:styles xmlns:dlg="http://openoffice.org/2000/dialog">
         <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
         <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>
         <dlg:style style-id="no_border" border="none"/>
+        <dlg:style style-id="dialog" border="3d"/>
     </dlg:styles>
 
     <dlg:bulletinboard xmlns:ns="http://www.fake" xmlns:dlg="http://openoffice.org/2000/dialog">
@@ -19,7 +21,7 @@
 
         <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50" width="50" height="50" style-id="bla" xmlns:ns="http://openoffice.org/2000/dialog"/>
 
-        <checkbox id="check1" helptext="helphelphelp!!!" value="checked" left="50" top="150" width="100" height="20" checked="true"/>
+        <checkbox id="check1" help-text="helphelphelp!!!" help-url="http://www.xml.org" value="checked" left="50" top="150" width="100" height="20" checked="true"/>
         <checkbox id="check2" value="dontknow" left="50" top="170" width="100" height="20" tristate="true"/>
         <checkbox id="check3" value="tristate_checked" left="50" top="190" width="100" height="20" checked="true" tristate="true"/>
 
@@ -57,15 +59,13 @@
             <radio id="radio1" value="default radio" left="50" top="250" width="100" height="20"/>
             <radio id="radio2" value="checked" left="50" top="270" width="100" height="20" checked="true"/>
             <radio id="radio3" value="unchecked" left="50" top="290" width="100" height="20" checked="false"/>
-            <radio id="radio4" value="dont know" left="50" top="310" width="100" height="20" tristate="true"/>
         </radiogroup>
 
         <titledbox id="groupbox1" left="250" top="250" width="120" height="100">
             <title value="grouped"/>
             <radio id="radio5" value="default radio" left="5" top="15" width="100" height="20"/>
-            <radio id="radio6" value="dont know" left="5" top="35" width="100" height="20" tristate="true"/>
-            <radio id="radio7" value="tristate checked" left="5" top="55" width="100" height="20" tristate="true" checked="true"/>
-            <radio id="radio8" value="checked" left="5" top="75" width="100" height="20" checked="true"/>
+            <radio id="radio7" value="unchecked" left="5" top="35" width="100" height="20" checked="false"/>
+            <radio id="radio8" value="checked" left="5" top="55" width="100" height="20" checked="true"/>
         </titledbox>
 
         <text id="fixed1" left="50" top="520" width="180" height="20" value="fixed text is here..." multiline="true" align="center"/>

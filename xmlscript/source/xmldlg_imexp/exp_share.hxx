@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ public:
     //
     void readEvents() SAL_THROW( (Exception) );
     //
+    void readDialogModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readButtonModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readEditModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readCheckBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );

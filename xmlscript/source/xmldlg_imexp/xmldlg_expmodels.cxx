@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,46 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":edit-mask") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LiteralMask") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":literal-mask") ) );
+    readEvents();
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readDialogModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
+    // collect elements
+    addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ) );
+
+    // collect styles
+    Style aStyle( 0x1 | 0x4 | 0x8 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+        aStyle._set |= 0x4;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
     readEvents();
 }
 

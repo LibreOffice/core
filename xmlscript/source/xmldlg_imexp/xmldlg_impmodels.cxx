@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-22 15:43:07 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,20 +796,13 @@ void TitledBoxElement::endElement()
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                                   xAttributes );
 
-        sal_Int16 nVal;
-        sal_Bool bTriState = sal_False;
-        sal_Bool bChecked = sal_False;
-        getBoolAttr( &bTriState, OUString( RTL_CONSTASCII_USTRINGPARAM("tristate") ), xAttributes );
-        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ))
+        sal_Int16 nVal = 0;
+        sal_Bool bChecked;
+        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ) &&
+            bChecked)
         {
-            // has "checked" attribute
-            nVal = (bChecked ? 1 : 0);
+            nVal = 1;
         }
-        else
-        {
-            nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
-        }
-
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
@@ -907,20 +900,13 @@ void RadioGroupElement::endElement()
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                                   xAttributes );
 
-        sal_Int16 nVal;
-        sal_Bool bTriState = sal_False;
-        sal_Bool bChecked = sal_False;
-        getBoolAttr( &bTriState, OUString( RTL_CONSTASCII_USTRINGPARAM("tristate") ), xAttributes );
-        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ))
+        sal_Int16 nVal = 0;
+        sal_Bool bChecked;
+        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ) &&
+            bChecked)
         {
-            // has "checked" attribute
-            nVal = (bChecked ? 1 : 0);
+            nVal = 1;
         }
-        else
-        {
-            nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
-        }
-
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
@@ -1510,79 +1496,52 @@ void WindowElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     Reference< beans::XPropertySet > xProps( _pImport->_xDialogModel, UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
+    ImportContext ctx( xProps );
 
-    OUString aValue( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("id") ) ) );
-    if (aValue.getLength())
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
     {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
-            makeAny( aValue ) );
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        pStyle->importBackgroundColorStyle( xProps );
+        pStyle->importBorderStyle( xProps );
+        pStyle->importFontStyle( xProps );
     }
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("title") ) );
-    if (aValue.getLength())
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-            makeAny( aValue ) );
-    }
+
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("id") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("title") ),
+                              _xAttributes );
+    ctx.importLongProperty( 0,
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("left") ),
+                            _xAttributes );
+    ctx.importLongProperty( 0,
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("top") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("width") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("height") ),
+                            _xAttributes );
 
     sal_Int32 nLong;
-
-    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ), _xAttributes ))
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-            makeAny( nLong ) );
-    }
-    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("top") ), _xAttributes ))
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-            makeAny( nLong ) );
-    }
-    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("width") ), _xAttributes ))
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-            makeAny( nLong ) );
-    }
-    if (getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("height") ), _xAttributes ))
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-            makeAny( nLong ) );
-    }
-
     if (! getLongAttr( &nLong, OUString( RTL_CONSTASCII_USTRINGPARAM("page") ), _xAttributes ))
     {
         nLong = 0;
     }
-
     xProps->setPropertyValue(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
         makeAny( nLong ) );
 
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) );
-    if (aValue.getLength())
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
-            makeAny( aValue ) );
-    }
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
+                              _xAttributes );
 
-    aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("helptext") ) );
-    if (aValue.getLength())
-    {
-        xProps->setPropertyValue(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-            makeAny( aValue ) );
-    }
+    ctx.importEvents( _events );
 }
-
 
 };

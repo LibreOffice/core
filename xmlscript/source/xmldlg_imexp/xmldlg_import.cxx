@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:37 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <xmlscript/xml_helper.hxx>
+#include <xmlscript/xml_import.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/awt/CharSet.hpp>
@@ -582,7 +582,7 @@ bool StyleElement::importFontStyle(
 //##################################################################################################
 
 //__________________________________________________________________________________________________
-bool ControlImportContext::importStringProperty(
+bool ImportContext::importStringProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -595,7 +595,7 @@ bool ControlImportContext::importStringProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importDoubleProperty(
+bool ImportContext::importDoubleProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -608,7 +608,7 @@ bool ControlImportContext::importDoubleProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importBooleanProperty(
+bool ImportContext::importBooleanProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -621,7 +621,7 @@ bool ControlImportContext::importBooleanProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importLongProperty(
+bool ImportContext::importLongProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -634,7 +634,7 @@ bool ControlImportContext::importLongProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importLongProperty(
+bool ImportContext::importLongProperty(
     sal_Int32 nOffset,
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
@@ -648,7 +648,7 @@ bool ControlImportContext::importLongProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importShortProperty(
+bool ImportContext::importShortProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -661,7 +661,7 @@ bool ControlImportContext::importShortProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importAlignProperty(
+bool ImportContext::importAlignProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -698,7 +698,7 @@ bool ControlImportContext::importAlignProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importDateFormatProperty(
+bool ImportContext::importDateFormatProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -767,7 +767,7 @@ bool ControlImportContext::importDateFormatProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-bool ControlImportContext::importTimeFormatProperty(
+bool ImportContext::importTimeFormatProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
@@ -810,6 +810,53 @@ bool ControlImportContext::importTimeFormatProperty(
         return true;
     }
     return false;
+}
+//__________________________________________________________________________________________________
+void ImportContext::importEvents(
+    vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents )
+{
+    Reference< script::XScriptEventsSupplier > xSupplier( _xControlModel, UNO_QUERY );
+    if (xSupplier.is())
+    {
+        Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
+        if (xEvents.is())
+        {
+            for ( size_t nPos = 0; nPos < rEvents.size(); ++nPos )
+            {
+                script::ScriptEventDescriptor descr;
+                Reference< xml::sax2::XExtendedAttributes > xEvent( rEvents[ nPos ] );
+
+                if (!getStringAttr( &descr.ListenerType,
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM("listener-type") ),
+                                    xEvent ) ||
+                    !getStringAttr( &descr.EventMethod,
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM("event-method") ),
+                                    xEvent ))
+                {
+                    throw xml::sax::SAXException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type | event attribute(s)!") ),
+                        Reference< XInterface >(), Any() );
+                }
+
+                getStringAttr( &descr.ScriptType,
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
+                               xEvent );
+                getStringAttr( &descr.ScriptCode,
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
+                               xEvent );
+                getStringAttr( &descr.AddListenerParam,
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("param") ),
+                               xEvent );
+
+                OUStringBuffer buf( 32 );
+                buf.append( descr.ListenerType );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
+                buf.append( descr.EventMethod );
+
+                xEvents->insertByName( buf.makeStringAndClear(), makeAny( descr ) );
+            }
+        }
+    }
 }
 //__________________________________________________________________________________________________
 void ControlImportContext::importDefaults(
@@ -869,55 +916,11 @@ void ControlImportContext::importDefaults(
                           OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
                           xAttributes );
     importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM("helptext") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("help-text") ),
                           xAttributes );
-}
-//__________________________________________________________________________________________________
-void ControlImportContext::importEvents(
-    vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents )
-{
-    Reference< script::XScriptEventsSupplier > xSupplier( _xControlModel, UNO_QUERY );
-    if (xSupplier.is())
-    {
-        Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
-        if (xEvents.is())
-        {
-            for ( size_t nPos = 0; nPos < rEvents.size(); ++nPos )
-            {
-                script::ScriptEventDescriptor descr;
-                Reference< xml::sax2::XExtendedAttributes > xEvent( rEvents[ nPos ] );
-
-                if (!getStringAttr( &descr.ListenerType,
-                                    OUString( RTL_CONSTASCII_USTRINGPARAM("listener-type") ),
-                                    xEvent ) ||
-                    !getStringAttr( &descr.EventMethod,
-                                    OUString( RTL_CONSTASCII_USTRINGPARAM("event-method") ),
-                                    xEvent ))
-                {
-                    throw xml::sax::SAXException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type | event attribute(s)!") ),
-                        Reference< XInterface >(), Any() );
-                }
-
-                getStringAttr( &descr.ScriptType,
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
-                               xEvent );
-                getStringAttr( &descr.ScriptCode,
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
-                               xEvent );
-                getStringAttr( &descr.AddListenerParam,
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("param") ),
-                               xEvent );
-
-                OUStringBuffer buf( 32 );
-                buf.append( descr.ListenerType );
-                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
-                buf.append( descr.EventMethod );
-
-                xEvents->insertByName( buf.makeStringAndClear(), makeAny( descr ) );
-            }
-        }
-    }
+    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("help-url") ),
+                          xAttributes );
 }
 
 //##################################################################################################

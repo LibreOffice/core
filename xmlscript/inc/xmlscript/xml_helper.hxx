@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:35 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,74 +71,19 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_XML_XIMPORTER_HXX_
-#include <com/sun/star/xml/XImporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HDL_
+#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HXX_
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
 
 namespace xmlscript
 {
-
-/*##################################################################################################
-
-    IMPORTING
-
-##################################################################################################*/
-
-//==================================================================================================
-struct NameSpaceUid
-{
-    /** URI defining XML namespace
-    */
-    ::rtl::OUString     sURI;
-    /** Identifier given for URI (given back in createRootContext(), createChildContext() callbacks
-    */
-    sal_Int32           nUid;
-
-    inline NameSpaceUid( ::rtl::OUString const & sURI_, sal_Int32 nUid_ ) SAL_THROW( () )
-        : sURI( sURI_ )
-        , nUid( nUid_ )
-        {}
-};
-
-/** Creates a document handler to be used for SAX1 parser that can handle namespaces.
-    Give a list of NameSpaceUid structs defining namespace mappings to integers (performance).
-    Implementing the XImporter interface, you will get a createRootContext() for the root
-    element of your XML document and subsequent createChildContext() callbacks for each
-    sub element.
-    Namespaces of tags are identified by their integer value.
-
-    @param pNamespaceUids
-           array of namespace mappings
-    @param nNameSpaceUids
-           number of element in namespace mappings array
-    @param nUnknownNamespaceUid
-           namespace id given for unrecognized namespace prefix
-           (one that is not given via pNamespaceUids)
-    @param xImporter
-           initial import object being called for root context
-    @param bSingleThreadedUse
-           flag whether context management is synchronized.
-    @return
-            document handler for parser
-*/
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL createDocumentHandler(
-    NameSpaceUid const * pNamespaceUids, sal_Int32 nNameSpaceUids,
-    sal_Int32 nUnknownNamespaceUid,
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::XImporter > const & xImporter,
-    bool bSingleThreadedUse = true )
-    SAL_THROW( () );
-
 
 /*##################################################################################################
 

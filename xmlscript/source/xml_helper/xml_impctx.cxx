@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_impctx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:58 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/implbase1.hxx>
-#include <xmlscript/xml_helper.hxx>
+#include <xmlscript/xml_import.hxx>
 
 #include <com/sun/star/xml/sax2/XExtendedAttributes.hpp>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-03 13:13:48 $
+ *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,14 +652,32 @@ void ElementDescriptor::readDefaults()
         OSL_ENSURE( 0, "unexpected property type for \"Enabled\": not bool!" );
     }
 
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
-    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
+    // force writing of pos/size
+    a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ) );
+    if (a.getValueTypeClass() == TypeClass_LONG)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ),
+                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+    }
+    a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ) );
+    if (a.getValueTypeClass() == TypeClass_LONG)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ),
+                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+    }
+    a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) );
+    if (a.getValueTypeClass() == TypeClass_LONG)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ),
+                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+    }
+    a = _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ) );
+    if (a.getValueTypeClass() == TypeClass_LONG)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ),
+                      OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+    }
+
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
@@ -667,7 +685,9 @@ void ElementDescriptor::readDefaults()
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":helptext") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-text") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-url") ) );
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEvents()
@@ -1043,66 +1063,44 @@ void SAL_CALL exportDialogModel(
 
     xOut->startDocument();
 
-    if (! all_elements.empty()) // dump out
+    // window
+    Reference< beans::XPropertySet > xProps( xDialogModel, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    Reference< beans::XPropertyState > xPropState( xProps, UNO_QUERY );
+    OSL_ASSERT( xPropState.is() );
+
+    OUString aWindowName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":window") );
+    ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
+    Reference< xml::sax::XAttributeList > xWindow( pWindow );
+    pWindow->readDialogModel( &all_styles );
+    xOut->ignorableWhitespace( OUString() );
+    xOut->startElement( aWindowName, xWindow );
+
+    // dump out stylebag
+    all_styles.dump( xOut );
+
+    if (! all_elements.empty())
     {
-        // window
-        Reference< beans::XPropertySet > xProps( xDialogModel, UNO_QUERY );
-        OSL_ASSERT( xProps.is() );
-        Reference< beans::XPropertyState > xPropState( xProps, UNO_QUERY );
-        OSL_ASSERT( xPropState.is() );
-
-        OUString aWindowName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":window") );
-        ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
-        Reference< xml::sax::XAttributeList > xWindow( pWindow );
-        pWindow->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
-        pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ) );
-        pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
-        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
-        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
-        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
-        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
-        pWindow->readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Step") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
-        pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
-        //pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
-        //                       OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":helptext") ) );
+        // open up bulletinboard
+        OUString aBBoardName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":bulletinboard") );
         xOut->ignorableWhitespace( OUString() );
-        xOut->startElement( aWindowName, xWindow );
+        xOut->startElement( aBBoardName, Reference< xml::sax::XAttributeList >() );
 
-        // dump out stylebag
-        all_styles.dump( xOut );
-
-        if (! all_elements.empty())
+        // export control elements
+        for ( size_t nPos = 0; nPos < all_elements.size(); ++nPos )
         {
-            // open up bulletinboard
-            OUString aBBoardName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":bulletinboard") );
-            xOut->ignorableWhitespace( OUString() );
-            xOut->startElement( aBBoardName, Reference< xml::sax::XAttributeList >() );
-
-            // export control elements
-            for ( size_t nPos = 0; nPos < all_elements.size(); ++nPos )
-            {
-                ElementDescriptor * pElem = static_cast< ElementDescriptor * >( all_elements[ nPos ].get() );
-                pElem->dump( xOut );
-            }
-
-            // end bulletinboard
-            xOut->ignorableWhitespace( OUString() );
-            xOut->endElement( aBBoardName );
+            ElementDescriptor * pElem = static_cast< ElementDescriptor * >( all_elements[ nPos ].get() );
+            pElem->dump( xOut );
         }
 
-        // end window
+        // end bulletinboard
         xOut->ignorableWhitespace( OUString() );
-        xOut->endElement( aWindowName );
+        xOut->endElement( aBBoardName );
     }
+
+    // end window
+    xOut->ignorableWhitespace( OUString() );
+    xOut->endElement( aWindowName );
 
     xOut->endDocument();
 }
