@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:38:20 $
+ *  last change: $Author: pl $ $Date: 2002-10-16 16:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,6 +790,13 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
 
     // Tracking-Event erzeugen
     Point           aMousePos( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY );
+#ifndef REMOTE_APPSERVER
+    if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+    {
+        // - RTL - re-mirror frame pos at pChild
+        ImplReMirror( aMousePos );
+    }
+#endif
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                            mpFrameData->mnClickCount, 0,
                            mpFrameData->mnMouseCode, mpFrameData->mnMouseCode );
