@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-28 10:01:52 $
+ *  last change: $Author: mib $ $Date: 2002-01-07 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,8 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     M_E( "HoriOrient",              STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALPOS_MIRRORED ),
     M_E( "HoriOrientRelation",      STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL, CTF_HORIZONTALREL ),
     M_E( "HoriOrientRelation",      STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALREL_FRAME ),
-    M_E( "UserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    // UserDefinedAttributes is already contained in the map this one is
+    // chained to.
 
     M_END()
 };
