@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:18:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,22 +100,42 @@ String STR_EXPORT_ONLY
 
 String STR_APPL_NAME_WRITER
 {
-    Text                    = "%PRODUCTNAME Writer";
+    Text                    = "%PRODUCTNAME Writer (.sxw)";
 };
 
 String STR_APPL_NAME_CALC
 {
-    Text                    = "%PRODUCTNAME Calc";
+    Text                    = "%PRODUCTNAME Calc (.sxc)";
 };
 
 String STR_APPL_NAME_IMPRESS
 {
-    Text                    = "%PRODUCTNAME Impress";
+    Text                    = "%PRODUCTNAME Impress (.sxi)";
 };
 
 String STR_APPL_NAME_DRAW
 {
-    Text                    = "%PRODUCTNAME Draw";
+    Text                    = "%PRODUCTNAME Draw (.sxd)";
+};
+
+String STR_APPL_NAME_OASIS_WRITER
+{
+    Text = "%PRODUCTNAME Writer (.oot)";
+};
+
+String STR_APPL_NAME_OASIS_CALC
+{
+    Text = "%PRODUCTNAME Calc (.oos)";
+};
+
+String STR_APPL_NAME_OASIS_IMPRESS
+{
+    Text = "%PRODUCTNAME Impress (.oop)";
+};
+
+String STR_APPL_NAME_OASIS_DRAW
+{
+    Text = "%PRODUCTNAME Draw (.ood)";
 };
 
 String STR_WARN_DELETE
