@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-08-06 14:40:52 $
+ *  last change: $Author: os $ $Date: 2002-08-07 13:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         case SID_INSERTDOC:
             if (!pItem)
+            {
                 rReq.SetReturnValue(SfxBoolItem(nSlot, GetView().InsertDoc(nSlot, aEmptyStr, aEmptyStr) != -1));
+                rReq.Ignore();
+            }
             else
             {
                 String aFile    = aEmptyStr;
@@ -465,7 +468,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                rWrtSh.SetBookmark( KeyCode(), ((SfxStringItem*)pItem)->GetValue(), aEmptyStr );
+                String sName = ((SfxStringItem*)pItem)->GetValue();
+                rWrtSh.MakeUniqueBookmarkName(sName);
+                rWrtSh.SetBookmark( KeyCode(), sName, aEmptyStr );
             }
             else
             {
