@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_unmarshal.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ sal_Bool Unmarshal::unpackType( void *pDest )
     {
         if( nTypeClass <= 14 /* any */ )
         {
-            pTypeRef = * typelib_static_type_getByTypeClass((enum typelib_TypeClass )nTypeClass);
+            pTypeRef = * typelib_static_type_getByTypeClass((typelib_TypeClass )nTypeClass);
             typelib_typedescriptionreference_acquire( pTypeRef );
         }
         else
@@ -219,7 +219,7 @@ sal_Bool Unmarshal::unpackType( void *pDest )
                     if( bReturn )
                     {
                         ::typelib_typedescriptionreference_new(
-                            &pTypeRef, (enum typelib_TypeClass )(nTypeClass & 0x7f), pString );
+                            &pTypeRef, (typelib_TypeClass )(nTypeClass & 0x7f), pString );
                         if( nCacheIndex != 0xffff )
                         {
                             if( nCacheIndex < m_pBridgeImpl->m_properties.nTypeCacheSize )
