@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:05:35 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,8 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>       // SwRedlineTbl
 #endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx> // SwDrawTextInfo
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 
 using namespace ::com::sun::star;
