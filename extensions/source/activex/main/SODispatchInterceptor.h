@@ -123,7 +123,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Bridge_implementedInterfaces(
             /* [retval][out] */ SAFEARRAY __RPC_FAR * __RPC_FAR *pVal)
         {
-            *pVal = SafeArrayCreateVector( VT_BSTR, 0, 3 );
+            *pVal = SafeArrayCreateVector( VT_BSTR, 0, 4 );
 
             if( !*pVal )
                 return E_FAIL;
@@ -139,11 +139,11 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SODISPATCHINTERCEPTOR)
             ix = 2;
             aInterface = CComBSTR( OLESTR( "com.sun.star.frame.XDispatch" ) );
             SafeArrayPutElement( *pVal, &ix, aInterface );
-            /*
+
             ix = 3;
             aInterface = CComBSTR( OLESTR( "com.sun.star.frame.XInterceptorInfo" ) );
             SafeArrayPutElement( *pVal, &ix, aInterface );
-            */
+
             return S_OK;
         }
 };

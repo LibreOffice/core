@@ -47,7 +47,14 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
     if( !strncmp( OLE2T( aTargetUrl.bstrVal ), "ftp://", 6 )
      || !strncmp( OLE2T( aTargetUrl.bstrVal ), "http://", 7 )
      || !strncmp( OLE2T( aTargetUrl.bstrVal ), "file://", 7 ) )
-        *retVal = this;
+    {
+        CComQIPtr< IDispatch, &IID_IDispatch > pIDisp( this );
+        if( pIDisp )
+        {
+            this->AddRef();
+            *retVal = pIDisp;
+        }
+    }
     else
     {
         if( !m_xSlave )
@@ -63,9 +70,11 @@ STDMETHODIMP SODispatchInterceptor::queryDispatch( IDispatch FAR* aURL,
         if( !SUCCEEDED( hr ) || aResult.vt != VT_DISPATCH || aResult.pdispVal == NULL ) return E_FAIL;
 
         *retVal = aResult.pdispVal;
+        /* following code is workaround for UNO bug
         CComQIPtr< IUnknown, &IID_IUnknown > pIUnk( *retVal );
         if( pIUnk )
             (*retVal)->AddRef();
+        */
     }
 
     return S_OK;

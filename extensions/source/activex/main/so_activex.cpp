@@ -83,8 +83,13 @@ const char* aMimeType[] = { "application/vnd.stardivision.chart",
 const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
 
+// ISOComWindowPeer interface information
 const char* aInterIDWinPeer = "{BF5D10F3-8A10-4A0B-B150-2B6AA2D7E118}";
 const char* aProxyStubWinPeer = "{00020424-0000-0000-C000-000000000046}";
+
+// ISODispatchInterceptor interface information
+const char* aInterIDDispInt = "{9337694C-B27D-4384-95A4-9D8E0EABC9E5}";
+const char* aProxyStubDispInt = "{00020424-0000-0000-C000-000000000046}";
 
 const char* aLocalPrefix = "Software\\Classes\\";
 
@@ -187,6 +192,12 @@ STDAPI DllRegisterServerNative( BOOL bForAllUsers )
                             && createKey( hkey2, "ProxyStubClsid32", aProxyStubWinPeer )
                             && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
                           && ERROR_SUCCESS == RegCloseKey( hkey2 )
+                        && createKey( hkey1, aInterIDDispInt, "ISODispatchInterceptor" )
+                          && ERROR_SUCCESS == RegCreateKey( hkey1, aInterIDDispInt, &hkey2 )
+                            && createKey( hkey2, "ProxyStubClsid", aProxyStubDispInt )
+                            && createKey( hkey2, "ProxyStubClsid32", aProxyStubDispInt )
+                            && createKey( hkey2, "TypeLib", aTypeLib, "Version", "1.0" )
+                          && ERROR_SUCCESS == RegCloseKey( hkey2 )
                       && ERROR_SUCCESS == RegCloseKey( hkey1 )
                   && ERROR_SUCCESS == RegCloseKey( hkey ) );
         }
@@ -273,6 +284,10 @@ STDAPI DllUnregisterServerNative( BOOL bForAllUsers )
            fErr = TRUE;
 
     wsprintf( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDWinPeer );
+    if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
+           fErr = TRUE;
+
+    wsprintf( aSubKey, "%s\\Interface\\%s", aPrefix, aInterIDDispInt );
     if( ERROR_SUCCESS != SHDeleteKey( bForAllUsers ? HKEY_CLASSES_ROOT : HKEY_CURRENT_USER, aSubKey ) )
            fErr = TRUE;
 

@@ -95,14 +95,14 @@ interface ISODispatchInterceptor : IDispatch
 
     [id(6), helpstring("method queryDispatches")]
                 HRESULT queryDispatches( [in] SAFEARRAY(IDispatch*) aDescripts,
-                                         [out,retval] SAFEARRAY(IDispatch*)* retVal );
+                                         [out,retval] SAFEARRAY(VARIANT)* retVal );
 
 
 // com.sun.star.frame.XDispatch
 
     [id(7), helpstring("method dispatch")]
                 HRESULT dispatch( [in] IDispatch* aURL,
-                                  [in] SAFEARRAY(IDispatch*) aArgs );
+                                  [in] SAFEARRAY(VARIANT) aArgs );
 
     [id(8), helpstring("method addStatusListener")]
                 HRESULT addStatusListener( [in] IDispatch* xControl,
