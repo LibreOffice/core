@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 11:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
 #endif
 
 #ifndef _WRTSH_HXX
@@ -166,8 +172,8 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         pSetFld = (SwSetExpField*)pField;
         String sFormula(pSetFld->GetFormula());
         //values are formatted - formulas are not
-        International aInt(pSetFld->GetLanguage());
-        if(aInt.IsNumeric(sFormula))
+        CharClass aCC( SvxCreateLocale( pSetFld->GetLanguage() ));
+        if( aCC.isNumeric( sFormula ))
             aStr = pSetFld->Expand();
         else
             aStr = sFormula;
@@ -243,6 +249,9 @@ IMPL_LINK(SwFldInputDlg, NextHdl, PushButton*, EMPTYARG)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:37  hr
+      initial import
+
       Revision 1.48  2000/09/18 16:05:30  willem.vandorp
       OpenOffice header added.
 
