@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:58:15 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -496,9 +499,29 @@
     //= OCommonGeometryControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    OCommonGeometryControlModel::HashMapString2Int  OCommonGeometryControlModel::s_aServiceSpecifierMap;
-    OCommonGeometryControlModel::PropSeqArray       OCommonGeometryControlModel::s_aAggregateProperties;
-    OCommonGeometryControlModel::IntArrayArray      OCommonGeometryControlModel::s_aAmbiguousPropertyIds;
+
+    typedef ::std::hash_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash > HashMapString2Int;
+    typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
+    typedef ::std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
+
+    // for creating class-unique PropertySetInfo's, we need some info:
+    namespace { struct ServiceSpecifierMap : public rtl::Static< HashMapString2Int, ServiceSpecifierMap > {}; }
+    // this one maps from a String, which is the service specifier for our
+    // aggregate, to a unique id
+
+    namespace { struct AggregateProperties : public rtl::Static< PropSeqArray, AggregateProperties > {}; }
+    // this one contains the properties which belong to all the unique ids
+    // in ServiceSpecifierMap
+
+    namespace { struct AmbiguousPropertyIds : public rtl::Static< IntArrayArray, AmbiguousPropertyIds > {}; }
+    // the ids of the properties which we as well as our aggregate supply
+    // For such props, we let our base class handle them, and whenever such
+    // a prop is set, we forward this to our aggregate.
+
+    // With this, we can ensure that two instances of this class share the
+    // same PropertySetInfo if and only if both aggregates have the same
+    // service specifier.
+
 
     //--------------------------------------------------------------------
     OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, const ::rtl::OUString& _rServiceSpecifier )
@@ -515,14 +538,16 @@
             throw IllegalArgumentException();
         }
 
-        HashMapString2Int::const_iterator aPropMapIdPos = s_aServiceSpecifierMap.find( m_sServiceSpecifier );
-        if ( s_aServiceSpecifierMap.end() == aPropMapIdPos )
+            HashMapString2Int &rMap = ServiceSpecifierMap::get();
+        HashMapString2Int::const_iterator aPropMapIdPos = rMap.find( m_sServiceSpecifier );
+        if ( rMap.end() == aPropMapIdPos )
         {
-            m_nPropertyMapId = s_aAggregateProperties.size();
-            s_aAggregateProperties.push_back( xPI->getProperties() );
-            s_aAmbiguousPropertyIds.push_back( IntArrayArray::value_type() );
+            PropSeqArray &rAggProperties = AggregateProperties::get();
+            m_nPropertyMapId = rAggProperties.size();
+            rAggProperties.push_back( xPI->getProperties() );
+            AmbiguousPropertyIds::get().push_back( IntArrayArray::value_type() );
 
-            s_aServiceSpecifierMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
+            rMap[ m_sServiceSpecifier ] = m_nPropertyMapId;
         }
         else
             m_nPropertyMapId = aPropMapIdPos->second;
@@ -553,8 +578,8 @@
     ::cppu::IPropertyArrayHelper* OCommonGeometryControlModel::createArrayHelper( sal_Int32 _nId ) const
     {
         OSL_ENSURE( _nId == m_nPropertyMapId, "OCommonGeometryControlModel::createArrayHelper: invalid argument!" );
-        OSL_ENSURE( _nId < (sal_Int32)s_aAggregateProperties.size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
-        OSL_ENSURE( _nId < (sal_Int32)s_aAmbiguousPropertyIds.size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
+        OSL_ENSURE( _nId < (sal_Int32)AggregateProperties::get().size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (1)!" );
+        OSL_ENSURE( _nId < (sal_Int32)AmbiguousPropertyIds::get().size(), "OCommonGeometryControlModel::createArrayHelper: invalid status info (2)!" );
 
         // our own properties
         Sequence< Property > aProps;
@@ -562,10 +587,10 @@
 
         // the aggregate properties
         Sequence< Property > aAggregateProps;
-        aAggregateProps = s_aAggregateProperties[ _nId ];
+        aAggregateProps = AggregateProperties::get()[ _nId ];
 
         // look for duplicates, and remember them
-        IntArrayArray::value_type& rDuplicateIds = s_aAmbiguousPropertyIds[ _nId ];
+        IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ _nId ];
         // for this, sort the aggregate properties
         ::std::sort(
             aAggregateProps.getArray(),
@@ -649,7 +674,7 @@
         OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
         // look if this id is one we recognized as duplicate
-        IntArrayArray::value_type& rDuplicateIds = s_aAmbiguousPropertyIds[ m_nPropertyMapId ];
+        IntArrayArray::value_type& rDuplicateIds = AmbiguousPropertyIds::get()[ m_nPropertyMapId ];
 
         IntArrayArray::value_type::const_iterator aPos = ::std::find_if(
             rDuplicateIds.begin(),
