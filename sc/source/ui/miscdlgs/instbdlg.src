@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-18 13:34:34 $
+ *  last change: $Author: dr $ $Date: 2001-06-07 11:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,18 +93,18 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     Closeable = TRUE ;
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 218 , 8 ) ;
+        Pos = MAP_APPFONT ( 218 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 218 , 25 ) ;
+        Pos = MAP_APPFONT ( 218 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 218 , 45 ) ;
+        Pos = MAP_APPFONT ( 218 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     FixedLine FL_POSITION
@@ -281,7 +281,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 66 ) ;
-        Size = MAP_APPFONT ( 23 , 12 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
         SpinSize = 1 ;
@@ -320,7 +320,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 82 ) ;
-        Size = MAP_APPFONT ( 137 , 12 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
     };
     RadioButton RB_FROMFILE
     {
