@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:47:19 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1948,6 +1948,7 @@ void EditEngine::QuickFormatDoc( sal_Bool bFull )
         pImpEditEngine->FormatFullDoc();
     else
         pImpEditEngine->FormatDoc();
+
     // #111072# Don't pass active view, maybe selection is not updated yet...
     pImpEditEngine->UpdateViews( NULL );
 }
