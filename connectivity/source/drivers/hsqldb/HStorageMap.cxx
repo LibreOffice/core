@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:08:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,6 @@ namespace connectivity
                 if ( m_xInputStream.is() )
                 {
                     m_xInputStream->closeInput();
-                    try
-                    {
-                        ::comphelper::disposeComponent(m_xOutputStream);
-                    }
-                    catch(Exception)
-                    {}
                     m_xInputStream = NULL;
                 }
                 if ( m_xOutputStream.is() )
@@ -106,8 +100,11 @@ namespace connectivity
                     {
                         ::comphelper::disposeComponent(m_xOutputStream);
                     }
-                    catch(Exception)
-                    {}
+                    catch(const Exception& e)
+                    {
+                        e;
+                        OSL_ENSURE(0,"Could not dispose OutputStream");
+                    }
                     m_xOutputStream = NULL;
                 }
                 m_xStream = NULL;
