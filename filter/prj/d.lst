@@ -7,7 +7,18 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\class\XSLTFilter\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\class\XSLTValidate\*.jar %_DEST%\bin%_EXT%\*.jar
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+mkdir: %_DEST%\bin%_EXT%\xslt
+mkdir: %_DEST%\bin%_EXT%\xslt\common
+mkdir: %_DEST%\bin%_EXT%\xslt\export
+mkdir: %_DEST%\bin%_EXT%\xslt\export\common
+mkdir: %_DEST%\bin%_EXT%\xslt\export\common\styles
+mkdir: %_DEST%\bin%_EXT%\xslt\export\common\table
+mkdir: %_DEST%\bin%_EXT%\xslt\export\xhtml
+..\source\xslt\common\*.xsl %_DEST%\bin%_EXT%\xslt\common\*.xsl
+..\source\xslt\export\common\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\*.xsl
+..\source\xslt\export\common\styles\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\styles\*.xsl
+..\source\xslt\export\common\table\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\table\*.xsl
+..\source\xslt\export\xhtml\*.xsl %_DEST%\bin%_EXT%\xslt\export\xhtml\*.xsl
 ..\%__SRC%\bin\*.xsl %_DEST%\bin%_EXT%\*.xsl
 ..\%__SRC%\bin\*.stw %_DEST%\bin%_EXT%\*.stw
-
 ..\%__SRC%\bin\fcfg_*.zip %_DEST%\pck%_EXT%\fcfg_*.zip
