@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implpolypolygon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,17 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP_
+#include <drafts/com/sun/star/rendering/PathJoinType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP_
+#include <drafts/com/sun/star/rendering/PathCapType.hpp>
+#endif
+
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
@@ -66,8 +77,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #endif
 
-#include "implpolypolygon.hxx"
-#include "tools.hxx"
+#include <implpolypolygon.hxx>
+#include <tools.hxx>
 
 
 using namespace ::drafts::com::sun::star;
@@ -82,6 +93,13 @@ namespace cppcanvas
                                           const uno::Reference< rendering::XPolyPolygon2D >& rPolyPoly ) :
             CanvasGraphicHelper( rParentCanvas ),
             mxPolyPoly( rPolyPoly ),
+            maStrokeAttributes(1.0,
+                               10.0,
+                               uno::Sequence< double >(),
+                               uno::Sequence< double >(),
+                               rendering::PathCapType::ROUND,
+                               rendering::PathCapType::ROUND,
+                               rendering::PathJoinType::ROUND ),
             maFillColor(),
             maStrokeColor(),
             mbFillColorSet( false ),
@@ -183,7 +201,7 @@ namespace cppcanvas
                         "ImplBitmap::draw: invalid canvas" );
 
             if( pCanvas.get() == NULL ||
-                pCanvas->getUNOCanvas().is() )
+                !pCanvas->getUNOCanvas().is() )
                 return false;
 
             if( mbFillColorSet )
@@ -199,10 +217,15 @@ namespace cppcanvas
             {
                 maRenderState.DeviceColor = maStrokeColor;
 
-                pCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
-                                                            pCanvas->getViewState(),
-                                                            maRenderState,
-                                                            maStrokeAttributes );
+                if( ::rtl::math::approxEqual(maStrokeAttributes.StrokeWidth, 1.0) )
+                    pCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
+                                                              pCanvas->getViewState(),
+                                                              maRenderState );
+                else
+                    pCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
+                                                                pCanvas->getViewState(),
+                                                                maRenderState,
+                                                                maStrokeAttributes );
             }
 
             return true;
