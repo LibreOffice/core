@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MailMerge.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:38:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,147 @@ published service MailMerge
     [property] string FileNamePrefix;
 
     //=============================================================================
+
+    /** Contains the password of the outgoing mail server. It is necessary to set this
+        if the password is not already stored in the configuration for security reasons.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string OutServerPassword;
+    //=============================================================================
+
+    /** Contains the password of the incoming mail server. It is necessary to set this
+        if the mail server configuration is set to 'SMTP after POP' authentication and
+        the password is not already stored in the configuration for security reasons.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string InServerPassword;
+    //=============================================================================
+
+    /** contains the subject of the e-Mail message.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+        @since OOo 2.0
+    */
+    [property, optional] string Subject;
+
+    //=============================================================================
+
+    /** contains the name of the data base column that contains the e-Mail address
+        to the the e-Mail to.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string AddressFromColumn;
+
+    //=============================================================================
+
+    /** determines that the created mail merge document is sent as body in HTML format.
+        This property is only valid if the propery "SendAsAttachment" is set to <false/>.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] boolean SendAsHTML;
+
+    //=============================================================================
+
+
+    /** determines that the created mail merge document is sent as attachment.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] boolean SendAsAttachment;
+
+    //=============================================================================
+
+    /** contains the text of the mail body.
+        This property is only valid if the property "SendAsAttachment" is set to <true/>
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string MailBody;
+
+    //=============================================================================
+
+    /** contains the name of the attachment.
+        This property is only valid if "SendAsAttachment" is set to <true/>.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string AttachmentName;
+
+    //=============================================================================
+
+    /** contains the name of the document filter to save the attached mail merge document.
+        This property is only valid if "SendAsAttachment" is set to <true/>.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string AttachmentFilter;
+
+    //=============================================================================
+
+    /** contains a list of e-Mail addresses to
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] sequence< string > CopiesTo;
+
+    //=============================================================================
+
+    /**
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] sequence< string > BlindCopiesTo;
+
+
+    //=============================================================================
+
+    /** determines that the output of the mail merge is save in one single file.
+        <p>This property is only evaluated for file output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] boolean SaveAsSingleFile;
+
+    //=============================================================================
+
+    /** contains the name of the document filter to save the output file(s).
+        <p>This property is only evaluated for file output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string SaveFilter;
+
+    //=============================================================================
+
+    /** contains the properties that are defined in <com::sun::star::view::PrintOptions>.
+
+        <p>This property is only evaluated for printer output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] sequence< com::sun::star::beans::PropertyValue > PrintOptions;
+
 };
 
 
