@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: dv $ $Date: 2001-08-24 13:58:47 $
+ *  last change: $Author: dv $ $Date: 2001-08-27 08:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,8 +527,7 @@ void FileDialogHelper_Impl::enablePasswordBox()
                             aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
         BOOL bEnablePasswd = pFilter &&
-                             ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ) &&
-                             pFilter->UsesStorage();
+                             ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
 
         Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
@@ -930,13 +929,23 @@ public:
 
     sal_Int16               GetReturnValue()
                             { ::vos::OGuard aGuard( maMutex ); return mnRet; }
+
+    void                    SetReturnValue( sal_Int16 aRetValue )
+                            { ::vos::OGuard aGuard( maMutex ); mnRet = aRetValue; }
 };
 
 void SAL_CALL PickerThread_Impl::run()
 {
-    sal_Int16 n = mxPicker->execute();
-    ::vos::OGuard aGuard( maMutex );
-    mnRet = n;
+    try
+    {
+        sal_Int16 n = mxPicker->execute();
+        SetReturnValue( n );
+    }
+    catch( RuntimeException& )
+    {
+        SetReturnValue( ExecutableDialogResults::CANCEL );
+        DBG_ERRORFILE( "RuntimeException caught" );
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1081,8 +1090,15 @@ ErrCode FileDialogHelper_Impl::execute()
     setDefaultValues();
     enablePasswordBox();
 
-    // show the dialog
-    sal_Int16 nRet = mxFileDlg->execute();
+    PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
+    pThread->create();
+
+    while ( pThread->GetReturnValue() == nMagic )
+        Application::Yield();
+
+    pThread->join();
+    sal_Int16 nRet = pThread->GetReturnValue();
+    delete pThread;
 
     maPath = mxFileDlg->getDisplayDirectory();
 
