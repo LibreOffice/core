@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:31:44 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 14:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ DBG_NAME(OAddTableDlg);
 OAddTableDlg::OAddTableDlg( Window* pParent)
              :ModelessDialog( pParent, ModuleRes(DLG_JOIN_TABADD) )
              ,aFTTable( this, ResId( FT_TABLE ) )
-             ,aTableList( this, ResId( LB_TABLE ) )
+             ,aTableList( this, ResId( LB_TABLE ),sal_False )
              ,aAddButton( this, ResId( PB_ADDTABLE ) )
              ,aCloseButton( this, ResId( PB_CLOSE ) )
              ,aHelpButton( this, ResId( PB_HELP ) )
@@ -181,10 +181,10 @@ void OAddTableDlg::AddTable()
     {
         ::rtl::OUString aCatalog,aSchema,aTableName;
         SvLBoxEntry* pSchema = aTableList.GetParent(pEntry);
-        if(pSchema)
+        if(pSchema && pSchema != aTableList.getAllObjectsEntry())
         {
             SvLBoxEntry* pCatalog = aTableList.GetParent(pSchema);
-            if(pCatalog)
+            if(pCatalog && pCatalog != aTableList.getAllObjectsEntry())
                 aCatalog = aTableList.GetEntryText(pCatalog);
             aSchema = aTableList.GetEntryText(pSchema);
         }
