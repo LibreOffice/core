@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:12:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,17 +193,23 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
     // Tabellennamen extrahieren
-    if(m_xSourceObject.is())
+    try
     {
-        Reference<XColumnsSupplier> xColSupp(m_xSourceObject,UNO_QUERY);
-        if(xColSupp.is())
-            m_xSourceColumns = xColSupp->getColumns();
+        if ( m_xSourceObject.is() )
+        {
+            Reference<XColumnsSupplier> xColSupp(m_xSourceObject,UNO_QUERY);
+            if(xColSupp.is())
+                m_xSourceColumns = xColSupp->getColumns();
 
-        if ( !m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND) )
-            ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,m_sSourceName,sal_False);
-        else
-            _xSourceObject->getPropertyValue(PROPERTY_NAME)         >>= m_sSourceName;
-        m_sName = m_sSourceName;
+            if ( !m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND) )
+                m_sSourceName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sal_False,::dbtools::eInDataManipulation);
+            else
+                _xSourceObject->getPropertyValue(PROPERTY_NAME) >>= m_sSourceName;
+            m_sName = m_sSourceName;
+        }
+    }
+    catch(Exception)
+    {
     }
 }
 // -----------------------------------------------------------------------------
@@ -273,6 +279,7 @@ void OCopyTableWizard::construct()
 //------------------------------------------------------------------------
 OCopyTableWizard::~OCopyTableWizard()
 {
+    DBG_DTOR(OCopyTableWizard,NULL);
     TabPage *pPage=0;
     while(pPage = GetPage(0))
     {
@@ -289,12 +296,11 @@ OCopyTableWizard::~OCopyTableWizard()
     m_aTypeInfoIndex.clear();
     m_aTypeInfo.clear();
     m_aDestTypeInfoIndex.clear();
-
-    DBG_DTOR(OCopyTableWizard,NULL);
 }
 // -----------------------------------------------------------------------
 IMPL_LINK( OCopyTableWizard, ImplPrevHdl, PushButton*, EMPTYARG )
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     m_ePressed = WIZARD_PREV;
     if ( GetCurLevel() )
     {
@@ -315,6 +321,7 @@ IMPL_LINK( OCopyTableWizard, ImplPrevHdl, PushButton*, EMPTYARG )
 
 IMPL_LINK( OCopyTableWizard, ImplNextHdl, PushButton*, EMPTYARG )
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
     {
@@ -333,6 +340,7 @@ IMPL_LINK( OCopyTableWizard, ImplNextHdl, PushButton*, EMPTYARG )
 // -----------------------------------------------------------------------
 sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     sal_Bool bRet = sal_True;
     m_vColumnPos.clear();
     m_vColumnTypes.clear();
@@ -461,6 +469,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
 //------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::isAutoincrementEnabled() const
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     return m_bCreatePrimaryColumn;
 }
 // -----------------------------------------------------------------------
@@ -485,6 +494,7 @@ IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
 // -----------------------------------------------------------------------
 void OCopyTableWizard::CheckButtons()
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     if(GetCurLevel() == 0) // erste Seite hat kein PrevButton
     {
         if(m_nPageCount > 1)
@@ -508,6 +518,7 @@ void OCopyTableWizard::CheckButtons()
 // -----------------------------------------------------------------------
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
 //  CheckButtons();
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
@@ -522,24 +533,28 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 // -----------------------------------------------------------------------
 long OCopyTableWizard::DeactivatePage()
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     OWizardPage* pPage = (OWizardPage*)GetPage(GetCurLevel());
     return pPage ? pPage->LeavePage() : sal_False;
 }
 // -----------------------------------------------------------------------
 void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     AddPage(pPage);
     ++m_nPageCount;
 }
 // -----------------------------------------------------------------------
 void OCopyTableWizard::RemoveWizardPage(OWizardPage* pPage)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     RemovePage(pPage);
     --m_nPageCount;
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
     if ( _pField )
     {
@@ -555,10 +570,25 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
     }
 }
 // -----------------------------------------------------------------------------
+void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName)
+{
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
+    OSL_ENSURE(_pField,"FieldDescrioption is null!");
+    if ( _pField )
+    {
+        m_vDestColumns.erase(_sOldName);
+        OSL_ENSURE( m_vDestColumns.find(_pField->GetName()) == m_vDestColumns.end(),"Column with that name already exist!");
+
+        m_aDestVec[_nPos] =
+            m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first;
+    }
+}
+// -----------------------------------------------------------------------------
 void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
                                 ODatabaseExport::TColumns& _rColumns,
                                 ODatabaseExport::TColumnVector& _rColVector)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     ODatabaseExport::TColumns::iterator aIter = _rColumns.begin();
 
     for(;aIter != _rColumns.end();++aIter)
@@ -579,6 +609,7 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
             Reference<XNameAccess> xColumns = xColSup->getColumns();
             OFieldDescription* pActFieldDescr = NULL;
             String aType;
+            ::rtl::OUString sCreateParam(RTL_CONSTASCII_USTRINGPARAM("x"));
             //////////////////////////////////////////////////////////////////////
             // ReadOnly-Flag
             // Bei Drop darf keine Zeile editierbar sein.
@@ -609,7 +640,7 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
                 pActFieldDescr = new OFieldDescription(xColumn);
                 // search for type
                 sal_Bool bForce;
-                TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bAutoIncrement,bForce);
+                TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
                 if ( !pTypeInfo.get() )
                     pTypeInfo = m_pTypeInfo;
 
@@ -640,11 +671,13 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::clearDestColumns()
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     clearColumns(m_vDestColumns,m_aDestVec);
 }
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OCopyTableWizard::getKeyColumns(const Reference<XPropertySet>& _xTable) const
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     // use keys and indexes for excat postioning
     // first the keys
     Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
@@ -664,7 +697,7 @@ Reference<XNameAccess> OCopyTableWizard::getKeyColumns(const Reference<XProperty
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
             {
-                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                xKeyColsSup.set(xProp,UNO_QUERY);
                 OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
                 xKeyColumns = xKeyColsSup->getColumns();
                 break;
@@ -677,6 +710,7 @@ Reference<XNameAccess> OCopyTableWizard::getKeyColumns(const Reference<XProperty
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,const ODatabaseExport::TColumnVector* _pVec,sal_Bool _bKeyColumns)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     // now append the columns
     OSL_ENSURE(_rxColSup.is(),"No columns supplier");
     if(!_rxColSup.is())
@@ -725,6 +759,7 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::appendKey(Reference<XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     if(!_rxSup.is())
         return; // the database doesn't support keys
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
@@ -752,61 +787,14 @@ void OCopyTableWizard::appendKey(Reference<XKeysSupplier>& _rxSup,const ODatabas
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createView()
 {
-    Reference<XViewsSupplier> xSup(m_xConnection,UNO_QUERY);
-    Reference< XNameAccess > xViews;
-    if(xSup.is())
-        xViews = xSup->getViews();
-    Reference<XDataDescriptorFactory> xFact(xViews,UNO_QUERY);
-    OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-    if(!xFact.is())
-        return NULL;
-
-    m_xDestObject = xFact->createDataDescriptor();
-    ::rtl::OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),
-                                        m_sName,
-                                        sCatalog,
-                                        sSchema,
-                                        sTable,
-                                        ::dbtools::eInDataManipulation);
-
-    m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-    m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-    m_xDestObject->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
-
-    ::rtl::OUString sCommand;
-    if(m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
-    {
-        m_xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-    }
-    else
-    {
-        sCommand = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-        ::rtl::OUString sComposedName;
-        ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,sComposedName,sal_True);
-        sCommand += sComposedName;
-    }
-    m_xDestObject->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
-
-    Reference<XAppend> xAppend(xViews,UNO_QUERY);
-    if(xAppend.is())
-        xAppend->appendByDescriptor(m_xDestObject);
-
-    m_xDestObject = NULL;
-    // we need to reget the view because after appending it it is no longer valid
-    // but this time it isn't a view object it is a table object with type "VIEW"
-    Reference<XTablesSupplier> xTabSup(m_xConnection,UNO_QUERY);
-    Reference< XNameAccess > xTables;
-    if(xSup.is())
-        xTables = xTabSup->getTables();
-    if(xTables.is() && xTables->hasByName(m_sName))
-        xTables->getByName(m_sName) >>= m_xDestObject;
-
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
+    m_xDestObject = ::dbaui::createView(m_sName,m_xConnection,m_xSourceObject);
     return m_xDestObject;
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createTable()
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
     Reference< XNameAccess > xTables;
     if(xSup.is())
@@ -873,7 +861,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         else
         {
             ::rtl::OUString sComposedName;
-            ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sComposedName,sal_False);
+            sComposedName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xDestObject,sal_False,::dbtools::eInDataManipulation);
             if(xTables->hasByName(sComposedName))
             {
                 xTables->getByName(sComposedName) >>= m_xDestObject;
@@ -910,7 +898,8 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     if ( m_vColumnPos.end() != aPosFind )
                     {
                         aPosFind->second = nNewPos;
-                        m_vColumnTypes[m_vColumnPos.end() - aPosFind] = (*aFind)->second->GetType();
+                        OSL_ENSURE(m_vColumnTypes.size() > (aPosFind - m_vColumnPos.begin()),"Invalid index for vector!");
+                        m_vColumnTypes[aPosFind - m_vColumnPos.begin()] = (*aFind)->second->GetType();
                     }
                 }
 /*
@@ -950,6 +939,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 // -----------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::supportsPrimaryKey() const
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     sal_Bool bAllowed = sal_False;
     if(m_xConnection.is())
     {
@@ -967,6 +957,7 @@ sal_Bool OCopyTableWizard::supportsPrimaryKey() const
 // -----------------------------------------------------------------------------
 sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     sal_Int32 nLen = 0;
     if(m_xConnection.is())
     {
@@ -984,11 +975,13 @@ sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::setCreateStyle(const OCopyTableWizard::Wizard_Create_Style& _eStyle)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     m_eCreateStyle = _eStyle;
 }
 // -----------------------------------------------------------------------------
 OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     return m_eCreateStyle;
 }
 // -----------------------------------------------------------------------------
@@ -997,6 +990,7 @@ OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
                                                     const ::rtl::OUString&  _sExtraChars,
                                                     sal_Int32               _nMaxNameLen)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
 
     ::rtl::OUString sAlias = _sColumnName;
     if ( isSQL92CheckEnabled(m_xConnection) )
@@ -1031,6 +1025,7 @@ OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
 // -----------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     sal_Bool bRet = m_aDestTypeInfo.find(_nDataType) != m_aDestTypeInfo.end();
     if ( bRet )
         _rNewDataType = _nDataType;
@@ -1039,11 +1034,12 @@ sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDat
 // -----------------------------------------------------------------------------
 TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& _bNotConvert)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     if ( m_xSourceConnection == m_xConnection )
         return _pType;
 
     sal_Bool bForce;
-    TOTypeInfoSP pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,_pType->nType,_pType->aTypeName,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
+    TOTypeInfoSP pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,_pType->nType,_pType->aTypeName,_pType->aCreateParams,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
     if ( !pType.get() || bForce )
     { // no type found so we have to find the correct one ourself
         sal_Int32 nDefaultType = DataType::VARCHAR;
@@ -1099,11 +1095,12 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
             default:
                 nDefaultType = DataType::VARCHAR;
         }
-        pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,nDefaultType,_pType->aTypeName,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
+        pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,nDefaultType,_pType->aTypeName,_pType->aCreateParams,_pType->nPrecision,_pType->nMaximumScale,_pType->bAutoIncrement,bForce);
         if ( !pType.get() )
         {
             _bNotConvert = sal_False;
-            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,50,0,sal_False,bForce);
+            ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x"));
+            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,sal_False,bForce);
             if ( !pType.get() )
                 pType = m_pTypeInfo;
         }
@@ -1115,6 +1112,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
 // -----------------------------------------------------------------------------
 ::rtl::OUString OCopyTableWizard::createUniqueName(const ::rtl::OUString& _sName)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     ::rtl::OUString sName = _sName;
     if ( m_xSourceColumns.is() )
         sName = ::dbtools::createUniqueName(m_xSourceColumns,sName,sal_False);
@@ -1135,18 +1133,21 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::fillTypeInfo()
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     ::dbaui::fillTypeInfo(m_xSourceConnection,m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);
     ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aDestTypeInfo,m_aDestTypeInfoIndex);
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::loadData()
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     loadData(m_xSourceObject,m_vSourceColumns,m_vSourceVec); // create the field description
 }
 // -----------------------------------------------------------------------------
 //=======
 void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName)
 {
+    DBG_CHKTHIS(OCopyTableWizard,NULL);
     UniString sTitle(ModuleRes(STR_STAT_WARNING));
     UniString sMessage(ModuleRes(STR_UNKNOWN_TYPE_FOUND));
 
