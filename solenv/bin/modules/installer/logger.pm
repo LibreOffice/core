@@ -2,9 +2,9 @@
 #
 #   $RCSfile: logger.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:55:03 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:35:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,20 @@ sub include_header_into_logfile
 
 
     $infoline = "######################################################\n";
+    push( @installer::globals::logfileinfo, $infoline);
+}
+
+####################################################
+# Write timestamp into log file
+####################################################
+
+sub include_timestamp_into_logfile
+{
+    my ($message) = @_;
+
+    my $infoline;
+    my $timestring = get_time_string();
+    $infoline = "$message\t$timestring";
     push( @installer::globals::logfileinfo, $infoline);
 }
 
