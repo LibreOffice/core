@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-16 12:15:21 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-
-#ifndef _OSL_TYPES_H_
-#include <osl/types.h>
 #endif
 
 #ifndef _OSL_MODULE_H_

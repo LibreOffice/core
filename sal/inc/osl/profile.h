@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:43:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #ifndef _OSL_PROFILE_H_
 #define _OSL_PROFILE_H_
 
-#ifndef _RTL_USTRING_H
-#     include <rtl/ustring.h>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
+#ifndef _RTL_USTRING_H
+#     include <rtl/ustring.h>
 #endif
 
 #ifdef __cplusplus
