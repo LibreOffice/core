@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,11 +616,15 @@ class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
     const ::rtl::OUString sPropertyColumnName;
     const ::rtl::OUString sPropertyDatabaseFormat;
     const ::rtl::OUString sPropertyCurrentPresentation;
+    const ::rtl::OUString sPropertyIsVisible;
 
     XMLValueImportHelper aValueHelper;
 
     ::rtl::OUString sColumnName;
     sal_Bool bColumnOK;
+
+    sal_Bool bDisplay;
+    sal_Bool bDisplayOK;
 
 public:
 
