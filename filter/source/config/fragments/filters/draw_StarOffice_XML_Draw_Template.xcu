@@ -1,4 +1,4 @@
-    <node oor:name="draw_StarOffice_XML_Draw_Template" oor:op="replace">
+    <node oor:name="draw_StarOffice_XML_Draw_Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>draw_StarOffice_XML_Draw_Template</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
@@ -9,20 +9,20 @@
         <prop oor:name="UIName">
             <value xml:lang="pl">%productname% %formatversion% - Szablon rysunku</value>
             <value xml:lang="hu">%productname% %formatversion%-rajzsablon</value>
-            <value xml:lang="ja">%productname% %formatversion% 図形描画テンプレート</value>
+            <value xml:lang="ja">%productname% %formatversion% 図形�??画テンプレート</value>
             <value xml:lang="es">Plantilla de dibujo %productname% %formatversion%</value>
             <value xml:lang="tr">%productname% %formatversion% Çizim Şablonu</value>
-            <value xml:lang="ru">%productname% %formatversion% Шаблон документа рисунка</value>
-            <value xml:lang="th">แม่แบบวาดรูป %productname% %formatversion% </value>
+            <value xml:lang="ru">%productname% %formatversion% Шаблон документа ри�?унка</value>
+            <value xml:lang="th">�?ม่�?บบวาดรูป %productname% %formatversion% </value>
             <value xml:lang="x-comment">%productname% %formatversion% Zeichnungsvorlage</value>
             <value xml:lang="ca">%productname% %formatversion% Drawing Template</value>
-            <value xml:lang="el">Πρότυπο σχεδίου %productname% %formatversion%</value>
-            <value xml:lang="zh-CN">%productname% %formatversion% 绘图样式</value>
+            <value xml:lang="el">Π�?ότυπο σχεδίου %productname% %formatversion%</value>
+            <value xml:lang="zh-CN">%productname% %formatversion% 绘图样�?</value>
             <value xml:lang="pt">%productname% %formatversion% Modelo de desenho</value>
             <value xml:lang="cs">Šablona kresby %productname% %formatversion%</value>
             <value xml:lang="fr">%productname% %formatversion% Modèle de dessin</value>
             <value xml:lang="ar">Draw 6.0 قالب</value>
-            <value xml:lang="zh-TW">%productname% %formatversion% 繪圖樣式</value>
+            <value xml:lang="zh-TW">%productname% %formatversion% 繪圖樣�?</value>
             <value xml:lang="sl">%productname% %formatversion% Risba Predloga</value>
             <value xml:lang="fi">Draw 6.0 -mallipohja</value>
             <value xml:lang="hi-IN">%productname% %formatversion% Drawing Template</value>
@@ -32,7 +32,7 @@
             <value xml:lang="sv">%productname% %formatversion% teckningsmall</value>
             <value xml:lang="da">%productname% %formatversion%-tegningsskabelon</value>
             <value xml:lang="de">%productname% %formatversion% Zeichnungsvorlage</value>
-            <value xml:lang="ko">%productname% %formatversion% 그리기 서식 파일</value>
+            <value xml:lang="ko">%productname% %formatversion% 그리기 서�? 파�?�</value>
             <value xml:lang="nl">%productname% %formatversion% Sjabloon voor tekeningen</value>
             <value xml:lang="pt-BR">Draw 6.0 Vorlage</value>
             <value xml:lang="it">%productname% %formatversion% Modello di disegno</value>

@@ -1,4 +1,4 @@
-    <node oor:name="draw_bmp_Export" oor:op="replace">
+    <node oor:name="draw_bmp_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>bmp_MS_Windows</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
