@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:59:44 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,6 @@ RootData::RootData( void )
 
     pTabId = NULL;
     pUserBViewList = NULL;
-    pCellMerging = NULL;
     pNameList = NULL;
     pScNameList = NULL;
     pExtSheetCntAndRecs = NULL;
@@ -136,11 +135,6 @@ RootData::RootData( void )
     pEscher = NULL;
 
     bWriteVBAStorage = FALSE;
-
-    pLastHlink = NULL;
-
-    nCellCount = 0;
-    pPrgrsBar = 0;
 
     pIR = NULL;
     pER = NULL;
@@ -163,14 +157,8 @@ RootData::~RootData()
     delete pPrintRanges;
     delete pPrintTitles;
 
-
-    if( pLastHlink )
-        delete pLastHlink;
-
 //  if( pCtrlStorage )
 //      delete pCtrlStorage;
-
-    delete pPrgrsBar;
 }
 
 
@@ -245,7 +233,7 @@ void OutlineBuffer::MakeScOutline( void )
     {
         for( BYTE nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
         {
-            UINT16  nStartPos;
+            UINT16  nStartPos       = 0;
             BYTE    nCurrLevel  = 0;
             BYTE    nPrevLevel  = 0;
 
