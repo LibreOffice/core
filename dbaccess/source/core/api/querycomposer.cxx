@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 06:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -427,11 +433,43 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         delete m_pParameters;
         m_pParameters = NULL;
     }
-    // now set the columns
-    const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getSelectColumns();
+    // now set the columns we have to look if the order of the columns is correct
+    Reference<XStatement> xStmt = m_xConnection->createStatement();
+
     ::std::vector< ::rtl::OUString> aNames;
-    for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
-        aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
+    const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getSelectColumns();
+    if(xStmt.is())
+    {
+        ::rtl::OUString sSql = m_aWorkSql;
+        sSql += STR_WHERE;
+        sSql += ::rtl::OUString::createFromAscii(" 0 = 1");
+
+        Reference<XResultSetMetaDataSupplier> xResMetaDataSup;
+        xResMetaDataSup = Reference<XResultSetMetaDataSupplier>(xStmt->executeQuery(sSql),UNO_QUERY);
+        Reference<XResultSetMetaData> xMeta = xResMetaDataSup->getMetaData();
+
+        sal_Int32 nCount = xMeta.is() ? xMeta->getColumnCount() : sal_Int32(0);
+        ::comphelper::UStringMixEqual bCase(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        for(sal_Int32 i=1;i<=nCount;++i)
+        {
+            ::rtl::OUString sName = xMeta->getColumnName(i);
+            OSQLColumns::const_iterator aFind = ::connectivity::find(aCols->begin(),aCols->end(),sName,bCase);
+            if(aFind != aCols->end())
+                aNames.push_back(sName);
+            else
+            { // we can now only look if we found it under the realname propertery
+                aFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,bCase);
+                if(aFind != aCols->end())
+                    aNames.push_back(sName);
+            }
+        }
+        ::comphelper::disposeComponent(xStmt);
+    }
+    else
+    {
+        for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
+            aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
+    }
     m_pColumns = new OPrivateColumns(*aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
 
     getTables();
