@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2002-05-24 08:01:26 $
+ *  last change: $Author: os $ $Date: 2002-05-28 14:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,6 +951,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
     long nX = 0;
     long nY = 0;
     sal_Bool bOnePixel = sal_False;
+    USHORT nAnchorDir = SW_MOVE_UP;
     switch(nDir)
     {
         case MOVE_LEFT_SMALL:
@@ -958,6 +959,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             //no break;
         case MOVE_LEFT_BIG:
             nX = -1;
+            nAnchorDir = SW_MOVE_LEFT;
         break;
         case MOVE_UP_SMALL:
             bOnePixel = sal_True;
@@ -970,12 +972,14 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             //no break;
         case MOVE_RIGHT_BIG:
             nX = +1;
+            nAnchorDir = SW_MOVE_RIGHT;
         break;
         case MOVE_DOWN_SMALL:
             bOnePixel = sal_True;
             //no break;
         case MOVE_DOWN_BIG:
             nY = +1;
+            nAnchorDir = SW_MOVE_DOWN;
         break;
     }
 
@@ -1010,33 +1014,40 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             // move handle with index nHandleIndex
             if(pHdl && (nX || nY))
             {
-                // now move the Handle (nX, nY)
-                Point aStartPoint(pHdl->GetPos());
-                Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
-                const SdrDragStat& rDragStat = pSdrView->GetDragStat();
-
-                // start dragging
-                pSdrView->BegDragObj(aStartPoint, 0, pHdl, 0);
-
-                if(pSdrView->IsDragObj())
+                if(HDL_ANCHOR == pHdl->GetKind())
                 {
-                    FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
-                    BOOL bWasSnapEnabled = pSdrView->IsSnapEnabled();
+                    rSh.MoveAnchor( nAnchorDir );
+                }
+                else
+                {
+                    // now move the Handle (nX, nY)
+                    Point aStartPoint(pHdl->GetPos());
+                    Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
+                    const SdrDragStat& rDragStat = pSdrView->GetDragStat();
 
-                    // switch snapping off
-                    if(!bWasNoSnap)
-                        ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
-                    if(bWasSnapEnabled)
-                        pSdrView->SetSnapEnabled(FALSE);
+                    // start dragging
+                    pSdrView->BegDragObj(aStartPoint, 0, pHdl, 0);
 
-                    pSdrView->MovAction(aEndPoint);
-                    pSdrView->EndDragObj();
+                    if(pSdrView->IsDragObj())
+                    {
+                        FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                        BOOL bWasSnapEnabled = pSdrView->IsSnapEnabled();
 
-                    // restore snap
-                    if(!bWasNoSnap)
-                        ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
-                    if(bWasSnapEnabled)
-                        pSdrView->SetSnapEnabled(bWasSnapEnabled);
+                        // switch snapping off
+                        if(!bWasNoSnap)
+                            ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                        if(bWasSnapEnabled)
+                            pSdrView->SetSnapEnabled(FALSE);
+
+                        pSdrView->MovAction(aEndPoint);
+                        pSdrView->EndDragObj();
+
+                        // restore snap
+                        if(!bWasNoSnap)
+                            ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                        if(bWasSnapEnabled)
+                            pSdrView->SetSnapEnabled(bWasSnapEnabled);
+                    }
                 }
             }
         }
@@ -1173,9 +1184,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         }
     }
 
-    OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+    OfaAutoCorrCfg* pACfg =  OFF_APP()->GetAutoCorrConfig();
     SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     /*TblChgWidthHeightType*/int eTblChgMode;
