@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-08 09:01:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,7 @@ struct LabelData
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  maHiers;        /// Hierarchies.
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  maMembers;      /// Members.
     ::com::sun::star::uno::Sequence< sal_Bool >         maVisible;      /// Visibility of members.
+    ::com::sun::star::uno::Sequence< sal_Bool >         maShowDet;      /// Show details of members.
     ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     /// Sorting info.
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
