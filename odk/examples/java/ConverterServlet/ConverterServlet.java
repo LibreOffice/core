@@ -38,7 +38,7 @@ public class ConverterServlet extends HttpServlet {
   /** Specifies the temporary directory on the web server.
    */
   private String stringWorkingDirectory =
-  System.getProperty( "java.io.tmpdir" ).replace( '\\', '/' ) + "/";
+  System.getProperty( "java.io.tmpdir" ).replace( '\\', '/' );
 
   /** Specifies the host for the office server.
    */
@@ -46,7 +46,7 @@ public class ConverterServlet extends HttpServlet {
 
   /** Specifies the port for the office server.
    */
-  private String stringPort = "8200";
+  private String stringPort = "8100";
 
   /** Called by the server (via the service method) to allow a servlet to handle
    * a POST request. The file from the client will be uploaded to the web server
@@ -59,6 +59,11 @@ public class ConverterServlet extends HttpServlet {
   protected void doPost( HttpServletRequest request,
   HttpServletResponse response) throws ServletException, java.io.IOException {
     try {
+      // If necessary, add a slash to the end of the string.
+      if ( !stringWorkingDirectory.endsWith( "/" ) ) {
+          stringWorkingDirectory += "/";
+      }
+
       // Construct a MultipartRequest to help read the information.
       // Pass in the request, a directory to save files to, and the
       // maximum POST size we should attempt to handle.
