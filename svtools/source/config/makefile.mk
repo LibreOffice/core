@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: pb $ $Date: 2002-05-08 07:23:59 $
+#   last change: $Author: pb $ $Date: 2002-05-13 09:35:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,7 @@ SLOFILES = \
     $(SLO)$/regoptions.obj				\
     $(SLO)$/accessibilityoptions.obj	\
     $(SLO)$/cmdoptions.obj				\
-    $(SLO)$/asianlanguagesoptions.obj
+    $(SLO)$/languageoptions.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
