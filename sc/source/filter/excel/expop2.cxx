@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:48:53 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include "XclAddInNameTrans.hxx"
 
 #include "document.hxx"
+#include "rangenam.hxx"
 #include "filtopt.hxx"
 
 
@@ -104,7 +105,8 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, ScDocument
     // nur Teil der Root-Daten gebraucht
     pExcRoot = new RootData;
     pExcRoot->pDoc = pDoc;
-    pExcRoot->pTabBuffer = new ExcETabNumBuffer( *pDoc );
+    pExcRoot->pTabBuffer = new XclExpTabNumBuffer( *pDoc );
+    pExcRoot->pScNameList = new ScRangeName;
     pExcRoot->pAktTab = NULL;
     pExcRoot->bCellCut = FALSE;
     pExcRoot->pFontRecs = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:44:47 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "progress.hxx"
 #include "editutil.hxx"
 #include "addincol.hxx"
+#include "rangenam.hxx"
 
 #include "root.hxx"
 #include "imp_op.hxx"
@@ -202,6 +203,7 @@ RootData::RootData( void )
     pUserBViewList = NULL;
     pCellMerging = NULL;
     pNameList = NULL;
+    pScNameList = NULL;
     pPalette2 = NULL;
     pFontRecs = NULL;
     pFormRecs = NULL;
@@ -243,6 +245,8 @@ RootData::~RootData()
 
     if( pTabBuffer )
         delete pTabBuffer;
+    if( pScNameList )
+        delete pScNameList;
     if( pEdEng )
         delete pEdEng;
     if( pEdEngHF )

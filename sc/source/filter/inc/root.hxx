@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ class XclImpPivotCacheList;
 class XclImpExternsheetBuffer;
 class XclImpTabIdBuffer;
 
-class ExcETabNumBuffer;
+class XclExpTabNumBuffer;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 class XclExpCellMerging;
@@ -181,11 +181,12 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     XclAddInNameTranslator* pAddInNameTranslator;
 
     // Erweiterungen fuer Export
-    ExcETabNumBuffer*   pTabBuffer;
+    XclExpTabNumBuffer* pTabBuffer;
     XclExpChTrTabId*    pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList* pUserBViewList;    // pointer to rec list, do not destroy
     XclExpCellMerging*  pCellMerging;       // pointer to rec list, do not destroy
     ExcNameList*        pNameList;
+    ScRangeName*        pScNameList;        // stores range names and DB ranges
     ExcPalette2*        pPalette2;
     UsedFontList*       pFontRecs;
     UsedFormList*       pFormRecs;
