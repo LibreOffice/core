@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-20 12:55:53 $
+ *  last change: $Author: jl $ $Date: 2001-02-26 15:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ Reference< XMultiServiceFactory > MultiServiceFactory;
 int main( int argc, char *argv[ ], char *envp[ ] )
 {
     HRESULT hr;
-    if( FAILED( hr=OleInitialize(NULL )))
+    if( FAILED( hr=CoInitialize(NULL )))
     {
         _tprintf(_T("CoInitialize failed \n"));
         return -1;
@@ -118,7 +118,7 @@ int main( int argc, char *argv[ ], char *envp[ ] )
 
 
     _Module.Term();
-    OleUninitialize();
+    CoUninitialize();
     return 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atlwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-20 12:55:53 $
+ *  last change: $Author: jl $ $Date: 2001-02-26 15:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 
 
     // create the DragSource
-    Reference< XInterface> xint= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDragAndDropSource"));
+    Reference< XInterface> xint= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDragSource"));
     m_xDragSource= Reference<XDragSource>( xint, UNO_QUERY);
     Reference<XInitialization> xInit( xint, UNO_QUERY);
 
@@ -155,7 +155,7 @@ LRESULT AWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     xInit->initialize( Sequence<Any>( ar, 2) );
 
     //create the DropTarget
-    Reference< XInterface> xintTarget= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDragAndDropTarget"));
+    Reference< XInterface> xintTarget= MultiServiceFactory->createInstance(OUString(L"com.sun.star.datatransfer.dnd.OleDropTarget"));
     m_xDropTarget= Reference<XDropTarget>( xintTarget, UNO_QUERY);
     Reference<XInitialization> xInitTarget( xintTarget, UNO_QUERY);
 
