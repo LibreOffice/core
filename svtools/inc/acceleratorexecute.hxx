@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:44:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
+
 #ifndef __COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
 #endif
@@ -148,7 +152,7 @@ class AcceleratorExecute : private TMutexInit
     private:
 
         /** TODO document me */
-        typedef ::std::vector< ::rtl::OUString > TCommandQueue;
+        typedef ::std::vector< ::std::pair< css::util::URL, css::uno::Reference< css::frame::XDispatch > > > TCommandQueue;
 
     //-------------------------------------------
     // member
