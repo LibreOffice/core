@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:01:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ String STR_PAGE_COUNT_MACRO
         FN_SHOW_BOOKVIEW                ;\
         FN_PRINT_PAGEPREVIEW            ;\
         FN_FAX                          ;\
-        FN_QRY_MERGE                    ;\
+        FN_MAILMERGE_WIZARD                    ;\
         FN_EDIT_FORMULA; \
         FN_INSERT_CTRL       ;\
         FN_INSERT_OBJ_CTRL   ;\
@@ -976,6 +976,11 @@ String RID_MODULE_TOOLBOX
     Text [ de ] = "Funktionsleiste (Lesemodus)" ;
     Text [ en-US ] = "Function Bar (viewing mode)" ;
     Text [ x-comment ] = " ";
+};
+String  STR_DONT_ASK_AGAIN
+{
+    Text [ de ] = "~Diese Warnung nicht mehr anzeigen" ;
+    Text [ en-US ] = "~Do not show warning again" ;
 };
 
 ToolBox RID_MODULE_TOOLBOX
