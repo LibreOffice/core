@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-18 13:07:35 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 12:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,10 +212,14 @@ void SfxLockBytesHandler_Impl::Handle( ::utl::UcbLockBytesHandler::LoadHandlerIt
                 if ( xLockBytes->IsSynchronMode() )
                 {
                     if ( m_nAcquireCount )
+                    {
                         Application::AcquireSolarMutex( m_nAcquireCount );
+                        m_nAcquireCount = 0;
+                    }
                 }
 
                 break;
+
             case DATA_AVAILABLE :
                 m_wMedium->DataAvailable_Impl();
                 break;
@@ -1391,23 +1395,23 @@ void SfxMedium::GetMedium_Impl()
 
         SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
 
+        BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
+        ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
         if ( pStreamItem )
         {
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
-                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream, pImp->aHandler );
+                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream, pHandler );
         }
         else
         {
-            xLockBytes = ::utl::UcbLockBytes::CreateInputLockBytes(
-                        GetContent(),
-                        pImp->aHandler );
+            xLockBytes = ::utl::UcbLockBytes::CreateInputLockBytes( GetContent(), pHandler );
         }
 
         if ( xLockBytes.Is() )
         {
             pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
-            if ( pImp->bForceSynchron || ! pImp->aDoneLink.IsSet() )
+            if ( bSynchron )
                 xLockBytes->SetSynchronMode( sal_True );
             else
                 xLockBytes->SetSynchronMode( sal_False );
