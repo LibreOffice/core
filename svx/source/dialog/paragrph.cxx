@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 14:13:19 $
+ *  last change: $Author: cl $ $Date: 2002-12-11 13:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,18 +447,23 @@ BOOL SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     if ( bNullTab )
     {
-        // negativer Erstzeileneinzug -> ggf. Null Default-Tabstop setzen
-        USHORT nWhich = GetWhich( SID_ATTR_TABSTOP );
-        const SfxItemSet& rInSet = GetItemSet();
-
-        if ( rInSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+        MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
+        if ( MAP_100TH_MM != eUnit )
         {
-            const SvxTabStopItem& rTabItem =
-                (const SvxTabStopItem&)rInSet.Get( nWhich );
-            SvxTabStopItem aNullTab( rTabItem );
-            SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
-            aNullTab.Insert( aNull );
-            rOutSet.Put( aNullTab );
+
+            // negativer Erstzeileneinzug -> ggf. Null Default-Tabstop setzen
+            USHORT nWhich = GetWhich( SID_ATTR_TABSTOP );
+            const SfxItemSet& rInSet = GetItemSet();
+
+            if ( rInSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+            {
+                const SvxTabStopItem& rTabItem =
+                    (const SvxTabStopItem&)rInSet.Get( nWhich );
+                SvxTabStopItem aNullTab( rTabItem );
+                SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
+                aNullTab.Insert( aNull );
+                rOutSet.Put( aNullTab );
+            }
         }
     }
     if( aRegisterCB.IsVisible())
