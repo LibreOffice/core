@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-21 13:17:46 $
+ *  last change: $Author: tl $ $Date: 2001-02-23 12:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,13 @@
 
 //using namespace uno;
 using namespace rtl;
+using namespace utl;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
+using namespace com::sun::star::uno;
 
+#define CFG_ROOT_NODE   "Office.Common/SearchOptions"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -113,9 +116,46 @@ TYPEINIT1_AUTOFACTORY(SvxSearchItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
+static Sequence< OUString > lcl_GetNotifyNames()
+{
+    // names of transliteration relevant properties
+    static const char* aTranslitNames[] =
+    {
+        "IsMatchCase",                          //  0
+        "Japanese/IsMatchFullHalfWidthForms",   //  1
+        "Japanese/IsMatchHiraganaKatakana",     //  2
+        "Japanese/IsMatchContractions",         //  3
+        "Japanese/IsMatchMinusDashCho-on",      //  4
+        "Japanese/IsMatchRepeatCharMarks",      //  5
+        "Japanese/IsMatchVariantFormKanji",     //  6
+        "Japanese/IsMatchOldKanaForms",         //  7
+        "Japanese/IsMatch_DiZi_DuZu",           //  8
+        "Japanese/IsMatch_BaVa_HaFa",           //  9
+        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 10
+        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 11
+        "Japanese/IsMatch_SeShe_ZeJe",          // 12
+        "Japanese/IsMatch_IaIya",               // 13
+        "Japanese/IsMatch_KiKu",                // 14
+        "Japanese/IsIgnorePunctuation",         // 15
+        "Japanese/IsIgnoreWhitespace",          // 16
+        "Japanese/IsIgnoreProlongedSoundMark",  // 17
+        "Japanese/IsIgnoreMiddleDot"            // 18
+    };
+
+    const int nCount = sizeof( aTranslitNames ) / sizeof( aTranslitNames[0] );
+    Sequence< OUString > aNames( nCount );
+    OUString* pNames = aNames.getArray();
+    for (INT32 i = 0;  i < nCount;  ++i)
+        pNames[i] = OUString::createFromAscii( aTranslitNames[i] );
+
+    return aNames;
+}
+
+// -----------------------------------------------------------------------
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
+    ConfigItem( OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::ALL_IGNORE_CASE | SearchFlags::LEV_RELAXED,
@@ -135,6 +175,8 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     nAppFlag        ( SVX_SEARCHAPP_WRITER ),
     bAsianOptions   ( FALSE )
 {
+    EnableNotification( lcl_GetNotifyNames() );
+
     SvtSearchOptions aOpt;
 
     bBackward       = aOpt.IsBackwards();
@@ -198,6 +240,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
+    ConfigItem( OUString::createFromAscii( CFG_ROOT_NODE ) ),
 
     aSearchOpt      ( rItem.aSearchOpt ),
     nCommand        ( rItem.nCommand ),
@@ -211,6 +254,7 @@ SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
     nAppFlag        ( rItem.nAppFlag ),
     bAsianOptions   ( rItem.bAsianOptions )
 {
+    EnableNotification( lcl_GetNotifyNames() );
 }
 
 // -----------------------------------------------------------------------
@@ -335,6 +379,14 @@ void SvxSearchItem::SetToDescriptor( ::com::sun::star::uno::Reference< ::com::su
     rDescr->setPropertyValue( DEFINE_CONST_UNICODE("SearchSimilarityRemove"), aAny );
     aAny <<= GetLEVLonger() ;
     rDescr->setPropertyValue( DEFINE_CONST_UNICODE("SearchSimilarityAdd"), aAny );
+}
+
+
+void SvxSearchItem::Notify( const Sequence< OUString > &rPropertyNames )
+{
+    // applies transliteration changes in the configuration database
+    // to the current SvxSearchItem
+    SetTransliterationFlags( SvtSearchOptions().GetTransliterationFlags() );
 }
 
 
