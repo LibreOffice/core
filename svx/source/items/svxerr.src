@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:09:48 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 16:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ Resource RID_SVXERRCODE
         Text[ spanish ] = "Ha ocurrido un error al leer una viñeta. No se pudieron cargar todas las viñetas.";
         Text[ italian ] = "Durante la lettura di un bullet si è verificato un errore. Non è stato possibile caricare tutti i bullet.";
         Text[ danish ] = "Der opstod en fejl ved læsning af et punkttegn. Det var ikke muligt at indlæse alle punkttegn.";
-        Text[ swedish ] = "Det uppstod ett fel vid läsning av en bullet. Alla bullets kunde inte laddas";
+        Text[ swedish ] = "Det uppstod ett fel vid läsning av en punkt. Det gick inte att ladda alla punkter";
         Text[ polish ] = "Wyst¹pi³ b³¹d przy odczycie wypunktowania. Nie mo¿na by³o za³adowaæ wszystkich wypunktowañ.";
         Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
         Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚ŞÛ‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
