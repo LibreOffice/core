@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:04:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ TabPage TP_CONDCOLL
         Text[ chinese_traditional ] = "¿ï¶µ";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÎíÇÑÇÊ";
+        Text[ catalan ] = "Opciones";
     };
     CheckBox CB_CONDITION
     {
@@ -123,6 +124,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "Á¶°ÇÀû À¯Çü(~C)";
         Text[ turkish ] = "~Koþullu biçim olarak";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
+        Text[ catalan ] = "C~omo estilo condicional";
     };
     FixedText FT_CONTEXT
     {
@@ -150,6 +152,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "³»¿ë(~X)";
         Text[ turkish ] = "Baðlam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Contexto";
     };
     FixedText FT_USED
     {
@@ -177,6 +180,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Uygulanan biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilos utilizados";
     };
     Control TB_CONDCOLLS
     {
@@ -214,6 +218,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "´Ü¶ô À¯Çü(~P)";
         Text[ turkish ] = "Paragraf biçimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Es~tilos de párrafo";
     };
     ListBox LB_STYLE
     {
@@ -262,6 +267,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "Á¦°Å(~M)";
         Text[ turkish ] = "~Kaldýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     PushButton PB_ASSIGN
     {
@@ -290,6 +296,7 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "ÁöÁ¤(~A)";
         Text[ turkish ] = "~Ata";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Asignar";
     };
     StringArray STR_REGIONS
     {
@@ -945,6 +952,37 @@ TabPage TP_CONDCOLL
         < " " ; > ;
         < " " ; > ;
     };
+    ItemList [ catalan ] =
+    {
+            < "Encabezamiento de la hoja" ; > ;
+        < "Tabla" ; > ;
+        < "Marco" ; > ;
+        < "Area" ; > ;
+        < "Nota al pie" ; > ;
+        < "Nota al final" ; > ;
+        < "Encabezamiento" ; > ;
+        < "Pie de página" ; > ;
+        < "1° nivel del esquema" ; > ;
+        < "2° nivel del esquema" ; > ;
+        < "3° nivel del esquema" ; > ;
+        < "4° nivel del esquema" ; > ;
+        < "5° nivel del esquema" ; > ;
+        < "6° nivel del esquema" ; > ;
+        < "7° nivel del esquema" ; > ;
+        < "8° nivel del esquema" ; > ;
+        < "9° nivel del esquema" ; > ;
+        < "10° nivel del esquema" ; > ;
+        < "1° nivel de la numeración" ; > ;
+        < "2° nivel de la numeración" ; > ;
+        < "3° nivel de la numeración" ; > ;
+        < "4° nivel de la numeración" ; > ;
+        < "5° nivel de la numeración" ; > ;
+        < "6° nivel de la numeración" ; > ;
+        < "7° nivel de la numeración" ; > ;
+        < "8° nivel de la numeración" ; > ;
+        < "9° nivel de la numeración" ; > ;
+        < "10° nivel de numeración" ; > ;
+    };
     };
     String STR_NOTEMPL
     {
@@ -969,6 +1007,7 @@ TabPage TP_CONDCOLL
         Text[ greek ] = "<êáíÝíá>";
         Text[ korean ] = "<¾øÀ½>";
         Text[ turkish ] = "<yok>";
+        Text[ catalan ] = "<ninguno>";
     };
 };
  // ********************************************************************** EOF
