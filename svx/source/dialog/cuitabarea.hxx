@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuitabarea.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:33:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,13 +241,8 @@ class SVX_DLLPUBLIC SvxAreaTabPage : public SvxTabPage
 {
 private:
     FixedLine           aFlProp;
-    RadioButton         aRbtNoFill;
-    RadioButton         aRbtColor;
-    RadioButton         aRbtGradient;
-    RadioButton         aRbtHatch;
-    RadioButton         aRbtBitmap;
+    ListBox             aTypeLB;
 
-//      ListBox             aDlgType;
     ColorLB             aLbColor;
     GradientLB          aLbGradient;
     HatchingLB          aLbHatching;
@@ -315,7 +310,7 @@ private:
     FieldUnit           eFUnit;
 
 #ifdef _SVX_TPAREA_CXX
-    DECL_LINK( SelectDialogType_Impl, void * );
+    DECL_LINK( SelectDialogTypeHdl_Impl, ListBox * );
     DECL_LINK( ClickInvisibleHdl_Impl, void * );
     DECL_LINK( ClickColorHdl_Impl, void * );
     DECL_LINK( ModifyColorHdl_Impl, void * );
