@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:42:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,6 +541,11 @@ class SwDoc
     //
 
     sal_Bool    bWinEncryption                      ;    // imported document password encrypted?
+
+    // --> OD 2005-02-11 #i38810# - flag indicating, that the links have been updated.
+    // If links have been updated
+    sal_Bool    mbLinksUpdated : 1;
+    // <--
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
@@ -2207,6 +2212,17 @@ public:
 
     inline void SetWinEncryption(const sal_Bool bImportWinEncryption) {bWinEncryption = bImportWinEncryption; }
     inline sal_Bool IsWinEncrypted() const         { return bWinEncryption; }
+
+    // --> OD 2005-02-11 #i38810#
+    inline void SetLinksUpdated( const sal_Bool _bNewLinksUpdated )
+    {
+        mbLinksUpdated = _bNewLinksUpdated;
+    }
+    inline sal_Bool LinksUpdated() const
+    {
+        return mbLinksUpdated;
+    }
+    // <--
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
