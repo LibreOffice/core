@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:56:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:23:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text [ DUTCH ] = "~Nieuw" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Neu erstellen" ;
         Text [ SWEDISH ] = "Skapa ~ny" ;
-        Text [ PORTUGUESE ] = "Criar ~novo" ;
+        Text [ PORTUGUESE ] = "~Nova folha" ;
         Text[ chinese_simplified ] = "ΠΒ½¨Ή¤Χχ±ν(~N)";
         Text[ russian ] = "Ρξηδΰςό νξβϋι λθρς";
         Text[ polish ] = "Utwσrz ponownie";
@@ -101,7 +101,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "·s«Ψ¤u§@ªν(~N)";
         Text[ arabic ] = "ΕδΤΗΑ γδ ΜΟνΟ";
         Text[ greek ] = "Δημιουργία";
-        Text[ korean ] = "»υ ½ΓΖ®(~N)";
+        Text[ korean ] = "»υ·Ξ΅΅ΈΈµι±β";
         Text[ turkish ] = "~Yeni tablo";
         Text[ language_user1 ] = " ";
     };
@@ -127,7 +127,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "±qΐΙ®Χ«Ψ«Ψ¥ί(~F)";
         Text[ arabic ] = "ΕδΤΗΑ γδ Ηαγαέ";
         Text[ greek ] = "Δημιουργία από αρχείο";
-        Text[ korean ] = "ΖΔΐΟ·ΞΊΞΕΝ(~F)";
+        Text[ korean ] = "£®£®ΖΔΐΟ·ΞΊΞΕΝ΅΅ΈΈµι±β";
         Text[ turkish ] = "~Dosyadan oluώtur";
         Text[ language_user1 ] = " ";
     };
@@ -160,7 +160,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "ΒsΔύ(~B)...";
         Text[ arabic ] = "ΗΣΚΪΡΗΦ...";
         Text[ greek ] = "Αναζήτηση...";
-        Text[ korean ] = "Γ£ΎΖΊΈ±β(~B)...";
+        Text[ korean ] = "Γ£ΎΖΊΈ±β...";
         Text[ turkish ] = "~Tara...";
         Text[ language_user1 ] = " ";
     };
@@ -187,7 +187,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "±¶®|(~K)";
         Text[ arabic ] = "ΡΘΨ";
         Text[ greek ] = "Σύνδεση";
-        Text[ korean ] = "Ώ¬°α(~K)";
+        Text[ korean ] = "Ώ¬°α";
         Text[ turkish ] = "Baπ~la";
         Text[ language_user1 ] = " ";
     };
@@ -251,7 +251,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text = "~Nach aktueller Tabelle" ;
         Text [ ENGLISH ] = "After selected sheet" ;
         TabStop = TRUE ;
-        Text [ portuguese ] = "~Depois folha seleccionada" ;
+        Text [ portuguese ] = "~Apσs folha activa" ;
         Text [ english_us ] = "~After current sheet" ;
         Text [ portuguese_brazilian ] = "~Nach aktueller Tabelle" ;
         Text [ swedish ] = "~Efter aktuell tabell" ;
@@ -267,7 +267,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦b·ν«eªΊ¤u§@ªν¤§«α(~A)";
         Text[ arabic ] = "ΘΪΟ ΗαΜΟζα ΗαΝΗαν";
         Text[ greek ] = "Μετά από τον ενεργό πίνακα";
-        Text[ korean ] = "Ηφΐη ½ΓΖ® µΪ·Ξ(~A)";
+        Text[ korean ] = "Ηφΐη ½ΓΖ® µΪΏ΅";
         Text[ turkish ] = "Aηύk tablonun ~arkasύna";
         Text[ language_user1 ] = " ";
     };
@@ -294,7 +294,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¦b·ν«eªΊ¤u§@ªν¤§«e(~S)";
         Text[ arabic ] = "ήΘα ΗαΜΟζα ΗαΝΗαν";
         Text[ greek ] = "Πριν από τον ενεργό πίνακα";
-        Text[ korean ] = "Ηφΐη ½ΓΖ® ΐόΏ΅(~E)";
+        Text[ korean ] = "Ηφΐη ½ΓΖ® ΎΥΏ΅";
         Text[ turkish ] = "Aηύk tablonun ~φnόne";
         Text[ language_user1 ] = " ";
     };
@@ -320,7 +320,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¤u§@ªν";
         Text[ arabic ] = "ΜΟζα";
         Text[ greek ] = "Πίνακας";
-        Text[ korean ] = "½ΓΖ® ΈΈµι±β";
+        Text[ korean ] = "½ΓΖ®";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
     };
@@ -356,7 +356,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
         Text[ chinese_traditional ] = "ΌΖ¥Ψ(~O)";
         Text[ arabic ] = "ΗαΪΟΟ";
         Text[ greek ] = "Αρι~θμός";
-        Text[ korean ] = "ΌύΐΪ";
+        Text[ korean ] = "°³Όφ";
         Text[ turkish ] = "A~det";
         Text[ language_user1 ] = " ";
     };
