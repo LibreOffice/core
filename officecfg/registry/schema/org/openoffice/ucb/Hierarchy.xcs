@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Hierarchy.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:59:38 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,166 +62,31 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Hierarchy" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
 		<author>KSO</author>
-		<desc xml:lang="en-US">Contains components and templates used by UCB's Hierarchy Content Provider (HCP). </desc>
+		<desc >Contains components and templates used by UCB's Hierarchy Content Provider (HCP). </desc>
 	</info>
 	<templates>
 		<group oor:name="Entry">
 			<info>
-				<desc xml:lang="en-US">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="el">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="nl">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="fr">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="fi">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="cs">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="da">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="zh-CN">指定等级式结构的条目。有两种类型的条目：文件夹和链接。文件夹是其他等级式结构元素的容器。链接是指向其他资源的指针。 </desc>
-				<desc xml:lang="zh-TW">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="ar">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="he">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="ca">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="pt">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="ru">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="es">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="it">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="sv">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="pl">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="pt-BR">Especifica uma entrada da hierarquia. Há dois tipos de entradas: Pastas e vínculos. Pastas são contenedores para outros elementos da hierarquia. Vínculos são apontadores para qualquer outro recurso.</desc>
-				<desc xml:lang="ja">階層の項目を指定します。次の 2 種類の項目があります。フォルダとリンクです。フォルダは、他の階層要素のコンテナです。リンクは、他の任意のリソースへのポインタです。 </desc>
-				<desc xml:lang="ko">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="tr">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="th">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="hi-IN">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="x-comment">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="sk">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="hu">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
-				<desc xml:lang="sl">Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
+				<desc>Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
 			</info>
 			<prop oor:name="Title" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="el">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="nl">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="fr">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="fi">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="cs">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="da">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="zh-CN">指定等级式结构条目的标题。</desc>
-					<desc xml:lang="zh-TW">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="ar">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="he">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="ca">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="pt">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="ru">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="es">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="it">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="sv">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="pl">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="pt-BR">Especifica o título de uma entrada da hierarquia. </desc>
-					<desc xml:lang="ja">階層の項目のタイトルを指定します。</desc>
-					<desc xml:lang="ko">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="tr">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="th">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="hi-IN">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="x-comment">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="sk">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="hu">Specifies the title of an entry of the hierarchy.</desc>
-					<desc xml:lang="sl">Specifies the title of an entry of the hierarchy.</desc>
+					<desc>Specifies the title of an entry of the hierarchy.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TargetURL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="el">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="nl">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="fr">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="fi">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="cs">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="da">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="zh-CN">指定等级式结构条目的目标 URL。</desc>
-					<desc xml:lang="zh-TW">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="ar">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="he">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="ca">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="pt">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="ru">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="es">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="it">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="sv">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="pl">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="pt-BR">Especifica a URL alvo da entrada da hierarquia.</desc>
-					<desc xml:lang="ja">階層の項目のターゲット URL を指定します。</desc>
-					<desc xml:lang="ko">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="tr">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="th">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="hi-IN">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="x-comment">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="sk">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="hu">Specifies the target URL of the entry of the hierarchy.</desc>
-					<desc xml:lang="sl">Specifies the target URL of the entry of the hierarchy.</desc>
+					<desc>Specifies the target URL of the entry of the hierarchy.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Type" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="el">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="nl">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="fr">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="fi">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="cs">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="da">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="zh-CN">指定等级式结构条目的类型。当前支持：链接 (0) 和文件夹 (1)。</desc>
-					<desc xml:lang="zh-TW">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="ar">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="he">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="ca">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="pt">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="ru">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="es">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="it">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="sv">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="pl">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="pt-BR">Especifica o tipo de entrada da hierarquia. No momento são suportados: Vínculos (0) e Pastas (1).</desc>
-					<desc xml:lang="ja">階層項目の種類を指定します。現在、次の種類がサポートされています。リンク (0) およびフォルダ (1)。</desc>
-					<desc xml:lang="ko">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="tr">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="th">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="hi-IN">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="x-comment">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="sk">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="hu">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
-					<desc xml:lang="sl">Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
+					<desc>Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
 				</info>
 			</prop>
 			<set oor:name="Children" oor:node-type="Entry">
 				<info>
-					<desc xml:lang="en-US">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="el">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="nl">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="fr">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="fi">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="cs">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="da">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="zh-CN">指定项的子项 (其他等级式结构条目)。</desc>
-					<desc xml:lang="zh-TW">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="ar">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="he">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="ca">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="pt">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="ru">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="es">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="it">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="sv">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="pl">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="pt-BR">Especifica os filhos (demais entradas da hierarquia) do ítem.</desc>
-					<desc xml:lang="ja">項目の子項目 (他の階層項目) を指定します。</desc>
-					<desc xml:lang="ko">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="tr">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="th">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="hi-IN">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="x-comment">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="sk">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="hu">Specifies the children (other hierarchy entries) of the item.</desc>
-					<desc xml:lang="sl">Specifies the children (other hierarchy entries) of the item.</desc>
+					<desc>Specifies the children (other hierarchy entries) of the item.</desc>
 				</info>
 			</set>
 		</group>
@@ -229,34 +94,7 @@
 	<component>
 		<set oor:name="Root" oor:node-type="Entry">
 			<info>
-				<desc xml:lang="en-US">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="el">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="nl">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="fr">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="fi">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="cs">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="da">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="zh-CN">含有等级式结构顶层条目的集合。</desc>
-				<desc xml:lang="zh-TW">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="ar">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="he">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="ca">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="pt">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="ru">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="es">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="it">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="sv">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="pl">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="pt-BR">Contém um conjunto de entradas do nivel superior da hierarquia. </desc>
-				<desc xml:lang="ja">階層の最上位の項目セットが含まれます。</desc>
-				<desc xml:lang="ko">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="tr">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="th">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="hi-IN">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="x-comment">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="sk">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="hu">Contains a set of top-level entries of the hierarchy.</desc>
-				<desc xml:lang="sl">Contains a set of top-level entries of the hierarchy.</desc>
+				<desc>Contains a set of top-level entries of the hierarchy.</desc>
 			</info>
 		</set>
 	</component>
