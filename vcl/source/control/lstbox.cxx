@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:52:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
 
-        mpFloatWin  = new ImplListBoxFloatingWindow( this );
+        mpFloatWin = new ImplListBoxFloatingWindow( this );
         mpFloatWin->SetAutoWidth( TRUE );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ListBox, ImplPopupModeEndHdl ) );
 
@@ -545,6 +545,8 @@ void ListBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
+        SetBackground();    // due to a hack in Window::UpdateSettings the background must be reset
+                            // otherwise it will overpaint NWF drawn listboxes
         Resize();
         mpImplLB->Resize(); // Wird nicht durch ListBox::Resize() gerufen, wenn sich die ImplLB nicht aendert.
 
@@ -617,7 +619,7 @@ void ListBox::SetPosSizePixel( long nX, long nY, long nWidth, long nHeight, USHO
     if( IsDropDownBox() && ( nFlags & WINDOW_POSSIZE_SIZE ) )
     {
         Size aPrefSz = mpFloatWin->GetPrefSize();
-        if ( ( nFlags & WINDOW_POSSIZE_HEIGHT ) && ( nHeight > mnDDHeight ) )
+        if ( ( nFlags & WINDOW_POSSIZE_HEIGHT ) && ( nHeight >= 2*mnDDHeight ) )
             aPrefSz.Height() = nHeight-mnDDHeight;
         if ( nFlags & WINDOW_POSSIZE_WIDTH )
             aPrefSz.Width() = nWidth;
@@ -637,10 +639,50 @@ void ListBox::Resize()
     Size aOutSz = GetOutputSizePixel();
     if( IsDropDownBox() )
     {
+        // initialize the dropdown button size with the standard scrollbar width
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        nSBWidth = CalcZoom( nSBWidth );
-        mpImplWin->SetPosSizePixel( 0, 0, aOutSz.Width() - nSBWidth, aOutSz.Height() );
-        mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+        long    nTop = 0;
+        long    nBottom = aOutSz.Height();
+
+        Window *pBorder = GetWindow( WINDOW_BORDER );
+        ImplControlValue aControlValue;
+        Point aPoint;
+        Region aContent, aBound;
+
+        // use the full extent of the control
+        Region aArea( Rectangle(aPoint, pBorder->GetOutputSizePixel()) );
+
+        if ( GetNativeControlRegion( CTRL_LISTBOX, PART_BUTTON_DOWN,
+                    aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            // convert back from border space to local coordinates
+            aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
+            aContent.Move( -aPoint.X(), -aPoint.Y() );
+
+            // use the themes drop down size for the button
+            aOutSz.Width() = aContent.GetBoundRect().Left();
+            mpBtn->SetPosSizePixel( aContent.GetBoundRect().Left(), nTop, aContent.GetBoundRect().Right(), (nBottom-nTop) );
+
+            // adjust the size of the edit field
+            if ( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT,
+                        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+            {
+                // convert back from border space to local coordinates
+                aContent.Move( -aPoint.X(), -aPoint.Y() );
+
+                // use the themes drop down size
+                Rectangle aContentRect = aContent.GetBoundRect();
+                mpImplWin->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
+            }
+            else
+                mpImplWin->SetSizePixel( aOutSz );
+        }
+        else
+        {
+            nSBWidth = CalcZoom( nSBWidth );
+            mpImplWin->SetPosSizePixel( 0, 0, aOutSz.Width() - nSBWidth, aOutSz.Height() );
+            mpBtn->SetPosSizePixel( aOutSz.Width() - nSBWidth, 0, nSBWidth, aOutSz.Height() );
+        }
     }
     else
     {
@@ -696,7 +738,13 @@ void ListBox::StateChanged( StateChangedType nType )
         if( mpImplWin )
         {
             mpImplWin->Enable( IsEnabled() );
-            mpImplWin->Invalidate();
+            if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
+                    && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
+            {
+                GetWindow( WINDOW_BORDER )->Invalidate( INVALIDATE_NOERASE );
+            }
+            else
+                mpImplWin->Invalidate();
         }
         if( mpBtn )
             mpBtn->Enable( IsEnabled() );
@@ -743,8 +791,17 @@ void ListBox::StateChanged( StateChangedType nType )
         mpImplLB->SetControlBackground( GetControlBackground() );
         if ( mpImplWin )
         {
-            mpImplWin->SetBackground( mpImplLB->GetMainWindow()->GetControlBackground() );
-            mpImplWin->SetControlBackground( mpImplLB->GetMainWindow()->GetControlBackground() );
+            if ( mpImplWin->IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL) )
+            {
+                // Transparent background
+                mpImplWin->SetBackground();
+                mpImplWin->SetControlBackground();
+            }
+            else
+            {
+                mpImplWin->SetBackground( mpImplLB->GetMainWindow()->GetControlBackground() );
+                mpImplWin->SetControlBackground( mpImplLB->GetMainWindow()->GetControlBackground() );
+            }
             mpImplWin->SetFont( mpImplLB->GetMainWindow()->GetFont() );
             mpImplWin->Invalidate();
         }
