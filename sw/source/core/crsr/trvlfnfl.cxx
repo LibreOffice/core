@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfnfl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:47:00 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,7 @@ FASTBOOL SwCrsrShell::GotoFlyTxt()
             SdrObject *pObj = pActPage->GetObj( nObj );
             ASSERT( pObj ,
                     "UUPs, kein Object" );
-            SwVirtFlyDrawObj *pVirt = pObj->IsWriterFlyFrame() ?
+            SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
                                                     (SwVirtFlyDrawObj*)pObj : 0;
             if( pVirt && pVirt->GetFlyFrm()->Lower() &&
                 !pVirt->GetFlyFrm()->Lower()->IsNoTxtFrm() )
