@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:10:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,19 @@
 #include <iderdll.hxx>
 #include <bastypes.hxx>
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+
+using namespace ::com::sun::star;
+
 SFX_IMPL_TOOLBOX_CONTROL( LibBoxControl, SfxStringItem );
 
-LibBoxControl::LibBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind )
-    : SfxToolBoxControl( nId, rTbx, rBind )
+LibBoxControl::LibBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+    : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
@@ -114,15 +123,16 @@ void LibBoxControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoo
 
 Window* LibBoxControl::CreateItemWindow( Window *pParent )
 {
-    return new BasicLibBox( pParent );
+    return new BasicLibBox( pParent, m_xFrame );
 }
 
 
 
 
 
-BasicLibBox::BasicLibBox( Window* pParent ) :
-    ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
+BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
+    ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
+    m_xFrame( rFrame )
 {
     FillBox();
     bIgnoreSelect = TRUE;   // Select von 0 noch nicht weiterleiten
@@ -313,6 +323,17 @@ void BasicLibBox::NotifyIDE()
         aLib = GetSelectEntry();
 
     SfxStringItem aLibName( SID_BASICIDE_ARG_LIBNAME, aLib );
+
+    uno::Any a;
+    uno::Sequence< beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LibSelect" ));
+    aLibName.QueryValue( a );
+    aArgs[0].Value = a;
+    SfxToolBoxControl::Dispatch(
+        uno::Reference< frame::XDispatchProvider >( m_xFrame->getController(), uno::UNO_QUERY ),
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LibSelect" )),
+        aArgs );
+/*
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
@@ -321,6 +342,7 @@ void BasicLibBox::NotifyIDE()
         pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
                               SFX_CALLMODE_SYNCHRON, &aLibName, 0L );
     }
+*/
     ReleaseFocus();
 }
 
