@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,13 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern ) const
     const SfxItemSet& rApplySet = pApplyPattern->GetItemSet();
     BOOL bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW, TRUE ) != SFX_ITEM_DEFAULT ||
                        rApplySet.GetItemState( ATTR_CONDITIONAL, TRUE ) != SFX_ITEM_DEFAULT );
+    BOOL bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY, TRUE ) != SFX_ITEM_DEFAULT );
 
     USHORT nFlags = SC_PF_TESTMERGE;
     if (bPaintExt)
         nFlags |= SC_PF_LINES;
+    if (bPaintRows)
+        nFlags |= SC_PF_WHOLEROWS;
     pDocShell->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID, nFlags );
 }
 
