@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:04:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,7 +987,7 @@ Resource RID_SW_SHELLRES
         TEXT[ japanese ] = "ζƒ…ε ± 0";
         TEXT[ chinese_traditional ] = "θ³‡θ¨ 0";
         TEXT[ arabic ] = "γΪαζγΙ 0";
-        TEXT[ greek ] = "Πληροφορίες 0";
+        TEXT[ greek ] = "Πληροφορία 0";
         TEXT[ korean ] = "μ •λ³΄ 0";
         TEXT[ turkish ] = "Bilgi 0";
         TEXT[ language_user1 ] = " ";
@@ -1019,7 +1019,7 @@ Resource RID_SW_SHELLRES
         TEXT[ japanese ] = "ζƒ…ε ± 1";
         TEXT[ chinese_traditional ] = "θ³‡θ¨ 1";
         TEXT[ arabic ] = "γΪαζγΙ 1";
-        TEXT[ greek ] = "Πληροφορίες 1";
+        TEXT[ greek ] = "Πληροφορία 1";
         TEXT[ korean ] = "μ •λ³΄ 1";
         TEXT[ turkish ] = "Bilgi 1";
         TEXT[ language_user1 ] = " ";
@@ -1051,7 +1051,7 @@ Resource RID_SW_SHELLRES
         TEXT[ japanese ] = "ζƒ…ε ± 2";
         TEXT[ chinese_traditional ] = "θ³‡θ¨ 2";
         TEXT[ arabic ] = "γΪαζγΙ 2";
-        TEXT[ greek ] = "Πληροφορίες 2";
+        TEXT[ greek ] = "Πληροφορία 2";
         TEXT[ korean ] = "μ •λ³΄ 2";
         TEXT[ turkish ] = "Bilgi 2";
         TEXT[ language_user1 ] = " ";
@@ -1083,7 +1083,7 @@ Resource RID_SW_SHELLRES
         TEXT[ japanese ] = "ζƒ…ε ± 3";
         TEXT[ chinese_traditional ] = "θ³‡θ¨ 3";
         TEXT[ arabic ] = "γΪαζγΙ 3";
-        TEXT[ greek ] = "Πληροφορίες 3";
+        TEXT[ greek ] = "Πληροφορία 3";
         TEXT[ korean ] = "μ •λ³΄ 3";
         TEXT[ turkish ] = "Bilgi 3";
         TEXT[ language_user1 ] = " ";
@@ -1278,7 +1278,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "θ½‰ζ› $(ARG1)";
         Text[ turkish ] = "Dφnόώtόr $(ARG1)";
         Text[ arabic ] = "ΚΝζνα $(ARG1)";
-        Text[ language_user1 ] = "DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet.";
+        Text[ language_user1 ] = "; DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet.";
         Text[ catalan ] = "Converteix $(ARG1)";
         Text[ finnish ] = "Muunna $(ARG1)";
         Text[ thai ] = "ΰΉΰΈ›ΰΈ¥ΰΈ‡ $(ARG1)";
@@ -1309,7 +1309,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "η¬¬δΈ€ε€‹θ½‰ζ› $(ARG1)";
         Text[ turkish ] = "έlk dφnόώόm $(ARG1)";
         Text[ arabic ] = "Γζα ΚΝζνα$(ARG1)";
-        Text[ language_user1 ] = "DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
+        Text[ language_user1 ] = "; DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
         Text[ catalan ] = "Primera conversiσ $(ARG1)";
         Text[ finnish ] = "Muunna ensin $(ARG1)";
         Text[ thai ] = "ΰΉΰΈ›ΰΈ¥ΰΈ‡ $(ARG1) ΰΈ„ΰΈ£ΰΈ±ΰΉ‰ΰΈ‡ΰΉΰΈ£ΰΈ";
@@ -1340,7 +1340,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_traditional ] = "θ½‰ζ›ηµ„ $(ARG1)";
         Text[ turkish ] = "Sonraki dφnόώόm $(ARG1)";
         Text[ arabic ] = "ΚΝζνα ΚΗαν $(ARG1)";
-        Text[ language_user1 ] = "DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
+        Text[ language_user1 ] = "; DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
         Text[ catalan ] = "Converteix sθrie $(ARG1)";
         Text[ finnish ] = "Muunna seuraavaksi $(ARG1)";
         Text[ thai ] = "ΰΉΰΈ›ΰΈ¥ΰΈ‡ $(ARG1) ΰΈ–ΰΈ±ΰΈ”ΰΉ„ΰΈ›";
@@ -1358,7 +1358,7 @@ String STR_AUTH_TYPE_ARTICLE
     Text[ english_us ] = "Article";
     Text[ portuguese ] = "Artigo";
     Text[ russian ] = "Ρςΰςόÿ";
-    Text[ greek ] = "Άρθρο περιοδικού";
+    Text[ greek ] = "Άρθρο";
     Text[ dutch ] = "Artikel";
     Text[ french ] = "Article";
     Text[ spanish ] = "Artνculo";
@@ -2101,7 +2101,7 @@ String STR_AUTH_FIELD_ADDRESS
     Text[ english_us ] = "Address";
     Text[ portuguese ] = "Endereηo";
     Text[ russian ] = "ΐδπερ";
-    Text[ greek ] = "Διεύθυνση εκδότη";
+    Text[ greek ] = "Διεύθυνση";
     Text[ dutch ] = "Adres";
     Text[ french ] = "Adresse";
     Text[ spanish ] = "Direcciσn";
@@ -2451,7 +2451,7 @@ String STR_AUTH_FIELD_NOTE
     Text[ japanese ] = "γƒ΅γƒΆ";
     Text[ korean ] = "λ©”λª¨";
     Text[ chinese_simplified ] = "ε¤‡ζ³¨";
-    Text[ chinese_traditional ] = "ε‚™θ¨»(~E)";
+    Text[ chinese_traditional ] = "ε‚™θ¨»(~N)";
     Text[ arabic ] = "γαΗΝΩΙ";
     Text[ turkish ] = "No~t";
     Text[ language_user1 ] = " ";
@@ -2625,7 +2625,7 @@ String STR_AUTH_FIELD_SERIES
     Text[ english_us ] = "Series";
     Text[ portuguese ] = "~Sιrie";
     Text[ russian ] = "Ρεπθÿ";
-    Text[ greek ] = "Όνομα σειράς";
+    Text[ greek ] = "Σειρά";
     Text[ dutch ] = "~Serie";
     Text[ french ] = "Sιrie";
     Text[ spanish ] = "Serie";
@@ -2717,7 +2717,7 @@ String STR_AUTH_FIELD_VOLUME
     Text[ english_us ] = "Volume";
     Text[ portuguese ] = "Volume";
     Text[ russian ] = "Òξμ";
-    Text[ greek ] = "Αριθμός τόμου";
+    Text[ greek ] = "Τόμος";
     Text[ dutch ] = "Deel";
     Text[ french ] = "Volume";
     Text[ spanish ] = "Tomo";
@@ -2747,7 +2747,7 @@ String STR_AUTH_FIELD_YEAR
     Text[ english_us ] = "Year";
     Text[ portuguese ] = "~Ano";
     Text[ russian ] = "Γξδ";
-    Text[ greek ] = "Έτος έκδοσης";
+    Text[ greek ] = "Έτος";
     Text[ dutch ] = "~Jaar";
     Text[ french ] = "Annιe";
     Text[ spanish ] = "Aρo";
@@ -2983,6 +2983,7 @@ String STR_AUTH_FIELD_ISBN
     Text[ hindi ] = "ISBN";
     Text[ slovak ] = "ISBN";
 };
+
 
 
 
