@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-18 11:56:07 $
+ *  last change: $Author: aw $ $Date: 2002-03-12 13:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,6 +1229,10 @@ void SdrMarkView::CheckMarked()
     // could lead to problems in sfx, see BUG description.
     //  if(bChg)
     //      MarkListHasChanged();
+
+    // #97995# at least reset the remembered BoundRect to prevent handle
+    // generation if bForceFrameHandles is TRUE.
+    bMarkedObjRectDirty = TRUE;
 }
 
 // for SW and their rearranged painting; this method forces the
