@@ -281,6 +281,7 @@ $(SHL1TARGETN) : \
         $(STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -295,6 +296,7 @@ $(SHL1TARGETN) : \
         $(STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL1USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -679,6 +681,7 @@ $(SHL2TARGETN) : \
         $(STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -693,6 +696,7 @@ $(SHL2TARGETN) : \
         $(STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL2USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1077,6 +1081,7 @@ $(SHL3TARGETN) : \
         $(STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1091,6 +1096,7 @@ $(SHL3TARGETN) : \
         $(STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL3USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1475,6 +1481,7 @@ $(SHL4TARGETN) : \
         $(STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1489,6 +1496,7 @@ $(SHL4TARGETN) : \
         $(STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL4USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1873,6 +1881,7 @@ $(SHL5TARGETN) : \
         $(STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -1887,6 +1896,7 @@ $(SHL5TARGETN) : \
         $(STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL5USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -2271,6 +2281,7 @@ $(SHL6TARGETN) : \
         $(STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -2285,6 +2296,7 @@ $(SHL6TARGETN) : \
         $(STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL6USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -2669,6 +2681,7 @@ $(SHL7TARGETN) : \
         $(STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -2683,6 +2696,7 @@ $(SHL7TARGETN) : \
         $(STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL7USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3067,6 +3081,7 @@ $(SHL8TARGETN) : \
         $(STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3081,6 +3096,7 @@ $(SHL8TARGETN) : \
         $(STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL8USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3465,6 +3481,7 @@ $(SHL9TARGETN) : \
         $(STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3479,6 +3496,7 @@ $(SHL9TARGETN) : \
         $(STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL9USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3863,6 +3881,7 @@ $(SHL10TARGETN) : \
         $(STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -3877,6 +3896,7 @@ $(SHL10TARGETN) : \
         $(STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL10USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\

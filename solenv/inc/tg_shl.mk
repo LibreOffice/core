@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-11-03 08:58:13 $
+#   last change: $Author: hjs $ $Date: 2004-11-08 10:46:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -381,6 +381,7 @@ $(SHL$(TNR)TARGETN) : \
         $(STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
@@ -395,6 +396,7 @@ $(SHL$(TNR)TARGETN) : \
         $(STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
+    @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
     $(LINK) @$(mktmp	$(LINKFLAGS)			\
