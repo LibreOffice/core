@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:37:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,37 @@ SwTOXBase::~SwTOXBase()
 void SwTOXBase::SetTitle(const String& rTitle)
     {   aTitle = rTitle; }
 
+
+SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
+{
+    ByteString aTmpStr(aTitle, RTL_TEXTENCODING_ASCII_US);
+    ByteString aTmpStr1(rSource.aTitle, RTL_TEXTENCODING_ASCII_US);
+    printf("%s, %d: \"%s\"->\"%s\"\n", __FILE__, __LINE__, aTmpStr.GetBuffer(),
+           aTmpStr1.GetBuffer());
+
+    aForm = rSource.aForm;
+    aName = rSource.aName;
+    aTitle = rSource.aTitle;
+    sMainEntryCharStyle = rSource.sMainEntryCharStyle;
+    sSequenceName = rSource.sSequenceName;
+    eLanguage = rSource.eLanguage;
+    sSortAlgorithm = rSource.sSortAlgorithm;
+    aData = rSource.aData;
+    nCreateType = rSource.nCreateType;
+    nOLEOptions = rSource.nOLEOptions;
+    eCaptionDisplay = rSource.eCaptionDisplay;
+    bProtected = rSource.bProtected;
+    bFromChapter = rSource.bFromChapter;
+    bFromObjectNames = rSource.bFromObjectNames;
+    bLevelFromChapter = rSource.bLevelFromChapter;
+
+    if (rSource.GetAttrSet())
+        SetAttrSet(*rSource.GetAttrSet());
+
+    return *this;
+}
+
+/* -----------------16.07.99 16:02-------------------
 
 SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 {
