@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,28 +138,28 @@ namespace configmgr
 class AdjustUpdate : ChangeTreeModification
 {
     SubtreeChange&      m_rChangeList;  // list which containes changes merged with the existing nodes
-    data::NodeAccess    m_aRefNode;     // reference node needed for merging
+    data::NodeAccessRef m_aRefNode;     // reference node needed for merging
     OTreeNodeConverter  m_aNodeConverter;
 public:
     static bool adjust(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        data::NodeAccess const& _aTargetNode)
+                        data::NodeAccessRef const& _aTargetNode)
     {
         return AdjustUpdate(_rResultTree,_aTargetNode).impl_adjust(_aUpdateTree);
     }
     static bool adjust(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        data::NodeAccess const& _aTargetNode,
+                        data::NodeAccessRef const& _aTargetNode,
                         OTreeNodeFactory& _rNodeFactory)
     {
         return AdjustUpdate(_rResultTree,_aTargetNode,_rNodeFactory).impl_adjust(_aUpdateTree);
     }
 private:
-    AdjustUpdate(SubtreeChange& rList, data::NodeAccess const & _aNode)
+    AdjustUpdate(SubtreeChange& rList, data::NodeAccessRef const & _aNode)
         :m_rChangeList(rList)
         ,m_aRefNode(_aNode)
         ,m_aNodeConverter()
     {}
 
-    AdjustUpdate(SubtreeChange& rList, data::NodeAccess const & _aNode, OTreeNodeFactory& _rNodeFactory)
+    AdjustUpdate(SubtreeChange& rList, data::NodeAccessRef const & _aNode, OTreeNodeFactory& _rNodeFactory)
         :m_rChangeList(rList)
         ,m_aRefNode(_aNode)
         ,m_aNodeConverter(_rNodeFactory)
@@ -223,7 +223,7 @@ public:
 
 
 // adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode)
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccessRef const & _aRootNode)
     {
         SubtreeChange aResultTree(_rUpdateTree, SubtreeChange::NoChildCopy());
 
@@ -313,7 +313,8 @@ void AdjustUpdate::handle(ValueChange& _rChange)
     if (checkNode())
     {
         // We need to find the element in the tree
-        data::NodeAccess aChildNode = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
+        data::NodeAccess aChildNodeAcc = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
+        data::NodeAccessRef aChildNode(aChildNodeAcc);
 
         // We have a node so we can keep the Change and the values do not differ
         if (aChildNode.isValid())
@@ -348,7 +349,8 @@ void AdjustUpdate::handle(SubtreeChange& _rChange)
     if (checkNode())
     {
         // We need to find the element in the tree
-        data::NodeAccess aChildNode = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
+        data::NodeAccess aChildNodeAcc = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
+        data::NodeAccessRef aChildNode(aChildNodeAcc);
 
         // if there is a node we continue
         if (aChildNode.isValid())
@@ -569,10 +571,10 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
     {
     protected:
         SubtreeChange&      m_rChangeList;
-        data::NodeAccess    m_aCacheNode;
+        data::NodeAccessRef m_aCacheNode;
 
     public:
-        ForwardTreeDifferenceBuilder(SubtreeChange& rList, data::NodeAccess const & _aCacheNode)
+        ForwardTreeDifferenceBuilder(SubtreeChange& rList, data::NodeAccessRef const & _aCacheNode)
         : m_rChangeList(rList)
         , m_aCacheNode(_aCacheNode)
         {
@@ -672,7 +674,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
         {
         }
 
-        Result applyToChildren(data::NodeAccess const & _aCacheNode)
+        Result applyToChildren(data::NodeAccessRef const & _aCacheNode)
         {
             if (data::GroupNodeAccess::isInstance(_aCacheNode))
             {
@@ -706,7 +708,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
             return CONTINUE;
         }
 
-        virtual Result handle(data::NodeAccess const & _aCacheNode)
+        virtual Result handle(data::NodeAccessRef const & _aCacheNode)
         {
             // value nodes are handled separately
             OSL_ASSERT(!data::ValueNodeAccess::isInstance(_aCacheNode));
@@ -789,7 +791,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
 //--------------------------------------------------------------------------
 
 // apply a set of changes to the target tree, return true, if there are changes found
-    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData)
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccessRef const & _aExistingData, ISubtree const & _aNewData)
     {
         OSL_ENSURE( _aExistingData.isValid(), "Trying to create diffrence for empty data" );
     // create the differences
