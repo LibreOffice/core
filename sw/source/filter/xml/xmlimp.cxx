@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: dvo $ $Date: 2001-07-04 15:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -162,6 +165,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::drawing;
 using namespace ::xmloff::token;
 
 //----------------------------------------------------------------------------
@@ -702,6 +706,11 @@ class SvTextShapeImportHelper : public XMLTextShapeImportHelper
     // destructor
     UniReference< ::xmloff::OFormLayerXMLImport > rFormImport;
 
+    // hold reference to the one page (if it exists) for calling startPage()
+    // and endPage. If !xPage.is(), then this document doesn't have a
+    // XDrawPage.
+    Reference<drawing::XDrawPage> xPage;
+
 public:
 
     SvTextShapeImportHelper(SvXMLImport& rImp);
@@ -711,21 +720,30 @@ public:
 SvTextShapeImportHelper::SvTextShapeImportHelper(SvXMLImport& rImp) :
     XMLTextShapeImportHelper(rImp)
 {
-    if (rImp.GetFormImport().is())
+    Reference<drawing::XDrawPageSupplier> xSupplier(rImp.GetModel(),UNO_QUERY);
+    if (xSupplier.is())
     {
-        Reference<drawing::XDrawPageSupplier> xSupplier(rImp.GetModel(),
-                                                        UNO_QUERY);
-        if (xSupplier.is())
+        if (rImp.GetFormImport().is())
         {
             rImp.GetFormImport()->startPage(xSupplier->getDrawPage());
             rFormImport = rImp.GetFormImport();
         }
+
+        xPage  = xSupplier->getDrawPage();
+        Reference<XShapes> xShapes( xPage, UNO_QUERY );
+        XMLShapeImportHelper::startPage( xShapes );
     }
 }
 
 SvTextShapeImportHelper::~SvTextShapeImportHelper()
 {
     rFormImport->endPage();
+
+    if (xPage.is)
+    {
+        Reference<XShapes> xShapes( xPage, UNO_QUERY );
+        XMLShapeImportHelper::endPage(xShapes);
+    }
 }
 
 
