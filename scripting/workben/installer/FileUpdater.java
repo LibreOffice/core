@@ -67,7 +67,7 @@ public class FileUpdater {
                     System.out.println("File closed");
                 }
                 catch(Exception e) {
-                    System.out.println("Update ProtocolHandler Failed! (File closing error)");
+                    System.out.println("Update ProtocolHandler Failed, please view SFrameworkInstall.log.");
             System.err.println(e);
             e.printStackTrace();
                 }
@@ -144,7 +144,7 @@ public class FileUpdater {
                     out.close();
                 }
                 catch(Exception e) {
-                    System.out.println("Update Script.xlc Failed (File closing error)");
+                    System.out.println("Update Script.xlc Failed, please view SFrameworkInstall.log.");
             e.printStackTrace();
                     System.err.println(e);
                 }
@@ -180,7 +180,8 @@ public class FileUpdater {
             }
         }
         catch( IOException ioe ) {
-            String message = "\nError reading "+in_file.getPath()+" information"+ ioe + "\n Error Detail:\n" + ExceptionTraceHelper.getTrace(ioe);
+
+            String message = "\nError reading dialog.xlc, please view SFrameworkInstall.log.";
             System.out.println(message);
             statusLabel.setText(message);
             return false;
@@ -219,7 +220,7 @@ public class FileUpdater {
                     out.close();
                 }
                 catch(Exception e) {
-                    System.out.println("Update dialog.xlc Failed (File closing error)");
+                    System.out.println("Update dialog.xlc Failed, please view SFrameworkInstall.log.");
             e.printStackTrace();
                     System.err.println(e);
                 }

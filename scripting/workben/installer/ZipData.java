@@ -16,12 +16,14 @@ public class ZipData
     }
 
     public static boolean extractEntry(String entry, String destination, javax.swing.JLabel statusLabel){
-        boolean status = false;
+    boolean status = false;
         System.err.println("Copying: "+entry);
         System.err.println("in: "+zipfile);
         System.err.println(" to: "+destination);
-        if (statusLabel != null)
-            statusLabel.setText("Copying " + entry);
+    if (statusLabel != null) {
+        statusLabel.setText("Copying " + entry);
+        System.out.println("Copying " + entry);
+    }
     try{
         ZipFile zip = new ZipFile(zipfile);
         ZipEntry zentry = zip.getEntry(entry);
@@ -54,8 +56,10 @@ public class ZipData
        System.out.println(e.getMessage());
        e.printStackTrace();
         status = false;
-        if (statusLabel != null)
-            statusLabel.setText("Failed extracting " + entry + " to " + destination);
+        if (statusLabel != null) {
+            statusLabel.setText("Failed extracting " + entry + " , please view SFramework.log");
+            System.out.println("Failed extracting " + entry + " to " + destination);
+        }
     }
     return status;
     }
