@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ptitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-28 11:03:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,13 @@
 #include "ptitem.hxx"
 #include "memberid.hrc"
 
+using namespace ::com::sun::star;
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxPointItem);
 
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
 // -----------------------------------------------------------------------
 
@@ -177,15 +180,22 @@ SvStream& SfxPointItem::Store(SvStream &rStream, USHORT nItemVersion) const
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPointItem::QueryValue( com::sun::star::uno::Any& rVal,
+BOOL SfxPointItem::QueryValue( uno::Any& rVal,
                                BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    awt::Point aTmp(aVal.X(), aVal.Y());
+    if( bConvert )
+    {
+        aTmp.X = TWIP_TO_MM100(aTmp.X);
+        aTmp.Y = TWIP_TO_MM100(aTmp.Y);
+    }
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
-        case 0: rVal <<= com::sun::star::awt::Point( aVal.getX(), aVal.getY() ); break;
-        case MID_X: rVal <<= aVal.getX(); break;
-        case MID_Y: rVal <<= aVal.getY(); break;
+        case 0: rVal <<= aTmp; break;
+        case MID_X: rVal <<= aTmp.X; break;
+        case MID_Y: rVal <<= aTmp.Y; break;
         default: DBG_ERROR("Wrong MemberId!"); return FALSE;
     }
 
@@ -194,17 +204,29 @@ BOOL SfxPointItem::QueryValue( com::sun::star::uno::Any& rVal,
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPointItem::PutValue( const com::sun::star::uno::Any& rVal,
+BOOL SfxPointItem::PutValue( const uno::Any& rVal,
                              BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     BOOL bRet = FALSE;
-    com::sun::star::awt::Point aValue;
+    awt::Point aValue;
     sal_Int32 nVal;
     if ( !nMemberId )
+    {
         bRet = ( rVal >>= aValue );
+        if( bConvert )
+        {
+            aValue.X = MM100_TO_TWIP(aValue.X);
+            aValue.Y = MM100_TO_TWIP(aValue.Y);
+        }
+    }
     else
+    {
         bRet = ( rVal >>= nVal );
+        if( bConvert )
+            nVal = MM100_TO_TWIP( nVal );
+    }
 
     if ( bRet )
     {
