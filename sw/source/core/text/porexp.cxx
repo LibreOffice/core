@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-19 14:53:55 $
+ *  last change: $Author: fme $ $Date: 2002-10-23 14:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,10 +241,7 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
         Truncate();
         rInf.SetUnderFlow( this );
         if( rInf.GetLast()->IsKernPortion() )
-        {
-            rInf.SetLast( rInf.GetLast()->FindPrevPortion( rInf.GetRoot() ) );
             rInf.SetUnderFlow( rInf.GetLast() );
-        }
     }
 }
 
@@ -261,10 +258,7 @@ sal_Bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
         Truncate();
         rInf.SetUnderFlow( this );
         if( rInf.GetLast()->IsKernPortion() )
-        {
-            rInf.SetLast( rInf.GetLast()->FindPrevPortion( rInf.GetRoot() ) );
             rInf.SetUnderFlow( rInf.GetLast() );
-        }
     }
     return bFull;
 }

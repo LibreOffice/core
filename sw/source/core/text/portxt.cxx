@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-27 13:40:01 $
+ *  last change: $Author: fme $ $Date: 2002-10-23 14:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         short nKern = rInf.GetFont()->CheckKerning();
         if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
         {
-            nKern = rInf.Width() - rInf.X() - Width();
+            nKern = rInf.Width() - rInf.X() - Width() - 1;
             if( nKern < 0 )
                 nKern = 0;
         }
