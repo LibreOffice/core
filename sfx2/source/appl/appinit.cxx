@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-15 06:01:27 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,11 +252,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     // SV-Look
     Help::EnableContextHelp();
     Help::EnableExtHelp();
-#ifdef ENABLE_INIMANAGER//MUSTINI
-    // falls der IniManager nicht schon durch CreateResManager erzeugt wurde
-    if ( !pAppIniMgr )
-        pAppIniMgr = CreateIniManager();
-#endif
+
     SvtLocalisationOptions aLocalisation;
     Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
     Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
@@ -271,11 +267,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pSfxFrameObjectFactoryPtr = new SfxFrameObjectFactoryPtr;
     pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
     SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
-#if SUPD<613//MUSTINI
-    INetURLHistory::GetOrCreate()->SetLocation( GetIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
-#else
     INetURLHistory::GetOrCreate()->SetLocation( SvtPathOptions().GetUserConfigPath() );
-#endif
 
     // merken, falls Applikation normal gestartet wurde
     if ( pAppData_Impl->bDirectAliveCount )
@@ -299,13 +291,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     // diverse Pointer
     pImp->pAutoSaveTimer = new Timer;
-#if SUPD<613//MUSTINI
-    String aPickSize = GetIniManager()->Get( SFX_KEY_PICKLIST );
-    int nPickSize = !aPickSize.Len() ? 4 : (int) aPickSize.ToInt32();
-    SfxPickList_Impl::GetOrCreate( Min(9, nPickSize) );
-#else
     SfxPickList_Impl::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
-#endif
 
     /////////////////////////////////////////////////////////////////
 
@@ -322,15 +308,9 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pInterfaces = new SfxInterface*[nInterfaces];
     memset( pInterfaces, 0, sizeof(SfxInterface*) * nInterfaces );
 
-    pAppData_Impl->pAppCfg = new SfxConfigManager;
-    pAppData_Impl->pAppCfg->Activate( pCfgMgr );
+    pAcceleratorMgr = new SfxAcceleratorManager( pCfgMgr );
 
-    pAcceleratorMgr = new SfxAcceleratorManager;
-
-    pImageMgr = new SfxImageManager;
-#if SUPD<608
-    pOptions = new SfxOptions;
-#endif
+    pImageMgr = new SfxImageManager( NULL );
     SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
 
     // Die Strings muessen leider zur Laufzeit gehalten werden, da wir bei
@@ -384,9 +364,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppDispat->Push(*this);
     pAppDispat->DoActivate_Impl( sal_True );
 
-    //  if not done in Init(), load the configuration
-    if ( !pImp->bConfigLoaded )
-        LoadConfig();
     SvtSaveOptions aSaveOptions;
     pImp->pAutoSaveTimer->SetTimeout( aSaveOptions.GetAutoSaveTime() * 60000 );
     pImp->pAutoSaveTimer->SetTimeoutHdl( LINK( pApp, SfxApplication, AutoSaveHdl_Impl ) );
@@ -422,6 +399,7 @@ IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
     ::com::sun::star::uno::Reference< ::com::sun::star::installation::XInstallationCheck >  xInst( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.installation.FontCheck") ), ::com::sun::star::uno::UNO_QUERY );
     if ( xInst.is() )
         xInst->checkWithDialog( sal_False );
+
 #if SUPD<613//MUSTINI
     String aWizard = GetIniManager()->Get( DEFINE_CONST_UNICODE("Common"), 0, 0, DEFINE_CONST_UNICODE("RunWizard") );
     sal_Bool bRunWizard = (sal_Bool) (sal_uInt16) aWizard.ToInt32();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-15 06:00:20 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,44 +698,6 @@ void SfxApplication::HandleConfigError_Impl
 
 //--------------------------------------------------------------------
 
-void SfxApplication::LoadConfig()
-
-/*  [Beschreibung]
-
-    Interne Routine zum Einlesen der Konfiguration aus SfxIniManager
-    und SfxConfigManager.
-*/
-
-{
-    if ( pImp->bConfigLoaded )
-        return;
-/*
-    sal_Bool bUpdateMode;
-    WorkWindow* pAppWin = Application::GetAppWindow();
-    if ( pAppWin->IsVisible() )
-    {
-        bUpdateMode = pAppWin->IsUpdateMode();
-        pAppWin->SetUpdateMode(sal_False);
-    }
-*/
-    if (!pCfgMgr->LoadConfig())
-        HandleConfigError_Impl((sal_uInt16)pCfgMgr->GetErrorCode());
-
-/*
-    if ( pAppWin->IsVisible()  )
-    {
-        pAppWin->SetUpdateMode( bUpdateMode );
-        SfxWorkWindow *pWork = GetWorkWindow_Impl();
-        pWork->ArrangeChilds_Impl();
-        pWork->ShowChilds_Impl();
-        pAppWin->Invalidate();
-    }
-*/
-    pImp->bConfigLoaded = sal_True;
-}
-
-//--------------------------------------------------------------------
-
 void SfxApplication::StoreConfig()
 
 /*  [Beschreibung]
@@ -750,7 +712,7 @@ void SfxApplication::StoreConfig()
 //        SfxTaskManager::SaveWorkingSet();
 //(mba/task): Implementierung fehlt
 
-    if (!pAppData_Impl->pAppCfg->StoreConfig())
+    if (!pCfgMgr->StoreConfiguration())
         HandleConfigError_Impl((sal_uInt16)pCfgMgr->GetErrorCode());
     else
         SaveConfiguration();
@@ -762,102 +724,7 @@ void SfxApplication::StoreConfig()
 #ifdef WNT
 extern String GetUserID();
 #endif
-#ifdef ENABLE_INIMANAGER//MUSTINI
-SfxIniManager* SfxApplication::CreateIniManager()
-{
-    SfxIniManager *pIniMgr = NULL;
-    try
-    {
-        pIniMgr = SfxIniManager::Get();
-        if ( pIniMgr )
-        {
-            pIniMgr->EnterLock();
 
-            // Dialog-Mnemonics/Scaling
-            LanguageType eLang = Application::GetAppInternational().GetLanguage();
-            Application::EnableAutoMnemonic( pIniMgr->Get( SFX_KEY_INTERNATIONAL_AUTOMNEMONIC,(sal_uInt16) eLang ).CompareToAscii("1") == COMPARE_EQUAL );
-            Application::SetDialogScaleX( (short)
-                    pIniMgr->Get( SFX_KEY_INTERNATIONAL_DIALOGSCALEX,
-                                (sal_uInt16) eLang ).ToInt32() );
-            return pIniMgr;
-        }
-    }
-    catch ( ::com::sun::star::registry::InvalidRegistryException& )
-    {
-        pIniMgr = NULL;
-    }
-
-    // If some configurtation files are missing or corrupt
-    // try to start setup. If starting failed show a errorbox and exit application with an error code.
-    String aProgURL = SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(PROGURL)") );
-    INetURLObject aSetupObj( aProgURL );
-
-    #if defined(UNX)
-    aSetupObj.insertName( DEFINE_CONST_UNICODE("setup") );
-    #endif
-    #if defined(WIN) || defined(WNT) || defined(OS2)
-    aSetupObj.insertName( DEFINE_CONST_UNICODE("setup.exe") );
-    #endif
-    #if defined(MAC)
-    aSetupObj.insertName( DEFINE_CONST_UNICODE("Setup") );
-    #endif
-
-    // We must use different messages for fat office and portal.
-    // A fat office can be repaired by user himself ...
-    // but portal problems must fixed by an admin!
-    String aMsg;
-
-    // Changed as per BugID 79541 Branding/Configuration
-    ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-    UNOANY MyAny = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    UNOOUSTRING aProductName ;
-
-    MyAny >>= aProductName;
-
-    if( Application::IsRemoteServer())
-    {
-        aMsg += DEFINE_CONST_UNICODE("Your user account is not configured correctly.\n");
-            aMsg += DEFINE_CONST_UNICODE("Please contact your %PRODUCTNAME administator.\n");
-    }
-    else
-    {
-        aMsg += DEFINE_CONST_UNICODE("Configuration files could not be found.\n");
-            aMsg += DEFINE_CONST_UNICODE("Can't start neither %PRODUCTNAME nor Setup.\n");
-        aMsg += DEFINE_CONST_UNICODE("Please try to start setup by yourself.");
-    }
-
-    // merge Productname into the String
-    aMsg.SearchAndReplaceAscii( "%PRODUCTNAME" , aProductName );
-
-    String aImageName( aSetupObj.PathToFileName() );
-    ::vos::OProcess aProcess( aImageName.GetBuffer() );
-    ::rtl::OUString aArg = ::rtl::OUString::createFromAscii( "/officemode" );
-    ::vos::OArgumentList aList( 1, &aArg );
-    if ( 0 != aProcess.execute( ::vos::OProcess::TOption_Detached, aList ) )
-        Application::Abort( aMsg );
-    exit(-1);
-    return 0;
-}
-
-//------------------------------------------------------------------------
-
-SfxIniManager* SfxApplication::GetIniManager() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert den Ini-Manager der Dokument-Factory
-    des aktiven Dokuments, insofern ein Dokument aktiv ist.
-    Ansonsten liefert sie den Ini-Manager der Applikation.
-
-    W"ahrend 'Application:Execute()' ist der R"uckgabewert
-    immer ein g"ultiger Pointer, ansonsten kann es auch ein
-    0-Pointer sein.
-*/
-
-{
-    return pViewFrame ? pViewFrame->GetIniManager() : pAppIniMgr;
-}
-#endif//MUSTINI!
 //------------------------------------------------------------------------
 
 SfxProgress* SfxApplication::GetProgress() const
@@ -900,7 +767,7 @@ void SfxApplication::ToolboxExec_Impl( SfxRequest &rReq )
     }
 
     // Parameter auswerten
-    SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+    SfxToolBoxConfig *pTbxConfig = pViewFrame->GetBindings().GetToolBoxConfig();
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
     sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
 
@@ -931,7 +798,7 @@ void SfxApplication::ToolboxState_Impl( SfxItemSet &rSet )
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
-        SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+        SfxToolBoxConfig *pTbxConfig = pViewFrame->GetBindings().GetToolBoxConfig();
         switch ( nSID )
         {
             case SID_TOGGLEFUNCTIONBAR:
