@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-07 11:25:09 $
+ *  last change: $Author: mtg $ $Date: 2001-09-21 11:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,7 +1312,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                 const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
                 if ( bGotZoomType && bGotZoomFactor &&
                    ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) )
-                    SetZoom( eZoom, nZoomFactor);
+                    SetZoom( eZoom, nZoomFactor, sal_True );
                 if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
                     SetVisArea( aVis.TopLeft() );
                 else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
