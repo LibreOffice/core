@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:15:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ String STR_NOGLOS1
     TEXT[ czech ] = "Automatický text pro zkratku '";
     TEXT[ hebrew ] = "AutoText zum Kürzel '";
     TEXT[ hindi ] = "सरलविधि केलिए स्वचालित ढंग से टेक्स्ट्  '";
+    TEXT[ slovak ] = "Automatický text pre skratku '";
 };
 String STR_NOGLOS2
 {
@@ -136,6 +137,7 @@ String STR_NOGLOS2
     TEXT[ czech ] = "' nebyl nalezen.";
     TEXT[ hebrew ] = "' nicht gefunden.";
     TEXT[ hindi ] = "' नहीं मिला ।";
+    TEXT[ slovak ] = "' nebol nájdený.";
 };
 
 String STR_NO_TABLE
@@ -169,6 +171,7 @@ String STR_NO_TABLE
     Text[ czech ] = "Není možno vložit tabulku";
     Text[ hebrew ] = "Eine Tabelle kann nicht in eine andere Tabelle eingefügt werden. Sie können die Daten jedoch einfügen, wenn sich der Cursor nicht in einer Tabelle befindet.";
     Text[ hindi ] = "वर्तमान में सारणी को जोड़ना संभव नहीं है ";
+    Text[ slovak ] = "Nemožno vložiť tabuľku";
 };
 
 
@@ -204,6 +207,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ czech ] = "Automatický text nelze vytvořit.";
     MESSAGE[ hebrew ] = "AutoText konnte nicht angelegt werden.";
     MESSAGE[ hindi ] = "स्वचालित ढंग से टेक्स्ट् नहीं उत्पन्न कर सकते है ।";
+    MESSAGE[ slovak ] = "Automatický text nie je možné vytvoriť";
 };
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
@@ -238,6 +242,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ czech ] = "Požadovaný formát schránky není dostupný.";
     MESSAGE[ hebrew ] = "Gewünschtes Zwischenablagen-Format steht nicht zur Verfügung.";
     MESSAGE[ hindi ] = "निवेदन की हुयी क्लिपबोर्ड रचना प्राप्य नहीं है ।";
+    MESSAGE[ slovak ] = "Požadovaný formát schránky nie je dostupný.";
 };
 
 QueryBox MSG_UPDATE_NEW_GLOS_FMT
@@ -276,6 +281,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ czech ] = "Formát oddílu je neplatný.\nMusí se zkonvertovat, aby\nbylo možno uložit změny.\nZkonvertovat nyní?";
     Message[ hebrew ] = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?";
     Message[ hindi ] = "विभाग रचना अमान्य है ।\nपरिवर्तनों को संचित करने केलिए उनको\nबदलना होगा ।\nअभी उसे बदलना चाहते है?";
+    Message[ slovak ] = "Formát oddielu je neplatný.\nMusí sa skonvertovať, aby\nbolo možné uložiť zmeny.\nSkonvertovať teraz?";
 };
 
 String STR_PRIVATETEXT
@@ -307,6 +313,7 @@ String STR_PRIVATETEXT
     Text[ czech ] = "%PRODUCTNAME Writer";
     Text[ hebrew ] = "%PRODUCTNAME Writer";
     Text[ hindi ] = "%PRODUCTNAME लेखक";
+    Text[ slovak ] = "%PRODUCTNAME Writer";
 };
 String STR_PRIVATEGRAPHIC
 {
@@ -337,6 +344,7 @@ String STR_PRIVATEGRAPHIC
     Text[ czech ] = "Obrázek [%PRODUCTNAME Writer]";
     Text[ hebrew ] = "Grafik [%PRODUCTNAME Writer]";
     Text[ hindi ] = "सुचित्र [%PRODUCTNAME लेखक]";
+    Text[ slovak ] = "Obrázok [%PRODUCTNAME Writer]";
 };
 String STR_PRIVATEOLE
 {
@@ -366,6 +374,7 @@ String STR_PRIVATEOLE
     Text[ czech ] = "Objekt [%PRODUCTNAME Writer]";
     Text[ hebrew ] = "Objekt [%PRODUCTNAME Writer]";
     Text[ hindi ] = "वस्तु [%PRODUCTNAME लेखक]";
+    Text[ slovak ] = "Objekt [%PRODUCTNAME Writer]";
 };
 String STR_DDEFORMAT
 {
@@ -400,6 +409,7 @@ String STR_DDEFORMAT
     Text[ czech ] = "Odkaz DDE";
     Text[ hebrew ] = "DDE Verknüpfung";
     Text[ hindi ] = "DDE लिंक";
+    Text[ slovak ] = "Odkaz DDE";
 };
 Bitmap BMP_SW_TEAM_MUGSHOT
 {
@@ -410,6 +420,8 @@ String STR_SW_TEAM_NAMES
 {
     TEXT = "Back row: Juergen Pingel, Caolan McNamara, Andreas Martens, Daniel Vogelheim, Thomas Lange, Michael Brauer, Frank Meies, Oliver Specht, Ulf Stroehler (QA). \nFront row: Stefan Baltzer (QA), Eric Savary (QA), Hasan Ilter (QA), Martin Gallwey, Michael Ruess (QA)";
 };
+
+
 
 
 
