@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:12:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,10 @@
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>          // class SwTableLines, ...
+#endif
+// #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
@@ -1089,6 +1093,8 @@ void SwWW8ImplReader::ImportDop()
     // move tabs on alignment
     rDoc.SetTabCompat(true);
     maTracer.Log(sw::log::eTabStopDistance);
+    // OD 14.10.2003 #i18732# - adjust default of option 'FollowTextFlow'
+    rDoc.SetDefault( SwFmtFollowTextFlow( FALSE ) );
 
     // Import Default-Tabs
     long nDefTabSiz = pWDop->dxaTab;
