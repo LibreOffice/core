@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-23 13:17:47 $
+ *  last change: $Author: ssa $ $Date: 2002-10-25 11:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #ifndef _VCL_XCONNECTION_HXX
 #include <xconnection.hxx>
 #endif
+#ifndef _SV_SVIDS_HRC
+#include <svids.hrc>
+#endif
 
 #include <unohelp.hxx>
 
@@ -168,12 +171,29 @@
 using namespace ::com::sun::star::uno;
 
 // keycodes handled internally by VCL
-KeyCode ImplReservedKeyCodes[] = {
-    KeyCode(KEY_F1,0), KeyCode(KEY_F1,KEY_SHIFT), KeyCode(KEY_F1,KEY_MOD1),             // help
-    KeyCode(KEY_F2,KEY_SHIFT),                                                          // help
-    KeyCode(KEY_F4,KEY_MOD1), KeyCode(KEY_F4,KEY_MOD2), KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2),  // dock/undock
-    KeyCode(KEY_F6,0), KeyCode(KEY_F6,KEY_MOD1), KeyCode(KEY_F6,KEY_SHIFT),             // navigation
-    KeyCode(KEY_F10,0)                                                                  // menu
+class ImplReservedKey
+{
+public:
+    ImplReservedKey( KeyCode aKeyCode, USHORT nResId ) :
+      mKeyCode(aKeyCode), mnResId( nResId)
+     {}
+
+    KeyCode mKeyCode;
+    USHORT  mnResId;
+};
+
+ImplReservedKey ImplReservedKeys[] = {
+    ImplReservedKey(KeyCode(KEY_F1,0),                  SV_SHORTCUT_HELP),
+    ImplReservedKey(KeyCode(KEY_F1,KEY_SHIFT),          SV_SHORTCUT_ACTIVEHELP),
+    ImplReservedKey(KeyCode(KEY_F1,KEY_MOD1),           SV_SHORTCUT_CONTEXTHELP),
+    ImplReservedKey(KeyCode(KEY_F2,KEY_SHIFT),          SV_SHORTCUT_CONTEXTHELP),
+    ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1),           SV_SHORTCUT_DOCKUNDOCK),
+    ImplReservedKey(KeyCode(KEY_F4,KEY_MOD2),           SV_SHORTCUT_DOCKUNDOCK),
+    ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2),  SV_SHORTCUT_DOCKUNDOCK),
+    ImplReservedKey(KeyCode(KEY_F6,0),                  SV_SHORTCUT_NEXTSUBWINDOW),
+    ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1),           SV_SHORTCUT_TODOCUMENT),
+    ImplReservedKey(KeyCode(KEY_F6,KEY_SHIFT),          SV_SHORTCUT_PREVSUBWINDOW),
+    ImplReservedKey(KeyCode(KEY_F10,0),                 SV_SHORTCUT_MENUBAR)
 };
 
 
@@ -491,14 +511,24 @@ void Application::Abort( const XubString& rErrorText )
 
 ULONG   Application::GetReservedKeyCodeCount()
 {
-    return sizeof( ImplReservedKeyCodes ) / sizeof( KeyCode );
+    return sizeof( ImplReservedKeys ) / sizeof( ImplReservedKey );
 }
+
 const KeyCode*  Application::GetReservedKeyCode( ULONG i )
 {
     if( i >= GetReservedKeyCodeCount() )
         return NULL;
     else
-        return &ImplReservedKeyCodes[i];
+        return &ImplReservedKeys[i].mKeyCode;
+}
+
+String Application::GetReservedKeyCodeDescription( ULONG i )
+{
+    return String();    // SSA->CD: please remove this line once the strings are available (#101009#)
+    if( i >= GetReservedKeyCodeCount() )
+        return String();
+    else
+        return String( ResId( ImplReservedKeys[i].mnResId, ImplGetResMgr() ) );
 }
 
 // -----------------------------------------------------------------------
