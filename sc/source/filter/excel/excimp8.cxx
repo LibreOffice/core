@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:46:45 $
+ *  last change: $Author: dr $ $Date: 2001-07-23 08:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1484,7 +1484,7 @@ void ImportExcel8::Name( void )
             ScRange aRange;
             if( pErgebnis->IsReference( aRange ) )  // test & get range
             {
-                aName += String::CreateFromInt32( (sal_Int32) aRange.aStart.Tab() );
+//                aName += String::CreateFromInt32( (sal_Int32) aRange.aStart.Tab() );
                 bSkip = bAutoFilter;
 
                 if( !pAutoFilterBuffer )
@@ -1501,14 +1501,11 @@ void ImportExcel8::Name( void )
     else
         pFormConv->Convert( pErgebnis, nLenDef, FT_RangeName );     // formula
 
-    if( !bSkip )
-    {
-        if( bHidden )
-            pExcRoot->pRNameBuff->Store( aName, NULL, nSheet );
-        else
-            // ohne hidden
-            pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, bPrintArea );
-    }
+    if( bHidden || bSkip )
+        pExcRoot->pRNameBuff->Store( aName, NULL, nSheet );
+    else
+        // ohne hidden
+        pExcRoot->pRNameBuff->Store( aName, pErgebnis, nSheet, bPrintArea );
 }
 
 
