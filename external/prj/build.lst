@@ -2,17 +2,8 @@ es      external :       soltools NULL
 es	external					usr1 - all es_mkout NULL
 es	external\ado		nmake	-	w	es_ado NULL
 es	external\atl		nmake	-	w	es_atl NULL
-es	external\dt		nmake	-	u	es_dt NULL
 es	external\glibc		nmake	-	all	es_glibc NULL
 es	external\glibc\rtufiles	nmake	-	all	es_glibcrtu es_glibc NULL
 es	external\gpc		nmake	-	u	es_gpc NULL
 es      external\gpc            nmake   -       w       es_gpc NULL
-es	external\npsdk		nmake	-	all	es_npsdk NULL
-es	external\npsdk\rtufiles	nmake	-	all	es_npsdkrtu es_npsdk NULL
-es	external\odbc		nmake	-	all	es_odbc NULL
-es      external\psprint	nmake	-	u	es_psprint es_psprintafm.u es_psprintppds.u NULL
-es	external\psprint\afm	nmake	-	u	es_psprintafm NULL
-es	external\psprint\ppds	nmake	-	u	es_psprintppds NULL
-es      external\sane		nmake	-	all	es_sane NULL
-es      external\twain		nmake	-	all	es_twain NULL
 es      external\w4w		nmake	-	u	es_w4w NULL
