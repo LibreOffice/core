@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: mba $ $Date: 2001-07-17 08:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,18 @@
 #include "appsys.hxx"
 #include "desktopresid.hxx"
 
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -129,6 +141,8 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/cjkoptions.hxx>
 #include <svtools/internaloptions.hxx>
+#include <unotools/tempfile.hxx>
+#include <osl/file.hxx>
 
 #include <rtl/logfile.hxx>
 #include <setup2/installer.hxx>
@@ -151,11 +165,13 @@ using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::system;
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 
 OOfficeAcceptorThread*  pOfficeAcceptThread = 0;
 ResMgr*                 Desktop::pResMgr    = 0;
+static PluginAcceptThread* pPluginAcceptThread = 0;
 
 // ----------------------------------------------------------------------------
 
@@ -298,10 +314,173 @@ BOOL Desktop::QueryExit()
 
 USHORT Desktop::Exception(USHORT nError)
 {
-    // first test implementation!!
+    // protect against recursive calls
+    static BOOL bInException = FALSE;
+
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
-    return Application::Exception( nError );
+    Application::SetDefModalDialogParent( NULL );
+
+    if ( bInException )
+    {
+        String aDoubleExceptionString;
+        Application::Abort( aDoubleExceptionString );
+    }
+
+    bInException = TRUE;
+
+    // save all modified documents
+    if( Application::IsInExecute() )
+    {
+        // store to backup path
+        String aSavePath( SvtPathOptions().GetBackupPath() );
+        SvtInternalOptions aOpt;
+
+        // iterate tasks
+        Reference< ::com::sun::star::frame::XTasksSupplier >
+                xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                UNO_QUERY );
+        Reference< ::com::sun::star::frame::XTask > xTask;
+        Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
+        while( xList->hasMoreElements() )
+        {
+            xList->nextElement() >>= xTask;
+
+            // ask for controller
+            Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
+            if ( xCtrl.is() )
+            {
+                // ask for model
+                Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
+                Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
+                if ( xModifiable.is() && xModifiable->isModified() )
+                {
+                    // ask if modified
+                    Reference< ::com::sun::star::frame::XStorable > xStor( xModel, UNO_QUERY );
+                    if ( xStor.is() )
+                    {
+                        // get the media descriptor and retrieve filter name and password
+                        ::rtl::OUString aOrigPassword, aOrigFilterName;
+                        Sequence < PropertyValue > aArgs( xModel->getArgs() );
+                        sal_Int32 nProps = aArgs.getLength();
+                        for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
+                        {
+                            const PropertyValue& rProp = aArgs[nProp];
+                            if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+                                rProp.Value >>= aOrigFilterName;
+                            if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
+                                rProp.Value >>= aOrigPassword;
+                        }
+
+                        // save document as tempfile in backup directory
+                        // remember old name or title
+                        ::rtl::OUString aOrigURL = xModel->getURL();
+                        ::rtl::OUString aOldName, aSaveURL;
+                        if ( aOrigURL.getLength() )
+                        {
+                            ::utl::TempFile aTempFile( &aSavePath );
+                            aSaveURL = aTempFile.GetURL();
+                            aOldName = aOrigURL;
+                        }
+                        else
+                        {
+                            // untitled document
+                            String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
+                            ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
+                            aSaveURL = aTempFile.GetURL();
+                            // aOldName = Title;
+                        }
+
+                        if ( aOrigPassword.getLength() )
+                        {
+                            // if the document was loaded with a password, it should be stored with password
+                            Sequence < PropertyValue > aSaveArgs(1);
+                            aSaveArgs[0].Name = DEFINE_CONST_UNICODE("Password");
+                            aSaveArgs[0].Value <<= aOrigPassword;
+
+                            xStor->storeToURL( aSaveURL, aSaveArgs );
+                        }
+                        else
+                            xStor->storeToURL( aSaveURL, Sequence < PropertyValue >() );
+
+                        // remember original name and filter
+                        aOpt.PushRecoveryItem(  aOldName, aOrigFilterName, aSaveURL );
+                    }
+                }
+            }
+        }
+
+        if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
+            WarningBox( NULL, DesktopResId(STR_RECOVER_PREPARED) ).Execute();
+    }
+
+    // store configuration data
+    ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+
+    // because there is no method to flush the condiguration data, we must dispose the ConfigManager
+    Reference < XComponent > xComp( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+    xComp->dispose();
+
+    switch( nError & EXC_MAJORTYPE )
+    {
+/*
+        case EXC_USER:
+            if( nError == EXC_OUTOFMEMORY )
+            {
+                // not possible without a special NewHandler!
+                String aMemExceptionString;
+                Application::Abort( aMemExceptionString );
+            }
+            break;
+*/
+        case EXC_RSCNOTLOADED:
+        {
+            String aResExceptionString;
+            Application::Abort( aResExceptionString );
+            break;
+        }
+
+        case EXC_SYSOBJNOTCREATED:
+        {
+            String aSysResExceptionString;
+            Application::Abort( aSysResExceptionString );
+            break;
+        }
+
+        default:
+        {
+            if( !pPluginAcceptThread && !Application::IsRemoteServer() )
+            {
+                OfficeIPCThread::DisableOfficeIPCThread();
+                if( pSignalHandler )
+                    DELETEZ( pSignalHandler );
+
+                ::rtl::OUString aProgName, aTmp;
+                ::vos::OStartupInfo aInfo;
+                aInfo.getExecutableFile( aProgName );
+
+                Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
+                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
+                if ( xSystemShellExecute.is() )
+                {
+                    ::rtl::OUString aSysPathFileName;
+                    ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aProgName, aSysPathFileName );
+                    if ( nError == ::osl::FileBase::E_None )
+                         xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                }
+            }
+
+            exit( 333 );
+//            Application::Abort( String() );
+            break;
+        }
+    }
+
+    return TRUE;
+
+    // ConfigManager is disposed, so no way to continue
+    // bInException = sal_False;
+    // return Application::Exception( nError );
 }
 
 void Desktop::Property( ApplicationProperty& )
@@ -395,7 +574,6 @@ void Desktop::Main()
 
             Reference< XConnectionBroker >  xServiceManagerBroker;
             Reference< XConnectionBroker >  xPalmPilotManagerBroker;
-            PluginAcceptThread*             pPluginAcceptThread = 0;
 
             RemoteControl aControl;
 
@@ -525,12 +703,11 @@ void Desktop::OpenClients()
                 ::com::sun::star::uno::UNO_QUERY );
 
         // create the parameter array
-        Sequence < PropertyValue > aArgs( 5 );
+        Sequence < PropertyValue > aArgs( 4 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
         aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
         aArgs[2].Name = ::rtl::OUString::createFromAscii("FilterName");
-        aArgs[3].Name = ::rtl::OUString::createFromAscii("RealURL");
-        aArgs[4].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
+        aArgs[3].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
 
         // mark it as a user request
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
@@ -560,14 +737,12 @@ void Desktop::OpenClients()
                         // get the original URL for the recovered document
                         aArgs[1].Value <<= sal_False;
                         aArgs[3].Value <<= ::rtl::OUString( sRealFileName );
-                        aArgs[4].Value <<= ::rtl::OUString( sRealFileName );
                     }
                     else
                     {
                         // this was an untitled document ( open as template )
                         aArgs[1].Value <<= sal_True;
                         aArgs[3].Value <<= ::rtl::OUString();
-                        aArgs[4].Value <<= ::rtl::OUString();
                     }
 
                     // load the document
