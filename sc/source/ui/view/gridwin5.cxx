@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-25 17:35:04 $
+ *  last change: $Author: nn $ $Date: 2000-12-19 16:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,17 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
-#endif
-
 #define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/flditem.hxx>
+
+#include <svx/editview.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/imapobj.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 
 
 // INCLUDE ---------------------------------------------------------------
@@ -96,7 +94,31 @@
 #include "dbfunc.hxx"
 
 
-// STATIC DATA -----------------------------------------------------------
+// -----------------------------------------------------------------------
+
+ScHideTextCursor::ScHideTextCursor( ScViewData* pData, ScSplitPos eW ) :
+    pViewData(pData),
+    eWhich(eW)
+{
+    Window* pWin = pViewData->GetView()->GetWindowByPos( eWhich );
+    if (pWin)
+    {
+        Cursor* pCur = pWin->GetCursor();
+        if ( pCur && pCur->IsVisible() )
+            pCur->Hide();
+    }
+}
+
+ScHideTextCursor::~ScHideTextCursor()
+{
+    Window* pWin = pViewData->GetView()->GetWindowByPos( eWhich );
+    if (pWin)
+    {
+        //  restore text cursor
+        if ( pViewData->HasEditView(eWhich) && pWin->HasFocus() )
+            pViewData->GetEditView(eWhich)->ShowCursor( FALSE, TRUE );
+    }
+}
 
 // -----------------------------------------------------------------------
 
@@ -318,6 +340,9 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 USHORT      nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
+
+                ScHideTextCursor aHideCursor( pViewData, eWhich );      // MapMode is changed in GetEditArea
+
                 // bForceToTop = FALSE, use the cell's real position
                 aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, FALSE );
             }
