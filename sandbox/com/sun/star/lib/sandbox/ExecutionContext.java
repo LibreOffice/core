@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExecutionContext.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: jl $ $Date: 2002-09-24 13:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ public abstract class ExecutionContext extends Observable {
     protected final static int DISPOSED  = 6;
 
     private int status = DISPOSED;
+    private Object statusLock= new Object();
+    private boolean bDispatchException;
 
     protected ClassContext classContext;
 
@@ -302,7 +304,7 @@ public abstract class ExecutionContext extends Observable {
             case CMD_LOAD:
                 if (status == DISPOSED) {
                     xload();
-                    status = LOADED;
+                    setStatus(LOADED);
                     showStatus("loaded");
                 }
                 else
@@ -312,7 +314,7 @@ public abstract class ExecutionContext extends Observable {
             case CMD_INIT:
                 if(status == LOADED || status == DESTROYED) {
                     xinit();
-                    status = INITED;
+                    setStatus(INITED);
                     showStatus("inited");
                 }
                 else
@@ -322,7 +324,7 @@ public abstract class ExecutionContext extends Observable {
             case CMD_START:
                 if (status == INITED || status == STOPPED) {
                     xstart();
-                    status = STARTED;
+                    setStatus(STARTED);
                     showStatus("started");
                 }
                 else
@@ -332,7 +334,7 @@ public abstract class ExecutionContext extends Observable {
             case CMD_STOP:
                 if (status == STARTED) {
                     xstop();
-                    status = STOPPED;
+                    setStatus(STOPPED);
                     showStatus("stopped");
                 }
                 else
@@ -342,7 +344,7 @@ public abstract class ExecutionContext extends Observable {
             case CMD_DESTROY:
                 if(status == INITED || status == STOPPED) {
                     xdestroy();
-                    status = DESTROYED;
+                    setStatus(DESTROYED);
                     showStatus("destroyed");
                 }
                 else
@@ -353,7 +355,7 @@ public abstract class ExecutionContext extends Observable {
                 if (status == LOADED || status == DESTROYED) {
                     xdispose();
                     //  baseResourceLoader.flush();
-                    status = DISPOSED;
+                    setStatus(DISPOSED);
                     showStatus("disposed");
                 }
                 else
@@ -365,28 +367,34 @@ public abstract class ExecutionContext extends Observable {
             }
         }
         catch (ClassNotFoundException classNotFoundException) {
+            setDispatchException();
             showStatus("notfound", name);
             if(DEBUG) classNotFoundException.printStackTrace();
         }
         catch (InstantiationException instantiationException) {
+            setDispatchException();
             showStatus("nocreate", name);
             if(DEBUG) instantiationException.printStackTrace();
         }
         catch (IllegalAccessException illegalAccessException) {
+            setDispatchException();
             showStatus("noconstruct", name);
             if(DEBUG) illegalAccessException.printStackTrace();
         }
         catch (Exception exception) {
+            setDispatchException();
             showStatus("exception", exception.getMessage());
             if(DEBUG) exception.printStackTrace();
         }
         catch (ThreadDeath threadDeath) {
+            setDispatchException();
             showStatus("death");
             if(DEBUG) threadDeath.printStackTrace();
 
             throw threadDeath;
         }
         catch (Error error) {
+            setDispatchException();
             showStatus("error", error.getMessage());
             if(DEBUG) error.printStackTrace();
         }
@@ -455,6 +463,44 @@ public abstract class ExecutionContext extends Observable {
         sendLoad();
         sendInit();
         sendStart();
+    }
+
+    /** This function blocks until the status of ExecutionContext is DISPOSED or
+     *      an Exeption occurred during a call to the AppletExecutionContext in dispatch.
+     * @see #dispatch
+     * @see #setStatus
+     * @see #setDispatchException
+     */
+    public void waitForDispose() {
+        if (status == DISPOSED || bDispatchException)
+            return;
+        else
+        {
+            // wait until status is disposed
+            synchronized (statusLock) {
+                while (status != DISPOSED && !bDispatchException) {
+                    try {
+                        statusLock.wait();
+                    } catch (java.lang.InterruptedException e) {
+                    }
+                }
+            }
+        }
+        System.err.println("exit");
+    }
+
+    protected void  setStatus( int newStatus) {
+        synchronized (statusLock) {
+            status= newStatus;
+            statusLock.notifyAll();
+        }
+    }
+
+    protected void setDispatchException() {
+        synchronized (statusLock) {
+            bDispatchException= true;
+            statusLock.notifyAll();
+        }
     }
 }
 
