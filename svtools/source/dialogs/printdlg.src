@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:51:30 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 21:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "~Eigenschappen..." ;
         Text[ chinese_simplified ] = "ÊôÐÔ(~I)...";
         Text[ russian ] = "~Ñâîéñòâà...";
-        Text[ polish ] = "W³a?ciwo?ci...";
+        Text[ polish ] = "W³aœciwoœci...";
         Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
         Text[ chinese_traditional ] = "ÄÝ©Ê(~I)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
@@ -479,7 +479,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ dutch ] = "~Selectie" ;
         Text[ chinese_simplified ] = "Ñ¡Ôñ";
         Text[ russian ] = "Âûäåëåíèå";
-        Text[ polish ] = "Wybór";
+        Text[ polish ] = "Zaznaczony fragment";
         Text[ japanese ] = "‘I‘ð‚µ‚½•”•ª";
         Text[ chinese_traditional ] = "¿ï¾Ü";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
@@ -681,3 +681,4 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
