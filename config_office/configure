@@ -1248,7 +1248,7 @@ echo "configure:1245: checking the GNU gcc include paths" >&5
                   if test "$_multiple" = "false"; then
                      _gcc_include_path="$_gcc_include_path/include"
 
-                     _gxx_include_path=`find $_gxx_include_start -name "$_gccincname1" -print 2> /dev/null`
+                     _gxx_include_path=`find $_gxx_include_start -name "$_gccincname1" -print | grep include 2> /dev/null`
                      if test "$_gxx_include_path"; then
                         _multiple=`echo $_gxx_include_path | $AWK '{ if ($2) print "true"; else print "false" }'`
                         if test "$_multiple" = "false"; then
@@ -1258,7 +1258,7 @@ echo "configure:1245: checking the GNU gcc include paths" >&5
                            echo "configure: warning: found multiple g++-3 directories, please rename so you have one distinct" 1>&2 >> warn
                         fi
                      else
-                        _gxx_include_path2=`find $_gxx_include_start -name "g++-2" -print 2> /dev/null`
+                        _gxx_include_path2=`find $_gxx_include_start -name "g++-2" -print | grep include 2> /dev/null`
                         if test "$_gxx_include_path2"; then
                            _multiple=`echo $_gxx_include_path2 | $AWK '{ if ($2) print "true"; else print "false" }'`
                            if test "$_multiple" = "false"; then
@@ -1269,7 +1269,7 @@ echo "configure:1245: checking the GNU gcc include paths" >&5
                               echo "configure: warning: found multiple g++-2 directories, please rename so you have one distinct" 1>&2 >> warn
                            fi
                         else
-                           _gxx_include_path3=`find $_gxx_include_start -name "g++" -print 2> /dev/null`
+                           _gxx_include_path3=`find $_gxx_include_start -name "g++" -print | grep include 2> /dev/null`
                            if test "$_gxx_include_path3"; then
                               _multiple=`echo $_gxx_include_path3 | $AWK '{ if ($2) print "true"; else print "false" }'`
                               if test "$_multiple" = "false"; then
