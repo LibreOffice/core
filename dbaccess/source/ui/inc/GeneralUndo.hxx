@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GeneralUndo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:28:25 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ namespace dbaui
         String  m_strComment; // undo, redo comment
 
     public:
+        TYPEINFO();
         OCommentUndoAction(USHORT nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
         virtual UniString   GetComment() const { return m_strComment; }
