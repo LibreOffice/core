@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-31 14:38:33 $
+ *  last change: $Author: pb $ $Date: 2001-02-13 14:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,6 @@ void SvxStyleBox::Select()
 {
     if ( !IsTravelSelect() )
     {
-        nCurSel = GetSelectEntryPos();
         SfxStringItem aItem( nSlotId, GetSelectEntry() );
         SfxUInt16Item aFamily( SID_STYLE_FAMILY, eStyleFamily );
         rBindings.GetDispatcher()->Execute(
@@ -500,9 +499,6 @@ long SvxStyleBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurSel = GetSelectEntryPos();
-    else if ( EVENT_LOSEFOCUS == nType && GetSelectEntryPos() != nCurSel )
-        SelectEntryPos( nCurSel );
-
     return ListBox::PreNotify( rNEvt );
 }
 
@@ -657,12 +653,6 @@ long SvxFontNameBox::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         FillList();
-    else if ( EVENT_LOSEFOCUS == nType )
-    {
-        String aCurName = aCurFont.GetName();
-        if ( GetText() != aCurName )
-            SetText( aCurName );
-    }
     return FontNameBox::PreNotify( rNEvt );
 }
 
@@ -823,7 +813,6 @@ void SvxFontSizeBox::Select()
         rBindings.GetDispatcher()->Execute(
             SID_ATTR_CHAR_FONTHEIGHT, SFX_CALLMODE_RECORD, &aFontHeightItem, 0L );
         ReleaseFocus_Impl();
-        aCurText = GetText();
     }
 }
 
@@ -880,9 +869,8 @@ void SvxFontSizeBox::Update( const SvxFontItem& rFontItem )
 long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
-    USHORT nType = rNEvt.GetType();
 
-    if ( EVENT_KEYINPUT == nType )
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
@@ -906,8 +894,6 @@ long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    else if ( EVENT_LOSEFOCUS == nType && GetText() != aCurText )
-        SetText( aCurText );
 
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
 }
