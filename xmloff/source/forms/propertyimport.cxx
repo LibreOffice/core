@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:28:04 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 16:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,10 @@ namespace xmloff
                 _rImporter.GetMM100UnitConverter().convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
                 OSL_ENSURE(bSuccess, "OPropertyImport::convertString: could not convert to an enum value!");
                 if (bEnumAsInt)
-                    aReturn <<= (sal_Int32)nEnumValue;
+                    if (TypeClass_SHORT == _rExpectedType.getTypeClass())
+                        aReturn <<= (sal_Int16)nEnumValue;
+                    else
+                        aReturn <<= (sal_Int32)nEnumValue;
                 else
                     aReturn = ::cppu::int2enum((sal_Int32)nEnumValue, _rExpectedType);
             }
@@ -533,6 +536,10 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/02/26 10:28:04  aw
+ *  Changed double import/export to use it's own conversion routines
+ *  so iots more clear what type is used
+ *
  *  Revision 1.6  2001/02/13 09:10:03  fs
  *  prevent an assertion because of an outdated file format ('til SUPD>=622)
  *
