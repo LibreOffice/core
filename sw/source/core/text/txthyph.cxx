@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-26 14:42:27 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 13:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,13 +197,12 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
             if( !aLine.Next() )
                 break;
         }
-    }
 
 #ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
             SwapWidthAndHeight();
 #endif
-
+    }
     return bRet;
 }
 
