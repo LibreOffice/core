@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 17:01:24 $
+ *  last change: $Author: nn $ $Date: 2001-07-31 17:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class SvxEditEngineForwarder;
 class ScDocShell;
 class ScHeaderFooterContentObj;
 class ScCellTextData;
+class ScHeaderFooterTextData;
 
 
 class ScHeaderFooterChangedHint : public SfxHint
@@ -95,29 +96,38 @@ public:
 };
 
 
-class ScHeaderFooterEditSource : public SvxEditSource, public SfxListener
+//  all ScSharedHeaderFooterEditSource objects for a single text share the same data
+
+class ScSharedHeaderFooterEditSource : public SvxEditSource
 {
 private:
-    ScHeaderFooterContentObj*   pContentObj;
-    USHORT                      nPart;
-    ScEditEngineDefaulter*      pEditEngine;
-    SvxEditEngineForwarder*     pForwarder;
-    BOOL                        bDataValid;
-    BOOL                        bInUpdate;
+    ScHeaderFooterTextData*     pTextData;
+
+protected:
+    ScHeaderFooterTextData*     GetTextData() const { return pTextData; }   // for ScHeaderFooterEditSource
 
 public:
-                                ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
-                                                            USHORT nP );
-    virtual                     ~ScHeaderFooterEditSource();
+                                ScSharedHeaderFooterEditSource( ScHeaderFooterTextData* pData );
+    virtual                     ~ScSharedHeaderFooterEditSource();
 
-    //! GetEditEngine nur als Uebergang, bis die Feld-Funktionen am Forwarder sind !!!
-    ScEditEngineDefaulter*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+    //  GetEditEngine is needed because the forwarder doesn't have field functions
+    ScEditEngineDefaulter*      GetEditEngine();
 
     virtual SvxEditSource*      Clone() const ;
     virtual SvxTextForwarder*   GetTextForwarder();
     virtual void                UpdateData();
+};
 
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+//  ScHeaderFooterEditSource with local copy of ScHeaderFooterTextData is used by field objects
+
+class ScHeaderFooterEditSource : public ScSharedHeaderFooterEditSource
+{
+public:
+                                ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent, USHORT nP );
+                                ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent, USHORT nP );
+    virtual                     ~ScHeaderFooterEditSource();
+
+    virtual SvxEditSource*      Clone() const;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 17:02:55 $
+ *  last change: $Author: nn $ $Date: 2001-07-31 17:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include "docfunc.hxx"
 #include "hints.hxx"
 #include "patattr.hxx"
-#include "scmod.hxx"
 #include "unoguard.hxx"
 
 //------------------------------------------------------------------------
@@ -93,117 +92,63 @@ ScHeaderFooterChangedHint::~ScHeaderFooterChangedHint()
 
 //------------------------------------------------------------------------
 
-ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
-                                                        USHORT nP ) :
-    pContentObj( pContent ),
-    nPart( nP ),
-    pEditEngine( NULL ),
-    pForwarder( NULL ),
-    bDataValid( FALSE ),
-    bInUpdate( FALSE )
+ScSharedHeaderFooterEditSource::ScSharedHeaderFooterEditSource( ScHeaderFooterTextData* pData ) :
+    pTextData( pData )
 {
-    if (pContentObj)                // pContentObj can be 0 if constructed via getReflection
-    {
-        pContentObj->acquire();     // must not go away
+    //  pTextData is held by the ScHeaderFooterTextObj.
+    //  Text range and cursor keep a reference to their parent text, so the text object is
+    //  always alive and the TextData is valid as long as there are children.
+}
 
-        pContentObj->AddListener( *this );
-    }
+ScSharedHeaderFooterEditSource::~ScSharedHeaderFooterEditSource()
+{
+}
+
+SvxEditSource* ScSharedHeaderFooterEditSource::Clone() const
+{
+    return new ScSharedHeaderFooterEditSource( pTextData );
+}
+
+SvxTextForwarder* ScSharedHeaderFooterEditSource::GetTextForwarder()
+{
+    return pTextData->GetTextForwarder();
+}
+
+void ScSharedHeaderFooterEditSource::UpdateData()
+{
+    pTextData->UpdateData();
+}
+
+ScEditEngineDefaulter* ScSharedHeaderFooterEditSource::GetEditEngine()
+{
+    return pTextData->GetEditEngine();
+}
+
+//------------------------------------------------------------------------
+
+//  each ScHeaderFooterEditSource object has its own ScHeaderFooterTextData
+
+ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj* pContent,
+                                                    USHORT nP ) :
+    ScSharedHeaderFooterEditSource( new ScHeaderFooterTextData( *pContent, nP ) )
+{
+}
+
+ScHeaderFooterEditSource::ScHeaderFooterEditSource( ScHeaderFooterContentObj& rContent,
+                                                    USHORT nP ) :
+    ScSharedHeaderFooterEditSource( new ScHeaderFooterTextData( rContent, nP ) )
+{
 }
 
 ScHeaderFooterEditSource::~ScHeaderFooterEditSource()
 {
-    ScUnoGuard aGuard;      //  needed for EditEngine dtor
-
-    if (pContentObj)
-        pContentObj->RemoveListener( *this );
-
-    delete pForwarder;
-    delete pEditEngine;
-
-    if (pContentObj)
-        pContentObj->release();
+    delete GetTextData();   // not accessed in ScSharedHeaderFooterEditSource dtor
 }
 
 SvxEditSource* ScHeaderFooterEditSource::Clone() const
 {
-    return new ScHeaderFooterEditSource( pContentObj, nPart );
-}
-
-SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
-{
-    if (!pEditEngine)
-    {
-        SfxItemPool* pEnginePool = EditEngine::CreatePool();
-        pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, TRUE );
-
-        pHdrEngine->EnableUndo( FALSE );
-        pHdrEngine->SetRefMapMode( MAP_TWIP );
-
-        //  default font must be set, independently of document
-        //  -> use global pool from module
-
-        SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
-        const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
-        rPattern.FillEditItemSet( &aDefaults );
-        //  FillEditItemSet adjusts font height to 1/100th mm,
-        //  but for header/footer twips is needed, as in the PatternAttr:
-        aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
-        aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
-        aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
-        pHdrEngine->SetDefaults( aDefaults );
-
-        ScHeaderFieldData aData;
-        ScHeaderFooterTextObj::FillDummyFieldData( aData );
-        pHdrEngine->SetData( aData );
-
-        pEditEngine = pHdrEngine;
-        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
-    }
-
-    if (bDataValid)
-        return pForwarder;
-
-    if (pContentObj)
-    {
-        const EditTextObject* pData;
-        if (nPart == SC_HDFT_LEFT)
-            pData = pContentObj->GetLeftEditObject();
-        else if (nPart == SC_HDFT_CENTER)
-            pData = pContentObj->GetCenterEditObject();
-        else
-            pData = pContentObj->GetRightEditObject();
-
-        if (pData)
-            pEditEngine->SetText(*pData);
-    }
-
-    bDataValid = TRUE;
-    return pForwarder;
-}
-
-void ScHeaderFooterEditSource::UpdateData()
-{
-    if ( pContentObj && pEditEngine )
-    {
-        bInUpdate = TRUE;   // don't reset bDataValid during UpdateText
-
-        pContentObj->UpdateText( nPart, *pEditEngine );
-
-        bInUpdate = FALSE;
-    }
-}
-
-void ScHeaderFooterEditSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-    if ( rHint.ISA( ScHeaderFooterChangedHint ) )
-    {
-        if ( ((const ScHeaderFooterChangedHint&)rHint).GetPart() == nPart )
-        {
-            if (!bInUpdate)             // not for own updates
-                bDataValid = FALSE;     // text has to be fetched again
-        }
-    }
+    const ScHeaderFooterTextData* pData = GetTextData();
+    return new ScHeaderFooterEditSource( pData->GetContentObj(), pData->GetPart() );
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 17:01:24 $
+ *  last change: $Author: nn $ $Date: 2001-07-31 17:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,34 @@ public:
 };
 
 
+//  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
+
+class ScHeaderFooterTextData : public SfxListener
+{
+private:
+    ScHeaderFooterContentObj&   rContentObj;
+    USHORT                      nPart;
+    ScEditEngineDefaulter*      pEditEngine;
+    SvxEditEngineForwarder*     pForwarder;
+    BOOL                        bDataValid;
+    BOOL                        bInUpdate;
+
+public:
+                            ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
+                                                    USHORT nP );
+                            ~ScHeaderFooterTextData();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+                            // helper functions
+    SvxTextForwarder*       GetTextForwarder();
+    void                    UpdateData();
+    ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
+
+    USHORT                  GetPart() const         { return nPart; }
+    ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
+};
+
 //  ScHeaderFooterTextObj veraendert den Text in einem ScHeaderFooterContentObj
 
 class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
@@ -184,16 +212,17 @@ class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScHeaderFooterContentObj&   rContentObj;
-    USHORT                      nPart;
+    ScHeaderFooterTextData      aTextData;
     SvxUnoText*                 pUnoText;
+
+    void                    CreateUnoText_Impl();
 
 public:
                             ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
                                                     USHORT nP );
     virtual                 ~ScHeaderFooterTextObj();
 
-    const SvxUnoText&       GetUnoText() const;
+    const SvxUnoText&       GetUnoText();
 
     static void             FillDummyFieldData( ScHeaderFieldData& rData );
 

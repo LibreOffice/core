@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 17:02:55 $
+ *  last change: $Author: nn $ $Date: 2001-07-31 17:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include "patattr.hxx"
 #include "cell.hxx"
 #include "docfunc.hxx"
+#include "scmod.hxx"
 
 using namespace com::sun::star;
 
@@ -274,31 +275,137 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
 
 //------------------------------------------------------------------------
 
+ScHeaderFooterTextData::ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
+                                                    USHORT nP ) :
+    rContentObj( rContent ),
+    nPart( nP ),
+    pEditEngine( NULL ),
+    pForwarder( NULL ),
+    bDataValid( FALSE ),
+    bInUpdate( FALSE )
+{
+    rContentObj.acquire();              // must not go away
+    rContentObj.AddListener( *this );
+}
+
+ScHeaderFooterTextData::~ScHeaderFooterTextData()
+{
+    ScUnoGuard aGuard;      //  needed for EditEngine dtor
+
+    rContentObj.RemoveListener( *this );
+
+    delete pForwarder;
+    delete pEditEngine;
+
+    rContentObj.release();
+}
+
+void ScHeaderFooterTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( ScHeaderFooterChangedHint ) )
+    {
+        if ( ((const ScHeaderFooterChangedHint&)rHint).GetPart() == nPart )
+        {
+            if (!bInUpdate)             // not for own updates
+                bDataValid = FALSE;     // text has to be fetched again
+        }
+    }
+}
+
+SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
+{
+    if (!pEditEngine)
+    {
+        SfxItemPool* pEnginePool = EditEngine::CreatePool();
+        pEnginePool->FreezeIdRanges();
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, TRUE );
+
+        pHdrEngine->EnableUndo( FALSE );
+        pHdrEngine->SetRefMapMode( MAP_TWIP );
+
+        //  default font must be set, independently of document
+        //  -> use global pool from module
+
+        SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
+        const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
+        rPattern.FillEditItemSet( &aDefaults );
+        //  FillEditItemSet adjusts font height to 1/100th mm,
+        //  but for header/footer twips is needed, as in the PatternAttr:
+        aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
+        aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
+        aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
+        pHdrEngine->SetDefaults( aDefaults );
+
+        ScHeaderFieldData aData;
+        ScHeaderFooterTextObj::FillDummyFieldData( aData );
+        pHdrEngine->SetData( aData );
+
+        pEditEngine = pHdrEngine;
+        pForwarder = new SvxEditEngineForwarder(*pEditEngine);
+    }
+
+    if (bDataValid)
+        return pForwarder;
+
+    const EditTextObject* pData;
+    if (nPart == SC_HDFT_LEFT)
+        pData = rContentObj.GetLeftEditObject();
+    else if (nPart == SC_HDFT_CENTER)
+        pData = rContentObj.GetCenterEditObject();
+    else
+        pData = rContentObj.GetRightEditObject();
+
+    if (pData)
+        pEditEngine->SetText(*pData);
+
+    bDataValid = TRUE;
+    return pForwarder;
+}
+
+void ScHeaderFooterTextData::UpdateData()
+{
+    if ( pEditEngine )
+    {
+        bInUpdate = TRUE;   // don't reset bDataValid during UpdateText
+
+        rContentObj.UpdateText( nPart, *pEditEngine );
+
+        bInUpdate = FALSE;
+    }
+}
+
+//------------------------------------------------------------------------
+
 ScHeaderFooterTextObj::ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
                                                 USHORT nP ) :
-    rContentObj( rContent ),
-    nPart( nP )
+    aTextData( rContent, nP ),
+    pUnoText( NULL )
 {
-    rContentObj.acquire();      // darf nicht wegkommen
+    //  ScHeaderFooterTextData acquires rContent
+    //  pUnoText is created on demand (getString/setString work without it)
+}
 
-    //! pUnoText erst bei Bedarf anlegen?
-    //  nicht einfach aggregieren, weil getString/setString selber gemacht wird
-    ScHeaderFooterEditSource aEditSource( &rContent, nP );
-    pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertyMap(), uno::Reference<text::XText>() );
-    pUnoText->acquire();
+void ScHeaderFooterTextObj::CreateUnoText_Impl()
+{
+    if ( !pUnoText )
+    {
+        //  can't be aggregated because getString/setString is handled here
+        ScSharedHeaderFooterEditSource aEditSource( &aTextData );
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertyMap(), uno::Reference<text::XText>() );
+        pUnoText->acquire();
+    }
 }
 
 ScHeaderFooterTextObj::~ScHeaderFooterTextObj()
 {
-    rContentObj.release();
-
     if (pUnoText)
         pUnoText->release();
 }
 
-const SvxUnoText& ScHeaderFooterTextObj::GetUnoText() const
+const SvxUnoText& ScHeaderFooterTextObj::GetUnoText()
 {
-    DBG_ASSERT(pUnoText, "GetUnoText: NULL");
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return *pUnoText;
 }
 
@@ -316,6 +423,8 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->createTextCursorByRange(aTextPosition);
     //! wie ScCellObj::createTextCursorByRange, wenn SvxUnoTextRange_getReflection verfuegbar
 }
@@ -336,6 +445,10 @@ rtl::OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeExce
     ScUnoGuard aGuard;
     rtl::OUString aRet;
     const EditTextObject* pData;
+
+    USHORT nPart = aTextData.GetPart();
+    ScHeaderFooterContentObj& rContentObj = aTextData.GetContentObj();
+
     if (nPart == SC_HDFT_LEFT)
         pData = rContentObj.GetLeftEditObject();
     else if (nPart == SC_HDFT_CENTER)
@@ -366,7 +479,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const rtl::OUString& aText ) thr
     ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), TRUE );
     aEditEngine.SetText( aString );
 
-    rContentObj.UpdateText( nPart, aEditEngine );
+    aTextData.GetContentObj().UpdateText( aTextData.GetPart(), aEditEngine );
 }
 
 void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XTextRange>& xRange,
@@ -374,6 +487,8 @@ void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XT
                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     pUnoText->insertString( xRange, aString, bAbsorb );
 }
 
@@ -383,6 +498,8 @@ void SAL_CALL ScHeaderFooterTextObj::insertControlCharacter(
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     pUnoText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
 }
 
@@ -430,7 +547,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.Adjust();
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
-            pHeaderField->InitDoc( &rContentObj, nPart, aSelection );
+            pHeaderField->InitDoc( &aTextData.GetContentObj(), aTextData.GetPart(), aSelection );
 
             pTextRange->SetSelection( aSelection );
 
@@ -438,6 +555,8 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
         }
     }
 
+    if (!pUnoText)
+        CreateUnoText_Impl();
     pUnoText->insertTextContent( xRange, xContent, bAbsorb );
 }
 
@@ -456,24 +575,32 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
             return;
         }
     }
+    if (!pUnoText)
+        CreateUnoText_Impl();
     pUnoText->removeTextContent( xContent );
 }
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextObj::getText() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->getText();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getStart() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->getStart();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getEnd() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->getEnd();
 }
 
@@ -483,7 +610,8 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::ge
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScHeaderFieldsObj( &rContentObj, nPart, SC_SERVICE_INVALID );    // alle Felder
+    // all fields
+    return new ScHeaderFieldsObj( &aTextData.GetContentObj(), aTextData.GetPart(), SC_SERVICE_INVALID );
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFieldMasters()
@@ -501,6 +629,8 @@ void SAL_CALL ScHeaderFooterTextObj::moveTextRange(
                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     pUnoText->moveTextRange( xRange, nParagraphs );
 }
 
@@ -510,6 +640,8 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->createEnumeration();
 }
 
@@ -518,12 +650,16 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
 uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->getElementType();
 }
 
 sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    if (!pUnoText)
+        CreateUnoText_Impl();
     return pUnoText->hasElements();
 }
 
