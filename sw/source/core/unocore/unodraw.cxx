@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 08:48:19 $
+ *  last change: $Author: os $ $Date: 2001-02-26 14:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,7 +644,7 @@ void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape) throw
 uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference< drawing::XShapes > & xShapes) throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    if(!pDoc)
+    if(!pDoc || !xShapes.is())
         throw uno::RuntimeException();
     uno::Reference< drawing::XShapeGroup >  xRet;
     if(xPageAgg.is())
