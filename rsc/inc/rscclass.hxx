@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:48:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,64 +82,64 @@ protected:
         ULONG   nVarDflt;
     };
     struct VARTYPE_STRUCT {
-        HASHID          nVarName;   // Variablenname
+        Atom            nVarName;   // Variablenname
         RSCVAR          nVarType;   // Variablentyp
-        USHORT          nMask;      // Maskierungsbit
-        USHORT          nOffset;    // Beginn der Instanzdaten
+        sal_uInt32      nMask;      // Maskierungsbit
+        sal_uInt32      nOffset;    // Beginn der Instanzdaten
         RscTop *        pClass;     // Klasse
         CLASS_DATA      pDefault;   // Zeiger auf DefaultDaten
-        HASHID          nDataBaseName;//Name fuer Fremddatenbereich
+        Atom            nDataBaseName;//Name fuer Fremddatenbereich
     };
-    USHORT              nSuperSize; // Groesse der Instanzdaten der SuperKl.
-    USHORT              nSize;      // Groesse der Instanzdaten dieser Klasse
+    sal_uInt32              nSuperSize; // Groesse der Instanzdaten der SuperKl.
+    sal_uInt32              nSize;      // Groesse der Instanzdaten dieser Klasse
                                     // mit Superklassen
-    USHORT              nEntries;   // Eintraege in pVarTypeList
+    sal_uInt32              nEntries;   // Eintraege in pVarTypeList
     VARTYPE_STRUCT *    pVarTypeList;   // Variablenliste
-    RSCINST             GetInstData( CLASS_DATA pData, USHORT nEle,
+    RSCINST             GetInstData( CLASS_DATA pData, sal_uInt32 nEle,
                                      BOOL bGetCopy = FALSE );
-    CLASS_DATA          GetDfltData( USHORT nEle );
-    BOOL                IsDflt( CLASS_DATA pData, USHORT nEle );
-    BOOL                IsValueDflt( CLASS_DATA pData, USHORT nEle );
-    void                SetVarDflt( CLASS_DATA pData, USHORT nEle,
+    CLASS_DATA          GetDfltData( sal_uInt32 nEle );
+    BOOL                IsDflt( CLASS_DATA pData, sal_uInt32 nEle );
+    BOOL                IsValueDflt( CLASS_DATA pData, sal_uInt32 nEle );
+    void                SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle,
                                     BOOL bSet );
-    INT32               GetCorrectValues( const RSCINST & rInst, USHORT nVarPos,
-                                        USHORT nTupelIdx, RscTypCont * pTC );
+    INT32               GetCorrectValues( const RSCINST & rInst, sal_uInt32 nVarPos,
+                                        sal_uInt32 nTupelIdx, RscTypCont * pTC );
 public:
-                    RscClass( HASHID nId, USHORT nTypId, RscTop * pSuperCl );
+                    RscClass( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
                     ~RscClass();
 
     virtual RSCCLASS_TYPE   GetClassType() const;
 
     void            Pre_dtor();
-    ERRTYPE         SetVariable( HASHID nVarName, RscTop * pClass,
+    ERRTYPE         SetVariable( Atom nVarName, RscTop * pClass,
                                  RSCINST * pDflt,
-                                 RSCVAR nVarType, USHORT nMask,
-                                 HASHID nDataBaseName );
+                                 RSCVAR nVarType, sal_uInt32 nMask,
+                                 Atom nDataBaseName );
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc );
-    RSCINST         GetVariable( const RSCINST & rInst, HASHID nVarName,
+    RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
                                  BOOL nInitDflt = FALSE,
                                  RscTop * pCreateClass = NULL );
-    RSCINST         GetCopyVar( const RSCINST & rInst, HASHID nVarName );
+    RSCINST         GetCopyVar( const RSCINST & rInst, Atom nVarName );
 
                     // Gibt die Groesse der Klasse in Bytes
-    USHORT          Size(){ return( nSize ); };
+    sal_uInt32          Size(){ return( nSize ); };
 
     BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
     void            SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    void            SetDefault( const RSCINST & rData, HASHID nVarId );
-    RSCINST         GetDefault( HASHID nVarId );
+    void            SetDefault( const RSCINST & rData, Atom nVarId );
+    RSCINST         GetDefault( Atom nVarId );
 
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
     void            Destroy( const RSCINST & rInst );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteInstRc( const RSCINST & rInst, RscWriteRc & aMem,
-                                 RscTypCont * pTC, USHORT, BOOL bExtra );
+                                 RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
     void            WriteSyntax( FILE * fOutput, RscTypCont * pTC );
 
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
@@ -150,31 +150,31 @@ public:
 class RscSysDepend : public RscClass
 {
 public:
-                    RscSysDepend( HASHID nId, USHORT nTypId, RscTop * pSuper );
+                    RscSysDepend( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
     ERRTYPE         WriteSysDependRc( const RSCINST &, RscWriteRc & aMem,
-                                    RscTypCont * pTC, USHORT, BOOL bExtra,
+                                    RscTypCont * pTC, sal_uInt32, BOOL bExtra,
                                     BOOL bFirst = FALSE );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
 };
 
 class RscFirstSysDepend : public RscSysDepend
 {
 public:
-                    RscFirstSysDepend( HASHID nId, USHORT nTypId,
+                    RscFirstSysDepend( Atom nId, sal_uInt32 nTypId,
                                         RscTop * pSuper );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, USHORT, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
 };
 
 class RscTupel : public RscClass
 {
 public:
-    RscTupel( HASHID nId, USHORT nTypId, RscTop * pSuper );
-    RSCINST         GetTupelVar( const RSCINST & rInst, USHORT nPos,
+    RscTupel( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
+    RSCINST         GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                                 const RSCINST & rInitInst );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                              RscTypCont * pTC, USHORT nTab, const char * );
+                              RscTypCont * pTC, sal_uInt32 nTab, const char * );
 };
 
 #endif //_RSCCLASS_HXX
