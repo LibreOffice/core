@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-26 14:59:42 $
+ *  last change: $Author: mav $ $Date: 2002-04-29 07:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,17 +150,23 @@ SotStorageStream::SotStorageStream( const String & rName, StreamMode nMode,
 }
 
 SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
-    : pOwnStm( pStm )
 {
-    if( !pStm || STREAM_WRITE & pStm->GetMode() )
-        bIsWritable = TRUE;
-    else
-        bIsWritable = FALSE;
-
     if( pStm )
     {
+        if( STREAM_WRITE & pStm->GetMode() )
+            bIsWritable = TRUE;
+        else
+            bIsWritable = FALSE;
+
+        pOwnStm = pStm;
         SetError( pStm->GetError() );
         pStm->ResetError();
+    }
+    else
+    {
+        pOwnStm = NULL;
+        bIsWritable = TRUE;
+        SetError( SVSTREAM_INVALID_PARAMETER );
     }
 }
 
@@ -1001,12 +1007,6 @@ SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, 
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
-    if( !rEleName.Len() )
-    {
-        SetError( SVSTREAM_INVALID_PARAMETER );
-        return NULL;
-    }
-
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
@@ -1019,6 +1019,7 @@ SotStorageStream * SotStorage::OpenEncryptedSotStream( const String & rEleName, 
         BaseStorageStream* p = pOwnStg->OpenStream( rEleName, nMode,
                             (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE, &rKey );
         pStm = new SotStorageStream( p );
+
         if( !nE )
             pOwnStg->ResetError(); // kein Fehler setzen
         if( nMode & STREAM_TRUNC )
@@ -1033,12 +1034,6 @@ SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
                                              StreamMode nMode,
                                              StorageMode nStorageMode )
 {
-    if( !rEleName.Len() )
-    {
-        SetError( SVSTREAM_INVALID_PARAMETER );
-        return NULL;
-    }
-
     DBG_ASSERT( !nStorageMode, "StorageModes ignored" )
     SotStorageStream * pStm = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
@@ -1051,6 +1046,7 @@ SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
         BaseStorageStream * p = pOwnStg->OpenStream( rEleName, nMode,
                             (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStm = new SotStorageStream( p );
+
         if( !nE )
             pOwnStg->ResetError(); // kein Fehler setzen
         if( nMode & STREAM_TRUNC )
@@ -1070,12 +1066,6 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
                                         StreamMode nMode,
                                         StorageMode nStorageMode )
 {
-    if( !rEleName.Len() )
-    {
-        SetError( SVSTREAM_INVALID_PARAMETER );
-        return NULL;
-    }
-
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )
@@ -1103,12 +1093,6 @@ SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
                                         StreamMode nMode,
                                         StorageMode nStorageMode )
 {
-    if( !rEleName.Len() )
-    {
-        SetError( SVSTREAM_INVALID_PARAMETER );
-        return NULL;
-    }
-
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )
@@ -1130,12 +1114,6 @@ SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
                                         StreamMode nMode,
                                         StorageMode nStorageMode )
 {
-    if( !rEleName.Len() )
-    {
-        SetError( SVSTREAM_INVALID_PARAMETER );
-        return NULL;
-    }
-
     SotStorage * pStor = NULL;
     DBG_ASSERT( Owner(), "must be owner" )
     if( pOwnStg )
