@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterhelpids.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:18:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,5 +115,8 @@
 #define HID_XML_FILTER_TEST_EXPORT_XSLT_FILE        (HID_FILTER_XSLT_START + 41)
 
 #define HID_XML_FILTER_TABPAGE_CTRL                 (HID_FILTER_XSLT_START + 42)
+
+// last help id is HID_FILTER_XSLT_END !
+// #define HID_FILTER_XSLT_END         (HID_FILTER_START +  99)
 
 #endif
