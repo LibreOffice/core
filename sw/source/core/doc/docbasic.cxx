@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:12 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,16 +189,38 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
     case EXTENDED_STYPE:
         {
             Sequence<Any> *pUnoArgs = 0;
-            Reference<XInterface> xThis;
             if( pArgs )
+            {
+                // better to rename the local function to lcl_translateBasic2Uno and
+                // a much shorter routine can be found in sfx2/source/doc/objmisc.cxx
                 pUnoArgs = lcl_docbasic_convertArgs( *pArgs );
-            eErr = pDocShell->CallScript( rMacro.GetLanguage(),
-                                          rMacro.GetMacName(),
-                                          xThis,
-                                          pUnoArgs );
+            }
+
+            if (!pUnoArgs)
+            {
+                pUnoArgs = new Sequence< Any > (0);
+            }
+
+            // TODO - return value is not handled
+            Any aRet;
+            Sequence< sal_Int16 > aOutArgsIndex;
+            Sequence< Any > aOutArgs;
+
+            OSL_TRACE( "SwDoc::ExecMacro URL is %s", ByteString( rMacro.GetMacName(),
+                RTL_TEXTENCODING_UTF8).GetBuffer() );
+
+            eErr = pDocShell->CallXScript(
+                rMacro.GetMacName(), *pUnoArgs, aRet, aOutArgsIndex, aOutArgs);
+
+            //*pRet = pRetValue->GetString();
+            // use the AnyConverter to return a String if appropriate?
+
+            // need to call something like lcl_translateUno2Basic
+            // pArgs = lcl_translateUno2Basic( pUnoArgs );
+
             delete pUnoArgs;
+            break;
         }
-        break;
     }
 
     return 0 == eErr;
@@ -287,11 +309,33 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
                 Sequence<Any> *pUnoArgs = 0;
-                Reference<XInterface> xThis;
+
                 if( pArgs )
+                {
                     pUnoArgs = lcl_docbasic_convertArgs( *pArgs );
-                nRet += 0 == pDocShell->CallScript( rMacro.GetLanguage(),
-                                      rMacro.GetMacName(), xThis, pUnoArgs );
+                }
+
+                if (!pUnoArgs)
+                {
+                    pUnoArgs = new Sequence <Any> (0);
+                }
+
+                Any aRet;
+                Sequence< sal_Int16 > aOutArgsIndex;
+                Sequence< Any > aOutArgs;
+
+                OSL_TRACE( "SwDoc::CallEvent URL is %s", ByteString(
+                    rMacro.GetMacName(), RTL_TEXTENCODING_UTF8).GetBuffer() );
+
+                nRet += 0 == pDocShell->CallXScript(
+                    rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs);
+
+                //*pRet = pRetValue->GetString();
+                // use the AnyConverter to return a String if appropriate?
+
+                // need to call something like lcl_translateUno2Basic
+                // pArgs = lcl_translateUno2Basic( pUnoArgs );
+
                 delete pUnoArgs;
             }
             // JavaScript calls are ignored
