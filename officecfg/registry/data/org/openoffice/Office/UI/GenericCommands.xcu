@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:39:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4738,6 +4738,24 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Verankerung</value>
                     <value xml:lang="en-US">A~nchor</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:AVMediaPlayer" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Mediapla~yer</value>
+                    <value xml:lang="en-US">Media Pla~yer</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertAVMedia" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Film und ~Klang</value>
+                    <value xml:lang="en-US">Mo~vie and Sound</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:Addons" oor:op="replace">
