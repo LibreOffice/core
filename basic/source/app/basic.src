@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:09:47 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 22:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ greek ] = "Testtool: Αναζήτηση κειμένου";
     TEXT[ dutch ] = "Testtool: tekst zoeken";
     TEXT[ french ] = "Testool : Recherche de texte";
-    TEXT[ spanish ] = "StarBasic: Buscar texto";
+    TEXT[ spanish ] = "Testtool: Buscar texto";
     TEXT[ italian ] = "Testtool: trova testo";
     TEXT[ danish ] = "StarBasic: Find Text";
     TEXT[ swedish ] = "Testtool: Find Text";
@@ -485,7 +485,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     TEXT[ greek ] = "Testtool: Αντικατάσταση κειμένου";
     TEXT[ dutch ] = "Testtool: tekst vervangen";
     TEXT[ french ] = "Testtool : Remplacement de texte";
-    TEXT[ spanish ] = "StarBasic: Sustituir texto";
+    TEXT[ spanish ] = "Testtool: Sustituir texto";
     TEXT[ italian ] = "Testtool: sostituire il testo";
     TEXT[ danish ] = "StarBasic: Replace Text";
     TEXT[ swedish ] = "Testtool: Replace Text";
@@ -546,7 +546,7 @@ ErrorBox IDS_CANTLOAD {
     Title[ greek ] = "Σφάλμα του Testtool!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "Error de StarBasic";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "Testtool Error!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
@@ -586,7 +586,7 @@ ErrorBox IDS_CANTSAVE {
     Title[ greek ] = "Σφάλμα του Testtool!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "Error de StarBasic";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
@@ -626,7 +626,7 @@ ErrorBox IDS_NOMAINPGM {
     Title[ greek ] = "Σφάλμα του Testtool!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "Error de StarBasic";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
@@ -666,7 +666,7 @@ ErrorBox IDS_READERROR {
     Title[ greek ] = "Σφάλμα του Testtool!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "Error de StarBasic";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
@@ -706,7 +706,7 @@ ErrorBox IDS_WRITEERROR {
     Title[ greek ] = "StarBasic Error!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "Error de StarBasic";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
@@ -746,7 +746,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ greek ] = "StarBasic Error!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "Error de StarBasic";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
@@ -786,7 +786,7 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ greek ] = "StarBasic Error!";
     Title[ dutch ] = "Testtool-fout!";
     Title[ french ] = "Testtool : Erreur!";
-    Title[ spanish ] = "StarBasic Error";
+    Title[ spanish ] = "Error de Testtool!";
     Title[ italian ] = "StarBasic Error!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool Error!";
@@ -828,7 +828,7 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "StarBasic!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -869,7 +869,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "StarBasic!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -910,7 +910,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -951,7 +951,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -992,7 +992,7 @@ QueryBox IDS_ASKRELOAD {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -1033,7 +1033,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -1074,7 +1074,7 @@ QueryBox IDS_RUNNING {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -1115,7 +1115,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
     Title[ french ] = "Testtool!";
-    Title[ spanish ] = "StarBasic";
+    Title[ spanish ] = "Testtool!";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
     Title[ swedish ] = "Testtool!";
@@ -1315,7 +1315,7 @@ String IDS_APPNAME {
     TEXT[ greek ] = "Testtool";
     TEXT[ dutch ] = "Testtool";
     TEXT[ french ] = "Testtool";
-    TEXT[ spanish ] = "StarBasic";
+    TEXT[ spanish ] = "Testtool";
     TEXT[ italian ] = "%PRODUCTNAME Basic";
     TEXT[ danish ] = "StarBasic";
     TEXT[ swedish ] = "Testtool";
@@ -1457,7 +1457,7 @@ String IDS_LOADDLG {
     TEXT[ greek ] = "Testtool: Load File";
     TEXT[ dutch ] = "Testtool: bestand lezen";
     TEXT[ french ] = "Testtool : Lecture du fichier";
-    TEXT[ spanish ] = "StarBasic: Leer archivo";
+    TEXT[ spanish ] = "Testtool: Leer archivo";
     TEXT[ italian ] = "StarBasic: Load File";
     TEXT[ danish ] = "StarBasic: Load File";
     TEXT[ swedish ] = "Testtool: Load File";
@@ -1478,7 +1478,7 @@ String IDS_SAVEDLG {
     TEXT[ greek ] = "Testtool: Save File";
     TEXT[ dutch ] = "Testtool: bestand opslaan";
     TEXT[ french ] = "Testtool : Enregistrement du fichier";
-    TEXT[ spanish ] = "StarBasic: Guardar archivo";
+    TEXT[ spanish ] = "Testtool: Guardar archivo";
     TEXT[ italian ] = "StarBasic: Save File";
     TEXT[ danish ] = "StarBasic: Save File";
     TEXT[ swedish ] = "Testtool: Save File";
@@ -2916,7 +2916,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ greek ] = "Testtool: Print File";
     TEXT[ dutch ] = "Testtool: bestand afdrukken";
     TEXT[ french ] = "Testtool : Impression du fichier";
-    TEXT[ spanish ] = "StarBasic: Imprimir archivo";
+    TEXT[ spanish ] = "Testtool: Imprimir archivo";
     TEXT[ italian ] = "StarBasic: Print file";
     TEXT[ danish ] = "StarBasic: Print File";
     TEXT[ swedish ] = "Testtool: Print File";
