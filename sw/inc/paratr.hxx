@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 15:56:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _PARATR_HXX
 #define _PARATR_HXX
-
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -193,7 +192,7 @@ inline SwRegisterItem& SwRegisterItem::operator=(
     return *this;
 }
 
-class SwNumRuleItem : public SfxStringItem
+class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 {
     SwModify* pDefinedIn;   // Modify-Object, in dem das NumRule steht
                             // kann nur TxtFmtCollection/TxtNode sein
