@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:49:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,11 +291,11 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
             if ( _eType != eType )
             {
                 aParam.put_Type(_eType);
+                eType = _eType;
                 aParam.put_Size(_nSize);
             }
 
-
-            if ( adVarBinary == _eType && aParam.GetAttributes() == adParamLong )
+            if ( adVarBinary == eType && aParam.GetAttributes() == adParamLong )
             {
                 aParam.AppendChunk(_Val);
             }
