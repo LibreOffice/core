@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:06:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,31 @@ ScRange XclTools::MakeScRange(
         static_cast< SCCOL >( nEndXclCol ), static_cast< SCROW >( nEndXclRow ), nEndScTab );
 }
 
+void XclTools::WriteRangeList( XclExpStream& rStrm, const ScRangeList& rRanges,
+        ULONG nFirstRange, ULONG nRangeCount)
+{
+    DBG_ASSERT( nFirstRange <= rRanges.Count(), "XclTools::WriteRangeList - error in range index" );
+    DBG_ASSERT( nRangeCount <= rRanges.Count(), "XclTools::WriteRangeList - error in range count" );
+
+    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( nRangeCount);
+    rStrm << nCount;
+    rStrm.SetSliceSize( 8 );
+
+    for( sal_uInt16 nRange = 0; nRange < nCount; ++nRange )
+    {
+        const ScRange* pRange = rRanges.GetObject( nRange + nFirstRange );
+        DBG_ASSERT( pRange, "XclTools::WriteCellRangeList - missing range" );
+        if( pRange )
+            rStrm   << static_cast< sal_uInt16 >( pRange->aStart.Row() )
+                    << static_cast< sal_uInt16 >( pRange->aEnd.Row() )
+                    << static_cast< sal_uInt16 >( pRange->aStart.Col() )
+                    << static_cast< sal_uInt16 >( pRange->aEnd.Col() );
+        else
+            // write dummy range to keep file format valid
+            rStrm.WriteZeroBytes( 8 );
+    }
+}
+
 // text encoding --------------------------------------------------------------
 
 namespace {
@@ -680,23 +705,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, ScRangeList& rRanges )
 
 XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
 {
-    sal_uInt16 nCount = ulimit_cast< sal_uInt16 >( rRanges.Count() );
-    rStrm << nCount;
-    rStrm.SetSliceSize( 8 );
-
-    for( sal_uInt16 nRange = 0; nRange < nCount; ++nRange )
-    {
-        const ScRange* pRange = rRanges.GetObject( nRange );
-        DBG_ASSERT( pRange, "XclTools::WriteCellRangeList - missing range" );
-        if( pRange )
-            rStrm   << static_cast< sal_uInt16 >( pRange->aStart.Row() )
-                    << static_cast< sal_uInt16 >( pRange->aEnd.Row() )
-                    << static_cast< sal_uInt16 >( pRange->aStart.Col() )
-                    << static_cast< sal_uInt16 >( pRange->aEnd.Col() );
-        else
-            // write dummy range to keep file format valid
-            rStrm.WriteZeroBytes( 8 );
-    }
+    XclTools::WriteRangeList(rStrm, rRanges, 0, rRanges.Count());
     return rStrm;
 }
 
