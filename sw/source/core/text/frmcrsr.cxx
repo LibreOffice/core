@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1451,11 +1451,8 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     OutputDevice *pOut = pSh->GetOut();
     if ( !GetTxtNode()->GetDoc()->IsBrowseMode() ||
             ( pSh->GetViewOptions()->IsPrtFormat() ) )
-    {
-        Printer *pPrt = GetTxtNode()->GetDoc()->GetPrt();
-        if ( pPrt && pPrt->IsValid() )
-            pOut = pPrt;
-    }
+        pOut = &GetTxtNode()->GetDoc()->GetRefDev();
+
     pFnt->SetFntChg( sal_True );
     pFnt->ChgPhysFnt( pSh, pOut );
 
