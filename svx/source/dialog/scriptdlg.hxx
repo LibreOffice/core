@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:16:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ protected:
 
     ::rtl::OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;
+/*
     const String m_delErrStr;
     const String m_delErrTitleStr;
     const String m_delQueryStr;
@@ -223,6 +224,7 @@ protected:
     const String m_renameErrStr;
     const String m_renameDupStr;
     const String m_renameErrTitleStr;
+*/
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
