@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-09 12:07:18 $
+ *  last change: $Author: jb $ $Date: 2002-09-09 09:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,7 @@ struct ConfigItemListEntry_Impl
 typedef std::list<ConfigItemListEntry_Impl> ConfigItemList;
 struct utl::ConfigMgr_Impl
 {
-    sal_Bool                                bIsLocalProvider;
     ConfigItemList                          aItemList;
-    Reference< XMultiServiceFactory >       xLocalConfigurationProvider;
-
 };
 
 /* -----------------------------28.08.00 15:35--------------------------------
@@ -134,12 +131,7 @@ struct utl::ConfigMgr_Impl
 ConfigManager::ConfigManager() :
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
-    Reference< XMultiServiceFactory > xCfgProv = GetConfigurationProvider();
-    Reference< XMultiServiceFactory > xLocalCfgProv = GetLocalConfigurationProvider();
-    if(xCfgProv.get() && xCfgProv.get() == xLocalCfgProv.get())
-        pMgrImpl->bIsLocalProvider = sal_False;
-    else
-        pMgrImpl->bIsLocalProvider = sal_True;
+    GetConfigurationProvider(); // attempt to create the provider early
 }
 /* -----------------------------17.11.00 13:51--------------------------------
 
@@ -148,7 +140,6 @@ ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
     pMgrImpl(new utl::ConfigMgr_Impl),
     xConfigurationProvider(xConfigProv)
 {
-    pMgrImpl->bIsLocalProvider = sal_False;
 }
 /* -----------------------------28.08.00 15:35--------------------------------
 
@@ -208,40 +199,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
  ---------------------------------------------------------------------------*/
 Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
 {
-    if(!pMgrImpl->xLocalConfigurationProvider.is())
-    {
-        Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
-        if ( xMSF.is() )
-        {
-            Sequence <Any> aArgs(1);
-            Any* pValues = aArgs.getArray();
-            PropertyValue aPValue;
-            aPValue.Name  = C2U("servertype");
-            aPValue.Value <<= C2U("plugin");
-            pValues[0] <<= aPValue;
-            try
-            {
-                pMgrImpl->xLocalConfigurationProvider = Reference< XMultiServiceFactory >
-                    (xMSF->createInstanceWithArguments(
-                        C2U("com.sun.star.configuration.ConfigurationProvider"), aArgs),
-                     UNO_QUERY);
-            }
-#ifdef DBG_UTIL
-            catch(Exception& rEx)
-            {
-                OString sMsg("CreateInstance with arguments exception: ");
-                sMsg += OString(rEx.Message.getStr(),
-                                rEx.Message.getLength(),
-                                RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSURE(sal_False, sMsg.getStr());
-            }
-#else
-            catch(Exception&){}
-#endif
-        }
-    }
-
-    return pMgrImpl->xLocalConfigurationProvider;
+    return GetConfigurationProvider();
 }
 /* -----------------------------29.08.00 12:35--------------------------------
 
@@ -417,23 +375,6 @@ rtl::OUString ConfigManager::GetConfigBaseURL()
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 {
     ConfigManager * pTheConfigManager = GetConfigManager();
-    if (pTheConfigManager->IsLocalConfigProvider())
-        switch (eProp)
-        {
-            case INSTALLPATH:
-                return
-                    pTheConfigManager->
-                        GetLocalProperty(
-                            rtl::OUString::createFromAscii(
-                                "UserProfile/Office/InstallPath"));
-
-            case OFFICEINSTALL:
-                return
-                    pTheConfigManager->
-                        GetLocalProperty(
-                            rtl::OUString::createFromAscii(
-                                "Office.Common/Path/Current/OfficeInstall"));
-        }
 
     Any aRet;
     if ( eProp == PRODUCTNAME && aBrandName.getLength() )
@@ -566,7 +507,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
     sPath += rProperty;
 
     OUString sNode, sProperty;
-    OSL_VERIFY( splitLastFromConfigurationPath(rProperty, sNode, sProperty) );
+    OSL_VERIFY( splitLastFromConfigurationPath(sPath, sNode, sProperty) );
 
     Reference< XNameAccess> xAccess( GetHierarchyAccess(sNode), UNO_QUERY );
     Any aRet;
@@ -598,7 +539,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
     sPath += rProperty;
 
     OUString sNode, sProperty;
-    OSL_VERIFY( splitLastFromConfigurationPath(rProperty, sNode, sProperty) );
+    OSL_VERIFY( splitLastFromConfigurationPath(sPath, sNode, sProperty) );
 
     Reference<XNameReplace> xNodeReplace(GetHierarchyAccess(sNode), UNO_QUERY);
     if(xNodeReplace.is())
@@ -626,6 +567,6 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
  ---------------------------------------------------------------------------*/
 sal_Bool    ConfigManager::IsLocalConfigProvider()
 {
-    return pMgrImpl->bIsLocalProvider;
+    return false;
 }
 
