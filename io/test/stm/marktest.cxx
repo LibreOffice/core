@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 11:07:33 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 17:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,12 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
-#include <vos/thread.hxx>
-
 #include <assert.h>
 #include <string.h>
 
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;

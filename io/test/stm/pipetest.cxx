@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipetest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:19 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 17:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,7 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <assert.h>
 #include <string.h>
@@ -82,7 +81,6 @@
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -95,7 +93,7 @@ using namespace ::com::sun::star::test;
 
 
 class WriteToStreamThread :
-        public OThread
+        public Thread
 {
 
 public:
@@ -398,7 +396,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
     Sequence<sal_Int8> seqRead;
 
     // deletes itself
-    OThread *p = new WriteToStreamThread( output,  iMax );
+    Thread *p = new WriteToStreamThread( output,  iMax );
 
     ERROR_ASSERT( p , "couldn't create thread for testing !\n" );
 
