@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 11:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,14 +1280,11 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         return rWrt;
 
     // Inhalt des Nodes als Grafik speichern
-    SvInPlaceObjectRef xRef = pOLENd->GetOLEObj().GetOleRef();;
-    GDIMetaFile* pPic = NULL;
-    SvData aData( FORMAT_GDIMETAFILE );
-    if( xRef->GetData( &aData ) )
-        aData.GetData( &pPic, TRANSFER_REFERENCE );
-    if( pPic )
+    SvEmbeddedObjectRef xRef( pOLENd->GetOLEObj().GetOleRef() );
+    GDIMetaFile aPic;
+    if( xRef.Is() && xRef->GetGDIMetaFile( aPic ).GetActionCount() )
     {
-        Graphic aGrf( *pPic );
+        Graphic aGrf( aPic );
         String aGrfNm;
         const String* pTempFileName = rHTMLWrt.GetOrigFileName();
         if(pTempFileName)
@@ -1317,11 +1314,14 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.6 2001-07-03 07:49:47 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.7 2001-07-05 11:33:43 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/07/03 07:49:47  mib
+      #88156#: warning for unconvertable chars
+
       Revision 1.5  2001/02/22 16:14:17  mtg
       Changed to use SwAppletImpl
 
