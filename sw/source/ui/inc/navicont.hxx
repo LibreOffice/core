@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navicont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,51 +62,40 @@
 #ifndef _NAVICONT_HXX
 #define _NAVICONT_HXX
 
-
-#ifndef _STRING_HXX //autogen
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+
 class SwDocShell;
-class SotDataObject;
-
-/*-----------------06.02.97 19.10-------------------
-
---------------------------------------------------*/
-
-
-class NaviContentBookmark
+class TransferDataContainer;
+class TransferableDataHelper;
 
 /*  [Beschreibung]
-
     Navigator-Bookmark zur eindeutigen Identifizierung im Sw
-
 */
 
+class NaviContentBookmark
 {
     String          aUrl;       // URL inkl. Sprungmarke
     String          aDescr;     // Description
     long            nDocSh;     // Adresse der DocShell
     USHORT          nDefDrag;   // Description enthaelt defaultDragType
 
-protected:
-
 public:
-                    NaviContentBookmark( const String &rUrl, const String& rDesc,
-                                            USHORT nDragType, const SwDocShell* );
-                    NaviContentBookmark();
+    NaviContentBookmark();
+    NaviContentBookmark( const String &rUrl, const String& rDesc,
+                            USHORT nDragType, const SwDocShell* );
 
-    const String&   GetURL() const { return aUrl; }
-    const String&   GetDescription() const { return aDescr; }
-    USHORT          GetDefaultDragType() const { return nDefDrag; }
-    long            GetDocShell() const {return(nDocSh);}
+    const String&   GetURL() const              { return aUrl; }
+    const String&   GetDescription() const      { return aDescr; }
+    USHORT          GetDefaultDragType() const  { return nDefDrag; }
+    long            GetDocShell() const         { return nDocSh; }
 
-    static BOOL     DragServerHasFormat( USHORT nItem, const SwDocShell* pDocSh );
-    static ULONG    HasFormat( SotDataObject& rObj );
+    static BOOL     HasFormat( TransferableDataHelper& rData,
+                                const SwDocShell* pDocSh = 0 );
 
-
-    BOOL            CopyDragServer() const;
-    BOOL            PasteDragServer( USHORT nItem );
-    BOOL            Paste( SotDataObject& rObj, ULONG nFormat );
+    void            Copy( TransferDataContainer& rData ) const;
+    BOOL            Paste( TransferableDataHelper& rData );
 };
 
 #endif

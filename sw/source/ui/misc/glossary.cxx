@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:35:35 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,7 +1098,9 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 /* -----------------26.11.98 14:42-------------------
  *
  * --------------------------------------------------*/
-DragDropMode  SwGlTreeListBox::NotifyBeginDrag( SvLBoxEntry* pEntry)
+DragDropMode SwGlTreeListBox::NotifyStartDrag(
+                    TransferDataContainer& rContainer,
+                    SvLBoxEntry* pEntry )
 {
     DragDropMode  eRet;
     pDragEntry = pEntry;
@@ -1114,12 +1116,12 @@ DragDropMode  SwGlTreeListBox::NotifyBeginDrag( SvLBoxEntry* pEntry)
         String sEntry(pGroupData->sGroupName);
         sEntry += GLOS_DELIM;
         sEntry += String::CreateFromInt32(pGroupData->nPathIdx);
-        sal_uInt16 nDragOptions = DRAG_COPYABLE;
+        sal_Int8 nDragOptions = DND_ACTION_COPY;
         eRet = SV_DRAGDROP_CTRL_COPY;
         if(!pDlg->pGlossaryHdl->IsReadOnly(&sEntry))
         {
             eRet |= SV_DRAGDROP_CTRL_MOVE;
-            nDragOptions |= DRAG_MOVEABLE;
+            nDragOptions |= DND_ACTION_MOVE;
         }
         SetDragOptions( nDragOptions );
     }
@@ -1128,7 +1130,7 @@ DragDropMode  SwGlTreeListBox::NotifyBeginDrag( SvLBoxEntry* pEntry)
 /* -----------------27.11.98 09:35-------------------
  *
  * --------------------------------------------------*/
-sal_Bool    SwGlTreeListBox::NotifyQueryDrop( SvLBoxEntry* pEntry)
+sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 {
     // TODO: Readonly - Ueberpruefung fehlt noch!
     SvLBoxEntry* pSrcParent = GetParent(pEntry) ? GetParent(pEntry) : pEntry;

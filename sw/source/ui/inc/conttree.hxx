@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 #ifndef _CONTTREE_HXX
 #define _CONTTREE_HXX
-#ifndef _SWCONT_HXX
-#include "swcont.hxx"
+
+#ifndef _SVTREEBOX_HXX
+#include <svtools/svtreebx.hxx>
 #endif
 
-#ifndef _SVTREEBOX_HXX //autogen
-#include <svtools/svtreebx.hxx>
+#ifndef _SWCONT_HXX
+#include "swcont.hxx"
 #endif
 
 class SwWrtShell;
@@ -77,7 +78,6 @@ class SwFmtFld;
 class SwTxtINetFmt;
 class SwNavigationConfig;
 class SwDocShell;
-class SvDataObject;
 class Menu;
 class ToolBox;
 
@@ -93,18 +93,28 @@ class ToolBox;
 
 class SwContentTree : public SvTreeListBox
 {
-    SwWrtShell*         pHiddenShell;   // gedropptes Doc
-    SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
-    SwNavigationConfig* pConfig;
     ImageList           aEntryImages;
     String              sSpace;
     AutoTimer           aUpdTimer;
+
+    SwContentType*      aActiveContentArr[CONTENT_TYPE_MAX];
+    SwContentType*      aHiddenContentArr[CONTENT_TYPE_MAX];
+    String              aContextStrings[CONTEXT_COUNT + 1];
+    String              sRemoveIdx;
+    String              sUpdateIdx;
+    String              sUnprotTbl;
+    String              sRename;
+    String              sReadonlyIdx;
+    String              sInvisible;
+
+    SwWrtShell*         pHiddenShell;   // gedropptes Doc
+    SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
+    SwNavigationConfig* pConfig;
 
     USHORT              nActiveBlock;
     USHORT              nHiddenBlock;
     USHORT              nRootType;
     USHORT              nLastSelType;
-    USHORT              nDragMode; // wir fuer den StaticLink gebraucht
     BYTE                nOutlineLevel;
 
     BOOL                bIsActive           :1;
@@ -121,21 +131,9 @@ class SwContentTree : public SvTreeListBox
 
     static BOOL         bIsInDrag;
 
-    SwContentType*      aActiveContentArr[CONTENT_TYPE_MAX];
-    SwContentType*      aHiddenContentArr[CONTENT_TYPE_MAX];
-    String              aContextStrings[CONTEXT_COUNT + 1];
-    String              sRemoveIdx;
-    String              sUpdateIdx;
-    String              sUnprotTbl;
-    String              sRename;
-    String              sReadonlyIdx;
-    String              sInvisible;
-
     void                FindActiveTypeAndRemoveUserData();
 
 protected:
-    virtual BOOL    Drop( const DropEvent& rEvt);
-    virtual BOOL    QueryDrop( DropEvent& rEvt);
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
@@ -143,11 +141,18 @@ protected:
     SwNavigationPI* GetParentWindow(){return
                         (SwNavigationPI*)Window::GetParent();}
 
-    void            StartExecuteDrag();
-    BOOL            FillDragServer(USHORT& nDragMode);
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void    DragFinished( sal_Int8 );
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+
+    sal_Bool        FillTransferData( TransferDataContainer& rTransfer,
+                                            sal_Int8& rDragMode );
     BOOL            HasContentChanged();
 
-    virtual DragDropMode    NotifyBeginDrag( SvLBoxEntry* );
+    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
+                                        SvLBoxEntry* );
+    virtual BOOL    NotifyAcceptDrop( SvLBoxEntry* );
 
     virtual BOOL    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
@@ -159,17 +164,11 @@ protected:
                                     SvLBoxEntry*& rpNewParent,
                                     ULONG&        rNewChildPos
                                 );
-    virtual BOOL    NotifyQueryDrop( SvLBoxEntry* );
-    virtual void    BeginDrag( const Point& );
-    virtual void    EndDrag();
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
     void            EditEntry(SvLBoxEntry* pEntry, BYTE nMode = EDIT_MODE_EDIT);
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(BOOL bSet) {bIsInDrag = bSet;}
-
-    USHORT          GetDragMode() const {return nDragMode;}
-    DECL_STATIC_LINK(SwContentTree, ExecDragHdl, SwContentTree*);
 
 public:
     SwContentTree(Window* pParent, const ResId& rResId);
@@ -262,58 +261,62 @@ class SwGlobalTree : public SvTreeListBox
 
     static const SfxObjectShell* pShowShell;
 
-    protected:
-        virtual BOOL    Drop( const DropEvent& rEvt);
-        virtual BOOL    QueryDrop( DropEvent& rEvt);
-        virtual void    Command( const CommandEvent& rCEvt );
-        virtual void    RequestHelp( const HelpEvent& rHEvt );
+protected:
+    virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
-        virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
-        virtual DragDropMode   NotifyBeginDrag( SvLBoxEntry* );
-        virtual BOOL    NotifyMoving(   SvLBoxEntry*  pTarget,
-                                        SvLBoxEntry*  pEntry,
-                                        SvLBoxEntry*& rpNewParent,
-                                        ULONG&        rNewChildPos
-                                    );
-        virtual BOOL    NotifyCopying(  SvLBoxEntry*  pTarget,
-                                        SvLBoxEntry*  pEntry,
-                                        SvLBoxEntry*& rpNewParent,
-                                        ULONG&        rNewChildPos
-                                    );
-        virtual BOOL    NotifyQueryDrop( SvLBoxEntry* );
-        virtual void    BeginDrag( const Point& );
-        virtual void    EndDrag();
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-        virtual void    KeyInput(const KeyEvent& rKEvt);
-        virtual void    GetFocus();
-        virtual void    SelectHdl();
-        virtual void    DeselectHdl();
-        virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    RequestHelp( const HelpEvent& rHEvt );
 
-        void            Clear();
+    virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
+    virtual BOOL    NotifyMoving(   SvLBoxEntry*  pTarget,
+                                    SvLBoxEntry*  pEntry,
+                                    SvLBoxEntry*& rpNewParent,
+                                    ULONG&        rNewChildPos
+                                );
+    virtual BOOL    NotifyCopying(  SvLBoxEntry*  pTarget,
+                                    SvLBoxEntry*  pEntry,
+                                    SvLBoxEntry*& rpNewParent,
+                                    ULONG&        rNewChildPos
+                                );
 
-        DECL_LINK(      PopupHdl, Menu* );
-        DECL_LINK(      Timeout, Timer* );
-        DECL_LINK(      DoubleClickHdl, SwGlobalTree * );
+    virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+    virtual void    DragFinished( sal_Int8 );
+    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
+                                        SvLBoxEntry* );
+    virtual BOOL    NotifyAcceptDrop( SvLBoxEntry* );
 
-        BOOL            IsInternalDrag() const {return bIsInternalDrag != 0;}
-        SwNavigationPI* GetParentWindow(){return
-                            (SwNavigationPI*)Window::GetParent();}
+    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void    KeyInput(const KeyEvent& rKEvt);
+    virtual void    GetFocus();
+    virtual void    SelectHdl();
+    virtual void    DeselectHdl();
+    virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
 
-        void            OpenDoc(const SwGlblDocContent*);
-        void            GotoContent(const SwGlblDocContent*);
-        USHORT          GetEnableFlags() const;
+    void            Clear();
+
+    DECL_LINK(      PopupHdl, Menu* );
+    DECL_LINK(      Timeout, Timer* );
+    DECL_LINK(      DoubleClickHdl, SwGlobalTree * );
+
+    BOOL            IsInternalDrag() const {return bIsInternalDrag != 0;}
+    SwNavigationPI* GetParentWindow()
+                        { return (SwNavigationPI*)Window::GetParent(); }
+
+    void            OpenDoc(const SwGlblDocContent*);
+    void            GotoContent(const SwGlblDocContent*);
+    USHORT          GetEnableFlags() const;
 
     static const SfxObjectShell*    GetShowShell() {return pShowShell;}
-    static void         SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
+    static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*);
 
-    public:
-        SwGlobalTree(Window* pParent, const ResId& rResId);
-        ~SwGlobalTree();
+public:
+    SwGlobalTree(Window* pParent, const ResId& rResId);
+    virtual ~SwGlobalTree();
 
     void                TbxMenuHdl(USHORT nTbxId, ToolBox* pBox);
-    void                InsertRegion(const SwGlblDocContent* pCont,
+    void                InsertRegion( const SwGlblDocContent* pCont,
                                         const String* pFileName = 0 );
     void                EditContent(const SwGlblDocContent* pCont );
     void                Show();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:32:49 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,11 @@ class SwGlTreeListBox : public SvTreeListBox
 {
     const String    sReadonly;
 
-    SvLBoxEntry*            pDragEntry;
+    SvLBoxEntry*  pDragEntry;
 
-    virtual DragDropMode    NotifyBeginDrag( SvLBoxEntry* );
-    virtual sal_Bool    NotifyQueryDrop( SvLBoxEntry* );
+    virtual DragDropMode NotifyStartDrag( TransferDataContainer& rContainer,
+                                            SvLBoxEntry* );
+    virtual sal_Bool    NotifyAcceptDrop( SvLBoxEntry* );
 
     virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
@@ -151,8 +152,8 @@ class SwGlTreeListBox : public SvTreeListBox
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
                                     sal_uInt32&       rNewChildPos);
-    public:
-            SwGlTreeListBox(Window* pParent, const ResId& rResId);
+public:
+    SwGlTreeListBox(Window* pParent, const ResId& rResId);
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     void            Clear();

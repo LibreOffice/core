@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 06:00:48 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 08:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,24 +63,28 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#ifndef _LSTBOX_HXX //autogen
+#include <vcl/lstbox.hxx>
+#endif
+#ifndef _SFXLSTNER_HXX //autogen
+#include <svtools/lstner.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+#ifndef _SFX_CHILDWIN_HXX //autogen
+#include <sfx2/childwin.hxx>
+#endif
 #ifndef _SFXCTRLITEM_HXX //autogen
 #include <sfx2/ctrlitem.hxx>
 #endif
 
-#ifndef _SFXLSTNER_HXX //autogen
-#include <svtools/lstner.hxx>
+#ifndef _CONTTREE_HXX
+#include <conttree.hxx>
 #endif
-
-#ifndef _LSTBOX_HXX //autogen
-#include <vcl/lstbox.hxx>
+#ifndef _POPBOX_HXX
+#include <popbox.hxx>
 #endif
-
-#ifndef _SFX_CHILDWIN_HXX //autogen
-#include <sfx2/childwin.hxx>
-#endif
-
-#include "conttree.hxx"
-#include "popbox.hxx"
 
 class SwWrtShell;
 class SwNavigationPI;
@@ -105,39 +109,37 @@ class SwNavHelpToolBox : public SwHelpToolBox
 
 
 // CLASS -----------------------------------------------------------------
-class SwNavigationPI: public Window,
-                            public SfxControllerItem, public SfxListener
+class SwNavigationPI : public Window,
+                        public SfxControllerItem, public SfxListener
 {
     friend class SwNavigationChild;
     friend class SwContentTree;
     friend class SwGlobalTree;
 
-private:
-
+    // --------- members -----------------------------
     SwNavHelpToolBox    aContentToolBox;
     SwHelpToolBox       aGlobalToolBox;
     ImageList           aContentImageList;
     SwContentTree       aContentTree;
     SwGlobalTree        aGlobalTree;
     ListBox             aDocListBox;
-
     Timer               aPageChgTimer;
-
-    SfxObjectShellLock* pxObjectShell;
-    SwView*             pContentView;
-    SwWrtShell*         pContentWrtShell;
-    SwView*             pActContView;
-    SwView*             pCreateView;
-
-    SfxChildWindowContext* pContextWin;
-
-    SwNavigationConfig* pConfig;
-
     String              sContentFileName;
     String              aContextArr[3];
     String              aStatusArr[4];
+    Point               aBoxBottomLeft; // Pos., wenn Box unten ist
 
-    Point   aBoxBottomLeft; // Pos., wenn Box unten ist
+    SfxObjectShellLock  *pxObjectShell;
+    SwView              *pContentView;
+    SwWrtShell          *pContentWrtShell;
+    SwView              *pActContView;
+    SwView              *pCreateView;
+
+    SfxChildWindowContext* pContextWin;
+
+    SwNavigationConfig  *pConfig;
+    SfxBindings         &rBindings;
+
     long    nDocLBIniHeight;
     long    nWishWidth;
     USHORT  nActMark;
@@ -147,13 +149,12 @@ private:
     short   nZoomOutInit;
     short   nZoomOut;
 
-    BOOL    bSmallMode :    1;
-    BOOL    bIsZoomedIn :   1;
+    BOOL    bSmallMode : 1;
+    BOOL    bIsZoomedIn : 1;
     BOOL    bPageCtrlsVisible : 1;
     BOOL    bGlobalMode : 1;
 
-    SfxBindings &rBindings;
-
+    // --------- methods -----------------------------
     BOOL _IsZoomedIn() const {return bIsZoomedIn;}
     void _ZoomOut();
     void _ZoomIn();
@@ -183,8 +184,10 @@ protected:
     virtual         BOOL Close();
     virtual         void Resize();
 
-    virtual BOOL    Drop( const DropEvent& rEvt);
-    virtual BOOL    QueryDrop( DropEvent& rEvt);
+//  virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+//  virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+    sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     // zum App-Ende rechtzeitig ObjectShellLock loslassen
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -205,7 +208,7 @@ public:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                             const SfxPoolItem* pState );
 
-    static String   CreateDropFileName(USHORT nItem);
+    static String   CreateDropFileName( TransferableDataHelper& rData );
     static void     CleanEntry( String& rEntry );
 
     USHORT          GetRegionDropMode() const {return nRegionMode;}
@@ -220,9 +223,6 @@ public:
 
 class SwNavigationChild : public SfxChildWindowContext
 {
-protected:
-    virtual BOOL    Drop( const DropEvent& rEvt);
-    virtual BOOL    QueryDrop( DropEvent& rEvt);
 public:
     SwNavigationChild( Window* ,
                         USHORT nId,
@@ -230,6 +230,6 @@ public:
                         SfxChildWinInfo*  );
 
     SFX_DECL_CHILDWINDOW_CONTEXT( SwNavigationChild )
-
 };
+
 #endif
