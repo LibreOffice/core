@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:39:48 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,9 +1694,8 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
                     {
                         const SotFactory* pFact = rOLEObj.GetOleRef()->GetSvFactory();
                         long nObj = ::lcl_IsSOObject( *pFact );
-                        bInclude = ( nOLEOptions & TOO_OTHER )
-                                        ? 0 == nObj
-                                        : 0 != (nOLEOptions & nObj);
+                        bInclude = ( (nOLEOptions & TOO_OTHER) && 0 == nObj)
+                                                    || (0 != (nOLEOptions & nObj));
                     }
                     else
                     {
