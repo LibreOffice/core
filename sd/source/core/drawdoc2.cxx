@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:04:34 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
 #ifndef _SV_WRKWIN_HXX
@@ -1376,6 +1379,12 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                 // the object can switch itself to RUNNING state in the following statement
                 awt::Size aSize = xObj->getVisualAreaSize( ( (SdrOle2Obj*) pObj )->GetAspect() );
                 aGraphSize = Size( aSize.Width, aSize.Height );
+                bObjSupported = TRUE;
+            }
+            catch( embed::NoVisualAreaSizeException& )
+            {
+                OSL_ASSERT( "Couldn't get visual area of the object!\n" );
+                aGraphSize = Size( 5000, 5000 );
                 bObjSupported = TRUE;
             }
             catch( uno::Exception& )
