@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:30:37 $
+ *  last change: $Author: nn $ $Date: 2001-05-10 14:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     // correct source range name list for web query import
     String aTempArea;
 
-    if( rNewFilter.EqualsAscii( pFilterHtmlWebQ ) )
+    if( rNewFilter == ScDocShell::GetWebQueryFilterName() )
         aTempArea = ScHTMLImport::GetHTMLRangeNameList( pSrcDoc, rNewArea );
     else
         aTempArea = rNewArea;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
+ *  last change: $Author: nn $ $Date: 2001-05-10 14:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,6 @@ class ScJobSetup;
 class ScChangeAction;
 
 //==================================================================
-
-
-//==================================================================
-
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
 
@@ -385,6 +381,7 @@ public:
 
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
+    static String   GetWebQueryFilterName();
     static BOOL     HasAutomaticTableName( const String& rFilter );
 
     DECL_LINK( RefreshDBDataHdl, ScDBData* );

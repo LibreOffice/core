@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-03 12:49:52 $
+ *  last change: $Author: nn $ $Date: 2001-05-10 14:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
 static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
 static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
 static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
-const sal_Char __FAR_DATA pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
+static const sal_Char __FAR_DATA pFilterHtmlWebQ[]  = "calc_HTML_WebQuery";
 static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
 
 //----------------------------------------------------------------------
@@ -2029,6 +2029,11 @@ void ScDocShell::PrepareReload()
 String ScDocShell::GetOwnFilterName()           // static
 {
     return String::CreateFromAscii(pFilterSc50);
+}
+
+String ScDocShell::GetWebQueryFilterName()      // static
+{
+    return String::CreateFromAscii(pFilterHtmlWebQ);
 }
 
 BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
