@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleMailClientSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com { module sun { module star { module system {
     @see com::sun::star::system::XSimpleMailClient
 */
 
-interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
+published interface XSimpleMailClientSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Allows a client to query for an object that implements
