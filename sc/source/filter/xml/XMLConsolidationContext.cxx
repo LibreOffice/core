@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-06 16:47:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,10 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
     sal_Int16               nAttrCount      = xAttrList->getLength();
     const SvXMLTokenMap&    rAttrTokenMap   = GetScImport().GetConsolidationAttrTokenMap();
 
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
+    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        OUString sAttrName  = xAttrList->getNameByIndex( nIndex );
-        OUString sValue     = xAttrList->getValueByIndex( nIndex );
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
@@ -175,7 +175,7 @@ void ScXMLConsolidationContext::EndElement()
         {
             sal_Int32 nOffset = 0;
             USHORT nIndex;
-            for( nIndex = 0; nIndex < nCount; nIndex++ )
+            for( nIndex = 0; nIndex < nCount; ++nIndex )
             {
                 ppAreas[ nIndex ] = new ScArea;
                 if ( !ScXMLConverter::GetAreaFromString(
@@ -188,7 +188,7 @@ void ScXMLConsolidationContext::EndElement()
             aConsParam.SetAreas( ppAreas, nCount );
 
             // array is copied in SetAreas
-            for( nIndex = 0; nIndex < nCount; nIndex++ )
+            for( nIndex = 0; nIndex < nCount; ++nIndex )
                 delete ppAreas[nIndex];
             delete[] ppAreas;
         }
