@@ -50,7 +50,6 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\data\org\openoffice\Office\Writer.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Writer.xcd
 ..\data\org\openoffice\Office\WriterWeb.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\WriterWeb.xcd
 ..\data\org\openoffice\Inet.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Inet.xcd
-..\data\org\openoffice\ucb\Hierarchy.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\ucb\Hierarchy.xcd
 ..\data\org\openoffice\ucb\Store.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\ucb\Store.xcd
 ..\data\org\openoffice\Setup.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Setup.xcd
 ..\data\org\openoffice\Types.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Types.xcd
