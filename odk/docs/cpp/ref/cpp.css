@@ -1,0 +1,110 @@
+/*      Autodoc css file for C++ documentation      */
+
+
+body   { background-color:#ffffff; }
+
+a { text-decoration: none; }
+a:link { color: #C44B01; }
+a:visited { color: #638093; }
+a:active { color: #9DCA12; }
+
+h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }
+h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }
+h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }
+h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+dl     { margin-top:1pt; margin-bottom:1pt; }
+dl.member  { margin-top:1pt; margin-bottom:1pt; 
+	     background-image:url(../../images/bg_table3.gif); }
+dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }
+dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
+dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }
+p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }
+pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
+tr     { font-size:10pt; }
+td     { font-size:10pt; }
+
+dt.attention   { color:#dd0000; }
+
+div.title      { text-align:center;  line-height:26pt; 
+		 background-image:url(../../images/bg_table.gif); }
+.subtitle      { background-image:url(../../images/bg_table.gif); }
+
+td.flagname    { background-image:url(../../images/bg_table2.gif);
+	         font-family:Arial; font-size:8pt; font-weight:bold; }
+td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }
+td.flagno      { font-family:Arial; font-size:8pt; }
+td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }
+
+td.navimain, td.navimain a
+               { background-image:url(../../images/bg_table2.gif);
+                 font-family:Arial; font-size:12pt; font-weight:bold; }
+
+/* background-color:#eeeeff; color:#000000; */
+
+td.navimainself
+               { background-color:#2222ad; color:#ffffff;
+                 font-family:Arial; font-size:12pt; font-weight:bold; }
+td.navimainnone
+               { background-image:url(../../images/bg_table2.gif);
+                 font-family:Arial; font-size:12pt; }
+
+div.define     { font-family:Arial; background-color:#ccccff; }
+
+.nqclass       { color:#008800; }
+
+h3.help        { background-color:#eeeeff; margin-top:12pt; }
+
+.btpubl        { color:#33ff33; }
+.btprot        { color:#cc9933; }
+.btpriv        { color:#ff6666; }
+.btvpubl       { color:#33ff33; font-style:italic; }
+.btvprot       { color:#cc9933; font-style:italic; }
+.btvpriv       { color:#ff6666; font-style:italic; }
+.btself        { font-weight:bold; }
+
+
+
+/* Explanation of CSS classes:
+
+dl.member       provides coloured frame for function descriptions.
+dd.member       makes the content of this frame white
+
+dt.attention    special colour for @attention remarks
+
+div.title       HTML page headline
+.subtitle       headline of lists of members and similar
+
+                These are for the flagtables in classes:
+td.flagname     Flag name.
+td.flagyes      flag value "yes"
+td.flagno       flag value "no"
+td.flagtext     other flag value
+
+
+                These are for the main navigationbar:
+td.navimain, td.navimain a
+                Links in navibar.
+td.navimainself Text in navibar which refers to current page.
+td.navimainnone Text which links to nothing.
+
+
+div.define      Subtitles on the #define/macro descriptions page
+
+.nqclass        special color for classes in the qualification
+                on top of type pages like in:
+                ::nsp1::nsp2::_ClassXY_::
+
+h3.help         Subtitles on the help page
+
+                These are for the base class tree on class pages:
+.btpubl         public base class
+.btprot         protected
+.btpriv         private
+.btvpubl        virtual public
+.btvprot        virtual protected
+.btvpriv        virtual private
+.btself         placeholder for currently displayed class
+
+*/
