@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:26:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
     SdrLayerID      nBackgroundLayerID;
     SdrLayerID      nBackgroundObjectsLayerID;
 
+    void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
     void            ImportPageEffect( SdPage* pPage );
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
