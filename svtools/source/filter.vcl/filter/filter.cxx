@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:38:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include "SvFilterOptionsDialog.hxx"
@@ -1094,7 +1097,7 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath,
 
 // ------------------------------------------------------------------------
 
-static ImpFilterLibCache aCache;
+namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 
 // -----------------
 // - GraphicFilter -
@@ -1634,8 +1637,9 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
         // find first filter in filter pathes
         xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
+        ImpFilterLibCache &rCache = Cache::get();
         for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
-            pFilter = aCache.GetFilter( aFilterPath, aFilterName );
+            pFilter = rCache.GetFilter( aFilterPath, aFilterName );
         if( !pFilter )
             nStatus = GRFILTER_FILTERERROR;
         else
@@ -2086,46 +2090,6 @@ BOOL GraphicFilter::HasImportDialog( USHORT nFormat )
 BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
 {
     return sal_True;
-/*
-    String  aFilterName( pConfig->GetImportFilterName( nFormat ) );
-    BOOL    bRet = FALSE;
-
-    if ( pConfig->IsImportInternalFilter( nFormat ) )
-    {
-        if( ( aFilterName.EqualsIgnoreCaseAscii( IMP_BMP ) ) || ( aFilterName.EqualsIgnoreCaseAscii( IMP_SVMETAFILE ) ) )
-        {
-            // Bitmaps und SV-MetaFiles
-        }
-        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_WMF ) )
-        {
-            // Import-Filter fuer WMF
-        }
-        else if( ( aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGF ) ) || ( aFilterName.EqualsIgnoreCaseAscii( IMP_SVSGV ) ) )
-        {
-            // StarDraw- und StarWriter-Filter
-        }
-    }
-    else
-    {
-        ImpFilterLibCacheEntry* pFilter = NULL;
-
-        // find first filter in filter pathes
-        xub_StrLen i, nTokenCount = aFilterPath.GetTokenCount( ';' );
-        for( i = 0; ( i < nTokenCount ) && ( pFilter == NULL ); i++ )
-            pFilter = aCache.GetFilter( aFilterPath.GetToken( i ), aFilterName );
-        if( pFilter )
-        {
-            PFilterDlgCall pFunc = pFilter->GetImportDlgFunction();
-            // Dialog in DLL ausfuehren
-            if( pFunc )
-            {
-                FltCallDialogParameter aFltCallDlgPara( pWindow, NULL, FUNIT_MM );
-                bRet = (*pFunc)( aFltCallDlgPara );
-            }
-        }
-    }
-    return bRet;
-*/
 }
 
 // ------------------------------------------------------------------------
