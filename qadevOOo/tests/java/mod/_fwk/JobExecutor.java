@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobExecutor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:53:18 $
+ *  last change:$Date: 2003-11-18 16:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XChangesBatch;
+import com.sun.star.uno.AnyConverter;
 
 /**
  * Test for object that implements the following interfaces :
@@ -156,6 +157,11 @@ public class JobExecutor extends TestCase {
 
         log.println("Service test.Job is "
             + (serviceRegistered ? "already" : "not yet")  + " registered.");
+        if (! serviceRegistered){
+            String message = "You have to register 'test.Job' before office is stared.\n";
+            message += "Please run '$OFFICEPATH/program/pkgchk $DOCPTH/qadevlibs/JobExecutor.jar'";
+            throw new StatusException(message, new Exception());
+        }
 
 
         XNameAccess jobs = null;
@@ -197,8 +203,6 @@ public class JobExecutor extends TestCase {
                 XNameReplace xNewJobNR = (XNameReplace)
                     UnoRuntime.queryInterface(XNameReplace.class, oNewJob);
                 xNewJobNR.replaceByName("Service", "test.Job");
-                xNewJobNR.replaceByName("AdminTime", "01.01.2001/00:00:01");
-                xNewJobNR.replaceByName("UserTime", "01.01.2001/00:00:00");
                 XNameContainer xJobsNC = (XNameContainer)
                     UnoRuntime.queryInterface(XNameContainer.class, jobs);
                 xJobsNC.insertByName("TestJob", oNewJob);
@@ -207,9 +211,22 @@ public class JobExecutor extends TestCase {
                 XSingleServiceFactory eventsFac = (XSingleServiceFactory)
                     UnoRuntime.queryInterface(XSingleServiceFactory.class, events);
                 Object oNewEvent = eventsFac.createInstance();
-                XNameReplace xNewEventNR = (XNameReplace)
-                    UnoRuntime.queryInterface(XNameReplace.class, oNewEvent);
-                xNewEventNR.replaceByName("Joblist", new String[] {"TestJob"});
+
+                XNameAccess xNewEventNA = (XNameAccess)
+                    UnoRuntime.queryInterface(XNameAccess.class, oNewEvent);
+                Object oJobList = xNewEventNA.getByName("JobList");
+                XSingleServiceFactory jobListFac = (XSingleServiceFactory)
+                    AnyConverter.toObject(new Type(XSingleServiceFactory.class),
+                    oJobList);
+                XNameContainer jobListNC = (XNameContainer)
+                    AnyConverter.toObject(new Type(XNameContainer.class),
+                    oJobList);
+                log.println("\tAdding TimeStamps to Events ...");
+                Object oNewJobTimeStamps = jobListFac.createInstance();
+
+                jobListNC.insertByName("TestJob",  oNewJobTimeStamps);
+
+
                 XNameContainer xEventsNC = (XNameContainer)
                     UnoRuntime.queryInterface(XNameContainer.class, events);
                 xEventsNC.insertByName("TestEvent", oNewEvent);
@@ -228,37 +245,6 @@ public class JobExecutor extends TestCase {
             }
         }
 
-        String regFile = utils.getOfficeURL((XMultiServiceFactory)Param.getMSF()) + "/types.rdb";
-
-
-        if (!serviceRegistered) {
-            try {
-                log.println("Registry: " + regFile);
-                Object serviceManager = RegistryServiceFactory.create(regFile);
-                XMultiServiceFactory serviceManager_xMultiServiceFactory =
-                    (XMultiServiceFactory)UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, serviceManager);
-
-                Object implementationRegistration =
-                    serviceManager_xMultiServiceFactory.createInstance
-                    ("com.sun.star.registry.ImplementationRegistration");
-                XImplementationRegistration
-                    implementationRegistration_xImplementationRegistration =
-                    (XImplementationRegistration)UnoRuntime.queryInterface
-                    (XImplementationRegistration.class, implementationRegistration);
-
-                String compURL =
-                    utils.getFullTestURL("qadevlibs/JobExecutor.jar");
-                log.println("Registering " + compURL);
-
-                implementationRegistration_xImplementationRegistration.
-                    registerImplementation
-                    ("com.sun.star.loader.Java2", compURL, null);
-            } catch (com.sun.star.uno.Exception e) {
-                e.printStackTrace(log);
-                throw new StatusException("Cann't register service", e);
-            }
-        }
     }
 
     /**
