@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-07-09 15:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 nY = (INT16) aSizeTwip.Height();
                 bOleOk = FALSE;         // PICT: kein WMF da -> Grafik statt OLE
             }
-//#if 0
+#if 0
 //JP 23.06.99 - if the OLE-Storage does not contained the streams META
 //              or PICT, then import the grafic from the escher.
 //              But the Question is, is the OLE-Storage then a valid
@@ -430,6 +430,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 //cmc 21 May 2001 - If we have an inline equation editor ole object we have no
 //META or PICT streams, so unless we import the graph associated with it, we
 //will not convert them to StarMath Formulas through CreateSdrOLEFromStorage
+//
+//This is now done in ImportGraf instead (#83396#)
 
             else
             {
@@ -460,7 +462,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 }
                 nObjLocFc = nOldObjLocFc;
             }
-//#endif
+#endif
         }       // StorageStreams wieder zu
 
         SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
@@ -699,11 +701,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, const BYTE* pData,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.12 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.13 2001-07-09 15:05:40 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.11  2001/05/23 13:07:06  cmc
       #75277# ##897## Object Offset incorrectly saved
 
