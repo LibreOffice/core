@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:16:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2609,28 +2609,26 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine ) c
 // class SvxBoxInfoItem --------------------------------------------------
 
 SvxBoxInfoItem::SvxBoxInfoItem( const sal_uInt16 nId ) :
-
     SfxPoolItem( nId ),
-
     pHori   ( 0 ),
     pVert   ( 0 ),
-    nDefDist( 0 )
-
+    nDefDist( 0 ),
+    mbEnableHor( false ),
+    mbEnableVer( false )
 {
-    bTable = bDist = bMinDist = sal_False;
+    bDist = bMinDist = sal_False;
     ResetFlags();
 }
 
 // -----------------------------------------------------------------------
 
 SvxBoxInfoItem::SvxBoxInfoItem( const SvxBoxInfoItem& rCpy ) :
-
-    SfxPoolItem( rCpy )
-
+    SfxPoolItem( rCpy ),
+    mbEnableHor( rCpy.mbEnableHor ),
+    mbEnableVer( rCpy.mbEnableVer )
 {
     pHori       = rCpy.GetHori() ? new SvxBorderLine( *rCpy.GetHori() ) : 0;
     pVert       = rCpy.GetVert() ? new SvxBorderLine( *rCpy.GetVert() ) : 0;
-    bTable      = rCpy.IsTable();
     bDist       = rCpy.IsDist();
     bMinDist    = rCpy.IsMinDist();
     nValidFlags = rCpy.nValidFlags;
@@ -2653,7 +2651,8 @@ SvxBoxInfoItem &SvxBoxInfoItem::operator=( const SvxBoxInfoItem& rCpy )
     delete pVert;
     pHori       = rCpy.GetHori() ? new SvxBorderLine( *rCpy.GetHori() ) : 0;
     pVert       = rCpy.GetVert() ? new SvxBorderLine( *rCpy.GetVert() ) : 0;
-    bTable      = rCpy.IsTable();
+    mbEnableHor = rCpy.mbEnableHor;
+    mbEnableVer = rCpy.mbEnableVer;
     bDist       = rCpy.IsDist();
     bMinDist    = rCpy.IsMinDist();
     nValidFlags = rCpy.nValidFlags;
@@ -2669,7 +2668,8 @@ int SvxBoxInfoItem::operator==( const SfxPoolItem& rAttr ) const
 
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return (   bTable                    == rBoxInfo.IsTable()
+    return (   mbEnableHor               == rBoxInfo.mbEnableHor
+            && mbEnableVer               == rBoxInfo.mbEnableVer
             && bDist                     == rBoxInfo.IsDist()
             && bMinDist                  == rBoxInfo.IsMinDist()
             && nValidFlags               == rBoxInfo.nValidFlags
@@ -3334,44 +3334,25 @@ sal_Bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
 {
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
-    sal_Int32 nVal = 0;
     if ( nMemId == 0 )
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
-        if( pLine )
-        {
-            aSeq[0] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetColor().GetColor() ));
-            aSeq[1] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetOutWidth() ));
-            aSeq[2] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetInWidth( ) ));
-            aSeq[3] = ::com::sun::star::uno::makeAny( sal_Int32( pLine->GetDistance() ));
-            rVal = ::com::sun::star::uno::makeAny( aSeq );
-        }
-        else
-        {
-            // Special case: We have to recognize the empty case which is different to the one
-            // where all members are 0 (means default!). For this special purpose we send an
-            // empty sequence!
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
-            rVal = ::com::sun::star::uno::makeAny( aSeq );
-        }
-
+        rVal <<= uno::makeAny( lcl_SvxLineToLine(pLine, bConvert) );
         return sal_True;
     }
     else if ( pLine )
     {
         switch ( nMemId )
         {
-            case MID_FG_COLOR:      nVal = pLine->GetColor().GetColor(); break;
-            case MID_OUTER_WIDTH:   nVal = pLine->GetOutWidth();    break;
-            case MID_INNER_WIDTH:   nVal = pLine->GetInWidth( );    break;
-            case MID_DISTANCE:      nVal = pLine->GetDistance();    break;
+            case MID_FG_COLOR:      rVal <<= sal_Int32(pLine->GetColor().GetColor()); break;
+            case MID_OUTER_WIDTH:   rVal <<= sal_Int32(pLine->GetOutWidth());   break;
+            case MID_INNER_WIDTH:   rVal <<= sal_Int32(pLine->GetInWidth( ));   break;
+            case MID_DISTANCE:      rVal <<= sal_Int32(pLine->GetDistance());   break;
             default:
                 DBG_ERROR( "Wrong MemberId" );
                 return sal_False;
         }
     }
 
-    rVal <<= nVal;
     return TRUE;
 }
 
@@ -3384,42 +3365,16 @@ sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
     sal_Int32 nVal;
     if ( nMemId == 0 )
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
-        if ( rVal >>= aSeq )
+        table::BorderLine aLine;
+        if ( rVal >>= aLine )
         {
-            if ( aSeq.getLength() == 4 )
-            {
-                if ( !pLine )
-                    pLine = new SvxBorderLine;
-
-                if ( aSeq[0] >>= nVal )
-                    pLine->SetColor( Color(nVal) );
-                else
-                    return sal_False;
-                if ( aSeq[1] >>= nVal )
-                    pLine->SetOutWidth( USHORT( nVal ));
-                else
-                    return sal_False;
-                if ( aSeq[2] >>= nVal )
-                    pLine->SetInWidth( USHORT( nVal ));
-                else
-                    return sal_False;
-                if ( aSeq[3] >>= nVal )
-                    pLine->SetDistance( USHORT( nVal ));
-                else
-                    return sal_False;
-
-                return sal_True;
-            }
-            else if ( aSeq.getLength() == 0 )
-            {
-                // Special case: No line at all! See PutValue
-                SetLine( 0 );
-                return sal_True;
-            }
+            if ( !pLine )
+                pLine = new SvxBorderLine;
+            if( !lcl_LineToSvxLine(aLine, *pLine, bConvert) )
+                DELETEZ( pLine );
+            return sal_True;
         }
-        else
-            return sal_False;
+        return sal_False;
     }
     else if ( rVal >>= nVal )
     {
@@ -3484,6 +3439,8 @@ SvStream& SvxLineItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
               << (short)pLine->GetInWidth()
               << (short)pLine->GetDistance();
     }
+    else
+        rStrm << Color() << (short)0 << (short)0 << (short)0;
     return rStrm;
 }
 
@@ -3511,8 +3468,11 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     Color        aColor;
 
     rStrm >> aColor >> nOutline >> nInline >> nDistance;
-    SvxBorderLine aLine( &aColor, nOutline, nInline, nDistance );
-    pLine->SetLine( &aLine );
+    if( nOutline )
+    {
+        SvxBorderLine aLine( &aColor, nOutline, nInline, nDistance );
+        pLine->SetLine( &aLine );
+    }
     return pLine;
 }
 
