@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDiagram.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
     @see XChartDocument
  */
-interface XDiagram: com::sun::star::drawing::XShape
+published interface XDiagram: com::sun::star::drawing::XShape
 {
     //-------------------------------------------------------------------------
 
