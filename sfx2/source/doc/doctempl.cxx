@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-08 08:46:50 $
+ *  last change: $Author: dv $ $Date: 2000-12-08 11:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,13 @@
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+
+#ifndef _EHDL_HXX
+#include <svtools/ehdl.hxx>
+#endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -170,6 +177,7 @@ using namespace ucb;
 #include "app.hxx"
 #include "sfxresid.hxx"
 #include "doc.hrc"
+#include "fcontnr.hxx"
 
 //========================================================================
 
@@ -202,11 +210,15 @@ using namespace ucb;
 
 class EntryData_Impl
 {
+    SfxObjectShellLock  mxObjShell;
+    SvStorageRef        mxStor;
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
     sal_Bool            mbInUse     : 1;
     sal_Bool            mbNew       : 1;
+    sal_Bool            mbIsOwner   : 1;
+    sal_Bool            mbDidConvert: 1;
 
 public:
                         EntryData_Impl( const OUString& rTitle );
@@ -227,6 +239,10 @@ public:
     void                SetInUse( sal_Bool bInUse ) { mbInUse = bInUse; }
     sal_Bool            IsInUse() const { return mbInUse; }
     sal_Bool            IsNew() const { return mbNew; }
+
+
+    SfxObjectShellRef   CreateObjectShell();
+    BOOL                DeleteObjectShell();
 };
 
 DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
@@ -424,146 +440,6 @@ void OpenNotifier_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 #endif  //(dv)
 }
-
-//------------------------------------------------------------------------
-#if 0
-//dv!
-SfxObjectShellRef SfxTemplateDirEntry::CreateObjectShell()
-
-/*  [Beschreibung]
-
-    Anlegen einer DokumentShell zu diesem Entry; das Entry beinhaltet
-    den Dateinamen.
-
-
-    [R"uckgabewert]
-
-    SfxObjectShellRef     Referenz auf die DokumentShell
-
-
-    [Querverweise]
-
-    <SfxTemplateDirEntry::DeleteObjectShell()>
-*/
-
-{
-    if(!xObjShell.Is())
-    {
-        bIsOwner=FALSE;
-        BOOL bDum = FALSE;
-        SfxApplication *pSfxApp = SFX_APP();
-        xObjShell = pSfxApp->DocAlreadyLoaded(GetFull().GetFull(),TRUE,bDum);
-        if(!xObjShell.Is())
-        {
-            bIsOwner=TRUE;
-            SfxMedium *pMed=new SfxMedium(
-                GetFull().GetFull(),(STREAM_READ | STREAM_SHARE_DENYWRITE), FALSE, 0 );
-            const SfxFilter* pFilter = NULL;
-            if( pSfxApp->GetFilterMatcher().GuessFilter(
-                *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
-                pFilter && !pFilter->IsOwnFormat() ||
-                pFilter && !pFilter->UsesStorage() )
-            {
-                SfxErrorContext aEc(ERRCTX_SFX_LOADTEMPLATE,
-                                    GetFull().GetFull(
-                                        FSYS_STYLE_HOST,FALSE,20));
-                delete pMed;
-                bDidConvert=TRUE;
-                ULONG lErr;
-                if ( xObjShell.Is() )
-                    if(lErr=(pSfxApp->LoadTemplate(
-                        xObjShell,GetFull().GetFull())!=ERRCODE_NONE))
-                        ErrorHandler::HandleError(lErr);
-
-            }
-            else
-            {
-                const SfxObjectFactory &rFactory =
-                    ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())
-                    ->GetFactory();
-                delete pMed;
-                bDidConvert=FALSE;
-                xStor = new SvStorage(
-                    GetFull().GetFull(),
-                    STREAM_READWRITE | STREAM_NOCREATE |
-                    STREAM_SHARE_DENYALL, STORAGE_TRANSACTED);
-                if ( pFilter )
-                    xStor->SetVersion( pFilter->GetVersion() );
-                if ( SVSTREAM_OK == xStor->GetError() )
-                {
-                    xObjShell = (SfxObjectShell *)
-                        rFactory.CreateObject(SFX_CREATE_MODE_ORGANIZER);
-                    if ( xObjShell.Is() )
-                    {
-                        xObjShell->DoInitNew(0);
-                        if(!xObjShell->LoadFrom(xStor))
-                            xObjShell.Clear();
-                        else
-                        {
-                            xObjShell->DoHandsOff();
-                            xObjShell->DoSaveCompleted(xStor);
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return (SfxObjectShellRef)(SfxObjectShell*) xObjShell;
-}
-
-//------------------------------------------------------------------------
-
-BOOL SfxTemplateDirEntry::DeleteObjectShell()
-
-/*  [Beschreibung]
-
-    "oschen der DokumentShell dieses Entrys, sofern eine DokumentShell
-    angelegt wurde
-
-
-    [R"uckgabewert]
-
-    BOOL                FALSE:  es ist ein Fehler beim Speichern aufgetreten;
-                        TRUE:   das Dokument wurde gespeichert
-
-
-    [Querverweise]
-
-    <SfxTemplateDirEntry::CreateObjectShell()>
-*/
-
-{
-    BOOL bRet = TRUE;
-    if ( xObjShell.Is() )
-    {
-        if( xObjShell->IsModified() )
-        {
-            //Hier speichern wir auch, falls die Vorlage in Bearbeitung ist...
-            bRet=FALSE;
-            if ( bIsOwner )
-                if( bDidConvert)
-                {
-                    bRet=xObjShell->PreDoSaveAs_Impl(
-                        GetFull().GetFull(),
-                        xObjShell->GetFactory().GetFilter(0)->GetName(),0 );
-                }
-                else
-                {
-                if(xObjShell->Save())
-                    bRet=xStor->Commit();
-                else
-                    bRet=FALSE;
-                }
-        }
-        if(bRet)
-        {
-            xObjShell.Clear();
-            xStor.Clear();
-        }
-    }
-    return bRet;
-}
-#endif
 
 //========================================================================
 //========================================================================
@@ -1797,11 +1673,19 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 */
 
 {
-    return NULL;
-#if 0   //dv!
-    DBG_ASSERT( pDirs, "not initialized" );
-    return (*pDirs)[nRegion]->GetContent()[nIdx]->CreateObjectShell();
-#endif
+    if ( !pImp )
+        return NULL;
+
+    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
+    EntryData_Impl *pEntry = NULL;
+
+    if ( pRegion )
+        pEntry = pRegion->GetEntry( nIdx );
+
+    if ( pEntry )
+        return pEntry->CreateObjectShell();
+    else
+        return NULL;
 }
 
 //------------------------------------------------------------------------
@@ -1832,11 +1716,19 @@ BOOL SfxDocumentTemplates::DeleteObjectShell
 */
 
 {
-#if 0
-    DBG_ASSERT( pDirs, "not initialized" );
-    return (*pDirs)[nRegion]->GetContent()[nIdx]->DeleteObjectShell();
-#endif
-    return TRUE;
+    if ( !pImp )
+        return NULL;
+
+    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
+    EntryData_Impl *pEntry = NULL;
+
+    if ( pRegion )
+        pEntry = pRegion->GetEntry( nIdx );
+
+    if ( pEntry )
+        return pEntry->DeleteObjectShell();
+    else
+        return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -2022,9 +1914,11 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 // -----------------------------------------------------------------------
 EntryData_Impl::EntryData_Impl( const OUString& rTitle )
 {
-    maTitle = rTitle;
-    mbInUse = sal_True;
-    mbNew   = sal_True;
+    maTitle     = rTitle;
+    mbInUse     = sal_True;
+    mbNew       = sal_True;
+    mbIsOwner   = sal_False;
+    mbDidConvert= sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2101,6 +1995,110 @@ void EntryData_Impl::RemoveEntry()
     catch ( CommandAbortedException& ) {}
     catch ( RuntimeException& ) {}
     catch ( Exception& ) {}
+}
+
+//------------------------------------------------------------------------
+SfxObjectShellRef EntryData_Impl::CreateObjectShell()
+{
+    if( ! mxObjShell.Is() )
+    {
+        mbIsOwner = FALSE;
+        BOOL bDum = FALSE;
+        SfxApplication *pSfxApp = SFX_APP();
+        mxObjShell = pSfxApp->DocAlreadyLoaded( maTargetURL, TRUE, bDum );
+
+        if( ! mxObjShell.Is() )
+        {
+            mbIsOwner = TRUE;
+            SfxMedium *pMed=new SfxMedium(
+                maTargetURL,(STREAM_READ | STREAM_SHARE_DENYWRITE), FALSE, 0 );
+            const SfxFilter* pFilter = NULL;
+            if( pSfxApp->GetFilterMatcher().GuessFilter(
+                *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
+                pFilter && !pFilter->IsOwnFormat() ||
+                pFilter && !pFilter->UsesStorage() )
+            {
+                SfxErrorContext aEc( ERRCTX_SFX_LOADTEMPLATE,
+                                     maTargetURL );
+                delete pMed;
+                mbDidConvert=TRUE;
+                ULONG lErr;
+                if ( mxObjShell.Is() )
+                    if(lErr=(pSfxApp->LoadTemplate(
+                        mxObjShell,maTargetURL)!=ERRCODE_NONE))
+                        ErrorHandler::HandleError(lErr);
+
+            }
+            else
+            {
+                const SfxObjectFactory &rFactory =
+                    ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())
+                    ->GetFactory();
+                delete pMed;
+                mbDidConvert=FALSE;
+                mxStor = new SvStorage(
+                    maTargetURL,
+                    STREAM_READWRITE | STREAM_NOCREATE |
+                    STREAM_SHARE_DENYALL, STORAGE_TRANSACTED);
+                if ( pFilter )
+                    mxStor->SetVersion( pFilter->GetVersion() );
+                if ( SVSTREAM_OK == mxStor->GetError() )
+                {
+                    mxObjShell = (SfxObjectShell *)
+                        rFactory.CreateObject(SFX_CREATE_MODE_ORGANIZER);
+                    if ( mxObjShell.Is() )
+                    {
+                        mxObjShell->DoInitNew(0);
+                        if(!mxObjShell->LoadFrom( mxStor ))
+                            mxObjShell.Clear();
+                        else
+                        {
+                            mxObjShell->DoHandsOff();
+                            mxObjShell->DoSaveCompleted( mxStor );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return (SfxObjectShellRef)(SfxObjectShell*) mxObjShell;
+}
+
+//------------------------------------------------------------------------
+
+BOOL EntryData_Impl::DeleteObjectShell()
+{
+    BOOL bRet = TRUE;
+
+    if ( mxObjShell.Is() )
+    {
+        if( mxObjShell->IsModified() )
+        {
+            //Hier speichern wir auch, falls die Vorlage in Bearbeitung ist...
+            bRet = FALSE;
+            if ( mbIsOwner )
+                if( mbDidConvert )
+                {
+                    bRet=mxObjShell->PreDoSaveAs_Impl(
+                        maTargetURL,
+                        mxObjShell->GetFactory().GetFilter(0)->GetName(),0 );
+                }
+                else
+                {
+                    if( mxObjShell->Save() )
+                        bRet = mxStor->Commit();
+                    else
+                        bRet = FALSE;
+                }
+        }
+        if( bRet )
+        {
+            mxObjShell.Clear();
+            mxStor.Clear();
+        }
+    }
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
