@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-01 16:11:30 $
+ *  last change: $Author: jp $ $Date: 2001-02-07 12:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,8 @@ void SwWW8Writer::InsUInt32( WW8Bytes& rO, UINT32 n )
 
 void SwWW8Writer::InsAsString16( WW8Bytes& rO, const String& rStr )
 {
-    for( const sal_Unicode* pStr = rStr.GetBuffer(); *pStr; ++pStr )
+    const sal_Unicode* pStr = rStr.GetBuffer();
+    for( xub_StrLen n = 0, nLen = rStr.Len(); n < nLen; ++n, ++pStr )
         SwWW8Writer::InsUInt16( rO, *pStr );
 }
 
@@ -2253,11 +2254,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.7 2001-02-01 16:11:30 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.8 2001-02-07 12:41:56 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/02/01 16:11:30  cmc
+      #83362# Missing i18n header include
+
       Revision 1.6  2001/01/30 20:11:06  cmc
       #83362# CJK Forbidden Character {Im|Ex}port
 
