@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-22 08:39:47 $
+ *  last change: $Author: tbe $ $Date: 2002-03-26 18:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,17 @@
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWLISTBOX_HXX_
 #include <toolkit/awt/vclxaccessibledropdownlistbox.hxx>
 #endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEEDIT_HXX_
+#include <toolkit/awt/vclxaccessibleedit.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEFIXEDTEXT_HXX_
+#include <toolkit/awt/vclxaccessiblefixedtext.hxx>
+#endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLELISTBOX_HXX_
 #include <toolkit/awt/vclxaccessiblelistbox.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLERADIOBUTTON_HXX_
+#include <toolkit/awt/vclxaccessibleradiobutton.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETEXTCOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessibletextcomponent.hxx>
@@ -120,6 +129,11 @@ IMPL_XTYPEPROVIDER_START( VCLXButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleButton( this );
+}
 
 void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -359,11 +373,6 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
-{
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleButton( this );
-}
-
 //  ----------------------------------------------------
 //  class VCLXImageControl
 //  ----------------------------------------------------
@@ -555,6 +564,11 @@ IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleCheckBox( this );
+}
 
 void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -752,12 +766,6 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
-{
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleCheckBox( this );
-}
-
-
 //  ----------------------------------------------------
 //  class VCLXRadioButton
 //  ----------------------------------------------------
@@ -783,9 +791,8 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleRadioButton( this );
 }
-
 
 void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -987,7 +994,6 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
         maItemListeners.itemStateChanged( aEvent );
     }
 }
-
 
 //  ----------------------------------------------------
 //  class VCLXSpinField
@@ -1764,7 +1770,6 @@ void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
     return aInfo;
 }
 
-
 //  ----------------------------------------------------
 //  class VCLXFixedText
 //  ----------------------------------------------------
@@ -1789,6 +1794,11 @@ IMPL_XTYPEPROVIDER_START( VCLXFixedText )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( this );
+}
 
 void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2249,9 +2259,8 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTextComponent( this );
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleEdit( this );
 }
-
 
 void VCLXEdit::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
