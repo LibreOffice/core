@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:49:03 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ struct SfxViewFrame_Impl
     sal_Bool            bInCtor:1;
     sal_Bool            bModal:1;
     sal_Bool            bEnabled:1;
+    sal_Bool            bEventFlag:1;
 
                         SfxViewFrame_Impl()
                         : pReloader(0 )
@@ -1185,7 +1186,7 @@ void SfxViewFrame::SetObjectShell_Impl
 #endif
 
     if ( !rObjSh.IsLoading() )
-        rObjSh.PostActivateEvent_Impl();
+        rObjSh.PostActivateEvent_Impl( this );
 
     Notify( rObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
     Notify( rObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
@@ -1224,6 +1225,8 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
     SfxViewShell *pDyingViewSh = GetViewShell();
     pImp->aLastType = xObjSh->Type();
 
+    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, xObjSh) );
+
     HACK(MI weiss nicht wie !pSh sein kann - nach PlugIns isses aber so)
     if ( pDyingViewSh )
     {
@@ -1238,7 +1241,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
 
         if ( !pView )
         {
-            // Ich bin die letzte ::com::sun::star::sdbcx::View
+            // Ich bin die letzte View
             SfxObjectFactory *pFactory = &xObjSh->GetFactory();
             if ( pFactory && pFactory->GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
             {
@@ -1652,8 +1655,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             case SFX_EVENT_LOADFINISHED:
             {
                 // Ein fertig geladenes Dokument kann das Event nicht selbst ausl"osen,
-                // weil es nicht wei\s, ob schon eine ::com::sun::star::sdbcx::View erzeugt wurde
-                xObjSh->PostActivateEvent_Impl();
+                // weil es nicht wei\s, ob schon eine View erzeugt wurde
+                xObjSh->PostActivateEvent_Impl( this );
                 break;
             }
 
@@ -1705,6 +1708,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
     pImp->bDontOverwriteResizeInToOut = sal_False;
     pImp->pImportShell = 0;
     pImp->bObjLocked = sal_False;
+    pImp->bEventFlag = sal_True;
     pImp->pFocusWin = 0;
     pImp->pActiveChild = NULL;
     pImp->bRestoreView = sal_False;
@@ -4064,4 +4068,15 @@ SfxImageManager* SfxViewFrame::GetImageManager()
 SfxMacro* SfxViewFrame::GetRecordingMacro_Impl()
 {
     return pImp->pMacro;
+}
+
+BOOL SfxViewFrame::ClearEventFlag_Impl()
+{
+    if ( pImp->bEventFlag )
+    {
+        pImp->bEventFlag = FALSE;
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
