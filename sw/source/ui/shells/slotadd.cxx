@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:33:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,13 +325,18 @@
 #define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
 #define ITEMID_HATCH_LIST       SID_HATCH_LIST
 #define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
+
 #ifndef _SVX_DRAWITEM_HXX
 #include <svx/drawitem.hxx>
+#endif
+#ifndef _AVMEDIA_MEDIAITEM_HXX
+#include <avmedia/mediaitem.hxx>
 #endif
 
 #define SvxDrawToolItem  SfxAllEnumItem
 #define SvxDrawAlignItem SfxAllEnumItem
 #define SvxDrawBezierItem SfxAllEnumItem
+#define avmedia_MediaItem ::avmedia::MediaItem
 
 #define SFX_TYPEMAP
 #include "itemdef.hxx"
