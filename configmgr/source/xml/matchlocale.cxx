@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-04-25 15:44:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #include "matchlocale.hxx"
 
+#include <rtl/ustrbuf.hxx>
+
 #include <algorithm>
 #include <iterator>
 
@@ -98,29 +100,39 @@ namespace configmgr
     SequencePos const c_nFallbackLocales = ARRAYSIZE(c_aFallbackLocales);
 
 // -----------------------------------------------------------------------------
-    bool isAnyLocale(OUString const & _sLocale)
+    bool isAnyLanguage(OUString const & _sLanguage)
     {
-        return !!_sLocale.equalsAscii(c_sAnyLanguage);
+        return !!_sLanguage.equalsAscii(c_sAnyLanguage);
     }
 
 // -----------------------------------------------------------------------------
-    bool isDefaultLocale(OUString const & _sLocale)
+    bool isDefaultLanguage(OUString const & _sLanguage)
     {
-        return !!_sLocale.equalsAscii(c_sDefLanguage);
+        return !!_sLanguage.equalsAscii(c_sDefLanguage);
     }
 
 // -----------------------------------------------------------------------------
-    OUString getAnyLocale()
+    OUString getAnyLanguage()
     {
-        static OUString const sAnyLocale = OUString::createFromAscii( c_sAnyLanguage );
-        return sAnyLocale;
+        return OUString::createFromAscii( c_sAnyLanguage );
     }
 
 // -----------------------------------------------------------------------------
-    OUString getDefaultLocale()
+    OUString getDefaultLanguage()
     {
-        static OUString const sDefLocale = OUString::createFromAscii( c_sDefLanguage );
-        return sDefLocale;
+        return OUString::createFromAscii( c_sDefLanguage );
+    }
+
+// -----------------------------------------------------------------------------
+    Locale getAnyLocale()
+    {
+        return Locale( getAnyLanguage(), OUString(), OUString() );
+    }
+
+// -----------------------------------------------------------------------------
+    Locale getDefaultLocale()
+    {
+        return Locale( getDefaultLanguage(), OUString(), OUString() );
     }
 
 // -----------------------------------------------------------------------------
@@ -170,29 +182,35 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
-// struct Locale { OUString aLanguage, aCountry };
-
 // -----------------------------------------------------------------------------
 // conversion helpers
 Locale makeLocale(OUString const& sLocaleName_)
 {
     Locale aResult;
-    splitLocaleString(sLocaleName_, aResult.aLanguage, aResult.aCountry);
+    splitLocaleString(sLocaleName_, aResult.Language, aResult.Country);
     return aResult;
 }
-Locale makeLocale(lang::Locale const& aUnoLocale_)
+Locale makeLocale(Locale const& aLocale_) // normalizes the locale
 {
-    Locale aResult;
-    aResult.aLanguage = aUnoLocale_.Language.toAsciiLowerCase();
-    aResult.aCountry  = aUnoLocale_.Country.toAsciiUpperCase();
-    return aResult;
+    return Locale(  aLocale_.Language.toAsciiLowerCase(),
+                    aLocale_.Country .toAsciiUpperCase(),
+                    OUString() );
+}
+OUString makeIsoLocale(Locale const& aUnoLocale_)
+{
+    rtl::OUStringBuffer aResult(aUnoLocale_.Language.toAsciiLowerCase());
+    if (aUnoLocale_.Country.getLength())
+    {
+        aResult.append( sal_Unicode('-') ).append(aUnoLocale_.Country.toAsciiUpperCase());
+    }
+    return aResult.makeStringAndClear();
 }
 static
 Locale makeLocale(StaticLocale const& aConstLocale_)
 {
     Locale aResult;
-    aResult.aLanguage = OUString::createFromAscii(aConstLocale_.aLanguage);
-    aResult.aCountry  = OUString::createFromAscii(aConstLocale_.aCountry);
+    aResult.Language = OUString::createFromAscii(aConstLocale_.aLanguage);
+    aResult.Country  = OUString::createFromAscii(aConstLocale_.aCountry);
     return aResult;
 }
 // -----------------------------------------------------------------------------
@@ -241,7 +259,7 @@ LocaleSequence makeLocaleSequence(uno::Sequence<lang::Locale> const& aUnoLocales
 // -----------------------------------------------------------------------------
 bool designatesAllLocales(Locale const& aLocale_)
 {
-    return aLocale_.aLanguage.compareToAscii(c_sAnyLanguage) == 0;
+    return aLocale_.Language.equalsAscii(c_sAnyLanguage);
 }
 bool designatesAllLocales(LocaleSequence const& aLocales_)
 {
@@ -253,21 +271,21 @@ bool designatesAllLocales(LocaleSequence const& aLocales_)
 MatchQuality match(Locale const& aLocale_, Locale const& aTarget_)
 {
     // check language
-    if (!aLocale_.aLanguage.equals(aTarget_.aLanguage))
+    if (!aLocale_.Language.equals(aTarget_.Language))
     {
         // can we accept any language
-        if (aTarget_.aLanguage.compareToAscii(c_sAnyLanguage) == 0)
+        if (aTarget_.Language.equalsAscii(c_sAnyLanguage))
             return MATCH_LANGUAGE;
 
         return MISMATCH;
     }
 
     // check for exact match
-    else if (aLocale_.aCountry.equals(aTarget_.aCountry))
+    else if (aLocale_.Country.equals(aTarget_.Country))
         return MATCH_LOCALE;
 
     // check for plain language
-    else if (aLocale_.aCountry.getLength() == 0)
+    else if (aLocale_.Country.getLength() == 0)
         return MATCH_LANGUAGE_PLAIN;
 
     // so we are left with the wrong country
