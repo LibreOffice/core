@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:42:19 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_WRKWIN_CXX
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -73,7 +71,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -220,7 +218,7 @@ void WorkWindow::ImplLoadRes( const ResId& rResId )
 {
     SystemWindow::ImplLoadRes( rResId );
 
-    USHORT nShowStyle   = ReadShortRes();
+    ReadShortRes();
     if ( !(rResId.aWinBits & WB_HIDE) && (RSC_WORKWIN == rResId.GetRT()) )
         Show();
 }
@@ -326,3 +324,43 @@ BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
 
     return bRet;
 }
+
+void WorkWindow::ImplSetFrameState( ULONG aFrameState )
+{
+    Window* pWindow = mpFrameWindow;
+
+    SalFrameState   aState;
+    aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;
+    aState.mnState  = aFrameState; //SAL_FRAMESTATE_MAXIMIZED;
+    mpFrame->SetWindowState( &aState );
+
+    // Syncrones Resize ausloesen, damit wir nach Moeglichkeit gleich
+    // mit der richtigen Groesse rechnen
+    long nNewWidth;
+    long nNewHeight;
+    pWindow->mpFrame->GetClientSize( nNewWidth, nNewHeight );
+    ImplHandleResize( pWindow, nNewWidth, nNewHeight );
+}
+
+
+void WorkWindow::Minimize()
+{
+    ImplSetFrameState( SAL_FRAMESTATE_MINIMIZED );
+}
+
+void WorkWindow::Restore()
+{
+    ImplSetFrameState( SAL_FRAMESTATE_NORMAL );
+}
+
+BOOL WorkWindow::Close()
+{
+    BOOL bCanClose = SystemWindow::Close();
+
+    // Ist es das Applikationsfenster, dann beende die Applikation
+    if ( bCanClose && ( ImplGetSVData()->maWinData.mpAppWin == this ) )
+        GetpApp()->Quit();
+
+    return bCanClose;
+}
+
