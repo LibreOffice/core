@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
+ *  last change: $Author: cmc $ $Date: 2002-03-21 14:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,8 @@
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
     : SvxMSDffManager( *rRdr.pTableStream, rRdr.pWwFib->fcDggInfo,
-    rRdr.pDataStream, 0, 0, COL_WHITE, 12 , rRdr.pStrm ), rReader( rRdr )
+    rRdr.pDataStream, 0, 0, COL_WHITE, 12 , rRdr.pStrm ), rReader( rRdr ),
+    pFallbackStream(0), pOldEscherBlipCache(0)
 {
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
@@ -311,16 +312,22 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
     return pRet;
 }
 
-SvStream *SwMSDffManager::DisableFallbackStream()
+void SwMSDffManager::DisableFallbackStream()
 {
-    SvStream *pOld = pStData2;
+    ASSERT(!pFallbackStream || !pOldEscherBlipCache,
+        "if you're recursive, you're broken");
+    pFallbackStream = pStData2;
+    pOldEscherBlipCache = pEscherBlipCache;
+    pEscherBlipCache = 0;
     pStData2 = 0;
-    return pOld;
 }
 
-void SwMSDffManager::EnableFallbackStream(SvStream *pNew)
+void SwMSDffManager::EnableFallbackStream()
 {
-    pStData2 = pNew;
+    pStData2 = pFallbackStream;
+    pEscherBlipCache = pOldEscherBlipCache;
+    pOldEscherBlipCache = 0;
+    pFallbackStream = 0;
 }
 
 SwFrmFmt* SwMSDffManager::GetLastOCXShapeFrm() const

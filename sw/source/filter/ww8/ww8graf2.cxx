@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-03-21 14:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
             incorrect fallback graphic being found if other escher graphics
             have been inserted in the document
             */
-            SvStream *pFallback = pMSDffManager->DisableFallbackStream();
+            pMSDffManager->DisableFallbackStream();
             if( !pMSDffManager->GetModel() )
                 pMSDffManager->SetModel(pDrawModel, 1440);
 
@@ -1019,7 +1019,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                 if( pTextObj && !bTextObjWasGrouped )
                     pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
-        pMSDffManager->EnableFallbackStream(pFallback);
+        pMSDffManager->EnableFallbackStream();
         }
         else if ( (aPic.lcb >= 58) && aPic.MFP.xExt && aPic.MFP.yExt )
             pRet = ImportGraf1( aPic, pDataStream, nPicLocFc );

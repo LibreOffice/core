@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
+ *  last change: $Author: cmc $ $Date: 2002-03-21 14:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,6 +532,9 @@ class SwMSDffManager : public SvxMSDffManager
 {
 private:
     SwWW8ImplReader& rReader;
+    SvStream *pFallbackStream;
+    List *pOldEscherBlipCache;
+
     virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
         SvStorageRef& rSrcStorage, SvStorageRef& rDestStorage ) const;
     virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
@@ -547,8 +550,8 @@ public:
         INT32 &rThick);
     SwMSDffManager( SwWW8ImplReader& rRdr );
     SwFrmFmt *GetLastOCXShapeFrm() const;
-    SvStream *DisableFallbackStream();
-    void EnableFallbackStream(SvStream *pNew);
+    void DisableFallbackStream();
+    void EnableFallbackStream();
 private:
 // If we convert an OCX through this manager we will store the uno XShape
 // reference created through the conversion
