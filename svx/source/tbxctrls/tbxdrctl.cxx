@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:14:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #endif
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/toolbox.hxx>
 
 #pragma hdrstop
 
