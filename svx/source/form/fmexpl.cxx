@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 06:56:37 $
+ *  last change: $Author: fs $ $Date: 2002-05-15 08:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ namespace svxform
     //========================================================================
     // class NavigatorFrame
     //========================================================================
-    DBG_NAME(NavigatorFrame);
+    DBG_NAME(NavigatorFrame)
     //------------------------------------------------------------------------
     NavigatorFrame::NavigatorFrame( SfxBindings *pBindings, SfxChildWindow *pMgr,
                                   Window* pParent )
