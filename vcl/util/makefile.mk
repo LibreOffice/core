@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-09 23:44:46 $
+#   last change: $Author: ka $ $Date: 2001-03-20 16:53:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,7 +223,8 @@ SHL1STDLIBS+=\
             $(UCBHELPERLIB)		\
             $(CPPULIB)			\
             $(UNOTOOLSLIB)		\
-            $(COMPHELPERLIB)
+            $(COMPHELPERLIB)	\
+            $(GPC3RDLIB)		
 
 .IF "$(remote)" != ""
 SHL1STDLIBS+=	$(UNOLIB)
