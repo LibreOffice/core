@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2000-11-16 10:56:35 $
+#   last change: $Author: hjs $ $Date: 2000-12-19 18:00:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,10 @@ TARGET=offapi_db
 
 # ------------------------------------------------------------------
 
+UNOIDLDBREGS= \
+    $(SOLARBINDIR)$/udkapi.rdb
+
 UNOIDLDBFILES= \
-    $(SOLARBINDIR)$/udkapi.rdb \
     $(UCR)$/cssawt.db \
     $(UCR)$/csschart.db \
     $(UCR)$/cssconfiguration.db \
