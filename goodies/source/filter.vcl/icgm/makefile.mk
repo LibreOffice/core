@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 09:26:34 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:10:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,9 +67,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Uno III Header -----------------------------------------------
 
@@ -113,27 +111,7 @@ UNOTYPES=\
         com.sun.star.text.XText\
         com.sun.star.style.HorizontalAlignment
 
-
-
 # --- Files --------------------------------------------------------
-
-CXXFILES=	cgm.cxx 			\
-            chart.cxx			\
-            class0.cxx			\
-            class1.cxx			\
-            class2.cxx			\
-            class3.cxx			\
-            class4.cxx			\
-            class5.cxx			\
-            class7.cxx			\
-            classx.cxx			\
-            outact.cxx			\
-            actmeta.cxx 		\
-            actimpr.cxx 		\
-            bundles.cxx 		\
-            bitmap.cxx			\
-            elements.cxx
-#			svdem.cxx
 
 SLOFILES =	$(SLO)$/cgm.obj		\
             $(SLO)$/chart.obj	\
@@ -156,110 +134,25 @@ SLOFILES =	$(SLO)$/cgm.obj		\
 SHL1TARGET	=	icg$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	icgm
 SHL1DEPN	=	$(LB)$/icgm.lib
+SHL1VERSIONMAP=exports.map
 SHL1DEF		=	$(MISC)$/$(SHL1TARGET).def
-SHL1DEPN	=	$(LB)$/icgm.lib
 SHL1LIBS	=	$(SLB)$/icgm.lib
-SHL1BASE	=	0x1c000000
+
+DEF1NAME=$(SHL1TARGET)
 
 .IF "$(GUI)"=="OS2"
 SHL1OBJS	=	$(SLO)$/class0.obj
 .ENDIF
 
-SHL1STDLIBS =	\
-                $(SVTOOLLIB)		\
-                $(TKLIB)			\
-                $(SVLIB)			\
-                $(SOTLIB)			\
-                $(UNOTOOLSLIB)		\
-                $(TOOLSLIB) 		\
-                $(CPPULIB)			\
-                $(VOSLIB)			\
-                $(SALLIB)
-#				ims_ifac.lib
+SHL1STDLIBS = \
+            $(TKLIB)		\
+            $(VCLLIB)		\
+            $(UNOTOOLSLIB)	\
+            $(TOOLSLIB)		\
+            $(CPPULIB)		\
+            $(SALLIB)
 
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
 
-# -------------------------------------------------------------------------
-
-$(MISC)$/$(SHL1TARGET).flt:
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-
-# -------------------------------------------------------------------------
-
-# THB: exports list goodies checked for 6.0 Final 6.12.2001
-.IF "$(GUI)"=="MAC"
-
-$(MISC)$/$(SHL1TARGET).def:  $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo	ImportCGM												> $@
-.ENDIF
-
-# ------------------
-
-.IF "$(GUI)"=="WIN"
-
-$(MISC)$/$(SHL1TARGET).def:  $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'Filter DLL'                                  >>$@
-    @echo EXETYPE	  WINDOWS                                       >>$@
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL MOVEABLE DISCARDABLE               >>$@
-    @echo DATA        PRELOAD MOVEABLE SINGLE                       >>$@
-    @echo HEAPSIZE    0                                             >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo	_ImportCGM												>>$@
-.ENDIF
-
-# ------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:\
-    makefile.mk \
-    $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY     $(DLLNAME) INITINSTANCE TERMINSTANCE           >$@
-    @echo DESCRIPTION 'FILTER DLL'									>>$@
-.IF "$(COM)" == "ZTC"
-    @echo STUB        'os2STUB.EXE'                                 >>$@
-.ENDIF
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL                                    >>$@
-    @echo DATA        PRELOAD MULTIPLE NONSHARED                    >>$@
-    @echo EXPORTS                                                   >>$@
-.IF "$(COM)"=="ICC"
-    @echo   ImportCGM												>>$@
-.ELSE
-    @echo   _ImportCGM												>>$@
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'Filter DLL'							>$@
-    @echo name $(BIN)$/$(SHL1TARGET)                          		>>$@
-    @echo	ImportCGM_												>>$@
-    @gawk -f s:\util\exp.awk temp.def								>>$@
-    @del temp.def
-.ENDIF
-.ENDIF
-
-# ------------------
-
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-    @echo LIBRARY     $(DLLNAME)									>$@
-    @echo DESCRIPTION 'Filter DLL'									>>$@
-    @echo DATA READ WRITE NONSHARED									>>$@
-    @echo EXPORTS													>>$@
-    @echo ImportCGM													>>$@
-.ENDIF
