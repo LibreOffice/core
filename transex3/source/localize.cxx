@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nf $ $Date: 2001-10-18 14:48:58 $
+ *  last change: $Author: nf $ $Date: 2001-12-17 11:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ const ByteString SourceTreeLocalizer::GetProjectName( BOOL bAbs )
             // HACK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             if (( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "webinstall" ) ||
                 ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "portal" ) ||
-                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "xulclient" ))
+                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ) == "xulclient" ) ||
+                ( ByteString( aCur.GetName(), RTL_TEXTENCODING_ASCII_US ).Search( "wdk_" ) == 0 ))
                     return "";
             // end HACK !!!!!!!!!!!!!!!!!!!!!!!!!
 
