@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:26:44 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** The accessible view of a spreadsheet document
 
-     @since #107627#
+     @since OOo 1.1.2
 */
 published service AccessibleSpreadsheet
 {
