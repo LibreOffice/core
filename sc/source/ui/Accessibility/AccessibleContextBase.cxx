@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:14:33 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::contains(const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return Rectangle (Point(), GetBoundingBox().GetSize()).IsInside(VCLPoint(rPoint));
 }
 
@@ -245,6 +246,7 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return AWTRectangle(GetBoundingBox());
 }
 
@@ -252,6 +254,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return AWTPoint(GetBoundingBox().TopLeft());
 }
 
@@ -259,6 +262,7 @@ awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return AWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
@@ -266,6 +270,7 @@ awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return AWTSize(GetBoundingBox().GetSize());
 }
 
@@ -273,13 +278,17 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isShowing(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Bool bShowing(sal_False);
-    uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
-    if (xParentComponent.is())
+    if (mxParent.is())
     {
-        Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
-        Rectangle aBounds(VCLRectangle(getBounds()));
-        bShowing = aBounds.IsOver(aParentBounds);
+        uno::Reference<XAccessibleComponent> xParentComponent (mxParent->getAccessibleContext(), uno::UNO_QUERY);
+        if (xParentComponent.is())
+        {
+            Rectangle aParentBounds(VCLRectangle(xParentComponent->getBounds()));
+            Rectangle aBounds(VCLRectangle(getBounds()));
+            bShowing = aBounds.IsOver(aParentBounds);
+        }
     }
     return bShowing;
 }
@@ -333,6 +342,7 @@ sal_Int32 SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     //  Use a simple but slow solution for now.  Optimize later.
    //   Return -1 to indicate that this object's parent does not know about the
    //   object.
@@ -373,6 +383,7 @@ sal_Int16 SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!msDescription.getLength())
     {
         OUString sDescription(createAccessibleDescription());
@@ -396,6 +407,7 @@ OUString SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!msName.getLength())
     {
         OUString sName(createAccessibleName());
@@ -434,6 +446,7 @@ lang::Locale SAL_CALL
         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (mxParent.is())
     {
         uno::Reference<XAccessibleContext> xParentContext (
@@ -457,6 +470,7 @@ void SAL_CALL
     if (xListener.is())
     {
         ScUnoGuard aGuard;
+        IsObjectValid();
         if (!IsDefunc())
         {
             if (!mpEventListeners)
@@ -474,6 +488,7 @@ void SAL_CALL
     if (xListener.is())
     {
         ScUnoGuard aGuard;
+        IsObjectValid();
         if (!IsDefunc() && mpEventListeners)
             mpEventListeners->removeInterface(xListener);
     }
@@ -548,6 +563,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
@@ -655,3 +671,9 @@ Rectangle ScAccessibleContextBase::GetBoundingBox(void) const
     return Rectangle();
 }
 
+void ScAccessibleContextBase::IsObjectValid() const
+        throw (lang::DisposedException)
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+        throw lang::DisposedException();
+}
