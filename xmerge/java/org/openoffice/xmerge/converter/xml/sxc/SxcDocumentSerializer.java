@@ -385,6 +385,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         if (cellAtt == null || cellAtt.item(0) == null)
         {
            Debug.log(Debug.INFO, "No Cell Attributes\n");
+           fmt.clearFormatting();
         }
         else
         {
@@ -432,6 +433,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
                 // has text:p tag
                 fmt.setCategory(CELLTYPE_STRING);
+
             } else if (cellType.equalsIgnoreCase(CELLTYPE_FLOAT)) {
 
                 // has table:value attribute
