@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,16 +117,19 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ danish ] = "Rediger";
             Text[ swedish ] = "Redigera";
             Text[ polish ] = "Edytuj";
-            Text[ portuguese_brazilian ] = "Edit";
+            Text[ portuguese_brazilian ] = "Editar";
             Text[ japanese ] = "編集";
             Text[ korean ] = "편집";
             Text[ chinese_simplified ] = "编辑";
             Text[ chinese_traditional ] = "編輯";
-            Text[ turkish ] = "Edit";
+            Text[ turkish ] = "D�zenle";
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Edita";
             Text[ finnish ] = "Muokkaa";
             Text[ thai ] = "แก้ไข";
+            Text[ czech ] = "Upravit";
+            Text[ hebrew ] = "‮עריכה‬";
+            Text[ hindi ] = "संपादन";
         };
         ToolBoxItem
         {
@@ -149,16 +152,19 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ danish ] = "Gem";
             Text[ swedish ] = "Spara";
             Text[ polish ] = "Zapisz";
-            Text[ portuguese_brazilian ] = "Save";
+            Text[ portuguese_brazilian ] = "Salvar";
             Text[ japanese ] = "保存";
             Text[ korean ] = "저장";
             Text[ chinese_simplified ] = "存盘";
             Text[ chinese_traditional ] = "儲存";
-            Text[ turkish ] = "Save";
+            Text[ turkish ] = "Kaydet";
             Text[ arabic ] = "���";
             Text[ catalan ] = "Desa";
             Text[ finnish ] = "Tallenna";
             Text[ thai ] = "บันทึก";
+            Text[ czech ] = "Uložit";
+            Text[ hebrew ] = "‮שמירה‬";
+            Text[ hindi ] = "संचित करो";
         };
         ToolBoxItem
         {
@@ -178,16 +184,19 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ danish ] = "Udskriv";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
-            Text[ portuguese_brazilian ] = "Print";
+            Text[ portuguese_brazilian ] = "Imprimir";
             Text[ japanese ] = "印刷";
             Text[ korean ] = "인쇄";
             Text[ chinese_simplified ] = "打印";
             Text[ chinese_traditional ] = "列印";
-            Text[ turkish ] = "Print";
+            Text[ turkish ] = "Yazd�r";
             Text[ arabic ] = "�����";
             Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
             Text[ thai ] = "พิมพ์";
+            Text[ czech ] = "Tisk";
+            Text[ hebrew ] = "‮הדפסה‬";
+            Text[ hindi ] = "छपाई";
         };
         ToolBoxItem
         {
@@ -250,16 +259,19 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ danish ] = "Denne relation findes allerede. Vil du redigere den?";
     Text[ swedish ] = "Den h�r relationen finns redan. Vill du redigera den?";
     Text[ polish ] = "Relacja ju� istnieje. Czy chcesz j� edytowa�?";
-    Text[ portuguese_brazilian ] = "This relation already exsits. Do you want to edit it?";
+    Text[ portuguese_brazilian ] = "Esta rela��o j� existe. Deseja edit�-la?";
     Text[ japanese ] = "このリレーションはすでにあります。これを編集しますか。";
     Text[ korean ] = "이 관계는 이미 있습니다. 이 관계를 편집하시겠습니까?";
     Text[ chinese_simplified ] = "这个关系已经存在。您想编辑它？";
     Text[ chinese_traditional ] = "這個關係已經存在。要編輯它？";
     Text[ arabic ] = "��� ������� ������ ������. �� ���� ������ǿ";
-    Text[ turkish ] = "Bu ili�ki mevcut durumda. D�zenlemek istiyor musunuz?";
+    Text[ turkish ] = "Bu ili�ki zaten mevcut durumda. D�zenlemek istiyor musunuz?";
     Text[ catalan ] = "Aquesta relaci� ja existeix. Voleu editar-la?";
     Text[ finnish ] = "Yhteys on jo olemassa. Haluatko muokata yhteytt�?";
     Text[ thai ] = "มีความสัมพันธ์นี้อยู่แล้ว คุณต้องการแก้ไขมันหรือไม่?";
+    Text[ czech ] = "Tato relace již existuje. Chcete ji upravit?";
+    Text[ hebrew ] = "Diese Relation existiert bereits. Möchten Sie sie bearbeiten?";
+    Text[ hindi ] = "इस सम्बन्ध पहिले से ही अस्तित्व में है । आप इसको संपादन करना चाहते है?";
 };
 String STR_RELATIONDESIGN
 {
@@ -276,16 +288,19 @@ String STR_RELATIONDESIGN
     Text[ danish ] = "Relationsdesign";
     Text[ swedish ] = "Relationsutkast";
     Text[ polish ] = "Projekt relacji";
-    Text[ portuguese_brazilian ] = "Relation design";
+    Text[ portuguese_brazilian ] = "Esbo�ar rela��o";
     Text[ japanese ] = "リレーションデザイン";
     Text[ korean ] = "관계 디자인";
     Text[ chinese_simplified ] = "关系设计";
     Text[ chinese_traditional ] = "關係設計";
-    Text[ turkish ] = "Relation design";
+    Text[ turkish ] = "�li�ki tasar�m�";
     Text[ arabic ] = "����� ������";
     Text[ catalan ] = "Disseny de la relaci�";
     Text[ finnish ] = "Yhteyksien rakenne";
     Text[ thai ] = "ออกแบบความสัมพันธ์";
+    Text[ czech ] = "Návrh relace";
+    Text[ hebrew ] = "Relationenentwurf";
+    Text[ hindi ] = "संबन्ध डिसैन";
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
@@ -302,16 +317,19 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ danish ] = "Databasen underst�tter ingen relationer!";
     Text[ swedish ] = "Databasen underst�der inte n�gra relationer.";
     Text[ polish ] = "Baza danych nie obs�uguje relacji.";
-    Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ portuguese_brazilian ] = "O banco de dados n�o tem suporte para rela��es.";
     Text[ japanese ] = "データベースはリレーションを支援しません。";
     Text[ korean ] = "데이터베이스는 관계를 지원하지 않습니다.";
     Text[ chinese_simplified ] = "这个数据库不支持关系功能！";
     Text[ chinese_traditional ] = "這個資料庫不支援關係功能！";
-    Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ turkish ] = "Veri taban� herhangi bir ili�kiyi desteklemiyor. �li�ki tasar�m� kapat�lacakt�r!";
     Text[ arabic ] = "����� �������� �� ���� ��� ������.";
     Text[ catalan ] = "La base de dades no permet les relacions.";
     Text[ finnish ] = "Tietokanta ei tue yhteyksi�.";
     Text[ thai ] = "ฐานข้อมูลไม่สนับสนุนความสัมพันธ์";
+    Text[ czech ] = "Databáze nepodporuje relace.";
+    Text[ hebrew ] = "Die Datenbank unterstützt keine Relationen";
+    Text[ hindi ] = "लेखासंचय सम्बन्धों को समर्थन नहीं करता है ।";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -329,17 +347,20 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ italian ] = "La struttura relazione � stata cambiata.\nVolete salvare le modifiche?";
     Message[ danish ] = "Relationsdesignet er blevet �ndret.\nSkal �ndringerne gemmes?";
     Message[ swedish ] = "Relationsutkastet har �ndrats.\nSka �ndringarna sparas?";
-    Message[ polish ] = "Zmieniono projekt relacji.\nZapisa� zmiany?";
-    Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ polish ] = "Zmieniono projekt relacji.\nCzy zapisa� zmiany?";
+    Message[ portuguese_brazilian ] = "O esbo�o de rela��es foi modificado.\nDeseja salvar as modifica��es?";
     Message[ japanese ] = "リレーションのデザインが変更されています。\n変更を保存しますか。";
     Message[ korean ] = "관계 디자인이 변경되었습니다.\n변경 내용을 저장하시겠습니까?";
     Message[ chinese_simplified ] = "这个关系数据已经更改。\n要存盘这些更改内容？";
     Message[ chinese_traditional ] = "這個關係設計已經變更。\n要儲存變更內容？";
-    Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ turkish ] = "�li�ki tasar�m� de�i�ti.\nDe�i�iklikleri kaydetmek istermisiniz?";
     Message[ arabic ] = "�� ����� ����� ��������.\n�� ���� ��� ��������ʿ";
     Message[ catalan ] = "El disseny de la relaci� ha canviat.\nVoleu desar els canvis?";
     Message[ finnish ] = "Yhteyksien rakennetta on muutettu.\nHaluatko tallentaa muutokset?";
     Message[ thai ] = "การออกแบบความสัมพันธ์ได้มีการเปลี่ยนแปลงแล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
+    Message[ czech ] = "Návrh relace byl změněn.\nChcete změny uložit?";
+    Message[ hebrew ] = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?";
+    Message[ hindi ] = "रिलेशन डिसैन में परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
 };
 
 Menu RID_RELATION_DESIGN_MAIN_MENU
@@ -427,16 +448,19 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ danish ] = "Fortryd";
                     Text[ swedish ] = "�ngra";
                     Text[ polish ] = "Cofnij";
-                    Text[ portuguese_brazilian ] = "Undo";
+                    Text[ portuguese_brazilian ] = "Desfazer";
                     Text[ japanese ] = "元に戻す";
                     Text[ korean ] = "실행 취소";
                     Text[ chinese_simplified ] = "撤消命令";
                     Text[ chinese_traditional ] = "復原";
-                    Text[ turkish ] = "Undo";
+                    Text[ turkish ] = "Geri al";
                     Text[ arabic ] = "�����";
                     Text[ catalan ] = "Desf�s";
                         Text[ finnish ] = "Kumoa";
                         Text[ thai ] = "เลิกทำ";
+                        Text[ czech ] = "Zpět";
+                        Text[ hebrew ] = "‮ביטול פעולה‬";
+                        Text[ hindi ] = "अनावृत्ति";
                     };
                 MenuItem
                 {
@@ -456,17 +480,20 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ italian ] = "Ripristina";
                     Text[ danish ] = "Gendan";
                     Text[ swedish ] = "�terst�ll";
-                    Text[ polish ] = "Przywr��";
-                    Text[ portuguese_brazilian ] = "Redo";
+                    Text[ polish ] = "Pon�w";
+                    Text[ portuguese_brazilian ] = "Refazer";
                     Text[ japanese ] = "やり直し";
                     Text[ korean ] = "다시 실행";
                     Text[ chinese_simplified ] = "恢复撤消命令";
                     Text[ chinese_traditional ] = "恢復撤消指令";
-                    Text[ turkish ] = "Redo";
+                    Text[ turkish ] = "Yinele";
                     Text[ arabic ] = "�����";
                     Text[ catalan ] = "Ref�s";
                         Text[ finnish ] = "Toista";
                         Text[ thai ] = "ทำซ้ำ";
+                        Text[ czech ] = "Znovu";
+                        Text[ hebrew ] = "‮שחזור פעולה‬";
+                        Text[ hindi ] = "फिर से करो";
                     };
                 MenuItem
                 {
@@ -486,6 +513,9 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Edita";
             Text[ thai ] = "แ~ก้ไข";
+            Text[ czech ] = "Upravit";
+            Text[ hebrew ] = "‮עריכה‬";
+            Text[ hindi ] = "~संपादन";
         };
 
     MenuItem
@@ -512,26 +542,29 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             };
         };
         Text[ english_us ] = "~Insert";
-            Text[ portuguese ] = "~Insert";
-            Text[ russian ] = "~Insert";
-            Text[ greek ] = "~Insert";
-            Text[ dutch ] = "~Insert";
+            Text[ portuguese ] = "~Inserir";
+            Text[ russian ] = "��������";
+            Text[ greek ] = "~��������";
+            Text[ dutch ] = "~Invoegen";
             Text[ french ] = "~Insertion";
             Text[ spanish ] = "~Insertar";
-            Text[ finnish ] = "~Insert";
+            Text[ finnish ] = "~Lis??";
             Text[ italian ] = "~Inserisci";
-            Text[ danish ] = "~Insert";
+            Text[ danish ] = "~Inds�t";
             Text[ swedish ] = "~Infoga";
-            Text[ polish ] = "~Insert";
+            Text[ polish ] = "Wstaw";
             Text[ portuguese_brazilian ] = "~Insert";
             Text[ japanese ] = "挿入(~I)";
             Text[ korean ] = "삽입(~I)";
             Text[ chinese_simplified ] = "插入(~I)";
             Text[ chinese_traditional ] = "插入(~I)";
-            Text[ turkish ] = "~Insert";
-            Text[ arabic ] = "~Insert";
+            Text[ turkish ] = "~Ekle";
+            Text[ arabic ] = "�����";
             Text[ catalan ] = "~Insereix";
             Text[ thai ] = "~วาง";
+            Text[ czech ] = "Vložit";
+            Text[ hebrew ] = "~Einfügen";
+            Text[ hindi ] = "~Insert";
         };
 
     MenuItem
@@ -579,6 +612,9 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ei~nes";
             Text[ thai ] = "เ~ครื่องมือ";
+            Text[ czech ] = "Nástroje";
+            Text[ hebrew ] = "‮כלים‬";
+            Text[ hindi ] = "~औज़ार";
         };
         GLOBLMN_WINMN
         {
@@ -604,17 +640,42 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ italian ] = "Eliminando questa tabella eliminerete anche tutte le relazioni corrispondenti. Volete procedere comunque?";
     Text[ danish ] = "Hvis du sletter denne tabel, slettes ogs� alle tilh�rende relationer. Vil du forts�tte?";
     Text[ swedish ] = "Om du raderar den h�r tabellen raderas �ven alla tillh�rande relationer. Vill du forts�tta?";
-    Text[ polish ] = "Wraz z tabel� usuni�te zostan� wszystkie przynale�ne relacje. Kontynuowa�?";
-    Text[ portuguese_brazilian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ polish ] = "Wraz z tabel� zostan� usuni�te wszystkie przynale�ne relacje. Kontynuowa�?";
+    Text[ portuguese_brazilian ] = "Quando voc� excluir esta tabela, todas as rela��es correspondentes ser�o excluidas. Deseja continuar ?";
     Text[ japanese ] = "このテーブルを削除すると、これに属するすべてのリレーションも削除されてします。続行しますか。";
     Text[ korean ] = "이 테이블을 삭제하면 해당하는 모든 관계 역시 삭제됩니다. 계속하시겠습니까?";
     Text[ chinese_simplified ] = "如果删除这个表格，就会一同删除所有的从属关系。要继续？";
     Text[ chinese_traditional ] = "如果刪除這個表格，也就會一起刪除全部的從屬關係。要繼續？";
-    Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ turkish ] = "Bu tabloyu sildi�iniz zaman ilgili ili�kilerin t�m� de silinecektir.Devam etmek istiyor musunuz?";
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "Quan s'elimini aquesta taula tamb� de suprimiran les seves relacions associades. Voleu continuar?";
     Text[ thai ] = "เมื่อคุณลบตารางนี้ ความสัมพันธ์ที่สอดคล้องกันทั้งหมดจะถูกลบไปด้วย ทำต่อหรือไม่?";
+    Text[ czech ] = "Pokud zrušíte tuto tabulku, budou všechny k ní vztažené relace zrušeny také. Pokračovat?";
+    Text[ hebrew ] = "Wenn Sie diese Tabelle löschen werden alle zugehörigen Relationen ebenfalls gelöscht. Fortfahren?";
+    Text[ hindi ] = "इस सारणी को मिटाने के समय इसके सब सम्बन्ध भी मिट जाएगा । जारी रखना है?";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
