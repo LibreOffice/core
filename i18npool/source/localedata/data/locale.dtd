@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ............................................................... -->
+<!-- Locale specification DTD ......................................... -->
+<!-- ............................................................... -->
+
+<!--
+
+PURPOSE:
+      Locale Defn
+
+-->
+
+<!-- ............................................................... -->
+<!-- Entities for characters and symbols ........................... -->
+
+<!ENTITY % UNOModule
+        'unoid                     CDATA              #REQUIRED'>
+<!ENTITY % MessageID
+        'msgid                     CDATA              #REQUIRED'>
+
+<!ELEMENT DefaultName  (#PCDATA)>
+
+<!-- Locale is made of different sub categories -->
+<!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_COLLATION, LC_SEARCH, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
+<!ATTLIST Locale  version CDATA #REQUIRED>
+<!-- Valid number -->
+
+<!ELEMENT LC_INFO (Language, Country, Platform?, Varient?)>
+
+<!ELEMENT Language (LangID, DefaultName) >
+<!ELEMENT LangID (#PCDATA) >
+<!-- LangID must be valid two letter language identifier  defined by ISO-639 -->
+
+<!ELEMENT Country (CountryID, DefaultName) >
+<!ELEMENT CountryID (#PCDATA) >
+<!-- CountryID must be valid two letter country identifier  defined by ISO-3166 -->
+
+<!ELEMENT Platform (PlatformID) >
+<!ELEMENT PlatformID (#PCDATA) >
+<!-- can be generic|unix|win32|macos -->
+
+<!ELEMENT Varient (#PCDATA) >
+
+<!ELEMENT LC_FORMAT (FormatElement+) >
+
+<!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
+<!ATTLIST FormatElement    %MessageID;>
+<!ATTLIST FormatElement    default CDATA #REQUIRED >
+<!ATTLIST FormatElement    type    CDATA #REQUIRED >
+<!--    short   medium  long
+    There may be up to three groups (type="short", type="medium", type="long")
+    for each usage category defined. Each group, if defined, needs excactly one
+    default. The type roughly determines the display string length, for example
+    short, medium, and long date formats.
+-->
+<!ATTLIST FormatElement    usage    CDATA #REQUIRED >
+<!--
+Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
+	CURRENCY ,DATE ,TIME ,DATE_TIME
+-->
+<!ATTLIST FormatElement formatindex  CDATA #REQUIRED>
+<!ELEMENT FormatCode      (#PCDATA)>
+
+<!-- Depricated
+<!ELEMENT DateFormats     (FormatElement+)>
+<!ELEMENT TimeFormats     (FormatElement+)>
+<!ELEMENT NumberFormats   (FormatElement+)>
+<!ELEMENT CurrencyFormats (FormatElement+)>
+<!ELEMENT PercentFormats (FormatElement+)>
+-->
+
+<!ELEMENT LC_CALENDAR (Calendar+ ) >
+<!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
+<!ATTLIST Calendar %UNOModule;>
+<!-- the unoid of a gregorian calendar MUST be lower case "gregorian" -->
+<!ATTLIST Calendar default CDATA #REQUIRED >
+<!ELEMENT DaysOfWeek (Day+)>
+<!-- Sequence of days is important, MUST start with Sunday -->
+<!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT DayID (#PCDATA)>
+<!-- preferably the lower case abbreviated English name like sun for Sunday -->
+<!ELEMENT DefaultAbbrvName (#PCDATA)>
+<!ELEMENT DefaultFullName (#PCDATA)>
+<!ELEMENT MonthsOfYear (Month+)>
+<!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT MonthID (#PCDATA)>
+<!-- preferably the lower case abbreviated English name like jan for January -->
+<!ELEMENT Eras (Era+)>
+<!ELEMENT Era (EraID, DefaultAbbrvName, DefaultFullName)>
+<!ELEMENT EraID (#PCDATA)>
+<!-- if a calendar has special eras (like zh_TW ROC or ja_JP Gengou calendar)
+     and a date before those eras is undefined, a leading (first) dummy era
+     with EraID="Dummy" has to be defined to enable the number formatter to
+     fall back to a gregorian calendar for those date values if the XCalendar
+     implementation returns an era value of 0.
+-->
+<!ELEMENT StartDayOfWeek (DayID)>
+<!-- MUST exactly match (case significant!) one of the DayID of DaysOfWeek -->
+<!ELEMENT MinimalDaysInFirstWeek (#PCDATA)>
+
+<!ELEMENT LC_CURRENCY (Currency+ ) >
+<!ELEMENT Currency (CurrencyID, CurrencySymbol, BankSymbol, CurrencyName, DecimalPlaces)>
+<!ATTLIST Currency  default CDATA #REQUIRED >
+<!ATTLIST Currency  usedInCompatibleFormatCodes CDATA #REQUIRED >
+<!-- if this currency is the one used in compatible number format codes with
+     <member>FormatElement::formatIndex</member> values in the range 12..17.
+     Those format codes are used to generate some old style currency format
+     codes for compatibility with StarOffice5 and StarOffice4.
+     Every locale data file MUST contain exactly one currency having this set to "true",
+     and that currency MUST be used in format codes 12..17.
+     For European countries using the EURo it MUST be the old currency, for example, DM.
+-->
+<!ELEMENT CurrencyID (#PCDATA)>
+<!ELEMENT CurrencySymbol (#PCDATA)>
+<!ELEMENT BankSymbol (#PCDATA)>
+<!ELEMENT CurrencyName (#PCDATA)>
+<!ELEMENT DecimalPlaces (#PCDATA)>
+
+<!ELEMENT LC_CTYPE (Separators, Markers, TimeAM, TimePM,  MeasurementSystem)>
+<!ATTLIST LC_CTYPE  %UNOModule;>
+<!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
+<!ELEMENT Markers (QuotationStart, QuotationEnd, DoubleQuotationStart, DoubleQuotationEnd)>
+<!ELEMENT DateSeparator (#PCDATA)>
+<!ELEMENT ThousandSeparator (#PCDATA)>
+<!ELEMENT DecimalSeparator (#PCDATA)>
+<!ELEMENT TimeSeparator (#PCDATA)>
+<!ELEMENT Time100SecSeparator (#PCDATA)>
+<!ELEMENT TimeAM (#PCDATA)>
+<!ELEMENT TimePM (#PCDATA)>
+<!ELEMENT ListSeparator (#PCDATA)>
+<!ELEMENT QuotationStart (#PCDATA)>
+<!ELEMENT QuotationEnd  (#PCDATA)>
+<!ELEMENT DoubleQuotationStart (#PCDATA)>
+<!ELEMENT DoubleQuotationEnd (#PCDATA)>
+<!ELEMENT MeasurementSystem  (#PCDATA)>
+<!ELEMENT LongDateDayOfWeekSeparator (#PCDATA)>
+<!ELEMENT LongDateDaySeparator (#PCDATA)>
+<!ELEMENT LongDateMonthSeparator (#PCDATA)>
+<!ELEMENT LongDateYearSeparator (#PCDATA)>
+
+<!ELEMENT LC_COLLATION (Collator*, CollationOptions?)>
+<!ELEMENT Collator EMPTY>
+<!ATTLIST Collator  %UNOModule;>
+<!ATTLIST Collator  default CDATA #REQUIRED >
+<!ELEMENT CollationOptions (TransliterationModules+)>
+<!ELEMENT TransliterationModules (#PCDATA)>
+
+<!ELEMENT LC_SEARCH (SearchOptions?)>
+<!ELEMENT SearchOptions (TransliterationModules+)>
+
+<!ELEMENT LC_TRANSLITERATION (Transliteration+)>
+<!ELEMENT Transliteration EMPTY>
+<!ATTLIST Transliteration  %UNOModule;>
+
+<!ELEMENT LC_MISC (ForbiddenCharacters?, ReservedWords)>
+<!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters)>
+<!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
+<!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
+
+<!ELEMENT ReservedWords  (trueWord, falseWord, quarter1Word, quarter2Word, quarter3Word, quarter4Word, aboveWord, belowWord)>
+<!ELEMENT trueWord (#PCDATA)>
+<!ELEMENT falseWord (#PCDATA)>
+<!ELEMENT quarter1Word (#PCDATA)>
+<!ELEMENT quarter2Word (#PCDATA)>
+<!ELEMENT quarter3Word (#PCDATA)>
+<!ELEMENT quarter4Word (#PCDATA)>
+<!ELEMENT aboveWord (#PCDATA)>
+<!ELEMENT belowWord (#PCDATA)>
+
+
+<!--
+the parameter NumType can have one of the following values:
+0 = CHARS_UPPER_LETTER   EX: A, B, C, ....
+1 = CHARS_LOWER_LETTER   EX: a, b, c, ....
+2 = ROMAN_UPPER          EX: I, II, III, ....
+3 = ROMAN_LOWER          EX: i, ii, iii, ....
+4 = ARABIC               EX: 1, 2, 3, 4, .....
+5 = NUMBER_ONE     numbering is invisible
+6 = CHAR_SPECIAL   use a character from specified font
+7 = PAGE_DESCRIPTOR  numbering is specified in page style
+8 = BITMAP                numbering is displayed in bitmap graphic
+9 = CHARS_UPPER_LETTER_N  EX: A, B, ...., AA, BB
+10 = CHARS_LOWER_LETTER_N EX: a, b, ..., aa, bb, cc
+-->
+
+<!ELEMENT LC_NumberingLevel (NumberingLevel+ )>
+<!ELEMENT NumberingLevel EMPTY>
+<!ATTLIST NumberingLevel Prefix CDATA #REQUIRED>
+<!ATTLIST NumberingLevel NumType CDATA #REQUIRED>
+<!ATTLIST NumberingLevel Suffix CDATA  #REQUIRED>
+
+
+<!ELEMENT LC_OutLineNumberingLevel (OutlineStyle+ )>
+<!ELEMENT OutlineStyle (OutLineNumberingLevel+)>
+<!ELEMENT OutLineNumberingLevel EMPTY>
+<!ATTLIST OutLineNumberingLevel Prefix CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel NumType CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel Suffix CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel BulletChar CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel BulletFontName CDATA   #REQUIRED>
+<!ATTLIST OutLineNumberingLevel ParentNumbering CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel LeftMargin CDATA   #REQUIRED>
+<!ATTLIST OutLineNumberingLevel SymbolTextDistance CDATA  #REQUIRED >
+<!ATTLIST OutLineNumberingLevel FirstLineOffset CDATA  #REQUIRED >
+
+

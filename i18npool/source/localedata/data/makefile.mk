@@ -1,0 +1,241 @@
+#*************************************************************************
+#*
+#*  $RCSfile: makefile.mk,v $
+#*
+#*  $Revision: 1.1 $
+#*
+#*  last change: $Author: bustamam $ $Date: 2002-02-20 00:35:43 $
+#*
+#*  The Contents of this file are made available subject to the terms of
+#*  either of the following licenses
+#*
+#*         - GNU Lesser General Public License Version 2.1
+#*         - Sun Industry Standards Source License Version 1.1
+#*
+#*  Sun Microsystems Inc., October, 2000
+#*
+#*  GNU Lesser General Public License Version 2.1
+#*  =============================================
+#*  Copyright 2000 by Sun Microsystems, Inc.
+#*  901 San Antonio Road, Palo Alto, CA 94303, USA
+#*
+#*  This library is free software; you can redistribute it and/or
+#*  modify it under the terms of the GNU Lesser General Public
+#*  License version 2.1, as published by the Free Software Foundation.
+#*
+#*  This library is distributed in the hope that it will be useful,
+#*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#*  Lesser General Public License for more details.
+#*
+#*  You should have received a copy of the GNU Lesser General Public
+#*  License along with this library; if not, write to the Free Software
+#*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#*  MA  02111-1307  USA
+#*
+#*
+#*  Sun Industry Standards Source License Version 1.1
+#*  =================================================
+#*  The contents of this file are subject to the Sun Industry Standards
+#*  Source License Version 1.1 (the "License"); You may not use this file
+#*  except in compliance with the License. You may obtain a copy of the
+#*  License at http://www.openoffice.org/license.html.
+#*
+#*  Software provided under this License is provided on an "AS IS" basis,
+#*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#*  See the License for the specific provisions governing your rights and
+#*  obligations concerning the Software.
+#*
+#*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#*
+#*  Copyright: 2000 by Sun Microsystems, Inc.
+#*
+#*  All Rights Reserved.
+#*
+#*  Contributor(s): _______________________________________
+#*
+#*
+#************************************************************************
+
+PRJ=..$/..$/..
+
+PRJNAME=i18npool
+TARGET=localedata_data
+
+# Disable debugging on MSC compilers, due linker bug
+.IF "$(COM)"=="MSC"
+debug!=
+.ENDIF
+
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :  settings.mk
+
+# --- Files --------------------------------------------------------
+
+MY_MISC_CXXFILES= \
+    $(MISC)$/localedata_de_DE.cxx	\
+    $(MISC)$/localedata_en_US.cxx	\
+    $(MISC)$/localedata_es_ES.cxx	\
+    $(MISC)$/localedata_fr_FR.cxx	\
+    $(MISC)$/localedata_it_IT.cxx	\
+    $(MISC)$/localedata_sv_SE.cxx	\
+    $(MISC)$/localedata_af_ZA.cxx	\
+    $(MISC)$/localedata_ca_ES.cxx	\
+    $(MISC)$/localedata_cs_CZ.cxx	\
+    $(MISC)$/localedata_da_DK.cxx	\
+    $(MISC)$/localedata_de_AT.cxx	\
+    $(MISC)$/localedata_de_CH.cxx	\
+    $(MISC)$/localedata_de_LU.cxx	\
+    $(MISC)$/localedata_el_GR.cxx	\
+    $(MISC)$/localedata_en_AU.cxx	\
+    $(MISC)$/localedata_en_BZ.cxx	\
+    $(MISC)$/localedata_en_CA.cxx	\
+    $(MISC)$/localedata_en_GB.cxx	\
+    $(MISC)$/localedata_en_IE.cxx	\
+    $(MISC)$/localedata_en_JM.cxx	\
+    $(MISC)$/localedata_en_NZ.cxx	\
+    $(MISC)$/localedata_en_PH.cxx	\
+    $(MISC)$/localedata_en_TT.cxx	\
+    $(MISC)$/localedata_en_ZA.cxx	\
+    $(MISC)$/localedata_en_ZW.cxx	\
+    $(MISC)$/localedata_es_AR.cxx	\
+    $(MISC)$/localedata_es_BO.cxx	\
+    $(MISC)$/localedata_es_CL.cxx	\
+    $(MISC)$/localedata_es_CO.cxx	\
+    $(MISC)$/localedata_es_CR.cxx	\
+    $(MISC)$/localedata_es_DO.cxx	\
+    $(MISC)$/localedata_es_EC.cxx	\
+    $(MISC)$/localedata_es_GT.cxx	\
+    $(MISC)$/localedata_es_HN.cxx	\
+    $(MISC)$/localedata_es_MX.cxx	\
+    $(MISC)$/localedata_es_NI.cxx	\
+    $(MISC)$/localedata_es_PA.cxx	\
+    $(MISC)$/localedata_es_PE.cxx	\
+    $(MISC)$/localedata_es_PR.cxx	\
+    $(MISC)$/localedata_es_PY.cxx	\
+    $(MISC)$/localedata_es_SV.cxx	\
+    $(MISC)$/localedata_es_UY.cxx	\
+    $(MISC)$/localedata_es_VE.cxx	\
+    $(MISC)$/localedata_fi_FI.cxx	\
+    $(MISC)$/localedata_fr_BE.cxx	\
+    $(MISC)$/localedata_fr_CA.cxx	\
+    $(MISC)$/localedata_fr_CH.cxx	\
+    $(MISC)$/localedata_fr_LU.cxx	\
+    $(MISC)$/localedata_fr_MC.cxx	\
+    $(MISC)$/localedata_hu_HU.cxx	\
+    $(MISC)$/localedata_id_ID.cxx	\
+    $(MISC)$/localedata_is_IS.cxx	\
+    $(MISC)$/localedata_it_CH.cxx	\
+    $(MISC)$/localedata_nl_BE.cxx	\
+    $(MISC)$/localedata_nl_NL.cxx	\
+    $(MISC)$/localedata_no_NO.cxx	\
+    $(MISC)$/localedata_nn_NO.cxx	\
+    $(MISC)$/localedata_pl_PL.cxx	\
+    $(MISC)$/localedata_pt_BR.cxx	\
+    $(MISC)$/localedata_pt_PT.cxx	\
+    $(MISC)$/localedata_ru_RU.cxx	\
+    $(MISC)$/localedata_sv_FI.cxx	\
+    $(MISC)$/localedata_tr_TR.cxx	\
+    $(MISC)$/localedata_nb_NO.cxx	\
+    $(MISC)$/localedata_en_CB.cxx	\
+    $(MISC)$/localedata_de_LI.cxx	\
+    $(MISC)$/localedata_ar_EG.cxx	\
+    $(MISC)$/localedata_ko_KR.cxx	\
+    $(MISC)$/localedata_ja_JP.cxx	\
+    $(MISC)$/localedata_zh_CN.cxx	\
+    $(MISC)$/localedata_zh_TW.cxx	\
+    $(MISC)$/localedata_zh_HK.cxx	\
+    $(MISC)$/localedata_zh_SG.cxx	\
+    $(MISC)$/localedata_zh_MO.cxx
+
+SLOFILES=	\
+    $(SLO)$/localedata_de_DE.obj	\
+    $(SLO)$/localedata_en_US.obj	\
+    $(SLO)$/localedata_es_ES.obj	\
+    $(SLO)$/localedata_fr_FR.obj	\
+    $(SLO)$/localedata_it_IT.obj	\
+    $(SLO)$/localedata_sv_SE.obj	\
+    $(SLO)$/localedata_af_ZA.obj	\
+    $(SLO)$/localedata_ca_ES.obj	\
+    $(SLO)$/localedata_cs_CZ.obj	\
+    $(SLO)$/localedata_da_DK.obj	\
+    $(SLO)$/localedata_de_AT.obj	\
+    $(SLO)$/localedata_de_CH.obj	\
+    $(SLO)$/localedata_de_LU.obj	\
+    $(SLO)$/localedata_el_GR.obj	\
+    $(SLO)$/localedata_en_AU.obj	\
+    $(SLO)$/localedata_en_BZ.obj	\
+    $(SLO)$/localedata_en_CA.obj	\
+    $(SLO)$/localedata_en_GB.obj	\
+    $(SLO)$/localedata_en_IE.obj	\
+    $(SLO)$/localedata_en_JM.obj	\
+    $(SLO)$/localedata_en_NZ.obj	\
+    $(SLO)$/localedata_en_PH.obj	\
+    $(SLO)$/localedata_en_TT.obj	\
+    $(SLO)$/localedata_en_ZA.obj	\
+    $(SLO)$/localedata_en_ZW.obj	\
+    $(SLO)$/localedata_es_AR.obj	\
+    $(SLO)$/localedata_es_BO.obj	\
+    $(SLO)$/localedata_es_CL.obj	\
+    $(SLO)$/localedata_es_CO.obj	\
+    $(SLO)$/localedata_es_CR.obj	\
+    $(SLO)$/localedata_es_DO.obj	\
+    $(SLO)$/localedata_es_EC.obj	\
+    $(SLO)$/localedata_es_GT.obj	\
+    $(SLO)$/localedata_es_HN.obj	\
+    $(SLO)$/localedata_es_MX.obj	\
+    $(SLO)$/localedata_es_NI.obj	\
+    $(SLO)$/localedata_es_PA.obj	\
+    $(SLO)$/localedata_es_PE.obj	\
+    $(SLO)$/localedata_es_PR.obj	\
+    $(SLO)$/localedata_es_PY.obj	\
+    $(SLO)$/localedata_es_SV.obj	\
+    $(SLO)$/localedata_es_UY.obj	\
+    $(SLO)$/localedata_es_VE.obj	\
+    $(SLO)$/localedata_fi_FI.obj	\
+    $(SLO)$/localedata_fr_BE.obj	\
+    $(SLO)$/localedata_fr_CA.obj	\
+    $(SLO)$/localedata_fr_CH.obj	\
+    $(SLO)$/localedata_fr_LU.obj	\
+    $(SLO)$/localedata_fr_MC.obj	\
+    $(SLO)$/localedata_hu_HU.obj	\
+    $(SLO)$/localedata_id_ID.obj	\
+    $(SLO)$/localedata_is_IS.obj	\
+    $(SLO)$/localedata_it_CH.obj	\
+    $(SLO)$/localedata_nl_BE.obj	\
+    $(SLO)$/localedata_nl_NL.obj	\
+    $(SLO)$/localedata_no_NO.obj	\
+    $(SLO)$/localedata_nn_NO.obj	\
+    $(SLO)$/localedata_pl_PL.obj	\
+    $(SLO)$/localedata_pt_BR.obj	\
+    $(SLO)$/localedata_pt_PT.obj	\
+    $(SLO)$/localedata_ru_RU.obj	\
+    $(SLO)$/localedata_sv_FI.obj	\
+    $(SLO)$/localedata_tr_TR.obj	\
+    $(SLO)$/localedata_nb_NO.obj	\
+    $(SLO)$/localedata_en_CB.obj	\
+    $(SLO)$/localedata_de_LI.obj	\
+    $(SLO)$/localedata_ar_EG.obj	\
+    $(SLO)$/localedata_ko_KR.obj	\
+    $(SLO)$/localedata_ja_JP.obj	\
+    $(SLO)$/localedata_zh_CN.obj	\
+    $(SLO)$/localedata_zh_TW.obj	\
+    $(SLO)$/localedata_zh_HK.obj	\
+    $(SLO)$/localedata_zh_SG.obj	\
+    $(SLO)$/localedata_zh_MO.obj
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :  target.mk
+
+$(MY_MISC_CXXFILES) : $(BIN)$/saxparser$(EXECPOST) $(BIN)$/applicat.rdb
+
+$(BIN)$/applicat.rdb : $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/applicat.rdb
+    +$(GNUCOPY) $(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)$/applicat.rdb $(BIN)$/applicat.rdb
+
+$(MISC)$/localedata_%.cxx : %.xml
+    +-$(RM) $@
+    +$(BIN)$/saxparser $* $< $@ $(BIN)$/applicat.rdb
