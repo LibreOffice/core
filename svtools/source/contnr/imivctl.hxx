@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-13 12:20:41 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,6 @@ class SvxIconChoiceCtrl_Impl
     BOOL            bUpdateMode;
     BOOL            bEntryEditingEnabled;
     BOOL            bInDragDrop;
-
-    VclEventListeners   maEventListeners;
 
     void            ShowCursor( BOOL bShow );
 
@@ -580,8 +578,6 @@ public:
     BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent );
 
     void            CallEventListeners( ULONG nEvent, void* pData = NULL );
-    void            AddEventListener( const Link& rEventListener );
-    void            RemoveEventListener( const Link& rEventListener );
 };
 
 // ----------------------------------------------------------------------------------------------
