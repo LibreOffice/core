@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:47:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 08:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_ZOOM
     Text [ italian ] = "Zoom" ;
     Text [ portuguese_brazilian ] = "Zoom" ;
     Text [ portuguese ] = "Zoom" ;
-    Text [ finnish ] = "Zoomaus" ;
+    Text [ finnish ] = "Zoomaa" ;
     Text [ danish ] = "Målestok" ;
     Text [ french ] = "Zoom" ;
     Text [ swedish ] = "Skala" ;
@@ -129,7 +129,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ italian ] = "~Ottimale" ;
         Text [ portuguese_brazilian ] = "~Optimal" ;
         Text [ portuguese ] = "~Optimizar" ;
-        Text [ finnish ] = "~Optimal" ;
+        Text [ finnish ] = "~Optimaalinen" ;
         Text [ danish ] = "Optimal" ;
         Text [ french ] = "~Optimal" ;
         Text [ swedish ] = "Optimal" ;
@@ -216,7 +216,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ italian ] = "~Variabile" ;
         Text [ portuguese_brazilian ] = "~Pessoal" ;
         Text [ portuguese ] = "~Variável" ;
-        Text [ finnish ] = "~Mukautettu" ;
+        Text [ finnish ] = "~Muuttuja" ;
         Text [ danish ] = "Variabel" ;
         Text [ french ] = "~Autre" ;
         Text [ swedish ] = "~Steglös" ;
@@ -258,7 +258,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ italian ] = "Scala" ;
         Text [ portuguese_brazilian ] = "Magnificação" ;
         Text [ portuguese ] = "Escala" ;
-        Text [ finnish ] = "Suurennus" ;
+        Text [ finnish ] = "Zoomaa kohteeseen" ;
         Text [ danish ] = "Skalering" ;
         Text [ french ] = "Facteur" ;
         Text [ swedish ] = "Skalning" ;
