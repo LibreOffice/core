@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:25:02 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,8 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
     aLabItem = (const SwLabItem&) rSet.Get(FN_LABEL);
 
     sal_Bool bFound = sal_False;
-    for(sal_uInt16 i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
+    sal_uInt16 i;
+    for(i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
         if( String(aLabItem.sGlossaryGroup) ==
             *(String*)aAutoTextGroupLB.GetEntryData( i ))
         {
@@ -929,6 +930,17 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
             break;
         }
 
+    if(!bFound)
+    {
+        // initially search for a group starting with "crd" which is the name of the
+        // business card AutoTexts
+        for(i = 0; i < aAutoTextGroupLB.GetEntryCount() && !bFound; i++)
+            if(0 == (*(String*)aAutoTextGroupLB.GetEntryData( i )).SearchAscii( "crd") )
+            {
+                bFound = sal_True;
+                break;
+            }
+    }
     if(bFound)
     {
         if(aAutoTextGroupLB.GetSelectEntryPos() != i)
