@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-07 12:32:46 $
+ *  last change: $Author: ama $ $Date: 2001-05-07 13:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2088,6 +2088,7 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
         const SwRect aNewRect( pCntnt->UnionFrm() );
         if ( bPosOnly && aNewRect.Top() != aOldRect.Top() &&
              !pCntnt->IsInTab() && !pCntnt->IsInSct() &&
+             ( !pCntnt->GetPrev() || !pCntnt->GetPrev()->IsTabFrm() ) &&
              pOldUp == pCntnt->GetUpper() &&
              aNewRect.Left() == aOldRect.Left() &&
              aNewRect.SSize() == aOldRect.SSize() )
