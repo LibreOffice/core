@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 16:29:58 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 16:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËÞ­°";
         Text[ korean ] = "Preview";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
@@ -352,7 +352,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËÞ­°";
         Text[ korean ] = "Preview";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
@@ -400,7 +400,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ finnish ] = "Raja" ;
         Text[ danish ] = "Tærskelværdi" ;
         Text[ french ] = "~Valeur de seuil" ;
-        Text[ swedish ] = "~Tröskelvärde" ;
+        Text[ swedish ] = "Trö~skelvärde" ;
         Text[ dutch ] = "~Drempelwaarde" ;
         Text[ spanish ] = "Valor ~umbral" ;
         Text[ english_us ] = "Threshold ~value" ;
@@ -538,7 +538,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËÞ­°";
         Text[ korean ] = "Preview";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
@@ -697,7 +697,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËÞ­°";
         Text[ korean ] = "Preview";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
@@ -858,7 +858,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËÞ­°";
         Text[ korean ] = "Preview";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄý";
         Text[ turkish ] = "Preview";
         Text[ arabic ] = "ãÚÇíäÉ";
