@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqledit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:47:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,9 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
 //------------------------------------------------------------------------------
 OSqlEdit::~OSqlEdit()
 {
+    DBG_DTOR(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
-    DBG_DTOR(OSqlEdit,NULL);
 }
 //------------------------------------------------------------------------------
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
@@ -148,14 +148,14 @@ sal_Bool OSqlEdit::IsInAccelAct()
 void OSqlEdit::GetFocus()
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
-    m_strOrigText = GetText();
+    m_strOrigText  =GetText();
     MultiLineEdit::GetFocus();
 }
 
 //------------------------------------------------------------------------------
 IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
 {
-    String aText = GetText();
+    String aText  =GetText();
     if(aText != m_strOrigText)
     {
         SfxUndoManager* pUndoMgr = m_pView->getContainerWindow()->getDesignView()->getController()->getUndoMgr();
@@ -167,7 +167,7 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
         m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_UNDO);
         m_pView->getContainerWindow()->getDesignView()->getController()->InvalidateFeature(SID_REDO);
 
-        m_strOrigText = aText;
+        m_strOrigText  =aText;
     }
 
     return 0L;
@@ -210,7 +210,7 @@ void OSqlEdit::OverloadedSetText(const String& rNewText)
     }
 
     MultiLineEdit::SetText(rNewText);
-    m_strOrigText = rNewText;
+    m_strOrigText  =rNewText;
 }
 // -----------------------------------------------------------------------------
 void OSqlEdit::stopTimer()
