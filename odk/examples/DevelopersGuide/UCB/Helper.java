@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:05:30 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,7 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 // base classes
 import java.util.Vector;
 import java.io.File;
@@ -258,7 +257,7 @@ public class Helper {
     {
         try
         {
-            StringBuffer buf = new StringBuffer( "data-" );
+            StringBuffer buf = new StringBuffer( "resource-" );
             buf.append( System.currentTimeMillis() );
             File file = new File( buf.toString() );
             String url = file.toURL().toString();
