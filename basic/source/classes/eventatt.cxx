@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-27 17:04:56 $
+ *  last change: $Author: ab $ $Date: 2001-05-07 12:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@
 #include <sbunoobj.hxx>
 #include <sbstar.hxx>
 #include <sbmeth.hxx>
+#include <runtime.hxx>
+#include <sbintern.hxx>
 
 
 #include <cppuhelper/implbase1.hxx>
@@ -583,7 +585,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     Reference< XToolkit > xToolkit( xMSF->createInstance(
         OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
     xDlg->createPeer( xToolkit, NULL );
-    attachDialogEvents( pBasic, xDlg );
+    StarBASIC* pStartedBasic = pINST->GetBasic();
+    attachDialogEvents( pStartedBasic, xDlg );
 
     // Return dialog
     Any aRetVal;
