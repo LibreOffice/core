@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:29:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,15 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SV_SYSWIN_HXX
+#include <vcl/syswin.hxx>
+#endif
+#ifndef _SV_MENU_HXX
+#include <vcl/menu.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 
 #include <memory>
 
@@ -129,7 +138,6 @@ void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
     }
 
     if ( bFont || bForeground )
@@ -170,6 +178,35 @@ void OApplicationSwapWindow::clearSelection()
         m_aIconControl.InvalidateEntry(pEntry);
     m_aIconControl.GetClickHdl().Call(&m_aIconControl);
 }
+
+// -----------------------------------------------------------------------------
+void OApplicationSwapWindow::createIconAutoMnemonics()
+{
+    // we need to share our "mnemonic space" with the menu of the window we live in
+    MnemonicGenerator aMnemonicGenerator;
+    SystemWindow* pSystemWindow = GetSystemWindow();
+    MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
+    if ( pMenu )
+    {
+        USHORT nMenuItems = pMenu->GetItemCount();
+        for ( USHORT i = 0; i < nMenuItems; ++i )
+            aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
+    }
+
+    m_aIconControl.CreateAutoMnemonics( aMnemonicGenerator );
+}
+
+// -----------------------------------------------------------------------------
+bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
+{
+    const KeyCode& rKeyCode = _rEvent.GetKeyCode();
+    if ( rKeyCode.GetModifier() == KEY_MOD2 )
+        return m_aIconControl.DoKeyInput( _rEvent );
+
+    // not intercepted
+    return false;
+}
+
 // -----------------------------------------------------------------------------
 ElementType OApplicationSwapWindow::getElementType() const
 {
