@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:31:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text = "Kontrollfeld";
         Text [ english ] = "Control";
         Text [ english_us ] = "Control";
-        Text[ portuguese ] = "Control";
+        Text[ portuguese ] = "Controlo";
         Text[ russian ] = "έλεμενς σοπΰβλενθÿ";
-        Text[ greek ] = "Control";
-        Text[ dutch ] = "Control";
+        Text[ greek ] = "Πεδίο ελέγχου";
+        Text[ dutch ] = "Controleveld";
         Text[ french ] = "Contrτle";
         Text[ spanish ] = "Campo de control";
         Text[ finnish ] = "Control";
@@ -133,7 +133,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text [ english_us ]= "On the right side, you see all the tables from the data source of the form.\n\n\nChoose the table from which the data should be used as basis for the list content:";
         Text[ portuguese ] = "O lado direito mostra-lhe todas as tabelas da fonte de dados do formulαrio.\n\n\nSeleccione a tabela com os dados que vγo servir de base ao conteϊdo da lista.";
         Text[ russian ] = "Ροπΰβΰ οξκΰηΰνϋ βρε ςΰαλθφϋ θη θρςξχνθκΰ δΰννϋυ τξπμσλÿπΰ.\n\n\nΒϋαεπθςε ςΰαλθφσ, δΰννϋε κξςξπξι δξλζνϋ οξρλσζθςό ξρνξβξι δλÿ ρξδεπζθμξγξ ροθρκΰ:";
-        Text[ greek ] = "Στην δεξιά πλευρά προβάλλονται όλοι οι πίνακες από τον προορισμό των δεδομένων της φόρμας.\n\n\nΕπιλέξτε τον πίνακα του οποίου τα δεδομένα θα";
+        Text[ greek ] = "Στην δεξιά πλευρά προβάλλονται όλοι οι πίνακες από τον προορισμό των δεδομένων της φόρμας.\n\n\nΕπιλέξτε τον πίνακα του οποίου τα δεδομένα θα ";
         Text[ dutch ] = "Aan de rechterkant ziet u alle tabellen uit de gegevensbron van het formulier.\n\n\nKies de tabel waarvan de gegevens de basis moeten vormen voor de inhoud van de lijst:";
         Text[ french ] = "Toutes les tables de la source de donnιes du formulaire sont mentionnιes ΰ droite.\n\n\nSιlectionnez les tables dont les donnιes devront servir de base au contenu de la liste :";
         Text[ spanish ] = "En la parte derecha puede ver todas las tablas de la base de datos del formulario.\n\n\nSeleccione la tabla de la que deban tomarse los datos para el contenido de la lista:";
@@ -505,7 +505,7 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text [ arabic ] = "νγίδί ΝέΩ ήνγΙ γΡΘΪ ΗαΚΝΡνΡ ζΗαΣΡΟ έν Νήα ήΗΪΟΙ ΘνΗδΗΚ΅ Γζ ΗΣΚΞΟΗγεΗ ααΪΡΦ έήΨ.";
     Text [ dutch ] = "U kunt de waarde van het combinatieveld in een databaseveld opslaan of deze alleen laten weergeven.";
     Text [ chinese_simplified ] = "ΔϊΔάΉ»½«ΧιΊΟΐΈΦΠµΔΚύΦµ΄ζΘλΚύΎέΏβΧΦ¶ΞΔΪ»ςΣΓΣΪΟΤΚΎ΅£";
-    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή του πεδίου συνδυασμού σε ένα πεδίο της βάσης δεδομένων ή να το χρησιμοποιήσετε μόνο για την εμφάνισή του.";
+    Text [ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή του πεδίου συνδυασμού σε ένα πεδίο της βάσης δεδομένων ή να το χρησιμοποιήσετε μόνο για την εμφάνισή του. ";
     Text [ korean ] = "ΔήΊΈΉΪ½ΊΐΗ °ªΐ» µ¥ΐΜΕΝΊ£ΐΜ½Ί ΗΚµεΏ΅ ΐϊΐεΗΟ°Ε³ª ³ªΕΈ³»±βΏ΅ΈΈ »ηΏλΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text [ turkish ] = "Kombinasyon alanύnύn deπerini bir veritabanύ alanύnda kaydedebilir ya da yalnύzca gφrόntόleme iηin kullanabilirsiniz.";
     Text[ catalan ] = "Puede guardar el valor del campo combinado en un campo de base de datos o usarlo solo para mostrarlo.";
@@ -515,11 +515,15 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/06/08 22:31:11  vg
+ *  Merge SRC633: 09.06.01 - 00:30:41
+ *
  *  Revision 1.14  2001/05/30 16:49:41  fs
  *  #86714# layout changes to allow displaying the form data source
  *
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
