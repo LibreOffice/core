@@ -2,9 +2,9 @@
 *
 *  $RCSfile: OfficeDocument.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:32:18 $
+*  last change: $Author: kz $ $Date: 2004-11-27 09:05:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,7 +60,6 @@
 
 package com.sun.star.wizards.document;
 
-import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
@@ -84,8 +83,11 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XFrames;
+import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
 
@@ -170,9 +172,16 @@ public class OfficeDocument {
         return oDocument;
     }
 
-    public static XFrame createNewFrame(XMultiServiceFactory xMSF) {
+    public static XFrame createNewFrame(XMultiServiceFactory xMSF, XTerminateListener listener) {
         XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xMSF));
         XFrame xFrame = xF.findFrame("_blank", 0);
+        if (listener != null) {
+            XFramesSupplier xFS = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xF);
+            XFrames xFF = xFS.getFrames();
+            xFF.remove(xFrame);
+            XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xF);
+            xDesktop.addTerminateListener(listener);
+        }
         return xFrame;
     }
 
@@ -216,6 +225,7 @@ public class OfficeDocument {
                 xStoreable.storeAsURL(StorePath, oStoreProperties);
             return true;
         } catch (Exception exception) {
+
             exception.printStackTrace(System.out);
             //TODO make sure that the peer of the dialog is used when available
             showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgSavingImpossible);
