@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-07 12:44:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-07 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
             break;
         case ID_BROWSER_SQL:
+            aReturn.bEnabled = m_bEsacpeProcessing;
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
         case ID_BROWSER_ADDTABLE:
@@ -383,7 +384,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
     {
         case ID_BROWSER_ESACPEPROCESSING:
             m_bEsacpeProcessing = !m_bEsacpeProcessing;
-            //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
+            InvalidateFeature(ID_BROWSER_SQL);
             break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
@@ -741,7 +742,6 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             if((*pBegin >>= aValue) && aValue.Name == PROPERTY_ACTIVECONNECTION)
             {
                 aValue.Value >>= m_xConnection;
-                OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
                 // be notified when connection is in disposing
                 Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
                 if (xComponent.is())
@@ -783,6 +783,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 if(xNameAccess->hasByName(m_sName) && (xNameAccess->getByName(m_sName) >>= xProp) && xProp.is())
                 {
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= m_sStatement;
+                    m_bEsacpeProcessing = ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
                     // load the layoutInformation
                     try
                     {
@@ -980,7 +981,8 @@ void OQueryController::createNewConnection(sal_Bool _bUI)
         if (m_bOwnConnection = m_xConnection.is())
         {
             // we hide the add table dialog because the tables in it are from the old connection
-            m_pAddTabDlg->Hide();
+            if(m_pAddTabDlg)
+                m_pAddTabDlg->Hide();
             InvalidateFeature(ID_BROWSER_ADDTABLE);
             setQueryComposer();
         }
