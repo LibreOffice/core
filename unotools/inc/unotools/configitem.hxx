@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-12-05 12:59:58 $
+ *  last change: $Author: os $ $Date: 2001-01-23 16:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,15 +105,9 @@ namespace utl
                                         xChangeLstnr;
             utl::ConfigManager*         pManager;
             sal_Bool                    bIsModified             : 1; //
-#if SUPD>615
-#else
-            sal_Bool                    bInPutValues            : 1; //prevent notification of own change actions
-#endif
             sal_Bool                    bHasChangedProperties   : 1; //call XChangesBatch::Commit() if any changes were notified
 
-#if SUPD>615
             sal_Int16                   nInValueChange;
-#endif
             ConfigItem();//
             void                    RemoveListener();
             void                    CallNotify(
@@ -132,11 +126,7 @@ namespace utl
                                         const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
                                         const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues);
 
-#if SUPD>615
             sal_Bool                EnableNotification(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);
-#else
-            sal_Bool                EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames);
-#endif
 
             //returns all members of a node
             com::sun::star::uno::Sequence< rtl::OUString >
@@ -150,6 +140,8 @@ namespace utl
             sal_Bool                SetSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
             // remove, change or add members of a set
             sal_Bool                ReplaceSetProperties(const rtl::OUString& rNode, com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues);
+            // add a new node without setting any properties
+            sal_Bool                AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode);
 
         public:
             virtual ~ConfigItem();
@@ -168,12 +160,7 @@ namespace utl
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
             virtual void            Commit();
 
-#if SUPD>615
             sal_Bool                IsInValueChange() const {return nInValueChange > 0;}
-#else
-            void                    SetInValueChange(sal_Bool bSet) {bInPutValues = bSet;}
-            sal_Bool                IsInValueChange() const {return bInPutValues;}
-#endif
     };
 }//namespace utl
 #endif //_UTL_CONFIGITEM_HXX_
