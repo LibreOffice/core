@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 19:09:54 $
+ *  last change: $Author: sab $ $Date: 2001-03-05 09:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES);
+    return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw()
@@ -1320,7 +1320,8 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
         ( 0 == rLocalName.compareToAscii(sXML_document) ||
           0 == rLocalName.compareToAscii(sXML_document_meta) ||
           0 == rLocalName.compareToAscii(sXML_document_styles) ||
-          0 == rLocalName.compareToAscii(sXML_document_content) ))
+          0 == rLocalName.compareToAscii(sXML_document_content) ||
+          0 == rLocalName.compareToAscii(sXML_document_settings) ))
         pContext = new ScXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
     else

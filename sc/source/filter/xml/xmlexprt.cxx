@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: sab $ $Date: 2001-03-05 09:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ OUString SAL_CALL ScXMLExport_Styles_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Styles_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES);
+    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Content_getSupportedServiceNames() throw()
