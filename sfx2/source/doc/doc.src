@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:52:47 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,8 +310,10 @@ String STR_ERROR_NOSTORAGE
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
-    Text [ de ] = "$(FILENAME) enthält möglicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. Möchten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
-    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format. Do you want to save the document in this format?\n\n- To save in $(FORMAT) Format, click 'Yes'\n- To preserve formatting, click No. Next save the document in the latest %PRODUCTNAME format.";
+//    Text [ de ] = "$(FILENAME) enthält möglicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. Möchten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
+    Text [ de ] = "Dieses Dokument beinhaltet unter Umständen Formatierungen oder Inhalte, die im aktuellen %FORMATNAME Format nicht gespeichert werden können./n/n Möchten Sie das Dokument trotzdem in diesem Format speichern?/n/n- Klicken Sie auf 'Ja', um das aktuelle Format beizubehalten./n- Klicken Sie auf 'Nein', um im aktuellsten %PRODUCTNAME Dateiformat zu speichern und dabei  Formatierungen und Inhalte sicher zu speichern.";
+    Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the present %FORMATNAME file format./n/nDo you want to save the document in this format anyway?/n/n- Click 'Yes' to keep the present file format./n- Click 'No' to use the latest %PRODUCTNAME file format and be sure all formatting and content is saved correctly.";
+//    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format. Do you want to save the document in this format?\n\n- To save in $(FORMAT) Format, click 'Yes'\n- To preserve formatting, click No. Next save the document in the latest %PRODUCTNAME format.";
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_MUSTOWNFORMAT
