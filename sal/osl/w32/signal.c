@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,18 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
     LPTSTR  lpFilePart;
     PROCESS_INFORMATION ProcessInfo;
     STARTUPINFO StartupInfo;
+    int     argi;
+
+    /* Check if crash reporter was disabled by command line */
+
+    for ( argi = 1; argi < __argc; argi++ )
+    {
+        if (
+            0 == stricmp( __argv[argi], "-nocrashreport" ) ||
+            0 == stricmp( __argv[argi], "/nocrashreport" )
+            )
+            return FALSE;
+    }
 
     if ( SearchPath( NULL, TEXT("crashrep.exe"), NULL, MAX_PATH, szPath, &lpFilePart ) )
     {
