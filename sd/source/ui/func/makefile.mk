@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ka $ $Date: 2002-04-18 15:47:30 $
+#   last change: $Author: cl $ $Date: 2002-12-12 18:39:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = $(PRJ)$/util$/sd.cxx \
+        undolayer.cxx	\
         fupoor.cxx		\
         fudraw.cxx		\
         fusel.cxx		\
@@ -159,6 +160,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/fuinsert.obj	
 
 SLOFILES = \
+        $(SLO)$/undolayer.obj	\
         $(SLO)$/fupoor.obj		\
         $(SLO)$/fudraw.obj		\
         $(SLO)$/fuzoom.obj		\

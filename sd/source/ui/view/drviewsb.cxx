@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-26 15:31:11 $
+ *  last change: $Author: cl $ $Date: 2002-12-12 18:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
 #include "dlgfield.hxx"
 #include "drawview.hxx"
 #include "unmodpg.hxx"
-
+#include "undolayer.hxx"
 
 /*************************************************************************
 |*
@@ -284,6 +284,7 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
             SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
             USHORT nCurPage = aLayerTab.GetCurPageId();
             String aLayerName = aLayerTab.GetPageText(nCurPage);
+            String aOldLayerName( aLayerName );
             SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, FALSE);
             const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -369,50 +370,43 @@ void SdDrawViewShell::FuTemp02(SfxRequest& rReq)
                 }
             }
             else if (pArgs->Count () == 4)
-                 {
-                     SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, FALSE);
-                     SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
-                     SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, FALSE);
-                     SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, FALSE);
-
-                     aLayerName   = pLayerName->GetValue ();
-                     bIsVisible   = pIsVisible->GetValue ();
-                     bIsLocked    = pIsLocked->GetValue ();
-                     bIsPrintable = pIsPrintable->GetValue ();
-                 }
-                 else
-                 {
-                     StarBASIC::FatalError (SbERR_WRONG_ARGS);
-                     Cancel ();
-                     rReq.Ignore ();
-                     break;
-                 }
-
-            pLayer->SetName( aLayerName );
-            pDrView->SetLayerVisible( aLayerName, bIsVisible );
-            pDrView->SetLayerLocked( aLayerName, bIsLocked);
-            pDrView->SetLayerPrintable(aLayerName, bIsPrintable);
-
-            pDoc->SetChanged(TRUE);
-
-            aLayerTab.SetPageText(nCurPage, aLayerName);
-
-            TabBarPageBits nBits = 0;
-
-            if (!bIsVisible)
             {
-                // Unsichtbare Layer werden anders dargestellt
-                nBits = TPB_SPECIAL;
+                SFX_REQUEST_ARG (rReq, pLayerName, SfxStringItem, ID_VAL_LAYERNAME, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsVisible, SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsLocked, SfxBoolItem, ID_VAL_ISLOCKED, FALSE);
+                SFX_REQUEST_ARG (rReq, pIsPrintable, SfxBoolItem, ID_VAL_ISPRINTABLE, FALSE);
+
+                aLayerName   = pLayerName->GetValue ();
+                bIsVisible   = pIsVisible->GetValue ();
+                bIsLocked     = pIsLocked->GetValue ();
+                bIsPrintable = pIsPrintable->GetValue ();
+            }
+            else
+            {
+                StarBASIC::FatalError (SbERR_WRONG_ARGS);
+                Cancel ();
+                rReq.Ignore ();
+                break;
             }
 
-            aLayerTab.SetPageBits(nCurPage, nBits);
+            SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+            SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
+                pDoc,
+                pLayer,
+                // old values
+                aOldLayerName,
+                pDrView->IsLayerVisible(aOldLayerName),
+                pDrView->IsLayerLocked(aOldLayerName),
+                pDrView->IsLayerPrintable(aOldLayerName),
+                // new values
+                aLayerName,
+                bIsVisible,
+                bIsLocked,
+                bIsPrintable
+                );
+            pManager->AddUndoAction( pAction );
 
-            GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
-                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-
-            FmFormShell* pFmShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
-            if (pFmShell)
-                pFmShell->Invalidate();
+            ModifyLayer( pLayer, aLayerName, bIsVisible, bIsLocked, bIsPrintable );
 
             Cancel();
             rReq.Done ();
@@ -797,4 +791,50 @@ IMPL_LINK( SdDrawViewShell, RenameSlideHdl, SvxNameDialog*, pDialog )
 
     return ( aNewName.Equals( pCurrentPage->GetName() )
              || GetDocSh()->IsNewPageNameValid( aNewName ) );
+}
+
+void SdDrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable )
+{
+    if( pLayer )
+    {
+
+        const USHORT nPageCount = aLayerTab.GetPageCount();
+        USHORT nCurPage = 0;
+        USHORT nPos;
+        for( nPos = 0; nPos < nPageCount; nPos++ )
+        {
+            USHORT nId = aLayerTab.GetPageId( nPos );
+            if( pLayer->GetName() == aLayerTab.GetPageText( nId ) )
+            {
+                nCurPage = nId;
+                break;
+            }
+        }
+
+        pLayer->SetName( rLayerName );
+        pDrView->SetLayerVisible( rLayerName, bIsVisible );
+        pDrView->SetLayerLocked( rLayerName, bIsLocked);
+        pDrView->SetLayerPrintable(rLayerName, bIsPrintable);
+
+        pDoc->SetChanged(TRUE);
+
+        aLayerTab.SetPageText(nCurPage, rLayerName);
+
+        TabBarPageBits nBits = 0;
+
+        if (!bIsVisible)
+        {
+            // Unsichtbare Layer werden anders dargestellt
+            nBits = TPB_SPECIAL;
+        }
+
+        aLayerTab.SetPageBits(nCurPage, nBits);
+
+        GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
+                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
+        FmFormShell* pFmShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
+        if (pFmShell)
+            pFmShell->Invalidate();
+    }
 }
