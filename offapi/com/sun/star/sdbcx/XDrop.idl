@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrop.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 /** provides methods to remove an element of its container and to drop it from
     the related database.
  */
-interface XDrop: com::sun::star::uno::XInterface
+published interface XDrop: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbcx::XDrop::dropByName
