@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-27 23:10:20 $
+ *  last change: $Author: nf $ $Date: 2001-12-06 13:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2031,7 +2031,7 @@ String STR_PACKNGO_NOACCESS
     Text[ japanese ] = "ﾄﾞﾗｲﾌﾞにｱｸｾｽできません";
     Text[ korean ] = "현재 데이터 매체를 액세스할 수 없습니다.";
     Text[ chinese_simplified ] = "无法读取当前的软盘。";
-    Text[ chinese_traditional ] = "無法讀取當前的數據載體。";
+    Text[ chinese_traditional ] = "無法存取目前的數據載體。";
     Text[ arabic ] = "���� ������ ��� ����� ������.";
     Text[ turkish ] = "Kullan�lan veri ta��y�c�s�na eri�im sa�lanamad�.";
     Text[ catalan ] = "No se pudo acceder al medio actual.";
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
