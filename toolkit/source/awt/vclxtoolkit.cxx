@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:07:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1162,7 +1162,19 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 aParentData.nSize = sizeof( aParentData );
                 aParentData.aWindow = x11_id;
                 osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-                pChildWindow = new WorkWindow( &aParentData );
+                try
+                {
+                    pChildWindow = new WorkWindow( &aParentData );
+                }
+                catch ( ::com::sun::star::uno::RuntimeException & rEx )
+                {
+                    // system child window could not be created
+                    OSL_TRACE(
+                        "VCLXToolkit::createSystemChild: caught %s\n",
+                        ::rtl::OUStringToOString(
+                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    pChildWindow = NULL;
+                }
             }
 #elif defined WNT
             sal_Int32 hWnd;
@@ -1173,7 +1185,19 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 aParentData.nSize = sizeof( aParentData );
                 aParentData.hWnd = (HWND)hWnd;
                 osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-                pChildWindow = new WorkWindow( &aParentData );
+                try
+                {
+                    pChildWindow = new WorkWindow( &aParentData );
+                }
+                catch ( ::com::sun::star::uno::RuntimeException & rEx )
+                {
+                    // system child window could not be created
+                    OSL_TRACE(
+                        "VCLXToolkit::createSystemChild: caught %s\n",
+                        ::rtl::OUStringToOString(
+                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    pChildWindow = NULL;
+                }
             }
 #endif
     }
