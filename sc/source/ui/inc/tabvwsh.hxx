@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:18:35 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:58:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 
 namespace svx {
     class ExtrusionBar;
+    class FontworkBar;
 }
 
 enum ObjectSelectionType
@@ -171,6 +172,7 @@ private:
     ScMediaShell*           pMediaShell;
     ScPageBreakShell*       pPageBreakShell;
     svx::ExtrusionBar*      pExtrusionBarShell;
+    svx::FontworkBar*       pFontworkBarShell;
 
     FmFormShell*            pFormShell;
 
@@ -225,6 +227,8 @@ private:
 
     SfxBroadcaster*         pAccessibilityBroadcaster;
 
+    static const int        MASTERENUMCOMMANDS = 6;
+    String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
 private:
     SC_DLLPRIVATE void  Construct( BYTE nForceDesignMode = SC_FORCEMODE_NONE );
