@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:26:20 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include <string.h>
 #ifndef _RTL_ALLOC_H_
 #include    <rtl/alloc.h>
 #endif

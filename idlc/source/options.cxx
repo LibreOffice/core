@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-07-25 14:53:02 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include <stdio.h>
+#include <string.h>
 
 #ifndef _IDLC_OPTIONS_HXX_
 #include <idlc/options.hxx>

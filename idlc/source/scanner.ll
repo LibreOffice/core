@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:38:10 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
  * scanner.ll - Lexical scanner for IDLC 1.0
  */
 #include <ctype.h>
+#include <string.h>
 
 #ifndef _IDLC_IDLC_HXX_
 #include <idlc/idlc.hxx>

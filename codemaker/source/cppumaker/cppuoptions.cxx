@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 08:30:40 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,8 @@
  *
  *
  ************************************************************************/
-#include    <stdio.h>
+#include <stdio.h>
+#include <string.h>
 
 #include    "cppuoptions.hxx"
 

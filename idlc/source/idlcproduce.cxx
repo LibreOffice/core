@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-23 07:21:56 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #include <errno.h>
 #endif
 
+#include <string.h>
 #ifdef SAL_UNX
 #include <unistd.h>
 #include <sys/stat.h>

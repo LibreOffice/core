@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-30 10:27:39 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 11:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <io.h>
 #endif
 
+#include <string.h>
 #ifdef  SAL_UNX
 #include <unistd.h>
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
