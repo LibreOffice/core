@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:31:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #include "DrawViewShell.hxx"
 #endif
 #ifndef SD_DRAW_DOC_SHELL_HXX
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #endif
 #ifndef SD_CLIENT_VIEW_HXX
 #include "ClientView.hxx"
