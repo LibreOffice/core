@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-26 08:08:49 $
+ *  last change: $Author: fme $ $Date: 2002-06-05 14:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1785,7 +1785,7 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         sal_Bool bSet = sal_True;
         if( bOdd )
             --nIdx; // innerhalb eines Intervalls
-        else if( !bRight && ( nIdx >= nCount || (*pTmp)[ nIdx ] != nXPos ) )
+        else if( ! bRight && ( nIdx >= nCount || (*pTmp)[ nIdx ] != nXPos ) )
         {
             if( nIdx )
                 nIdx -= 2; // ein Intervall nach links gehen
@@ -2225,14 +2225,20 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
 
 SwRect SwTxtFly::FlyToRect( const SdrObject *pObj, const SwRect &rLine ) const
 {
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pCurrFrm )
+
+#ifdef BIDI
+    const long nXPos = pCurrFrm->IsRightToLeft() ?
+                       rLine.Right() :
+                       (rLine.*fnRect->fnGetLeft)();
+
+    SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine, pCurrFrm,
+                                                 nXPos, ! pCurrFrm->IsRightToLeft() );
+#else
     SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine, pCurrFrm,
         (rLine.*fnRect->fnGetLeft)(), sal_True );
-#else
-    SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine,
-        rLine.Left(), sal_True );
 #endif
+
     if( !aFly.Width() )
         return aFly;
 
