@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:32:16 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 10:49:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,9 @@
 #include "viewutil.hxx"
 #include "globstr.hrc"
 #include "drawview.hxx"
+
+#include <string>
+#include <algorithm>
 
 #define SPLIT_MARGIN    30
 #define SC_ICONSIZE     36
@@ -1351,7 +1354,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars )
 
     if ( nNewX >= 0 && nNewX <= MAXCOL && nDeltaX )
     {
-        USHORT nTrackX = max( nOldX, (USHORT) nNewX );
+        USHORT nTrackX = std::max( nOldX, (USHORT) nNewX );
 
             //  Auf dem Mac wird in Window::Scroll vor dem Scrollen Update gerufen,
             //  so dass mit den neuen Variablen an die alte Position ausgegeben wuerde.
@@ -1447,7 +1450,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, BOOL bUpdBars )
 
     if ( nNewY >= 0 && nNewY <= MAXROW && nDeltaY )
     {
-        USHORT nTrackY = max( nOldY, (USHORT) nNewY );
+        USHORT nTrackY = std::max( nOldY, (USHORT) nNewY );
 
         //  Zeilenkoepfe anpassen vor dem eigentlichen Scrolling, damit nicht
         //  doppelt gepainted werden muss
