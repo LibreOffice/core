@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-07 17:13:53 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace configmgr
 
             ~BroadcastImplHelper()
             {
-                OSL_ENSHURE(m_aInterfaces.empty(), "Configuration Broadcaster was not disposed properly");
+                OSL_ENSURE(m_aInterfaces.empty(), "Configuration Broadcaster was not disposed properly");
             }
 
         public:
