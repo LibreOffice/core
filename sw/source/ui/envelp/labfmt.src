@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@ TabPage TP_LAB_FMT
     FixedText FI_MAKE
     {
         Pos = MAP_APPFONT ( 108 , 7 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
     };
     FixedText FI_TYPE
     {
-        Pos = MAP_APPFONT ( 160 , 7 ) ;
+        Pos = MAP_APPFONT ( 150 , 7 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
     };
     Window WIN_PREVIEW
@@ -652,10 +652,30 @@ ModalDialog DLG_SAVE_LABEL
     Moveable = TRUE ;
     FixedText FT_MAKE
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Neuer Name" ;
-        Text [ ENGLISH ] = "New name" ;
+        Text = "~Marke" ;
+        Text [ italian ] = "Marca" ;
+        Text [ portuguese_brazilian ] = "Fazer" ;
+        Text [ portuguese ] = "Marca" ;
+        Text [ finnish ] = "Merkki" ;
+        Text [ danish ] = "MÊrke" ;
+        Text [ french ] = "~Marque" ;
+        Text [ swedish ] = "~M‰rke" ;
+        Text [ dutch ] = "~Merk" ;
+        Text [ spanish ] = "~Marca" ;
+        Text [ english_us ] = "Brand" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "…Ã±Í";
+        Text[ russian ] = "Ã‡Í‡";
+        Text[ polish ] = "Znacznik";
+        Text[ japanese ] = "êªë¢å≥";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "∞”º–";
+        Text[ arabic ] = "«·„«—ﬂ…";
+        Text[ greek ] = "~Ã‹ÒÍ·";
+        Text[ korean ] = "ªÛ«•";
+        Text[ turkish ] = "Markas˝";
     };
     ComboBox CB_MAKE
     {
@@ -663,19 +683,39 @@ ModalDialog DLG_SAVE_LABEL
         Size = MAP_APPFONT ( 100 , 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
-        Text = "Neuer Name" ;
-        Text [ ENGLISH ] = "New name" ;
     };
     FixedText FT_TYPE
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Typ" ;
-        Text [ ENGLISH ] = "Typ" ;
+        Text = "~Typ" ;
+        Text [ English ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "~Type" ;
+        Text [ swedish ] = "~Typ" ;
+        Text [ dutch ] = "~Type" ;
+        Text [ spanish ] = "~Tipo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ greek ] = "~‘˝ÔÚ";
+        Text[ korean ] = "¿Ø«¸(~T)";
+        Text[ turkish ] = "Tipi";
+        Text[ language_user1 ] = " ";
     };
     Edit ED_TYPE
     {
-        Pos = MAP_APPFONT ( 65 , 27 ) ;
+        Pos = MAP_APPFONT ( 65 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
         Border = TRUE;
     };
