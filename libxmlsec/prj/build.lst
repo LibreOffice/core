@@ -1,0 +1,3 @@
+lx	xmlsec1	: libxml2 NULL
+lx	xmlsec1			    usr1	-	all	lx_mkout NULL
+lx	xmlsec1			    nmake	-	all	lx_xmlsec1 NULL
