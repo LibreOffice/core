@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:00:57 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
+#include <constant/mediadescriptor.hxx>
+
 #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
 #endif
@@ -75,8 +77,8 @@
 #include <dispatch/interceptionhelper.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_COMPONENTLOADER_HXX_
-#include <helper/componentloader.hxx>
+#ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
+#include <loadenv/loadenv.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
@@ -89,14 +91,6 @@
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
-#include <classes/argumentanalyzer.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
-#include <classes/filtercache.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
@@ -133,10 +127,6 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
@@ -206,6 +196,10 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -431,7 +425,6 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_bConnected                ( sal_False                                         ) // There exist no component inside of use => sal_False, we are not connected!
         ,   m_nExternalLockCount        ( 0                                                 )
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
-        ,   m_bIsPlugIn                 ( sal_False                                         )
         ,   m_aPoster                   ( LINK( this, Frame, implts_windowClosing )         )
         ,   m_bIsHidden                 ( sal_True                                          )
         ,   m_bIsBackingMode            ( sal_False                                         )
@@ -484,14 +477,12 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
                                                                                                                                                                    css::lang::IllegalArgumentException ,
                                                                                                                                                                    css::uno::RuntimeException          )
 {
-    /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    ComponentLoader* pLoader = new ComponentLoader(m_xFactory,this);
+    css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;
     aReadLock.unlock();
-    /* } SAFE */
 
-    css::uno::Reference< css::frame::XComponentLoader > xLoader(static_cast< ::cppu::OWeakObject* >(pLoader), css::uno::UNO_QUERY);
-    return xLoader->loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
+    return LoadEnv::loadComponentFromURL(xThis, xSMGR, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-****************************************************************************************************//**
@@ -1976,7 +1967,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_bSelfClose         = sal_False;
     m_bIsHidden          = sal_True;
     m_bIsBackingMode     = sal_False;
-    m_bIsPlugIn          = sal_False;
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -3098,21 +3088,9 @@ void Frame::implts_setIconOnWindow()
             css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
             if( xModel.is() == sal_True )
             {
-                ::rtl::OUString  sFilter;
-                ArgumentAnalyzer aAnalyzer(xModel->getArgs(),sal_True);
-                aAnalyzer.getArgument( E_FILTERNAME, sFilter );
-
-                if( sFilter.getLength() > 0 )
-                {
-                    FilterCache aCacheRef; // Cache use refcount and static impl_data_container! So we can use it so!
-                    Filter      aFilter  = aCacheRef.getFilter( sFilter );
-
-                    SvtModuleOptions::EFactory eFactory;
-                    if( SvtModuleOptions::ClassifyFactoryByName( aFilter.sDocumentService, eFactory ) == sal_True )
-                    {
-                        nIcon = SvtModuleOptions().GetFactoryIcon( eFactory );
-                    }
-                }
+                SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByModel(xModel);
+                if (eFactory != SvtModuleOptions::E_UNKNOWN_FACTORY)
+                    nIcon = SvtModuleOptions().GetFactoryIcon( eFactory );
             }
         }
 
@@ -3439,8 +3417,7 @@ sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XF
 {
     return  (
                 ( &xFrame                                                                                   ==  NULL        )   ||
-                ( css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is()           ==  sal_True    )   ||
-                ( css::uno::Reference< css::mozilla::XPluginInstance >( xFrame, css::uno::UNO_QUERY ).is()  ==  sal_True    )
+                ( css::uno::Reference< css::frame::XDesktop >( xFrame, css::uno::UNO_QUERY ).is()           ==  sal_True    )
             );
 }
 
