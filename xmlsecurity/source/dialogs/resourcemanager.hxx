@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-27 07:57:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace XmlSec
                                     const char* _pCommaReplacement = ", ",
                                     bool _bPreserveId = false );        // strips "CN=" and so from string
     String          GetContentPart( const String& _rRawString, const String& _rPartId );
+    String          GetContentPart( const String& _rRawString );
 
     String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", UINT16 _nLineBreak = 0xFFFF );
 
