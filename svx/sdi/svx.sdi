@@ -1736,7 +1736,7 @@ SfxVoidItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
 [
     /* flags: */
     AutoUpdate = FALSE,
-    Cachable = Volatile,
+    Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
