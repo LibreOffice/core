@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mib $ $Date: 2002-03-06 11:44:03 $
+#   last change: $Author: fme $ $Date: 2002-06-10 09:12:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@
 CDEFS+=-DNUM_RELSPACE
 CDEFS+=-DVERTICAL_LAYOUT
 CDEFS+=-DACCESSIBLE_LAYOUT
+CDEFS+=-DBIDI
 
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 CDEFS+=-DSBASIC
