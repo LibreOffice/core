@@ -1,20 +1,23 @@
 [writer]
-en-US = "%PRODUCTNAME Text Document"
-de = "%PRODUCTNAME Textdokument"
+en-US = "Create and edit text and graphics in letters, reports, documents and Web pages by using Writer."
+de = "Erstellen und bearbeiten von Text und Grafiken in Briefen, Reports, Dokumenten und Web-Seiten - Writer macht's möglich."
 
 [impress]
-en-US = "%PRODUCTNAME Presentation"
-de = "%PRODUCTNAME Präsentation"
+en-US = "Create and edit presentations for slideshows, meeting and Web pages by using Impress."
+de = "Erstellen und bearbeiten von Präsentationen für Dia-Vorführungen, Meetings und Web-Auftritte - Impress macht's möglich."
 
 [draw]
-en-US = "%PRODUCTNAME Drawing"
-de = "%PRODUCTNAME Zeichnung"
+en-US = "Create and edit drawings, flow charts, and logos by using Draw."
+de = "Zeichnungen erstellen und bearbeiten, Flussdiagramme entwerfen und Logos kreieren - Draw macht's möglich."
 
 [calc]
-en-US = "%PRODUCTNAME Spreadsheet"
-de = "%PRODUCTNAME Tabelle"
+en-US = "Perform calculation, analyze information and manage lists in spreadsheets by using Calc."
+de = "Berechnungen ausführen, Informationen analysieren und Listen in Tabellen verwalten - Calc macht's möglich."
 
 [math]
-en-US = "%PRODUCTNAME Formula"
-de = "%PRODUCTNAME Formel"
+en-US = "Create and edit scientific formulas and equations by using Math."
+de = "Wissenschaftliche Formeln erstellen und bearbeiten - Math macht's möglich."
 
+[base]
+en-US = "Manage databases, create queries and reports to track and manage your information by using Base."
+de = "Verwalten von Datenbanken, Erstellen von Abfragen und Berichten - Base macht's möglich."
