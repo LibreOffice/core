@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:16:52 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1282,7 +1282,7 @@ Menu RID_COMMANDMENU
             Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û";
             Text[ russian ] = "Óíàğíûå/Áèíàğíûå îïåğàòîğû";
             Text[ polish ] = "Unarne/binarne operatory";
-            Text[ japanese ] = "¼Ş­°ÅØ/ÊŞ²ÅØ µÍßÚ°À";
+            Text[ japanese ] = "’P€¥“ñ€‰‰Zq(~U)";
             Text[ chinese_traditional ] = "¤@¤¸/¤G¤¸¹Bºâ²Å";
             Text[ dutch ] = "~Unaire/binaire operatoren";
             Text[ chinese_simplified ] = "Ò»Ôª/¶şÔªÔËËã·û";
@@ -1450,7 +1450,7 @@ Menu RID_COMMANDMENU
             Text[ chinese_simplified ] = "¹ØÏµ";
             Text[ russian ] = "Îòíîøåíèÿ";
             Text[ polish ] = "Relacje";
-            Text[ japanese ] = "ØÚ°¼®İ";
+            Text[ japanese ] = "”äŠr‰‰Z";
             Text[ chinese_traditional ] = "Ãö«Y";
             Text[ dutch ] = "~Relaties";
             Text[ chinese_simplified ] = "¹ØÏµ";
