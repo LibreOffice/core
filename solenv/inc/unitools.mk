@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:14:21 $
+#   last change: $Author: hjs $ $Date: 2004-07-13 16:30:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ AWK*=awk
 SORT*=sort
 SED*=sed
 .IF "$(USE_SHELL)"!="4nt"
+# change drive and directory
+CDD=cdd
 # expect cygwin tools to exist
 COPY*=cp
 COPYRECURSE=-r
@@ -81,6 +83,7 @@ RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
 .ELSE			# "$(USE_SHELL)"!="4nt"
+CDD=cd
 COPY*=copy
 COPYRECURSE=/s
 COPYUPDATE=/u
@@ -113,6 +116,7 @@ SED*=sed
 SORT*=sort
 PERL=perl
 TYPE=cat
+CDD=cd
 COPY=cp -f
 COPYRECURSE=-r
 .IF "$(OS)"=="SOLARIS"
