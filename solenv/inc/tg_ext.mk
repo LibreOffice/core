@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 14:13:35 $
+#   last change: $Author: hjs $ $Date: 2002-04-03 16:58:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,12 +131,20 @@ clean:
     
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
     @+-$(RM) $@
+.IF "$(GUI)"=="UNX"
+    @+echo $(assign UNPACKCMD := sh -c "uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+.ELSE			# "$(GUI)"=="UNX"
     @+echo $(assign UNPACKCMD := uncompress -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.Z | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+.ENDIF			# "$(GUI)"=="UNX"
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
+.IF "$(GUI)"=="UNX"
+    @+echo $(assign UNPACKCMD := sh -c "gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ") > $(NULLDEV)
+.ELSE			# "$(GUI)"=="UNX"
     @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+.ENDIF			# "$(GUI)"=="UNX"
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
