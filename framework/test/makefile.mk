@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: as $ $Date: 2000-11-23 14:52:13 $
+#   last change: $Author: as $ $Date: 2001-02-26 08:45:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- Applikation --------------------------------------------------
+# --- Test Applikation --------------------------------------------------
 
 APP1TARGET= 	$(TARGET)
 
@@ -104,6 +104,33 @@ APP1DEPN=		$(SLB)$/fwk_helper.lib				\
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
 APP1DEF=		$(MISC)$/test.def
+.ENDIF
+
+# --- TypeCFG Applikation --------------------------------------------------
+
+APP2TARGET= 	typecfg
+
+APP2OBJS=		$(SLO)$/typecfg.obj					\
+                $(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercache.obj				\
+                $(SLO)$/wildcard.obj
+
+APP2STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(OSLLIB)							\
+                $(SALLIB)							\
+                $(VOSLIB)							\
+                $(TOOLSLIB) 						\
+                $(SVTOOLLIB)						\
+                $(TKLIB)							\
+                $(COMPHELPERLIB)					\
+                $(SVLIB)
+
+APP2DEPN=		$(SLO)$/servicemanager.obj			\
+                $(SLO)$/filtercache.obj
+
+.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+APP2DEF=		$(MISC)$/typecfg.def
 .ENDIF
 
 # --- Targets ------------------------------------------------------

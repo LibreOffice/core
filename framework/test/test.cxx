@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-02-07 12:28:04 $
+ *  last change: $Author: as $ $Date: 2001-02-26 08:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void TestApplication::Main()
 
     // Init global servicemanager and set it.
     ServiceManager aManager;
-    m_xFactory = aManager.getManager( DECLARE_ASCII("test.rdb") );
+    m_xFactory = aManager.getPrivateUNOServiceManager( DECLARE_ASCII("test.rdb") );
     setProcessServiceFactory( m_xFactory );
 
     // Control sucess of operation.
