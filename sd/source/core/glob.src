@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:14:54 $
+ *  last change: $Author: cl $ $Date: 2001-08-20 11:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,11 @@
  ************************************************************************/
 /* StarView ressource file */
 
+#define __RSC
+
 #include "misc.hxx"
 #include "glob.hrc"
+#include "sderror.hxx"
 
 String STR_LAYER_BCKGRND
 {
@@ -2215,10 +2218,85 @@ String STR_SAVE_DOC
     Text[ catalan ] = "Guardar documento";
 };
 
+#define ERR_CODE( class, err )  (class | (err - ERROR_SD_BASE))
+#define WARN_CODE( class, err ) (class | ( err - WARN_SD_BASE))
 
-
-
-
-
-
-
+Resource RID_SD_ERRHDL
+{
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
+    {
+        Text = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ English ] = "File format error at $(ARG1)(row,col)" ;
+        Text [ english_us ] = "File format error found at $(ARG1)(row,col)" ;
+        Text [ italian ] = "Θ stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)" ;
+        Text [ spanish ] = "Se ha descubierto un error de formato en el archivo en la posiciσn $(ARG1)(fila,columna)" ;
+        Text [ french ] = "Erreur de format ΰ la position $(ARG1)(ligne,colonne) du fichier" ;
+        Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand" ;
+        Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptδckt i filen" ;
+        Text [ danish ] = "Der blev opdaget en formatfejl i filen pε position $(ARG1)(rζkke,spalte)" ;
+        Text [ portuguese ] = "Descoberto erro de formato na posiηγo $(ARG1)(linha, coluna) do ficheiro" ;
+        Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text[ chinese_simplified ] = "ζ–‡δ»¶ζ ΌεΌι”™θ―― $(ARG1)(θ΅οΌε—)";
+        Text[ russian ] = "Β μερςε $(ARG1)(ρςπξκΰ,ρςξλαεφ) ξανΰπσζενΰ ξψθακΰ τξπμΰςΰ τΰιλΰ";
+        Text[ polish ] = "Znaleziono w pliku b³Ήd formatu przy pozycji $(ARG1)(Wiersz, kolumna)";
+        Text[ japanese ] = "οΎο½§ο½²οΎ™γ® $(ARG1)(θ΅γ€ε—)γ«ζ›ΈεΌο½΄οΎ—ο½°γθ¦‹γ¤γ‹γ‚γΎγ—γγ€‚";
+        Text[ chinese_traditional ] = "ζª”ζ΅ζ ΌεΌι―θª¤ $(ARG1)(θ΅οΌε—)";
+        Text[ arabic ] = "Κγ ΗίΚΤΗέ ΞΨΓ έν ΗαγζΦΪ $(ARG1)(ΣΨΡ΅ΪγζΟ) έν Ηαγαέ";
+        Text[ greek ] = "Βρέθηκε σφάλμα μορφοποίησης στη θέση $(ARG1)(γραμμή,στήλη) του αρχείο";
+        Text[ korean ] = "νμΌμ„μ‹ μ¤λ¥κ°€ $(ARG1)(ν–‰,μ—΄)μ—μ„γ€€λ°κ²¬λμ—μµλ‹λ‹¤.";
+        Text[ turkish ] = "Dosya format hatasύ $(ARG1)(satύr, sόtun) bulundu";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Se ha descubierto un error de formato en el archivo en la posiciσn $(ARG1)(fila,columna)";
+        Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake)";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
+    {
+        Text = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
+        Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiηγo $(ARG2)(linha,coluna)";
+        Text[ russian ] = "Β χΰρςθ δξκσμενςΰ $(ARG1) β οξηθφθθ $(ARG2)(ρςπξκΰ, κξλξνκΰ)ξανΰπσζενΰ ξψθακΰ τξπμΰςΰ.";
+        Text[ greek ] = "Εντοπίστηκε ένα σφάλμα μορφοποίησης του αρχείου στο τμήμα κειμένου $(ARG1) στη θέση $(ARG2)(γραμμή, στήλη)";
+        Text[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
+        Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciσn $(ARG2)(fila,columna)";
+        Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
+        Text[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ swedish ] = "Det har upptδckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
+        Text[ polish ] = "Wykryto b³Ήd w formacie dokumentu podrzκdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
+        Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ japanese ] = "οΎο½§ο½²οΎ™γ® $(ARG2)(θ΅γ€ε—)γ«γ‚γ‚‹ιƒ¨ε†οΎ„οΎο½·ο½­οΎ’οΎοΎ„ $(ARG1) γ«ζ›ΈεΌο½΄οΎ—ο½°γθ¦‹γ¤γ‹γ‚γΎγ—γγ€‚";
+        Text[ korean ] = "νμΌμ $(ARG2)(ν–‰, μ—΄)μ„μΉμ— μλ” λ¶€λ¶„ λ¬Έμ„ $(ARG1)μ ν¬λ§· μ¤λ¥ λ°κ²¬";
+        Text[ chinese_simplified ] = "ε‘η°ζ–‡δ»¶η„ε­ζ–‡ζ΅£$(ARG1)ε†…ε«ι”™θ――οΌδ½η½®ε¨ $(ARG2)(θ΅,ε—)";
+        Text[ chinese_traditional ] = "η™ΌηΎζª”ζ΅η„ε­ζ–‡δ»¶$(ARG1)ε…§ε«ι―θª¤οΌδ½η½®ε¨ $(ARG2)(θ΅,ζ¬„)";
+        Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL )
+    {
+        Text = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
+        Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiηγo(ARG2)(linha,coluna)";
+        Text[ russian ] = "Β χΰρςθ δξκσμενςΰ $(ARG1) β οξηθφθθ $(ARG2)(ρςπξκΰ,κξλξνκΰ)ξανΰπσζενΰ ξψθακΰ τξπμΰςΰ.";
+        Text[ greek ] = "Εντοπίστηκε σφάλμα μορφοποίησης στο αρχείο στο τμήμα κειμένου $(ARG1) στη θέση $(ARG2)(γραμμή,στήλη)";
+        Text[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
+        Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciσn $(ARG2)(fila,columna)";
+        Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
+        Text[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ swedish ] = "Det har upptδckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
+        Text[ polish ] = "Wykryto b³Ήd w formacie dokumentu podrzκdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
+        Text[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ japanese ] = "οΎο½§ο½²οΎ™γ® $(ARG2)(θ΅γ€ε—) γ«γ‚γ‚‹ιƒ¨ε†οΎ„οΎο½·ο½­οΎ’οΎοΎ„ $(ARG1) γ«ζ›ΈεΌο½΄οΎ—ο½°γθ¦‹γ¤γ‹γ‚γΎγ—γγ€‚";
+        Text[ korean ] = "νμΌμ $(ARG2)(ν–‰,μ—΄) μ„μΉμ— μλ” λ¶€λ¶„ λ¬Έμ„ $(ARG1)μ ν¬λ§· μ¤λ¥ λ°κ²¬";
+        Text[ chinese_simplified ] = "ε‘η°ζ–‡δ»¶η„ε­ζ–‡ζ΅£$(ARG1)ε†…ε«ι”™θ――οΌδ½η½®ε¨ $(ARG2)(θ΅,ε—)";
+        Text[ chinese_traditional ] = "η™ΌηΎζª”ζ΅η„ε­ζ–‡δ»¶$(ARG1)ε…§ε«ι―θª¤οΌδ½η½®ε¨ $(ARG2)(θ΅,ζ¬„)";
+        Text[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ catalan ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
+    };
+};

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:31:39 $
+ *  last change: $Author: cl $ $Date: 2001-08-20 11:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _EHDL_HXX
+#include <svtools/ehdl.hxx>
+#endif
+
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 #include <svx/svxids.hrc>
 #include <offmgr/ofaids.hrc>
@@ -107,6 +111,7 @@
 #pragma hdrstop
 
 #define _SD_DLL                 // fuer SD_MOD()
+#include "sderror.hxx"
 #include "sdmod.hxx"
 #include "sddll.hxx"
 #include "sdresid.hxx"
@@ -156,6 +161,11 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
     pSearchItem = new SvxSearchItem(ITEMID_SEARCH);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
+
+    mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,
+                                         ERRCODE_AREA_SD,
+                                         ERRCODE_AREA_SD_END,
+                                         GetResMgr() );
 }
 
 
@@ -171,6 +181,7 @@ SdModule::~SdModule()
     delete pSearchItem;
     if( pNumberFormatter )
         delete pNumberFormatter;
+    delete mpErrorHdl;
 }
 
 
