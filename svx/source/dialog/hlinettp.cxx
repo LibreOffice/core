@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef _ADRPARSE_HXX
 #include <svtools/adrparse.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
+#endif
 
 #include "hlinettp.hxx"
 #include "hyperdlg.hrc"
@@ -118,7 +124,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbbTarget.SetHelpId( HID_HYPERDLG_INET_PATH );
 
     // Find Path to Std-Doc
-    String aStrBasePaths( SFX_APP()->GetIniManager()->Get( SFX_KEY_TEMPLATE_PATH ) );
+    String aStrBasePaths( SvtPathOptions().GetTemplatePath() );
     BOOL bFound = FALSE;
     String aStrFilename;
     DirEntry aFileEntry;
@@ -291,9 +297,8 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
             maFtPassword.Disable ();
 
             maEdLogin.SetText ( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( sAnonymous ) ) );
-            SvAddressParser aAddress(SFX_INIMANAGER()->GetAddressToken(ADDRESS_EMAIL));
-            maEdPassword.SetText ( aAddress.Count() ?
-                                   aAddress.GetEmailAddress(0) : String() );
+            SvAddressParser aAddress( SvtUserOptions().GetEmail() );
+            maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
         }
         else
         {
@@ -812,9 +817,9 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
     // disable login-editfields if checked
     if ( maCbAnonymous.IsChecked() )
     {
-        SvAddressParser aAddress(SFX_INIMANAGER()->GetAddressToken(ADDRESS_EMAIL));
-        maEdLogin.SetText ( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sAnonymous ) ) );
-        maEdPassword.SetText ( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
+        SvAddressParser aAddress( SvtUserOptions().GetEmail() );
+        maEdLogin.SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sAnonymous ) ) );
+        maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
 
         maFtLogin.Disable ();
         maFtPassword.Disable ();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 09:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
@@ -281,8 +281,8 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
 
     aStbStatus.InsertItem( 1, 130, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
-    aStbStatus.InsertItem( 2, 10 + GetTextWidth( String::CreateFromAscii( " 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
-    aStbStatus.InsertItem( 3, 10 + GetTextWidth( String::CreateFromAscii( " 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    aStbStatus.InsertItem( 2, 10 + GetTextWidth( DEFINE_CONST_UNICODE( " 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    aStbStatus.InsertItem( 3, 10 + GetTextWidth( DEFINE_CONST_UNICODE( " 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
 
     aFtURL.Disable();
     aCbbURL.Disable();
@@ -638,23 +638,23 @@ void SvxIMapDlg::DoOpen()
 {
     SfxSimpleFileDialog aDlg( this, WB_3DLOOK | WB_OPEN );
     ImageMap        aLoadIMap;
-    const String    aFilter( String::CreateFromAscii( IMAP_ALL_FILTER ) );
+    const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
 
 #ifdef MAC
-    aDlg.AddFilter( aFilter, String::CreateFromAscii( IMAP_ALL_TYPE ), "XXXX0" );
-    aDlg.AddFilter( String::CreateFromAscii( IMAP_CERN_FILTER ), String::CreateFromAscii( IMAP_CERN_TYPE ), "XXXX0" );
-    aDlg.AddFilter( String::CreateFromAscii( IMAP_NCSA_FILTER ), String::CreateFromAscii( IMAP_NCSA_TYPE ), "XXXX0" );
-    aDlg.AddFilter( String::CreateFromAscii( IMAP_BINARY_FILTER ), String::CreateFromAscii( IMAP_BINARY_TYPE ), "XXXX0" );
+    aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ), "XXXX0" );
+    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ), "XXXX0" );
+    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ), DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ), "XXXX0" );
+    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ), DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ), "XXXX0" );
 #else
-    aDlg.AddFilter( aFilter, String::CreateFromAscii( IMAP_ALL_TYPE ) );
-    aDlg.AddFilter( String::CreateFromAscii( IMAP_CERN_FILTER ), String::CreateFromAscii( IMAP_CERN_TYPE ) );
-    aDlg.AddFilter( String::CreateFromAscii( IMAP_NCSA_FILTER ), String::CreateFromAscii( IMAP_NCSA_TYPE ) );
-    aDlg.AddFilter( String::CreateFromAscii( IMAP_BINARY_FILTER ), String::CreateFromAscii( IMAP_BINARY_TYPE ) );
+    aDlg.AddFilter( aFilter, DEFINE_CONST_UNICODE( IMAP_ALL_TYPE ) );
+    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ), DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
+    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ), DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
+    aDlg.AddFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ), DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
 #endif
 
     aDlg.SetCurFilter( aFilter );
-    aDlg.SetPath( SFX_INIMANAGER()->Get( SFX_KEY_GRAPHICS_PATH ) );
-    aDlg.SetDefaultExt( String::CreateFromAscii( IMAP_BINARY_EXT ) );
+    aDlg.SetPath( SvtPathOptions().GetGraphicPath() );
+    aDlg.SetDefaultExt( DEFINE_CONST_UNICODE( IMAP_BINARY_EXT ) );
 
     if ( aDlg.Execute() == RET_OK )
     {
@@ -684,26 +684,26 @@ void SvxIMapDlg::DoOpen()
 BOOL SvxIMapDlg::DoSave()
 {
     SfxSimpleFileDialog     aDlg( this, WB_3DLOOK | WB_SAVEAS );
-    const String    aBinFilter( String::CreateFromAscii( IMAP_BINARY_FILTER ) );
-    const String    aCERNFilter( String::CreateFromAscii( IMAP_CERN_FILTER ) );
-    const String    aNCSAFilter( String::CreateFromAscii( IMAP_NCSA_FILTER ) );
+    const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
+    const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
+    const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
     const BOOL      bChanged = pModel->IsChanged();
     BOOL            bRet;
 
 #ifdef MAC
-    aDlg.AddFilter( aCERNFilter, String::CreateFromAscii( IMAP_CERN_TYPE ), "XXXX0" );
-    aDlg.AddFilter( aNCSAFilter, String::CreateFromAscii( IMAP_NCSA_TYPE ), "XXXX0" );
-    aDlg.AddFilter( aBinFilter, String::CreateFromAscii( IMAP_BINARY_TYPE ), "XXXX0" );
+    aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ), "XXXX0" );
+    aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ), "XXXX0" );
+    aDlg.AddFilter( aBinFilter, DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ), "XXXX0" );
 #else
-    aDlg.AddFilter( aCERNFilter, String::CreateFromAscii( IMAP_CERN_TYPE ) );
-    aDlg.AddFilter( aNCSAFilter, String::CreateFromAscii( IMAP_NCSA_TYPE ) );
-    aDlg.AddFilter( aBinFilter, String::CreateFromAscii( IMAP_BINARY_TYPE ) );
+    aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
+    aDlg.AddFilter( aNCSAFilter, DEFINE_CONST_UNICODE( IMAP_NCSA_TYPE ) );
+    aDlg.AddFilter( aBinFilter, DEFINE_CONST_UNICODE( IMAP_BINARY_TYPE ) );
 #endif
 
     aDlg.SetCurFilter( aCERNFilter );
-    aDlg.SetPath( SFX_INIMANAGER()->Get( SFX_KEY_GRAPHICS_PATH ) );
-    aDlg.SetDefaultExt( String::CreateFromAscii( IMAP_BINARY_EXT ) );
+    aDlg.SetPath( SvtPathOptions().GetGraphicPath() );
+    aDlg.SetDefaultExt( DEFINE_CONST_UNICODE( IMAP_BINARY_EXT ) );
 
     if( aDlg.Execute() == RET_OK )
     {
@@ -715,17 +715,17 @@ BOOL SvxIMapDlg::DoSave()
         if ( aFilter == aBinFilter )
         {
             nFormat = IMAP_FORMAT_BIN;
-            aExt = String::CreateFromAscii( IMAP_BINARY_EXT );
+            aExt = DEFINE_CONST_UNICODE( IMAP_BINARY_EXT );
         }
         else if ( aFilter == aCERNFilter )
         {
             nFormat = IMAP_FORMAT_CERN;
-            aExt = String::CreateFromAscii( IMAP_CERN_EXT );
+            aExt = DEFINE_CONST_UNICODE( IMAP_CERN_EXT );
         }
         else if ( aFilter == aNCSAFilter )
         {
             nFormat = IMAP_FORMAT_NCSA;
-            aExt = String::CreateFromAscii( IMAP_NCSA_EXT );
+            aExt = DEFINE_CONST_UNICODE( IMAP_NCSA_EXT );
         }
 
         INetURLObject aURL;
@@ -781,7 +781,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         aEdtText.SetText( rInfo.aMarkDescription );
 
         if ( !rInfo.aMarkTarget.Len() )
-            pOwnData->pCbbTarget->SetText( String::CreateFromAscii( SELF_TARGET ) );
+            pOwnData->pCbbTarget->SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
         else
             pOwnData->pCbbTarget->SetText( rInfo.aMarkTarget );
     }
@@ -827,7 +827,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
             aEdtText.SetText( rInfo.aMarkDescription );
 
         if ( !rInfo.aMarkTarget.Len() )
-            pOwnData->pCbbTarget->SetText( String::CreateFromAscii( SELF_TARGET ) );
+            pOwnData->pCbbTarget->SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
         else
             pOwnData->pCbbTarget->SetText(  rInfo.aMarkTarget );
     }
@@ -851,7 +851,7 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
     GET_MODULE_FIELDUNIT( eFieldUnit );
 
     aStr.Assign( GetUnitString( rMousePos.X(), eFieldUnit, cSep ) );
-    aStr.Append( String::CreateFromAscii( " / " ) );
+    aStr.Append( DEFINE_CONST_UNICODE( " / " ) );
     aStr.Append( GetUnitString( rMousePos.Y(), eFieldUnit, cSep ) );
 
     aStbStatus.SetItemText( 2, aStr );
@@ -875,7 +875,7 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
     GET_MODULE_FIELDUNIT( eFieldUnit );
 
     aStr.Assign( GetUnitString( rSize.Width(), eFieldUnit, cSep ) );
-    aStr.Append( String::CreateFromAscii( " x " ) );
+    aStr.Append( DEFINE_CONST_UNICODE( " x " ) );
     aStr.Append( GetUnitString( rSize.Height(), eFieldUnit, cSep ) );
 
     aStbStatus.SetItemText( 3, aStr );
@@ -927,7 +927,7 @@ IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, p )
     aNewInfo.aMarkDescription = aEdtText.GetText();
 
     if ( !aTargetText.Len() )
-        aNewInfo.aMarkTarget = String::CreateFromAscii( SELF_TARGET );
+        aNewInfo.aMarkTarget = DEFINE_CONST_UNICODE( SELF_TARGET );
     else
         aNewInfo.aMarkTarget = aTargetText;
 

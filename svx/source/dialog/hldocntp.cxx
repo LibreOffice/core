@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldocntp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 09:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "hldocntp.hxx"
 
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -66,56 +67,46 @@
 #ifndef _SFX_OBJFAC_HXX
 #include <sfx2/docfac.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
 #endif
-
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
-
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
-
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>
 #endif
-
 #ifndef _SV_SYSTEM_HXX
 #include <vcl/system.hxx>
 #endif
-
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
-
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 
-#include "hldocntp.hxx"
 #include "hyperdlg.hrc"
 
 using namespace ::rtl;
@@ -205,7 +196,8 @@ void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, Str
 
     // read URL
     rURL = aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_URL_TAG) ), RTL_TEXTENCODING_ASCII_US );
-    rURL = SFX_INIMANAGER()->SubstPathVars( rURL );
+    SvtPathOptions aPathOpt;
+    rURL = aPathOpt.SubstituteVariable( rURL );
 
     // read target
     if ( pShowAsFolder )
@@ -219,7 +211,7 @@ void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, Str
     rIconId = aStrIconId.ToInt32();
 
     // read title
-    String aLangStr = SfxIniManager::Get()->SubstPathVars( String::CreateFromAscii( "$(vlang)" ) );
+    String aLangStr = aPathOpt.SubstituteVariable( DEFINE_CONST_UNICODE("$(vlang)") );
     ByteString aLang( aLangStr, RTL_TEXTENCODING_UTF8 );
     ByteString aGroup = INTERNETSHORTCUT_ID_TAG;
     ( ( aGroup += '-' ) += aLang ) += ".W";
@@ -230,10 +222,8 @@ void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, Str
 void SvxHyperlinkNewDocTp::FillDocumentList ()
 {
     EnterWait();
-
-    SfxIniManager* pIni = SFX_APP()->GetIniManager();
-    String aStrDirName( pIni->Get( SFX_KEY_NEW_DIR ) );
-
+    SvtPathOptions aPathOpt;
+    String aStrDirName( aPathOpt.GetNewMenuPath() );
     INetURLObject aFolderObj( aStrDirName, INET_PROT_FILE );
     try
     {
@@ -278,7 +268,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
                         sal_Char const sTilde[] = "~";
                         aTitle.Erase ( aTitle.SearchAscii( sTilde ), 1 );
 
-                        aURL = pIni->SubstPathVars( aURL );
+                        aURL = aPathOpt.SubstituteVariable( aURL );
 
                         if( !bShowAsFolder )
                         {
@@ -349,7 +339,7 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( String& aStrURL, String& aStrName
     if( aURL.getFSysPath( INetURLObject::FSYS_DETECT ).Len() - aURL.getName().Len() <= 1 ||
         aURL.getFSysPath( INetURLObject::FSYS_DETECT ).Search( '.' ) == 0 )
     {
-        INetURLObject aTmpURL( SFX_APP()->GetIniManager()->Get( SFX_KEY_WORK_PATH ), INET_PROT_FILE );
+        INetURLObject aTmpURL( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
         if( !aTmpURL.hasFinalSlash() )
             aTmpURL.setFinalSlash();
         aTmpURL.Append( aURL.getName() );
@@ -505,7 +495,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
     if( aURL.getFSysPath( INetURLObject::FSYS_DETECT ).Len() - aURL.getName().Len() <= 1 ||
         aURL.getFSysPath( INetURLObject::FSYS_DETECT ).Search( '.' ) == 0 )
     {
-        INetURLObject aTmpURL( SFX_APP()->GetIniManager()->Get( SFX_KEY_WORK_PATH ), INET_PROT_FILE );
+        INetURLObject aTmpURL( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
         if( !aTmpURL.hasFinalSlash() )
             aTmpURL.setFinalSlash();
         aTmpURL.Append( aURL.getName() );
@@ -622,9 +612,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     String aStrName = GetName ( maEdPath.GetText() );
 
     if ( aStrPath == aEmptyStr )
-    {
-        aStrPath = SFX_APP()->GetIniManager()->Get( SFX_KEY_WORK_PATH  );
-    }
+        aStrPath = SvtPathOptions().GetWorkPath();
 
     aDlg.SetPath ( aStrPath );
 
