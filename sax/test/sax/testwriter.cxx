@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testwriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:32:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include <vector>
 #include <stdio.h>
-#include <assert.h>
 
 #include <com/sun/star/test/XSimpleTest.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>  // for the multiservice-factories
