@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:10:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,31 +386,40 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
 
             Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
-            if ( xSeek.is() )
+            try
             {
-                // If the stream is a raw one, then we should be positioned
-                // at the beginning of the actual data
-                if ( !bToBeCompressed || bRawStream )
+                if ( xSeek.is() )
                 {
-                    xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
-                    ImplSetStoredData ( *pTempEntry, xStream );
-                }
-                else if ( bToBeEncrypted )
-                    pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
+                    // If the stream is a raw one, then we should be positioned
+                    // at the beginning of the actual data
+                    if ( !bToBeCompressed || bRawStream )
+                    {
+                        xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
+                        ImplSetStoredData ( *pTempEntry, xStream );
+                    }
+                    else if ( bToBeEncrypted )
+                        pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
 
-                xSeek->seek ( 0 );
-            }
-            else
-            {
-                // Okay, we don't have an xSeekable stream. This is possibly bad.
-                // check if it's one of our own streams, if it is then we know that
-                // each time we ask for it we'll get a new stream that will be
-                // at position zero...otherwise, assert and skip this stream...
-                if ( !pStream->IsPackageMember() )
-                {
-                    VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
-                    continue;
+                    xSeek->seek ( 0 );
                 }
+                else
+                {
+                    // Okay, we don't have an xSeekable stream. This is possibly bad.
+                    // check if it's one of our own streams, if it is then we know that
+                    // each time we ask for it we'll get a new stream that will be
+                    // at position zero...otherwise, assert and skip this stream...
+                    if ( !pStream->IsPackageMember() )
+                    {
+                        VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
+                        continue;
+                    }
+                }
+            }
+            catch ( Exception& )
+            {
+                VOS_ENSURE( 0, "The stream provided to the package component has problems!" );
+                bWritingFailed = sal_True;
+                continue;
             }
 
             if ( bToBeEncrypted || bRawStream )
