@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:37:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,12 +769,14 @@ public:
     TypeWriter(RTTypeSource     RTTypeSource,
                RTTypeClass      RTTypeClass,
                const OString&   typeName,
-               const OString&   superTypeName,
+               sal_uInt16       superTypeCount,
                sal_uInt16       FieldCount,
                sal_uInt16       methodCount,
                sal_uInt16       referenceCount);
 
     ~TypeWriter();
+
+    void setSuperType(sal_uInt16 index, OString const & name);
 
     void createBlop();
 };
@@ -782,7 +784,7 @@ public:
 TypeWriter::TypeWriter(RTTypeSource     RTTypeSource,
                        RTTypeClass      RTTypeClass,
                        const OString&   typeName,
-                       const OString&   superTypeName,
+                       sal_uInt16       superTypeCount,
                        sal_uInt16       fieldCount,
                        sal_uInt16       methodCount,
                        sal_uInt16       referenceCount)
@@ -790,7 +792,7 @@ TypeWriter::TypeWriter(RTTypeSource     RTTypeSource,
     , m_typeSource(RTTypeSource)
     , m_typeClass(RTTypeClass)
      , m_typeName(typeName)
-    , m_nSuperTypes(superTypeName.getLength() > 0 ? 1 : 0)
+    , m_nSuperTypes(superTypeCount)
     , m_fieldCount(fieldCount)
     , m_methodCount(methodCount)
     , m_referenceCount(referenceCount)
@@ -801,7 +803,6 @@ TypeWriter::TypeWriter(RTTypeSource     RTTypeSource,
     if (m_nSuperTypes > 0)
     {
         m_superTypeNames = new OString[m_nSuperTypes];
-        m_superTypeNames[0] = superTypeName;
     } else
     {
         m_superTypeNames = NULL;
@@ -836,6 +837,11 @@ TypeWriter::~TypeWriter()
 
     if (m_pUik)
         delete m_pUik;
+}
+
+void TypeWriter::setSuperType(sal_uInt16 index, OString const & name)
+{
+    m_superTypeNames[index] = name;
 }
 
 void TypeWriter::createBlop()
@@ -1243,27 +1249,6 @@ void TypeWriter::createBlop()
 
 **************************************************************************/
 
-static TypeWriterImpl TYPEREG_CALLTYPE createEntry(RTTypeClass  RTTypeClass,
-                                                   rtl_uString*  typeName,
-                                                   rtl_uString*  superTypeName,
-                                                   sal_uInt16       FieldCount,
-                                                   sal_uInt16       methodCount,
-                                                   sal_uInt16       referenceCount)
-{
-    OString rTypeName, rSuperTypeName;
-
-    rtl_uString2String( &rTypeName.pData, typeName->buffer, typeName->length, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-    rtl_uString2String( &rSuperTypeName.pData, superTypeName->buffer, superTypeName->length, RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-
-    return new TypeWriter(RT_UNO_IDL,
-                          RTTypeClass,
-                          rTypeName,
-                          rSuperTypeName,
-                          FieldCount,
-                          methodCount,
-                          referenceCount);
-}
-
 static void TYPEREG_CALLTYPE acquire(TypeWriterImpl hEntry)
 {
     TypeWriter* pEntry = (TypeWriter*) hEntry;
@@ -1477,10 +1462,47 @@ static void TYPEREG_CALLTYPE setReferenceData(TypeWriterImpl    hEntry,
     }
 }
 
+static TypeWriterImpl TYPEREG_CALLTYPE createMIEntry(
+    RTTypeClass typeClass, rtl_uString * typeName, sal_uInt16 superTypeCount,
+    sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
+{
+    OString rTypeName;
+    rtl_uString2String(
+        &rTypeName.pData, typeName->buffer, typeName->length,
+        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
+    return new TypeWriter(
+        RT_UNO_IDL, typeClass, rTypeName, superTypeCount, fieldCount,
+        methodCount, referenceCount);
+}
+
+static void TYPEREG_CALLTYPE setMISuperTypeData(
+    TypeWriterImpl hEntry, sal_uInt16 index, rtl_uString * name)
+{
+    OString rName;
+    rtl_uString2String(
+        &rName.pData, name->buffer, name->length, RTL_TEXTENCODING_UTF8,
+        OUSTRING_TO_OSTRING_CVTFLAGS);
+    static_cast< TypeWriter * >(hEntry)->setSuperType(index, rName);
+}
+
+static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
+    RTTypeClass typeClass, rtl_uString * typeName, rtl_uString * superTypeName,
+    sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
+{
+    sal_uInt16 superTypeCount = rtl_uString_getLength(superTypeName) == 0
+        ? 0 : 1;
+    TypeWriterImpl t = createMIEntry(
+        typeClass, typeName, superTypeCount, fieldCount, methodCount,
+        referenceCount);
+    if (superTypeCount > 0) {
+        setMISuperTypeData(t, 0, superTypeName);
+    }
+    return t;
+}
 
 extern "C" RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(void)
 {
-    static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)
     {
         aApi.createEntry        = &createEntry;
@@ -1496,6 +1518,8 @@ extern "C" RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api(v
         aApi.getBlop            = &getBlop;
         aApi.getBlopSize        = &getBlopSize;
         aApi.setReferenceData   = &setReferenceData;
+        aApi.createMIEntry      = &createMIEntry;
+        aApi.setMISuperTypeData = &setMISuperTypeData;
 
         return (&aApi);
     }
