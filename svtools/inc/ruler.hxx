@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:46:57 $
+ *  last change: $Author: os $ $Date: 2002-10-18 10:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,7 +721,7 @@ private:
     USHORT              nMargin1Style;
     USHORT              nMargin2Style;
     BOOL                bAutoPageWidth;
-    BOOL                bDummyAlign;
+    BOOL                bTextRTL;
 
 #ifdef _SV_RULER_CXX
 public:
@@ -931,6 +931,9 @@ public:
     const Link&         GetDoubleClickHdl() const { return maDoubleClickHdl; }
     void                SetExtraDownHdl( const Link& rLink ) { maExtraDownHdl = rLink; }
     const Link&         GetExtraDownHdl() const { return maExtraDownHdl; }
+
+    //set text direction right-to-left
+    void                SetTextRTL(BOOL bRTL);
 };
 
 #endif  // _RULER_HXX

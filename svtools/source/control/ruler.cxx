@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 09:16:49 $
+ *  last change: $Author: os $ $Date: 2002-10-18 10:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
                     {
                         aNumStr = (sal_Unicode)'0';
                         nTxtWidth2 = maVirDev.GetTextWidth( aNumStr )/2;
-                        if ( mnWinStyle & WB_HORZ )
+                        if ( (mnWinStyle & WB_HORZ)^mpData->bTextRTL )
                             nX = nStart-nTxtWidth2;
                         else
                             nX = nStart+nTxtWidth2;
@@ -1122,7 +1122,12 @@ void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
         if ( mpData->pTabs[i].nStyle & RULER_STYLE_INVISIBLE )
             continue;
 
-        long n = mpData->pTabs[i].nPos+mpData->nNullVirOff;
+        long n;
+        if(mpData->bTextRTL)
+            n =  mpData->nMargin2 - mpData->pTabs[i].nPos;
+        else
+            n = mpData->pTabs[i].nPos;
+        n += +mpData->nNullVirOff;
         long nTopBottom = GetStyle() & WB_RIGHT_ALIGNED ? nVirTop : nVirBottom;
         if ( (n >= nMin) && (n <= nMax) )
             ImplDrawTab( &maVirDev, Point( n, nTopBottom ), mpData->pTabs[i].nStyle );
@@ -1383,7 +1388,7 @@ void Ruler::ImplFormat()
     {
         long    nMin = nVirLeft;
         long    nMax = nP2;
-        long    nStart = nNullVirOff;
+        long    nStart = mpData->bTextRTL ? mpData->nMargin2 + nNullVirOff : nNullVirOff;
         long    nCenter = nVirTop+((nVirBottom-nVirTop)/2);
 
         // Nicht Schatten uebermalen
@@ -3106,4 +3111,11 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
     ImplCenterTabPos( aPos, nTabStyle );
     ImplDrawRulerTab( pDevice, aPos, nTabStyle, nStyle  );
     pDevice->Pop();
+}
+/* -----------------16.10.2002 15:17-----------------
+ *
+ * --------------------------------------------------*/
+void Ruler::SetTextRTL(BOOL bRTL)
+{
+    mpData->bTextRTL = bRTL;
 }
