@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:21:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
 #endif
 
 #ifndef __SGI_STL_HASH_MAP
@@ -206,6 +210,7 @@ class SvtCmdOptions
         CommandHashMap m_aCommandHashMap;
 };
 
+typedef ::std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > > SvtFrameVector;
 
 class SvtCommandOptions_Impl : public ConfigItem
 {
@@ -279,6 +284,7 @@ class SvtCommandOptions_Impl : public ConfigItem
         Sequence< OUString >    GetList     (   SvtCommandOptions::CmdOption    eCmdOption  ) const ;
         void                    AddCommand  (   SvtCommandOptions::CmdOption    eCmdOption,
                                                 const OUString& sURL        );
+        void EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -307,6 +313,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
     private:
         SvtCmdOptions  m_aDisabledCommands;
+        SvtFrameVector m_lFrames;
 };
 
 //_________________________________________________________________________________________________________________
@@ -399,6 +406,17 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames 
         lValues[nItem] >>= sCmd;
         m_aDisabledCommands.AddCommand( sCmd );
     }
+
+    // dont forget to update all existing frames and her might cached dispatch objects!
+    // But look for already killed frames. We hold weak references instead of hard ones ...
+    for (SvtFrameVector::const_iterator pIt  = m_lFrames.begin();
+                                        pIt != m_lFrames.end()  ;
+                                      ++pIt                     )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame(pIt->get(), ::com::sun::star::uno::UNO_QUERY);
+        if (xFrame.is())
+            xFrame->contextChanged();
+    }
 }
 
 //*****************************************************************************************************************
@@ -487,6 +505,20 @@ void SvtCommandOptions_Impl::AddCommand( SvtCommandOptions::CmdOption eCmdOption
         default:
             DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::GetList()\nUnknown option type given!\n" );
     }
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtCommandOptions_Impl::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+{
+    // check if frame already exists inside list
+    // ignore double registrations
+    // every frame must be notified one times only!
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > xWeak(xFrame);
+    SvtFrameVector::const_iterator pIt = ::std::find(m_lFrames.begin(), m_lFrames.end(), xWeak);
+    if (pIt == m_lFrames.end())
+        m_lFrames.push_back(xWeak);
 }
 
 //*****************************************************************************************************************
@@ -593,6 +625,15 @@ void SvtCommandOptions::AddCommand( CmdOption eCmdOption, const OUString& sURL )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->AddCommand( eCmdOption, sURL );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void SvtCommandOptions::EstablisFrameCallback(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame)
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->EstablisFrameCallback(xFrame);
 }
 
 //*****************************************************************************************************************
