@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-06 17:43:02 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 15:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2642,6 +2642,12 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
     {
         if ( bForce || eMode != SC_INPUT_NONE )
         {
+            if (!bOptLoaded)
+            {
+                bAutoComplete = SC_MOD()->GetAppOptions().GetAutoComplete();
+                bOptLoaded = TRUE;
+            }
+
             HideTip();
 
             if ( bSelIsRef )
@@ -2689,7 +2695,16 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
 
                     bUsed = TRUE;
 
-                    //! AutoInput?
+                    if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
+                    {
+                        //  AutoInput after ext text input
+
+                        nAutoPos = SCPOS_INVALID;
+                        if (bFormulaMode)
+                            UseFormulaData();
+                        else
+                            UseColData();
+                    }
                 }
 
                 DataChanged();              //  calls UpdateParenthesis()
@@ -2956,9 +2971,15 @@ void ScInputHandler::InputChanged( EditView* pView )
     DataChanged();
     bTextValid = TRUE;      // wird in DataChanged auf FALSE gesetzt
 
-    if ( bNewView )
-        if ( pActiveViewSh )
-            pActiveViewSh->GetViewData()->GetDocShell()->PostEditView( pEngine, aCursorPos );
+    if ( pActiveViewSh )
+    {
+        ScViewData* pViewData = pActiveViewSh->GetViewData();
+        if ( bNewView )
+            pViewData->GetDocShell()->PostEditView( pEngine, aCursorPos );
+
+        pViewData->EditGrowY();
+        pViewData->EditGrowX();
+    }
 
     SyncViews( pView );
 }
