@@ -1,4 +1,6 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\ooo
 ..\util\hid.lst %COMMON_DEST%\bin%_EXT%\ooo\hid.lst
+..\%COMMON_OUTDIR%\bin\images.zip %COMMON_DEST%\bin%_EXT%\images.zip
+..\%COMMON_OUTDIR%\bin\images.zip %COMMON_DEST%\bin%_EXT%\images2.zip
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
