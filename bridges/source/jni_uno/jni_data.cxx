@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:00:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,6 +1817,34 @@ void Bridge::map_to_java(
                     jni.ensure_no_exception();
                 }
                 break;
+            }
+            case typelib_TypeClass_STRUCT:
+            {
+                // Do not lose information about type arguments of instantiated
+                // polymorphic struct types:
+                rtl::OUString const & name = rtl::OUString::unacquired(
+                    &pAny->pType->pTypeName);
+                OSL_ASSERT(name.getLength() > 0);
+                if (name[name.getLength() - 1] == '>')
+                {
+                    // Box up in com.sun.star.uno.Any:
+                    JLocalAutoRef jo_type(jni, create_type(jni, pAny->pType));
+                    jvalue java_data;
+                    map_to_java(
+                        jni, &java_data, pAny->pData, pAny->pType, 0, true,
+                        false);
+                    jo_any.reset(java_data.l);
+                    jvalue args[2];
+                    args[0].l = jo_type.get();
+                    args[1].l = jo_any.get();
+                    jo_any.reset(
+                        jni->NewObjectA(
+                            m_jni_info->m_class_Any,
+                            m_jni_info->m_ctor_Any_with_Type_Object, args));
+                    jni.ensure_no_exception();
+                    break;
+                }
+                // fall through
             }
             default:
             {
