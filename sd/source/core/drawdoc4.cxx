@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 16:00:08 $
+ *  last change: $Author: dl $ $Date: 2000-11-16 13:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,10 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#define ITEMID_LANGUAGE           EE_CHAR_LANGUAGE
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -310,15 +314,38 @@ void SdDrawDocument::CreateLayoutTemplates()
     aSvxFontItem.GetFamily() = FAMILY_ROMAN;
     aSvxFontItem.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
     aSvxFontItem.GetCharSet() = gsl_getSystemTextEncoding();
-
     rISet.Put(aSvxFontItem);
+    SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
+    aSvxFontItemCJK.GetFamily() = FAMILY_ROMAN;
+    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MS Mincho" ) );
+    aSvxFontItemCJK.GetCharSet() = gsl_getSystemTextEncoding();
+    rISet.Put(aSvxFontItemCJK);
+    SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
+    aSvxFontItemCTL.GetFamily() = FAMILY_ROMAN;
+    aSvxFontItemCTL.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
+    aSvxFontItemCTL.GetCharSet() = gsl_getSystemTextEncoding();
+    rISet.Put(aSvxFontItemCTL);
+
+    rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT ) );     // 24 pt
+    rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 24 pt
+    rISet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 24 pt
+
+    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+
+    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+
+    rISet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+    rISet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
+    rISet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
+
     rISet.Put(SvxContourItem(FALSE));
     rISet.Put(SvxShadowedItem(FALSE));
     rISet.Put(SvxUnderlineItem(UNDERLINE_NONE));
     rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
-    rISet.Put(SvxPostureItem(ITALIC_NONE));
-    rISet.Put(SvxWeightItem(WEIGHT_NORMAL));
-    rISet.Put(SvxFontHeightItem(846));          // 24 pt
     rISet.Put(SvxColorItem(RGB_Color(COL_BLACK)));
 
                     // Absatzattribute (Edit Engine)

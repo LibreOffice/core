@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulmaper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: dl $ $Date: 2000-11-16 13:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,27 +184,53 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         {
             // wenn Aufzaehlung statt Bullet gewaehlt wurde, wird der Bullet-Font
             // dem Vorlagen-Font angeglichen
+
+            // to be implemented if module supports CJK
+            long nFontID = ITEMID_FONT;
+            long nFontHeightID = ITEMID_FONTHEIGHT;
+            long nWeightID = ITEMID_WEIGHT;
+            long nPostureID = ITEMID_POSTURE;
+
+            if( 0 )
+            {
+                nFontID = EE_CHAR_FONTINFO_CJK;
+                 nFontHeightID = EE_CHAR_FONTHEIGHT_CJK;
+                nWeightID = EE_CHAR_WEIGHT_CJK;
+                nPostureID = EE_CHAR_ITALIC_CJK;
+            }
+            else if( 0 )
+            {
+                nFontID = EE_CHAR_FONTINFO_CTL;
+                 nFontHeightID = EE_CHAR_FONTHEIGHT_CTL;
+                nWeightID = EE_CHAR_WEIGHT_CTL;
+                nPostureID = EE_CHAR_ITALIC_CTL;
+            }
+
             Font aMyFont;
-            const SvxFontItem& rFItem = (SvxFontItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_FONT));
+            const SvxFontItem& rFItem =
+                (SvxFontItem&)rSet.Get(GetWhich( nFontID ));
             aMyFont.SetFamily(rFItem.GetFamily());
             aMyFont.SetName(rFItem.GetFamilyName());
             aMyFont.SetCharSet(rFItem.GetCharSet());
             aMyFont.SetPitch(rFItem.GetPitch());
 
-            const SvxFontHeightItem& rFHItem = (SvxFontHeightItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_FONTHEIGHT));
+            const SvxFontHeightItem& rFHItem =
+                (SvxFontHeightItem&)rSet.Get(GetWhich( nFontHeightID ));
             aMyFont.SetSize(Size(0, rFHItem.GetHeight()));
 
-            const SvxWeightItem& rWItem = (SvxWeightItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_WEIGHT));
+            const SvxWeightItem& rWItem =
+                (SvxWeightItem&)rSet.Get(GetWhich( nWeightID ));
             aMyFont.SetWeight(rWItem.GetWeight());
+
+            const SvxPostureItem& rPItem =
+                (SvxPostureItem&)rSet.Get(GetWhich( nPostureID ));
+            aMyFont.SetItalic(rPItem.GetPosture());
 
             const SvxUnderlineItem& rUItem = (SvxUnderlineItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE));
             aMyFont.SetUnderline(rUItem.GetUnderline());
 
             const SvxCrossedOutItem& rCOItem = (SvxCrossedOutItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_STRIKEOUT));
             aMyFont.SetStrikeout(rCOItem.GetStrikeout());
-
-            const SvxPostureItem& rPItem = (SvxPostureItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_POSTURE));
-            aMyFont.SetItalic(rPItem.GetPosture());
 
             const SvxContourItem& rCItem = (SvxContourItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_CONTOUR));
             aMyFont.SetOutline(rCItem.GetValue());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:39:04 $
+ *  last change: $Author: dl $ $Date: 2000-11-16 13:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,11 +1980,22 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                             if (pSheet)
                             {
                                 SfxItemSet& rSet = pSheet->GetItemSet();
-                                const SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&)
-                                rSet.Get(EE_CHAR_FONTHEIGHT);
+
+                                SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT);
                                 ULONG nFontHeight = rOldHgt.GetHeight();
                                 nFontHeight = long(nFontHeight * (double) aFractY);
-                                rSet.Put(SvxFontHeightItem(nFontHeight));
+                                rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
+
+                                rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CJK);
+                                nFontHeight = rOldHgt.GetHeight();
+                                nFontHeight = long(nFontHeight * (double) aFractY);
+                                rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
+
+                                rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CTL);
+                                nFontHeight = rOldHgt.GetHeight();
+                                nFontHeight = long(nFontHeight * (double) aFractY);
+                                rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
+
                                 pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                             }
                         }
@@ -2006,11 +2017,21 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                                 {
                                     // Neue Fonthoehe berechnen
                                     SfxItemSet aTempSet(pSheet->GetItemSet());
-                                    const SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&)
-                                    aTempSet.Get(EE_CHAR_FONTHEIGHT);
+
+                                    SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT);
                                     ULONG nFontHeight = rOldHgt.GetHeight();
                                     nFontHeight = long(nFontHeight * (double) aFractY);
-                                    aTempSet.Put(SvxFontHeightItem(nFontHeight));
+                                    aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
+
+                                    rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK);
+                                    nFontHeight = rOldHgt.GetHeight();
+                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
+
+                                    rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL);
+                                    nFontHeight = rOldHgt.GetHeight();
+                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
 
                                     // Bullet anpassen
                                     ((SdStyleSheet*) pSheet)->AdjustToFontHeight(aTempSet, FALSE);
@@ -2045,7 +2066,10 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                             {
                                 ULONG nHeight = pObj->GetLogicRect().GetSize().Height();
                                 ULONG nFontHeight = (ULONG) (nHeight * 0.0741);
-                                pSheet->GetItemSet().Put(SvxFontHeightItem(nFontHeight));
+                                SfxItemSet& rSet = pSheet->GetItemSet();
+                                rSet.Put( SvxFontHeightItem(nFontHeight, EE_CHAR_FONTHEIGHT ));
+                                rSet.Put( SvxFontHeightItem(nFontHeight, EE_CHAR_FONTHEIGHT_CJK ));
+                                rSet.Put( SvxFontHeightItem(nFontHeight, EE_CHAR_FONTHEIGHT_CTL ));
                                 pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                             }
                         }
@@ -2059,15 +2083,28 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                         * Normales Textobjekt: Texthoehe anpassen
                         ******************************************************/
                         pObj->GetOutlinerParaObject()->RemoveCharAttribs( EE_CHAR_FONTHEIGHT );
-                        SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool(), EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT );
+                        pObj->GetOutlinerParaObject()->RemoveCharAttribs( EE_CHAR_FONTHEIGHT_CJK );
+                        pObj->GetOutlinerParaObject()->RemoveCharAttribs( EE_CHAR_FONTHEIGHT_CTL );
+
+                        SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool(), EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CTL );
 
 //-/                        pObj->TakeAttributes(aSet, TRUE, FALSE);
                         aSet.Put(pObj->GetItemSet());
 
-                        const SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aSet.Get(EE_CHAR_FONTHEIGHT);
+                        SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aSet.Get(EE_CHAR_FONTHEIGHT);
                         ULONG nFontHeight = rOldHgt.GetHeight();
                         nFontHeight = long(nFontHeight * (double) aFractY);
-                        aSet.Put(SvxFontHeightItem(nFontHeight));
+                        aSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
+
+                        rOldHgt = (SvxFontHeightItem&) aSet.Get( EE_CHAR_FONTHEIGHT_CJK );
+                        nFontHeight = rOldHgt.GetHeight();
+                        nFontHeight = long(nFontHeight * (double) aFractY);
+                        aSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK ));
+
+                        rOldHgt = (SvxFontHeightItem&) aSet.Get( EE_CHAR_FONTHEIGHT_CTL );
+                        nFontHeight = rOldHgt.GetHeight();
+                        nFontHeight = long(nFontHeight * (double) aFractY);
+                        aSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL ));
 
 //-/                        pObj->NbcSetAttributes(aSet, FALSE);
                         pObj->SetItemSet(aSet);

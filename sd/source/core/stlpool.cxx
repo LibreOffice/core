@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: dl $ $Date: 2000-11-16 13:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 
 
@@ -279,6 +282,14 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
     aSvxFontItem.GetFamily() = FAMILY_ROMAN;
     aSvxFontItem.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
     aSvxFontItem.GetCharSet() = gsl_getSystemTextEncoding();
+    SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
+    aSvxFontItemCJK.GetFamily() = FAMILY_ROMAN;
+    aSvxFontItemCJK.GetFamilyName() = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MS Mincho" ) );
+    aSvxFontItemCJK.GetCharSet() = gsl_getSystemTextEncoding();
+    SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
+    aSvxFontItemCTL.GetFamily() = FAMILY_ROMAN;
+    aSvxFontItemCTL.GetFamilyName() = System::GetStandardFont(STDFONT_ROMAN).GetName();
+    aSvxFontItemCTL.GetCharSet() = gsl_getSystemTextEncoding();
 
     Font aBulletFont( GetBulletFont() );
 
@@ -312,16 +323,26 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
             {
                 SfxItemSet& rSet = pSheet->GetItemSet();
                 rSet.Put(aSvxFontItem);
-                rSet.Put(SvxPostureItem(ITALIC_NONE));
-                rSet.Put(SvxWeightItem(WEIGHT_NORMAL));
-                rSet.Put(SvxUnderlineItem(UNDERLINE_NONE));
-                rSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
-                rSet.Put(SvxShadowedItem(FALSE));
-                rSet.Put(SvxContourItem(FALSE));
-                rSet.Put(SvxColorItem( Color(COL_BLACK)));
-                rSet.Put(SvxAdjustItem(SVX_ADJUST_LEFT));
-                rSet.Put(XLineStyleItem(XLINE_NONE));
-                rSet.Put(XFillStyleItem(XFILL_NONE));
+                rSet.Put(aSvxFontItemCJK);
+                rSet.Put(aSvxFontItemCTL);
+                LanguageType eLanguage = pDoc->GetLanguage();
+                rSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+                rSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
+                rSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
+                rSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+                rSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+                rSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+                rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+                rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+                rSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+                rSet.Put( SvxUnderlineItem(UNDERLINE_NONE) );
+                rSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
+                rSet.Put( SvxShadowedItem(FALSE) );
+                rSet.Put( SvxContourItem(FALSE) );
+                rSet.Put( SvxColorItem( Color(COL_BLACK)) );
+                rSet.Put( SvxAdjustItem(SVX_ADJUST_LEFT) );
+                rSet.Put( XLineStyleItem(XLINE_NONE) );
+                rSet.Put( XFillStyleItem(XFILL_NONE) );
 
                 if( nLevel == 1 )
                 {
@@ -369,7 +390,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
 
             // FontSize
             nFontSize = (USHORT)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
-            pSheet->GetItemSet().Put(SvxFontHeightItem(nFontSize));
+            SfxItemSet& rOutlineSet = pSheet->GetItemSet();
+            rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT ) );
+            rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CJK ) );
+            rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
             // Einzuege
             aSvxLRSpaceItem.SetTxtFirstLineOfst(nFirstIndent);
@@ -410,9 +434,21 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rTitleSet.Put(XLineStyleItem(XLINE_NONE));
         rTitleSet.Put(XFillStyleItem(XFILL_NONE));
         rTitleSet.Put(aSvxFontItem);
-        rTitleSet.Put(SvxPostureItem(ITALIC_NONE));
-        rTitleSet.Put(SvxWeightItem(WEIGHT_NORMAL));
-        rTitleSet.Put(SvxFontHeightItem(1552));                 // 44 pt
+        rTitleSet.Put(aSvxFontItemCJK);
+        rTitleSet.Put(aSvxFontItemCTL);
+        LanguageType eLanguage = pDoc->GetLanguage();
+        rTitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+        rTitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
+        rTitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
+        rTitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+        rTitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+        rTitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+        rTitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+        rTitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+        rTitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT ) );                 // 44 pt
+        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT_CJK ) );                 // 44 pt
+        rTitleSet.Put(SvxFontHeightItem( 1552, 100, EE_CHAR_FONTHEIGHT_CTL ) );                 // 44 pt
         rTitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE));
         rTitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
         rTitleSet.Put(SvxShadowedItem(FALSE));
@@ -441,9 +477,21 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rSubtitleSet.Put(XLineStyleItem(XLINE_NONE));
         rSubtitleSet.Put(XFillStyleItem(XFILL_NONE));
         rSubtitleSet.Put(aSvxFontItem);
-        rSubtitleSet.Put(SvxPostureItem(ITALIC_NONE));
-        rSubtitleSet.Put(SvxWeightItem(WEIGHT_NORMAL));
-        rSubtitleSet.Put(SvxFontHeightItem(1129));                  // 32 pt
+        rSubtitleSet.Put(aSvxFontItemCJK);
+        rSubtitleSet.Put(aSvxFontItemCTL);
+        LanguageType eLanguage = pDoc->GetLanguage();
+        rSubtitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+        rSubtitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
+        rSubtitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
+        rSubtitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+        rSubtitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+        rSubtitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+        rSubtitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+        rSubtitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+        rSubtitleSet.Put(SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+        rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT ) );     // 32 pt
+        rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 32 pt
+        rSubtitleSet.Put( SvxFontHeightItem( 1129, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 32 pt
         rSubtitleSet.Put(SvxUnderlineItem(UNDERLINE_NONE));
         rSubtitleSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
         rSubtitleSet.Put(SvxShadowedItem(FALSE));
@@ -474,14 +522,26 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rNotesSet.Put(XLineStyleItem(XLINE_NONE));
         rNotesSet.Put(XFillStyleItem(XFILL_NONE));
         rNotesSet.Put(aSvxFontItem);
-        rNotesSet.Put(SvxPostureItem(ITALIC_NONE));
-        rNotesSet.Put(SvxWeightItem(WEIGHT_NORMAL));
-        rNotesSet.Put(SvxFontHeightItem(846));     // 24 pt
-        rNotesSet.Put(SvxUnderlineItem(UNDERLINE_NONE));
-        rNotesSet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
-        rNotesSet.Put(SvxShadowedItem(FALSE));
-        rNotesSet.Put(SvxContourItem(FALSE));
-        rNotesSet.Put(SvxColorItem( Color(COL_BLACK)));
+        rNotesSet.Put(aSvxFontItemCJK);
+        rNotesSet.Put(aSvxFontItemCTL);
+        LanguageType eLanguage = pDoc->GetLanguage();
+        rNotesSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
+        rNotesSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
+        rNotesSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
+        rNotesSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+        rNotesSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+        rNotesSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+        rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+        rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+        rNotesSet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+        rNotesSet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT ) );    // 24 pt
+        rNotesSet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 24 pt
+        rNotesSet.Put( SvxFontHeightItem( 846, 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 24 pt
+        rNotesSet.Put( SvxUnderlineItem(UNDERLINE_NONE) );
+        rNotesSet.Put( SvxCrossedOutItem(STRIKEOUT_NONE) );
+        rNotesSet.Put( SvxShadowedItem(FALSE) );
+        rNotesSet.Put( SvxContourItem(FALSE) );
+        rNotesSet.Put( SvxColorItem( Color(COL_BLACK)) );
         rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
     }
 
