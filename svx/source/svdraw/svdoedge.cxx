@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-22 09:54:38 $
+ *  last change: $Author: thb $ $Date: 2002-09-10 08:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
     // prepare line geometry
-    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     if(!bHideContour && ImpSetShadowAttributes(rXOut,TRUE))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-22 11:48:40 $
+ *  last change: $Author: thb $ $Date: 2002-09-10 08:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ImpLineGeometry
+class SdrLineGeometry
 {
     PolyPolygon3D               maPolyPoly3D;
     PolyPolygon3D               maLinePoly3D;
@@ -244,7 +244,7 @@ class ImpLineGeometry
     BOOL                        mbForceTwoPixel;
 
 public:
-    ImpLineGeometry(const PolyPolygon3D& rPolyPoly, const PolyPolygon3D& rLinePoly,
+    SdrLineGeometry(const PolyPolygon3D& rPolyPoly, const PolyPolygon3D& rLinePoly,
                     const ImpLineStyleParameterPack& rLineAttr,
                     BOOL bForceOnePixel, BOOL bForceTwoPixel)
     :   maPolyPoly3D(rPolyPoly),

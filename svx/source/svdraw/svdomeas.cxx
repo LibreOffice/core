@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-27 14:03:48 $
+ *  last change: $Author: thb $ $Date: 2002-09-10 08:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,7 +678,7 @@ FASTBOOL SdrMeasureObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rIn
 
     // prepare line geometry
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    ::std::auto_ptr< ImpLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
     BOOL bShadOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
@@ -1388,7 +1388,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-::std::auto_ptr< ImpLineGeometry > SdrMeasureObj::CreateLinePoly( OutputDevice& rOut,
+::std::auto_ptr< SdrLineGeometry > SdrMeasureObj::CreateLinePoly( OutputDevice& rOut,
                                                                   BOOL          bForceOnePixel,
                                                                   BOOL          bForceTwoPixel,
                                                                   BOOL          bIsLineDraft    ) const
@@ -1460,10 +1460,10 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     }
 
     if(aPolyPoly3D.Count() || aLinePoly3D.Count())
-        return ::std::auto_ptr< ImpLineGeometry > (new ImpLineGeometry(aPolyPoly3D, aLinePoly3D,
+        return ::std::auto_ptr< SdrLineGeometry > (new SdrLineGeometry(aPolyPoly3D, aLinePoly3D,
                                                                        aLineAttr, bForceOnePixel, bForceTwoPixel));
     else
-        return ::std::auto_ptr< ImpLineGeometry > (NULL);
+        return ::std::auto_ptr< SdrLineGeometry > (NULL);
 }
 
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const

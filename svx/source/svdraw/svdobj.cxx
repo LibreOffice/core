@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-27 14:03:49 $
+ *  last change: $Author: thb $ $Date: 2002-09-10 08:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,7 +1767,7 @@ FASTBOOL SdrObject::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfo
     return TRUE;
 }
 
-::std::auto_ptr< ImpLineGeometry >  SdrObject::CreateLinePoly( OutputDevice&        rOut,
+::std::auto_ptr< SdrLineGeometry >  SdrObject::CreateLinePoly( OutputDevice&        rOut,
                                                                BOOL                 bForceOnePixel,
                                                                BOOL                 bForceTwoPixel,
                                                                BOOL                 bIsLineDraft    ) const
@@ -1796,10 +1796,10 @@ FASTBOOL SdrObject::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& /*rInfo
     }
 
     if(aPolyPoly3D.Count() || aLinePoly3D.Count())
-        return ::std::auto_ptr< ImpLineGeometry > (new ImpLineGeometry(aPolyPoly3D, aLinePoly3D,
+        return ::std::auto_ptr< SdrLineGeometry > (new SdrLineGeometry(aPolyPoly3D, aLinePoly3D,
                                                                        aLineAttr, bForceOnePixel, bForceTwoPixel));
     else
-        return ::std::auto_ptr< ImpLineGeometry > (NULL);
+        return ::std::auto_ptr< SdrLineGeometry > (NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2157,7 +2157,7 @@ void PolyPolygon3D_BuildSkeletonsAndGrow(const PolyPolygon3D& rPolyPoly)
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-::std::auto_ptr< ImpLineGeometry > SdrObject::ImpPrepareLineGeometry( ExtOutputDevice& rXOut, const SfxItemSet& rSet,
+::std::auto_ptr< SdrLineGeometry > SdrObject::ImpPrepareLineGeometry( ExtOutputDevice& rXOut, const SfxItemSet& rSet,
                                                                       BOOL bIsLineDraft) const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
@@ -2187,11 +2187,11 @@ void PolyPolygon3D_BuildSkeletonsAndGrow(const PolyPolygon3D& rPolyPoly)
                               bForceOnePixel, bForceTwoPixel, bIsLineDraft);
     }
 
-    return ::std::auto_ptr< ImpLineGeometry > (0L);
+    return ::std::auto_ptr< SdrLineGeometry > (0L);
 }
 
 void SdrObject::ImpDrawShadowLineGeometry(
-    ExtOutputDevice& rXOut, const SfxItemSet& rSet, ImpLineGeometry& rLineGeometry) const
+    ExtOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const
 {
     sal_uInt32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
     sal_uInt32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
@@ -2225,7 +2225,7 @@ void SdrObject::ImpDrawShadowLineGeometry(
 }
 
 void SdrObject::ImpDrawColorLineGeometry(
-    ExtOutputDevice& rXOut, const SfxItemSet& rSet, ImpLineGeometry& rLineGeometry) const
+    ExtOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const
 {
     Color aColor = ((XLineColorItem&)rSet.Get(XATTR_LINECOLOR)).GetValue();
     sal_uInt16 nTrans = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
@@ -2238,7 +2238,7 @@ void SdrObject::ImpDrawLineGeometry(
     ExtOutputDevice& rXOut,
      Color& rColor,
     sal_uInt16 nTransparence,
-    ImpLineGeometry& rLineGeometry) const
+    SdrLineGeometry& rLineGeometry) const
 {
     Color aLineColor( rColor );
 
@@ -4166,7 +4166,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         aMap.SetScaleY(pModel->GetScaleFraction());
         aVDev.SetMapMode(aMap);
 
-        ::std::auto_ptr< ImpLineGeometry > aLineGeom( pRet->CreateLinePoly(aVDev, FALSE, FALSE, FALSE) );
+        ::std::auto_ptr< SdrLineGeometry > aLineGeom( pRet->CreateLinePoly(aVDev, FALSE, FALSE, FALSE) );
         if( aLineGeom.get() )
         {
             PolyPolygon3D& rPolyPoly3D = aLineGeom->GetPolyPoly3D();
