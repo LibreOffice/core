@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 09:38:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,9 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
     PropertyValue* pBegin = _rInfo.getArray();
     PropertyValue* pEnd   = pBegin + _rInfo.getLength();
     ::std::sort(pBegin,pEnd,TPropertyValueLessFunctor());
+
+    pBegin = _rInfo.getArray();
+    pEnd   = pBegin + _rInfo.getLength();
     for (; pBegin != pEnd; ++pBegin)
     {
         // we only include strings an integer values
