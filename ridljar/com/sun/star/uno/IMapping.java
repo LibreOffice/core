@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMapping.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:37:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@ package com.sun.star.uno;
  * <p>This interface exists for compatibility with the binary UNO API.</p>
  *
  * @see com.sun.star.uno.IBridge
- * @since UDK 1.0
  *
  * @deprecated As of UDK 3.2, this interface is deprecated, without offering a
  * replacement.

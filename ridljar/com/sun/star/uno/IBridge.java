@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IBridge.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:37:15 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@ import java.io.IOException;
  * @see com.sun.star.uno.IBridge
  * @see com.sun.star.uno.IQueryInterface
  * @see com.sun.star.uno.UnoRuntime
- * @since UDK 1.0
  *
  * @deprecated As of UDK 3.2, this interface is deprecated, without offering a
  * replacement.
