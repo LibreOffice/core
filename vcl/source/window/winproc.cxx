@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-15 13:48:35 $
+ *  last change: $Author: cp $ $Date: 2002-02-20 08:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,6 +1148,12 @@ static long ImplHandleExtTextInput( Window* pWindow, ULONG nTime,
         }
         pSVData->maWinData.mpExtTextInputWin = pChild;
         ImplCallCommand( pChild, COMMAND_STARTEXTTEXTINPUT );
+    }
+
+    // be aware of being recursively called in StartExtTextInput
+    if ( !pChild->mbExtTextInput )
+    {
+        return 0;
     }
 
     // Test for changes
