@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-13 18:24:21 $
+ *  last change: $Author: dvo $ $Date: 2002-06-19 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,14 +151,26 @@
 #include <xmloff/xmltoken.hxx>
 #endif
 
+#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
+#include <xmloff/prhdlfac.hxx>
+#endif
+
+#ifndef _XMLOFF_XMLTYPES_HXX
+#include <xmloff/xmltypes.hxx>
+#endif
+
 #ifndef _SW_XMLITHLP_HXX
 #include "xmlithlp.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+using com::sun::star::uno::Any;
 
 SvXMLImportItemMapper::SvXMLImportItemMapper(
                                 SvXMLItemMapEntriesRef rMapEntries,
@@ -996,6 +1008,22 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( bSetSizeType )
                         pFrmSize->SetSizeType( eSizeType );
                 }
+            }
+        }
+        break;
+
+        case RES_FRAMEDIR:
+        {
+            const XMLPropertyHandler* pWritingModeHandler =
+                XMLPropertyHandlerFactory::CreatePropertyHandler(
+                    XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
+            if( pWritingModeHandler != NULL )
+            {
+                Any aAny;
+                bOk = pWritingModeHandler->importXML( rValue, aAny,
+                                                      rUnitConverter );
+                if( bOk )
+                    bOk = rItem.PutValue( aAny );
             }
         }
         break;

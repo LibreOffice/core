@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
+ *  last change: $Author: dvo $ $Date: 2002-06-19 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,14 @@
 #include <xmloff/xmltoken.hxx>
 #endif
 
+#ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
+#include <xmloff/prhdlfac.hxx>
+#endif
+
+#ifndef _XMLOFF_XMLTYPES_HXX
+#include <xmloff/xmltypes.hxx>
+#endif
+
 #ifndef _SW_XMLITHLP_HXX
 #include "xmlithlp.hxx"
 #endif
@@ -178,6 +186,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+using ::com::sun::star::uno::Any;
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
@@ -1096,6 +1105,24 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             {
                 rUnitConverter.convertMeasure( aOut, pFrmSize->GetHeight() );
                 bOk = sal_True;
+            }
+        }
+        break;
+
+        case RES_FRAMEDIR:
+        {
+            Any aAny;
+            bOk = rItem.QueryValue( aAny );
+            if( bOk )
+            {
+                const XMLPropertyHandler* pWritingModeHandler =
+                    XMLPropertyHandlerFactory::CreatePropertyHandler(
+                        XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT );
+                OUString sValue;
+                bOk = pWritingModeHandler->exportXML( sValue, aAny,
+                                                      rUnitConverter );
+                if( bOk )
+                    aOut.append( sValue );
             }
         }
         break;

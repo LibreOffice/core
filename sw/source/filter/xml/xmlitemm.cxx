@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:16:19 $
+ *  last change: $Author: dvo $ $Date: 2002-06-19 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
     // not required
     // RES_UNKNOWNATR_CONTAINER
     M_E_SE( TEXT, XMLNS, RES_UNKNOWNATR_CONTAINER, 0 ),
+
+    // RES_FRAMEDIR
+    M_E( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
     M_END
 };
 
