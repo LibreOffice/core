@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchRecorder.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:38:51 $
+ *  last change:$Date: 2004-03-02 13:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,14 +104,19 @@ public class _XDispatchRecorder extends MultiMethodTest {
     }
 
     public void _startRecording() {
-        oObj.startRecording(xFrame);
 
+        oObj.startRecording(xFrame);
+        oObj.endRecording();
         tRes.tested("startRecording()", true);
     }
 
-    public void _endRecording() {
-        requiredMethod("startRecording()");
+    public void _getRecordedMacro() {
 
+        clearBuffer();
+
+        oObj.startRecording(xFrame);
+
+        log.println("NEGATIVE TEST: dispatch calles via API must not recorded");
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
@@ -127,26 +132,44 @@ public class _XDispatchRecorder extends MultiMethodTest {
 
         shortWait();
 
-        log.println("Ending record ...");
-        oObj.endRecording();
-
         log.println("Getting macro ... :");
         String macro = oObj.getRecordedMacro();
         log.println(macro);
 
+        log.println("Ending record ...");
+        oObj.endRecording();
+
         boolean res = macro != null
-                   && macro.indexOf(dispURL.Complete) > -1
-                   && macro.indexOf((String)dispArgs[0].Value) > -1;
+                   && macro.indexOf(dispURL.Complete) == -1
+                   && macro.indexOf((String)dispArgs[0].Value) == -1;
         if (!res) log.println("Dispatch URL '" + dispURL.Complete
             + "' or its argument '" + dispArgs[0].Value
-            + "' was not found in macro returned - FAILED");
+            + "' was found in macro - FAILED");
+
+        tRes.tested("getRecordedMacro()", res);
+    }
+
+    public void _endRecording() {
+
+        oObj.startRecording(xFrame);
+        oObj.endRecording();
+        String macro = oObj.getRecordedMacro();
+        boolean res = true;
+        if (macro.length() != 0){
+            log.println("'endRecording()' was called but macro buffer is not cleared: FALSE");
+            log.println(macro);
+            res = false;
+        }
 
         tRes.tested("endRecording()", res);
     }
 
     public void _recordDispatch() {
-        executeMethod("endRecording()");
+        clearBuffer();
 
+        oObj.startRecording(xFrame);
+
+        // positve test
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
@@ -161,6 +184,8 @@ public class _XDispatchRecorder extends MultiMethodTest {
         String macro = oObj.getRecordedMacro();
         log.println(macro);
 
+        oObj.endRecording();
+
         boolean res = macro != null
                    && macro.indexOf(dispURL.Complete) > -1
                    && macro.indexOf((String)dispArgs[0].Value) > -1;
@@ -172,7 +197,9 @@ public class _XDispatchRecorder extends MultiMethodTest {
     }
 
     public void _recordDispatchAsComment() {
-        executeMethod("endRecording()");
+        clearBuffer();
+
+        oObj.startRecording(xFrame);
 
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
@@ -187,6 +214,8 @@ public class _XDispatchRecorder extends MultiMethodTest {
         log.println("Getting macro ... :");
         String macro = oObj.getRecordedMacro();
         log.println(macro);
+
+        oObj.endRecording();
 
         boolean res = macro != null
                    && macro.indexOf(dispURL.Complete) > -1
@@ -211,17 +240,21 @@ public class _XDispatchRecorder extends MultiMethodTest {
         tRes.tested("recordDispatchAsComment()", res);
     }
 
-    public void _getRecordedMacro() {
-        executeMethod("endRecording()");
-        executeMethod("recordDispatch()");
-        executeMethod("recordDispatchAsComment()");
-
-        tRes.tested("getRecordedMacro()", oObj.getRecordedMacro() != null);
-    }
 
     private void shortWait() {
         try {
             Thread.sleep(500);
         } catch (InterruptedException ex) {}
     }
+
+    private void clearBuffer() {
+        oObj.startRecording(xFrame);
+        oObj.endRecording();
+        String macro = oObj.getRecordedMacro();
+        if (macro.length() != 0){
+            log.println("ERROR: 'endRecording()' was called but macro buffer is not cleared!");
+            log.println(macro);
+        }
+    }
+
 }
