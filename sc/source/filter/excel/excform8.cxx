@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-20 14:05:13 $
+ *  last change: $Author: dr $ $Date: 2001-11-23 13:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
 {
     BYTE                    nOp, nLen, nByte;
     UINT16                  nUINT16, nIndexToFunc;
-    INT16                   nINT16;
     double                  fDouble;
     String                  aString;
     BOOL                    bError = FALSE;
@@ -648,15 +647,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
             {
-                aIn >> nINT16 >> nUINT16;
+                sal_uInt16 nXti, nName;
+                aIn >> nXti >> nName;
                 aIn.Ignore( 2 );
-                ULONG nXti = (ULONG)nINT16;
                 const XclImpSupbook* pSupbook = pExcRoot->pExtsheetBuffer->GetSupbook( nXti );
                 if( !pSupbook || pSupbook->IsSelf() )
-                    aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nUINT16 ] );
+                    aStack << aPool.Store( ( *pExcRoot->pRNameBuff )[ nName ] );
                 else
                 {
-                    const XclImpExtName* pExtName = pSupbook->GetExtName( nUINT16 );
+                    const XclImpExtName* pExtName = pSupbook->GetExtName( nName );
                     if( pExtName )
                     {
                         String aAppl, aExtDoc;
