@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 20:01:04 $
+ *  last change: $Author: cl $ $Date: 2001-02-22 10:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 #include <com/sun/star/frame/XModel.hpp>
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+
+#ifndef _XMLEOHLP_HXX
+#include <svx/xmleohlp.hxx>
 #endif
 
 #include "document.hxx"
@@ -205,14 +209,26 @@ sal_Bool ScXMLImportWrapper::Import()
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh )
     {
-        SvXMLGraphicHelper* pGraphicHelper;
+        SvXMLGraphicHelper* pGraphicHelper = NULL;
         uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
+
+        uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+        SvXMLEmbeddedObjectHelper *pObjectHelper = NULL;
+
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
-        if( !xSource.is() )
+
+        if( pStorage )
         {
             pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
             xGrfContainer = pGraphicHelper;
+
+            SvPersist *pPersist = pObjSh;
+            if( pPersist )
+            {
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
+                xObjectResolver = pObjectHelper;
+            }
         }
 
         uno::Reference<task::XStatusIndicator> xStatusIndicator;
@@ -233,10 +249,11 @@ sal_Bool ScXMLImportWrapper::Import()
             }
         }
 
-        uno::Sequence<uno::Any> aArgs(2);
+        uno::Sequence<uno::Any> aArgs(3);
         uno::Any* pArgs = aArgs.getArray();
         pArgs[0] <<= xGrfContainer;
         pArgs[1] <<= xStatusIndicator;
+        pArgs[2] <<= xObjectResolver;
 
         uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
             xServiceFactory->createInstanceWithArguments(
@@ -279,8 +296,11 @@ sal_Bool ScXMLImportWrapper::Import()
             bRetval = sal_False;
         }
 
-        if( !xSource.is() )
+        if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+        if( pObjectHelper )
+            SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
 
         return bRetval;
     }
@@ -414,6 +434,9 @@ sal_Bool ScXMLImportWrapper::Export()
             uno::Reference<io::XActiveDataSource> xDocSrc( xWriter, uno::UNO_QUERY );
             xDocSrc->setOutputStream( xDocOut );
 
+            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
+            SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
+
             uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
             SvXMLGraphicHelper* pGraphicHelper;
 
@@ -423,11 +446,19 @@ sal_Bool ScXMLImportWrapper::Export()
                 xGrfContainer = pGraphicHelper;
             }
 
-            uno::Sequence<uno::Any> aDocArgs(3);
+            SvPersist *pPersist = pObjSh;
+            if( pPersist )
+            {
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
+                xObjectResolver = pObjectHelper;
+            }
+
+            uno::Sequence<uno::Any> aDocArgs(4);
             uno::Any* pDocArgs = aDocArgs.getArray();
             pDocArgs[0] <<= xGrfContainer;
             pDocArgs[1] <<= GetStatusIndicator(xModel);
             pDocArgs[2] <<= xHandler;
+            pDocArgs[3] <<= xObjectResolver;
 
             uno::Reference<document::XFilter> xDocFilter(
                 xServiceFactory->createInstanceWithArguments(
@@ -447,8 +478,11 @@ sal_Bool ScXMLImportWrapper::Export()
                     xDocStream->Commit();
             }
 
-            if( pStorage )
+            if( pGraphicHelper )
                 SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+            if( pObjectHelper )
+                SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
         }
 
         return bDocRet && bMetaRet;
