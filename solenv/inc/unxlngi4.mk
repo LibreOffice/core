@@ -3,9 +3,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-19 13:29:40 $
+#   last change: $Author: hr $ $Date: 2001-07-13 13:53:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,7 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mpentium -fno-for-scope -fpermissive -mpreferred-stack-boundary=2
+CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
