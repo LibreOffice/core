@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:09:35 $
+ *  last change: $Author: jp $ $Date: 2001-03-05 13:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_CHARRELIEFITEM_HXX
+#include <svx/charreliefitem.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -479,7 +482,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },  // RES_CHRATR_EMPHASIS_MARK
     { SID_ATTR_CHAR_TWO_LINES, SFX_ITEM_POOLABLE },     // RES_CHRATR_TWO_LINES
     { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },    // RES_CHRATR_SCALEW
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY5
+    { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },        // RES_CHRATR_RELIEF
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
 
     { FN_TXTATR_INET, 0 },                              // RES_TXTATR_INETFMT
@@ -707,10 +710,10 @@ void _InitCore()
                 new SvxEmphasisMarkItem;
     aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SvxTwoLinesItem( FALSE );
     aAttrTab[ RES_CHRATR_SCALEW - POOLATTR_BEGIN ] = new SvxCharScaleWidthItem;
+    aAttrTab[ RES_CHRATR_RELIEF - POOLATTR_BEGIN ] = new SvxCharReliefItem;
 
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
-    aAttrTab[ RES_CHRATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY5 );
 // CharakterAttr - Dummies
 
 // TextAttr Ende - Dummies
