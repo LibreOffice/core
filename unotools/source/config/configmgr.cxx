@@ -1,10 +1,10 @@
-/*************************************************************************
+    /*************************************************************************
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:41:28 $
+ *  last change: $Author: jb $ $Date: 2001-07-10 11:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include "unotools/configitem.hxx"
+#endif
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include "unotools/configpathes.hxx"
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
@@ -476,8 +479,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     }
     catch(Exception&){}
-    Reference<XHierarchicalNameAccess> xHierarchyAccess(xIFace, UNO_QUERY);
-    if(xHierarchyAccess.is())
+    Reference<XNameAccess> xDirectAccess(xIFace, UNO_QUERY);
+    if(xDirectAccess.is())
     {
         OUString sProperty;
         switch(eProp)
@@ -504,7 +507,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         }
         try
         {
-            aRet = xHierarchyAccess->getByHierarchicalName(sProperty);
+            aRet = xDirectAccess->getByName(sProperty);
         }
         catch(Exception&)
         {
@@ -562,16 +565,15 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
     OUString sPath = C2U(cConfigBaseURL);
     sPath += rProperty;
 
-    sal_Int32 nLastIndex = sPath.lastIndexOf( '/',  sPath.getLength());
-    OUString sNode =    sPath.copy( 0, nLastIndex );
-    OUString sProperty =    sPath.copy( nLastIndex + 1, sPath.getLength() - nLastIndex - 1 );
+    OUString sNode, sProperty;
+    OSL_VERIFY( splitLastFromConfigurationPath(rProperty, sNode, sProperty) );
 
-    Reference< XHierarchicalNameAccess> xAccess = GetHierarchyAccess(sNode);
+    Reference< XNameAccess> xAccess( GetHierarchyAccess(sNode), UNO_QUERY );
     Any aRet;
     try
     {
         if(xAccess.is())
-            aRet = xAccess->getByHierarchicalName(sProperty);
+            aRet = xAccess->getByName(sProperty);
     }
 #ifdef DBG_UTIL
     catch(Exception& rEx)
@@ -595,16 +597,10 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
     OUString sPath = C2U(cConfigBaseURL);
     sPath += rProperty;
 
-    sal_Int32 nLastIndex = sPath.lastIndexOf( '/',  sPath.getLength());
-    OUString sNode =    sPath.copy( 0, nLastIndex );
-    OUString sProperty =    sPath.copy( nLastIndex + 1, sPath.getLength() - nLastIndex - 1 );
+    OUString sNode, sProperty;
+    OSL_VERIFY( splitLastFromConfigurationPath(rProperty, sNode, sProperty) );
 
-    Reference< XHierarchicalNameAccess> xHierarchyAccess = GetHierarchyAccess(sNode);
-
-    Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
-    Reference<XNameAccess> xNodeAcc;
-    aNode >>= xNodeAcc;
-    Reference<XNameReplace> xNodeReplace(xNodeAcc, UNO_QUERY);
+    Reference<XNameReplace> xNodeReplace(GetHierarchyAccess(sNode), UNO_QUERY);
     if(xNodeReplace.is())
     {
         try

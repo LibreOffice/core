@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 06:31:41 $
+ *  last change: $Author: jb $ $Date: 2001-07-10 11:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include "unotools/configmgr.hxx"
 #endif
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include "unotools/configpathes.hxx"
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #endif
@@ -79,16 +82,28 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAME_HPP_
+#include <com/sun/star/container/XHierarchicalName.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_XTEMPLATECONTAINER_HPP_
+#include <com/sun/star/configuration/XTemplateContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
+#include <com/sun/star/util/XStringEscape.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
@@ -98,12 +113,14 @@
 #endif
 
 using namespace utl;
-using namespace rtl;
+using rtl::OUString;
+using rtl::OString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+using namespace com::sun::star::configuration;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -208,41 +225,9 @@ sal_Bool lcl_Find(
     //return true if the path is completely correct or if it is longer
     //i.e ...Print/Content/Graphic and .../Print
     for(sal_Int32 nIndex = 0; nIndex < nLength; nIndex++)
-        if(pCheckPropertyNames[nIndex] == rTemp ||
-            pCheckPropertyNames[nIndex].getLength() < rTemp.getLength() &&
-                rTemp[pCheckPropertyNames[nIndex].getLength()] == '/' &&
-                    0 == rTemp.compareTo(pCheckPropertyNames[nIndex], pCheckPropertyNames[nIndex].getLength())
-            )
+        if( isPrefixOfConfigurationPath(rTemp, pCheckPropertyNames[nIndex]) )
             return sal_True;
     return sal_False;
-}
-/* -----------------------------10.07.01 08:05--------------------------------
-    search for the first slash that is unquoted
-
- ---------------------------------------------------------------------------*/
-lcl_FindFirstSlashInPath(const OUString& rPath)
-{
-    const sal_Unicode cSglQuote('\'');
-    const sal_Unicode cDblQuote('\"');
-    const sal_Unicode cSlash('/');
-    sal_Int32 nSglQuote = rPath.indexOf(cSglQuote);
-    sal_Int32 nDblQuote = rPath.indexOf(cDblQuote);
-    sal_Int32 nSlash = rPath.indexOf(cSlash);
-    if(nSglQuote > -1 && nSglQuote < nSlash)
-    {
-        sal_Int32 nForward = rPath.indexOf(cSglQuote, ++nSglQuote);
-        OSL_ENSURE(nForward < rPath.getLength() -1, "incorrect quoting");
-        nSlash = rPath.indexOf(cSlash, ++nForward);
-        OSL_ENSURE(nSlash > 0, "incorrect quoting");
-    }
-    else if(nDblQuote > -1 && nDblQuote < nSlash)
-    {
-        sal_Int32 nForward = rPath.indexOf(cDblQuote, ++nDblQuote);
-        OSL_ENSURE(nForward < rPath.getLength() -1, "incorrect quoting");
-        nSlash = rPath.indexOf(cSlash, ++nForward);
-        OSL_ENSURE(nSlash > 0, "incorrect quoting");
-    }
-    return nSlash;
 }
 //-----------------------------------------------------------------------------
 void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
@@ -543,13 +528,6 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
  ---------------------------------------------------------------------------*/
 Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
 {
-//#ifdef DEBUG
-//    sal_Int32 nSlash = lcl_FindFirstSlashInPath(C2U("name/name"));
-//    nSlash = lcl_FindFirstSlashInPath(C2U("name"));
-//    nSlash = lcl_FindFirstSlashInPath(C2U("name/*['test/test']/name"));
-//    nSlash = lcl_FindFirstSlashInPath(C2U("*['test/test']/name"));
-//    nSlash = lcl_FindFirstSlashInPath(C2U("*[\"test/te/st\"]/name"));
-//#endif
     Sequence< Any > aRet(rNames.getLength());
     const OUString* pNames = rNames.getConstArray();
     Any* pRet = aRet.getArray();
@@ -654,14 +632,9 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             {
                 try
                 {
-                    // quoted node names should not be a problem - the last slash
-                    // must be behind the last quoting
-                    sal_Int32 nLastIndex = pNames[i].lastIndexOf( '/',  pNames[i].getLength());
-
-                    if(nLastIndex > 0)
+                    OUString sNode, sProperty;
+                    if (splitLastFromConfigurationPath(pNames[i],sNode, sProperty))
                     {
-                        OUString sNode =    pNames[i].copy( 0, nLastIndex );
-                        OUString sProperty =    pNames[i].copy( nLastIndex + 1, pNames[i].getLength() - nLastIndex - 1 );
                         Any aNode = xHierarchyAccess->getByHierarchicalName(sNode);
                         Reference<XNameAccess> xNodeAcc;
                         aNode >>= xNodeAcc;
@@ -675,7 +648,7 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                     }
                     else //direct value
                     {
-                        xTopNodeReplace->replaceByName(pNames[i], pValues[i]);
+                        xTopNodeReplace->replaceByName(sProperty, pValues[i]);
                     }
                 }
 #ifdef DBG_UTIL
@@ -751,10 +724,96 @@ void ConfigItem::RemoveListener()
         }
     }
 }
-/* -----------------------------15.09.00 12:06--------------------------------
+/* -----------------------------10.07.00      --------------------------------
+
+ ---------------------------------------------------------------------------*/
+void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eFormat, Reference<XInterface> const& _xParentNode)
+{
+    switch (_eFormat)
+    {
+    case CONFIG_NAME_LOCAL_NAME:
+        // unaltered - this is our input format
+        break;
+
+    case CONFIG_NAME_FULL_PATH:
+        {
+            Reference<XHierarchicalName> xFormatter(_xParentNode, UNO_QUERY);
+            if (xFormatter.is())
+            {
+                OUString * pNames = _rNames.getArray();
+                for(int i = 0; i<_rNames.getLength(); ++i)
+                try
+                {
+                    pNames[i] = xFormatter->composeHierarchicalName(pNames[i]);
+                }
+                CATCH_INFO("Exception from composeHierarchicalName(): ")
+                break;
+            }
+        }
+        OSL_ENSURE(false, "Cannot create absolute pathes: missing interface");
+        // make local pathes instaed
+
+    case CONFIG_NAME_LOCAL_PATH:
+        {
+            Reference<XTemplateContainer> xTypeContainer(_xParentNode, UNO_QUERY);
+            if (xTypeContainer.is())
+            {
+                OUString sTypeName = xTypeContainer->getElementTemplateName();
+                sTypeName = sTypeName.copy(sTypeName.lastIndexOf('/')+1);
+
+                OUString * pNames = _rNames.getArray();
+                for(int i = 0; i<_rNames.getLength(); ++i)
+                {
+                    pNames[i] = wrapConfigurationElementName(pNames[i],sTypeName);
+                }
+            }
+            else
+            {
+                static const OUString sSetService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.SetAccess"));
+                Reference<XServiceInfo> xSVI(_xParentNode, UNO_QUERY);
+                if (xSVI.is() && xSVI->supportsService(sSetService))
+                {
+                    OUString * pNames = _rNames.getArray();
+                    for(int i = 0; i<_rNames.getLength(); ++i)
+                    {
+                        pNames[i] = wrapConfigurationElementName(pNames[i]);
+                    }
+                }
+            }
+        }
+        break;
+
+    case CONFIG_NAME_PLAINTEXT_NAME:
+        {
+            Reference<XStringEscape> xEscaper(_xParentNode, UNO_QUERY);
+            if (xEscaper.is())
+            {
+                OUString * pNames = _rNames.getArray();
+                for(int i = 0; i<_rNames.getLength(); ++i)
+                try
+                {
+                    pNames[i] = xEscaper->unescapeString(pNames[i]);
+                }
+                CATCH_INFO("Exception from unescapeString(): ")
+            }
+        }
+        break;
+
+    }
+}
+/* -----------------------------10.07.00      --------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
+{
+    ConfigNameFormat const eDefaultFormat = CONFIG_NAME_LOCAL_NAME; // CONFIG_NAME_DEFAULT;
+
+    return GetNodeNames(rNode, eDefaultFormat);
+}
+/* -----------------------------15.09.00 12:06--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat)
 {
     Sequence< OUString > aRet;
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
@@ -773,7 +832,9 @@ Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
             if(xCont.is())
             {
                 aRet = xCont->getElementNames();
+                lcl_normalizeLocalNames(aRet,eFormat,xCont);
             }
+
         }
 #ifdef DBG_UTIL
         catch(Exception& rEx)
@@ -817,7 +878,7 @@ sal_Bool ConfigItem::ClearNodeSet(const OUString& rNode)
                 {
                     xCont->removeByName(pNames[i]);
                 }
-                CATCH_INFO("Exception from commitChanges(): ")
+                CATCH_INFO("Exception from removeByName(): ")
             }
             xBatch->commitChanges();
             bRet = sal_True;
@@ -865,6 +926,41 @@ sal_Bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString
     }
     return bRet;
 }
+//----------------------------------------------------------------------------
+static inline
+OUString lcl_extractSetPropertyName( const OUString& rInPath, const OUString& rPrefix )
+{
+    OUString const sSubPath = dropPrefixFromConfigurationPath( rInPath, rPrefix);
+    return extractFirstFromConfigurationPath( sSubPath );
+}
+//----------------------------------------------------------------------------
+static
+Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue >& rValues, const OUString& rPrefix )
+{
+    const PropertyValue* pProperties = rValues.getConstArray();
+
+    Sequence< OUString > aSubNodeNames(rValues.getLength());
+    OUString* pSubNodeNames = aSubNodeNames.getArray();
+
+    OUString sLastSubNode;
+    sal_Int32 nSubIndex = 0;
+
+    for(sal_Int32 i = 0; i < rValues.getLength(); i++)
+    {
+        OUString const sSubPath = dropPrefixFromConfigurationPath( pProperties[i].Name, rPrefix);
+        OUString const sSubNode = extractFirstFromConfigurationPath( sSubPath );
+
+        if(sLastSubNode != sSubNode)
+        {
+            pSubNodeNames[nSubIndex++] = sSubNode;
+        }
+
+        sLastSubNode = sSubNode;
+    }
+    aSubNodeNames.realloc(nSubIndex);
+
+    return aSubNodeNames;
+}
 /* -----------------------------15.09.00 15:52--------------------------------
     add or change properties
  ---------------------------------------------------------------------------*/
@@ -891,37 +987,20 @@ sal_Bool ConfigItem::SetSetProperties(
                 return sal_False;
 
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            sal_Int32 nNodeLength = rNode.getLength() + 1;
+
             if(xFac.is())
             {
-                const PropertyValue* pProperties = rValues.getConstArray();
-                Sequence< OUString > aSubNodeNames(rValues.getLength());
-                OUString* pSubNodeNames = aSubNodeNames.getArray();
-                OUString sLastSubNode;
-                sal_Int32 nSubIndex = 0;
+                const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
 
-                for(sal_Int32 i = 0; i < rValues.getLength(); i++)
-                {
-                    OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                    sal_Int32 nSlashIndex = lcl_FindFirstSlashInPath(sSubNode);
-                    if( nSlashIndex >= 0 )
-                        sSubNode = sSubNode.copy(0, nSlashIndex);
-                    if(sLastSubNode != sSubNode)
-                    {
-                        pSubNodeNames[nSubIndex++] = sSubNode;
-                    }
-                    sLastSubNode = sSubNode;
-                }
-                aSubNodeNames.realloc(nSubIndex);
-                pSubNodeNames = aSubNodeNames.getArray();
+                const sal_Int32 nSubNodeCount = aSubNodeNames.getLength();
 
-                for(sal_Int32 j = 0; j < nSubIndex; j++)
+                for(sal_Int32 j = 0; j <nSubNodeCount ; j++)
                 {
-                    if(!xCont->hasByName(pSubNodeNames[j]))
+                    if(!xCont->hasByName(aSubNodeNames[j]))
                     {
                         Reference<XInterface> xInst = xFac->createInstance();
                         Any aVal; aVal <<= xInst;
-                        xCont->insertByName(pSubNodeNames[j], aVal);
+                        xCont->insertByName(aSubNodeNames[j], aVal);
                     }
                     //set values
                 }
@@ -931,10 +1010,14 @@ sal_Bool ConfigItem::SetSetProperties(
                 }
                 CATCH_INFO("Exception from commitChanges(): ")
 
+                const PropertyValue* pProperties = rValues.getConstArray();
+
                 Sequence< OUString > aSetNames(rValues.getLength());
                 OUString* pSetNames = aSetNames.getArray();
+
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
+
                 sal_Bool bEmptyNode = rNode.getLength() == 0;
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
@@ -951,13 +1034,15 @@ sal_Bool ConfigItem::SetSetProperties(
                 {
                     try
                     {
-                        OSL_ENSURE(pValues[nValue].Name.getLength() > nNodeLength,"incorrect path");
-                        OUString sSubNode = pValues[nValue].Name.copy(nNodeLength);
-                        OSL_ENSURE(sSubNode.indexOf('/') == -1,     "incorrect path");
+                        OUString sSubNode = lcl_extractSetPropertyName( pValues[nValue].Name, rNode );
+
                         if(xCont->hasByName(sSubNode))
                             xCont->replaceByName(sSubNode, pValues[nValue].Value);
                         else
                             xCont->insertByName(sSubNode, pValues[nValue].Value);
+
+                        OSL_ENSURE( xHierarchyAccess->hasByHierarchicalName(dropPrefixFromConfigurationPath(pValues[nValue].Name, rNode)),
+                                    "Invalid config path" );
                     }
                     CATCH_INFO("Exception form insert/replaceByName(): ")
                 }
@@ -1001,44 +1086,28 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 xCont = Reference<XNameContainer> (xHierarchyAccess, UNO_QUERY);
             if(!xCont.is())
                 return sal_False;
-            Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            if(xFac.is())
+
+            // JB: Change: now the same name handling for sets of simple values
+            const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
+            const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
+            const sal_Int32 nSubNodeCount = aSubNodeNames.getLength();
+
+            //remove unknown members first
             {
-                const PropertyValue* pProperties = rValues.getConstArray();
-                //remove unknown members first
-
-                Sequence< OUString > aSubNodeNames(rValues.getLength());
-                OUString* pSubNodeNames = aSubNodeNames.getArray();
-                sal_Int32 nNodeLength = rNode.getLength() + 1;
-                OUString sLastSubNode;
-                sal_Int32 nSubIndex = 0;
-
-                for(sal_Int32 i = 0; i < rValues.getLength(); i++)
-                {
-                    OUString sSubNode = pProperties[i].Name.copy(nNodeLength);
-                    sal_Int32 nSlashIndex = lcl_FindFirstSlashInPath(sSubNode);
-                    if(nSlashIndex >= 0)
-                        sSubNode = sSubNode.copy(0, nSlashIndex);
-                    if(sLastSubNode != sSubNode)
-                    {
-                        pSubNodeNames[nSubIndex++] = sSubNode;
-                    }
-                    sLastSubNode = sSubNode;
-                }
-                aSubNodeNames.realloc(nSubIndex);
-                pSubNodeNames = aSubNodeNames.getArray();
-
-                Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
+                const Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
                 const OUString* pContainerSubNodes = aContainerSubNodes.getConstArray();
+
                 for(sal_Int32 nContSub = 0; nContSub < aContainerSubNodes.getLength(); nContSub++)
                 {
                     sal_Bool bFound = sal_False;
-                    for(sal_Int32 j = 0; j < nSubIndex; j++)
+                    for(sal_Int32 j = 0; j < nSubNodeCount; j++)
+                    {
                         if(pSubNodeNames[j] == pContainerSubNodes[nContSub])
                         {
                             bFound = sal_True;
                             break;
                         }
+                    }
                     if(!bFound)
                     {
                         xCont->removeByName(pContainerSubNodes[nContSub]);
@@ -1046,8 +1115,12 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 }
                 try { xBatch->commitChanges(); }
                 CATCH_INFO("Exception from commitChanges(): ")
+            }
 
-                for(sal_Int32 j = 0; j < nSubIndex; j++)
+            Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
+            if(xFac.is())
+            {
+                for(sal_Int32 j = 0; j < nSubNodeCount; j++)
                 {
                     if(!xCont->hasByName(pSubNodeNames[j]))
                     {
@@ -1059,10 +1132,15 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                 }
                 try { xBatch->commitChanges(); }
                 CATCH_INFO("Exception from commitChanges(): ")
+
+                const PropertyValue* pProperties = rValues.getConstArray();
+
                 Sequence< OUString > aSetNames(rValues.getLength());
                 OUString* pSetNames = aSetNames.getArray();
+
                 Sequence< Any> aSetValues(rValues.getLength());
                 Any* pSetValues = aSetValues.getArray();
+
                 sal_Bool bEmptyNode = rNode.getLength() == 0;
                 for(sal_Int32 k = 0; k < rValues.getLength(); k++)
                 {
@@ -1075,37 +1153,17 @@ sal_Bool ConfigItem::ReplaceSetProperties(
             {
                 const PropertyValue* pValues = rValues.getConstArray();
 
-                //remove unspecified container elements
-                Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
-                const OUString* pContainerSubNodes = aContainerSubNodes.getConstArray();
-                for(sal_Int32 nContSub = 0; nContSub < aContainerSubNodes.getLength(); nContSub++)
-                {
-                    sal_Bool bFound = sal_False;
-                    const OUString& rSubName = pContainerSubNodes[nContSub];
-                    for(int nValue = 0; nValue < rValues.getLength();nValue++)
-                    {
-                        if(pValues[nValue].Name == rSubName)
-                        {
-                            bFound = sal_True;
-                            break;
-                        }
-                    }
-
-                    if(!bFound)
-                        xCont->removeByName(rSubName);
-                }
-
                 //if no factory is available then the node contains basic data elements
                 for(int nValue = 0; nValue < rValues.getLength();nValue++)
                 {
                     try
                     {
-                        OSL_ENSURE(pValues[nValue].Name.indexOf('/') == -1,
-                            "incorrect path");
-                        if(xCont->hasByName(pValues[nValue].Name))
-                            xCont->replaceByName(pValues[nValue].Name, pValues[nValue].Value);
+                        OUString sSubNode = lcl_extractSetPropertyName( pValues[nValue].Name, rNode );
+
+                        if(xCont->hasByName(sSubNode))
+                            xCont->replaceByName(sSubNode, pValues[nValue].Value);
                         else
-                            xCont->insertByName(pValues[nValue].Name, pValues[nValue].Value);
+                            xCont->insertByName(sSubNode, pValues[nValue].Value);
                     }
                     CATCH_INFO("Exception from insert/replaceByName(): ");
                 }
@@ -1148,7 +1206,6 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
                 // the element which will loop through the field
                 sal_uInt32 nFieldElement = nEngendering;
 
-                ::rtl::OUString sThisRoundTrial;
                 for (; 1 != nFieldElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
                 {
                     ::rtl::OUString sThisRoundTrial = _rName;
@@ -1191,7 +1248,7 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
                 return sal_False;
 
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
-            sal_Int32 nNodeLength = rNode.getLength() + 1;
+
             if(xFac.is())
             {
                 if(!xCont->hasByName(rNewNode))
