@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-23 09:25:37 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 
 #include <algorithm>
-
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -972,6 +971,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     SwPaM *pCrsr = GetCrsr();
     const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     const SwTxtNode* pTxtNd = pTxtFrm->GetTxtNode();
+
     if( pCrsrSh != 0 && pTxtNd != 0 &&
         ( pCrsr == 0 ||
            pCrsr->GetPoint()->nNode.GetIndex() != pTxtNd->GetIndex() ||
@@ -985,7 +985,16 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 
         // set PaM at cursor shell
         Select( aPaM );
+
+
     }
+
+    /* ->#i13955# */
+    Window * pWindow = GetWindow();
+
+    if (pWindow != NULL)
+        pWindow->GrabFocus();
+    /* <-#i13955# */
 }
 
 OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
