@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-21 09:05:28 $
+ *  last change: $Author: as $ $Date: 2002-05-23 10:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,63 @@
 <!DOCTYPE oor:node SYSTEM "../../../../component-update.dtd">
 <oor:node oor:name="TypeDetection" oor:context="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Types">
+    <node oor:name="writer_AportisDoc_PalmDB_File" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">AportisDoc Palm DB</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>1,,,,pdb,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="writer_XHTML_File" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="de">XHTML Datei</value>
+        <value xml:lang="en-US">XHTML File</value>
+        <value xml:lang="x-translate">XHTML File</value>
+        <value xml:lang="x-Comment">XHTML File</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,,,,xhtml,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="writer_PocketWord_File" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="de">PocketWord Datei</value>
+        <value xml:lang="en-US">PocketWord File</value>
+        <value xml:lang="x-translate">PocketWord File</value>
+        <value xml:lang="x-Comment">PocketWord File</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,,,,psw,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="calc_MiniCalc_PalmDB_File" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">MiniCalc Palm DB</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,,,,pdb,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="writer_Flat_XML_File" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="de">Flat XML Datei</value>
+        <value xml:lang="en-US">Flat XML File</value>
+        <value xml:lang="x-translate">Flat XML File</value>
+        <value xml:lang="x-comment">Flat XML File</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,,,,xml,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="calc_Pocket_Excel_Filee" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">Pocket Excel</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,,,,pxl,20002,</value>
+      </prop>
+    </node>
     <node oor:name="graphic_HTML" oor:op="replace">
       <prop oor:name="UIName">
         <value xml:lang="en-US">HTML</value>
@@ -1856,6 +1913,81 @@
     </node>
   </node>
   <node oor:name="Filters">
+    <node oor:name="AportisDoc Palm DB" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">AportisDoc Palm DB</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,writer_AportisDoc_PalmDB_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/aportisdoc.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="Flat XML File" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="de">Flat XML Datei</value>
+        <value xml:lang="en-US">Flat XML File</value>
+        <value xml:lang="x-translate">Flat XML File</value>
+        <value xml:lang="x-comment">Flat XML File</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,writer_Flat_XML_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XFlatXml; ;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="XHTML File" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="de">XHTML Datei</value>
+        <value xml:lang="en-US">XHTML File</value>
+        <value xml:lang="x-translate">XHTML File</value>
+        <value xml:lang="x-comment">XHTML File</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,writer_XHTML_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/htmlsoff.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="PocketWord File" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="de">PocketWord Datei</value>
+        <value xml:lang="en-US">PocketWord File</value>
+        <value xml:lang="x-translate">PocketWord File</value>
+        <value xml:lang="x-comment">PocketWord File</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,writer_PocketWord_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/pocketword.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="MiniCalc Palm DB" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">MiniCalc Palm DB</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,calc_MiniCalc_PalmDB_File,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/minicalc.jar;com.sun.star.comp.Calc.XMLImporter;com.sun.star.comp.Calc.XMLExporter,1,,</value>
+      </prop>
+    </node>
+    <node oor:name="Pocket Excel" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">Pocket Excel</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,calc_Pocket_Excel_File,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/pexcel.jar;com.sun.star.comp.Calc.XMLImporter;com.sun.star.comp.Calc.XMLExporter,1,,</value>
+      </prop>
+    </node>
     <node oor:name="draw_html_Export" oor:op="replace">
       <prop oor:name="Installed">
         <value>false</value>
