@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:36:27 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,71 @@ const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
 extern const sal_Char __FAR_DATA sBulletFntName[] = "StarSymbol";
 #endif
 
-inline void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
+
+
+const SwNumFmt& SwNumRule::Get( USHORT i ) const
+{
+    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
+    return aFmts[ i ] ? *aFmts[ i ]
+                      : *aBaseFmts[ eRuleType ][ i ];
+}
+
+const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
+{
+    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
+    return aFmts[ i ];
+}
+const Font& SwNumRule::GetDefBulletFont()
+{
+    if( !pDefBulletFont )
+        SwNumRule::_MakeDefBulletFont();
+    return *pDefBulletFont;
+}
+
+USHORT SwNumRule::GetNumIndent( BYTE nLvl )
+{
+    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    return aDefNumIndents[ nLvl ];
+}
+USHORT SwNumRule::GetBullIndent( BYTE nLvl )
+{
+    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    return aDefNumIndents[ nLvl ];
+}
+
+sal_Unicode SwNumRule::GetBulletChar( const SwNodeNum& rNum ) const
+{
+    return Get( rNum.GetRealLevel()).GetBulletChar();
+}
+const Font* SwNumRule::GetBulletFont( const SwNodeNum& rNum ) const
+{
+    return Get( rNum.GetRealLevel() ).GetBulletFont();
+}
+
+
+
+SwNodeNum::SwNodeNum( BYTE nLevel, USHORT nSetVal )
+    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE ),
+      bContNum(FALSE)
+{
+    memset( nLevelVal, 0, sizeof( nLevelVal ) );
+}
+
+SwNodeNum& SwNodeNum::operator=( const SwNodeNum& rCpy )
+{
+    nSetValue = rCpy.nSetValue;
+    nMyLevel = rCpy.nMyLevel;
+    bStartNum = rCpy.bStartNum;
+    bContNum = rCpy.bContNum;
+
+    memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );
+    return *this;
+}
+
+void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 {
     if( rNd.GetNum() &&
-        (~NO_NUMLEVEL & rNd.GetNum()->GetLevel() ) == nLevel )
+        rNd.GetNum()->GetRealLevel() == nLevel )
         rNd.NumRuleChgd();
 }
 /* -----------------------------22.02.01 13:41--------------------------------
@@ -373,9 +434,9 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
                         for( SwTxtNode* pNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
                                 pNd; pNd = (SwTxtNode*)aIter.Next() )
                             if( pNd->GetNodes().IsDocNodes() &&
-                                                    nStt < pNd->GetIndex() &&
-                                pNd->GetOutlineNum() && i == (~NO_NUMLEVEL &
-                                pNd->GetOutlineNum()->GetLevel() ) )
+                                nStt < pNd->GetIndex() &&
+                                pNd->GetOutlineNum() && i ==
+                                pNd->GetOutlineNum()->GetRealLevel() )
                                     pNd->NumRuleChgd();
                         break;
                     }
@@ -406,12 +467,14 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 
 BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
 {
-    return nMyLevel == rNum.nMyLevel &&
-           nSetValue == rNum.nSetValue &&
-           bStartNum == rNum.bStartNum &&
-           ( nMyLevel >= MAXLEVEL ||
-             0 == memcmp( nLevelVal, rNum.nLevelVal,
-                        sizeof( USHORT ) * (nMyLevel+1) ));
+    return
+        nMyLevel == rNum.nMyLevel &&
+        nSetValue == rNum.nSetValue &&
+        bStartNum == rNum.bStartNum &&
+        bContNum == rNum.bContNum && // #111955#
+        ( nMyLevel >= MAXLEVEL ||
+          0 == memcmp( nLevelVal, rNum.nLevelVal,
+                       sizeof( USHORT ) * (nMyLevel+1) ));
 }
 
 SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
@@ -534,10 +597,16 @@ BOOL SwNumRule::IsRuleLSpace( SwTxtNode& rNd ) const
     const SfxPoolItem* pItem;
     BYTE nLvl;
     const SwAttrSet* pASet = rNd.GetpSwAttrSet();
-    BOOL bRet = rNd.GetNum() && pASet && SFX_ITEM_SET == pASet->GetItemState(
-                RES_LR_SPACE, FALSE, &pItem ) && ( nLvl = (~NO_NUMLEVEL &
-                rNd.GetNum()->GetLevel() )) < MAXLEVEL &&
-                Get( nLvl ).GetAbsLSpace() == ((SvxLRSpaceItem*)pItem)->GetTxtLeft();
+
+    BOOL bRet = FALSE;
+    if (rNd.GetNum() && pASet &&
+        SFX_ITEM_SET == pASet->GetItemState(RES_LR_SPACE, FALSE, &pItem ))
+    {
+        nLvl = rNd.GetNum()->GetRealLevel();
+
+        if (nLvl < MAXLEVEL)
+            bRet = Get( nLvl ).GetAbsLSpace() == ((SvxLRSpaceItem*)pItem)->GetTxtLeft();
+    }
 
     return bRet;
 }
@@ -618,7 +687,7 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
                                 BOOL bOnlyArabic ) const
 {
     String aStr;
-    if( NO_NUM > rNum.GetLevel() && !( NO_NUMLEVEL & rNum.GetLevel() ) )
+    if (rNum.IsShowNum())
     {
         const SwNumFmt& rMyNFmt = Get( rNum.GetLevel() );
         if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
