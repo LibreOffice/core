@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-02 09:58:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <tools/stream.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //                Clipboard-Format fuer XOutDev-Fuellattribute
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -76,7 +80,7 @@ class SfxItemPool;
 
 
 
-class XFillExchangeData
+class SVX_DLLPUBLIC XFillExchangeData
 {
 private:
     XFillAttrSetItem*   pXFillAttrSetItem;
@@ -93,7 +97,7 @@ public:
                         XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
 
     friend SvStream&    operator<<( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );
-    friend SvStream&    operator>>( SvStream& rIStm, XFillExchangeData& rXFillExchangeData );
+    SVX_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStm, XFillExchangeData& rXFillExchangeData );
 
     static ULONG        RegisterClipboardFormatName();
     XFillAttrSetItem*   GetXFillAttrSetItem() { return pXFillAttrSetItem; }
