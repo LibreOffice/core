@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:02:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,8 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
                 // same for tables
-            ,m_aTableFilter(_rDB.m_aTableFilter)
-            ,m_aTableTypeFilter(_rDB.m_aTableTypeFilter)
+            ,m_aTableFilter(_rDB.m_pImpl->m_aTableFilter)
+            ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_xORB(_rxORB)
             ,m_xMasterConnection(_rxMaster)
             ,m_pTables(NULL)
