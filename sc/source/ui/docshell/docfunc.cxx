@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-04 11:40:47 $
+ *  last change: $Author: er $ $Date: 2001-02-06 14:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,7 +1271,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
 
     USHORT nEditTestEndX = nUndoEndX;
     if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT ) nEditTestEndX = MAXCOL;
-    USHORT nEditTestEndY = nUndoEndX;
+    USHORT nEditTestEndY = nUndoEndY;
     if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP ) nEditTestEndY = MAXROW;
     if (!pDoc->IsBlockEditable( nTab, nUndoStartX,nUndoStartY,nEditTestEndX,nEditTestEndY ))
     {
