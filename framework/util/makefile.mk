@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:56:33 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 12:08:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,6 @@
 #
 #*************************************************************************
 PRJ=..
-
 PRJNAME=			framework
 TARGET=				framework
 
@@ -287,7 +286,6 @@ SHL4OBJS=       \
                 $(SLO)$/moduleuicfgsupplier.obj     \
                 $(SLO)$/moduleuiconfigurationmanager.obj \
                 $(SLO)$/menubarfactory.obj          \
-                $(SLO)$/mediadescriptor.obj         \
                 $(SLO)$/filter.obj                  \
                 $(SLO)$/frameloader.obj             \
                 $(SLO)$/contenthandler.obj          \
