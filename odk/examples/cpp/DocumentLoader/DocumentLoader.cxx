@@ -102,8 +102,18 @@ int SAL_CALL main( int argc, char **argv )
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
 
     // Resolves the component context from the office, on the uno URL given by argv[1].
-    xInterface = Reference< XInterface >(
-        resolver->resolve( sConnectionString ), UNO_QUERY );
+    try
+    {
+        xInterface = Reference< XInterface >(
+            resolver->resolve( sConnectionString ), UNO_QUERY );
+    }
+    catch ( Exception& e )
+    {
+        printf("Error: cannot establish a connection using '%s':\n       %s\n",
+               OUStringToOString(sConnectionString, RTL_TEXTENCODING_ASCII_US).getStr(),
+               OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        exit(1);
+    }
 
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
