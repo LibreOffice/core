@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.17 $
+#  $Revision: 1.18 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:32:49 $
+#  last change: $Author: rt $ $Date: 2005-01-31 17:18:57 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,44 +48,41 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=ToDo
-OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
-OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT_NAME)
-COMPONENT_RDB_NAME=$(COMPONENT_NAME).uno.rdb
-COMPONENT_RDB=$(OUT_COMP_GEN)/$(COMPONENT_RDB_NAME)
-COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
-COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
-COMPONENT_JAR=$(OUT_CLASS)/$(COMPONENT_JAR_NAME)
-COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
+COMP_NAME=ToDo
+COMP_CLASS_OUT=$(OUT_CLASS)/$(COMP_NAME)
+COMP_GEN_OUT=$(OUT_MISC)/$(COMP_NAME)
+COMP_RDB_NAME=$(COMP_NAME).uno.rdb
+COMP_RDB=$(COMP_GEN_OUT)/$(COMP_RDB_NAME)
+COMP_PACKAGE=$(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
+COMP_PACKAGE_URL=$(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_JAR_NAME=$(COMP_NAME).uno.jar
+COMP_JAR=$(COMP_CLASS_OUT)/$(COMP_JAR_NAME)
+COMP_JAR_MANIFEST=$(COMP_CLASS_OUT)/$(COMP_NAME).uno.Manifest
+COMP_UNOPKG_MANIFEST = $(COMP_GEN_OUT)/META-INF/manifest.xml
+COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)java_$(COMP_NAME)_register_component.flag
 
-REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT_NAME)_register_component.flag
+IDLFILES = XToDo.idl \
+	ToDo.idl
 
-IDLFILES = XToDo.idl
-
-# normally the idl file should be stored in a directory tree fitting the module structure,
-# for the example we know the module structure
+# normally the idl file should be stored in a directory tree fitting the module 
+# structure, for the example we know the module structure
 PACKAGE = org/openoffice
 
-JAVAFILES  = ToDo.java
+COMP_JAVAFILES  = ToDo.java
+COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/%.class,$(COMP_JAVAFILES))
 
-GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
+GEN_CLASSFILES = $(patsubst %.idl,$(COMP_CLASS_OUT)/$(PACKAGE)/%.class,$(IDLFILES))
+GEN_TYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
+GEN_URDFILES = $(patsubst %.idl,$(COMP_GEN_OUT)/%.urd,$(IDLFILES))
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
-CLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
-$(COMPONENT_NAME)_CLASSFILES = $(COMPONENT_NAME).class \
-		$(COMPONENT_NAME)$(QUOTE)$$$(COMPONENT_NAME)Implementation.class
+$(COMP_NAME)_CLASSFILES = $(COMP_NAME).class \
+		$(COMP_NAME)$(QUOTE)$$$(COMP_NAME)Impl.class
 
-$(COMPONENT_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
+$(COMP_NAME)_CLASSFILES += $(subst $(COMP_CLASS_OUT)/,,$(GEN_CLASSFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
+		$(PATH_SEPARATOR)$(COMP_CLASS_OUT))
 
 
 # Targets
@@ -94,42 +91,58 @@ ALL : JavaToDoExample
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS)/%.Manifest :
+$(COMP_CLASS_OUT)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
 
-$(OUT_COMP_GEN)/%.urd : %.idl
+$(COMP_GEN_OUT)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
+	$(IDLC) -C -I. -I$(IDL_DIR) -O$(COMP_GEN_OUT) $<
 
-$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+$(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(REGMERGE) $@ /UCR $(GEN_URDFILES)
 
-$(OUT_COMP_GEN)/%.java : $(COMPONENT_RDB)
+$(GEN_CLASSFILES) : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(JAVAMAKER) -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
+	$(JAVAMAKER) -BUCR -nD $(GEN_TYPELIST) -O$(COMP_CLASS_OUT) $(COMP_RDB) $(OFFICE_TYPE_LIBRARY)
 
-$(CLASSFILES) : $(JAVAFILES) $(GENJAVAFILES)
+$(COMP_CLASSFILES) : $(COMP_JAVAFILES) $(GEN_CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(COMP_CLASS_OUT) $(COMP_JAVAFILES) 
 
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+# rule for component jar file
+$(COMP_JAR) : $(COMP_JAR_MANIFEST) $(COMP_CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(COMP_CLASS_OUT)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR)
+# rule for component package manifest
+$(COMP_GEN_OUT)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
-	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$(<F))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_MISC)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_MISC)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+# rule for component package file
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(COMP_RDB_NAME)
+	cd $(subst /,$(PS),$(COMP_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_JAR_NAME)
+	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) META-INF/manifest.xml
+
+$(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -139,17 +152,20 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-JavaToDoExample : $(REGISTERFLAG)
+JavaToDoExample : $(COMP_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The ToDo Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Please load the "$(QM)ToDo.sxc$(QM)" document to see how this component works, see
+	@echo The $(COMP_NAME) Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
+	@echo Please load the "$(QM)ToDo.ods$(QM)" document to see how this component works, see
 	@echo the example description.
+	@echo -
+	@echo make ToDo.ods.load
 	@echo --------------------------------------------------------------------------------
+
+ToDo.ods.load : $(COMP_REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(COMP_CLASS_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(COMP_GEN_OUT))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
