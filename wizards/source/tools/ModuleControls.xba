@@ -275,4 +275,16 @@ Dim sProdName as String
 		oDialog.AppendFilter(FilterNames(i,0), FilterNames(i,1))
 	Next i
 	oDialog.SetCurrentFilter(FilterNames(0,0)
+End Sub
+
+
+Sub SwitchMousePointer(oWindowPeer as Object, bDoEnable as Boolean)
+Dim oWindowPointer as Object
+	oWindowPointer = CreateUnoService(&quot;com.sun.star.awt.Pointer&quot;)
+	If bDoEnable Then
+		oWindowPointer.SetType(com.sun.star.awt.SystemPointer.ARROW)
+	Else
+		oWindowPointer.SetType(com.sun.star.awt.SystemPointer.WAIT)
+	End If
+	oWindowPeer.SetPointer(oWindowPointer)
 End Sub</script:module>

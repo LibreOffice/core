@@ -535,16 +535,8 @@ End Function
 &apos; Dis-or enables a Window and adjusts the mousepointer accordingly
 Sub ToggleWindow(bDoEnable as Boolean)
 Dim oWindow as Object
-Dim oWindowPointer as Object
 	oWindow = StarDesktop.CurrentFrame.ComponentWindow
 	oWindow.Enable = bDoEnable
-	oWindowPointer = CreateUnoService(&quot;com.sun.star.awt.Pointer&quot;)
-	If bDoEnable Then
-		oWindowPointer.SetType(com.sun.star.awt.SystemPointer.ARROW)
-	Else
-		oWindowPointer.SetType(com.sun.star.awt.SystemPointer.WAIT)
-	End If
-	oWindow.SetPointer(oWindowPointer)
 End Sub
 
 

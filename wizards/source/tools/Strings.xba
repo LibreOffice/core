@@ -84,8 +84,12 @@ Dim SmallLen as Integer
 Dim BigLen as Integer
 	SmallLen = Len(SmallString)
 	BigLen = Len(BigString)
-	If Mid(BigString,BigLen + 1 - SmallLen, SmallLen) = SmallString Then
-		RTrimStr = Mid(BigString,1,BigLen - SmallLen)
+	If Instr(1,BigString, SmallString) &lt;&gt; 0 Then
+		If Mid(BigString,BigLen + 1 - SmallLen, SmallLen) = SmallString Then
+			RTrimStr = Mid(BigString,1,BigLen - SmallLen)
+		Else
+			RTrimStr = BigString
+		End If
 	Else
 		RTrimStr = BigString
 	End If
