@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:49:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,6 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK( RealSizeHdl, Button * );
     DECL_LINK( RelSizeClickHdl, CheckBox * );
     DECL_LINK( MirrorHdl, CheckBox * );
-
 
     DECL_LINK( AutoWidthClickHdl, void* );
     DECL_LINK( AutoHeightClickHdl, void* );
