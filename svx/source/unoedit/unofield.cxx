@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:00:06 $
+ *  last change: $Author: cl $ $Date: 2001-02-11 14:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
     {
 
         { MAP_CHAR_LEN("Format"),           WID_INT16,      &::getCppuType((const sal_Int16*)0),    0, 0 },
-        { MAP_CHAR_LEN("Presentation"),     WID_STRING1,    &::getCppuType((const OUString*)0),     0, 0 },
+        { MAP_CHAR_LEN("Representation"),   WID_STRING1,    &::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("TargetFrame"),      WID_STRING2,    &::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("URL"),              WID_STRING3,    &::getCppuType((const OUString*)0),     0, 0 },
         {0,0}
@@ -331,7 +331,7 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
         break;
 
     case ID_URLFIELD:
-        mpImpl->mnInt16 = SVXURLFORMAT_URL;
+        mpImpl->mnInt16 = SVXURLFORMAT_REPR;
         break;
 
     case ID_EXT_FILEFIELD:
@@ -472,7 +472,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         break;
 
     case ID_URLFIELD:
-        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1 );
+        pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1, mpImpl->msString1.getLength() ? SVXURLFORMAT_REPR : SVXURLFORMAT_URL );
         ((SvxURLField*)pData)->SetTargetFrame( mpImpl->msString2 );
         if( mpImpl->mnInt16 >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXURLFORMAT_REPR )
             ((SvxURLField*)pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
