@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-03 17:30:55 $
+ *  last change: $Author: mt $ $Date: 2001-04-19 14:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,18 @@ MapMode EditEngine::GetRefMapMode()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetRefMapMode();
+}
+
+void EditEngine::SetBackgroundColor( const Color& rColor )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->SetBackgroundColor( rColor );
+}
+
+Color EditEngine::GetBackgroundColor() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetBackgroundColor();
 }
 
 const SfxItemSet& EditEngine::GetEmptyItemSet()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-09 18:10:04 $
+ *  last change: $Author: mt $ $Date: 2001-04-19 14:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,19 @@ void Outliner::SetRefMapMode( const MapMode& rMMode )
     DBG_CHKTHIS(Outliner,0);
     pEditEngine->SetRefMapMode( rMMode );
 }
+
+void Outliner::SetBackgroundColor( const Color& rColor )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetBackgroundColor( rColor );
+}
+
+Color Outliner::GetBackgroundColor() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->GetBackgroundColor();
+}
+
 
 void Outliner::ClearModifyFlag()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 10:42:02 $
+ *  last change: $Author: mt $ $Date: 2001-04-19 14:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2171,6 +2171,11 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         // Font wird nicht restauriert...
     }
 
+    if ( rFont.GetColor() == COL_AUTO )
+    {
+        rFont.SetColor( GetAutoColor() );
+    }
+
     if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) &&
         ( nPos > mpIMEInfos->aPos.GetIndex() ) && ( nPos <= ( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen ) ) )
     {
@@ -3599,4 +3604,18 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
         }
     }
     return xBI;
+}
+
+Color ImpEditEngine::GetAutoColor() const
+{
+    Color aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+
+    if ( GetBackgroundColor() != COL_AUTO )
+    {
+        long n = GetBackgroundColor().GetRed() + GetBackgroundColor().GetGreen() + GetBackgroundColor().GetBlue();
+        if ( n < 154 )
+            aColor = COL_WHITE;
+    }
+
+    return aColor;
 }
