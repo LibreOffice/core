@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:30:58 $
+ *  last change: $Author: as $ $Date: 2000-11-24 16:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,9 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
-
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #include <basic/basmgr.hxx>
 
 #include <appuno.hxx>
@@ -298,6 +300,11 @@ SfxApplication::SfxApplication()
     pAppData_Impl->StartListening( *pAppIniMgr );
     pAppData_Impl->UpdateApplicationSettings( pAppIniMgr->IsDontHideDisabledEntries() );
 #else
+    International aOldInter( Application::GetAppInternational() );
+    String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
+    LanguageType eLanguage = sLanguage.ToInt32();
+    Application::SetAppInternational( International( eLanguage, aOldInter.GetFormatLanguage() ) );
+
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
 #endif
