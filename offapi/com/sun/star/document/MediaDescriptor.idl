@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:04:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,15 @@ service MediaDescriptor
         </p>
      */
     [optional,property] any ComponentData;
+
+    //-------------------------------------------------------------------------
+    /** document title
+
+        <p>
+        This parameter can be used to specify a title for a document.
+        </p>
+     */
+    [optional,property] string DocumentTitle;
 
     //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::URL</member>
