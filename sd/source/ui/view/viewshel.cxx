@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:38:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,6 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
-#ifndef SD_DRAW_SUB_CONTROLLER_HXX
-#include "DrawSubController.hxx"
-#endif
 
 
 // #96090#
@@ -218,6 +215,8 @@ ViewShell::ViewShell (
     pView(NULL),
     nPrintedHandoutPageNum(1),
 //  mbPrintDirectSelected( FALSE ),
+    mxController(),
+    mpController(NULL),
     meShellType (ST_NONE)
 {
     pScrlBox = new ScrollBarBox(&pFrame->GetWindow(), WB_3DLOOK | WB_SIZEABLE );
@@ -259,6 +258,8 @@ ViewShell::ViewShell(SfxViewFrame* pFrame, const ViewShell& rShell)
     pView(NULL),
     nPrintedHandoutPageNum(1),
 //  mbPrintDirectSelected( FALSE ),
+    mxController(),
+    mpController(NULL),
     meShellType (ST_NONE)
 {
     pScrlBox = new ScrollBarBox(&pFrame->GetWindow(), WB_3DLOOK | WB_SIZEABLE );
@@ -273,11 +274,10 @@ ViewShell::ViewShell(SfxViewFrame* pFrame, const ViewShell& rShell)
 
 ViewShell::~ViewShell()
 {
-    // Dispose the sub-controller of this sub-shell.  The disposing
-    // event sent to the main controller will result in it asking the
-    // sub shell manager for the sub-controller of the new main
-    // sub-shell.
-    Reference<lang::XComponent> xComponent (mxSubController, UNO_QUERY);
+    // Dispose the controller of this sub-shell.  The disposing event sent
+    // to the main controller will result in it asking the sub shell manager
+    // for the controller of the new main sub-shell.
+    Reference<lang::XComponent> xComponent (mxController, UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 
@@ -580,7 +580,6 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
 void ViewShell::UIActivate( SvInPlaceObject *pIPObj )
 {
     OSL_ASSERT (GetViewShell()!=NULL);
-    GetViewShell()->UIActivate(pIPObj);
 
     // #94252# Disable draw view controls when going inactive
     aDrawBtn.Disable();
@@ -602,7 +601,6 @@ void ViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
     aPresentationBtn.Enable();
 
     OSL_ASSERT (GetViewShell()!=NULL);
-    GetViewShell()->UIDeactivate(pIPObj);
 }
 
 /*************************************************************************
@@ -1531,17 +1529,13 @@ void ViewShell::SetDefTabHRuler( UINT16 nDefTab )
 \************************************************************************/
 USHORT ViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
-    OSL_ASSERT (GetViewShell()!=NULL);
-    USHORT nRet = GetViewShell()->PrepareClose (bUI, bForBrowsing);
+    USHORT nResult = 0;
 
-    if( nRet == TRUE )
-    {
-        FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
-        if (pFormShell != NULL)
-            nRet = pFormShell->PrepareClose (bUI, bForBrowsing);
-    }
+    FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+    if (pFormShell != NULL)
+        nResult = pFormShell->PrepareClose (bUI, bForBrowsing);
 
-    return nRet;
+    return nResult;
 }
 
 /*************************************************************************
@@ -1892,10 +1886,9 @@ ObjectBarManager& ViewShell::GetObjectBarManager (void) const
 
 
 
-DrawSubController* ViewShell::GetSubController (void)
+DrawController* ViewShell::GetController (void)
 {
-    return static_cast<DrawSubController*>(
-        static_cast< ::com::sun::star::uno::XWeak*>(mxSubController.get()));
+    return mpController;
 }
 
 
