@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:13:17 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,7 +1446,9 @@ XML_CONSTASCII_ACTION( sXML_system, "system" );
 XML_CONSTASCII_ACTION( sXML_tab_stop, "tab-stop" );
 XML_CONSTASCII_ACTION( sXML_tab_stops, "tab-stops" );
 XML_CONSTASCII_ACTION( sXML_table, "table" );
+XML_CONSTASCII_ACTION( sXML_table_background, "table-background" );
 XML_CONSTASCII_ACTION( sXML_table_cell, "table-cell" );
+XML_CONSTASCII_ACTION( sXML_table_centering, "table-centering" );
 XML_CONSTASCII_ACTION( sXML_table_column, "table-column" );
 XML_CONSTASCII_ACTION( sXML_table_column_group, "table-column-group" );
 XML_CONSTASCII_ACTION( sXML_table_columns, "table-columns" );
