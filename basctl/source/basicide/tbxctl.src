@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:12:05 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ FloatingWindow RID_TBXCONTROLS
         Text[ korean ] = "ÄÁÆ®·Ñ";
         Text[ turkish ] = "Komut alanlarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Campos de control";
     };
     Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
     Text[ russian ] = "Ýëåìåíòû óïðàâëåíèÿ";
@@ -114,6 +115,7 @@ FloatingWindow RID_TBXCONTROLS
     Text[ korean ] = "ÄÁÆ®·Ñ";
     Text[ turkish ] = "Komut alanlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campos de control";
 };
 ToolBox RID_TOOLBOX
 {
@@ -148,6 +150,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¸í·É ¹öÆ°";
             Text[ turkish ] = "Komut düðmesi";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Botón de comando";
         };
         ToolBoxItem
         {
@@ -175,6 +178,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "Ã¼Å©  ¹Ú½º";
             Text[ turkish ] = "Seçme kutusu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Casilla de verificación";
         };
         ToolBoxItem
         {
@@ -202,6 +206,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¶óº§";
             Text[ turkish ] = "Etiket";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Etiqueta";
         };
         ToolBoxItem
         {
@@ -229,6 +234,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¸®½ºÆ® ¹Ú½º";
             Text[ turkish ] = "Liste kutusu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Listado";
         };
         ToolBoxItem
         {
@@ -256,6 +262,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¼öÆò ½ºÅ©·Ñ¹Ù";
             Text[ turkish ] = "Yatay kaydýrma çubuðu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "BarraDesplazHoriz.";
         };
         ToolBoxItem
         {
@@ -283,6 +290,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "ÇÁ·¹ÀÓ ÄÁÆ®·Ñ";
             Text[ turkish ] = "FrameControl";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "FrameControl";
         };
         ToolBoxItem
         {
@@ -311,6 +319,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "URL ¹öÆ°";
             Text[ turkish ] = "URL düðmesi";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Botón URL";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -340,6 +349,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "µî·ÏÁ¤º¸";
             Text[ turkish ] = "Özellikler";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Propiedades";
         };
         ToolBoxItem
         {
@@ -366,6 +376,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¼û°ÜÁø ÄÁÆ®·Ñ ³ªÅ¸³»±â";
             Text[ turkish ] = "Gizli komut alanlarýný görüntüle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Mostrar elementos de control invisibles";
         };
         ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
         ToolBoxItem
@@ -394,6 +405,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "È¸Àü ¹öÆ°";
             Text[ turkish ] = "Deðer kutusu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Botón de selección";
         };
         ToolBoxItem
         {
@@ -421,6 +433,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¿É¼Ç ¹öÆ°";
             Text[ turkish ] = "Seçenek düðmesi";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Botón de opción";
         };
         ToolBoxItem
         {
@@ -448,6 +461,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "ÅØ½ºÆ® ¹Ú½º";
             Text[ turkish ] = "Metin kutusu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Cuadro de texto";
         };
         ToolBoxItem
         {
@@ -476,6 +490,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "ÄÞº¸ ¹Ú½º";
             Text[ turkish ] = "Kombinasyon alaný";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Cuadro combinado";
         };
         ToolBoxItem
         {
@@ -503,6 +518,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ¹Ù";
             Text[ turkish ] = "Dikey kaydýrma çubuðu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Barra de desplazamiento vert.";
         };
         ToolBoxItem
         {
@@ -530,6 +546,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¹Ì¸®º¸±â";
             Text[ turkish ] = "Önizleme";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Previsualización";
         };
         ToolBoxItem
         {
@@ -559,6 +576,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "¼±ÅÃ";
             Text[ turkish ] = "Seçim";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Selección";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -588,6 +606,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "Å×½ºÆ®¸ðµå È°¼ºÈ­";
             Text[ turkish ] = "Deneme kipini etkinleþtir";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Activar modo prueba";
         };
         ToolBoxItem
         {
@@ -614,6 +633,7 @@ ToolBox RID_TOOLBOX
             Text[ korean ] = "Æû ´ëÈ­»óÀÚ ³ªÅ¸³»±â";
             Text[ turkish ] = "Biçim diyaloðunu görüntüle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Mostrar diálogo para formularios";
         };
     };
 };
