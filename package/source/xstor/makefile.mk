@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-09-11 14:28:46 $
+#   last change: $Author: hr $ $Date: 2004-02-03 17:56:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES =  \
         $(SLO)$/owriteablestream.obj\
         $(SLO)$/xstorage.obj\
         $(SLO)$/xfactory.obj\
+        $(SLO)$/disposelistener.obj\
         $(SLO)$/register.obj
 
 EXCEPTIONSFILES= \
@@ -87,6 +88,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/owriteablestream.obj\
         $(SLO)$/xstorage.obj\
         $(SLO)$/xfactory.obj\
+        $(SLO)$/disposelistener.obj\
         $(SLO)$/register.obj
 
 SHL1TARGET=$(TARGET)
