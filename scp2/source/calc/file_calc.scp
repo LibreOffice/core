@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:16:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,3 +178,15 @@ File gid_File_Exe_Scalc
     Name = EXENAME(scalc);
     Styles = (PACKED);
 End
+
+#ifdef UNX
+
+File gid_File_Xdg_Calc
+	TXT_FILE_BODY;
+	Dir = gid_Dir_Share_Xdg;
+	Name = "calc.desktop";
+    Styles = (PACKED);
+End
+
+#endif
+
