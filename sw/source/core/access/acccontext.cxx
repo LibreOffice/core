@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:48:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,14 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATESET_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATESET_HPP_
+#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -168,7 +168,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 void SwAccessibleContext::InitStates()
@@ -185,7 +185,7 @@ void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
     vos::OGuard aGuard( aMutex );
 
-    ::com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xParent( pParent );
+    ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xParent( pParent );
     xWeakParent = xParent;
 }
 
@@ -322,7 +322,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                 }
                 else
                 {
-                    ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                    ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rLower.GetSdrObject(),
                                                   this,
                                                   SCROLLED_OUT == eAction ||
@@ -334,7 +334,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         case SCROLLED:
                         case SCROLLED_WITHIN:
                             xAccImpl->ViewForwarderChanged(
-                                accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
+                                ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                 GetMap() );
                             break;
                         case SCROLLED_IN:
@@ -344,7 +344,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         case SCROLLED_OUT:
                             {
                                 xAccImpl->ViewForwarderChanged(
-                                    accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
+                                    ::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                     GetMap() );
                                 DisposeShape( rLower.GetSdrObject(),
                                               xAccImpl.getBodyPtr() );
@@ -412,7 +412,7 @@ void SwAccessibleContext::ScrolledIn()
         SetParent( xParentImpl.getBodyPtr() );
 
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+        aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.NewValue <<= xThis;
 
         xParentImpl->FireAccessibleEvent( aEvent );
@@ -501,7 +501,7 @@ void SwAccessibleContext::DisposeChildren( const SwFrm *pFrm,
         }
         else
         {
-            ::vos::ORef< accessibility::AccessibleShape > xAccImpl(
+            ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl(
                     GetMap()->GetContextImpl( rLower.GetSdrObject(),
                                           this, sal_False )  );
             if( xAccImpl.isValid() )
@@ -542,7 +542,7 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 void SwAccessibleContext::FireVisibleDataEvent()
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+    aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
 
     FireAccessibleEvent( aEvent );
     DBG_MSG( "AccessibleVisibleData" )
@@ -553,7 +553,7 @@ void SwAccessibleContext::FireStateChangedEvent( sal_Int16 nState,
 {
     AccessibleEventObject aEvent;
 
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     if( bNewState )
         aEvent.NewValue <<= nState;
     else
@@ -783,7 +783,7 @@ Reference<XAccessibleStateSet> SAL_CALL
 }
 
 Locale SAL_CALL SwAccessibleContext::getLocale (void)
-        throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
+        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -840,7 +840,7 @@ static sal_Bool lcl_PointInRectangle(const awt::Point & aPoint,
 
 }
 
-sal_Bool SAL_CALL SwAccessibleContext::contains(
+sal_Bool SAL_CALL SwAccessibleContext::containsPoint(
             const ::com::sun::star::awt::Point& aPoint )
         throw (RuntimeException)
 {
@@ -851,7 +851,7 @@ sal_Bool SAL_CALL SwAccessibleContext::contains(
     return lcl_PointInRectangle(aPoint, aPixBounds);
 }
 
-Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
+Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint(
                 const awt::Point& aPoint )
         throw (RuntimeException)
 {
@@ -1078,14 +1078,14 @@ Sequence< OUString > SAL_CALL SwAccessibleContext::getSupportedServiceNames()
 }
 
 void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
-                                accessibility::AccessibleShape *pAccImpl )
+                                ::accessibility::AccessibleShape *pAccImpl )
 {
-    ::vos::ORef< accessibility::AccessibleShape > xAccImpl( pAccImpl );
+    ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl( pAccImpl );
     if( !xAccImpl.isValid() )
         xAccImpl = GetMap()->GetContextImpl( pObj, this, sal_True );
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+    aEvent.EventId = AccessibleEventId::CHILD;
     Reference< XAccessible > xAcc( xAccImpl.getBodyPtr() );
     aEvent.OldValue <<= xAcc;
     FireAccessibleEvent( aEvent );
@@ -1095,10 +1095,10 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
 }
 
 void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
-                                accessibility::AccessibleShape *pAccImpl )
+                                ::accessibility::AccessibleShape *pAccImpl )
 {
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+    aEvent.EventId = AccessibleEventId::CHILD;
     Reference< XAccessible > xAcc( pAccImpl );
     aEvent.NewValue <<= xAcc;
     FireAccessibleEvent( aEvent );
@@ -1109,7 +1109,7 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
         if( pWin && pWin->HasFocus() )
         {
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+            aEvent.EventId = AccessibleEventId::STATE_CHANGED;
             aEvent.NewValue <<= AccessibleStateType::FOCUSED;
             aEvent.Source = xAcc;
 
@@ -1142,7 +1142,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         SwAccessibleContext *pAcc = (SwAccessibleContext *)xParent.get();
 
         AccessibleEventObject aEvent;
-        aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+        aEvent.EventId = AccessibleEventId::CHILD;
         aEvent.OldValue <<= xThis;
         pAcc->FireAccessibleEvent( aEvent );
         DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
@@ -1191,7 +1191,7 @@ void SwAccessibleContext::DisposeChild( const SwFrmOrObj& rChildFrmOrObj,
         }
         else
         {
-            ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+            ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
                     GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
                                               this, sal_True );
             DisposeShape( rChildFrmOrObj.GetSdrObject(),
@@ -1269,7 +1269,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else
             {
-                ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
                                                   this, sal_True );
                 ScrolledInShape( rChildFrmOrObj.GetSdrObject(),
@@ -1296,7 +1296,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else
             {
-                ::vos::ORef< accessibility::AccessibleShape > xAccImpl =
+                ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
                                                   this, sal_True );
                 DisposeShape( rChildFrmOrObj.GetSdrObject(),
