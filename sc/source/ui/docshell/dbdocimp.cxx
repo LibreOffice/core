@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:14:48 $
+ *  last change: $Author: nn $ $Date: 2000-10-26 19:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,16 +69,13 @@
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/msgbox.hxx>
-#include <sdb/sdbstat.hxx>      // DBObject enum values
 #include <tools/debug.hxx>
-#include <svtools/zforlist.hxx>
 #include <offmgr/sbaitems.hxx>  // SbaSelectionList
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -86,8 +83,6 @@
 #include "docsh.hxx"
 #include "globstr.hrc"
 #include "scerrors.hxx"
-#include "cell.hxx"
-#include "compiler.hxx"
 #include "dbcolect.hxx"
 #include "markdata.hxx"
 #include "undodat.hxx"
@@ -95,6 +90,7 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
+#include "dbdocutl.hxx"
 
 using namespace com::sun::star;
 
@@ -104,149 +100,6 @@ using namespace com::sun::star;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
-
-#define D_TIMEFACTOR              86400.0
-
-// -----------------------------------------------------------------
-
-void lcl_PutData( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
-                    const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
-                    long nType, BOOL bCurrency )
-{
-    String aString;
-    double nVal = 0.0;
-    BOOL bValue = FALSE;
-    BOOL bEmptyFlag = FALSE;
-    BOOL bError = FALSE;
-    ULONG nFormatIndex = 0;
-
-    //! wasNull calls only if null value was found?
-
-    try
-    {
-        switch ( nType )
-        {
-            case sdbc::DataType::BIT:
-                //! use language from doc (here, date/time and currency)?
-                nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
-                                    NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
-                nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
-                bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
-                bValue = TRUE;
-                break;
-
-            case sdbc::DataType::TINYINT:
-            case sdbc::DataType::SMALLINT:
-            case sdbc::DataType::INTEGER:
-            case sdbc::DataType::BIGINT:
-            case sdbc::DataType::FLOAT:
-            case sdbc::DataType::REAL:
-            case sdbc::DataType::DOUBLE:
-            case sdbc::DataType::NUMERIC:
-            case sdbc::DataType::DECIMAL:
-                //! do the conversion here?
-                nVal = xRow->getDouble(nRowPos);
-                bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
-                bValue = TRUE;
-                break;
-
-            case sdbc::DataType::CHAR:
-            case sdbc::DataType::VARCHAR:
-            case sdbc::DataType::LONGVARCHAR:
-                aString = xRow->getString(nRowPos);
-                bEmptyFlag = ( aString.Len() == 0 ) && xRow->wasNull();
-                break;
-
-            case sdbc::DataType::DATE:
-                {
-                    SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
-                    nFormatIndex = pFormTable->GetStandardFormat(
-                                        NUMBERFORMAT_DATE, ScGlobal::eLnge );
-
-                    util::Date aDate = xRow->getDate(nRowPos);
-                    nVal = Date( aDate.Day, aDate.Month, aDate.Year ) -
-                                                *pFormTable->GetNullDate();
-                    bEmptyFlag = xRow->wasNull();
-                    bValue = TRUE;
-                }
-                break;
-
-            case sdbc::DataType::TIME:
-                {
-                    SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
-                    nFormatIndex = pFormTable->GetStandardFormat(
-                                        NUMBERFORMAT_TIME, ScGlobal::eLnge );
-
-                    util::Time aTime = xRow->getTime(nRowPos);
-                    nVal = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                             aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                    bEmptyFlag = xRow->wasNull();
-                    bValue = TRUE;
-                }
-                break;
-
-            case sdbc::DataType::TIMESTAMP:
-                {
-                    SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
-                    nFormatIndex = pFormTable->GetStandardFormat(
-                                        NUMBERFORMAT_DATETIME, ScGlobal::eLnge );
-
-                    util::DateTime aStamp = xRow->getTimestamp(nRowPos);
-                    nVal = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) -
-                                                *pFormTable->GetNullDate() ) +
-                           ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                             aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                    bEmptyFlag = xRow->wasNull();
-                    bValue = TRUE;
-                }
-                break;
-
-            case sdbc::DataType::SQLNULL:
-                bEmptyFlag = TRUE;
-                break;
-
-            case sdbc::DataType::BINARY:
-            case sdbc::DataType::VARBINARY:
-            case sdbc::DataType::LONGVARBINARY:
-            default:
-                bError = TRUE;      // unknown type
-        }
-    }
-    catch ( uno::Exception& )
-    {
-        bError = TRUE;
-    }
-
-    if ( bValue && bCurrency )
-        nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
-                            NUMBERFORMAT_CURRENCY, ScGlobal::eLnge );
-
-    ScBaseCell* pCell;
-    if (bEmptyFlag)
-    {
-        pCell = NULL;
-        pDoc->PutCell( nCol, nRow, nTab, pCell );
-    }
-    else if (bError)
-    {
-        pDoc->SetError( nCol, nRow, nTab, NOVALUE );
-    }
-    else if (bValue)
-    {
-        pCell = new ScValueCell( nVal );
-        if (nFormatIndex == 0)
-            pDoc->PutCell( nCol, nRow, nTab, pCell );
-        else
-            pDoc->PutCell( nCol, nRow, nTab, pCell, nFormatIndex );
-    }
-    else
-    {
-        pCell = ScBaseCell::CreateTextCell( aString, pDoc );
-//      if ( pSimpleFlag && pCell->GetCellType() == CELLTYPE_EDIT )
-//          *pSimpleFlag = FALSE;
-        pDoc->PutCell( nCol, nRow, nTab, pCell );
-    }
-}
 
 // -----------------------------------------------------------------
 
@@ -326,8 +179,8 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
             //
 
             sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
-                        ( (rParam.nType == dbQuery) ? sdb::CommandType::QUERY :
-                                                      sdb::CommandType::TABLE );
+                        ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
+                                                        sdb::CommandType::TABLE );
             uno::Any aAny;
 
             aAny <<= rtl::OUString( rParam.aDBName );
@@ -420,7 +273,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
                         nCol = rParam.nCol1;
                         for (i=0; i<nColCount; i++)
                         {
-                            lcl_PutData( pImportDoc, nCol, nRow, nTab,
+                            ScDatabaseDocUtil::PutData( pImportDoc, nCol, nRow, nTab,
                                             xRow, i+1, pTypeArr[i], pCurrArr[i] );
                             ++nCol;
                         }
