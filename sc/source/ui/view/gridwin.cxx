@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:01:41 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1922,7 +1922,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;
     }
 
-    if (DrawMouseButtonUp(rMEvt))
+    if (DrawMouseButtonUp(rMEvt))       // includes format paint brush handling for drawing objects
         return;
 
     rMark.SetMarking(FALSE);
@@ -2047,6 +2047,15 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 }
             }
         }
+    }
+
+    ScViewFunc* pView = pViewData->GetView();
+    ScDocument* pBrushDoc = pView->GetBrushDocument();
+    if ( pBrushDoc )
+    {
+        pView->PasteFromClip( IDF_ATTRIB, pBrushDoc );
+        if ( !pView->IsPaintBrushLocked() )
+            pView->ResetBrushDocument();            // invalidates pBrushDoc pointer
     }
 
             //
@@ -2316,7 +2325,7 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    BOOL bWater = SC_MOD()->GetIsWaterCan();
+    BOOL bWater = SC_MOD()->GetIsWaterCan() || pViewData->GetView()->HasPaintBrush();
     if (bWater)
         SetPointer( Pointer(POINTER_FILL) );
 
