@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:10:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 20:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,10 @@ String KEY_PREVIEW
     Text[ russian ] = "Ïðîñìîòð";
     Text[ greek ] = "Åéêüíá ðñïåðéóêüðçóçò EPS";
     Text[ dutch ] = "Voorbeeld";
-    Text[ french ] = "Aperçu EPS";
+    Text[ french ] = "Aperçu";
     Text[ spanish ] = "Previsualización";
     Text[ finnish ] = "EPS-esikatselukuva";
-    Text[ italian ] = "Anteprima immagine EPS";
+    Text[ italian ] = "Anteprima";
     Text[ danish ] = "EPS eksempelbillede";
     Text[ swedish ] = "Förhandsvisning";
     Text[ polish ] = "Podgl¹d";
@@ -83,7 +83,7 @@ String KEY_PREVIEW
     Text[ japanese ] = "ÌßÚËÞ­°";
     Text[ korean ] = "EPS ¹Ì¸®º¸±â ÀÌ¹ÌÁö";
     Text[ chinese_simplified ] = "EPS Ô¤ÀÀÍ¼";
-    Text[ chinese_traditional ] = "EPS ÀËµø¹Ï";
+    Text[ chinese_traditional ] = "ÀËµø";
     Text[ turkish ] = "EPS önizleme resmi";
     Text[ arabic ] = "ÕæÑÉ ÇáãÚÇíäÉ  EPS";
     Text[ catalan ] = "Previsualización EPS";
@@ -97,10 +97,10 @@ String KEY_VERSION
     Text[ russian ] = "Âåðñèÿ";
     Text[ greek ] = "¸êäïóç EPS";
     Text[ dutch ] = "Versie";
-    Text[ french ] = "Version EPS";
+    Text[ french ] = "Version";
     Text[ spanish ] = "Versión";
     Text[ finnish ] = "EPS-versio";
-    Text[ italian ] = "Versione EPS";
+    Text[ italian ] = "Versione";
     Text[ danish ] = "EPS version";
     Text[ swedish ] = "Version";
     Text[ polish ] = "Wersja";
@@ -108,7 +108,7 @@ String KEY_VERSION
     Text[ japanese ] = "ÊÞ°¼Þ®Ý";
     Text[ korean ] = "EPS ¹öÀü";
     Text[ chinese_simplified ] = "EPS °æ±¾";
-    Text[ chinese_traditional ] = "EPS ª©¥»";
+    Text[ chinese_traditional ] = "ª©¥»";
     Text[ turkish ] = "EPS sürümü";
     Text[ arabic ] = "EPS ÅÕÏÇÑ";
     Text[ catalan ] = "Versión EPS";
@@ -122,10 +122,10 @@ String KEY_COLOR
     Text[ russian ] = "Ôîðìàò öâåòà";
     Text[ greek ] = "ÌïñöÞ ÷ñþìáôïò EPS";
     Text[ dutch ] = "Kleuropmaak";
-    Text[ french ] = "Format de couleur EPS";
+    Text[ french ] = "Format de couleur";
     Text[ spanish ] = "Formato de color";
     Text[ finnish ] = "EPS-värimuoto";
-    Text[ italian ] = "Formato colore EPS";
+    Text[ italian ] = "FormatoColore";
     Text[ danish ] = "EPS farveformat";
     Text[ swedish ] = "Färgformat";
     Text[ polish ] = "Format koloru";
@@ -133,7 +133,7 @@ String KEY_COLOR
     Text[ japanese ] = "ColorFormat";
     Text[ korean ] = "EPS »ö Æ÷¸Ë";
     Text[ chinese_simplified ] = "EPS ÑÕÉ«¸ñÊ½";
-    Text[ chinese_traditional ] = "EPS ÃC¦â®æ¦¡";
+    Text[ chinese_traditional ] = "ÃC¦â®æ¦¡";
     Text[ turkish ] = "EPS renk formatý";
     Text[ arabic ] = "EPS ÊäÓíÞ ÇáÃáæÇä";
     Text[ catalan ] = "Formato de color EPS";
@@ -147,10 +147,10 @@ String KEY_COMPR
     Text[ russian ] = "Òèï óæàòèÿ";
     Text[ greek ] = "Ôýðïò óõìðßåóçò EPS";
     Text[ dutch ] = "Compressiemodus";
-    Text[ french ] = "Type de compression EPS";
+    Text[ french ] = "Type de compression";
     Text[ spanish ] = "Tipo de compresión";
     Text[ finnish ] = "EPS-tiivistysmuoto";
-    Text[ italian ] = "Tipo di compressione EPS";
+    Text[ italian ] = "ModoCompressione";
     Text[ danish ] = "EPS kompressionstype";
     Text[ swedish ] = "Kompressionsläge";
     Text[ polish ] = "Tryb kompresji";
@@ -158,7 +158,7 @@ String KEY_COMPR
     Text[ japanese ] = "CompressionMode";
     Text[ korean ] = "EPS ¾ÐÃà ¸ðµå";
     Text[ chinese_simplified ] = "EPS Ñ¹Ëõ·½Ê½";
-    Text[ chinese_traditional ] = "EPS À£ÁY¤è¦¡";
+    Text[ chinese_traditional ] = "À£ÁY¤è¦¡";
     Text[ turkish ] = "EPS sýkýþtýrma türü";
     Text[ arabic ] = "EPS ØÑíÞÉ ÇáÖÛØ";
     Text[ catalan ] = "Tipo de compresión EPS";
@@ -196,6 +196,7 @@ String KEY_VERSION_CHECK
     Text[ finnish ] = "Varoitus: Kaikkien tuotujen EPS-kuvien tallentaminen ei onnistunut tasolla 1,\nkoska joidenkin kuvien taso on korkeampi.";
     Text[ catalan ] = "¡Atención: No han podido ser guardados en Level1 todos los gráficos EPS importados\nporque existen algunos en un nivel más alto!";
 };
+
 
 
 
