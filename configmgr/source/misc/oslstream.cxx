@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oslstream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2001-07-06 12:41:58 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,13 +105,13 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 
     if (nBytesToRead < 0)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
 
     aData.realloc(nBytesToRead);
 
     sal_uInt64 nRead = 0;
-    FileBase::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
-    if (eError != osl_File_E_None)
+    File::RC eError = m_pFile->read(aData.getArray(), nBytesToRead, nRead);
+    if (eError != File::E_None)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     // Wenn gelesene Zeichen < MaxLength, staruno::Sequence anpassen
@@ -144,7 +144,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_I
 //------------------------------------------------------------------------------
 void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    osl::MutexGuard aGuard( m_aMutex );
     if (!m_pFile)
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
@@ -152,16 +152,11 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
     m_pFile->getPos(nCurrentPos);
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
-    FileBase::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
-    if (eError != osl_File_E_None)
+    File::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
+    if (eError != File::E_None)
     {
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
     }
-
-#ifdef DBG_UTIL
-    m_pFile->getPos(nCurrentPos);
-    volatile int dummy = 0;                      // to take a look at last changes ;-)
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -172,23 +167,23 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnecte
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nPos;
-    FileBase::RC eError = m_pFile->getPos(nPos);
-    if (eError != osl_File_E_None)
+    File::RC eError = m_pFile->getPos(nPos);
+    if (eError != File::E_None)
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nDummy = 0;
     eError = m_pFile->setPos(Pos_End, nDummy);
-    if (eError != osl_File_E_None)
+    if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nAvailable;
     eError = m_pFile->getPos(nAvailable);
-    if (eError != osl_File_E_None)
+    if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
     eError = m_pFile->setPos(Pos_Absolut, nPos);
-    if (eError != osl_File_E_None)
+    if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
     return nAvailable;
 }
@@ -211,11 +206,12 @@ void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedExc
 //------------------------------------------------------------------------------
 void SAL_CALL OSLOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException )
 {
-    sal_uInt64 nWritten;
-    if (aData.getLength() != 0)
+    sal_uInt32 const nLength = sal_uInt32(aData.getLength());
+    if (nLength != 0)
     {
-        FileBase::RC eError = rFile.write(aData.getConstArray(),aData.getLength(), nWritten);
-        if (eError != osl_File_E_None || nWritten != aData.getLength())
+        sal_uInt64 nWritten;
+        File::RC eError = rFile.write(aData.getConstArray(),nLength, nWritten);
+        if (eError != File::E_None || nWritten != nLength)
         {
             throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
         }
@@ -276,8 +272,8 @@ sal_Int32 SAL_CALL OSLInputBufferedStreamWrapper::readBytes(staruno::Sequence< s
     aData.realloc(nBytesToRead);
 
     sal_uInt64 nRead = 0;
-    FileBase::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
-    if (eError != osl_File_E_None)
+    File::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
+    if (eError != File::E_None)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     return nRead;
@@ -314,16 +310,11 @@ void SAL_CALL OSLInputBufferedStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) t
     m_pFile->getPos(nCurrentPos);
 
     sal_uInt64 nNewPos = nCurrentPos + nBytesToSkip;
-    FileBase::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
-    if (eError != osl_File_E_None)
+    File::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
+    if (eError != File::E_None)
     {
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
     }
-
-#ifdef DBG_UTIL
-    m_pFile->getPos(nCurrentPos);
-    volatile int dummy = 0;                      // to take a look at last changes ;-)
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -334,23 +325,23 @@ sal_Int32 SAL_CALL OSLInputBufferedStreamWrapper::available() throw( stario::Not
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nPos;
-    FileBase::RC eError = m_pFile->getPos(nPos);
-    if (eError != osl_File_E_None)
+    File::RC eError = m_pFile->getPos(nPos);
+    if (eError != File::E_None)
         throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nDummy = 0;
     eError = m_pFile->setPos(Pos_End, nDummy);
-    if (eError != osl_File_E_None)
+    if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     sal_uInt64 nAvailable;
     eError = m_pFile->getPos(nAvailable);
-    if (eError != osl_File_E_None)
+    if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
     eError = m_pFile->setPos(Pos_Absolut, nPos);
-    if (eError != osl_File_E_None)
+    if (eError != File::E_None)
        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
     return nAvailable;
 }
