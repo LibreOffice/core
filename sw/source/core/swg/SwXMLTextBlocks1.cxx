@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:21:57 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 19:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,11 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
     }
     else
     {
+#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+        String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
+#else
         String aStreamName = aFolderName + String::CreateFromAscii(".xml");
-
+#endif
         xRoot = xBlkRoot->OpenUCBStorage( aFolderName, STREAM_STGREAD );
         SvStorageStreamRef xContents = xRoot->OpenStream( aStreamName, STREAM_STGREAD );
 
@@ -350,7 +353,11 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     sal_Bool bTextOnly = sal_True;
     String aFolderName;
     GeneratePackageName ( rShort, aFolderName );
+#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+    String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
+#else
     String aStreamName = aFolderName + String::CreateFromAscii(".xml");
+#endif
     rText.Erase();
 
     xRoot = xBlkRoot->OpenUCBStorage( aFolderName, STREAM_STGREAD );
@@ -431,7 +438,11 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
     }
     */
     String aFolderName( rPackageName );
+#if defined(_MSC_VER) && (_MSC_VER >= 1310 )
+    String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
+#else
     String aStreamName = aFolderName + String::CreateFromAscii(".xml");
+#endif
 
     Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
