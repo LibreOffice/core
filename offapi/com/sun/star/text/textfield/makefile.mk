@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: os $ $Date: 2000-11-16 12:22:38 $
+#   last change: $Author: os $ $Date: 2001-03-13 09:33:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ IDLFILES=\
     Bibliography.idl\
     DateTime.idl\
     ConditionalText.idl\
+    HiddenParagraph.idl\
     HiddenText.idl\
     Input.idl\
     InputUser.idl\
