@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2002-01-10 14:16:06 $
+ *  last change: $Author: os $ $Date: 2002-06-19 14:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_COLUMN
         Text[ portuguese ] = "~Colunas";
         Text[ russian ] = "Êîëîíêè";
         Text[ greek ] = "~ÓôŞëåò";
-        Text[ dutch ] = "~Aantal";
+        Text[ dutch ] = "~Kolommen";
         Text[ french ] = "Colonnes";
         Text[ spanish ] = "~Columnas";
         Text[ finnish ] = "Sarakkeet";
@@ -104,13 +104,14 @@ TabPage TP_COLUMN
         Text[ swedish ] = "~Kolumner";
         Text[ polish ] = "Kolumny";
         Text[ portuguese_brazilian ] = "~N?m.";
-        Text[ japanese ] = "æ®µæ•°(~A)";
-        Text[ korean ] = "ì—´";
+        Text[ japanese ] = "æ®µæ•°";
+        Text[ korean ] = "ë‹¨";
         Text[ chinese_simplified ] = "åˆ—";
         Text[ chinese_traditional ] = "æ¬„";
         Text[ turkish ] = "S~ayı";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ catalan ] = "~Cantidad";
+        Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     NumericField ED_NUMBER
     {
@@ -147,7 +148,7 @@ TabPage TP_COLUMN
         Text[ greek ] = "ºóç êáôáíïìŞ ôïõ ğåñéå÷ïìİíïõ óå üëåò ôéò óôŞëåò";
         Text[ dutch ] = "Inhoud gelijkmatig verdelen over ~kolommen";
         Text[ french ] = "Répartition régulière du contenu sur toutes les ~colonnes";
-        Text[ spanish ] = "Distribución uniforme del contenido sobre todas las ~columnas";
+        Text[ spanish ] = "Distribución uniforme del contenido sobre todas las columnas";
         Text[ italian ] = "Distribuisci in modo uniforme il contenuto di tutte le colonne.";
         Text[ danish ] = "Udjævn kolonner";
         Text[ swedish ] = "Fördela innehåll jämnt över ~alla kolumner";
@@ -160,7 +161,8 @@ TabPage TP_COLUMN
         Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
         Text[ turkish ] = "S~ütunları dengele";
         Text[ catalan ] = "~Optimar columnas";
-        Text[ finnish ] = "~Balance columns";
+        Text[ finnish ] = "Jaa sisältö tasaisesti kaikkiin sarakkeisiin";
+        Text[ thai ] = "à¹à¸ˆà¸à¹à¸ˆà¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸”à¸µà¸¢à¸§à¸à¸±à¸™à¹„à¸›à¸¢à¸±à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     FixedLine FL_COLUMNS
     {
@@ -173,22 +175,23 @@ TabPage TP_COLUMN
         Text[ portuguese ] = "Predefinições";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ dutch ] = "Kolommen";
+        Text[ dutch ] = "Instellingen";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Columnas";
-        Text[ finnish ] = "Sarakkeet";
+        Text[ finnish ] = "Asetukset";
         Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Kolonner";
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Colunas";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾˜ï½¾ï½¯ï¾„";
-        Text[ korean ] = "ê¸°ë³¸ê°’";
+        Text[ japanese ] = "ãƒ—ãƒªã‚»ãƒƒãƒˆ";
+        Text[ korean ] = "ê¸°ë³¸ ê°’";
         Text[ chinese_simplified ] = "é¢„ç½®";
         Text[ chinese_traditional ] = "é è¨­";
         Text[ turkish ] = "Sütun";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
         Text[ catalan ] = "Columnas";
+        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
     };
     FixedText FT_COLUMN
     {
@@ -201,22 +204,23 @@ TabPage TP_COLUMN
         Text[ portuguese ] = "Coluna";
         Text[ russian ] = "Êîëîíêà";
         Text[ greek ] = "ÓôŞëç";
-        Text[ dutch ] = "Column";
+        Text[ dutch ] = "Kolom";
         Text[ french ] = "Colonne";
         Text[ spanish ] = "Columna";
-        Text[ finnish ] = "Column";
+        Text[ finnish ] = "Sarake";
         Text[ italian ] = "Colonna";
         Text[ danish ] = "Column";
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Kolumna";
         Text[ portuguese_brazilian ] = "Column";
         Text[ japanese ] = "æ®µç•ªå·";
-        Text[ korean ] = "ì—´";
+        Text[ korean ] = "ë‹¨";
         Text[ chinese_simplified ] = "åˆ—";
         Text[ chinese_traditional ] = "æ¬„";
         Text[ turkish ] = "Column";
         Text[ arabic ] = "Column";
         Text[ catalan ] = "Column";
+        Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     Window WN_BSP
     {
@@ -290,6 +294,7 @@ TabPage TP_COLUMN
         Text[ turkish ] = "Genişlik";
         Text[ catalan ] = "Ancho";
         Text[ finnish ] = "Leveys";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡";
     };
     MetricField ED_1
     {
@@ -374,7 +379,8 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Aralık";
         Text[ catalan ] = "Espacio";
-        Text[ finnish ] = "Objektiv?lit";
+        Text[ finnish ] = "Objektivälit";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
     };
     MetricField ED_DIST1
     {
@@ -443,6 +449,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "O~tomatik genişlik";
         Text[ catalan ] = "Ancho ~automático";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     FixedLine FL_LAYOUT
     {
@@ -455,10 +462,10 @@ TabPage TP_COLUMN
         Text[ portuguese ] = "Largura e espaçamento";
         Text[ russian ] = "Øèğèíà è ğàññòîÿíèå";
         Text[ greek ] = "ĞëÜôïò êáé áğüóôáóç";
-        Text[ dutch ] = "Kolombreedte";
+        Text[ dutch ] = "Breedte en afstand";
         Text[ french ] = "Largeur et écart";
         Text[ spanish ] = "Ancho y espacio";
-        Text[ finnish ] = "Sarakkeen leveys";
+        Text[ finnish ] = "Leveys ja välit";
         Text[ italian ] = "Larghezza e distanza";
         Text[ danish ] = "Kolonnebredde";
         Text[ swedish ] = "Bredd och avstånd";
@@ -471,6 +478,7 @@ TabPage TP_COLUMN
         Text[ turkish ] = "Sütun genişliği";
         Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
         Text[ catalan ] = "Ancho de columna";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
     };
 
     FixedText FT_STYLE
@@ -485,7 +493,7 @@ TabPage TP_COLUMN
         Text [ portuguese ] = "~Estilo" ;
         Text [ finnish ] = "~Viiva" ;
         Text [ danish ] = "Type" ;
-        Text [ french ] = "~Type" ;
+        Text [ french ] = "Type" ;
         Text [ swedish ] = "~Typ" ;
         Text [ dutch ] = "~Type" ;
         Text [ spanish ] = "~Tipo" ;
@@ -504,6 +512,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "T~ür";
         Text[ catalan ] = "~Tipo";
+        Text[ thai ] = "~à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     ListBox LB_STYLE
     {
@@ -615,6 +624,10 @@ TabPage TP_COLUMN
         {
              < "Ninguno" ; Default ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "à¹„à¸¡à¹ˆà¸¡à¸µ" ; Default ; > ;
+    };
     };
     FixedText FT_HEIGHT
     {
@@ -628,7 +641,7 @@ TabPage TP_COLUMN
         Text [ portuguese ] = "Altu~ra" ;
         Text [ finnish ] = "K~orkeus" ;
         Text [ danish ] = "Højde" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "Hö~jd" ;
         Text [ dutch ] = "~Hoogte" ;
         Text [ spanish ] = "A~ltura" ;
@@ -647,6 +660,7 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Yüks.";
         Text[ catalan ] = "A~ltura";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹~à¸‡";
     };
     MetricField ED_HEIGHT
     {
@@ -677,9 +691,9 @@ TabPage TP_COLUMN
         Text [ portuguese_brazilian ] = "~Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
-        Text [ italian ] = "~Posizione" ;
+        Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "~Posición" ;
-        Text [ french ] = "~Position" ;
+        Text [ french ] = "Position" ;
         Text [ dutch ] = "~Positie" ;
         Text[ chinese_simplified ] = "ä½ç½®(~P)";
         Text[ russian ] = "Ïîçèöèÿ";
@@ -695,6 +709,7 @@ TabPage TP_COLUMN
         Text[ turkish ] = "~Konum";
         Text[ catalan ] = "~Posición";
         Text[ finnish ] = "~Sijainti";
+        Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     ListBox LB_POSITION
     {
@@ -858,6 +873,12 @@ TabPage TP_COLUMN
             < "Centrado" ; Default ; > ;
             < "Abajo" ; Default ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "à¸”à¹‰à¸²à¸™à¸šà¸™" ; Default ; > ;
+        < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡" ; Default ; > ;
+        < "à¸”à¹‰à¸²à¸™à¸¥à¹ˆà¸²à¸‡" ; Default ; > ;
+    };
     };
     FixedLine FL_LINETYPE
     {
@@ -889,6 +910,50 @@ TabPage TP_COLUMN
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ayırma çizgisi";
         Text[ catalan ] = "Línea de separación";
+        Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸à¸šà¸£à¸£à¸—à¸±à¸”";
+    };
+    FixedLine  FL_VERT
+    {
+        Pos = MAP_APPFONT ( 116 , 138 ) ;
+        Size = MAP_APPFONT ( 4 , 43 ) ;
+        Hide = TRUE ;
+        Vert = TRUE;
+    };
+    FixedLine   FL_PROPERTIES
+    {
+        Pos = MAP_APPFONT ( 121 , 127 ) ;
+        Size = MAP_APPFONT ( 133 , 8 ) ;
+        Hide = TRUE ;
+        Text = "Eigenschaften" ;
+        Text [ ENGLISH ] = "Properties" ;
+    };
+    FixedText   FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 127 , 138 ) ;
+        Size = MAP_APPFONT ( 127 , 8 ) ;
+        Hide = TRUE ;
+        Text = "~Textfluss" ;
+        Text [ ENGLISH ] = "Text ~direction" ;
+    };
+    ListBox     LB_TEXTDIRECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 127 , 149 ) ;
+        Size = MAP_APPFONT ( 127 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Links nach rechts" ; 0; > ;
+            < "Rechts nach links" ; 1; > ;
+            < "Einstellungen des übergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Left-to-right" ; 0; > ;
+            < "Right-to-left" ; 1; > ;
+            < "Use superordinate settings" ; 4; > ;
+        };
     };
     Text[ chinese_simplified ] = "æ ";
     Text[ russian ] = "Êîëîíêè";
@@ -899,10 +964,11 @@ TabPage TP_COLUMN
     Text[ dutch ] = "Kolommen";
     Text[ chinese_simplified ] = "æ ";
     Text[ greek ] = "ÓôŞëåò";
-    Text[ korean ] = "ì—´";
+    Text[ korean ] = "ë‹¨";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Sütun";
     Text[ catalan ] = "Columnas";
+    Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 
 ModalDialog DLG_COLUMN
@@ -942,7 +1008,7 @@ ModalDialog DLG_COLUMN
         Text[ english_us ] = "~Apply to";
         Text[ portuguese ] = "~Aplicar em";
         Text[ greek ] = "Åö~áñìïãŞ óå:";
-        Text[ dutch ] = "~Toepassen op:";
+        Text[ dutch ] = "~Toepassen op";
         Text[ french ] = "Appliquer à";
         Text[ spanish ] = "~Aplicar a";
         Text[ swedish ] = "~Använd på";
@@ -952,14 +1018,15 @@ ModalDialog DLG_COLUMN
         Text[ polish ] = "Zastosuj w";
         Text[ portuguese_brazilian ] = "~Apply to:";
         Text[ japanese ] = "è¨­å®šå¯¾è±¡(~A):";
-        Text[ korean ] = "ì— ì ìš©";
+        Text[ korean ] = "ì ìš©(~A)";
         Text[ chinese_simplified ] = "é‡‡ç”¨åˆ°(~A)";
         Text[ chinese_traditional ] = "å¥—ç”¨åˆ°(~A)";
         Text[ arabic ] = "ÊØÈíŞ Úáì:";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Uygulanacağı yer:";
         Text[ catalan ] = "~Aplicar a:";
-        Text[ finnish ] = "~K?yt?:";
+        Text[ finnish ] = "~Käytä:";
+        Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¸à¸±à¸š";
     };
     ListBox LB_APPLY_TO
     {
@@ -1093,15 +1160,15 @@ ModalDialog DLG_COLUMN
             < "ç¾åœ¨ã®ç¯„å›²" ;   LISTBOX_SECTION     ; > ;
             < "é¸æŠç¯„å›²" ;  LISTBOX_SECTIONS    ; > ;
             < "å¤–æ " ;                LISTBOX_FRAME       ; > ;
-            < "ï¾ï¾Ÿï½°ï½¼ï¾ï½½ï¾€ï½²ï¾™: " ;         LISTBOX_PAGE        ; > ;
+            < "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«: " ;       LISTBOX_PAGE        ; > ;
         };
         StringList [ korean ] =
         {
             < "ì„ íƒ" ;            LISTBOX_SELECTION; > ;
-            < "í˜„ì¬ êµ¬ì—­" ;     LISTBOX_SECTION     ; > ;
-            < "ì„ íƒëœ êµ¬ì—­" ;  LISTBOX_SECTIONS    ; > ;
+            < "í˜„ì¬ ì˜ì—­" ;     LISTBOX_SECTION     ; > ;
+            < "ì„ íƒëœ ì˜ì—­" ;  LISTBOX_SECTIONS    ; > ;
             < "í”„ë ˆì„" ;                 LISTBOX_FRAME       ; > ;
-            < "ìª½ ìœ í˜•: " ;          LISTBOX_PAGE        ; > ;
+            < "í˜ì´ì§€ ìŠ¤íƒ€ì¼: " ;         LISTBOX_PAGE        ; > ;
         };
         StringList [ chinese_simplified ] =
         {
@@ -1114,7 +1181,7 @@ ModalDialog DLG_COLUMN
         StringList [ chinese_traditional ] =
         {
             < "é¸å–" ;            LISTBOX_SELECTION; > ;
-            < "ç•¶å‰çš„å€åŸŸ" ;   LISTBOX_SECTION     ; > ;
+            < "ç›®å‰çš„å€åŸŸ" ;   LISTBOX_SECTION     ; > ;
             < "é¸æ“‡çš„å€åŸŸ" ;  LISTBOX_SECTIONS ; > ;
             < "æ¡†" ;               LISTBOX_FRAME       ; > ;
             < "é é¢æ¨£å¼ï¼š " ;          LISTBOX_PAGE        ; > ;
@@ -1151,6 +1218,14 @@ ModalDialog DLG_COLUMN
             < "Kehys" ;                 LISTBOX_FRAME       ; > ;
             < "Sivun tyyli: " ;         LISTBOX_PAGE        ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "à¹€à¸¥à¸·à¸­à¸" ;              LISTBOX_SELECTION; > ;
+        < "à¸ªà¹ˆà¸§à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™" ;      LISTBOX_SECTION     ; > ;
+        < "à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸" ;  LISTBOX_SECTIONS    ; > ;
+        < "à¸à¸£à¸­à¸š" ;                  LISTBOX_FRAME       ; > ;
+        < "à¸¥à¸±à¸à¸©à¸“à¸°à¸«à¸™à¹‰à¸²: " ;          LISTBOX_PAGE        ; > ;
+    };
     };
     Text[ english_us ] = "Columns";
     Text[ portuguese ] = "Colunas";
@@ -1165,7 +1240,7 @@ ModalDialog DLG_COLUMN
     Text[ polish ] = "Kolumny";
     Text[ portuguese_brazilian ] = "Columns";
     Text[ japanese ] = "æ®µçµ„ã¿";
-    Text[ korean ] = "ì—´";
+    Text[ korean ] = "ë‹¨";
     Text[ chinese_simplified ] = "æ ";
     Text[ chinese_traditional ] = "æ¬„";
     Text[ arabic ] = "ÃÚãÏÉ";
@@ -1173,18 +1248,7 @@ ModalDialog DLG_COLUMN
     Text[ turkish ] = "Sütun";
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
+    Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
