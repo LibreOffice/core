@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:46:48 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
     ScRangeName* pRangeName = pDoc->GetRangeName();
 
     // 1 - entire document
-    String aName( ScFilterTools::pHTMLDocName, RTL_TEXTENCODING_ASCII_US );
+    String aName( ScFilterTools::GetHTMLDocName() );
     USHORT nColDim, nRowDim;
     pParser->GetDimensions( nColDim, nRowDim );
     aNewRange.aEnd.IncCol( nColDim - 1 );

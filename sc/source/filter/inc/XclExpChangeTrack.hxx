@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ private:
     sal_Bool                    bAccepted;
 
 protected:
-    const ExcETabNumBuffer&     rTabBuffer;     // for table num export (sc num -> xcl num)
+    const XclExpTabNumBuffer&   rTabBuffer;     // for table num export (sc num -> xcl num)
     const XclExpChTrTabIdBuffer& rIdBuffer;     // for table num export (xcl num -> tab id)
     sal_uInt32                  nLength;        // this is not the record size
     sal_uInt16                  nOpCode;        // EXC_CHTR_OP_***

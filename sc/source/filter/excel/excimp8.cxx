@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:57:01 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 09:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3125,7 +3125,7 @@ void ImportExcel8::SXExt_ParamQry()
     else
     {
         pQuery->eMode = xiwqDoc;
-        pQuery->aTables.AssignAscii( ScFilterTools::pHTMLDocName );
+        pQuery->aTables = ScFilterTools::GetHTMLDocName();
     }
 }
 
@@ -3198,9 +3198,10 @@ void XclImpWebQuery::ConvertTableNames()
     String aQuotedPairs( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
     xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, cSep );
     String aNewTables;
+    xub_StrLen nStringIx = 0;
     for( xub_StrLen nToken = 0; nToken < nTokenCnt; nToken++ )
     {
-        String aToken( aTables.GetQuotedToken( nToken, aQuotedPairs, cSep ) );
+        String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, cSep, nStringIx ) );
         sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
         if( nTabNum > 0 )
             AppendToken( aNewTables, ScFilterTools::GetNameFromHTMLIndex( (ULONG)nTabNum ), cSep );
@@ -3230,7 +3231,7 @@ void XclImpWebQueryBuffer::Apply( ScDocument* pDoc )
     {
         if( pQuery->IsValid() )
         {
-            String sFilterName( RTL_CONSTASCII_USTRINGPARAM( "calc_HTML_WebQuery" ) );
+            String sFilterName( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(),
                 pQuery->aFilename, sFilterName, EMPTY_STRING, pQuery->aTables,
                 pQuery->aDestRange, (ULONG)pQuery->nRefresh * 60 );
