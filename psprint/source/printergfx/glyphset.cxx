@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-26 15:21:40 $
+ *  last change: $Author: cp $ $Date: 2001-08-27 11:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
                                  pEncodingVector + nSize);
         nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID),
                                  pEncodingVector + nSize);
-        nSize += psp::appendStr (" [ ",
+        nSize += psp::appendStr (" [ /.notdef ",
                                  pEncodingVector + nSize);
 
         // need a list of glyphs, sorted by glyphid
