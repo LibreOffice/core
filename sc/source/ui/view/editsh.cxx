@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:07:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include <svx/clipfmtitem.hxx>
+#include <svx/svxdlg.hxx>
 #include <svx/cntritem.hxx>
 //CHINA001 #include <svx/chardlg.hxx>
 #include <svx/crsditem.hxx>
@@ -94,14 +95,14 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <so3/pastedlg.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
-
+#include <sot/formats.hxx>
+#include <svtools/transfer.hxx>
 
 #define _EDITSH_CXX
 #include "editsh.hxx"
@@ -281,15 +282,20 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case FID_PASTE_CONTENTS:
             {
-                SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
-                pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
-                pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
+                ULONG nFormat = 0;
+                if ( pDlg )
+                {
+                    pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
+                    pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
 
-                TransferableDataHelper aDataHelper(
-                    TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-                ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), aDataHelper.GetTransferable() );
-                DELETEZ(pDlg);
+                    nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+                    DELETEZ(pDlg);
+                }
 
                 // while the dialog was open, edit mode may have been stopped
                 if (!SC_MOD()->IsInputMode())
