@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:54:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,10 @@
 #include <services/sessionlistener.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIELEMENT_NEWMENUCONTROLLER_HXX_
+#include <uielement/newmenucontroller.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -322,6 +326,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::UICategoryDescription                   )
                         COMPONENTINFO( ::framework::StatusbarControllerFactory              )
                         COMPONENTINFO( ::framework::SessionListener                         )
+                        COMPONENTINFO( ::framework::NewMenuController                       )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -367,7 +372,9 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
-                        IFFACTORY( ::framework::StatusbarControllerFactory              )   else
                         IFFACTORY( ::framework::SessionListener                         )
+else
+                        IFFACTORY( ::framework::StatusbarControllerFactory              )   else
+                        IFFACTORY( ::framework::NewMenuController                       )
             )
 
