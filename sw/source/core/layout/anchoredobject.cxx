@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:37:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,19 +194,36 @@ const SwTwips SwAnchoredObject::GetLastTopOfLine() const
     and <maLastTopOfLine> are updated. These are checked for change and
     depending on the applied positioning, it's decided, if the Writer fly
     frame has to be invalidated.
+    OD 2004-07-15 #117380#
+    add parameter <_bCheckForParaPorInf>, default value <true>
 
     @author OD
 */
-void SwAnchoredObject::CheckCharRectAndTopOfLine()
+void SwAnchoredObject::CheckCharRectAndTopOfLine(
+                                        const bool _bCheckForParaPorInf )
 {
-    if ( FLY_AUTO_CNTNT == GetFrmFmt().GetAnchor().GetAnchorId() &&
-         GetAnchorFrm() )
+    if ( GetAnchorFrm() &&
+         GetAnchorFrm()->IsTxtFrm() )
     {
         const SwFmtAnchor& rAnch = GetFrmFmt().GetAnchor();
-        if ( rAnch.GetCntntAnchor() )
+        if ( rAnch.GetAnchorId() == FLY_AUTO_CNTNT &&
+             rAnch.GetCntntAnchor() )
         {
-            _CheckCharRect( rAnch );
-            _CheckTopOfLine( rAnch );
+            // --> OD 2004-07-14 #117380# - if requested, assure that anchor frame,
+            // which contains the anchor character, has a paragraph portion information.
+            // The paragraph portion information is needed to determine the
+            // anchor character rectangle respectively the top of the line.
+            // Thus, a format of this frame is avoided to determine the
+            // paragraph portion information.
+            xub_StrLen nOffset = rAnch.GetCntntAnchor()->nContent.GetIndex();
+            const SwTxtFrm& aAnchorCharFrm =
+                    static_cast<SwTxtFrm*>(AnchorFrm())->GetFrmAtOfst( nOffset );
+            if ( !_bCheckForParaPorInf || aAnchorCharFrm.HasPara() )
+            {
+                _CheckCharRect( rAnch, aAnchorCharFrm );
+                _CheckTopOfLine( rAnch, aAnchorCharFrm );
+            }
+            // <--
         }
     }
 }
@@ -218,15 +235,17 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine()
     For to-character anchored Writer fly frames the member <maLastCharRect>
     is updated. This is checked for change and depending on the applied
     positioning, it's decided, if the Writer fly frame has to be invalidated.
+    OD 2004-07-14 #117380#
+    improvement - add second parameter <_rAnchorCharFrm>
 
     @author OD
 */
-void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch )
+void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
+                                       const SwTxtFrm& _rAnchorCharFrm )
 {
     // determine rectangle of anchor character. If not exist, abort operation
     SwRect aCharRect;
-    if ( !static_cast<SwTxtFrm*>(AnchorFrm())->GetAutoPos( aCharRect,
-                                                *_rAnch.GetCntntAnchor() ) )
+    if ( !_rAnchorCharFrm.GetAutoPos( aCharRect, *_rAnch.GetCntntAnchor() ) )
     {
         return;
     }
@@ -235,11 +254,7 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch )
     {
         // check positioning and alignment for invalidation of position
         {
-            // determine frame the anchor character is in.
-            SwTxtFrm& aAnchorCharFrm =
-                static_cast<SwTxtFrm*>(AnchorFrm())->GetFrmAtOfst(
-                    _rAnch.GetCntntAnchor()->nContent.GetIndex() );
-            SWRECTFN( (&aAnchorCharFrm) );
+            SWRECTFN( (&_rAnchorCharFrm) );
             // determine positioning and alignment
             SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
             SwFmtHoriOrient aHori( GetFrmFmt().GetHoriOrient() );
@@ -279,14 +294,16 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch )
     For to-character anchored Writer fly frames the member <mnLastTopOfLine>
     is updated. This is checked for change and depending on the applied
     positioning, it's decided, if the Writer fly frame has to be invalidated.
+    OD 2004-07-14 #117380#
+    improvement - add second parameter <_rAnchorCharFrm>
 
     @author OD
 */
-void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch )
+void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch,
+                                        const SwTxtFrm& _rAnchorCharFrm )
 {
     SwTwips nTopOfLine = 0L;
-    if ( static_cast<SwTxtFrm*>(AnchorFrm())->GetTopOfLine(
-                                        nTopOfLine, *_rAnch.GetCntntAnchor() ) )
+    if ( _rAnchorCharFrm.GetTopOfLine( nTopOfLine, *_rAnch.GetCntntAnchor() ) )
     {
         if ( nTopOfLine != mnLastTopOfLine )
         {
