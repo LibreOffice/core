@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:54:21 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ namespace configmgr
             m_xDefaultProvider = NULL;
         }
         else
-            OSL_ENSHURE(sal_False, "unknown object disposed.");
+            OSL_ENSURE(sal_False, "unknown object disposed.");
     }
 
 //........................................................................
@@ -343,6 +343,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/01/26 07:54:21  lla
+ *  #82734# disposing with lasy writing necessary
+ *
  *  Revision 1.5  2000/12/07 16:46:12  dg
  *  #81469# incomplete adjustments to portal environment fixed
  *

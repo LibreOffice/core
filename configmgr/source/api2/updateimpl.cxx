@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 08:49:14 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
         NodeChange aChange = rNode.getNodeUpdater().validateInsertElement(aChildName, aElementTree);
 
         aChange.test(); // make sure old values are set up correctly
-        OSL_ENSHURE(aChange.isChange(), "ERROR: Adding a node validated as empty change");
+        OSL_ENSURE(aChange.isChange(), "ERROR: Adding a node validated as empty change");
 
         Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
 
@@ -453,7 +453,7 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
         NodeChange aChange = rNode.getNodeUpdater().validateInsertElement(aChildName, rElement);
 
         aChange.test(); // make sure old values are set up correctly
-        OSL_ENSHURE(aChange.isChange(), "ERROR: Adding a node validated as empty change");
+        OSL_ENSURE(aChange.isChange(), "ERROR: Adding a node validated as empty change");
 
         Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
 
@@ -522,7 +522,7 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
         NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aChildTree, aChild);
 
         aChange.test(); // make sure old values are set up correctly
-        OSL_ENSHURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
+        OSL_ENSURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
 
         Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
 
@@ -586,7 +586,7 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
         NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aChildTree, aChild);
 
         aChange.test(); // make sure old values are set up correctly
-        OSL_ENSHURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
+        OSL_ENSURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
 
         Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
 

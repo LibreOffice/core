@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 18:03:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ namespace configmgr
     {
         uno::Reference< script::XTypeConverter > xConverter(
             _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))), uno::UNO_QUERY);
-        OSL_ENSHURE(xConverter.is(), "Module::Module : could not create an instance of the type converter !");
+        OSL_ENSURE(xConverter.is(), "Module::Module : could not create an instance of the type converter !");
 
         m_xDefaultOptions = new OOptions(xConverter);
 
@@ -501,16 +501,16 @@ namespace configmgr
                     rtl::OString aStr = "The argument '";
                     aStr += rtl::OUStringToOString(aCurrent.Name,RTL_TEXTENCODING_ASCII_US).getStr();
                     aStr += "' could not be extracted.";
-                    OSL_ENSHURE(false, aStr.getStr());
+                    OSL_ENSURE(false, aStr.getStr());
                 }
             }
             else if (i > 0 || pCurrent->getValueTypeClass() != uno::TypeClass_STRING)
             {
-                OSL_ENSHURE(false, "operator >>= failed.");
+                OSL_ENSURE(false, "operator >>= failed.");
             }
             else
             {
-                OSL_ENSHURE(_rArgs.getLength() <= 2, "Too many arguments for legacy parameters.");
+                OSL_ENSURE(_rArgs.getLength() <= 2, "Too many arguments for legacy parameters.");
                 break;
             }
         }
@@ -565,7 +565,7 @@ namespace configmgr
                     ::rtl::OString sMessage(RTL_CONSTASCII_STRINGPARAM("OProviderImpl::extractArgs : unknown argument name: "));
                     sMessage += ::rtl::OString(aCurrent.Name.getStr(), aCurrent.Name.getLength(), RTL_TEXTENCODING_ASCII_US);
                     sMessage += ::rtl::OString(RTL_CONSTASCII_STRINGPARAM("!"));
-                    OSL_ENSHURE(sal_False, sMessage.getStr());
+                    OSL_ENSURE(sal_False, sMessage.getStr());
                 }
 #endif
 */

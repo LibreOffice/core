@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:14:10 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ sal_Bool implHasPendingChanges( TreeElement& rElement ) throw(uno::RuntimeExcept
         e.unhandled();
     }
 
-    OSL_ENSHURE(false,"Unreachable Code");
+    OSL_ENSURE(false,"Unreachable Code");
     return false;
 }
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ using namespace ::osl;
             sError += ASCII("\n with URL: ");
             sError += _aURL;
             rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(0, aStr.getStr());
+            OSL_ENSURE(0, aStr.getStr());
             return 1;
         }
         return 0;
@@ -123,7 +123,7 @@ using namespace ::osl;
         {
             rtl::OUString sError = ASCII("createBackupAndRemove: ") + FileHelper::createOSLErrorString(eError) + ASCII("\n with URL: ") + _aFromURL;
             rtl::OString aStr = rtl::OUStringToOString(sError,RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(0, aStr.getStr());
+            OSL_ENSURE(0, aStr.getStr());
             return 2;
         }
         return 0;

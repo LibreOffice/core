@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-03 11:56:29 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ namespace configmgr
             void setObjectAt(Index nIndex, UnoInterface* pInterface)
             {
                 osl::MutexGuard aGuard(mutex());
-                OSL_ENSHURE( !isDisposed(), "object is disposed" );
+                OSL_ENSURE( !isDisposed(), "object is disposed" );
 
                 if (isAlive())
                 {
@@ -531,8 +531,8 @@ namespace configmgr
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
             osl::MutexGuard aGuard( mutex() );
-            OSL_ENSHURE( !isDisposing(), "do not add listeners in the dispose call" );
-            OSL_ENSHURE( !isDisposed(), "object is disposed" );
+            OSL_ENSURE( !isDisposing(), "do not add listeners in the dispose call" );
+            OSL_ENSURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
             {
@@ -552,8 +552,8 @@ namespace configmgr
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
             osl::MutexGuard aGuard( mutex() );
-            OSL_ENSHURE( !isDisposing(), "do not add listeners in the dispose call" );
-            OSL_ENSHURE( !isDisposed(), "object is disposed" );
+            OSL_ENSURE( !isDisposing(), "do not add listeners in the dispose call" );
+            OSL_ENSURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
             {
@@ -572,7 +572,7 @@ namespace configmgr
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
             osl::MutexGuard aGuard( mutex() );
-            OSL_ENSHURE( !isDisposed(), "object is disposed" );
+            OSL_ENSURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
             {
@@ -589,7 +589,7 @@ namespace configmgr
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
             osl::MutexGuard aGuard( mutex() );
-            OSL_ENSHURE( !isDisposed(), "object is disposed" );
+            OSL_ENSURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
                 return m_aSpecialHelper.aLC.removeInterface(aKey, xListener );

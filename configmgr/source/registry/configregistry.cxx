@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:39:30 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ OConfigurationRegistry::OConfigurationRegistry(const Reference< XMultiServiceFac
     ,m_xORB(_rORB)
 {
     // create the configuration provider used for accessing the configuration
-    OSL_ENSHURE(m_xORB.is(), "OConfigurationRegistry::OConfigurationRegistry : invalid service factory !");
+    OSL_ENSURE(m_xORB.is(), "OConfigurationRegistry::OConfigurationRegistry : invalid service factory !");
     if (m_xORB.is())
     {
         m_xConfigurationProvider =
@@ -378,7 +378,7 @@ void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
                 sMessage += e.Message;
 
                 // TODO : the specification of XFlushable has to be changed !!!!!
-                OSL_ENSHURE(sal_False, "OConfigurationRegistry::flush : caught an exception, could not flush the data !");
+                OSL_ENSURE(sal_False, "OConfigurationRegistry::flush : caught an exception, could not flush the data !");
                 return;
 
     //          throw RuntimeException(sMessage, THISREF());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-20 17:05:04 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ namespace configmgr
                 , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
                 , root(_rTree)
         {
-            OSL_ENSHURE(false, "Test only, because deep copy of subtreechange is very expensive.");
+            OSL_ENSURE(false, "Test only, because deep copy of subtreechange is very expensive.");
         }
 
         /** ctor

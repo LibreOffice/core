@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-20 17:06:48 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ namespace configmgr
             }
         virtual void handle(RemoveNode& _rRemoveNode)
             {
-                OSL_ENSHURE(false, "OMergeValueChange::handle(ValueChange): have a ValueChange for a removed node!");
+                OSL_ENSURE(false, "OMergeValueChange::handle(ValueChange): have a ValueChange for a removed node!");
                 // should never happen. How did the user change a value for a node which is obviously flagged as removed?
             }
         virtual void handle(AddNode& _rAddNode)
@@ -229,7 +229,7 @@ namespace configmgr
             }
         virtual void handle(SubtreeChange& _rSubtree)
             {
-                OSL_ENSHURE(false, "OMergeValueChange:handle(SubtreeChange): have a ValueChange for a sub tree!");
+                OSL_ENSURE(false, "OMergeValueChange:handle(SubtreeChange): have a ValueChange for a sub tree!");
             }
     };
 
@@ -265,12 +265,12 @@ namespace configmgr
     private:
         virtual void handle(ValueChange& aValueChange)
             {
-                OSL_ENSHURE(false, "OMergeRemoveNode::handle(ValueChange): remove a value node?");
+                OSL_ENSURE(false, "OMergeRemoveNode::handle(ValueChange): remove a value node?");
             }
 
         virtual void handle(RemoveNode& _rRemoveNode)
             {
-                OSL_ENSHURE(false, "OMergeRemoveNode::handle(RemoveNode): should never happen!");
+                OSL_ENSURE(false, "OMergeRemoveNode::handle(RemoveNode): should never happen!");
                 // how can a RemoveNode change exist if in the file we're merging it into
                 // there already is such a RemoveNode change (_rRemoveNode)?
             }
@@ -310,12 +310,12 @@ namespace configmgr
     private:
         virtual void handle(ValueChange& aValueChange)
             {
-                OSL_ENSHURE(false, "OMergeSubtreeChange::handle(ValueChange): remove a value node?");
+                OSL_ENSURE(false, "OMergeSubtreeChange::handle(ValueChange): remove a value node?");
             }
 
         virtual void handle(RemoveNode& _rRemoveNode)
             {
-                OSL_ENSHURE(false, "OMergeSubtreeChange::handle(RemoveNode): should never happen!");
+                OSL_ENSURE(false, "OMergeSubtreeChange::handle(RemoveNode): should never happen!");
             }
 
         virtual void handle(AddNode& _rAddNode)
@@ -338,7 +338,7 @@ namespace configmgr
     void OMergeTreeChangeList::pushTree(SubtreeChange* _pTree)
     {
         m_pCurrentParent = _pTree;
-        OSL_ENSHURE(m_pCurrentParent, "OMergeTreeChangeList::pushTree: must not be NULL!");
+        OSL_ENSURE(m_pCurrentParent, "OMergeTreeChangeList::pushTree: must not be NULL!");
         m_aTreePathStack.push_back(_pTree);
     }
     void OMergeTreeChangeList::popTree()
@@ -542,7 +542,7 @@ namespace configmgr
             OSL_ENSURE(pSubtree, "BLA");
             if (pSubtree)
             {
-                OSL_ENSHURE(false, "DANGER, THIS CODE IS WRONG!");
+                OSL_ENSURE(false, "DANGER, THIS CODE IS WRONG!");
                 // because, the important Node is the _rSubtree, which will not insert anywhere
 
                 // Merge _rSubtree into pSubtree using a TreeUpdate object
@@ -580,7 +580,7 @@ namespace configmgr
     void OMergeChanges::pushTree(SubtreeChange* _pTree)
     {
         m_pCurrentParent = _pTree;
-        OSL_ENSHURE(m_pCurrentParent, "OMergeChanges::pushTree: must not be NULL!");
+        OSL_ENSURE(m_pCurrentParent, "OMergeChanges::pushTree: must not be NULL!");
         m_aTreePathStack.push_back(_pTree);
     }
     void OMergeChanges::popTree()
@@ -788,7 +788,7 @@ namespace configmgr
         }
         else if (pChange->ISA(AddNode))
         {
-            // OSL_ENSHURE(false, "sorry, no addnode in subtreechange! can't supported yet.");
+            // OSL_ENSURE(false, "sorry, no addnode in subtreechange! can't supported yet.");
 
             AddNode* pAddNode = SAL_STATIC_CAST(AddNode*, pChange);
             INode* pNode = pAddNode->getAddedNode();
@@ -860,7 +860,7 @@ namespace configmgr
         {
             ::rtl::OString aStr("TreeUpdater: Can't find value with name:=");
             aStr += rtl::OUStringToOString(aValueNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(pValue, aStr.getStr());
+            OSL_ENSURE(pValue, aStr.getStr());
             aLog.push_back(aStr);
         }
 #endif
@@ -876,7 +876,7 @@ namespace configmgr
                 std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aAddNode.getNodeName());
 
 #ifdef DEBUG
-                OSL_ENSHURE(aOldNode.get(), "TreeUpdater:AddNode: can't recover node being replaced");
+                OSL_ENSURE(aOldNode.get(), "TreeUpdater:AddNode: can't recover node being replaced");
                 if (aOldNode.get() == NULL)
                     aLog.push_back(rtl::OString("TreeUpdater: can't recover node being replaced (for AddNode)"));
 #endif
@@ -918,7 +918,7 @@ namespace configmgr
             {
                 ::rtl::OString aStr("TreeUpdater: Can't remove child with name:=");
                 aStr += rtl::OUStringToOString(aRemoveNode.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSHURE(bOk, aStr.getStr());
+                OSL_ENSURE(bOk, aStr.getStr());
                 aLog.push_back(aStr);
             }
 #endif
@@ -930,13 +930,13 @@ namespace configmgr
         // handle traversion
         ISubtree *pOldSubtree = m_pCurrentSubtree;
         rtl::OUString aNodeName = _aSubtree.getNodeName();
-        OSL_ENSHURE(m_pCurrentSubtree->getChild(aNodeName), "TreeUpdater::handle : invalid subtree change ... this will crash !");
+        OSL_ENSURE(m_pCurrentSubtree->getChild(aNodeName), "TreeUpdater::handle : invalid subtree change ... this will crash !");
         m_pCurrentSubtree = m_pCurrentSubtree->getChild(aNodeName)->asISubtree();
 
 #if DEBUG
         ::rtl::OString aStr("TreeUpdater: there is no Subtree for name:=");
         aStr += rtl::OUStringToOString(_aSubtree.getNodeName(),RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(m_pCurrentSubtree, aStr.getStr());
+        OSL_ENSURE(m_pCurrentSubtree, aStr.getStr());
         if (!m_pCurrentSubtree)
             aLog.push_back(aStr);
 #endif

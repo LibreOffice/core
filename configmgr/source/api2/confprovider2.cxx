@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-07 17:17:50 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ namespace configmgr
                 { &configapi::aCreateReadAccessSI, &OConfigurationProviderImpl::createReadAccess },
                 { &configapi::aCreateUpdateAccessSI, &OConfigurationProviderImpl::createUpdateAccess },
             };
-            OSL_ENSHURE(sizeof(createServiceData)/sizeof(createServiceData[0]) == getCreateServiceDataCount(),
+            OSL_ENSURE(sizeof(createServiceData)/sizeof(createServiceData[0]) == getCreateServiceDataCount(),
                 "getCreateServiceData : inconsistent data !");
             return createServiceData;
         }

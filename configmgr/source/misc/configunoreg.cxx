@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-15 17:20:38 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ void REGISTER_PROVIDER(
     aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSHURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
+    OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
     for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
@@ -132,7 +132,7 @@ void RegisterService(
     aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSHURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
+    OSL_ENSURE(xNewKey.is(), "CONFMGR::component_writeInfo : could not create a registry key !");
 
     AsciiServiceName const* p = pInfo->serviceNames;
     if (p != 0)
@@ -169,12 +169,12 @@ struct ProviderRequest
         if (!xRet.is() && (Implname == sImplementationName))
         try
         {
-            OSL_ENSHURE(!xRet.is(), "CREATE_PROVIDER : invalid : already have a return value !");
+            OSL_ENSURE(!xRet.is(), "CREATE_PROVIDER : invalid : already have a return value !");
             if (xRet.is())
                 xRet->release();
 
             xRet = creator( m_xServiceManager, sImplementationName,Factory, Services);
-            OSL_ENSHURE(xRet.is(), "CREATE_PROVIDER : invalid return value !");
+            OSL_ENSURE(xRet.is(), "CREATE_PROVIDER : invalid return value !");
 
             if (xRet.is())
                 xRet->acquire();
@@ -193,7 +193,7 @@ struct ProviderRequest
                 createFactoryFunc creator
             )
     {
-        OSL_ENSHURE(!xRet.is(), "CreateProvider : invalid : we already have a return value !");
+        OSL_ENSURE(!xRet.is(), "CreateProvider : invalid : we already have a return value !");
         if (xRet.is())
             return true; //xRet->release();
 
@@ -203,7 +203,7 @@ struct ProviderRequest
             const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
 
             xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
-            OSL_ENSHURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
+            OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
 
             if (xRet.is())
                 xRet->acquire();
@@ -252,7 +252,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (::com::sun::star::registry::InvalidRegistryException& )
     {
-        OSL_ENSHURE(sal_False, "SBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE(sal_False, "SBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;

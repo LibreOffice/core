@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-07 16:28:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,7 @@ Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, c
 void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< OUString >& aPropertyNames, const Reference< beans::XPropertiesChangeListener >& xListener )
     throw(RuntimeException)
 {
-    OSL_ENSHURE(xListener.is(), "ERROR: requesting to fire Events to a NULL listener.");
+    OSL_ENSURE(xListener.is(), "ERROR: requesting to fire Events to a NULL listener.");
     if (!xListener.is())
     {
         return; // should this be an exception ??
