@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:07:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,9 @@ class ODatabaseForm :public OFormComponents
 //  </overwritten_properties>
 
 //  <properties>
+    ::com::sun::star::uno::Any  m_aControlBorderColorFocus;
+    ::com::sun::star::uno::Any  m_aControlBorderColorMouse;
+    ::com::sun::star::uno::Any  m_aDynamicControlBorder;
     ::rtl::OUString             m_sName;
     ::rtl::OUString             m_aTargetURL;
     ::rtl::OUString             m_aTargetFrame;
