@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:35:40 $
+ *  last change: $Author: os $ $Date: 2000-10-23 10:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,8 +565,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
                     { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PROPERTY_NONE ,MID_URL_VISITED_FMT       },
                     { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),           PROPERTY_NONE ,MID_URL_UNVISITED_FMT     },
-                    { SW_PROP_NAME(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL), FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL,&::getCppuType((const sal_Int8*)0),   PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME),  FN_UNO_PARA_CONDITIONAL_STYLE_NAME, &::getCppuType((const OUString*)0),      PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_NUMBERING_RESTART),     FN_NUMBER_NEWSTART,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID, 0 },
@@ -611,7 +611,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_HYPER_LINK_NAME ),          RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),         PROPERTY_NONE ,MID_URL_HYPERLINKNAME     },
                     { SW_PROP_NAME(UNO_NAME_UNVISITED_CHAR_STYLE_NAME),   RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),       PROPERTY_NONE ,MID_URL_VISITED_FMT       },
                     { SW_PROP_NAME(UNO_NAME_VISITED_CHAR_STYLE_NAME),     RES_TXTATR_INETFMT,     &::getCppuType((const OUString*)0),           PROPERTY_NONE ,MID_URL_UNVISITED_FMT     },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),                  FN_UNO_IS_PHYSICAL,    &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
@@ -707,8 +707,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },
                     { SW_PROP_NAME(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS       ),   RES_PARATR_HYPHENZONE,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},
                     { SW_PROP_NAME(UNO_NAME_NUMBERING_STYLE_NAME),          RES_PARATR_NUMRULE,     &::getCppuType((const OUString*)0),         PropertyAttribute::MAYBEVOID,   0},
-                    { SW_PROP_NAME(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),                  FN_UNO_IS_PHYSICAL,    &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_IS_AUTO_UPDATE),            FN_UNO_IS_AUTO_UPDATE, &::getBooleanCppuType(), PROPERTY_NONE, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
@@ -1595,8 +1595,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_TRANSPARENT_BACKGROUND ),       FN_UNO_TABLE_CELL_BACKGROUND,   &::getBooleanCppuType(),    PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT      },
                     { SW_PROP_NAME(UNO_NAME_WORD_MODE           ),          RES_CHRATR_WORDLINEMODE,&::getBooleanCppuType()  ,          PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_PARA_STYLE_NAME),           FN_UNO_PARA_STYLE,      &::getCppuType((const OUString*)0),         PROPERTY_NONE,     0},
-                    { SW_PROP_NAME(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),  RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
-                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),      RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES),  RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES),      RES_TXTATR_UNKNOWN_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTableCursorPropertyMap_Impl;
