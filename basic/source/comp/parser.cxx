@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:54:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ static SbiStatement StmntTable [] = {
 { ELSEIF,   &SbiParser::NoIf,       N, Y, }, // ELSEIF
 { ENDIF,    &SbiParser::NoIf,       N, Y, }, // ENDIF
 { END,      &SbiParser::Stop,       N, Y, }, // END
+{ ENUM,     &SbiParser::Enum,       Y, N, }, // TYPE
 { ERASE,    &SbiParser::Erase,      N, Y, }, // ERASE
 { _ERROR_,  &SbiParser::ErrorStmnt, N, Y, }, // ERROR
 { EXIT,     &SbiParser::Exit,       N, Y, }, // EXIT
@@ -185,6 +186,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     nGblChain = aGen.Gen( _JUMP, 0 );
 
     rTypeArray = new SbxArray; // Array fuer Benutzerdefinierte Typen
+    rEnumArray = new SbxArray; // Array for Enum types
 }
 
 
