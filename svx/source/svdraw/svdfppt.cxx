@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-24 15:38:14 $
+ *  last change: $Author: sj $ $Date: 2002-09-30 17:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4396,7 +4396,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
                     sal_uInt32 nLevel, sal_Bool bFirst, sal_Bool bSimpleText )
 {
     // Absatzattribute
-    sal_uInt16  nVal16, nMask16;
+    sal_uInt16  nVal16, i, nMask16;
     sal_uInt32  nVal32, nPMask;
     rIn >> nPMask;
 
@@ -4452,9 +4452,10 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
         {
             if ( nPMask & 0x200000 )
             {
-                rIn >> nVal16;          // if set, read the next 4 bytes too
-                if ( nVal16 )
-                    rIn >> nVal32;
+                // number of tabulators
+                rIn >> nVal16;
+                for ( i = 0; i < nVal16; i++ )
+                    rIn >> nVal32;      // reading the tabulators
             }
             if ( nPMask & 0x40000 )
                 rIn >> nVal16;
@@ -4522,7 +4523,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
             nPMask &=~0x2e0000;
         }
         nPMask >>= 18; // wenn normaler Text obere Flags ignorieren
-        for ( UINT16 i = 18; nPMask; i++, nPMask >>= 1 )
+        for ( i = 18; nPMask; i++, nPMask >>= 1 )
         {
             if ( nPMask & 1 )
             {
