@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-27 15:30:08 $
+ *  last change: $Author: dl $ $Date: 2001-09-04 11:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,15 @@
 #endif#else
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
+#endif
+#ifdef MAC
+#include "::ui:inc:docshell.hxx"
+#else
+#ifdef UNX
+#include "../ui/inc/docshell.hxx"
+#else
+#include "..\ui\inc\docshell.hxx"
+#endif
 #endif
 #endif // !SVX_LIGHT
 
@@ -720,7 +729,8 @@ void SdDrawDocument::StopOnlineSpelling()
 #ifndef SVX_LIGHT
 void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 {
-    if (bOnlineSpell && (bForceSpelling || bInitialOnlineSpellingEnabled))
+    if (bOnlineSpell && (bForceSpelling || bInitialOnlineSpellingEnabled) &&
+        pDocSh && !pDocSh->IsReadOnly() )
     {
         StopOnlineSpelling();
 
