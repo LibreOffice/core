@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-11 18:08:02 $
+ *  last change: $Author: ssa $ $Date: 2002-10-15 07:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ sal_Bool PersistentWindowState::implst_getFrameProps( const css::uno::Reference<
     if (pWindow!=NULL && pWindow->IsSystemWindow())
     {
         ULONG nMask = WINDOWSTATE_MASK_ALL;
-        nMask &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
         sWindowState = ((SystemWindow*)pWindow)->GetWindowState( nMask );
     }
 
