@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+#   last change: $Author: hjs $ $Date: 2002-10-04 11:06:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,9 +100,6 @@ LIB1OBJFILES=  $(SLOFILES)
 
 SRC1FILES=	commtest.src
 SRS1NAME=	commtest
-
-SRS1FILES=	$(SRS)$/commtest.srs
-RES1TARGET=	commtest
 
 ########  Ende Testapplikation  #########
 
