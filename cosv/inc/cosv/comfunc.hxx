@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comfunc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
+ *  last change: $Author: np $ $Date: 2002-05-15 11:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef CSV_COMFUNC_HXX
 #define CSV_COMFUNC_HXX
+
+#include <stdlib.h>
 
 namespace csv
 {
@@ -119,7 +121,7 @@ switch_endian( NUMTYPE &       o_rNumber,
     char *          pFront = reinterpret_cast< char* >(&o_rNumber);
     const char *    pBack  = reinterpret_cast< const char* >(&i_rNumber) + sizeof(NUMTYPE);
 
-     for ( size_t p = 0; p < sizeof(NUMTYPE); --p )
+    for ( size_t p = 0; p < sizeof(NUMTYPE); --p )
     {
         *pFront++ = *(--pBack);
     }
