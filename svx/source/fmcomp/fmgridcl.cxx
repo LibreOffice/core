@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 12:40:22 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 10:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,15 @@ using namespace ::svx;
 }
 
 //==============================================================================
+struct FmGridHeaderData
+{
+    ODataAccessDescriptor   aDropData;
+    Point                   aDropPosPixel;
+    sal_Int8                nDropAction;
+    Reference< XInterface > xDroppedStatement;
+};
+
+//==============================================================================
 //------------------------------------------------------------------------------
 const sal_Int16 nChangeTypeOffset = 1000;
 void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNewMenu, sal_Bool bDesignMode = sal_True, sal_Int16 nOffset = nChangeTypeOffset)
@@ -292,8 +301,15 @@ void SetMenuItem(const ImageList& rList, sal_uInt16 nID, Menu* pMenu, Menu& rNew
 FmGridHeader::FmGridHeader( BrowseBox* pParent, WinBits nWinBits)
         :DbBrowseHeader(pParent, nWinBits)
         ,DropTargetHelper(this)
+        ,m_pImpl(new FmGridHeaderData)
 {
     EnableDrop(sal_True);
+}
+
+//------------------------------------------------------------------------------
+FmGridHeader::~FmGridHeader()
+{
+    delete m_pImpl;
 }
 
 //------------------------------------------------------------------------------
@@ -370,7 +386,7 @@ sal_Int8 FmGridHeader::AcceptDrop( const AcceptDropEvent& rEvt )
 
     // search for recognized formats
     const DataFlavorExVector& rFlavors = GetDataFlavorExVector();
-    if (OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_FIELD_DESCRIPTOR))
+    if (OColumnTransferable::canExtractColumnDescriptor(rFlavors, CTF_COLUMN_DESCRIPTOR | CTF_FIELD_DESCRIPTOR))
         return (rEvt.mnAction & DND_ACTION_LINK) ? DND_ACTION_LINK : DND_ACTION_COPY;
 
     return DND_ACTION_NONE;
@@ -384,96 +400,158 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
 
-    ::rtl::OUString sDatasouce, sCommand, sFieldName;
-    sal_Int32       nCommandType = CommandType::COMMAND;
-    if (!OColumnTransferable::extractColumnDescriptor(aDroppedData, sDatasouce, nCommandType, sCommand, sFieldName))
+    // check the formats
+    sal_Bool bColumnDescriptor  = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR);
+    sal_Bool bFieldDescriptor   = OColumnTransferable::canExtractColumnDescriptor(aDroppedData.GetDataFlavorExVector(), CTF_FIELD_DESCRIPTOR);
+    if (!bColumnDescriptor && !bFieldDescriptor)
     {
         DBG_ERROR("FmGridHeader::ExecuteDrop: should never have reached this (no extractable format)!");
         return DND_ACTION_NONE;
     }
 
-    if (!sFieldName.getLength() || !sCommand.getLength() || !sDatasouce.getLength())
-        return DND_ACTION_NONE;
-
-
-    Reference< XConnection >            xConnection;
+    // extract the descriptor
+    ::rtl::OUString sDatasouce, sCommand, sFieldName;
+    sal_Int32       nCommandType = CommandType::COMMAND;
     Reference< XPreparedStatement >     xStatement;
+    Reference< XPropertySet >           xField;
+    Reference< XConnection >            xConnection;
+
+    ODataAccessDescriptor aColumn = OColumnTransferable::extractColumnDescriptor(aDroppedData);
+    if (aColumn.has(daDataSource))  aColumn[daDataSource]   >>= sDatasouce;
+    if (aColumn.has(daCommand))     aColumn[daCommand]      >>= sCommand;
+    if (aColumn.has(daCommandType)) aColumn[daCommandType]  >>= nCommandType;
+    if (aColumn.has(daColumnName))  aColumn[daColumnName]   >>= sFieldName;
+    if (aColumn.has(daColumnObject))aColumn[daColumnObject] >>= xField;
+    if (aColumn.has(daConnection))  aColumn[daConnection]   >>= xConnection;
+
+    if (!sFieldName.getLength() || !sCommand.getLength() || !sDatasouce.getLength())
+    {
+        DBG_ERROR("FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!");
+        return DND_ACTION_NONE;
+    }
 
     try
     {
-        xConnection = dbtools::getConnection(sDatasouce, ::rtl::OUString(), ::rtl::OUString(), static_cast<FmGridControl*>(GetParent())->getServiceManager());
-    }
-    catch(NoSuchElementException&)
-    {   // allowed, means sDatasouce isn't a valid data source name ....
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
-    }
-    if (!xConnection.is())
-    {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
-        return sal_False;
-    }
-    try
-    {
+        // need a connection
+        if (!xConnection.is())
+        {   // the transferable did not contain the connection -> build an own one
+            try
+            {
+                xConnection = dbtools::getConnection(sDatasouce, ::rtl::OUString(), ::rtl::OUString(), static_cast<FmGridControl*>(GetParent())->getServiceManager());
+            }
+            catch(NoSuchElementException&)
+            {   // allowed, means sDatasouce isn't a valid data source name ....
+            }
+            catch(Exception&)
+            {
+                DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
+            }
 
+            if (!xConnection.is())
+            {
+                DBG_ERROR("FmGridHeader::ExecuteDrop: could not retrieve the database access object !");
+                return DND_ACTION_NONE;
+            }
+        }
+
+        // try to obtain the column object
+        if (!xField.is())
+        {
 #if DBG_UTIL
-        Reference< XServiceInfo >  xServiceInfo(xConnection, UNO_QUERY);
-        DBG_ASSERT(xServiceInfo.is() && xServiceInfo->supportsService(SRV_SDB_CONNECTION), "FmGridHeader::ExecuteDrop: invalid connection (no database access connection !)");
+            Reference< XServiceInfo >  xServiceInfo(xConnection, UNO_QUERY);
+            DBG_ASSERT(xServiceInfo.is() && xServiceInfo->supportsService(SRV_SDB_CONNECTION), "FmGridHeader::ExecuteDrop: invalid connection (no database access connection !)");
 #endif
 
-        // Festellen des Feldes
-        Reference< XNameAccess >    xFields;
-        Reference< XPropertySet >       xField;
-        switch (nCommandType)
-        {
-            case CommandType::TABLE:
+            Reference< XNameAccess >    xFields;
+            switch (nCommandType)
             {
-                Reference< XTablesSupplier > xSupplyTables(xConnection, UNO_QUERY);
-                Reference< XColumnsSupplier >  xSupplyColumns;
-                xSupplyTables->getTables()->getByName(sCommand) >>= xSupplyColumns;
-                xFields = xSupplyColumns->getColumns();
-            }
-            break;
-            case CommandType::QUERY:
-            {
-                Reference< XQueriesSupplier > xSupplyQueries(xConnection, UNO_QUERY);
-                Reference< XColumnsSupplier > xSupplyColumns;
-                xSupplyQueries->getQueries()->getByName(sCommand) >>= xSupplyColumns;
-                xFields  = xSupplyColumns->getColumns();
-            }
-            break;
-            default:
-            {
-                xStatement = xConnection->prepareStatement(sCommand);
-                // not interested in any results
+                case CommandType::TABLE:
+                {
+                    Reference< XTablesSupplier > xSupplyTables(xConnection, UNO_QUERY);
+                    Reference< XColumnsSupplier >  xSupplyColumns;
+                    xSupplyTables->getTables()->getByName(sCommand) >>= xSupplyColumns;
+                    xFields = xSupplyColumns->getColumns();
+                }
+                break;
+                case CommandType::QUERY:
+                {
+                    Reference< XQueriesSupplier > xSupplyQueries(xConnection, UNO_QUERY);
+                    Reference< XColumnsSupplier > xSupplyColumns;
+                    xSupplyQueries->getQueries()->getByName(sCommand) >>= xSupplyColumns;
+                    xFields  = xSupplyColumns->getColumns();
+                }
+                break;
+                default:
+                {
+                    xStatement = xConnection->prepareStatement(sCommand);
+                    // not interested in any results
 
-                Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
-                xStatProps->setPropertyValue(rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
+                    Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
+                    xStatProps->setPropertyValue(rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
 
-                Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
-                if (xSupplyCols.is())
-                    xFields = xSupplyCols->getColumns();
+                    Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
+                    if (xSupplyCols.is())
+                        xFields = xSupplyCols->getColumns();
+                }
+            }
+
+            if (xFields.is() && xFields->hasByName(sFieldName))
+                xFields->getByName(sFieldName) >>= xField;
+
+            if (!xField.is())
+            {
+                ::comphelper::disposeComponent(xStatement);
+                return DND_ACTION_NONE;
             }
         }
 
-        if (xFields.is() && xFields->hasByName(sFieldName))
-            xFields->getByName(sFieldName) >>= xField;
+        // do the drop asynchronously
+        // (85957 - UI actions within the drop are not allowed, but we want to open a popup menu)
+        m_pImpl->aDropData = aColumn;
+        m_pImpl->aDropData[daConnection] <<= xConnection;
+        m_pImpl->aDropData[daColumnObject] <<= xField;
 
-        Reference< XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+        m_pImpl->nDropAction = _rEvt.mnAction;
+        m_pImpl->aDropPosPixel = _rEvt.maPosPixel;
+        m_pImpl->xDroppedStatement = xStatement;
 
-        if (!xSupplier.is() || !xField.is())
-        {
-            ::comphelper::disposeComponent(xStatement);
-            return sal_False;
-        }
+        PostUserEvent(LINK(this, FmGridHeader, OnAsyncExecuteDrop));
+    }
+    catch (Exception&)
+    {
+        DBG_ERROR("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
+        ::comphelper::disposeComponent(xStatement);
+        return sal_False;
+    }
 
-        Reference< XNumberFormats >  xNumberFormats(xSupplier->getNumberFormats());
+    return DND_ACTION_LINK;
+}
+
+//------------------------------------------------------------------------------
+IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
+{
+    ::rtl::OUString             sDatasouce, sCommand, sFieldName;
+    sal_Int32                   nCommandType = CommandType::COMMAND;
+    Reference< XPropertySet >   xField;
+    Reference< XConnection >    xConnection;
+    m_pImpl->aDropData[daDataSource]    >>= sDatasouce;
+    m_pImpl->aDropData[daCommand]       >>= sCommand;
+    m_pImpl->aDropData[daCommandType]   >>= nCommandType;
+    m_pImpl->aDropData[daColumnName]    >>= sFieldName;
+    m_pImpl->aDropData[daConnection]    >>= xConnection;
+    m_pImpl->aDropData[daColumnObject]  >>= xField;
+
+    try
+    {
+        // need number formats
+        Reference< XNumberFormatsSupplier > xSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+        Reference< XNumberFormats >  xNumberFormats;
+        if (xSupplier.is())
+            xNumberFormats = xSupplier->getNumberFormats();
         if (!xNumberFormats.is())
         {
-            ::comphelper::disposeComponent(xStatement);
-            return sal_False;
+            ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
+            return 0L;
         }
 
         // Vom Feld werden nun zwei Informationen benoetigt:
@@ -488,8 +566,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::OTHER:
-                ::comphelper::disposeComponent(xStatement);
-                return sal_False;
+                ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
+                return 0L;
         }
 
         sal_Int32 nFormatKey;
@@ -499,8 +577,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
         Reference< XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
 
-        Point aPos  = OutputToScreenPixel(_rEvt.maPosPixel);
-        sal_uInt16 nColId = GetItemId(_rEvt.maPosPixel);
+        Point aPos  = OutputToScreenPixel(m_pImpl->aDropPosPixel);
+        sal_uInt16 nColId = GetItemId(m_pImpl->aDropPosPixel);
         // EinfuegePosition, immer vor der aktuellen Spalte
         sal_uInt16 nPos = GetModelColumnPos(nColId);
         Reference< XPropertySet >  xCol, xSecondCol;
@@ -564,7 +642,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         if (aPossibleTypes.Count() != 0)
         {
             nPreferedType = aPossibleTypes[0];
-            if ((_rEvt.mnAction == DND_ACTION_LINK) && (aPossibleTypes.Count() > 1))
+            if ((m_pImpl->nDropAction == DND_ACTION_LINK) && (aPossibleTypes.Count() > 1))
             {
                 ImageList aImageList( SVX_RES(RID_SVXIMGLIST_FMEXPL) );
 
@@ -573,7 +651,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                 PopupMenu* pMenu = aInsertMenu.GetPopupMenu(SID_FM_INSERTCOL);
                 for (sal_uInt32 i=0; i<aPossibleTypes.Count(); ++i)
                     SetMenuItem(aImageList, sal_uInt16(aPossibleTypes[(sal_uInt16)i]), pMenu, aTypeMenu, sal_True, 0);
-                nPreferedType = aTypeMenu.Execute(this, _rEvt.maPosPixel);
+                nPreferedType = aTypeMenu.Execute(this, m_pImpl->aDropPosPixel);
             }
 
             bDateNTimeCol = nPreferedType == SID_FM_TWOFIELDS_DATE_N_TIME;
@@ -602,8 +680,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         if (!xCol.is() || (bDateNTimeCol && !xSecondCol.is()))
         {
             ::comphelper::disposeComponent(xCol);   // in case only the creation of the second column failed
-            ::comphelper::disposeComponent(xStatement);
-            return sal_False;
+            ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
+            return 0L;
         }
 
         if (bDateNTimeCol)
@@ -709,12 +787,13 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
-        ::comphelper::disposeComponent(xStatement);
-        return sal_False;
+        DBG_ERROR("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
+        ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
+        return 0L;
     }
 
-    return DND_ACTION_COPY;
+    ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
+    return 1L;
 }
 
 //------------------------------------------------------------------------------
