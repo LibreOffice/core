@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:00:32 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 18:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::s
             ,m_eMask(_eMask)
 {
     // initially check the start of the chain against the include mask
-    if (m_pCurrent && (m_eMask >= NI_EXCEPTIONS))
+    if (m_pCurrent && (m_eMask > NI_EXCEPTIONS))
         next();
 }
 
@@ -229,7 +229,7 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::s
             ,m_eMask(_eMask)
 {
     // initially check the start of the chain against the include mask
-    if (m_pCurrent && (m_eMask >= NI_WARNINGS))
+    if (m_pCurrent && (m_eMask > NI_WARNINGS))
         next();
 }
 
@@ -241,7 +241,7 @@ SQLExceptionIteratorHelper::SQLExceptionIteratorHelper(const ::com::sun::star::s
             ,m_eMask(_eMask)
 {
     // initially check the start of the chain against the include mask
-    if (m_pCurrent && (m_eMask >= NI_CONTEXTINFOS))
+    if (m_pCurrent && (m_eMask > NI_CONTEXTINFOS))
         next();
 }
 
@@ -329,6 +329,9 @@ FunctionSequenceException::FunctionSequenceException(const Reference< XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/24 15:00:32  oj
+ *  make strings unique for lib's
+ *
  *  Revision 1.1  2000/10/05 08:50:41  fs
  *  moved the files from unotools to here
  *
