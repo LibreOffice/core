@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccorr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+
+#ifndef _HINTS_HXX
+#include <hints.hxx>
 #endif
 
 /*  */
@@ -266,13 +270,35 @@ void SwDoc::CorrAbs( const SwNodeIndex& rOldNode,
 
 /*  */
 
-#define _PaMCorrAbs2( pPam ) \
+bool _PaMCorrAbs2( SwPaM* pPam,
+                   const SwPosition& rNewPos,
+                   ULONG nSttNode, ULONG nEndNode )
+{
+    bool bRet = false;
+
     for( int nb = 0; nb < 2; ++nb ) \
-        if( (pPam)->GetBound( BOOL(nb) ).nNode >= nSttNode && \
-            (pPam)->GetBound( BOOL(nb) ).nNode <= nEndNode ) \
-            (pPam)->GetBound( BOOL(nb) ) = aNewPos;
+        if( (pPam)->GetBound( BOOL(nb) ).nNode >= nSttNode &&
+            (pPam)->GetBound( BOOL(nb) ).nNode <= nEndNode )
+        {
+            (pPam)->GetBound( BOOL(nb) ) = rNewPos;
+            bRet = true;
+        }
 
+    return bRet;
+}
 
+// find the relevant section in which the SwUnoCrsr may wander. returns NULL if
+// no restrictions apply
+const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
+{
+    const SwStartNode* pStartNode = rNode.StartOfSectionNode();
+    while( ( pStartNode != NULL ) &&
+           ( pStartNode->StartOfSectionNode() != pStartNode ) &&
+           ( pStartNode->GetStartNodeType() == SwNormalStartNode ) )
+        pStartNode = pStartNode->StartOfSectionNode();
+
+    return pStartNode;
+}
 
 void PaMCorrAbs( const SwNodeIndex &rStartNode,
                  const SwNodeIndex &rEndNode,
@@ -292,16 +318,16 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
     //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
             do {
-                _PaMCorrAbs2( _pStkCrsr )
+                _PaMCorrAbs2( _pStkCrsr, aNewPos, nSttNode, nEndNode );
             } while ( (_pStkCrsr != 0 ) &&
                 ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
-                _PaMCorrAbs2( PCURCRSR )
+                _PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
             FOREACHPAM_END()
 
             if( PCURSH->IsTableMode() )
-                _PaMCorrAbs2( PCURSH->GetTblCrs() )
+                _PaMCorrAbs2( PCURSH->GetTblCrs(), aNewPos, nSttNode, nEndNode );
 
         FOREACHSHELL_END( pShell )
     }
@@ -310,16 +336,38 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
         register SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
-            FOREACHPAM_START( rTbl[ n ] )
-                _PaMCorrAbs2( PCURCRSR )
+            bool bChange = false;
+
+            SwUnoCrsr* pUnoCursor = rTbl[ n ];
+
+            // determine whether the UNO cursor will leave it's designated
+            // section
+            bool bLeaveSection =
+                pUnoCursor->IsRemainInSection() &&
+                ( lcl_FindUnoCrsrSection( aNewPos.nNode.GetNode() ) !=
+                  lcl_FindUnoCrsrSection(
+                      pUnoCursor->GetPoint()->nNode.GetNode() ) );
+
+            FOREACHPAM_START( pUnoCursor )
+                bChange |= _PaMCorrAbs2(PCURCRSR, aNewPos, nSttNode, nEndNode);
             FOREACHPAM_END()
 
-            SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*rTbl[ n ];
+            SwUnoTableCrsr* pUnoTblCrsr = (SwUnoTableCrsr*)*pUnoCursor;
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    _PaMCorrAbs2( PCURCRSR )
+                    bChange |=
+                        _PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
                 FOREACHPAM_END()
+            }
+
+            // if a UNO cursor leaves its designated section, we must inform
+            // (and invalidate) said cursor
+            if( bChange && bLeaveSection )
+            {
+                // the UNO cursor has left its section. We need to notify it!
+                SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
+                pUnoCursor->Modify( &aHint, NULL );
             }
         }
     }
