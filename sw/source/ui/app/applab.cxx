@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:24:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,10 +334,6 @@ static sal_uInt16 nBCTitleNo = 0;
         // Neues Dokument erzeugen.
         SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD));
         xDocSh->DoInitNew( 0 );
-
-        /*TODO #111050# call public made method of sfx (which was protected before!)
-          to force missing event OnNew ... */
-        xDocSh->Stamp_SetActivateEvent(SFX_EVENT_CREATEDOC);
 
         // Drucker
         Printer *pPrt = pDlg->GetPrt();
