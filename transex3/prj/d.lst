@@ -19,8 +19,6 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
-..\scripts\localize.btm %_DEST%\bin%_EXT%\localize.bat
-..\scripts\localize.bat %_DEST%\bin%_EXT%\localize.bm
 
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\transex3\utf8conv.hxx
