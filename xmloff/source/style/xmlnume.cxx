@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-17 13:26:13 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 14:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,9 +576,16 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
             if( bHasColor )
             {
                 const Color aColor( nColor );
-                SvXMLUnitConverter::convertColor( sBuffer, aColor );
-                GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
-                              sBuffer.makeStringAndClear() );
+                if( aColor.GetColor() == 0xffffffff )
+                {
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_USE_WINDOW_FONT_COLOR, XML_TRUE );
+                }
+                else
+                {
+                    SvXMLUnitConverter::convertColor( sBuffer, aColor );
+                    GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLOR,
+                                  sBuffer.makeStringAndClear() );
+                }
             }
 
             // fo:height="...%"

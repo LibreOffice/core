@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-23 13:03:43 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 14:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,6 +662,7 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_WIDTH,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR,
+    XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE,
 
     XML_TOK_STYLE_ATTRIBUTES_ATTR_END=XML_TOK_UNKNOWN
@@ -699,6 +700,8 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
             XML_TOK_STYLE_ATTRIBUTES_ATTR_HEIGHT },
     { XML_NAMESPACE_FO, XML_COLOR,
             XML_TOK_STYLE_ATTRIBUTES_ATTR_COLOR },
+    { XML_NAMESPACE_STYLE, XML_USE_WINDOW_FONT_COLOR,
+            XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR },
     { XML_NAMESPACE_FO, XML_FONT_SIZE,
             XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE },
 
@@ -792,6 +795,12 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 Color aColor;
                 if( SvXMLUnitConverter::convertColor( aColor, rValue ) )
                     rListLevel.SetColor( (sal_Int32)aColor.GetColor() );
+            }
+            break;
+        case XML_TOK_STYLE_ATTRIBUTES_ATTR_WINDOW_FONT_COLOR:
+            {
+                if( IsXMLToken( rValue, XML_TRUE ) )
+                    rListLevel.SetColor( (sal_Int32)0xffffffff );
             }
             break;
         case XML_TOK_STYLE_ATTRIBUTES_ATTR_FONT_SIZE:
