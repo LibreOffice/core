@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:11:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,27 +125,29 @@ struct CompatibilityItem
     bool        m_bUseLineSpacing;
     bool        m_bAddTableSpacing;
     bool        m_bUseObjPos;
+    bool        m_bUseOurTextWrapping;
     bool        m_bIsDefault;
     bool        m_bIsUser;
 
     CompatibilityItem( const String& _rName, const String& _rModule,
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
                        bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
-                       bool _bAddTableSpacing, bool _bUseObjPos,
+                       bool _bAddTableSpacing, bool _bUseObjPos, bool _bUseOurTextWrapping,
                        bool _bIsDefault, bool _bIsUser ) :
 
-        m_sName             ( _rName ),
-        m_sModule           ( _rModule ),
-        m_bUsePrtMetrics    ( _bUsePrtMetrics ),
-        m_bAddSpacing       ( _bAddSpacing ),
-        m_bAddSpacingAtPages( _bAddSpacingAtPages ),
-        m_bUseOurTabStops   ( _bUseOurTabStops ),
-        m_bNoExtLeading     ( _bNoExtLeading ),
-        m_bUseLineSpacing   ( _bUseLineSpacing ),
-        m_bAddTableSpacing  ( _bAddTableSpacing ),
-        m_bUseObjPos        ( _bUseObjPos ),
-        m_bIsDefault        ( _bIsDefault ),
-        m_bIsUser           ( _bIsUser ) {}
+        m_sName                 ( _rName ),
+        m_sModule               ( _rModule ),
+        m_bUsePrtMetrics        ( _bUsePrtMetrics ),
+        m_bAddSpacing           ( _bAddSpacing ),
+        m_bAddSpacingAtPages    ( _bAddSpacingAtPages ),
+        m_bUseOurTabStops       ( _bUseOurTabStops ),
+        m_bNoExtLeading         ( _bNoExtLeading ),
+        m_bUseLineSpacing       ( _bUseLineSpacing ),
+        m_bAddTableSpacing      ( _bAddTableSpacing ),
+        m_bUseObjPos            ( _bUseObjPos ),
+        m_bUseOurTextWrapping   ( _bUseOurTextWrapping ),
+        m_bIsDefault            ( _bIsDefault ),
+        m_bIsUser               ( _bIsUser ) {}
 };
 
 #include <vector>
@@ -183,7 +185,8 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
         String sEntry = String( ResId( nResId ) );
         if ( STR_TAB_ALIGNMENT == nResId ||
              STR_LINE_SPACING == nResId ||
-             STR_USE_OBJPOSITIONING == nResId )
+             STR_USE_OBJPOSITIONING == nResId ||
+             STR_USE_OURTEXTWRAPPING == nResId )
             ReplaceFormatName( sEntry );
         SvLBoxEntry* pEntry = m_aOptionsLB.SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
@@ -209,6 +212,19 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     m_aFormattingFT.Hide();
     m_aFormattingLB.Hide();
     m_aResetPB.Hide();
+    // so move and resize the other controls
+    Point aMovePnt = m_aFormattingFT.GetPosPixel();
+    Point aNewPnt = m_aOptionsFT.GetPosPixel();
+    aNewPnt.Y() = aMovePnt.Y();
+    m_aOptionsFT.SetPosPixel( aNewPnt );
+    aMovePnt = m_aFormattingLB.GetPosPixel();
+    aNewPnt = m_aOptionsLB.GetPosPixel();
+    long nDelta = aNewPnt.Y() - aMovePnt.Y();
+    aNewPnt.Y() = aMovePnt.Y();
+    m_aOptionsLB.SetPosPixel( aNewPnt );
+    Size aNewSz = m_aOptionsLB.GetSizePixel();
+    aNewSz.Height() += nDelta;
+    m_aOptionsLB.SetSizePixel( aNewSz );
 }
 
 // -----------------------------------------------------------------------
@@ -256,7 +272,8 @@ ULONG convertBools2Ulong_Impl
     bool _bNoExtLeading,
     bool _bUseLineSpacing,
     bool _bAddTableSpacing,
-    bool _bUseObjPos
+    bool _bUseObjPos,
+    bool _bUseOurTextWrapping
 )
 {
     ULONG nRet = 0;
@@ -284,6 +301,9 @@ ULONG convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if ( _bUseObjPos )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bUseOurTextWrapping )
         nRet |= nSetBit;
 
     return nRet;
@@ -331,6 +351,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     bool bUseLineSpacing;
     bool bAddTableSpacing;
     bool bUseObjPos;
+    bool bUseOurTextWrapping;
     int i, j, nCount = aList.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -359,12 +380,14 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 aValue.Value >>= bAddTableSpacing;
             else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING )
                 aValue.Value >>= bUseObjPos;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING )
+                aValue.Value >>= bUseOurTextWrapping;
         }
 
         CompatibilityItem aItem(
             sName, sModule, bUsePrtMetrics, bAddSpacing,
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
-            bUseLineSpacing, bAddTableSpacing, bUseObjPos,
+            bUseLineSpacing, bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
             ( sName.equals( DEFAULT_ENTRY ) != sal_False ),
             ( sName.equals( USER_ENTRY ) != sal_False ) );
         m_pImpl->m_aList.push_back( aItem );
@@ -388,7 +411,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         USHORT nPos = m_aFormattingLB.InsertEntry( sNewEntry );
         ULONG nOptions = convertBools2Ulong_Impl(
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
-            bUseOurTabStops, bNoExtLeading, bUseLineSpacing, bAddTableSpacing, bUseObjPos );
+            bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
+            bAddTableSpacing, bUseObjPos, bUseOurTextWrapping );
         m_aFormattingLB.SetEntryData( nPos, (void*)(long)nOptions );
     }
 
@@ -458,6 +482,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                         case COPT_USE_LINESPACING : pItem->m_bUseLineSpacing = bChecked; break;
                         case COPT_ADD_TABLESPACING : pItem->m_bAddTableSpacing = bChecked; break;
                         case COPT_USE_OBJECTPOSITIONING: pItem->m_bUseObjPos = bChecked; break;
+                        case COPT_USE_OUR_TEXTWRAPPING: pItem->m_bUseOurTextWrapping = bChecked; break;
                         default:
                         {
                             DBG_ERRORFILE( "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
@@ -498,13 +523,14 @@ ULONG SwCompatibilityOptPage::GetDocumentOptions() const
         short nPrtLayout = m_pWrtShell->IsUseVirtualDevice();
         nRet = convertBools2Ulong_Impl(
             PrinterIndependentLayout::DISABLED == nPrtLayout,
-            m_pWrtShell->IsParaSpaceMax() != FALSE,
-            m_pWrtShell->IsParaSpaceMaxAtPages() != FALSE,
-            m_pWrtShell->IsTabCompat() == FALSE,
-            m_pWrtShell->IsAddExtLeading() == FALSE,
-            m_pWrtShell->IsFormerLineSpacing() != FALSE,
-                        m_pWrtShell->IsAddParaSpacingToTableCells() != FALSE,
-            m_pWrtShell->IsFormerObjectPositioning() != FALSE );
+            m_pWrtShell->IsParaSpaceMax() != sal_False,
+            m_pWrtShell->IsParaSpaceMaxAtPages() != sal_False,
+            m_pWrtShell->IsTabCompat() == sal_False,
+            m_pWrtShell->IsAddExtLeading() == sal_False,
+            m_pWrtShell->IsFormerLineSpacing() != sal_False,
+            m_pWrtShell->IsAddParaSpacingToTableCells() != sal_False,
+            m_pWrtShell->IsFormerObjectPositioning() != sal_False,
+            m_pWrtShell->IsFormerTextWrapping() != sal_False );
     }
     return nRet;
 }
@@ -520,7 +546,7 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_sName, pItem->m_sModule, pItem->m_bUsePrtMetrics, pItem->m_bAddSpacing,
             pItem->m_bAddSpacingAtPages, pItem->m_bUseOurTabStops,
             pItem->m_bNoExtLeading, pItem->m_bUseLineSpacing,
-            pItem->m_bAddTableSpacing, pItem->m_bUseObjPos );
+            pItem->m_bAddTableSpacing, pItem->m_bUseObjPos, pItem->m_bUseOurTextWrapping );
 }
 
 // -----------------------------------------------------------------------
@@ -582,12 +608,17 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
                 }
                 else if ( COPT_ADD_TABLESPACING == nOption )
                 {
-                    //! method only exists in cws swformatcells
+                    m_pWrtShell->SetAddParaSpacingToTableCells( bChecked );
                     bModified = TRUE;
                 }
                 else if ( COPT_USE_OBJECTPOSITIONING == nOption )
                 {
                     m_pWrtShell->SetUseFormerObjectPositioning( bChecked );
+                    bModified = TRUE;
+                }
+                else if ( COPT_USE_OUR_TEXTWRAPPING == nOption )
+                {
+                    m_pWrtShell->SetUseFormerTextWrapping( bChecked );
                     bModified = TRUE;
                 }
             }
