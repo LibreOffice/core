@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 10:26:18 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 //CHINA001 #include <svx/postdlg.hxx>
 //CHINA001 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
+//#include <svx/adritem.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
