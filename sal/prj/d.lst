@@ -7,6 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 
 ..\inc\udkversion.mk %_DEST%\inc%_EXT%\udkversion.mk
 ..\inc\sal\*.h %_DEST%\inc%_EXT%\sal\*.h
+..\%__SRC%\inc\sal\typesizes.h %_DEST%\inc%_EXT%\sal\typesizes.h
 ..\inc\osl\*.h %_DEST%\inc%_EXT%\osl\*.h
 ..\inc\osl\*.hxx %_DEST%\inc%_EXT%\osl\*.hxx
 ..\inc\rtl\*.h %_DEST%\inc%_EXT%\rtl\*.h
