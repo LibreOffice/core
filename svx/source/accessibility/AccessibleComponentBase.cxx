@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-10-23 09:45:46 $
+ *  last change: $Author: af $ $Date: 2002-12-04 15:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 using namespace ::rtl;
@@ -167,40 +170,13 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
 
 
 
-/*
-sal_Bool SAL_CALL AccessibleComponentBase::isShowing (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return sal_False;
-}
-
-
-
-
-sal_Bool SAL_CALL AccessibleComponentBase::isVisible (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return sal_False;
-}
-
-
-
-
-sal_Bool SAL_CALL AccessibleComponentBase::isFocusTraversable (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return sal_False;
-}
-*/
-
-
 
 void SAL_CALL AccessibleComponentBase::addFocusListener (
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::awt::XFocusListener >& xListener)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // emtpy
+    // Ignored
 }
 
 
@@ -210,7 +186,7 @@ void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::st
     ::com::sun::star::awt::XFocusListener >& xListener )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // emtpy
+    // Ignored
 }
 
 
@@ -219,27 +195,16 @@ void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::st
 void SAL_CALL AccessibleComponentBase::grabFocus (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // emtpy
+    // Ignored
 }
 
 
 
-
-::com::sun::star::uno::Any SAL_CALL AccessibleComponentBase::getAccessibleKeyBinding (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return uno::Any();
-}
-
-
-
-
-//=====  XAccessibleExtendedComponent  ========================================
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return 0;
+    return Color(COL_BLACK).GetColor();
 }
 
 
@@ -248,11 +213,13 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getForeground (void)
 sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return -1;
+    return Color(COL_WHITE).GetColor();
 }
 
 
 
+
+//=====  XAccessibleExtendedComponent  ========================================
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
         AccessibleComponentBase::getFont (void)
