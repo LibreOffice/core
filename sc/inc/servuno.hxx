@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:29:40 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 11:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,11 @@ class ScDocShell;
 #define SC_SERVICE_DOCSPRSETT   22
 #define SC_SERVICE_DOCCONF      23
 
-#define SC_SERVICE_COUNT        24
+#define SC_SERVICE_IMAP_RECT    24
+#define SC_SERVICE_IMAP_CIRC    25
+#define SC_SERVICE_IMAP_POLY    26
+
+#define SC_SERVICE_COUNT        27
 #define SC_SERVICE_INVALID      USHRT_MAX
 
 

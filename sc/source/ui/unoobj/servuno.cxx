@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 11:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #pragma hdrstop
 
 #include <tools/debug.hxx>
+#include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
 
 #ifndef _SVX_UNONRULE_HXX
@@ -82,6 +83,7 @@
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "confuno.hxx"
+#include "shapeuno.hxx"
 
 using namespace ::com::sun::star;
 
@@ -113,7 +115,10 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         "com.sun.star.sheet.Defaults",              // SC_SERVICE_DOCDEFLTS
         "com.sun.star.drawing.Defaults",            // SC_SERVICE_DRAWDEFLTS
         "com.sun.star.comp.SpreadsheetSettings",    // SC_SERVICE_DOCSPRSETT
-        "com.sun.star.document.Settings"            // SC_SERVICE_DOCCONF
+        "com.sun.star.document.Settings",           // SC_SERVICE_DOCCONF
+        "com.sun.star.image.ImageMapRectangleObject",// SC_SERVICE_IMAP_RECT
+        "com.sun.star.image.ImageMapCircleObject",  // SC_SERVICE_IMAP_CIRC
+        "com.sun.star.image.ImageMapPolygonObject"  // SC_SERVICE_IMAP_POLY
     };
 
 //
@@ -146,7 +151,10 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_DOCDEFLTS
         "",                                         // SC_SERVICE_DRAWDEFLTS
         "",                                         // SC_SERVICE_DOCSPRSETT
-        ""                                          // SC_SERVICE_DOCCONF
+        "",                                         // SC_SERVICE_DOCCONF
+        "",                                         // SC_SERVICE_IMAP_RECT
+        "",                                         // SC_SERVICE_IMAP_CIRC
+        ""                                          // SC_SERVICE_IMAP_POLY
     };
 
 
@@ -266,6 +274,16 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_DOCCONF:
             if (pDocShell)
                 xRet = (beans::XPropertySet*)new ScDocumentConfiguration(pDocShell);
+            break;
+
+        case SC_SERVICE_IMAP_RECT:
+            xRet = SvUnoImageMapRectangleObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
+            break;
+        case SC_SERVICE_IMAP_CIRC:
+            xRet = SvUnoImageMapCircleObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
+            break;
+        case SC_SERVICE_IMAP_POLY:
+            xRet = SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() );
             break;
     }
     return xRet;
