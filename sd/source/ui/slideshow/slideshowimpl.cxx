@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:34:55 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,15 @@
 #include "rtl/ref.hxx"
 
 
+// TODO(Q3): This breaks encapsulation. Either export
+// these strings from avmedia, or provide an XManager
+// factory there
+#ifdef WNT
+#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
+#else
+#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
+#endif
+
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Any;
@@ -254,7 +263,7 @@ sal_Int32 AnimationPageList::getStartPageIndex() const
 
 sal_Int32 AnimationPageList::getPageNumber( sal_Int32 nPageIndex ) const
 {
-    if( nPageIndex >= 0 && nPageIndex < maPageNumbers.size() )
+    if( nPageIndex >= 0 && (sal_uInt32)nPageIndex < maPageNumbers.size() )
         return maPageNumbers[nPageIndex];
     else
         return -1;
@@ -930,6 +939,20 @@ void SlideshowImpl::paint( const Rectangle& rRect )
 
 void SlideshowImpl::slideChange()
 {
+    try
+    {
+        if( mxPlayer.is() )
+        {
+            mxPlayer->stop();
+            mxPlayer.clear();
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::SlideshowImpl::slideChange(), exception caught!" );
+    }
+
     if( mpAnimationPageList.get() )
     {
         sal_Int32 nCurrentPageIndex = mpAnimationPageList->getCurrentPageIndex();
@@ -1071,12 +1094,15 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nPageNumber)
                 case ClickAction_STOPPRESENTATION:
                     break;
                 case ClickAction_BOOKMARK:
-                case ClickAction_DOCUMENT:
-                case ClickAction_PROGRAM:
                     if( xSetInfo->hasPropertyByName( msBookmark ) )
                         xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
                     if( getPageNumberForBookmark( pEvent->maStrBookmark ) == -1 )
                         continue;
+                case ClickAction_DOCUMENT:
+                case ClickAction_SOUND:
+                case ClickAction_PROGRAM:
+                    if( xSetInfo->hasPropertyByName( msBookmark ) )
+                        xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
                     break;
                 case ClickAction_VERB:
                     if( xSetInfo->hasPropertyByName( msVerb ) )
@@ -1255,6 +1281,29 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
         }
     }
     break;
+    case ClickAction_SOUND:
+    {
+        try
+        {
+            if( !mxManager.is() )
+            {
+                uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
+
+                mxManager.set(
+                    xFac->createInstance(
+                        ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
+                    uno::UNO_QUERY_THROW );
+            }
+
+            mxPlayer.set( mxManager->createPlayer( pEvent->maStrBookmark ), uno::UNO_QUERY_THROW );
+            mxPlayer->start();
+        }
+        catch( uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR("sd::SlideshowImpl::click(), exception caught!" );
+        }
+    }
 
     case ClickAction_DOCUMENT:
     {
@@ -1537,30 +1586,23 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             break;
 
         case KEY_RETURN:
-            mxShow->nextEffect();
-            update();
-/*
         {
-            USHORT nPageCount = mpDocument->GetSdPageCount( PK_STANDARD );
-
-            int nPage = (USHORT)maCharBuffer.ToInt32();
-
-            // We use here a ByteString to be able to ask the string
-            // wether he is a ASCII-number or not. If we use real
-            // Unicode we have to think about a solution to ask for
-            // a number, independed on the current charset
-            ByteString aStrTmp( maCharBuffer, RTL_TEXTENCODING_ASCII_US );
-
-            // if it is a number choose this page
-            if( aStrTmp.Len() && aStrTmp.IsNumericAscii() ) // && aAnimPageList.IsPageNumIncluded( nPage - 1 ) )
-                nPage--;
+            if( maCharBuffer.Len() )
+            {
+                if( mpAnimationPageList.get() )
+                {
+                    sal_Int32 nPageIndex = mpAnimationPageList->findPageIndex( maCharBuffer.ToInt32() - 1 );
+                    if( nPageIndex != -1 )
+                        jumpToPageIndex( nPageIndex );
+                }
+                maCharBuffer.Erase();
+            }
             else
-                // advance page
-
-            maCharBuffer.Erase();
-            //bTrySlideChange = TRUE;
+            {
+                mxShow->nextEffect();
+                update();
+            }
         }
-*/
         break;
 
         // numeric: add to buffer
