@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@
 #include <srchdlg.hxx>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <frmdiritem.hxx>
 #endif
 
@@ -160,7 +160,7 @@ using namespace ::com::sun::star::linguistic2;
 DBG_NAME( EditEngine );
 DBG_NAMEEX( EditView );
 
-#if defined ( DEBUG ) || defined ( DBG_UTIL )
+#if (OSL_DEBUG_LEVEL > 1) || defined ( DBG_UTIL )
 static sal_Bool bDebugPaint = sal_False;
 #endif
 
@@ -330,7 +330,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
 {
     DBG_CHKTHIS( EditEngine, 0 );
 
-#if defined( DBG_UTIL ) || defined( DEBUG )
+#if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
     if ( bDebugPaint )
         EditDbg::ShowEditEngineData( this, sal_False );
 #endif
@@ -885,7 +885,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     {
         switch ( nCode )
         {
-           #if defined( DBG_UTIL ) || defined( DEBUG )
+           #if defined( DBG_UTIL ) || (OSL_DEBUG_LEVEL > 1)
             case KEY_F1:
             {
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
@@ -971,7 +971,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         nNewCursorFlags |= GETCRSR_ENDOFLINE;
 
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 GetLanguage( pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() ), aCurSel.Max().GetIndex() );
 #endif
             }
@@ -1062,7 +1062,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
-                #if defined( DEBUG ) && !defined( PRODUCT )
+                #if (OSL_DEBUG_LEVEL > 1) && !defined( PRODUCT )
                     if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         SfxItemSet aAttribs = pEditView->GetAttribs();
