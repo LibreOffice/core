@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-04 14:24:26 $
+#   last change: $Author: as $ $Date: 2001-11-08 11:54:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ IDLFILES=\
     ServiceNotRegisteredException.idl\
     SystemDependent.idl\
     WrappedTargetException.idl\
+    WrappedTargetRuntimeException.idl\
     XComponent.idl\
     XConnectionPoint.idl\
     XConnectionPointContainer.idl\
