@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:12:47 $
+ *  last change: $Author: fs $ $Date: 2001-08-31 14:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,7 @@ Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException
 void OGridControlModel::disposing()
 {
     OControlModel::disposing();
+    OErrorBroadcaster::disposing();
     OInterfaceContainer::disposing();
 
     EventObject aEvt(static_cast<XWeak*>(this));

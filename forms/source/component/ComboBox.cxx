@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:02:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-31 14:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ OComboBoxModel::~OComboBoxModel()
 void OComboBoxModel::disposing()
 {
     OBoundControlModel::disposing();
+    OErrorBroadcaster::disposing();
     m_xFormatter = NULL;
 }
 
