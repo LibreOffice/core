@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 15:26:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2530,6 +2530,50 @@ Resource RID_GLOBSTR
     {
         Text [ de ] = "ACHTUNG: Diese Aktion kann dazu geführt haben, dass Referenzen auf den gelöschten Bereich nicht wieder hergestellt wurden.";
         Text[ en-US ] = "WARNING: This action may have resulted in references to the deleted area not being restored.";
+    };
+
+    String STR_HF_NONE_IN_BRACKETS
+    {
+        Text [ de ]  = "(keine)";
+        Text [ en-US ] = "(none)";
+        Text [ x-comment ] = "(keine) refers to text Kopfzeile or Fußzeile" ;
+    };
+
+    String STR_HF_OF
+    {
+        Text [ de ]  = "von";
+        Text [ en-US ] = "of";
+    };
+
+    String STR_HF_OF_QUESTION
+    {
+        Text [ de ]  = "von ?";
+        Text [ en-US ] = "of ?";
+    };
+
+    String STR_HF_CREATED_BY
+    {
+        Text [ de ]  = "Erstellt von";
+        Text [ en-US ] = "Created by";
+    };
+
+    String STR_HF_CONFIDENTIAL
+    {
+        Text [ de ]  = "Vertraulich";
+        Text [ en-US ] = "Confidential";
+    };
+
+    String STR_HF_CUSTOMIZED
+    {
+        Text [ de ]  = "Benutzerdefiniert" ;
+        Text [ en-US ] = "Customized";
+    };
+
+    String STR_HF_CUSTOM_FOOTER
+    {
+        Text [ de ]  = "Benutzerdefiniert" ;
+        Text [ en-US ] = "Custom footer";
+        Text [ x-comment ] = "German text shortened.";
     };
 };
 
