@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-04 17:45:30 $
+ *  last change: $Author: mtg $ $Date: 2002-01-29 15:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,16 @@
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
 #endif
+/*
 #ifndef _XMEMORY_STREAM_HXX
 #include <XMemoryStream.hxx>
 #endif
-#ifndef _XUNBUFFERED_STREAM_HXX
-#include <XUnbufferedStream.hxx>
-#endif
 #ifndef _XFILE_STREAM_HXX
 #include <XFileStream.hxx>
+#endif
+*/
+#ifndef _XUNBUFFERED_STREAM_HXX
+#include <XUnbufferedStream.hxx>
 #endif
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
@@ -271,16 +273,6 @@ sal_Bool ZipFile::StaticFillData ( ORef < EncryptionData > & rData, sal_Int32 &r
     }
     return bOk;
 }
-Reference < XInputStream > ZipFile::createFileStream(
-            ZipEntry & rEntry,
-            const ORef < EncryptionData > &rData,
-            sal_Bool bRawStream,
-            sal_Bool bIsEncrypted )
-{
-    static OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
-    Reference < XInputStream > xTempStream = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
-    return new XFileStream ( rEntry, xStream, xTempStream, rData, bRawStream, bIsEncrypted );
-}
 
 sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionData > &rData )
 {
@@ -332,6 +324,17 @@ sal_Bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ORef < EncryptionD
         rtl_digest_destroySHA1 ( aDigest );
     }
     return bRet;
+}
+#if 0
+Reference < XInputStream > ZipFile::createFileStream(
+            ZipEntry & rEntry,
+            const ORef < EncryptionData > &rData,
+            sal_Bool bRawStream,
+            sal_Bool bIsEncrypted )
+{
+    static OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
+    Reference < XInputStream > xTempStream = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+    return new XFileStream ( rEntry, xStream, xTempStream, rData, bRawStream, bIsEncrypted );
 }
 Reference < XInputStream > ZipFile::createMemoryStream(
             ZipEntry & rEntry,
@@ -414,6 +417,7 @@ Reference < XInputStream > ZipFile::createMemoryStream(
     }
     return Reference < XInputStream > ( new XMemoryStream ( aWriteBuffer ) );
 }
+#endif
 Reference < XInputStream > ZipFile::createUnbufferedStream(
             ZipEntry & rEntry,
             const ORef < EncryptionData > &rData,
