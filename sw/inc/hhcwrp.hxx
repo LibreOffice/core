@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:27:29 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,24 @@
 class SwView;
 class Window;
 class SwWrtShell;
+struct SwConversionArgs;
 
 //////////////////////////////////////////////////////////////////////
 
 class SwHHCWrapper : public svx::HangulHanjaConversion
 {
-    rtl::OUString   aConvText;  // convertible text part found last time
-    xub_StrLen      nLastPos;   // starting position of the last found text part
-                                // (sth that gets not moved like SwPaM or
-                                // SwPosition by replace operations)
-    sal_Int32       nUnitOffset;
-
     SwView *    pView;
     Window*     pWin;
     SwWrtShell &rWrtShell;
+
+    SwConversionArgs *pConvArgs;    // object for arguments (and results) needed
+                                    // to find of next convertible text portion
+
+    xub_StrLen      nLastPos;   // starting position of the last found text part
+                                // (needs to be sth that gets not moved like
+                                // SwPaM or SwPosition by replace operations!)
+    sal_Int32       nUnitOffset;
+
     USHORT      nPageCount;     // page count for progress bar
     USHORT      nPageStart;     // first checked page
 
@@ -93,7 +97,7 @@ class SwHHCWrapper : public svx::HangulHanjaConversion
     sal_Bool    bIsStart;
     sal_Bool    bIsOtherCntnt;
     sal_Bool    bStartChk;
-    sal_Bool    bIsSelection;
+    sal_Bool    bIsSelection;   // true if only the selected text should be converted
     sal_Bool    bInfoBox;       // true if message should be displayed at the end
     sal_Bool    bIsConvSpecial; // true if special regions: header, footer, ... should be converted
     sal_Bool    bStartDone;
@@ -106,9 +110,9 @@ class SwHHCWrapper : public svx::HangulHanjaConversion
 
     // from SwSpellWrapper copied and modified
     sal_Bool    HasOtherCnt_impl();
-    void        ConvStart_impl( SvxSpellArea eSpell );   // former SpellStart
-    void        ConvEnd_impl();                          // former SpellEnd
-    sal_Bool    ConvContinue_impl();                     // former SpellContinue
+    void        ConvStart_impl( SwConversionArgs *pConvArgs, SvxSpellArea eSpell );   // former SpellStart
+    void        ConvEnd_impl( SwConversionArgs *pConvArgs );                          // former SpellEnd
+    sal_Bool    ConvContinue_impl( SwConversionArgs *pConvArgs );                     // former SpellContinue
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
@@ -117,13 +121,14 @@ class SwHHCWrapper : public svx::HangulHanjaConversion
     inline void SetDrawObj( BOOL bNew ) { bIsDrawObj = bNew; }
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion );
+    virtual void    GetNextPortion( ::rtl::OUString& rNextPortion, LanguageType& rLangOfPortion );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const ::rtl::OUString& rReplaceWith,
-                        ReplacementAction eAction );
+                        ReplacementAction eAction,
+                        LanguageType *pNewUnitLanguage );
 
     virtual sal_Bool    HasRubySupport() const;
 
