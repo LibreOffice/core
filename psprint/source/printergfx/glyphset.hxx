@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ private:
     rtl::OString        maBaseName;
     fonttype::type      meBaseType;
     rtl_TextEncoding    mnBaseEncoding;
+    bool                mbUseFontEncoding;
 
     typedef std::hash_map< sal_Unicode, sal_uInt8 > char_map_t;
     typedef std::list< char_map_t > char_list_t;
