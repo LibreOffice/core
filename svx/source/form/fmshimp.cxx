@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:29:19 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,8 @@ sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
     SID_FM_CONVERTTO_PATTERN,
     SID_FM_CONVERTTO_IMAGECONTROL,
     SID_FM_CONVERTTO_FORMATTED,
+    SID_FM_CONVERTTO_SCROLLBAR,
+    SID_FM_CONVERTTO_SPINBUTTON,
 
     SID_FM_FMEXPLORER_CONTROL,
 
@@ -359,7 +361,9 @@ sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_CURRENCY,
     SID_FM_CONVERTTO_PATTERN,
     SID_FM_CONVERTTO_IMAGECONTROL,
-    SID_FM_CONVERTTO_FORMATTED
+    SID_FM_CONVERTTO_FORMATTED,
+    SID_FM_CONVERTTO_SCROLLBAR,
+    SID_FM_CONVERTTO_SPINBUTTON
 };
 
 sal_Int16 nCreateSlots[] =
@@ -381,7 +385,9 @@ sal_Int16 nCreateSlots[] =
     SID_FM_CURRENCYFIELD,
     SID_FM_PATTERNFIELD,
     SID_FM_IMAGECONTROL,
-    SID_FM_FORMATTEDFIELD
+    SID_FM_FORMATTEDFIELD,
+    SID_FM_SCROLLBAR,
+    SID_FM_SPINBUTTON
 };
 
 sal_Int16 nObjectTypes[] =
@@ -403,7 +409,9 @@ sal_Int16 nObjectTypes[] =
     OBJ_FM_CURRENCYFIELD,
     OBJ_FM_PATTERNFIELD,
     OBJ_FM_IMAGECONTROL,
-    OBJ_FM_FORMATTEDFIELD
+    OBJ_FM_FORMATTEDFIELD,
+    OBJ_FM_SCROLLBAR,
+    OBJ_FM_SPINBUTTON
 };
 
 using namespace ::com::sun::star::uno;
