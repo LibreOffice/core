@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:30:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,6 +653,8 @@ void SAL_CALL OfficeIPCThread::run()
                         eFactory = SvtModuleOptions::E_DRAW;
                     else if ( aCmdLineArgs.IsImpress() )
                         eFactory = SvtModuleOptions::E_IMPRESS;
+                    else if ( aCmdLineArgs.IsBase() )
+                        eFactory = SvtModuleOptions::E_DATABASE;
                     else if ( aCmdLineArgs.IsMath() )
                         eFactory = SvtModuleOptions::E_MATH;
                     else if ( aCmdLineArgs.IsGlobal() )
@@ -679,6 +681,9 @@ void SAL_CALL OfficeIPCThread::run()
                 } else if (aCmdLineArgs.IsHelpImpress()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+                } else if (aCmdLineArgs.IsHelpBase()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
                 } else if (aCmdLineArgs.IsHelpBasic()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
