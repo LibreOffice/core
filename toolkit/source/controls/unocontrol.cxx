@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-03 13:55:40 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 16:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,9 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
         sal_Int32               nIndependentPos = 0;
             // position where to insert the independent properties, dependent ones are inserted at the end of the vector
 
+        sal_Bool bNeedNewPeer = sal_False;
+            // some properties require a re-creation of the peer, 'cause they can't be changed on the fly
+
         sal_Int32 nLen = rEvents.getLength();
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
@@ -321,20 +324,8 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
                         ( nPType == BASEPROPERTY_SPIN ) ||
                         ( nPType == BASEPROPERTY_ALIGN ) )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xParent = getParentPeer();
-                    if ( xParent.is() )
-                    {
-                        // Funktioniert beim Container nicht!
-                        mxPeer->dispose();
-                        mxPeer = NULL;
-                        mbRefeshingPeer = sal_True;
-                        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP( xParent, ::com::sun::star::uno::UNO_QUERY );
-                        // createPeer ueber Interface rufen, damit aggrigierende Klasse  es mitbekommt
-                        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xThis( (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this, ::com::sun::star::uno::UNO_QUERY );
-                        xThis->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), xP );
-                        mbRefeshingPeer = sal_False;
-                        break;
-                    }
+                    bNeedNewPeer = sal_True;
+                    break;
                 }
             }
             if ( nPType && ( nLen > 1 ) && DoesDependOnOthers( nPType ) )
@@ -352,11 +343,28 @@ void UnoControl::propertiesChange( const ::com::sun::star::uno::Sequence< ::com:
             }
         }
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xParent = getParentPeer();
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xThis( (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this, ::com::sun::star::uno::UNO_QUERY );
+            // call createPeer via a interface got from queryInterface, so the aggregating class can intercept it
+
         aGuard.clear();
-            // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
-            // usually don't have an own mutex but use the SolarMutex instead.
-            // To prevent deadlocks resulting from this, we release our own mutex here
-            // FS - 11/03/2000
+            // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
+            // 82300 - 12/21/00 - FS
+        if (bNeedNewPeer && xParent.is())
+        {
+            // Funktioniert beim Container nicht!
+            mxPeer->dispose();
+            mxPeer.clear();
+            mbRefeshingPeer = sal_True;
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP( xParent, ::com::sun::star::uno::UNO_QUERY );
+            xThis->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (), xP );
+            mbRefeshingPeer = sal_False;
+        }
+
+        // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
+        // usually don't have an own mutex but use the SolarMutex instead.
+        // To prevent deadlocks resulting from this, we do this without our own mutex locked
+        // FS - 11/03/2000
         for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
                 aLoop != aPeerPropertiesToSet.end();
                 ++aLoop
@@ -666,7 +674,7 @@ void UnoControl::setContext( const ::com::sun::star::uno::Reference< ::com::sun:
 
 void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
 
     if( !mxPeer.is() )
     {
@@ -787,25 +795,40 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
         // Ableitungen die Moeglichkeit geben die Attribute zu manipulieren
         PrepareWindowDescriptor(aDescr);
 
-        // Jetzt die Peer erzeugen
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xWP = xToolkit->createWindow( aDescr );
+        // create the peer
+        mxPeer = xToolkit->createWindow( aDescr );
 
-        // mxPeer initialisieren...
-        mxPeer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >( xWP, ::com::sun::star::uno::UNO_QUERY );
+        // release the mutex guard (and work with copies of our members)
+        // this is necessary as our peer may lock the SolarMutex (actually, all currently known peers do), so calling
+        // into the peer with our own mutex locked may cause deadlocks
+        // (We _really_ need peers which do not use the SolarMutex. It's really pissing me off that from time to
+        // time deadlocks pop up because the low-level components like our peers use a mutex which ususally
+        // is locked at the top of the stack (it protects the global message looping). This is always dangerous, and
+        // can not always be solved by tampering with other mutexes.
+        // Unfortunately, the VCL used in the peers is not threadsafe, and by definition needs a locked SolarMutex.)
+        // 82300 - 12/21/00 - FS
+        UnoControlComponentInfos aComponentInfos(maComponentInfos);
+        sal_Bool bDesignMode(mbDesignMode);
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > xGraphics( mxGraphics );
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xV(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW(mxPeer, ::com::sun::star::uno::UNO_QUERY);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xV( mxPeer, ::com::sun::star::uno::UNO_QUERY );
-        xV->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
+        aGuard.clear();
 
+        // the updateFromModel is done without a locked mutex, too.
+        // The reason is that the only thing this method does  is firing property changes, and this in general has
+        // to be done without locked mutexes (as every notification to external listeners).
+        // 82300 - 12/21/00 - FS
         updateFromModel();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+        xV->setZoom( aComponentInfos.nZoomX, aComponentInfos.nZoomY );
 
-        if( maComponentInfos.bVisible && !mbDesignMode )
+        if( aComponentInfos.bVisible && !bDesignMode )
             // Erst nach dem setzen der Daten anzeigen
-            xW->setVisible( maComponentInfos.bVisible );
+            xW->setVisible( aComponentInfos.bVisible );
 
-        if( !maComponentInfos.bEnable )
-            xW->setEnable( maComponentInfos.bEnable );
+        if( !aComponentInfos.bEnable )
+            xW->setEnable( aComponentInfos.bEnable );
 
         if ( maWindowListeners.getLength() )
             xW->addWindowListener( &maWindowListeners );
@@ -825,14 +848,12 @@ void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun:
         if ( maPaintListeners.getLength() )
             xW->addPaintListener( &maPaintListeners );
 
-        xV->setGraphics( mxGraphics );
+        xV->setGraphics( xGraphics );
     }
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > UnoControl::getPeer(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
     return mxPeer;
 }
 
@@ -877,11 +898,9 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::Runt
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     mbDesignMode = bOn;
-    if ( mxPeer.is() )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  xW( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+    if ( xW.is() )
         xW->setVisible( !bOn );
-    }
 }
 
 sal_Bool UnoControl::isDesignMode(  ) throw(::com::sun::star::uno::RuntimeException)
