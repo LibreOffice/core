@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: ab $ $Date: 2001-08-07 11:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
+#include <tools/tenccvt.hxx>
 #pragma hdrstop
 #include <svtools/sbx.hxx>
 #include "sb.hxx"
@@ -171,6 +172,7 @@ BOOL SbiImage::Load( SvStream& r )
         r >> nVersion >> nCharSet >> lDimBase
           >> nFlags >> nReserved1 >> nReserved2 >> nReserved3;
         eCharSet = (CharSet) nCharSet;
+        eCharSet = GetSOLoadTextEncoding( eCharSet );
         bBadVer  = BOOL( nVersion != B_CURVERSION );
         nDimBase = (USHORT) lDimBase;
     }
@@ -256,6 +258,9 @@ BOOL SbiImage::Save( SvStream& r )
     // Erst mal der Header:
     ULONG nStart = SbiOpenRecord( r, B_MODULE, 1 );
     ULONG nPos;
+
+    eCharSet = GetSOStoreTextEncoding( eCharSet );
+
     r << (INT32) B_CURVERSION
       << (INT32) eCharSet
       << (INT32) nDimBase
