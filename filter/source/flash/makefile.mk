@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:39:26 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:23:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  	settings.mk
 
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CFLAGS+=-DSYSTEM_ZLIB
+.ENDIF
 # --- Types -------------------------------------
 
 UNOTYPES=\
