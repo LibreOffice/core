@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 11:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,6 +993,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
         !IsOwnStorageFormat_Impl(*pNewMed) &&
         pMedium->GetName().Len();
 */
+    DBG_ASSERT( !pNewMed || pNewMed->GetError() == ERRCODE_NONE, "DoSaveCompleted: Medium has error!" );
     if ( bMedChanged )
     {
         delete pMedium;
