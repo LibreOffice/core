@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:12:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
 
     sal_uInt32 nReturn(0);
+    rDoc.SetRangeOverflowType(0);   // is modified by the importer if limits are exceeded
+
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
         xServiceFactory->createInstanceWithArguments(
             sComponentName, aArgs ),
@@ -422,13 +424,13 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         nReturn = SCERR_IMPORT_UNKNOWN;
     }
 
-    if ( xDocHandler.is() )
-    {
-        ScXMLImport* pImport = static_cast<ScXMLImport*>(SvXMLImport::getImplementation(xDocHandler));
+    // #i31130# Can't use getImplementation here to get the ScXMLImport from xDocHandler,
+    // because when OOo 1.x files are loaded, xDocHandler is the OOo2OasisTransformer.
+    // So the overflow warning ErrorCode is now stored in the document.
+    // Export works differently, there getImplementation still works.
 
-        if (pImport && pImport->HasRangeOverflow() && !nReturn)
-            nReturn = pImport->GetRangeOverflowType();
-    }
+    if (rDoc.HasRangeOverflow() && !nReturn)
+        nReturn = rDoc.GetRangeOverflowType();
 
     // free the component
     xParser->setDocumentHandler( NULL );
