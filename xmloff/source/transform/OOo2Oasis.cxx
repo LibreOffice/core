@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:53:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TEXT, EXPRESSION, XML_ETACTION_PROC_ATTRS,
             OOO_TEXT_VALUE_TYPE_ACTIONS), /* generated entry */
 //  ENTRY1( TEXT, USER_DEFINED, XML_ETACTION_PROC_ATTRS,
-//          OOO_TEXT_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
+//          OOO_TEXT_VALUE_TYPE_ACTIONS), /* text:user-defined has no attrs so far */
     ENTRY1( TABLE, TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, COVERED_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
@@ -1919,6 +1919,12 @@ OOo2OasisTransformer::OOo2OasisTransformer( const sal_Char *pImplName,
 
     GetNamespaceMap().Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT_OOO), XML_NAMESPACE_SCRIPT );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
+    GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
+
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
+    GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG_COMPAT), XML_NAMESPACE_SVG );
 
     for( sal_uInt16 i=0; i<MAX_OOO_ACTIONS; ++i )
         m_aActions[i] = 0;
