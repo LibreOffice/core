@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-04 19:34:55 $
+ *  last change: $Author: jb $ $Date: 2000-12-11 11:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "noderef.hxx"
 #include "apitreeaccess.hxx"
 #include "objectregistry.hxx"
+#include "configexcept.hxx"
 
 #ifndef CONFIGMGR_API_PROVIDER2_HXX_
 #include "confprovider2.hxx"
@@ -125,16 +126,26 @@ namespace configmgr
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
-        if (aArgs.getLength() != 0)
+        try
         {
-            NodeElement* pElement = buildReadAccess(sPath, xOptions, nLevels);
-            if (pElement != 0)
+            if (aArgs.getLength() != 0)
             {
-                xReturn = pElement->getUnoInstance();
-                if (xReturn.is())
-                    // acquired once by buildReadAccess
-                    xReturn->release();
+                NodeElement* pElement = buildReadAccess(sPath, xOptions, nLevels);
+                if (pElement != 0)
+                {
+                    xReturn = pElement->getUnoInstance();
+                    if (xReturn.is())
+                        // acquired once by buildReadAccess
+                        xReturn->release();
+                }
             }
+        }
+        catch (configuration::Exception& e)
+        {
+            configapi::ExceptionMapper ec(e);
+            ec.setContext(this->getProviderInstance());
+            //ec.unhandled();
+            throw lang::WrappedTargetException(ec.message(), ec.context(), uno::Any());
         }
         return xReturn;
     }
@@ -159,16 +170,26 @@ namespace configmgr
 
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
-        if (aArgs.getLength() != 0)
+        try
         {
-            NodeElement* pElement = buildUpdateAccess(sPath, xOptions, nLevels);
-            if (pElement != 0)
+            if (aArgs.getLength() != 0)
             {
-                xReturn = pElement->getUnoInstance();
-                if (xReturn.is())
-                    // acquired once by buildReadAccess
-                    xReturn->release();
+                NodeElement* pElement = buildUpdateAccess(sPath, xOptions, nLevels);
+                if (pElement != 0)
+                {
+                    xReturn = pElement->getUnoInstance();
+                    if (xReturn.is())
+                        // acquired once by buildReadAccess
+                        xReturn->release();
+                }
             }
+        }
+        catch (configuration::Exception& e)
+        {
+            configapi::ExceptionMapper ec(e);
+            ec.setContext(this->getProviderInstance());
+            //ec.unhandled();
+            throw lang::WrappedTargetException(ec.message(), ec.context(), uno::Any());
         }
         return xReturn;
     }
