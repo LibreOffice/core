@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:29:11 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,27 @@ typedef ::std::list< SotElement_Impl* > SotElementList_Impl;
 // Main storage implementation
 
 class OStorage;
-typedef ::std::list< OStorage* > OStorageList_Impl;
+
+struct StorageHolder_Impl
+{
+    OStorage* m_pPointer;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakRef;
+
+    StorageHolder_Impl( OStorage* pStorage )
+    : m_pPointer( pStorage )
+    , m_xWeakRef( ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >(
+                                                (::com::sun::star::embed::XStorage*)pStorage ) )
+    {
+    }
+
+    StorageHolder_Impl( const StorageHolder_Impl& aSH )
+    : m_pPointer( aSH.m_pPointer )
+    , m_xWeakRef( aSH.m_xWeakRef )
+    {
+    }
+};
+
+typedef ::std::list< StorageHolder_Impl > OStorageList_Impl;
 
 struct OStorage_Impl
 {
@@ -348,6 +368,8 @@ public:
     void SAL_CALL InternalDispose( sal_Bool bNotifyImpl );
 
     void ChildIsDisposed( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChild );
+
+    sal_Int32 GetRefCount_Impl() { return m_refCount; }
 
     //____________________________________________________________________________________________________
     //  XInterface
