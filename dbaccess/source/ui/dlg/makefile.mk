@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.28 $
+ #  $Revision: 1.29 $
  #
- #  last change: $Author: pjunck $ $Date: 2004-10-27 13:04:41 $
+ #  last change: $Author: kz $ $Date: 2005-01-13 19:05:25 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -152,6 +152,7 @@ SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
 # --- Targets ----------------------------------
+LOCALIZE_ME=AutoControls_tmpl.hrc
 
 .INCLUDE : target.mk
 
