@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:01:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,15 @@ class BaseReference
 {
 protected:
     /** the interface pointer
+
+        <p>To work around ambiguities in the case of multiple-inheritance
+        interface types (which inherit <code>XInterface</code> more than once),
+        dervied <code>Reference</code> instances use
+        <code>reinterpret_cast</code> to switch <code>_pInterface</code> from a
+        pointer to <code>XInterface</code> to a pointer to a derived interface
+        type, and vice versa.  <em>In principle, this is not guaranteed to
+        work.</em>  In practice, it seems to work on all supported
+        platforms.</p>
     */
     XInterface * _pInterface;
 
@@ -212,7 +221,7 @@ class Reference : public BaseReference
         @param pInterface interface pointer
         @return interface of demanded type (may be null)
     */
-    inline static interface_type * SAL_CALL iquery( XInterface * pInterface )
+    inline static XInterface * SAL_CALL iquery( XInterface * pInterface )
         SAL_THROW( (RuntimeException) );
 #ifndef EXCEPTIONS_OFF
     /** Queries given interface for type interface_type.
@@ -221,7 +230,7 @@ class Reference : public BaseReference
         @param pInterface interface pointer
         @return interface of demanded type
     */
-    inline static interface_type * SAL_CALL iquery_throw( XInterface * pInterface )
+    inline static XInterface * SAL_CALL iquery_throw( XInterface * pInterface )
         SAL_THROW( (RuntimeException) );
 #endif
 
@@ -331,14 +340,14 @@ public:
         @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL operator -> () const SAL_THROW( () )
-        { return static_cast< interface_type * >( _pInterface ); }
+        { return reinterpret_cast< interface_type * >( _pInterface ); }
 
     /** Gets interface pointer. This call does not acquire the interface.
 
         @return UNacquired interface pointer
     */
     inline interface_type * SAL_CALL get() const SAL_THROW( () )
-        { return static_cast< interface_type * >( _pInterface ); }
+        { return reinterpret_cast< interface_type * >( _pInterface ); }
 
     /** Clears reference, i.e. releases interface. Reference is null after clear() call.
     */
