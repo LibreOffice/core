@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:43:09 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,9 +640,10 @@ TabPage RID_SVXPAGE_GRID
     };
     FixedLine FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 127 , 107 ) ;
-        Size = MAP_APPFONT ( 4 , 72 ) ;
+        Pos = MAP_APPFONT ( 127 , 111 ) ;
+        Size = MAP_APPFONT ( 4 , 68 ) ;
         Hide = TRUE;
+        Vert = TRUE;
     };
     FixedLine GRP_ORTHO
     {

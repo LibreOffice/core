@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,6 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aBottomMF.SetDecimalDigits(1);
         aEdShadowSize.SetDecimalDigits(1);
     }
-
-    aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
-    aFlSep2.SetStyle( aFlSep1.GetStyle() | WB_VERT );
 
     pFrameSel = new SvxFrameSelector( &aWndFrameSel,
                                       bIsTableBorder

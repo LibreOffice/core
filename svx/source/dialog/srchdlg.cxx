@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-16 12:32:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,9 +435,6 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxBindings& rBind ) :
     nTransliterationFlags   ( 0x00000000 )
 
 {
-    aSearchVertFL.SetStyle( aSearchVertFL.GetStyle() | WB_VERT );
-    aSearchDirVertFL.SetStyle( aSearchDirVertFL.GetStyle() | WB_VERT );
-
     Wallpaper aBackground = GetBackground();
     aSearchFormatsED.SetBackground( aBackground );
     aReplaceFormatsED.SetBackground( aBackground );

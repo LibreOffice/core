@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:46:41 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 93, 163 ) ;
         Size = MAP_APPFONT ( 4,  43 ) ;
+        Vert = TRUE;
     };
     RadioButton BTN_ROWS
     {
@@ -830,6 +831,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 186, 163 ) ;
         Size = MAP_APPFONT ( 4,  43 ) ;
+        Vert = TRUE;
     };
     CheckBox CB_ALLTABLES
     {

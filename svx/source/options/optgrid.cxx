@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:30:01 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,6 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     SetExchangeSupport();
 
     FreeResource();
-    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
 
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rCoreSet );

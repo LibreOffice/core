@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2001-05-16 13:17:09 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,9 +315,6 @@ SvxLineTabPage::SvxLineTabPage
 
     // #63083#
     nActLineWidth = -1;
-
-    //  Make the fixed line separator vertical.
-    aFLSeparator.SetStyle (aFLSeparator.GetStyle() | WB_VERT);
 }
 //#58425# Symbole auf einer Linie (z.B. StarChart) , Symbol-Controls aktivieren
 void SvxLineTabPage::ShowSymbolControls(BOOL bOn)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 07:41:52 $
+ *  last change: $Author: fme $ $Date: 2001-06-03 14:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
     // Metrik einstellen
     FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
     SetFieldUnit( aTabBox, eFUnit );
-
-    // vertical separators
-    aTabLabelVert.SetStyle( aTabLabelVert.GetStyle() | WB_VERT );
-    aTabTypeLabelVert.SetStyle( aTabTypeLabelVert.GetStyle() | WB_VERT );
 
     // Buttons initialisieren
     aNewBtn.SetClickHdl( LINK( this,SvxTabulatorTabPage, NewHdl_Impl ) );
