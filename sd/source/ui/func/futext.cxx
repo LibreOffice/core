@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:17:17 $
+ *  last change: $Author: dl $ $Date: 2001-03-06 08:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,7 +1129,7 @@ BOOL FuText::RestoreDefaultText()
                     pPage->SetObjText( pTextObj, pInternalOutl, ePresObjKind, aString );
 
                     if( pOldPara )
-                        pTextObj->GetOutlinerParaObject()->SetVertical( bVertical );
+                        pTextObj->SetVerticalWriting( bVertical );
 
                     SdrOutliner* pOutliner = pView->GetTextEditOutliner();
                     pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
