@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscstr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// Programmabh„ngige Includes.
+// Programmabhï¿½ngige Includes.
 #ifndef _RSCDB_HXX
 #include <rscdb.hxx>
 #endif
@@ -87,7 +87,7 @@
 |*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
-RscString::RscString( HASHID nId, USHORT nTypeId )
+RscString::RscString( Atom nId, sal_uInt32 nTypeId )
                 : RscTop( nId, nTypeId )
 {
     nSize = ALIGNED_SIZE( sizeof( RscStringInst ) );
@@ -117,7 +117,7 @@ RSCCLASS_TYPE RscString::GetClassType() const
 |*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
-ERRTYPE RscString::SetString( const RSCINST & rInst, char * pStr ){
+ERRTYPE RscString::SetString( const RSCINST & rInst, const char * pStr ){
     char    * pTmp;
     ERRTYPE aError;
 
@@ -126,13 +126,13 @@ ERRTYPE RscString::SetString( const RSCINST & rInst, char * pStr ){
 
         pTmp = ((RscStringInst *)rInst.pData)->pStr;
         if( pTmp ){
-            RscMem::Free( pTmp );
+            rtl_freeMemory( pTmp );
             pTmp = NULL;
         }
 
         if( pStr ){
-            USHORT  nLen = strlen( pStr ) +1;
-            pTmp = (char *)RscMem::Malloc( nLen );
+            sal_uInt32  nLen = strlen( pStr ) +1;
+            pTmp = (char *)rtl_allocateMemory( nLen );
             memcpy( pTmp, pStr, nLen );
         };
 
@@ -207,7 +207,7 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
     if( !pInst ){
         aInst.pClass = this;
         aInst.pData = (CLASS_DATA)
-                      RscMem::Malloc( sizeof( RscStringInst ) );
+                      rtl_allocateMemory( sizeof( RscStringInst ) );
     }
     else
         aInst = *pInst;
@@ -240,7 +240,7 @@ RSCINST RscString::Create( RSCINST * pInst, const RSCINST & rDflt,
 *************************************************************************/
 void RscString::Destroy( const RSCINST & rInst ){
     if( ((RscStringInst *)rInst.pData)->pStr )
-        RscMem::Free( ((RscStringInst *)rInst.pData)->pStr );
+        rtl_freeMemory( ((RscStringInst *)rInst.pData)->pStr );
     ((RscStringInst *)rInst.pData)->aRefId.Destroy();
 }
 
@@ -310,7 +310,7 @@ BOOL RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*
 *************************************************************************/
 void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                          RscTypCont *, USHORT, const char * )
+                          RscTypCont *, sal_uInt32, const char * )
 {
     if ( ((RscStringInst *)rInst.pData)->aRefId.IsId() )
     {
@@ -322,8 +322,8 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         RscStringInst * pStrI = ((RscStringInst *)rInst.pData);
         if(  pStrI->pStr ){
             //char *  pChangeTab = RscChar::GetChangeTab();
-            USHORT  n = 0;
-            USHORT  nPos, nSlashPos;
+            sal_uInt32  n = 0;
+            sal_uInt32  nPos, nSlashPos;
 
             do {
                 fputc( '\"', fOutput );
@@ -345,57 +345,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
         }
         else
             fprintf( fOutput, "\"\"" );
-        /*
-        if( pStrI->pStr )
-        {
-            UINT16 nStrLen = strlen( pStrI->pStr );
-            sal_Unicode *   pUniCode = new sal_Unicode[ nStrLen +1 ];
-            rtl_TextToUnicodeConverter hConv = rtl_createTextToUnicodeConverter( RTL_TEXTENCODING_UTF8 );
-
-            sal_uInt32 nInfo;
-            sal_Size   nSrcCvtBytes;
-            sal_Size nSize = rtl_convertTextToUnicode( hConv, 0,
-                                                        pStrI->pStr, nStrLen,
-                                                        pUniCode, nStrLen,
-                                                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT
-                                                        | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT
-                                                        | RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT
-                                                        | RTL_TEXTTOUNICODE_FLAGS_FLUSH,
-                                                        &nInfo,
-                                                        &nSrcCvtBytes );
-            fputc( 'L', fOutput );
-            fputc( '\"', fOutput );
-            for( sal_Size i = 0; i < nSize; i++ )
-            {
-                if( pUniCode[i] >= 32 && pUniCode[i] < 128 )
-                {
-                    if( pUniCode[i] == '\\' )
-                    {
-                        fputc( (char)pUniCode[i], fOutput );
-                        fputc( (char)pUniCode[i], fOutput );
-                    }
-                    else if( pUniCode[i] == '\"' )
-                    {
-                        fputc( '\\', fOutput );
-                        fputc( '"', fOutput );
-                    }
-                    else
-                        fputc( (char)pUniCode[i], fOutput );
-                }
-                else
-                    fprintf( fOutput, "\\x%4.4lX", (long)pUniCode[i] );
-                if( !((i +1) % 40) && i +1 != nSize )
-                    fprintf( fOutput, "\"\n\t\t\tL\"" );
-            }
-            fputc( '\"', fOutput );
-
-            rtl_destroyTextToUnicodeConverter( hConv );
-            delete pUniCode;
-        }
-        else
-            fprintf( fOutput, "\"\"" );
-        */
-    };
+    }
 }
 
 /*************************************************************************
@@ -408,7 +358,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, USHORT nDeep, BOOL bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
 {
     ERRTYPE aError;
     ObjNode *       pObjNode = NULL;
@@ -437,7 +387,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                 {
                     if( pTC )
                     {
-                        ByteString  aMsg( pHS->Get( pRefClass->GetId() ) );
+                        ByteString  aMsg( pHS->getString( pRefClass->GetId() ).getStr() );
                         aMsg += ' ';
                         aMsg += aId.GetName();
                         aError = WRN_STR_REFNOTFOUND;
@@ -466,11 +416,10 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                 char * pStr = RscChar::MakeUTF8( ((RscStringInst *)rInst.pData)->pStr,
                                                 pTC->GetSourceCharSet() );
                 rMem.PutUTF8( pStr );
-                RscMem::Free( pStr );
+                rtl_freeMemory( pStr );
             }
             else
                 rMem.PutUTF8( ((RscStringInst *)rInst.pData)->pStr );
-            //rMem.PutUTF8( ((RscStringInst *)rInst.pData)->pStr );
         };
     };
     return( aError );
