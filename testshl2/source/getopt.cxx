@@ -8,8 +8,8 @@
 #*                     (see description in headerfile)
 #*
 #*    Creation Date     Stefan Zimmermann  09/15/2000
-#*    last change       $Author: hr $ $Date: 2003-08-07 15:07:41 $
-#*    $Revision: 1.2 $
+#*    last change       $Author: vg $ $Date: 2003-10-06 13:35:48 $
+#*    $Revision: 1.3 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -17,7 +17,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.2 2003-08-07 15:07:41 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.3 2003-10-06 13:35:48 vg Exp $
 
       Source Code Control System - Update
 
@@ -733,7 +733,6 @@ sal_uInt32 GetOpt::getMaxLegendLength() {
     ::osl::File iniFile( fName );
 
     const sal_uInt32 filesize = (sal_uInt32)fState.getFileSize();
-     char* buf = new char[ filesize + 1 ];
 
     ::osl::FileBase::RC ret;
     sal_uInt64 bytesread;
@@ -741,6 +740,7 @@ sal_uInt32 GetOpt::getMaxLegendLength() {
     if ( ( ret = iniFile.open( OpenFlag_Read ) ) != ::osl::FileBase::E_None )  {
         return ret;
     }
+     char* buf = new char[ filesize + 1 ];
     ret = iniFile.read( buf, filesize, bytesread );
     buf[ filesize ] = '\0';
 
