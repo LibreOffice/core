@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:55:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 11:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ BOOL SbiImage::Load( SvStream& r )
                 r >> nLen;
                 if( SbiGood( r ) )
                 {
-                    delete pStrings;
+                    delete [] pStrings;
                     pStrings = new sal_Unicode[ nLen ];
                     nStringSize = (USHORT) nLen;
 
