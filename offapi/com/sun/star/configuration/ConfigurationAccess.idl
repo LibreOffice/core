@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ service ConfigurationAccess
         <li><type>SetAccess</type> if this element is a <em>Set</em>.</li>
         <li><type>GroupAccess</type> if this element is a <em>Group</em>.</li>
      </ul>
-    */
+     */
     service HierarchyAccess;
 
     /** provides interfaces to obtain information about this element and its
@@ -245,20 +245,21 @@ service ConfigurationAccess
             <em>Group</em>.</li>
      </ul>
 
-    */
+     */
     service HierarchyElement;
 
     /** specializes <type>HierarchyAccess</type>, if this element is a <em>Set</em>.
 
          <p>This is an alternative to <type>GroupAccess</type>.
         </p>
+     */
     /*[optional]*/ service SetAccess;
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Group</em>.
      <p>This is an alternative to <type>SetAccess</type>.
      </p>
-    */
+     */
     /*[optional]*/ service GroupAccess;
 
     /** specializes <type>HierarchyElement</type>,
@@ -270,7 +271,7 @@ service ConfigurationAccess
      @see ConfigurationProvider
         Instances obtained from a <type>ConfigurationProvider</type> will
         implement this version of <type>HierarchyElement</type>.
-    */
+     */
     /*[optional]*/ service AccessRootElement;
 
     /** specializes <type>HierarchyElement</type>,
@@ -278,7 +279,7 @@ service ConfigurationAccess
      <p>This is an alternative to <type>AccessRootElement</type>
      or <type>GroupElement</type>.
      </p>
-*/
+     */
     /*[optional]*/ service SetElement;
 
     /** specializes <type>HierarchyElement</type>,
@@ -286,7 +287,7 @@ service ConfigurationAccess
      <p>This is an alternative to <type>AccessRootElement</type>
      or <type>SetElement</type>.
      </p>
-*/
+     */
     /*[optional]*/ service GroupElement;
 };
 
