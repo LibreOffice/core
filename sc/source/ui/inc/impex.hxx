@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:59:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,13 @@ class ScImportExport
     BOOL Text2Doc( SvStream& );
     BOOL Doc2Sylk( SvStream& );
     BOOL Sylk2Doc( SvStream& );
-    BOOL Doc2HTML( SvStream& );
+    BOOL Doc2HTML( SvStream&, const String& );
     BOOL Doc2RTF( SvStream& );
     BOOL Doc2Dif( SvStream& );
     BOOL Dif2Doc( SvStream& );
     BOOL ExtText2Doc( SvStream& );      // mit pExtOptions
-    BOOL RTF2Doc( SvStream& );
-    BOOL HTML2Doc( SvStream& );
+    BOOL RTF2Doc( SvStream&, const String& rBaseURL );
+    BOOL HTML2Doc( SvStream&, const String& rBaseURL );
 
     //! only if stream is only used in own (!) memory
     static  inline  void    SetNoEndianSwap( SvStream& rStrm );
@@ -165,8 +165,8 @@ public:
     BOOL ExportString( ::rtl::OUString&, ULONG=FORMAT_STRING );
     BOOL ExportByteString( ByteString&, rtl_TextEncoding, ULONG=FORMAT_STRING );
 
-    BOOL ImportStream( SvStream&, ULONG=FORMAT_STRING );
-    BOOL ExportStream( SvStream&, ULONG=FORMAT_STRING );
+    BOOL ImportStream( SvStream&, const String& rBaseURL, ULONG=FORMAT_STRING );
+    BOOL ExportStream( SvStream&, const String& rBaseURL, ULONG=FORMAT_STRING );
 
     BOOL ImportData( const String& rMimeType,
                      const ::com::sun::star::uno::Any & rValue );
