@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-04 06:39:52 $
+ *  last change: $Author: cd $ $Date: 2001-05-04 17:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
+#if SUPD > 631
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#endif
+#endif // SUPD
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -189,6 +194,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_bIsBookmarkMenu   = sal_False;
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
+    ::std::vector< USHORT > aQueryLabelItemIdVector;
+
     int nItemCount = pMenu->GetItemCount();
     for ( int i = 0; i < nItemCount; i++ )
     {
@@ -207,7 +214,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
         {
             MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
-            // store menu item command as we later have to know which menu is active (see Acivate handler)
+            // store menu item command as we later have to know which menu is active (see Activate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
 
             MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
@@ -215,6 +222,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                                                         pSubMenuManager,
                                                         REFERENCE< XDISPATCH >() );
             m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+            if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                aQueryLabelItemIdVector.push_back( nItemId );
         }
         else
         {
@@ -228,6 +237,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                                                             nItemId,
                                                             pSubMenuManager,
                                                             REFERENCE< XDISPATCH >() );
+                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                    aQueryLabelItemIdVector.push_back( nItemId );
             }
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand == aSlotAutoPilot )
@@ -239,6 +250,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                                                             nItemId,
                                                             pSubMenuManager,
                                                             REFERENCE< XDISPATCH >() );
+                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                    aQueryLabelItemIdVector.push_back( nItemId );
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
@@ -247,10 +260,35 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                     pMenu->SetItemImage( nItemId, aImage );
 
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() ));
+                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                    aQueryLabelItemIdVector.push_back( nItemId );
             }
         }
     }
 
+
+    // retrieve label information for all menu items without item text
+#if SUPD > 631
+    if ( aQueryLabelItemIdVector.size() > 0 )
+    {
+        Sequence< ::rtl::OUString > aURLSequence( aQueryLabelItemIdVector.size() );
+        Sequence< ::rtl::OUString > aLabelSequence( aQueryLabelItemIdVector.size() );
+
+        sal_uInt32 nPos = 0;
+        ::std::vector< USHORT >::iterator p;
+        for ( p = aQueryLabelItemIdVector.begin(); p != aQueryLabelItemIdVector.end(); p++ )
+            aURLSequence[nPos++] = pMenu->GetItemCommand( *p );
+
+        Reference< XDispatchInformationProvider > xDIP( xFrame, UNO_QUERY );
+        if ( xDIP.is() )
+        {
+            nPos = 0;
+            xDIP->queryDispatchInformations( aURLSequence, aLabelSequence );
+            for ( p = aQueryLabelItemIdVector.begin(); p != aQueryLabelItemIdVector.end(); p++ )
+                pMenu->SetItemText( *p, aLabelSequence( nPos++ ));
+        }
+    }
+#endif
     m_pVCLMenu->SetHighlightHdl( LINK( this, MenuManager, Highlight ));
     m_pVCLMenu->SetActivateHdl( LINK( this, MenuManager, Activate ));
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuManager, Deactivate ));
@@ -851,8 +889,6 @@ IMPL_LINK( MenuManager, Deactivate, Menu *, pMenu )
 
 IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 {
-    LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::Select" )
-
     if ( pMenu == m_pVCLMenu )
     {
         USHORT nCurItemId = pMenu->GetCurItemId();
@@ -862,8 +898,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                  nCurItemId <= END_ITEMID_WINDOWLIST )
             {
                 // window list menu item selected
-                UNLOCK_MUTEX( aGuard, m_aMutex )
-
                 Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                                 DESKTOP_SERVICE ), UNO_QUERY );
                 USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
@@ -880,7 +914,6 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                         if ( xTask.is() && nTaskId == nCurItemId )
                         {
                             Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
-                            UNLOCK_MUTEX( aGuard, m_aMutex )
                             pWin->GrabFocus();
                             break;
                         }
