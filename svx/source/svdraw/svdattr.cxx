@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-05 14:46:26 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 10:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #include "svdstr.hrc"
 #include "sdgcpitm.hxx"
 #include "adjitem.hxx"
+#include "writingmodeitem.hxx"
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -339,10 +340,9 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TRANSFORMREF1Y -SDRATTR_START]=new SdrTransformRef1YItem;
     ppPoolDefaults[SDRATTR_TRANSFORMREF2X -SDRATTR_START]=new SdrTransformRef2XItem;
     ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
-    ppPoolDefaults[SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, TRUE );
-    ppPoolDefaults[SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM, FALSE );
+    ppPoolDefaults[SDRATTR_TEXTDIRECTION  -SDRATTR_START]=new SvxWritingModeItem;
 
-    for (i=SDRATTR_NOTPERSISTRESERVE3; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
+    for (i=SDRATTR_NOTPERSISTRESERVE2; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
 
