@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-06 13:00:12 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 15:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,8 +311,13 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_CONTROL_GETFOCUS:
         {
-            aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
-            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            // if multiple listeners were registered it is possible that the
+            // focus was changed during event processing (eg SfxTopWindow )
+            if( pWindow->HasFocus() )
+            {
+                aNewValue <<= accessibility::AccessibleStateType::FOCUSED;
+                NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+            }
         }
         break;
         case VCLEVENT_WINDOW_LOSEFOCUS:
