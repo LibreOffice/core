@@ -58,9 +58,13 @@ package org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula;
 
 import java.io.*;
 import java.util.Vector;
+import java.util.Enumeration;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.DefinedName;
+import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.Workbook;
+
 /**
  * The TokenDecoder decodes a byte[] to an equivalent <code>String</code>. The only
  * public method apart from the default constructor is the getTokenVector method.
@@ -81,6 +85,7 @@ public class TokenDecoder {
     private FunctionLookup fl;
     private OperatorLookup operatorLookup;
     private OperandLookup operandLookup;
+    private Workbook wb;
 
     /**
      * Default Constructor initializes the <code>TokenFactory</code> for generating
@@ -92,6 +97,15 @@ public class TokenDecoder {
         fl = new FunctionLookup();
         operatorLookup = new OperatorLookup();
         operandLookup = new OperandLookup();
+    }
+
+      /**
+     * Sets global workbook data needed for defined names
+     */
+       public void setWorkbook(Workbook wb) {
+
+        Debug.log(Debug.TRACE, "TokenDecoder : setWorkbook");
+        this.wb = wb;
     }
 
     /**
@@ -117,6 +131,16 @@ public class TokenDecoder {
 
             switch (b) {
 
+                case TokenConstants.TAREA3D:
+                                Debug.log(Debug.TRACE, "Decoded 3D Area Cell Reference: ");
+                                v.add(read3DCellAreaRefToken(bis));
+                                Debug.log(Debug.TRACE, "Decoded 3D Area Cell Reference: " + v.lastElement());
+                                break;
+                case TokenConstants.TREF3D:
+                                Debug.log(Debug.TRACE, "Decoded 3D Cell Reference: ");
+                                v.add(read3DCellRefToken(bis));
+                                Debug.log(Debug.TRACE, "Decoded 3D Cell Reference: " + v.lastElement());
+                                break;
                 case TokenConstants.TREF :
                                 v.add(readCellRefToken(bis));
                                 Debug.log(Debug.TRACE, "Decoded Cell Reference: " + v.lastElement());
@@ -140,6 +164,10 @@ public class TokenDecoder {
                 case TokenConstants.TSTRING :
                                 v.add(readStringToken(bis));
                                 Debug.log(Debug.TRACE, "Decoded string: " + v.lastElement());
+                                break;
+                case TokenConstants.TNAME :
+                                v.add(readNameToken(bis));
+                                Debug.log(Debug.TRACE, "Decoded defined name: " + v.lastElement());
                                 break;
                 case TokenConstants.TUPLUS:
                 case TokenConstants.TUMINUS:
@@ -187,6 +215,7 @@ public class TokenDecoder {
      * @return The decoded String <code>Token</code>
      */
     private Token readStringToken(ByteArrayInputStream bis) {
+
         int len = ((int)bis.read())*2;
         int options = (int)bis.read();
         Debug.log(Debug.TRACE,"String length is " + len + " and Options Flag is " + options);
@@ -210,6 +239,31 @@ public class TokenDecoder {
     }
 
     /**
+     * Reads a Defined Name  token from the <code>ByteArrayInputStream</code>
+     *
+     * @param bis The <code>ByteArrayInputStream</code> from which we read the
+     * bytes.
+     * @return The decoded Name <code>Token</code>
+     */
+    private Token readNameToken(ByteArrayInputStream bis) {
+        byte buffer[] = new byte[2];
+        buffer[0] = (byte) bis.read();
+        buffer[1] = (byte) bis.read();
+        int nameIndex = EndianConverter.readShort(buffer);
+        bis.skip(12);       // the next 12 bytes are unused
+        Enumeration e = wb.getDefinedNames();
+        int i = 1;
+        while(i<nameIndex) {
+            e.nextElement();
+            i++;
+        }
+        Debug.log(Debug.TRACE,"Name index is " + nameIndex);
+        DefinedName dn = (DefinedName)e.nextElement();
+        Debug.log(Debug.TRACE,"DefinedName is " + dn.getName());
+        return (tf.getOperandToken(dn.getName(), "NAME"));
+    }
+
+    /**
      * Reads a Cell Reference token from the <code>ByteArrayInputStream</code>
      *
      * @param bis The <code>ByteArrayInputStream</code> from which we read the
@@ -217,6 +271,7 @@ public class TokenDecoder {
      * @return The decoded Cell Reference <code>Token</code>
      */
     private Token readCellRefToken(ByteArrayInputStream bis) {
+
         byte buffer[] = new byte[2];
         String outputString = new String();
 
@@ -230,6 +285,81 @@ public class TokenDecoder {
         outputString = int2CellStr(formulaRow, formulaCol, relativeFlags);
 
         return (tf.getOperandToken(outputString,"CELL_REFERENCE"));
+    }
+
+    /**
+     * Reads a Cell Reference token from the <code>ByteArrayInputStream</code>
+     *
+     * @param bis The <code>ByteArrayInputStream</code> from which we read the
+     * bytes.
+     * @return The decoded Cell Reference <code>Token</code>
+     */
+    private Token read3DCellRefToken(ByteArrayInputStream bis) {
+
+        byte buffer[] = new byte[2];
+        String outputString = new String();
+
+        bis.skip(10);
+
+           buffer[0] = (byte) bis.read();
+         buffer[1] = (byte) bis.read();
+        int Sheet1 = EndianConverter.readShort(buffer);
+           buffer[0] = (byte) bis.read();
+         buffer[1] = (byte) bis.read();
+        int Sheet2 = EndianConverter.readShort(buffer);
+
+        buffer[0] = (byte) bis.read();
+        buffer[1] = (byte) bis.read();
+        int formulaRow = EndianConverter.readShort(buffer);
+        int relativeFlags = (formulaRow & 0xC000)>>14;
+        formulaRow &= 0x3FFF;
+        int formulaCol = (byte) bis.read();
+        String cellRef = "." + int2CellStr(formulaRow, formulaCol, relativeFlags);
+        if(Sheet1 == Sheet2) {
+            outputString = "$" + wb.getSheetName(Sheet1) + cellRef;
+        } else {
+            outputString = "$" + wb.getSheetName(Sheet1) + cellRef + ":$" + wb.getSheetName(Sheet2) + cellRef;
+        }
+
+        return (tf.getOperandToken(outputString,"3D_CELL_REFERENCE"));
+    }
+
+    /**
+     * Reads a Cell Reference token from the <code>ByteArrayInputStream</code>
+     *
+     * @param bis The <code>ByteArrayInputStream</code> from which we read the
+     * bytes.
+     * @return The decoded Cell Reference <code>Token</code>
+     */
+    private Token read3DCellAreaRefToken(ByteArrayInputStream bis) {
+
+        byte buffer[] = new byte[2];
+        String outputString = new String();
+
+        bis.skip(10);
+
+           buffer[0] = (byte) bis.read();
+         buffer[1] = (byte) bis.read();
+        int Sheet1 = EndianConverter.readShort(buffer);
+           buffer[0] = (byte) bis.read();
+         buffer[1] = (byte) bis.read();
+        int Sheet2 = EndianConverter.readShort(buffer);
+
+        buffer[0] = (byte) bis.read();
+        buffer[1] = (byte) bis.read();
+        int formulaRow = EndianConverter.readShort(buffer);
+        int relativeFlags = (formulaRow & 0xC000)>>14;
+        formulaRow &= 0x3FFF;
+        int formulaCol = (byte) bis.read();
+        String cellRef = "." + int2CellStr(formulaRow, formulaCol, relativeFlags);
+
+        if(Sheet1 == Sheet2) {
+            outputString = "$" + wb.getSheetName(Sheet1) + cellRef;
+        } else {
+            outputString = "$" + wb.getSheetName(Sheet1) + cellRef + ":$" + wb.getSheetName(Sheet2) + cellRef;
+        }
+
+        return (tf.getOperandToken(outputString,"3D_CELL_REFERENCE"));
     }
 
     /**

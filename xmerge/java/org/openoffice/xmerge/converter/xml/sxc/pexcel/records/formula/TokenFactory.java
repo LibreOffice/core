@@ -93,6 +93,7 @@ public class TokenFactory {
         Token t = null;
         // We will have to fix this later to include fixed function tokens
         // Also will need to handle errors where functions names are incorrect???
+        Debug.log(Debug.TRACE,"TokenFactory creating function Token : " + s);
         try {
             t = new Token(s, ParseToken.TOKEN_FUNCTION_VARIABLE, fl.getIDFromString(s), args);
         } catch (UnsupportedFunctionException eFn) {
@@ -111,6 +112,7 @@ public class TokenFactory {
 
         Token t = null;
 
+        Debug.log(Debug.TRACE,"TokenFactory creating operator Token : " + s);
         if(args==1) {
             if(s.equals("+")) {
                 t = new Token(s, ParseToken.TOKEN_OPERATOR, operatorLookup.getIDFromString("UNARY_PLUS"), args);
@@ -133,6 +135,7 @@ public class TokenFactory {
     public Token getOperandToken(String s, String type) {
         Token t;
 
+        Debug.log(Debug.TRACE,"TokenFactory creating operand Token : " + s);
         t = new Token(s, ParseToken.TOKEN_OPERAND, operandLookup.getIDFromString(type), 0);
 
         return t;
