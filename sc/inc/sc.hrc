@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-05 11:48:07 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,6 +1284,37 @@
 #define STR_ACC_CSVRULER_DESCR      (STR_START + 151)
 #define STR_ACC_CSVGRID_NAME        (STR_START + 152)
 #define STR_ACC_CSVGRID_DESCR       (STR_START + 153)
+
+// Document
+#define STR_ACC_DOC_NAME            (STR_START + 154)
+#define STR_ACC_DOC_DESCR           (STR_START + 155)
+#define STR_ACC_TABLE_NAME          (STR_START + 156)
+#define STR_ACC_TABLE_DESCR         (STR_START + 157)
+#define STR_ACC_CELL_NAME           (STR_START + 158)
+#define STR_ACC_CELL_DESCR          (STR_START + 159)
+// Preview
+#define STR_ACC_PREVIEWDOC_NAME     (STR_START + 160)
+#define STR_ACC_PREVIEWDOC_DESCR    (STR_START + 161)
+#define STR_ACC_HEADERCELL_NAME     (STR_START + 162)
+#define STR_ACC_HEADERCELL_DESCR    (STR_START + 163)
+#define STR_ACC_LEFTAREA_NAME       (STR_START + 164)
+#define STR_ACC_LEFTAREA_DESCR      (STR_START + 165)
+#define STR_ACC_CENTERAREA_NAME     (STR_START + 166)
+#define STR_ACC_CENTERAREA_DESCR    (STR_START + 167)
+#define STR_ACC_RIGHTAREA_NAME      (STR_START + 168)
+#define STR_ACC_RIGHTAREA_DESCR     (STR_START + 169)
+#define STR_ACC_HEADER_NAME         (STR_START + 170)
+#define STR_ACC_HEADER_DESCR        (STR_START + 171)
+#define STR_ACC_FOOTER_NAME         (STR_START + 172)
+#define STR_ACC_FOOTER_DESCR        (STR_START + 173)
+
+// Editline
+#define STR_ACC_EDITLINE_NAME       (STR_START + 174)
+#define STR_ACC_EDITLINE_DESCR      (STR_START + 175)
+
+// EditCell
+#define STR_ACC_EDITCELL_NAME       (STR_START + 176)
+#define STR_ACC_EDITCELL_DESCR      (STR_START + 177)
 
 // --------------------------------------------------
 

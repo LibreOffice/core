@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-05 11:49:54 $
+ *  last change: $Author: sab $ $Date: 2002-08-08 13:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3244,6 +3244,8 @@ String STR_REPLCELLSWARN
 String STR_ACC_CSVRULER_NAME
 {
     Text = "Lineal";
+    Text[ english ] = "Ruler";
+    Text[ english_us ] = "Ruler";
 };
 
 String STR_ACC_CSVRULER_DESCR
@@ -3254,11 +3256,159 @@ String STR_ACC_CSVRULER_DESCR
 String STR_ACC_CSVGRID_NAME
 {
     Text = "Vorschautabelle";
+    Text[ english ] = "Preview table";
+    Text[ english_us ] = "Preview table";
 };
 
 String STR_ACC_CSVGRID_DESCR
 {
     Text = "Diese Tabelle zeigt die Anordnung der Daten, wie sie im Dokument erscheinen.";
+};
+
+String STR_ACC_DOC_NAME
+{
+    Text = "Dokumentenansicht";
+    Text[ english ] = "Document View";
+    Text[ english_us ] = "Document View";
+};
+
+String STR_ACC_DOC_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_TABLE_NAME
+{
+    Text = "Tabelle %1";
+    Text[ english ] = "Table %1";
+    Text[ english_us ] = "Table %1";
+};
+
+String STR_ACC_TABLE_DESCR
+{
+    Text = "Tabelle %1 Seite %2";
+};
+
+String STR_ACC_CELL_NAME
+{
+    Text = "Tabellenzelle %1";
+    Text[ english ] = "Table Cell %1";
+    Text[ english_us ] = "Table Cell %1";
+};
+
+String STR_ACC_CELL_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_PREVIEWDOC_NAME
+{
+    Text = "Seitenvorschau";
+    Text[ english ] = "Page Preview";
+    Text[ english_us ] = "Page Preview";
+};
+
+String STR_ACC_PREVIEWDOC_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_HEADERCELL_NAME
+{
+    Text = "";
+};
+
+String STR_ACC_HEADERCELL_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_LEFTAREA_NAME
+{
+    Text = "Linker Bereich";
+    Text[ english ] = "Left Area";
+    Text[ english_us ] = "Left Area";
+};
+
+String STR_ACC_LEFTAREA_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_CENTERAREA_NAME
+{
+    Text = "Mittlerer Bereich";
+    Text[ english ] = "Center Area";
+    Text[ english_us ] = "Center Area";
+};
+
+String STR_ACC_CENTERAREA_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_RIGHTAREA_NAME
+{
+    Text = "Rechter Bereich";
+    Text[ english ] = "Right Area";
+    Text[ english_us ] = "Right Area";
+};
+
+String STR_ACC_RIGHTAREA_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_HEADER_NAME
+{
+    Text = "Kopfzeile";
+    Text[ english ] = "Header";
+    Text[ english_us ] = "Header";
+};
+
+String STR_ACC_HEADER_DESCR
+{
+    Text = "Kopfzeile Seite %1";
+    Text[ english ] = "Header Page %1";
+    Text[ english_us ] = "Header Page %1";
+};
+
+String STR_ACC_FOOTER_NAME
+{
+    Text = "Fuﬂzeile";
+    Text[ english ] = "Footer";
+    Text[ english_us ] = "Footer";
+};
+
+String STR_ACC_FOOTER_DESCR
+{
+    Text = "Fuﬂzeile Seite %1";
+    Text[ english ] = "Footer Page %1";
+    Text[ english_us ] = "Footer Page %1";
+};
+
+String STR_ACC_EDITLINE_NAME
+{
+    Text = "Editzeile";
+    Text[ english ] = "Editline";
+    Text[ english_us ] = "Editline";
+};
+
+String STR_ACC_EDITLINE_DESCR
+{
+    Text = "";
+};
+
+String STR_ACC_EDITCELL_NAME
+{
+    Text = "Tabellenzelle %1";
+    Text[ english ] = "Table Cell %1";
+    Text[ english_us ] = "Table Cell %1";
+};
+
+String STR_ACC_EDITCELL_DESCR
+{
+    Text = "";
 };
 
 
