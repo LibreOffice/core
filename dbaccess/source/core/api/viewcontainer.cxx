@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 07:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-26 09:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
+#include <connectivity/sdbcx/VView.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -159,7 +162,16 @@ OViewContainer::~OViewContainer()
     //  dispose();
     DBG_DTOR(OViewContainer, NULL);
 }
-
+// -----------------------------------------------------------------------------
+void SAL_CALL OViewContainer::acquire() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_rParent.acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OViewContainer::release() throw(::com::sun::star::uno::RuntimeException)
+{
+    m_rParent.release();
+}
 //------------------------------------------------------------------------------
 /** compare two strings
 */
@@ -318,7 +330,9 @@ Reference< XPropertySet > OViewContainer::createEmptyObject()
     Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterViews,UNO_QUERY);
     if(xDataFactory.is())
-        return xDataFactory->createDataDescriptor();
+        xRet = xDataFactory->createDataDescriptor();
+    else
+        xRet = new ::connectivity::sdbcx::OView(isCaseSensitive(),m_xMetaData);
 
     return xRet;
 }
