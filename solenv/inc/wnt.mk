@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:40:27 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:12:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-SOLAR_JAVA=TRUE
+SOLAR_JAVA*=TRUE
 FULL_DESK=TRUE
 JAVAFLAGSDEBUG=-g
 
@@ -176,6 +176,8 @@ CFLAGS+=-c -nologo -Gs -Gy $(NOLOGO) $(MINUS_I)$(INCLUDE)
 .IF "$(VC_STANDARD)"==""
 CFLAGS+= -Ob1
 .ENDIF	# "$(VC_STANDARD)"==""
+.ENDIF
+.ENDIF
 .ENDIF
 .ELSE	# ist keine product...
 CDEFS+= -D_X86_=1 $(OLE2DEF)
