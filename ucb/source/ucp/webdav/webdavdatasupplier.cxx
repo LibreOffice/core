@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:44:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ sal_Bool DataSupplier::getData()
             // propfind depth 1, get property values for parent AND for each
             // child
             m_pImpl->m_xContent->getResourceAccess()
-                .PROPFIND( ONE,
+                .PROPFIND( DAVONE,
                            propertyNames,
                            resources,
                            getResultSet()->getEnvironment() );
