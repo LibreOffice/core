@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:17:04 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2294,7 +2294,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ swedish ] = "Till錿 h鋘gande ~interpunktion";
         Text[ polish ] = "Dopu滄 sieroty i wdowy";
         Text[ portuguese_brazilian ] = "Hanging punctuation";
-        Text[ japanese ] = "嬛懃張棟傪峴偆";
+        Text[ japanese ] = "嬪撉揰偺傇傜壓偘傪峴偆";
         Text[ korean ] = "备滴痢 倾侩";
         Text[ chinese_simplified ] = "允许行末附加标点符号";
         Text[ chinese_traditional ] = "︽ソ夹翴才腹";
@@ -2582,4 +2582,5 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 };
 
  // ********************************************************************** EOF
+
 
