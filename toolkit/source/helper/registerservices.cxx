@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:26 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,75 @@
 #ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include <toolkit/controls/formattedcontrol.hxx>
 #endif
+#ifndef TOOLKIT_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
+#include <toolkit/controls/tkscrollbar.hxx>
+#endif
+#ifndef TOOLKIT_CONTROLS_TKSPINBUTTON_HXX
+#include "toolkit/controls/tkspinbutton.hxx"
+#endif
 #ifndef TOOLKIT_DIALOG_CONTROL_HXX
 #include <toolkit/controls/dialogcontrol.hxx>
 #endif
 
-#define REGISTER_SERVICES( ImplName, ServiceName1, ServiceName2 ) \
-    xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.Toolkit." #ImplName "/UNO/SERVICES" ) ); \
-    xNewKey->createKey( ServiceName1 ); \
-    xNewKey->createKey( ServiceName2 );
+namespace toolkit
+{
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::registry;
 
+    //.........................................................................
+    Reference< XRegistryKey > registerServices( const Reference< XRegistryKey >& _rxParentKey,
+        const sal_Char* _pAsciiImplName, const sal_Char* _pAsciiServiceName )
+    {
+        ::rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "/stardiv.Toolkit." ) );
+        sImplName += ::rtl::OUString::createFromAscii( _pAsciiImplName );
+        sImplName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) );
+
+        Reference< XRegistryKey > xNewKey = _rxParentKey->createKey( sImplName );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( _pAsciiServiceName ) );
+
+        return xNewKey;
+    }
+
+    //.........................................................................
+    Reference< XRegistryKey > registerServices( const Reference< XRegistryKey >& _rxParentKey,
+        const sal_Char* _pAsciiImplName, const sal_Char* _pAsciiServiceName1, const sal_Char* _pAsciiServiceName2 )
+    {
+        Reference< XRegistryKey > xComponentServicesKey = registerServices( _rxParentKey, _pAsciiImplName, _pAsciiServiceName1 );
+        xComponentServicesKey->createKey( ::rtl::OUString::createFromAscii( _pAsciiServiceName2 ) );
+        return xComponentServicesKey;
+    }
+
+    //.........................................................................
+    void* tryCreateFactory( const sal_Char* _pRequiredImplName, const sal_Char* _pComponentImplName,
+        const sal_Char* _pAsciiServiceName1, const sal_Char* _pAsciiServiceName2,
+        ::cppu::ComponentInstantiation _pInstantiation, const Reference< XMultiServiceFactory >& _rxServiceFactory )
+    {
+        void* pReturn = NULL;
+
+        if ( rtl_str_compare( _pRequiredImplName, _pComponentImplName ) == 0 )
+        {
+            Sequence< ::rtl::OUString > aServiceNames( _pAsciiServiceName2 ? 2 : 1 );
+            aServiceNames.getArray()[ 0 ] = ::rtl::OUString::createFromAscii( _pAsciiServiceName1 );
+            if ( _pAsciiServiceName2 )
+                aServiceNames.getArray()[ 1 ] = ::rtl::OUString::createFromAscii( _pAsciiServiceName2 );
+            Reference< XSingleServiceFactory > xFactory( ::cppu::createSingleFactory(
+                _rxServiceFactory, ::rtl::OUString::createFromAscii( _pComponentImplName ),
+                _pInstantiation, aServiceNames
+            ) );
+
+            if ( xFactory.is() )
+            {
+                xFactory->acquire();
+                pReturn = xFactory.get();
+            }
+        }
+
+        return pReturn;
+    }
+
+
+}
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) \
@@ -146,20 +206,12 @@
 }
 
 #define CHECKANDCREATEFACTORY( ImplName, ServiceName1, ServiceName2 ) \
-    if ( rtl_str_compare( sImplementationName, "stardiv.Toolkit." #ImplName ) == 0 ) \
-    { \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(2); \
-        aServiceNames.getArray()[0] = ServiceName1; \
-        aServiceNames.getArray()[1] = ServiceName2; \
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory( ::cppu::createSingleFactory( pServiceManager, \
-            ::rtl::OUString::createFromAscii( sImplementationName ), ImplName##_CreateInstance, aServiceNames ) ); \
-        if ( xFactory.is() ) \
-        { \
-            xFactory->acquire(); \
-            pRet = xFactory.get(); \
-        } \
-    }
-
+    pRet = tryCreateFactory( sImplementationName, "stardiv.Toolkit." #ImplName, \
+                ServiceName1, ServiceName2, \
+                ImplName##_CreateInstance, xServiceFactory \
+            ); \
+    if ( pRet ) \
+        return pRet; \
 
 using namespace toolkit;
 
@@ -189,6 +241,7 @@ IMPL_CREATEINSTANCE( UnoControlRadioButtonModel )
 IMPL_CREATEINSTANCE( UnoControlTimeFieldModel )
 IMPL_CREATEINSTANCE( UnoControlProgressBarModel )
 IMPL_CREATEINSTANCE( UnoControlScrollBarModel )
+IMPL_CREATEINSTANCE( UnoSpinButtonModel )
 IMPL_CREATEINSTANCE( UnoControlFixedLineModel )
 IMPL_CREATEINSTANCE( UnoCurrencyFieldControl )
 IMPL_CREATEINSTANCE( UnoDateFieldControl )
@@ -206,6 +259,7 @@ IMPL_CREATEINSTANCE( UnoRadioButtonControl )
 IMPL_CREATEINSTANCE( UnoTimeFieldControl )
 IMPL_CREATEINSTANCE( UnoProgressBarControl )
 IMPL_CREATEINSTANCE( UnoScrollBarControl )
+IMPL_CREATEINSTANCE( UnoSpinButtonControl )
 IMPL_CREATEINSTANCE( UnoFixedLineControl )
 IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
@@ -225,60 +279,62 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 {
     if (_pRegistryKey)
     {
-        ::com::sun::star::registry::XRegistryKey * pRegistryKey = reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( _pRegistryKey );
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xNewKey;
+        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey =
+            static_cast< ::com::sun::star::registry::XRegistryKey* >( _pRegistryKey );
 
-        REGISTER_SERVICES( VCLXToolkit, ::rtl::OUString::createFromAscii( szServiceName_Toolkit ), ::rtl::OUString::createFromAscii( szServiceName2_Toolkit ) );
-        REGISTER_SERVICES( VCLXPopupMenu, ::rtl::OUString::createFromAscii( szServiceName_PopupMenu ), ::rtl::OUString::createFromAscii( szServiceName2_PopupMenu ) );
-        REGISTER_SERVICES( VCLXMenuBar, ::rtl::OUString::createFromAscii( szServiceName_MenuBar ), ::rtl::OUString::createFromAscii( szServiceName2_MenuBar ) );
-        REGISTER_SERVICES( VCLXPointer, ::rtl::OUString::createFromAscii( szServiceName_Pointer ), ::rtl::OUString::createFromAscii( szServiceName2_Pointer ) );
-        REGISTER_SERVICES( UnoControlContainer, ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainer ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainer ) );
-        REGISTER_SERVICES( UnoControlContainerModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainerModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainerModel ) );
-        REGISTER_SERVICES( StdTabController, ::rtl::OUString::createFromAscii( szServiceName_TabController ), ::rtl::OUString::createFromAscii( szServiceName2_TabController ) );
-        REGISTER_SERVICES( StdTabControllerModel, ::rtl::OUString::createFromAscii( szServiceName_TabControllerModel ), ::rtl::OUString::createFromAscii( szServiceName2_TabControllerModel ) );
-        REGISTER_SERVICES( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) );
-        REGISTER_SERVICES( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) );
-        REGISTER_SERVICES( UnoEditControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit ) );
-        REGISTER_SERVICES( UnoControlEditModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEditModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel ) );
-        REGISTER_SERVICES( UnoDateFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateField ) );
-        REGISTER_SERVICES( UnoControlDateFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel ) );
-        REGISTER_SERVICES( UnoTimeFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeField ) );
-        REGISTER_SERVICES( UnoControlTimeFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel ) );
-        REGISTER_SERVICES( UnoNumericFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericField ) );
-        REGISTER_SERVICES( UnoControlNumericFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel ) );
-        REGISTER_SERVICES( UnoCurrencyFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyField ) );
-        REGISTER_SERVICES( UnoControlCurrencyFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel ) );
-        REGISTER_SERVICES( UnoPatternFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternField ) );
-        REGISTER_SERVICES( UnoControlPatternFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel ) );
-        REGISTER_SERVICES( UnoFormattedFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedField ) );
-        REGISTER_SERVICES( UnoControlFormattedFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel ) );
-        REGISTER_SERVICES( UnoFileControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControl ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControl ) );
-        REGISTER_SERVICES( UnoControlFileControlModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControlModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControlModel ) );
-        REGISTER_SERVICES( UnoButtonControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlButton ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButton ) );
-        REGISTER_SERVICES( UnoControlButtonModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlButtonModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel ) );
-        REGISTER_SERVICES( UnoImageControlControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageButton ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageButton ) );
-        REGISTER_SERVICES( UnoControlImageControlModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageButtonModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageButtonModel ) );
-        REGISTER_SERVICES( UnoImageControlControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControl ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControl ) );
-        REGISTER_SERVICES( UnoControlImageControlModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControlModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel ) );
-        REGISTER_SERVICES( UnoRadioButtonControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButton ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButton ) );
-        REGISTER_SERVICES( UnoControlRadioButtonModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) );
-        REGISTER_SERVICES( UnoCheckBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBox ) );
-        REGISTER_SERVICES( UnoControlCheckBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel ) );
-        REGISTER_SERVICES( UnoListBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBox ) );
-        REGISTER_SERVICES( UnoControlListBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel ) );
-        REGISTER_SERVICES( UnoComboBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBox ) );
-        REGISTER_SERVICES( UnoControlComboBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel ) );
-        REGISTER_SERVICES( UnoFixedTextControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedText ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedText ) );
-        REGISTER_SERVICES( UnoControlFixedTextModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedTextModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel ) );
-        REGISTER_SERVICES( UnoGroupBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBox ) );
-        REGISTER_SERVICES( UnoControlGroupBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel ) );
-        REGISTER_SERVICES( UnoProgressBarControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBar ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBar ) );
-        REGISTER_SERVICES( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) );
-        REGISTER_SERVICES( UnoScrollBarControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBar ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBar ) );
-        REGISTER_SERVICES( UnoControlScrollBarModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBarModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel ) );
-        REGISTER_SERVICES( UnoFixedLineControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLine ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLine ) );
-        REGISTER_SERVICES( UnoControlFixedLineModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLineModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel ) );
-        REGISTER_SERVICES( VCLXPrinterServer, ::rtl::OUString::createFromAscii( szServiceName_PrinterServer ), ::rtl::OUString::createFromAscii( szServiceName2_PrinterServer ) );
+        registerServices( xRegistryKey, "VCLXToolkit", szServiceName_Toolkit, szServiceName2_Toolkit );
+        registerServices( xRegistryKey, "VCLXPopupMenu", szServiceName_PopupMenu, szServiceName2_PopupMenu );
+        registerServices( xRegistryKey, "VCLXMenuBar", szServiceName_MenuBar, szServiceName2_MenuBar );
+        registerServices( xRegistryKey, "VCLXPointer", szServiceName_Pointer, szServiceName2_Pointer );
+        registerServices( xRegistryKey, "UnoControlContainer", szServiceName_UnoControlContainer, szServiceName2_UnoControlContainer );
+        registerServices( xRegistryKey, "UnoControlContainerModel", szServiceName_UnoControlContainerModel, szServiceName2_UnoControlContainerModel );
+        registerServices( xRegistryKey, "StdTabController", szServiceName_TabController, szServiceName2_TabController );
+        registerServices( xRegistryKey, "StdTabControllerModel", szServiceName_TabControllerModel, szServiceName2_TabControllerModel );
+        registerServices( xRegistryKey, "UnoDialogControl", szServiceName_UnoControlDialog, szServiceName2_UnoControlDialog );
+        registerServices( xRegistryKey, "UnoControlDialogModel", szServiceName_UnoControlDialogModel, szServiceName2_UnoControlDialogModel );
+        registerServices( xRegistryKey, "UnoEditControl", szServiceName_UnoControlEdit, szServiceName2_UnoControlEdit );
+        registerServices( xRegistryKey, "UnoControlEditModel", szServiceName_UnoControlEditModel, szServiceName2_UnoControlEditModel );
+        registerServices( xRegistryKey, "UnoDateFieldControl", szServiceName_UnoControlDateField, szServiceName2_UnoControlDateField );
+        registerServices( xRegistryKey, "UnoControlDateFieldModel", szServiceName_UnoControlDateFieldModel, szServiceName2_UnoControlDateFieldModel );
+        registerServices( xRegistryKey, "UnoTimeFieldControl", szServiceName_UnoControlTimeField, szServiceName2_UnoControlTimeField );
+        registerServices( xRegistryKey, "UnoControlTimeFieldModel", szServiceName_UnoControlTimeFieldModel, szServiceName2_UnoControlTimeFieldModel );
+        registerServices( xRegistryKey, "UnoNumericFieldControl", szServiceName_UnoControlNumericField, szServiceName2_UnoControlNumericField );
+        registerServices( xRegistryKey, "UnoControlNumericFieldModel", szServiceName_UnoControlNumericFieldModel, szServiceName2_UnoControlNumericFieldModel );
+        registerServices( xRegistryKey, "UnoCurrencyFieldControl", szServiceName_UnoControlCurrencyField, szServiceName2_UnoControlCurrencyField );
+        registerServices( xRegistryKey, "UnoControlCurrencyFieldModel", szServiceName_UnoControlCurrencyFieldModel, szServiceName2_UnoControlCurrencyFieldModel );
+        registerServices( xRegistryKey, "UnoPatternFieldControl", szServiceName_UnoControlPatternField, szServiceName2_UnoControlPatternField );
+        registerServices( xRegistryKey, "UnoControlPatternFieldModel", szServiceName_UnoControlPatternFieldModel, szServiceName2_UnoControlPatternFieldModel );
+        registerServices( xRegistryKey, "UnoFormattedFieldControl", szServiceName_UnoControlFormattedField, szServiceName2_UnoControlFormattedField );
+        registerServices( xRegistryKey, "UnoControlFormattedFieldModel", szServiceName_UnoControlFormattedFieldModel, szServiceName2_UnoControlFormattedFieldModel );
+        registerServices( xRegistryKey, "UnoFileControl", szServiceName_UnoControlFileControl, szServiceName2_UnoControlFileControl );
+        registerServices( xRegistryKey, "UnoControlFileControlModel", szServiceName_UnoControlFileControlModel, szServiceName2_UnoControlFileControlModel );
+        registerServices( xRegistryKey, "UnoButtonControl", szServiceName_UnoControlButton, szServiceName2_UnoControlButton );
+        registerServices( xRegistryKey, "UnoControlButtonModel", szServiceName_UnoControlButtonModel, szServiceName2_UnoControlButtonModel );
+        registerServices( xRegistryKey, "UnoImageControlControl", szServiceName_UnoControlImageButton, szServiceName2_UnoControlImageButton );
+        registerServices( xRegistryKey, "UnoControlImageControlModel", szServiceName_UnoControlImageButtonModel, szServiceName2_UnoControlImageButtonModel );
+        registerServices( xRegistryKey, "UnoImageControlControl", szServiceName_UnoControlImageControl, szServiceName2_UnoControlImageControl );
+        registerServices( xRegistryKey, "UnoControlImageControlModel", szServiceName_UnoControlImageControlModel, szServiceName2_UnoControlImageControlModel );
+        registerServices( xRegistryKey, "UnoRadioButtonControl", szServiceName_UnoControlRadioButton, szServiceName2_UnoControlRadioButton );
+        registerServices( xRegistryKey, "UnoControlRadioButtonModel", szServiceName_UnoControlRadioButtonModel, szServiceName2_UnoControlRadioButtonModel );
+        registerServices( xRegistryKey, "UnoCheckBoxControl", szServiceName_UnoControlCheckBox, szServiceName2_UnoControlCheckBox );
+        registerServices( xRegistryKey, "UnoControlCheckBoxModel", szServiceName_UnoControlCheckBoxModel, szServiceName2_UnoControlCheckBoxModel );
+        registerServices( xRegistryKey, "UnoListBoxControl", szServiceName_UnoControlListBox, szServiceName2_UnoControlListBox );
+        registerServices( xRegistryKey, "UnoControlListBoxModel", szServiceName_UnoControlListBoxModel, szServiceName2_UnoControlListBoxModel );
+        registerServices( xRegistryKey, "UnoComboBoxControl", szServiceName_UnoControlComboBox, szServiceName2_UnoControlComboBox );
+        registerServices( xRegistryKey, "UnoControlComboBoxModel", szServiceName_UnoControlComboBoxModel, szServiceName2_UnoControlComboBoxModel );
+        registerServices( xRegistryKey, "UnoFixedTextControl", szServiceName_UnoControlFixedText, szServiceName2_UnoControlFixedText );
+        registerServices( xRegistryKey, "UnoControlFixedTextModel", szServiceName_UnoControlFixedTextModel, szServiceName2_UnoControlFixedTextModel );
+        registerServices( xRegistryKey, "UnoGroupBoxControl", szServiceName_UnoControlGroupBox, szServiceName2_UnoControlGroupBox );
+        registerServices( xRegistryKey, "UnoControlGroupBoxModel", szServiceName_UnoControlGroupBoxModel, szServiceName2_UnoControlGroupBoxModel );
+        registerServices( xRegistryKey, "UnoProgressBarControl", szServiceName_UnoControlProgressBar, szServiceName2_UnoControlProgressBar );
+        registerServices( xRegistryKey, "UnoControlProgressBarModel", szServiceName_UnoControlProgressBarModel, szServiceName2_UnoControlProgressBarModel );
+        registerServices( xRegistryKey, "UnoScrollBarControl", szServiceName_UnoControlScrollBar, szServiceName2_UnoControlScrollBar );
+        registerServices( xRegistryKey, "UnoControlScrollBarModel", szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel );
+        registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
+        registerServices( xRegistryKey, "UnoSpinButtonControl", szServiceName_UnoSpinButtonControl );
+        registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
+        registerServices( xRegistryKey, "UnoControlFixedLineModel", szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel );
+        registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
         return sal_True;
     }
     return sal_False;
@@ -286,63 +342,66 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 
 void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* _pRegistryKey )
 {
-    void* pRet = 0;
+    void* pRet = NULL;
 
     if ( _pServiceManager )
     {
-        ::com::sun::star::lang::XMultiServiceFactory* pServiceManager = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory =
+            static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
 
-        CHECKANDCREATEFACTORY( VCLXToolkit, ::rtl::OUString::createFromAscii( szServiceName_Toolkit ), ::rtl::OUString::createFromAscii( szServiceName2_Toolkit ) )
-        else CHECKANDCREATEFACTORY( VCLXPopupMenu, ::rtl::OUString::createFromAscii( szServiceName_PopupMenu ), ::rtl::OUString::createFromAscii( szServiceName2_PopupMenu ) )
-        else CHECKANDCREATEFACTORY( VCLXMenuBar, ::rtl::OUString::createFromAscii( szServiceName_MenuBar ), ::rtl::OUString::createFromAscii( szServiceName2_MenuBar ) )
-        else CHECKANDCREATEFACTORY( VCLXPointer, ::rtl::OUString::createFromAscii( szServiceName_Pointer ), ::rtl::OUString::createFromAscii( szServiceName2_Pointer ) )
-        else CHECKANDCREATEFACTORY( UnoControlContainer, ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainer ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainer ) )
-        else CHECKANDCREATEFACTORY( UnoControlContainerModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainerModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainerModel ) )
-        else CHECKANDCREATEFACTORY( StdTabController, ::rtl::OUString::createFromAscii( szServiceName_TabController ), ::rtl::OUString::createFromAscii( szServiceName2_TabController ) )
-        else CHECKANDCREATEFACTORY( StdTabControllerModel, ::rtl::OUString::createFromAscii( szServiceName_TabControllerModel ), ::rtl::OUString::createFromAscii( szServiceName2_TabControllerModel ) )
-        else CHECKANDCREATEFACTORY( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) )
-        else CHECKANDCREATEFACTORY( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) )
-        else CHECKANDCREATEFACTORY( UnoEditControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit ) )
-        else CHECKANDCREATEFACTORY( UnoControlEditModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEditModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel ) )
-        else CHECKANDCREATEFACTORY( UnoDateFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateField ) )
-        else CHECKANDCREATEFACTORY( UnoControlDateFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel ) )
-        else CHECKANDCREATEFACTORY( UnoTimeFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeField ) )
-        else CHECKANDCREATEFACTORY( UnoControlTimeFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlTimeFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel ) )
-        else CHECKANDCREATEFACTORY( UnoNumericFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericField ) )
-        else CHECKANDCREATEFACTORY( UnoControlNumericFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlNumericFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel ) )
-        else CHECKANDCREATEFACTORY( UnoCurrencyFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyField ) )
-        else CHECKANDCREATEFACTORY( UnoControlCurrencyFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCurrencyFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel ) )
-        else CHECKANDCREATEFACTORY( UnoPatternFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternField ) )
-        else CHECKANDCREATEFACTORY( UnoControlPatternFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlPatternFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel ) )
-        else CHECKANDCREATEFACTORY( UnoFormattedFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedField ) )
-        else CHECKANDCREATEFACTORY( UnoControlFormattedFieldModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel ) )
-        else CHECKANDCREATEFACTORY( UnoFileControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControl ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControl ) )
-        else CHECKANDCREATEFACTORY( UnoControlFileControlModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFileControlModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControlModel ) )
-        else CHECKANDCREATEFACTORY( UnoButtonControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlButton ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButton ) )
-        else CHECKANDCREATEFACTORY( UnoControlButtonModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlButtonModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel ) )
-        else CHECKANDCREATEFACTORY( UnoImageControlControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageButton ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageButton ) )
-        else CHECKANDCREATEFACTORY( UnoControlImageControlModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageButtonModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageButtonModel ) )
-        else CHECKANDCREATEFACTORY( UnoImageControlControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControl ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControl ) )
-        else CHECKANDCREATEFACTORY( UnoControlImageControlModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControlModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel ) )
-        else CHECKANDCREATEFACTORY( UnoRadioButtonControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButton ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButton ) )
-        else CHECKANDCREATEFACTORY( UnoControlRadioButtonModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButtonModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) )
-        else CHECKANDCREATEFACTORY( UnoCheckBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBox ) )
-        else CHECKANDCREATEFACTORY( UnoControlCheckBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel ) )
-        else CHECKANDCREATEFACTORY( UnoListBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBox ) )
-        else CHECKANDCREATEFACTORY( UnoControlListBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel ) )
-        else CHECKANDCREATEFACTORY( UnoComboBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBox ) )
-        else CHECKANDCREATEFACTORY( UnoControlComboBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlComboBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel ) )
-        else CHECKANDCREATEFACTORY( UnoFixedTextControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedText ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedText ) )
-        else CHECKANDCREATEFACTORY( UnoControlFixedTextModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedTextModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel ) )
-        else CHECKANDCREATEFACTORY( UnoGroupBoxControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBox ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBox ) )
-        else CHECKANDCREATEFACTORY( UnoControlGroupBoxModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlGroupBoxModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel ) )
-        else CHECKANDCREATEFACTORY( UnoProgressBarControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBar ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBar ) )
-        else CHECKANDCREATEFACTORY( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlProgressBarModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) )
-        else CHECKANDCREATEFACTORY( UnoScrollBarControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBar ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBar ) )
-        else CHECKANDCREATEFACTORY( UnoControlScrollBarModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBarModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel ) )
-        else CHECKANDCREATEFACTORY( UnoFixedLineControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLine ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLine ) )
-        else CHECKANDCREATEFACTORY( UnoControlFixedLineModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLineModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel ) )
-        else CHECKANDCREATEFACTORY( VCLXPrinterServer, ::rtl::OUString::createFromAscii( szServiceName_PrinterServer ), ::rtl::OUString::createFromAscii( szServiceName2_PrinterServer ) )
+        CHECKANDCREATEFACTORY( VCLXToolkit, szServiceName_Toolkit, szServiceName2_Toolkit )
+        CHECKANDCREATEFACTORY( VCLXPopupMenu, szServiceName_PopupMenu, szServiceName2_PopupMenu )
+        CHECKANDCREATEFACTORY( VCLXMenuBar, szServiceName_MenuBar, szServiceName2_MenuBar )
+        CHECKANDCREATEFACTORY( VCLXPointer, szServiceName_Pointer, szServiceName2_Pointer )
+        CHECKANDCREATEFACTORY( UnoControlContainer, szServiceName_UnoControlContainer, szServiceName2_UnoControlContainer )
+        CHECKANDCREATEFACTORY( UnoControlContainerModel, szServiceName_UnoControlContainerModel, szServiceName2_UnoControlContainerModel )
+        CHECKANDCREATEFACTORY( StdTabController, szServiceName_TabController, szServiceName2_TabController )
+        CHECKANDCREATEFACTORY( StdTabControllerModel, szServiceName_TabControllerModel, szServiceName2_TabControllerModel )
+        CHECKANDCREATEFACTORY( UnoDialogControl, szServiceName_UnoControlDialog, szServiceName2_UnoControlDialog )
+        CHECKANDCREATEFACTORY( UnoControlDialogModel, szServiceName_UnoControlDialogModel, szServiceName2_UnoControlDialogModel )
+        CHECKANDCREATEFACTORY( UnoEditControl, szServiceName_UnoControlEdit, szServiceName2_UnoControlEdit )
+        CHECKANDCREATEFACTORY( UnoControlEditModel, szServiceName_UnoControlEditModel, szServiceName2_UnoControlEditModel )
+        CHECKANDCREATEFACTORY( UnoDateFieldControl, szServiceName_UnoControlDateField, szServiceName2_UnoControlDateField )
+        CHECKANDCREATEFACTORY( UnoControlDateFieldModel, szServiceName_UnoControlDateFieldModel, szServiceName2_UnoControlDateFieldModel )
+        CHECKANDCREATEFACTORY( UnoTimeFieldControl, szServiceName_UnoControlTimeField, szServiceName2_UnoControlTimeField )
+        CHECKANDCREATEFACTORY( UnoControlTimeFieldModel, szServiceName_UnoControlTimeFieldModel, szServiceName2_UnoControlTimeFieldModel )
+        CHECKANDCREATEFACTORY( UnoNumericFieldControl, szServiceName_UnoControlNumericField, szServiceName2_UnoControlNumericField )
+        CHECKANDCREATEFACTORY( UnoControlNumericFieldModel, szServiceName_UnoControlNumericFieldModel, szServiceName2_UnoControlNumericFieldModel )
+        CHECKANDCREATEFACTORY( UnoCurrencyFieldControl, szServiceName_UnoControlCurrencyField, szServiceName2_UnoControlCurrencyField )
+        CHECKANDCREATEFACTORY( UnoControlCurrencyFieldModel, szServiceName_UnoControlCurrencyFieldModel, szServiceName2_UnoControlCurrencyFieldModel )
+        CHECKANDCREATEFACTORY( UnoPatternFieldControl, szServiceName_UnoControlPatternField, szServiceName2_UnoControlPatternField )
+        CHECKANDCREATEFACTORY( UnoControlPatternFieldModel, szServiceName_UnoControlPatternFieldModel, szServiceName2_UnoControlPatternFieldModel )
+        CHECKANDCREATEFACTORY( UnoFormattedFieldControl, szServiceName_UnoControlFormattedField, szServiceName2_UnoControlFormattedField )
+        CHECKANDCREATEFACTORY( UnoControlFormattedFieldModel, szServiceName_UnoControlFormattedFieldModel, szServiceName2_UnoControlFormattedFieldModel )
+        CHECKANDCREATEFACTORY( UnoFileControl, szServiceName_UnoControlFileControl, szServiceName2_UnoControlFileControl )
+        CHECKANDCREATEFACTORY( UnoControlFileControlModel, szServiceName_UnoControlFileControlModel, szServiceName2_UnoControlFileControlModel )
+        CHECKANDCREATEFACTORY( UnoButtonControl, szServiceName_UnoControlButton, szServiceName2_UnoControlButton )
+        CHECKANDCREATEFACTORY( UnoControlButtonModel, szServiceName_UnoControlButtonModel, szServiceName2_UnoControlButtonModel )
+        CHECKANDCREATEFACTORY( UnoImageControlControl, szServiceName_UnoControlImageButton, szServiceName2_UnoControlImageButton )
+        CHECKANDCREATEFACTORY( UnoControlImageControlModel, szServiceName_UnoControlImageButtonModel, szServiceName2_UnoControlImageButtonModel )
+        CHECKANDCREATEFACTORY( UnoImageControlControl, szServiceName_UnoControlImageControl, szServiceName2_UnoControlImageControl )
+        CHECKANDCREATEFACTORY( UnoControlImageControlModel, szServiceName_UnoControlImageControlModel, szServiceName2_UnoControlImageControlModel )
+        CHECKANDCREATEFACTORY( UnoRadioButtonControl, szServiceName_UnoControlRadioButton, szServiceName2_UnoControlRadioButton )
+        CHECKANDCREATEFACTORY( UnoControlRadioButtonModel, szServiceName_UnoControlRadioButtonModel, szServiceName2_UnoControlRadioButtonModel )
+        CHECKANDCREATEFACTORY( UnoCheckBoxControl, szServiceName_UnoControlCheckBox, szServiceName2_UnoControlCheckBox )
+        CHECKANDCREATEFACTORY( UnoControlCheckBoxModel, szServiceName_UnoControlCheckBoxModel, szServiceName2_UnoControlCheckBoxModel )
+        CHECKANDCREATEFACTORY( UnoListBoxControl, szServiceName_UnoControlListBox, szServiceName2_UnoControlListBox )
+        CHECKANDCREATEFACTORY( UnoControlListBoxModel, szServiceName_UnoControlListBoxModel, szServiceName2_UnoControlListBoxModel )
+        CHECKANDCREATEFACTORY( UnoComboBoxControl, szServiceName_UnoControlComboBox, szServiceName2_UnoControlComboBox )
+        CHECKANDCREATEFACTORY( UnoControlComboBoxModel, szServiceName_UnoControlComboBoxModel, szServiceName2_UnoControlComboBoxModel )
+        CHECKANDCREATEFACTORY( UnoFixedTextControl, szServiceName_UnoControlFixedText, szServiceName2_UnoControlFixedText )
+        CHECKANDCREATEFACTORY( UnoControlFixedTextModel, szServiceName_UnoControlFixedTextModel, szServiceName2_UnoControlFixedTextModel )
+        CHECKANDCREATEFACTORY( UnoGroupBoxControl, szServiceName_UnoControlGroupBox, szServiceName2_UnoControlGroupBox )
+        CHECKANDCREATEFACTORY( UnoControlGroupBoxModel, szServiceName_UnoControlGroupBoxModel, szServiceName2_UnoControlGroupBoxModel )
+        CHECKANDCREATEFACTORY( UnoProgressBarControl, szServiceName_UnoControlProgressBar, szServiceName2_UnoControlProgressBar )
+        CHECKANDCREATEFACTORY( UnoControlProgressBarModel, szServiceName_UnoControlProgressBarModel, szServiceName2_UnoControlProgressBarModel )
+        CHECKANDCREATEFACTORY( UnoScrollBarControl, szServiceName_UnoControlScrollBar, szServiceName2_UnoControlScrollBar )
+        CHECKANDCREATEFACTORY( UnoControlScrollBarModel, szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel )
+        CHECKANDCREATEFACTORY( UnoFixedLineControl, szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine )
+        CHECKANDCREATEFACTORY( UnoControlFixedLineModel, szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel )
+        CHECKANDCREATEFACTORY( VCLXPrinterServer, szServiceName_PrinterServer, szServiceName2_PrinterServer )
+        CHECKANDCREATEFACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
+        CHECKANDCREATEFACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
     }
     return pRet;
 }
