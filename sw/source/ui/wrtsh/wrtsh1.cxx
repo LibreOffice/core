@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:05:11 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
 #endif
@@ -694,7 +693,7 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         String aDummy;
         // determine source CLSID
         aRef->SvPseudoObject::FillClass( &aCLSID, &lDummy, &aDummy, &aDummy, &aDummy);
-        bStarMath = SotExchange::IsMath( *aRef->GetSvFactory() );
+        bStarMath = 0 != SotExchange::IsMath( *aRef->GetSvFactory() );
 
         if( IsSelection() )
         {
