@@ -1,6 +1,6 @@
 #!/bin/sh
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
-CLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/sandbox.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
+CLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
 echo java -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
 java -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
