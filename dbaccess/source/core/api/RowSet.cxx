@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:47:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,19 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
+
+// -------------------------------------------------------------------------
+namespace
+{
+    static void throwRowSetVetoException( const Reference< XInterface >& _rSource, const sal_Char* _pAsciiMessage )
+    {
+        // TODO: localize the message
+        RowSetVetoException aException;
+        aException.Message = ::rtl::OUString::createFromAscii( _pAsciiMessage );
+        aException.Context = _rSource;
+        throw RowSetVetoException( aException );
+    }
+}
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ORowSet()
@@ -1020,6 +1033,8 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
             // - RowCount/IsRowCountFinal
             fireRowcount();
         }
+        else
+            throwRowSetVetoException( *this, "The insertion of the record has been vetoed." );
     }
 }
 // -------------------------------------------------------------------------
@@ -1064,6 +1079,8 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
                 fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
             OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
         }
+        else
+            throwRowSetVetoException( *this, "The update of the record has been vetoed." );
     }
 }
 // -------------------------------------------------------------------------
@@ -1079,7 +1096,6 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     // the concurrency is read only
     if(!m_pCache || m_bBeforeFirst || m_bAfterLast || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwFunctionSequenceException(*this);
-
 
     // this call position the cache indirect
     notifyClonesRowDelete(m_aBookmark);
@@ -1113,7 +1129,10 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
+    else
+        throwRowSetVetoException( *this, "The deletion of the row has been vetoed." );
 }
+
 // -------------------------------------------------------------------------
 void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQLException, RuntimeException ) )
 {
@@ -1914,6 +1933,8 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
         // - RowCount/IsRowCountFinal
         fireRowcount();
     }
+    else
+        throwRowSetVetoException( *this, "The deletion of the records has been vetoed." );
     return aRet;
 }
 // -----------------------------------------------------------------------------
