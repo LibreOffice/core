@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:02:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,24 @@ class FuInsertOLE
         SfxRequest& rReq);
     virtual ~FuInsertOLE (void);
 };
+
+/************************************************************************/
+
+class FuInsertAVMedia
+    : public FuPoor
+{
+public:
+    TYPEINFO();
+
+    FuInsertAVMedia (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuInsertAVMedia (void);
+};
+
 
 } // end of namespace sd
 
