@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:43:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ using namespace com::sun::star::lang;
 
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,m_aCollection.GetItem(_rName));
@@ -153,7 +153,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
     OAdoTable* pTable = NULL;
     if(getImplementation(pTable,_xDescriptor) && pTable != NULL)
@@ -161,7 +161,7 @@ Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDesc
         WpADOTable aTable = pTable->getImpl();
         return new OAdoTable(this,isCaseSensitive(),m_pCatalog,aTable);
     }
-    return Reference< XNamed >();
+    return sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
