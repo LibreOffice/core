@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:10:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -230,6 +229,8 @@
 #include <vcl/scrbar.hxx>
 #endif
 
+#include "swabstdlg.hxx" //CHINA001
+#include "globals.hrc" //CHINA001
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -3013,9 +3014,14 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         uno::Reference< uno::XInterface >  xTmp;
         aObj >>= xTmp;
         uno::Reference< container::XNamed >  xNamed(xTmp, uno::UNO_QUERY);
-        SwRenameXNamedDlg aDlg(this, xNamed, xNameAccess);
+        //CHINA001 SwRenameXNamedDlg aDlg(this, xNamed, xNameAccess);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+        AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg( this, xNamed, xNameAccess,ResId( DLG_RENAME_XNAMED ));
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if(xSecond.is())
-            aDlg.SetAlternativeAccess( xSecond, xThird);
+            pDlg->SetAlternativeAccess( xSecond, xThird); //CHINA001 aDlg.SetAlternativeAccess( xSecond, xThird);
 
         String sForbiddenChars;
         if(CONTENT_TYPE_BOOKMARK == nType)
@@ -3026,8 +3032,9 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         {
             sForbiddenChars = C2S(" .<>");
         }
-        aDlg.SetForbiddenChars(sForbiddenChars);
-        aDlg.Execute();
+        pDlg->SetForbiddenChars(sForbiddenChars);//CHINA001 aDlg.SetForbiddenChars(sForbiddenChars);
+        pDlg->Execute();//CHINA001 aDlg.Execute();
+        delete pDlg; //CHINA001
     }
 }
 
