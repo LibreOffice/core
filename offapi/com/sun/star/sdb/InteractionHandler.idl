@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:38:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,11 @@
 #ifndef __com_sun_star_sdb_InteractionHandler_idl__
 #define __com_sun_star_sdb_InteractionHandler_idl__
 
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
-#include <com/sun/star/task/XInteractionHandler.idl>
-#endif
+module com { module sun { module star { module task {
+    published interface XInteractionHandler;
+}; }; }; };
 
 module com {  module sun {  module star {  module sdb {
-
 
 /** is a service for user interaction for databases.
     <p>
@@ -120,12 +119,7 @@ module com {  module sun {  module star {  module sdb {
     </ul>
     </p>
 */
-published service InteractionHandler
-{
-    /** handles interaction requests
-    */
-    interface com::sun::star::task::XInteractionHandler;
-};
+published service InteractionHandler: com::sun::star::task::XInteractionHandler;
 
 //=============================================================================
 
