@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-30 12:28:43 $
+ *  last change: $Author: mt $ $Date: 2002-09-03 09:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,7 +1519,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                 pWindow->ImplSetClipFlag();
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->mbAllResize ||
                 ( pWindow->mbFrame && pWindow->mpClientWindow ) )   // propagate resize for system border windows
-                pWindow->Resize();                                  // otherwise menues cannot be positioned
+                pWindow->ImplCallResize();                                  // otherwise menues cannot be positioned
             else
                 pWindow->mbCallResize = TRUE;
         }
@@ -1537,14 +1537,17 @@ void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
     if( pWindow->mbFrame && pWindow->ImplIsFloatingWindow() && pWindow->IsReallyVisible() )
     {
         static_cast<FloatingWindow*>(pWindow)->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
-        pWindow->Move();
+        pWindow->ImplCallMove();
     }
 
     if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
         KillOwnPopups( pWindow );
 
+    if ( pWindow->IsVisible() )
+        pWindow->ImplCallMove();
+
     if ( pWindow->mbFrame && pWindow->mpClientWindow )
-        pWindow->mpClientWindow->Move();    // notify client to update geometry
+        pWindow->mpClientWindow->ImplCallMove();    // notify client to update geometry
 
 }
 
