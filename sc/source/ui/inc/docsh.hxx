@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 18:03:17 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 20:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,10 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     BOOL            GetTabParam( const SfxItemSet* pArgs, USHORT nId, USHORT& rTab );
     BOOL            LoadCalc( SvStorage* pStor );
     BOOL            SaveCalc( SvStorage* pStor );
+    BOOL            LoadXML( SfxMedium* pMedium, SvStorage* pStor );
+    BOOL            SaveXML( SfxMedium* pMedium, SvStorage* pStor );
     USHORT          GetSaveTab();
+    void            UpdateAllRowHeights();
 
     void            RemoveUnknownObjects();
 
