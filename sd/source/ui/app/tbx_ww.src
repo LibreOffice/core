@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:45:02 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,13 +116,13 @@ FloatingWindow RID_ALIGNMENT
             };
         };
     };
-    Text[ chinese_simplified ] = "¶ÔÆë";
+    Text[ chinese_simplified ] = "å¯¹é½";
     Text[ russian ] = "Âûğàâíèâàíèå";
     Text[ polish ] = "Wyrównanie";
-    Text[ japanese ] = "”z’u";
-    Text[ chinese_traditional ] = "¹ï»ô";
+    Text[ japanese ] = "é…ç½®";
+    Text[ chinese_traditional ] = "å°é½Š";
     Text[ greek ] = "Óôïß÷éóç";
-    Text[ korean ] = "¸ÂÃã";
+    Text[ korean ] = "ë§ì¶¤";
     Text[ arabic ] = "ãÍÇĞÇÉ";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
@@ -211,13 +211,13 @@ FloatingWindow RID_ZOOM
             };
         };
     };
-    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÀı";
+    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
     Text[ russian ] = "Ìàñøòàá";
     Text[ polish ] = "Powiêkszenie";
-    Text[ japanese ] = "½Ş°Ñ";
-    Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
+    Text[ japanese ] = "ï½½ï¾ï½°ï¾‘";
+    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
     Text[ greek ] = "Åóôßáóç";
-    Text[ korean ] = "È®´ë/Ãà¼Ò";
+    Text[ korean ] = "í™•ëŒ€/ì¶•ì†Œ";
     Text[ arabic ] = "ÊßÈíÑ æÊÕÛíÑ";
     Text[ turkish ] = "Yakınlaştır";
     Text[ language_user1 ] = " ";
@@ -311,13 +311,13 @@ FloatingWindow RID_CHOOSE_MODE
             };
         };
     };
-    Text[ chinese_simplified ] = "Ğ§¹û";
+    Text[ chinese_simplified ] = "æ•ˆæœ";
     Text[ russian ] = "İôôåêòû";
     Text[ polish ] = "Efekty";
-    Text[ japanese ] = "Œø‰Ê";
-    Text[ chinese_traditional ] = "®ÄªG";
+    Text[ japanese ] = "åŠ¹æœ";
+    Text[ chinese_traditional ] = "æ•ˆæœ";
     Text[ greek ] = "Åöİ";
-    Text[ korean ] = "È¿°ú";
+    Text[ korean ] = "íš¨ê³¼";
     Text[ arabic ] = "ÊÃËíÑÇÊ";
     Text[ turkish ] = "Efektler";
     Text[ language_user1 ] = " ";
@@ -388,13 +388,13 @@ FloatingWindow RID_TEXT
     Text [ danish ] = "Tekst" ;
     Text [ portuguese_brazilian ] = "Text" ;
     Text [ portuguese ] = "Texto" ;
-    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
     Text[ polish ] = "Tekst";
-    Text[ japanese ] = "Ã·½Ä";
-    Text[ chinese_traditional ] = "¤å¦r";
+    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„";
+    Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ greek ] = "Êåßìåíï";
-    Text[ korean ] = "ÅØ½ºÆ®";
+    Text[ korean ] = "í…ìŠ¤íŠ¸";
     Text[ arabic ] = "äÕ";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
@@ -488,13 +488,13 @@ FloatingWindow RID_RECTANGLES
             };
         };
     };
-    Text[ chinese_simplified ] = "¾ØĞÎ";
+    Text[ chinese_simplified ] = "çŸ©å½¢";
     Text[ russian ] = "Ïğÿìîóãîëüíèêè";
     Text[ polish ] = "Prostok¹ty";
-    Text[ japanese ] = "lŠpŒ`";
-    Text[ chinese_traditional ] = "¯x§Î";
+    Text[ japanese ] = "å››è§’å½¢";
+    Text[ chinese_traditional ] = "çŸ©å½¢";
     Text[ greek ] = "Ïñèïãşíéá";
-    Text[ korean ] = "Á÷»ç°¢Çü";
+    Text[ korean ] = "ì§ì‚¬ê°í˜•";
     Text[ arabic ] = "ãÓÊØíáÇÊ";
     Text[ turkish ] = "Dikdörtgenler";
     Text[ language_user1 ] = " ";
@@ -616,13 +616,13 @@ FloatingWindow RID_ELLIPSES
             };
         };
     };
-    Text[ chinese_simplified ] = "ÍÖÔ²";
+    Text[ chinese_simplified ] = "æ¤­åœ†";
     Text[ russian ] = "İëëèïñû";
     Text[ polish ] = "Elipsy";
-    Text[ japanese ] = "‘È‰~Œ`";
-    Text[ chinese_traditional ] = "¾ò¶ê";
+    Text[ japanese ] = "æ¥•å††å½¢";
+    Text[ chinese_traditional ] = "æ©¢åœ“";
     Text[ greek ] = "¸ëëåéøç";
-    Text[ korean ] = "Å¸¿ø";
+    Text[ korean ] = "íƒ€ì›";
     Text[ arabic ] = "ÃÔßÇá ÈíÖæíÉ";
     Text[ turkish ] = "Elipsler";
     Text[ language_user1 ] = " ";
@@ -709,13 +709,13 @@ FloatingWindow RID_LINES
             };
         };
     };
-    Text[ chinese_simplified ] = "ÇúÏß";
+    Text[ chinese_simplified ] = "æ›²çº¿";
     Text[ russian ] = "Êğèâûå ëèíèè";
     Text[ polish ] = "Krzywe";
-    Text[ japanese ] = "‹Èü";
-    Text[ chinese_traditional ] = "¦±½u";
+    Text[ japanese ] = "æ›²ç·š";
+    Text[ chinese_traditional ] = "æ›²ç·š";
     Text[ greek ] = "Êáìğıëåò";
-    Text[ korean ] = "°î¼±";
+    Text[ korean ] = "ê³¡ì„ ";
     Text[ arabic ] = "ãäÍäíÇÊ";
     Text[ turkish ] = "Eğri";
     Text[ language_user1 ] = " ";
@@ -827,13 +827,13 @@ FloatingWindow RID_ARROWS
             };
         };
     };
-    Text[ chinese_simplified ] = "ÏßÌõ";
+    Text[ chinese_simplified ] = "çº¿æ¡";
     Text[ russian ] = "Ëèíèè";
     Text[ polish ] = "Linie";
-    Text[ japanese ] = "ü";
-    Text[ chinese_traditional ] = "½u±ø";
+    Text[ japanese ] = "ç·š";
+    Text[ chinese_traditional ] = "ç·šæ¢";
     Text[ greek ] = "Ãñáììİò";
-    Text[ korean ] = "¼±";
+    Text[ korean ] = "ì„ ";
     Text[ arabic ] = "ÎØæØ";
     Text[ turkish ] = "Çizgiler";
     Text[ language_user1 ] = " ";
@@ -920,13 +920,13 @@ FloatingWindow RID_3D_OBJECTS
             };
         };
     };
-    Text[ chinese_simplified ] = "3 Î¬¶ÔÏó";
+    Text[ chinese_simplified ] = "3 ç»´å¯¹è±¡";
     Text[ russian ] = "Îáúåêòû 3-Ì";
     Text[ polish ] = "Obiekty 3-W";
-    Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "3D ª«¥ó";
+    Text[ japanese ] = "3D ä½“ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    Text[ chinese_traditional ] = "3D ç‰©ä»¶";
     Text[ greek ] = "Áíôéêåßìåíá 3Ä";
-    Text[ korean ] = "3£Ä£­°³Ã¼";
+    Text[ korean ] = "3ï¼¤ï¼ê°œì²´";
     Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
@@ -1168,13 +1168,13 @@ FloatingWindow RID_CONNECTORS
             };
         };
     };
-    Text[ chinese_simplified ] = "Á¬½Ó·û";
+    Text[ chinese_simplified ] = "è¿æ¥ç¬¦";
     Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
     Text[ polish ] = "£¹cznik";
-    Text[ japanese ] = "ºÈ¸À";
-    Text[ chinese_traditional ] = "³s±µ²Å";
+    Text[ japanese ] = "ï½ºï¾ˆï½¸ï¾€";
+    Text[ chinese_traditional ] = "é€£æ¥ç¬¦";
     Text[ greek ] = "Óõíäİóåéò";
-    Text[ korean ] = "¿¬°á¼±";
+    Text[ korean ] = "ì—°ê²°ì„ ";
     Text[ arabic ] = "ÑæÇÈØ";
     Text[ turkish ] = "Bağlayıcılar";
     Text[ language_user1 ] = " ";
@@ -1283,13 +1283,13 @@ FloatingWindow RID_INSERT
             };
         };
     };
-    Text[ chinese_simplified ] = "²åÈë";
+    Text[ chinese_simplified ] = "æ’å…¥";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
-    Text[ japanese ] = "‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ japanese ] = "æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥";
     Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "»ğÀÔ";
+    Text[ korean ] = "ì‚½ì…";
     Text[ arabic ] = "ÅÏÑÇÌ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
@@ -1364,19 +1364,20 @@ FloatingWindow RID_POSITION
             };
         };
     };
-    Text[ chinese_simplified ] = "ÅÅĞò";
+    Text[ chinese_simplified ] = "æ’åº";
     Text[ russian ] = "Ğàñïîëîæåíèå";
     Text[ polish ] = "Rozmieszczenie";
-    Text[ japanese ] = "®—ñ";
-    Text[ chinese_traditional ] = "±Æ§Ç";
+    Text[ japanese ] = "æ•´åˆ—";
+    Text[ chinese_traditional ] = "æ’åº";
     Text[ greek ] = "Ôáêôïğïßçóç";
-    Text[ korean ] = "Á¤·Ä";
+    Text[ korean ] = "ì •ë ¬";
     Text[ arabic ] = "ÊÑÊíÈ";
     Text[ turkish ] = "Sıralama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición";
     Text[ finnish ] = "Järjestä";
 };
+
 
 
 
