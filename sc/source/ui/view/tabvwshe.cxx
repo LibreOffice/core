@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 12:52:26 $
+ *  last change: $Author: nn $ $Date: 2001-08-20 17:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,23 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
 
     if ( bAsText )
     {
-        //  InsertBookmark ?
-        InsertURLField( rName, rURL, rTarget );
+        if ( GetViewData()->IsActive() )
+        {
+            //  if the view is active, always use InsertURLField, which starts EditMode
+            //  and selects the URL, so it can be changed from the URL bar / dialog
+
+            InsertURLField( rName, rURL, rTarget );
+        }
+        else
+        {
+            //  #91216# if the view is not active, InsertURLField doesn't work
+            //  -> use InsertBookmark to directly manipulate cell content
+            //  bTryReplace=TRUE -> if cell contains only one URL, replace it
+
+            USHORT nPosX = GetViewData()->GetCurX();
+            USHORT nPosY = GetViewData()->GetCurY();
+            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, TRUE );
+        }
     }
     else
     {
