@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-20 17:39:00 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 17:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef TOOLS_INETMIME_HXX
 #include <inetmime.hxx>
 #endif
-
-#undef max // defined by <tools/solar.h>
-#undef min // defined by <tools/solar.h>
 
 namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;
     // unnamed namespaces don't work well yet

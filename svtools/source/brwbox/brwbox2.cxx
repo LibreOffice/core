@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 12:57:50 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,6 @@
 
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
-#endif
-#ifndef _STRING_
-#include <string>
-#endif
-#ifdef min
-#undef min
 #endif
 #include <algorithm>
 

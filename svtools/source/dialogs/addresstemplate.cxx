@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 17:20:26 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,12 +141,6 @@
 #include "localresaccess.hxx"
 #endif
 
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
 #include <algorithm>
 
 // .......................................................................

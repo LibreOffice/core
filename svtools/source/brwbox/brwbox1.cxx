@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 12:57:50 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,6 @@
 #include <vcl/sound.hxx>
 #include "brwhead.hxx"
 #include "datwin.hxx"
-#include <string>
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
 #include <algorithm>
 
 #pragma hdrstop

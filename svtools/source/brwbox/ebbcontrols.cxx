@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 12:57:51 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #include <vcl/decoview.hxx>
 #endif
 
-#ifdef max
-#undef max
-#endif
 #include <algorithm>
 
 // .......................................................................
@@ -386,6 +383,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/09/28 12:57:51  hr
+ *  #65293#: std::min/std::max
+ *
  *  Revision 1.1  2001/06/15 12:49:36  fs
  *  initial checkin - moved this herein from svx/source/fmcomp/dbchk*
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 18:05:21 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,6 @@
 #include "imivctl.hxx"
 #include "svmedit.hxx"
 
-#include <string>
-#ifdef min
-#undef min
-#endif
-#ifdef max
-#undef max
-#endif
 #include <algorithm>
 
 #define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)

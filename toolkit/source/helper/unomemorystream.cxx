@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomemorystream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 12:42:54 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 17:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 
 #include <toolkit/helper/unomemorystream.hxx>
-#ifdef min
-#undef min
-#endif
 #include <algorithm>
 
 //  ----------------------------------------------------

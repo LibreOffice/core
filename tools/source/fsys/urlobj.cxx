@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-08 14:12:43 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 17:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define min min // fool <tools/solar.h>...
-#define max max // fool <tools/solar.h>...
 
 #ifndef _URLOBJ_HXX
 #include "urlobj.hxx"
