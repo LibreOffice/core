@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:30 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,19 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
                 m_vecCriteria != rDesc.GetCriteria()    ||
                 m_bVisible != rDesc.IsVisible() );
 
+}
+// -----------------------------------------------------------------------------
+void OTableFieldDesc::clear()
+{
+    m_vecCriteria.clear();
+    ::std::vector< ::rtl::OUString>().swap( m_vecCriteria );
+    m_aTableName    = m_aAliasName = m_aFieldName = m_aFieldAlias = m_aDatabaseName = m_aFunctionName = ::rtl::OUString();
+    m_pTabWindow    = NULL;
+    m_eDataType     = 1000;
+    m_bVisible      = sal_False;
+    m_eOrderDir     =  ORDER_NONE;
+    m_eFunctionType = FKT_NONE;
+    m_bGroupBy      = sal_False;
 }
 
 //------------------------------------------------------------------------------
