@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-23 03:56:25 $
+#   last change: $Author: hjs $ $Date: 2001-02-26 12:26:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1993,12 +1993,12 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(XMLPROPERTIESN) \
         $(XMLXULRESN)	\
         $(GENJAVAFILES) \
-        $(JAVATARGET)	\
         $(JAVACLASSFILES) $(JAVA1CLASSFILES)	\
         $(JAVA2CLASSFILES)	$(JAVA3CLASSFILES) $(JAVA4CLASSFILES)\
         $(JAVA5CLASSFILES)	$(JAVA6CLASSFILES) $(JAVA7CLASSFILES)\
         $(JAVA8CLASSFILES)	$(JAVA9CLASSFILES) $(JAVA10CLASSFILES)\
         $(JAVA11CLASSFILES)	\
+        $(JAVATARGET)	\
         $(TARGETDPJ) \
         $(OBJTARGET)	$(SLOTARGET)	$(SMRSLOTARGET)		\
         $(S2USLOTARGET) \
@@ -2249,7 +2249,8 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
     @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
     +bmp $(IMGLST_SRS) $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) $(lang_{$(subst,$(TARGET)_img, $(@:b))}) -f $@
-    -+$(GNUCOPY) -p $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
+    -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
+    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(TARGET)_img, $(@:b))})$/*.bmp~
 .ELSE			# "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) >& $(NULLDEV)
     +bmp $(IMGLST_SRS) $(BMP_IN) $(BMP_OUT)$/$(langext_{$(subst,$(TARGET)_img, $(@:b))}) $(lang_{$(subst,$(TARGET)_img, $(@:b))}) -f $@
