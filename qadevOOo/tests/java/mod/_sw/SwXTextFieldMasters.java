@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextFieldMasters.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:18:23 $
+ *  last change:$Date: 2005-01-25 16:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public class SwXTextFieldMasters extends TestCase {
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
     }
 
