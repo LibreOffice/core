@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 15:02:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,30 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
             }
         }
     }
+}
+// -----------------------------------------------------------------------------
+Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 _nIndex)
+{
+    Rectangle aRect;
+    if ( SeekRow(_nRow) )
+    {
+        CellController* pController = GetController(_nRow,_nColumnId);
+        if ( pController )
+            aRect = pController->GetWindow().GetCharacterBounds(_nIndex);
+    }
+    return aRect;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+{
+    sal_Int32 nRet = -1;
+    if ( SeekRow(_nRow) )
+    {
+        CellController* pController = GetController(_nRow,_nColumnId);
+        if ( pController )
+            nRet = pController->GetWindow().GetIndexForPoint(_rPoint);
+    }
+    return nRet;
 }
 
 
