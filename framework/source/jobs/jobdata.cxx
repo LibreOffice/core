@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:37:20 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@
 #include <classes/converter.hxx>
 #endif
 
-#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
-#include <classes/wildcard.hxx>
-#endif
-
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
@@ -111,6 +107,10 @@
 
 //________________________________
 //  includes of other projects
+
+#ifndef _WLDCRD_HXX
+#include <tools/wldcrd.hxx>
+#endif
 
 #ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #include <unotools/configpathes.hxx>
@@ -667,9 +667,10 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
         to "~" ...
      */
     static ::rtl::OUString PATTERN_ISO8601 = ::rtl::OUString::createFromAscii("\?\?\?\?-\?\?-\?\?*\0");
+    WildCard aISOPattern(PATTERN_ISO8601);
 
-    sal_Bool bValidAdmin = Wildcard::match(sAdminTime, PATTERN_ISO8601);
-    sal_Bool bValidUser  = Wildcard::match(sUserTime , PATTERN_ISO8601);
+    sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);
+    sal_Bool bValidUser  = aISOPattern.Matches(sUserTime );
 
     // We check for "isEnabled()" here only.
     // Note further: ISO8601 formated strings can be compared as strings directly!
