@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:31:25 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -271,6 +274,9 @@ Sequence<OUString> SAL_CALL DrawController::getSupportedServiceNames (void)
 sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
     throw(lang::IllegalArgumentException, RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     sal_Bool bResult = sal_False;
 
     // Forward call to sub-controller of currently active sub-shell.
@@ -287,6 +293,9 @@ sal_Bool SAL_CALL DrawController::select (const Any& aSelection)
 Any SAL_CALL DrawController::getSelection()
     throw(RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Any aSelection;
 
     // Forward call to sub-controller of currently active sub-shell.
@@ -304,6 +313,9 @@ void SAL_CALL DrawController::addSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener)
     throw(RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     addListener(
         ::getCppuType((Reference<view::XSelectionChangeListener>*)0),
         xListener);
@@ -316,6 +328,9 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     const Reference< view::XSelectionChangeListener >& xListener )
     throw(RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     removeListener(
         ::getCppuType((Reference<view::XSelectionChangeListener>*)0),
         xListener);
@@ -389,6 +404,9 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
         throw ( ::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( mbDisposing )
+        throw lang::DisposedException();
 
     static Reference < beans::XPropertySetInfo >  xInfo(
         createPropertySetInfo( getInfoHelper() ) );
@@ -485,6 +503,9 @@ Reference<awt::XWindow> DrawController::getWindow (void)
 
 void SAL_CALL DrawController::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->setPosSize( X, Y, Width, Height, Flags );
@@ -492,6 +513,9 @@ void SAL_CALL DrawController::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Wi
 
 ::com::sun::star::awt::Rectangle SAL_CALL DrawController::getPosSize(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     ::com::sun::star::awt::Rectangle aRect;
 
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
@@ -503,6 +527,9 @@ void SAL_CALL DrawController::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Wi
 
 void SAL_CALL DrawController::setVisible( sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->setVisible( Visible );
@@ -510,6 +537,9 @@ void SAL_CALL DrawController::setVisible( sal_Bool Visible ) throw (::com::sun::
 
 void SAL_CALL DrawController::setEnable( sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->setEnable( Enable );
@@ -517,6 +547,9 @@ void SAL_CALL DrawController::setEnable( sal_Bool Enable ) throw (::com::sun::st
 
 void SAL_CALL DrawController::setFocus(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->setFocus();
@@ -524,6 +557,9 @@ void SAL_CALL DrawController::setFocus(  ) throw (::com::sun::star::uno::Runtime
 
 void SAL_CALL DrawController::addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->addWindowListener( xListener );
@@ -531,6 +567,9 @@ void SAL_CALL DrawController::addWindowListener( const ::com::sun::star::uno::Re
 
 void SAL_CALL DrawController::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removeWindowListener( xListener );
@@ -538,6 +577,9 @@ void SAL_CALL DrawController::removeWindowListener( const ::com::sun::star::uno:
 
 void SAL_CALL DrawController::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->addFocusListener( xListener );
@@ -545,6 +587,9 @@ void SAL_CALL DrawController::addFocusListener( const ::com::sun::star::uno::Ref
 
 void SAL_CALL DrawController::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removeFocusListener( xListener );
@@ -552,6 +597,9 @@ void SAL_CALL DrawController::removeFocusListener( const ::com::sun::star::uno::
 
 void SAL_CALL DrawController::addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->addKeyListener( xListener );
@@ -559,6 +607,9 @@ void SAL_CALL DrawController::addKeyListener( const ::com::sun::star::uno::Refer
 
 void SAL_CALL DrawController::removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removeKeyListener( xListener );
@@ -566,6 +617,9 @@ void SAL_CALL DrawController::removeKeyListener( const ::com::sun::star::uno::Re
 
 void SAL_CALL DrawController::addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->addMouseListener( xListener );
@@ -573,6 +627,9 @@ void SAL_CALL DrawController::addMouseListener( const ::com::sun::star::uno::Ref
 
 void SAL_CALL DrawController::removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removeMouseListener( xListener );
@@ -580,6 +637,9 @@ void SAL_CALL DrawController::removeMouseListener( const ::com::sun::star::uno::
 
 void SAL_CALL DrawController::addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->addMouseMotionListener( xListener );
@@ -587,6 +647,9 @@ void SAL_CALL DrawController::addMouseMotionListener( const ::com::sun::star::un
 
 void SAL_CALL DrawController::removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removeMouseMotionListener( xListener );
@@ -594,6 +657,9 @@ void SAL_CALL DrawController::removeMouseMotionListener( const ::com::sun::star:
 
 void SAL_CALL DrawController::addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->addPaintListener( xListener );
@@ -601,6 +667,9 @@ void SAL_CALL DrawController::addPaintListener( const ::com::sun::star::uno::Ref
 
 void SAL_CALL DrawController::removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    if( mbDisposing )
+        throw lang::DisposedException();
+
     Reference< ::com::sun::star::awt::XWindow > xWindow( getWindow() );
     if( xWindow.is() )
         xWindow->removePaintListener( xListener );
