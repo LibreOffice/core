@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-06 14:12:11 $
+ *  last change: $Author: jsc $ $Date: 2001-01-24 15:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,11 @@ BOOL SVMain()
             delete pObj;
         delete pSVData->mpKeyNames;
     }
+#else
+    // call deinit to deinitialize application class
+    // soffice/sfx implementation disposes the global service manager
+    // Warning: After this call you can't call uno services
+    pSVData->mpApp->DeInit();
 #endif
 
     if ( pSVData->maAppData.mpSettings )
