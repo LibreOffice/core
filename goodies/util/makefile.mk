@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-09 10:15:56 $
+#   last change: $Author: kz $ $Date: 2004-06-11 09:52:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,18 +78,25 @@ LIB1TARGET=$(SLB)$/go.lib
 LIB1FILES=\
     $(SLB)$/base3d.lib	\
     $(SLB)$/base2d.lib	\
-    $(SLB)$/graphic.lib
+    $(SLB)$/graphic.lib \
+    $(SLB)$/unographic.lib	
 
 SHL1TARGET= go$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= igo
 
 SHL1STDLIBS=\
-        $(VCLLIB)		\
-        $(SVLLIB)		\
-        $(UNOTOOLSLIB)	\
-        $(TOOLSLIB)		\
-        $(VOSLIB)		\
-        $(SALLIB)
+        $(VCLLIB)			\
+        $(SVLLIB)			\
+        $(SVTOOLLIB)		\
+        $(UNOTOOLSLIB)		\
+        $(TOOLSLIB)			\
+        $(VOSLIB)			\
+        $(SALLIB)			\
+        $(CPPULIB) 			\
+        $(COMPHELPERLIB) 	\
+        $(UCBHELPERLIB)		\
+        $(CPPUHELPERLIB)		\
+        $(TKLIB)			
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/go.lib
@@ -99,6 +106,7 @@ DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
         $(LIB1TARGET)
 DEF1DES		=Goodies
 DEFLIB1NAME	=go
+DEF1EXPORTFILE	=goodies.dxp
 
 # THB: exports list goodies checked for 6.0 Final 6.12.2001
 # Note: explicit exports only necessary for VCL graphic filters (see there)
@@ -114,9 +122,11 @@ DEFLIB1NAME	=go
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo _Impl>$@
+        @echo _Impl>$@
     @echo WEP>>$@
-    @echo m_pLoader>$@
+        @echo m_pLoader>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
+        @echo CT>>$@
+
 .ENDIF
