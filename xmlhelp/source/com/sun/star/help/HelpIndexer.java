@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HelpIndexer.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 08:37:15 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 14:04:56 $
  *
  *  The Contents of this file are made available subject to tUhe terms of
  *  either of the following licenses
@@ -616,7 +616,15 @@ public class HelpIndexer {
                     _processor.parse(_in);
                     _out.flush();
                 }
-            } catch (Exception e) {
+            } catch ( SAXParseException e ){
+                e.printStackTrace();
+                System.err.println("url: " + url);
+                System.err.println(e.getMessage());
+                System.err.println("Line: "+e.getLineNumber()+" Column: "+e.getColumnNumber()+" public ID: "+e.getPublicId()+" System ID: "+e.getSystemId()  );
+                System.exit(1);
+
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("url: " + url);
                 System.err.println(e.getMessage());
