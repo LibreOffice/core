@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:07:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,96 +69,25 @@ ModalDialog DLG_MULTMRK
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 95 ) ;
-    Text = "Verzeichnismarkierungen" ;
-    Text [ English ] = "Index marks" ;
-    Text [ norwegian ] = "Stikkordregistermerker" ;
-    Text [ italian ] = "Contrassegni indice" ;
-    Text [ portuguese_brazilian ] = "Marcações do índice" ;
-    Text [ portuguese ] = "Marcas do índice" ;
-    Text [ finnish ] = "Hakemiston merkinnät" ;
-    Text [ danish ] = "Indeksmarkeringer" ;
-    Text [ french ] = "Marques d'index" ;
-    Text [ swedish ] = "Förteckningsmarkeringar" ;
-    Text [ dutch ] = "Indexmarkeringen" ;
-    Text [ spanish ] = "Marcas del índice" ;
-    Text [ english_us ] = "Index Markings" ;
+    Text [ de ] = "Verzeichnismarkierungen" ;
+    Text [ en-US ] = "Index Markings" ;
     Moveable = TRUE ;
     FixedLine FL_TOX
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 153 , 8 ) ;
-        Text = "Auswahl" ;
-        Text [ English ] = "Choice" ;
-        Text [ norwegian ] = "Choice" ;
-        Text [ italian ] = "Selezione" ;
-        Text [ portuguese_brazilian ] = "Seleção" ;
-        Text [ portuguese ] = "Selecção" ;
-        Text [ finnish ] = "Valinta" ;
-        Text [ danish ] = "Vælg" ;
-        Text [ french ] = "Sélection" ;
-        Text [ swedish ] = "Urval" ;
-        Text [ dutch ] = "Selectie" ;
-        Text [ spanish ] = "Selección" ;
-        Text [ english_us ] = "Selection" ;
-        Text[ chinese_simplified ] = "é€‰æ‹©";
-        Text[ russian ] = "Âûáîğ";
-        Text[ polish ] = "Wybór";
-        Text[ japanese ] = "é¸æŠ";
-        Text[ chinese_traditional ] = "é¸å–";
-        Text[ arabic ] = "ÊÍÏíÏ";
-        Text[ dutch ] = "Selectie";
-        Text[ chinese_simplified ] = "é€‰æ‹©";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opció";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "VÃ½ber";
-        Text[ hungarian ] = "KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izbor";
+        Text [ de ] = "Auswahl" ;
+        Text [ en-US ] = "Selection" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_ENTRY
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text = "Verzeichnis" ;
-        Text [ English ] = "Index" ;
-        Text [ norwegian ] = "Stikkordregister" ;
-        Text [ italian ] = "Indice" ;
-        Text [ portuguese_brazilian ] = "Índice" ;
-        Text [ portuguese ] = "Índice" ;
-        Text [ finnish ] = "Hakemisto" ;
-        Text [ danish ] = "Indeks" ;
-        Text [ french ] = "Index" ;
-        Text [ swedish ] = "Förteckning" ;
-        Text [ dutch ] = "Index" ;
-        Text [ spanish ] = "Índice" ;
-        Text [ english_us ] = "Index" ;
+        Text [ de ] = "Verzeichnis" ;
+        Text [ en-US ] = "Index" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ç›®å½•";
-        Text[ russian ] = "Óêàçàòåëü";
-        Text[ polish ] = "Indeks";
-        Text[ japanese ] = "ç´¢å¼•";
-        Text[ chinese_traditional ] = "ç›®éŒ„";
-        Text[ arabic ] = "ÇáİåÑÓ";
-        Text[ dutch ] = "Index";
-        Text[ chinese_simplified ] = "ç›®å½•";
-        Text[ greek ] = "ÅõñåôŞñéï";
-        Text[ korean ] = "ìƒ‰ì¸";
-        Text[ turkish ] = "Dizin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Índex";
-        Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
-        Text[ czech ] = "RejstÅ™Ã­k";
-        Text[ hebrew ] = "Verzeichnis";
-        Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾";
-        Text[ slovak ] = "Obsah";
-        Text[ hungarian ] = "JegyzÃ©k";
-        Text[ slovenian ] = "Kazalo";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_TEXT
     {
@@ -170,40 +99,10 @@ ModalDialog DLG_MULTMRK
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text = "Eintrag" ;
-        Text [ English ] = "Entry" ;
-        Text [ norwegian ] = "Inngang" ;
-        Text [ italian ] = "Voce" ;
-        Text [ portuguese_brazilian ] = "Entrada" ;
-        Text [ portuguese ] = "Entrada" ;
-        Text [ finnish ] = "Merkintä" ;
-        Text [ danish ] = "Element" ;
-        Text [ french ] = "Entrée" ;
-        Text [ swedish ] = "Post" ;
-        Text [ dutch ] = "Item" ;
-        Text [ spanish ] = "Entrada" ;
-        Text [ english_us ] = "Entry" ;
+        Text [ de ] = "Eintrag" ;
+        Text [ en-US ] = "Entry" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "æ¡ç›®";
-        Text[ russian ] = "İëåìåíò";
-        Text[ polish ] = "Wpis";
-        Text[ japanese ] = "é …ç›®";
-        Text[ chinese_traditional ] = "æ¢ç›®";
-        Text[ arabic ] = "ÇáÅÏÎÇá";
-        Text[ dutch ] = "Item";
-        Text[ chinese_simplified ] = "æ¡ç›®";
-        Text[ greek ] = "Êáôá÷şñéóç";
-        Text[ korean ] = "í•­ëª©";
-        Text[ turkish ] = "Giriş";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Entrada";
-        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "PoloÅ¾ka";
-        Text[ hebrew ] = "â€®×©×•×¨×”â€¬";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿";
-        Text[ slovak ] = "PoloÅ¾ka";
-        Text[ hungarian ] = "BejegyzÃ©s";
-        Text[ slovenian ] = "Vnos";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_TOX
     {
@@ -226,26 +125,7 @@ ModalDialog DLG_MULTMRK
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "ç›®å½•æ ‡è®°";
-    Text[ russian ] = "Îòìåòêè óêàçàòåëÿ";
-    Text[ polish ] = "Znaczniki indeksu";
-    Text[ japanese ] = "ç™»éŒ²é …ç›®";
-    Text[ chinese_traditional ] = "ç›®éŒ„æ¨™è¨˜";
-    Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
-    Text[ dutch ] = "Indexmarkeringen";
-    Text[ chinese_simplified ] = "ç›®å½•æ ‡è®°";
-    Text[ greek ] = "ÓçìÜíóåéò åõñåôçñßïõ";
-    Text[ korean ] = "ìƒ‰ì¸ í‘œì‹œ";
-    Text[ turkish ] = "Dizin işaretleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marques de l'índex";
-    Text[ thai ] = "à¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¸”à¸±à¸Šà¸™à¸µ";
-    Text[ czech ] = "ZnaÄky rejstÅ™Ã­ku";
-    Text[ hebrew ] = "Verzeichnismarkierungen";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤šà¤¿à¤¹à¥à¤¨";
-    Text[ slovak ] = "ZnaÄky obsahu";
-    Text[ hungarian ] = "JegyzÃ©kjelek";
-    Text[ slovenian ] = "Oznake kazala";
+    Text [ x-comment ] = " ";
 };
 
 
