@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dbo $ $Date: 2002-10-21 15:30:34 $
+#   last change: $Author: dbo $ $Date: 2002-12-06 16:40:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,10 +94,12 @@ UNOTYPES= \
         com.sun.star.loader.XImplementationLoader	\
         com.sun.star.registry.XRegistryKey			\
         com.sun.star.registry.XSimpleRegistry			\
+        com.sun.star.beans.XPropertySet				\
         com.sun.star.lang.IllegalArgumentException	\
         com.sun.star.lang.XTypeProvider				\
         com.sun.star.lang.XServiceInfo				\
         com.sun.star.lang.XMultiServiceFactory		\
+        com.sun.star.lang.XMultiComponentFactory		\
         com.sun.star.lang.XSingleServiceFactory		\
             com.sun.star.lang.XSingleComponentFactory   \
         com.sun.star.uno.TypeClass					\
@@ -113,8 +115,10 @@ SLOFILES= \
 SHL1TARGET=	$(TARGET)
 
 SHL1STDLIBS= \
-        $(CPPULIB)		\
+        $(JVMACCESSLIB)		\
+        $(SALHELPERLIB)		\
         $(CPPUHELPERLIB)	\
+        $(CPPULIB)		\
         $(SALLIB)
 
 SHL1DEPN=

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibraryLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-01-22 10:52:07 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
 
 /**
+ * @deprecated use class Bootstrap bootstrapping a native UNO installation
+ *             and use the shared library loader service.
+ *
  * The <code>SharedLibraryLoader</code> class provides the functionality of the <code>com.sun.star.loader.SharedLibrary</code>
  * service.
  * <p>

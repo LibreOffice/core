@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-14 16:31:02 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,52 +59,122 @@
  *
  ************************************************************************/
 
-#include <osl/diagnose.h>
-#include <rtl/alloc.h>
-#include <rtl/bootstrap.hxx>
-#include <rtl/string.hxx>
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
 
-#include <uno/mapping.hxx>
-#include <cppuhelper/bootstrap.hxx>
+#include "rtl/alloc.h"
+#include "rtl/bootstrap.hxx"
+#include "rtl/string.hxx"
 
-#include "jvm_uno_helper.h"
+#include "uno/mapping.hxx"
+#include "uno/environment.hxx"
+
+#include "cppuhelper/bootstrap.hxx"
+#include "cppuhelper/compbase1.hxx"
+#include "cppuhelper/component_context.hxx"
+
+#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+
+#include "jni.h"
+#include "jvmaccess/virtualmachine.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
-using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::jvm_uno_helper;
+using ::rtl::OString;
+using ::rtl::OUString;
 
-namespace jvm_uno_helper
+namespace javaunohelper
 {
+struct MutexHolder
+{
+    ::osl::Mutex m_mutex;
+};
+typedef ::cppu::WeakComponentImplHelper1< lang::XSingleComponentFactory > t_impl;
+
 //==================================================================================================
-void get_java_env( Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () )
+class SingletonFactory : public MutexHolder, public t_impl
 {
-    OUString java_env_name = OUSTR(UNO_LB_JAVA);
+    ::rtl::Reference< ::jvmaccess::VirtualMachine > m_vm_access;
 
-    uno_Environment ** java_envs;
-    sal_Int32 nSize;
-    uno_getRegisteredEnvironments(
-        &java_envs, &nSize, (uno_memAlloc)rtl_allocateMemory, java_env_name.pData );
-    if (0 < nSize)
-    {
-        java_env->operator = ( java_envs[ 0 ] );
-        while (nSize--)
-        {
-            (*java_envs[ nSize ]->release)( java_envs[ nSize ] );
-        }
-        rtl_freeMemory( java_envs );
-    }
-    else
-    {
-        JavaVM * vm;
-        jni_env->GetJavaVM( &vm );
-        ::JavaVMContext * jvm_context = new JavaVMContext( vm );
-        JVM_registration_guard jvm_guard( jvm_context );
-        uno_getEnvironment( (uno_Environment **)java_env, java_env_name.pData, jvm_context );
-    }
+protected:
+    virtual void SAL_CALL disposing();
+
+public:
+    inline SingletonFactory( ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access )
+        : t_impl( m_mutex ),
+          m_vm_access( vm_access )
+        {}
+
+    // XSingleComponentFactory impl
+    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
+        Reference< XComponentContext > const & xContext )
+        throw (Exception);
+    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+        Sequence< Any > const & args, Reference< XComponentContext > const & xContext )
+        throw (Exception);
+};
+//__________________________________________________________________________________________________
+void SingletonFactory::disposing()
+{
+    m_vm_access.clear();
 }
+//__________________________________________________________________________________________________
+Reference< XInterface > SingletonFactory::createInstanceWithContext(
+    Reference< XComponentContext > const & xContext )
+    throw (Exception)
+{
+    sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
+    Any arg( makeAny( handle ) );
+    OSL_ENSURE( 0, "unexpected: getting vm service using explicit parameters!" );
+    return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        OUSTR("com.sun.star.java.JavaVirtualMachine"), Sequence< Any >( &arg, 1 ), xContext );
+}
+//__________________________________________________________________________________________________
+Reference< XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
+    Sequence< Any > const & args, Reference< XComponentContext > const & xContext )
+    throw (Exception)
+{
+    OSL_ENSURE( 0, "unexpected: getting vm service using explicit parameters!" );
+    return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        OUSTR("com.sun.star.java.JavaVirtualMachine"), args, xContext );
+}
+
+//==================================================================================================
+Reference< XComponentContext > install_vm_singleton(
+    Reference< XComponentContext > const & xContext,
+    ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access )
+{
+    Reference< lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
+    ::cppu::ContextEntry_Init entry(
+        OUSTR("/singletons/com.sun.star.java.theJavaVirtualMachine"), makeAny( xFac ), true );
+    return ::cppu::createComponentContext( &entry, 1, xContext );
+}
+//==================================================================================================
+::rtl::Reference< ::jvmaccess::VirtualMachine > create_vm_access( JNIEnv * jni_env )
+{
+    JavaVM * vm;
+    jni_env->GetJavaVM( &vm );
+    return new ::jvmaccess::VirtualMachine( vm, JNI_VERSION_1_2, false, jni_env );
+}
+
+//==================================================================================================
+inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
+{
+    OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
+    jsize len = jni_env->GetStringLength( jstr );
+    rtl_uString * ustr =
+        (rtl_uString *)rtl_allocateMemory( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) );
+    jni_env->GetStringRegion( jstr, 0, len, ustr->buffer );
+    OSL_ASSERT( JNI_FALSE == jni_env->ExceptionCheck() );
+    ustr->refCount = 1;
+    ustr->length = len;
+    ustr->buffer[ len ] = '\0';
+    return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
+}
+
 }
 
 //==================================================================================================
@@ -128,7 +198,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
                 }
                 if (0 != jstr)
                 {
-                    OUString name( jstring_to_oustring( jstr, jni_env ) );
+                    OUString name( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
                     // value
                     jstr = (jstring)jni_env->GetObjectArrayElement( jpairs, nPos +1 );
                     if (JNI_FALSE != jni_env->ExceptionCheck())
@@ -139,27 +209,15 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
                     }
                     if (0 != jstr)
                     {
-                        OUString value( jstring_to_oustring( jstr, jni_env ) );
+                        OUString value( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
 
                         // set bootstrap parameter
-                        Bootstrap::set( name, value );
+                        ::rtl::Bootstrap::set( name, value );
                     }
                 }
                 nPos += 2;
             }
         }
-
-        // env
-        OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-        Environment cpp_env, java_env;
-        uno_getEnvironment( (uno_Environment **)&cpp_env, cpp_env_name.pData, 0 );
-        if (! cpp_env.is())
-            throw RuntimeException( OUSTR("cannot get cpp env!"), Reference< XInterface >() );
-        get_java_env( &java_env, jni_env );
-        if (! java_env.is())
-            throw RuntimeException( OUSTR("cannot get java env!"), Reference< XInterface >() );
-        // register before doing any complex uno that may call java (beware of detaching!)
-        JVM_registration_guard jvm_guard( java_env.get() );
 
         // bootstrap uno
         Reference< XComponentContext > xContext;
@@ -169,14 +227,30 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         }
         else
         {
-            OUString uno_rc( jstring_to_oustring( juno_rc, jni_env ) );
+            OUString uno_rc( ::javaunohelper::jstring_to_oustring( juno_rc, jni_env ) );
             xContext = ::cppu::defaultBootstrap_InitialComponentContext( uno_rc );
         }
+
+        // create vm access
+        ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
+            ::javaunohelper::create_vm_access( jni_env ) );
+        // wrap vm singleton entry
+        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
+
+        // get uno envs
+        OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+        OUString java_env_name = OUSTR(UNO_LB_JAVA);
+        Environment java_env, cpp_env;
+        uno_getEnvironment((uno_Environment **)&cpp_env, cpp_env_name.pData, NULL);
+        uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
         // map to java
         Mapping mapping( cpp_env.get(), java_env.get() );
         if (! mapping.is())
         {
+            Reference< lang::XComponent > xComp( xContext, UNO_QUERY );
+            if (xComp.is())
+                xComp->dispose();
             throw RuntimeException(
                 OUSTR("cannot get mapping C++ <-> Java!"),
                 Reference< XInterface >() );
@@ -193,7 +267,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
         if (0 != c)
         {
-            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString cstr( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( __FILE__": forwarding RuntimeException: %s", cstr.getStr() );
             jni_env->ThrowNew( c, cstr.getStr() );
         }
@@ -203,7 +277,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
         if (0 != c)
         {
-            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString cstr( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             jni_env->ThrowNew( c, cstr.getStr() );
         }

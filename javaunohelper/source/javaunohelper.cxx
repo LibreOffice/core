@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-14 15:29:55 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,41 @@
 #include <osl/diagnose.h>
 #include <osl/module.h>
 
+#include <uno/environment.hxx>
 #include <uno/mapping.hxx>
 
-#include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/component_context.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-#include "jvm_uno_helper.h"
+#include "jni.h"
+#include "jvmaccess/virtualmachine.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::cppu;
-using namespace ::rtl;
-using namespace ::jvm_uno_helper;
+using ::rtl::OString;
+using ::rtl::OUString;
+
+namespace javaunohelper
+{
+
+//==================================================================================================
+Reference< XComponentContext > install_vm_singleton(
+    Reference< XComponentContext > const & xContext,
+    ::rtl::Reference< ::jvmaccess::VirtualMachine > const & vm_access );
+//==================================================================================================
+::rtl::Reference< ::jvmaccess::VirtualMachine > create_vm_access( JNIEnv * jni_env );
+
+}
+
 
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader
@@ -116,8 +132,13 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
                 uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
             }
-            get_java_env( &java_env, pJEnv );
-            JVM_registration_guard jvm_guard( java_env.get() );
+
+            // create vm access
+            ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
+                ::javaunohelper::create_vm_access( pJEnv ) );
+            OUString java_env_name = OUSTR(UNO_LB_JAVA);
+            uno_getEnvironment(
+                (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
             OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
             if (pSym = osl_getSymbol( lib, aWriteInfoName.pData ))
@@ -191,8 +212,13 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                 OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
                 uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
             }
-            get_java_env( &java_env, pJEnv );
-            JVM_registration_guard jvm_guard( java_env.get() );
+
+            // create vm access
+            ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
+                ::javaunohelper::create_vm_access( pJEnv ) );
+            OUString java_env_name = OUSTR(UNO_LB_JAVA);
+            uno_getEnvironment(
+                (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
             if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
@@ -274,17 +300,31 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
             pJEnv->ReleaseStringChars(jWriteRegFile, pjWriteRegFile);
         }
 
+        // bootstrap
         Reference< lang::XMultiServiceFactory > rMSFac;
         if (aReadRegFile.getLength() == 0)
-            rMSFac = createRegistryServiceFactory( aWriteRegFile, bReadOnly);
+            rMSFac = ::cppu::createRegistryServiceFactory( aWriteRegFile, bReadOnly);
         else
-            rMSFac = createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
+            rMSFac = ::cppu::createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
 
-        Environment java_env, curr_env;
+        Reference< beans::XPropertySet > xProps(
+            rMSFac, UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext(
+            xProps->getPropertyValue( OUSTR("DefaultContext") ), UNO_QUERY_THROW );
+
+        // create vm access
+        ::rtl::Reference< ::jvmaccess::VirtualMachine > vm_access(
+            ::javaunohelper::create_vm_access( pJEnv ) );
+        // wrap vm singleton entry
+        xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
+        rMSFac.set( xContext->getServiceManager(), UNO_QUERY_THROW );
+
+        // get uno envs
         OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+        OUString java_env_name = OUSTR(UNO_LB_JAVA);
+        Environment java_env, curr_env;
         uno_getEnvironment((uno_Environment **)&curr_env, aCurrentEnv.pData, NULL);
-        get_java_env( &java_env, pJEnv );
-        JVM_registration_guard jvm_guard( java_env.get() );
+        uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
         Mapping curr_java(curr_env.get(), java_env.get());
         if (! curr_java.is())
@@ -305,7 +345,7 @@ Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactor
         jclass c = pJEnv->FindClass( "com/sun/star/uno/RuntimeException" );
         if (0 != c)
         {
-            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString cstr( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             pJEnv->ThrowNew( c, cstr.getStr() );
         }

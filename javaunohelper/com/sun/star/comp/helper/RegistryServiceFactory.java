@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceFactory.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2002-01-22 10:50:35 $
+ *  last change: $Author: dbo $ $Date: 2002-12-06 16:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ import com.sun.star.uno.RuntimeException;
 
 /** The class provides a set of methods which create instances of the
     com.sun.star.lang.RegistryServiceManager service.
+
+    @deprecated use class Bootstrap instead
 */
 public class RegistryServiceFactory {
     static {
