@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:35:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ dutch ] = "Tweede overzichtsniveau";
     Text[ chinese_simplified ] = "µΪ¶ώΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Δεύτερο επίπεδο διάρθρωσης";
-    Text[ korean ] = "2ΉψΒ°΅΅΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "2ΉψΒ°΅΅΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "έkinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segundo nivel del esquema";
@@ -433,7 +433,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ dutch ] = "Derde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΘύΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Τρίτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "3ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "3ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "άηόncό anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tercer nivel del esquema";
@@ -462,7 +462,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ dutch ] = "Vierde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΛΔΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Τέταρτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "4ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "4ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "Dφrdόncό anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cuarto nivel del esquema";
@@ -492,7 +492,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ dutch ] = "Vijfde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΞεΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Πέμπτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "5ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "5ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "Beώinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quinto nivel del esquema";
@@ -521,7 +521,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ dutch ] = "Zesde overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΑωΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Έκτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "6ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "6ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "Altύncύ anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sexto nivel del esquema";
@@ -550,7 +550,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ dutch ] = "Zevende overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΖίΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Έβδομο επίπεδο διάρθρωσης";
-    Text[ korean ] = "7ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "7ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "Yedinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sιptimo nivel del esquema";
@@ -579,7 +579,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ dutch ] = "Achtste overzichtsniveau";
     Text[ chinese_simplified ] = "µΪ°ΛΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Όγδοο επίπεδο διάρθρωσης";
-    Text[ korean ] = "8ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "8ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "Sekizinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Octavo nivel del esquema";
@@ -608,7 +608,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ dutch ] = "Negende overzichtsniveau";
     Text[ chinese_simplified ] = "µΪΎΕΈφ΄σΈΩΌ¶";
     Text[ greek ] = "Ένατο επίπεδο διάρθρωσης";
-    Text[ korean ] = "9ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ  ";
+    Text[ korean ] = "9ΉψΒ°  ΄Ω΄ά°θ΅΅΄ά°θ";
     Text[ turkish ] = "Dokuzuncu anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Noveno nivel del esquema";
@@ -2108,4 +2108,5 @@ String STR_POOLSHEET_ARROW
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arrow";
 };
+
 
