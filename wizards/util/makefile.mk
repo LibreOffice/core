@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mh $ $Date: 2001-11-28 12:40:12 $
+#   last change: $Author: kz $ $Date: 2002-01-07 10:55:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,8 @@ all : $(SRS)$/hidother.hid ALLTAR
 
 .ENDIF
 .ENDIF
+
+$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 
 $(SRS)$/hidother.hid: hidother.src
     +mhids hidother.src ..$/$(INPATH)$/srs wizards hidother
