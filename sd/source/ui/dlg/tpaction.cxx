@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:11:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX //autogen
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -237,10 +240,12 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
         aFtAction       ( this, SdResId( FT_ACTION ) ),
         aLbAction       ( this, SdResId( LB_ACTION ) ),
+        aEdtSound       ( this, SdResId( EDT_SOUND ) ),
         aBtnSearch      ( this, SdResId( BTN_SEARCH ) ),
         aFtTree         ( this, SdResId( FT_TREE ) ),
         aLbTree         ( this, SdResId( LB_TREE ) ),
         aLbTreeDocument ( this, SdResId( LB_TREE_DOCUMENT ) ),
+        aLbOLEAction    ( this, SdResId( LB_OLE_ACTION ) ),
         aFlSeparator    ( this, SdResId( FL_SEPARATOR ) ),
         aEdtBookmark    ( this, SdResId( EDT_BOOKMARK ) ),
         aEdtDocument    ( this, SdResId( EDT_DOCUMENT ) ),
@@ -260,25 +265,6 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
-
-    pCurrentActions = new List;
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NONE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PREVPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_LASTPAGE, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_BOOKMARK, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_DOCUMENT, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PROGRAM, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_MACRO, LIST_APPEND);
-    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
-
-    // Action-Listbox fuellen
-    for (ULONG nAction = 0; nAction < pCurrentActions->Count(); nAction++)
-    {
-        USHORT nRId = GetClickActionSdResId((presentation::ClickAction)(ULONG)pCurrentActions->GetObject(nAction));
-        aLbAction.InsertEntry( String( SdResId( nRId ) ) );
-    }
 
     aLbAction.SetSelectHdl( LINK( this, SdTPAction, ClickActionHdl ) );
     aLbTree.SetSelectHdl( LINK( this, SdTPAction, SelectTreeHdl ) );
@@ -322,6 +308,99 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
 
 void SdTPAction::Construct()
 {
+    // OLE-Actionlistbox auffuellen
+    SdrOle2Obj* pOleObj = NULL;
+    SdrGrafObj* pGrafObj = NULL;
+    BOOL        bDisableAll = FALSE;
+    BOOL        bOLEAction = FALSE;
+
+    if ( pView->AreObjectsMarked() )
+    {
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        SdrObject* pObj;
+
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            SdrMark* pMark = rMarkList.GetMark(0);
+            pObj = pMark->GetObj();
+
+            UINT32 nInv = pObj->GetObjInventor();
+            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+
+            if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
+            {
+                pOleObj = (SdrOle2Obj*) pObj;
+            }
+            else if (nInv == SdrInventor && nSdrObjKind == OBJ_GRAF)
+            {
+                pGrafObj = (SdrGrafObj*) pObj;
+            }
+//          // VCXControl ?
+//          else if( pObj->IsA( TYPE( VCSbxDrawObject ) ) )
+//          {
+//              bDisableAll = TRUE;
+//          }
+        }
+    }
+    if( pGrafObj )
+    {
+        bOLEAction = TRUE;
+
+        aVerbVector.push_back( 0 );
+        aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( String( SdResId( STR_EDIT_OBJ ) ) ) );
+    }
+    else if( pOleObj )
+    {
+        uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+        if ( xObj.is() )
+        {
+            bOLEAction = TRUE;
+            uno::Sequence < embed::VerbDescriptor > aVerbs;
+            try
+            {
+                aVerbs = xObj->getSupportedVerbs();
+            }
+            catch ( embed::NeedsRunningStateException& )
+            {
+                xObj->changeState( embed::EmbedStates::RUNNING );
+                aVerbs = xObj->getSupportedVerbs();
+            }
+
+            for( sal_Int32 i=0; i<aVerbs.getLength(); i++ )
+            {
+                embed::VerbDescriptor aVerb = aVerbs[i];
+                if( aVerb.VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU )
+                {
+                    String aTmp( aVerb.VerbName );
+                    aVerbVector.push_back( aVerb.VerbID );
+                    aLbOLEAction.InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( aTmp ) );
+                }
+            }
+        }
+    }
+
+    pCurrentActions = new List;
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NONE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PREVPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NEXTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_FIRSTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_LASTPAGE, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_BOOKMARK, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_DOCUMENT, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_SOUND, LIST_APPEND);
+    if( bOLEAction && aLbOLEAction.GetEntryCount() )
+        pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_VERB, LIST_APPEND );
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PROGRAM, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_MACRO, LIST_APPEND);
+    pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_STOPPRESENTATION, LIST_APPEND);
+
+    // Action-Listbox fuellen
+    for (ULONG nAction = 0; nAction < pCurrentActions->Count(); nAction++)
+    {
+        USHORT nRId = GetClickActionSdResId((presentation::ClickAction)(ULONG)pCurrentActions->GetObject(nAction));
+        aLbAction.InsertEntry( String( SdResId( nRId ) ) );
+    }
+
 }
 
 // -----------------------------------------------------------------------
@@ -348,7 +427,8 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
     else
     {
         String aBaseURL = pDoc->GetDocSh()->GetMedium()->GetBaseURL();
-        if( eCA == presentation::ClickAction_DOCUMENT ||
+        if( eCA == presentation::ClickAction_SOUND ||
+            eCA == presentation::ClickAction_DOCUMENT ||
             eCA == presentation::ClickAction_PROGRAM )
             aFileName = ::URIHelper::SmartRel2Abs( INetURLObject(aBaseURL), aFileName, URIHelper::GetMaybeFileHdl(), true, false,
                                                     INetURLObject::WAS_ENCODED,
@@ -378,6 +458,13 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     else
         aLbAction.SetNoSelection();
 
+    // aEdtSound
+    if( rAttrs.GetItemState( ATTR_ACTION_FILENAME ) != SFX_ITEM_DONTCARE )
+    {
+            aFileName = ( ( const SfxStringItem& ) rAttrs.Get( ATTR_ACTION_FILENAME ) ).GetValue();
+            SetEditText( aFileName );
+    }
+
     switch( eCA )
     {
         case presentation::ClickAction_BOOKMARK:
@@ -400,6 +487,7 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     ClickActionHdl( this );
 
     aLbAction.SaveValue();
+    aEdtSound.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -451,6 +539,7 @@ void SdTPAction::OpenFileDialog()
 {
     // Soundpreview nur fuer Interaktionen mit Sound
     presentation::ClickAction eCA = GetActualClickAction();
+    BOOL bSound = ( eCA == presentation::ClickAction_SOUND );
     BOOL bPage = ( eCA == presentation::ClickAction_BOOKMARK );
     BOOL bDocument = ( eCA == presentation::ClickAction_DOCUMENT ||
                        eCA == presentation::ClickAction_PROGRAM );
@@ -465,7 +554,22 @@ void SdTPAction::OpenFileDialog()
     {
         String aFile( GetEditText() );
 
-        if (bMacro)
+        if (bSound)
+        {
+            SdOpenSoundFileDialog   aFileDialog;
+
+            if( !aFile.Len() )
+                aFile = SvtPathOptions().GetGraphicPath();
+
+            aFileDialog.SetPath( aFile );
+
+            if( aFileDialog.Execute() == ERRCODE_NONE )
+            {
+                aFile = aFileDialog.GetPath();
+                SetEditText( aFile );
+            }
+        }
+        else if (bMacro)
         {
             Window* pOldWin = Application::GetDefDialogParent();
             Application::SetDefDialogParent( this );
@@ -538,8 +642,10 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aFtTree.Hide();
             aLbTree.Hide();
             aLbTreeDocument.Hide();
+            aLbOLEAction.Hide();
 
             aFlSeparator.Hide();
+            aEdtSound.Hide();
             aEdtBookmark.Hide();
             aEdtDocument.Hide();
             aEdtProgram.Hide();
@@ -548,20 +654,29 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aBtnSeek.Hide();
             break;
 
+        case presentation::ClickAction_SOUND:
         case presentation::ClickAction_PROGRAM:
         case presentation::ClickAction_MACRO:
             aFtTree.Hide();
             aLbTree.Hide();
             aLbTreeDocument.Hide();
+            aLbOLEAction.Hide();
 
             aEdtDocument.Hide();
 
             if( eCA == presentation::ClickAction_MACRO )
             {
+                aEdtSound.Hide();
                 aEdtProgram.Hide();
             }
             else if( eCA == presentation::ClickAction_PROGRAM )
             {
+                aEdtSound.Hide();
+                aEdtMacro.Hide();
+            }
+            else if( eCA == presentation::ClickAction_SOUND )
+            {
+                aEdtProgram.Hide();
                 aEdtMacro.Hide();
             }
 
@@ -571,7 +686,9 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
 
         case presentation::ClickAction_DOCUMENT:
             aLbTree.Hide();
+            aLbOLEAction.Hide();
 
+            aEdtSound.Hide();
             aEdtProgram.Hide();
             aEdtMacro.Hide();
             aEdtBookmark.Hide();
@@ -580,23 +697,23 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
 
         case presentation::ClickAction_BOOKMARK:
             aLbTreeDocument.Hide();
-
+            aLbOLEAction.Hide();
+            aEdtSound.Hide();
             aEdtDocument.Hide();
             aEdtProgram.Hide();
             aEdtMacro.Hide();
             aBtnSearch.Hide();
             break;
 
-        case presentation::ClickAction_VANISH:
-            aFtTree.Hide();
+        case presentation::ClickAction_VERB:
             aLbTree.Hide();
-            aLbTreeDocument.Hide();
-
-            aFlSeparator.Hide();
-            aEdtBookmark.Hide();
             aEdtDocument.Hide();
             aEdtProgram.Hide();
+            aEdtBookmark.Hide();
             aEdtMacro.Hide();
+            aBtnSearch.Hide();
+            aFlSeparator.Hide();
+            aEdtSound.Hide();
             aBtnSeek.Hide();
             break;
     }
@@ -612,6 +729,15 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
         case presentation::ClickAction_LASTPAGE:
         case presentation::ClickAction_STOPPRESENTATION:
             // none
+            break;
+
+        case presentation::ClickAction_SOUND:
+            aFlSeparator.Show();
+            aEdtSound.Show();
+            aEdtSound.Enable();
+            aBtnSearch.Show();
+            aBtnSearch.Enable();
+            aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_SOUND ) ) );
             break;
 
         case presentation::ClickAction_PROGRAM:
@@ -644,6 +770,13 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aFlSeparator.SetText( String( SdResId( STR_EFFECTDLG_DOCUMENT ) ) );
 
             CheckFileHdl( NULL );
+            break;
+
+        case presentation::ClickAction_VERB:
+            aFtTree.Show();
+            aLbOLEAction.Show();
+
+            aFtTree.SetText( String( SdResId( STR_EFFECTDLG_ACTION ) ) );
             break;
 
         case presentation::ClickAction_BOOKMARK:
@@ -758,6 +891,8 @@ void SdTPAction::SetEditText( String const & rStr )
             if( rStr.GetTokenCount( DOCUMENT_TOKEN ) == 2 )
                 aText = rStr.GetToken( 0, DOCUMENT_TOKEN );
 
+            // fallthrough inteded
+        case presentation::ClickAction_SOUND:
         case presentation::ClickAction_PROGRAM:
             INetURLObject aURL( aText );
 
@@ -772,6 +907,16 @@ void SdTPAction::SetEditText( String const & rStr )
     // set the string to the corresponding control
     switch( eCA )
     {
+        case presentation::ClickAction_SOUND:
+            aEdtSound.SetText(aText );
+            break;
+        case presentation::ClickAction_VERB:
+            {
+                ::std::vector< long >::iterator aFound( ::std::find( aVerbVector.begin(), aVerbVector.end(), rStr.ToInt32() ) );
+                if( aFound != aVerbVector.end() )
+                    aLbOLEAction.SelectEntryPos( static_cast< short >( aFound - aVerbVector.begin() ) );
+            }
+            break;
         case presentation::ClickAction_PROGRAM:
             aEdtProgram.SetText( aText );
             break;
@@ -827,6 +972,16 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
 
     switch( eCA )
     {
+        case presentation::ClickAction_SOUND:
+            aStr = aEdtSound.GetText();
+            break;
+        case presentation::ClickAction_VERB:
+            {
+                const USHORT nPos = aLbOLEAction.GetSelectEntryPos();
+                if( nPos < aVerbVector.size() )
+                    aStr = UniString::CreateFromInt32( aVerbVector[ nPos ] );
+                return aStr;
+            }
         case presentation::ClickAction_DOCUMENT:
             aStr = aEdtDocument.GetText();
             break;
@@ -885,6 +1040,8 @@ USHORT SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_DOCUMENT:         return STR_CLICK_ACTION_DOCUMENT;
         case presentation::ClickAction_PROGRAM:          return STR_CLICK_ACTION_PROGRAM;
         case presentation::ClickAction_MACRO:            return STR_CLICK_ACTION_MACRO;
+        case presentation::ClickAction_SOUND:            return STR_CLICK_ACTION_SOUND;
+        case presentation::ClickAction_VERB:             return STR_CLICK_ACTION_VERB;
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
         default: DBG_ERROR( "Keine StringResource fuer ClickAction vorhanden!" );
     }
