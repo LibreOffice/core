@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,6 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
 }
 
 void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(uno::RuntimeException)
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
         VOS_DEBUG_ONLY("Invalid parameters to Deflater::setInputSegment!");
@@ -205,14 +204,12 @@ void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffe
     nLength = nNewLength;
 }
 void SAL_CALL Deflater::setInput( const uno::Sequence< sal_Int8 >& rBuffer )
-        throw(uno::RuntimeException)
 {
     sInBuffer = rBuffer;
     nOffset = 0;
     nLength = rBuffer.getLength();
 }
 void SAL_CALL Deflater::setDictionarySegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(uno::RuntimeException)
 {
     if (pStream == NULL)
     {
@@ -226,7 +223,6 @@ void SAL_CALL Deflater::setDictionarySegment( const uno::Sequence< sal_Int8 >& r
     sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray()+nOffset, nLength);
 }
 void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer )
-        throw(uno::RuntimeException)
 {
     if (pStream == NULL)
     {
@@ -237,7 +233,6 @@ void SAL_CALL Deflater::setDictionary( const uno::Sequence< sal_Int8 >& rBuffer 
     sal_Int32 nResult = z_deflateSetDictionary(pStream, (const unsigned char*)rBuffer.getConstArray(), rBuffer.getLength());
 }
 void SAL_CALL Deflater::setStrategy( sal_Int32 nNewStrategy )
-        throw(uno::RuntimeException)
 {
     if (nNewStrategy != DEFAULT_STRATEGY &&
         nNewStrategy != FILTERED &&
@@ -252,7 +247,6 @@ void SAL_CALL Deflater::setStrategy( sal_Int32 nNewStrategy )
     }
 }
 void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
-        throw(uno::RuntimeException)
 {
     if ((nNewLevel < 0 || nNewLevel > 9) && nNewLevel != DEFAULT_COMPRESSION)
     {
@@ -265,50 +259,41 @@ void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
     }
 }
 sal_Bool SAL_CALL Deflater::needsInput(  )
-        throw(uno::RuntimeException)
 {
     return nLength <=0;
 }
 void SAL_CALL Deflater::finish(  )
-        throw(uno::RuntimeException)
 {
     bFinish = sal_True;
 }
 sal_Bool SAL_CALL Deflater::finished(  )
-        throw(uno::RuntimeException)
 {
     return bFinished;
 }
 sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(uno::RuntimeException)
 {
     if (nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength())
         VOS_DEBUG_ONLY("Invalid Offset or Length passed to doDeflateSegment");
     return doDeflateBytes(rBuffer, nNewOffset, nNewLength);
 }
 sal_Int32 SAL_CALL Deflater::doDeflate( uno::Sequence< sal_Int8 >& rBuffer )
-    throw(uno::RuntimeException)
 {
     return doDeflateBytes(rBuffer, 0, rBuffer.getLength());
 }
 
 sal_Int32 SAL_CALL Deflater::getAdler(  )
-        throw(uno::RuntimeException)
 {
     return pStream->adler;
 }
 sal_Int32 SAL_CALL Deflater::getTotalIn(  )
-        throw(uno::RuntimeException)
 {
     return pStream->total_in;
 }
 sal_Int32 SAL_CALL Deflater::getTotalOut(  )
-        throw(uno::RuntimeException)
 {
     return pStream->total_out;
 }
 void SAL_CALL Deflater::reset(  )
-        throw(uno::RuntimeException)
 {
     z_deflateReset(pStream);
     bFinish = sal_False;
@@ -316,7 +301,6 @@ void SAL_CALL Deflater::reset(  )
     nOffset = nLength = 0;
 }
 void SAL_CALL Deflater::end(  )
-        throw(uno::RuntimeException)
 {
     if (pStream != NULL)
     {
