@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 14:46:30 $
+ *  last change: $Author: sj $ $Date: 2002-03-25 17:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3755,7 +3755,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 case PPT_PST_MasterText :   // first seen in: ms-tt02.ppt
                 case PPT_PST_SrKinsoku :
                 case PPT_PST_NewlyAddedAtom4016 :
-                case PPT_PST_NewlyAddedAtomByPPT2000 :
+                case PPT_PST_NewlyAddedAtomByPPT2000_6010 :
+                case PPT_PST_NewlyAddedAtomByPPT2000_6011 :
                 case PPT_PST_NewlyAddedAtomByXP1037 :
                 case PPT_PST_NewlyAddedAtomByXP12004 :
                 case PPT_PST_NewlyAddedAtomByXP14001 :
