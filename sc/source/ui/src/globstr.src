@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:45:40 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2691,7 +2691,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οεπεκπϋςθε ξαϊεδθνεννϋυ ÿχεεκ νεδξοσρςθμξ!";
         Text[ polish ] = "Nak³adanie scalonach komσrek jest niedopuszczalne!";
         Text[ japanese ] = "“‡‚µ‚½‚ΰ‚Μ‚Νd‚Λ‚η‚κ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "¤£®e³\\½Ζ¦X¦X¨Φ΅I";
+        Text[ chinese_traditional ] = "¤£¤Ή³\\½Ζ¦X¦X¨Φ΅I";
         Text[ arabic ] = "γγδζΪ ΚΡΗίΘ ΗαΞαΗνΗ ΗαγΟγΜΙ!";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει συγχώνευση κελιών τα οποία είναι ήδη συγχωνευμένα!";
         Text[ korean ] = "Ί΄ΗΥ½ΓΏ΅΅΅°γΔ΅Αφ΅΅ΎΚ°Τ!";
@@ -2718,7 +2718,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οεπεκπϋςθε ξαϊεδθνεννϋυ ÿχεεκ νεδξοσρςθμξ!";
         Text[ polish ] = "Nak³adanie scalonych komσrek jest niedopuszczalne!";
         Text[ japanese ] = "“‡‚µ‚½‚ΰ‚Μ‚Νd‚Λ‚η‚κ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "¤£®e³\\½Ζ¦X¦X¨Φ΅I";
+        Text[ chinese_traditional ] = "¤£¤Ή³\\½Ζ¦X¦X¨Φ΅I";
         Text[ arabic ] = "γγδζΪ ΚΡΗίΘ ΗαΞαΗνΗ ΗαγΟγΜΙ!";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει συγχώνευση κελιών τα οποία είναι ήδη συγχωνευμένα!";
         Text[ korean ] = "Ί΄ΗΥ½ΓΏ΅΅΅°γΔ΅Αφ΅΅ΎΚ°Τ!";
@@ -2828,7 +2828,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Οεπεκπϋςθε ξαϊεδθνεννϋυ ÿχεεκ νεδξοσρςθμξ !";
         Text[ polish ] = "Nak³adanie scalonych komσek jest niedopuszczalne!";
         Text[ japanese ] = "“‡‚µ‚½‚ΰ‚Μ‚Νd‚Λ‚η‚κ‚ά‚Ή‚ρB";
-        Text[ chinese_traditional ] = "¤£®e³\\½Ζ¦X¦X¨Φ΅I";
+        Text[ chinese_traditional ] = "¤£¤Ή³\\½Ζ¦X¦X¨Φ΅I";
         Text[ arabic ] = "γγδζΪ ΚΡΗίΘ ΗαΞαΗνΗ ΗαγΟγΜΙ !";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει συγχώνευση κελιών τα οποία είναι ήδη συγχωνευμένα!";
         Text[ korean ] = "Ί΄ΗΥ½ΓΏ΅΅΅°γΔ΅Αφ΅΅ΎΚ°Τ!";
@@ -3020,7 +3020,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³§δ¨μΊλ½TªΊΌΖ­Θ΅C\n";
         Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ήνγΙ γΦΘζΨΙ ΚγΗγΗπ.\n";
         Text[ greek ] = "Δεν ήταν δυνατόν να βρεθεί ακριβής τιμή \n";
-        Text[ korean ] = "Α¤Θ®ΗΡ °ªΐ»΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω. \n";
+        Text[ korean ] = "Α¤Θ®ΗΡ °ªΐ»΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω.\n";
         Text[ turkish ] = "Φzdeώ deπer bulunamadύ.\n";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo encontrar ningϊn valor exacto.\n";
@@ -4339,14 +4339,14 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "#MACRO?" ;
         Text [ spanish ] = "#MACRO?" ;
         Text [ danish ] = "#MACRO?" ;
-        Text [ swedish ] = "#MACRO?" ;
+        Text [ swedish ] = "#MAKRO?" ;
         Text [ finnish ] = "NAME?" ;
         Text [ english_us ] = "#MACRO?" ;
         Text[ chinese_simplified ] = "#Ίκ£Ώ";
         Text[ russian ] = "#MACRO?";
         Text[ polish ] = "#MACRO?";
         Text[ japanese ] = "#MACRO?";
-        Text[ chinese_traditional ] = "#MACRO?";
+        Text[ chinese_traditional ] = "#¥¨¶°?";
         Text[ arabic ] = "#MACRO?";
         Text[ greek ] = "#MACRO?";
         Text[ korean ] = "#MACRO?";
@@ -5914,11 +5914,11 @@ Resource RID_GLOBSTR
         Text [ norwegian ] = "Error: AddIn not found" ;
         Text [ italian ] = "Errore: AddIn non trovato" ;
         Text [ portuguese_brazilian ] = "Error: AddIn not found" ;
-        Text [ portuguese ] = "Error: AddIn not found" ;
+        Text [ portuguese ] = "Erro: Add-in nγo encontrado" ;
         Text [ finnish ] = "Error: AddIn not found" ;
         Text [ danish ] = "Error: AddIn not found" ;
         Text [ french ] = "Erreur : Add-in non dιtectι" ;
-        Text [ swedish ] = "Error: AddIn not found" ;
+        Text [ swedish ] = "Fel: add-in hittades inte" ;
         Text [ dutch ] = "Error: AddIn not found" ;
         Text [ spanish ] = "Error: no se ha encontrado Add-in" ;
         Text [ english_us ] = "Error: Add-in not found" ;
@@ -5926,7 +5926,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξψθακΰ: AddIn νε νΰιδενϋ";
         Text[ polish ] = "B³Ήd: nie znaleziono dodatku Add-in";
         Text[ japanese ] = "΄Χ°: ±Δή²έ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ";
-        Text[ chinese_traditional ] = "Error: AddIn not found";
+        Text[ chinese_traditional ] = "Ώω»~΅G¨S¦³§δ¨μ Add-In";
         Text[ arabic ] = "Error: AddIn not found";
         Text[ greek ] = "Σφάλμα: Δεν βρέθηκε το AddIn";
         Text[ korean ] = "Error: AddIn not found";
@@ -5941,11 +5941,11 @@ Resource RID_GLOBSTR
         Text [ norwegian ] = "Error: Macro not found" ;
         Text [ italian ] = "Errore: macro non trovata" ;
         Text [ portuguese_brazilian ] = "Error: Macro not found" ;
-        Text [ portuguese ] = "Error: Macro not found" ;
+        Text [ portuguese ] = "Erro: Macro nγo encontrada" ;
         Text [ finnish ] = "Error: Macro not found" ;
         Text [ danish ] = "Error: Macro not found" ;
         Text [ french ] = "Erreur : Macro non dιtectιe" ;
-        Text [ swedish ] = "Error: Macro not found" ;
+        Text [ swedish ] = "Fel: makro hittades inte" ;
         Text [ dutch ] = "Error: Macro not found" ;
         Text [ spanish ] = "Error: No se ha encontrado la macro" ;
         Text [ english_us ] = "Error: Macro not found" ;
@@ -5953,7 +5953,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Ξψθακΰ: μΰκπξρ νε νΰιδεν";
         Text[ polish ] = "B³Ήd: nie znaleziono makra";
         Text[ japanese ] = "΄Χ°: ΟΈΫ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ";
-        Text[ chinese_traditional ] = "Error: Macro not found";
+        Text[ chinese_traditional ] = "Ώω»~΅G¨S¦³§δ¨μ¥¨¶°";
         Text[ arabic ] = "Error: Macro not found";
         Text[ greek ] = "Σφάλμα: Δεν βρέθηκε η μακροεντολή";
         Text[ korean ] = "Error: Macro not found";
@@ -6543,7 +6543,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¬°¤F¨Ο¥Ξ¦Ϋ°Κ®ζ¦΅΅A\n±z¥²¶·¦ά¤ΦΏο¨ϊ¤F\n3x3 ¤u§@ªν°Ο°μ΅C";
         Text[ arabic ] = "αίν ΚΣΚΞΟγ ΗαΚδΣνή ΗαΚαήΗΖν΅\nνΜΘ Γδ ΚΝΟΟ δΨΗή έν ΗαΜΟζα αΗ νήα Ϊδ\n3x3 ΞαΗνΗ.";
         Text[ greek ] = "Για να εφαρμοστεί η ΑυτοΜορφή,\nπρέπει να έχει επιλεγεί μια περιοχή ενός πίνακα με κελιά\nδιαστάσεων τουλάχιστον 3χ3.";
-        Text[ korean ] = "ΐΪµΏΌ­½Δΐ» ΐϋΏλΗÒ Όφ ΐΦµµ·Ο ΗΟ±β ΐ§ΗΨΌ­΄Β\nΓΦΌÒΗΡ \n 3x3ΌΏΐΗ Η¥ ΏµΏªΐΜ Ό±ΕΓ Η¥½ΓµΗΎξΎί ΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΪµΏΌ­½Δΐ» ΐϋΏλΗÒ Όφ ΐΦµµ·Ο ΗΟ±β ΐ§ΗΨΌ­΄Β\nΓΦΌÒΗΡ\n3x3ΌΏΐΗ Η¥ ΏµΏªΐΜ Ό±ΕΓ Η¥½ΓµΗΎξΎί ΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "otomatik formatlamayύ kullanabilmek iηin\n en az 3x3 hόcre bόyόklόπόnde bir tablo aralύπύ seηilmiώ olmalύdύr.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Para poder aplicar el AutoFormato\nes necesario marcar un αrea en la tabla\nde por lo menos 3x3 celdas.";
@@ -6570,7 +6570,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "(½Ζ¦XªΊ)";
         Text[ arabic ] = "(ΚΡΗίΘ)";
         Text[ greek ] = "(Αλλεπάλληλη σύνδεση)";
-        Text[ korean ] = "(°γΔ΅°Τ)";
+        Text[ korean ] = " (°γΔ΅°Τ)";
         Text[ turkish ] = "(yuvalanmύώ)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "(en cascada)";
@@ -10169,6 +10169,7 @@ Resource RID_GLOBSTR
     };
 */
 };
+
 
 
 
