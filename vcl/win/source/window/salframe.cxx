@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-14 15:32:34 $
+ *  last change: $Author: ssa $ $Date: 2002-10-14 16:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2508,8 +2508,8 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
-    aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
-    aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
+    aStyleSettings.SetScrollBarSize( std::min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
+    aStyleSettings.SetSpinSize( std::min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
     if ( bCompBorder )
     {
