@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlTimeFieldModel.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:28:34 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,17 @@ published service UnoControlTimeFieldModel
         </pre>
      */
     [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since #i24694#
+     */
+    [optional, property] long BorderColor;
 
     //-------------------------------------------------------------------------
 
@@ -217,6 +228,12 @@ published service UnoControlTimeFieldModel
      */
     [property] long TimeMin;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the selection in the control should be hidden when the control is not
+        active (focused).
+    */
+    [optional, property] boolean HideInactiveSelection;
 };
 
 //=============================================================================
