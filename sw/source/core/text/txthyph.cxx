@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:43:36 $
+ *  last change: $Author: tl $ $Date: 2001-03-29 08:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
                             pBreakIt->GetLocale( pFnt->GetLanguage() ),
-                            rTxt.Len() - nMinTrail,
-                            Sequence< PropertyValue >() );
+                            rTxt.Len() - nMinTrail, GetHyphValues() );
     return xHyphWord;
 
 }
