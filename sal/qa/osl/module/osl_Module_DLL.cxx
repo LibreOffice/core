@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Module_DLL.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-08 13:21:30 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 #include <sal/types.h>
+#include <cppunit/simpleheader.hxx>
 
 extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {
