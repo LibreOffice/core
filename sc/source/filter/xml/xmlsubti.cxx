@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:33:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@
 
 using namespace com::sun::star;
 
-ScMyTableData::ScMyTableData(sal_Int16 nSheet, sal_Int32 nCol, sal_Int32 nRow)
+ScMyTableData::ScMyTableData(sal_Int32 nSheet, sal_Int32 nCol, sal_Int32 nRow)
     :   nColsPerCol(nDefaultColCount, 1),
         nRealCols(nDefaultColCount + 1, 0),
         nRowsPerRow(nDefaultRowCount, 1),
@@ -655,8 +655,8 @@ void ScMyTables::UpdateRowHeights()
     {
         rImport.LockSolarMutex();
         // update automatic row heights
-        sal_Int16 nTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
-        for (sal_Int16 i = 0; i < nTableCount; i++)
+        SCTAB nTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
+        for (SCTAB i = 0; i < nTableCount; i++)
             ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
         rImport.UnlockSolarMutex();
     }
@@ -683,7 +683,7 @@ void ScMyTables::DeleteTable()
     {
         uno::Sequence<sal_Int8> aPass;
         SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-        rImport.GetDocument()->SetTabProtection(nCurrentSheet, bProtection, aPass);
+        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), bProtection, aPass);
         /*uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);
         if (xProtectable.is())
         {
@@ -788,7 +788,7 @@ void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
 }
 
-void ScMyTables::AddMatrixRange(sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn, sal_uInt32 nEndRow)
+void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow)
 {
     DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
     DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
@@ -801,7 +801,7 @@ void ScMyTables::AddMatrixRange(sal_uInt32 nStartColumn, sal_uInt32 nStartRow, s
     aMatrixRangeList.push_back(aRange);
 }
 
-sal_Bool ScMyTables::IsPartOfMatrix(sal_uInt32 nColumn, sal_uInt32 nRow)
+sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
 {
     sal_Bool bResult(sal_False);
     if (!aMatrixRangeList.empty())
