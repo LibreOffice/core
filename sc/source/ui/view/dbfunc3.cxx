@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,8 +631,10 @@ void ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     aObj.SetOutRange( aDestRange );
     aObj.SetSaveData( rData );
 
+    BOOL bAllowMove = ( pDPObj != NULL );   // allow re-positioning when editing existing table
+
     ScDBDocFunc aFunc( *pDocSh );
-    aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE );
+    aFunc.DataPilotUpdate( pDPObj, &aObj, TRUE, FALSE, bAllowMove );
 
     CursorPosChanged();     // shells may be switched
 
