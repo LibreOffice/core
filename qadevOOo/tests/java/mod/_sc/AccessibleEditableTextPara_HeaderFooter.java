@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara_HeaderFooter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-11-02 12:00:53 $
+ *  last change:$Date: 2005-02-24 17:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
         DiagThread psDiag = new DiagThread(xCalcDoc, msf);
         psDiag.start();
 
-        util.utils.shortWait(Param.getInt("ShortWait"));
+        util.utils.shortWait(Param.getInt("ShortWait")*5);
 
         Object atw = tk.getActiveTopWindow();
 
