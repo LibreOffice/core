@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-03 18:16:15 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
     String      aFilterName;
 
-    aMedium.SetTransferPriority( SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC | SFX_TFPRIO_SYNCHRON );
     aMedium.DownLoad();
 
     SvStream* pIStm = aMedium.GetInStream();
