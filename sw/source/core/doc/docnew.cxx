@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:20 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,14 +334,17 @@ SwDoc::SwDoc() :
     nUndoCnt( 0 ),
     nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
-    nLinkUpdMode( GLOBALSETTING ),
-    nFldUpdMode( AUTOUPD_GLOBALSETTING ),
-    eRedlineMode( SwRedlineMode(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) ),
+        eRedlineMode( SwRedlineMode(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) ),
     eChrCmprType( CHARCOMPRESS_NONE ),
-    nLinkCt( 0 ),
-    nLockExpFld( 0 ),
-    bReadlineChecked(sal_False),
-    n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0x06 )
+        nLinkCt( 0 ),
+        nLockExpFld( 0 ),
+        n32Dummy1( 0 ),
+    n32Dummy2( 0 ),
+    n8Dummy1( 0x80 ), // this will throw a compiler warning, because 0x80 doesn't fit in sal_Int8
+    n8Dummy2( 0x06 ),
+    nLinkUpdMode( GLOBALSETTING ),
+     nFldUpdMode( AUTOUPD_GLOBALSETTING ),
+    bReadlineChecked(sal_False)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
@@ -493,6 +496,7 @@ SwDoc::SwDoc() :
     SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
     SetUseFormerObjectPositioning( aOptions.IsUseObjectPositioning() );
     SetUseFormerTextWrapping( aOptions.IsUseOurTextWrapping() );
+    SetConsiderWrapOnObjPos( aOptions.IsConsiderWrappingStyle() );
 
     ResetModified();
 }
