@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userdat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@ public:
     virtual         ~ScIMapInfo();
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
-
-//BFS01 virtual void WriteData( SvStream& rOStm );
-//BFS01 virtual void ReadData( SvStream& rIStm );
 
     void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const             { return aImageMap; }
