@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignature_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:58:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #endif
 
-#ifndef _XMLSECURITYCONTEXT_MSCRYPTIMPL_HXX_
-#include "xmlsecuritycontext_mscryptimpl.hxx"
+#ifndef _SECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
+#include "securityenvironment_mscryptimpl.hxx"
 #endif
 
 #ifndef _XMLSTREAMIO_XMLSECIMPL_HXX_
@@ -120,7 +120,7 @@ XMLSignature_MSCryptImpl :: ~XMLSignature_MSCryptImpl() {
 Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
-    const Reference< XXMLSecurityContext >& aSecurityCtx
+    const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLSignatureException,
          com::sun::star::uno::SecurityException )
 {
@@ -131,7 +131,17 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     if( !aTemplate.is() )
         throw RuntimeException() ;
 
-    if( !aSecurityCtx.is() )
+    if( !aEnvironment.is() )
+        throw RuntimeException() ;
+
+    //Get Keys Manager
+    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
+    if( !xSecTunnel.is() ) {
+         throw RuntimeException() ;
+    }
+
+    SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
+    if( pSecEnv == NULL )
         throw RuntimeException() ;
 
     //Get the xml node
@@ -160,25 +170,19 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
             throw RuntimeException() ;
     }
 
-    //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aSecurityCtx , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
-
-    XMLSecurityContext_MSCryptImpl* pSecCtxt = ( XMLSecurityContext_MSCryptImpl* )xSecTunnel->getSomething( XMLSecurityContext_MSCryptImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-
-    pMngr = pSecCtxt->keysManager() ;
-
      setErrorRecorder( aTemplate );
+
+    pMngr = pSecEnv->createKeysManager() ; //i39448
+    if( !pMngr ) {
+        throw RuntimeException() ;
+    }
 
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
         //throw XMLSignatureException() ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
         clearErrorRecorder();
         return aTemplate;
     }
@@ -186,6 +190,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     //Sign the template
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) < 0 ) {
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
         //Unregistered the stream/URI binding
         if( xUriBinding.is() )
@@ -197,6 +202,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
+    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -223,6 +229,19 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
         throw RuntimeException() ;
 
     if( !aSecurityCtx.is() )
+        throw RuntimeException() ;
+
+    //Get Keys Manager
+    Reference< XSecurityEnvironment > xSecEnv
+        = aSecurityCtx->getSecurityEnvironmentByIndex(
+            aSecurityCtx->getDefaultSecurityEnvironmentIndex());
+    Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY ) ;
+    if( !xSecTunnel.is() ) {
+         throw RuntimeException() ;
+    }
+
+    SecurityEnvironment_MSCryptImpl* pSecEnv = ( SecurityEnvironment_MSCryptImpl* )xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ) ;
+    if( pSecEnv == NULL )
         throw RuntimeException() ;
 
     //Get the xml node
@@ -258,24 +277,18 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     }
     */
 
-    //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aSecurityCtx , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
-
-    XMLSecurityContext_MSCryptImpl* pSecCtxt = ( XMLSecurityContext_MSCryptImpl* )xSecTunnel->getSomething( XMLSecurityContext_MSCryptImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-
-    pMngr = pSecCtxt->keysManager() ;
-
      setErrorRecorder( aTemplate );
+
+    pMngr = pSecEnv->createKeysManager() ; //i39448
+    if( !pMngr ) {
+        throw RuntimeException() ;
+    }
 
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
         //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -284,6 +297,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     //Verify signature
     if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) < 0 ) {
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
         //Unregistered the stream/URI binding
         if( xUriBinding.is() )
@@ -297,6 +311,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     //valid = ( pDsigCtx->status == xmlSecDSigStatusSucceeded ) ;
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
+    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
