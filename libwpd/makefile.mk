@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mmeeks $ $Date: 2004-10-07 14:49:05 $
+#   last change: $Author: kz $ $Date: 2005-03-01 17:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,13 @@ TARGET=wpd
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=libwpd-snap-20040823
-PATCH_FILE_NAME=$(TARFILE_NAME).diff
+.IF "$(SYSTEM_LIBWPD)" == "YES"
+@all:
+    @echo "Using system libwpd..."
+.ENDIF
+
+TARFILE_NAME=libwpd-0.8.0
+#PATCH_FILE_NAME=$(TARFILE_NAME).diff
 BUILD_ACTION=dmake
 BUILD_DIR=src/lib
 
