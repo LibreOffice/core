@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 12:10:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3360,6 +3360,18 @@ namespace pcr
 
             aComplexDependentProperties.push_back( PROPERTY_BOUNDCOLUMN );
             aComplexDependentProperties.push_back( PROPERTY_STRINGITEMLIST );
+
+            // also reset the list entries if the cell range is reset
+            // #i28319# - 2004-04-27 - fs@openoffice.org
+            try
+            {
+                if ( !xSource.is() )
+                    m_xPropValueAccess->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< ::rtl::OUString >() ) );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "OPropertyBrowserController::updateDependentProperties( ListCellRange ): caught an exception while resetting the string items!" );
+            }
         }
         break;
 
