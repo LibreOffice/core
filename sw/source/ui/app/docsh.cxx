@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: jp $ $Date: 2000-10-30 14:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,9 +581,11 @@ BOOL SwDocShell::Save()
     }
     SetError( nErr ? nErr : nVBWarning );
 
-    const SfxStringItem aTmp( SID_DOC_MODIFIED, ' ' );
-    pWrtShell->GetView().GetViewFrame()->GetBindings().SetState( aTmp );
-
+    SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
+    if( pFrm )
+    {
+        pFrm->GetBindings().SetState( SfxStringItem( SID_DOC_MODIFIED, ' ' ));
+    }
     return !IsError( nErr );
 }
 
@@ -1466,6 +1468,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.388  2000/09/18 16:05:10  willem.vandorp
     OpenOffice header added.
 
