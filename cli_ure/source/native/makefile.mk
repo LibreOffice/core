@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 14:37:51 $
+#   last change: $Author: obo $ $Date: 2004-10-18 14:54:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,7 +126,7 @@ UNOTYPES = \
 
 CFLAGS += -clr -AI $(OUT)$/bin
 #see  Microsoft Knowledge Base Article - 814472 
-LINKFLAGS += /NOENTRY /NODEFAULTLIB:nochkclr.obj /INCLUDE:__DllMainCRTStartup@12
+LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
 
 SLOFILES = \
         $(SLO)$/native_bootstrap.obj \
