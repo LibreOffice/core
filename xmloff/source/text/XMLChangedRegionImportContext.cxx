@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: dvo $ $Date: 2001-01-16 10:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmloff/xmluconv.hxx"
+#include "xmluconv.hxx"
 #endif
 
 
