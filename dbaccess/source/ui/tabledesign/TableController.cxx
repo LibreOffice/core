@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:38:17 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 07:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1294,8 +1294,13 @@ void OTableController::alterColumns()
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-        if ( !pField || (*aIter)->IsReadOnly() )
+        if ( !pField )
             continue;
+        if ( (*aIter)->IsReadOnly() )
+        {
+            aColumns[pField->GetName()] = sal_True;
+            continue;
+        }
 
         Reference<XPropertySet> xColumn;
         if ( xColumns->hasByName(pField->GetName()) )
@@ -1467,7 +1472,7 @@ void OTableController::alterColumns()
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-        if(!pField)
+        if ( !pField || (*aIter)->IsReadOnly() )
             continue;
 
         Reference<XPropertySet> xColumn;
