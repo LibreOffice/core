@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.1.1.1 2000-09-22 15:33:25 hr Exp $
+/* RCS  $Id: dmake.h,v 1.2 2004-09-08 16:05:34 rt Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -183,8 +183,9 @@
 #define V_MAKE          0x10
 #define V_FILE_IO       0x20
 #define V_WARNALL       0x40
+#define V_FORCEECHO     0x80
 #define V_ALL           (V_LEAVE_TMP | V_DIR_SET | V_INFER | V_MAKE |\
-                       V_FILE_IO | V_DIR_CACHE | V_WARNALL)
+                       V_FILE_IO | V_DIR_CACHE | V_WARNALL | V_FORCEECHO)
 
 /* Macro definitions for use inside dmake */
 #define SET_TOKEN(A, B)  (A)->tk_str = (B);\
