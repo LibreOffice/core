@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 13:17:15 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:29:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #ifndef _INTERACTION_REQUEST_HXX_
 #include <InteractionRequest.hxx>
 #endif
+#include <memory>
 
 using namespace rtl;
 using namespace ucb;
@@ -131,6 +132,39 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
+
+struct SuffixGenerator
+{
+    sal_Char mpSuffix[30], *mpSuffixMid, *mpSuffixEnd;
+    sal_uInt16 mnDigits;
+    SuffixGenerator(): mnDigits (2), mpSuffixMid ( mpSuffix), mpSuffixEnd ( mpSuffix + 2)
+    {
+        memset ( mpSuffix, 0, 30 );
+        mpSuffixMid[0] = 'a';
+        mpSuffixMid[1] = 'a'; // first generated suffix will be .ab
+    }
+    void generateFileName( OUString &rFileName, const OUString &rPrefix );
+};
+
+void SuffixGenerator::generateFileName( OUString &rFileName, const OUString &rPrefix )
+{
+    // same file prefix, different extension
+    OUStringBuffer aStringBuf;
+    sal_Char *p;
+    for ( p = mpSuffixEnd-1; *p == 'z'; p--)
+        *p = 'a';
+    ++(*p);
+    if (*p == 'z' && p == mpSuffixMid )
+    {
+        ++mnDigits;
+        ++mpSuffixMid;
+        *mpSuffixEnd++ = 'a';
+        *mpSuffixEnd++ = 'a';
+    }
+    aStringBuf.append ( rPrefix );
+    aStringBuf.appendAscii ( mpSuffix );
+    rFileName = aStringBuf.makeStringAndClear();
+}
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 : pContent(NULL)
@@ -164,7 +198,7 @@ ZipPackage::~ZipPackage( void )
 
 void ZipPackage::getZipFileContents()
 {
-    ZipEnumeration *pEnum = pZipFile->entries();
+    auto_ptr < ZipEnumeration > pEnum ( pZipFile->entries() );
     Reference< XNameContainer > xCurrent;
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder;
@@ -367,10 +401,10 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             const sal_Int8 *pSeq = aSequence.getConstArray();
             if (pSeq[0] == 'P' &&
                 pSeq[1] == 'K' &&
-                pSeq[2] == '7' &&
-                pSeq[3] == '8' )
+                pSeq[2] == 7 &&
+                pSeq[3] == 8 )
                 bSpanned = sal_True;
-        }
+       }
         else
             bHaveZipFile = sal_False;
     }
@@ -385,12 +419,13 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     {
         try
         {
-            /*
             if ( bSpanned)
+            {
+                xContentStream = unSpanFile ( xContentStream );
                 pZipFile = new ZipFile ( xContentStream, sURL );
+            }
             else
-            */
-            pZipFile = new ZipFile ( xContentStream, sal_True);
+                pZipFile = new ZipFile ( xContentStream, sal_True);
             getZipFileContents();
         }
         catch ( IOException & )
@@ -607,7 +642,7 @@ char * ImplGetChars( const OUString & rString )
     // and no longer
     sal_Int32 nLength = rString.getLength();
     const sal_Unicode *pString = rString.getStr();
-    char * pChar = new char [nLength];
+    char * pChar = new char [nLength+1];
     for ( sal_Int16 i = 0; i < nLength; i++ )
     {
         pChar[i] = static_cast < char > (pString[i]);
@@ -620,7 +655,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
 {
     ThreadedBuffer *pBuffer;
-    Reference < XOutputStream > xOutBuffer = (pBuffer = new ThreadedBuffer ( n_ConstBufferSize, nSegmentSize, *this ));
+    Reference < XOutputStream > xOutBuffer = (pBuffer = new ThreadedBuffer ( n_ConstBufferSize, *this ));
     Reference < XInputStream > xInBuffer ( pBuffer );
     ZipOutputStream aZipOut ( xOutBuffer, nSegmentSize != 0);
     pBuffer->setZipOutputStream ( aZipOut );
@@ -635,13 +670,40 @@ void SAL_CALL ZipPackage::commitChanges(  )
     const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
     if (xRootFolder->hasByName( sMeta ) )
         xRootFolder->removeByName( sMeta );
+    /// >>>>>>>>
+    // Then create a tempfile...
+    OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
+
+    Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+#ifdef MTG_DEBUG
+    fprintf(stderr, "We have a %s tempfile!\n", xTempOut.is() ? "good" : "bad" );
+#endif
+    Reference < XInputStream > xTempIn = Reference < XInputStream > ( xTempOut, UNO_QUERY );
+    Reference < XSeekable > xTempSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY );
+    // Then write the full package to the temp file...
+    Sequence < sal_Int8 > aBuffer;
+    sal_Int64 nRead;
+
+    do
+    {
+        nRead = xInBuffer->readBytes ( aBuffer, n_ConstBufferSize );
+        xTempOut->writeBytes( aBuffer );
+    }
+    while ( nRead == n_ConstBufferSize );
+
+    // seek back to the beginning of the temp file so we can read segments from it
+    xTempSeek->seek ( 0 );
+    xContentStream = xTempIn;
+    xContentSeek = xTempSeek;
+    pZipFile->setInputStream ( xTempIn );
+    // <<<<<<<<<<
 
 
     if (!nSegmentSize )
     {
         try
         {
-            pContent->writeStream ( xInBuffer, sal_True );
+            pContent->writeStream ( xTempIn, sal_True );
         }
         catch (::com::sun::star::uno::Exception& r)
         {
@@ -649,6 +711,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
                     static_cast < OWeakObject * > ( this ), makeAny( r ) );
         }
         Reference < XActiveDataSink > xSink = new ZipPackageSink;
+        /*
+         * We want to reference the temp file, not the one we just wrote
         try
         {
             // Update our references to point to the new file
@@ -662,26 +726,34 @@ void SAL_CALL ZipPackage::commitChanges(  )
             throw WrappedTargetException( OUString::createFromAscii( "Unable to read Zip File content!" ),
                 static_cast < OWeakObject * > ( this ), makeAny( r ) );
         }
+        */
     }
     else
     {
         // We want to span...first, make sure we have an interaction handler...
         getInteractionHandler();
+
         sal_Int16 nDiskNum = 0;
-        sal_Int32 nDot = sURL.lastIndexOf ( '.' );
-        OUStringBuffer aStringBuf;
-
-        Sequence < sal_Int8 > aBuffer;
-
-        // If we don't have a specified segment size, don't span
-#ifdef UNX
-        sal_Int32 nPrefixLength = sURL.lastIndexOf ( '/' );
-#else
-        sal_Int32 nPrefixLength = 2 + sURL.lastIndexOf ( ':' );
-#endif
-        OUString sMountPath ( sURL.copy ( 0, nPrefixLength ) );
         VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
-        FileBase::RC aRC = Directory::getVolumeInfo ( sMountPath, aInfo );
+        FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
+#ifdef MTG_DEBUG
+        fprintf(stderr, "MTG: url is %s getVolumeInfo returned %d\n", ImplGetChars ( sURL), aRC);
+        fprintf(stderr, "MTG: isRemovable returned %d\n", aInfo.getRemoveableFlag() );
+        fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_FreeSpace returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_FreeSpace) );
+        fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_DeviceHandle returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_DeviceHandle) );
+        fprintf(stderr, "MTG: isValid osl_VolumeInfo_Mask_Attributes returned %d\n", aInfo.isValid(osl_VolumeInfo_Mask_Attributes) );
+        fprintf(stderr, "MTG: getFreeSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getFreeSpace() ) );
+        fprintf(stderr, "MTG: getUsedSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getUsedSpace() ) );
+        fprintf(stderr, "MTG: getTotalSpace returned %ld\n", static_cast < sal_Int32 > ( aInfo.getTotalSpace() ) );
+#endif
+        VolumeDevice aDevice = aInfo.getDeviceHandle();
+        OUString sFileName, sMountPath = aDevice.getMountPath();
+#ifdef MTG_DEBUG
+        fprintf(stderr, "MTG: mount path is %s %d\n", ImplGetChars ( sMountPath ), aRC);
+#endif
+        sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
+        OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
+
 #ifdef MTG_DEBUG
         fprintf(stderr, "MTG: url is %s first getVolumeInfo on %s returned %d\n", ImplGetChars ( sURL), ImplGetChars ( sMountPath), aRC);
 #endif
@@ -689,46 +761,47 @@ void SAL_CALL ZipPackage::commitChanges(  )
 #ifdef MTG_DEBUG
         fprintf(stderr, "MTG: Removable flag is %d\n", bIsRemovable);
 #endif
+        SegmentEnum eRet = e_Finished;
+        SuffixGenerator aGenerator;
         do
         {
-            pBuffer->nextSegment( ++nDiskNum);
-            sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
-            if (nDiskNum == 1 )
-            {
-                // Everything after the last slash is file name
-                aStringBuf.append ( sURL.copy ( 1 + nLastSlash ) );
-            }
+            //pBuffer->nextSegment( ++nDiskNum);
+            nDiskNum++;
+            sal_Int64 nCurrentPos = xTempSeek->getPosition();
+            if ( nDiskNum == 1 )
+                sFileName = sURL.copy ( 1 + nLastSlash );
             else
-            {
-                // same file prefix, different extension
-                aStringBuf.append ( sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash ) );
-                aStringBuf.appendAscii ( nDiskNum -1 < 10 ? "s0" : "s" );
-                aStringBuf.append ( static_cast < sal_Int32 > ( nDiskNum -1 ) );
-
-            }
-            OUString sFileName ( aStringBuf.makeStringAndClear() );
+                aGenerator.generateFileName ( sFileName, sFilePrefix );
             if ( bIsRemovable )
             {
                 if ( nDiskNum > 1 && RequestDisk( sMountPath, nDiskNum ) < 0 )
                     return;
-                sal_Bool bRetry;
+
                 do
                 {
-                    bRetry = sal_False;
-                    SegmentEnum eRet = writeSegment ( sFileName, sMountPath, xInBuffer, aBuffer, bRetry, nDiskNum );
+                    eRet = writeSegment ( sFileName, sMountPath, xTempIn, nDiskNum );
                     if (eRet == e_Aborted)
                         return;
+                    else if ( eRet == e_Retry )
+                        xTempSeek->seek ( nCurrentPos );
                 }
-                while ( bRetry );
+                while ( eRet == e_Retry );
             }
             else
             {
                 OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
-                Content aContent (sFullPath, Reference < XCommandEnvironment >() );
-                aContent.writeStream ( xInBuffer, sal_True );
+                do
+                {
+                    eRet = writeSegment ( sFullPath, xTempIn );
+                    if (eRet == e_Aborted)
+                        return;
+                    else if ( eRet == e_Retry )
+                        xTempSeek->seek ( nCurrentPos );
+                }
+                while ( eRet == e_Retry );
             }
         }
-        while ( !pBuffer->isOutputFinished() );
+        while ( eRet != e_Finished );
     }
 #ifdef MTG_DEBUG
     fprintf ( stderr, "MTG: ZipPackage Commit finished\n");
@@ -768,7 +841,7 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
 
     Any aExceptionAny, aMediumException;
     InteractiveWrongMediumException aException;
-    aMediumException <<= nDiskNum;
+    aMediumException <<= static_cast < sal_Int16 > (nDiskNum-1);
     aException.Medium = aMediumException;
     aExceptionAny <<= aException;
     if ( !HandleError ( aExceptionAny, EC_YES|EC_ABORT ) )
@@ -792,11 +865,12 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
 #endif
     return FileBase::E_None;
 }
-SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMountPath, Reference < XInputStream > &xInBuffer, Sequence < sal_Int8 > &rBuffer, sal_Bool bRetry, const sal_Int16 nDiskNum )
+SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMountPath, Reference < XInputStream > &xInBuffer, const sal_Int16 nDiskNum )
 {
     File *pFile = NULL;
     FileBase::RC aRC;
     sal_Bool bDynamicSpan = nSegmentSize < 0;
+    Sequence < sal_Int8 > aBuffer;
 
     sal_Int32 nRead = n_ConstBufferSize;
     sal_uInt64 nLeft, nWritten;
@@ -826,10 +900,10 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                 bReCheck = sal_False;
                 sal_uInt64 nFree = aInfo.getFreeSpace();
 #ifdef MTG_DEBUG
-                fprintf(stderr, "MTG: free is  %d\n", nFree );
+                fprintf(stderr, "MTG: free is  %d\n", static_cast < sal_Int32 > ( nFree ) );
 #endif
-                if (( bDynamicSpan && nFree < 1000) ||
-                     !bDynamicSpan && nFree < nSegmentSize )
+                if ( (  bDynamicSpan && nFree < 1000         ) ||
+                     ( !bDynamicSpan && nFree < nSegmentSize ) )
                 {
                     if ( !HandleError (  osl_File_E_NOSPC, EC_RETRY|EC_ABORT, sFullPath )
                       || RequestDisk ( rMountPath, nDiskNum ) < 0 )
@@ -848,7 +922,7 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                 {
                     nLeft = bDynamicSpan ? nFree : nSegmentSize;
 #ifdef MTG_DEBUG
-                    fprintf(stderr, "MTG: left is  %d\n", nLeft );
+                    fprintf(stderr, "MTG: left is %ld\n", static_cast < sal_Int32 > ( nLeft ) );
 #endif
                 }
             }
@@ -880,32 +954,17 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
     // dynamic spanning and 1000 bytes if dynamic spanning.
 
 
-    /*
-    if ( rOffset )
-    {
-        sal_uInt64 nLeft = rBuffer.getLength() - rOffset;
-        sal_uInt64 nToWrite = (nSegmentSize - nTotalWritten ) > nLeft ? nLeft : nSegmentSize - nTotalWritten;
-        aRC = aFile.write ( rBuffer.getConstArray() + rOffset, nToWrite, nWritten );
-        VOS_ENSURE ( aRC == FileBase::E_None, "Unable to write to file!");
-        nTotalWritten += nWritten;
-        if ( nWritten != nToWrite )
-        {
-            rOffset += nWritten;
-            // Need an interaction handler!
-        }
-    }
-    */
-
     // Let's read it all into the buffer in case something goes wrong and also
     // so that the spannable checks in ByteChucker and ZipOutputStream work
 
-    if (!bRetry)
-        nRead = xInBuffer->readBytes ( rBuffer, static_cast < sal_Int32 > ( nLeft ) );
+    nRead = xInBuffer->readBytes ( aBuffer, static_cast < sal_Int32 > ( nLeft ) );
 
-    aRC = pFile->write ( rBuffer.getConstArray(), nRead, nWritten );
+    aRC = pFile->write ( aBuffer.getConstArray(), nRead, nWritten );
 #ifdef MTG_DEBUG
     fprintf ( stderr, "MTG: write returned %d\n", aRC );
 #endif
+
+    sal_Bool bRetry = sal_False;
 
     if ( nWritten != nRead || aRC != FileBase::E_None )
         bRetry = sal_True;
@@ -919,7 +978,111 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
             bRetry = sal_True;
     }
     delete pFile;
-    return bRetry ? e_Retry : e_Success;
+    return nRead < nLeft ? e_Finished : bRetry ? e_Retry : e_Success;
+}
+
+SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, Reference < XInputStream > &xInBuffer )
+{
+    FileBase::RC aRC;
+    Sequence < sal_Int8 > aBuffer ( nSegmentSize );
+
+    sal_Int32 nRead = n_ConstBufferSize;
+    sal_uInt64 nWritten;
+
+    nRead = xInBuffer->readBytes ( aBuffer, static_cast < sal_Int32 > ( nSegmentSize ) );
+
+    File aFile ( rFileName );
+    aRC = aFile.open ( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
+    if ( aRC == FileBase::E_EXIST )
+        aRC = aFile.open ( osl_File_OpenFlag_Write );
+    if ( aRC != FileBase::E_None )
+    {
+        if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, rFileName ) )
+            return e_Aborted;
+    }
+
+    aRC = aFile.write ( aBuffer.getConstArray(), nRead, nWritten );
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG: write returned %d\n", aRC );
+#endif
+
+    sal_Bool bRetry = sal_False;
+    if ( nWritten != nRead || aRC != FileBase::E_None )
+        bRetry = sal_True;
+    else
+    {
+        aRC = aFile.close ();
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: close returned %d\n", aRC );
+#endif
+        if ( aRC != FileBase::E_None )
+            bRetry = sal_True;
+    }
+    return nRead < nSegmentSize ? e_Finished : bRetry ? e_Retry : e_Success;
+}
+
+SegmentEnum ZipPackage::readSegment ( const OUString &rFileName, OUString &rMountPath, Reference < XOutputStream > &xTempOut, const sal_Int16 nDiskNum )
+{
+    File *pFile = NULL;
+    FileBase::RC aRC;
+    SegmentEnum eRet;
+
+    OUStringBuffer aStringBuffer;
+    aStringBuffer.append ( rMountPath );
+    if ( rMountPath.lastIndexOf ( '/' ) != rMountPath.getLength()-1 )
+        aStringBuffer.appendAscii ( "/" );
+    aStringBuffer.append ( rFileName );
+    OUString sFullPath ( aStringBuffer.makeStringAndClear() );
+
+    DirectoryItem aItem;
+    do
+    {
+        aRC = DirectoryItem::get ( sFullPath, aItem );
+        if ( aRC != FileBase::E_None &&  !HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
+            return e_Aborted;
+    }
+    while (aRC != FileBase::E_None );
+    do
+    {
+        pFile = new File ( sFullPath );
+        aRC = pFile->open ( osl_File_OpenFlag_Read );
+        if ( aRC != FileBase::E_None )
+        {
+            delete pFile;
+            if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
+                return e_Aborted;
+        }
+    }
+    while (aRC != FileBase::E_None );
+
+    FileStatus aStatus ( FileStatusMask_FileSize );
+    aItem.getFileStatus ( aStatus );
+    sal_uInt64 nRead, nLeft = aStatus.getFileSize(), nToRead;
+
+    Sequence < sal_Int8 > aBuffer ( n_ConstBufferSize );
+    do
+    {
+        nToRead = nLeft < n_ConstBufferSize ? nLeft : n_ConstBufferSize;
+        aRC = pFile->read ( static_cast < void* > ( aBuffer.getArray() ), nToRead, nRead );
+        if ( aRC != FileBase::E_None )
+        {
+            if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
+                return e_Aborted;
+        }
+        else
+        {
+            Sequence < sal_Int8 > aReadBuf ( aBuffer.getConstArray(), static_cast < sal_Int32 > ( nRead ) );
+            nLeft -= nRead;
+            xTempOut->writeBytes ( aReadBuf );
+            if (nLeft == 0)
+                eRet = checkEnd ( aReadBuf ) ? e_Finished : e_Success;
+        }
+    }
+    while (nLeft > 0 );
+
+    aRC = pFile->close ();
+    delete pFile;
+    return eRet;
 }
 
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
@@ -1047,8 +1210,6 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     {
         if (!( aValue >>= nSegmentSize ) )
             throw IllegalArgumentException();
-        // always force the value back to 0 as this feature is not complete
-        nSegmentSize = 0;
     }
     else
         throw UnknownPropertyException();
@@ -1187,7 +1348,7 @@ sal_Bool ZipPackage::HandleError ( Any &rAny, sal_uInt16 eContinuations )
     return nSelection == EC_YES || nSelection == EC_RETRY;
 }
 
-sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, OUString &rFileName )
+sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, const OUString &rFileName )
 {
     Any aAny;
     InteractiveFileIOException aException;
@@ -1195,4 +1356,108 @@ sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, 
     aException.FileName = rFileName;
     aAny <<= aException;
     return HandleError (aAny, eContinuations );
+}
+
+Reference < XInputStream > ZipPackage::unSpanFile ( Reference < XInputStream > &rStream )
+{
+    const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
+    Reference < XInputStream > xTempIn = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
+    Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xTempIn, UNO_QUERY );
+    Reference < XSeekable > xTempSeek = Reference < XSeekable > ( xTempIn, UNO_QUERY );
+    Reference < XSeekable > xInSeek = Reference < XSeekable > ( rStream, UNO_QUERY );
+
+    Sequence < sal_Int8 > aBuffer;
+    sal_Int64 nRead;
+    xInSeek->seek ( 0 ); // Skip spanned header
+    do
+    {
+        nRead = rStream->readBytes ( aBuffer, n_ConstBufferSize );
+        xTempOut->writeBytes ( aBuffer );
+    }
+    while ( nRead == n_ConstBufferSize );
+
+    // Check if the buffer just read is the last one
+    if ( checkEnd ( aBuffer ) )
+        return xTempIn;
+
+    sal_Int16 nDiskNum = 1;
+    VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
+    FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
+    VolumeDevice aDevice = aInfo.getDeviceHandle();
+    sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
+
+    sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
+    OUString sFileName, sMountPath = aDevice.getMountPath();
+    const OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
+    SegmentEnum eRet = e_Finished;
+    SuffixGenerator aGenerator;
+    do
+    {
+        //pBuffer->nextSegment( ++nDiskNum);
+        nDiskNum++;
+        aGenerator.generateFileName ( sFileName, sFilePrefix );
+        if ( bIsRemovable )
+        {
+            // We need an interaction handler to request disks
+            getInteractionHandler();
+            if ( RequestDisk( sMountPath, nDiskNum ) < 0 )
+                return Reference < XInputStream > ();
+            eRet = readSegment ( sFileName, sMountPath, xTempOut, nDiskNum );
+            if (eRet == e_Aborted)
+                return Reference < XInputStream > ();
+        }
+        else
+        {
+            OUString sFullPath = sURL.copy ( 0, nLastSlash + 1 ) + sFileName;
+            Reference < XInputStream > xStream;
+            Content aContent (sFullPath, Reference < XCommandEnvironment >() );
+            Reference < XActiveDataSink > xSink = new ZipPackageSink;
+            try
+            {
+                if (aContent.openStream ( xSink ) )
+                    xStream = xSink->getInputStream();
+                if ( xStream.is() )
+                {
+                    do
+                    {
+                        nRead = xStream->readBytes ( aBuffer, n_ConstBufferSize );
+                        xTempOut->writeBytes ( aBuffer );
+                    }
+                    while ( nRead == n_ConstBufferSize );
+                    eRet = checkEnd ( aBuffer ) ? e_Finished : e_Success;
+                }
+            }
+            catch (com::sun::star::uno::Exception&)
+            {
+                // bad juju
+                //
+            }
+        }
+    }
+    while ( eRet != e_Finished );
+
+    return xTempIn;
+}
+
+sal_Bool ZipPackage::checkEnd ( Sequence < sal_Int8 > &rSequence )
+{
+    sal_Int32 nLength, nPos, nEnd;
+
+    nLength = static_cast <sal_Int32 > (rSequence.getLength());
+    // Start at what should be the beginning of the end header
+    if ( nLength == 0 || nLength < ENDHDR )
+        return sal_False;
+    nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
+    // We'll only look for the END signature within a sane range (ZIP_MAXNAMELEN)
+    nEnd = nPos >= 0 ? nPos : 0;
+
+    const sal_Int8 *pBuffer = rSequence.getConstArray();
+    nPos = nLength - ENDHDR;
+    while ( nPos >= nEnd )
+    {
+        if (pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 5 && pBuffer[nPos+3] == 6 )
+            return sal_True;
+        nPos--;
+    }
+    return sal_False;
 }
