@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PolyStructTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:04:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,18 +129,6 @@ public final class PolyStructTest extends ComplexTestCase {
                     new TestPolyStruct(new Short(Short.MAX_VALUE))).member);
 
             assertEquals(
-                new Short((short) 0),
-                t.transportUnsignedShort(new TestPolyStruct()).member);
-            assertEquals(
-                new Short((short) 0),
-                t.transportUnsignedShort(
-                    new TestPolyStruct(new Short((short) 0))).member);
-            assertEquals(
-                new Short((short) 0xFFFF),
-                t.transportUnsignedShort(
-                    new TestPolyStruct(new Short((short) 0xFFFF))).member);
-
-            assertEquals(
                 new Integer(0), t.transportLong(new TestPolyStruct()).member);
             assertEquals(
                 new Integer(Integer.MIN_VALUE),
@@ -152,18 +140,6 @@ public final class PolyStructTest extends ComplexTestCase {
                     new TestPolyStruct(new Integer(Integer.MAX_VALUE))).member);
 
             assertEquals(
-                new Integer(0),
-                t.transportUnsignedLong(new TestPolyStruct()).member);
-            assertEquals(
-                new Integer(0),
-                t.transportUnsignedLong(
-                    new TestPolyStruct(new Integer(0))).member);
-            assertEquals(
-                new Integer(0xFFFFFFFF),
-                t.transportUnsignedLong(
-                    new TestPolyStruct(new Integer(0xFFFFFFFF))).member);
-
-            assertEquals(
                 new Long(0L), t.transportHyper(new TestPolyStruct()).member);
             assertEquals(
                 new Long(Long.MIN_VALUE),
@@ -173,19 +149,6 @@ public final class PolyStructTest extends ComplexTestCase {
                 new Long(Long.MAX_VALUE),
                 t.transportHyper(
                     new TestPolyStruct(new Long(Long.MAX_VALUE))).member);
-
-            assertEquals(
-                new Long(0L),
-                t.transportUnsignedHyper(new TestPolyStruct()).member);
-            assertEquals(
-                new Long(0),
-                t.transportUnsignedHyper(
-                    new TestPolyStruct(new Long(0))).member);
-            assertEquals(
-                new Long(0xFFFFFFFFFFFFFFFFL),
-                t.transportUnsignedHyper(
-                    new TestPolyStruct(
-                        new Long(0xFFFFFFFFFFFFFFFFL))).member);
 
             assertEquals(
                 new Float(0.0f), t.transportFloat(new TestPolyStruct()).member);
@@ -290,29 +253,11 @@ public final class PolyStructTest extends ComplexTestCase {
                         return s;
                     }
 
-                    public TestPolyStruct transportUnsignedShort(
-                        TestPolyStruct s)
-                    {
-                        return s;
-                    }
-
                     public TestPolyStruct transportLong(TestPolyStruct s) {
                         return s;
                     }
 
-                    public TestPolyStruct transportUnsignedLong(
-                        TestPolyStruct s)
-                    {
-                        return s;
-                    }
-
                     public TestPolyStruct transportHyper(TestPolyStruct s) {
-                        return s;
-                    }
-
-                    public TestPolyStruct transportUnsignedHyper(
-                        TestPolyStruct s)
-                    {
                         return s;
                     }
 
