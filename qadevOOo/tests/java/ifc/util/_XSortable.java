@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSortable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:52 $
+ *  last change:$Date: 2003-09-08 11:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,18 @@
  *
  *
  ************************************************************************/
-
 package ifc.util;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.util.XSortable;
 import java.io.PrintWriter;
+
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.table.TableSortField;
+import com.sun.star.util.XSortable;
+
 
 /**
  * Testing <code>com.sun.star.util.XSortable</code>
@@ -85,28 +88,19 @@ import lib.StatusException;
  * @see com.sun.star.util.XSortable
  */
 public class _XSortable extends MultiMethodTest {
-
-       // oObj filled by MultiMethodTest
+    // oObj filled by MultiMethodTest
     public XSortable oObj = null;
     XSortChecker checker = null;
     PropertyValue[] oPV = null;
 
-    /**
-    * The interface for sort checking.
-    */
-    public static interface XSortChecker {
-        public void prepareToSort();
-        public boolean checkSort(boolean isSortNumbering,
-            boolean isSortAscending);
-        public void setPrintWriter(PrintWriter log);
-    }
-
-
     protected void before() {
-        checker = (XSortChecker)tEnv.getObjRelation("SORTCHECKER");
-        if (checker == null) throw
-            new StatusException(Status.failed(
-                "Couldn't get relation 'SORTCHECKER'"));
+        checker = (XSortChecker) tEnv.getObjRelation("SORTCHECKER");
+
+        if (checker == null) {
+            throw new StatusException(Status.failed(
+                                              "Couldn't get relation 'SORTCHECKER'"));
+        }
+
         checker.setPrintWriter(log);
     }
 
@@ -115,13 +109,33 @@ public class _XSortable extends MultiMethodTest {
      * Has <b> OK </b> status if the length of the returned array
      * is greater than zero. <p>
      */
-    public void _createSortDescriptor(){
+    public void _createSortDescriptor() {
         boolean bResult = false;
 
         log.println("test for createSortDescriptor() ");
         oPV = oObj.createSortDescriptor();
 
-        if( oPV.length > 0 ){bResult = true;};
+        if (oPV.length > 0) {
+            bResult = true;
+
+            for (int k = 0; k < oPV.length; k++) {
+                log.println("DescriptorProperty " + k + ": Name=" +
+                            oPV[k].Name + "; Value=" + oPV[k].Value);
+
+                if (oPV[k].Name.equals("SortFields")) {
+                    TableSortField[] tsf = (TableSortField[]) oPV[k].Value;
+
+                    for (int l = 0; l < tsf.length; l++) {
+                        log.println("\t isAscending:  " +
+                                    tsf[l].IsAscending);
+                        log.println("\t IsCaseSensitive:  " +
+                                    tsf[l].IsCaseSensitive);
+                        log.println("\t CollatorAlgorithm:  " +
+                                    tsf[l].CollatorAlgorithm);
+                    }
+                }
+            }
+        }
 
         log.println("Found " + oPV.length + " PropertyValues");
         tRes.tested("createSortDescriptor()", bResult);
@@ -138,47 +152,121 @@ public class _XSortable extends MultiMethodTest {
      *  for sort. </li>
      * </ul>
      */
-    public void _sort(){
-        boolean bResult = false;
+    public void _sort() {
 
         checker.prepareToSort();
 
-        log.println("Sort algorithm: Alphanumeric Order: Ascending");
+        log.println(
+                "############## Sort algorithm: Alphanumeric Order: Ascending");
         modifyDescriptor(false, true);
         oObj.sort(oPV);
-        boolean res = checker.checkSort(false, true);
 
-        log.println("Sort algorithm: Alphanumeric Order: Descending");
+        boolean res = checker.checkSort(false, true);
+        log.println(
+                "############################################################");
+
+        log.println(
+                "############# Sort algorithm: Alphanumeric Order: Descending");
         modifyDescriptor(false, false);
         oObj.sort(oPV);
         res = checker.checkSort(false, false);
+        log.println(
+                "############################################################");
 
-        log.println("Sort algorithm: Numeric Order: Ascending");
+        log.println(
+                "################# Sort algorithm: Numeric Order: Ascending");
         modifyDescriptor(true, true);
         oObj.sort(oPV);
         res = checker.checkSort(true, true);
+        log.println(
+                "############################################################");
 
-        log.println("Sort algorithm: Numeric Order: Descending");
+        log.println(
+                "################## Sort algorithm: Numeric Order: Descending");
         modifyDescriptor(true, false);
         oObj.sort(oPV);
         res = checker.checkSort(true, false);
+        log.println(
+                "############################################################");
 
         tRes.tested("sort()", res);
     }
 
     protected void modifyDescriptor(boolean isSortNumeric,
-            boolean isSortAscending) {
-        for(int i = 0; i < oPV.length; i++) {
-            if (oPV[i].Name.equals("IsSortAscending0")) {
-                oPV[i].Value = new Boolean( isSortAscending );
+                                    boolean isSortAscending) {
+        for (int i = 0; i < oPV.length; i++) {
+            if (oPV[i].Name.equals("SortFields")) {
+                TableSortField[] TableFields = (TableSortField[]) oPV[i].Value;
+
+                if (TableFields.length == 0) {
+                    TableFields = new TableSortField[1];
+                    TableFields[0] = new TableSortField();
+                }
+
+                for (int k = 0; k < TableFields.length; k++) {
+                    TableFields[k].IsAscending = isSortAscending;
+
+                    if (isSortNumeric) {
+                        TableFields[k].FieldType = com.sun.star.table.TableSortFieldType.NUMERIC;
+                        TableFields[k].CollatorAlgorithm = "numeric";
+                    } else {
+                        TableFields[k].FieldType = com.sun.star.table.TableSortFieldType.ALPHANUMERIC;
+                        TableFields[k].CollatorAlgorithm = "alphanumeric";
+                    }
+                }
+
+                oPV[i].Value = TableFields;
             }
-            if (oPV[i].Name.equals("IsSortNumeric0")) {
-                oPV[i].Value = new Boolean( isSortNumeric );
+
+            if (oPV[i].Name.equals("isSortInTable")) {
+                oPV[i].Value = new Boolean(true);
             }
-            if (oPV[i].Name.equals("SortColumns")) {
-                oPV[i].Value = new Boolean( false );
+
+            if (oPV[i].Name.equals("IsSortColumns")) {
+                oPV[i].Value = new Boolean(false);
+            }
+        }
+
+        log.println("Modified sort descriptor: ");
+
+        if (oPV.length > 0) {
+            for (int k = 0; k < oPV.length; k++) {
+                log.println("DescriptorProperty " + k + ": Name=" +
+                            oPV[k].Name + "; Value=" + oPV[k].Value);
+
+                if (oPV[k].Name.equals("SortFields")) {
+                    TableSortField[] tsf = (TableSortField[]) oPV[k].Value;
+
+                    for (int l = 0; l < tsf.length; l++) {
+                        log.println("\t isAscending:  " +
+                                    tsf[l].IsAscending);
+                        log.println("\t IsCaseSensitive:  " +
+                                    tsf[l].IsCaseSensitive);
+                        log.println("\t CollatorAlgorithm:  " +
+                                    tsf[l].CollatorAlgorithm);
+                    }
+                }
             }
         }
     }
-}  // finish class _XSortable
 
+    /**
+    * The interface for sort checking.
+    */
+    public static interface XSortChecker {
+        public void prepareToSort();
+
+        public boolean checkSort(boolean isSortNumbering,
+                                 boolean isSortAscending);
+
+        public void setPrintWriter(PrintWriter log);
+    }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+
+} // finish class _XSortable

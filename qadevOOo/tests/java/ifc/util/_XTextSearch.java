@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextSearch.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:52 $
+ *  last change:$Date: 2003-09-08 11:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.util;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.util.SearchAlgorithms;
 import com.sun.star.util.SearchFlags;
 import com.sun.star.util.SearchOptions;
 import com.sun.star.util.SearchResult;
 import com.sun.star.util.XTextSearch;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.util.XTextSearch</code>
