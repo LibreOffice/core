@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 15:57:58 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 17:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     ScDBDocFunc::ShowInBeamer( aImportParam, pTabViewShell->GetViewFrame() );
                 }
+                rReq.Done();        // needed because it's a toggle slot
             }
             break;
 
