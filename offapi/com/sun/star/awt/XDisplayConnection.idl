@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDisplayConnection.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:01:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,14 @@ module com { module sun { module star { module awt {
 interface XEventHandler;
 
 //=============================================================================
+
 /** This interface should be implemented by toolkits that want to give access
     to their internal message handling loop.
 */
-
 interface XDisplayConnection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+
     /** registers an event handler.
 
         @param window
@@ -87,15 +88,15 @@ interface XDisplayConnection: com::sun::star::uno::XInterface
         registered for all windows.
 
         @param eventHandler
-        the handler to register
+        the handler to register.
 
         @param eventMask
         the event mask specifies the events the handler is interested in.
     */
-
     [oneway] void addEventHandler( [in] any window, [in] XEventHandler eventHandler, [in] long eventMask );
 
     //-------------------------------------------------------------------------
+
     /** removes a eventHandler from the handler list.
 
         @param window
@@ -103,34 +104,36 @@ interface XDisplayConnection: com::sun::star::uno::XInterface
         If empty, the handler should be deregistered completly.
 
         @param eventHandler
-        the handler to remove
+        the handler to remove.
     */
-
     [oneway] void removeEventHandler( [in] any window, [in] XEventHandler eventHandler );
 
     //-------------------------------------------------------------------------
+
     /** register an error handler for toolkit specific errors.
 
         @param errorHandler
-        the handler to register
+        the handler to register.
     */
-
     [oneway] void addErrorHandler( [in] XEventHandler errorHandler );
 
     //-------------------------------------------------------------------------
+
     /** remover an error handler from the handler list.
 
         @param errorHandler
-        the handler to remove
+        the handler to remove.
     */
-
     [oneway] void removeErrorHandler( [in] XEventHandler errorhandler );
 
     //-------------------------------------------------------------------------
-    /** @returns a unique platform dependend identifier for a display connection
-    */
 
+    /** returns a identifier.
+
+        @returns a unique platform dependend identifier for a display connection.
+    */
     any getIdentifier();
+
 };
 
 //=============================================================================
