@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 10:11:26 $
+ *  last change: $Author: pl $ $Date: 2001-07-05 14:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,7 @@ void cc50_solaris_intel_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
     // will be released in generated dtor
     // alignment to 8
     pExcSpace[0] = pTypeDescr;
+    pExcSpace[1] = (void*)0xbadfad;
     uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // destruct uno exception

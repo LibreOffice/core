@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-03 16:11:07 $
+ *  last change: $Author: pl $ $Date: 2001-07-05 14:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,9 +276,15 @@ static void cpp_call(
      }
      catch( ... )
      {
+        void* pExc = __Crun::ex_get();
+        const char* pName;
+        if( ((void**)pExc)[-1] != (void*)0xbadfad )
+            pName = __Cimpl::ex_name();
+        else
+            pName = *(const char**)((void**)pExc)[-18];
           // get exception
-        cc50_solaris_sparc_fillUnoException( __Crun::ex_get(),
-                                             __Cimpl::ex_name(),
+        cc50_solaris_sparc_fillUnoException( pExc,
+                                             pName,
                                              *ppUnoExc,
                                              &pThis->pBridge->aCpp2Uno);
         // temporary params
