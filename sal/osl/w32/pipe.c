@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-19 09:26:28 $
+ *  last change: $Author: hro $ $Date: 2001-11-23 09:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,24 +594,39 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     {
         if (IS_NT)
         {
-            /* free instance should be available first */
-            WaitNamedPipeW(path->buffer, NMPWAIT_WAIT_FOREVER);
+            BOOL    fPipeAvailable;
 
-            /* first try to open system pipe */
-            if ((pPipe->m_File = CreateFileW(
-                    path->buffer,
-                    GENERIC_READ|GENERIC_WRITE,
-                    FILE_SHARE_READ | FILE_SHARE_WRITE,
-                    NULL,
-                    OPEN_EXISTING,
-                    FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
-                    NULL)) != INVALID_HANDLE_VALUE)
+            do
             {
-                rtl_uString_release( name );
-                rtl_uString_release( path );
+                /* free instance should be available first */
+                fPipeAvailable = WaitNamedPipeW(path->buffer, NMPWAIT_WAIT_FOREVER);
 
-                return (pPipe);
-            }
+                /* first try to open system pipe */
+                if ( fPipeAvailable )
+                {
+                    pPipe->m_File = CreateFileW(
+                            path->buffer,
+                            GENERIC_READ|GENERIC_WRITE,
+                            FILE_SHARE_READ | FILE_SHARE_WRITE,
+                            NULL,
+                            OPEN_EXISTING,
+                            FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
+                            NULL);
+
+                    if ( pPipe->m_File != INVALID_HANDLE_VALUE )
+                    {
+                        // We got it !
+                        rtl_uString_release( name );
+                        rtl_uString_release( path );
+
+                        return (pPipe);
+                    }
+                    else
+                    {
+                        // Pipe instance maybe catched by another client -> try again
+                    }
+                }
+            } while ( fPipeAvailable );
         }
         else
         {
@@ -769,29 +784,37 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         os.hEvent = pPipe->m_AcceptEvent;
         ResetEvent(pPipe->m_AcceptEvent);
 
-        // If `ConnectNamedPipe' reports accepted connection,
-        // don't try to block then. Otherwise, a race with
-        // `osl_receivePipe' is possible: it issues
-        // `ResetEvent'. Grrr.
-        if (!ConnectNamedPipe(pPipe->m_File, &os) &&
-            !(GetLastError() == ERROR_PIPE_CONNECTED))
+        if ( !ConnectNamedPipe(pPipe->m_File, &os))
         {
-            // blocking call to accept
-            if( ! GetOverlappedResult(
-                    pPipe->m_File,
-                    &os,
-                    &nBytesTransfered,
-                    TRUE ) )
+            switch ( GetLastError() )
             {
-                // check, if between ConnectNamePipe and
-                // GetOverlappedResult a successful connect took place
-                DWORD dw = GetLastError();
-                if( ERROR_PIPE_CONNECTED != dw )
+            case ERROR_PIPE_CONNECTED:  // Client already connected to pipe
+            case ERROR_NO_DATA:         // Client was connected but has already closed pipe end
+                                        // should only appear in nonblocking mode but in fact does
+                                        // in blocking asynchronous mode.
+                break;
+            case ERROR_PIPE_LISTENING:  // Only for nonblocking mode but see ERROR_NO_DATA
+            case ERROR_IO_PENDING:      // This is normal if not client is connected yet
+            case ERROR_MORE_DATA:       // Should not happen
+                // blocking call to accept
+                if( !GetOverlappedResult( pPipe->m_File, &os, &nBytesTransfered, TRUE ) )
                 {
-                    // no successful connect (in general, pipe has been
-                    // destroyed)
-                    return 0;
+                    // Possible error could be that between ConnectNamedPipe and GetOverlappedResult a connect
+                    // took place.
+
+                    switch ( GetLastError() )
+                    {
+                    case ERROR_PIPE_CONNECTED:  // Pipe was already connected
+                    case ERROR_NO_DATA:         // Pipe was connected but client has already closed -> ver fast client ;-)
+                        break;                  // Everything's fine !!!
+                    default:
+                        // Something went wrong
+                        return 0;
+                    }
                 }
+                break;
+            default:                    // All other error say that somethings going wrong.
+                return 0;
             }
         }
 
