@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:04:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,7 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return sal_True;        // kein Prädikat
+        return sal_True;        // kein Praedikat
 
     for(;aIter != rCodeList.end();++aIter)
     {
@@ -701,7 +701,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
 {
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return ;        // kein Prädikat
+        return ;        // kein Praedikat
 
     for(;aIter != rCodeList.end();++aIter)
     {
