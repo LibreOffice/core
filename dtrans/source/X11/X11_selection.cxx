@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-27 18:57:42 $
+ *  last change: $Author: pl $ $Date: 2001-12-11 20:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,12 +219,12 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
 // ------------------------------------------------------------------------
 
 SelectionManager::IncrementalTransfer::IncrementalTransfer(
-    const Sequence< sal_Int8 >& rData,
-    Window aRequestor,
-    Atom aProperty,
-    Atom aTarget,
-    int nFormat
-    ) :
+                                                           const Sequence< sal_Int8 >& rData,
+                                                           Window aRequestor,
+                                                           Atom aProperty,
+                                                           Atom aTarget,
+                                                           int nFormat
+                                                           ) :
         m_aData( rData ),
         m_aRequestor( aRequestor ),
         m_aProperty( aProperty ),
@@ -238,25 +238,25 @@ SelectionManager::IncrementalTransfer::IncrementalTransfer(
 // ------------------------------------------------------------------------
 
 SelectionManager::SelectionManager() :
-    m_pDisplay( NULL ),
-    m_aWindow( None ),
-    m_aDropWindow( None ),
-    m_aDropProxy( None ),
-    m_aThread( NULL ),
-    m_aDragExecuteThread( NULL ),
-    m_nCurrentProtocolVersion( nXdndProtocolRevision ),
-    m_nNoPosX( 0 ),
-    m_nNoPosY( 0 ),
-    m_nNoPosWidth( 0 ),
-    m_nNoPosHeight( 0 ),
-    m_bDropSent( false ),
-    m_bWaitingForPrimaryConversion( false ),
-    m_bDropSuccess( false ),
-    m_aMoveCursor( None ),
-    m_aCopyCursor( None ),
-    m_aLinkCursor( None ),
-    m_aNoneCursor( None ),
-    m_aCurrentCursor( None )
+        m_pDisplay( NULL ),
+        m_aWindow( None ),
+        m_aDropWindow( None ),
+        m_aDropProxy( None ),
+        m_aThread( NULL ),
+        m_aDragExecuteThread( NULL ),
+        m_nCurrentProtocolVersion( nXdndProtocolRevision ),
+        m_nNoPosX( 0 ),
+        m_nNoPosY( 0 ),
+        m_nNoPosWidth( 0 ),
+        m_nNoPosHeight( 0 ),
+        m_bDropSent( false ),
+        m_bWaitingForPrimaryConversion( false ),
+        m_bDropSuccess( false ),
+        m_aMoveCursor( None ),
+        m_aCopyCursor( None ),
+        m_aLinkCursor( None ),
+        m_aNoneCursor( None ),
+        m_aCurrentCursor( None )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
@@ -575,75 +575,85 @@ OString SelectionManager::convertToCompound( const OUString& rText )
         aRet = OString();
 
     return aRet;
- }
+}
 
 // ------------------------------------------------------------------------
 
 bool SelectionManager::convertData(
-    const Reference< XTransferable >& xTransferable,
-    Atom nType,
-    Atom nSelection,
-    int& rFormat,
-    Sequence< sal_Int8 >& rData )
+                                   const Reference< XTransferable >& xTransferable,
+                                   Atom nType,
+                                   Atom nSelection,
+                                   int& rFormat,
+                                   Sequence< sal_Int8 >& rData )
 {
     bool bSuccess = false;
 
     if( ! xTransferable.is() )
         return bSuccess;
 
-    DataFlavor aFlavor;
-    aFlavor.MimeType = convertTypeFromNative( nType, nSelection, rFormat );
-
-    sal_Int32 nIndex = 0;
-    if( aFlavor.MimeType.getToken( 0, ';', nIndex ).compareToAscii( "text/plain" ) == 0 )
+    try
     {
-        if( aFlavor.MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
-            aFlavor.DataType = getCppuType( (OUString *) 0 );
+
+        DataFlavor aFlavor;
+        aFlavor.MimeType = convertTypeFromNative( nType, nSelection, rFormat );
+
+        sal_Int32 nIndex = 0;
+        if( aFlavor.MimeType.getToken( 0, ';', nIndex ).compareToAscii( "text/plain" ) == 0 )
+        {
+            if( aFlavor.MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-16" ) == 0 )
+                aFlavor.DataType = getCppuType( (OUString *) 0 );
+            else
+                aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
+        }
         else
             aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
-    }
-    else
-        aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
 
-    if( xTransferable->isDataFlavorSupported( aFlavor ) )
-    {
-        Any aValue( xTransferable->getTransferData( aFlavor ) );
-        if( aValue.getValueTypeClass() == TypeClass_STRING )
+        if( xTransferable->isDataFlavorSupported( aFlavor ) )
         {
-            OUString aString;
-            aValue >>= aString;
-            rData = Sequence< sal_Int8 >( (sal_Int8*)aString.getStr(), aString.getLength() * sizeof( sal_Unicode ) );
-            bSuccess = true;
-        }
-        else if( aValue.getValueType() == getCppuType( (Sequence< sal_Int8 >*)0 ) )
-        {
-            aValue >>= rData;
-            bSuccess = true;
-        }
-    }
-    else if( aFlavor.MimeType.compareToAscii( "text/plain", 10 ) == 0 )
-    {
-        rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
-        bool bCompoundText = false;
-        if( nType == m_nCOMPOUNDAtom )
-            bCompoundText = true;
-        else
-            aEncoding = getTextPlainEncoding( aFlavor.MimeType );
-        if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
-        {
-            aFlavor.MimeType = OUString::createFromAscii( "text/plain;charset=utf-16" );
-            aFlavor.DataType = getCppuType( (OUString *) 0 );
-            if( xTransferable->isDataFlavorSupported( aFlavor ) )
+            Any aValue( xTransferable->getTransferData( aFlavor ) );
+            if( aValue.getValueTypeClass() == TypeClass_STRING )
             {
-                Any aValue( xTransferable->getTransferData( aFlavor ) );
                 OUString aString;
                 aValue >>= aString;
-                OString aByteString( bCompoundText ? convertToCompound( aString ) : OUStringToOString( aString, aEncoding ) );
-                rData = Sequence< sal_Int8 >( (sal_Int8*)aByteString.getStr(), aByteString.getLength() * sizeof( sal_Char ) );
+                rData = Sequence< sal_Int8 >( (sal_Int8*)aString.getStr(), aString.getLength() * sizeof( sal_Unicode ) );
+                bSuccess = true;
+            }
+            else if( aValue.getValueType() == getCppuType( (Sequence< sal_Int8 >*)0 ) )
+            {
+                aValue >>= rData;
                 bSuccess = true;
             }
         }
+        else if( aFlavor.MimeType.compareToAscii( "text/plain", 10 ) == 0 )
+        {
+            rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
+            bool bCompoundText = false;
+            if( nType == m_nCOMPOUNDAtom )
+                bCompoundText = true;
+            else
+                aEncoding = getTextPlainEncoding( aFlavor.MimeType );
+            if( aEncoding != RTL_TEXTENCODING_DONTKNOW || bCompoundText )
+            {
+                aFlavor.MimeType = OUString::createFromAscii( "text/plain;charset=utf-16" );
+                aFlavor.DataType = getCppuType( (OUString *) 0 );
+                if( xTransferable->isDataFlavorSupported( aFlavor ) )
+                {
+                    Any aValue( xTransferable->getTransferData( aFlavor ) );
+                    OUString aString;
+                    aValue >>= aString;
+                    OString aByteString( bCompoundText ? convertToCompound( aString ) : OUStringToOString( aString, aEncoding ) );
+                    rData = Sequence< sal_Int8 >( (sal_Int8*)aByteString.getStr(), aByteString.getLength() * sizeof( sal_Char ) );
+                    bSuccess = true;
+                }
+            }
+        }
     }
+    // various exceptions possible ... which all lead to a failed conversion
+    // so simplify here to a catch all
+    catch(...)
+    {
+    }
+
     return bSuccess;
 }
 
@@ -1190,7 +1200,7 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
 #ifdef DEBUG
             else
                 fprintf( stderr, "convertData failed for type: %s \n",
-                     OUStringToOString( convertTypeFromNative( rRequest.target, rRequest.selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                         OUStringToOString( convertTypeFromNative( rRequest.target, rRequest.selection, nFormat ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
         }
     }
@@ -1442,9 +1452,9 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 #endif
         }
         else if(
-            rMessage.message_type == m_nXdndPosition &&
-            aSource == m_aDropEnterEvent.data.l[0]
-            )
+                rMessage.message_type == m_nXdndPosition &&
+                aSource == m_aDropEnterEvent.data.l[0]
+                )
         {
             m_nDropTime = m_nCurrentProtocolVersion > 0 ? rMessage.data.l[3] : CurrentTime;
             if( ! m_bDropEnterSent )
@@ -1497,9 +1507,9 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             }
         }
         else if(
-            rMessage.message_type == m_nXdndLeave  &&
-            aSource == m_aDropEnterEvent.data.l[0]
-            )
+                rMessage.message_type == m_nXdndLeave  &&
+                aSource == m_aDropEnterEvent.data.l[0]
+                )
         {
 #ifdef DEBUG
             fprintf( stderr, "received XdndLeave on 0x%x\n", aTarget );
@@ -1513,9 +1523,9 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
             m_nCurrentProtocolVersion = nXdndProtocolRevision;
         }
         else if(
-            rMessage.message_type == m_nXdndDrop &&
-            aSource == m_aDropEnterEvent.data.l[0]
-            )
+                rMessage.message_type == m_nXdndDrop &&
+                aSource == m_aDropEnterEvent.data.l[0]
+                )
         {
             m_nDropTime = m_nCurrentProtocolVersion > 0 ? rMessage.data.l[2] : CurrentTime;
 
@@ -1959,8 +1969,8 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         }
     }
     else if(
-        ( rMessage.type == ButtonPress || rMessage.type == ButtonRelease ) &&
-        rMessage.xbutton.button == m_nDragButton )
+            ( rMessage.type == ButtonPress || rMessage.type == ButtonRelease ) &&
+            rMessage.xbutton.button == m_nDragButton )
     {
         bool bCancel = true;
         if( m_aDropWindow != None )
@@ -2360,13 +2370,13 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
 // ------------------------------------------------------------------------
 
 void SelectionManager::startDrag(
-    const DragGestureEvent& trigger,
-    sal_Int8 sourceActions,
-    sal_Int32 cursor,
-    sal_Int32 image,
-    const Reference< XTransferable >& transferable,
-    const Reference< XDragSourceListener >& listener
-    ) throw()
+                                 const DragGestureEvent& trigger,
+                                 sal_Int8 sourceActions,
+                                 sal_Int32 cursor,
+                                 sal_Int32 image,
+                                 const Reference< XTransferable >& transferable,
+                                 const Reference< XDragSourceListener >& listener
+                                 ) throw()
 {
 #ifdef DEBUG
     fprintf( stderr, "startDrag( sourceActions = %x )\n", (int)sourceActions );
@@ -2447,7 +2457,7 @@ void SelectionManager::startDrag(
 #endif
         int nKeyboardGrabSuccess =
             XGrabKeyboard( m_pDisplay, it->second.m_aRootWindow, True,
-                          GrabModeAsync, GrabModeAsync, CurrentTime );
+                           GrabModeAsync, GrabModeAsync, CurrentTime );
 #ifdef DEBUG
         fprintf( stderr, "%d\n", nKeyboardGrabSuccess );
 #endif
@@ -2764,11 +2774,11 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
                 handleDragEvent( rEvent );
             // messages from drag source
             else if(
-                rEvent.xclient.message_type == m_nXdndEnter     ||
-                rEvent.xclient.message_type == m_nXdndLeave     ||
-                rEvent.xclient.message_type == m_nXdndPosition  ||
-                rEvent.xclient.message_type == m_nXdndDrop
-                )
+                    rEvent.xclient.message_type == m_nXdndEnter     ||
+                    rEvent.xclient.message_type == m_nXdndLeave     ||
+                    rEvent.xclient.message_type == m_nXdndPosition  ||
+                    rEvent.xclient.message_type == m_nXdndDrop
+                    )
                 handleDropEvent( rEvent.xclient );
             break;
         case EnterNotify:
@@ -2990,9 +3000,9 @@ void SelectionManager::fireContentsChanged() throw()
 
 SelectionManagerHolder::SelectionManagerHolder() :
         ::cppu::WeakComponentImplHelper3<
-                XDragSource,
-                XInitialization,
-                XServiceInfo > (m_aMutex)
+    XDragSource,
+    XInitialization,
+    XServiceInfo > (m_aMutex)
 {
 }
 
@@ -3043,11 +3053,11 @@ sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(
 // ------------------------------------------------------------------------
 
 void SelectionManagerHolder::startDrag(
-    const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
-    sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-    const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-    const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
-    ) throw()
+                                       const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
+                                       sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
+                                       const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+                                       const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+                                       ) throw()
 {
     if( m_xRealDragSource.is() )
         m_xRealDragSource->startDrag( trigger, sourceActions, cursor, image, transferable, listener );
