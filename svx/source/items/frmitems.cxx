@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:47:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3752,7 +3752,10 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
             // UNICODE: rStream >> aRel;
             rStream.ReadByteString(aRel);
 
-            String aAbs = INetURLObject::RelToAbs( aRel );
+            // TODO/MBA: how can we get a BaseURL here?!
+            DBG_ERROR("No BaseURL!");
+            String aAbs = INetURLObject::GetAbsURL( String(), aRel );
+            DBG_ASSERT( aAbs.Len(), "Invalid URL!" );
             pStrLink = new String( aAbs );
         }
 
@@ -4139,7 +4142,9 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 nItemVersion ) con
         rStream << pImpl->pGraphicObject->GetGraphic();
     if ( pStrLink )
     {
-        String aRel = INetURLObject::AbsToRel( *pStrLink );
+        DBG_ERROR("No BaseURL!");
+        // TODO/MBA: how to get a BaseURL?!
+        String aRel = INetURLObject::GetRelURL( String(), *pStrLink );
         // UNICODE: rStream << aRel;
         rStream.WriteByteString(aRel);
     }
