@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:05:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,15 @@
 
 #include "fulink.hxx"
 
-#ifndef _INSDLG_HXX //autogen
-#include <so3/insdlg.hxx>
-#endif
 #include <svx/linkmgr.hxx>
-#ifndef _LINKDLG_HXX //autogen
-#include <so3/linkdlg.hxx>
-#endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+
+#include <svx/svxdlg.hxx>
 
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
@@ -108,9 +104,15 @@ FuLink::FuLink (
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-    ::so3::SvBaseLinksDialog aLinkDlg( NULL, pLinkManager );
-    aLinkDlg.Execute();
-    pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pViewShell->GetActiveWindow(), pLinkManager );
+    if ( pDlg )
+    {
+        pDlg->Execute();
+        pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
+        delete pDlg;
+    }
 }
 
 
