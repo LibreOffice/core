@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:06:55 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@ class ScDetectiveFunc
     ScDocument*     pDoc;
     SCTAB           nTab;
 
-    Point       GetDrawPos( SCCOL nCol, SCROW nRow, BOOL bArrow );
     BOOL        HasArrow( const ScAddress& rStart,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
 
@@ -161,6 +160,7 @@ class ScDetectiveFunc
 public:
                 ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}
 
+    Point       GetDrawPos( SCCOL nCol, SCROW nRow, BOOL bArrow );
     BOOL        ShowSucc( SCCOL nCol, SCROW nRow );
     BOOL        ShowPred( SCCOL nCol, SCROW nRow );
     BOOL        ShowError( SCCOL nCol, SCROW nRow );
