@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettingsSequenceDefines.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-12 14:47:48 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 14:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,31 @@
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 
-#define SC_VIEWSETTINGS_COUNT               7
+#define SC_VIEWSETTINGS_COUNT               23
 
-#define SC_TABLE_VIEWSETTINGS               0
-#define SC_ACTIVE_TABLE                     1
-#define SC_HORIZONTAL_SCROLL_BAR_WIDTH      2
-#define SC_ZOOM_TYPE                        3
-#define SC_ZOOM_VALUE                       4
-#define SC_PAGE_VIEW_ZOOM_VALUE             5
-#define SC_PAGE_BREAK_PREVIEW               6
+#define SC_VIEW_ID                          0
+#define SC_TABLE_VIEWSETTINGS               1
+#define SC_ACTIVE_TABLE                     2
+#define SC_HORIZONTAL_SCROLL_BAR_WIDTH      3
+#define SC_ZOOM_TYPE                        4
+#define SC_ZOOM_VALUE                       5
+#define SC_PAGE_VIEW_ZOOM_VALUE             6
+#define SC_PAGE_BREAK_PREVIEW               7
+#define SC_SHOWZERO                         8
+#define SC_SHOWNOTES                        9
+#define SC_SHOWGRID                         10
+#define SC_GRIDCOLOR                        11
+#define SC_SHOWPAGEBR                       12
+#define SC_COLROWHDR                        13
+#define SC_SHEETTABS                        14
+#define SC_OUTLSYMB                         15
+#define SC_SNAPTORASTER                     16
+#define SC_RASTERVIS                        17
+#define SC_RASTERRESX                       18
+#define SC_RASTERRESY                       19
+#define SC_RASTERSUBX                       20
+#define SC_RASTERSUBY                       21
+#define SC_RASTERSYNC                       22
 
 
 // this are the defines for the position of the settings in the

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 11:18:55 $
+ *  last change: $Author: sab $ $Date: 2001-05-02 14:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "editutil.hxx"
 #include "scextopt.hxx"
 #include "miscuno.hxx"
+#include "unonames.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -2104,11 +2105,17 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
 
 void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings)
 {
-    rSettings.realloc(SC_VIEWSETTINGS_COUNT + 1);
+    rSettings.realloc(SC_VIEWSETTINGS_COUNT);
     // + 1, because we have to put the view id in the sequence
     beans::PropertyValue* pSettings = rSettings.getArray();
     if (pSettings)
     {
+        sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
+        pSettings[SC_VIEW_ID].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
+        rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
+        SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
+        pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();
+
         USHORT nTabCount (pDoc->GetTableCount());
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
@@ -2156,11 +2163,43 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         pSettings[SC_PAGE_BREAK_PREVIEW].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SHOWPAGEBREAKPREVIEW));
         ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_PAGE_BREAK_PREVIEW].Value, bPagebreak);
 
-        sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
-        pSettings[SC_VIEWSETTINGS_COUNT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
-        rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
-        SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
-        pSettings[SC_VIEWSETTINGS_COUNT].Value <<= sBuffer.makeStringAndClear();
+        if (pOptions)
+        {
+            pSettings[SC_SHOWZERO].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWZERO));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWZERO].Value, pOptions->GetOption( VOPT_NULLVALS ) );
+            pSettings[SC_SHOWNOTES].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWNOTES));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWNOTES].Value, pOptions->GetOption( VOPT_NOTES ) );
+            pSettings[SC_SHOWGRID].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWGRID));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWGRID].Value, pOptions->GetOption( VOPT_GRID ) );
+            pSettings[SC_GRIDCOLOR].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_GRIDCOLOR));
+            String aColorName;
+            Color aColor = pOptions->GetGridColor(&aColorName);
+            pSettings[SC_GRIDCOLOR].Value <<= static_cast<sal_Int64>(aColor.GetColor());
+            pSettings[SC_SHOWPAGEBR].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHOWPAGEBR));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHOWPAGEBR].Value, pOptions->GetOption( VOPT_PAGEBREAKS ) );
+            pSettings[SC_COLROWHDR].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COLROWHDR));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_COLROWHDR].Value, pOptions->GetOption( VOPT_HEADER ) );
+            pSettings[SC_SHEETTABS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHEETTABS));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHEETTABS].Value, pOptions->GetOption( VOPT_TABCONTROLS ) );
+            pSettings[SC_OUTLSYMB].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_OUTLSYMB));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_OUTLSYMB].Value, pOptions->GetOption( VOPT_OUTLINER ) );
+
+            const ScGridOptions& aGridOpt = pOptions->GetGridOptions();
+            pSettings[SC_SNAPTORASTER].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SNAPTORASTER));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SNAPTORASTER].Value, aGridOpt.GetUseGridSnap() );
+            pSettings[SC_RASTERVIS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_RASTERVIS));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_RASTERVIS].Value, aGridOpt.GetGridVisible() );
+            pSettings[SC_RASTERRESX].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_RASTERRESX));
+            pSettings[SC_RASTERRESX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawX() );
+            pSettings[SC_RASTERRESY].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_RASTERRESY));
+            pSettings[SC_RASTERRESY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawY() );
+            pSettings[SC_RASTERSUBX].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_RASTERSUBX));
+            pSettings[SC_RASTERSUBX].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionX() );
+            pSettings[SC_RASTERSUBY].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_RASTERSUBY));
+            pSettings[SC_RASTERSUBY].Value <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionY() );
+            pSettings[SC_RASTERSYNC].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_RASTERSYNC));
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_RASTERSYNC].Value, aGridOpt.GetSynchronize() );
+        }
     }
 }
 
@@ -2172,6 +2211,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     sal_Bool bPageMode(sal_False);
     for (sal_Int32 i = 0; i < nCount; i++)
     {
+        // SC_VIEWID has to parse and use by mba
         rtl::OUString sName(rSettings[i].Name);
         if (sName.compareToAscii(SC_TABLES) == 0)
         {
@@ -2235,7 +2275,49 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         }
         else if (sName.compareToAscii(SC_SHOWPAGEBREAKPREVIEW) == 0)
             bPageMode = ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value );
-        // SC_VIEWID has to parse and use by mba
+        else if ( sName.compareToAscii( SC_UNO_SHOWZERO ) == 0 )
+            pOptions->SetOption(VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else if ( sName.compareToAscii( SC_UNO_SHOWNOTES ) == 0 )
+            pOptions->SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else if ( sName.compareToAscii( SC_UNO_SHOWGRID ) == 0 )
+            pOptions->SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else if ( sName.compareToAscii( SC_UNO_GRIDCOLOR ) == 0 )
+        {
+            sal_Int64 nColor;
+            if (rSettings[i].Value >>= nColor)
+            {
+                String aColorName;
+                Color aColor(static_cast<sal_uInt32>(nColor));
+                pOptions->SetGridColor(aColor, aColorName);
+            }
+        }
+        else if ( sName.compareToAscii( SC_UNO_SHOWPAGEBR ) == 0 )
+            pOptions->SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else if ( sName.compareToAscii( SC_UNO_COLROWHDR ) == 0 )
+            pOptions->SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else if ( sName.compareToAscii( SC_UNO_SHEETTABS ) == 0 )
+            pOptions->SetOption(VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else if ( sName.compareToAscii( SC_UNO_OUTLSYMB ) == 0 )
+            pOptions->SetOption(VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+        else
+        {
+            ScGridOptions aGridOpt(pOptions->GetGridOptions());
+            if ( sName.compareToAscii( SC_UNO_SNAPTORASTER ) == 0 )
+                aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            else if ( sName.compareToAscii( SC_UNO_RASTERVIS ) == 0 )
+                aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            else if ( sName.compareToAscii( SC_UNO_RASTERRESX ) == 0 )
+                aGridOpt.SetFldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+            else if ( sName.compareToAscii( SC_UNO_RASTERRESY ) == 0 )
+                aGridOpt.SetFldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+            else if ( sName.compareToAscii( SC_UNO_RASTERSUBX ) == 0 )
+                aGridOpt.SetFldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+            else if ( sName.compareToAscii( SC_UNO_RASTERSUBY ) == 0 )
+                aGridOpt.SetFldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( rSettings[i].Value ) ) );
+            else if ( sName.compareToAscii( SC_UNO_RASTERSYNC ) == 0 )
+                aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
+            pOptions->SetGridOptions(aGridOpt);
+        }
     }
     if (nCount)
         SetPagebreakMode( bPageMode );
