@@ -70,6 +70,12 @@
     <type> com.sun.star.sdbc.XResultSetMetaData                </type>
     <type> com.sun.star.sdbc.XResultSetMetaDataSupplier        </type>
     <type> com.sun.star.sdbc.XRow                              </type>
+    <type> com.sun.star.task.XInteractionRequest               </type>
+    <type> com.sun.star.task.XInteractionAbort                 </type>
+    <type> com.sun.star.task.XInteractionRetry                 </type>
+    <type> com.sun.star.task.XInteractionApprove               </type>
+    <type> com.sun.star.task.XInteractionDisapprove            </type>
+    <type> com.sun.star.ucb.AuthenticationRequest              </type>
     <type> com.sun.star.ucb.CommandInfoChange                  </type>
     <type> com.sun.star.ucb.ContentAction                      </type>
     <type> com.sun.star.ucb.ContentCreationError               </type>
@@ -78,6 +84,7 @@
     <type> com.sun.star.ucb.InsertCommandArgument              </type>
     <type> com.sun.star.ucb.ListActionType                     </type>
     <type> com.sun.star.ucb.NameClash                          </type>
+    <type> com.sun.star.ucb.NameClashResolveRequest            </type>
     <type> com.sun.star.ucb.OpenCommandArgument2               </type>
     <type> com.sun.star.ucb.OpenMode                           </type>
     <type> com.sun.star.ucb.ResultSetException                 </type>
@@ -95,6 +102,9 @@
     <type> com.sun.star.ucb.XContentProviderManager            </type>
     <type> com.sun.star.ucb.XDynamicResultSet                  </type>
     <type> com.sun.star.ucb.XFileIdentifierConverter           </type>
+    <type> com.sun.star.ucb.XInteractionReplaceExistingData    </type>
+    <type> com.sun.star.ucb.XInteractionSupplyAuthentication   </type>
+    <type> com.sun.star.ucb.XInteractionSupplyName             </type>
     <type> com.sun.star.ucb.XParameterizedContentProvider      </type>
     <type> com.sun.star.ucb.XPropertySetRegistryFactory        </type>
     <type> com.sun.star.ucb.XRemoteContentProviderDoneListener </type>
