@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:00:54 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#ifdef SYSTEM_DB3
-#include <db3/db_cxx.h>
-#else
-#include <berkeleydb/db_cxx.h>
+#ifndef BERKELEYDBPROXY_DB_HXX_
+#include "db.hxx"
 #endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
@@ -95,6 +93,7 @@
 #include <algorithm>
 
 using namespace chelp;
+using namespace berkeleydbproxy;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::container;
@@ -542,7 +541,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
         rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),osl_getThreadTextEncoding() );
 
-        if( table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
+        if( table->open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
             table->close( 0 );
             delete table;
@@ -756,7 +755,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                                osl_getThreadTextEncoding() );
 
         Db table(0,DB_CXX_NO_EXCEPTIONS);
-        if( 0 == table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
+        if( 0 == table.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
             std::vector<KeywordInfo::KeywordElement> aVector;
             Db* idmap = getBerkeley( Database,Language );
