@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:52:43 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter
 OSQLParseTreeIterator::~OSQLParseTreeIterator()
 {
     m_aTables.clear();
+    m_aSelectColumns    = NULL;
+    m_aParameters       = NULL;
 }
 // -----------------------------------------------------------------------------
 void OSQLParseTreeIterator::dispose()
