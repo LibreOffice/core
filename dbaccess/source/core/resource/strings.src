@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:22:08 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ polish ] = "Pr�bowano otworzy� tabel� $name$.";
     Text[ portuguese_brazilian ] = "Tried to open the table $name$";
     Text[ japanese ] = "$name$ ﾃｰﾌﾞﾙを開こうとしました。";
-    Text[ korean ] = "$name$ 테이블을 열기 위해 시도함";
+    Text[ korean ] = "$name$ 시트를 열려고 합니다.";
     Text[ chinese_simplified ] = "已经尝试过打开表格 $name$ 。";
     Text[ chinese_traditional ] = "已經嘗試過開啟表格 $name$ 。";
     Text[ turkish ] = "Tried to open the table $name$";
@@ -103,7 +103,7 @@ String RID_STR_CONNECTION_INVALID
     Text[ polish ] = "Brak po��czenia!";
     Text[ portuguese_brazilian ] = "Not possible to create a connection!";
     Text[ japanese ] = "接続できませんでした。";
-    Text[ korean ] = "접속도하지 못했습니다!";
+    Text[ korean ] = "연결도 되지 않았습니다.";
     Text[ chinese_simplified ] = "无法建立连接！";
     Text[ chinese_traditional ] = "無法建立連線!";
     Text[ turkish ] = "Not possible to create a connection!";
@@ -129,7 +129,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ polish ] = "Tabela $name$ ju� istenieje. Nie jest widoczna, poniewa� zosta�a przefiltrowana!";
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
     Text[ japanese ] = "ﾃｰﾌﾞﾙ $name$ はすでにあります。ﾌｨﾙﾀされているため、表示されません。";
-    Text[ korean ] = " $name$ 시트가 이미 존재합니다. 이 시트는 필터로 제거되었기 때문에 보이지 않습니다.!";
+    Text[ korean ] = " $name$ 시트가 이미 존재합니다. 이 시트는 필터로 제거되어 보이지 않습니다.!";
     Text[ chinese_simplified ] = "表格 $name$ 已经存在。因为已经筛选出这个表格，所以无法显示它。";
     Text[ chinese_traditional ] = "這個表格 $name$ 已經存在。因爲已經篩選它而無法顯示。";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
@@ -156,7 +156,7 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ polish ] = "Brak praw na zapisywanie danych konfiguracjynych obiektu.";
     Text[ portuguese_brazilian ] = "You have no write access to the configuration data the object is based on.";
     Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄの設定ﾃﾞｰﾀへの書き込み権はありません。";
-    Text[ korean ] = "개체의 컨피규레이션 데이터에 대한 쓰기 권한이 없습니다";
+    Text[ korean ] = "개체의 구성 데이터에 대한 쓰기 권한이 없습니다";
     Text[ chinese_simplified ] = "您没有权限读取这个对象的配置数据。";
     Text[ chinese_traditional ] = "您沒有權限存取這個物件的配置資料。";
     Text[ turkish ] = "You have no write access to the configuration data the object is based on.";
@@ -183,7 +183,7 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
     Text[ polish ] = "Brak po��czenia z zewn�trznym �r�d�em danych. Wyst�pni� nieznany b��d. Prawdopodobie nie dzia�a sterownik.";
     Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
     Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽへ接続できませんでした。不明なｴﾗｰが発生しました。ﾄﾞﾗｲﾊﾞにﾄﾗﾌﾞﾙがある可能性があります。";
-    Text[ korean ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
+    Text[ korean ] = "외부 데이터 소스와의 연결을 설정하지 못했습니다. SDBC 드라이버에 결함이 있을 가능성이 높습니다.";
     Text[ chinese_simplified ] = "无法与外部数据源建立连接。出现了一个不明的错误。可能是驱动程序已经损坏。";
     Text[ chinese_traditional ] = "無法與外部的資料源連線。出現一個不明的錯誤。原因可能是驅動程式已經損壞。";
     Text[ turkish ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
@@ -209,7 +209,7 @@ String RID_STR_COULDNOTCONNECT_NODRIVER
     Text[ polish ] = "Brak po��czenia z zewn�trznym �r�d�em danych. Nie znaleziono sterownika SDCB do podanego adresu URL.";
     Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
     Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽへ接続できませんでした。指定した URL ｱﾄﾞﾚｽの SDBC ﾄﾞﾗｲﾊﾞは見つかりませんでした。";
-    Text[ korean ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
+    Text[ korean ] = "외부 데이터 소스와의 연결을 설정하지 못했습니다. 지정된 URL에 대한 SDBC 드라이버를 찾지 못했습니다.";
     Text[ chinese_simplified ] = "无法与外部数据源建立连接。无法在指定的 URL 处找到 SDBC 驱动程序。";
     Text[ chinese_traditional ] = "無法與外部的資料源連線。無法在指定的 URL 位置找到 SDBC 驅動程式。";
     Text[ turkish ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
@@ -235,13 +235,14 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ polish ] = "Brak po��czenia z zewn�trznym �r�d�em danych. Za�adowanie mened�era sterownika SDCB nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽへ接続できませんでした。SDBC ﾄﾞﾗｲﾊﾞのﾏﾈｰｼﾞｬｰは読み込みできませんでした。";
-    Text[ korean ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
+    Text[ korean ] = "외부 데이터 소스와의 연결을 설정하지 못했습니다. SDBC 드라이버 관리자가 로드되지 못했습니다.";
     Text[ chinese_simplified ] = "无法与外部数据源建立连接。无法装入 SDBC 驱动程序管理器。";
     Text[ chinese_traditional ] = "無法與外部的資料源連線。無法載入 SDBC 驅動程式管理員。";
     Text[ turkish ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ arabic ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
     Text[ catalan ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
+
 
 
 
