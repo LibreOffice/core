@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:54:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,15 +762,13 @@ void XMLTextParagraphExport::exportListChange(
                         sName = sTmp;
                 }
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          sName );
+                        GetExport().EncodeStyleName( sName ) );
             }
             if( bContinue && rNextInfo.IsOrdered() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                           XML_CONTINUE_NUMBERING, XML_TRUE );
 
-            enum XMLTokenEnum eLName =
-                    rNextInfo.IsOrdered() ? XML_ORDERED_LIST
-                                          : XML_UNORDERED_LIST;
+            enum XMLTokenEnum eLName = XML_LIST;
 
             OUString *pElem = new OUString(
                     GetExport().GetNamespaceMap().GetQNameByKey(
@@ -1699,7 +1697,7 @@ void XMLTextParagraphExport::exportParagraph(
             sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, xPropSet, sStyle );
             if( sAutoStyle.getLength() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          sAutoStyle );
+                              GetExport().EncodeStyleName( sAutoStyle ) );
 
             if( rPropSetHelper.hasProperty( PARA_CONDITIONAL_STYLE_NAME ) )
             {
@@ -1718,7 +1716,7 @@ void XMLTextParagraphExport::exportParagraph(
                     if( sCondStyle.getLength() )
                         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                   XML_COND_STYLE_NAME,
-                                                  sCondStyle );
+                              GetExport().EncodeStyleName( sCondStyle ) );
                 }
             }
 
@@ -1736,7 +1734,8 @@ void XMLTextParagraphExport::exportParagraph(
                 {
                     OUStringBuffer sTmp;
                     sTmp.append( (sal_Int32)nOutlineLevel+1L );
-                    GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_LEVEL,
+                    GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+                                              XML_OUTLINE_LEVEL,
                                   sTmp.makeStringAndClear() );
                 }
             }
@@ -2030,7 +2029,8 @@ sal_Bool lcl_txtpara_isBoundAsChar(
 
 sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet,
-    sal_Bool bShape )
+    sal_Bool bShape,
+    OUString *pMinHeightValue )
 {
     sal_Int32 nShapeFeatures = SEF_DEFAULT;
 
@@ -2202,9 +2202,9 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
         }
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                             nHeight );
-        if( SizeType::FIX != nSizeType && 0==nRelHeight && !bSyncHeight )
-            GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
-                                      sValue.makeStringAndClear() );
+        if( SizeType::FIX != nSizeType && 0==nRelHeight && !bSyncHeight &&
+             pMinHeightValue )
+            *pMinHeightValue = sValue.makeStringAndClear();
         else
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
@@ -2308,7 +2308,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
 
             if( sStyle.getLength() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          sStyle );
+                                  GetExport().EncodeStyleName( sStyle ) );
             {
                 SvXMLElementExport aElem( GetExport(), sStyle.getLength() > 0,
                     XML_NAMESPACE_TEXT, XML_SPAN, sal_False, sal_False );
@@ -2362,11 +2362,19 @@ void XMLTextParagraphExport::_exportTextFrame(
     }
 
     OUString sAutoStyle( sStyle );
+    OUString aMinHeightValue;
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
     if( sAutoStyle.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
-                                  sAutoStyle );
-    addTextFrameAttributes( rPropSet, sal_False );
+                              GetExport().EncodeStyleName( sAutoStyle ) );
+    addTextFrameAttributes( rPropSet, sal_False, &aMinHeightValue );
+
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                              XML_FRAME, sal_False, sal_True );
+
+    if( aMinHeightValue.getLength() )
+        GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_HEIGHT,
+                                  aMinHeightValue );
 
     // draw:chain-next-name
     if( rPropSetInfo->hasPropertyByName( sChainNextName ) )
@@ -2379,11 +2387,15 @@ void XMLTextParagraphExport::_exportTextFrame(
                                       sNext );
     }
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              XML_TEXT_BOX, sal_False, sal_True );
+    {
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                  XML_TEXT_BOX, sal_True, sal_True );
 
-    // frame bound frames
-    exportFramesBoundToFrame( xTxtFrame, bProgress );
+        // frame bound frames
+        exportFramesBoundToFrame( xTxtFrame, bProgress );
+
+        exportText( xTxt, sal_False, bProgress, sal_True );
+    }
 
     // script:events
     Reference<XEventsSupplier> xEventsSupp( xTxtFrame, UNO_QUERY );
@@ -2392,7 +2404,6 @@ void XMLTextParagraphExport::_exportTextFrame(
     // image map
     GetExport().GetImageMapExport().Export( rPropSet );
 
-    exportText( xTxt, sal_False, bProgress, sal_True );
 }
 
 void XMLTextParagraphExport::exportContour(
@@ -2532,8 +2543,27 @@ void XMLTextParagraphExport::_exportTextGraphic(
     sAutoStyle = Find( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet, sStyle );
     if( sAutoStyle.getLength() )
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME,
-                                  sAutoStyle );
+                                  GetExport().EncodeStyleName( sAutoStyle ) );
     addTextFrameAttributes( rPropSet, sal_False );
+
+    // svg:transform
+    aAny = rPropSet->getPropertyValue( sGraphicRotation );
+    sal_Int16 nVal;
+    aAny >>= nVal;
+    if( nVal != 0 )
+    {
+        OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
+        sRet.append( GetXMLToken(XML_ROTATE));
+        sRet.append( (sal_Unicode)'(' );
+        GetExport().GetMM100UnitConverter().convertNumber( sRet, (sal_Int32)nVal );
+        sRet.append( (sal_Unicode)')' );
+        GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
+                                  sRet.makeStringAndClear() );
+    }
+
+
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                              XML_FRAME, sal_False, sal_True );
 
     // xlink:href
     OUString sOrigURL;
@@ -2560,47 +2590,23 @@ void XMLTextParagraphExport::_exportTextGraphic(
         GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_FILTER_NAME,
                                   sGrfFilter );
 
-    // svg:transform
-    aAny = rPropSet->getPropertyValue( sGraphicRotation );
-    sal_Int16 nVal;
-    aAny >>= nVal;
-    if( nVal != 0 )
     {
-        OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
-        sRet.append( GetXMLToken(XML_ROTATE));
-        sRet.append( (sal_Unicode)'(' );
-        GetExport().GetMM100UnitConverter().convertNumber( sRet, (sal_Int32)nVal );
-        sRet.append( (sal_Unicode)')' );
-        GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
-                                  sRet.makeStringAndClear() );
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+                                  XML_IMAGE, sal_False, sal_True );
+
+        // optional office:binary-data
+        GetExport().AddEmbeddedGraphicObjectAsBase64( sOrigURL );
     }
-
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
-                              XML_IMAGE, sal_False, sal_True );
-
-    // optional office:binary-data
-    GetExport().AddEmbeddedGraphicObjectAsBase64( sOrigURL );
 
     // script:events
     Reference<XEventsSupplier> xEventsSupp( rPropSet, UNO_QUERY );
     GetExport().GetEventExport().Export(xEventsSupp);
 
-    // svg:desc
-    exportAlternativeText( rPropSet, rPropSetInfo );
-    /*
-    OUString sAltText;
-    aAny = rPropSet->getPropertyValue( sAlternativeText );
-    aAny >>= sAltText;
-    if( sAltText.getLength() )
-    {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
-                                  XML_DESC, sal_True, sal_False );
-        GetExport().Characters( sAltText );
-    }
-    */
-
     // image map
     GetExport().GetImageMapExport().Export( rPropSet );
+
+    // svg:desc
+    exportAlternativeText( rPropSet, rPropSetInfo );
 
     // draw:contour
     exportContour( rPropSet, rPropSetInfo );
@@ -2750,11 +2756,11 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
 
         if( sUStyleName.getLength() )
             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      XML_STYLE_NAME, sUStyleName );
+              XML_STYLE_NAME, GetExport().EncodeStyleName( sUStyleName ) );
 
         if( sVStyleName.getLength() )
             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
-                                      XML_VISITED_STYLE_NAME, sVStyleName );
+              XML_VISITED_STYLE_NAME, GetExport().EncodeStyleName( sVStyleName ) );
     }
 
     return bExport;
@@ -2808,7 +2814,7 @@ void XMLTextParagraphExport::exportTextRange(
             OUString sText = rTextRange->getString();
             if( sStyle.getLength() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                          sStyle );
+                          GetExport().EncodeStyleName( sStyle ) );
             {
                 // in a block to make sure it is destroyed before the text:a element
                 SvXMLElementExport aElem( GetExport(), sStyle.getLength() > 0,
@@ -2905,7 +2911,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
             case 0x0009:    // Tab
                 {
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
-                                              XML_TAB_STOP, sal_False,
+                                              XML_TAB, sal_False,
                                               sal_False );
                 }
                 break;
@@ -3109,7 +3115,7 @@ void XMLTextParagraphExport::exportRuby(
                                         sEmpty );
             DBG_ASSERT(sStyleName.getLength() > 0, "I can't find the style!");
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                     XML_STYLE_NAME, sStyleName);
+                 XML_STYLE_NAME, sStyleName );
 
             // export <text:ruby> and <text:ruby-base> start elements
             GetExport().StartElement( XML_NAMESPACE_TEXT, XML_RUBY, sal_False);
@@ -3136,7 +3142,7 @@ void XMLTextParagraphExport::exportRuby(
                 if (sOpenRubyCharStyle.getLength() > 0)
                     GetExport().AddAttribute(
                         XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                        sOpenRubyCharStyle);
+                GetExport().EncodeStyleName( sOpenRubyCharStyle) );
 
                 SvXMLElementExport aRuby(
                     GetExport(), XML_NAMESPACE_TEXT, XML_RUBY_TEXT,
