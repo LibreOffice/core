@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:21:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef CONNECTIVITY_MYSQL_DRIVER_HXX
 #include "mysql/YDriver.hxx"
 #endif
@@ -351,7 +350,7 @@ namespace connectivity
                         );
             }
         }
-        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     }
 
     //--------------------------------------------------------------------
