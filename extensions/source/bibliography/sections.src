@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:06:36 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 19:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1447,7 +1447,7 @@ TabPage RID_TP_GENERAL
     Text[ spanish ] = "General";
     Text[ italian ] = "Generale";
     Text[ danish ] = "Generel";
-    Text[ swedish ] = "Allmän";
+    Text[ swedish ] = "Allmänt";
     Text[ polish ] = "Ogólne";
     Text[ portuguese_brazilian ] = "General";
     Text[ japanese ] = "‘S”Ê";
