@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProtocolHandler.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-05-07 11:22:51 $
+ *  last change: $Author: as $ $Date: 2002-09-04 10:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/frame/XDispatchProvider.idl>
 #endif
 
+#ifndef __com_sun_star_lang_XInitialization_idl__
+#include <com/sun/star/lang/XInitialization.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module frame {
@@ -73,31 +77,48 @@
 /** special dispatch provider registered for URL protocols
 
     <p>
-    Such provider can be registered inside office to handle special kinds of URLs
-    by adding a list of pattern into the configuration. The generic dispatch mechanism
-    on a <type>Frame</type> search for any registered protocol handler and ask him,
-    if he whish to handle the given request.
-    </p>
+    The generic dispatch mechanism on a <type>Frame</type>
+    search for such registered protocol handler and use it if it agrees with
+    the dispatched URL.
 
-    @see Frame
+    Supported URLs must match follow format: <protocol scheme>:<protocol specific part>
+    If a handler provides optional arguments ("?") or jump marks ("#") depends from his
+    defintion and implementation. The generic dispatch provider will use <protocol scheme>
+    to detect right handler only.
+    </p>
  */
 service ProtocolHandler
 {
-    //-------------------------------------------------------------------------
-    /** provides <type>XDispatch</type> interfaces if given URL match the
-        criteria of this handler
+        //-------------------------------------------------------------------------
+        /** used from the generic dispatch mechanism of the frame, to ask ProtocolHandler
+            for his agreement for the dispatched URL
 
         <p>
-        A handler is registered for types of URLs by using pattern. But he can
-        disagree with some special requests by returning <NULL/> during call
-        <member>XDispatchProvider::queryDispatch()</member>. If not he must
-        return a valid dispatch object.
+        Such asked handler can agree by returning itself or a special sub dispatch object, which
+        can handle the given URL. Of course he can disagree with it by returning an empty reference.
+        </p>
+        */
+        interface XDispatchProvider;
+
+        //-------------------------------------------------------------------------
+        /** used to set the environment on this handler
+
+        <p>
+        Sometimes it can be usefull for a dispatch object, to know something about the
+        environment, in which it runs - especily the frame. Then this optional interface
+        has to be implemented. Following parameters are passed due to this interface inside the given array of any values:
+        <ul>
+                <li>sequence< any >[0] => the frame for which this ProtocolHandler was created [com.sun.star.frame.XFrame]</li>
+        </ul>
         </p>
 
-        @see XNotifyingDispatch
-        @see XDispatch
-     */
-    interface XDispatchProvider;
+        <p>
+        Please note: if this mechanism is used it seams not usefull (nor possible) to implement a ProtocolHandler
+        as a singleton. Otherwhise the implementation can't distinguish between different environments
+        and her corresponding dispatch requests.
+        </p>
+        */
+        [optional] interface com::sun::star::lang::XInitialization;
 };
 
 //=============================================================================
