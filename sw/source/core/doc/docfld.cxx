@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-08 15:06:36 $
+ *  last change: $Author: od $ $Date: 2002-08-09 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2414,6 +2414,19 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         delete pFldSortLst;
     pFldSortLst = new _SetGetExpFlds( 64, 16 );
 
+    /// OD 09.08.2002 [#101207#,#101216#,#101778#] - consider and unhide sections
+    ///     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
+    ///     notes by OD:
+    ///         eGetMode == GETFLD_CALC in call from methods SwDoc::FldsToCalc
+    ///         eGetMode == GETFLD_EXPAND in call from method SwDoc::FldsToExpand
+    ///         eGetMode == GETFLD_ALL in call from method SwDoc::UpdateExpFlds
+    ///         I figured out that hidden section only have to be shown,
+    ///         if fields have updated (call by SwDoc::UpdateExpFlds) and thus
+    ///         the hide conditions of section have to be updated.
+    ///         For correct updating the hide condition of a section, its position
+    ///         have to be known in order to insert the hide condition as a new
+    ///         expression field into the sorted field list (<pFldSortLst>).
+    if ( eGetMode == GETFLD_ALL )
     // zuerst die Bereiche einsammeln. Alle die ueber Bedingung
     // gehiddet sind, wieder mit Frames versorgen, damit die darin
     // enthaltenen Felder richtig einsortiert werden!!!
