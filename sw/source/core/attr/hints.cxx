@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:10:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,14 +264,13 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 }
 
 SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
-    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName ), pList(0), pDoc(0)
+    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName )
 {
 }
 
 void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
 {
-    if (pList)
-        pList->Insert(rNd.GetIndex(), &rNd);
+    aList.Insert(rNd.GetIndex(), &rNd);
 }
 
 SwNRuleLowerLevel::SwNRuleLowerLevel( const String& rRuleName, BYTE nSrchLvl )
