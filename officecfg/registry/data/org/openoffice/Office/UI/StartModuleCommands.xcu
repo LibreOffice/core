@@ -1,10 +1,283 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: StartModuleCommands.xcu,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:33:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
 <!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
 <oor:component-data oor:name="StartModuleCommands" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <node oor:name="UserInterface">
         <node oor:name="Commands">
+            <node oor:name=".uno:AddDirect" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Neu</value>
+                    <value xml:lang="en-US">~New</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CloseDoc" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">S~chließen</value>
+                    <value xml:lang="en-US">~Close</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CloseWin" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Fenster schließen</value>
+                    <value xml:lang="en-US">Close Window</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Copy" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Kopieren</value>
+                    <value xml:lang="en-US">~Copy</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Cut" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Ausschneiden</value>
+                    <value xml:lang="en-US">Cu~t</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ExtendedHelp" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Direkthilfe</value>
+                    <value xml:lang="en-US">What's ~This?</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:HelpIndex" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">%PRODUCTNAME ~Hilfe</value>
+                    <value xml:lang="en-US">%PRODUCTNAME ~Help</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:NewDoc" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Neues Dokument aus Vorlage</value>
+                    <value xml:lang="en-US">New Document From Template</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Open" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Ö~ffnen...</value>
+                    <value xml:lang="en-US">~Open...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:OpenUrl" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">URL laden</value>
+                    <value xml:lang="en-US">Load URL</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Paste" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">E~infügen</value>
+                    <value xml:lang="en-US">~Paste</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Print" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Drucken...</value>
+                    <value xml:lang="en-US">~Print...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PrinterSetup" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Druckereinstellun~g...</value>
+                    <value xml:lang="en-US">P~rinter Settings...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Quit" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Beenden</value>
+                    <value xml:lang="en-US">E~xit</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Save" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Speichern</value>
+                    <value xml:lang="en-US">~Save</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SaveAs" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Speichern ~unter...</value>
+                    <value xml:lang="en-US">Save ~As...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SendMail" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Dokument als ~E-Mail...</value>
+                    <value xml:lang="en-US">Document as ~E-mail...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SetDocumentProperties" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">E~igenschaften...</value>
+                    <value xml:lang="en-US">Propert~ies...</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Undo" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Rückgängig unmöglich</value>
+                    <value xml:lang="en-US">Can&apos;t Undo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
+            <node oor:name=".uno:EditMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Bearbeiten</value>
+                    <value xml:lang="en-US">~Edit</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:HelpMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Hilfe</value>
+                    <value xml:lang="en-US">~Help</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:MacrosMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Makros</value>
+                    <value xml:lang="en-US">~Macros</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:PickList" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Datei</value>
+                    <value xml:lang="en-US">~File</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ToolsMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">E~xtras</value>
+                    <value xml:lang="en-US">~Tools</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ViewMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">~Ansicht</value>
+                    <value xml:lang="en-US">~View</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:WindowList" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Fen~ster</value>
+                    <value xml:lang="en-US">~Window</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
