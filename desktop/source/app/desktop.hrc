@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:13 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,21 @@
 #define TXT_DLG_CMDLINEHELP_RIGHT           (RID_DESKTOP_DIALOG_START+104)
 #define TXT_DLG_CMDLINEHELP_BOTTOM          (RID_DESKTOP_DIALOG_START+105)
 #define BTN_DLG_CMDLINEHELP_OK              (RID_DESKTOP_DIALOG_START+106)
+
+#define DLG_LICENSE                         (RID_DESKTOP_DIALOG_START+110)
+#define ML_LICENSE                          (RID_DESKTOP_DIALOG_START+111)
+#define FT_INFO1                            (RID_DESKTOP_DIALOG_START+112)
+#define FT_INFO2                            (RID_DESKTOP_DIALOG_START+113)
+#define FT_INFO3                            (RID_DESKTOP_DIALOG_START+114)
+#define FT_INFO2_1                          (RID_DESKTOP_DIALOG_START+115)
+#define FT_INFO3_1                          (RID_DESKTOP_DIALOG_START+116)
+#define CB_ACCEPT                           (RID_DESKTOP_DIALOG_START+117)
+#define PB_PAGEDOWN                         (RID_DESKTOP_DIALOG_START+118)
+#define IMG_ARROW                           (RID_DESKTOP_DIALOG_START+119)
+#define LICENSE_ACCEPT                      (RID_DESKTOP_DIALOG_START+120)
+#define LICENSE_NOTACCEPT                   (RID_DESKTOP_DIALOG_START+121)
+#define PB_DECLINE                          (RID_DESKTOP_DIALOG_START+122)
+#define PB_ACCEPT                           (RID_DESKTOP_DIALOG_START+123)
 
 #define QBX_CONFIG_IMPORTSETTINGS           (RID_DESKTOP_DIALOG_START+180)
 
