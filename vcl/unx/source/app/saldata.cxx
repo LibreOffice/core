@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-01-26 14:40:53 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 14:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ void SalXLib::Remove( int nFD )
         nFDs_ = nFD + 1;
     }
 }
-
+#if 0
 class YieldMutexReleaser
 {
     ULONG               m_nYieldCount;
@@ -733,6 +733,7 @@ YieldMutexReleaser::~YieldMutexReleaser()
         m_nYieldCount--;
     }
 }
+#endif
 
 final void SalXLib::Yield( BOOL bWait )
 {
