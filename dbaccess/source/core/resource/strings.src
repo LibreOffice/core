@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:04:17 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 22:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text [ english_us ] = "The table $name$ already exists. It has been filtered.";
     Text[ portuguese ] = "A tabela $name$ jб existe. Esta foi filtrada.";
     Text[ russian ] = "“аблица $name$ уже существует. ќна отфильтрована!";
-    Text[ greek ] = "the table $name$ already exists. She is only filtered!";
+    Text[ greek ] = "ѕ рянбкбт $name$ хр№счей ёдз. Єчей цйлфсбсйуфея!";
     Text[ dutch ] = "Tabel $name$ bestaat reeds. Hij werd alleen gefilterd!";
     Text[ french ] = "La table $name$ existe dйjа ; elle a йtй filtrйe !";
     Text[ spanish ] = "La tabla $name$ ya existe. °Ha sido filtrada!";
@@ -163,4 +163,5 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
     Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
 };
+
 
