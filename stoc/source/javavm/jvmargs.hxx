@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:39:17 $
+ *  last change: $Author: jl $ $Date: 2001-10-17 15:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ namespace stoc_javavm {
 
     class JVM {
         ::std::vector<rtl::OUString> _props;
-
         ::rtl::OUString _runtimeLib;
         ::rtl::OUString _systemClasspath;
         ::rtl::OUString _userClasspath;
@@ -158,6 +157,7 @@ namespace stoc_javavm {
 
         const ::rtl::OUString & getRuntimeLib() const throw();
         sal_Bool isEnabled() const throw();
+        const ::std::vector< ::rtl::OUString> & getProperties() const;
     };
 }
 

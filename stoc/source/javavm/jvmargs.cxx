@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 17:35:21 $
+ *  last change: $Author: jl $ $Date: 2001-10-17 15:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,5 +330,10 @@ namespace stoc_javavm {
 
     sal_Bool JVM::isEnabled() const throw() {
         return _enabled && _systemClasspath.getLength() && _runtimeLib.getLength();
+    }
+
+    const ::std::vector<::rtl::OUString> & JVM::getProperties() const
+    {
+        return _props;
     }
 }

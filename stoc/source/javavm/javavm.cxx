@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jl $ $Date: 2001-09-25 06:39:19 $
+ *  last change: $Author: jl $ $Date: 2001-10-17 15:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,12 +513,19 @@ namespace stoc_javavm {
         OUString * pSectionEntry = javaProperties.getArray();
         sal_Int32 nCount         = javaProperties.getLength();
 
-        for(sal_Int32 i=0; i < nCount; ++ i) {
-            OUString entryValue = (xJavaSection->openKey(pSectionEntry[i]))->getStringValue();
+        for(sal_Int32 i=0; i < nCount; ++ i)
+        {
+            //Reconstruct the whole lines of the java.ini
+            Reference< XRegistryKey > key= xJavaSection->openKey(pSectionEntry[i]);
+            if (key.is())
+            {
+                // there was a "=" in the line, hence key/value pair.
+                OUString entryValue = key->getStringValue();
 
-            if(entryValue.getLength()) {
-                pSectionEntry[i] += OUString(RTL_CONSTASCII_USTRINGPARAM("="));
-                pSectionEntry[i] += entryValue;
+                if(entryValue.getLength()) {
+                    pSectionEntry[i] += OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                    pSectionEntry[i] += entryValue;
+                }
             }
 
             pjvm->pushProp(pSectionEntry[i]);
@@ -670,40 +677,37 @@ namespace stoc_javavm {
             sigaction( SIGFPE, &act, NULL);
 
 #endif
-            //determine number of options
-            // number= 1 (classpath) + number of elements of JDK1_1InitArgs::properties
-            sal_uInt16 cprops=0;
-            if(vm_args.properties != 0)
-                while( vm_args.properties[cprops++] != 0);
-            else
-                cprops=1;
-
+            sal_uInt16 cprops= jvm.getProperties().size();
 
             JavaVMInitArgs vm_args2;
-            JavaVMOption * options= new JavaVMOption[cprops];
-
-
-            OString _path(vm_args.classpath);
-            OString _prepath( "-Djava.class.path=");
-            OString _allpath= _prepath + _path;
-            options[0].optionString= (char*)_allpath.getStr();
+            JavaVMOption * options= new JavaVMOption[cprops + 1];
+            OString sClassPath= OString("-Djava.class.path=") + vm_args.classpath;
+            options[0].optionString= (char*)sClassPath.getStr();
             options[0].extraInfo= NULL;
 
+            OString * arProps= new OString[cprops];
 
-            for( sal_uInt16 x= 1; x< cprops; x++)
+            OString sPattern("-X");
+            for( sal_uInt16 x= 0; x< cprops; x++)
             {
-                OString sProp( OString("-D") + OString(vm_args.properties[ x-1]));
-                options[x].optionString= (char*)sProp.getStr();
-                options[x].extraInfo= NULL;
+                OString sOption(vm_args.properties[x]);
+
+                if ( ! sOption.matchIgnoreAsciiCase(sPattern, 0))
+                    arProps[x]= OString("-D") + vm_args.properties[x];
+                else
+                    arProps[x]= vm_args.properties[x];
+                options[x+1].optionString= (char*)arProps[x].getStr();
+                options[x+1].extraInfo= NULL;
             }
             vm_args2.version= 0x00010002;
             vm_args2.options= options;
-            vm_args2.nOptions= cprops;
+            vm_args2.nOptions= cprops + 1;
             vm_args2.ignoreUnrecognized= JNI_TRUE;
 
             err= pCreateJavaVM(&pJavaVM, &pJNIEnv, &vm_args2);
 
             delete [] options;
+            delete [] arProps;
         }
         if(err) {
             OUString message(RTL_CONSTASCII_USTRINGPARAM("JavaVirtualMachine_Impl::createJavaVM - can not create vm, cause of err:"));
