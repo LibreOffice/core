@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 12:04:15 $
+ *  last change: $Author: as $ $Date: 2001-12-19 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,11 +528,19 @@ UUIInteractionHandler::handle(
             return;
         }
 
-        star::document::NoSuchFilterRequest aFilterRequest;
-        if (aAnyRequest >>= aFilterRequest)
+        star::document::NoSuchFilterRequest aNoSuchFilterRequest;
+        if (aAnyRequest >>= aNoSuchFilterRequest)
         {
-            handleFilterRequest(aFilterRequest,
-                                 rRequest->getContinuations());
+            handleNoSuchFilterRequest(aNoSuchFilterRequest,
+                                      rRequest->getContinuations());
+            return;
+        }
+
+        star::document::AmbigousFilterRequest aAmbigousFilterRequest;
+        if (aAnyRequest >>= aAmbigousFilterRequest)
+        {
+            handleAmbigousFilterRequest(aAmbigousFilterRequest,
+                                        rRequest->getContinuations());
             return;
         }
 
@@ -1576,8 +1584,8 @@ UUIInteractionHandler::handleCookiesRequest(
 }
 
 void
-UUIInteractionHandler::handleFilterRequest( star::document::NoSuchFilterRequest const &                                                 rRequest       ,
-                                            star::uno::Sequence< star::uno::Reference< star::task::XInteractionContinuation > > const & rContinuations ) SAL_THROW((star::uno::RuntimeException))
+UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRequest const &                                                 rRequest       ,
+                                                  star::uno::Sequence< star::uno::Reference< star::task::XInteractionContinuation > > const & rContinuations ) SAL_THROW((star::uno::RuntimeException))
 {
     star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
     star::uno::Reference< star::document::XInteractionFilterSelect > xFilterTransport;
@@ -1678,7 +1686,101 @@ UUIInteractionHandler::handleFilterRequest( star::document::NoSuchFilterRequest 
             executeFilterDialog( rRequest.URL, lNames, sFilter );
 
             if( sFilter.getLength() > 0 )
+            {
                 xFilterTransport->setFilter( sFilter );
+                xFilterTransport->select();
+            }
+            else
+                xAbort->select();
+        }
+    }
+}
+
+void
+UUIInteractionHandler::handleAmbigousFilterRequest(
+    com::sun::star::document::AmbigousFilterRequest const & rRequest,
+    com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((com::sun::star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
+    star::uno::Reference< star::document::XInteractionFilterSelect > xFilterTransport;
+
+    sal_Int32 nCount = rContinuations.getLength();
+    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    {
+        if( ! xAbort.is() )
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+
+        if( ! xFilterTransport.is() )
+            xFilterTransport = star::uno::Reference< star::document::XInteractionFilterSelect >( rContinuations[nStep], star::uno::UNO_QUERY );
+    }
+
+    uui::FilterNameList lNames;
+
+    if( m_xServiceFactory.is() == sal_True )
+    {
+        star::uno::Reference< star::container::XNameContainer > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
+        if( xFilterContainer.is() == sal_True )
+        {
+            star::uno::Any                                    aPackedSet    ;
+            star::uno::Sequence< star::beans::PropertyValue > lProps        ;
+            sal_Int32                                         nCount        ;
+            sal_Int32                                         nStep         ;
+            uui::FilterNamePair                               aPair         ;
+
+            aPackedSet   = xFilterContainer->getByName( rRequest.SelectedFilter );
+            aPackedSet >>= lProps;
+            nCount       = lProps.getLength();
+            for( nStep=0; nStep<nCount; ++nStep )
+            {
+                if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
+                {
+                    ::rtl::OUString sTemp;
+                    lProps[nStep].Value >>= sTemp;
+                    aPair.sUI       = sTemp;
+                    aPair.sInternal = rRequest.SelectedFilter;
+                    lNames.push_back( aPair );
+                    break;
+                }
+            }
+
+            aPackedSet   = xFilterContainer->getByName( rRequest.DetectedFilter );
+            aPackedSet >>= lProps;
+            nCount       = lProps.getLength();
+            for( nStep=0; nStep<nCount; ++nStep )
+            {
+                if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
+                {
+                    ::rtl::OUString sTemp;
+                    lProps[nStep].Value >>= sTemp;
+                    aPair.sUI       = sTemp;
+                    aPair.sInternal = rRequest.DetectedFilter;
+                    lNames.push_back( aPair );
+                    break;
+                }
+            }
+        }
+    }
+
+    if( xAbort.is() && xFilterTransport.is() )
+    {
+        if( lNames.size() < 1 )
+        {
+            xAbort->select();
+        }
+        else
+        {
+            rtl::OUString sFilter;
+            executeFilterDialog( rRequest.URL, lNames, sFilter );
+
+            if( sFilter.getLength() > 0 )
+            {
+                xFilterTransport->setFilter( sFilter );
+                xFilterTransport->select();
+            }
             else
                 xAbort->select();
         }

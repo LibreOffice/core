@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 12:04:41 $
+ *  last change: $Author: as $ $Date: 2001-12-19 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_NOSUCHFILTERREQUEST_HPP_
 #include "com/sun/star/document/NoSuchFilterRequest.hpp"
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_AMBIGOUSFILTERREQUEST_HPP_
+#include "com/sun/star/document/AmbigousFilterRequest.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
@@ -262,8 +265,17 @@ private:
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
-    handleFilterRequest(
+    handleNoSuchFilterRequest(
         com::sun::star::document::NoSuchFilterRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleAmbigousFilterRequest(
+        com::sun::star::document::AmbigousFilterRequest const & rRequest,
         com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > const &
