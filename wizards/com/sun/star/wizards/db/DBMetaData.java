@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: hr $ $Date: 2005-04-06 10:18:21 $
+*  last change: $Author: hr $ $Date: 2005-04-06 12:09:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -735,33 +735,34 @@ public class DBMetaData {
 
 
 
-    public XComponent openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bOpenInDesign, XHierarchicalNameAccess _xDocuments){
-    XComponent xRetComponent = null;
-    try {
-        XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, _xDocuments);
-        PropertyValue[] aPropertyValues = new PropertyValue[4];
-        aPropertyValues[0] = Properties.createProperty("OpenMode", _bOpenInDesign ?  "openDesign": "open" );
-        aPropertyValues[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
-        aPropertyValues[2] = Properties.createProperty("DocumentTitle", _docname);
-        aPropertyValues[3] = Properties.createProperty("AsTemplate", new Boolean(_bAsTemplate));
-        XHierarchicalNameContainer xHier = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, _xDocuments);
-        if (xHier.hasByHierarchicalName(_docname)){
-            xRetComponent = xComponentLoader.loadComponentFromURL(_docname, "", 0, aPropertyValues);
+    public XComponent[] openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bOpenInDesign, XHierarchicalNameAccess _xDocuments){
+        XComponent[] xRetComponent = new XComponent[2];
+        try {
+            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, _xDocuments);
+            PropertyValue[] aPropertyValues = new PropertyValue[4];
+            aPropertyValues[0] = Properties.createProperty("OpenMode", _bOpenInDesign ?  "openDesign": "open" );
+            aPropertyValues[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
+            aPropertyValues[2] = Properties.createProperty("DocumentTitle", _docname);
+            aPropertyValues[3] = Properties.createProperty("AsTemplate", new Boolean(_bAsTemplate));
+            XHierarchicalNameContainer xHier = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, _xDocuments);
+            if (xHier.hasByHierarchicalName(_docname)){
+                xRetComponent[0] = (XComponent)UnoRuntime.queryInterface(XComponent.class, xHier.getByHierarchicalName(_docname));
+                xRetComponent[1] = xComponentLoader.loadComponentFromURL(_docname, "", 0, aPropertyValues);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }
         return xRetComponent;
     }
 
 
-    public XComponent openFormDocument(String _sformname, boolean _bOpenInDesign){
+    public XComponent[] openFormDocument(String _sformname, boolean _bOpenInDesign){
         XHierarchicalNameAccess xFormDocuments = getFormDocuments();
         return openDatabaseDocument(_sformname, false, _bOpenInDesign, xFormDocuments);
     }
 
 
-    public XComponent openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bOpenInDesign){
+    public XComponent[] openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bOpenInDesign){
         XHierarchicalNameAccess xReportDocuments = getReportDocuments();
         return openDatabaseDocument(_sreportname, _bAsTemplate, _bOpenInDesign, xReportDocuments);
     }
