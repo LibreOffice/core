@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-21 15:24:11 $
+ *  last change: $Author: ka $ $Date: 2001-08-29 08:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,10 @@ private:
     ImageMap*                       pImageMap;
     Rectangle                       aVisArea;
     Point                           aStartPos;
-    BOOL                            bInternalMove;
-    BOOL                            bOwnDocument;
-    BOOL                            bOwnView;
+    BOOL                            bInternalMove   : 1;
+    BOOL                            bOwnDocument    : 1;
+    BOOL                            bOwnView        : 1;
+    BOOL                            bLateInit       : 1;
 
                                     // not available
                                     SdTransferable();

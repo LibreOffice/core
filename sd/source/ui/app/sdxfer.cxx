@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-23 10:54:33 $
+ *  last change: $Author: ka $ $Date: 2001-08-29 08:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,10 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL
     pOLEDataHelper( NULL ),
     pBookmark( NULL ),
     pGraphic( NULL ),
-    pImageMap( NULL )
+    pImageMap( NULL ),
+    bLateInit( bInitOnGetData )
 {
-    if( !bInitOnGetData )
+    if( !bLateInit )
         CreateData();
 }
 
@@ -388,6 +389,9 @@ void SdTransferable::CreateData()
 
 void SdTransferable::AddSupportedFormats()
 {
+    if( !bLateInit )
+        CreateData();
+
     if( pOLEDataHelper )
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
