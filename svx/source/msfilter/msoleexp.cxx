@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:27:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,22 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
 #endif
@@ -80,16 +96,99 @@
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include "msoleexp.hxx"
 
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( \
     RTL_CONSTASCII_STRINGPARAM(s))
 
+using namespace ::com::sun::star;
+
+SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
+{
+    if ( aAppName == SvGlobalName( SO3_SM_CLASSID_60 ) )
+            return SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 );
+    else if ( aAppName == SvGlobalName( SO3_SW_CLASSID_60 ) )
+            return SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 );
+    else if ( aAppName == SvGlobalName( SO3_SC_CLASSID_60 ) )
+            return SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 );
+    else if ( aAppName == SvGlobalName( SO3_SDRAW_CLASSID_60 ) )
+            return SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 );
+    else if ( aAppName == SvGlobalName( SO3_SIMPRESS_CLASSID_60 ) )
+            return SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 );
+    else if ( aAppName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
+            return SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 );
+
+    return SvGlobalName();
+}
+
+String GetStorageType( const SvGlobalName& aEmbName )
+{
+    if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_60 ) )
+            return String::CreateFromAscii( "soffice.StarMathDocument.6" );
+    else if ( aEmbName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 ) )
+            return String::CreateFromAscii( "soffice.StarWriterDocument.6" );
+    else if ( aEmbName == SvGlobalName( SO3_SC_OLE_EMBED_CLASSID_60 ) )
+            return String::CreateFromAscii( "soffice.StarCalcDocument.6" );
+    else if ( aEmbName == SvGlobalName( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
+            return String::CreateFromAscii( "soffice.StarDrawDocument.6" );
+    else if ( aEmbName == SvGlobalName( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
+            return String::CreateFromAscii( "soffice.StarImpressDocument.6" );
+    else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
+            return String::CreateFromAscii( "soffice.StarChartDocument.6" );
+
+    return String();
+}
+
+sal_Bool UseOldMSExport()
+{
+    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+
+    if ( xFactory.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xProvider( xFactory->createInstance(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider"))),
+                    uno::UNO_QUERY);
+        if ( xProvider.is() )
+        {
+            try {
+                uno::Sequence< uno::Any > aArg( 1 );
+                aArg[0] <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/InternalMSExport") );
+                uno::Reference< container::XNameAccess > xNameAccess(
+                    xProvider->createInstanceWithArguments(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                        aArg ),
+                    uno::UNO_QUERY );
+                if ( xNameAccess.is() )
+                {
+                    uno::Any aResult = xNameAccess->getByName(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOldExport" ) ) );
+
+                    sal_Bool bResult;
+                    if ( aResult >>= bResult )
+                        return bResult;
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+    }
+
+    OSL_ENSURE( sal_False, "Could not get access to configuration entry!\n" );
+    return sal_False;
+}
+
 void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                                                 SvStorage& rDestStg )
 {
-    sal_Bool bOwn = sal_False;
+    SvGlobalName aOwnGlobalName;
     const SfxFilter* pExpFilter = NULL;
     SfxInPlaceObjectRef xSfxIPObj( &rObj );
     if( xSfxIPObj.Is() && xSfxIPObj->GetObjectShell() )
@@ -134,7 +233,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
                             rId.b12, rId.b13, rId.b14, rId.b15 );
                 if( *xSfxIPObj->GetSvFactory() == aGlbNm )
                 {
-                    bOwn = sal_True;
+                    aOwnGlobalName = aGlbNm;
+
                     if( GetFlags() & pArr->nFlag )
                     {
                         const SfxObjectFactory& rFact = xSfxIPObj->
@@ -149,15 +249,79 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
             }
         }
     }
+
     if( pExpFilter )                        // use this filter for the export
     {
         SfxMedium aMed( &rDestStg, FALSE );
         aMed.SetFilter( pExpFilter );
         xSfxIPObj->GetObjectShell()->ConvertTo( aMed );
     }
+    else if( aOwnGlobalName != SvGlobalName() )
+    {
+        SvGlobalName aEmbName = GetEmbeddedVersion( aOwnGlobalName );
+        if ( aEmbName != SvGlobalName() && !UseOldMSExport() )
+        {
+            // this is a StarOffice 6.1 embedded object
+            rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
+            rDestStg.SetClass( aEmbName,
+                                SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE,
+                                GetStorageType( aEmbName ) );
+            SotStorageStreamRef xExtStm = rDestStg.OpenSotStream(
+                                            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "properties_stream" ) ),
+                                            STREAM_STD_READWRITE );
+
+            sal_Bool bExtentSuccess = sal_False;
+            if( !xExtStm->GetError() )
+            {
+                // write extent
+                Rectangle aVisArea = xSfxIPObj->GetVisArea( ASPECT_CONTENT );
+                sal_Int32 pRect[4];
+                pRect[0] = aVisArea.Left();
+                pRect[1] = aVisArea.Right();
+                pRect[2] = aVisArea.Top();
+                pRect[3] = aVisArea.Bottom();
+
+                sal_Int8 aWriteSet[16];
+                for ( int ind = 0; ind < 4; ind++ )
+                {
+                    sal_Int32 nVal = pRect[ind];
+                    for ( int nByte = 0; nByte < 4; nByte++ )
+                    {
+                        aWriteSet[ind*4+nByte] = nVal % 0x100;
+                        nVal /= 0x100;
+                    }
+                }
+                bExtentSuccess = ( xExtStm->Write( aWriteSet, 16 ) == 16 );
+            }
+
+            if ( bExtentSuccess )
+            {
+                SotStorageStreamRef xEmbStm = rDestStg.OpenSotStream(
+                                                String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "package_stream" ) ),
+                                                STREAM_STD_READWRITE );
+
+                if( !xEmbStm->GetError() )
+                {
+                    SvStorageRef xEmbStor = new SvStorage( sal_True, *xEmbStm );
+                    if( !xEmbStor->GetError() )
+                    {
+                        rObj.DoSaveAs( &xEmbStor );
+                        rObj.DoSaveCompleted();
+                        xEmbStor->Commit();
+                    }
+                }
+            }
+        }
+        else
+        {
+            rDestStg.SetVersion( SOFFICE_FILEFORMAT_50 );
+            rObj.DoSaveAs( &rDestStg );
+            rObj.DoSaveCompleted();
+        }
+    }
     else
     {
-        rDestStg.SetVersion( bOwn ? SOFFICE_FILEFORMAT_50 : SOFFICE_FILEFORMAT_31 );
+        rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
         rObj.DoSaveAs( &rDestStg );
         rObj.DoSaveCompleted();
     }
