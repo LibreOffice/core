@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 09:16:26 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 12:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace dbaui
 //=========================================================================
 //-------------------------------------------------------------------------
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XMultiServiceFactory >& _rxORB)
-    :OGenericUnoDialog(_rxORB)
+    :ODatabaseAdministrationDialogBase(_rxORB)
     ,m_pDatasourceItems(NULL)
     ,m_pItemPool(NULL)
     ,m_pItemPoolDefaults(NULL)
@@ -207,7 +207,7 @@ Reference<XPropertySetInfo>  SAL_CALL ODatabaseAdministrationDialog::getProperty
 //-------------------------------------------------------------------------
 void ODatabaseAdministrationDialog::destroyDialog()
 {
-    OGenericUnoDialog::destroyDialog();
+    ODatabaseAdministrationDialogBase::destroyDialog();
     ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
 }
 
@@ -237,7 +237,7 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
             return;
         }
     }
-    OGenericUnoDialog::implInitialize(_rValue);
+    ODatabaseAdministrationDialogBase::implInitialize(_rValue);
 }
 
 //.........................................................................
@@ -247,6 +247,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/17 09:16:26  fs
+ *  #86511# hold the type collection as pointer, not as object - allows construction in createDialog, where it can be guarded by the solar mutex
+ *
  *  Revision 1.7  2001/03/15 08:27:03  fs
  *  cppuhelper/extract -> comphelper/extract
  *

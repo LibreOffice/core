@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.1 $
+ #  $Revision: 1.2 $
  #
- #  last change: $Author: fs $ $Date: 2000-10-25 13:01:10 $
+ #  last change: $Author: fs $ $Date: 2001-06-18 12:35:37 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -82,7 +82,6 @@ SRCFILES =	\
 SLOFILES=	\
         $(SLO)$/unosqlmessage.obj	\
         $(SLO)$/unoadmin.obj	\
-        $(SLO)$/genericunodialog.obj	\
         $(SLO)$/dbinteraction.obj	\
 
 # --- Targets ----------------------------------
@@ -93,6 +92,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.1  2000/10/25 13:01:10  fs
+ #	initial checkin
+ #	
  #
  #	Revision 1.0 20.09.00 10:58:55  fs
  ########################################################################/

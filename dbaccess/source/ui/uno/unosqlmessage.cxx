@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:33:59 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 12:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace dbaui
 //=========================================================================
 //-------------------------------------------------------------------------
 OSQLMessageDialog::OSQLMessageDialog(const Reference< XMultiServiceFactory >& _rxORB)
-    :OGenericUnoDialog(_rxORB)
+    :OSQLMessageDialogBase(_rxORB)
 {
     registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID,
         &m_aException, ::getCppuType(static_cast<SQLException*>(NULL)));
@@ -164,7 +164,7 @@ sal_Bool SAL_CALL OSQLMessageDialog::convertFastPropertyValue( Any& _rConvertedV
                 // always assume "modified", don't bother with with comparing the two values
         }
         default:
-            return OGenericUnoDialog::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
+            return OSQLMessageDialogBase::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
     }
 }
 
@@ -206,6 +206,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/23 13:33:59  jl
+ *  replaced: OSL_ENSHURE->OSL_ENSURE
+ *
  *  Revision 1.6  2001/01/05 12:16:07  fs
  *  adjusted the implementation name
  *

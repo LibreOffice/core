@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-01 16:31:30 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 12:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_UNOSQLMESSAGE_HXX_
 #define _DBAUI_UNOSQLMESSAGE_HXX_
 
-#ifndef _DBAUI_GENERICUNODIALOG_HXX_
-#include "genericunodialog.hxx"
+#ifndef _SVT_GENERICUNODIALOG_HXX_
+#include <svtools/genericunodialog.hxx>
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -74,7 +74,7 @@ namespace dbaui
 {
 //.........................................................................
 
-typedef OGenericUnoDialog OSQLMessageDialogBase;
+typedef ::svt::OGenericUnoDialog OSQLMessageDialogBase;
 class OSQLMessageDialog
         :public OSQLMessageDialogBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OSQLMessageDialog >
@@ -126,6 +126,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/01 16:31:30  fs
+ *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
+ *
  *  Revision 1.1  2000/10/25 12:49:21  fs
  *  moved herein from ..\dlg
  *
