@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 06:55:41 $
+ *  last change: $Author: os $ $Date: 2001-05-04 07:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  )
     aMtrFldAngle.Show();
     aFtBezAngle.Show();
     aMtrFldBezAngle.Show();
+    aSeparatorFL.Show();
 }
 
 // -----------------------------------------------------------------------
