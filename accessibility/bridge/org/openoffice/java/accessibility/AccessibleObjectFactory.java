@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-02 07:05:27 $
+ *  last change: $Author: obr $ $Date: 2002-10-02 16:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 
 /**
 */
-public class AccessibleObjectFactory {
+public class AccessibleObjectFactory implements XGlobalFocusListener {
 
     // This type is needed for conversions from/to uno Any
     public static final Type XAccessibleType = new Type(XAccessible.class);
@@ -120,6 +120,7 @@ public class AccessibleObjectFactory {
     /** Sets a new AccessibleInformationProvider to be used by this factory object */
     public void setInformationProvider(XAccessibilityInformationProvider provider) {
         infoProvider = provider;
+        provider.setGlobalFocusListener(this);
     }
 
     /** Returns the AccessibleInformationProvider currently used by this factory object */
@@ -139,6 +140,10 @@ public class AccessibleObjectFactory {
             }
         }
 
+        return getAccessibleObject(xAccessibleContext, create, parent);
+    }
+
+    public AccessibleObject getAccessibleObject(XAccessibleContext xAccessibleContext, boolean create, Accessible parent) {
         // Ensure that we really got an UNO accessible context
         if(xAccessibleContext == null) {
             if( Build.DEBUG ) {
@@ -426,6 +431,23 @@ public class AccessibleObjectFactory {
         }
     }
 
+    /*
+    * XGlobalFocusListener
+    */
+
+    public void focusGained(XAccessibleContext context) {
+        AccessibleObject ao = getAccessibleObject(context, true, null);
+        if( ao != null ) {
+            ao.getEventProxy().processFocusGained();
+        }
+    }
+
+    public void focusLost(XAccessibleContext context) {
+        AccessibleObject ao = getAccessibleObject(context, false, null);
+        if( ao != null ) {
+            ao.getEventProxy().processFocusLost();
+        }
+    }
 }
 
 
