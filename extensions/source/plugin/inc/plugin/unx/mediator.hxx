@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-22 18:48:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -216,7 +216,7 @@ class MediatorListener : public NAMESPACE_VOS( OThread )
 
 inline void medDebug( int condition, char* pFormat, ... )
 {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( condition )
     {
         va_list ap;
