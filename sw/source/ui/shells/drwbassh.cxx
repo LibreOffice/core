@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2000-11-02 13:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,16 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
-
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
 #ifndef _FMTORNT_HXX
 #include <fmtornt.hxx>
 #endif
 #include "cmdid.h"
+#include <swmodule.hxx>
 #include "wrtsh.hxx"
-#include "view.hxx"
+#include "wview.hxx"
 #include "edtwin.hxx"
 #include "viewopt.hxx"
 #include "dcontact.hxx"
@@ -279,6 +282,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                         SfxItemSet aSet( *aNewAttr.GetPool(), pRange );
+                        SwView& rView = GetView();
+                        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rView));
+                        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+
                         aSet.Put( aNewAttr, FALSE );
 
                         if (bCaption)
@@ -602,161 +609,6 @@ BOOL SwDrawBaseShell::Disable(SfxItemSet& rSet, USHORT nWhich)
     return bDisable;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.49  2000/09/18 16:06:03  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.48  2000/09/07 15:59:29  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.47  2000/08/10 16:34:18  jp
-    Bug #77310#: don't call a method with a zero pointer
-
-    Revision 1.46  2000/05/29 16:40:53  jp
-    Bug #69159#: delete selection reset the rotate mode
-
-    Revision 1.45  2000/05/26 07:21:32  os
-    old SW Basic API Slots removed
-
-    Revision 1.44  2000/05/10 11:53:01  os
-    Basic API removed
-
-    Revision 1.43  2000/02/11 14:57:25  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.42  1999/06/21 13:20:24  JP
-    Interface changes: SdrView::GetAttributes
-
-
-      Rev 1.41   21 Jun 1999 15:20:24   JP
-   Interface changes: SdrView::GetAttributes
-
-      Rev 1.40   07 Oct 1998 10:58:48   JP
-   Bug #57153#: in allen GetStates einer DrawShell die MarkListe aktualisieren
-
-      Rev 1.39   06 Jul 1998 18:10:14   OM
-   Images zum gruppieren
-
-      Rev 1.38   06 Jul 1998 16:09:54   OM
-   #52065# Gruppe verlassen bei Beendigung der DrawShell
-
-      Rev 1.37   03 Jul 1998 16:28:48   OM
-   #51420# Nur erlaubte Verankerungsarten im PositionsDialog
-
-      Rev 1.36   01 Jul 1998 12:13:44   OM
-   #51323# Zeichengebundene Objekte nicht gruppieren
-
-      Rev 1.35   16 Jun 1998 13:03:32   OM
-   Gruppenobjekte per Ctrl selektieren
-
-      Rev 1.34   12 Jun 1998 16:08:56   OM
-   Gruppierung betreten/verlassen
-
-      Rev 1.33   12 Jun 1998 13:34:02   OM
-   Wieder SID_OBJECT_SELECT statt SID_DRAW_SELECT
-
-      Rev 1.32   11 Jun 1998 16:13:14   OM
-   Gruppierungsmenue
-
-      Rev 1.31   10 Jun 1998 11:23:18   OM
-   Hell/Heaven nicht in FormShell
-
-      Rev 1.30   09 Jun 1998 15:36:00   OM
-   VC-Controls entfernt
-
-      Rev 1.29   22 May 1998 15:19:06   OS
-   wird ein DrawObject geloescht, darf nicht mehr auf this zugegriffen werden
-
-      Rev 1.28   15 May 1998 16:22:02   OM
-   #49467# GeschÅtzte Rahmen nicht bearbeiten
-
-      Rev 1.27   15 Apr 1998 15:32:24   OM
-   #49467 Objekte innerhalb von geschuetzten Rahmen duerfen nicht veraendert werden
-
-      Rev 1.26   29 Nov 1997 15:51:24   MA
-   includes
-
-      Rev 1.25   24 Nov 1997 09:46:58   MA
-   includes
-
-      Rev 1.24   20 Oct 1997 12:45:06   OM
-   Kein Legenden-Dialog bei URL-Buttons
-
-      Rev 1.23   20 Oct 1997 12:15:18   OM
-   #44751# Umankern auch bei Legendenobjekten
-
-      Rev 1.22   15 Oct 1997 13:00:06   AMA
-   Fix #44651#: Umankern mit gleichzeitiger Positionsaenderung
-
-      Rev 1.21   05 Sep 1997 12:04:22   MH
-   chg: header
-
-      Rev 1.20   02 Sep 1997 13:23:16   OS
-   includes
-
-      Rev 1.19   16 Aug 1997 12:59:54   OS
-   include
-
-      Rev 1.18   05 Aug 1997 16:23:12   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.17   01 Aug 1997 11:47:18   MH
-   chg: header
-
-      Rev 1.16   10 Jul 1997 17:27:44   MA
-   #41589# nicht die dontcare verlieren, damit auch GPF umpopeln
-
-      Rev 1.15   08 Jul 1997 12:16:26   OM
-   Draw-Selektionsmodi aufgeraeumt
-
-      Rev 1.14   08 Jul 1997 12:07:10   OM
-   Draw-Selektionsmodi aufgeraeumt
-
-      Rev 1.13   25 Jun 1997 13:34:18   OM
-   #40966# DrawBaseShell-Ptr wieder eingefuehrt
-
-      Rev 1.12   25 Jun 1997 09:10:18   MA
-   #40965#, SubShell abmelden
-
-      Rev 1.11   17 Jun 1997 15:52:52   MA
-   DrawTxtShell nicht von BaseShell ableiten + Opts
-
-      Rev 1.10   16 Jun 1997 15:31:56   OM
-   GPF behoben: Backspace wie Delete behandeln
-
-      Rev 1.9   27 May 1997 16:39:24   OM
-   Zeichengebundene Zeichenobjekte korrekt ausrichten
-
-      Rev 1.8   27 May 1997 12:52:46   OS
-   AttrChangedNotify erst am Ende des ::Execute rufen #40220#
-
-      Rev 1.7   30 Apr 1997 11:34:50   MA
-   #39469# erstmal GPF umpopelt
-
-      Rev 1.6   07 Apr 1997 17:43:34   MH
-   chg: header
-
-      Rev 1.5   02 Apr 1997 21:42:20   MH
-   chg: header SfxDialoge
-
-      Rev 1.4   19 Mar 1997 11:54:26   OM
-   #37302# Shellwechsel nach Basic-Delete ausloesen
-
-      Rev 1.3   27 Jan 1997 16:31:04   OS
-   HtmlMode entfernt
-
-      Rev 1.2   23 Jan 1997 10:45:52   OM
-   Neue Shells: Control- und DrawBaseShell
-
-      Rev 1.1   22 Jan 1997 14:40:32   OM
-   unnoetige Includes entfernt
-
-      Rev 1.0   22 Jan 1997 11:23:24   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 
 
