@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:31:23 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 23:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ chinese_traditional ] = "±¶®|(~L)";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "¿¬°á(~L)";
+        Text[ korean ] = "¸µÅ©";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vínculo";
@@ -163,7 +163,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~R)";
         Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
         Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİ~íùí óåëéäşí öüíôïõ.";
-        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æÂÊ »èÁ¦(~R)";
+        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÆäÀÌÁö »èÁ¦";
         Text[ turkish ] = "Artalandaki kullanılmayan sayfaları sil";
         Text[ catalan ] = "~Eliminar páginas de fondo no usadas";
         Text[ finnish ] = "Poista käyttämättömät taus~tat";
@@ -175,5 +175,6 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ catalan ] = "Insertar páginas/objetos";
     Text[ finnish ] = "Lisää diat/objektit";
 };
+
 
 
