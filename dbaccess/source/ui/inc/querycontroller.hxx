@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 14:59:53 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,11 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
-        ::rtl::OUString m_sStatement;       // contains the sql statement
-        ::rtl::OUString m_sUpdateCatalogName; // catalog for update data
-        ::rtl::OUString m_sUpdateSchemaName;  // schema for update data
-        ::rtl::OUString m_sUpdateTableName;   // table for update data
-        ::rtl::OUString m_sName;            // name of the query
+        ::rtl::OUString m_sStatement;           // contains the sql statement
+        ::rtl::OUString m_sUpdateCatalogName;   // catalog for update data
+        ::rtl::OUString m_sUpdateSchemaName;    // schema for update data
+        ::rtl::OUString m_sUpdateTableName;     // table for update data
+        ::rtl::OUString m_sName;                // name of the query
 
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
@@ -146,6 +146,7 @@ namespace dbaui
         sal_Bool        m_bViewFunction;    // show the function row in the design view
         sal_Bool        m_bEsacpeProcessing;// is true when we shouldn't parse the statement
         sal_Bool        m_bCreateView;      // set to true when we should create a view otherwise we create a normal query
+        sal_Bool        m_bIndependent;     // are we creating an "independent" SQL command (which does *not* belong to a data source)?
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getElements() const;
         sal_Bool askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
@@ -155,8 +156,8 @@ namespace dbaui
         void deleteIterator();
         void executeQuery();
         void doSaveAsDoc(sal_Bool _bSaveAs);
-        ::rtl::OUString translateStatement();
-        void setTitle(const ::rtl::OUString& _sName);
+        ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
+        void updateTitle( );
 
     protected:
         virtual String          getMenu() const;
@@ -235,6 +236,12 @@ namespace dbaui
         virtual short saveModified();
         virtual void reset();
         void        resetImpl();
+
+        /// sets m_sStatement, and notifies our respective property change listeners
+        void    setStatement_fireEvent( const ::rtl::OUString& _rNewStatement, bool _bFireStatementChange = true );
+
+    private:
+        DECL_LINK( OnExecuteAddTable, void* );
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX
