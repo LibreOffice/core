@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:54:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,6 +1388,12 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         SdrObject *pO = rObjs[j];
         if ( !pO->ISA(SwVirtFlyDrawObj) )
             continue;
+
+        // OD 2004-01-15 #110582# - do not consider invisible objects
+        if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
+        {
+            continue;
+        }
 
         const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
 
@@ -4894,7 +4900,8 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                 for ( USHORT i = 0; i < rObjs.Count(); ++i )
                 {
                     SdrObject *pO = rObjs[i];
-                    if ( pO->ISA(SwVirtFlyDrawObj) )
+                    if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) &&
+                         pO->ISA(SwVirtFlyDrawObj) )
                     {
                         const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if ( pFly->IsFlyInCntFrm() && pFly->Frm().IsOver( rRect ) )
@@ -4987,7 +4994,10 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
 
             // OD 19.12.2002 #106318# - do *not* consider fly frames with
             // a transparent background.
-            if ( pFly->IsBackgroundTransparent() )
+            // OD 2004-02-12 #110582#-2 - do *not* consider fly frame, which
+            // belongs to a invisible layer
+            if ( pFly->IsBackgroundTransparent() ||
+                 !pFly->GetFmt()->GetDoc()->IsVisibleLayerId( pObj->GetLayer() ) )
             {
                 aIter.Next();
                 continue;
