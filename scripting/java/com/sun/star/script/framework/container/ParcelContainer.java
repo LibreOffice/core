@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContainer.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 13:56:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 15:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,14 +188,17 @@ public class ParcelContainer implements XNameAccess
      * found.
      */
 
-    public ParcelContainer getChildContainer( String containerUrl )
+    public ParcelContainer getChildContainer( String key )
     {
         ParcelContainer result = null;
         Iterator iter = childContainers.iterator();
         while ( iter.hasNext() )
         {
             ParcelContainer c = (ParcelContainer) iter.next();
-            if ( containerUrl.equals( c.containerUrl ) )
+            String location = ScriptMetaData.getLocationPlaceHolder(
+                c.containerUrl, c.getName());
+
+            if ( key.equals( location ) )
             {
                 result = c;
                 break;
