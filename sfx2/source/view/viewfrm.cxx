@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 07:34:31 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 15:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,7 +1243,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
         // Jetzt alle SubShells wechhauen
         pDyingViewSh->PushSubShells_Impl( sal_False );
         sal_uInt16 nLevel = pDispatcher->GetShellLevel( *pDyingViewSh );
-        if ( nLevel )
+        if ( nLevel && nLevel != USHRT_MAX )
         {
             // Es gibt immer nocht SubShells
             SfxShell *pSubShell = pDispatcher->GetShell( nLevel-1 );
