@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:36:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,8 +1184,8 @@ void SdDrawDocument::SetLanguage( const LanguageType eLang, const USHORT nId )
 
     if( bChanged )
     {
-        GetDrawOutliner().SetDefaultLanguage( eLang );
-        pHitTestOutliner->SetDefaultLanguage( eLang );
+        GetDrawOutliner().SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+        pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
         pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLang, nId ) );
         SetChanged( bChanged );
     }
