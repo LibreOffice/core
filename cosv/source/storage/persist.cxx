@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 13:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@
 #include <cosv/ploc.hxx>
 
 
+#ifdef WNT
+#include <io.h>
+
 namespace csv
 {
 namespace ploc
 {
-
-#ifdef WNT
-#include <io.h>
 
 bool
 Persistent::Exists() const
@@ -81,8 +81,26 @@ Persistent::Exists() const
     return access( StrPath(), 00) == 0;
 }
 
+} // namespace ploc
+} // namespace csv
+
+
 #elif defined(UNX)
 #include <unistd.h>
+
+/*
+#ifndef __SUNPRO_CC
+#include <unistd.h>
+#else
+#define F_OK    0   // Test for existence of File
+extern int access(const char *, int);
+#endif
+*/
+
+namespace csv
+{
+namespace ploc
+{
 
 bool
 Persistent::Exists() const
@@ -91,9 +109,17 @@ Persistent::Exists() const
 }
 
 
+} // namespace ploc
+} // namespace csv
+
 #else
 #error  For using csv::ploc there has to be defined: WNT or UNX.
 #endif
+
+namespace csv
+{
+namespace ploc
+{
 
 const char *
 Persistent::StrPath() const
@@ -113,9 +139,9 @@ Persistent::StrPath() const
     return sPath.c_str();
 }
 
-
 } // namespace ploc
 } // namespace csv
+
 
 
 

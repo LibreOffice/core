@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ploc_dir.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 12:18:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 13:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,11 +164,18 @@ Directory::Check_Parent() const
     return ret;
 }
 
+} // namespace ploc
+} // namespace csv
 
 
 #ifdef WNT
 #include <direct.h>
 #include <io.h>
+
+namespace csv
+{
+namespace ploc
+{
 
 bool
 Directory::PhysicalCreate_Dir( const char * i_sStr ) const
@@ -252,11 +259,19 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
     }
 }
 
+} // namespace ploc
+} // namespace csv
+
+
 #elif defined(UNX)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <unistd.h>
+
+namespace csv
+{
+namespace ploc
+{
 
 bool
 Directory::PhysicalCreate_Dir( const char * i_sStr ) const
@@ -354,10 +369,19 @@ Directory::GetContainedFiles( StringVector &    o_rResult,
     }
 }
 
+} // namespace ploc
+} // namespace csv
+
+
 #else
 #error  For using csv::ploc there has to be defined: WNT or UNX.
 #endif
 
+
+namespace csv
+{
+namespace ploc
+{
 
 const Path &
 Directory::inq_MyPath() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 12:18:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ StreamStr::StreamStr( const char *  i_sInitStr,
     size_type nLength = strlen(i_sInitStr);
     nCapacity1 = csv::max(nLength, i_nCapacity) + 1;
     dpData = new char [nCapacity1];
-    strcpy(dpData, i_sInitStr);
+    strcpy(dpData, i_sInitStr);     // SAFE STRCPY (#100211# - checked)
     pCur = dpData + nLength;
     pEnd = pCur;
 }
@@ -150,7 +150,7 @@ StreamStr::StreamStr( const self & i_rOther )
         pCur( dpData + i_rOther.tellp() ),
         eMode(i_rOther.eMode)
 {
-    strcpy( dpData, i_rOther.dpData );
+    strcpy( dpData, i_rOther.dpData );      // SAFE STRCPY (#100211# - checked)
 }
 
 StreamStr::~StreamStr()
@@ -167,7 +167,7 @@ StreamStr::operator=( const self & i_rOther )
     nCapacity1 = i_rOther.nCapacity1;
     dpData = new char [i_rOther.nCapacity1];
     pEnd = dpData + strlen(i_rOther.dpData);
-    strcpy( dpData, i_rOther.dpData );
+    strcpy( dpData, i_rOther.dpData );          // SAFE STRCPY (#100211# - checked)
     pCur = dpData + i_rOther.tellp();
     eMode = i_rOther.eMode;
 
@@ -224,7 +224,7 @@ StreamStr &
 StreamStr::operator<<( short i_n )
 {
     char buf[C_short_max_size] = "";
-    sprintf( buf, "%hi", i_n );
+    sprintf( buf, "%hi", i_n );         // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -238,7 +238,7 @@ StreamStr &
 StreamStr::operator<<( unsigned short i_n )
 {
     char buf[C_short_max_size] = "";
-    sprintf( buf, "%hu", i_n );
+    sprintf( buf, "%hu", i_n );         // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -252,7 +252,7 @@ StreamStr &
 StreamStr::operator<<( int i_n )
 {
     char buf[C_int_max_size] = "";
-    sprintf( buf, "%i", i_n );
+    sprintf( buf, "%i", i_n );          // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -266,7 +266,7 @@ StreamStr &
 StreamStr::operator<<( unsigned int i_n )
 {
     char buf[C_int_max_size] = "";
-    sprintf( buf, "%u", i_n );
+    sprintf( buf, "%u", i_n );          // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -280,7 +280,7 @@ StreamStr &
 StreamStr::operator<<( long i_n )
 {
     char buf[C_long_max_size] = "";
-    sprintf( buf, "%li", i_n );
+    sprintf( buf, "%li", i_n );         // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -294,7 +294,7 @@ StreamStr &
 StreamStr::operator<<( unsigned long i_n )
 {
     char buf[C_long_max_size] = "";
-    sprintf( buf, "%lu", i_n );
+    sprintf( buf, "%lu", i_n );         // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -309,7 +309,7 @@ StreamStr::operator<<( float i_n )
 {
     const int C_float_max_size = 20;
     char buf[C_float_max_size] = "";
-    sprintf( buf, "%.*g", C_float_max_size-8, i_n );
+    sprintf( buf, "%.*g", C_float_max_size-8, i_n );    // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -324,7 +324,7 @@ StreamStr::operator<<( double i_n )
 {
     const int C_double_max_size = 30;
     char buf[C_double_max_size] = "";
-    sprintf( buf, "%.*lg", C_double_max_size-8, i_n );
+    sprintf( buf, "%.*lg", C_double_max_size-8, i_n );  // SAFE SPRINTF (#100211# - checked)
 
     size_type nLength = strlen(buf);
     ProvideAddingSize( nLength );
@@ -809,7 +809,7 @@ StreamStr::Resize( size_type i_nMinimumCapacity )
     nCapacity1 = csv::max( nNewSize, size_type(i_nMinimumCapacity + 1) );
 
     char * pNew = new char[nCapacity1];
-    strcpy ( pNew, dpData );
+    strcpy ( pNew, dpData );            // SAFE STRCPY (#100211# - checked)
     pEnd = pNew + (pEnd - dpData);
     pCur = pNew + (pCur - dpData);
 
