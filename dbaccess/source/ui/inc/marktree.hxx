@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:41:31 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ public:
     void SetCheckHandler(const Link& _rHdl) { m_aCheckButtonHandler = _rHdl; }
 
 protected:
-    void Paint(const Rectangle& _rRect);
+    virtual void Paint(const Rectangle& _rRect);
+    virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
 
 private:
     void InitButtonData();
@@ -112,6 +113,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:41:31  fs
+ *  use a different font when painting a disabled control
+ *
  *  Revision 1.1  2000/10/05 10:08:43  fs
  *  initial checkin
  *

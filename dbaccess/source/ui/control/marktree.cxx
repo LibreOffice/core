@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:34:33 $
+ *  last change: $Author: fs $ $Date: 2001-01-30 08:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void OMarkableTreeListBox::CheckButtons()
             if(pSchema)
             {
                 pEntry = GetModel()->NextSibling(pSchema);
-                SetCheckButtonState( pSchema,eState);
+                SetCheckButtonState(pSchema, eState);
             }
             else
                 pEntry = NULL; // wenn kein Schema dann sind bereits alle pEntry's durchlaufen worden
@@ -225,40 +225,45 @@ void OMarkableTreeListBox::CheckButtons()
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::CheckButtonHdl()
 {
-    SvLBoxEntry* pHdlEntry = GetHdlEntry();
-    SvButtonState eState = GetCheckButtonState( pHdlEntry);
-    if(GetModel()->HasChilds(pHdlEntry))    // Falls Kinder, dann diese auch checken
+    checkedButton_noBroadcast(GetHdlEntry());
+    if (m_aCheckButtonHandler.IsSet())
+        m_aCheckButtonHandler.Call(this);
+}
+
+//------------------------------------------------------------------------
+void OMarkableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
+{
+    SvButtonState eState = GetCheckButtonState( _pEntry);
+    if (GetModel()->HasChilds(_pEntry)) // Falls Kinder, dann diese auch checken
     {
-        SvLBoxEntry* pChildEntry = GetModel()->Next(pHdlEntry);
-        SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(pHdlEntry);
+        SvLBoxEntry* pChildEntry = GetModel()->Next(_pEntry);
+        SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(_pEntry);
         while(pChildEntry && pChildEntry != pSiblingEntry)
         {
-            SetCheckButtonState( pChildEntry,eState);
+            SetCheckButtonState(pChildEntry, eState);
             pChildEntry = GetModel()->Next(pChildEntry);
         }
     }
 
-    SvLBoxEntry* pEntry = IsSelected(pHdlEntry) ? FirstSelected() : NULL;
+    SvLBoxEntry* pEntry = IsSelected(_pEntry) ? FirstSelected() : NULL;
     while(pEntry)
     {
-        SetCheckButtonState( pEntry,eState);
+        SetCheckButtonState(pEntry,eState);
         if(GetModel()->HasChilds(pEntry))   // Falls Kinder, dann diese auch checken
         {
             SvLBoxEntry* pChildEntry = GetModel()->Next(pEntry);
             SvLBoxEntry* pSiblingEntry = GetModel()->NextSibling(pEntry);
             while(pChildEntry && pChildEntry != pSiblingEntry)
             {
-                SetCheckButtonState( pChildEntry,eState);
+                SetCheckButtonState(pChildEntry,eState);
                 pChildEntry = GetModel()->Next(pChildEntry);
             }
         }
         pEntry = NextSelected(pEntry);
     }
     CheckButtons();
-
-    if (m_aCheckButtonHandler.IsSet())
-        m_aCheckButtonHandler.Call(this);
 }
+
 //------------------------------------------------------------------------
 SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxEntry* pStart) const
 {
@@ -276,6 +281,9 @@ SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:34:33  fs
+ *  use a different font when painting a disabled control
+ *
  *  Revision 1.1  2000/10/05 10:00:43  fs
  *  initial checkin
  *
