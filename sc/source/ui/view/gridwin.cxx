@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-06 15:19:20 $
+ *  last change: $Author: nn $ $Date: 2001-08-10 10:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2670,6 +2670,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                  IsDropFormatSupported( SOT_FORMAT_GDIMETAFILE ) ||
                                  IsDropFormatSupported( SOT_FORMAT_BITMAP ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_DATAEXCHANGE ) ||
+                                 IsDropFormatSupported( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) ||
                                  ( !bMove && (
                                      IsDropFormatSupported( SOT_FORMAT_FILE ) ||
                                      IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
