@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessController.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:32:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 module com {  module sun {  module star {  module security {
 
 //=============================================================================
-
 /** This meta service supports the XAccessController interface for checking
     security permissions.
 
@@ -87,7 +86,7 @@ module com {  module sun {  module star {  module security {
 
     @since #107627#
 */
-service AccessController
+published service AccessController
 {
     interface XAccessController;
 };
