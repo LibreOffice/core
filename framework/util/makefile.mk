@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
+#   last change: $Author: as $ $Date: 2001-12-19 13:20:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,8 @@ LIB1OBJFILES=	$(SLO)$/attributelist.obj					\
                 $(SLO)$/propertysetcontainer.obj			\
                 $(SLO)$/rootactiontriggercontainer.obj		\
                 $(SLO)$/actiontriggerhelper.obj				\
-                $(SLO)$/imagewrapper.obj
+                $(SLO)$/imagewrapper.obj					\
+                $(SLO)$/interaction.obj
 
 # --- internal import -------------------------------------------------
 
