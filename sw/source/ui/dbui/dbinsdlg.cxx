@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:59:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,27 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
+#include "dbinsdlg.hxx"
+
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
+
+#ifndef INCLUDED_FLOAT_H
+#include <float.h>
+#define INCLUDED_FLOAT_H
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+#ifndef _UIPARAM_HXX
+#include <uiparam.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -121,6 +136,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
@@ -136,12 +152,6 @@
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
 #endif
-#ifndef _SWDBTOOLSCLIENT_HXX
-#include <swdbtoolsclient.hxx>
-#endif
-
-#include <float.h>
-
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -168,9 +178,6 @@
 #include <svx/unolingu.hxx>
 #endif
 
-#ifndef _UIPARAM_HXX
-#include <uiparam.hxx>
-#endif
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -187,6 +194,9 @@
 #include <svx/rulritem.hxx>
 #endif
 
+#ifndef _SWDBTOOLSCLIENT_HXX
+#include <swdbtoolsclient.hxx>
+#endif
 #ifndef _SWTABLEREP_HXX //autogen
 #include <tabledlg.hxx>
 #endif
@@ -204,9 +214,6 @@
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
-#endif
-#ifndef _DBINSDLG_HXX
-#include <dbinsdlg.hxx>
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
@@ -264,8 +271,6 @@
 #include <dbui.hrc>
 #endif
 
-
-
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -282,8 +287,16 @@
 #include <comphelper/uno3.hxx>
 #endif
 
+#ifndef _SWTABSH_HXX
+#include "tabsh.hxx"
+#endif
 #include "swabstdlg.hxx" //CHINA001
 #include "table.hrc" //CHINA001
+
+namespace swui
+{
+    SwAbstractDialogFactory * GetFactory();
+}
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -294,9 +307,12 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 
-extern const USHORT __FAR_DATA aUITableAttrRange[];//CHINA001
+// tblafmt.hxx
+SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
+
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
+
 #define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
@@ -867,7 +883,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
     if( !pTblSet )
     {
         bNewSet = TRUE;
-        pTblSet = new SfxItemSet( rSh.GetAttrPool(), aUITableAttrRange );
+        pTblSet = new SfxItemSet( rSh.GetAttrPool(), SwuiGetUITableAttrRange() );
 
         //Ersteinmal die einfachen Attribute besorgen.
         pTblSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTblName() ));
@@ -964,7 +980,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 
 //CHINA001  SwTableTabDlg* pDlg = new SwTableTabDlg( pButton, rSh.GetAttrPool(),
 //CHINA001  pTblSet, &rSh );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
     SfxAbstractTabDialog* pDlg = pFact->CreateSwTableTabDlg(  pButton, rSh.GetAttrPool(),pTblSet, &rSh, ResId( DLG_FORMAT_TABLE ));
@@ -986,7 +1002,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
 {
     //CHINA001 SwAutoFormatDlg aDlg( pButton, pView->GetWrtShellPtr(), FALSE, pTAutoFmt );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(),ResId( DLG_AUTOFMT_TABLE ), FALSE, pTAutoFmt);
@@ -1077,7 +1093,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
+static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
 {
     _DB_Column* pNew;
     USHORT nSttPos = 0, nFndPos;
@@ -1550,9 +1566,14 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         // zum Anfang und eine Mark setzen, damit der
                         // Cursor am Ende wieder auf Anfangsposition
                         // gesetzt werden kann.
-                        rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
+
+                        // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
+                        rSh.SwCrsrShell::MovePara(
+                            SwuiGetfnParaCurr(), SwuiGetfnParaStart() );
                         rSh.SetBookmark( KeyCode(), C2S("DB_Mark"), aEmptyStr, MARK );
-                        rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
+                        // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
+                        rSh.SwCrsrShell::MovePara(
+                            SwuiGetfnParaCurr(), SwuiGetfnParaEnd() );
                         bSetCrsr = FALSE;
                     }
                 }
@@ -1641,7 +1662,7 @@ void SwInsertDBColAutoPilot::SetTabSet()
     rSh.SetMark();
     rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableEnd() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableEnd );
 
-    ::lcl_ItemSetToTableParam( *pTblSet, rSh );
+    ItemSetToTableParam( *pTblSet, rSh );
 
     rSh.ClearMark();
     rSh.MoveTable( SwuiGetfnTableCurr(), SwuiGetfnTableStart() ); //CHINA001 rSh.MoveTable( fnTableCurr, fnTableStart );
@@ -1655,7 +1676,7 @@ _DB_ColumnConfigData::~_DB_ColumnConfigData() {}
 /* -----------------------------05.12.00 16:15--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
+static Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
 {
     Sequence<rtl::OUString> aSourceNames(11);
     rtl::OUString* pNames = aSourceNames.getArray();
@@ -1689,7 +1710,7 @@ Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
 /* -----------------------------05.12.00 16:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
+static Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
 {
     Sequence<rtl::OUString> aSubSourceNames(6);
     rtl::OUString* pNames = aSubSourceNames.getArray();
@@ -1712,7 +1733,7 @@ Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
 /* -----------------------------06.12.00 13:03--------------------------------
 
  ---------------------------------------------------------------------------*/
-rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
+static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 {
     sal_Int32 nIdx = aNames.getLength();
     const rtl::OUString* pNames = aNames.getConstArray();
