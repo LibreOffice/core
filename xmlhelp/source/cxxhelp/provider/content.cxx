@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-02 11:48:26 $
+ *  last change: $Author: abi $ $Date: 2002-10-30 09:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #endif
@@ -107,7 +110,9 @@
 #ifndef _UCBHELPER_PROPERTYVALUESET_HXX
 #include <ucbhelper/propertyvalueset.hxx>
 #endif
-
+#ifndef _UCBHELPER_CANCELCOMMANDEXECUTION_HXX
+#include <ucbhelper/cancelcommandexecution.hxx>
+#endif
 #ifndef _CONTENT_HXX
 #include <provider/content.hxx>
 #endif
@@ -396,15 +401,34 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         Sequence< Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            VOS_ENSURE( sal_False, "Wrong argument type!" );
-            return aRet;
+            aRet <<= IllegalArgumentException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
         }
 
         aRet <<= getPropertyValues( Properties );
     }
     else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
     {
+        Sequence<PropertyValue> propertyValues;
+
+        if( ! ( aCommand.Argument >>= propertyValues ) ) {
+            aRet <<= IllegalArgumentException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
+        }
+
+        Sequence<Any> ret(propertyValues.getLength());
+        Sequence< Property > props(getProperties(Environment));
         // No properties can be set
+        for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
+            ret[i] <<= UnknownPropertyException();
+            for(sal_Int32 j = 0; j < props.getLength(); ++j)
+                if(props[j].Name == propertyValues[i].Name) {
+                    ret[i] <<= IllegalAccessException();
+                    break;
+                }
+        }
+
+        aRet <<= ret;
     }
     else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
     {
@@ -421,53 +445,72 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
-            VOS_ENSURE( sal_False,
-                        "Content::execute - invalid parameter!" );
-            throw IllegalArgumentException();
+            aRet <<= IllegalArgumentException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
         }
 
-        Reference< XActiveDataSink > xActiveDataSink( aOpenCommand.Sink,UNO_QUERY );
-        if( xActiveDataSink.is() )
-            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xActiveDataSink );
+        Reference< XActiveDataSink > xActiveDataSink(
+            aOpenCommand.Sink,UNO_QUERY);
 
-        Reference< XActiveDataStreamer > activeDataStreamer( aOpenCommand.Sink,UNO_QUERY );
-        if( activeDataStreamer.is() )
-            throw UnsupportedDataSinkException();
+        if(xActiveDataSink.is())
+            m_aURLParameter.open(m_xSMgr,
+                                 aCommand,
+                                 CommandId,
+                                 Environment,
+                                 xActiveDataSink);
 
-        Reference< XOutputStream > xOutputStream( aOpenCommand.Sink,UNO_QUERY );
-        if( xOutputStream.is() )
-            m_aURLParameter.open( m_xSMgr,aCommand,CommandId,Environment,xOutputStream );
+        Reference< XActiveDataStreamer > xActiveDataStreamer(
+            aOpenCommand.Sink,UNO_QUERY);
+
+        if(xActiveDataStreamer.is()) {
+            aRet <<= UnsupportedDataSinkException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
+        }
+
+        Reference< XOutputStream > xOutputStream(
+            aOpenCommand.Sink,UNO_QUERY);
+
+        if(xOutputStream.is() )
+            m_aURLParameter.open(m_xSMgr,
+                                 aCommand,
+                                 CommandId,
+                                 Environment,
+                                 xOutputStream);
 
         if( m_aURLParameter.isRoot() )
         {
             Reference< XDynamicResultSet > xSet
-                = new DynamicResultSet( m_xSMgr,
-                                        this,
-                                        aOpenCommand,
-                                        Environment,
-                                        new ResultSetForRootFactory( m_xSMgr,
-                                                                     m_xProvider.getBodyPtr(),
-                                                                     aOpenCommand.Mode,
-                                                                     aOpenCommand.Properties,
-                                                                     aOpenCommand.SortingInfo,
-                                                                     m_aURLParameter,
-                                                                     m_pDatabases ) );
+                = new DynamicResultSet(
+                    m_xSMgr,
+                    this,
+                    aOpenCommand,
+                    Environment,
+                    new ResultSetForRootFactory(
+                        m_xSMgr,
+                        m_xProvider.getBodyPtr(),
+                        aOpenCommand.Mode,
+                        aOpenCommand.Properties,
+                        aOpenCommand.SortingInfo,
+                        m_aURLParameter,
+                        m_pDatabases));
             aRet <<= xSet;
         }
         else if( m_aURLParameter.isQuery() )
         {
             Reference< XDynamicResultSet > xSet
-                = new DynamicResultSet( m_xSMgr,
-                                        this,
-                                        aOpenCommand,
-                                        Environment,
-                                        new ResultSetForQueryFactory( m_xSMgr,
-                                                                      m_xProvider.getBodyPtr(),
-                                                                      aOpenCommand.Mode,
-                                                                      aOpenCommand.Properties,
-                                                                      aOpenCommand.SortingInfo,
-                                                                      m_aURLParameter,
-                                                                      m_pDatabases ) );
+                = new DynamicResultSet(
+                    m_xSMgr,
+                    this,
+                    aOpenCommand,
+                    Environment,
+                    new ResultSetForQueryFactory(
+                        m_xSMgr,
+                        m_xProvider.getBodyPtr(),
+                        aOpenCommand.Mode,
+                        aOpenCommand.Properties,
+                        aOpenCommand.SortingInfo,
+                        m_aURLParameter,
+                        m_pDatabases ) );
             aRet <<= xSet;
         }
     }
@@ -476,9 +519,8 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //////////////////////////////////////////////////////////////////
         // Unsupported command
         //////////////////////////////////////////////////////////////////
-
-//      VOS_ENSURE( sal_False, "Content::execute - unsupported command!" );
-        throw CommandAbortedException();
+        aRet <<= UnsupportedCommandException();
+        ucbhelper::cancelCommandExecution(aRet,Environment);
     }
 
     return aRet;
@@ -492,40 +534,56 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    vos::ORef< ::ucb::PropertyValueSet > xRow = new ::ucb::PropertyValueSet( m_xSMgr );
+    vos::ORef< ::ucb::PropertyValueSet > xRow =
+        new ::ucb::PropertyValueSet( m_xSMgr );
 
     for ( sal_Int32 n = 0; n < rProperties.getLength(); ++n )
     {
         const Property& rProp = rProperties[n];
 
         if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
-            xRow->appendString( rProp,rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
+            xRow->appendString(
+                rProp,
+                rtl::OUString::createFromAscii(
+                    "application/vnd.sun.star.help" ) );
         else if( rProp.Name.compareToAscii( "Title" ) == 0 )
             xRow->appendString ( rProp,m_aURLParameter.get_title() );
         else if( rProp.Name.compareToAscii( "IsReadOnly" ) == 0 )
             xRow->appendBoolean( rProp,true );
         else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
-            xRow->appendBoolean( rProp,m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
+            xRow->appendBoolean(
+                rProp,
+                m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
         else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
-            xRow->appendBoolean( rProp, ! m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
+            xRow->appendBoolean(
+                rProp,
+                ! m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
         else if( rProp.Name.compareToAscii( "IsErrorDocument" ) == 0 )
             xRow->appendBoolean( rProp, m_aURLParameter.isErrorDocument() );
         else if( rProp.Name.compareToAscii( "MediaType" ) == 0  )
             if( m_aURLParameter.isPicture() )
-                xRow->appendString( rProp,rtl::OUString::createFromAscii( "image/gif" ) );
+                xRow->appendString(
+                    rProp,
+                    rtl::OUString::createFromAscii( "image/gif" ) );
             else if( m_aURLParameter.isActive() )
-                xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/plain" ) );
+                xRow->appendString(
+                    rProp,
+                    rtl::OUString::createFromAscii( "text/plain" ) );
             else if( m_aURLParameter.isFile() )
-                xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/html" ) );
+                xRow->appendString(
+                    rProp,rtl::OUString::createFromAscii( "text/html" ) );
             else if( m_aURLParameter.isRoot() )
-                xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/css" ) );
+                xRow->appendString(
+                    rProp,
+                    rtl::OUString::createFromAscii( "text/css" ) );
             else
                 xRow->appendVoid( rProp );
         else if( m_aURLParameter.isModule() )
             if( rProp.Name.compareToAscii( "KeywordList" ) == 0 )
             {
-                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
-                                                             m_aURLParameter.get_language() );
+                KeywordInfo *inf =
+                    m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                              m_aURLParameter.get_language() );
 
                 Any aAny;
                 if( inf )
@@ -534,8 +592,9 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "KeywordRef" ) == 0 )
             {
-                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
-                                                             m_aURLParameter.get_language() );
+                KeywordInfo *inf =
+                    m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                              m_aURLParameter.get_language() );
 
                 Any aAny;
                 if( inf )
@@ -544,8 +603,9 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "KeywordAnchorForRef" ) == 0 )
             {
-                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
-                                                             m_aURLParameter.get_language() );
+                KeywordInfo *inf =
+                    m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                              m_aURLParameter.get_language() );
 
                 Any aAny;
                 if( inf )
@@ -554,8 +614,9 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "KeywordTitleForRef" ) == 0 )
             {
-                KeywordInfo *inf = m_pDatabases->getKeyword( m_aURLParameter.get_module(),
-                                                             m_aURLParameter.get_language() );
+                KeywordInfo *inf =
+                    m_pDatabases->getKeyword( m_aURLParameter.get_module(),
+                                              m_aURLParameter.get_language() );
 
                 Any aAny;
                 if( inf )
@@ -573,9 +634,10 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else if( rProp.Name.compareToAscii( "Order" ) == 0 )
             {
-                StaticModuleInformation *inf = m_pDatabases->getStaticInformationForModule(
-                    m_aURLParameter.get_module(),
-                    m_aURLParameter.get_language() );
+                StaticModuleInformation *inf =
+                    m_pDatabases->getStaticInformationForModule(
+                        m_aURLParameter.get_module(),
+                        m_aURLParameter.get_language() );
 
                 Any aAny;
                 if( inf )
@@ -584,7 +646,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
             }
             else
                 xRow->appendVoid( rProp );
-        else if( rProp.Name.compareToAscii( "AnchorName" ) == 0 && m_aURLParameter.isFile() )
+        else if( rProp.Name.compareToAscii( "AnchorName" ) == 0 &&
+                 m_aURLParameter.isFile() )
             xRow->appendString( rProp,m_aURLParameter.get_tag() );
         else
             xRow->appendVoid( rProp );

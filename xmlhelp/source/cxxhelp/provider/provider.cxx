@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-02 15:19:00 $
+ *  last change: $Author: abi $ $Date: 2002-10-30 09:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ void ContentProvider::init()
         aAny >>= m_xContainer;
         if(m_xContainer.is())
             m_xContainer->addContainerListener(this);
-    } catch(const com::sun::star::uno::Exception& e) {
+    } catch(const com::sun::star::uno::Exception&) {
     }
 
     /**
@@ -367,10 +367,12 @@ Reference< XMultiServiceFactory > ContentProvider::getConfiguration() const
         try
         {
             rtl::OUString sProviderService =
-                rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+                rtl::OUString::createFromAscii(
+                    "com.sun.star.configuration.ConfigurationProvider" );
             sProvider =
                 Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstanceWithArguments( sProviderService,seq ),
+                    m_xSMgr->createInstanceWithArguments(
+                        sProviderService,seq ),
                     UNO_QUERY );
         }
         catch( const com::sun::star::uno::Exception& )
@@ -416,8 +418,9 @@ ContentProvider::getHierAccess( const Reference< XMultiServiceFactory >& sProvid
 
 
 rtl::OUString
-ContentProvider::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
-                         const char* key ) const
+ContentProvider::getKey(const Reference<
+                        XHierarchicalNameAccess >& xHierAccess,
+                        const char* key) const
 {
     rtl::OUString instPath;
     if( xHierAccess.is() )
@@ -426,7 +429,8 @@ ContentProvider::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess
         try
         {
             aAny =
-                xHierAccess->getByHierarchicalName( rtl::OUString::createFromAscii( key ) );
+                xHierAccess->getByHierarchicalName(
+                    rtl::OUString::createFromAscii(key));
         }
         catch( const com::sun::star::container::NoSuchElementException& )
         {
@@ -450,7 +454,7 @@ void ContentProvider::subst( rtl::OUString& instpath ) const
                     m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) ),
                     UNO_QUERY );
         }
-        catch( const com::sun::star::uno::Exception& e )
+        catch( const com::sun::star::uno::Exception&)
         {
             OSL_ENSURE( xCfgMgr.is()," cant instantiate the special config manager " );
         }
