@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 08:56:13 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 21:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ english_us ] = "~Spacing" ;
         Text [ italian ] = "Spaziatura" ;
         Text [ spanish ] = "Espa~cio" ;
-        Text [ french ] = "~�cart" ;
+        Text [ french ] = "�cart" ;
         Text [ dutch ] = "~Afstand" ;
         Text [ swedish ] = "~Avst�nd" ;
         Text [ danish ] = "Afstand" ;
@@ -115,7 +115,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Uzakl�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espa~cio";
-        Text[ finnish ] = "~Objektiv?lit";
+        Text[ finnish ] = "~Objektiv�lit";
+        Text[ thai ] = "~ระยะห่าง";
     };
     MetricField MF_ABSTAND
     {
@@ -140,7 +141,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ english_us ] = "~Angle" ;
         Text [ italian ] = "Angolo" ;
         Text [ spanish ] = "�~ngulo" ;
-        Text [ french ] = "~Angle" ;
+        Text [ french ] = "Angle" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ danish ] = "Vinkel" ;
@@ -158,6 +159,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�~ngulo";
         Text[ finnish ] = "~Kulma";
+        Text[ thai ] = "~มุม";
     };
     ListBox LB_WINKEL
     {
@@ -281,7 +283,7 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ japanese ] =
     {
-            < "ﾌﾘｰ" ; 1 ; > ;
+            < "フリー" ; 1 ; > ;
         < "30度" ; 3000 ; > ;
         < "45度" ; 4500 ; > ;
         < "60度" ; 6000 ; > ;
@@ -351,6 +353,14 @@ TabPage RID_SVXPAGE_CAPTION
         < "60 astetta" ; 6000 ; > ;
         < "90 astetta" ; 9000 ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "อิสระ" ; 1 ; > ;
+        < "30 องศา" ; 3000 ; > ;
+        < "45 องศา" ; 4500 ; > ;
+        < "60 องศา" ; 6000 ; > ;
+        < "90 องศา" ; 9000 ; > ;
+    };
     };
     FixedText FT_ANSATZ
     {
@@ -379,6 +389,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Salida";
         Text[ finnish ] = "~Loppuliite";
+        Text[ thai ] = "~ส่วนขยาย";
     };
     ListBox LB_ANSATZ
     {
@@ -561,16 +572,24 @@ TabPage RID_SVXPAGE_CAPTION
             < "�ptimo" ; 4 ; > ;
         < "Desde arriba" ; 3 ; > ;
         < "De izquierda" ; 3 ; > ;
-        < "Horizontal" ; 1 ; > ;
+        < "Horitzontal" ; 1 ; > ;
         < "Vertical" ; 2 ; > ;
     };
     StringList [ finnish ] =
     {
             < "Optimaalinen" ; 4 ; > ;
-        < "Ylh??lt?" ; 3 ; > ;
+        < "Ylh��lt�" ; 3 ; > ;
         < "Vasemmalta" ; 3 ; > ;
         < "Vaakataso" ; 1 ; > ;
         < "Pystytaso" ; 2 ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "เหมาะที่สุด" ; 4 ; > ;
+        < "จากด้านบน" ; 3 ; > ;
+        < "จากด้านล่าง" ; 3 ; > ;
+        < "แนวนอน" ; 1 ; > ;
+        < "แนวตั้ง" ; 2 ; > ;
     };
     };
     FixedText FT_UM
@@ -583,7 +602,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ english_us ] = "~By" ;
         Text [ italian ] = "Per" ;
         Text [ spanish ] = "~De" ;
-        Text [ french ] = "~De" ;
+        Text [ french ] = "De" ;
         Text [ swedish ] = "~Om" ;
         Text [ danish ] = "Ved" ;
         Text [ portuguese_brazilian ] = "~Um" ;
@@ -600,6 +619,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~De";
         Text[ finnish ] = "~Laatija";
+        Text[ thai ] = "โ~ดย";
     };
     MetricField MF_ANSATZ
     {
@@ -623,9 +643,9 @@ TabPage RID_SVXPAGE_CAPTION
         Text [ English ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
         Text [ english_us ] = "~Position" ;
-        Text [ italian ] = "~Posizione" ;
-        Text [ spanish ] = "~Posici�n" ;
-        Text [ french ] = "~Position" ;
+        Text [ italian ] = "Posizione" ;
+        Text [ spanish ] = "Posici�n" ;
+        Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
         Text [ portuguese_brazilian ] = "~Position" ;
@@ -642,6 +662,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posici�n";
         Text[ finnish ] = "~Sijainti";
+        Text[ thai ] = "~ตำแหน่ง";
     };
     ListBox LB_ANSATZ_REL
     {
@@ -680,6 +701,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Longitud";
         Text[ finnish ] = "~Pituus";
+        Text[ thai ] = "ความ~ยาว";
     };
     MetricField MF_LAENGE
     {
@@ -704,7 +726,7 @@ TabPage RID_SVXPAGE_CAPTION
         TabStop = TRUE ;
         Text [ english_us ] = "~Optimal" ;
         Text [ italian ] = "~Ottimale" ;
-        Text [ spanish ] = "�~ptimo" ;
+        Text [ spanish ] = "�ptimo" ;
         Text [ french ] = "~Optimal" ;
         Text [ dutch ] = "~Optimaal" ;
         Text [ swedish ] = "~Optimal" ;
@@ -723,6 +745,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�~ptimo";
         Text[ finnish ] = "~Optimaalinen";
+        Text[ thai ] = "เ~หมาะที่สุด";
     };
     String STR_CAPTTYPE_1
     {
@@ -749,6 +772,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nea recta";
         Text[ finnish ] = "Suora viiva";
+        Text[ thai ] = "เส้นตรง";
     };
     String STR_CAPTTYPE_2
     {
@@ -775,6 +799,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nea acodada";
         Text[ finnish ] = "Kulmikas viiva";
+        Text[ thai ] = "เส้นเป็นเหลี่ยมเป็นมุม";
     };
     String STR_CAPTTYPE_3
     {
@@ -801,6 +826,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nea acodada con un solo �ngulo";
         Text[ finnish ] = "Kulmikas liitinviiva";
+        Text[ thai ] = "เส้นเชื่อมต่อเป็นเหลี่ยมเป็นมุม";
     };
     String STR_CAPTTYPE_4
     {
@@ -827,6 +853,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nea acodada con dos �ngulos";
         Text[ finnish ] = "Kaksikulmainen viiva";
+        Text[ thai ] = "เส้นเป็นเหลี่ยมเป็นมุมคู่";
     };
     String STR_HORZ_LIST
     {
@@ -852,7 +879,8 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "�st;Orta;Alt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Arriba;centro;abajo";
-        Text[ finnish ] = "Yl?osa;Keskiosa;Alaosa";
+        Text[ finnish ] = "Yl�osa;Keskiosa;Alaosa";
+        Text[ thai ] = "บน;กลาง;ล่าง";
     };
     String STR_VERT_LIST
     {
@@ -879,6 +907,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Izquierda;centrado;derecha";
         Text[ finnish ] = "Vasen;Keskiosa;Oikea";
+        Text[ thai ] = "ซ้าย;กลาง;ขวา";
     };
     Bitmap BMP_CAPTTYPE_1
     {
@@ -908,6 +937,7 @@ TabPage RID_SVXPAGE_CAPTION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Leyenda";
     Text[ finnish ] = "Kuvatekstit";
+    Text[ thai ] = "คำบรรยายภาพ";
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 TabDialog RID_SVXDLG_CAPTION
@@ -962,6 +992,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ turkish ] = "Konum ve boyut";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Posici�n y tama�o";
+                Text[ thai ] = "Position and Size";
             };
             PageItem
             {
@@ -990,6 +1021,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Leyenda";
                 Text[ finnish ] = "Kuvateksti";
+                Text[ thai ] = "คำบรรยายภาพ";
             };
         };
     };
@@ -1005,6 +1037,7 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Leyenda";
     Text[ finnish ] = "Kuvatekstit";
+    Text[ thai ] = "คำบรรยายภาพ";
 };
  // ********************************************************************** EOF
 
