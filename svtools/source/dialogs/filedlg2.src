@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:38:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String STR_FILEDLG_SELECT
     Text[ czech ] = "Vybrat adresář";
     Text[ hebrew ] = "‮בחירת ספריה‬";
     Text[ hindi ] = "ड़ैरक्टरी चुनो";
+    Text[ slovak ] = "Vybrať adresár";
 };
 String STR_FILEDLG_CANTCHDIR
 {
@@ -119,6 +120,7 @@ String STR_FILEDLG_CANTCHDIR
     Text[ czech ] = "Nelze přejít do adresáře";
     Text[ hebrew ] = "‮לא ניתן לעבור אל הספריה‬";
     Text[ hindi ] = "ड़ैरक्टरी को परिवर्तन नहीं कर सकते है";
+    Text[ slovak ] = "Nie je možné prejsť do adresára";
 };
 String STR_FILEDLG_OPEN
 {
@@ -149,6 +151,7 @@ String STR_FILEDLG_OPEN
     Text[ czech ] = "Otevřít";
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "खोलो";
+    Text[ slovak ] = "Otvoriť";
 };
 String STR_FILEDLG_FILE
 {
@@ -179,6 +182,7 @@ String STR_FILEDLG_FILE
     Text[ czech ] = "Soubor";
     Text[ hebrew ] = "‮קובץ‬";
     Text[ hindi ] = "~फाइल";
+    Text[ slovak ] = "~Súbor";
 };
 String STR_FILEDLG_DIR
 {
@@ -209,6 +213,7 @@ String STR_FILEDLG_DIR
     Text[ czech ] = "Adresář";
     Text[ hebrew ] = "‮ספריה‬";
     Text[ hindi ] = "~Directory";
+    Text[ slovak ] = "A~dresár";
 };
 String STR_FILEDLG_TYPE
 {
@@ -239,6 +244,7 @@ String STR_FILEDLG_TYPE
     Text[ czech ] = "Typ souboru";
     Text[ hebrew ] = "‮סוג קובץ‬";
     Text[ hindi ] = "फाइल ~वर्ग";
+    Text[ slovak ] = "~Typ súboru";
 };
 String STR_FILEDLG_CANTOPENFILE
 {
@@ -269,6 +275,7 @@ String STR_FILEDLG_CANTOPENFILE
     Text[ czech ] = "Není možné otevřít soubor";
     Text[ hebrew ] = "‮לא ניתן לפתוח את הקובץ‬";
     Text[ hindi ] = "फाइल नहीं खोल सकते है";
+    Text[ slovak ] = "Nie je možné otvoriť súbor";
 };
 String STR_FILEDLG_CANTOPENDIR
 {
@@ -299,6 +306,7 @@ String STR_FILEDLG_CANTOPENDIR
     Text[ czech ] = "Není možné otevřít adresář";
     Text[ hebrew ] = "‮לא ניתן לפתוח את הספריה‬";
     Text[ hindi ] = "डैरक्टरी नहीं खोल सकते है";
+    Text[ slovak ] = "Nie je možné otvoriť adresár";
 };
 String STR_FILEDLG_OVERWRITE
 {
@@ -329,6 +337,7 @@ String STR_FILEDLG_OVERWRITE
     Text[ czech ] = "Tento soubor již existuje.\nPřepsat?";
     Text[ hebrew ] = "‮בעל שם זהה קיים כבר. האם להחליפו?‬ ‮קובץ‬";
     Text[ hindi ] = "इस फाइल पहिले से अस्तित्व में है ।\nऑवर-रइट् करना है ?";
+    Text[ slovak ] = "Tento súbor už existuje.\nPrepísať?";
 };
 String STR_FILEDLG_GOUP
 {
@@ -359,6 +368,7 @@ String STR_FILEDLG_GOUP
     Text[ czech ] = "O úroveň výše";
     Text[ hebrew ] = "‮רמה אחת למעלה‬";
     Text[ hindi ] = "एक स्तर ऊपर ";
+    Text[ slovak ] = "O úroveň vyššie";
 };
 String STR_FILEDLG_SAVE
 {
@@ -389,6 +399,7 @@ String STR_FILEDLG_SAVE
     Text[ czech ] = "Uložit";
     Text[ hebrew ] = "‮שמירה‬";
     Text[ hindi ] = "संचित करो";
+    Text[ slovak ] = "Uložiť";
 };
 String STR_FILEDLG_DRIVES
 {
@@ -419,6 +430,7 @@ String STR_FILEDLG_DRIVES
     Text[ czech ] = "Mechanika";
     Text[ hebrew ] = "‮כונן‬";
     Text[ hindi ] = "ड़्र~इव्";
+    Text[ slovak ] = "Mec~hanika";
 };
 String STR_FILEDLG_HOME
 {
@@ -449,6 +461,7 @@ String STR_FILEDLG_HOME
     Text[ czech ] = "Adresář uživatele";
     Text[ hebrew ] = "‮ספרית המשתמש‬";
     Text[ hindi ] = "उपभोक्ता डैरक्टरी";
+    Text[ slovak ] = "Adresár užívateľa";
 };
 String STR_FILEDLG_NEWDIR
 {
@@ -479,6 +492,7 @@ String STR_FILEDLG_NEWDIR
     Text[ czech ] = "Vytvořit adresář";
     Text[ hebrew ] = "‮יצירת ספריה‬";
     Text[ hindi ] = "डैरक्टरी उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť adresár";
 };
 String STR_FILEDLG_ASKNEWDIR
 {
@@ -509,7 +523,10 @@ String STR_FILEDLG_ASKNEWDIR
     Text[ czech ] = "Přejete si vytvořit adresář %s?";
     Text[ hebrew ] = "‮האם ליצור ספריה %s?‬";
     Text[ hindi ] = "Do you want the directory %s to be created ?";
+    Text[ slovak ] = "Prajete si vytvoriť adresár %s?";
 };
+
+
 
 
 
