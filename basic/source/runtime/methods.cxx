@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-29 11:23:15 $
+ *  last change: $Author: ab $ $Date: 2000-11-29 15:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,9 +435,8 @@ RTLFUNC(Chr)
     else
     {
         SbxVariableRef pArg = rPar.Get( 1 );
-        char aCh = (char) pArg->GetInteger();
-        String aStr;
-        aStr = aCh;
+        sal_Unicode aCh = (sal_Unicode) pArg->GetInteger();
+        String aStr( aCh );
         rPar.Get(0)->PutString( aStr );
     }
 }
