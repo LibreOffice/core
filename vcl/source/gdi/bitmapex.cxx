@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:29:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#include <hash_map>
+#include <ctype.h>
+
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
@@ -77,8 +80,20 @@
 #ifndef _SV_ALPHA_HXX
 #include <alpha.hxx>
 #endif
+#ifndef _SV_IMAGE_H
+#include <image.h>
+#endif
 #ifndef _SV_BITMAPEX_HXX
 #include <bitmapex.hxx>
+#endif
+#ifndef _SV_PNGREAD_HXX
+#include <pngread.hxx>
+#endif
+#ifndef _SV_IMPIMAGETREE_H
+#include <impimagetree.hxx>
+#endif
+#ifndef _SV_RC_H
+#include <tools/rc.h>
 #endif
 
 // ------------
@@ -101,6 +116,30 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx ) :
         eTransparent        ( rBitmapEx.eTransparent ),
         bAlpha              ( rBitmapEx.bAlpha )
 {
+}
+
+// ------------------------------------------------------------------
+
+BitmapEx::BitmapEx( const ResId& rResId ) :
+        eTransparent( TRANSPARENT_NONE ),
+        bAlpha      ( FALSE )
+{
+    static ImplImageTreeSingletonRef    aImageTree;
+    ResMgr*                             pResMgr = NULL;
+
+    ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
+    pResMgr->ReadShort();
+    pResMgr->ReadShort();
+
+    const String aFileName( pResMgr->ReadString() );
+
+    if( !aImageTree->loadImage( aFileName, *this ) )
+    {
+#ifdef DBG_UTIL
+        ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );
+        DBG_ERROR( ( aErrorStr += ByteString( aFileName, RTL_TEXTENCODING_ASCII_US ) ) += '>' );
+#endif
+    }
 }
 
 // ------------------------------------------------------------------
@@ -158,6 +197,8 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
 BitmapEx::~BitmapEx()
 {
 }
+
+// ------------------------------------------------------------------
 
 // ------------------------------------------------------------------
 
@@ -274,9 +315,25 @@ Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
 
 BitmapEx BitmapEx::GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const
 {
-    BitmapEx aRet( *this );
+    BitmapEx aRet;
 
-    aRet.aBitmap = aBitmap.GetColorTransformedBitmap( eColorMode );
+    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
+    {
+        aRet = *this;
+        aRet.aBitmap = aBitmap.GetColorTransformedBitmap( eColorMode );
+    }
+    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
+             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
+    {
+        aRet = *this;
+        aRet.aBitmap = aRet.aBitmap.GetColorTransformedBitmap( eColorMode );
+
+        if( !aRet.aMask.IsEmpty() )
+        {
+            aRet.aMask.CombineSimple( aRet.aBitmap, BMP_COMBINE_OR );
+            aRet.aBitmap.Erase( ( BMP_COLOR_MONOCHROME_BLACK == eColorMode ) ? COL_BLACK : COL_WHITE );
+        }
+    }
 
     return aRet;
 }
@@ -557,7 +614,7 @@ BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                     }
                     else
                     {
-                        sal_uInt8       cBlack = 0;
+                        sal_uInt8   cBlack = 0;
                         AlphaMask*  pAlpha = new AlphaMask( GetSizePixel(), &cBlack );
 
                         aMask = pAlpha->ImplGetBitmap();
@@ -583,6 +640,20 @@ BOOL BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                         eTransparent = TRANSPARENT_BITMAP;
                         aMask.CopyPixel( rRectDst, rRectSrc, &pBmpExSrc->aMask );
                     }
+                }
+                else if( IsAlpha() )
+                {
+                    sal_uInt8         cBlack = 0;
+                    const AlphaMask   aAlphaSrc( pBmpExSrc->GetSizePixel(), &cBlack );
+
+                    aMask.CopyPixel( rRectDst, rRectSrc, &aAlphaSrc.ImplGetBitmap() );
+                }
+                else if( IsTransparent() )
+                {
+                    Bitmap aMaskSrc( pBmpExSrc->GetSizePixel(), 1 );
+
+                    aMaskSrc.Erase( Color( COL_BLACK ) );
+                    aMask.CopyPixel( rRectDst, rRectSrc, &aMaskSrc );
                 }
             }
         }
@@ -765,4 +836,3 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
 
     return rIStm;
 }
-
