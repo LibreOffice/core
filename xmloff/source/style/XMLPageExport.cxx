@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:32:20 $
+ *  last change: $Author: dr $ $Date: 2000-10-19 05:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,18 +112,34 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-void XMLPageExport::collectPageMasterAutoStyle(
-            const Reference < XPropertySet > & rPropSet )
+
+//______________________________________________________________________________
+
+sal_Bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
 {
-    std::vector<XMLPropertyState> xPropStates = rExport.GetPageMasterPropSetMapper()->Filter( rPropSet );
+    for( ::std::vector< XMLPageExportNameEntry >::const_iterator pEntry = aNameVector.begin();
+            pEntry != aNameVector.end(); pEntry++ )
+    {
+        if( pEntry->sStyleName == rStyleName )
+        {
+            rPMName = pEntry->sPageMasterName;
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
+void XMLPageExport::collectPageMasterAutoStyle(
+        const Reference < XPropertySet > & rPropSet,
+        OUString& rPageMasterName )
+{
+    ::std::vector<XMLPropertyState> xPropStates = rExport.GetPageMasterPropSetMapper()->Filter( rPropSet );
     if(xPropStates.size())
     {
-        rtl::OUString sParent;
-        rtl::OUString sName( rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates) );
-        if (!sName.getLength())
-        {
-            sName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates);
-        }
+        OUString sParent;
+        rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates );
+        if (!rPageMasterName.getLength())
+            rPageMasterName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates);
     }
 }
 
@@ -154,13 +170,21 @@ sal_Bool XMLPageExport::exportStyle(
 
     if( bAutoStyles )
     {
-        collectPageMasterAutoStyle( xPropSet );
+        XMLPageExportNameEntry aEntry;
+        collectPageMasterAutoStyle( xPropSet, aEntry.sPageMasterName );
+        aEntry.sStyleName = rStyle->getName();
+        aNameVector.push_back( aEntry );
+
         exportMasterPageContent( xPropSet, sal_True );
     }
     else
     {
         OUString sName( rStyle->getName() );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_name, sName );
+
+        OUString sPMName;
+        if( findPageMasterName( sName, sPMName ) )
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_page_master_name, sPMName );
 
         aAny = xPropSet->getPropertyValue( sFollowStyle );
         OUString sNextName;
