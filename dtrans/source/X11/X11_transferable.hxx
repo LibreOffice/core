@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,9 @@ namespace x11 {
         SelectionManager&               m_rManager;
         Reference< XInterface >         m_xCreator;
         Atom                m_aSelection;
-
-        virtual ~X11Transferable();
-
     public:
-
         X11Transferable( SelectionManager& rManager, const Reference< XInterface >& xCreator, Atom selection = None );
+        virtual ~X11Transferable();
 
         /*
          * XTransferable
