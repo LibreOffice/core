@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:17:34 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,8 +880,8 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
     if (_rMEvt.IsLeft())
         if (_rMEvt.GetClicks() != 2)
         {
-            ImplStartColumnDrag(_rMEvt.GetPosPixel());
-            return;
+            if (ImplStartColumnDrag(_rMEvt.GetPosPixel()))
+                return;
         }
 
     FmGridHeader::MouseButtonDown(_rMEvt);
