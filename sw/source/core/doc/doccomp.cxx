@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:33:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
-#ifndef _SV_FONTTYPE_HXX //autogen
-#include <vcl/fonttype.hxx>
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
 #endif
 #ifndef _SVX_CRSDITEM_HXX //autogen
 #include <svx/crsditem.hxx>
