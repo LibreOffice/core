@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-13 12:59:00 $
+ *  last change: $Author: ka $ $Date: 2001-08-13 13:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,12 +1410,14 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
                 }
                 else
                 {
+                    String aLocalURL;
+
                     pObj->aURL = INetURLObject( aFileName );
 
                     if( ( pObj->aURL.GetProtocol() == INET_PROT_NOT_VALID ) &&
-                        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aFileName ) )
+                        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aLocalURL ) )
                     {
-                        pObj->aURL = INetURLObject( aFileName );
+                        pObj->aURL = INetURLObject( aLocalURL );
                     }
                 }
             }
