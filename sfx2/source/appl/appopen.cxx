@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:15:14 $
+ *  last change: $Author: mba $ $Date: 2001-12-10 14:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,7 +922,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     else
     {
         const SfxPoolItem *pRet=0;
-        SfxCallMode eMode = rReq.IsSynchronCall() ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
         SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
         SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
         if ( aTemplateFileName.Len() )
@@ -933,12 +932,12 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL() );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
-            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName, 0L );
+            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName, 0L );
         }
         else
         {
             SfxStringItem aName( SID_FILE_NAME, DEFINE_CONST_UNICODE("private:factory") );
-            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, 0L );
+            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aTarget, &aReferer, 0L );
         }
 
         if ( pRet )
