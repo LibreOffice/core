@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setobjects.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,8 +347,8 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        ORootElementTreeSetUpdate(ApiProvider& rProvider, configuration::Tree const& aTree)
-        : m_aAccessElement(static_cast<css::lang::XComponent*>(this),rProvider,aTree)
+        ORootElementTreeSetUpdate(ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+        : m_aAccessElement(static_cast<css::lang::XComponent*>(this),rProvider,aTree, _xOptions)
         {
         }
 
@@ -381,8 +381,8 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        ORootElementValueSetUpdate(ApiProvider& rProvider, configuration::Tree const& aTree)
-        : m_aAccessElement(static_cast<css::lang::XComponent*>(this),rProvider,aTree)
+        ORootElementValueSetUpdate(ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+        : m_aAccessElement(static_cast<css::lang::XComponent*>(this),rProvider,aTree,_xOptions)
         {
         }
 

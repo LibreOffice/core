@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:32:38 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,8 +389,6 @@ SetElement* Factory::findSetElement(ElementTree const& aElementTree)
 
     NodeRef aRoot = aTree.getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
-
-    OSL_ENSURE( !configuration::isSimpleValue(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
 
     osl::MutexGuard aLock(this->doGetMutex());
 

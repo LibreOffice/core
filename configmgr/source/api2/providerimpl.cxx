@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:46 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile"));
+static ::rtl::OUString ssDefaultLocale(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+static ::rtl::OUString ssInternational(RTL_CONSTASCII_USTRINGPARAM("International"));
+static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"));
+
 namespace configmgr
 {
     namespace css   = ::com::sun::star;
@@ -137,18 +142,41 @@ namespace configmgr
     OProviderImpl::OProviderImpl(OProvider* _pProvider,
                                  IConfigSession* _pSession,
                                  Module& _rModule)
-                  :m_pConfiguration(new TreeManager(_pSession, _rModule.getConverter()))
+                  :m_xDefaultOptions(new OOptions(_rModule.getConverter()))
+                  ,m_pTreeMgr(new TreeManager(_pSession, m_xDefaultOptions))
                   ,m_pNewProviders(0)
-                  ,m_aNotifier(m_pConfiguration)
+                  ,m_aNotifier(m_pTreeMgr)
                   ,m_pProvider(_pProvider)
-                  ,m_xConverter(_rModule.getConverter())
-                  ,m_aOptions(_rModule.getOptions())
     {
-        m_pConfiguration->acquire();
-        m_pConfiguration->setOptions(m_aOptions);
+        m_pTreeMgr->acquire();
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
-        m_pNewProviders = new configapi::ApiProviderInstances(*this,*m_pConfiguration);
+        m_pNewProviders   = new configapi::ApiProviderInstances(*this,*m_pTreeMgr);
+
+        // read the default locale for the user
+        rtl::OUString sDefaultLocale(ssDefaultLocale);
+        try
+        {
+            ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions);
+            if (pSubTree)
+            {
+                INode* pNode = pSubTree->getChild(ssInternational);
+                pSubTree = pNode ? pNode->asISubtree() : NULL;
+                if (pSubTree)
+                {
+                    pNode = pSubTree->getChild(ssLocale);
+                    ValueNode* pValueNode = pNode ? pNode->asValueNode() : NULL;
+                    if (pValueNode)
+                        pValueNode->getValue() >>= sDefaultLocale;
+                }
+            }
+        }
+        catch (container::NoSuchElementException&)
+        {
+            // could not read default locale
+            // default locale is en-US
+        }
+        m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
     }
 
     //-----------------------------------------------------------------------------
@@ -156,8 +184,8 @@ namespace configmgr
     {
         delete m_pNewProviders;
         m_aNotifier.dispose();
-        m_pConfiguration->release();
-        m_pConfiguration = NULL;
+        m_pTreeMgr->release();
+        m_pTreeMgr = NULL;
     }
 
     //-----------------------------------------------------------------------------
@@ -174,33 +202,22 @@ namespace configmgr
 
     // ITreeProvider
     //-----------------------------------------------------------------------------
-    ISubtree const* OProviderImpl::getSubtree( OUString const& aComponentName ) const
+    ISubtree* OProviderImpl::requestSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+                                             sal_Int16 nMinLevels) throw (container::NoSuchElementException)
     {
-        return m_pConfiguration->getSubtree(aComponentName);
+        return m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
     }
 
     //-----------------------------------------------------------------------------
-    ISubtree* OProviderImpl::requestSubtree( OUString const& aSubtreePath, sal_Int16 nMinLevels) throw (container::NoSuchElementException)
+    void OProviderImpl::updateTree(TreeChangeList& aChanges, const vos::ORef < OOptions >& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException)
     {
-        return m_pConfiguration->requestSubtree(aSubtreePath, nMinLevels);
-    }
-
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(TreeChangeList& aChanges) throw (lang::WrappedTargetException, uno::RuntimeException)
-    {
-        m_pConfiguration->updateTree(aChanges);
+        m_pTreeMgr->updateTree(aChanges, _xOptions);
     }
 
     //-----------------------------------------------------------------------------
     void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) const throw (uno::RuntimeException)
     {
-        m_pConfiguration->notifyUpdate(aChanges);
-    }
-
-    //-----------------------------------------------------------------------------
-    const INode* OProviderImpl::getNode(const OUString& _rPath)
-    {
-        return m_pConfiguration->getNode(_rPath);
+        m_pTreeMgr->notifyUpdate(aChanges);
     }
 
     // IRefCountedTreeProvider
@@ -225,13 +242,13 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     ISynchronizedData& OProviderImpl::getTreeLock()
     {
-        return *m_pConfiguration;
+        return *m_pTreeMgr;
     }
 
     //-----------------------------------------------------------------------------
     ISynchronizedData const& OProviderImpl::getTreeLock() const
     {
-        return *m_pConfiguration;
+        return *m_pTreeMgr;
     }
 
     // ISyncronizedData
@@ -268,9 +285,38 @@ namespace configmgr
         return nNameStart > 0 ? _rAccessor.copy(0,nNameStart) : ConfigurationName::rootname();
     }
 
+    //-----------------------------------------------------------------------------------
+    OUString OProviderImpl::getErrorMessage(OUString const& _rAccessor)
+    {
+        CFG_TRACE_ERROR("config provider: the cache manager could not provide the tree (neither from the cache nor from the session)");
+
+        ::rtl::OUString sMessage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The read access for node "));
+        ::rtl::OUString sPurePath, sUser, sLocale;
+        sal_Bool bHasExtension = IConfigSession::splitNodeAccessor(_rAccessor, sPurePath, sUser, sLocale) != 0;
+        CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the locale \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sLocale), OUSTRING2ASCII(sPurePath));
+        sMessage += sPurePath;
+
+        if (sUser.getLength())
+        {
+            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (and for user "));
+            sMessage += sUser;
+            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+        }
+
+        if (sLocale.getLength())
+        {
+            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (and for locale "));
+            sMessage += sLocale;
+            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+        }
+
+        sMessage += ::rtl::OUString::createFromAscii(" could not be created. Unable to retrieve the node from the configuration server.");
+        return sMessage;
+    }
+
     // actual factory methods
     //-----------------------------------------------------------------------------------
-    NodeElement* OProviderImpl::buildReadAccess(OUString const& _rAccessor, sal_Int32 nMinLevels)  throw (uno::Exception, uno::RuntimeException)
+    NodeElement* OProviderImpl::buildReadAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels)  throw (uno::Exception, uno::RuntimeException)
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
@@ -279,7 +325,7 @@ namespace configmgr
         try
         {
             OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
-            pTree = requestSubtree(_rAccessor,sal_Int16(nMinLevels));
+            pTree = requestSubtree(_rAccessor,_xOptions, sal_Int16(nMinLevels));
         }
         catch(container::NoSuchElementException&e)
         {
@@ -288,20 +334,7 @@ namespace configmgr
 
         if (!pTree)
         {
-            CFG_TRACE_ERROR("config provider: the cache manager could not provide the tree (neither from the cache nor from the session)");
-
-            ::rtl::OUString sMessage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The read access for node "));
-            ::rtl::OUString sPurePath, sUser;
-            sal_Bool bHadUser = IConfigSession::splitNodeAccessor(_rAccessor, sPurePath, sUser);
-            CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sPurePath));
-            sMessage += sPurePath;
-            if (bHadUser)
-            {
-                sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (and for user "));
-                sMessage += sUser;
-                sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-            }
-            sMessage += ::rtl::OUString::createFromAscii(" could not be created. Unable to retrieve the node from the configuration server.");
+            ::rtl::OUString sMessage = getErrorMessage(_rAccessor);
 
             // append the error message given by the tree provider
             if (sErrorMessage.getLength())
@@ -319,15 +352,14 @@ namespace configmgr
                 *pTree, nDepth, getTemplateProvider()
             ));
 
-        return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree);
+        return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree, _xOptions);
     }
 
 
     //-----------------------------------------------------------------------------------
-    NodeElement* OProviderImpl::buildUpdateAccess(OUString const& _rAccessor, sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException)
+    NodeElement* OProviderImpl::buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions,
+                                                  sal_Int32 nMinLevels) throw (uno::Exception, uno::RuntimeException)
     {
-        m_pConfiguration->setOptions(getOptions());
-
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
         ISubtree*   pTree = NULL;
@@ -335,7 +367,7 @@ namespace configmgr
         try
         {
             OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
-            pTree = requestSubtree(_rAccessor, sal_Int16(nMinLevels));
+            pTree = requestSubtree(_rAccessor, _xOptions, sal_Int16(nMinLevels));
         }
         catch(container::NoSuchElementException&e)
         {
@@ -344,20 +376,7 @@ namespace configmgr
 
         if (!pTree)
         {
-            CFG_TRACE_ERROR("config provider: the cache manager could not provide the tree (neither from the cache nor from the session)");
-
-            ::rtl::OUString sMessage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The update access for node "));
-            ::rtl::OUString sPurePath, sUser;
-            sal_Bool bHadUser = IConfigSession::splitNodeAccessor(_rAccessor, sPurePath, sUser);
-            CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sPurePath));
-            sMessage += sPurePath;
-            if (bHadUser)
-            {
-                sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" (and for user "));
-                sMessage += sUser;
-                sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-            }
-            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" could not be created. Unable to retrieve the node from the configuration server."));
+            ::rtl::OUString sMessage = getErrorMessage(_rAccessor);
 
             // append the error message given by the tree provider
             if (sErrorMessage.getLength())
@@ -382,7 +401,7 @@ namespace configmgr
                 {   CFG_TRACE_ERROR("config provider: DATA ERROR: User Admin Accessor points to a non-set node"); }
         #endif
 
-        return m_pNewProviders->getWriterFactory().makeAccessRoot(aRootTree);
+        return m_pNewProviders->getWriterFactory().makeAccessRoot(aRootTree, _xOptions);
     }
 
     //=============================================================================
@@ -461,7 +480,7 @@ namespace configmgr
         checkArgs(_rArgs);
 #endif
         ::rtl::OUString sUser, sPath, sLocale;
-        sal_Bool bSetupMode;
+        sal_Bool bSetupMode = sal_False;
         sal_Int32 nLevelDepth = ITreeProvider::ALL_LEVELS;
 
         // the args have to be a sequence of property values, currently three property names are recognized

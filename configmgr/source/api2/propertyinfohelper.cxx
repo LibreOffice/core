@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-08 09:43:54 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@ beans::Property helperMakeProperty( configuration::NodeInfo const& aNodeInfo, un
     namespace PropertyAttribute = com::sun::star::beans::PropertyAttribute;
 
     sal_Int16 nPropAttributes = 0;
-    if (!aNodeInfo.is.writable)     nPropAttributes |= PropertyAttribute::READONLY;
-    if ( aNodeInfo.is.nullable)     nPropAttributes |= PropertyAttribute::MAYBEVOID;
-    if ( aNodeInfo.is.notified)     nPropAttributes |= PropertyAttribute::BOUND;
-    if ( aNodeInfo.is.constrained)  nPropAttributes |= PropertyAttribute::CONSTRAINED;
-    if ( aNodeInfo.is.defaultable)  nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
+    if (!aNodeInfo.aAttributes.bWritable)       nPropAttributes |= PropertyAttribute::READONLY;
+    if ( aNodeInfo.aAttributes.bNullable)       nPropAttributes |= PropertyAttribute::MAYBEVOID;
+    if ( aNodeInfo.aAttributes.bNotified)       nPropAttributes |= PropertyAttribute::BOUND;
+    if ( aNodeInfo.aAttributes.bConstrained)    nPropAttributes |= PropertyAttribute::CONSTRAINED;
+    if ( aNodeInfo.aAttributes.bDefaultable)    nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
 
-    return beans::Property(aNodeInfo.name.toString(), -1, aType, nPropAttributes);
+    return beans::Property(aNodeInfo.aName.toString(), -1, aType, nPropAttributes);
 }
 //-----------------------------------------------------------------------------
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-21 19:17:32 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 08:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,11 +175,11 @@ void CollectProperties::setAttributes(PropAttributes& _rPropAttr, const NodeRef&
 {
     configuration::Attributes nNodeAttr = _rNode.getAttributes();
 
-    if (!nNodeAttr.writable)    _rPropAttr |= PropertyAttribute::READONLY;
-    if (nNodeAttr.nullable)     _rPropAttr |= PropertyAttribute::MAYBEVOID;
-    if (nNodeAttr.notified)     _rPropAttr |= PropertyAttribute::BOUND;
-    if (nNodeAttr.constrained)  _rPropAttr |= PropertyAttribute::CONSTRAINED;
-    if (nNodeAttr.defaultable)  _rPropAttr |= PropertyAttribute::MAYBEDEFAULT;
+    if (!nNodeAttr.bWritable)   _rPropAttr |= PropertyAttribute::READONLY;
+    if (nNodeAttr.bNullable)    _rPropAttr |= PropertyAttribute::MAYBEVOID;
+    if (nNodeAttr.bNotified)    _rPropAttr |= PropertyAttribute::BOUND;
+    if (nNodeAttr.bConstrained) _rPropAttr |= PropertyAttribute::CONSTRAINED;
+    if (nNodeAttr.bDefaultable) _rPropAttr |= PropertyAttribute::MAYBEDEFAULT;
 
     if (!m_bReadonly)
         _rPropAttr |= PropertyAttribute::READONLY;
