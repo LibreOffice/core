@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-14 12:12:12 $
+ *  last change: $Author: obr $ $Date: 2002-08-16 13:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,27 @@ public class AccessibleObjectFactory {
 //      infoProvider = provider;
     }
 
+    public class GenericAccessibleParent extends Object implements javax.accessibility.Accessible {
+        XAccessibleContext unoObject;
+        AccessibleObject wrapperObject;
+
+        public GenericAccessibleParent(AccessibleObject o, XAccessibleContext ac) {
+            unoObject = ac;
+            wrapperObject = o;
+        }
+
+        public javax.accessibility.AccessibleContext getAccessibleContext() {
+            XAccessible xAccessible = unoObject.getAccessibleParent();
+            if( xAccessible != null ) {
+                AccessibleObject o = AccessibleObjectFactory.this.getAccessibleObject(xAccessible, true, null);
+                wrapperObject.setAccessibleParent(o);
+                return o;
+            }
+
+            return null;
+        }
+    }
+
     /** Returns the default accessible object factory */
     public static AccessibleObjectFactory getDefault() {
         return defaultFactory;
@@ -99,28 +120,35 @@ public class AccessibleObjectFactory {
         infoProvider = provider;
     }
 
-    public AccessibleObject getAccessibleObject(XAccessible xAccessible, Accessible parent) {
+    /** Returns the AccessibleInformationProvider currently used by this factory object */
+    public XAccessibilityInformationProvider getInformationProvider() {
+        return infoProvider;
+    }
+
+    public AccessibleObject getAccessibleObject(XAccessible xAccessible, boolean create, Accessible parent) {
         XAccessibleContext xAccessibleContext = null;
 
-        if(xAccessible == null) {
-            return null;
-        }
-
-        // Save the round trip to C++ UNO if possible
-        if(xAccessible instanceof XAccessibleContext) {
-            xAccessibleContext = (XAccessibleContext) xAccessible;
-        } else {
-            xAccessibleContext = xAccessible.getAccessibleContext();
+        if(xAccessible != null) {
+            // Save the round trip to C++ UNO if possible
+            if(xAccessible instanceof XAccessibleContext) {
+                xAccessibleContext = (XAccessibleContext) xAccessible;
+            } else {
+                xAccessibleContext = xAccessible.getAccessibleContext();
+            }
         }
 
         // Ensure that we really got an UNO accessible context
         if(xAccessibleContext == null) {
+            if( Build.DEBUG ) {
+                System.err.println("No accessible context");
+            }
             return null;
         }
 
         // Retrieve unique id for the original UNO object to be used as a hash key
         String oid = UnoRuntime.generateOid(xAccessibleContext);
         AccessibleObject o = null;
+
         // Check if we already have a wrapper object for this context
         synchronized (objectList) {
             WeakReference r = (WeakReference) objectList.get(oid);
@@ -128,7 +156,8 @@ public class AccessibleObjectFactory {
                 o = (AccessibleObject) r.get();
             }
         }
-        if( o == null ) {
+
+        if( o == null && create ) {
             AccessibleContextInfo info = infoProvider.getAccessibleContextInfo(xAccessibleContext);
 
             switch(info.Role) {
@@ -164,6 +193,9 @@ public class AccessibleObjectFactory {
                     );
                     break;
                 case AccessibleRole.ICON:
+                case AccessibleRole.GRAPHIC:
+                case AccessibleRole.SHAPE:
+                case AccessibleRole.EMBEDDED_OBJECT:
                     o = new AccessibleImage(xAccessibleContext);
                     break;
                 case AccessibleRole.LISTITEM:
@@ -223,11 +255,11 @@ public class AccessibleObjectFactory {
                 case AccessibleRole.FOOTNOTE:
                 case AccessibleRole.HEADER:
                 case AccessibleRole.LAYEREDPANE:
+                case AccessibleRole.OPTIONPANE:
                 case AccessibleRole.PAGETAB:
                 case AccessibleRole.PANEL:
                 case AccessibleRole.ROOTPANE:
                 case AccessibleRole.SCROLLPANE:
-                case AccessibleRole.SHAPE:
                 case AccessibleRole.SPLITPANE:
                 case AccessibleRole.STATUSBAR:
                 case AccessibleRole.TOOLBAR:
@@ -242,7 +274,10 @@ public class AccessibleObjectFactory {
                         System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(info.Role)
                          + " (id = " + info.Role + ")");
                     }
-                    o = new AccessibleWindow(AccessibleRoleMap.toAccessibleRole(info.Role), xAccessibleContext);
+                    o = new AccessibleWindow(
+                        AccessibleRoleMap.toAccessibleRole(info.Role),
+                        xAccessibleContext
+                    );
                     break;
             }
 
@@ -265,14 +300,18 @@ public class AccessibleObjectFactory {
              * using dispose().
              */
             synchronized (o) {
-                initializeAccessibleObject(o,
-                    infoProvider.getAccessibleComponentInfo(xAccessibleContext, listener)
-                );
+                o.initialize(infoProvider.getAccessibleComponentInfo(xAccessibleContext, listener));
+            }
+
+            // Create generic parent if parent is null
+            if( parent == null && info.IndexInParent != -1 ) {
+                parent = new GenericAccessibleParent(o, xAccessibleContext);
             }
 
             // Finaly set accessible parent object
-            // FIXME: create temporary parent if parent is null !!
-            o.setAccessibleParent(parent);
+            if( parent != null ) {
+                o.setAccessibleParent(parent);
+            }
 
             // Add the child to the internal list if parent is AccessibleWindow
             if( ((info.States & AccessibleState.CHILDREN_TRANSIENT) == 0) && (parent instanceof AccessibleWindow) ) {
@@ -286,44 +325,7 @@ public class AccessibleObjectFactory {
         }
         return o;
     }
-
-    // Set the initial values of this accessible object
-    protected void initializeAccessibleObject(AccessibleObject o, AccessibleComponentInfo info) {
-
-        // Set accessible name and description
-        o.setAccessibleName(info.Name);
-        o.setAccessibleDescription(info.Description);
-
-        // Set the object boundaries and colors
-        o.setBounds(new java.awt.Rectangle(info.Bounds.X, info.Bounds.Y, info.Bounds.Width, info.Bounds.Height));
-        o.setForeground(new java.awt.Color(info.ForegroundColor));
-        o.setBackground(new java.awt.Color(info.BackgroundColor));
-
-        // Fill the state set
-        AccessibleStateTypeMap.fillAccessibleStateSet(o.getAccessibleStateSet(), info.States);
-
-        // Set the number of children
-        if(o instanceof AccessibleWindow) {
-            AccessibleWindow w = (AccessibleWindow) o;
-            w.setAccessibleChildrenCount(info.ChildrenCount);
-        } else if(o instanceof AccessibleMenu) {
-            AccessibleMenu m = (AccessibleMenu) o;
-            m.setAccessibleChildrenCount(info.ChildrenCount);
-        } else if(o instanceof AccessibleFixedText) {
-            AccessibleFixedText t = (AccessibleFixedText) o;
-            if( info.Text != null )
-                t.setText(info.Text);
-            else
-                t.setText(info.Name);
-        } else if(o instanceof AccessibleLabel) {
-            AccessibleLabel l = (AccessibleLabel) o;
-            if( info.Text != null && info.Text.length() > 0 )
-                l.setText(info.Text);
-            else
-                l.setText(info.Name);
-        }
-    }
-
+/*
     public AccessibleObject removeAccessibleObject(XAccessible xAccessible) {
         XAccessibleContext xAccessibleContext = null;
 
@@ -360,7 +362,7 @@ public class AccessibleObjectFactory {
 
         return null;
     }
-
+*/
     public static XAccessible toXAccessible(Object any) {
         if(AnyConverter.isObject(any)) {
             try {
@@ -375,6 +377,37 @@ public class AccessibleObjectFactory {
         return null;
     }
 
+    public java.lang.Object[] getAccessibleObjectSet(java.lang.Object o) {
+        java.lang.Object[] list = null;
+
+        if( o instanceof java.lang.Object[] ) {
+            list = (java.lang.Object[]) o;
+        } else if( o instanceof com.sun.star.uno.Any && AnyConverter.isArray(o) ) {
+            try {
+                list = (java.lang.Object[]) AnyConverter.toArray(o);
+            }
+
+            catch(com.sun.star.lang.IllegalArgumentException e) {
+                // this should never happen
+            }
+        }
+
+        if( list != null ) {
+            java.util.ArrayList set = new java.util.ArrayList(list.length);
+
+            for(int i=0; i<list.length; i++) {
+                AccessibleObject ao = getAccessibleObject(toXAccessible(list[i]), true,  null);
+                if( ao != null ) {
+                    set.add(ao);
+                }
+            }
+
+            set.trimToSize();
+            return set.toArray();
+        }
+
+        return null;
+    }
 
     public void releaseAccessibleObject(AccessibleObject o) {
         synchronized (objectList) {

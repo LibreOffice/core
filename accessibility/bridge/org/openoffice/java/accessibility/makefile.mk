@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obr $ $Date: 2002-08-14 12:12:13 $
+#   last change: $Author: obr $ $Date: 2002-08-16 13:13:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ JAVAFILES = \
     AccessibleFixedText.java \
     AccessibleFrame.java \
     AccessibleImage.java \
+    AccessibleKeyBinding.java \
     AccessibleLabel.java \
     AccessibleListItem.java \
     AccessibleMenu.java \
@@ -90,6 +91,7 @@ JAVAFILES = \
     AccessibleObjectFactory.java \
     AccessibleObject.java \
     AccessibleParagraph.java \
+    AccessibleRelationTypeMap.java \
     AccessibleRoleMap.java \
     AccessibleScrollBar.java \
     AccessibleSeparator.java \
@@ -140,3 +142,5 @@ $(JAVADIR)$/$(PACKAGE)$/%.java:
 
 $(CLASSDIR)$/$(PACKAGE)$/Build.class : $(JAVADIR)$/$(PACKAGE)$/Build.java
     -+$(JAVAC) -d $(CLASSDIR) $(JAVADIR)$/$(PACKAGE)$/Build.java
+
+$(JAVACLASSFILES) : $(UCR)$/internal.db
