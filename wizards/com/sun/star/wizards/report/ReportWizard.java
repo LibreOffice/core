@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-27 09:41:14 $
+ *  last change: $Author: bc $ $Date: 2002-07-08 11:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ public class ReportWizard {
     static XDatabaseMetaData xDBMetaData;
     static DBMetaData.CommandMetaData CurDBMetaData;
     static UNODialogs.UNODialog CurUNODialog;
-    static UNODialogs.UNODialog CurProgressDialog;
+    static UNODialogs.UNODialog CurUNOProgressDialog;
+    static final String SOREPORTFORMNAME = "ReportSource";
 
     static final int SOCMDCANCEL = 1;
     static final int SOCMDHELP = 2;
@@ -232,9 +233,10 @@ public class ReportWizard {
     static XListBox xGroupListBox;
     static XListBox xLayoutListBox;
     static Object lblHeaderText;
-    static XTablesSupplier xDBTables;
     static XNameAccess xTableNames;
     static XNameAccess xQueryNames;
+
+    static XTablesSupplier xDBTables;
     static String TableName;
     static Object oDBTable;
     static int[] iCommandTypes;
@@ -242,12 +244,13 @@ public class ReportWizard {
     static boolean bEnableBinaryOptionGroup;
     static boolean bcreateTemplate;
     static boolean buseTemplate;
+    static boolean bcreateLink;
 
     static String[] OriginalList = new String[]{""};
-    static XNameAccess xColumns;
     static XDesktop xDesktop;
     static ReportDocument.RepWizardDocument CurReportDocument;
     static java.util.Vector GroupFieldVector;
+    static java.util.Vector GroupFormatVector = new java.util.Vector();
     static String TemplatePath;
 
     static String sMsgWizardName;
@@ -256,12 +259,11 @@ public class ReportWizard {
     static String scmdBack;
     static String scmdHelp;
     static String scmdGoOn;
-    static String sMsgNoConnection;
-
     static String slblDatabases;
     static String slblTables;
     static String slblFields;
     static String slblSelFields;
+    static String sShowBinaryFields;
     static String slblDataStructure;
     static String slblPageLayout;
     static String sOrganizeFields;
@@ -286,7 +288,25 @@ public class ReportWizard {
     static String sMsgNoDatabaseAvailable;
     static String sMsgCommandCouldNotbeOpened;
     static String sMsgSavingImpossible;
+    static String sMsgLinkCreationImpossible;
     static String sMsgNoTableInDatabase;
+    static String sMsgNoConnection;
+// Progress display relevant Strings
+    static String sProgressTitle;
+    static String sStop;
+    static String sProgressDBConnection;
+    static String sProgressDataImport;
+    static String sProgressBaseCurRecord;
+    static String sProgressCurRecord;
+    static String sReportFormNotExisting;
+    static String sMsgEndAutopilot;
+    static String sMsgTableNotExisting;
+    static String sMsgNoDBConnection;
+    static String sMsgConnectionImpossible;
+    static String sMsgNoConnectionforDataimport;
+    static String sMsgQueryCreationImpossible;
+    static String sMsgHiddenControlMissing;
+
 
     static boolean bCloseDocument;
 
@@ -300,7 +320,7 @@ public class ReportWizard {
         try{
             short DBIndex = xDBListBox.getSelectedItemPos();
             String sDBName = sDatabaseList[DBIndex];
-        boolean bGetConnection = DBMetaData.getConnection(xMSF, CurDBMetaData, CurReportDocument, sDBName, sMsgNoConnection);
+        boolean bGetConnection = DBMetaData.getConnection(xMSF, CurDBMetaData, CurReportDocument, sDBName, sMsgNoConnection, sMsgConnectionImpossible);
             if (bGetConnection == true){
         CurDBMetaData.DataSourceName = sDBName;
         String[] ContentList = DBMetaData.getDBMetaData(CurReportDocument);
@@ -344,7 +364,7 @@ public class ReportWizard {
         CurDBMetaData.CommandType = CurCommandType;
        }
            XColumnsSupplier xTableCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oDBTable);
-           xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xTableCols.getColumns());
+           CurDBMetaData.xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xTableCols.getColumns());
            if (DBMetaData.getSpecificFieldNames(CurDBMetaData) > 0)
                UNODialogs.toggleListboxControls(CurUNODialog.xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, new Boolean(true));
            else
@@ -435,11 +455,11 @@ public class ReportWizard {
             break;
 
         case SOCONTENTLST:
-            CurReportDocument.ReportTextDocument.lockControllers();
+//          CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xContentListBox.getSelectedItemPos();
-            ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, ContentFiles[0][iPos]);
+            ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, GroupFormatVector, ContentFiles[0][iPos]);
             ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, ContentFiles[0][iPos], "LoadTextStyles");
-            CurReportDocument.ReportTextDocument.unlockControllers();
+//          CurReportDocument.ReportTextDocument.unlockControllers();
             ReportDocument.selectFirstPage(CurReportDocument);
             break;
 
@@ -471,6 +491,7 @@ public class ReportWizard {
         public void disposing(EventObject eventObject) {
         }
         public void actionPerformed(ActionEvent actionEvent) {
+        boolean bGoOn = true;
             try{
                 int iKey  =  UNODialogs.getControlKey(actionEvent.Source, CurUNODialog.ControlList);
                 switch (iKey) {
@@ -507,19 +528,23 @@ public class ReportWizard {
                         break;
 
                     case SOGROUPLST:
-                       ReportDocument.addGroupNametoDocument(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
+                       bGoOn = ReportDocument.addGroupNametoDocument(xGlobalMSF, CurReportDocument, CurDBMetaData, CurUNODialog,
+                                     xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector,
+                                     sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot);
                        break;
 
                     case SOSELGROUPLST:
-                       ReportDocument.removeGroupName(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
+                       ReportDocument.removeGroupName(CurReportDocument, CurDBMetaData, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector);
                        break;
 
                     case SOCMDGROUPOUT:
-                       ReportDocument.addGroupNametoDocument(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
+                       bGoOn = ReportDocument.addGroupNametoDocument(xGlobalMSF, CurReportDocument, CurDBMetaData, CurUNODialog,
+                                    xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector,
+                                    sMsgTableNotExisting + (char) 13 + sMsgEndAutopilot);
                        break;
 
                     case SOCMDGROUPIN:
-            ReportDocument.removeGroupName(CurReportDocument, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector);
+            ReportDocument.removeGroupName(CurReportDocument, CurDBMetaData, CurUNODialog, xGroupListBox, xSelGroupListBox, GroupFieldVector, GroupFormatVector);
                        break;
 
                     case SOOPTLANDSCAPE:
@@ -550,6 +575,9 @@ public class ReportWizard {
 //               System.err.println( exception);
                         break;
                 }
+        if (bGoOn == false){
+            CurUNODialog.xDialog.endExecute();
+        }
             }
             catch( Exception exception ){
                exception.printStackTrace(System.out);
@@ -594,21 +622,16 @@ public class ReportWizard {
         boolean bDocisStored;
         StorePath = getStorePath();
         if (bcreateTemplate == true){
-            ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData);
+            ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData, SOREPORTFORMNAME);
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             buseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
-            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template", buseTemplate, sMsgSavingImpossible);
-            if (bDocisStored == false)
-            return;
+            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template",
+                               buseTemplate, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
+            if (bDocisStored == true)
             DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
         }
         else{
-            boolean bcreateLink = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "chkcreateLink", "State")).shortValue() == (short) 1;
-            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)", false, sMsgSavingImpossible);
-            if (bDocisStored == false)
-            return;
-            if (bcreateLink == true)
-            DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
+            bcreateLink = ((Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "chkcreateLink", "State")).shortValue() == (short) 1;
         }
         bSetTitle = false;
         bCloseDocument = false;
@@ -671,7 +694,6 @@ public class ReportWizard {
     }}
 
 
-
     public static void setUpSortList(){
     try{
     short iCurState = 0;
@@ -705,22 +727,36 @@ public class ReportWizard {
         if (CurIndex > MaxSortIndex)
         MaxSortIndex = CurIndex;
     }
-        if ((bDoEnable == false) && (MaxSortIndex > CurIndex)){
+
+    if (bDoEnable == false){
+        if (CurIndex < MaxSortIndex - 1){
+        for (int i = CurIndex + 1; i <= MaxSortIndex; i++){
+            toggleSortListBox(i, false);
+            if (i < MaxSortIndex)
+            xSortListBox[i+1].selectItemPos((short)0,true);
+        }
+        }
+    }
+        else
+            toggleSortListBox(CurIndex+1, bDoEnable);
+
+
+/*  if ((bDoEnable == false) && (MaxSortIndex > CurIndex)){
             for (int i= CurIndex; i < MaxSortIndex; i++){
                 iNextItemPos = xSortListBox[i+1].getSelectedItemPos();
-                if (iNextItemPos != 0){
+           if (iNextItemPos != 0){
                     xSortListBox[i].selectItemPos(iNextItemPos,true);
                     xSortListBox[i+1].selectItemPos(iNextItemPos,false);
                     toggleSortListBox(i,true);
-                    xSortListBox[i+1].selectItemPos((short)0,true);
+        xSortListBox[i+1].selectItemPos((short)0,true);
                 }
             }
-            MaxSortIndex = MaxSortIndex - 1;
-            if (MaxSortIndex < xSortListBox.length -2)
-                toggleSortListBox(MaxSortIndex + 2, false);
+//            MaxSortIndex = MaxSortIndex - 1;
+//            if (MaxSortIndex < xSortListBox.length -2)
+//                toggleSortListBox(MaxSortIndex + 2, false);
         }
         else
-            toggleSortListBox(CurIndex+1, bDoEnable);
+            toggleSortListBox(CurIndex+1, bDoEnable); */
     }
       catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -804,14 +840,15 @@ public class ReportWizard {
     String sStorePath = "";
     Short iState = (Short) UNODialogs.getPropertyOfDialogControl(CurUNODialog.xDlgNameAccess, "optCreateReportTemplate", "State");
     boolean bDoTemplateEnable = iState.shortValue() == 1;
-        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optEditTemplate", "Enabled", new Boolean (bDoTemplateEnable));
-        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optUseTemplate", "Enabled", new Boolean (bDoTemplateEnable));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optEditTemplate", "Enabled", new Boolean(bDoTemplateEnable));
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "optUseTemplate", "Enabled", new Boolean(bDoTemplateEnable));
 
-    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSaveAs_1", "Enabled", new Boolean (bDoTemplateEnable));
-    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_1", "Enabled", new Boolean (bDoTemplateEnable));
-    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdSelectPath_1", "Enabled", new Boolean (bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSaveAs_1", "Enabled", new Boolean(bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_1", "Enabled", new Boolean(bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdSelectPath_1", "Enabled", new Boolean(bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblAutomaticLink", "Enabled", new Boolean(bDoTemplateEnable));
 
-    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSaveAs_2", "Enabled", new Boolean (!bDoTemplateEnable));
+    UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lblSaveAs_2", "Enabled", new Boolean(!bDoTemplateEnable));
     UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "txtSavePath_2", "Enabled", new Boolean(!bDoTemplateEnable));
     UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "cmdSelectPath_2", "Enabled", new Boolean(!bDoTemplateEnable));
     UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "chkcreateLink", "Enabled", new Boolean(!bDoTemplateEnable));
@@ -852,7 +889,7 @@ public class ReportWizard {
 
     UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblAutomaticLink",
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
-                new Object[] {new Integer(8), new Integer(16), new Integer(108), new Integer(5), new Integer(125), sCreateLinkAutomatically});
+                new Object[] {new Integer(8), new Integer(16), new Integer(108), new Integer(5), new Integer(200), sCreateLinkAutomatically});
 
     insertSaveControls(140, 1, false, 46, 34376);
 
@@ -883,7 +920,7 @@ public class ReportWizard {
         short iSelPos = (short) tools.FieldInList(ContentFiles[0], CurReportDocument.ReportFolderName + "/cnt-default.stw");
         xContentListBox = UNODialogs.insertListBox(CurUNODialog, "lstContent", SOCONTENTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
-                new Object[] {new Integer(58), "HID:34363", new Integer(6), new Integer(80), new short[] {iSelPos},  new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
+                new Object[] {new Integer(63), "HID:34363", new Integer(6), new Integer(80), new short[] {iSelPos},  new Integer(4), ContentFiles[1], new Short((short)32), new Integer(125)});
         xContentListBox.selectItemPos(iSelPos, true);
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblLayout",
@@ -894,11 +931,7 @@ public class ReportWizard {
         short iSelLayoutPos = (short) tools.FieldInList(LayoutFiles[0], CurReportDocument.ReportFolderName + "/stl-default.stw");
         xLayoutListBox = UNODialogs.insertListBox(CurUNODialog, "lstLayout", SOLAYOUTLST, new ActionListenerImpl(), new ItemListenerImpl(),
                     new String[] {"Height", "HelpURL", "PositionX", "PositionY", "SelectedItems", "Step", "StringItemList", "TabIndex", "Width"},
-                new Object[] {new Integer(58), "HID:34364", new Integer(140), new Integer(80), new short[] {iSelLayoutPos}, new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
-
-        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", CurUNODialog, "hlnOrientation",
-                new String[] {"Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
-                new Object[] {new Integer(2), "", new Integer(0), new Integer(6), new Integer(144), new Integer(4), new Integer(258)});
+                new Object[] {new Integer(63), "HID:34364", new Integer(140), new Integer(80), new short[] {iSelLayoutPos}, new Integer(4), LayoutFiles[1], new Short((short)33), new Integer(125)});
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblOrientation",
                             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
@@ -942,7 +975,7 @@ public class ReportWizard {
         GroupFieldVector.copyInto(GroupFieldNames);
         CurDBMetaData.GroupFieldNames = GroupFieldNames;
         int FieldCount = CurDBMetaData.FieldNames.length;
-        int SortFieldCount = FieldCount + 1-CurDBMetaData.GroupFieldNames.length;
+        int SortFieldCount = FieldCount + 1 - CurDBMetaData.GroupFieldNames.length;
         String SortFieldNames[] = new String[SortFieldCount];
         SortFieldNames[0] = sNoSorting;
         String CurFieldName;
@@ -954,8 +987,15 @@ public class ReportWizard {
             a +=1;
         }
         }
+        short[] SelList;
         for (int i = 0; i<4; i++){
+        if (i == 0)
+            SelList = new short[] {(short) 1};
+        else
+            SelList = new short[] {(short) 0};
         UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstSort" + new Integer(i+1).toString(), "StringItemList", SortFieldNames);
+        UNODialogs.assignPropertyToDialogControl(CurUNODialog.xDlgNameAccess, "lstSort" + new Integer(i+1).toString(), "SelectedItems", SelList);
+
         }
     }
     }
@@ -971,15 +1011,16 @@ public class ReportWizard {
     int YPos = 40;
     int BaseHelpID = 34321;
     for (int i = 0; i<4; i++){
-        bDoEnable = (i == 0);
+        bDoEnable = (i < 2);
+
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel",CurUNODialog, "lblSort" + new Integer(i+1),
                 new String[] {"Enabled", "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
                 new Object[] {new Boolean(bDoEnable), new Integer(8), sSortHeader[i], new Integer(0), new Integer(12), new Integer(YPos), new Integer(3), new Integer(252)});
 
         HIDString = "HID:" + Integer.toString(BaseHelpID);
         xSortListBox[i] = UNODialogs.insertListBox(CurUNODialog, "lstSort" + new Integer(i+1).toString(), SOSORTLST[i], new ActionListenerImpl(), new ItemListenerImpl(),
-                new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Dropdown", "LineCount", "Name"},
-                new Object[] {new Boolean(bDoEnable), new Integer(12), HIDString,  new Integer(12), new Integer(YPos + 14), new Integer(3), new Short((short) (17+i*4)), new Integer(154), new Boolean(true), new Short("7"), "lstSort" + new Integer(i+1)});
+                new String[] {"Dropdown", "Enabled", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                new Object[] {new Boolean(true), new Boolean(bDoEnable), new Integer(12), HIDString, new Short("7"), "lstSort" + new Integer(i+1),  new Integer(12), new Integer(YPos + 14), new Integer(3), new Short((short) (17+i*4)), new Integer(154)});
 
         HIDString = "HID:" + Integer.toString(BaseHelpID+1);
         UNODialogs.insertRadioButton(CurUNODialog, "optAscend" + Integer.toString(i+1), SOSORTASCENDOPT[i], new ActionListenerImpl(),
@@ -1081,15 +1122,15 @@ public class ReportWizard {
 
         UNODialogs.insertButton(CurUNODialog, "cmdMoveAll", SOCMDMOVEALL, new ActionListenerImpl(),
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34335", new Integer(122), new Integer(108), new Integer(1), new Short((short) 5), new Integer(25), "=>>"});
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34335", new Integer(122), new Integer(102), new Integer(1), new Short((short) 5), new Integer(25), "=>>"});
 
     UNODialogs.insertButton(CurUNODialog, "cmdRemoveSelected", SOCMDREMOVESEL, new ActionListenerImpl(),
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34336", new Integer(122), new Integer(131), new Integer(1), new Short((short) 6), new Integer(25), "<-"});
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34336", new Integer(122), new Integer(120), new Integer(1), new Short((short) 6), new Integer(25), "<-"});
 
         UNODialogs.insertButton(CurUNODialog, "cmdRemoveAll", SOCMDREMOVEALL, new ActionListenerImpl(),
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "Label"},
-                            new Object[] {new Boolean(false), new Integer(14), "HID:34337", new Integer(122), new Integer(157), new Integer(1), new Short((short) 7), new Integer(25), "<<="});
+                            new Object[] {new Boolean(false), new Integer(14), "HID:34337", new Integer(122), new Integer(138), new Integer(1), new Short((short) 7), new Integer(25), "<<="});
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblDatabases",
                             new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
@@ -1122,11 +1163,14 @@ public class ReportWizard {
                             new Object[] {new Boolean(false), new Integer(12), "HID:34331", new Integer(122), new Integer(49), new Integer(1), new Short((short) 2), new Integer(110), new Boolean(true), new Short("7")});
     xFieldsListBox = UNODialogs.insertListBox(CurUNODialog, "lstFields", SOFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                 new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(false), new Integer(96), "HID:34332", new Integer(6), new Integer(79), new Integer(1), new Short((short) 3), new Integer(110), new Boolean(true)});
+                            new Object[] {new Boolean(false), new Integer(77), "HID:34332", new Integer(6), new Integer(79), new Integer(1), new Short((short) 3), new Integer(110), new Boolean(true)});
     xSelFieldsListBox = UNODialogs.insertListBox(CurUNODialog, "lstSelFields", SOSELFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                             new String[] {"Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(false), new Integer(96), "HID:34333", new Integer(154), new Integer(79), new Integer(1), new Short((short) 8), new Integer(110), new Boolean(true)});
-        }
+                            new Object[] {new Boolean(false), new Integer(77), "HID:34333", new Integer(154), new Integer(79), new Integer(1), new Short((short) 8), new Integer(110), new Boolean(true)});
+    UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNODialog, "lblBinaryFields",
+                            new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
+                            new Object[] {new Integer(16), new Integer(6), new Integer(162), new Integer(1), new Integer(210), sShowBinaryFields});
+    }
         catch(Exception exception){
         exception.printStackTrace(System.out);
         }}
@@ -1152,17 +1196,18 @@ public class ReportWizard {
     xGlobalMSF = xMSF;
     xDesktop = tools.getDesktop( xMSF );
     XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
-    getReportResources(xMSF);
+    getReportResources(xMSF, false);
     CurReportDocument =  new ReportDocument.RepWizardDocument();
     CurDBMetaData = new DBMetaData.CommandMetaData();
-    CurReportDocument.ReportTextDocument =  (XTextDocument) tools.createNewDocument(xDesktop, CurReportDocument.Component, "swriter");
-    ReportDocument.initializeReportDocument(xMSF, CurReportDocument);
+    ReportDocument.initializeReportDocument(xMSF, CurReportDocument, true, false);
     String[] DatabaseNames = DBMetaData.getDatabaseNames(CurReportDocument);
     if (DatabaseNames.length > 0){
         ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportDocument.ReportFolderName + "/stl-default.stw", "LoadPageStyles");
         DBMetaData.InitializeWidthList();
+        int i1Pos = CurReportDocument.PosSize.Width;
+        int iPos = (int) ((CurReportDocument.PosSize.Width/2) - 135);
         CurUNODialog = UNODialogs.initializeDialog(xMSF, new String[] {"Height", "PositionX", "PositionY", "Step", "Title", "Width"},
-                                 new Object[] {new Integer(210), new Integer(200), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)});
+                                 new Object[] {new Integer(210), new Integer(iPos), new Integer(250), new Integer(1), WizardTitle[0], new Integer(270)});
         CurReportDocument.ProgressBar.setValue(16);
         fillFirstStep(xMSF, CurReportDocument, DatabaseNames);
         CurReportDocument.ProgressBar.setValue(32);
@@ -1199,13 +1244,16 @@ public class ReportWizard {
             return;
         }
         if ((buseTemplate == true) || (bcreateTemplate == false)){
-            if (ReportDocument.checkReportLayoutMode(CurReportDocument.TextSectionsSupplier, CurDBMetaData.GroupFieldNames) == true){
-            CurProgressDialog = Dataimport.showProgressDisplay(xMSF);
-            Dataimport.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument);
-            CurProgressDialog.xComponent.dispose();
+            if (ReportDocument.checkReportLayoutMode(CurReportDocument.TextSectionsSupplier, CurDBMetaData.GroupFieldNames)){
+            CurUNOProgressDialog = Dataimport.showProgressDisplay(xMSF, false);
+            Dataimport.insertDatabaseDatatoReportDocument(xMSF, CurDBMetaData, CurReportDocument, CurUNOProgressDialog);
+            CurUNOProgressDialog.xComponent.dispose();
             }
             if (bcreateTemplate == false){
-            boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)", false, sMsgSavingImpossible);
+            boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)",
+                                    false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
+            if (bcreateLink && bDocisStored)
+                DBMetaData.createDBLink(CurDBMetaData.DataSource, StorePath);
             }
         }
         return;
@@ -1220,40 +1268,38 @@ public class ReportWizard {
     }}
 
 
-    public static void getReportResources(XMultiServiceFactory xMSF){
+    public static void getReportResources(XMultiServiceFactory xMSF, boolean bgetProgressResourcesOnly){
         final int RID_COMMON = 1000;
         final int RID_FORM = 2200;
         final int RID_REPORT = 2400;
-
         XInvocation xResInvoke = tools.initResources(xMSF, "ReportWizard","dbw");
-        sMsgWizardName = tools.getResText(xResInvoke, RID_REPORT);
+    sMsgWizardName = tools.getResText(xResInvoke, RID_REPORT);
+    if (bgetProgressResourcesOnly == false){
         scmdReady = tools.getResText(xResInvoke, RID_COMMON + 0);
         scmdCancel = tools.getResText(xResInvoke, RID_COMMON + 1);
         scmdBack = tools.getResText(xResInvoke, RID_COMMON + 2);
-    scmdGoOn = tools.getResText(xResInvoke, RID_COMMON + 3);
+        scmdGoOn = tools.getResText(xResInvoke, RID_COMMON + 3);
 
-    sMsgErrorOccured = tools.getResText(xResInvoke, RID_COMMON + 6);
-    sMsgNoTableInDatabase = tools.getResText(xResInvoke, RID_COMMON + 9);
-    sMsgCommandCouldNotbeOpened = tools.getResText(xResInvoke, RID_COMMON + 13);
-    sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
-    sMsgSavingImpossible = "Document could not be saved";
+        sMsgErrorOccured = tools.getResText(xResInvoke, RID_COMMON + 6);
+        sMsgNoTableInDatabase = tools.getResText(xResInvoke, RID_COMMON + 9);
+        sMsgCommandCouldNotbeOpened = tools.getResText(xResInvoke, RID_COMMON + 13);
+        sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
         scmdHelp = tools.getResText(xResInvoke, RID_COMMON + 20);
-    sMsgNoDatabaseAvailable = tools.getResText(xResInvoke, RID_REPORT + 2);
-
+        sMsgNoDatabaseAvailable = tools.getResText(xResInvoke, RID_REPORT + 2);
 
         slblTables = tools.getResText(xResInvoke, RID_FORM + 6);
-    slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
+        slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
         slblFields = tools.getResText(xResInvoke, RID_FORM + 12);
         slblSelFields = tools.getResText(xResInvoke, RID_REPORT + 9);
         slblDataStructure = tools.getResText(xResInvoke, RID_REPORT + 15);
         slblPageLayout = tools.getResText(xResInvoke, RID_REPORT + 16);
         sOrganizeFields = tools.getResText(xResInvoke, RID_REPORT + 19);
-    sSortHeader[0] = tools.getResText(xResInvoke, RID_REPORT + 20);
+        sSortHeader[0] = tools.getResText(xResInvoke, RID_REPORT + 20);
         sSortHeader[1] = tools.getResText(xResInvoke, RID_REPORT + 21);
         sSortHeader[2] = tools.getResText(xResInvoke, RID_REPORT + 51);
         sSortHeader[3] = tools.getResText(xResInvoke, RID_REPORT + 52);
 
-    sNoSorting = tools.getResText(xResInvoke, RID_REPORT + 8);
+        sNoSorting = tools.getResText(xResInvoke, RID_REPORT + 8);
         sOrientationHeader =  tools.getResText(xResInvoke, RID_REPORT + 22);
         sOrientVertical = tools.getResText(xResInvoke, RID_REPORT + 23);
         sOrientHorizontal = tools.getResText(xResInvoke, RID_REPORT + 24);
@@ -1263,34 +1309,47 @@ public class ReportWizard {
         sSortAscend[2] = tools.getResText(xResInvoke, RID_REPORT + 54);
         sSortAscend[3] = tools.getResText(xResInvoke, RID_REPORT + 55);
 
-    sSortDescend[0] = tools.getResText(xResInvoke, RID_REPORT + 37);
-    sSortDescend[1] = tools.getResText(xResInvoke, RID_REPORT + 56);
-    sSortDescend[2] = tools.getResText(xResInvoke, RID_REPORT + 57);
-    sSortDescend[3] = tools.getResText(xResInvoke, RID_REPORT + 58);
+        sSortDescend[0] = tools.getResText(xResInvoke, RID_REPORT + 37);
+        sSortDescend[1] = tools.getResText(xResInvoke, RID_REPORT + 56);
+        sSortDescend[2] = tools.getResText(xResInvoke, RID_REPORT + 57);
+        sSortDescend[3] = tools.getResText(xResInvoke, RID_REPORT + 58);
 
-    WizardHeaderText[0] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 28);
-    WizardHeaderText[1] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 29);
-    WizardHeaderText[2] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 30);
-    WizardHeaderText[3] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 31);
-    WizardHeaderText[4] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 32);
-    WizardTitle = new String[5];
-    WizardTitle[0] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 45);
-    WizardTitle[1] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 11);
-    WizardTitle[2] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 12);
-    WizardTitle[3] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 13);
-    WizardTitle[4] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 14);
-    sSaveAsTemplate = tools.getResText(xResInvoke, RID_REPORT + 40);
-    sUseTemplate = tools.getResText(xResInvoke, RID_REPORT + 41);
-        sEditTemplate = tools.getResText(xResInvoke, RID_REPORT + 42);
+        WizardHeaderText[0] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 28);
+        WizardHeaderText[1] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 29);
+        WizardHeaderText[2] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 30);
+        WizardHeaderText[3] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 31);
+        WizardHeaderText[4] = (char) 13 +  " " + tools.getResText(xResInvoke, RID_REPORT + 32);
+        WizardTitle = new String[5];
+        WizardTitle[0] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 45);
+        WizardTitle[1] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 11);
+        WizardTitle[2] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 12);
+        WizardTitle[3] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 13);
+        WizardTitle[4] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 14);
+        sSaveAsTemplate = tools.getResText(xResInvoke, RID_REPORT + 40);
+        sUseTemplate = tools.getResText(xResInvoke, RID_REPORT + 41);
+            sEditTemplate = tools.getResText(xResInvoke, RID_REPORT + 42);
         sSaveAsDocument = tools.getResText(xResInvoke, RID_REPORT + 43);
-    sSaveAs = tools.getResText(xResInvoke, RID_REPORT + 44);
+        sSaveAs = tools.getResText(xResInvoke, RID_REPORT + 44);
         sCreateLink = tools.getResText(xResInvoke, RID_REPORT + 45);
-    sGroupings = tools.getResText(xResInvoke, RID_REPORT + 50);
-    sCreateLinkAutomatically = " A Database link will be created automatically";
-    sWriterFilterName = tools.getResText(xResInvoke, RID_FORM + 70);
-
-/* Todo:  String sMsgNoDataimport;
-*/
-
+        sGroupings = tools.getResText(xResInvoke, RID_REPORT + 50);
+            sMsgSavingImpossible = tools.getResText(xResInvoke, RID_COMMON + 30);
+// todo: the following message also has to show up when saving failed: sLinkCreationImpossible
+        sMsgLinkCreationImpossible = tools.getResText(xResInvoke, RID_COMMON + 31);
+        sCreateLinkAutomatically = tools.getResText(xResInvoke, RID_COMMON + 32);
+        sShowBinaryFields = tools.getResText(xResInvoke, RID_REPORT + 60);
     }
-}   
+    sMsgEndAutopilot = tools.getResText(xResInvoke, RID_COMMON + 33);
+        sProgressDBConnection = tools.getResText(xResInvoke, RID_COMMON + 34);
+    sMsgConnectionImpossible = tools.getResText(xResInvoke, RID_COMMON + 35);
+
+    sStop = tools.getResText(xResInvoke, RID_COMMON + 21);
+    sMsgTableNotExisting = tools.getResText(xResInvoke, RID_REPORT + 61);
+    sProgressTitle = tools.getResText(xResInvoke, RID_REPORT + 62);
+    sProgressBaseCurRecord = tools.getResText(xResInvoke, RID_REPORT + 63);
+    sReportFormNotExisting = tools.getResText(xResInvoke, RID_REPORT + 64);
+    sMsgQueryCreationImpossible =  tools.getResText(xResInvoke, RID_REPORT + 65); //"Die Abfrage mit dem Statement " + (char) 13 + "'<STATEMENT>'" + (char) 13 + "konnte nicht ausgeführt werden." + (char)13 + " Überprüfen Sie ihre Datenquelle.";
+    sMsgHiddenControlMissing = tools.getResText(xResInvoke, RID_REPORT + 66); //"Folgendes versteckte Control im Formular '<FORMNAME>' konnte nicht ausgelesen werden: '<CONTROLNAME>'.";
+    sProgressDataImport = tools.getResText(xResInvoke, RID_REPORT + 67);
+    sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
+    }
+}
