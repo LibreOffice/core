@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sz $ $Date: 2001-05-03 09:53:20 $
+ *  last change: $Author: sz $ $Date: 2001-05-18 13:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ class TestResult {
     // <private_members>
     sal_Char* m_name;
     sal_Char* m_result;
+    sal_Char* m_msg;
     sal_Bool m_state;
     sal_Bool m_boom;
     // </private_members>
@@ -87,8 +88,11 @@ class TestResult {
 
     // <private_methods>
     // <method_cpy>
-    sal_Char* cpy(sal_Char** dest, const sal_Char* src ) {
+    sal_Char* cpy( sal_Char** dest, const sal_Char* src ) {
 
+        if ( *dest ) {
+            delete [] *dest;
+        }
         *dest = new sal_Char[ ln(src)+1 ];
         // set pointer
         sal_Char* pdest = *dest;
@@ -141,6 +145,7 @@ public:
     TestResult( const sal_Char* meth, sal_Bool boom = sal_False )
             : m_name(0)
             , m_result(0)
+            , m_msg(0)
             , m_state( sal_False )
             , m_boom( boom ) {
 
@@ -154,17 +159,20 @@ public:
             delete( m_name );
         if( m_result )
             delete( m_result );
+        if( m_msg )
+            delete( m_msg );
+
     } // </dtor>
 
     // <public_methods>
     // <method_state>
     inline void state( sal_Bool state, sal_Char* msg = 0 ) {
         m_state = state;
+        if( msg ) {
+            cpy( &m_msg, msg );
+        }
         if( ! state && m_boom ) {
-            if(! msg ) {
-                cpy( &msg, m_name );
-            }
-            TST_BOOM( m_state, msg );
+            TST_BOOM( m_state, m_msg );
         }
     } // </method_state>
 
@@ -199,6 +207,11 @@ public:
     sal_Char* getResult() {
         return m_result;
     } // </method_getResult>
+
+    // <method_getMsg>
+    sal_Char* getMsg() {
+        return m_msg;
+    } // </method_getMsg>
 
     // </public_methods>
 
