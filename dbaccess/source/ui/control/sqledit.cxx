@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqledit.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:07:27 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef DBAUI_UNDOSQLEDIT_HXX
 #include "undosqledit.hxx"
 #endif
+#ifndef DBAUI_QUERYDESIGNVIEW_HXX
+#include "QueryDesignView.hxx"
+#endif
 //////////////////////////////////////////////////////////////////////////
 // OSqlEdit
 //------------------------------------------------------------------------------
@@ -111,8 +114,8 @@ OSqlEdit::~OSqlEdit()
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
-    m_pView->getController()->InvalidateFeature(SID_CUT);
-    m_pView->getController()->InvalidateFeature(SID_COPY);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
 
     // Ist dies ein Cut, Copy, Paste Event?
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
@@ -151,14 +154,14 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     String aText = GetText();
     if(aText != m_strOrigText)
     {
-        SfxUndoManager* pUndoMgr = m_pView->getController()->getUndoMgr();
+        SfxUndoManager* pUndoMgr = static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->getUndoMgr();
         OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( this );
 
         pUndoAct->SetOriginalText( m_strOrigText );
         pUndoMgr->AddUndoAction( pUndoAct );
 
-        m_pView->getController()->InvalidateFeature(SID_UNDO);
-        m_pView->getController()->InvalidateFeature(SID_REDO);
+        static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_UNDO);
+        static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_REDO);
 
         m_strOrigText = aText;
     }
@@ -168,8 +171,8 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
 {
-    m_pView->getController()->InvalidateFeature(SID_CUT);
-    m_pView->getController()->InvalidateFeature(SID_COPY);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
     m_timerInvalidate.Start();
     return 0L;
 }
@@ -180,12 +183,12 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, EMPTYTAG)
         m_timerUndoActionCreation.Stop();
     m_timerUndoActionCreation.Start();
 
-    if (!m_pView->getController()->isModified())
-        m_pView->getController()->setModified( sal_True );
+    if (!static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->isModified())
+        static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->setModified( sal_True );
 
-    m_pView->getController()->InvalidateFeature(SID_SBA_QRY_EXECUTE);
-    m_pView->getController()->InvalidateFeature(SID_CUT);
-    m_pView->getController()->InvalidateFeature(SID_COPY);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_SBA_QRY_EXECUTE);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
 
     m_lnkTextModifyHdl.Call(NULL);
     return 0;
@@ -203,7 +206,7 @@ void OSqlEdit::OverloadedSetText(const String& rNewText)
 
     MultiLineEdit::SetText(rNewText);
     m_strOrigText = rNewText;
-    m_pView->getController()->setModified(sal_True);
+    static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
 }
 
 //==============================================================================

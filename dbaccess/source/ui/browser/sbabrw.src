@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:13:25 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,10 @@
         ID_BROWSER_SAVEASDOC;\
         ID_QUERY_ZOOM_IN;\
         ID_QUERY_ZOOM_OUT;\
+        ID_REALTION_ADD_RELATION;\
     };\
     IdCount = {\
-    38;\
+    39;\
     }
 
  // Default Image-Liste ----------------------------------------------------------------
@@ -692,6 +693,18 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text = "Tabelle e~infügen" ;
             Text [ english ] = "~insert table" ;
             Text [ english_us ] = "~insert table" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_RELATION_DESIGN ;
+            HelpId = HID_BROWSER_RELATION_DESIGN ;
+            Text = "Relatio~nenentwurf" ;
+            Text [ english ] = "relatio~n design" ;
+            Text [ english_us ] = "relatio~n design" ;
         };
     };
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:17:34 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,8 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
+#include <sot/storage.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -1468,6 +1470,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
         SvLBoxEntry* pTables    = m_pTreeView->getListBox()->GetEntry(pDSEntry,1);
 
         aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, (pTables == pEntry || pTables == pTemp));
+        aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN,     (pTables == pEntry || pTables == pTemp));
+
         sal_Bool bPasteAble = (pTables == pEntry || pTables == pTemp);
         if(bPasteAble)
         {
@@ -1551,6 +1555,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
             closeConnection(pDSEntry);
         }
             break;
+        case ID_TREE_RELATION_DESIGN:
         case ID_TREE_TABLE_CREATE_DESIGN:
         case ID_TREE_QUERY_CREATE_DESIGN:
         case ID_TREE_QUERY_CREATE_TEXT:
@@ -1613,6 +1618,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                 sal_Bool bEdit = sal_False;
                 switch(nPos)
                 {
+                    case ID_TREE_RELATION_DESIGN:
+                        pDispatcher = new ORelationDesignAccess(m_xMultiServiceFacatory) ;
+                        break;
                     case ID_TREE_TABLE_EDIT:
                         bEdit = sal_True; // run through
                     case ID_TREE_TABLE_CREATE_DESIGN:

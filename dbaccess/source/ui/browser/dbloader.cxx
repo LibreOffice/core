@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign")),UNO_QUERY);
     else if(aParser.GetMainURL() == String(URL_COMPONENT_TABLEDESIGN))// construct the control
         xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
+    else if(aParser.GetMainURL() == String(URL_COMPONENT_RELATIONDESIGN))// construct the control
+        xController = Reference< XController >(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
     else
         OSL_ENSHURE(0,"wrong dispatch url!");
 
