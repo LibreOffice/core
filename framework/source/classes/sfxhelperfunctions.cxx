@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelperfunctions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:45:23 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,28 +59,31 @@
  *
  ************************************************************************/
 
-#ifndef _FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_CXX_
-#define _FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_CXX_
-
+#ifndef __FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_CXX_
 #include <classes/sfxhelperfunctions.hxx>
+#endif
 
-static pfunc_setToolBoxCreator pToolBoxCreator = NULL;
+static pfunc_setToolBoxControllerCreator pToolBoxControllerCreator = NULL;
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
-pfunc_setToolBoxCreator SAL_CALL SetToolBoxCreator( pfunc_setToolBoxCreator pSetToolBoxCreator )
+namespace framework
 {
-    pfunc_setToolBoxCreator pOldSetToolBoxCreator = pToolBoxCreator;
-    pToolBoxCreator = pSetToolBoxCreator;
-    return pOldSetToolBoxCreator;
+
+pfunc_setToolBoxControllerCreator SAL_CALL SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator )
+{
+    pfunc_setToolBoxControllerCreator pOldSetToolBoxControllerCreator = pToolBoxControllerCreator;
+    pToolBoxControllerCreator = pSetToolBoxControllerCreator;
+    return pOldSetToolBoxControllerCreator;
 }
 
-Reference< drafts::com::sun::star::ui::XUIElement > SAL_CALL CreateToolBox( Reference< ::com::sun::star::frame::XFrame >& rFrame, Reference< ::com::sun::star::awt::XWindow >& rParent, const ::rtl::OUString& aURL )
+svt::ToolboxController* SAL_CALL CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
 {
-    if ( pToolBoxCreator )
-        return (*pToolBoxCreator)( rFrame, rParent, aURL );
+    if ( pToolBoxControllerCreator )
+        return (*pToolBoxControllerCreator)( rFrame, pToolbox, nID, aCommandURL );
     else
-        return Reference< drafts::com::sun::star::ui::XUIElement >();
+        return NULL;
 }
 
-#endif // _FRAMEWORK_CLASSES_SFXHELPERFUNCTIONS_CXX_
+}
