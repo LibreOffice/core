@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-25 09:30:22 $
+#   last change: $Author: tl $ $Date: 2002-11-06 12:37:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,8 +112,7 @@ SLOFILES =  \
         $(SLO)$/viewhdl.obj \
         $(SLO)$/edit.obj \
         $(SLO)$/rect.obj \
-        $(SLO)$/unomodel.obj \
-        $(SLO)$/xchar.obj
+                $(SLO)$/unomodel.obj
 
 EXCEPTIONSFILES =   \
         $(SLO)$/accessibility.obj \
