@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberformatcodewrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-10-13 19:52:27 $
+ *  last change: $Author: er $ $Date: 2000-10-20 11:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 
 
 #define LOCALEDATA_LIBRARYNAME "int"
-#define LOCALEDATA_SERVICENAME "com.sun.star.lang.NumberFormatCode"
+#define LOCALEDATA_SERVICENAME "com.sun.star.lang.NumberFormatMapper"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -128,6 +128,7 @@ NumberFormatCodeWrapper::NumberFormatCodeWrapper(
             DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
         }
     }
+    DBG_ASSERT( xNFC.is(), "NumberFormatCodeWrapper: no NumberFormatMapper" );
 }
 
 
