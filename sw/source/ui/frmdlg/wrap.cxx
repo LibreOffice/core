@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:48:53 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,22 +785,22 @@ void SwWrapTabPage::ApplyImageList()
     ImageList& rImgLst = GetDisplayBackground().GetColor().IsDark() ?
         aWrapILH : aWrapIL;
 
-    aWrapThroughRB.SetImage(rImgLst.GetImage(IMG_THROUGH));
+    aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));
     BOOL bWrapOutline =  !aWrapOutlineCB.IsChecked();
     if(bWrapOutline)
     {
-        aNoWrapRB.SetImage(rImgLst.GetImage(IMG_NONE));
-        aWrapLeftRB.SetImage(rImgLst.GetImage(IMG_LEFT));
-        aWrapRightRB.SetImage(rImgLst.GetImage(IMG_RIGHT));
-        aWrapParallelRB.SetImage(rImgLst.GetImage(IMG_PARALLEL));
-        aIdealWrapRB.SetImage(rImgLst.GetImage(IMG_IDEAL));
+        aNoWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_NONE));
+        aWrapLeftRB.SetModeRadioImage(rImgLst.GetImage(IMG_LEFT));
+        aWrapRightRB.SetModeRadioImage(rImgLst.GetImage(IMG_RIGHT));
+        aWrapParallelRB.SetModeRadioImage(rImgLst.GetImage(IMG_PARALLEL));
+        aIdealWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_IDEAL));
     }
     else
     {
-        aNoWrapRB.SetImage(rImgLst.GetImage( IMG_KON_NONE ));
-        aWrapLeftRB.SetImage(rImgLst.GetImage( IMG_KON_LEFT ));
-        aWrapRightRB.SetImage(rImgLst.GetImage( IMG_KON_RIGHT ));
-        aWrapParallelRB.SetImage(rImgLst.GetImage(IMG_KON_PARALLEL ));
-        aIdealWrapRB.SetImage(rImgLst.GetImage( IMG_KON_IDEAL ));
+        aNoWrapRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_NONE ));
+        aWrapLeftRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_LEFT ));
+        aWrapRightRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_RIGHT ));
+        aWrapParallelRB.SetModeRadioImage(rImgLst.GetImage(IMG_KON_PARALLEL ));
+        aIdealWrapRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_IDEAL ));
     }
 }
