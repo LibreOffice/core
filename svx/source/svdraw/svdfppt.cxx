@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: sj $ $Date: 2001-01-30 14:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5416,11 +5416,17 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         if ( aColorInSheet != aCol )
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
     }
-
     if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nInstanceInSheet ) ) // Hoch/Tiefstellung in %
     {
-        SvxEscapementItem aItem;
-        aItem.GetEsc() = (short)nVal;
+        sal_uInt16  nEsc = 0;
+        sal_uInt8   nProp = 100;
+
+        if ( nVal )
+        {
+            nEsc = (sal_Int16)nVal;
+            nProp = DFLT_ESC_PROP;
+        }
+        SvxEscapementItem aItem( nEsc, nProp );
         rSet.Put( aItem );
     }
 }
