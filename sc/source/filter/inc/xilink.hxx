@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:19:43 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,12 @@
 #ifndef SC_XILINK_HXX
 #define SC_XILINK_HXX
 
+#ifndef SC_XLLINK_HXX
+#include "xllink.hxx"
+#endif
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
-
-#include "excdefs.hxx"
 
 class ScDocument;
 class ScTokenArray;
@@ -77,6 +78,7 @@ class XclImpStream;
 Classes for import of different kinds of internal/external references.
 - 3D cell and cell range links
 - External cell and cell range links
+- Internal and external defined names
 - Add-in functions
 - DDE links
 - OLE object links
@@ -91,9 +93,6 @@ Classes for import of different kinds of internal/external references.
     first sheet. */
 class XclImpTabIdBuffer
 {
-private:
-    ScfUInt16Vec                maTabIdVec;     /// The vector with sheet indexes.
-
 public:
     /** Reads the TABID record. */
     void                        ReadTabid( XclImpStream& rStrm );
@@ -105,6 +104,61 @@ public:
         Example: The buffer is 3;5;2;4;1, nCreatedId is 1 and nMaxTabId is 3. The function will
         return 2 which is the 0-based index of sheet 1 in the list 3;2;1. */
     sal_uInt16                  GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId = 0xFFFF ) const;
+
+private:
+    ScfUInt16Vec                maTabIdVec;     /// The vector with sheet indexes.
+};
+
+
+// Internal defined names =====================================================
+
+class ScRangeData;
+
+/** Represents a defined name. It may be related to a single sheet or global. */
+class XclImpName : protected XclImpRoot
+{
+public:
+    explicit                    XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex );
+
+    inline const String&        GetXclName() const { return maXclName; }
+    inline const String&        GetScName() const { return maScName; }
+    inline sal_uInt16           GetScTabNum() const { return mnScTab; }
+    inline const ScRangeData*   GetScRangeData() const { return mpScData; }
+    inline bool                 IsGlobal() const { return mnScTab == EXC_NOTAB; }
+
+private:
+    String                      maXclName;      /// Original name read from the file.
+    String                      maScName;       /// Name inserted into the Calc document.
+    const ScRangeData*          mpScData;       /// Pointer to Calc defined name (no ownership).
+    sal_Unicode                 mcBuiltIn;      /// Excel built-in name index.
+    sal_uInt16                  mnScTab;        /// Sheet index of local names.
+};
+
+
+// ----------------------------------------------------------------------------
+
+/** This buffer contains all internal defined names of the document.
+    @descr  It manages the position of the names in the document, means if they are
+    global or attached to a specific sheet. While inserting the names into the Calc
+    document this buffer resolves conflicts caused by equal names from different
+    sheets. */
+class XclImpNameBuffer : protected XclImpRoot
+{
+public:
+    explicit                    XclImpNameBuffer( const XclImpRoot& rRoot );
+
+    /** Reads a NAME record and creates an entry in this buffer. */
+    void                        ReadName( XclImpStream& rStrm );
+
+    /** Tries to find the name used in Calc, based on the original Excel defined name.
+        @param nScTab  The sheet index for local names or EXC_NOTAB for global names.
+        If no local name is found, tries to find a matching global name.
+        @return  Pointer to the defined name or 0 on error. */
+    const XclImpName*           FindName( const String& rXclName, sal_uInt16 nScTab = EXC_NOTAB ) const;
+
+private:
+    typedef ScfDelList< XclImpName > XclImpNameList;
+    XclImpNameList              maNameList;
 };
 
 
@@ -113,7 +167,8 @@ public:
 /** Type of an external name. */
 enum XclImpExtNameType
 {
-    xlExtName,                  /// An external defined name or AddIn function name.
+    xlExtName,                  /// An external defined name.
+    xlExtAddIn,                 /// An add-in function name.
     xlExtDDE,                   /// A DDE link range.
     xlExtOLE                    /// An OLE object link.
 };
@@ -125,18 +180,9 @@ enum XclImpExtNameType
     @descr Supported: External defined names, AddIn names, DDE links and OLE objects. */
 class XclImpExtName
 {
-private:
-    typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
-
-    XclImpCachedMatrixPtr       mpDdeMatrix;        /// Cached results of the DDE link.
-    String                      maName;             /// The name of the external name.
-    String                      maAddInName;        /// The converted Calc add-in function name.
-    sal_uInt32                  mnStorageId;        /// Storage ID for OLE object storages.
-    XclImpExtNameType           meType;             /// Type of the external name.
-
 public:
     /** Reads the external name from the stream. */
-    explicit                    XclImpExtName( XclImpStream& rStrm );
+    explicit                    XclImpExtName( XclImpStream& rStrm, bool bAddIn = false );
 
     /** Create and apply the cached list of this DDE Link to the document. */
     void                        CreateDdeData( ScDocument& rDoc,
@@ -145,165 +191,21 @@ public:
 
     inline XclImpExtNameType    GetType() const         { return meType; }
     inline const String&        GetName() const         { return maName; }
-    inline const String&        GetAddInName() const    { return maAddInName; }
     inline sal_uInt32           GetStorageId() const    { return mnStorageId; }
-};
 
-
-// ----------------------------------------------------------------------------
-
-/** Buffer for all external names of one SUPBOOK (external document). */
-class XclImpExtNameList : public ScfDelList< XclImpExtName >
-{
-public:
-    /** Returns the external name specified by an index from the Excel document (one-based). */
-    const XclImpExtName*        GetName( sal_uInt16 nXclIndex ) const;
-};
-
-
-// Cached external cells ======================================================
-
-/** Contains the address and value of an external referenced cell. */
-class XclImpCrn : public XclImpCachedValue
-{
-public:
-    /** Reads a cached value and stores it with its cell address. */
-    explicit                    XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow );
-
-    /** Copies the cached value to sheet nTab in the document. */
-    void                        SetCell( ScDocument& rDoc, sal_uInt16 nTab ) const;
-};
-
-
-// External documents =========================================================
-
-/** Contains the name and sheet index of one sheet in an external document. */
-class XclImpSupbookTab
-{
 private:
-    ScfDelList< XclImpCrn >     maCrnList;      /// List of CRN records (cached cell values).
-    String                      maName;         /// Name of the external sheet.
-    sal_uInt16                  mnScTab;        /// New sheet index in Calc document.
+    typedef ::std::auto_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
 
-public:
-    /** Stores the sheet name and marks the sheet index as invalid.
-        The sheet index is set while creating a sheet with CreateSheet(). */
-    explicit                    XclImpSupbookTab( const String& rName );
-
-    inline const String&        GetName() const     { return maName; }
-    inline sal_uInt16           GetScTab() const    { return mnScTab; }
-
-    /** Stores the contents of an external referenced cell in the own CRN list. */
-    inline void                 AppendCrn( XclImpCrn* pCrn ) { maCrnList.Append( pCrn ); }
-
-    /** Creates a new sheet in the Calc document and stores all external cells in it. */
-    void                        CreateTable( ScDocument& rDoc, const String& rUrl );
-};
-
-
-// ----------------------------------------------------------------------------
-
-/** This class represents an external linked document (record SUPBOOK).
-    @descr  Contains a list of all referenced sheets in the document. */
-class XclImpSupbook
-{
-private:
-    typedef ScfDelList< XclImpSupbookTab > XclImpSupbookTabList;
-
-    XclImpSupbookTabList        maSupbookTabList;   /// All sheet names of the document.
-    XclImpExtNameList           maExtNameList;      /// All external names of the document.
-    String                      maUrl;              /// URL of the external document.
-    sal_uInt16                  mnCurrExcTab;       /// Current Excel sheet index of external cells.
-    bool                        mbSelf;             /// true = internal 3D references.
-    bool                        mbAddIn;            /// true = Add-in function names.
-
-public:
-    /** Reads the SUPBOOK record from stream. */
-    explicit                    XclImpSupbook( XclImpStream& rStrm );
-
-    /** Reads and decodes an encoded URL. */
-    static void                 ReadUrl( XclImpStream& rStrm, String& rUrl, bool& rbSelf );
-    /** Reads an external sheet name. */
-    static void                 ReadTabName( XclImpStream& rStrm, String& rTabName );
-
-    /** Reads an XCT record (count of following CRNs and current sheet). */
-    void                        ReadXct( XclImpStream& rStrm );
-    /** Reads a CRN record (external referenced cell). */
-    void                        ReadCrn( XclImpStream& rStrm );
-    /** Reads an EXTERNNAME record. */
-    void                        ReadExternname( XclImpStream& rStrm );
-
-    /** Returns true, if this SUPBOOK contains internal 3D references. */
-    inline bool                 IsSelf() const { return mbSelf; }
-    /** Returns true, if this SUPBOOK contains add-in function names. */
-    inline bool                 IsAddIn() const { return mbAddIn; }
-
-    /** Returns the URL of the external document. */
-    inline const String&        GetUrl() const { return maUrl; }
-    /** Returns the external name specified by an index from the Excel document (one-based). */
-    const XclImpExtName*        GetExtName( sal_uInt16 nXclIndex ) const;
-    /** Decodes the URL to special links.
-        @descr  For DDE links: Decodes application and document name.
-        For OLE object links: Decodes class and document name.
-        @return  true = decoding was successful. */
-    bool                        GetLink( String& rApplic, String& rDoc ) const;
-
-    /** Returns Calc sheet index from Excel sheet index. */
-    sal_uInt16                  GetScTabNum( sal_uInt16 nExcTabNum ) const;
-    /** Returns Calc sheet index from sheet name. */
-    sal_uInt16                  GetScTabNum( const String& rTabName ) const;
-
-    /** Creates all sheets of this external document.
-        @param nFirstTab  The external Excel index of the first sheet to be created.
-        @param nLastTab  The external Excel index of the last sheet to be created. */
-    void                        CreateTables(
-                                    const XclImpRoot& rRoot,
-                                    sal_uInt16 nFirstTab, sal_uInt16 nLastTab ) const;
-};
-
-
-// ----------------------------------------------------------------------------
-
-/** Contains a list of all external documents (SUPBOOKs) used in this workbook. */
-class XclImpSupbookBuffer
-{
-private:
-    typedef ScfDelList< XclImpSupbook > XclImpSupbookList;
-
-    XclImpSupbookList           maSupbookList;      /// List of external documents.
-
-public:
-    /** Reads and appends a SUPBOOK record (BIFF8). */
-    inline void                 ReadSupbook( XclImpStream& rStrm )
-                                    { maSupbookList.Append( new XclImpSupbook( rStrm ) ); }
-
-    /** Returns the number of SUPBOOKs. */
-    inline sal_uInt32           Count() const { return maSupbookList.Count(); }
-
-    /** Returns the specified SUPBOOK record data. */
-    inline const XclImpSupbook* GetSupbook( sal_uInt32 nIndex ) const
-                                    { return maSupbookList.GetObject( nIndex ); }
-    /** Returns the SUPBOOK record data specified by the URL of the external document. */
-    const XclImpSupbook*        GetSupbook( const String& rUrl ) const;
-    /** Returns the current SUPBOOK record data (last SUPBOOK in the list). */
-    inline XclImpSupbook*       GetCurrSupbook() const { return maSupbookList.Last(); }
+    XclImpCachedMatrixPtr       mpDdeMatrix;        /// Cached results of the DDE link.
+    String                      maName;             /// The name of the external name.
+    sal_uInt32                  mnStorageId;        /// Storage ID for OLE object storages.
+    XclImpExtNameType           meType;             /// Type of the external name.
 };
 
 
 // Import link manager ========================================================
 
-/** Contains the SUPBOOK index and sheet indexes of an external link.
-    @descr  It is possible to enter a formula like =SUM(Sheet1:Sheet3!A1),
-    therefore here occurs a sheet range. */
-struct XclImpXti
-{
-    sal_uInt16                  mnSupbook;          /// Index to SUPBOOK.
-    sal_uInt16                  mnFirst;            /// Index of first sheet.
-    sal_uInt16                  mnLast;             /// Index of last sheet.
-};
-
-
-// ----------------------------------------------------------------------------
+class XclImpLinkManager_Impl;
 
 /** This is the central class for the import of all internal/external links.
     @descr  This manager stores all data about external documents with their sheets
@@ -320,15 +222,8 @@ struct XclImpXti
     and sheet indexes for each external reference used anywhere in the workbook.
     This record follows a list of SUPBOOK records (with their attached records).
 */
-class XclImpLinkManager : protected XclImpRoot
+class XclImpLinkManager
 {
-private:
-    typedef ScfDelList< XclImpXti > XclImpXtiList;
-
-    XclImpXtiList               maXtiList;          /// List of all XTI structures.
-    XclImpSupbookBuffer         maSupbookBuffer;    /// Buffer for all external workbooks.
-    bool                        mbCreated;          /// true = Calc sheets already created.
-
 public:
     explicit                    XclImpLinkManager( const XclImpRoot& rRoot );
                                 ~XclImpLinkManager();
@@ -344,29 +239,28 @@ public:
     /** Reads an EXTERNNAME record and appends it to the current SUPBOOK. */
     void                        ReadExternname( XclImpStream& rStrm );
 
-    /** Returns the XTI record data (reference indexes) from position nXtiIndex. */
-    inline const XclImpXti*     GetXti( sal_uInt32 nXtiIndex ) const
-                                    { return maXtiList.GetObject( nXtiIndex ); }
+    /** Returns true, if the specified XTI entry contains an internal reference. */
+    bool                        IsSelfRef( sal_uInt16 nXtiIndex ) const;
+    /** Returns the Calc sheet index range of the specified XTI entry.
+        @return  true = XTI data found, returned sheet index range is valid. */
+    bool                        GetScTabRange(
+                                    sal_uInt16& rnFirstScTab, sal_uInt16& rnLastScTab,
+                                    sal_uInt16 nXtiIndex ) const;
+    /** Returns the specified external name or 0 on error. */
+    const XclImpExtName*        GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
+    /** Tries to decode the URL of the specified XTI entry to OLE or DDE link components.
+        @descr  For DDE links: Decodes to application name and topic.
+        For OLE object links: Decodes to class name and document URL.
+        @return  true = decoding was successful, returned strings are valid (not empty). */
+    bool                        GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
 
-    /** Returns the specified SUPBOOK (external document). */
-    const XclImpSupbook*        GetSupbook( sal_uInt32 nXtiIndex ) const;
-    /** Returns the SUPBOOK (external workbook) specified by its URL. */
-    inline const XclImpSupbook* GetSupbook( const String& rUrl ) const
-                                    { return maSupbookBuffer.GetSupbook( rUrl ); }
+    /** Returns the Calc sheet index of a table in an external document.
+        @return  Calc sheet index or EXC_TAB_INVALID on error. */
+    sal_uInt16                  GetScTab( const String& rUrl, const String& rTabName ) const;
 
 private:
-    /** Creates all external sheets in the Calc document. */
-    void                        CreateTables();
-
-    /** Finds the largest range of sheet indexes in a SUPBOOK after a start sheet index.
-        @param nSupb  The list index of the SUPBOOK.
-        @param nStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
-        @param rnFirst  The first index of the range is returned here.
-        @param rnLast  The last index of the range is returned here (incusive).
-        @return  true = the return values are valid; false = nothing found. */
-    bool                        FindNextTabRange(
-                                    sal_uInt16& rnFirst, sal_uInt16& rnLast,
-                                    sal_uInt16 nSupb, sal_uInt16 nStart ) const;
+    typedef ::std::auto_ptr< XclImpLinkManager_Impl > XclImpLinkManager_ImplPtr;
+    XclImpLinkManager_ImplPtr   mpImpl;
 };
 
 
