@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:06:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,15 +127,13 @@ void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaint
 
     for (nCol=0; nCol<nX1; nCol++)
         aOffset.X() -= pDoc->GetColWidth( nCol, nTab ) * nLayoutSign;
-    for (nRow=0; nRow<nY1; nRow++)
-        aOffset.Y() -= pDoc->GetRowHeight( nRow, nTab );
+    aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nTab );
 
     long nDataWidth = 0;
     long nDataHeight = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
         nDataWidth += pDoc->GetColWidth( nCol, nTab );
-    for (nRow=nY1; nRow<=nY2; nRow++)
-        nDataHeight += pDoc->GetRowHeight( nRow, nTab );
+    nDataHeight += pDoc->GetRowHeight( nY1, nY2, nTab );
 
     if ( bLayoutRTL )
         aOffset.X() += nDataWidth;
@@ -152,8 +150,7 @@ void ScOutputData::DrawingLayer(const sal_uInt16 nLayer, const sal_uInt16 nPaint
 
     for (nCol=nX1; nCol<=nX2; nCol++)
         aRect.Right() += pDoc->GetColWidth( nCol, nTab );
-    for (nRow=nY1; nRow<=nY2; nRow++)
-        aRect.Bottom() += pDoc->GetRowHeight( nRow, nTab );
+    aRect.Bottom() += pDoc->GetRowHeight( nY1, nY2, nTab );
 
     aRect.Left()   = (long) (aRect.Left()   * HMM_PER_TWIPS);
     aRect.Top()    = (long) (aRect.Top()    * HMM_PER_TWIPS);
