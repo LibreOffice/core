@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:28:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5393,7 +5393,7 @@ const XclDumpFunc pFuncData[] =
         { "TEXTREF" },                      // macro/internal
         { "INDIRECT",               0 },
         { "REGISTER" },                     // macro/internal
-/*150*/ { "CALL" },                         // macro/internal
+/*150*/ { "CALL" },
         { "ADD.BAR" },                      // macro/internal
         { "ADD.MENU" },                     // macro/internal
         { "ADD.COMMAND" },                  // macro/internal
@@ -5447,18 +5447,18 @@ const XclDumpFunc pFuncData[] =
         { "UNREGISTER" },                   // macro/internal
         { "202" },                          // not used
         { "203" },                          // not used
-        { "USDOLLAR" },                     // macro/internal
-/*205*/ { "FINDB" },                        // macro/internal
-        { "SEARCHB" },                      // macro/internal
-        { "REPLACEB" },                     // macro/internal
-        { "LEFTB" },                        // macro/internal
-        { "RIGHTB" },                       // macro/internal
-/*210*/ { "MIDB" },                         // macro/internal
-        { "LENB" },                         // macro/internal
+        { "USDOLLAR" },
+/*205*/ { "FINDB" },
+        { "SEARCHB" },
+        { "REPLACEB",               4 },
+        { "LEFTB" },
+        { "RIGHTB" },
+/*210*/ { "MIDB",                   3 },
+        { "LENB",                   1 },
         { "ROUNDUP",                2 },
         { "ROUNDDOWN",              2 },
-        { "ASC" },                          // macro/internal
-/*215*/ { "DBSC" },                         // macro/internal
+        { "ASC",                    1 },
+/*215*/ { "DBSC",                   1 },
         { "RANK",                   0 },
         { "217" },                          // not used
         { "218" },                          // not used
@@ -5487,7 +5487,7 @@ const XclDumpFunc pFuncData[] =
         { "FORMULA.CONVERT" },              // macro/internal
         { "GET.LINK.INFO" },                // macro/internal
         { "TEXT.BOX" },                     // macro/internal
-        { "INFO" },                         // macro/internal
+        { "INFO",                   1 },
 /*245*/ { "GROUP" },                        // macro/internal
         { "GET.OBJECT" },                   // macro/internal
         { "DB",                     0 },
@@ -5594,16 +5594,16 @@ const XclDumpFunc pFuncData[] =
         { "SCENARIO.GET" },                 // macro/internal
         { "OPTIONS.LISTS.GET" },            // macro/internal
 /*350*/ { "ISPMT",                  4 },
-        { "DATEDIF" },                      // macro/internal
-        { "DATESTRING" },                   // macro/internal
-        { "NUMBERSTRING" },                 // macro/internal
+        { "DATEDIF",                3 },
+        { "DATESTRING",             1 },
+        { "NUMBERSTRING",           2 },
         { "ROMAN",                  0 },
 /*355*/ { "OPEN.DIALOG" },                  // macro/internal
         { "SAVE.DIALOG" },                  // macro/internal
         { "VIEW.GET" },                     // macro/internal
         { "GETPIVOTDATA",           0 },
         { "HYPERLINK",              2 },
-/*360*/ { "PHONETIC" },                     // macro/internal
+/*360*/ { "PHONETIC",               1 },
         { "AVERAGEA",               0 },
         { "MAXA",                   0 },
         { "MINA",                   0 },
@@ -5612,17 +5612,18 @@ const XclDumpFunc pFuncData[] =
         { "STDEVA",                 0 },
         { "VARA",                   0 },
         { "BAHTTEXT",               1 },
-        { "THAIDAYOFWEEK" },                // macro/internal
-/*370*/ { "THAIDIGIT" },                    // macro/internal
-        { "THAIMONTHOFYEAR" },              // macro/internal
-        { "THAINUMSOUND" },                 // macro/internal
-        { "THAINUMSTRING" },                // macro/internal
-        { "THAISTRINGLENGTH" },             // macro/internal
-/*375*/ { "ISTHAIDIGIT" },                  // macro/internal
-        { "ROUNDBAHTDOWN" },                // macro/internal
-        { "ROUNDBAHTUP" },                  // macro/internal
-        { "THAIYEAR" },                     // macro/internal
-        { "RTD" }                           // macro/internal
+        { "THAIDAYOFWEEK",          1 },
+/*370*/ { "THAIDIGIT",              1 },
+        { "THAIMONTHOFYEAR",        1 },
+        { "THAINUMSOUND",           1 },
+        { "THAINUMSTRING",          1 },
+        { "THAISTRINGLENGTH",       1 },
+/*375*/ { "ISTHAIDIGIT",            1 },
+        { "ROUNDBAHTDOWN",          1 },
+        { "ROUNDBAHTUP",            1 },
+        { "THAIYEAR",               1 },
+        { "RTD" },
+/*380*/ { "ISHYPERLINK",            1 }
 };
 
 const XclDumpFunc* lcl_GetFuncData( sal_uInt16 nIndex )
