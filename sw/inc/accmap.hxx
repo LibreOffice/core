@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:09:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,6 @@ public:
     // for preview
     Point PixelToCore (const Point& rPoint) const;
     Rectangle CoreToPixel (const Rectangle& rRect) const;
-    Rectangle PixelToCore (const Rectangle& rRect) const;
 
 private:
     /** get mapping mode for LogicToPixel and PixelToLogic conversions
