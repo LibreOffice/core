@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-08 14:45:43 $
+ *  last change: $Author: cl $ $Date: 2001-02-11 13:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,22 +273,29 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     // ----------------
     // prep text styles
     // ----------------
-    uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
-    if(xText.is())
+    if( aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
+        aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
+        aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
+        aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape )
     {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
-        sal_Bool bIsEmptyPresObj = sal_False;
-
-        if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(msEmptyPres) )
+        uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
+        if(xText.is())
         {
-            uno::Any aAny = xPropSet->getPropertyValue(msEmptyPres);
-            aAny >>= bIsEmptyPresObj;
-        }
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        if(!bIsEmptyPresObj)
-        {
-            GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
+            sal_Bool bIsEmptyPresObj = sal_False;
+
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(msEmptyPres) )
+            {
+                uno::Any aAny = xPropSet->getPropertyValue(msEmptyPres);
+                aAny >>= bIsEmptyPresObj;
+            }
+
+            if(!bIsEmptyPresObj)
+            {
+                GetExport().GetTextParagraphExport()->collectTextAutoStyles( xText );
+            }
         }
     }
 
