@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:37:10 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,14 +138,6 @@
 #include <vcl/wintypes.hxx>     // for check states
 #endif
 
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
-
-#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
-#include <com/sun/star/form/XFormsSupplier.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
@@ -557,16 +549,13 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPage)
     {
-        m_xForms.clear();
+        m_xCurrentPageFormsSupp.clear();
 
         OSL_ENSURE(_rxDrawPage.is(), "OFormLayerXMLImport_Impl::startPage: NULL page!");
-        Reference< XFormsSupplier > xFormsSupp(_rxDrawPage, UNO_QUERY);
-        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLImport_Impl::startPage: invalid draw page (no XFormsSupplier)!");
-        if (!xFormsSupp.is())
+        m_xCurrentPageFormsSupp = m_xCurrentPageFormsSupp.query( _rxDrawPage );
+        OSL_ENSURE( m_xCurrentPageFormsSupp.is(), "OFormLayerXMLImport_Impl::startPage: invalid draw page (no XFormsSupplier)!" );
+        if ( !m_xCurrentPageFormsSupp.is() )
             return;
-
-        m_xForms = Reference< XNameContainer >(xFormsSupp->getForms(), UNO_QUERY);
-        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::startPage: invalid forms collection!");
 
         // add a new entry to our page map
         ::std::pair< MapDrawPage2MapIterator, bool > aPagePosition =
@@ -578,7 +567,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OFormLayerXMLImport_Impl::endPage()
     {
-        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::endPage: sure you called startPage before?");
+        OSL_ENSURE( m_xCurrentPageFormsSupp.is(), "OFormLayerXMLImport_Impl::endPage: sure you called startPage before?" );
 
         // do some knittings for the controls which are referring to each other
         try
@@ -620,9 +609,11 @@ namespace xmloff
         }
 
         // now that we have all children of the forms collection, attach the events
-        Reference< XIndexAccess > xIndexContainer(m_xForms, UNO_QUERY);
-        if (xIndexContainer.is())
-            ODefaultEventAttacherManager::setEvents(xIndexContainer);
+        Reference< XIndexAccess > xIndexContainer;
+        if ( m_xCurrentPageFormsSupp.is() && m_xCurrentPageFormsSupp->hasForms() )
+            xIndexContainer = xIndexContainer.query( m_xCurrentPageFormsSupp->getForms() );
+        if ( xIndexContainer.is() )
+            ODefaultEventAttacherManager::setEvents( xIndexContainer );
 
         // clear the structures for the control references.
         m_aControlReferences.clear();
@@ -660,22 +651,20 @@ namespace xmloff
     SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >& _rxAttribs)
     {
-        OSL_ENSURE(m_xForms.is(), "OFormLayerXMLImport_Impl::createContext: have no forms collection (did you use startPage?)!");
-
         SvXMLImportContext* pContext = NULL;
-        if( m_xForms.is() && (0 == _rLocalName.compareToAscii("form")))
+        if ( 0 == _rLocalName.compareToAscii( "form" ) )
         {
-            pContext =
-               new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xForms );
+            if ( m_xCurrentPageFormsSupp.is() )
+                pContext = new OFormImport(*this, *this, _nPrefix, _rLocalName, m_xCurrentPageFormsSupp->getForms() );
         }
-        else if( _nPrefix == XML_NAMESPACE_XFORMS
-                 && xmloff::token::IsXMLToken( _rLocalName,
-                                               xmloff::token::XML_MODEL ) )
+        else if (  ( _nPrefix == XML_NAMESPACE_XFORMS
+                && ( xmloff::token::IsXMLToken( _rLocalName, xmloff::token::XML_MODEL ) ) )
+                )
         {
-            pContext =
-                createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
+            pContext = createXFormsModelContext( m_rImporter, _nPrefix, _rLocalName );
         }
-        else
+
+        if ( !pContext )
         {
             OSL_ENSURE( false, "unknown element" );
             pContext =
