@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 15:53:33 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 09:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,7 @@ void ODataOutputStream::writeUTF(const OUString& Value)
     throw ( IOException,
             RuntimeException)
 {
-    sal_Int32 nStrLen = Value.len();
+    sal_Int32 nStrLen = Value.getLength();
     const sal_Unicode * pStr = Value.getStr();
     sal_Int32 nUTFLen = 0;
 
@@ -1522,7 +1522,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
     sal_Bool bLoadSuccesfull = sal_True;
     if( nId )
     {
-        if( aName.len() )
+        if( aName.getLength() )
         {
             // load the object
             Reference< XInterface > x = m_rFactory->createInstance( aName );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-11 15:43:48 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 09:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ namespace io_acceptor
                     sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
                     if( -1 != nIndex )
                     {
-                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toLowerCase();
+                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toAsciiLowerCase();
                         if( nIndex < container.getToken(i).getLength() )
                         {
                             OUString oValue = container.getToken(i).copy(
@@ -302,7 +302,7 @@ namespace io_acceptor
                     sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
                     if( -1 != nIndex )
                     {
-                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toLowerCase();
+                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toAsciiLowerCase();
                         if( nIndex < container.getToken(i).getLength() )
                         {
                             OUString oValue = container.getToken(i).copy( nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
