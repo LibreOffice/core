@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,8 +665,10 @@ public:
 
     virtual sal_Bool ReplaceChild (
         accessibility::AccessibleShape* pCurrentChild,
-        accessibility::AccessibleShape* pReplacement)
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex,
+        const accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
+    )   throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  Internal  ========================================================
 
@@ -943,7 +945,9 @@ Size ScShapeChilds::PixelToLogic (const Size& rSize) const
 
     ///=====  IAccessibleParent  ==============================================
 
-sal_Bool ScShapeChilds::ReplaceChild (accessibility::AccessibleShape* pCurrentChild, accessibility::AccessibleShape* pReplacement)
+sal_Bool ScShapeChilds::ReplaceChild (accessibility::AccessibleShape* pCurrentChild,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex, const accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo)
         throw (uno::RuntimeException)
 {
     DBG_ERRORFILE("should not be called in the page preview");

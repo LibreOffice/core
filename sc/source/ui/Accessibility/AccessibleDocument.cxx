@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 15:56:48 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,8 +333,10 @@ public:
 
     virtual sal_Bool ReplaceChild (
         accessibility::AccessibleShape* pCurrentChild,
-        accessibility::AccessibleShape* pReplacement)
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex,
+        const accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
+    )   throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  Internal  ========================================================
     void SetDrawBroadcaster();
@@ -508,9 +510,20 @@ void ScChildrenShapes::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-sal_Bool ScChildrenShapes::ReplaceChild (accessibility::AccessibleShape* pCurrentChild, accessibility::AccessibleShape* pReplacement)
+sal_Bool ScChildrenShapes::ReplaceChild (accessibility::AccessibleShape* pCurrentChild,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex, const accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
 {
+    // create the new child
+    ::accessibility::AccessibleShape* pReplacement = ::accessibility::ShapeTypeHandler::Instance().CreateAccessibleObject (
+        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
+        _rShapeTreeInfo
+    );
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xNewChild( pReplacement ); // keep this alive (do this before calling Init!)
+    if ( pReplacement )
+        pReplacement->Init();
+
     sal_Bool bResult(sal_False);
     if (pCurrentChild && pReplacement)
     {
