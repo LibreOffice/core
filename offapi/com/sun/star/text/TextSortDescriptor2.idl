@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSortDescriptor2.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:15:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 
     @since #107627#
  */
-service TextSortDescriptor2
+published service TextSortDescriptor2
 {
     service com::sun::star::table::TableSortDescriptor2;
 
