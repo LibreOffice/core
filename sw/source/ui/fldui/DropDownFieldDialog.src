@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:00:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,41 +69,15 @@ ModalDialog DLG_FLD_DROPDOWN
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 119 ) ;
-    Text = "Eintrag auswählen: " ;
-    Text [ english_us ] = "Choose Item: " ;
+    Text [ de ] = "Eintrag auswählen: " ;
+    Text [ en-US ] = "Choose Item: " ;
     Moveable = TRUE ;
     FixedLine FL_ITEMS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 127 , 8 ) ;
-        Text = "Bearbeiten" ;
-        Text [ english_us ] = "Edit" ;
-        Text[ portuguese ] = "~Editar";
-        Text[ russian ] = "Ïğàâêà";
-        Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ dutch ] = "Bewerken";
-        Text[ french ] = "Éditer";
-        Text[ spanish ] = "Editar";
-        Text[ finnish ] = "Muokkaa";
-        Text[ italian ] = "Modifica";
-        Text[ czech ] = "Upravit";
-        Text[ slovak ] = "UpraviÅ¥";
-        Text[ danish ] = "Rediger";
-        Text[ swedish ] = "Redigera";
-        Text[ polish ] = "Edytuj";
-        Text[ portuguese_brazilian ] = "~Editar";
-        Text[ japanese ] = "ç·¨é›†";
-        Text[ korean ] = "í¸ì§‘";
-        Text[ chinese_simplified ] = "ç¼–è¾‘";
-        Text[ chinese_traditional ] = "ç·¨è¼¯";
-        Text[ turkish ] = "Düzenle";
-        Text[ arabic ] = "ÊÍÑíÑ";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-        Text[ catalan ] = "Edita";
-        Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
-        Text[ hindi ] = "à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-        Text[ hungarian ] = "SzerkesztÃ©s";
-        Text[ slovenian ] = "Uredi";
+        Text [ de ] = "Bearbeiten" ;
+        Text [ en-US ] = "Edit" ;
     };
     ListBox LB_LISTITEMS
     {
@@ -133,34 +107,8 @@ ModalDialog DLG_FLD_DROPDOWN
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text = "~Weiter" ;
-        Text [ english_us ] = "~Next" ;
-        Text[ portuguese ] = "~Seguinte";
-        Text[ russian ] = "Äàëåå";
-        Text[ greek ] = "Åğüìåíï";
-        Text[ dutch ] = "~Volgende";
-        Text[ french ] = "Suivant";
-        Text[ spanish ] = "~Siguiente";
-        Text[ finnish ] = "~Seuraava";
-        Text[ italian ] = "~Successivo";
-        Text[ czech ] = "DalÅ¡Ã­";
-        Text[ slovak ] = "Ä~alÅ¡Ã­";
-        Text[ danish ] = "~Næste";
-        Text[ swedish ] = "~Nästa";
-        Text[ polish ] = "Dalej";
-        Text[ portuguese_brazilian ] = "~Próximo";
-        Text[ japanese ] = "æ¬¡ã¸(~N)";
-        Text[ korean ] = "ë‹¤ìŒ(~N)";
-        Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ª(~N)";
-        Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹(~N)";
-        Text[ turkish ] = "~İleri";
-        Text[ arabic ] = "ÇáÊÇáí";
-        Text[ hebrew ] = "â€®×”×‘×â€¬";
-        Text[ catalan ] = "~Següent";
-        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
-        Text[ hindi ] = "~à¤†à¤—à¥‡";
-        Text[ hungarian ] = "~TovÃ¡bb";
-        Text[ slovenian ] = "~Naslednji";
+        Text [ de ] = "~Weiter" ;
+        Text [ en-US ] = "~Next" ;
     };
     HelpButton PB_HELP
     {
@@ -173,63 +121,11 @@ ModalDialog DLG_FLD_DROPDOWN
         Pos = MAP_APPFONT ( 139 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Bearbeiten" ;
-        Text [ english_us ] = "~Edit" ;
-        Text[ portuguese ] = "E~ditar";
-        Text[ russian ] = "Ïğàâêà";
-        Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ dutch ] = "~Bewerken";
-        Text[ french ] = "Éditer";
-        Text[ spanish ] = "~Editar";
-        Text[ finnish ] = "~Muokkaa";
-        Text[ italian ] = "~Modifica";
-        Text[ czech ] = "Upravit";
-        Text[ slovak ] = "~UpraviÅ¥";
-        Text[ danish ] = "~Rediger";
-        Text[ swedish ] = "R~edigera";
-        Text[ polish ] = "Edytuj";
-        Text[ portuguese_brazilian ] = "&Editar";
-        Text[ japanese ] = "ç·¨é›†(~E)";
-        Text[ korean ] = "í¸ì§‘(~E)";
-        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
-        Text[ turkish ] = "~Düzenle";
-        Text[ arabic ] = "ÊÍÑíÑ";
-        Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-        Text[ catalan ] = "&Edita";
-        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
-        Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-        Text[ hungarian ] = "S~zerkesztÃ©s";
-        Text[ slovenian ] = "Uredi";
+        Text [ de ] = "~Bearbeiten" ;
+        Text [ en-US ] = "~Edit" ;
     };
 
-    Text [ portuguese_brazilian ] = "Campo de Entrada" ;
-    Text [ swedish ] = "Välj post: " ;
-    Text [ danish ] = "Vælg element: " ;
-    Text [ italian ] = "Scegli elemento: " ;
-    Text [ spanish ] = "Selección del elemento:" ;
-    Text [ french ] = "Choix d'élément :" ;
-    Text [ dutch ] = "Kies item:" ;
-    Text [ portuguese ] = "Campo de entrada" ;
-    Text[ chinese_simplified ] = "é€‰æ‹©æ¡ç›®ï¼š";
-    Text[ russian ] = "Ïîëå ââîäà";
-    Text[ polish ] = "Pole wprowadzania";
-    Text[ japanese ] = "é …ç›®ã®é¸æŠ: ";
-    Text[ chinese_traditional ] = "é¸å–é …ç›®ï¼š";
-    Text[ arabic ] = "ÍŞá ÅÏÎÇá";
-    Text[ greek ] = "Ğåäßï åéóáãùãŞò";
-    Text[ korean ] = "í•­ëª© ì„ íƒ:";
-    Text[ turkish ] = "Giriş alanı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Camp d'entrada";
-    Text[ finnish ] = "Syöttökenttä";
-    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Zvolte poloÅ¾ku: ";
-    Text[ hebrew ] = "Eingabefeld";
-    Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤•à¥à¤·à¥‡à¤¤à¥à¤°";
-    Text[ slovak ] = "Vyberte poloÅ¾ku: ";
-    Text[ hungarian ] = "Elem vÃ¡lasztÃ¡sa:";
-    Text[ slovenian ] = "Zapri element:";
+    Text [ x-comment ] = " ";
 };
 
 
