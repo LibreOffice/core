@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,12 +587,15 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 
 /* Volume attributes */
 
-#define osl_Volume_Attribute_Removeable     0x00000001L
-#define osl_Volume_Attribute_Remote         0x00000002L
-#define osl_Volume_Attribute_CompactDisc    0x00000004L
-#define osl_Volume_Attribute_FixedDisk      0x00000008L
-#define osl_Volume_Attribute_RAMDisk        0x00000010L
-#define osl_Volume_Attribute_FloppyDisk     0x00000020L
+#define osl_Volume_Attribute_Removeable        0x00000001L
+#define osl_Volume_Attribute_Remote            0x00000002L
+#define osl_Volume_Attribute_CompactDisc       0x00000004L
+#define osl_Volume_Attribute_FixedDisk         0x00000008L
+#define osl_Volume_Attribute_RAMDisk           0x00000010L
+#define osl_Volume_Attribute_FloppyDisk        0x00000020L
+
+#define osl_Volume_Attribute_Case_Is_Preserved 0x00000040L
+#define osl_Volume_Attribute_Case_Sensitive    0x00000080L
 
 /* Flags specifying which fields to retreive by osl_getVolumeInfo */
 
@@ -604,6 +607,7 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 #define osl_VolumeInfo_Mask_MaxPathLength   0x00000020L
 #define osl_VolumeInfo_Mask_FileSystemName  0x00000040L
 #define osl_VolumeInfo_Mask_DeviceHandle    0x00000080L
+
 
 typedef
 
