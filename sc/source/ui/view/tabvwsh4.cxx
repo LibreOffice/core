@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 08:34:27 $
+ *  last change: $Author: nn $ $Date: 2002-12-12 19:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1601,6 +1601,8 @@ void ScTabViewShell::Construct()
             USHORT nInitTabCount = 3;                           //! konfigurierbar !!!
             for (USHORT i=1; i<nInitTabCount; i++)
                 pDoc->MakeTable(i);
+
+            pDocSh->ResetEmpty();           // #i6232# make sure this is done only once
         }
 
         ScExtDocOptions* pExtOpt = pDoc->GetExtDocOptions();
