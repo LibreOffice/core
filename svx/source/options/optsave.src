@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:36:30 $
+ *  last change: $Author: kz $ $Date: 2002-10-31 13:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "~Carregar definições personalizadas com o documento";
         Text[ russian ] = "Çàãğóæàòü âìåñòå ñ äîêóìåíòîì íàñòğîéêè, çàäàííûå ïîëüçîâàòåëåì";
         Text[ greek ] = "Load user-defined settings with the document";
-        Text[ dutch ] = "Door gebruiker ge-definieerde instellingen samen met het document laden";
+        Text[ dutch ] = "Door gebruiker gedefinieerde instellingen samen met het document laden";
         Text[ french ] = "Chargement des paramètres utilisateur avec le document";
         Text[ spanish ] = "Cargar la configuración de usuario al cargar el documento";
         Text[ finnish ] = "Load user-defined settings with the document";
@@ -349,7 +349,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "Size optimization for XML files (no pretty printing)";
         Text[ russian ] = "Size optimization for XML files (no pretty printing)";
         Text[ greek ] = "Size optimization for XML files (no pretty printing)";
-        Text[ dutch ] = "Grootte van XML-bestanden optimaliseren (zonder Pretty Printing)";
+        Text[ dutch ] = "Grootte van ~XML-bestanden optimaliseren (zonder Pretty Printing)";
         Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
         Text[ spanish ] = "Optimar el tamaño del formato XML (sin pretty printing)";
         Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
@@ -377,7 +377,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "Salvare URL relativamente" ;
         Text [ spanish ] = "Guardar URLs relativamente" ;
         Text [ french ] = "Enregistrement relatif des URL" ;
-        Text [ dutch ] = "URLs relatief opslaan" ;
+        Text [ dutch ] = "URL's relatief opslaan" ;
         Text [ swedish ] = "Spara URL:er relativt" ;
         Text [ danish ] = "Gem URL'er relativt" ;
         Text [ portuguese_brazilian ] = "URLs relativ speichern" ;
@@ -401,7 +401,7 @@ TabPage RID_SFXPAGE_SAVE
         Text = "im Da~teisystem" ;
         Text [ English ] = "on ~filesystem" ;
         Text [ english_us ] = "~File system" ;
-        Text [ dutch ] = "~naar bestandsysteem" ;
+        Text [ dutch ] = "~naar bestandssysteem" ;
         Text [ italian ] = "Al file sys~tem" ;
         Text [ spanish ] = "En el ~sistema de archivos" ;
         Text [ french ] = "~Système de fichiers" ;
@@ -433,7 +433,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "A Internet" ;
         Text [ spanish ] = "En ~Internet" ;
         Text [ french ] = "Sur l'~Internet" ;
-        Text [ dutch ] = "in Int~ernet" ;
+        Text [ dutch ] = "~in Internet" ;
         Text [ swedish ] = "på Int~ernet" ;
         Text [ danish ] = "på Internettet" ;
         Text [ portuguese_brazilian ] = "im Int~ernet" ;
@@ -460,7 +460,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese ] = "Formato de ficheiro padrão";
         Text[ russian ] = "Ñòàíäàğòíûé ôîğìàò ôàéëà";
         Text[ greek ] = "ÂáóéêŞ ìïñöŞ áñ÷åßïõ";
-        Text[ dutch ] = "Standaard bestandsformaat";
+        Text[ dutch ] = "Standaardbestandsindeling";
         Text[ french ] = "Format de fichier standard";
         Text[ spanish ] = "Formato de archivo predeterminado";
         Text[ italian ] = "Formato file standard";
@@ -782,7 +782,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ portuguese ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ russian ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ greek ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ dutch ] = "Het gebruik van \"%1\" als standaard-bestandsformaat kan leiden tot verlies van gegevens.\n";
+        Text[ dutch ] = "Het gebruik van \"%1\" als standaardbestandsindeling kan leiden tot verlies van gegevens.\n";
         Text[ french ] = "L'application de \"%1\" comme format de fichier par défaut peut entraîner une perte d'information.\n";
         Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pérdida de información.\n";
         Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
