@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-02 08:03:44 $
+ *  last change: $Author: oj $ $Date: 2002-07-02 14:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,8 +784,10 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool _bSuspend) throw( RuntimeEx
             }
         }
     }
+/*
     if ( bCheck )
         OSingleDocumentController::suspend(_bSuspend);
+*/
     return bCheck;
 }
 // -----------------------------------------------------------------------------
