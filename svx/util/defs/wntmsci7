@@ -23473,3 +23473,8 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?DataChanged@SvxLineEndDefTabPage@@UAEXABVDataChangedEvent@@@Z
 ?DataChanged@SvxLineDefTabPage@@UAEXABVDataChangedEvent@@@Z
 ?FillControl@SvxLineBox@@IAEXXZ
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx234852@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx218819543@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+??1?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@CAPAVXSeekable@io@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_io_XSeekable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSeekable@io@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
