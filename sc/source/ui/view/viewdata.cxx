@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:09:32 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,8 +1639,11 @@ BOOL ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
         for (SCCOL i=0; i<nCountX; i++)
             nOutWidth += ToPixel( pDoc->GetColWidth(nX+i,nTabNo), nPPTX );
         SCROW nCountY = pMerge->GetRowMerge();
-        for (SCROW j=0; j<nCountY; j++)
-            nOutHeight += ToPixel( pDoc->GetRowHeight(nY+j,nTabNo), nPPTY );
+        ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+                pDoc->GetRowFlagsArray( nTabNo), nY, nY+nCountY-1, CR_HIDDEN,
+                0, pDoc->GetRowHeightArray( nTabNo));
+        for ( ; aIter; ++aIter )
+            nOutHeight += ToPixel( *aIter, nPPTY );
 
         rSizeXPix = nOutWidth;
         rSizeYPix = nOutHeight;
