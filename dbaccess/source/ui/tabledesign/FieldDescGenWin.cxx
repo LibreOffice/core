@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 07:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ OFieldDescGenWin::OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelp 
 OFieldDescGenWin::~OFieldDescGenWin()
 {
     DBG_DTOR(OFieldDescGenWin,NULL);
-    delete m_pFieldControl;
+    ::std::auto_ptr<Window> aTemp(m_pFieldControl);
     m_pFieldControl = NULL;
 }
 //------------------------------------------------------------------------------

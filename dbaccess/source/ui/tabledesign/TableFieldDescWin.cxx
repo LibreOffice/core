@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescWin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 07:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
+#include <memory>
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25
@@ -141,9 +142,18 @@ OTableFieldDescWin::~OTableFieldDescWin()
     m_pGenPage->Hide();
     m_pHeader->Hide();
 
-    delete m_pGenPage;
-    delete m_pHeader;
-    delete m_pHelpBar;
+    {
+        ::std::auto_ptr<Window> aTemp(m_pGenPage);
+        m_pGenPage = NULL;
+    }
+    {
+        ::std::auto_ptr<Window> aTemp(m_pHeader);
+        m_pHeader = NULL;
+    }
+    {
+        ::std::auto_ptr<Window> aTemp(m_pHelpBar);
+        m_pHelpBar = NULL;
+    }
 }
 
 //------------------------------------------------------------------------------

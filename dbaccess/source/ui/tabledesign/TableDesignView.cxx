@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 08:28:08 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 07:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ OTableDesignView::~OTableDesignView()
 {
     DBG_DTOR(OTableDesignView,NULL);
     m_pWin->Hide();
-    delete m_pWin;
+    ::std::auto_ptr<Window> aTemp(m_pWin);
     m_pWin = NULL;
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 08:04:10 $
+ *  last change: $Author: oj $ $Date: 2002-05-31 07:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#include <memory>
 
 using namespace dbaui;
 //  using namespace comphelper;
@@ -313,11 +314,14 @@ OFieldDescControl::~OFieldDescControl()
 {
     DBG_DTOR(OFieldDescControl,NULL);
 
-    delete m_pVertScroll;
-    delete m_pHorzScroll;
-
-    m_pVertScroll    = NULL;
-    m_pHorzScroll    = NULL;
+    {
+        ::std::auto_ptr<Window> aTemp(m_pVertScroll);
+        m_pVertScroll    = NULL;
+    }
+    {
+        ::std::auto_ptr<Window> aTemp(m_pHorzScroll);
+        m_pHorzScroll    = NULL;
+    }
     pLastFocusWindow = NULL;
 
     //////////////////////////////////////////////////////////////////////
