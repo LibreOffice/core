@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:10:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,9 @@ void SfxDockingWindow::Resize()
                 case SFX_ALIGN_RIGHT:
                 case SFX_ALIGN_FIRSTRIGHT:
                 case SFX_ALIGN_LASTRIGHT:
+                    pImp->nVerticalSize = aSize.Height();
                     pImp->nHorizontalSize = aSize.Width();
+                    pImp->aSplitSize = aSize;
                     break;
                 case SFX_ALIGN_TOP:
                 case SFX_ALIGN_LOWESTTOP:
@@ -165,6 +167,8 @@ void SfxDockingWindow::Resize()
                 case SFX_ALIGN_HIGHESTBOTTOM:
                 case SFX_ALIGN_LOWESTBOTTOM:
                     pImp->nVerticalSize = aSize.Height();
+                    pImp->nHorizontalSize = aSize.Width();
+                    pImp->aSplitSize = aSize;
                     break;
             }
         }
@@ -871,7 +875,7 @@ void SfxDockingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         pImp->aWinState = GetFloatingWindow()->GetWindowState();
 
     rInfo.aWinState = pImp->aWinState;
-    rInfo.aExtraString += DEFINE_CONST_UNICODE("AL:(");
+    rInfo.aExtraString = DEFINE_CONST_UNICODE("AL:(");
     rInfo.aExtraString += String::CreateFromInt32((USHORT) GetAlignment());
     rInfo.aExtraString += ',';
     rInfo.aExtraString += String::CreateFromInt32 ((USHORT) pImp->GetLastAlignment());
@@ -1514,6 +1518,9 @@ USHORT SfxDockingWindow::GetWinBits_Impl() const
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {
     pImp->aSplitSize = rSize;
+    pImp->nVerticalSize = rSize.Height();
+    pImp->nHorizontalSize = rSize.Width();
+
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
     if ( pImp->bSplitable )
