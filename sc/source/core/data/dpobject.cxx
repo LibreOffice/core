@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-30 17:30:44 $
+ *  last change: $Author: nn $ $Date: 2001-11-07 18:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,73 +1317,79 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
                 pDoc->GetString( nCol, nRow, nTab, aDocStr );
             else
                 aDocStr = lcl_GetDimName( xSource, nCol );  // cols must start at 0
-            //! handle empty strings etc.
-            pDim = rSaveData.GetDimensionByName(aDocStr);
+
+            if ( aDocStr.Len() )
+                pDim = rSaveData.GetDimensionByName(aDocStr);
+            else
+                pDim = NULL;
         }
 
-        if ( nOrient == sheet::DataPilotFieldOrientation_DATA )     // set summary function
+        if ( pDim )
         {
-            //  generate an individual entry for each function
-            BOOL bFirst = TRUE;
-
-            //  if a dimension is used for column or row and data,
-            //  use duplicated dimensions for all data occurrences
-            if (pRefColFields)
-                for (USHORT nRefCol=0; nRefCol<nRefColCount; nRefCol++)
-                    if (pRefColFields[nRefCol].nCol == nCol)
-                        bFirst = FALSE;
-            if (pRefRowFields)
-                for (USHORT nRefRow=0; nRefRow<nRefRowCount; nRefRow++)
-                    if (pRefRowFields[nRefRow].nCol == nCol)
-                        bFirst = FALSE;
-
-            //  if set via api, a data column may occur several times
-            //  (if the function hasn't been changed yet) -> also look for duplicate data column
-            for (USHORT nPrevData=0; nPrevData<i; nPrevData++)
-                if (pFields[nPrevData].nCol == nCol)
-                    bFirst = FALSE;
-
-            USHORT nMask = 1;
-            for (USHORT nBit=0; nBit<16; nBit++)
+            if ( nOrient == sheet::DataPilotFieldOrientation_DATA )     // set summary function
             {
-                if ( nFuncs & nMask )
+                //  generate an individual entry for each function
+                BOOL bFirst = TRUE;
+
+                //  if a dimension is used for column or row and data,
+                //  use duplicated dimensions for all data occurrences
+                if (pRefColFields)
+                    for (USHORT nRefCol=0; nRefCol<nRefColCount; nRefCol++)
+                        if (pRefColFields[nRefCol].nCol == nCol)
+                            bFirst = FALSE;
+                if (pRefRowFields)
+                    for (USHORT nRefRow=0; nRefRow<nRefRowCount; nRefRow++)
+                        if (pRefRowFields[nRefRow].nCol == nCol)
+                            bFirst = FALSE;
+
+                //  if set via api, a data column may occur several times
+                //  (if the function hasn't been changed yet) -> also look for duplicate data column
+                for (USHORT nPrevData=0; nPrevData<i; nPrevData++)
+                    if (pFields[nPrevData].nCol == nCol)
+                        bFirst = FALSE;
+
+                USHORT nMask = 1;
+                for (USHORT nBit=0; nBit<16; nBit++)
                 {
-                    sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc( nMask );
-                    if (bFirst)
+                    if ( nFuncs & nMask )
                     {
-                        pDim->SetOrientation( nOrient );
-                        pDim->SetFunction( eFunc );
-                        bFirst = FALSE;
+                        sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc( nMask );
+                        if (bFirst)
+                        {
+                            pDim->SetOrientation( nOrient );
+                            pDim->SetFunction( eFunc );
+                            bFirst = FALSE;
+                        }
+                        else
+                        {
+                            ScDPSaveDimension* pDup = rSaveData.DuplicateDimension(pDim->GetName());
+                            pDup->SetOrientation( nOrient );
+                            pDup->SetFunction( eFunc );
+                        }
                     }
-                    else
-                    {
-                        ScDPSaveDimension* pDup = rSaveData.DuplicateDimension(pDim->GetName());
-                        pDup->SetOrientation( nOrient );
-                        pDup->SetFunction( eFunc );
-                    }
+                    nMask *= 2;
                 }
-                nMask *= 2;
             }
-        }
-        else                                            // set SubTotals
-        {
-            pDim->SetOrientation( nOrient );
-
-            USHORT nFuncArray[16];
-            USHORT nFuncCount = 0;
-            USHORT nMask = 1;
-            for (USHORT nBit=0; nBit<16; nBit++)
+            else                                            // set SubTotals
             {
-                if ( nFuncs & nMask )
-                    nFuncArray[nFuncCount++] = ScDataPilotConversion::FirstFunc( nMask );
-                nMask *= 2;
-            }
-            pDim->SetSubTotals( nFuncCount, nFuncArray );
+                pDim->SetOrientation( nOrient );
 
-            //  ShowEmpty was implicit in old tables,
-            //  must be set for data layout dimension (not accessible in dialog)
-            if ( bOldDefaults || nCol == PIVOT_DATA_FIELD )
-                pDim->SetShowEmpty( TRUE );
+                USHORT nFuncArray[16];
+                USHORT nFuncCount = 0;
+                USHORT nMask = 1;
+                for (USHORT nBit=0; nBit<16; nBit++)
+                {
+                    if ( nFuncs & nMask )
+                        nFuncArray[nFuncCount++] = ScDataPilotConversion::FirstFunc( nMask );
+                    nMask *= 2;
+                }
+                pDim->SetSubTotals( nFuncCount, nFuncArray );
+
+                //  ShowEmpty was implicit in old tables,
+                //  must be set for data layout dimension (not accessible in dialog)
+                if ( bOldDefaults || nCol == PIVOT_DATA_FIELD )
+                    pDim->SetShowEmpty( TRUE );
+            }
         }
     }
 }
