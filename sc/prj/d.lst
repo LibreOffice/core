@@ -6,6 +6,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\bin\scalc3.pdb %_DEST%\bin%_EXT%\scalc3.pdb
 ..\%__SRC%\bin\scslots.tlb %_DEST%\bin%_EXT%\scslots.tlb
 ..\%__SRC%\bin\sc?????.dll %_DEST%\bin%_EXT%\sc?????.dll
+..\%__SRC%\bin\scd?????.dll %_DEST%\bin%_EXT%\scd?????.dll
 ..\%__SRC%\bin\sc?????.res %_DEST%\bin%_EXT%\sc?????.res
 ..\%__SRC%\bin\dfa?????.dll %_DEST%\bin%_EXT%\dfa?????.dll
 ..\%__SRC%\bin\rot?????.dll %_DEST%\bin%_EXT%\rot?????.dll
@@ -13,13 +14,9 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\misc\sc.csv %_DEST%\inc%_EXT%\sc.csv
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
-..\%__SRC%\lib\sclib.lib %_DEST%\lib%_EXT%\sclib.lib
-..\%__SRC%\slb\ysclib.lib %_DEST%\lib%_EXT%\ysclib.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\inc\sc.hrc %_DEST%\inc%_EXT%\sc.hrc
 mkdir: %_DEST%\inc\%_EXT%\sc
-hedabu: ..\inc\scdll.hxx %_DEST%\inc%_EXT%\sc\scdll.hxx
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 
