@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
+ *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ UnoControl::UnoControl()
     mbUpdatingModel = sal_False;
     mbDisposePeer = sal_True;
     mbRefeshingPeer = sal_False;
+    mbCreatingCompatiblePeer = sal_False;
     mbDesignMode = sal_False;
 }
 
@@ -157,6 +158,10 @@ UnoControl::~UnoControl()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer )
 {
+    DBG_ASSERT( !mbCreatingCompatiblePeer, "ImplGetCompatiblePeer - rekursive?" );
+
+    mbCreatingCompatiblePeer = sal_True;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xP;
 
     if ( bAcceptExistingPeer )
@@ -184,6 +189,9 @@ UnoControl::~UnoControl()
         if( bVis )
             maComponentInfos.bVisible = sal_True;
     }
+
+    mbCreatingCompatiblePeer = sal_False;
+
     return xP;
 }
 

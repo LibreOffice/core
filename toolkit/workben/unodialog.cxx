@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 16:15:05 $
+ *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,9 +212,9 @@ void MyApp::Main()
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
     aValue <<= (sal_Int32) 10;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 100;
+    aValue <<= (sal_Int32) 40;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 20;
+    aValue <<= (sal_Int32) 12;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
     aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test!" ) );
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aValue );
@@ -225,7 +225,7 @@ void MyApp::Main()
     uno::Reference< beans::XPropertySet > xDlgPSet( xC, uno::UNO_QUERY );
     aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Test-Dialog" ) );
     xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aValue );
-    aValue <<= (sal_Int32) 600;
+    aValue <<= (sal_Int32) 200;
     xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
     aValue <<= (sal_Int32) 200;
     xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
@@ -240,11 +240,11 @@ void MyApp::Main()
     xPSet = uno::Reference< beans::XPropertySet >( xCtrl2, uno::UNO_QUERY );
     aValue <<= (sal_Int32) 10;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
-    aValue <<= (sal_Int32) 50;
+    aValue <<= (sal_Int32) 40;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) ), aValue );
-    aValue <<= (sal_Int32) 100;
+    aValue <<= (sal_Int32) 80;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aValue );
-    aValue <<= (sal_Int32) 20;
+    aValue <<= (sal_Int32) 12;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aValue );
     aValue <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Text..." ) );
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Text" ) ), aValue );

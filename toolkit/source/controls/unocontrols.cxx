@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 16:16:49 $
+ *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,36 @@ void UnoDialogControl::ImplSetPosSize( uno::Reference< awt::XControl >& rxCtrl )
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
     xP->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
 
+
+    uno::Reference< awt::XWindowPeer > xPeer = ImplGetCompatiblePeer( sal_True );
+    uno::Reference< awt::XDevice > xD( xPeer, uno::UNO_QUERY );
+
+    awt::SimpleFontMetric aFM;
+    awt::FontDescriptor aFD;
+    uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_FONTDESCRIPTOR ) );
+    aVal >>= aFD;
+    if ( aFD.StyleName.getLength() )
+    {
+        uno::Reference< awt::XFont > xFont = xD->getFont( aFD );
+        aFM = xFont->getFontMetric();
+    }
+    else
+    {
+        uno::Reference< awt::XGraphics > xG = xD->createGraphics();
+        aFM = xG->getFontMetric();
+    }
+
+    sal_Int16 nH = aFM.Ascent + aFM.Descent;
+
+    nX *= nH;
+    nX /= 4;
+    nWidth *= nH;
+    nWidth /= 4;
+    nY *= nH;
+    nY /= 8;
+    nHeight *= nH;
+    nHeight /= 8;
+
     uno::Reference < awt::XWindow > xW( rxCtrl, uno::UNO_QUERY );
     xW->setPosSize( nX, nY, nWidth, nHeight, awt::PosSize::POSSIZE );
 }
@@ -589,7 +619,7 @@ void UnoDialogControl::elementReplaced( const ::com::sun::star::container::Conta
 // beans::XPropertiesChangeListener
 void UnoDialogControl::propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException)
 {
-    if( !IsUpdatingModel() )
+    if( !IsUpdatingModel() && !mbCreatingCompatiblePeer )
     {
         ::rtl::OUString s1( RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) );
         ::rtl::OUString s2( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ) );

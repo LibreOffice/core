@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-25 13:30:09 $
+ *  last change: $Author: mt $ $Date: 2001-02-05 15:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ protected:
     sal_Bool                            mbDisposePeer;
     sal_Bool                            mbUpdatingModel;
     sal_Bool                            mbRefeshingPeer;
+    sal_Bool                            mbCreatingCompatiblePeer;
     sal_Bool                            mbDesignMode;
 
     UnoControlComponentInfos            maComponentInfos;

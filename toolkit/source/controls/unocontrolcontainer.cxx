@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:56:36 $
+ *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,15 +388,18 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
         UnoControl::createPeer( rxToolkit, rParent );
 
         // alle Peers der Childs erzeugen
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aCtrls = getControls();
-        sal_uInt32 nCtrls = aCtrls.getLength();
-        for( sal_uInt32 n = 0; n < nCtrls; n++ )
-            aCtrls.getArray()[n]->createPeer( rxToolkit, mxPeer );
+        if ( !mbCreatingCompatiblePeer )
+        {
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aCtrls = getControls();
+            sal_uInt32 nCtrls = aCtrls.getLength();
+            for( sal_uInt32 n = 0; n < nCtrls; n++ )
+                aCtrls.getArray()[n]->createPeer( rxToolkit, mxPeer );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer >  xC( mxPeer, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer >  xC( mxPeer, ::com::sun::star::uno::UNO_QUERY );
 
-        xC->enableDialogControl( sal_True );
-        ImplActivateTabControllers();
+            xC->enableDialogControl( sal_True );
+            ImplActivateTabControllers();
+        }
 
         if( bVis )
             UnoControl::setVisible( sal_True );
