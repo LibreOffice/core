@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:29:19 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 09:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,12 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODECHANGEBROADCASTER_HPP_
+#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
+#endif
 
 struct UnoControlComponentInfos
 {
@@ -135,26 +141,29 @@ struct UnoControlComponentInfos
 //  ----------------------------------------------------
 //  class UnoControl
 //  ----------------------------------------------------
-class UnoControl :  public ::com::sun::star::awt::XControl,
-                    public ::com::sun::star::awt::XWindow,
-                    public ::com::sun::star::awt::XView,
-                    public ::com::sun::star::beans::XPropertiesChangeListener,
-                    public ::com::sun::star::lang::XServiceInfo,
-                    public ::com::sun::star::lang::XTypeProvider,
-                    public ::drafts::com::sun::star::accessibility::XAccessible,
-                    public ::cppu::OWeakAggObject
+typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControl
+                                    ,   ::com::sun::star::awt::XWindow
+                                    ,   ::com::sun::star::awt::XView
+                                    ,   ::com::sun::star::beans::XPropertiesChangeListener
+                                    ,   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::drafts::com::sun::star::accessibility::XAccessible
+                                    ,   ::com::sun::star::util::XModeChangeBroadcaster
+                                    >   UnoControl_Base;
+
+class UnoControl :  public UnoControl_Base
 {
 private:
     ::osl::Mutex    maMutex;
 
 protected:
-    EventListenerMultiplexer        maDisposeListeners;
-    WindowListenerMultiplexer       maWindowListeners;
-    FocusListenerMultiplexer        maFocusListeners;
-    KeyListenerMultiplexer          maKeyListeners;
-    MouseListenerMultiplexer        maMouseListeners;
-    MouseMotionListenerMultiplexer  maMouseMotionListeners;
-    PaintListenerMultiplexer        maPaintListeners;
+    EventListenerMultiplexer            maDisposeListeners;
+    WindowListenerMultiplexer           maWindowListeners;
+    FocusListenerMultiplexer            maFocusListeners;
+    KeyListenerMultiplexer              maKeyListeners;
+    MouseListenerMultiplexer            maMouseListeners;
+    MouseMotionListenerMultiplexer      maMouseMotionListeners;
+    PaintListenerMultiplexer            maPaintListeners;
+    ::cppu::OInterfaceContainerHelper   maModeChangeListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      mxPeer;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       mxContext;
@@ -197,15 +206,7 @@ public:
 
     virtual ::rtl::OUString GetComponentServiceName();
 
-    // ::com::sun::star::uno::XAggregation
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
-
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XComponent
@@ -263,6 +264,12 @@ public:
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XModeChangeBroadcaster
+    virtual void SAL_CALL addModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModeChangeApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeApproveListener >& _rxListener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 };
 
 

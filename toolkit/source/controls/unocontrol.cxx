@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-06 08:33:33 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 09:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,12 +151,16 @@
 #ifndef TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
 #include <toolkit/controls/accessiblecontrolcontext.hxx>
 #endif
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 
 using ::drafts::com::sun::star::accessibility::XAccessibleContext;
 using ::drafts::com::sun::star::accessibility::XAccessible;
@@ -198,6 +202,7 @@ UnoControl::UnoControl()
     , maMouseListeners( *this )
     , maMouseMotionListeners( *this )
     , maPaintListeners( *this )
+    , maModeChangeListeners( GetMutex() )
 {
     mbUpdatingModel = sal_False;
     mbDisposePeer = sal_True;
@@ -303,31 +308,8 @@ void UnoControl::updateFromModel()
 }
 
 
-// XInterface
-Any UnoControl::queryAggregation( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( XControl*, this ),
-                                        SAL_STATIC_CAST( XWindow*, this ),
-                                        SAL_STATIC_CAST( XComponent*, SAL_STATIC_CAST( XControl*, this ) ),
-                                        SAL_STATIC_CAST( XView*, this ),
-                                        SAL_STATIC_CAST( XPropertiesChangeListener*, this ),
-                                        SAL_STATIC_CAST( XEventListener*, this ),
-                                        SAL_STATIC_CAST( XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( XTypeProvider*, this ),
-                                        SAL_STATIC_CAST( XAccessible*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
-}
-
 // XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoControl )
-getCppuType( ( Reference< XControl>* ) NULL ),
-getCppuType( ( Reference< XWindow>* ) NULL ),
-getCppuType( ( Reference< XView>* ) NULL ),
-getCppuType( ( Reference< XPropertiesChangeListener>* ) NULL ),
-getCppuType( ( Reference< XServiceInfo>* ) NULL ),
-getCppuType( ( Reference< XAccessible >* ) NULL )
-IMPL_XTYPEPROVIDER_END
+IMPL_IMPLEMENTATION_ID( UnoControl )
 
 void UnoControl::disposeAccessibleContext()
 {
@@ -370,6 +352,7 @@ void UnoControl::dispose(  ) throw(RuntimeException)
     maMouseListeners.disposeAndClear( aDisposeEvent );
     maMouseMotionListeners.disposeAndClear( aDisposeEvent );
     maPaintListeners.disposeAndClear( aDisposeEvent );
+    maModeChangeListeners.disposeAndClear( aDisposeEvent );
 
     // Model wieder freigeben
     setModel( Reference< XControlModel > () );
@@ -1056,6 +1039,8 @@ Reference< XView > UnoControl::getView(  ) throw(RuntimeException)
 
 void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 {
+    ModeChangeEvent aModeChangeEvent;
+
     Reference< XWindow > xWindow;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
@@ -1070,11 +1055,17 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         // (changing the design mode implies having a new implementation for this context,
         // so the old one must be declared DEFUNC)
         disposeAccessibleContext();
+
+        aModeChangeEvent.Source = *this;
+        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
     }
 
-    // and ajust the visibility of our window
+    // ajust the visibility of our window
     if ( xWindow.is() )
         xWindow->setVisible( !bOn );
+
+    // and notify our mode listeners
+    NOTIFY_LISTENERS( maModeChangeListeners, XModeChangeListener, modeChanged, aModeChangeEvent );
 }
 
 sal_Bool UnoControl::isDesignMode(  ) throw(RuntimeException)
@@ -1146,5 +1137,27 @@ Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) th
     }
 
     return xCurrentContext;
+}
+
+void SAL_CALL UnoControl::addModeChangeListener( const Reference< XModeChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+    maModeChangeListeners.addInterface( _rxListener );
+}
+
+void SAL_CALL UnoControl::removeModeChangeListener( const Reference< XModeChangeListener >& _rxListener ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+    maModeChangeListeners.removeInterface( _rxListener );
+}
+
+void SAL_CALL UnoControl::addModeChangeApproveListener( const Reference< XModeChangeApproveListener >& _rxListener ) throw (NoSupportException, RuntimeException)
+{
+    throw NoSupportException( );
+}
+
+void SAL_CALL UnoControl::removeModeChangeApproveListener( const Reference< XModeChangeApproveListener >& _rxListener ) throw (NoSupportException, RuntimeException)
+{
+    throw NoSupportException( );
 }
 
