@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:24 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 18:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ import org.openoffice.idesupport.ui.ConfigurePanel;
 public class ParcelFolderSupport implements ParcelFolderCookie
 {
     protected ParcelFolder pf;
+    private ConfigurePanel configuror = null;
 
     public ParcelFolderSupport(ParcelFolder pf) {
         this.pf = pf;
@@ -152,9 +153,18 @@ public class ParcelFolderSupport implements ParcelFolderCookie
     }
 
     public void configure() {
+
         FileObject primary = pf.getPrimaryFile();
-        File contents = FileUtil.toFile(primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
-        File parcelDescriptor = new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML);
+
+        ParcelFolder.ParcelFolderNode node =
+            (ParcelFolder.ParcelFolderNode)pf.getNodeDelegate();
+
+        File contents = FileUtil.toFile(
+            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
+
+        File parcelDescriptor = new File(contents,
+            ParcelZipper.PARCEL_DESCRIPTOR_XML);
+
         InputSource is;
         Document previous = null;
 
@@ -175,8 +185,15 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         Vector classpath = getClasspath();
         classpath.addElement(contents.getAbsolutePath());
 
-        ConfigurePanel configuror = new ConfigurePanel(contents.getAbsolutePath(), classpath, previous);
-        DialogDescriptor descriptor = new DialogDescriptor(configuror, "Choose Methods to Export as Scripts");
+        if (configuror == null)
+            configuror = new ConfigurePanel(contents.getAbsolutePath(),
+                classpath, previous, node.getLanguage());
+        else
+            configuror.reload(contents.getAbsolutePath(), classpath, previous,
+                node.getLanguage());
+
+        DialogDescriptor descriptor = new DialogDescriptor(configuror,
+            ConfigurePanel.DIALOG_TITLE);
 
         Dialog dialog = TopManager.getDefault().createDialog(descriptor);
         dialog.show();

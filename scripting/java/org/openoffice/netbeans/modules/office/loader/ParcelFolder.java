@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:33 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 18:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ import org.openoffice.netbeans.modules.office.actions.ParcelFolderSupport;
 
 public class ParcelFolder extends DataFolder {
 
+    public static final String LANGUAGE_ATTRIBUTE = "language";
+
     public ParcelFolder(FileObject pf, ParcelFolderDataLoader loader)
         throws DataObjectExistsException {
         super(pf, loader);
@@ -100,9 +102,11 @@ public class ParcelFolder extends DataFolder {
     public class ParcelFolderNode extends DataFolder.FolderNode {
         private static final String LOCATION = "location";
         private static final String FILTER = "filter";
+        private static final String LANGUAGE = LANGUAGE_ATTRIBUTE;
 
         private File location;
         private FileFilter filter;
+        private String language;
 
         private final FileFilter DEFAULT_FILTER = BinaryOnlyFilter.getInstance();
 
@@ -121,6 +125,8 @@ public class ParcelFolder extends DataFolder {
                     if (name.equals(availableFilters[i].toString()))
                         filter = availableFilters[i];
             }
+
+            language = (String)pf.getPrimaryFile().getAttribute(LANGUAGE);
         }
 
         public File getTargetDir() {
@@ -129,6 +135,12 @@ public class ParcelFolder extends DataFolder {
 
         public FileFilter getFileFilter() {
             return filter;
+        }
+
+        public String getLanguage() {
+            if (language == null)
+                language = (String)getPrimaryFile().getAttribute(LANGUAGE);
+            return language;
         }
 
         public Sheet createSheet() {
@@ -149,6 +161,9 @@ public class ParcelFolder extends DataFolder {
             prop = createFilterProperty();
             props.put(prop);
 
+            prop = createLanguageProperty();
+            props.put(prop);
+
             return sheet;
         }
 
@@ -163,7 +178,6 @@ public class ParcelFolder extends DataFolder {
                                 getPrimaryFile().setAttribute(LOCATION, location);
                             }
                             catch (IOException ioe) {
-                                System.out.println("Error setting location attribute");
                             }
                         }
                     }
@@ -176,8 +190,53 @@ public class ParcelFolder extends DataFolder {
             return prop;
         }
 
-        private FileFilter[] availableFilters =
-            new FileFilter[] {BinaryOnlyFilter.getInstance(), AllFilesFilter.getInstance()};
+        private String[] languages = {"Java", "BeanShell"};
+
+        private Node.Property createLanguageProperty() {
+            Node.Property prop =
+               new PropertySupport.ReadWrite(LANGUAGE, String.class,
+                   "Parcel Language", "Language of scripts in this Parcel") {
+                    public void setValue(Object obj) {
+                        if (obj instanceof String) {
+                            language = (String)obj;
+
+                            try {
+                                getPrimaryFile().setAttribute(LANGUAGE, language);
+                            }
+                            catch (IOException ioe) {
+                            }
+                        }
+                    }
+
+                    public Object getValue() {
+                        if (language == null)
+                            language = (String)getPrimaryFile().getAttribute(LANGUAGE);
+                        return language;
+                    }
+
+                    public PropertyEditor getPropertyEditor() {
+                        return new PropertyEditorSupport() {
+                            public String[] getTags() {
+                                return languages;
+                            }
+
+                            public void setAsText(String text) {
+                                for (int i = 0; i < languages.length; i++)
+                                    if (text.equals(languages[i]))
+                                        this.setValue(languages[i]);
+                            }
+
+                            public String getAsText() {
+                                return (String)this.getValue();
+                            }
+                        };
+                    }
+                };
+            return prop;
+        }
+
+        private FileFilter[] availableFilters = new FileFilter[] {
+            BinaryOnlyFilter.getInstance(), AllFilesFilter.getInstance()};
 
         private Node.Property createFilterProperty() {
             Node.Property prop =
@@ -191,7 +250,6 @@ public class ParcelFolder extends DataFolder {
                                 getPrimaryFile().setAttribute(FILTER, filter.toString());
                             }
                             catch (IOException ioe) {
-                                System.out.println("Error setting filter attribute");
                             }
                         }
                     }
