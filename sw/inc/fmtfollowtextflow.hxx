@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfollowtextflow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:14:20 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,13 @@
 #ifndef _FORMAT_HXX //autogen
 #include <format.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 class IntlWrapper;
 
-class SwFmtFollowTextFlow : public SfxBoolItem
+class SW_DLLPUBLIC SwFmtFollowTextFlow : public SfxBoolItem
 {
 public:
     SwFmtFollowTextFlow( BOOL bFlag = FALSE )
