@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_rslb.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-08 16:37:09 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:33:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,12 +84,11 @@ $(RESLIB9TARGETN) .NULL : RESLIB9
 
 .IF "$(MULTI_RESLIB_FLAG)"==""
 RESLIB1 RESLIB2 RESLIB3 RESLIB4 RESLIB5 RESLIB6 RESLIB7 RESLIB8 RESLIB9:
-    @dmake $(RESLIB$(TNR)TARGETN) $(HIDRES$(TNR)PARTICLE) solarlang=$(solarlang) MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
+    @dmake $(RESLIB$(TNR)TARGETN) $(HIDRES$(TNR)PARTICLE) MULTI_RESLIB_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ELSE
 
 
 #######################################################
-# Anweisungen fuer das Linken
 # unroll begin
 
 .IF "$(RESLIB$(TNR)TARGETN)"!=""
@@ -119,12 +118,12 @@ $(RSC_MULTI$(TNR)) : \
 .IF "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subMODULE=$(PRJ)$/.. \
     -subGLOBAL=$(SOLARSRC) \
     -subCUSTOM=to_be_defined \
@@ -136,12 +135,12 @@ $(RSC_MULTI$(TNR)) : \
 .ELSE			# "$(common_build_reslib)"!=""
     $(RSC) -presponse @$(mktmp \
     -r -p \
-    $(foreach,i,$(alllangext) $(rsclang_{$i}) \
-    $(rescharset_{$i}) \
+    $(foreach,i,$(alllangiso) -lg$i \
+    $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs{$(BIN)$/$(RESLIB$(TNR)NAME)$(RESLIB$(TNR)VERSION)$i.res} \
-    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$(lang_{$i}) \
+    $(foreach,j,$(subst,$(PRJ),$(PRJ)$/..$/$(PRJNAME) $(RESLIB1IMAGES)) -lip{$j}$/$i \
     -lip{$j} ) \
-    -lip$(SOLARSRC)$/res$/$(lang_{$i}) -lip$(SOLARSRC)$/res ) \
+    -lip$(SOLARSRC)$/res$/$i -lip$(SOLARSRC)$/res ) \
     -subGLOBAL=$(SOLARSRC) \
     -subMODULE=$(PRJ)$/.. \
     -subCUSTOM=to_be_defined \
@@ -172,7 +171,6 @@ $(RESLIB$(TNR)TARGETN): \
 .ENDIF				# "$(RESLIB$(TNR)TARGETN)"!=""
 
 
-# Anweisungen fuer das Linken
 # unroll end
 #######################################################
 
