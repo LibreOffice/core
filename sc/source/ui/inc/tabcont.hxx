@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-04 14:31:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,9 @@ class ScTabControl : public TabBar, public DropTargetHelper, public DragSourceHe
 {
 private:
     ScViewData*     pViewData;
+    USHORT          nMouseClickPageId;      /// Last page ID after mouse button down/up
+    USHORT          nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
     BOOL            bErrorShown;
-    BOOL            bAddDown;
-    USHORT          nTabSwitchId;
-    long            nQueryCount;
 
     void            DoDrag( const Region& rRegion );
 
@@ -107,6 +106,7 @@ protected:
     virtual long    StartRenaming();
     virtual long    AllowRenaming();
     virtual void    EndRenaming();
+    virtual void    Mirror();
 
 public:
                     ScTabControl( Window* pParent, ScViewData* pData );
@@ -114,6 +114,8 @@ public:
 
     void            UpdateStatus();
     void            ActivateView(BOOL bActivate);
+
+    void            SetSheetLayoutRTL( BOOL bSheetRTL );
 };
 
 
