@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _BaseIndex.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:25 $
+ *  last change:$Date: 2003-09-08 11:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,12 @@
 
 package ifc.text;
 
+import lib.MultiPropertyTest;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XIndexReplace;
 import com.sun.star.text.XTextColumns;
-import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 
 /**
 * Testing <code>com.sun.star.text.BaseIndex</code>
