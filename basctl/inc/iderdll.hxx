@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 08:41:52 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 11:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,11 @@
 
 class BasicIDEShell;
 class BasicIDEData;
-class ResMgr;
 
 class BasicIDEDLL
 {
     friend class BasicIDEShell;
 
-    ResMgr*         pResMgr;
     BasicIDEShell*  pShell;
     BasicIDEData*   pExtraData;
 
@@ -78,7 +76,6 @@ public:
                     BasicIDEDLL();
                     ~BasicIDEDLL();
 
-    ResMgr*         GetResMgr() const { return pResMgr; }
     BasicIDEShell*  GetShell() const { return pShell; }
     BasicIDEData*   GetExtraData();
     static void     Init();
