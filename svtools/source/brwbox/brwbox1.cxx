@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 13:32:35 $
+ *  last change: $Author: oj $ $Date: 2002-08-08 11:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2637,7 +2637,7 @@ void BrowseBox::CursorMoved()
     // before implementing more here, please adjust the EditBrowseBox
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    if ( m_pImpl->m_pAccessible )
+    if ( m_pImpl->m_pAccessible && HasFocus() )
         commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
                          com::sun::star::uno::makeAny(CreateAccessibleCell(GetCurRow(),GetCurColumnId())),
                          com::sun::star::uno::Any());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2002-07-26 07:44:24 $
+ *  last change: $Author: oj $ $Date: 2002-08-08 11:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,7 +1047,7 @@ namespace svt
                     AsynchGetFocus();
                 }
             }
-            else if ( isAccessibleCreated() )
+            else if ( isAccessibleCreated() && HasFocus() )
                 commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
                                  com::sun::star::uno::makeAny(CreateAccessibleCell(nRow,nCol)),
                                  com::sun::star::uno::Any());
@@ -1501,6 +1501,11 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2002/07/26 07:44:24  bm
+ *  #101228# new browser flag EBBF_HANDLE_COLUMN_TEXT for displaying text in column
+ *           0 in the handle column (like in the normal browse-box).
+ *           EBBF_NOROWPICTURE => EBBF_NO_HANDLE_COLUMN_CONTENT to reduce confusion now
+ *
  *  Revision 1.12  2002/06/21 14:04:32  oj
  *  #99812# new helper method used to know if accessible object was already created
  *
