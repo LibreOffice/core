@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <stgelem.hxx>
 #endif
 
+class UCBStorageStream;
 
 class StgIo;
 class StgPage;
@@ -87,6 +88,8 @@ class StgCache {
     USHORT nRef;                            // reference count
     void * pLRUCache;                       // hash table of cached objects
     short nPageSize;                        // page size of the file
+    UCBStorageStream* pStorageStream;       // holds reference to UCB storage stream
+
     void Erase( StgPage* );                 // delete a cache element
     void InsertToLRU( StgPage* );           // insert into LRU list
     void InsertToOrdered( StgPage* );       // insert into ordered list
@@ -107,6 +110,7 @@ public:
     short GetPhysPageSize()             { return nPageSize; }
     SvStream* GetStrm()                 { return pStrm;     }
     void  SetStrm( SvStream*, BOOL );
+    void  SetStrm( UCBStorageStream* );
     BOOL  IsWritable()                  { return pStrm->IsWritable(); }
     BOOL  Good()                        { return BOOL( nError == SVSTREAM_OK ); }
     BOOL  Bad()                         { return BOOL( nError != SVSTREAM_OK ); }
