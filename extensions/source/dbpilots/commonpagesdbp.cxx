@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -91,6 +94,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
 #endif
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
@@ -176,9 +182,22 @@ namespace dbp
 
             implFillTables();
 
-            ::rtl::OUString sTableName;
-            rContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("Command")) >>= sTableName;
-            m_aTable.SelectEntry(sTableName);
+            ::rtl::OUString sCommand;
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("Command") ) >>= sCommand );
+            sal_Int32 nCommandType = CommandType::TABLE;
+            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString::createFromAscii("CommandType") ) >>= nCommandType );
+
+            // search the entry of the given type with the given name
+            XubString sLookup( sCommand );
+            for ( USHORT nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
+            {
+                if ( m_aTable.GetEntry( nLookup ) == sLookup )
+                    if ( reinterpret_cast< sal_Int32 >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )
+                    {
+                        m_aTable.SelectEntryPos( nLookup );
+                        break;
+                    }
+            }
         }
         catch(Exception&)
         {
@@ -197,9 +216,13 @@ namespace dbp
         {
             Reference< XConnection > xOldConn = getFormConnection();
 
-            rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("DataSourceName"), makeAny(::rtl::OUString(m_aDatasource.GetSelectEntry())));
-            rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("Command"), makeAny(::rtl::OUString(m_aTable.GetSelectEntry())));
-            rContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("CommandType"), makeAny((sal_Int32)CommandType::TABLE));
+            ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
+            ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
+            sal_Int32 nCommandType = reinterpret_cast< sal_Int32 >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
+
+            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("Command"), makeAny( sCommand ) );
+            rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("CommandType"), makeAny( nCommandType ) );
 
             setFormConnection( xOldConn, sal_False );
 
@@ -239,6 +262,22 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
+    namespace
+    {
+        void    lcl_fillEntries( ListBox& _rListBox, const Sequence< ::rtl::OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
+        {
+            const ::rtl::OUString* pNames = _rNames.getConstArray();
+            const ::rtl::OUString* pNamesEnd = _rNames.getConstArray() + _rNames.getLength();
+            sal_uInt16 nPos = 0;
+            while ( pNames != pNamesEnd )
+            {
+                nPos = _rListBox.InsertEntry( *pNames++, _rImage );
+                _rListBox.SetEntryData( nPos, reinterpret_cast< void* >( _nCommandType ) );
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------
     void OTableSelectionPage::implFillTables()
     {
         m_aTable.Clear();
@@ -264,8 +303,9 @@ namespace dbp
 
         // will be the table tables of the selected data source
         Sequence< ::rtl::OUString > aTableNames;
+        Sequence< ::rtl::OUString > aQueryNames;
 
-        // connect tot the data source
+        // connect to the data source
         Any aSQLException;
         try
         {
@@ -291,6 +331,15 @@ namespace dbp
                         aTableNames = xTables->getElementNames();
                 }
 
+                // and the queries
+                Reference< XQueriesSupplier > xSuppQueries( xConn, UNO_QUERY );
+                if ( xSuppQueries.is() )
+                {
+                    Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY );
+                    if ( xQueries.is() )
+                        aQueryNames = xQueries->getElementNames();
+                }
+
                 setFormConnection( xConn );
             }
         }
@@ -313,8 +362,16 @@ namespace dbp
             return;
         }
 
-        // insert the table names into the list
-        fillListBox(m_aTable, aTableNames);
+        Image aTableImage, aQueryImage;
+        {
+            ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
+
+            bool bIsHiContrast = m_aTable.GetBackground().GetColor().IsDark();
+            aTableImage = Image( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE );
+            aQueryImage = Image( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY );
+        }
+        lcl_fillEntries( m_aTable, aTableNames, aTableImage, CommandType::TABLE );
+        lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );
     }
 
     //---------------------------------------------------------------------
