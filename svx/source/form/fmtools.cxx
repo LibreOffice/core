@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,9 +416,10 @@ void CloneForms(const Reference< ::com::sun::star::container::XIndexContainer>& 
     DBG_ASSERT(_xSource.is() && _xDest.is(), "CloneForms : invalid argument !");
 
     sal_Int32 nSourceCount = _xSource->getCount();
+    Reference< ::com::sun::star::sdbc::XRowSet> xCurrent;
     for (sal_Int32 i=nSourceCount-1; i>=0; --i)
     {
-        Reference< ::com::sun::star::sdbc::XRowSet> xCurrent(*(Reference< XInterface>*)_xSource->getByIndex(i).getValue(), UNO_QUERY);
+        _xSource->getByIndex(i) >>= xCurrent;
         if (!xCurrent.is())
             continue;
 
@@ -450,17 +451,14 @@ sal_Bool searchElement(const Reference< ::com::sun::star::container::XIndexAcces
         return sal_False;
 
     sal_Int32 nCount = xCont->getCount();
-    Any aRet;
+    Reference< XInterface> xComp;
     for (sal_Int32 i = 0; i < nCount; i++)
     {
-        Reference< XInterface> xComp;
         try
         {
-            aRet = xCont->getByIndex(i);
-            if (aRet.hasValue())
+            xCont->getByIndex(i) >>= xComp;
+            if (xComp.is())
             {
-                Reference< XInterface> xIface(*(Reference< XInterface>*) aRet.getValue());
-                ::comphelper::query_interface(xIface, xComp);
                 if (((XInterface *)xElement.get()) == (XInterface*)xComp.get())
                     return sal_True;
                 else
@@ -692,16 +690,13 @@ Reference< ::com::sun::star::frame::XModel> getXModel(const Reference< XInterfac
 
     if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlModel))
     {
-        Any aLabelModel( xControlModel->getPropertyValue(FM_PROP_CONTROLLABEL) );
-        if (aLabelModel.getValueTypeClass() == TypeClass_INTERFACE)
+        Reference< ::com::sun::star::beans::XPropertySet> xLabelSet;
+        xControlModel->getPropertyValue(FM_PROP_CONTROLLABEL) >>= xLabelSet;
+        if (xLabelSet.is() && ::comphelper::hasProperty(FM_PROP_LABEL, xLabelSet))
         {
-            Reference< ::com::sun::star::beans::XPropertySet> xLabelSet(*(Reference< XInterface>*)aLabelModel.getValue(), UNO_QUERY);
-            if (xLabelSet.is() && ::comphelper::hasProperty(FM_PROP_LABEL, xLabelSet))
-            {
-                Any aLabel( xLabelSet->getPropertyValue(FM_PROP_LABEL) );
-                if ((aLabel.getValueTypeClass() == TypeClass_STRING) && ::comphelper::getString(aLabel).getLength())
-                    return ::comphelper::getString(aLabel);
-            }
+            Any aLabel( xLabelSet->getPropertyValue(FM_PROP_LABEL) );
+            if ((aLabel.getValueTypeClass() == TypeClass_STRING) && ::comphelper::getString(aLabel).getLength())
+                return ::comphelper::getString(aLabel);
         }
     }
 
@@ -1507,28 +1502,37 @@ void TransferEventScripts(const Reference< ::com::sun::star::awt::XControlModel>
 //------------------------------------------------------------------------------
 sal_Int16   GridModel2ViewPos(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nModelPos)
 {
-    if (rColumns.is())
+    try
     {
-        // invalid pos ?
-        if (nModelPos >= rColumns->getCount())
-            return (sal_Int16)-1;
-
-        // the column itself shouldn't be hidden
-        Reference< ::com::sun::star::beans::XPropertySet> xAskedFor( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(nModelPos).getValue());
-        if (::comphelper::getBOOL(xAskedFor->getPropertyValue(FM_PROP_HIDDEN)))
+        if (rColumns.is())
         {
-            DBG_ERROR("GridModel2ViewPos : invalid argument !");
-            return (sal_Int16)-1;
-        }
+            // invalid pos ?
+            if (nModelPos >= rColumns->getCount())
+                return (sal_Int16)-1;
 
-        sal_Int16 nViewPos = nModelPos;
-        for (sal_Int16 i=0; i<nModelPos; ++i)
-        {
-            Reference< ::com::sun::star::beans::XPropertySet> xCur( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
-            if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
-                --nViewPos;
+            // the column itself shouldn't be hidden
+            Reference< ::com::sun::star::beans::XPropertySet> xAskedFor;
+            rColumns->getByIndex(nModelPos) >>= xAskedFor;
+            if (::comphelper::getBOOL(xAskedFor->getPropertyValue(FM_PROP_HIDDEN)))
+            {
+                DBG_ERROR("GridModel2ViewPos : invalid argument !");
+                return (sal_Int16)-1;
+            }
+
+            sal_Int16 nViewPos = nModelPos;
+            Reference< ::com::sun::star::beans::XPropertySet> xCur;
+            for (sal_Int16 i=0; i<nModelPos; ++i)
+            {
+                rColumns->getByIndex(i) >>= xCur;
+                if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+                    --nViewPos;
+            }
+            return nViewPos;
         }
-        return nViewPos;
+    }
+    catch(...)
+    {
+        DBG_ERROR("GridModel2ViewPos Exception occured!");
     }
     return (sal_Int16)-1;
 }
@@ -1536,23 +1540,31 @@ sal_Int16   GridModel2ViewPos(const Reference< ::com::sun::star::container::XInd
 //------------------------------------------------------------------------------
 sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns, sal_Int16 nViewPos)
 {
-    if (rColumns.is())
+    try
     {
-        // loop through all columns
-        sal_Int16 i;
-        for (i=0; i<rColumns->getCount(); ++i)
+        if (rColumns.is())
         {
-            Reference< ::com::sun::star::beans::XPropertySet> xCur( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
-            if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
-                // for every visible col : if nViewPos is greater zero, decrement it, else we
-                // have found the model position
-                if (!nViewPos)
-                    break;
-                else
-                    --nViewPos;
+            // loop through all columns
+            sal_Int16 i;
+            Reference< ::com::sun::star::beans::XPropertySet> xCur;
+            for (i=0; i<rColumns->getCount(); ++i)
+            {
+                rColumns->getByIndex(i) >>= xCur;
+                if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+                    // for every visible col : if nViewPos is greater zero, decrement it, else we
+                    // have found the model position
+                    if (!nViewPos)
+                        break;
+                    else
+                        --nViewPos;
+            }
+            if (i<rColumns->getCount())
+                return i;
         }
-        if (i<rColumns->getCount())
-            return i;
+    }
+    catch(...)
+    {
+        DBG_ERROR("GridView2ModelPos Exception occured!");
     }
     return (sal_Int16)-1;
 }
@@ -1560,17 +1572,25 @@ sal_Int16   GridView2ModelPos(const Reference< ::com::sun::star::container::XInd
 //------------------------------------------------------------------------------
 sal_Int16   GridViewColumnCount(const Reference< ::com::sun::star::container::XIndexAccess>& rColumns)
 {
-    if (rColumns.is())
+    try
     {
-        sal_Int16 nCount = rColumns->getCount();
-        // loop through all columns
-        for (sal_Int16 i=0; i<rColumns->getCount(); ++i)
+        if (rColumns.is())
         {
-            Reference< ::com::sun::star::beans::XPropertySet> xCur( *(Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
-            if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
-                --nCount;
+            sal_Int16 nCount = rColumns->getCount();
+            // loop through all columns
+            Reference< ::com::sun::star::beans::XPropertySet> xCur;
+            for (sal_Int16 i=0; i<rColumns->getCount(); ++i)
+            {
+                rColumns->getByIndex(i) >>= xCur;
+                if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+                    --nCount;
+            }
+            return nCount;
         }
-        return nCount;
+    }
+    catch(...)
+    {
+        DBG_ERROR("GridView2ModelPos Exception occured!");
     }
     return 0;
 }
@@ -1768,7 +1788,7 @@ Reference< ::com::sun::star::sdbc::XConnection> findConnection(const Reference< 
 DBG_NAME(FmXDispatchInterceptorImpl);
 //------------------------------------------------------------------------
 FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const Reference< ::com::sun::star::frame::XDispatchProviderInterception>& _rToIntercept, FmDispatchInterceptor* _pMaster, sal_Int16 _nId)
-    : ::cppu::OComponentHelper(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
+    : FmXDispatchInterceptorImpl_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)
     ,m_xIntercepted(_rToIntercept)
     ,m_pMaster(_pMaster)
     ,m_nId(_nId)
@@ -1784,7 +1804,7 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const Reference< ::com::s
         // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
         Reference< ::com::sun::star::lang::XComponent> xInterceptedComponent(m_xIntercepted, UNO_QUERY);
         if (xInterceptedComponent.is())
-            xInterceptedComponent->addEventListener((::com::sun::star::lang::XEventListener*)this);
+            xInterceptedComponent->addEventListener(this);
     }
     ::comphelper::decrement(m_refCount);
 }
@@ -1799,26 +1819,26 @@ FmXDispatchInterceptorImpl::~FmXDispatchInterceptorImpl()
 }
 
 //------------------------------------------------------------------------
-Any SAL_CALL FmXDispatchInterceptorImpl::queryInterface( const Type& type) throw ( RuntimeException )
-{
-    Any aOut = ::cppu::queryInterface(type,static_cast< ::com::sun::star::frame::XDispatchProviderInterceptor*>(this),
-        static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
-        static_cast< ::com::sun::star::lang::XEventListener*>(this));
-    if(aOut.hasValue())
-        return aOut;
-    return OComponentHelper::queryInterface(type);
-}
+//Any SAL_CALL FmXDispatchInterceptorImpl::queryInterface( const Type& type) throw ( RuntimeException )
+//{
+//  Any aOut = ::cppu::queryInterface(type,static_cast< ::com::sun::star::frame::XDispatchProviderInterceptor*>(this),
+//      static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
+//      static_cast< ::com::sun::star::lang::XEventListener*>(this));
+//  if(aOut.hasValue())
+//      return aOut;
+//  return OComponentHelper::queryInterface(type);
+//}
 //------------------------------------------------------------------------------
-Sequence< Type > SAL_CALL FmXDispatchInterceptorImpl::getTypes(  ) throw(RuntimeException)
-{
-    Sequence< Type > aTypes(OComponentHelper::getTypes());
-    aTypes.realloc(2);
-    Type* pTypes = aTypes.getArray();
-
-    pTypes[aTypes.getLength()-2] = ::getCppuType((const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>*)0);
-    pTypes[aTypes.getLength()-1] = ::getCppuType((const Reference< ::com::sun::star::lang::XEventListener>*)0);
-    return aTypes;
-}
+//Sequence< Type > SAL_CALL FmXDispatchInterceptorImpl::getTypes(  ) throw(RuntimeException)
+//{
+//  Sequence< Type > aTypes(OComponentHelper::getTypes());
+//  aTypes.realloc(2);
+//  Type* pTypes = aTypes.getArray();
+//
+//  pTypes[aTypes.getLength()-2] = ::getCppuType((const Reference< ::com::sun::star::frame::XDispatchProviderInterceptor>*)0);
+//  pTypes[aTypes.getLength()-1] = ::getCppuType((const Reference< ::com::sun::star::lang::XEventListener>*)0);
+//  return aTypes;
+//}
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXDispatchInterceptorImpl::getImplementationId() throw(RuntimeException)
 {
@@ -1945,17 +1965,16 @@ sal_Bool isLoadable(const Reference< XInterface>& xLoad)
         try
         {
             // is there already a active connection
-            Any aConn( xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) );
-            if (aConn.getValueTypeClass() == TypeClass_INTERFACE &&
-                ((Reference< XInterface>*)aConn.getValue())->is())
-                return sal_True;
-            else if (::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).len() ||
-                     ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).len() ||
-                     ::findConnection(xLoad).is())
-                return sal_True;
+            Reference< XInterface> xConn;
+            xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
+            return (xConn.is() ||
+                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).len() ||
+                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).len() ||
+                    ::findConnection(xLoad).is());
         }
         catch(Exception&)
         {
+            DBG_ERROR("isLoadable Exception occured!");
         }
 
     }
@@ -1971,7 +1990,8 @@ Reference< ::com::sun::star::container::XNameAccess> getTableFields(const Refere
     Reference< ::com::sun::star::container::XNameAccess> xTables( xSupplyTables->getTables());
     if (xTables.is() && xTables->hasByName(_rsName))
     {
-        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xTableCols(*(Reference< XInterface>*)xTables->getByName(_rsName).getValue(), UNO_QUERY);
+        Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xTableCols;
+        xTables->getByName(_rsName) >>= xTableCols;
         DBG_ASSERT(xTableCols.is(), "::getTableFields : invalid table !");
             // the table is expected to support the service sddb::Table, which requires an ::com::sun::star::sdbcx::XColumnsSupplier interface
 
@@ -2063,8 +2083,9 @@ void setConnection(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
                         Reference< ::com::sun::star::container::XNameAccess> xQueries(xQueriesAccess->getQueries());
                         if (xQueries->hasByName(aCommand))
                         {
-                            Any aElement(xQueries->getByName(aCommand));
-                            Reference< ::com::sun::star::beans::XPropertySet> xQuery(*(Reference< XInterface>*)aElement.getValue(), UNO_QUERY);
+                            Reference< ::com::sun::star::beans::XPropertySet> xQuery;
+                            xQueries->getByName(aCommand) >>= xQuery;
+                            OSL_ENSHURE(xQuery.is(),"xQuery is null!");
                             aReturn= ::comphelper::getString(xQuery->getPropertyValue(FM_PROP_COMMAND));
                             bEscapeProcessing = ::comphelper::getBOOL(xQuery->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                         }
@@ -2139,7 +2160,8 @@ Reference< ::com::sun::star::sdb::XSQLQueryComposer> getCurrentSettingsComposer(
                         if (!xQueries.is() || !xQueries->hasByName(sCommand))
                             break;
 
-                        Reference< ::com::sun::star::beans::XPropertySet> xQueryProps(*(Reference< XInterface>*)xQueries->getByName(sCommand).getValue(), UNO_QUERY);
+                        Reference< ::com::sun::star::beans::XPropertySet> xQueryProps;
+                        xQueries->getByName(sCommand) >>= xQueryProps;
                         if (!xQueryProps.is())
                             break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:10:57 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ try
 
 catch(...)
 {
+    DBG_ERROR("FmPropBrw::StateChanged: Exception occured!");
 }
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,12 +162,12 @@
 #include <connectivity/dbtools.hxx>
 #endif
 
-#define ANY_TO_IFACE(any)   (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)any.getValue())
-
+DBG_NAME(FmFormPageImpl);
 //------------------------------------------------------------------------------
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
                :pPage(_pPage)
 {
+    DBG_CTOR(FmFormPageImpl,NULL);
     Init();
 }
 
@@ -175,6 +175,7 @@ FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage)
 FmFormPageImpl::FmFormPageImpl(FmFormPage* _pPage, const FmFormPageImpl& rImpl)
                :pPage(_pPage)
 {
+    DBG_CTOR(FmFormPageImpl,NULL);
     Init();
 
     // copy it by streaming
@@ -246,6 +247,7 @@ FmFormPageImpl::~FmFormPageImpl()
     xCurrentForm = NULL;
 
     ::comphelper::disposeComponent(xForms);
+    DBG_DTOR(FmFormPageImpl,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -271,10 +273,15 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
             {
                 try
                 {
-                    xForm = *(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > *)xForms->getByName(ustrStdFormName).getValue();
+                    xForms->getByName(ustrStdFormName) >>= xForm;
                 }
-                catch(...)
+                catch(::com::sun::star::container::NoSuchElementException &)
                 {
+                    DBG_ERROR("NoSuchElementException occured!");
+                }
+                catch(::com::sun::star::lang::WrappedTargetException &)
+                {
+                    DBG_ERROR("WrappedTargetException occured!");
                 }
 
             }
@@ -286,7 +293,7 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
                 DBG_ASSERT(xGetFirst.is(), "FmFormPageImpl::getDefaultForm : no IndexAccess on my form container !");
                     // wenn das anspringt, muesste man sich die Namen des NameContainers geben lassen und dann das Objekt fuer den
                     // ersten Namen erfragen ... aber normalerweise sollte die FOrms-Sammlung auch einen IndexAccess haben
-                xForm = *(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > *)xGetFirst->getByIndex(0).getValue();
+                xGetFirst->getByIndex(0) >>= xForm;
             }
         }
     }
@@ -358,7 +365,8 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
         sal_Int32 nCount = xFormsByIndex->getCount();
         for (sal_Int32 i = 0; !xForm.is() && i < nCount; i++)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xToSearch(*(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > *)xFormsByIndex->getByIndex(i).getValue());
+            ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xToSearch;
+            xFormsByIndex->getByIndex(i) >>= xToSearch;
             xForm = FindForm(xToSearch, rDatabase, rCursorSource, nCommandType);
         }
 
@@ -467,7 +475,8 @@ void FmFormPageImpl::setCurForm(::com::sun::star::uno::Reference< ::com::sun::st
     sal_Int32 nCount = xComponents->getCount();
     for (sal_Int32 i = 0; !xResultForm.is() && i < nCount; ++i)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xSearchForm(ANY_TO_IFACE(xComponents->getByIndex(i)), ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xSearchForm;
+        xComponents->getByIndex(i) >>= xSearchForm;
         // jetzt innerhalb der ::com::sun::star::form weitersuchen
         if (xSearchForm.is())
             xResultForm = FindForm(xSearchForm, rDatabase, rCursorSource, nCommandType);

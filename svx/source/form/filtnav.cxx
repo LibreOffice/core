@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,8 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
     sal_Int32 nCount = xControllers->getCount();
     for (sal_Int32 i = 0; i < nCount; i++)
     {
-        Reference< ::com::sun::star::form::XFormController >  xController(*(Reference< ::com::sun::star::form::XFormController > *)xControllers->getByIndex(i).getValue());
+        Reference< ::com::sun::star::form::XFormController >  xController;
+        xControllers->getByIndex(i) >>= xController;
         Reference< ::com::sun::star::beans::XPropertySet >  xModelAsSet(xController->getModel(), UNO_QUERY);
         ::rtl::OUString aName = ::comphelper::getString(xModelAsSet->getPropertyValue(FM_PROP_NAME));
 

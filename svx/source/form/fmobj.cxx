@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,8 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         {
             if (xLoop->getCount() == 0)
                 break;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xRightMostChild(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xLoop->getByIndex(xLoop->getCount() - 1).getValue(), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xRightMostChild;
+            xLoop->getByIndex(xLoop->getCount() - 1) >>= xRightMostChild;
             if (!xRightMostChild.is())
             {
                 DBG_ERROR("FmFormObj::SetPage : invalid elements in environment history !");
@@ -493,7 +494,8 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
         // get the DSS of the source form (we have to find an aquivalent for)
         DBG_ASSERT(nIndex<xSourceContainer->getCount(), "FmFormObj::ensureModelEnv : invalid access path !");
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSourceForm = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSourceContainer->getByIndex(nIndex).getValue(), ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSourceForm;
+        xSourceContainer->getByIndex(nIndex) >>= xSourceForm;
         DBG_ASSERT(xSourceForm.is(), "FmFormObj::ensureModelEnv : invalid source form !");
 
         ::com::sun::star::uno::Any aSrcCursorSource, aSrcCursorSourceType, aSrcDataSource;
@@ -502,9 +504,9 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // the parent access path should refer to a row set
         try
         {
-            aSrcCursorSource = xSourceForm->getPropertyValue(FM_PROP_COMMAND);
-            aSrcCursorSourceType = xSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE);
-            aSrcDataSource = xSourceForm->getPropertyValue(FM_PROP_DATASOURCE);
+            aSrcCursorSource        = xSourceForm->getPropertyValue(FM_PROP_COMMAND);
+            aSrcCursorSourceType    = xSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE);
+            aSrcDataSource          = xSourceForm->getPropertyValue(FM_PROP_DATASOURCE);
         }
         catch(...)
         {
@@ -520,7 +522,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             sal_Bool bEqualDSS = sal_False;
             while (!bEqualDSS)  // (we don't have to check nCurrentSourceIndex here : it's bounded by nIndex)
             {
-                xCurrentSourceForm = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSourceContainer->getByIndex(nCurrentSourceIndex).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                xSourceContainer->getByIndex(nCurrentSourceIndex) >>= xCurrentSourceForm;
                 DBG_ASSERT(xCurrentSourceForm.is(), "FmFormObj::ensureModelEnv : invalid form ancestor (2) !");
                 bEqualDSS = sal_False;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentSourceForm))
@@ -551,7 +553,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             bEqualDSS = sal_False;
             while (!bEqualDSS && (nCurrentDestIndex < xDestContainer->getCount()))
             {
-                xCurrentDestForm = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xDestContainer->getByIndex(nCurrentDestIndex).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                xDestContainer->getByIndex(nCurrentDestIndex) >>= xCurrentDestForm;
                 DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid destination form !");
                 bEqualDSS = sal_False;
                 if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentDestForm))

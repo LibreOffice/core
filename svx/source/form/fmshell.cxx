@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 11:25:47 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,7 +1841,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                     if (bIsNew)
                         nCount++;
 
-                    aValue = String(sal_uInt32(nCount));
+                    aValue = String::CreateFromInt32(sal_uInt32(nCount));
                 }
                 rSet.Put(SfxStringItem(nWhich, aValue));
             }   break;

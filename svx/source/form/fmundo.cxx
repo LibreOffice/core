@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,7 +609,8 @@ void SAL_CALL FmXUndoEnvironment::vetoableChange(const ::com::sun::star::beans::
 void SAL_CALL FmXUndoEnvironment::elementInserted(const ::com::sun::star::container::ContainerEvent& evt)
 {
     // neues Object zum lauschen
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *) evt.Element.getValue());
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface;
+    evt.Element >>= xIface;
     AddElement(xIface);
 
     if (!IsLocked() && rModel.GetObjectShell())
@@ -621,10 +622,11 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ::com::sun::star::contai
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *) evt.ReplacedElement.getValue());
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface;
+    evt.ReplacedElement >>= xIface;
     RemoveElement(xIface);
 
-    xIface = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *) evt.Element.getValue());
+    evt.Element >>= xIface;
     AddElement(xIface);
 
     if (!IsLocked() && rModel.GetObjectShell())
@@ -636,7 +638,8 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ::com::sun::star::contai
 //------------------------------------------------------------------------------
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.Element.getValue());
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface;
+    evt.ReplacedElement >>= xIface;
     RemoveElement(xIface);
 
     if (!IsLocked() && rModel.GetObjectShell())
@@ -671,9 +674,10 @@ void FmXUndoEnvironment::AlterPropertyListening(const ::com::sun::star::uno::Ref
     if (xContainer.is())
     {
         sal_uInt32 nCount = xContainer->getCount();
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface;
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(i).getValue());
+            xContainer->getByIndex(i) >>= xIface;
             AlterPropertyListening(xIface);
         }
     }
@@ -706,7 +710,7 @@ void FmXUndoEnvironment::AddElement(const ::com::sun::star::uno::Reference< ::co
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface;
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            xIface = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(i).getValue();
+            xContainer->getByIndex(i) >>= xIface;
             AddElement(xIface);
         }
 
@@ -764,7 +768,7 @@ void FmXUndoEnvironment::RemoveElement(const ::com::sun::star::uno::Reference< :
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xIface;
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            xIface = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(i).getValue();
+            xContainer->getByIndex(i) >>= xIface;
             RemoveElement(xIface);
         }
     }
@@ -785,14 +789,16 @@ void FmXUndoEnvironment::firing_Impl( const ::com::sun::star::script::ScriptEven
         if (evt.Helper.getValueType() ==
             ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>*)0))
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController( *(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > *)evt.Helper.getValue() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController;
+            evt.Helper >>= xController;
             xThis = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (xController, ::com::sun::star::uno::UNO_QUERY);
         }
         else if (evt.Helper.getValueType() ==
             ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)0))
 
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(*(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)evt.Helper.getValue());
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet;
+            evt.Helper >>= xSet;
             ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(xSet, ::com::sun::star::uno::UNO_QUERY);
 
             if ( xForm.is())
@@ -816,7 +822,8 @@ void FmXUndoEnvironment::firing_Impl( const ::com::sun::star::script::ScriptEven
             ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>*)0) )
 
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl( *(::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > *)evt.Helper.getValue() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl;
+            evt.Helper >>= xControl;
             xThis = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (xControl, ::com::sun::star::uno::UNO_QUERY);
         }
 
@@ -973,8 +980,9 @@ void FmUndoContainerAction::Undo()
         {
             case Inserted:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObj(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(nIndex).getValue()),
-                        xIface;
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObj,xIface;;
+                xContainer->getByIndex(nIndex) >>= xObj;
+
 
                 ::comphelper::query_interface(xObj, xIface);
                 if ((::com::sun::star::uno::XInterface *)xElement.get() == (::com::sun::star::uno::XInterface *)xIface.get())
@@ -1050,9 +1058,9 @@ void FmUndoContainerAction::Redo()
             }   break;
             case Removed:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObj(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(nIndex).getValue()),
-                        xIface;
-                if ((::com::sun::star::uno::XInterface *)xElement.get() == (::com::sun::star::uno::XInterface *)xIface.get())
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObj;
+                xContainer->getByIndex(nIndex) >>= xObj;
+                if ((::com::sun::star::uno::XInterface *)xElement.get() == (::com::sun::star::uno::XInterface *)xObj.get())
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContainer, ::com::sun::star::uno::UNO_QUERY);
                     if (xManager.is())

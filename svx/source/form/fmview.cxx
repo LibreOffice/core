@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,11 +376,11 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
             if (!bDesign)
                 ActivateControls(pCurPageView);
 
+            ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset >  xReset;
             for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
             {
-                ::com::sun::star::uno::Any aElement(xForms->getByIndex(i));
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset >  xReset(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xLoad(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
+                xForms->getByIndex(i) >>= xReset;
+                ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xLoad(xReset, ::com::sun::star::uno::UNO_QUERY);
 
                 if (bDesign)
                 {
@@ -863,14 +863,16 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
             case 0: // old : DataSelectionType_TABLE:
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >  xSupplyTables(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSupplyTables->getTables()->getByName(aObjectName).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
+                xSupplyTables->getTables()->getByName(aObjectName) >>= xSupplyColumns;
                 xFields = xSupplyColumns->getColumns();
             }
             break;
             case 1: // old : DataSelectionType_QUERY:
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XQueriesSupplier >  xSupplyQueries(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSupplyQueries->getQueries()->getByName(aObjectName).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyColumns;
+                xSupplyQueries->getQueries()->getByName(aObjectName) >>= xSupplyColumns;
                 xFields  = xSupplyColumns->getColumns();
             }
             break;
@@ -886,7 +888,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         }
 
         if (xFields.is() && xFields->hasByName(aFieldName))
-            xField = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xFields->getByName(aFieldName).getValue();
+            xFields->getByName(aFieldName) >>= xField;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_False);
         if (!xSupplier.is())

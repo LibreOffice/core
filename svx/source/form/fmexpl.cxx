@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,7 +750,9 @@ void SAL_CALL FmXExplPropertyChangeList::elementInserted(const ::com::sun::star:
     // keine Undoaction einfuegen
     m_bCanUndo = sal_False;
 
-    Insert(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.Element.getValue(), ::comphelper::getINT32(evt.Accessor));
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xTemp;
+    evt.Element >>= xTemp;
+    Insert(xTemp, ::comphelper::getINT32(evt.Accessor));
 
     m_bCanUndo = sal_True;
 }
@@ -763,8 +765,12 @@ void FmXExplPropertyChangeList::Insert(const ::com::sun::star::uno::Reference< :
     {
         m_pExplModel->InsertForm(xForm, sal_uInt32(nIndex));
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForm, ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xTemp;
         for (sal_Int32 i = 0; i < xContainer->getCount(); i++)
-            Insert(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(i).getValue(), i);
+        {
+            xContainer->getByIndex(i) >>= xTemp;
+            Insert(xTemp, i);
+        }
     }
     else
     {
@@ -783,13 +789,15 @@ void SAL_CALL FmXExplPropertyChangeList::elementReplaced(const ::com::sun::star:
     m_bCanUndo = sal_False;
 
     // EntryData loeschen
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xReplaced(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.ReplacedElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xReplaced;
+    evt.ReplacedElement >>= xReplaced;
     FmEntryData* pEntryData = m_pExplModel->FindData(xReplaced, m_pExplModel->GetRootList(), sal_True);
     if (pEntryData)
     {
         if (pEntryData->ISA(FmControlData))
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.Element.getValue(), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp;
+            evt.Element >>= xComp;
             DBG_ASSERT(xComp.is(), "FmXExplPropertyChangeList::elementReplaced : invalid argument !");
                 // an einer FmControlData sollte eine ::com::sun::star::form::XFormComponent haengen
             m_pExplModel->ReplaceFormComponent(xReplaced, xComp);
@@ -813,7 +821,9 @@ void SAL_CALL FmXExplPropertyChangeList::elementRemoved(const ::com::sun::star::
 
     //////////////////////////////////////////////////////////
     // EntryData loeschen
-    FmEntryData* pEntryData = m_pExplModel->FindData(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.Element.getValue(), m_pExplModel->GetRootList(), sal_True);
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xTemp;
+    evt.Element >>= xTemp;
+    FmEntryData* pEntryData = m_pExplModel->FindData(xTemp, m_pExplModel->GetRootList(), sal_True);
     if (pEntryData)
         m_pExplModel->Remove(pEntryData);
 
@@ -1153,7 +1163,7 @@ void FmExplorerModel::FillBranch( FmFormData* pFormData )
                 ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>*)0),
 
                 "FmExplorerModel::FillBranch : the root container should supply only elements of type XForm");
-            xSubForm = *(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > *)xForms->getByIndex(i).getValue();
+            xForms->getByIndex(i) >>= xSubForm;
             pSubFormData = new FmFormData( xSubForm, m_ilNavigatorImages, pFormData );
             Insert( pSubFormData, LIST_APPEND );
 
@@ -1176,9 +1186,10 @@ void FmExplorerModel::FillBranch( FmFormData* pFormData )
         FmControlData* pNewControlData;
         FmFormData* pSubFormData;
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xCurrentComponent;
         for (sal_Int32 j=0; j<xComponents->getCount(); ++j)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xCurrentComponent(*(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > *)xComponents->getByIndex(j).getValue());
+            xComponents->getByIndex(j) >>= xCurrentComponent;
             ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xSubForm(xCurrentComponent, ::com::sun::star::uno::UNO_QUERY);
 
             if (xSubForm.is())

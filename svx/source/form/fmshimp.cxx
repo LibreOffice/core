@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 14:09:32 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,11 +464,7 @@ sal_Bool FmXBoundFormFieldIterator::ShouldHandleElement(const ::com::sun::star::
         // void or invalid property value
         return sal_False;
 
-    if (!((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aVal.getValue())->is())
-        // empty ref
-        return sal_False;
-
-    return sal_True;
+    return aVal.hasValue();
 }
 
 //==============================================================================
@@ -563,6 +559,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> FmXFormShell::DetermineCurForm(const SdrMarkList& rMarkList, sal_Bool& bMixedWithFormControls)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // gibt es eine aktuelle Form, wird ermittelt aus den selektierten Objekten
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xReferenceForm;
     bMixedWithFormControls = sal_False;
@@ -632,6 +629,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
 //========================================================================
 // class FmXFormShell
 //========================================================================
+DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
@@ -651,6 +649,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         ,m_pExternalViewInterceptor(NULL)
         ,m_bChangingDesignMode(sal_False)
 {
+    DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
 
@@ -663,11 +662,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     SfxFrame* pFrame = _pViewFrame ? _pViewFrame->GetFrame() : NULL;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame> xUnoFrame;
     if( pFrame)
-#if SUPD > 582
         xUnoFrame = pFrame->GetFrameInterface();
-#else
-        convertIFace((XFrame*)pFrame->GetFrameInterface(),xUnoFrame);
-#endif
     else
         xUnoFrame = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>(NULL);
 
@@ -688,24 +683,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
 //------------------------------------------------------------------------
 FmXFormShell::~FmXFormShell()
 {
-    if (!rBHelper.bDisposed)
-        dispose();
-
-    ::osl::ClearableMutexGuard aGuard(m_aAsyncSafety);
-    if (HasAnyPendingCursorAction())
-        CancelAnyPendingCursorAction();
-    aGuard.clear();
-
-    if (m_pCheckForRemoval)
-    {
-        delete m_pCheckForRemoval;
-        m_pCheckForRemoval = NULL;
-    }
-
-    DBG_ASSERT(!m_nInvalidationEvent, "FmXFormShell::~FmXFormShell : still have an invalidation event !");
-        // should habe been deleted while beeing disposed
-
-    m_aMarkTimer.Stop();
+    DBG_DTOR(FmXFormShell,NULL);
 }
 
 //------------------------------------------------------------------
@@ -759,6 +737,7 @@ void SAL_CALL FmXFormShell::disposing(const ::com::sun::star::lang::EventObject&
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (evt.PropertyName == FM_PROP_ISMODIFIED)
     {
         if (!::comphelper::getBOOL(evt.NewValue))
@@ -811,6 +790,7 @@ void SAL_CALL FmXFormShell::propertyChange(const ::com::sun::star::beans::Proper
         }
         catch(...)
         {
+            DBG_ERROR("FmXFormShell::propertyChange: Exception occured!");
         }
 
     }
@@ -825,6 +805,7 @@ void SAL_CALL FmXFormShell::propertyChange(const ::com::sun::star::beans::Proper
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& rEvent)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (!m_bActiveModified)
     {
         m_bActiveModified = sal_True;
@@ -836,6 +817,7 @@ void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& 
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> FmXFormShell::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException )
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
 
     if (!m_pShell)
@@ -913,7 +895,8 @@ void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& 
 
 
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xFormProps(xAffectedForm, ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::form::NavigationBarMode eMode = *(::com::sun::star::form::NavigationBarMode*)xFormProps->getPropertyValue(FM_PROP_NAVIGATION).getValue();
+            ::com::sun::star::form::NavigationBarMode eMode;
+            xFormProps->getPropertyValue(FM_PROP_NAVIGATION) >>= eMode;
             if (eMode != ::com::sun::star::form::NavigationBarMode_CURRENT)
             {   // we can't supply a dispatcher for that : else we would have to listen to all operations on the parent
                 // form and to all ops on the affected form itself, just to keep the state up-to-date. This would be too much to do ...
@@ -969,6 +952,7 @@ void SAL_CALL FmXFormShell::modified(const ::com::sun::star::lang::EventObject& 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formActivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(rEvent.Source == m_xExternalViewController, "FmXFormShell::formActivated : where did this come from ?");
     setActiveController(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>(rEvent.Source, ::com::sun::star::uno::UNO_QUERY));
 }
@@ -976,6 +960,7 @@ void SAL_CALL FmXFormShell::formActivated(const ::com::sun::star::lang::EventObj
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formDeactivated(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException )
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(rEvent.Source == m_xExternalViewController, "FmXFormShell::formDeactivated : where did this come from ?");
 }
 
@@ -1033,6 +1018,24 @@ void FmXFormShell::disposing()
         }
     }
 
+    {
+        ::osl::ClearableMutexGuard aGuard(m_aAsyncSafety);
+        if (HasAnyPendingCursorAction())
+            CancelAnyPendingCursorAction();
+        aGuard.clear();
+
+        if (m_pCheckForRemoval)
+        {
+            delete m_pCheckForRemoval;
+            m_pCheckForRemoval = NULL;
+        }
+
+        DBG_ASSERT(!m_nInvalidationEvent, "FmXFormShell::~FmXFormShell : still have an invalidation event !");
+            // should habe been deleted while beeing disposed
+
+        m_aMarkTimer.Stop();
+    }
+
     // we are disposed from within the destructor of our shell, so now the shell pointer is invalid ....
     m_pShell                    = NULL;
     m_xActiveController         = NULL;
@@ -1054,6 +1057,7 @@ void FmXFormShell::disposing()
 //------------------------------------------------------------------------------
 void FmXFormShell::InvalidateSlot(sal_Int16 nId, sal_Bool bWithItem, sal_Bool bWithId)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
@@ -1071,6 +1075,7 @@ void FmXFormShell::InvalidateSlot(sal_Int16 nId, sal_Bool bWithItem, sal_Bool bW
 //------------------------------------------------------------------------------
 void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     DBG_ASSERT(bLock || m_nLockSlotInvalidation>0, "FmXFormShell::LockSlotInvalidation : invalid call !");
 
@@ -1087,6 +1092,7 @@ void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
@@ -1111,6 +1117,7 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (IsSelectionUpdatePending())
     {
         m_aMarkTimer.Stop();
@@ -1153,6 +1160,7 @@ sal_Bool FmXFormShell::IsControlConversionSlot(sal_uInt16 nSlotId)
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::ExecuteControlConversionSlot(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xContext, sal_uInt16 nSlotId)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     for (int i=0; i<sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i)
     {
         if (nConvertSlots[i] == nSlotId)
@@ -1194,6 +1202,7 @@ void FmXFormShell::CheckControlConversionSlots(const ::com::sun::star::uno::Refe
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::ConvertControlTo(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xModel, sal_uInt16 nTargetObjectId)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (!xModel.is())
         // das wuerde ausser einem Performance-Verlust nix machen, aber trotzdem ...
         return sal_False;
@@ -1354,11 +1363,13 @@ sal_Bool FmXFormShell::ConvertControlTo(const ::com::sun::star::uno::Reference< 
 //------------------------------------------------------------------------------
 void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xControlModels(m_xActiveForm, ::com::sun::star::uno::UNO_QUERY);
     if (xControlModels.is())
         for (sal_Int16 i=0; i<xControlModels->getCount(); ++i)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xModelSet(*(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)xControlModels->getByIndex(i).getValue(), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xModelSet;
+            xControlModels->getByIndex(i) >>= xModelSet;
             if (!xModelSet.is())
                 continue;
 
@@ -1457,6 +1468,7 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 //------------------------------------------------------------------------------
 void FmXFormShell::ExecuteSearch()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     UniString sTestContexts;
     //  m_arrSearchContexts.Remove(0, m_arrSearchContexts.Count());
     m_arrSearchContexts.clear();
@@ -1531,7 +1543,8 @@ void FmXFormShell::ExecuteSearch()
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProperties(xActiveControl->getModel(), ::com::sun::star::uno::UNO_QUERY);
         if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xProperties) && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xProperties))
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xField( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)(xProperties->getPropertyValue(FM_PROP_BOUNDFIELD).getValue()));
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xField;
+            xProperties->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
             if (xField.is())    // (nur wenn das Ding wirklich gebunden ist)
             {
                 // und das Control selber nach einem TextComponent-Interface (damit ich mir dort den Text abholen kann)
@@ -1558,13 +1571,16 @@ void FmXFormShell::ExecuteSearch()
 
                 sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
                 sal_Int16 nModelCol = GridView2ModelPos(xColumns, nViewCol);
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCurrentCol( xColumns.is() ? *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)xColumns->getByIndex(nModelCol).getValue() : ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(NULL));
+                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCurrentCol;
+                if(xColumns.is())
+                    xColumns->getByIndex(nModelCol) >>= xCurrentCol;
                 if (xCurrentCol.is())
                     strActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(FM_PROP_LABEL)).getStr();
 
                 // the text fo the current column
                 ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xColControls(xGridPeer, ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xCurControl(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xColControls->getByIndex(nViewCol).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xCurControl;
+                xColControls->getByIndex(nViewCol) >>= xCurControl;
                 ::rtl::OUString sInitialText;
                 if (IsSearchableControl(xCurControl, &sInitialText))
                     strInitialText = sInitialText.getStr();
@@ -1598,6 +1614,7 @@ void FmXFormShell::ExecuteSearch()
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_pShell->IsDesignMode())
         // im Design-Modus (ohne aktive Controls) soll sich das Haupt-Dokument darum kuemmern
         return sal_False;
@@ -1634,6 +1651,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 //------------------------------------------------------------------------------
 void FmXFormShell::SetY2KState(sal_uInt16 n)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xActiveForm( getActiveForm());
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xDB(xActiveForm, ::com::sun::star::uno::UNO_QUERY);
     if (xDB.is())
@@ -1652,6 +1670,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(...)
                 {
+                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
                 }
 
             }
@@ -1692,6 +1711,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(...)
                 {
+                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
                 }
 
             }
@@ -1791,14 +1811,16 @@ void FmXFormShell::ResetCurrent(const ::com::sun::star::uno::Reference< ::com::s
 //------------------------------------------------------------------------
 void FmXFormShell::ResetAll(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xContainer(_xForm, ::com::sun::star::uno::UNO_QUERY);
     for (sal_Int16 nBothViews=0; nBothViews<2; ++nBothViews)
     {
         if (xContainer.is())
         {
+            ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset> xReset;
             for (sal_Int32 i=0; i<xContainer->getCount(); ++i)
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XReset> xReset(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xContainer->getByIndex(i).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                xContainer->getByIndex(i) >>= xReset;
                 if (xReset.is())
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xAsForm(xReset, ::com::sun::star::uno::UNO_QUERY);
@@ -1845,6 +1867,7 @@ sal_Bool FmXFormShell::SaveModified(const ::com::sun::star::uno::Reference< ::co
         }
         catch(...)
         {
+            DBG_ERROR("FmXFormShell::SaveModified: Exception occured!");
         }
 
         _rRecordInserted = bIsNew && bResult;
@@ -1933,6 +1956,7 @@ sal_Bool FmXFormShell::MoveRight(const ::com::sun::star::uno::Reference< ::com::
         }
         catch(...)
         {
+            DBG_ERROR("FmXFormShell::MoveRight: Exception occured!");
         }
 
     }
@@ -1982,6 +2006,7 @@ sal_Bool FmXFormShell::MoveLeft(const ::com::sun::star::uno::Reference< ::com::s
         }
         catch(...)
         {
+            DBG_ERROR("FmXFormShell::MoveLeft: Exception occured!");
         }
 
     }
@@ -2001,6 +2026,7 @@ sal_Bool FmXFormShell::MoveLeft(const ::com::sun::star::uno::Reference< ::com::s
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::cursorMoved(const ::com::sun::star::lang::EventObject& event) throw( ::com::sun::star::uno::RuntimeException )
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     m_bActiveModified = sal_False;
     m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(DatabaseSlotMap);
 }
@@ -2008,6 +2034,7 @@ void SAL_CALL FmXFormShell::cursorMoved(const ::com::sun::star::lang::EventObjec
 //------------------------------------------------------------------------------
 void FmXFormShell::CloseExternalFormViewer()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (!m_xExternalViewController.is())
         return;
 
@@ -2032,6 +2059,7 @@ void FmXFormShell::CloseExternalFormViewer()
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> FmXFormShell::getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xExternalCtrlr(m_xExternalViewController, ::com::sun::star::uno::UNO_QUERY);
     if (xExternalCtrlr.is() && (_xForm == xExternalCtrlr->getModel()))
     {
@@ -2044,6 +2072,7 @@ void FmXFormShell::CloseExternalFormViewer()
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> FmXFormShell::getInternalForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xExternalCtrlr(m_xExternalViewController, ::com::sun::star::uno::UNO_QUERY);
     if (xExternalCtrlr.is() && (_xForm == xExternalCtrlr->getModel()))
     {
@@ -2056,6 +2085,7 @@ void FmXFormShell::CloseExternalFormViewer()
 //------------------------------------------------------------------------------
 void FmXFormShell::ActivateDispatchers(const UniString& _sNavFormAccess, sal_Bool _bActivate)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     for (   ConstFormsDispatchersIterator aFormIter = m_aNavigationDispatcher.begin();
             aFormIter != m_aNavigationDispatcher.end();
             ++aFormIter
@@ -2081,6 +2111,7 @@ void FmXFormShell::ActivateDispatchers(const UniString& _sNavFormAccess, sal_Boo
 //------------------------------------------------------------------------------
 UniString FmXFormShell::GetAccessPathFromForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, const UniString& rAssumedPagePrefix) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     UniString sReturn;
     if (!_xForm.is())
         return sReturn;
@@ -2112,6 +2143,7 @@ UniString FmXFormShell::GetAccessPathFromForm(const ::com::sun::star::uno::Refer
 //------------------------------------------------------------------------------
 UniString FmXFormShell::GetPageId(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     UniString sEmptyReturn;
     FmFormModel* pModel = m_pShell->GetFormModel();
     if (!pModel)
@@ -2146,6 +2178,7 @@ UniString FmXFormShell::GetPageId(const ::com::sun::star::uno::Reference< ::com:
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> FmXFormShell::GetPageForms(const UniString sPageId) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> aEmptyReturn;
     FmFormModel* pModel = m_pShell->GetFormModel();
     if (!pModel)
@@ -2169,6 +2202,7 @@ UniString FmXFormShell::GetPageId(const ::com::sun::star::uno::Reference< ::com:
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateAllFormDispatchers(const UniString& _rPath)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     for (   FormsDispatchersIterator aDispIter = m_aNavigationDispatcher.begin();
             aDispIter != m_aNavigationDispatcher.end();
             ++aDispIter
@@ -2195,6 +2229,7 @@ void FmXFormShell::UpdateAllFormDispatchers(const UniString& _rPath)
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateFormDispatcher(FmFormNavigationDispatcher* _pDisp)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     sal_Bool bEnable = sal_False;
     if (!_pDisp)
         return;
@@ -2237,6 +2272,7 @@ void FmXFormShell::UpdateFormDispatcher(FmFormNavigationDispatcher* _pDisp)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatcher)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(pDispatcher, "FmXFormShell::OnExecuteNavSlot : invalid argument !");
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> xCursor(pDispatcher->getForm());
@@ -2308,6 +2344,7 @@ IMPL_LINK(FmXFormShell, OnExecuteNavSlot, FmFormNavigationDispatcher*, pDispatch
 //------------------------------------------------------------------------------
 void FmXFormShell::setActiveController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_bChangingDesignMode)
         return;
     DBG_ASSERT(!m_pShell->IsDesignMode(), "nur im alive mode verwenden");
@@ -2372,6 +2409,7 @@ void FmXFormShell::setActiveController(const ::com::sun::star::uno::Reference< :
                     }
                     catch(...)
                     {
+                        DBG_ERROR("FmXFormShell::setActiveController: Exception occured!");
                     }
 
 
@@ -2432,6 +2470,7 @@ void FmXFormShell::setActiveController(const ::com::sun::star::uno::Reference< :
 //------------------------------------------------------------------------------
 void FmXFormShell::setCurControl( const SdrMarkList& rMarkList )
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (isControlList(rMarkList))
     {
         // Aktuell selektiertes Objekt setzen
@@ -2475,6 +2514,7 @@ void FmXFormShell::setCurControl( const SdrMarkList& rMarkList )
 //------------------------------------------------------------------------------
 void FmXFormShell::setCurControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xNewControl)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(m_pShell->IsDesignMode(), "nur im designmode verwenden");
 
     if (m_xCurControl == xNewControl)
@@ -2505,6 +2545,7 @@ void FmXFormShell::setCurControl(const ::com::sun::star::uno::Reference< ::com::
 //------------------------------------------------------------------------------
 void FmXFormShell::setSelObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xNewObj)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(m_pShell->IsDesignMode(), "nur im designmode verwenden");
 
     if (m_xSelObject != xNewObj)
@@ -2518,6 +2559,7 @@ void FmXFormShell::setSelObject(const ::com::sun::star::uno::Reference< ::com::s
 //------------------------------------------------------------------------------
 void FmXFormShell::setCurForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xF)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(m_pShell->IsDesignMode(), "nur im designmode verwenden");
     if (xF != m_xCurForm)
     {
@@ -2533,6 +2575,7 @@ void FmXFormShell::setCurForm(const ::com::sun::star::uno::Reference< ::com::sun
 //------------------------------------------------------------------------------
 void FmXFormShell::startListening()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xDatabaseForm(m_xActiveForm, ::com::sun::star::uno::UNO_QUERY);
     if (xDatabaseForm.is() && ::dbtools::getConnection(xDatabaseForm).is())
     {
@@ -2543,7 +2586,7 @@ void FmXFormShell::startListening()
             ::rtl::OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
             if (aSource.len())
             {
-                // datensatzwechsel mitbekommen
+                // we have to recognize any change roset change
                 xDatabaseForm->addRowSetListener(this);
 
                 // Modify
@@ -2561,8 +2604,7 @@ void FmXFormShell::startListening()
 
                 m_bDatabaseBar = sal_True;
 
-                ::com::sun::star::uno::Any aVal    = xActiveFormSet->getPropertyValue(FM_PROP_NAVIGATION);
-                m_eNavigate    = *(::com::sun::star::form::NavigationBarMode*) aVal.getValue();
+                xActiveFormSet->getPropertyValue(FM_PROP_NAVIGATION) >>= m_eNavigate;
 
                 xActiveFormSet->addPropertyChangeListener(FM_PROP_ISMODIFIED,this);
                 xActiveFormSet->addPropertyChangeListener(FM_PROP_ISNEW, this);
@@ -2583,9 +2625,7 @@ void FmXFormShell::startListening()
                                 xParentSet = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(xParent->getModel(), ::com::sun::star::uno::UNO_QUERY);
                             if (xParentSet.is())
                             {
-                                ::com::sun::star::uno::Any aVal( xParentSet->getPropertyValue(FM_PROP_NAVIGATION) );
-                                m_eNavigate = *(::com::sun::star::form::NavigationBarMode*) aVal.getValue();
-
+                                xParentSet->getPropertyValue(FM_PROP_NAVIGATION) >>= m_eNavigate;
                                 if (m_eNavigate == ::com::sun::star::form::NavigationBarMode_CURRENT)
                                     break;
                             }
@@ -2624,6 +2664,7 @@ void FmXFormShell::startListening()
                     }
                     catch(...)
                     {
+                        DBG_ERROR("FmXFormShell::startListening: Exception occured!");
                     }
 
 
@@ -2647,6 +2688,7 @@ void FmXFormShell::startListening()
 //------------------------------------------------------------------------------
 void FmXFormShell::stopListening()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xDatabaseForm(m_xActiveForm, ::com::sun::star::uno::UNO_QUERY);
     if (xDatabaseForm.is() && m_bDatabaseBar)
     {
@@ -2696,6 +2738,7 @@ void FmXFormShell::stopListening()
 //------------------------------------------------------------------------------
 void FmXFormShell::ShowProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rxObject, sal_Bool bShow)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // Evtl. noch aktuelles Objekt umsetzen
     if (rxObject != m_xSelObject)
         setSelObject( rxObject );
@@ -2716,6 +2759,7 @@ void FmXFormShell::ShowProperties(const ::com::sun::star::uno::Reference< ::com:
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < m_arrSearchContexts.size()),
         "FmXFormShell::OnFoundData : ungueltiger Kontext !");
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm( m_arrSearchContexts.at(pfriWhere->nContext));
@@ -2788,6 +2832,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < m_arrSearchContexts.size()),
         "FmXFormShell::OnCanceledNotFound : ungueltiger Kontext !");
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm( m_arrSearchContexts.at(pfriWhere->nContext));
@@ -2807,6 +2852,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextInfo)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(pfmscContextInfo->nContext < m_arrSearchContexts.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm( m_arrSearchContexts.at(pfmscContextInfo->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnSearchContextRequest : unexpected : invalid context !");
@@ -2915,9 +2961,10 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                                 // the case 'no columns' should be indicated with an empty container, I think ...
                             DBG_ASSERT(xModelColumns->getCount() >= xPeerContainer->getCount(), "FmXFormShell::OnSearchContextRequest : impossible : have more view than model columns !");
 
+                            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xCurrentColumn;
                             for (sal_Int16 nViewPos=0; nViewPos<xPeerContainer->getCount(); ++nViewPos)
                             {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xCurrentColumn(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xPeerContainer->getByIndex(nViewPos).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                                xPeerContainer->getByIndex(nViewPos) >>= xCurrentColumn;
                                 if (!xCurrentColumn.is())
                                     continue;
 
@@ -2926,7 +2973,8 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                                     continue;
 
                                 sal_Int16 nModelPos = GridView2ModelPos(xModelColumns, nViewPos);
-                                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCurrentColModel( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)xModelColumns->getByIndex(nModelPos).getValue());
+                                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCurrentColModel;
+                                xModelColumns->getByIndex(nModelPos) >>= xCurrentColModel;
                                 aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
                                 // the cursor has a field matching the control source ?
                                 if (xValidFormFields->hasByName(aName))
@@ -3023,28 +3071,39 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 //------------------------------------------------------------------------------
 void FmXFormShell::elementInserted(const ::com::sun::star::container::ContainerEvent& evt)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // neues Object zum lauschen
-    AddElement(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)evt.Element.getValue());
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xTemp;
+    evt.Element >>= xTemp;
+    AddElement(xTemp);
     m_pShell->DetermineForms(sal_True);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::elementReplaced(const ::com::sun::star::container::ContainerEvent& evt)
 {
-    RemoveElement(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)evt.ReplacedElement.getValue());
-    AddElement(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)evt.Element.getValue());
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xTemp;
+    evt.ReplacedElement >>= xTemp;
+    RemoveElement(xTemp);
+    evt.Element >>= xTemp;
+    AddElement(xTemp);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt)
 {
-    RemoveElement(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)evt.Element.getValue());
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xTemp;
+    evt.Element >>= xTemp;
+    RemoveElement(xTemp);
     m_pShell->DetermineForms(sal_True);
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::ResetForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xForms, sal_Bool bInvalidate)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_xForms != _xForms)
     {
         RemoveElement(m_xForms);
@@ -3059,16 +3118,17 @@ void FmXFormShell::ResetForms(const ::com::sun::star::uno::Reference< ::com::sun
 //------------------------------------------------------------------------------
 void FmXFormShell::AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // am Container horchen
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xContainer(Element, ::com::sun::star::uno::UNO_QUERY);
     if (xContainer.is())
     {
         sal_uInt32 nCount = xContainer->getCount();
-        ::com::sun::star::uno::Any aElement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xElement;
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            aElement = xContainer->getByIndex(i);
-            AddElement(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue());
+            xContainer->getByIndex(i) >>= xElement;
+            AddElement(xElement);
         }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer> xCont(Element, ::com::sun::star::uno::UNO_QUERY);
@@ -3084,6 +3144,7 @@ void FmXFormShell::AddElement(const ::com::sun::star::uno::Reference< ::com::sun
 //------------------------------------------------------------------------------
 void FmXFormShell::RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier> xSelSupplier(Element, ::com::sun::star::uno::UNO_QUERY);
     if (xSelSupplier.is())
         xSelSupplier->removeSelectionChangeListener(this);
@@ -3097,11 +3158,11 @@ void FmXFormShell::RemoveElement(const ::com::sun::star::uno::Reference< ::com::
             xCont->removeContainerListener(this);
 
         sal_uInt32 nCount = xContainer->getCount();
-        ::com::sun::star::uno::Any aElement;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xElement;
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            aElement = xContainer->getByIndex(i);
-            RemoveElement(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue());
+            xContainer->getByIndex(i) >>= xElement;
+            RemoveElement(xElement);
         }
     }
 }
@@ -3109,11 +3170,13 @@ void FmXFormShell::RemoveElement(const ::com::sun::star::uno::Reference< ::com::
 //------------------------------------------------------------------------------
 void FmXFormShell::selectionChanged(const ::com::sun::star::lang::EventObject& rEvent)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier> xSupplier(rEvent.Source, ::com::sun::star::uno::UNO_QUERY);
     ::com::sun::star::uno::Any aSelObj( xSupplier->getSelection() );
     if (aSelObj.getValueTypeClass() != ::com::sun::star::uno::TypeClass_INTERFACE)
         return;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xSelObj( *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aSelObj.getValue());
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xSelObj;
+    aSelObj >>= xSelObj;
 
     // es wurde eine Selektion weggenommen, dieses kann nur durch die Shell vorgenommen werden
     if (!xSelObj.is())
@@ -3145,6 +3208,7 @@ void FmXFormShell::selectionChanged(const ::com::sun::star::lang::EventObject& r
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnTimeOut, void*, EMPTYTAG)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (m_pShell->IsDesignMode() && m_pShell->GetFormView())
         SetSelection(m_pShell->GetFormView()->GetMarkList());
 
@@ -3161,6 +3225,7 @@ void FmXFormShell::SetSelectionDelayed(FmFormView* pView)
 //------------------------------------------------------------------------
 void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DetermineSelection(rMarkList);
     m_pShell->NotifyMarkListChanged(m_pShell->GetFormView());
 }
@@ -3168,6 +3233,7 @@ void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------
 void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // Aktuelles Objekt setzen
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xPreviousObject( m_xSelObject);
     sal_Bool bMixedWithFormControls = sal_True;
@@ -3199,6 +3265,7 @@ void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------------
 void FmXFormShell::SaveMarkList(const FmFormView* pView)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     m_aMark = pView->GetMarkList();
     m_aMarkTimer.Stop();
 }
@@ -3206,6 +3273,7 @@ void FmXFormShell::SaveMarkList(const FmFormView* pView)
 //------------------------------------------------------------------------------
 void FmXFormShell::RestoreMarkList(FmFormView* pView)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     const SdrMarkList& rCurrentList = pView->GetMarkList();
     FmFormPage* pPage = m_pShell->GetCurPage();
     if (pPage)
@@ -3330,6 +3398,7 @@ void FmXFormShell::RestoreMarkList(FmFormView* pView)
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::IsPropBrwOpen() const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     return( ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() ) ?
             m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow(SID_FM_SHOW_PROPERTIES) : sal_False );
 }
@@ -3337,6 +3406,7 @@ sal_Bool FmXFormShell::IsPropBrwOpen() const
 //------------------------------------------------------------------------------
 void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(m_pShell && m_pShell->GetFormView(), "FmXFormShell::SetDesignMode : invalid call (have no shell or no view) !");
     m_bChangingDesignMode = sal_True;
 
@@ -3448,6 +3518,7 @@ void FmXFormShell::ObjectRemovedInAliveMode(const SdrObject* pObject)
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> FmXFormShell::GetControlFromModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // die View ...
     SdrPageView* pCurPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
     // deren ViewWinRec-Liste, daraus das erste Element
@@ -3470,25 +3541,28 @@ void FmXFormShell::ObjectRemovedInAliveMode(const SdrObject* pObject)
 //------------------------------------------------------------------------------
 void FmXFormShell::CollectFormContexts(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xStartingPoint, const UniString& sCurrentLevelPrefix, UniString& sNames)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xAllComponentIndizies(xStartingPoint, ::com::sun::star::uno::UNO_QUERY);
 
     if (xAllComponentIndizies.is() && xAllComponentIndizies->getCount())
     {
-        // das Ding hat Kinder, also gehen wir die alle durch
-        ::com::sun::star::uno::Any aElement;
+        // work through all children
         UniString sCurrentFormName, sNextLevelPrefix;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xCurrentAsForm;
         for (sal_Int32 i=0; i<xAllComponentIndizies->getCount(); ++i)
         {
-            aElement = xAllComponentIndizies->getByIndex(i);
-            // ist das aktuelle Kind eine Form ?
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xCurrentAsForm(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
+            xAllComponentIndizies->getByIndex(i) >>= xCurrentAsForm;;
+            // is the current child a form?
             if (xCurrentAsForm.is())
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xAskForName(xCurrentAsForm, ::com::sun::star::uno::UNO_QUERY);
                 if (xAskForName.is())
                 {
                     try { sCurrentFormName = ::comphelper::getString(xAskForName->getPropertyValue(FM_PROP_NAME)).getStr(); }
-                    catch(...) { }
+                    catch(...)
+                    {
+                        DBG_ERROR("FmXFormShell::CollectFormContexts: Exception occured!");
+                    }
                 }
                 // den Namen an die Aufzaehlung haengen
                 sNames += ';';
@@ -3519,6 +3593,7 @@ void FmXFormShell::CollectFormContexts(const ::com::sun::star::uno::Reference< :
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> FmXFormShell::GetBoundField(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _xForm) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // sonderbehandlung fuer databaseGrid
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XGrid> xGrid(_xControl, ::com::sun::star::uno::UNO_QUERY);
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xModel, xField;
@@ -3529,7 +3604,7 @@ void FmXFormShell::CollectFormContexts(const ::com::sun::star::uno::Reference< :
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xCols(_xControl->getModel(), ::com::sun::star::uno::UNO_QUERY);
         nCurrentPos = GridView2ModelPos(xCols, nCurrentPos);
         if (nCurrentPos != (sal_Int16)-1)
-            xModel = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)xCols->getByIndex(nCurrentPos).getValue();
+             xCols->getByIndex(nCurrentPos) >>= xModel;
     }
     else if (_xControl.is())
     {
@@ -3541,10 +3616,7 @@ void FmXFormShell::CollectFormContexts(const ::com::sun::star::uno::Reference< :
     // (zum Beispiel ein TextControl an ein Bild-Feld)
     // (FS - 64265)
     if (xModel.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xModel))
-    {
-        ::com::sun::star::uno::Any aElement( xModel->getPropertyValue(FM_PROP_BOUNDFIELD) );
-        xField = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)aElement.getValue();
-    }
+        xModel->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
 
     return xField;
 }
@@ -3552,6 +3624,7 @@ void FmXFormShell::CollectFormContexts(const ::com::sun::star::uno::Reference< :
 //------------------------------------------------------------------------------
 void FmXFormShell::SetWizardUsing(sal_Bool bUseThem)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // gleich an die INI weiterreichen
     SFX_INIMANAGER()->Set( (bUseThem ? '1' : '0'), SFX_GROUP_DATABASE, String::CreateFromAscii("UseWizards"));
     m_bUseWizards = bUseThem;
@@ -3574,6 +3647,7 @@ void FmXFormShell::ObjectRemoveListener::Notify(SfxBroadcaster& rBC, const SfxHi
 //------------------------------------------------------------------------------
 void FmXFormShell::startFiltering()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     // setting all forms in filter mode
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
 
@@ -3607,17 +3681,17 @@ void FmXFormShell::startFiltering()
 }
 
 //------------------------------------------------------------------------------
-void saveFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController)
+void saveFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _rxController)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xFormAsSet(xController->getModel(), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xControllerAsSet(xController, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xControllerAsIndex(xController, ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xFormAsSet(_rxController->getModel(), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xControllerAsSet(_rxController, ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xControllerAsIndex(_rxController, ::com::sun::star::uno::UNO_QUERY);
 
     // call the subcontroller
-    for (sal_Int32 i = 0, nCount = xControllerAsIndex->getCount();
-         i < nCount; i++)
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xController;
+    for (sal_Int32 i = 0, nCount = xControllerAsIndex->getCount(); i < nCount; ++i)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xController(*(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>*)xControllerAsIndex->getByIndex(i).getValue());
+        xControllerAsIndex->getByIndex(i) >>= xController;
         saveFilter(xController);
     }
 
@@ -3631,6 +3705,7 @@ void saveFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form::
     }
     catch(...)
     {
+        DBG_ERROR("saveFilter: Exception occured!");
     }
 
 }
@@ -3638,6 +3713,7 @@ void saveFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form::
 //------------------------------------------------------------------------------
 void FmXFormShell::stopFiltering(sal_Bool bSave)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     m_bFilterMode = sal_False;
 
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
@@ -3711,6 +3787,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 }
                 catch(...)
                 {
+                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occured!");
                 }
 
                 if (!isRowSetAlive(xFormSet))
@@ -3725,6 +3802,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     }
                     catch(...)
                     {
+                        DBG_ERROR("FmXFormShell::stopFiltering: Exception occured!");
                     }
                 }
             }
@@ -3736,21 +3814,23 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
 }
 
 //------------------------------------------------------------------------------
-void clearFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController)
+void clearFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _rxController)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xControllerAsSet(xController, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xControllerAsIndex(xController, ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xControllerAsSet(_rxController, ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> xControllerAsIndex(_rxController, ::com::sun::star::uno::UNO_QUERY);
 
     // call the subcontroller
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xController;
     for (sal_Int32 i = 0, nCount = xControllerAsIndex->getCount();
          i < nCount; i++)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController> xController(*(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>*)xControllerAsIndex->getByIndex(i).getValue());
+        xControllerAsIndex->getByIndex(i) >>= xController;
         clearFilter(xController);
     }
 
     // clear the filter
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xContainer(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xControllerAsSet->getPropertyValue(FM_PROP_FILTERSUPPLIER).getValue(), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer> xContainer;
+    xControllerAsSet->getPropertyValue(FM_PROP_FILTERSUPPLIER) >>= xContainer;
     if (xContainer.is())
     {
         // clear the current filter
@@ -3769,6 +3849,7 @@ void clearFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::form:
 //------------------------------------------------------------------------------
 void FmXFormShell::clearFilter()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     FmXFormView* pXView = m_pShell->GetFormView()->GetImpl();
 
     // if the active controller is our external one we have to use the trigger controller
@@ -3796,6 +3877,7 @@ void FmXFormShell::clearFilter()
 //------------------------------------------------------------------------------
 void FmXFormShell::setControlLocks()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController> xCtrler(getActiveController(), ::com::sun::star::uno::UNO_QUERY);
     if (!xCtrler.is())
         return;
@@ -3821,7 +3903,7 @@ void FmXFormShell::setControlLocks()
             {   // no recursion. we only know top level control containers (e.g. grid controls)
                 for (sal_Int16 i=0; i<xContainer->getCount(); ++i)
                 {
-                    xCtrl = ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundControl>(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xContainer->getByIndex(i).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                    xContainer->getByIndex(i) >>= xCtrl;
                     if (!xCtrl.is())
                         continue;
 
@@ -3840,6 +3922,7 @@ void FmXFormShell::setControlLocks()
 //------------------------------------------------------------------------------
 void FmXFormShell::restoreControlLocks()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController> xCtrler(getActiveController(), ::com::sun::star::uno::UNO_QUERY);
     if (!xCtrler.is())
         return;
@@ -3864,7 +3947,7 @@ void FmXFormShell::restoreControlLocks()
             {   // no recursion. we only know top level control containers (e.g. grid controls)
                 for (sal_Int16 i=0; i<xContainer->getCount(); ++i)
                 {
-                    xCtrl = ::com::sun::star::uno::Reference< ::com::sun::star::form::XBoundControl>(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)xContainer->getByIndex(i).getValue(), ::com::sun::star::uno::UNO_QUERY);
+                    xContainer->getByIndex(i) >>= xCtrl;
                     if (!xCtrl.is())
                         continue;
 
@@ -3887,6 +3970,7 @@ void FmXFormShell::restoreControlLocks()
 //------------------------------------------------------------------------------
 void FmXFormShell::DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& _xController, CURSOR_ACTION _eWhat)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(_xController.is(), "FmXFormShell::DoAsyncCursorAction : invalid argument !");
     DoAsyncCursorAction(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>(_xController->getModel(), ::com::sun::star::uno::UNO_QUERY), _eWhat);
 }
@@ -3894,6 +3978,7 @@ void FmXFormShell::DoAsyncCursorAction(const ::com::sun::star::uno::Reference< :
 //------------------------------------------------------------------------------
 void FmXFormShell::DoAsyncCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm, CURSOR_ACTION _eWhat)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
     DBG_ASSERT(_xForm.is(), "FmXFormShell::DoAsyncCursorAction : invalid argument !");
 
@@ -3945,6 +4030,7 @@ void FmXFormShell::DoAsyncCursorAction(const ::com::sun::star::uno::Reference< :
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::HasPendingCursorAction(const UniString& _rAccessPath) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(((FmXFormShell*)this)->m_aAsyncSafety);
 
     for (   ConstCursorActionsIterator aIter = m_aCursorActions.begin();
@@ -3969,6 +4055,7 @@ sal_Bool FmXFormShell::HasPendingCursorAction(const UniString& _rAccessPath) con
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xForm) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (!_xForm.is())
         return sal_False;
 
@@ -3978,6 +4065,7 @@ sal_Bool FmXFormShell::HasPendingCursorAction(const ::com::sun::star::uno::Refer
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::HasPendingCursorAction(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController>& xController) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     if (!xController.is())
         return sal_False;
 
@@ -4000,6 +4088,7 @@ sal_Bool FmXFormShell::HasAnyPendingCursorAction() const
 //------------------------------------------------------------------------------
 void FmXFormShell::CancelAnyPendingCursorAction()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::comphelper::OReusableGuard< ::osl::Mutex> aGuard(m_aAsyncSafety);
 
     CursorActionsIterator aIter;
@@ -4030,6 +4119,7 @@ void FmXFormShell::CancelAnyPendingCursorAction()
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnCursorActionDone, FmCursorActionThread*, pThread)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
 
     // search the pos of the thread within m_aCursorActions
@@ -4053,12 +4143,14 @@ IMPL_LINK(FmXFormShell, OnCursorActionDone, FmCursorActionThread*, pThread)
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::PathsInterfere(const UniString& _rPathLeft, const UniString& _rPathRight) const
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     return ((_rPathLeft.Search(_rPathRight) == 0) || (_rPathRight.Search(_rPathLeft) == 0));
 }
 
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormShell, OnCursorActionDoneMainThread, FmCursorActionThread*, pThread)
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     ::osl::MutexGuard aGuard(m_aAsyncSafety);
 
     // search the pos of the thread within m_aCursorActions
@@ -4103,6 +4195,7 @@ IMPL_LINK(FmXFormShell, OnCursorActionDoneMainThread, FmCursorActionThread*, pTh
 //------------------------------------------------------------------------------
 void FmXFormShell::CreateExternalView()
 {
+    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     DBG_ASSERT(m_xAttachedFrame.is(), "FmXFormShell::CreateExternalView : no frame !");
 
     // the frame the external view is displayed in
@@ -4249,11 +4342,11 @@ void FmXFormShell::CreateExternalView()
             ::com::sun::star::uno::Any aCurrentBoundField;
             ::rtl::OUString sColumnType,aGroupName,sControlSource;
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property> aProps;
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCurrentBoundField;
             while ((xCurrentModelSet = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(aModelIterator.Next(), ::com::sun::star::uno::UNO_QUERY)).is())
             {
-                aCurrentBoundField = xCurrentModelSet->getPropertyValue(FM_PROP_BOUNDFIELD);
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCurrentBoundField(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aCurrentBoundField.getValue(), ::com::sun::star::uno::UNO_QUERY);
-
+                xCurrentModelSet->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xCurrentBoundField;
+                OSL_ENSHURE(xCurrentModelSet.is(),"xCurrentModelSet is null!");
                 // create a description of the column to be created
                 // first : determine it's type
 
@@ -4536,7 +4629,8 @@ sal_Bool SearchableControlIterator::ShouldHandleElement(const ::com::sun::star::
     if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xProperties) && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xProperties))
     {
         // und das BoundField gueltig ist
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xField( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)(xProperties->getPropertyValue(FM_PROP_BOUNDFIELD).getValue()));
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xField;
+        xProperties->getPropertyValue(FM_PROP_BOUNDFIELD) >>= xField;
         if (xField.is())
         {
             // nehmen wir's
