@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: pl $ $Date: 2002-05-31 15:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,18 +1309,9 @@ Rectangle ListBox::GetDropDownPosSizePixel() const
 
 const Wallpaper& ListBox::GetDisplayBackground() const
 {
-    const Control* pSubControl = mpFloatWin ? static_cast<const Control*>(mpImplWin) : static_cast<const Control*>(mpImplLB);
-
-    if( ! pSubControl->IsBackground() )
-        return Control::GetDisplayBackground();
-
-    const Wallpaper& rBack = pSubControl->GetBackground();
-    if( ! rBack.IsBitmap() &&
-        ! rBack.IsGradient() &&
-        rBack.GetColor().GetColor() == COL_TRANSPARENT
-        )
-        return Control::GetDisplayBackground();
-    return rBack;
+    // !!! recursion does not occur because the ImplListBox is default
+    // initialized to a nontransparent color in Window::ImplInitData
+    return mpImplLB->GetDisplayBackground();
 }
 
 // =======================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:05:42 $
+ *  last change: $Author: pl $ $Date: 2002-05-31 15:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2288,6 +2288,13 @@ long ImplListBox::Notify( NotifyEvent& rNEvt )
     }
 
     return nDone ? nDone : Window::Notify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+const Wallpaper& ImplListBox::GetDisplayBackground() const
+{
+    return maLBWindow.GetDisplayBackground();
 }
 
 // -----------------------------------------------------------------------
