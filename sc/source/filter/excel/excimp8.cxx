@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-19 09:55:42 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 14:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,13 +995,13 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
 
             switch( nFormatsLen )
             {
-                case 10:    nPosF = 0;      nPosL = 0;      nPosP += 7;     break;  // P
+                case 10:    nPosF = 0;      nPosL = 0;      nPosP += 6;     break;  // P
                 case 14:    nPosF = 0;      nPosL += 6;     nPosP = 0;      break;  // L
-                case 18:    nPosF = 0;      nPosL += 6;     nPosP += 15;    break;  // L + P
+                case 18:    nPosF = 0;      nPosL += 6;     nPosP += 14;    break;  // L + P
                 case 124:   nPosF += 74;    nPosL = 0;      nPosP = 0;      break;  // F
-                case 128:   nPosF += 74;    nPosL = 0;      nPosP += 125;   break;  // F + P
+                case 128:   nPosF += 74;    nPosL = 0;      nPosP += 124;   break;  // F + P
                 case 132:   nPosF += 74;    nPosL += 124;   nPosP = 0;      break;  // F + L
-                case 136:   nPosF += 74;    nPosL += 124;   nPosP += 133;   break;  // F + L + P
+                case 136:   nPosF += 74;    nPosL += 124;   nPosP += 132;   break;  // F + L + P
                 default:    nPosF = 0;      nPosL = 0;      nPosP = 0;
             }
 
@@ -1092,20 +1092,18 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
 
             if( nPosP )     // pattern (fill)
             {
-                UINT8           nP;
+                UINT16          nPatt;
                 UINT16          nCol;
-                rIn.Seek( nPosP );
 
-                rIn >> nP >> nCol;
+                rIn.Seek( nPosP );
+                rIn >> nPatt >> nCol;
 
                 UINT8           nF = nCol & 0x007F;
                 UINT8           nB = ( nCol >> 7 ) & 0x007F;
-
-                if( !nP )
-                {// no brush set
-                    nF = nB;
-                    nB = 0xFF;
-                    nP = 1;
+                UINT8           nP = (UINT8)((nPatt >> 10) & 0x003F);
+                if( nP <= 1 )
+                {
+                    nP = nB; nB = nF; nF = nP; nP = 1;
                 }
 
                 XF_Buffer::SetFill( rStyleItemSet, rColBuff, nP, nF, nB );

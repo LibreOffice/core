@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:42:20 $
+ *  last change: $Author: dr $ $Date: 2001-04-19 14:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2703,6 +2703,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( "   " );
                 STARTFLAG();
                 ADDFLAG( 0x0001, " fToughRecalc" );
+                ADDRESERVED( 0xFFFE );
                 PRINT();
                 LINESTART();
                 ADDTEXT( "range: " );
@@ -2869,7 +2870,16 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                         LINESTART();
                         ADDTEXT( "- PATTERN -[   4 ]" );
                         PRINT();
-                        ContDump( 4 );
+                        LINESTART();
+                        UINT16 nVal;
+                        rIn >> nVal;
+                        ADDTEXT( "Pattern(" );      __AddHex( t, nVal );
+                        ADDTEXT( "): " );           __AddDec( t, (UINT16)((nVal >> 10) & 0x003F) );
+                        rIn >> nVal;
+                        ADDTEXT( "   Colors(" );    __AddHex( t, nVal );
+                        ADDTEXT( "): fg=" );        __AddDec( t, (UINT16)((nVal >> 7) & 0x007F) );
+                        ADDTEXT( " bg=" );          __AddDec( t, (UINT16)(nVal & 0x007F) );
+                        PRINT();
                     }
 
                     rIn.Seek( nPosPreForm + nPreForm );
