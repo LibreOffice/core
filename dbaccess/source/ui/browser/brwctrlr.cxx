@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:04:30 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2960,12 +2960,13 @@ void SbaXDataBrowserController::AfterDrop()
         xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
 }
 // -----------------------------------------------------------------------------
-void SbaXDataBrowserController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void SbaXDataBrowserController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
-    OGenericUnoController::loadSubToolbar(_xLayoutManager);
+    OGenericUnoController::onLoadedMenu( _xLayoutManager );
+
     // for task frames, we have our own cut/copy/paste functionality
     // 22.05.2002 - 99030 - fs@openoffice.org
-    if ( m_xCurrentFrame.is() )
+    if ( m_xCurrentFrame.is() && _xLayoutManager.is() )
     {
         if ( m_xCurrentFrame->isTop() )
         {
