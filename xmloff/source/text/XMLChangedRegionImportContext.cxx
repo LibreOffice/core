@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:43:02 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,17 +137,17 @@ void XMLChangedRegionImportContext::StartElement(
             GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                               &sLocalName );
 
-        OUString& rValue = xAttrList->getValueByIndex(nAttr);
+        OUString sValue = xAttrList->getValueByIndex(nAttr);
         if ( XML_NAMESPACE_TEXT == nPrefix )
         {
             if( IsXMLToken( sLocalName, XML_ID ) )
             {
-                sID = rValue;
+                sID = sValue;
             }
             else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
             {
                 sal_Bool bTmp;
-                if( SvXMLUnitConverter::convertBool(bTmp, rValue) )
+                if( SvXMLUnitConverter::convertBool(bTmp, sValue) )
                 {
                     bMergeLastPara = bTmp;
                 }
