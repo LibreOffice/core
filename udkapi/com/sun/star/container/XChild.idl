@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XChild.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module container {
     <p>This interface normally is only supported if the objects all have
     exactly one dedicated parent container.</p>
  */
-interface XChild: com::sun::star::uno::XInterface
+published interface XChild: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
