@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:55:23 $
+ *  last change: $Author: dr $ $Date: 2001-07-19 12:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     FixedLine FL_TREAT_AS_EQUAL
     {
         Pos = MAP_APPFONT( 6, 3 );
-        Size = MAP_APPFONT( 248, 10 );
+        Size = MAP_APPFONT( 248, 8 );
         Text = "Gleichwertig behandeln";
         Text [ ENGLISH ] = "Treat as equal";
         Text[ english_us ] = "Treat as equal";
@@ -103,7 +103,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_CASE
     {
-        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Groﬂ-/Kleinschreibung" ;
         Text [ ENGLISH ] = "Match case" ;
@@ -131,7 +131,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_FULL_HALF_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Normale/halbbreite Formen" ;
         Text [ ENGLISH ] = "Match full/half width form" ;
@@ -159,7 +159,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_HIRAGANA_KATAKANA
     {
-        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Hiragana/Katakana" ;
         Text [ ENGLISH ] = "Match hiragana/katakana" ;
@@ -187,7 +187,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_CONTRACTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Kontraktionen (yo-on, sokuon)" ;
         Text [ ENGLISH ] = "Match contractions (yo-on, sokuon)" ;
@@ -215,7 +215,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_MINUS_DASH_CHOON
     {
-        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Minus/Bindestrich/cho-on" ;
         Text [ ENGLISH ] = "Match minus/dash/cho-on" ;
@@ -243,7 +243,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_REPEAT_CHAR_MARKS
     {
-        Pos = MAP_APPFONT ( 6 , 84 ) ;
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "~Wiederholungszeichen" ;
         Text [ ENGLISH ] = "Match 'repeat character' marks" ;
@@ -271,7 +271,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_VARIANT_FORM_KANJI
     {
-        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "K~anji Variante (itaiji)" ;
         Text [ ENGLISH ] = "Match variant-form kanji (itaiji)" ;
@@ -299,7 +299,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_MATCH_OLD_KANA_FORMS
     {
-        Pos = MAP_APPFONT ( 6 , 112) ;
+        Pos = MAP_APPFONT ( 12 , 112) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "A~lte Kana-Formen" ;
         Text [ ENGLISH ] = "Match old kana forms" ;
@@ -523,8 +523,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     FixedLine FL_IGNORE
     {
-        Pos = MAP_APPFONT( 6, 125 );
-        Size = MAP_APPFONT( 248, 10 );
+        Pos = MAP_APPFONT( 6, 128 );
+        Size = MAP_APPFONT( 248, 8 );
         Text = "Ignorieren";
         Text [ ENGLISH ] = "Ignore";
         Text[ english_us ] = "Ignore";
@@ -550,7 +550,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_IGNORE_PUNCTUATION
     {
-        Pos = MAP_APPFONT ( 6 , 136 ) ;
+        Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Int~erpunktionszeichen" ;
         Text [ ENGLISH ] = "Punctuation characters" ;
@@ -577,7 +577,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_IGNORE_WHITESPACES
     {
-        Pos = MAP_APPFONT ( 136 , 136 ) ;
+        Pos = MAP_APPFONT ( 136 , 139 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Leerraumzei~chen" ;
         Text [ ENGLISH ] = "Whitespace characters" ;
@@ -604,7 +604,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_IGNORE_PROLONGED_SOUNDMARK
     {
-        Pos = MAP_APPFONT ( 6 , 150 ) ;
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Verl~‰ngerte Vokale (cho-on)" ;
         Text [ ENGLISH ] = "Prolonged soundmarks (cho-on)" ;
@@ -631,7 +631,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     };
     CheckBox CB_IGNORE_MIDDLE_DOT
     {
-        Pos = MAP_APPFONT ( 136 , 150 ) ;
+        Pos = MAP_APPFONT ( 136 , 153 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text = "Mittige~r Punkt" ;
         Text [ ENGLISH ] = "Middle dots" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:26:42 $
+ *  last change: $Author: dr $ $Date: 2001-07-19 12:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,33 +548,33 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text = "~Verfügbare Sprachmodule:" ;
-        Text [ English ] = "Available language modules:" ;
-        Text[ english_us ] = "Available language modules:";
-        Text[ portuguese ] = "~Módulos linguísticos disponíveis:";
-        Text[ russian ] = "Äîñòóïíûå ÿçûêîâûå ìîäóëè:";
-        Text[ greek ] = "Äéáèİóéìåò ëåéôïõñãéêİò ìïíÜäåò ãëşóóáò:";
-        Text[ dutch ] = "~Beschikbare taalmodules:";
-        Text[ french ] = "~Modules de langue disponibles :";
-        Text[ spanish ] = "~Módulos disponibles de idioma:";
-        Text[ italian ] = "Moduli linguistici disponibili:";
-        Text[ danish ] = "Available language modules:";
-        Text[ swedish ] = "T~illgängliga språkmoduler:";
-        Text[ polish ] = "Dostêpne modu³y jêzyków:";
-        Text[ portuguese_brazilian ] = "Available language modules:";
-        Text[ japanese ] = "g—p‚Å‚«‚éŒ¾ŒêÓ¼Ş­°Ù:";
-        Text[ korean ] = "»ç¿ë °¡´ÉÇÑ ¾ğ¾î ¸ğµâ:";
+        Text = "~Verfügbare Sprachmodule" ;
+        Text [ English ] = "~Available language modules" ;
+        Text[ english_us ] = "Available language modules";
+        Text[ portuguese ] = "~Módulos linguísticos disponíveis";
+        Text[ russian ] = "Äîñòóïíûå ÿçûêîâûå ìîäóëè";
+        Text[ greek ] = "Äéáèİóéìåò ëåéôïõñãéêİò ìïíÜäåò ãëşóóáò";
+        Text[ dutch ] = "~Beschikbare taalmodules";
+        Text[ french ] = "~Modules de langue disponibles";
+        Text[ spanish ] = "~Módulos disponibles de idioma";
+        Text[ italian ] = "Moduli linguistici disponibili";
+        Text[ danish ] = "Available language modules";
+        Text[ swedish ] = "T~illgängliga språkmoduler";
+        Text[ polish ] = "Dostêpne modu³y jêzyków";
+        Text[ portuguese_brazilian ] = "Available language modules";
+        Text[ japanese ] = "g—p‚Å‚«‚éŒ¾ŒêÓ¼Ş­°Ù";
+        Text[ korean ] = "»ç¿ë °¡´ÉÇÑ ¾ğ¾î ¸ğµâ";
         Text[ chinese_simplified ] = "¿É¹©Ê¹ÓÃµÄÓïÑÔÄ£¿é£º";
         Text[ chinese_traditional ] = "´£¨Ñ¨Ï¥Îªº»y¨¥¼Ò¶ô¡G";
-        Text[ turkish ] = "Available language modules:";
-        Text[ arabic ] = "æÍÏÇÊ ÇááÛÉ ÇáäãØíÉ ÇáãÊæİÑÉ:";
-        Text[ catalan ] = "~Módulos disponibles de idioma:";
-        Text[ finnish ] = "Available language modules:";
+        Text[ turkish ] = "Available language modules";
+        Text[ arabic ] = "æÍÏÇÊ ÇááÛÉ ÇáäãØíÉ ÇáãÊæİÑÉ";
+        Text[ catalan ] = "~Módulos disponibles de idioma";
+        Text[ finnish ] = "Available language modules";
     };
     Control CLB_LINGU_MODULES
     {
         Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 183 , 30 ) ;
+        Size = MAP_APPFONT ( 182 , 30 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -611,9 +611,9 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text = "Benutzerwörterbücher" ;
-        Text [ ENGLISH ] = "Personal dictionaries" ;
-        Text[ english_us ] = "User-defined dictionaries";
+        Text = "Ben~utzerwörterbücher" ;
+        Text [ ENGLISH ] = "~User-defined dictionaries" ;
+        Text[ english_us ] = "~User-defined dictionaries";
         Text[ portuguese ] = "Dicionários do utilizador";
         Text[ russian ] = "Ñëîâàğè ïîëüçîâàòåëÿ";
         Text[ greek ] = "ĞñïóùğéêÜ ëåîéêÜ";
@@ -637,7 +637,7 @@ TabPage RID_SFXPAGE_LINGU
     Control CLB_LINGU_DICS
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
-        Size = MAP_APPFONT ( 183 , 48 ) ;
+        Size = MAP_APPFONT ( 182 , 48 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -674,9 +674,9 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 87 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "~Bearbeiten..." ;
-        Text [ English ] = "Edit..." ;
-        Text[ english_us ] = "~Edit...";
+        Text = "B~earbeiten..." ;
+        Text [ English ] = "E~dit..." ;
+        Text[ english_us ] = "E~dit...";
         Text[ portuguese ] = "~Editar...";
         Text[ russian ] = "Ïğàâêà...";
         Text[ greek ] = "Åğåîåñãáóßá...";
@@ -703,7 +703,7 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Löschen" ;
-        Text [ English ] = "Delete" ;
+        Text [ English ] = "Dele~te" ;
         Text[ english_us ] = "Dele~te";
         Text[ portuguese ] = "E~liminar";
         Text[ russian ] = "Óäàëèòü";
@@ -730,33 +730,33 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text = "Optionen:" ;
-        Text [ English ] = "Options:" ;
-        Text[ english_us ] = "Options:";
-        Text[ portuguese ] = "Opções:";
-        Text[ russian ] = "Ïàğàìåòğû:";
-        Text[ greek ] = "Åğéëïãİò:";
-        Text[ dutch ] = "Opties:";
-        Text[ french ] = "Options :";
-        Text[ spanish ] = "Opciones:";
-        Text[ italian ] = "Opzioni:";
-        Text[ danish ] = "Options:";
-        Text[ swedish ] = "Alternativ:";
-        Text[ polish ] = "Opcje:";
-        Text[ portuguese_brazilian ] = "Options:";
-        Text[ japanese ] = "µÌß¼®İ:";
-        Text[ korean ] = "¿É¼Ç:";
+        Text = "~Optionen" ;
+        Text [ English ] = "~Options" ;
+        Text[ english_us ] = "~Options";
+        Text[ portuguese ] = "Opções";
+        Text[ russian ] = "Ïàğàìåòğû";
+        Text[ greek ] = "Åğéëïãİò";
+        Text[ dutch ] = "Opties";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Opciones";
+        Text[ italian ] = "Opzioni";
+        Text[ danish ] = "Options";
+        Text[ swedish ] = "Alternativ";
+        Text[ polish ] = "Opcje";
+        Text[ portuguese_brazilian ] = "Options";
+        Text[ japanese ] = "µÌß¼®İ";
+        Text[ korean ] = "¿É¼Ç";
         Text[ chinese_simplified ] = "Ñ¡Ïî£º";
         Text[ chinese_traditional ] = "¿ï¶µ¡G";
-        Text[ turkish ] = "Options:";
-        Text[ arabic ] = "ÇáÎíÇÑÇÊ:";
-        Text[ catalan ] = "Opciones:";
+        Text[ turkish ] = "Options";
+        Text[ arabic ] = "ÇáÎíÇÑÇÊ";
+        Text[ catalan ] = "Opciones";
         Text[ finnish ] = "Asetukset";
     };
     Control CLB_LINGU_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 133 ) ;
-        Size = MAP_APPFONT ( 183 , 46 ) ;
+        Size = MAP_APPFONT ( 182 , 46 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -765,9 +765,9 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text = "B~earbeiten..." ;
-        Text [ English ] = "E~dit..." ;
-        Text[ english_us ] = "E~dit...";
+        Text = "Be~arbeiten..." ;
+        Text [ English ] = "Ed~it..." ;
+        Text[ english_us ] = "Ed~it...";
         Text[ portuguese ] = "E~ditar...";
         Text[ russian ] = "Ïğàâêà...";
         Text[ greek ] = "~Åğåîåñãáóßá...";
