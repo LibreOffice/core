@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:17:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ Text[English] = "Hint: Currency amounts that refer to external Links as well as 
 Text[ english_us ] = "Remarks: currency amounts connected to external references and currency conversion factors in cell formulas can not be converted.";
     Text[ portuguese ] = "Observaηγo: ι impossνvel converter montantes em moeda ligados a referκncias externas bem como factores de conversγo monetαria em fσrmulas de cιlulas.";
     Text[ russian ] = "Κ Βΰψεμσ ρβεδενθώ: ρσμμϋ βΰλώς, κξςξπϋε ρβÿηΰνϋ ρ βνεψνθμθ ρρϋλκΰμθ, ΰ ςΰκζε τΰκςξπϋ οπεξαπΰηξβΰνθÿ βΰλώςϋ β τξπμσλΰυ ÿχεεκ οπεξαπΰηξβΰςό νεβξημξζνξ.";
-    Text[ greek ] = "Υπόδειξη: Δεν είναι δυνατόν να γίνει μετατροπή ποσών νομίσματος, τα οποία είναι συνδεδεμένα με εξωτερικές αναφορές και παραγόντων μετατροπής νομίσματος σε μαθηματικούς τύπους κελιών.";
+    Text[ greek ] = "Συμβουλή: Δεν είναι δυνατόν να γίνει η μετατροπή ποσών νομίσματος τα οποία είναι συνδεδεμένα με εξωτερικές αναφορές όπως επίσης και παραγόντων μετατροπής νομίσματος σε τύπους κελιών.";
     Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden omgerekend.";
     Text[ french ] = "Avertissement : Il est impossible de convertir les montants liιs ΰ des rιfιrences externes, de mκme que les facteurs de conversion inclus dans des cellules contenant des formules.";
     Text[ spanish ] = "Advertencia: No se pueden convertir los importes unidos a referencias externas ni los factores de conversiσn de moneda en fσrmulas de celdas.";
@@ -490,7 +490,7 @@ Text[ english_us ] = "Templates:";
     Text[ italian ] = "Modelli:";
     Text[ danish ] = "Typografier:";
     Text[ swedish ] = "Mallar:";
-    Text[ polish ] = "Szablony:";
+    Text[ polish ] = "Style:";
     Text[ portuguese_brazilian ] = "Templates:";
     Text[ japanese ] = "ΓέΜίΪ°Δ:";
     Text[ korean ] = "ΕΫΗΓΈ®Ζ®:";
