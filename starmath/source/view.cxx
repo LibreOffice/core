@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 13:00:52 $
+ *  last change: $Author: jp $ $Date: 2001-05-22 15:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,7 +1320,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 if( !bCallExec )
                 {
                     TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                                    GetEditWindow()) );
 
                     if( aDataHelper.GetTransferable().is() &&
                         aDataHelper.HasFormat( FORMAT_STRING ))
@@ -1489,7 +1490,8 @@ void SmViewShell::GetState(SfxItemSet &rSet)
             {
                 AddRemoveClipboardListener( TRUE );
                 TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard() );
+                        TransferableDataHelper::CreateFromSystemClipboard(
+                                                        GetEditWindow()) );
 
                 bPasteState = aDataHelper.GetTransferable().is() &&
                  ( aDataHelper.HasFormat( FORMAT_STRING ) ||
