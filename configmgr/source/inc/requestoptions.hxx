@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ namespace configmgr
                 <FALSE/>, if the default locale should be used
         */
         bool    hasLocale() const { return m_sLocale.getLength() != 0; }
+        /// @returns the locale to get data for
+        bool    isForAllLocales() const;
         /// @returns the locale to get data for
         Locale  getLocale() const { return m_sLocale; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergeddataprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-12 14:10:33 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 09:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ namespace configmgr
     /** Listener interface for receiving notifications
         about changes to previously requested data
     */
-    struct INodeDataListener : Refcounted
+    struct SAL_NO_VTABLE INodeDataListener : Refcounted
     {
         /** is called to indicate changes within the data being observed.
 
@@ -95,7 +95,7 @@ namespace configmgr
 // ---------------------------------------------------------------------------
 
     /// Interface providing access to (merged) data for whole components
-    struct IComponentDataProvider
+    struct SAL_NO_VTABLE IComponentDataProvider
     {
         /** loads merged data for a (complete) tree and returns it as return value.
 
@@ -110,7 +110,7 @@ namespace configmgr
                 The exact exception being thrown may depend on the underlying backend.
 
         */
-        virtual NodeInstance getComponentData(ComponentRequest const & _aRequest)
+        virtual NodeResult getComponentData(ComponentRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
     };
 // ---------------------------------------------------------------------------
@@ -122,7 +122,7 @@ namespace configmgr
         (or even at all).If the provider cannot detect changes
         it may simply ignore a supplied listener.
      */
-    struct INodeDataProvider
+    struct SAL_NO_VTABLE INodeDataProvider
     {
         /** loads merged data for a (partial) tree and returns it as return value.
 
@@ -147,7 +147,7 @@ namespace configmgr
                 if the node cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual NodeInstance getNodeData(NodeRequest const & _aRequest, INodeDataListener * _pListener = NULL)
+        virtual NodeResult getNodeData(NodeRequest const & _aRequest, INodeDataListener * _pListener = NULL)
             CFG_UNO_THROW_ALL() = 0;
 
         /** remove a listener registered for a previous request.
@@ -161,7 +161,7 @@ namespace configmgr
 // ---------------------------------------------------------------------------
 
     /// Interface providing the capability to update node data
-    struct INodeUpdateProvider
+    struct SAL_NO_VTABLE INodeUpdateProvider
     {
         /** applies an update to the stored data.
 
@@ -179,7 +179,7 @@ namespace configmgr
 // ---------------------------------------------------------------------------
 
     /// Interface providing access to (merged) default data
-    struct IDefaultDataProvider
+    struct SAL_NO_VTABLE IDefaultDataProvider
     {
         /** loads default data for a (partial) tree and returns it as return value
 
@@ -195,13 +195,13 @@ namespace configmgr
                 if the default cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual NodeInstance getDefaultData(NodeRequest const & _aRequest)
+        virtual NodeResult getDefaultData(NodeRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
     };
 // ---------------------------------------------------------------------------
 
     /// Interface providing access to template (schema) data
-    struct ITemplateDataProvider
+    struct SAL_NO_VTABLE ITemplateDataProvider
     {
         /** loads a given template and returns it as return value
 
@@ -220,8 +220,22 @@ namespace configmgr
                 if the template cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
         */
-        virtual TemplateInstance getTemplateData(TemplateRequest const & _aRequest)
+        virtual TemplateResult getTemplateData(TemplateRequest const & _aRequest)
             CFG_UNO_THROW_ALL() = 0;
+    };
+// ---------------------------------------------------------------------------
+
+    /// Interface providing access to backend meta-data
+    struct SAL_NO_VTABLE IDataProviderMetaData
+    {
+        /** Queries whether default property values are stripped from
+            a merged result tree or whether they are returned inline.
+
+            @returns
+                <TRUE/>  if default data is stripped from a merged node result, <BR/>
+                <FALSE/> if default data is left in the merged node result
+        */
+        virtual bool isStrippingDefaults() CFG_NOTHROW() = 0;
     };
 // ---------------------------------------------------------------------------
 
@@ -252,6 +266,7 @@ namespace configmgr
     , INodeUpdateProvider
     , IDefaultDataProvider
     , ITemplateDataProvider
+    , IDataProviderMetaData
     {
     };
 
