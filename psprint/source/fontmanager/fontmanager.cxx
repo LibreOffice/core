@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-28 09:49:06 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 15:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,9 @@
 
 
 #include <parseAFM.hxx>
+#define NO_LIST
 #include <sft.h>
+#undef NO_LIST
 
 #ifdef DEBUG
 #include <sys/times.h>

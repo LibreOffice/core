@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-06 16:10:50 $
+ *  last change: $Author: pl $ $Date: 2001-07-26 15:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@
 #endif
 
 #ifndef __SUBFONT_H
+#define NO_LIST
 #include <../fontsubset/sft.h>
+#undef NO_LIST
 #endif
 
 using namespace psp ;
