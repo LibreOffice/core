@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-04-26 11:10:49 $
+ *  last change: $Author: ama $ $Date: 2002-05-30 11:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,9 @@ static FASTBOOL bTableHack = FALSE;
 
 //Um das teure Ermitteln der RetoucheColor zu optimieren
 Color aGlobalRetoucheColor;
+
+Color aBlackColor;
+Color aWhiteColor;
 
 //Statics fuer Umrandungsalignment setzen.
 void SwCalcPixStatics( OutputDevice *pOut )
@@ -1629,6 +1632,11 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     ::SwCalcPixStatics( pSh->GetOut() );
     aGlobalRetoucheColor = pSh->Imp()->GetRetoucheColor();
+    if( pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
+    {
+        aWhiteColor = Color( COL_WHITE );
+        aBlackColor = Color( COL_BLACK );
+    }
 
     //Ggf. eine Action ausloesen um klare Verhaeltnisse zu schaffen.
     //Durch diesen Kunstgriff kann in allen Paints davon ausgegangen werden,
@@ -2388,6 +2396,8 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 |*
 |*************************************************************************/
 
+#define DARK_COLOR 154
+
 void SwFrm::PaintBorderLine( const SwRect& rRect,
                              const SwRect& rOutRect,
                              const SwPageFrm *pPage,
@@ -2403,6 +2413,24 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     BYTE nSubCol = ( IsCellFrm() || IsRowFrm() ) ? SUBCOL_TAB :
                    ( IsInSct() ? SUBCOL_SECT :
                    ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
+    if( pColor && ( IsCellFrm() || IsFlyFrm() ) &&
+        pGlobalShell->GetViewOptions()->IsUseAutomaticBorderColor() )
+    {
+        const SvxBrushItem* pItem;
+        SwRect aOrigBackRect;
+        const Color* pCol = NULL;
+        if( GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) &&
+            !pItem->GetColor().GetTransparency() )
+            pCol = &pItem->GetColor();
+        else
+            pCol = NULL;
+        if( !pCol )
+            pCol = &aGlobalRetoucheColor;
+        if( DARK_COLOR > pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() )
+            pColor = &aWhiteColor;
+        else
+            pColor = &aBlackColor;
+    }
     if ( pPage->GetSortedObjs() )
     {
         SwRegionRects aRegion( aOut, 4, 1 );
