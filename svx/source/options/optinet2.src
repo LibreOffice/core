@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:46:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,7 +1221,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ catalan ] = "Es~til";
         Text[ finnish ] = "~Kirjainkoon vastaavuus";
         Text[ thai ] = "จับคู่~ตัวพิมพ์";
-        Text[ czech ] = "Porovnání velikosti";
+        Text[ czech ] = "Převést na";
         Text[ hebrew ] = "‮חיפוש לפי אותיות קטנות\\גדולות‬";
         Text[ hindi ] = "~केस् तुलना";
         Text[ slovak ] = "~Rozlišovať veľké/malé";
@@ -1378,8 +1378,8 @@ TabPage RID_SVXPAGE_INET_SEARCH
     };
     StringList [ czech ] =
     {
-         < "žádné" ; > ;
-        < "velká" ; > ;
+         < "Beze změny" ; > ;
+        < "VELKÁ" ; > ;
         < "malá" ; > ;
     };
     StringList [ hebrew ] =
@@ -2155,7 +2155,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ arabic ] = "Open h~yperlinks";
         Text[ catalan ] = "Open h~yperlinks";
         Text[ thai ] = "Open h~yperlinks";
-        Text[ czech ] = "Otevřít hypertextové odkazy";
+        Text[ czech ] = "Otevírat odkazy";
         Text[ hebrew ] = "‮פתיחת היפר קישורים‬";
         Text[ hindi ] = "Open h~yperlinks";
         Text[ slovak ] = "Otvorené h~yperlinky";
@@ -2944,6 +2944,8 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
+
 
 
 
