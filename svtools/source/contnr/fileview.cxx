@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:01:07 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,7 @@ public:
     sal_Bool                mbAscending     : 1;
     sal_Bool                mbOnlyFolder    : 1;
     sal_Bool                mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
-    sal_Bool                mbSuspendSelectCallback : 1;
+    sal_Int16               mnSuspendSelectCallback : 1;
 
     IntlWrapper             aIntlWrapper;
 
@@ -1800,7 +1800,7 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool 
     ,aIntlWrapper               ( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() )
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
     ,mpNameTrans                ( NULL )
-    ,mbSuspendSelectCallback    ( sal_False )
+    ,mnSuspendSelectCallback    ( 0 )
     ,mpUrlFilter                ( NULL )
 
 {
@@ -2128,7 +2128,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 // -----------------------------------------------------------------------
 IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, void*, _pSource )
 {
-    return mbSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
+    return mnSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
 }
 
 // -----------------------------------------------------------------------
@@ -2179,9 +2179,9 @@ void SvtFileView_Impl::OpenFolder_Impl()
 
     InitSelection();
 
-    mbSuspendSelectCallback = sal_True;
+    ++mnSuspendSelectCallback;
     mpView->SetUpdateMode( TRUE );
-    mbSuspendSelectCallback = sal_False;
+    --mnSuspendSelectCallback;
 
     ResetCursor();
 }
@@ -2373,7 +2373,10 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
         if ( nPos < mpView->GetEntryCount() )
         {
             pEntry = mpView->GetEntry( nPos );
+
+            ++mnSuspendSelectCallback;  // #i15668# - 2004-04-25 - fs@openoffice.org
             mpView->SetCurEntry( pEntry );
+            --mnSuspendSelectCallback;
         }
     }
 }
