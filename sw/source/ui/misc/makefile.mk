@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:36:58 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:57:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=misc
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
@@ -75,26 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        bookmark.cxx \
-        docfnote.cxx \
-        glosbib.cxx \
-        glosdoc.cxx \
-        glossary.cxx \
-        glshell.cxx \
-        hdftctrl.cxx \
-        insfnote.cxx \
-        insrule.cxx \
-        linenum.cxx \
-        num.cxx \
-        numberingtypelistbox.cxx \
-        outline.cxx \
-        pgfnote.cxx \
-        pggrid.cxx \
-        redlndlg.cxx \
-        srtdlg.cxx
-
-SRCFILES=\
+SRS1NAME=$(TARGET)
+SRC1FILES=\
     bookmark.src \
     docfnote.src \
     glossary.src \
