@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-20 17:16:04 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 15:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,11 +887,35 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             aRet <<= OUString( (sal_Unicode *)rVal.getValue(), 1 );
             break;
 
+        case TypeClass_SHORT:
+            {
+                sal_Int16 nInt(0);
+                rVal >>= nInt;
+                aRet <<= OUString::valueOf( (sal_Int32)nInt );
+            }
+            break;
+
+        case TypeClass_UNSIGNED_SHORT:
+            {
+                sal_uInt16 nInt(0);
+                rVal >>= nInt;
+                aRet <<= OUString::valueOf( (sal_Int32)nInt );
+            }
+            break;
+
         case TypeClass_LONG:
             {
                 sal_Int32 nInt(0);
                 rVal >>= nInt;
                 aRet <<= OUString::valueOf( nInt );
+            }
+            break;
+
+        case TypeClass_UNSIGNED_LONG:
+            {
+                sal_uInt32 nInt(0);
+                rVal >>= nInt;
+                aRet <<= OUString::valueOf( (sal_Int64)nInt );
             }
             break;
 
