@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:43:36 $
+ *  last change: $Author: fs $ $Date: 2001-10-16 15:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,80 +276,89 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
 {
     Reference< ::com::sun::star::form::XForm >  xForm;
 
-    // wenn noch kein TargetForm gefunden, dann aktuelle oder Default
-    if (!xCurrentForm.is())
+    try
     {
-        if (xForms->hasElements())
+        // wenn noch kein TargetForm gefunden, dann aktuelle oder Default
+        if (!xCurrentForm.is())
         {
-            // suche die Standardform
-            ::rtl::OUString ustrStdFormName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
-
-            if (xForms->hasByName(ustrStdFormName))
+            if (xForms->hasElements())
             {
-                try
+                // suche die Standardform
+                ::rtl::OUString ustrStdFormName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
+
+                if (xForms->hasByName(ustrStdFormName))
                 {
-                    xForms->getByName(ustrStdFormName) >>= xForm;
-                }
-                catch(::com::sun::star::container::NoSuchElementException &)
-                {
-                    DBG_ERROR("NoSuchElementException occured!");
-                }
-                catch(::com::sun::star::lang::WrappedTargetException &)
-                {
-                    DBG_ERROR("WrappedTargetException occured!");
+                    try
+                    {
+                        xForms->getByName(ustrStdFormName) >>= xForm;
+                    }
+                    catch(::com::sun::star::container::NoSuchElementException &)
+                    {
+                        DBG_ERROR("NoSuchElementException occured!");
+                    }
+                    catch(::com::sun::star::lang::WrappedTargetException &)
+                    {
+                        DBG_ERROR("WrappedTargetException occured!");
+                    }
+
                 }
 
+                // gibt es denn ueberhaupt eine
+                if (!xForm.is())
+                {
+                    Reference< ::com::sun::star::container::XIndexAccess >  xGetFirst(xForms, UNO_QUERY);
+                    DBG_ASSERT(xGetFirst.is(), "FmFormPageImpl::getDefaultForm : no IndexAccess on my form container !");
+                        // wenn das anspringt, muesste man sich die Namen des NameContainers geben lassen und dann das Objekt fuer den
+                        // ersten Namen erfragen ... aber normalerweise sollte die FOrms-Sammlung auch einen IndexAccess haben
+                    xGetFirst->getByIndex(0) >>= xForm;
+                }
+            }
+        }
+        else
+            xForm = xCurrentForm;
+
+        // keine gefunden dann standard erzeugen
+        if (!xForm.is())
+        {
+
+            SdrModel* pModel = pPage->GetModel();
+            XubString aStr(SVX_RES(RID_STR_FORM));
+            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
+            aUndoStr.SearchAndReplace('#', aStr);
+            pModel->BegUndo(aUndoStr);
+
+            xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
+            // a form should always have the command type table as default
+            Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
+            try
+            {
+                xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
+            }
+            catch(Exception&)
+            {
             }
 
-            // gibt es denn ueberhaupt eine
-            if (!xForm.is())
-            {
-                Reference< ::com::sun::star::container::XIndexAccess >  xGetFirst(xForms, UNO_QUERY);
-                DBG_ASSERT(xGetFirst.is(), "FmFormPageImpl::getDefaultForm : no IndexAccess on my form container !");
-                    // wenn das anspringt, muesste man sich die Namen des NameContainers geben lassen und dann das Objekt fuer den
-                    // ersten Namen erfragen ... aber normalerweise sollte die FOrms-Sammlung auch einen IndexAccess haben
-                xGetFirst->getByIndex(0) >>= xForm;
-            }
+            ::rtl::OUString aName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
+            xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
+
+
+            Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, UNO_QUERY);
+            pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                                                       FmUndoContainerAction::Inserted,
+                                                       xContainer,
+                                                       xForm,
+                                                       xContainer->getCount()));
+            xForms->insertByName(aName, makeAny(xForm));
+            xCurrentForm = xForm;
+            pModel->EndUndo();
         }
     }
-    else
-        xForm = xCurrentForm;
-
-    // keine gefunden dann standard erzeugen
-    if (!xForm.is())
+    catch( const Exception& )
     {
-
-        SdrModel* pModel = pPage->GetModel();
-        XubString aStr(SVX_RES(RID_STR_FORM));
-        XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-        aUndoStr.SearchAndReplace('#', aStr);
-        pModel->BegUndo(aUndoStr);
-
-        xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
-        // a form should always have the command type table as default
-        Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
-        try
-        {
-            xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
-        }
-        catch(Exception&)
-        {
-        }
-
-        ::rtl::OUString aName = ::rtl::OUString(SVX_RES(RID_STR_STDFORMNAME));
-        xSet->setPropertyValue(FM_PROP_NAME, makeAny(aName));
-
-
-        Reference< ::com::sun::star::container::XIndexContainer >  xContainer(xForms, UNO_QUERY);
-        pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
-                                                   FmUndoContainerAction::Inserted,
-                                                   xContainer,
-                                                   xForm,
-                                                   xContainer->getCount()));
-        xForms->insertByName(aName, makeAny(xForm));
-        xCurrentForm = xForm;
-        pModel->EndUndo();
+        DBG_ERROR( "FmFormPageImpl::getDefaultForm: caught an exception!" );
+        xForm.clear();
     }
+
     return xForm;
 }
 
