@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-06 14:47:18 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 17:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,10 @@
 #include "xmlexp.hxx"
 #endif
 
-namespace rtl { class OUString; }
-namespace com { namespace sun { namespace star {
-    namespace frame { class XModel; }
-    namespace lang { class XMultiServiceFactory; }
-    namespace uno { template<class X> class Reference; }
-    namespace uno { class XInterface; }
-    namespace uno { class Exception; }
-    namespace xml { namespace sax { class XDocumentHandler; } }
-} } }
-
 class XMLMetaExportComponent : public SvXMLExport
 {
 public:
     XMLMetaExportComponent();
-
-    XMLMetaExportComponent(
-        const ::rtl::OUString& rFileName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & rModel);
 
     ~XMLMetaExportComponent();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-06 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 17:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,14 +120,6 @@ using namespace ::com::sun::star;
 
 XMLMetaExportComponent::XMLMetaExportComponent() :
     SvXMLExport( MAP_INCH, sXML_meta )
-{
-}
-
-XMLMetaExportComponent::XMLMetaExportComponent(
-    const rtl::OUString& rFileName,
-    const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
-    const uno::Reference<frame::XModel> & rModel) :
-        SvXMLExport(rFileName, rHandler, rModel, MAP_INCH)
 {
 }
 
