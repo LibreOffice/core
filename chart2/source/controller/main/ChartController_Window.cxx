@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:09:46 $
+ *  last change: $Author: iha $ $Date: 2004-01-22 19:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,7 +856,7 @@ util::URL createDispatchURL( USHORT nSID )
 void ChartController::execute_Command( const CommandEvent& rCEvt )
 {
     // pop-up menu
-    if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !m_pDrawViewWrapper->IsAction())
+    if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU && m_pDrawViewWrapper && !m_pDrawViewWrapper->IsAction())
     {
         m_pChartWindow->ReleaseMouse();
 
