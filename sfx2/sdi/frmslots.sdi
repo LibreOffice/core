@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: kz $ $Date: 2004-02-25 15:39:13 $ $Revision: 1.16 $
+    $Author: hr $ $Date: 2004-08-02 15:02:56 $ $Revision: 1.17 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -11,13 +11,6 @@ interface Window : Object
     Automation = FALSE ;
 ]
 {
-     //---------------------------------------------------------------------
-    SID_CUSTOMIZETOOLBOX // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ChildWindowExecute ;
-        StateMethod = ChildWindowState ;
-    ]
-
     //----------------------------------------------------------------------
     SID_HYPERLINK_INSERT
     [
@@ -91,52 +84,7 @@ interface Window : Object
         StateMethod = ChildWindowState ;
     ]
 
-        SID_TOGGLE_MENUBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-    SID_TOGGLECOMMONTASKBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-    SID_TOGGLENAVBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-    SID_TOGGLEMACROBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-    SID_TOGGLEOPTIONBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_TOGGLEFUNCTIONBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_TOGGLEOBJECTBAR // ole(no) api(final/play/rec)
-    [
-        ExecMethod = ToolboxExec_Impl ;
-        StateMethod = ToolboxState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_TOGGLETOOLBAR // ole(no) api(final/play/rec)
+    SID_TOGGLE_MENUBAR // ole(no) api(final/play/rec)
     [
         ExecMethod = ToolboxExec_Impl ;
         StateMethod = ToolboxState_Impl ;
