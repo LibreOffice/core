@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
+ *  last change: $Author: ssa $ $Date: 2002-05-06 13:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,16 +173,8 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
             rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() )
         {
             // Ctrl-F6 goes directly to the document
-            Window *pWin = this;
-            while( pWin )
-            {
-                if( !pWin->GetParent() )
-                {
-                    pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
-                    return TRUE;
-                }
-                pWin = pWin->GetParent();
-            }
+            GrabFocusToDocument();
+            return TRUE;
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obr $ $Date: 2002-04-30 15:10:04 $
+ *  last change: $Author: ssa $ $Date: 2002-05-06 13:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6614,6 +6614,22 @@ BOOL Window::HasFocus() const
 
 // -----------------------------------------------------------------------
 
+void Window::GrabFocusToDocument()
+{
+    Window *pWin = this;
+    while( pWin )
+    {
+        if( !pWin->GetParent() )
+        {
+            pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+            return;
+        }
+        pWin = pWin->GetParent();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 BOOL Window::HasChildPathFocus( BOOL bSystemWindow ) const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -7625,3 +7641,4 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
     }
     return bRet;
 }
+
