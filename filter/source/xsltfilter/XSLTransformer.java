@@ -139,7 +139,7 @@ public class XSLTransformer
         if ((statsfilepath = System.getProperty(STATSPROP)) != null) {
             try {
                 File statsfile = new File(statsfilepath);
-                statsp = new PrintStream(new FileOutputStream(statsfile, false));
+                statsp = new PrintStream(new FileOutputStream(statsfile.getPath(), false));
             } catch (java.lang.Exception e)
             {
                 System.err.println("XSLTransformer: could not open statsfile'"+statsfilepath+"'");
