@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: os $ $Date: 2000-09-27 13:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,8 +340,31 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
                     pDoc->SplitNode( *aTmp.GetPoint(), sal_True );
                     break;
                 case ControlCharacter::APPEND_PARAGRAPH:
+                {
                     pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
                     pDoc->AppendTxtNode( *aTmp.GetPoint() );
+
+                    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
+                    SwXTextRange* pRange = 0;
+                    SwXTextCursor* pCursor = 0;
+                    if(xRangeTunnel.is())
+                    {
+                        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
+                                                SwXTextRange::getUnoTunnelId());
+                        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
+                                                SwXTextCursor::getUnoTunnelId());
+                    }
+                    if(pRange)
+                    {
+                        pRange->_CreateNewBookmark(aTmp);
+                    }
+                    else if(pCursor)
+                    {
+                        SwUnoCrsr* pCrsr = pCursor->GetCrsr();
+                        *pCrsr->GetPoint() = *aTmp.GetPoint();
+                        pCrsr->DeleteMark();
+                    }
+                }
                 break;
                 case ControlCharacter::LINE_BREAK:  cIns = 10;      break;
                 case ControlCharacter::SOFT_HYPHEN: cIns = CHAR_SOFTHYPHEN; break;
@@ -1497,38 +1520,4 @@ void    SwXHeadFootText::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify( this, pOld, pNew);
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2000/09/18 16:04:36  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.8  2000/09/01 14:23:23  os
-    #78380# Header and footer separated
-
-    Revision 1.7  2000/08/24 15:40:28  os
-    new control character: APPEND_PARAGRAPH
-
-    Revision 1.6  2000/08/04 11:47:56  jp
-    Soft-/HardHyphens & HardBlanks changed from attribute to unicode character
-
-    Revision 1.5  2000/07/11 13:43:44  os
-    #76708# insert/remove paragraphs before/behind tables
-
-    Revision 1.4  2000/07/10 11:37:51  os
-    #76149# throw correct exception
-
-    Revision 1.3  2000/06/29 08:11:05  os
-    SwXText inherits XTypeProvider
-
-    Revision 1.2  2000/05/16 17:21:44  jp
-    Changes for Unicode
-
-    Revision 1.1  2000/05/04 15:15:05  os
-    reduce size of unoobj.cxx
-
-
-------------------------------------------------------------------------*/
-
 
