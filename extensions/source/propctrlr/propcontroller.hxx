@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:06:45 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XINTROSPECTIONACCESS_HPP_
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -119,8 +122,8 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
@@ -144,6 +147,12 @@
 #ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
+#endif
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
+#endif
 
 
 class SvNumberFormatsSupplierObj;
@@ -162,6 +171,8 @@ namespace pcr
 
 #define OWN_PROPERTY_ID_INTROSPECTEDOBJECT  0x0010
 #define OWN_PROPERTY_ID_CURRENTPAGE         0x0011
+#define OWN_PROPERTY_ID_CONTROLCONTEXT      0x0012
+#define OWN_PROPERTY_ID_TABBINGMODEL        0x0013
 
     // control types
     const sal_Int16 CONTROL_TYPE_UNKNOWN    =   0;
@@ -172,11 +183,11 @@ namespace pcr
     //= OPropertyBrowserController
     //========================================================================
     // #95343#------------------------------------------------------------------------------------
-    typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::frame::XController
+    typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::frame::XController
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::awt::XFocusListener
-                                    // #95343# -----------------------
                                     ,   ::com::sun::star::awt::XLayoutConstrains
+                                    ,   ::com::sun::star::beans::XPropertyChangeListener
                                     >   OPropertyBrowserController_Base;
     typedef ::comphelper::OPropertyContainer    OPropertyBrowserController_PropertyBase1;
 
@@ -208,6 +219,10 @@ namespace pcr
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                             m_xIntrospecteeAsProperty;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+                            m_xControlsView;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                            m_xDependentComponent;  // a component which depends on us. Important when suspending the controller
 
         ::cppu::OInterfaceContainerHelper       m_aDisposeListeners;
 
@@ -250,6 +265,8 @@ namespace pcr
         sal_Bool    m_bHasListSource            : 1;
         sal_Bool    m_bHasCursorSource          : 1;
         sal_Bool    m_bContainerFocusListening  : 1;
+        sal_Bool    m_bSuspendingDependentComp  : 1;
+        sal_Bool    m_bInspectingSubForm        : 1;
 
     protected:
         // good callback candidates:
@@ -260,7 +277,7 @@ namespace pcr
         ::rtl::OUString getStringRepFromPropertyValue(const ::com::sun::star::uno::Any& _rValue, sal_Int32 _nPropId);
 
         // helper to find a string within a string list
-        sal_Int32 GetStringPos(const String& _rEntry, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rEntries);
+        sal_Int32 GetStringPos( const String& _rEntry, const ::std::vector< String >& _rEntries);
 
         // helper
         ::com::sun::star::beans::Property getIntrospecteeProperty(const ::rtl::OUString& _rName);
@@ -306,6 +323,9 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                         sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
+
+        // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     public:
         OPropertyBrowserController(
@@ -353,6 +373,7 @@ namespace pcr
         sal_Bool haveView() const { return NULL != m_pView; }
 
         OPropertyEditor*    getPropertyBox() { return m_pView->getPropertyBox(); }
+        Window*             getDialogParent();
 
         // set a new object (a smaller version of bindToObject)
         virtual sal_Bool setObject(const ::com::sun::star::uno::Any& _rIntrospectee, const ::com::sun::star::uno::Any& _rControl);
@@ -385,6 +406,10 @@ namespace pcr
         */
         void    updateDependentProperties( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue );
 
+        /** updates the state of a property which depends on more than one other property value
+        */
+        void    updateComplexPropertyDependency( const ::rtl::OUString& _rPropertyName );
+
         /** sets the modified flag of our document
 
             <p>The document is searched by traveling up the component hierarchy, starting with
@@ -404,6 +429,28 @@ namespace pcr
         void    enablePropertyLines( const ::rtl::OUString* _pPropertyStart, const ::rtl::OUString* _pPropertyEnd,
             sal_Bool _bEnable );
 
+        /** enables the lines for the properties given, if and only if the given property value denotes
+            a non-empty string
+
+            @param _pPropertyStart
+                iterator pointing to the first property name
+            @param _pPropertyStart
+                iterator pointing behind the last property name
+            @param _rStringPropertyValue
+                the value of a string property
+        */
+        void    enablePropertyLinesIfNonEmptyString( const ::rtl::OUString* _pPropertyStart, const ::rtl::OUString* _pPropertyEnd,
+            const ::com::sun::star::uno::Any& _rStringPropertyValue );
+
+        // some property values are faked, and not used in the way they're provided by our inspectee
+        void        fakePropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nPropId );
+
+        /** classifies our introspecty, in case it's a control model, by ClassId
+
+            Note that UNO dialog controls are also classified, though they don't have the ClassId property
+        */
+        void        classifyControlModel( );
+
         void SetCursorSource( sal_Bool _bConnect, sal_Bool _bInit );
         void SetListSource(sal_Bool _bInit = sal_False);
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
@@ -416,19 +463,38 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     ensureRowsetConnection();
 
+        /// create an empty top-level frame, which does not belong to the desktop's frame list
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                    createEmptyParentlessTask( ) const;
+
         /** get the rowset for the object we're inspecting
-            <p>if we inspect a form, the rowset is the object itself</p>
-            <p>if we're inspecting a form control, the XRowSet interface is looked for at the parent.</p>
-            <p>if we're inspectting a grid column, the XRowSet is looked for at the parent of the parent</p>
+
+            If we inspect a form, the rowset is the object itself
+
+            If we're inspecting a form control, the XRowSet interface is looked for at the parent.
+
+            If we're inspectting a grid column, the XRowSet is looked for at the parent of the parent.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
                     getRowSet( ) const;
 
+        /** determines whether the given form has a valid data source signature.
+
+            Valid here means that the DataSource property denotes an existing data source, and the
+            Command property is not empty. No check is made whether the value of the Command property
+            denotes an existent object, since this would be way too expensive.
+
+            @param _rxForm
+                the form to check. Must not be <NULL/>.
+        */
+        bool        hasValidDataSourceSignature(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm
+                    ) SAL_THROW(());
 
         sal_uInt32      GetPropertyPos(const ::rtl::OUString& _rPropName);
         ::rtl::OUString GetPropertyValue(const ::rtl::OUString& _rPropName);
         ::com::sun::star::uno::Any
-                        GetPropertyUnoValue( const ::rtl::OUString& _rPropName );
+                        GetUnoPropertyValue( const ::rtl::OUString& _rPropName, bool _bCheckExistence = false );
 
         void syncPropertyToView();
         void syncViewToProperty();
@@ -444,8 +510,21 @@ namespace pcr
         void SetQueries(OLineDescriptor& _rProperty);
         void SetFields(OLineDescriptor& _rProperty);
 
+        void doEnterLinkedFormFields();
+        void doDesignSQLCommand( );
+        void executeFilterOrSortDialog( bool _bFilter );
+        void chooseListSelection( const ::rtl::OUString& _rProperty );
+
         void initFormStuff();
         void deinitFormStuff();
+
+        /// closes the component denoted by m_xDependentComponent
+        void     closeDependentComponent();
+        /** suspends the component denoted by m_xDependentComponent
+        */
+        sal_Bool suspendDependentComponent();
+        /// called whenever the component denoted by m_xDependentComponent has been closed <em>by an external instance</em>
+        void     dependentComponentClosed();
 
         sal_Bool        implGetCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
         ::rtl::OUString implGetStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
@@ -463,7 +542,16 @@ namespace pcr
 
         sal_Bool Construct(Window* _pParentWin);
 
-        sal_Int16 getControlType() const;
+        /// determines whether we're inspecting a UNO dialog control or a form control
+        sal_Int16       getControlType() const;
+
+        /// determines whether the given name denotes an existent data source
+        bool isValidDataSourceName( const ::rtl::OUString& _rDSName );
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                        getDocumentModel() const;
+        ::rtl::OUString getDocumentURL() const;
+        FieldUnit       getDocumentMeasurementUnit() const;
 
     private:
         DECL_LINK(OnPageActivation, void*);
