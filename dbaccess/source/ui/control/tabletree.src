@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:01:18 $
+ *  last change: $Author: fs $ $Date: 2000-10-09 12:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,17 @@ String STR_INVALIDREGISTEREDDRIVER
     Text [ english_us ] = "The driver registered for the URL #connurl# does not support a required interface (com.sun.star.sdbc.XDataDefinitionSupplier).";
 };
 
+String STR_COULDNOTCONNECT
+{
+    Text = "Es konnte keine Verbindung für die URL #connurl# aufgebaut werden.";
+    Text [ english ] = "A connection could not be established for URL #connurl#.";
+    Text [ english_us ] = "A connection could not be established for URL #connurl#.";
+};
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
-    Text = "Es konnte keine Verbindung für die URL #connurl# aufgebaut werden. Bitte ueberpruefen Sie die aktuellen Einstellungen.";
-    Text [ english ] = "A connection could not be established for URL #connurl#. Please check the current settings.";
-    Text [ english_us ] = "A connection could not be established for URL #connurl#. Please check the current settings.";
+    Text = "Bitte ueberpruefen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Passwort.";
+    Text [ english ] = "Please check the current settings, e.g. with respect to user name and password.";
+    Text [ english_us ] = "Please check the current settings, e.g. with respect to user name and password.";
 };
 String STR_NOTABLEINFO
 {
@@ -178,6 +184,9 @@ String STR_NOTABLEINFO
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:01:18  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
