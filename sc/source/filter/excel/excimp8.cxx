@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:32:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ void ImportExcel8::ApplyEscherObjects()
                         {
                             if( pCtrlObj->GetType() == EXC_OBJ_CMO_COMBOBOX )
                             {
-                                if( const XclImpEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
+                                if( const XclEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
                                 {
                                     bool bSkipObj = aPivotTabList.IsInPivotRange( pAnchor->mnLCol, pAnchor->mnTRow, pAnchor->mnScTab );
                                     if( !bSkipObj && pExcRoot->pAutoFilterBuffer )
