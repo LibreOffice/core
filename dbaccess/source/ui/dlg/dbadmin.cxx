@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:44:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTOINCREMENTVALUE, PROPERTY_AUTOINCREMENTCREATION));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEVALUE, ::rtl::OUString::createFromAscii("AutoRetrievingStatement")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEENABLED, ::rtl::OUString::createFromAscii("IsAutoRetrievingEnabled")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOSLINEENDS, ::rtl::OUString::createFromAscii("PreferDosLikeLineEnds")));
 
     // special settings for adabas
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
@@ -755,12 +756,13 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_AUTOINCREMENTVALUE, String());
     *pCounter++ = new SfxStringItem(DSID_AUTORETRIEVEVALUE, String());
     *pCounter++ = new SfxBoolItem(DSID_AUTORETRIEVEENABLED, sal_False);
-
+    *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, sal_False);
 
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -1645,7 +1647,7 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
     const sal_Int32* pRelevantItems = getRelevantItems(_rSource);
-    DBG_ASSERT(pRelevantItems, "ODbAdminDialog::translateProperties: invalid item ids got from the page!");
+    DBG_ASSERT(pRelevantItems, "ODbAdminDialog::fillDatasourceInfo: invalid item ids got from the page!");
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
@@ -1934,6 +1936,26 @@ IMPL_LINK(ODbAdminDialog, OnRestoreDatasource, Window*, _pWindow)
 }
 
 //-------------------------------------------------------------------------
+void ODbAdminDialog::initializeNewlyCreatedDataSource( ODatasourceMap::Iterator _aWhich )
+{
+    // if this is a *new* MS-Access data source, set the PreferDosLikeLineEnds property
+    // #13497# / 2004-03-18 / fs@openoffice.org
+    OSL_ENSURE( _aWhich->isNew() && _aWhich->getModifications(), "ODbAdminDialog::initializeNewlyCreatedDataSource: invalid data source iterator!" );
+
+    DATASOURCE_TYPE eType = getDatasourceType( *_aWhich->getModifications() );
+    if ( DST_ADO == eType )
+    {
+        SFX_ITEMSET_GET( *_aWhich->getModifications(), pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
+        if ( pConnectURL->GetValue().SearchAscii( "Microsoft.Jet.OLEDB." ) != STRING_NOTFOUND )
+        {
+            SfxItemSet aNewItems( *_aWhich->getModifications()->GetPool() );
+            aNewItems.Put( SfxBoolItem( DSID_DOSLINEENDS, TRUE ) );
+            m_aDatasources.update( _aWhich->getName(), aNewItems );
+        }
+    }
+}
+
+//-------------------------------------------------------------------------
 ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 {
     if (!PrepareLeaveCurrentPage())
@@ -2038,6 +2060,9 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
                 {
                     eResult = AR_LEAVE_MODIFIED;
                         // we changes something
+
+                    if ( aLoop->isNew() )
+                        initializeNewlyCreatedDataSource( aLoop );
 
                     // put the remembered settings into the property set
                     translateProperties(*aLoop->getModifications(), xDatasource);
