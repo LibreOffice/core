@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:33:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,10 @@ NameBuffer*     ExcDocument::pTabNames = NULL;
 
 
 
-static String lcl_GetVbaTabName( UINT16 n )
+static String lcl_GetVbaTabName( SCTAB n )
 {
     String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
-    aRet += String::CreateFromInt32( n );
+    aRet += String::CreateFromInt32( static_cast<sal_uInt16>(n) );
     return aRet;
 }
 
@@ -159,7 +159,7 @@ DefRowXFs::DefRowXFs( void )
 }
 
 
-BOOL DefRowXFs::ChangeXF( sal_uInt16 nRow, sal_uInt32& rnXFId )
+BOOL DefRowXFs::ChangeXF( SCROW nRow, sal_uInt32& rnXFId )
 {
     XclExpDefRowXFVec::const_iterator aBegin = maXFList.begin(), aIter = aBegin, aEnd = maXFList.end();
     if( nRow > nLastRow )
@@ -193,7 +193,7 @@ ExcTable::ExcTable( RootData* pRD ) :
 {   }
 
 
-ExcTable::ExcTable( RootData* pRD, UINT16 nScTable ) :
+ExcTable::ExcTable( RootData* pRD, SCTAB nScTable ) :
     ExcRoot( pRD ),
     nScTab( nScTable ),
     nExcTab( pRD->pER->GetTabInfo().GetXclTab( nScTable ) ),
@@ -238,7 +238,7 @@ void ExcTable::AddUsedRow( ExcRow*& rpRow )
 }
 
 
-void ExcTable::SetDefRowXF( sal_uInt16 nRow, sal_uInt32 nXFId )
+void ExcTable::SetDefRowXF( SCROW nRow, sal_uInt32 nXFId )
 {
     if( !pDefRowXFs )
         pDefRowXFs = new DefRowXFs;
@@ -259,9 +259,9 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     else
         Add( new ExcBofW8 );
 
-    UINT16  nC;
+    SCTAB   nC;
     String  aTmpString;
-    UINT16  nScTabCount     = rTabInfo.GetScTabCount();
+    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
     UINT16  nCodenames      = rTabInfo.GetXclCodenameCount();
 
@@ -397,7 +397,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
                 rBSRecList.Append( pBS );
             }
 
-        for( UINT16 nAdd = 0; nC < nCodenames ; nC++, nAdd++ )
+        for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
         {
             aTmpString = lcl_GetVbaTabName( nAdd );
             pBS = new ExcBundlesheet8( aTmpString );
@@ -443,16 +443,16 @@ void ExcTable::FillAsTable( void )
         return;
     }
 
-    UINT16                  nLastCol, nLastRow,         // in Tabelle
-                            nFirstCol, nFirstRow;
-    UINT16                  nPrevRow = 0;
-    UINT16                  nColMin;                    // fuer aktuelle Zeile
+     SCCOL                  nLastCol, nFirstCol;
+     SCROW                  nLastRow, nFirstRow;            // in Tabelle
+     SCROW                  nPrevRow = 0;
+     SCCOL                  nColMin;                    // fuer aktuelle Zeile
                                                         //  Row-Records
-    UINT16                  nCol = 0;
-    UINT16                  nRow = 0;
+    SCCOL                   nCol = 0;
+    SCROW                   nRow = 0;
 
-    UINT16                  nMaxFlagCol = rDoc.GetLastFlaggedCol( nScTab );
-    UINT16                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );
+    SCCOL                   nMaxFlagCol = rDoc.GetLastFlaggedCol( nScTab );
+    SCROW                  nMaxFlagRow = rDoc.GetLastFlaggedRow( nScTab );
 
     ExcCell*                pAktExcCell;
     SvNumberFormatter&      rFormatter = *rR.pDoc->GetFormatTable();
@@ -475,7 +475,7 @@ void ExcTable::FillAsTable( void )
     ExcFmlaResultStr*       pFormulaResult = NULL;
 
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
-    DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= static_cast<sal_uInt16>(MAXTAB)), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     rDoc.GetTableArea( nScTab, nLastCol, nLastRow );
 
@@ -491,15 +491,15 @@ void ExcTable::FillAsTable( void )
     ScOutlineArray*         pOLRowArray = NULL;
     if( pOLTable )
     {
-        UINT16              nStart, nEnd;
-        UINT16              nMaxOLCol = 0;
-        UINT16              nMaxOLRow = 0;
+        SCCOLROW            nStart, nEnd;
+        SCCOL               nMaxOLCol = 0;
+        SCROW               nMaxOLRow = 0;
 
         pOLColArray = pOLTable->GetColArray();
         if( pOLColArray )
         {
             pOLColArray->GetRange( nStart, nEnd );
-            nMaxOLCol = nEnd + 1;
+            nMaxOLCol = static_cast<SCCOL>(nEnd + 1);
         }
         nMaxFlagCol = Max( nMaxFlagCol, nMaxOLCol );
 
@@ -511,8 +511,8 @@ void ExcTable::FillAsTable( void )
         }
         nMaxFlagRow = Max( nMaxFlagRow, nMaxOLRow );
     }
-    nMaxFlagCol = Min( nMaxFlagCol, (UINT16) MAXCOL );
-    nMaxFlagRow = Min( Min( nMaxFlagRow, (UINT16) MAXROW ), rR.nRowMax );
+    nMaxFlagCol = Min( nMaxFlagCol, MAXCOL );
+    nMaxFlagRow = Min( Min( nMaxFlagRow, MAXROW ), rR.nRowMax );
 
     ExcEOutline aExcOLCol( pOLColArray );
     ExcEOutline aExcOLRow( pOLRowArray );
@@ -586,7 +586,7 @@ void ExcTable::FillAsTable( void )
 
     // COLINFO records for all columns
     XclExpColinfo* pColinfo = NULL;
-    for( sal_uInt16 nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
     {
         sal_uInt32 nColXFId = rXFBuffer.Insert( rDoc.GetPattern( nScCol, MAXROW, nScTab ) );
         if( !pColinfo || !pColinfo->Expand( nScCol, nScTab, nColXFId, aExcOLCol ) )
@@ -776,16 +776,16 @@ void ExcTable::FillAsTable( void )
         // #i11733# not "else" - pAktScCell may be set to NULL above (empty note cell)
         if( !pAktScCell )
         {// leere Zelle mit Attributierung
-            UINT16  nColCnt = aIterator.GetEndCol() - aIterator.GetStartCol() + 1;
+            SCCOL   nColCnt = aIterator.GetEndCol() - aIterator.GetStartCol() + 1;
 
             if( pLastBlank && pLastBlank->GetLastCol() + 1 == aIterator.GetStartCol() )
             {
-                pLastBlank->Add( aScPos, pPatt, rR, nColCnt, *this );
+                pLastBlank->Add( aScPos, pPatt, rR, static_cast<sal_uInt16>(nColCnt), *this );
                 pAktExcCell = NULL;    // kein NEUER Record!
             }
             else
             {
-                pLastBlank = new ExcBlankMulblank( aScPos, pPatt, rR, nColCnt, *this );
+                pLastBlank = new ExcBlankMulblank( aScPos, pPatt, rR, static_cast<sal_uInt16>(nColCnt), *this );
                 pAktExcCell = pLastBlank;
             }
         }
@@ -857,8 +857,8 @@ void ExcTable::FillAsTable( void )
                             (pLastBlank ? pLastBlank->GetXFId() :
                             (pLastRKMulRK ? pLastRKMulRK->GetXFId() :
                             XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_DEFAULTCELL ))));
-                for( UINT16 iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
-                    rR.pCellMerging->Append( iCol, rItem.GetColMerge(), nRow, rItem.GetRowMerge(), nXFId );
+                for( SCCOL iCol = aIterator.GetStartCol(); iCol <= aIterator.GetEndCol(); iCol++ )
+                    rR.pCellMerging->Append( static_cast<sal_uInt16>(iCol), static_cast<sal_uInt16>(rItem.GetColMerge()), static_cast<sal_uInt16>(nRow), static_cast<sal_uInt16>(rItem.GetRowMerge()), nXFId );
             }
 
             // data validation
@@ -999,7 +999,7 @@ void ExcTable::FillAsTable( void )
 void ExcTable::NullTab( const String* pCodename )
 {
     DBG_ASSERT( (nScTab >= 0L) && (nScTab <= MAXTAB), "-ExcTable::Table(): nScTab - no ordinary table!" );
-    DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
+    DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= static_cast<sal_uInt16>(MAXTAB)), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     RootData&       rR = *pExcRoot;
     const XclExpRoot& rRoot = *rR.pER;
@@ -1034,7 +1034,7 @@ void ExcTable::NullTab( const String* pCodename )
 }
 
 
-BOOL ExcTable::ModifyToDefaultRowXF( sal_uInt16 nRow, sal_uInt32& rnXFId )
+BOOL ExcTable::ModifyToDefaultRowXF( SCROW nRow, sal_uInt32& rnXFId )
 {
     if( pDefRowXFs )
         return pDefRowXFs->ChangeXF( nRow, rnXFId );
@@ -1085,8 +1085,8 @@ void ExcDocument::ReadDoc( void )
 {
     aHeader.FillAsHeader( aBundleSheetRecList );
 
-    USHORT nScTabCount = ::std::max< USHORT >(
-        GetTabInfo().GetScTabCount(), GetTabInfo().GetXclCodenameCount() );
+    SCTAB nScTabCount = ::std::max< SCTAB >(
+        GetTabInfo().GetScTabCount(), static_cast<SCTAB>(GetTabInfo().GetXclCodenameCount()) );
 
     while( GetCurrScTab() < nScTabCount )
     {
