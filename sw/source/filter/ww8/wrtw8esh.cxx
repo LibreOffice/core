@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:39:29 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,14 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                 aRect -= aIter->maParentPos;
                 aObjPos = aRect.TopLeft();
                 if (VERT_NONE == rVOr.GetVertOrient())
-                    aObjPos.Y() = rVOr.GetPos();
+                {
+                    // CMC, OD 24.11.2003 #i22673#
+                    SwRelationOrient eOri = rVOr.GetRelationOrient();
+                    if (eOri == REL_CHAR || eOri == REL_VERT_LINE)
+                        aObjPos.Y() = -rVOr.GetPos();
+                    else
+                        aObjPos.Y() = rVOr.GetPos();
+                }
                 if (HORI_NONE == rHOr.GetHoriOrient())
                     aObjPos.X() = rHOr.GetPos();
                 aRect.SetPos( aObjPos );
@@ -2167,7 +2174,8 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
     const SwFmtHoriOrient&  rHoriOri = rFmt.GetHoriOrient();
     const SwFmtVertOrient&  rVertOri = rFmt.GetVertOrient();
 
-    SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
+    const SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
+    // CMC, OD 24.11.2003 #i22673#
     SwVertOrient eVOri = rVertOri.GetVertOrient();
 
     SwRelationOrient eHRel = rHoriOri.GetRelationOrient();
@@ -2276,6 +2284,8 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
             break;
     }
 
+    // CMC, OD 24.11.2003 #i22673#
+    bool bVertSwap = false;
     switch( eVRel )
     {
         case FRAME:
@@ -2285,13 +2295,47 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
             nVIndex |= 0x00010000;
             break;
         case REL_CHAR:
+            bVertSwap = true;
             nVIndex |= 0x00020000;
+            break;
+        case REL_VERT_LINE:
+            bVertSwap = true;
+            nVIndex |= 0x00040000;
             break;
         default:
             nVIndex |= 0x00030000; // PRTAREA
             break;
     }
 
+    // CMC, OD 24.11.2003 #i22673#
+    // When anchored vertically relative to line, (or to char) bottom becomes top
+    // and vice versa
+    if (bVertSwap)
+    {
+        switch (eVOri)
+        {
+            case VERT_TOP:
+                eVOri = VERT_BOTTOM;
+                break;
+            case VERT_BOTTOM:
+                eVOri = VERT_TOP;
+                break;
+            case VERT_CHAR_TOP:
+                eVOri = VERT_CHAR_BOTTOM;
+                break;
+            case VERT_CHAR_BOTTOM:
+                eVOri = VERT_CHAR_TOP;
+                break;
+            case VERT_LINE_TOP:
+                eVOri = VERT_LINE_BOTTOM;
+                break;
+            case VERT_LINE_BOTTOM:
+                eVOri = VERT_LINE_TOP;
+                break;
+            default:
+                break;
+        }
+    }
     switch( eVOri )
     {
         case VERT_TOP:
@@ -2601,6 +2645,16 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
                 0x12020223,  //               VERT_CENTER
                 0x12020302,  //               VERT_NONE
                 0x12020633,  //               VERT_CHAR_BOTTOM (value: 6)
+    // CMC, OD 24.11.2003 #i22673# - extending for vertical alignment at top of line
+    // SwRelationOrient: "Character" == REL_VERT_LINE: 4
+    //               |
+                0x12040013,  //               VERT_TOP
+                0x12040123,  //               VERT_BOTTOM
+                0x12040233,  //               VERT_CENTER
+                0x12040303,  //               VERT_NONE
+                0x12040713,  //               VERT_LINE_TOP
+                0x12040823,  //               VERT_LINE_BOTTOM
+                0x12040933,  //               VERT_LINE_CENTER
 
     // RndStdIds: "as character" == FLY_IN_CNTNT: 0x13
     //
