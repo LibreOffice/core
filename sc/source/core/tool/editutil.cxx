@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:55:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
 
     Point aStartPos = aScrPos;
 
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    long nLayoutSign = bLayoutRTL ? -1 : 1;
+
     const ScMergeAttr* pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
     long nCellX = (long) ( pDoc->GetColWidth(nCol,nTab) * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
@@ -165,7 +168,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
                 SVX_HOR_JUSTIFY_LEFT )
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
     long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
-    aStartPos.X()   += nPixDifX;
+    aStartPos.X()   += nPixDifX * nLayoutSign;
     nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // wegen Umbruch etc.
 
     //  vertikale Position auf die in der Tabelle anpassen
@@ -215,6 +218,9 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
 
     aStartPos.Y() += nPixDifY;
     nCellY      -= nPixDifY;
+
+    if ( bLayoutRTL )
+        aStartPos.X() -= nCellX - 2;    // excluding grid on both sides
 
                                                         //  -1 -> Gitter nicht ueberschreiben
     return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
