@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 09:22:27 $
+ *  last change: $Author: os $ $Date: 2001-05-09 09:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
             RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
             RES_FILL_ORDER,     RES_FRMATR_END -1,
             0L);
-        SwXTextCursor::GetCrsrAttr(*pUnoCrsr, aSet);
+        sal_Bool bAttributesFilled = sal_False;
         Any* pValues = aValues.getArray();
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
@@ -481,6 +481,11 @@ Sequence< Any > SwXTextPortion::getPropertyValues(
                     }
                     break;
                     default:
+                        if(!bAttributesFilled)
+                        {
+                            SwXTextCursor::GetCrsrAttr(*pUnoCrsr, aSet);
+                            bAttributesFilled = sal_True;
+                        }
                         BOOL bDone = FALSE;
                         PropertyState eTemp;
                         bDone = SwUnoCursorHelper::getCrsrPropertyValue(
