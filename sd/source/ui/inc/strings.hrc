@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:53:19 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,8 @@
 #define STR_FIELD_PLACEHOLDER_FOOTER            (RID_APP_START+693)
 #define STR_FIELD_PLACEHOLDER_DATETIME          (RID_APP_START+694)
 #define STR_FIELD_PLACEHOLDER_NUMBER            (RID_APP_START+695)
+
+#define STR_UNDO_HANGULHANJACONVERSION                  (RID_APP_START+696)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
