@@ -60,21 +60,17 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::container;
 
 
 namespace framework
 {
-
-SV_IMPL_PTRARR( ToolBoxDescriptor, ToolBoxItemDescriptorPtr);
-SV_IMPL_PTRARR( ToolBoxLayoutDescriptor, ToolBoxLayoutItemDescriptorPtr);
 
 static Reference< XParser > GetSaxParser(
     // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XParser >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
     return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
 }
 
@@ -83,29 +79,24 @@ static Reference< XDocumentHandler > GetSaxWriter(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XDocumentHandler >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
     return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
 }
 
 // #110897#
 sal_Bool ToolBoxConfiguration::LoadToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rInStream,
-    ToolBoxDescriptor& aItems )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration )
 {
     Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
-    Reference< XInputStream > xInputStream(
-                                (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
-                                UNO_QUERY );
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
 
-    aInputSource.aInputStream = xInputStream;
+    aInputSource.aInputStream = rInputStream;
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
-    Reference< XDocumentHandler > xDocHandler( new OReadToolBoxDocumentHandler( aItems ));
+    Reference< XDocumentHandler > xDocHandler( new OReadToolBoxDocumentHandler( rToolbarConfiguration ));
     Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
 
     // connect parser and filter
@@ -136,103 +127,18 @@ sal_Bool ToolBoxConfiguration::LoadToolBox(
 // #110897#
 sal_Bool ToolBoxConfiguration::StoreToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rOutStream,
-    const ToolBoxDescriptor& aItems )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration )
 {
     Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
 
-    Reference< XOutputStream > xOutputStream(
-                                (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),
-                                UNO_QUERY );
-
     Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-    xDataSource->setOutputStream( xOutputStream );
+    xDataSource->setOutputStream( rOutputStream );
 
     try
     {
-        OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler( aItems, xWriter );
+        OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler( rToolbarConfiguration, xWriter );
         aWriteToolBoxDocumentHandler.WriteToolBoxDocument();
-        return sal_True;
-    }
-    catch ( RuntimeException& )
-    {
-        return sal_False;
-    }
-    catch ( SAXException& )
-    {
-        return sal_False;
-    }
-    catch ( ::com::sun::star::io::IOException& )
-    {
-        return sal_False;
-    }
-
-    return sal_False;
-}
-
-// #110897#
-sal_Bool ToolBoxConfiguration::LoadToolBoxLayout(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rInStream,
-    ToolBoxLayoutDescriptor& aItems )
-{
-    Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
-    Reference< XInputStream > xInputStream(
-                                (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
-                                UNO_QUERY );
-
-    // connect stream to input stream to the parser
-    InputSource aInputSource;
-
-    aInputSource.aInputStream = xInputStream;
-
-    // create namespace filter and set menudocument handler inside to support xml namespaces
-    Reference< XDocumentHandler > xDocHandler( new OReadToolBoxLayoutDocumentHandler( aItems ));
-    Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
-
-    // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
-
-    try
-    {
-        xParser->parseStream( aInputSource );
-        return sal_True;
-    }
-    catch ( RuntimeException& )
-    {
-        return sal_False;
-    }
-    catch( SAXException& )
-    {
-        return sal_False;
-    }
-    catch( ::com::sun::star::io::IOException& )
-    {
-        return sal_False;
-    }
-
-    return sal_False;
-}
-
-// #110897#
-sal_Bool ToolBoxConfiguration::StoreToolBoxLayout(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rOutStream,
-    ToolBoxLayoutDescriptor& aItems )
-{
-    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
-
-    Reference< XOutputStream > xOutputStream(
-                                (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),
-                                UNO_QUERY );
-
-    Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-    xDataSource->setOutputStream( xOutputStream );
-
-    try
-    {
-        OWriteToolBoxLayoutDocumentHandler aWriteToolBoxLayoutDocumentHandler( aItems, xWriter );
-        aWriteToolBoxLayoutDocumentHandler.WriteToolBoxLayoutDocument();
         return sal_True;
     }
     catch ( RuntimeException& )
