@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:14:26 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:15:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,9 +99,9 @@ SRC1FILES =	\
         sdstring.src		\
         pseudo.src
 
-OBJFILES = \
-        $(OBJ)$/sdlib.obj	\
-        $(OBJ)$/sdresid.obj	\
+#OBJFILES = \
+#		$(OBJ)$/sdlib.obj	\
+#		$(OBJ)$/sdresid.obj	\
 
 SLOFILES =	\
         $(SLO)$/sdmod.obj		\
@@ -114,11 +114,11 @@ SLOFILES =	\
         $(SLO)$/optsitem.obj	\
         $(SLO)$/sdresid.obj		\
         $(SLO)$/sdpopup.obj		\
-        $(SLO)$/sdxfer.obj		
+        $(SLO)$/sdxfer.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/sdxfer.obj		\
-        $(SLO)$/sdmod1.obj		
+        $(SLO)$/sdmod1.obj
 
 .IF "$(GUI)" == "WNT"
 
