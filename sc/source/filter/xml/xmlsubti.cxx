@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#ifndef SC_XMLSUBTI_HXX
 #include "xmlsubti.hxx"
+#endif
 #include "global.hxx"
 #include "xmlstyli.hxx"
 #include "xmlimprt.hxx"
@@ -225,6 +227,7 @@ ScMyTables::~ScMyTables()
 
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName, const sal_Bool bTempProtection)
 {
+    sCurrentSheetName = sTableName;
     ScMyTableData* aTable;
     while (nTableCount > 0)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-05 09:27:25 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XSHEETLINKABLE_HPP_
+#include <com/sun/star/sheet/XSheetLinkable.hpp>
 #endif
 
 //! not found in unonames.hxx
@@ -1104,6 +1107,7 @@ void ScXMLExport::_ExportContent()
                         SvXMLElementExport aElemT(*this, XML_NAMESPACE_TABLE, sXML_table, sal_True, sal_True);
                         CheckAttrList();
                         WriteViewSettings();
+                        WriteTableSource();
                         WriteScenario();
                         GetxCurrentShapes(xCurrentShapes);
                         WriteTableShapes();
@@ -1910,7 +1914,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                     if (pMemChart)
                     {
                         bMemChart = sal_True;
-                        GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA, pPoint);
+                        GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint);
                     }
                 }
             }
@@ -2297,6 +2301,71 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
     }
 }
 
+void ScXMLExport::WriteViewSettings()
+{
+}
+
+void ScXMLExport::WriteTableSource()
+{
+    uno::Reference <sheet::XSheetLinkable> xLinkable (xCurrentTable, uno::UNO_QUERY);
+    if (xLinkable.is())
+    {
+        sheet::SheetLinkMode nMode (xLinkable->getLinkMode());
+        if (nMode != sheet::SheetLinkMode_NONE)
+        {
+            rtl::OUString sLink (xLinkable->getLinkUrl());
+            uno::Reference <beans::XPropertySet> xProps (GetModel(), uno::UNO_QUERY);
+            if (xProps.is())
+            {
+                uno::Any aAny = xProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_SHEETLINKS)));
+                uno::Reference <container::XIndexAccess> xIndex;
+                if (aAny >>= xIndex)
+                {
+                    sal_Int32 nCount = xIndex->getCount();
+                    if (nCount)
+                    {
+                        sal_Bool bFound(sal_False);
+                        uno::Reference <beans::XPropertySet> xLinkProps;
+                        for (sal_Int32 i = 0; (i < nCount) && !bFound; i++)
+                        {
+                            uno::Any aSheetLink = xIndex->getByIndex(i);
+                            if (aSheetLink >>= xLinkProps)
+                            {
+                                aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_LINKURL)));
+                                rtl::OUString sNewLink;
+                                if (aAny >>= sNewLink)
+                                    bFound = sLink.equals(sNewLink);
+                            }
+                        }
+                        if (bFound && xLinkProps.is())
+                        {
+                            rtl::OUString sFilter;
+                            rtl::OUString sFilterOptions;
+                            rtl::OUString sTableName (xLinkable->getLinkSheetName());
+                            aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTER)));
+                            aAny >>= sFilter;
+                            aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTOPT)));
+                            aAny >>= sFilterOptions;
+                            if (sLink.getLength() && sTableName.getLength())
+                            {
+                                AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sLink);
+                                AddAttribute(XML_NAMESPACE_TABLE, sXML_table_name, sTableName);
+                                if (sFilter.getLength())
+                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_filter_name, sFilter);
+                                if (sFilterOptions.getLength())
+                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_filter_options, sFilterOptions);
+                                if (nMode != sheet::SheetLinkMode_NORMAL)
+                                    AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_mode, sXML_copy_results_only);
+                                SvXMLElementExport aSourceElem(*this, XML_NAMESPACE_TABLE, sXML_table_source, sal_True, sal_True);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // core implementation
 void ScXMLExport::WriteScenario()
 {
@@ -2327,10 +2396,6 @@ void ScXMLExport::WriteScenario()
             AddAttribute(XML_NAMESPACE_TABLE, sXML_comment, rtl::OUString(sComment));
         SvXMLElementExport aElem(*this, XML_NAMESPACE_TABLE, sXML_scenario, sal_True, sal_True);
     }
-}
-
-void ScXMLExport::WriteViewSettings()
-{
 }
 
 void ScXMLExport::WriteTheLabelRanges( const uno::Reference< sheet::XSpreadsheetDocument >& xSpreadDoc )

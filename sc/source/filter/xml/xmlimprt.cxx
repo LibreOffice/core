@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 12:11:49 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ static __FAR_DATA SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[]
 static __FAR_DATA SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
 {
     { XML_NAMESPACE_TABLE, sXML_title,          XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
-    { XML_NAMESPACE_TABLE, sXML_display,            XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
+    { XML_NAMESPACE_TABLE, sXML_display,        XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
     { XML_NAMESPACE_TABLE, sXML_message_type,   XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE },
     XML_TOKEN_MAP_END
 };
@@ -257,6 +257,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableTokenMap[] =
     { XML_NAMESPACE_TABLE, sXML_table_header_rows,      XML_TOK_TABLE_HEADER_ROWS   },
     { XML_NAMESPACE_TABLE, sXML_table_rows,             XML_TOK_TABLE_ROWS          },
     { XML_NAMESPACE_TABLE, sXML_table_row,              XML_TOK_TABLE_ROW           },
+    { XML_NAMESPACE_TABLE, sXML_table_source,           XML_TOK_TABLE_SOURCE        },
     { XML_NAMESPACE_TABLE, sXML_scenario,               XML_TOK_TABLE_SCENARIO      },
     { XML_NAMESPACE_TABLE, sXML_shapes,                 XML_TOK_TABLE_SHAPES        },
     XML_TOKEN_MAP_END

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-07 10:34:01 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_HEADER_ROWS,
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
+    XML_TOK_TABLE_SOURCE,
     XML_TOK_TABLE_SCENARIO,
     XML_TOK_TABLE_SHAPES
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
+ *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
+    rtl::OUString                       sCurrentSheetName;
     sal_Int16                           nCurrentDrawPage;
     std::vector<ScMyTableData*>         aTableVec;
     sal_Int16                           nTableCount;
@@ -176,6 +177,7 @@ public:
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
     void                                AddColCount(sal_Int32 nTempColCount);
+    rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
     sal_Int16                           GetCurrentSheet() const { return nCurrentSheet; }
     sal_Int32                           GetCurrentColumn() const { return aTableVec[nTableCount - 1]->GetColCount(); }
     sal_Int32                           GetCurrentRow() const { return aTableVec[nTableCount - 1]->GetRow(); }
