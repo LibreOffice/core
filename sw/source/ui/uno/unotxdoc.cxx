@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-20 11:02:47 $
+ *  last change: $Author: mtg $ $Date: 2001-09-03 11:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,9 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -262,7 +265,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
+using ::rtl::OUString;
+using ::osl::FileBase;
 
 /* -----------------------------17.01.01 15:43--------------------------------
 
@@ -1250,8 +1254,14 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // FileName-Property?
             if ( rProp.Name == sFileName )
             {
-                if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
-                    aReq.AppendItem(SfxStringItem( SID_FILE_NAME, *(const OUString*)rProp.Value.getValue()));
+                OUString sFileURL;
+                if ( (rProp.Value >>= sFileURL ) )
+                {
+                    // Convert the File URL into a system dependant path, as the SalPrinter expects
+                    OUString sSystemPath;
+                    FileBase::getSystemPathFromFileURL ( sFileURL, sSystemPath );
+                    aReq.AppendItem(SfxStringItem( SID_FILE_NAME, sSystemPath ) );
+                }
                 else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
                     throw IllegalArgumentException();
             }
