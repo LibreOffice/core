@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:58:39 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#undef SC_DLLIMPLEMENTATION
 
 #ifdef PCH
 #include "ui_pch.hxx"
