@@ -3,6 +3,7 @@
 ..\%__SRC%\lib\libjuh*.so %_DEST%\lib%_EXT%\libjuh*.so
 ..\%__SRC%\lib\libjuh*.dylib %_DEST%\lib%_EXT%\libjuh*.dylib
 
+..\%__SRC%\bin\juh_loader_classes.zip %_DEST%\bin%_EXT%\juh_loader_classes.zip
+..\bin\win\unowinreg.dll %COMMON_DEST%\bin%_EXT%\unowinreg.dll
+
 ..\%__SRC%\bin\juh_src.zip %COMMON_DEST%\bin%_EXT%\juh_src.zip
-
-
