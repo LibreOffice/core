@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:44:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,13 @@
 
 #ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
 #include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#endif
+
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORY_HPP_
+#include <drafts/com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#endif
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
+#include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -467,6 +474,14 @@ void SfxConfigGroupListBox_Impl::ClearAll()
     for ( USHORT i=0; i<nCount; i++ )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
+        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        {
+            XInterface* xi = static_cast<XInterface *>(pData->pObject);
+            if (xi != NULL)
+            {
+                xi->release();
+            }
+        }
         delete pData;
     }
 
@@ -673,60 +688,128 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
         OSL_TRACE("** ** bShowSF");
         // Add Scripting Framework entries
         Reference< browse::XBrowseNode > rootNode;
-        if ( tmp )
+        try
         {
-            OSL_TRACE("** ** Have working doc");
-            Reference< provider::XScriptProviderSupplier > xSPS =
-                Reference< provider::XScriptProviderSupplier >
-                    ( tmp->GetModel(), UNO_QUERY );
-
-            if( xSPS.is() )
-            {
-                OSL_TRACE("** ** Have MasterScriptProvider from doc");
-                Reference< provider::XScriptProvider > xScriptProvider =
-                    xSPS->getScriptProvider();
-                rootNode = Reference< browse::XBrowseNode >( xScriptProvider, UNO_QUERY );
-            }
+            Reference < beans::XPropertySet > xProps(
+                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+            Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+            Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
+                ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+            rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTSELECTOR ) );
+            //rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER ) );
         }
-        else
+        catch( Exception& e )
         {
-            OSL_TRACE("** ** Creating MSP on the fly");
-            Reference < lang::XMultiServiceFactory > xMgr =
-        ::comphelper::getProcessServiceFactory();
-            if ( xMgr.is() )
-            {
-                ::rtl::OUString name( RTL_CONSTASCII_USTRINGPARAM(
-                    "drafts.com.sun.star.script.provider.MasterScriptProvider"));
-
-                Sequence< Any > args(1);
-                SfxObjectShell *tmp = SfxObjectShell::GetFirst();
-                args[ 0 ] <<= tmp->GetModel();
-
-                rootNode = Reference< browse::XBrowseNode >(
-                    xMgr->createInstanceWithArguments( name, args ), UNO_QUERY );
-            }
+            OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
+                ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            // TODO exception handling
         }
-
 
 
         if ( rootNode.is() )
         {
-            /*
-                We call acquire on the XBrowseNode so that it does not
-                get autodestructed and become invalid when accessed later.
-            */
-            rootNode->acquire();
+            if ( nMode )
+            {
+                /*
+                    We call acquire on the XBrowseNode so that it does not
+                    get autodestructed and become invalid when accessed later.
+                */
+                rootNode->acquire();
 
-            SfxGroupInfo_Impl *pInfo =
-                new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
-                    static_cast<void *>(rootNode.get()));
+                SfxGroupInfo_Impl *pInfo =
+                    new SfxGroupInfo_Impl( SFX_CFGGROUP_SCRIPTCONTAINER, 0,
+                        static_cast<void *>(rootNode.get()));
 
-            String aTitle( SfxResId( STR_HUMAN_APPNAME ) );
-            aTitle += String::CreateFromAscii( " Scripts" );
-            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
-            pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildsOnDemand( TRUE );
-            aArr.Insert( pInfo, aArr.Count() );
+                String aTitle( SfxResId( STR_MACROS ) );
+                SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+                pNewEntry->SetUserData( pInfo );
+                pNewEntry->EnableChildsOnDemand( TRUE );
+                aArr.Insert( pInfo, aArr.Count() );
+            }
+            else
+            {
+                /*
+                 * We are only showing scripts not slot APIs so skip
+                 * Root node and show location nodes
+                 */
+                try {
+                    if ( rootNode->hasChildNodes() )
+                    {
+                        Sequence< Reference< browse::XBrowseNode > > children =
+                            rootNode->getChildNodes();
+                        BOOL bIsRootNode = FALSE;
+
+                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
+                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
+                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
+                        {
+                            bIsRootNode = TRUE;
+                        }
+
+                        for ( ULONG n = 0; n < children.getLength(); n++ )
+                        {
+                            Reference< browse::XBrowseNode >& theChild = children[n];
+                            BOOL bDisplay = TRUE;
+                            /* To mimic current starbasic behaviour we
+                            need to make sure that only the current document
+                            is displayed in the config tree. Tests below
+                            set the bDisplay flag to FALSE if the current
+                            node is a first level child of the Root and is NOT
+                            either the current document, user or share */
+                            ::rtl::OUString currentDocTitle;
+                               if ( SfxObjectShell::GetWorkingDocument() )
+                            {
+                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
+                            }
+                            if ( bIsRootNode )
+                            {
+                                if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
+                                    theChild->getName().equals( currentDocTitle ) ) ) )
+                                {
+                                    bDisplay=FALSE;
+                                }
+                            }
+                            if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
+                            {
+
+                                /*
+                                    We call acquire on the XBrowseNode so that it does not
+                                    get autodestructed and become invalid when accessed later.
+                                */
+                                theChild->acquire();
+
+                                SfxGroupInfo_Impl* pInfo =
+                                    new SfxGroupInfo_Impl(SFX_CFGGROUP_SCRIPTCONTAINER,
+                                        0, static_cast<void *>( theChild.get()));
+
+                                SvLBoxEntry* pNewEntry =
+                                    InsertEntry( theChild->getName(), NULL);
+
+                                pNewEntry->SetUserData( pInfo );
+                                aArr.Insert( pInfo, aArr.Count() );
+
+                                if ( children[n]->hasChildNodes() )
+                                {
+                                    Sequence< Reference< browse::XBrowseNode > > grandchildren =
+                                        children[n]->getChildNodes();
+
+                                    for ( ULONG m = 0; m < grandchildren.getLength(); m++ )
+                                    {
+                                        if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
+                                        {
+                                            pNewEntry->EnableChildsOnDemand( TRUE );
+                                            m = grandchildren.getLength();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (RuntimeException &e) {
+                    // do nothing, the entry will not be displayed in the UI
+                }
+            }
         }
     }
     MakeVisible( GetEntry( 0,0 ) );
