@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elapsedtime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #include <canvas/elapsedtime.hxx>
 
-#ifdef WIN
+#if defined(WIN) || defined(WNT)
 
 // TEMP!!!
 // Awaiting corresponding functionality in OSL
@@ -83,33 +83,24 @@ namespace canvas
     {
         namespace
         {
-#ifdef WIN
+#if defined(WIN) || defined(WNT)
             static double fTimeFactor;
 #endif
 
             double getTimeFactor()
             {
-#ifndef WIN
-                // value is in nanoseconds
-                return 1.0/10e9;
-#else
+#if defined(WIN) || defined(WNT)
                 // value is hardware-dependent
                 return fTimeFactor;
+#else
+                // value is in nanoseconds
+                return 10e-10;
 #endif
             }
 
             sal_uInt64 getCurrentTime()
             {
-#ifndef WIN
-                TimeValue aTimeVal;
-                sal_uInt64 bRet( 0 );
-
-                if( osl_getSystemTime( &aTimeVal ) )
-                {
-                    // combine to seconds + fraction of second
-                    bRet = ((sal_uInt64)aTimeVal.Seconds) * (sal_uInt64)1000000000 + (sal_uInt64)aTimeVal.Nanosec;
-                }
-#else
+#if defined(WIN) || defined(WNT)
                 sal_uInt64 bRet( 0 );
 
                 // TEMP!!!
@@ -156,9 +147,18 @@ namespace canvas
                 {
                     bRet = timeGetTime();
                 }
+#else
+                TimeValue aTimeVal;
+                sal_uInt64 bRet( 0 );
+
+                if( osl_getSystemTime( &aTimeVal ) )
+                {
+                    // combine to seconds + fraction of second
+                    bRet = ((sal_uInt64)aTimeVal.Seconds) * (sal_uInt64)1000000000 + (sal_uInt64)aTimeVal.Nanosec;
+                }
 #endif
 
-                return bRet; // TODO: is 0 okay for the failure case here?
+                return bRet; // TODO(Q2): is 0 okay for the failure case here?
             }
         }
 
@@ -173,7 +173,7 @@ namespace canvas
             mnStartTime = getCurrentTime();
         }
 
-        double ElapsedTime::getElapsedTime()
+        double ElapsedTime::getElapsedTime() const
         {
             sal_uInt64 nCurrTime( getCurrentTime() );
 
