@@ -13,4 +13,5 @@ inserttable, <formtablecontrol,?>
 inserttimefield, <formtimefield?>
 numberformatcurrency, <formcurrencyfield?>
 numberformatdate, <formdatefield?>
-
+insobjctrl, insertobjectdialog
+zoomout, zoomminus
