@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 08:48:51 $
+ *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,14 +361,12 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
 
         if (IsFldEdit())
         {
-            if( !aNameED.HasDroppedData() )
-                aNameED.SetText(GetCurField()->GetPar1());
+            aNameED.SetText(GetCurField()->GetPar1());
             aValueED.SetText(GetCurField()->GetPar2());
         }
         else
         {
-            if( !aNameED.HasDroppedData() )
-                aNameED.SetText(aEmptyStr);
+            aNameED.SetText(aEmptyStr);
             aValueED.SetText(aEmptyStr);
         }
 
@@ -412,10 +410,8 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 aNameED.SetDropEnable(TRUE);
                 if (IsFldEdit())
                 {
-                    if( !aCond1ED.HasDroppedData() )
-                        aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
-                    if( !aCond2ED.HasDroppedData() )
-                        aCond2ED.SetText(GetCurField()->GetPar2().GetToken(1, '|'));
+                    aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
+                    aCond2ED.SetText(GetCurField()->GetPar2().GetToken(1, '|'));
                 }
 
                 bName = bValue = TRUE;
@@ -455,9 +451,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
             default:
                 break;
         }
-        aNameED.ResetDroppedDataFlag();
-        aCond1ED.ResetDroppedDataFlag();
-        aCond2ED.ResetDroppedDataFlag();
 
         if (bShowSelection)
         {
@@ -724,6 +717,9 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/07/17 08:48:51  tbe
+    #87307# remove external basctl dependencies
+
     Revision 1.4  2001/07/11 17:08:58  jp
     #89582#: look for the dropped content flag at ConditionEdit controls
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-18 13:24:40 $
+ *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,17 +126,19 @@
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwFldPage::SwFldPage(Window *pParent, const ResId &rId, const SfxItemSet &rAttrSet ) :
-    SfxTabPage      (pParent, rId, rAttrSet),
+SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
+                        const SfxItemSet &rAttrSet )
+    :SfxTabPage     (pParent, rId, rAttrSet),
+    pCurFld         (0),
     nPageId         (rId.GetId()),
-    bFldDlgHtmlMode (FALSE),
     nFldDlgAktGrpSel(0),
     nTypeSel        (LISTBOX_ENTRY_NOTFOUND),
     nSelectionSel   (LISTBOX_ENTRY_NOTFOUND),
+    bFldDlgHtmlMode (FALSE),
     bFldEdit        (FALSE),
-    pCurFld         (0),
     bInsert         (TRUE),
-    bRefresh        (FALSE)
+    bRefresh        (FALSE),
+    bFirstHTMLInit  (TRUE)
 {
 //  FreeResource();
 }
@@ -150,47 +152,38 @@ SwFldPage::~SwFldPage()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-USHORT SwFldPage::GetGroup()
-{
-    ASSERT (0, "GetGroup not implemented!");
-    return 0;
-}
-
-/*--------------------------------------------------------------------
     Beschreibung: TabPage initialisieren
  --------------------------------------------------------------------*/
 
 void SwFldPage::Init()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
-    BOOL bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
+    BOOL bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
-    bFldEdit = GetTabDialog() == 0;
+    bFldEdit = 0 == GetTabDialog();
+
+    // FieldManager neu initialisieren wichtig fuer
+    // Dok-Wechsel (fldtdlg:ReInitTabPage)
     pCurFld = aMgr.GetCurFld();
 
     nFldDlgAktGrpSel = GetGroup();
 
-    if (bNewMode != bFldDlgHtmlMode)
+    if( bNewMode != bFldDlgHtmlMode )
     {
         bFldDlgHtmlMode = bNewMode;
 
         // Bereichslistbox initialisieren
-        if (bFldDlgHtmlMode)
+        if( bFldDlgHtmlMode && bFirstHTMLInit )
         {
+            bFirstHTMLInit = FALSE;
             SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
-
-            (SwSetExpFieldType*)pSh->InsertFldType(SwSetExpFieldType(pDocSh->GetDoc(),
-                                                    String::CreateFromAscii("HTML_ON"), 1));
-            (SwSetExpFieldType*)pSh->InsertFldType(SwSetExpFieldType(pDocSh->GetDoc(),
-                                                    String::CreateFromAscii("HTML_OFF"), 1));
+            SwDoc* pDoc = pSh->GetDoc();
+            pSh->InsertFldType( SwSetExpFieldType( pDoc,
+                                    String::CreateFromAscii("HTML_ON"), 1));
+            pSh->InsertFldType( SwSetExpFieldType(pDoc,
+                                    String::CreateFromAscii("HTML_OFF"), 1));
         }
     }
-
-    aMgr.GetCurFld();   // FieldManager neu initialisieren
-                        // wichtig fuer Dok-Wechsel (fldtdlg:ReInitTabPage)
 }
 
 /*--------------------------------------------------------------------
@@ -206,10 +199,13 @@ void SwFldPage::ActivatePage()
      Beschreibung: Kompletter Reset; neues Feld editieren
  --------------------------------------------------------------------*/
 
-void SwFldPage::EditNewField()
+void SwFldPage::EditNewField( BOOL bOnlyActivate )
 {
-    nFldDlgAktGrpSel = 0;
-    nTypeSel = LISTBOX_ENTRY_NOTFOUND;
+    if( !bOnlyActivate )
+    {
+        nFldDlgAktGrpSel = 0;
+        nTypeSel = LISTBOX_ENTRY_NOTFOUND;
+    }
     nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
     bRefresh = TRUE;
     Reset(*(SfxItemSet*)0);
@@ -367,22 +363,17 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwFldPage::SavePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
+void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
+                         const ListBox* pLst3 )
 {
-    if (pLst1 && pLst1->GetEntryCount())
-        sLst1 = pLst1->GetSelectEntry();
-    else
-        sLst1.Erase();
+    const ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
 
-    if (pLst2 && pLst2->GetEntryCount())
-        sLst2 = pLst2->GetSelectEntry();
-    else
-        sLst2.Erase();
-
-    if (pLst3 && pLst3->GetEntryCount())
-        sLst3 = pLst3->GetSelectEntry();
-    else
-        sLst3.Erase();
+    const ListBox** ppLB = aLBArr;
+    for( int i = 0; i < coLBCount; ++i, ++ppLB )
+        if( (*ppLB) && (*ppLB)->GetEntryCount() )
+            aLstStrArr[ i ] = (*ppLB)->GetSelectEntry();
+        else
+            aLstStrArr[ i ].Erase();
 }
 
 /*--------------------------------------------------------------------
@@ -392,13 +383,13 @@ void SwFldPage::SavePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 {
     USHORT nPos = 0;
-
-    if (pLst1 && pLst1->GetEntryCount() && sLst1.Len() && (nPos = pLst1->GetEntryPos(sLst1)) != LISTBOX_ENTRY_NOTFOUND)
-        pLst1->SelectEntryPos(nPos);
-    if (pLst2 && pLst2->GetEntryCount() && sLst1.Len() && (nPos = pLst2->GetEntryPos(sLst1)) != LISTBOX_ENTRY_NOTFOUND)
-        pLst2->SelectEntryPos(nPos);
-    if (pLst3 && pLst3->GetEntryCount() && sLst1.Len() && (nPos = pLst3->GetEntryPos(sLst1)) != LISTBOX_ENTRY_NOTFOUND)
-        pLst3->SelectEntryPos(nPos);
+    ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
+    ListBox** ppLB = aLBArr;
+    for( int i = 0; i < coLBCount; ++i, ++ppLB )
+        if( (*ppLB) && (*ppLB)->GetEntryCount() && aLstStrArr[ i ].Len() &&
+            LISTBOX_ENTRY_NOTFOUND !=
+                        ( nPos = (*ppLB)->GetEntryPos(aLstStrArr[ i ] ) ) )
+            (*ppLB)->SelectEntryPos( nPos );
 }
 
 /*--------------------------------------------------------------------

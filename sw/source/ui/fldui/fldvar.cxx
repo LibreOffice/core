@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-08-03 14:37:05 $
+ *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,13 +291,11 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, pBox )
         if (nOld != LISTBOX_ENTRY_NOTFOUND)
         {
             aNameED.SetText(aEmptyStr);
-            if( !aValueED.HasDroppedData() )
-                aValueED.SetText(aEmptyStr);
+            aValueED.SetText(aEmptyStr);
         }
 
         aValueED.SetDropEnable(FALSE);
         UpdateSubType();    // Auswahl-Listboxen initialisieren
-        aValueED.ResetDroppedDataFlag();
     }
 
     bInit = FALSE;
@@ -322,8 +320,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
         if (nTypeId != TYP_FORMELFLD)
             aNameED.SetText(GetFldMgr().GetCurFldPar1());
 
-        if( !aValueED.HasDroppedData() )
-            aValueED.SetText(GetFldMgr().GetCurFldPar2());
+        aValueED.SetText(GetFldMgr().GetCurFldPar2());
     }
 
     if (aNameFT.GetText() != sOldNameFT)
@@ -359,16 +356,15 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                         if (pType->GetType() == UF_STRING)
                         {
-                            if( !aValueED.HasDroppedData() )
-                                aValueED.SetText(pType->GetContent());
+                            aValueED.SetText(pType->GetContent());
                             aNumFormatLB.SelectEntryPos(0);
                         }
-                        else if( !aValueED.HasDroppedData() )
+                        else
                             aValueED.SetText(pType->GetContent());
 //                          aValueED.SetText(pType->GetContent(aNumFormatLB.GetFormat()));
                     }
                 }
-                else if( !aValueED.HasDroppedData() )
+                else
                     aValueED.SetText(pType->GetContent());
             }
             else
@@ -376,8 +372,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 if (pBox)   // Nur bei Interaktion mit Maus
                 {
                     aNameED.SetText(aEmptyStr);
-                     if( !aValueED.HasDroppedData() )
-                        aValueED.SetText(aEmptyStr);
+                    aValueED.SetText(aEmptyStr);
                 }
             }
             bValue = bName = bNumFmt = bInvisible = TRUE;
@@ -426,8 +421,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 // Muss aber verwendet werden, da sonst bei GetPar2 nur der vom
                 // Kalkulator errechnete Wert angezeigt werden wuerde
                 // (statt test2 = test + 1)
-                 if( !aValueED.HasDroppedData() )
-                    aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
+                aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
             }
             aValueED.SetDropEnable(TRUE);
             break;
@@ -608,7 +602,6 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             aValueED.SetText(aEmptyStr);
             break;
     }
-    aValueED.ResetDroppedDataFlag();
 
     aNumFormatLB.Show(bNumFmt);
     aFormatLB.Show(!bNumFmt);
@@ -1404,6 +1397,9 @@ void SwFldVarPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/08/03 14:37:05  os
+    #90496# zero is a valid number format
+
     Revision 1.5  2001/07/11 17:08:58  jp
     #89582#: look for the dropped content flag at ConditionEdit controls
 

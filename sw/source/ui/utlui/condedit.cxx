@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-30 14:00:10 $
+ *  last change: $Author: jp $ $Date: 2001-09-20 12:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ using namespace ::com::sun::star::uno;
 ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId ),
     DropTargetHelper( this ),
-    bBrackets( TRUE ), bEnableDrop( TRUE ), bHasDroppedData( FALSE )
+    bBrackets( TRUE ), bEnableDrop( TRUE )
 {
 }
 
@@ -138,7 +138,6 @@ sal_Int8 ConditionEdit::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     sDBName += ']';
 
                 SetText( sDBName );
-                bHasDroppedData = TRUE;
                 nRet = DND_ACTION_COPY;
             }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-30 14:17:19 $
+ *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,29 +188,26 @@ BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *pDocSh)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
-                                        SfxBindings* pB,
-                                        SfxChildWinInfo* pInfo) :
-    SwChildWinWrapper( pParent, nId )
-
+SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
 {
-    pWindow = new SwFldDlg( pB, this, pParent );
-    SwFldDlg *pWin = (SwFldDlg*)pWindow;
-    pWin->Start();
-
-    ((SwFldDlg*)pWindow)->Initialize(pInfo);
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    return SfxChildWindow::GetInfo();
 }
+
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
+SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
+                                    SfxBindings* pB,
+                                    SfxChildWinInfo* pInfo )
+    : SwChildWinWrapper( pParent, nId )
 {
-    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-    // ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );
-    return aInfo;
+    SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
+    pWindow = pDlg;
+    pDlg->Start();
+    pDlg->Initialize( pInfo );
+    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 
 /*--------------------------------------------------------------------
@@ -241,8 +238,8 @@ void SwFldDlgWrapper::ShowPage(USHORT nPage)
  --------------------------------------------------------------------*/
 
 
-SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent) :
-    SfxTabDialog(pParent, SW_RES(DLG_FLD_INSERT)),
+SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
+    : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
     pChildWin(pCW)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
@@ -283,7 +280,6 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent) :
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
 
 SwFldDlg::~SwFldDlg()
 {
@@ -354,20 +350,6 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwFldDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
-{
-/*  switch( nId )
-    {
-        case TP_CHAR_DB:
-//          ((SvxCharExtPage&)rPage).DisableControls(DISABLE_CASEMAP);
-            break;
-    }*/
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nId )
 {
     return 0;
@@ -428,12 +410,12 @@ void SwFldDlg::ReInitDlg()
     Beschreibung: Nach Dok-Wechsel TabPage neu initialisieren
  --------------------------------------------------------------------*/
 
-void SwFldDlg::ReInitTabPage(USHORT nPageId)
+void SwFldDlg::ReInitTabPage( USHORT nPageId, BOOL bOnlyActivate )
 {
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
-    if (pPage)
-        pPage->EditNewField();  // TabPage neu initialisieren
+    if ( pPage )
+        pPage->EditNewField( bOnlyActivate );   // TabPage neu initialisieren
 }
 
 /*--------------------------------------------------------------------
@@ -443,19 +425,19 @@ void SwFldDlg::ReInitTabPage(USHORT nPageId)
 void SwFldDlg::Activate()
 {
     SwView* pView = ::GetActiveView();
-    if(pView)
+    if( pView )
     {
         BOOL bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
         const SwWrtShell& rSh = pView->GetWrtShell();
         GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                               !rSh.HasReadonlySel() );
 
-        ReInitTabPage(TP_FLD_VAR);
+        ReInitTabPage( TP_FLD_VAR, TRUE );
 
-        if (!bHtmlMode)
+        if( !bHtmlMode )
         {
-            ReInitTabPage(TP_FLD_REF);
-            ReInitTabPage(TP_FLD_FUNC);
+            ReInitTabPage( TP_FLD_REF, TRUE );
+            ReInitTabPage( TP_FLD_FUNC, TRUE );
         }
     }
 }
@@ -484,95 +466,4 @@ void SwFldDlg::InsertHdl()
     GetOKButton().Click();
 }
 
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2001/01/18 14:01:38  jp
-    new Field/-Type: combined character
-
-    Revision 1.1.1.1  2000/09/18 17:14:36  hr
-    initial import
-
-    Revision 1.26  2000/09/18 16:05:29  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.25  2000/09/07 15:59:24  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.24  2000/02/11 14:45:56  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.23  1999/01/20 13:16:52  JP
-    Task #58677#: Crsr in Readonly Bereichen zulassen
-
-
-      Rev 1.22   20 Jan 1999 14:16:52   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.21   22 Oct 1998 12:20:42   OM
-   #58157# Querverweis einfuegen
-
-      Rev 1.20   21 Oct 1998 16:16:04   OM
-   #58157# Querverweise einfuegen
-
-      Rev 1.19   09 Jul 1998 09:52:58   JP
-   EmptyStr benutzen
-
-      Rev 1.18   31 Mar 1998 13:31:38   OM
-   Korrekt abgleichen
-
-      Rev 1.17   27 Mar 1998 14:14:16   OM
-   ChildWindows im Modified-Hdl updaten
-
-      Rev 1.16   18 Mar 1998 10:33:56   OM
-   #48197# Focus restaurieren nach InputDlg
-
-      Rev 1.15   10 Mar 1998 17:27:12   OM
-   Korrekte Windowbits setzen
-
-      Rev 1.14   03 Mar 1998 13:31:02   OM
-   Im Html-Mode nicht alle TabPages anzeigen
-
-      Rev 1.13   09 Jan 1998 16:57:18   OM
-   Bei Dok-Wechsel updaten
-
-      Rev 1.12   06 Jan 1998 18:13:36   OM
-   Felbefehl-Dlg
-
-      Rev 1.11   19 Dec 1997 18:25:00   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.10   16 Dec 1997 17:02:46   OM
-   Feldbefehle bearbeiten
-
-      Rev 1.9   12 Dec 1997 16:11:12   OM
-   AutoUpdate bei FocusWechsel u.a.
-
-      Rev 1.8   12 Dec 1997 10:49:38   OM
-   ExchangeSupport implementiert
-
-      Rev 1.7   09 Dec 1997 17:16:46   OM
-   Kein alter Feldbefehl-Dialog mehr
-
-      Rev 1.6   21 Nov 1997 17:19:42   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.5   18 Nov 1997 10:33:10   OM
-   Neuer Feldbefehldialog
-
-      Rev 1.4   11 Nov 1997 10:03:40   OM
-   Neuer Feldbefehl-Dialog
-
-      Rev 1.3   04 Nov 1997 10:05:42   OM
-   Neuer Felddialog
-
-      Rev 1.2   30 Oct 1997 16:29:42   OM
-   Feldbefehl-Umstellung
-
-      Rev 1.1   30 Oct 1997 14:30:48   OM
-   Feldbefehl-Umstellung
-
-      Rev 1.0   28 Oct 1997 15:05:38   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
