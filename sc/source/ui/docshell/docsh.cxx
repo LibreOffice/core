@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:23:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,6 +621,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         aDocument.SetInsertingFromOtherDoc( FALSE );
 
     aDocument.SetImportingXML( FALSE );
+    bIsEmpty = FALSE;
 
     if (pModificator)
     {
