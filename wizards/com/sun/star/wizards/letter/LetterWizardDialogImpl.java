@@ -1,11 +1,7 @@
 package com.sun.star.wizards.letter;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Vector;
-import com.sun.star.i18n.NumberFormatIndex;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Desktop;
@@ -17,7 +13,6 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.uno.AnyConverter;
@@ -28,13 +23,11 @@ import com.sun.star.text.XTextFrame;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
-import com.sun.star.util.DateTime;
 import com.sun.star.util.XCloseable;
 import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.event.*;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.Helper.DateUtils;
 
 
 
@@ -104,7 +97,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             setMaxStep(6);
 
             //instatiate The Document Frame for the Preview
-            myLetterDoc = new LetterDocument(xMSF);
+            myLetterDoc = new LetterDocument(xMSF, this);
 
             //create the dialog:
             drawNaviBar();
@@ -143,6 +136,9 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             //load the last used document and apply last used settings:
             setConfiguration();
 
+            //If the configuration does not define Greeting/Salutation yet choose a default
+            setDefaultForGreetingAndSalutation();
+
             //disable funtionality that is not supported by the template:
             initializeElements();
 
@@ -177,6 +173,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             }
             sPath = fileAccess.getURL(sPath);
             myLetterDoc.killEmptyUserFields();
+            myLetterDoc.keepLogoFrame = (chkUseLogo.getState() != 0);
+            myLetterDoc.keepBendMarksFrame = (chkUseBendMarks.getState() != 0);
+            myLetterDoc.keepLetterSignsFrame = (chkUseSigns.getState() != 0);
+            myLetterDoc.killEmptyFrames();
 
             //first, if the filename was not changed, thus
             //it is coming from a saved session, check if the
@@ -190,7 +190,9 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 }
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer_StarOffice_XML_Writer_Template", false, "Template could not be saved!");
+            //bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer_StarOffice_XML_Writer_Template", false, "Template could not be saved!");
+                bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to " + sPath);
+
             if (bSaveSuccess) {
                 saveConfiguration();
                 xWindow.setVisible(false);
@@ -204,7 +206,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
                 } else {
                     loadValues[0].Value = Boolean.TRUE;
                 }
-                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_blank", loadValues);
+                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", loadValues);
                 XTextDocument xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
                 XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
                 ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
@@ -330,14 +332,18 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public void lstPrivOfficialStyleItemChanged() {
         xTextDocument = myLetterDoc.loadAsPreview(OfficialFiles[1][lstPrivOfficialStyle.getSelectedItemPos()] , false );
+        myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
         setElements();
+        myLetterDoc.xTextDocument.unlockControllers();
     }
 
     public void lstPrivateStyleItemChanged() {
         xTextDocument = myLetterDoc.loadAsPreview(PrivateFiles[1][lstPrivateStyle.getSelectedItemPos()] , false );
+        myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
         setElements();
+        myLetterDoc.xTextDocument.unlockControllers();
     }
 
     public void numLogoHeightTextChanged() {
@@ -527,14 +533,26 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     //switch Elements on/off -------------------------------------------------------
     public void chkUseLogoItemChanged() {
-        if (myLetterDoc.hasElement("Company Logo")) {
-            myLetterDoc.switchElement("Company Logo", (chkUseLogo.getState() != 0));
+        try {
+            if (myLetterDoc.hasElement("Company Logo")) {
+                boolean logostatus = AnyConverter.toBoolean(getControlProperty("chkUseLogo", "Enabled")) && (chkUseLogo.getState() != 0);
+                myLetterDoc.switchElement("Company Logo", logostatus);
+            }
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
     public void chkUseAddressReceiverItemChanged() {
-        if (myLetterDoc.hasElement("Sender Address Repeated")) {
-            myLetterDoc.switchElement("Sender Address Repeated", (chkUseAddressReceiver.getState() != 0));
+        try {
+            if (myLetterDoc.hasElement("Sender Address Repeated")) {
+                boolean rstatus = AnyConverter.toBoolean(getControlProperty("chkUseAddressReceiver", "Enabled")) && (chkUseAddressReceiver.getState() != 0);
+                myLetterDoc.switchElement("Sender Address Repeated", rstatus);
+            }
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
@@ -562,10 +580,10 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
             if (chkFooterNextPages.getState() != 0) {
                 myLetterDoc.switchFooter("First Page", false, (chkFooterPageNumbers.getState() != 0),txtFooter.getText());
-                myLetterDoc.switchFooter("Default", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+                myLetterDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             } else {
                 myLetterDoc.switchFooter("First Page", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
-                myLetterDoc.switchFooter("Default", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+                myLetterDoc.switchFooter("Standard", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
             }
 
             //enable/disable roadmap item for footer page
@@ -589,18 +607,16 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     private void setPossibleFooter(boolean bState) {
         setControlProperty("chkUseFooter", "Enabled", new Boolean(bState));
-        if (!bState) {
-            chkUseFooter.setState((short) 0);
-        }
         chkUseFooterItemChanged();
     }
 
     private void setPossibleAddressReceiver(boolean bState) {
         if (myLetterDoc.hasElement("Sender Address Repeated")) {
             setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(bState));
+            /*
             if (!bState) {
                 chkUseAddressReceiver.setState((short) 0);
-            }
+            }*/
             chkUseAddressReceiverItemChanged();
         }
     }
@@ -608,9 +624,6 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     private void setPossibleLogo(boolean bState) {
         if (myLetterDoc.hasElement("Company Logo")) {
             setControlProperty("chkUseLogo", "Enabled", new Boolean(bState));
-            if (!bState) {
-                chkUseLogo.setState((short) 0);
-            }
             chkUseLogoItemChanged();
         }
     }
@@ -671,6 +684,18 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myLetterDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
         setControlProperty("lstGreeting", "Enabled", new Boolean(chkUseGreeting.getState() != 0));
+    }
+
+    private void setDefaultForGreetingAndSalutation() {
+        XTextComponent xTextComponent;
+        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
+        if (xTextComponent.getText().equals("")) {
+            xTextComponent.setText(resources.SalutationLabels[0]);
+        }
+        xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
+        if (xTextComponent.getText().equals("")) {
+            xTextComponent.setText(resources.GreetingLabels[0]);
+        }
     }
 
     public void lstGreetingItemChanged() {
@@ -777,10 +802,19 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public void initializeNorms() {
         //To add new Languages please modify this method and LetterWizardDialogResources.java
-        Norms = new String[2];
+        Norms = new String[11];
 
         Norms[0] = "en-US";
         Norms[1] = "de";
+        Norms[2] = "fr";
+        Norms[3] = "es";
+        Norms[4] = "it";
+        Norms[5] = "pt-BR";
+        Norms[6] = "sv";
+        Norms[7] = "ja";
+        Norms[8] = "ko";
+        Norms[9] = "zh-CN";
+        Norms[10] = "zh-TW";
 
         setControlProperty("lstLetterNorm", "StringItemList", resources.LanguageLabels);
 
@@ -837,6 +871,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(myLetterDoc.hasElement("Sender Address Repeated")));
         setControlProperty("chkUseSubject", "Enabled", new Boolean(myLetterDoc.hasElement("Subject Line")));
         setControlProperty("chkUseSigns", "Enabled", new Boolean(myLetterDoc.hasElement("Letter Signs")));
+        myLetterDoc.updateDateFields();
     }
 
     public void setConfiguration() {
@@ -862,6 +897,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         chkUseSalutationItemChanged();
         chkUseGreetingItemChanged();
         chkUseBendMarksItemChanged();
+        chkUseAddressReceiverItemChanged();
         txtTemplateNameTextChanged();
 
         //not UI relevant:
@@ -898,8 +934,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
         myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
         myPathSelection.sDefaultDirectory = sUserTemplatePath;
-        myPathSelection.sDefaultName = "myLetterTemplate.stw";
-        myPathSelection.sDefaultFilter = "writer_StarOffice_XML_Writer_Template";
+        myPathSelection.sDefaultName = "myLetterTemplate.ott";
+        myPathSelection.sDefaultFilter = "writer8_template";
         myPathSelection.addSelectionListener(new myPathSelectionListener());
     }
 
