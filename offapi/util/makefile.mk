@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: af $ $Date: 2002-07-26 08:36:28 $
+#   last change: $Author: dbo $ $Date: 2002-07-31 13:14:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,8 @@ TARGET=offapi_db
 
 # ------------------------------------------------------------------
 
-UNOIDLDBREGS= \
-    $(SOLARBINDIR)$/udkapi.rdb
+#UNOIDLDBREGS= \
+#	$(SOLARBINDIR)$/udkapi.rdb
 
 UNOIDLDBFILES= \
     $(UCR)$/cssawt.db \
@@ -150,6 +150,20 @@ REFERENCE_SO_60_DOC_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat_doc.rdb
 REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
 # --- Targets ------------------------------------------------------
+
+.IF "$(depend)" == ""
+ALLTAR : $(UCR)$/applicat.db $(OUT)$/ucrdoc$/applicat_doc.db
+
+$(UCR)$/applicat.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
+    +$(GNUCOPY) -f $(UCR)$/offapi.db $@
+    +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
+$(OUT)$/ucrdoc$/applicat_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
+    +$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
+    +regmerge $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
+
+.ELSE
+ALL : ALLDEP
+.ENDIF
 
 .INCLUDE :  target.mk
 
