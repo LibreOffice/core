@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 19:01:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,13 +414,14 @@ static const ULONG primes[] =
   2147483647,
   0
 };
+    int i;
 
     pDataArr = new _HashData[ nSize ];
     pDataArr[0].nNext = 0;
     pDataArr[0].nHash = 0,
     pDataArr[0].pLine = 0;
 
-    for( int i = 0; primes[i] < nSize / 3;  i++)
+    for( i = 0; primes[i] < nSize / 3;  i++)
         if( !primes[i] )
         {
             pHashArr = 0;
@@ -448,7 +449,8 @@ void Hash::CalcHashValue( CompareData& rData )
             ULONG nH = pLine->GetHashValue();
 
             ULONG* pFound = &pHashArr[ nH % nPrime ];
-            for( ULONG i = *pFound;  ;  i = pDataArr[i].nNext )
+            ULONG i;
+            for( i = *pFound;  ;  i = pDataArr[i].nNext )
                 if( !i )
                 {
                     i = nCount++;
@@ -534,7 +536,9 @@ void Compare::SetDiscard( const CompareData& rData,
 
     // berechne Max in Abhanegigkeit zur LineAnzahl
     USHORT nMax = 5;
-    for( ULONG n = nLen / 64; ( n = n >> 2 ) > 0; )
+    ULONG n;
+
+    for( n = nLen / 64; ( n = n >> 2 ) > 0; )
         nMax <<= 1;
 
     for( n = 0; n < nLen; ++n )
@@ -659,7 +663,9 @@ Compare::MovedData::MovedData( CompareData& rData, sal_Char* pDiscard )
     : pIndex( 0 ), pLineNum( 0 ), nCount( 0 )
 {
     ULONG nLen = rData.GetLineCount();
-    for( ULONG n = 0; n < nLen; ++n )
+    ULONG n;
+
+    for( n = 0; n < nLen; ++n )
         if( pDiscard[ n ] )
             rData.SetChanged( n );
         else
@@ -1221,8 +1227,10 @@ BOOL SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         const SwTxtNode& rSrcNd = *rLine.GetNode().GetTxtNode();
 
         xub_StrLen nDEnd = rDestNd.GetTxt().Len(), nSEnd = rSrcNd.GetTxt().Len();
-        for( xub_StrLen nStt = 0, nEnd = Min( nDEnd, nSEnd );
-            nStt < nEnd; ++nStt )
+        xub_StrLen nStt;
+        xub_StrLen nEnd;
+
+        for( nStt = 0, nEnd = Min( nDEnd, nSEnd ); nStt < nEnd; ++nStt )
             if( rDestNd.GetTxt().GetChar( nStt ) !=
                 rSrcNd.GetTxt().GetChar( nStt ) )
                 break;
