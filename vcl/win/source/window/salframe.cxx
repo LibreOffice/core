@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-15 12:50:03 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,8 @@ void SalFrame::SetParent( SalFrame* pNewParent )
 
 
     // make sure we're pointing to the right VCL parent
-    ((Window*)maFrameData.mpInst)->mpRealParent = (Window*)pNewParent->maFrameData.mpInst;
+    // FIXME: sclient requires the following statement !!!
+    //((Window*)maFrameData.mpInst)->mpRealParent = (Window*)pNewParent->maFrameData.mpInst;
 
 
     // recreate DCs
