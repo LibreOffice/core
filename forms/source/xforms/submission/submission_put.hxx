@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission_put.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:01:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define __SUBMISSION_PUT_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 
 #include "submission.hxx"
 
@@ -72,7 +73,7 @@ private:
     CSS::uno::Reference< CSS::lang::XMultiServiceFactory > m_aFactory;
 public:
     CSubmissionPut(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit();
+    virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler);
 
 };
 #endif
