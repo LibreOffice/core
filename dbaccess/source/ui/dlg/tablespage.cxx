@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:24:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,11 +953,11 @@ namespace dbaui
 
         // expand the entries
         // TODO: some kind of collapse all
-        actOnEntryPaths(pMySettings->aExpandedEntries, (void (OTableSubscriptionPage::*)(SvLBoxEntry*))doExpand);
+        actOnEntryPaths(pMySettings->aExpandedEntries, &OTableSubscriptionPage::doExpand);
 
         // select the entries
         m_aTablesList.SelectAll(sal_False);
-        actOnEntryPaths(pMySettings->aSelectedEntries, (void (OTableSubscriptionPage::*)(SvLBoxEntry*))doSelect);
+        actOnEntryPaths(pMySettings->aSelectedEntries, &OTableSubscriptionPage::doSelect);
 
         SvLBoxEntry* pFocusEntry = getEntryFromPath(pMySettings->sFocusEntry);
         if (pFocusEntry)
