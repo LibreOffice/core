@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:00:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4223,8 +4223,9 @@ static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)
 
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rectangle& aBoundRect, const DffObjData& rObjData ) const
 {
-    SdrObject* pRet = NULL;
-    String aFilename;
+    SdrObject*  pRet = NULL;
+    String      aFilename;
+    String      aLinkFileName, aLinkFilterName;
 
     MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
     sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
@@ -4494,7 +4495,28 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                     }
                 }
                 if ( bSetFileName )
-                    ((SdrGrafObj*)pRet)->SetFileName( aName );
+                {
+                    String          aFilterName;
+                    INetURLObject   aURLObj( aName );
+
+                    if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
+                    {
+                        String aValidURL;
+
+                        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aValidURL ) )
+                            aURLObj = INetURLObject( aValidURL );
+                    }
+
+                    if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
+                    {
+                        GraphicFilter* pGrfFilter = GetGrfFilter();
+                        aFilterName = pGrfFilter->GetImportFormatName(
+                                        pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
+                    }
+
+                    aLinkFileName = aName;
+                    aLinkFilterName = aFilterName;
+                }
             }
         }
         if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
@@ -4512,8 +4534,15 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     }
     pRet->SetModel( pSdrModel ); // fuer GraphicLink erforderlich
     pRet->SetLogicRect( aBoundRect );
+
     if ( pRet->ISA( SdrGrafObj ) )
+    {
+        if( aLinkFileName.Len() )
+            ((SdrGrafObj*)pRet)->SetGraphicLink( aLinkFileName, aLinkFilterName );
+
         ((SdrGrafObj*)pRet)->ForceSwapOut();
+    }
+
     return pRet;
 }
 
