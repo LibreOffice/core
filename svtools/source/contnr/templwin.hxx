@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 07:07:19 $
+ *  last change: $Author: vg $ $Date: 2001-05-08 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef _SVTOOLS_TEMPLWIN_HXX
 #define _SVTOOLS_TEMPLWIN_HXX
 
+#include <vcl/window.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/splitwin.hxx>
+
+#include "ivctrl.hxx"
+#include "fileview.hxx"
+
 namespace com
 {
     namespace sun
@@ -75,13 +82,6 @@ namespace com
     }
 };
 
-
-#include <vcl/window.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/splitwin.hxx>
-
-#include "ivctrl.hxx"
-#include "fileview.hxx"
 
 // class SvtIconWindow_Impl ----------------------------------------------
 
