@@ -1,0 +1,23 @@
+### 109883 ###
+dbaccess.SbaXGridControl::com::sun::star::form::XUpdateBroadcaster
+
+### 111118 ###
+dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessibleContext
+
+### 111120 ###
+dbaccess.JoinViewAccessibility::com::sun::star::accessibility::XAccessibleContext
+
+### 112634 ###
+dbaccess.SbaXGridControl::com::sun::star::awt::XWindow
+
+### 114044 ###
+dbaccess.ORowSet::com::sun::star::sdbc::XWarningsSupplier
+
+### 114046 ###
+dbaccess.ORowSet::com::sun::star::sdb::XCompletedExecution
+
+### 95380 ###
+dbaccess.OCommandDefinition::com::sun::star::beans::XPropertySet
+
+### 99122 ###
+dbaccess.ODatasourceBrowser::com::sun::star::form::XFormController
