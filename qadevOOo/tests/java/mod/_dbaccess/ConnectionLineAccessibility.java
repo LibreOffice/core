@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccessibility.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-04-28 12:24:01 $
+ *  last change:$Date: 2003-05-27 12:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,13 +141,13 @@ public class ConnectionLineAccessibility extends TestCase {
         Object oDBContext = null, oDBSource = null, newQuery = null;
         Object toolkit = null;
         try {
-            oDBContext = Param.getMSF().createInstance(
+            oDBContext = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.sdb.DatabaseContext");
-            oDBSource = Param.getMSF().createInstance(
+            oDBSource = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.sdb.DataSource");
-            newQuery = Param.getMSF().createInstance(
+            newQuery = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.sdb.QueryDefinition");
-            toolkit = Param.getMSF().createInstance(
+            toolkit = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.awt.Toolkit");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
@@ -323,7 +323,7 @@ public class ConnectionLineAccessibility extends TestCase {
             throw new StatusException(Status.failed("Couldn't insert query"));
         }
 
-        DiagThread Diag = new DiagThread(Param.getMSF());
+        DiagThread Diag = new DiagThread((XMultiServiceFactory)Param.getMSF());
 
         Diag.start();
 
