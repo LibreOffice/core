@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
+ *  last change: $Author: dvo $ $Date: 2001-07-10 17:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
             SwXTextCursor* pOwnCursor = (SwXTextCursor*)xOwnTunnel->getSomething(
                                     SwXTextCursor::getUnoTunnelId());
 
-            const SwStartNode* pOwnStartNode = pOwnCursor->GetCrsr()->GetNode()->FindStartNode();
+            const SwStartNode* pOwnStartNode = GetStartNode();
             SwStartNodeType eSearchNodeType = SwNormalStartNode;
             switch(eCrsrType)
             {
