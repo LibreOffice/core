@@ -8154,3 +8154,6 @@ lpfnDrawStateW
 ??_R0?AVWrappedTargetRuntimeException@lang@star@sun@com@@@8
 ?s_pType_com_sun_star_ucb_CommandAbortedException@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBVCommandAbortedException@ucb@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
+?OpenURL@ShutdownIcon@@SAXAAVOUString@rtl@@ABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2372420298@@YAXABVSbxVariableRef@@PAX@Z
+??1OReleaseSolarMutex@sfx2@@QAE@XZ
