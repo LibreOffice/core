@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 17:52:01 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 16:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
+#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
+#endif
 
 #include <algorithm>
 #include <iterator>
@@ -90,41 +96,35 @@ using ::osl::MutexGuard;
 namespace
 {
 
-// enum
-// {
-//     PROP_DIAGRAM_PREFERRED_ALIGNMENT,
-//     PROP_DIAGRAM_PREFERRED_STRETCH_MODE
-// };
+enum
+{
+    PROP_DIAGRAM_REL_POS
+};
 
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-//     rOutProperties.push_back(
-//         Property( C2U( "PreferredAlignment" ),
-//                   PROP_DIAGRAM_PREFERRED_ALIGNMENT,
-//                   ::getCppuType( reinterpret_cast< const layout::Alignment * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "RelativePosition" ),
+                  PROP_DIAGRAM_REL_POS,
+                  ::getCppuType( reinterpret_cast< const layout::RelativePoint * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 
-//     rOutProperties.push_back(
-//         Property( C2U( "PreferredStretchMode" ),
-//                   PROP_DIAGRAM_PREFERRED_STRETCH_MODE,
-//                   ::getCppuType( reinterpret_cast< const layout::StretchMode * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "TransformationMatrix" ),
+                  PROP_DIAGRAM_REL_POS,
+                  ::getCppuType( reinterpret_cast< const drawing::HomogenMatrix * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
     ::chart::helper::tPropertyValueMap & rOutMap )
 {
-//     layout::Alignment aCenterAlign( 0.5, 0.5, true );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_PREFERRED_ALIGNMENT ));
-//     rOutMap[ PROP_DIAGRAM_PREFERRED_ALIGNMENT ] =
-//         uno::makeAny( aCenterAlign );
-
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_PREFERRED_STRETCH_MODE ));
-//     rOutMap[ PROP_DIAGRAM_PREFERRED_STRETCH_MODE ] =
-//         uno::makeAny( layout::StretchMode_BOTH );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_REL_POS ));
+    rOutMap[ PROP_DIAGRAM_REL_POS ] =
+        uno::makeAny( drawing::HomogenMatrix() );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()

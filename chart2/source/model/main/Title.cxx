@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:58 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 16:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
+#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#endif
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -116,7 +119,8 @@ enum
     PROP_TITLE_PARA_IS_HYPHENATION,
 
     PROP_TITLE_TEXT_ROTATION,
-    PROP_TITLE_TEXT_STACKED
+    PROP_TITLE_TEXT_STACKED,
+    PROP_TITLE_REL_POS
 };
 
 void lcl_AddPropertiesToVector(
@@ -183,6 +187,13 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "RelativePosition" ),
+                  PROP_TITLE_REL_POS,
+                  ::getCppuType( reinterpret_cast< const layout::RelativePoint * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Title.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 16:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #ifndef CHART_MUTEXCONTAINER_HXX
 #include "MutexContainer.hxx"
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -85,9 +85,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XLAYOUTELEMENT_HPP_
-#include <drafts/com/sun/star/layout/XLayoutElement.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -97,11 +94,10 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper3<
     ::drafts::com::sun::star::chart2::XTitle,
     ::com::sun::star::lang::XServiceInfo,
-    ::drafts::com::sun::star::chart2::XIdentifiable,
-    ::drafts::com::sun::star::layout::XLayoutElement >
+    ::drafts::com::sun::star::chart2::XIdentifiable >
     Title_Base;
 }
 
@@ -159,9 +155,6 @@ protected:
     // ____ XIdentifiable ____
     virtual ::rtl::OUString SAL_CALL getIdentifier()
         throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XLayoutElement ____
-    // (empty)
 
 private:
     ::rtl::OUString m_aIdentifier;

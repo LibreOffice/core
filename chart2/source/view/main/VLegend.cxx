@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 17:02:30 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 16:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,14 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
 #include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XANCHOREDOBJECT_HPP_
-#include <drafts/com/sun/star/layout/XAnchoredObject.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
 #include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ANCHORPOINT_HPP_
+#include <drafts/com/sun/star/layout/AnchorPoint.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
+#include <drafts/com/sun/star/layout/RelativePoint.hpp>
 #endif
 
 // header for class Matrix3D
@@ -575,6 +578,39 @@ void lcl_createLegend(
     rOutSize.Height = nMaxYPos + nYPadding;
 }
 
+layout::AnchorPoint lcl_getAnchorByAutoPos( chart2::LegendPosition ePos )
+{
+    layout::AnchorPoint aResult;
+
+    switch( ePos )
+    {
+        case chart2::LegendPosition_LINE_START:
+            aResult.Alignment = ::layout_defaults::const_aLineStart;
+            aResult.EscapeDirection = 0.0;
+            break;
+        case chart2::LegendPosition_LINE_END:
+            aResult.Alignment = ::layout_defaults::const_aLineEnd;
+            aResult.EscapeDirection = 180.0;
+            break;
+        case chart2::LegendPosition_PAGE_START:
+            aResult.Alignment = ::layout_defaults::const_aPageStart;
+            aResult.EscapeDirection = 270.0;
+            break;
+        case chart2::LegendPosition_PAGE_END:
+            aResult.Alignment = ::layout_defaults::const_aPageEnd;
+            aResult.EscapeDirection = 90.0;
+            break;
+
+        case chart2::LegendPosition_CUSTOM:
+            // to avoid warning
+        case chart2::LegendPosition_MAKE_FIXED_SIZE:
+            // nothing to be set
+            break;
+    }
+
+    return aResult;
+}
+
 } // anonymous namespace
 
 //.............................................................................
@@ -747,10 +783,14 @@ void VLegend::changePosition(
 
     try
     {
-        // determine position and alignment depending on anchor
-        uno::Reference< layout::XAnchoredObject > xAnchObj( m_xLegend, uno::UNO_QUERY_THROW );
-        layout::AnchorPoint aAnchor( xAnchObj->getAnchor());
-        layout::RelativePoint aOffset( xAnchObj->getRelativePosition());
+        // determine position and alignment depending on default position
+        chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
+        uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
+        xLegendProp->getPropertyValue( C2U( "AutoPosition" )) >>= ePos;
+
+        layout::AnchorPoint aAnchor = lcl_getAnchorByAutoPos( ePos );
+        // shift legend about 2% into the primary direction
+        layout::RelativePoint aOffset( 0.02, 0.0 );
 
         helper::LayoutHelper::rotatePoint( aAnchor.EscapeDirection, aOffset.Primary, aOffset.Secondary );
 
@@ -784,10 +824,6 @@ void VLegend::changePosition(
         m_aBoundRect.Y = aPos.Y;
 
         // adapt rOutAvailableSpace if LegendPosition is not CUSTOM
-        chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
-        uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
-        xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
-
         switch( ePos )
         {
             case chart2::LegendPosition_LINE_START:

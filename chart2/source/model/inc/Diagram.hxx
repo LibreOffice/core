@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 17:49:50 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 16:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include "MutexContainer.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -96,9 +96,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <drafts/com/sun/star/chart2/XTitled.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XLAYOUTELEMENT_HPP_
-#include <drafts/com/sun/star/layout/XLayoutElement.hpp>
-#endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
 #endif
@@ -117,14 +114,13 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper8<
+typedef ::cppu::WeakImplHelper7<
     ::drafts::com::sun::star::chart2::XDiagram,
     ::com::sun::star::lang::XServiceInfo,
     ::drafts::com::sun::star::chart2::XAxisContainer,
     ::drafts::com::sun::star::chart2::XBoundedCoordinateSystemContainer,
     ::drafts::com::sun::star::chart2::XGridContainer,
     ::drafts::com::sun::star::chart2::XTitled,
-    ::drafts::com::sun::star::layout::XLayoutElement,
     ::drafts::com::sun::star::chart2::XIdentifiable >
     Diagram_Base;
 }
@@ -256,9 +252,6 @@ protected:
     virtual void SAL_CALL setTitle( const ::com::sun::star::uno::Reference<
                                     ::drafts::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ XLayoutElement ____
-    // (empty)
 
     // ____ XIdentifiable ____
     virtual ::rtl::OUString SAL_CALL getIdentifier()

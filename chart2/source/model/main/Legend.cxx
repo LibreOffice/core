@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:35 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 16:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
 #include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
+#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#endif
 
 #include <algorithm>
 
@@ -107,18 +110,19 @@ static const ::rtl::OUString lcl_aServiceName(
 
 enum
 {
-    PROP_LEGEND_POSITION,
+    PROP_LEGEND_AUTO_POSITION,
     PROP_LEGEND_PREFERRED_EXPANSION,
     PROP_LEGEND_SHOW,
-    PROP_LEGEND_REF_PAGE_SIZE
+    PROP_LEGEND_REF_PAGE_SIZE,
+    PROP_LEGEND_REL_POS
 };
 
 void lcl_AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
-        Property( C2U( "Position" ),
-                  PROP_LEGEND_POSITION,
+        Property( C2U( "AutoPosition" ),
+                  PROP_LEGEND_AUTO_POSITION,
                   ::getCppuType( reinterpret_cast< const chart2::LegendPosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -142,13 +146,20 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "RelativePosition" ),
+                  PROP_LEGEND_REL_POS,
+                  ::getCppuType( reinterpret_cast< const layout::RelativePoint * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
     ::chart::helper::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_POSITION ));
-    rOutMap[ PROP_LEGEND_POSITION ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_AUTO_POSITION ));
+    rOutMap[ PROP_LEGEND_AUTO_POSITION ] =
         uno::makeAny( chart2::LegendPosition_LINE_END );
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_SHOW ));
@@ -209,7 +220,6 @@ Legend::Legend( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
         m_aIdentifier( LegendHelper::getIdentifierForLegend() )
 {
-    setAnchorAndRelposFromProperty( GetDefaultValue( PROP_LEGEND_POSITION ));
 }
 
 Legend::~Legend()
@@ -254,69 +264,6 @@ uno::Sequence< uno::Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntr
     throw (uno::RuntimeException)
 {
     return m_aIdentifier;
-}
-
-// ____ XAnchoredObject ____
-void SAL_CALL Legend::setAnchor( const layout::AnchorPoint& aAnchor )
-    throw (uno::RuntimeException)
-{
-    m_aAnchor = aAnchor;
-}
-
-layout::AnchorPoint SAL_CALL Legend::getAnchor()
-    throw (uno::RuntimeException)
-{
-    return m_aAnchor;
-}
-
-void SAL_CALL Legend::setRelativePosition( const layout::RelativePoint& aPosition )
-    throw (uno::RuntimeException)
-{
-    m_aRelativePosition = aPosition;
-}
-
-layout::RelativePoint SAL_CALL Legend::getRelativePosition()
-    throw (uno::RuntimeException)
-{
-    return m_aRelativePosition;
-}
-
-// private
-void Legend::setAnchorAndRelposFromProperty( const uno::Any & rValue )
-{
-    chart2::LegendPosition ePos;
-    if( rValue >>= ePos )
-    {
-        // shift legend about 2% into the primary direction
-        m_aRelativePosition.Primary   = 0.02;
-        m_aRelativePosition.Secondary = 0.0;
-
-        switch( ePos )
-        {
-            case chart2::LegendPosition_LINE_START:
-                m_aAnchor.Alignment = ::layout_defaults::const_aLineStart;
-                m_aAnchor.EscapeDirection = 0.0;
-                break;
-            case chart2::LegendPosition_LINE_END:
-                m_aAnchor.Alignment = ::layout_defaults::const_aLineEnd;
-                m_aAnchor.EscapeDirection = 180.0;
-                break;
-            case chart2::LegendPosition_PAGE_START:
-                m_aAnchor.Alignment = ::layout_defaults::const_aPageStart;
-                m_aAnchor.EscapeDirection = 270.0;
-                break;
-            case chart2::LegendPosition_PAGE_END:
-                m_aAnchor.Alignment = ::layout_defaults::const_aPageEnd;
-                m_aAnchor.EscapeDirection = 90.0;
-                break;
-
-            case chart2::LegendPosition_CUSTOM:
-            // to avoid warning
-            case chart2::LegendPosition_MAKE_FIXED_SIZE:
-                // nothing to be set
-                break;
-        }
-    }
 }
 
 // ================================================================================
@@ -387,16 +334,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
     return xInfo;
     // \--
-}
-
-void SAL_CALL Legend::setFastPropertyValue_NoBroadcast
-    ( sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception)
-{
-    if( nHandle == PROP_LEGEND_POSITION )
-        setAnchorAndRelposFromProperty( rValue );
-
-    OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
