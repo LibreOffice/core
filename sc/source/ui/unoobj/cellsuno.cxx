@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-18 18:29:28 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@ const SfxItemPropertyMap* lcl_GetCellsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), 0,                  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
@@ -231,6 +232,7 @@ const SfxItemPropertyMap* lcl_GetCellsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {0,0,0,0}
     };
@@ -263,6 +265,7 @@ const SfxItemPropertyMap* lcl_GetRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), 0,                  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
@@ -284,6 +287,7 @@ const SfxItemPropertyMap* lcl_GetRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {0,0,0,0}
     };
@@ -316,6 +320,7 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), 0,                  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FORMLOC),  0,                  &getCppuType((rtl::OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FORMRT),   0,                  &getCppuType((table::CellContentType*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, 0 },
@@ -339,6 +344,7 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {0,0,0,0}
     };
@@ -371,6 +377,7 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), 0,                  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
 //      {MAP_CHAR_LEN(SC_UNONAME_CELLFILT), 0,                  &getBooleanCppuType(),                  0, 0 },
@@ -397,6 +404,7 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLWID),  0,                  &getCppuType((sal_Int32*)0),            0, 0 },
         {0,0,0,0}
@@ -427,6 +435,7 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), 0,                  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHGT),  0,                  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
@@ -454,6 +463,7 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {0,0,0,0}
     };
@@ -483,6 +493,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CHROWHDR), 0,                  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDFMT),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CONDLOC),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CONDXML),  0,                  &getCppuType((uno::Reference<sheet::XSheetConditionalEntries>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &getBooleanCppuType(),                  0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &getBooleanCppuType(),                  0, 0 },
@@ -508,6 +519,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0), 0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_VALIDAT),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  0,                  &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {0,0,0,0}
     };
@@ -1238,9 +1250,11 @@ USHORT lcl_GetPropertyWhich( const String& rName )
         nWhich = pMap->nWID;
     else if ( rName.EqualsAscii( SC_UNONAME_TBLBORD ) )
         nWhich = ATTR_BORDER;
-    else if ( rName.EqualsAscii( SC_UNONAME_CONDFMT ) || rName.EqualsAscii( SC_UNONAME_CONDLOC ) )
+    else if ( rName.EqualsAscii( SC_UNONAME_CONDFMT ) || rName.EqualsAscii( SC_UNONAME_CONDLOC ) ||
+              rName.EqualsAscii( SC_UNONAME_CONDXML ) )
         nWhich = ATTR_CONDITIONAL;
-    else if ( rName.EqualsAscii( SC_UNONAME_VALIDAT ) || rName.EqualsAscii( SC_UNONAME_VALILOC ) )
+    else if ( rName.EqualsAscii( SC_UNONAME_VALIDAT ) || rName.EqualsAscii( SC_UNONAME_VALILOC ) ||
+              rName.EqualsAscii( SC_UNONAME_VALIXML ) )
         nWhich = ATTR_VALIDDATA;
     return nWhich;
 }
@@ -1423,20 +1437,26 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                     aAny <<= aBorder;
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) || aNameString.EqualsAscii( SC_UNONAME_CONDLOC ) )
+            else if ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_CONDLOC ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_CONDXML ) )
             {
-                BOOL bEnglish = ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) );
+                BOOL bEnglish = !aNameString.EqualsAscii( SC_UNONAME_CONDLOC );
+                BOOL bXML = aNameString.EqualsAscii( SC_UNONAME_CONDXML );
 
                 uno::Reference<sheet::XSheetConditionalEntries> xObj =
-                        new ScTableConditionalFormat( pDoc, 0, bEnglish );
+                        new ScTableConditionalFormat( pDoc, 0, bEnglish, bXML );
                 aAny <<= xObj;
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) || aNameString.EqualsAscii( SC_UNONAME_VALILOC ) )
+            else if ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_VALILOC ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_VALIXML ) )
             {
-                BOOL bEnglish = ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) );
+                BOOL bEnglish = !aNameString.EqualsAscii( SC_UNONAME_VALILOC );
+                BOOL bXML = aNameString.EqualsAscii( SC_UNONAME_VALIXML );
 
                 uno::Reference<beans::XPropertySet> xObj =
-                        new ScTableValidationObj( pDoc, 0, bEnglish );
+                        new ScTableValidationObj( pDoc, 0, bEnglish, bXML );
                 aAny <<= xObj;
             }
         }
@@ -1620,9 +1640,12 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
                     lcl_ApplyBorder( pDocShell, aRanges, aOuter, aInner );  //! docfunc
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) || aNameString.EqualsAscii( SC_UNONAME_CONDLOC ) )
+            else if ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_CONDLOC ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_CONDXML ) )
             {
-                BOOL bEnglish = ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) );
+                BOOL bEnglish = !aNameString.EqualsAscii( SC_UNONAME_CONDLOC );
+                BOOL bXML = aNameString.EqualsAscii( SC_UNONAME_CONDXML );
 
                 uno::Reference<sheet::XSheetConditionalEntries> xInterface;
                 if ( aRanges.Count() && ( aValue >>= xInterface ) ) // leer = nichts zu tun
@@ -1634,7 +1657,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
                         ScDocument* pDoc = pDocShell->GetDocument();
 
                         ScConditionalFormat aNew( 0, pDoc );    // Index wird beim Einfuegen gesetzt
-                        pFormat->FillFormat( aNew, pDoc, bEnglish );
+                        pFormat->FillFormat( aNew, pDoc, bEnglish, bXML );
                         ULONG nIndex = pDoc->AddCondFormat( aNew );
 
                         ScMarkData aMark;
@@ -1647,9 +1670,12 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
                     }
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) || aNameString.EqualsAscii( SC_UNONAME_VALILOC ) )
+            else if ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_VALILOC ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_VALIXML ) )
             {
-                BOOL bEnglish = ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) );
+                BOOL bEnglish = !aNameString.EqualsAscii( SC_UNONAME_VALILOC );
+                BOOL bXML = aNameString.EqualsAscii( SC_UNONAME_VALIXML );
 
                 uno::Reference<beans::XPropertySet> xInterface;
                 if ( aRanges.Count() && ( aValue >>= xInterface ) ) // leer = nichts zu tun
@@ -1661,7 +1687,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValue(
                         ScDocument* pDoc = pDocShell->GetDocument();
 
                         ScValidationData* pNewData =
-                                pValidObj->CreateValidationData( pDoc, bEnglish );
+                                pValidObj->CreateValidationData( pDoc, bEnglish, bXML );
                         ULONG nIndex = pDoc->AddValidationEntry( *pNewData );
                         delete pNewData;
 
@@ -1782,9 +1808,12 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const rtl::OUString& aProp
                     aAny <<= aBorder;
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) || aNameString.EqualsAscii( SC_UNONAME_CONDLOC ) )
+            else if ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_CONDLOC ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_CONDXML ) )
             {
-                BOOL bEnglish = ( aNameString.EqualsAscii( SC_UNONAME_CONDFMT ) );
+                BOOL bEnglish = !aNameString.EqualsAscii( SC_UNONAME_CONDLOC );
+                BOOL bXML = aNameString.EqualsAscii( SC_UNONAME_CONDXML );
 
                 const ScPatternAttr* pPattern = GetCurrentAttrsDeep();
                 if ( pPattern )
@@ -1793,13 +1822,16 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const rtl::OUString& aProp
                     ULONG nIndex = ((const SfxUInt32Item&)
                             pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
                     uno::Reference<sheet::XSheetConditionalEntries> xObj =
-                            new ScTableConditionalFormat( pDoc, nIndex, bEnglish );
+                            new ScTableConditionalFormat( pDoc, nIndex, bEnglish, bXML );
                     aAny <<= xObj;
                 }
             }
-            else if ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) || aNameString.EqualsAscii( SC_UNONAME_VALILOC ) )
+            else if ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_VALILOC ) ||
+                        aNameString.EqualsAscii( SC_UNONAME_VALIXML ) )
             {
-                BOOL bEnglish = ( aNameString.EqualsAscii( SC_UNONAME_VALIDAT ) );
+                BOOL bEnglish = !aNameString.EqualsAscii( SC_UNONAME_VALILOC );
+                BOOL bXML = aNameString.EqualsAscii( SC_UNONAME_VALIXML );
 
                 const ScPatternAttr* pPattern = GetCurrentAttrsDeep();
                 if ( pPattern )
@@ -1808,7 +1840,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const rtl::OUString& aProp
                     ULONG nIndex = ((const SfxUInt32Item&)
                             pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
                     uno::Reference<beans::XPropertySet> xObj =
-                            new ScTableValidationObj( pDoc, nIndex, bEnglish );
+                            new ScTableValidationObj( pDoc, nIndex, bEnglish, bXML );
                     aAny <<= xObj;
                 }
             }
