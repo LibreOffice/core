@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:41:42 $
+ *  last change: $Author: ama $ $Date: 2000-11-14 11:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,8 @@ class SwDoubleLinePortion : public SwMultiPortion
     xub_StrLen nBlank1;     // Number of blanks in the first line
     xub_StrLen nBlank2;     // Number of blanks in the second line
 public:
-    SwDoubleLinePortion( xub_StrLen nEnd ) : SwMultiPortion( nEnd ),
-        pBracket( 0 ) { SetDouble(); }
     SwDoubleLinePortion( SwDoubleLinePortion& rDouble, xub_StrLen nEnd );
+    SwDoubleLinePortion( const SwTxtAttr& rAttr, xub_StrLen nEnd );
     ~SwDoubleLinePortion();
 
     inline SwBracket* GetBrackets() const { return pBracket; }
@@ -167,7 +166,8 @@ public:
     void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
     inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
     inline KSHORT PostWidth() const { return pBracket->nPostWidth; }
-    inline void ClearBrackets(){ pBracket->nPreWidth = pBracket->nPostWidth=0; }
+    inline void ClearBrackets()
+        { pBracket->nPreWidth = pBracket->nPostWidth=0; Width( 0 ); }
     inline KSHORT BracketWidth(){ return PreWidth() + PostWidth(); }
 
     void CalcBlanks( SwTxtFormatInfo &rInf );
