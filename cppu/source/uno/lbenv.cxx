@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 09:36:30 $
+ *  last change: $Author: dbo $ $Date: 2001-02-01 09:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
     OId2ObjectMap       aOId2ObjectMap;
 
     uno_DefaultEnvironment(
-        const OUString & rTypeName_, oslModule hMod_, void * pContext_ ) throw ();
+        const OUString & rTypeName_, void * pContext_, oslModule hMod_ ) throw ();
     ~uno_DefaultEnvironment() throw ();
 };
 
