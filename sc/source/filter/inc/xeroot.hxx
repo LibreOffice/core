@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:43:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,17 @@
 #ifndef SC_XLROOT_HXX
 #include "xlroot.hxx"
 #endif
-#ifndef SC_XERECORD_HXX
-#include "xerecord.hxx"
-#endif
 
 // Forward declarations of objects in public use ==============================
 
 class XclExpStream;
+class XclExpRecordBase;
 class XclExpString;
 class XclExpTokenArray;
 
-typedef ScfRef< XclExpString > XclExpStringRef;
-typedef ScfRef< XclExpTokenArray > XclExpTokenArrayRef;
+typedef ScfRef< XclExpRecordBase >  XclExpRecordRef;
+typedef ScfRef< XclExpString >      XclExpStringRef;
+typedef ScfRef< XclExpTokenArray >  XclExpTokenArrayRef;
 
 // Global data ================================================================
 
