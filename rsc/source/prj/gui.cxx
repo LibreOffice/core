@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:55:13 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,7 @@ int cdecl main ( int argc, char ** argv) {
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
 #endif
     RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
-                                             pCmdLine->m_aOutputFiles.front().nLangTypeId,
                                              pCmdLine->nByteOrder,
-                                             pCmdLine->m_aOutputFiles.front().nSourceCharSet,
                                              pCmdLine->aPath,
                                              pCmdLine->nCommands );
 
