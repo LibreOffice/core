@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 15:40:36 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,20 +120,26 @@ namespace xmloff
 
                     sLocalMacroName = sLocalMacroName.copy( nPrefixLen + 1 );
                 }
+                // tree property values to describe one event ...
+                rMappedEvent.realloc( sLibrary.getLength() ? 3 : 2 );
+
+                // ... the type
+                rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
+
+                // and the macro name
+                rMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
+
+                // the library
+                if ( sLibrary.getLength() )
+                    rMappedEvent[2] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
             }
-
-            // tree property values to describe one event ...
-            rMappedEvent.realloc( sLibrary.getLength() ? 3 : 2 );
-
-            // ... the type
-            rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
-
-            // and the macro name
-            rMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
-
-            // the library
-            if ( sLibrary.getLength() )
-                rMappedEvent[2] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
+            else
+            {
+                rMappedEvent.realloc( 2 );
+                rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
+                // and the macro name
+                rMappedEvent[1] = PropertyValue(EVENT_SCRIPTURL, -1, makeAny(pEvents->ScriptCode), PropertyState_DIRECT_VALUE);
+            }
         }
     }
 
@@ -196,6 +202,12 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5.174.1  2003/10/09 13:51:20  dfoster
+ *  #i19262# - Enable scripting framework scripts to be persisted for forms
+ *
+ *  Revision 1.5  2002/01/18 15:40:36  fs
+ *  #96662# don't write a library if the library name is empty
+ *
  *  Revision 1.4  2001/09/04 10:19:41  fs
  *  #91865# correctly im- and export application events
  *
