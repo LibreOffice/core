@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:27:48 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ chinese_simplified ] = "½¨ΑΆ 3 Ξ¬ΠύΧªΜε";
     Text[ russian ] = "Ρξηδΰςό ξαϊεκς βπΰωενθÿ";
     Text[ polish ] = "Utwσrz 3-W obiekt obrotowy";
-    Text[ japanese ] = "3D‘Μ‰ρ“]µΜήΌήªΈΔ‚Μμ¬";
+    Text[ japanese ] = "3D ‰ρ“]‘ΜµΜήΌήªΈΔ‚Μμ¬";
     Text[ chinese_traditional ] = "«Ψ¥ί 3 Ίϋ±ΫΒΰΕι";
     Text[ arabic ] = "ΕδΤΗΑ ίΗΖδ ΗΣΚΟΗΡΙ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Δημιουργία περιστρεφόμενου αντικειμένου 3Δ";
@@ -227,7 +227,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ chinese_simplified ] = "ΠύΧª 3 Ξ¬¶ΤΟσ";
     Text[ russian ] = "Βπΰωΰςό ξαϊεκς";
     Text[ polish ] = "Obrσζ obiekt 3-W";
-    Text[ japanese ] = "3D‘ΜµΜήΌήªΈΔ‚Μ‰ρ“]";
+    Text[ japanese ] = "3D ‘ΜµΜήΌήªΈΔ‚Μ‰ρ“]";
     Text[ chinese_traditional ] = "±ΫΒΰ 3 Ίϋª«¥σ";
     Text[ arabic ] = "ΗΣΚΟΗΡΙ ίΗΖδ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Περιστροφή αντικειμένου 3Δ";
@@ -327,7 +327,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ chinese_simplified ] = "3 Ξ¬ΚτΠΤ";
     Text[ russian ] = "ΐςπθασςϋ 3-Μ";
     Text[ polish ] = "Atrybuty 3-W";
-    Text[ japanese ] = "3D‘Μ‚Μ‘®«";
+    Text[ japanese ] = "3D ‘Μ‚Μ‘®«";
     Text[ chinese_traditional ] = "3 ΊϋΔέ©Κ";
     Text[ arabic ] = "ΣγΗΚ ΛαΗΛνΙ ΗαΓΘΪΗΟ";
     Text[ greek ] = "Ιδιότητες 3Δ";
