@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-03 12:20:28 $
+ *  last change: $Author: mba $ $Date: 2000-11-16 17:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,7 +761,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent > xCon
     {
         // first try read/write mode
         sal_Bool bError = pThread->DoIt();
-        if ( bError )
+        if ( bError || !xLockBytes->getInputStream_Impl().is() )
             xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
         delete pThread;
         return xLockBytes;
