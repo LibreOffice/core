@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:49:11 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@ String STR_REMEMBERPASSWORD_SESSION
     Text = "Passwort bis Applikationsende ~merken";
     Text[ english ] = "~Remember password until application ends";
     Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
-    Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
-    Text[ chinese_traditional ] = "µ²§ôµ{¦¡¤§«e¤@ª½°O¦í±K½X(~R)";
+    Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
+    Text[ chinese_simplified ] = "ç»“æŸç¨‹åºä¹‹å‰ä¸€ç›´è®°ä½å¯†ç (~R)";
+    Text[ chinese_traditional ] = "çµæŸç¨‹å¼ä¹‹å‰ä¸€ç›´è¨˜ä½å¯†ç¢¼(~R)";
     Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
@@ -78,8 +78,8 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ french ] = "Se rappeler du ~mot de passe jusqu'à la fin de la session";
     Text[ greek ] = "Áğï~ìíçìüíåõóç êùäéêïı İùò ôï ôİëïò ôçò åöáñìïãŞò";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚Í±ÌßØ¹°¼®İI—¹‚Ü‚Å‹L‰¯‚µ‚Ä‚¨‚­(~R)";
-    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÒ ¶§±îÁö ÆĞ½º¿öµå ±â¾ï(~R)";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã¯ï½±ï¾Œï¾Ÿï¾˜ï½¹ï½°ï½¼ï½®ï¾çµ‚äº†ã¾ã§è¨˜æ†¶ã—ã¦ãŠã(~R)";
+    Text[ korean ] = "ì‘ìš©í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•  ë•Œê¹Œì§€ íŒ¨ìŠ¤ì›Œë“œ ê¸°ì–µ(~R)";
     Text[ polish ] = "Zapamiêtaj has³o do koñca aplikacji";
     Text[ portuguese ] = "~Lembrar senha até terminar a aplicação";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -96,9 +96,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text = "Passwort dauerhaft ~speichern";
     Text[ english ] = "~Save password permanently";
     Text[ arabic ] = "ÍİÙ ÏÇÆã áßáãÉ ÇáÓÑ";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
-    Text[ chinese_simplified ] = "±£´æÃÜÂë(~R)";
-    Text[ chinese_traditional ] = "Àx¦s±K½X(~R)";
+    Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
+    Text[ chinese_simplified ] = "ä¿å­˜å¯†ç (~R)";
+    Text[ chinese_traditional ] = "å„²å­˜å¯†ç¢¼(~R)";
     Text[ danish ] = "Gem adgangskoden permanent";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
@@ -106,8 +106,8 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ french ] = "~Enregistrer le mot de passe";
     Text[ greek ] = "Ìüíéìç áğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
     Text[ italian ] = "Salva pa~ssword ";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚ğ‚¸‚Á‚Æ•Û‘¶(~R)";
-    Text[ korean ] = "ÆĞ½º¿öµå ¿µ±¸ ÀúÀå(~R)";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ï¾œï½°ï¾„ï¾ã‚’ãšã£ã¨ä¿å­˜(~R)";
+    Text[ korean ] = "íŒ¨ìŠ¤ì›Œë“œ ì˜êµ¬ ì €ì¥(~R)";
     Text[ polish ] = "Zapisz has³o na sta³e";
     Text[ portuguese ] = "~Guardar senha";
     Text[ portuguese_brazilian ] = "Passwort ~speichern";
@@ -123,6 +123,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/07/13 20:49:11  kz
+ *  Merge SRC638: 13.07.01 - 22:47:55
+ *
  *  Revision 1.8  2001/05/10 05:46:50  kz
  *  Merge SRC631: 10.05.01 - 07:46:52 (NoBranch)
  *
@@ -150,5 +153,6 @@ String STR_REMEMBERPASSWORD_PERSISTENT
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
+
 
 
