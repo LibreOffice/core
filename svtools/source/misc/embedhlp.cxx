@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:14:55 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -423,24 +426,14 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
     if ( !xStream.is() )
     {
         // update wanted or no stream in container storage available
-        try
-        {
-            TryRunningState( mxObj );
-            embed::VisualRepresentation aRep = mxObj->getPreferredVisualRepresentation( mpImp->nViewAspect );
-            mpImp->aMediaType = aRep.Flavor.MimeType;
+        xStream = GetGraphicReplacementStream( mpImp->nViewAspect, mxObj, &mpImp->aMediaType );
 
-            uno::Sequence < sal_Int8 > aSeq;
-            aRep.Data >>= aSeq;
-            xStream = new ::comphelper::SequenceInputStream( aSeq );
+        if ( xStream.is() )
+        {
             if ( mpImp->pContainer )
                 mpImp->pContainer->InsertGraphicStream( xStream, mpImp->aPersistName, mpImp->aMediaType );
-            SvStream *pStream = new SvMemoryStream( aSeq.getLength() );
-            pStream->Write( aSeq.getConstArray(), aSeq.getLength() );
-            pStream->Seek(0);
-            return pStream;
-        }
-        catch ( uno::Exception& )
-        {
+
+            return ::utl::UcbStreamHelper::CreateStream( xStream );
         }
     }
 
@@ -588,6 +581,52 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
     }
     else
         OSL_ENSURE( sal_False, "Export of graphic is failed!\n" );
+}
+
+sal_Bool EmbeddedObjectRef::ObjectIsModified( const uno::Reference< embed::XEmbeddedObject >& xObj )
+    throw( uno::Exception )
+{
+    sal_Bool bResult = sal_False;
+
+    sal_Int32 nState = xObj->getCurrentState();
+    if ( nState != embed::EmbedStates::LOADED && nState != embed::EmbedStates::RUNNING )
+    {
+        // the object is active so if the model is modified the replacement
+        // should be retrieved from the object
+        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+        if ( xModifiable.is() )
+            bResult = xModifiable->isModified();
+    }
+
+    return bResult;
+}
+
+uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                                sal_Int64 nViewAspect,
+                                                                const uno::Reference< embed::XEmbeddedObject >& xObj,
+                                                                ::rtl::OUString* pMediaType )
+    throw()
+{
+    uno::Reference< io::XInputStream > xInStream;
+    if ( xObj.is() )
+    {
+        try
+        {
+            TryRunningState( xObj );
+            embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( nViewAspect );
+            if ( pMediaType )
+                *pMediaType = aRep.Flavor.MimeType;
+
+            uno::Sequence < sal_Int8 > aSeq;
+            aRep.Data >>= aSeq;
+            xInStream = new ::comphelper::SequenceInputStream( aSeq );
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
+    return xInStream;
 }
 
 };
