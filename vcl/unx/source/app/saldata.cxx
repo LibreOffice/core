@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:43:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 #include <limits.h>
 #include <errno.h>
 #include <pthread.h>
@@ -138,12 +138,26 @@
 
 #include <tools/debug.hxx>
 #include <sm.hxx>
+#include <svapp.hxx>
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
 #endif
 #ifndef _SAL_I18N_XKBDEXTENSION_HXX
 #include "i18n_xkb.hxx"
+#endif
+
+// -=-= <signal.h> -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#ifndef UNX
+#ifndef SIGBUS
+#define SIGBUS 10
+#endif
+#ifndef SIGSEGV
+#define SIGSEGV 11
+#endif
+#ifndef SIGIOT
+#define SIGIOT SIGABRT
+#endif
 #endif
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -294,9 +308,8 @@ static oslSignalAction SalSignalHdl (void* pData, oslSignalInfo* pInfo)
         case osl_Signal_System :
             return osl_Signal_ActCallNextHdl;
         case osl_Signal_Terminate :
-            if (!GetSalData()->Close())
-                return osl_Signal_ActIgnore;
-            break;
+            Application::Quit();
+            return osl_Signal_ActIgnore;
         case osl_Signal_User :
             return osl_Signal_ActCallNextHdl;
         default: break;
@@ -346,67 +359,37 @@ SalData::SalData()
     bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
 
     pXLib_          = NULL;
-    pDefDisp_       = 0;
-    pCurDisp_       = 0;
+    m_pSalDisplay   = NULL;
+    pInstance_      = NULL;
 
     hMainThread_    = pthread_self();
-
-    pInstance_      = NULL;
-    pFirstFrame_    = NULL;
 }
 
 SalData::~SalData()
 {
-    DeleteDisplays();
+    DeleteDisplay();
 }
 
-void SalData::DeleteDisplays()
+void SalData::DeleteDisplay()
 {
-    while( SalDisplays_.Count() )
-        delete SalDisplays_.Remove( (ULONG)0 );
-
+    delete m_pSalDisplay;
+    m_pSalDisplay   = NULL;
     delete pXLib_;
     pXLib_      = NULL;
-    pDefDisp_   = NULL;
-    pCurDisp_   = NULL;
-}
-
-long SalData::Close() const
-{
-    X11SalFrame *pFrame = pFirstFrame_;
-    while( pFrame )
-    {
-        if( !pFrame->Close() )
-            return 0;
-        pFrame = pFrame->GetNextFrame();
-    }
-    return 1;
-}
-
-long SalData::ShutDown() const
-{
-    X11SalFrame *pFrame = pFirstFrame_;
-    while( pFrame )
-    {
-        if( !pFrame->ShutDown() )
-            return 0;
-        pFrame = pFrame->GetNextFrame();
-    }
-    return 1;
-}
-
-SalDisplay *SalData::GetDisplay( Display *pDisplay )
-{
-    SalDisplay *pSalDisplay = SalDisplays_.First();
-    while( pSalDisplay && pSalDisplay->GetDisplay() != pDisplay )
-        pSalDisplay = SalDisplays_.Next();
-    return pSalDisplay;
 }
 
 void SalData::Init()
 {
     pXLib_ = new SalXLib();
     pXLib_->Init();
+}
+
+void SalData::initNWF( void )
+{
+}
+
+void SalData::deInitNWF( void )
+{
 }
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -456,8 +439,9 @@ SalXLib::SalXLib()
         nFDs_ = pTimeoutFDS_[0] + 1;
     }
 
-    bWasXError_             = FALSE;
-    bIgnoreXErrors_         = !!getenv( "SAL_IGNOREXERRORS" );
+    bWasXError_                     = FALSE;
+    bIgnoreXErrors_                 = !!getenv( "SAL_IGNOREXERRORS" );
+    m_bHaveSystemChildFrames        = false;
     nIgnoreErrorLevel               = 0;
 }
 
@@ -498,6 +482,7 @@ void SalXLib::Init()
             aCommandLine.getCommandArg(i+1, aParam);
             aDisplay = rtl::OUStringToOString(
                    aParam, osl_getThreadTextEncoding());
+
             if ((pDisp = XOpenDisplay(aDisplay.getStr()))!=NULL)
             {
                 /*
@@ -591,24 +576,12 @@ void EmitFontpathWarning( void )
 
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
+    if( m_bHaveSystemChildFrames )
+        return;
+
     char msg[ 120 ] = "";
     if( nIgnoreErrorLevel > 0 )
         return;
-
-    if( ! bIgnoreXErrors_ )
-    {
-        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
-        while( pFrame )
-        {
-            if( pFrame->GetStyle() & SAL_FRAME_STYLE_CHILD )
-            {
-                bIgnoreXErrors_ = TRUE;
-                break;
-            }
-            pFrame = pFrame->GetNextFrame();
-        }
-    }
-
 
     if( ! bIgnoreXErrors_ )
     {
@@ -648,7 +621,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         fflush( stdout );
         fflush( stderr );
 #endif
-        if( pDisplay != GetSalData()->GetDefDisp()->GetDisplay() )
+        if( pDisplay != GetSalData()->GetDisplay()->GetDisplay() )
             return;
 
         oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
@@ -888,4 +861,9 @@ void SalXLib::Yield( BOOL bWait )
 void SalXLib::Wakeup()
 {
     write (pTimeoutFDS_[1], "", 1);
+}
+
+void SalXLib::PostUserEvent()
+{
+    Wakeup();
 }
