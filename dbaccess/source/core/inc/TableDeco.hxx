@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
 #endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
+#endif
 
 namespace dbaccess
 {
@@ -132,7 +135,7 @@ namespace dbaccess
     //= OTables
     //==========================================================================
     class ODBTableDecorator;
-    typedef ::comphelper::OPropertyArrayUsageHelper< ODBTableDecorator >    ODBTableDecorator_PROP;
+    typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTableDecorator >  ODBTableDecorator_PROP;
 
     class ODBTableDecorator :public comphelper::OBaseMutex
                             ,public ODataSettings //ODataSettings_Base
@@ -156,7 +159,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
         virtual void refreshColumns();
 
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 _nId) const;
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         // OConfigurationFlushable
         virtual void flush_NoBroadcast_NoCommit();
