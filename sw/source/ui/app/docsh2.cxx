@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 14:09:54 $
+ *  last change: $Author: os $ $Date: 2001-09-25 07:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,7 +948,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if(!bHasName)
                     {
-                        FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
+                        FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION, 0 );
                         aDlgHelper.AddFilter( pHtmlFlt->GetFilterName(), pHtmlFlt->GetDefaultExtension() );
                         aDlgHelper.SetCurrentFilter( pHtmlFlt->GetFilterName() );
                         if( ERRCODE_NONE != aDlgHelper.Execute())
