@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:27:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,6 @@ public:
     void            GetPrintState( ScPrintState& rState );
     BOOL            GetLastSourceRange( ScRange& rRange ) const;
 
-#ifdef _PRINTFUN_CXX
 private:
     void            Construct( const ScPrintOptions* pOptions );
     void            InitParam( const ScPrintOptions* pOptions );
@@ -383,7 +382,6 @@ private:
                                     const SvxShadowItem* pShadow );
 
     void            FillPageData();
-#endif
 };
 
 
