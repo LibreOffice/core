@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-28 15:59:47 $
+ *  last change: $Author: nf $ $Date: 2002-04-04 13:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ using namespace com::sun::star::uno;
 #define REPLACEMENT_CHINESE_TRADITIONAL ASCII_STR("chinese_traditional")
 #define REPLACEMENT_CHINESE_SIMPLIFIED  ASCII_STR("chinese_simplified")
 //#define   REPLACEMENT_PORTUGUESE          ASCII_STR("portuguese")
+#define REPLACEMENT_THAI                ASCII_STR("thai");
 
 #define STRPOS_NOTFOUND                 -1
 
@@ -715,7 +716,10 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                 case LANGUAGE_PORTUGUESE_BRAZILIAN  :   aReplacement = REPLACEMENT_PORTUGUESE;
                                                         break ; */
 
-                default                             :   // no fallback any longer
+                case LANGUAGE_THAI                  :   aReplacement = REPLACEMENT_THAI;
+                                                        break;
+
+                default                             :   // fallback for L10N-framework => ISO-Code
                                                         {
                                                             String rLangStr;
                                                             String rCountry;
