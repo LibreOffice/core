@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorlist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:53:33 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ struct VendorSupportMapEntry
 VendorSupportMapEntry gVendorMap[] ={
 
 #define VENDOR_MAP_ENTRY(x,y) \
-    {x, & y##::getJavaExePaths, & y##::createInstance},
+    {x, & y::getJavaExePaths, & y::createInstance},
 
 #define END_VENDOR_MAP() \
     {NULL, NULL, NULL} };

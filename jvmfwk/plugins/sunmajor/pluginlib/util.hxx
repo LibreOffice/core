@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:52:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ struct SameOrSubDirJREMap
             return true;
         rtl::OUString sSub;
         sSub = s2.first + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-        if (s1.match(sSub) == true)
+        if (s1.match(sSub) == sal_True)
             return true;
         return false;
     }
