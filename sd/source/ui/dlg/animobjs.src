@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:38:04 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,19 +81,8 @@ DockingWindow FLT_WIN_ANIMATION
     Dockable = TRUE ;
     EnableResizing = TRUE ;
     Size = MAP_APPFONT ( 159 , 236 ) ;
-    Text = "Animation" ;
-    Text [ ENGLISH ] = "Animation" ;
-    Text [ norwegian ] = "Animasjon" ;
-    Text [ italian ] = "Animazione" ;
-    Text [ portuguese_brazilian ] = "Animação" ;
-    Text [ portuguese ] = "Animação" ;
-    Text [ finnish ] = "Animaatio" ;
-    Text [ danish ] = "Animation" ;
-    Text [ french ] = "Animation" ;
-    Text [ swedish ] = "Animation" ;
-    Text [ dutch ] = "Animatie" ;
-    Text [ spanish ] = "Animación" ;
-    Text [ english_us ] = "Animation" ;
+    Text [ de ] = "Animation" ;
+    Text [ en-US ] = "Animation" ;
     Control CTL_DISPLAY
     {
         Border = TRUE ;
@@ -106,37 +95,9 @@ DockingWindow FLT_WIN_ANIMATION
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_WINDSTART ;
-        QuickHelpText = "Erstes Bild" ;
-        QuickHelpText [ ENGLISH ] = "First picture" ;
-        QuickHelpText [ norwegian ] = "Første bilde" ;
-        QuickHelpText [ italian ] = "Prima immagine" ;
-        QuickHelpText [ portuguese_brazilian ] = "Primeira imagem" ;
-        QuickHelpText [ portuguese ] = "Primeira imagem" ;
-        QuickHelpText [ finnish ] = "Ensimmäinen kuva" ;
-        QuickHelpText [ danish ] = "Første billede" ;
-        QuickHelpText [ french ] = "Première image" ;
-        QuickHelpText [ swedish ] = "Första bilden" ;
-        QuickHelpText [ dutch ] = "Eerste afbeelding" ;
-        QuickHelpText [ spanish ] = "Primera imagen" ;
-        QuickHelpText [ english_us ] = "First Image" ;
-        QuickHelpText[ russian ] = "Ïåğâàÿ êàğòèíà";
-        QuickHelpText[ polish ] = "Pierwszy obraz";
-        QuickHelpText[ japanese ] = "æœ€åˆã®ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒ";
-        QuickHelpText[ chinese_simplified ] = "ç¬¬ä¸€ä¸ªå›¾åƒ";
-        QuickHelpText[ chinese_traditional ] = "ç¬¬ä¸€å€‹å½±åƒ";
-        QuickHelpText[ arabic ] = "ÇáÕæÑÉ ÇáÃæáì";
-        QuickHelpText[ greek ] = "Ğñşôç åéêüíá";
-        QuickHelpText[ korean ] = "ì²« ì´ë¯¸ì§€";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Erstes Bild";
-        QuickHelpText[ catalan ] = "Primera imatge";
-        QuickHelpText[ czech ] = "PrvnÃ­ obrÃ¡zek";
-        QuickHelpText[ hebrew ] = "Erstes Bild";
-        QuickHelpText[ thai ] = "First Image";
-        QuickHelpText[ hindi ] = "à¤ªà¤¹à¤²à¤¾ à¤šà¤¿à¤¤à¥à¤°";
-        QuickHelpText[ slovak ] = "PrvÃ½ obrÃ¡zok";
-        QuickHelpText[ hungarian ] = "ElsÅ‘ kÃ©p";
-        QuickHelpText[ slovenian ] = "Prva slika";
+        QuickHelpText [ de ] = "Erstes Bild" ;
+        QuickHelpText [ en-US ] = "First Image" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_REVERSE
     {
@@ -144,37 +105,9 @@ DockingWindow FLT_WIN_ANIMATION
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_REVERSEPLAY ;
         /* ### ACHTUNG: Neuer Text in Resource? Rückwärts : R³ckwõrts */
-        QuickHelpText = "Rückwärts" ;
-        QuickHelpText [ ENGLISH ] = "Reverse" ;
-        QuickHelpText [ norwegian ] = "Spole tilbake" ;
-        QuickHelpText [ italian ] = "Indietro" ;
-        QuickHelpText [ portuguese_brazilian ] = "Para trás" ;
-        QuickHelpText [ portuguese ] = "Para trás" ;
-        QuickHelpText [ finnish ] = "Taaksepäin" ;
-        QuickHelpText [ danish ] = "Baglæns" ;
-        QuickHelpText [ french ] = "Marche arrière" ;
-        QuickHelpText [ swedish ] = "Bakåt" ;
-        QuickHelpText [ dutch ] = "Achterwaarts" ;
-        QuickHelpText [ spanish ] = "Atrás" ;
-        QuickHelpText [ english_us ] = "Backwards" ;
-        QuickHelpText[ russian ] = "Íàçàä";
-        QuickHelpText[ polish ] = "Wstecz";
-        QuickHelpText[ japanese ] = "æˆ»ã‚‹";
-        QuickHelpText[ chinese_simplified ] = "è¿”å›";
-        QuickHelpText[ chinese_traditional ] = "åå‘";
-        QuickHelpText[ arabic ] = "Åáì ÇáÎáİ";
-        QuickHelpText[ greek ] = "Ğßóù";
-        QuickHelpText[ korean ] = "ë’¤ë¡œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Rückwärts";
-        QuickHelpText[ catalan ] = "Enrera";
-        QuickHelpText[ czech ] = "NazpÄ›t";
-        QuickHelpText[ hebrew ] = "â€®××—×•×¨× ×™×ªâ€¬";
-        QuickHelpText[ thai ] = "Backwards";
-        QuickHelpText[ hindi ] = "à¤ªà¤¿à¤›à¤²à¥€ à¤“à¤°";
-        QuickHelpText[ slovak ] = "SpÃ¤Å¥";
-        QuickHelpText[ hungarian ] = "VisszafelÃ©";
-        QuickHelpText[ slovenian ] = "Nazaj";
+        QuickHelpText [ de ] = "Rückwärts" ;
+        QuickHelpText [ en-US ] = "Backwards" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_STOP
     {
@@ -182,111 +115,27 @@ DockingWindow FLT_WIN_ANIMATION
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_STOP ;
         Disable = TRUE ;
-        QuickHelpText = "Stopp" ;
-        QuickHelpText [ ENGLISH ] = "Stop" ;
-        QuickHelpText [ dutch ] = "Stop" ;
-        QuickHelpText [ english_us ] = "Stop" ;
-        QuickHelpText [ spanish ] = "Finalizar" ;
-        QuickHelpText [ french ] = "Stop" ;
-        QuickHelpText [ italian ] = "Stop" ;
-        QuickHelpText [ danish ] = "Stop" ;
-        QuickHelpText [ swedish ] = "Stopp" ;
-        QuickHelpText [ portuguese ] = "Stop" ;
-        QuickHelpText [ portuguese_brazilian ] = "Parar" ;
-        QuickHelpText [ norwegian ] = "Stop" ;
-        QuickHelpText [ finnish ] = "Seis" ;
-        QuickHelpText[ russian ] = "Ñòîï";
-        QuickHelpText[ polish ] = "Zatrzymanie";
-        QuickHelpText[ japanese ] = "åœæ­¢";
-        QuickHelpText[ chinese_simplified ] = "åœæ­¢";
-        QuickHelpText[ chinese_traditional ] = "æš«åœ";
-        QuickHelpText[ arabic ] = "ÅíŞÇİ";
-        QuickHelpText[ greek ] = "ÄéáêïğŞ";
-        QuickHelpText[ korean ] = "ì •ì§€";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Stopp";
-        QuickHelpText[ catalan ] = "Finalitza";
-        QuickHelpText[ czech ] = "Zastavit";
-        QuickHelpText[ hebrew ] = "Stopp";
-        QuickHelpText[ thai ] = "Stop";
-        QuickHelpText[ hindi ] = "à¤°à¥à¤•à¤¾à¤µà¤Ÿ";
-        QuickHelpText[ slovak ] = "ZastaviÅ¥";
-        QuickHelpText[ hungarian ] = "LeÃ¡llÃ­tÃ¡s";
-        QuickHelpText[ slovenian ] = "Ustavi";
+        QuickHelpText [ de ] = "Stopp" ;
+        QuickHelpText [ en-US ] = "Stop" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_PLAY
     {
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 3 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_PLAY ;
-        QuickHelpText = "Abspielen" ;
-        QuickHelpText [ ENGLISH ] = "Play" ;
-        QuickHelpText [ norwegian ] = "Spill" ;
-        QuickHelpText [ italian ] = "Riproduci" ;
-        QuickHelpText [ portuguese_brazilian ] = "Tocar" ;
-        QuickHelpText [ portuguese ] = "Tocar" ;
-        QuickHelpText [ finnish ] = "Toista" ;
-        QuickHelpText [ danish ] = "Afspil" ;
-        QuickHelpText [ french ] = "Reproduire" ;
-        QuickHelpText [ swedish ] = "Spela upp" ;
-        QuickHelpText [ dutch ] = "Afspelen" ;
-        QuickHelpText [ spanish ] = "Reproducir" ;
-        QuickHelpText [ english_us ] = "Play" ;
-        QuickHelpText[ russian ] = "Âîñïğîèçâåñòè";
-        QuickHelpText[ polish ] = "Odtwórz";
-        QuickHelpText[ japanese ] = "å†ç”Ÿ";
-        QuickHelpText[ chinese_simplified ] = "æ”¾æ˜ ";
-        QuickHelpText[ chinese_traditional ] = "æ”¾æ˜ ";
-        QuickHelpText[ arabic ] = "ÊÔÛíá";
-        QuickHelpText[ greek ] = "ÁíáğáñáãùãŞ";
-        QuickHelpText[ korean ] = "ì¬ìƒ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Abspielen";
-        QuickHelpText[ catalan ] = "Reprodueix";
-        QuickHelpText[ czech ] = "PÅ™ehrÃ¡t";
-        QuickHelpText[ hebrew ] = "Abspielen";
-        QuickHelpText[ thai ] = "Play";
-        QuickHelpText[ hindi ] = "à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­";
-        QuickHelpText[ slovak ] = "PrehraÅ¥";
-        QuickHelpText[ hungarian ] = "LejÃ¡tszÃ¡s";
-        QuickHelpText[ slovenian ] = "Predvajaj";
+        QuickHelpText [ de ] = "Abspielen" ;
+        QuickHelpText [ en-US ] = "Play" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_LAST
     {
         Pos = MAP_APPFONT ( 6 + MIN_BUTTON_WIDTH * 4 , 100 ) ;
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_WINDEND ;
-        QuickHelpText = "Letztes Bild" ;
-        QuickHelpText [ ENGLISH ] = "Last picture" ;
-        QuickHelpText [ norwegian ] = "Siste bilde" ;
-        QuickHelpText [ italian ] = "Ultima immagine" ;
-        QuickHelpText [ portuguese_brazilian ] = "Última imagem" ;
-        QuickHelpText [ portuguese ] = "Última imagem" ;
-        QuickHelpText [ finnish ] = "Viimeinen kuva" ;
-        QuickHelpText [ danish ] = "Sidste billede" ;
-        QuickHelpText [ french ] = "Dernière image" ;
-        QuickHelpText [ swedish ] = "Sista bilden" ;
-        QuickHelpText [ dutch ] = "Laatste afbeelding" ;
-        QuickHelpText [ spanish ] = "Última imagen" ;
-        QuickHelpText [ english_us ] = "Last Image" ;
-        QuickHelpText[ russian ] = "Ïîñëåäíÿÿ êàğòèíà";
-        QuickHelpText[ polish ] = "Ostatni obraz";
-        QuickHelpText[ japanese ] = "æœ€å¾Œã®ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒ";
-        QuickHelpText[ chinese_simplified ] = "æœ€åä¸€ä¸ªå›¾åƒ";
-        QuickHelpText[ chinese_traditional ] = "æœ€å¾Œä¸€å€‹å½±åƒ";
-        QuickHelpText[ arabic ] = "ÇáÕæÑÉ ÇáÃÎíÑÉ";
-        QuickHelpText[ greek ] = "Ôåëåõôáßá åéêüíá";
-        QuickHelpText[ korean ] = "ë§ˆì§€ë§‰ ì´ë¯¸ì§€";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Letztes Bild";
-        QuickHelpText[ catalan ] = "Última imatge";
-        QuickHelpText[ czech ] = "PoslednÃ­ obrÃ¡zek";
-        QuickHelpText[ hebrew ] = "Letztes Bild";
-        QuickHelpText[ thai ] = "Last Image";
-        QuickHelpText[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤šà¤¿à¤¤à¥à¤°";
-        QuickHelpText[ slovak ] = "PoslednÃ½ obrÃ¡zok";
-        QuickHelpText[ hungarian ] = "UtolsÃ³ kÃ©p";
-        QuickHelpText[ slovenian ] = "Zadnja slika";
+        QuickHelpText [ de ] = "Letztes Bild" ;
+        QuickHelpText [ en-US ] = "Last Image" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     NumericField NUM_FLD_BITMAP
     {
@@ -302,38 +151,9 @@ DockingWindow FLT_WIN_ANIMATION
         First = 1 ;
         Last = 999 ;
         SpinSize = 1 ;
-        QuickHelpText = "Bildnummer" ;
-        QuickHelpText [ ENGLISH ] = "Picture number" ;
-        QuickHelpText [ norwegian ] = "Bildenummer" ;
-        QuickHelpText [ italian ] = "Numero d'immagine" ;
-        QuickHelpText [ portuguese_brazilian ] = "Número da imagem" ;
-        QuickHelpText [ portuguese ] = "Número da imagem" ;
-        QuickHelpText [ finnish ] = "Kuvan numero" ;
-        QuickHelpText [ danish ] = "Billednummer" ;
-        QuickHelpText [ french ] = "Numéro de l'image" ;
-        QuickHelpText [ swedish ] = "Bildnummer" ;
-        QuickHelpText [ dutch ] = "Afbeeldingsnummer" ;
-        QuickHelpText [ spanish ] = "Número de imagen" ;
-        QuickHelpText [ english_us ] = "Image Number" ;
-        QuickHelpText [ french ] = "Numéro de l'image" ;
-        QuickHelpText[ russian ] = "Íîìåğ êàğòèíû";
-        QuickHelpText[ polish ] = "Numer obrazu";
-        QuickHelpText[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒç•ªå·";
-        QuickHelpText[ chinese_simplified ] = "å›¾åƒå·ç ";
-        QuickHelpText[ chinese_traditional ] = "å½±åƒè™Ÿç¢¼";
-        QuickHelpText[ arabic ] = "ÑŞã ÇáÕæÑÉ";
-        QuickHelpText[ greek ] = "Áñéèìüò åéêüíáò";
-        QuickHelpText[ korean ] = "ì´ë¯¸ì§€ ë²ˆí˜¸";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Bildnummer";
-        QuickHelpText[ catalan ] = "Nombre d'imatge";
-        QuickHelpText[ czech ] = "ÄŒÃ­slo obrÃ¡zku";
-        QuickHelpText[ hebrew ] = "Bildnummer";
-        QuickHelpText[ thai ] = "Image Number";
-        QuickHelpText[ hindi ] = "à¤šà¤¿à¤¤à¥à¤° à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-        QuickHelpText[ slovak ] = "ÄŒÃ­slo obrÃ¡zku";
-        QuickHelpText[ hungarian ] = "KÃ©pszÃ¡m";
-        QuickHelpText[ slovenian ] = "Å tevilka slike";
+        QuickHelpText [ de ] = "Bildnummer" ;
+        QuickHelpText [ en-US ] = "Image Number" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     TimeField TIME_FIELD
     {
@@ -355,36 +175,9 @@ DockingWindow FLT_WIN_ANIMATION
             Second = 59 ;
             Sec100 = 99 ;
         };
-        QuickHelpText = "Anzeigedauer" ;
-        QuickHelpText [ ENGLISH ] = "Duration" ;
-        QuickHelpText [ dutch ] = "Duur" ;
-        QuickHelpText [ english_us ] = "Duration" ;
-        QuickHelpText [ italian ] = "Durata visualizzazione" ;
-        QuickHelpText [ spanish ] = "Duración" ;
-        QuickHelpText [ french ] = "Durée d'affichage" ;
-        QuickHelpText [ portuguese_brazilian ] = "Duração" ;
-        QuickHelpText [ portuguese ] = "Duração" ;
-        QuickHelpText [ danish ] = "Visningstid" ;
-        QuickHelpText [ swedish ] = "Visningstid" ;
-        QuickHelpText[ russian ] = "Äëèòåëüíîñòü ïîêàçà";
-        QuickHelpText[ polish ] = "Czas wyœwietlania";
-        QuickHelpText[ japanese ] = "è¡¨ç¤ºæ™‚é–“";
-        QuickHelpText[ chinese_simplified ] = "æ˜¾ç¤ºæŒç»­æ—¶é—´";
-        QuickHelpText[ chinese_traditional ] = "é¡¯ç¤ºæŒçºŒæ™‚é–“";
-        QuickHelpText[ arabic ] = "ÇáãÏÉ";
-        QuickHelpText[ greek ] = "ÄéÜñêåéá";
-        QuickHelpText[ korean ] = "í‘œì‹œ ì§€ì† ì‹œê°„";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Anzeigedauer";
-        QuickHelpText[ catalan ] = "Duració";
-        QuickHelpText[ finnish ] = "Kesto";
-        QuickHelpText[ czech ] = "Doba trvÃ¡nÃ­";
-        QuickHelpText[ hebrew ] = "Anzeigedauer";
-        QuickHelpText[ thai ] = "Duration";
-        QuickHelpText[ hindi ] = "à¤•à¤¾à¤²à¤¾à¤µà¤§à¤¿";
-        QuickHelpText[ slovak ] = "Doba trvania";
-        QuickHelpText[ hungarian ] = "IdÅ‘tartam";
-        QuickHelpText[ slovenian ] = "Trajanje";
+        QuickHelpText [ de ] = "Anzeigedauer" ;
+        QuickHelpText [ en-US ] = "Duration" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ListBox LB_LOOP_COUNT
     {
@@ -393,7 +186,7 @@ DockingWindow FLT_WIN_ANIMATION
         Size = MAP_APPFONT ( MIN_BUTTON_WIDTH * 2 + 3 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "1" ; > ;
             < "2" ; > ;
@@ -415,183 +208,7 @@ DockingWindow FLT_WIN_ANIMATION
             < "1000" ; > ;
             < "Max." ; > ;
         };
-        stringlist [ english_us ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Máx." ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Maks." ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Máx." ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-        stringlist [ portuguese ] =
+        StringList [ en-US ] =
         {
             < "1" ; > ;
             < "2" ; > ;
@@ -614,225 +231,10 @@ DockingWindow FLT_WIN_ANIMATION
             < "Max." ; > ;
         };
         /* ### ACHTUNG: Neuer Text in Resource? Anzahl der Durchläufe : Anzahl der Durchlõufe */
-        QuickHelpText = "Anzahl der Durchläufe" ;
-        QuickHelpText [ ENGLISH ] = "Loop count" ;
-        QuickHelpText [ english_us ] = "Loop Count" ;
-        QuickHelpText [ portuguese_brazilian ] = "Contagem de sequências" ;
-        QuickHelpText [ swedish ] = "Antal omgångar" ;
-        QuickHelpText [ danish ] = "Antal sløjfer" ;
-        QuickHelpText [ italian ] = "Numero dei passaggi" ;
-        QuickHelpText [ spanish ] = "Cantidad de secuencias" ;
-        QuickHelpText [ french ] = "Nombre de cycles" ;
-        QuickHelpText [ dutch ] = "Aantal keren doorlopen" ;
-        QuickHelpText [ portuguese ] = "Contagem de sequências" ;
-    StringList [ chinese_simplified ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "æœ€å¤§" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Ìàêñ." ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Maks." ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "æœ€å¤§é™" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "æœ€å¤§" ; > ;
-    };
-        QuickHelpText[ russian ] = "Êîëè÷åñòâî ïğîãîíîâ";
-        QuickHelpText[ polish ] = "Liczba przebiegów";
-        QuickHelpText[ japanese ] = "ãƒ«ãƒ¼ãƒ—æ•°";
-        QuickHelpText[ chinese_simplified ] = "è¿ç»­æ”¾æ˜ çš„æ•°ç›®";
-        QuickHelpText[ chinese_traditional ] = "é€£çºŒæ”¾æ˜ çš„æ•¸ç›®";
-        QuickHelpText[ arabic ] = "ÚÏÏ ÇáÍáŞÇÊ";
-    StringList [ arabic ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "ÇáÃŞÕì" ; > ;
-    };
-        QuickHelpText[ greek ] = "ĞëŞèïò åğáíáëŞøåùí";
-        QuickHelpText[ korean ] = "ë°˜ë³µ íšŸìˆ˜";
-    StringList [ greek ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Ìåã." ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "ìµœëŒ€" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Azm." ; > ;
-    };
-        QuickHelpText[ language_user1 ] = " ";
-    StringList [ language_user1 ] =
+        QuickHelpText [ de ] = "Anzahl der Durchläufe" ;
+        QuickHelpText [ en-US ] = "Loop Count" ;
+        QuickHelpText [ x-comment ] = " ";
+    StringList [ x-comment ] =
     {
             < " " ; > ;
         < " " ; > ;
@@ -854,214 +256,6 @@ DockingWindow FLT_WIN_ANIMATION
         < " " ; > ;
         < " " ; > ;
     };
-        QuickHelpText[ turkish ] = "Anzahl der Durchläufe";
-        QuickHelpText[ catalan ] = "Nombre de seqüències";
-    StringList [ catalan ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Máx." ; > ;
-    };
-        QuickHelpText[ finnish ] = "Toistojen määrä";
-    StringList [ finnish ] =
-    {
-            < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Rajaton" ; > ;
-    };
-        QuickHelpText[ czech ] = "PoÄet opakovÃ¡nÃ­";
-        QuickHelpText[ hebrew ] = "Anzahl der DurchlÃ¤ufe";
-    StringList [ czech ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-    StringList [ hebrew ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-        QuickHelpText[ thai ] = "Loop Count";
-        QuickHelpText[ hindi ] = "à¤šà¤•à¥à¤•à¤° à¤—à¤£à¤¨à¤¾";
-    StringList [ thai ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Max." ; > ;
-        };
-    StringList [ hindi ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "à¤…à¤§à¤¿à¤•à¤¤à¤®" ; > ;
-        };
-        QuickHelpText[ slovak ] = "PoÄet opakovanÃ­";
-    StringList [ slovak ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-        < "4" ; > ;
-        < "5" ; > ;
-        < "6" ; > ;
-        < "7" ; > ;
-        < "8" ; > ;
-        < "9" ; > ;
-        < "10" ; > ;
-        < "12" ; > ;
-        < "15" ; > ;
-        < "20" ; > ;
-        < "25" ; > ;
-        < "50" ; > ;
-        < "100" ; > ;
-        < "500" ; > ;
-        < "1000" ; > ;
-        < "Max." ; > ;
-    };
-        QuickHelpText[ hungarian ] = "IsmÃ©tlÃ©sek szÃ¡ma";
-        QuickHelpText[ slovenian ] = "Å tevec zanke";
-    StringList [ hungarian ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "100" ; > ;
-            < "max." ; > ;
-        };
-    StringList [ slovenian ] =
-    {
-         < "1" ; > ;
-        < "2" ; > ;
-        < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "12" ; > ;
-            < "15" ; > ;
-            < "20" ; > ;
-            < "25" ; > ;
-            < "50" ; > ;
-            < "100" ; > ;
-            < "500" ; > ;
-            < "1000" ; > ;
-            < "Maks." ; > ;
-        };
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
@@ -1077,36 +271,9 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Objekt übernehmen : Objekt ³bernehmen */
-        QuickHelpText = "Objekt übernehmen" ;
-        QuickHelpText [ ENGLISH ] = "Get Object" ;
-        QuickHelpText [ dutch ] = "Object overnemen" ;
-        QuickHelpText [ english_us ] = "Apply Object" ;
-        QuickHelpText [ italian ] = "Accetta oggetto" ;
-        QuickHelpText [ spanish ] = "Aceptar objeto" ;
-        QuickHelpText [ french ] = "Appliquer l'objet" ;
-        QuickHelpText [ danish ] = "Overtag objekt" ;
-        QuickHelpText [ portuguese ] = "Aplicar objecto" ;
-        QuickHelpText [ portuguese_brazilian ] = "Aplicar objeto" ;
-        QuickHelpText [ swedish ] = "Överta objekt" ;
-        QuickHelpText[ russian ] = "Ïğèíÿòü îáúåêò";
-        QuickHelpText[ polish ] = "Zastosuj obiekt";
-        QuickHelpText[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’é©ç”¨";
-        QuickHelpText[ chinese_simplified ] = "ä½¿ç”¨å¯¹è±¡";
-        QuickHelpText[ chinese_traditional ] = "ä½¿ç”¨ç‰©ä»¶";
-        QuickHelpText[ arabic ] = "ÊØÈíŞ ÇáßÇÆä";
-        QuickHelpText[ greek ] = "ÅöáñìïãŞ áíôéêåéìİíïõ";
-        QuickHelpText[ korean ] = "ê°œì²´ ì ìš©";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Objekt übernehmen";
-        QuickHelpText[ catalan ] = "Accepta l'objecte";
-        QuickHelpText[ finnish ] = "Liitä objekti";
-        QuickHelpText[ czech ] = "PouÅ¾Ã­t objekt";
-        QuickHelpText[ hebrew ] = "Objekt Ã¼bernehmen";
-        QuickHelpText[ thai ] = "Apply Object";
-        QuickHelpText[ hindi ] = "Ã Â¤ÂµÃ Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¥Â Ã Â¤Â²Ã Â¤Â¾Ã Â¤â€”Ã Â¥â€š Ã Â¤â€¢Ã Â¤Â°Ã Â¥â€¹";
-        QuickHelpText[ slovak ] = "PouÅ¾iÅ¥ objekty";
-        QuickHelpText[ hungarian ] = "Objektum elfogadÃ¡sa";
-        QuickHelpText[ slovenian ] = "Uporabi predmet";
+        QuickHelpText [ de ] = "Objekt übernehmen" ;
+        QuickHelpText [ en-US ] = "Apply Object" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
@@ -1122,36 +289,9 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Objekte einzeln übernehmen : Objekte einzeln ³bernehmen */
-        QuickHelpText = "Objekte einzeln übernehmen" ;
-        QuickHelpText [ ENGLISH ] = "Get pictures separatly" ;
-        QuickHelpText [ dutch ] = "Objecten afzonderlijk overnemen" ;
-        QuickHelpText [ english_us ] = "Apply Objects Individually" ;
-        QuickHelpText [ italian ] = "Accetta gli oggetti singolarmente" ;
-        QuickHelpText [ spanish ] = "Aceptar objetos uno a uno" ;
-        QuickHelpText [ french ] = "Appliquer les objets un par un" ;
-        QuickHelpText [ danish ] = "Overtag objekter enkeltvis" ;
-        QuickHelpText [ portuguese ] = "Aplicar objectos um por um" ;
-        QuickHelpText [ portuguese_brazilian ] = "Aplicar objetos individualmente" ;
-        QuickHelpText [ swedish ] = "Överta objekt ett och ett" ;
-        QuickHelpText[ russian ] = "Ïğèíÿòü îáúåêòû ïî îäíîìó";
-        QuickHelpText[ polish ] = "Zastosuj obiekty pojedynczo";
-        QuickHelpText[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ï¼‘ã¤ãšã¤é©ç”¨";
-        QuickHelpText[ chinese_simplified ] = "å•ç‹¬ä½¿ç”¨å¯¹è±¡";
-        QuickHelpText[ chinese_traditional ] = "å–®ç¨ä½¿ç”¨ç‰©ä»¶";
-        QuickHelpText[ arabic ] = "ÊØÈíŞ ÇáßÇÆäÇÊ ßá Úáì ÍÏå";
-        QuickHelpText[ greek ] = "ÅöáñìïãŞ áíôéêåéìİíùí ìåìïíùìİíá";
-        QuickHelpText[ korean ] = "ê°œì²´ë¥¼ ê°œë³„ì ìœ¼ë¡œ ì ìš©";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Objekte einzeln übernehmen";
-        QuickHelpText[ catalan ] = "Accepta els objectes un a un";
-        QuickHelpText[ finnish ] = "Objektit yksittäin";
-        QuickHelpText[ czech ] = "PouÅ¾Ã­t objekty jednotlivÄ›";
-        QuickHelpText[ hebrew ] = "Objekte einzeln Ã¼bernehmen";
-        QuickHelpText[ thai ] = "Apply Objects Individually";
-        QuickHelpText[ hindi ] = "à¤à¤• à¤à¤• à¤µà¤¸à¥à¤¤à¥ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-        QuickHelpText[ slovak ] = "PouÅ¾iÅ¥ objekty individuÃ¡lne";
-        QuickHelpText[ hungarian ] = "Objektumok egyenkÃ©nti alkalmazÃ¡sa";
-        QuickHelpText[ slovenian ] = "Uporabi posamezne predmete";
+        QuickHelpText [ de ] = "Objekte einzeln übernehmen" ;
+        QuickHelpText [ en-US ] = "Apply Objects Individually" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_REMOVE_BITMAP
     {
@@ -1167,36 +307,9 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Aktuelles Bild löschen : Aktuelles Bild l÷schen */
-        QuickHelpText = "Aktuelles Bild löschen" ;
-        QuickHelpText [ ENGLISH ] = "Remove current picture" ;
-        QuickHelpText [ english_us ] = "Delete Current Image" ;
-        QuickHelpText [ italian ] = "Cancella immagine attuale" ;
-        QuickHelpText [ spanish ] = "Borrar imagen actual" ;
-        QuickHelpText [ french ] = "Supprimer l'image active" ;
-        QuickHelpText [ dutch ] = "Actuele afbeelding wissen" ;
-        QuickHelpText [ danish ] = "Slet aktuelt billede" ;
-        QuickHelpText [ portuguese ] = "Elimina a imagem activa" ;
-        QuickHelpText [ portuguese_brazilian ] = "Excluir imagem atual" ;
-        QuickHelpText [ swedish ] = "Radera aktuell bild" ;
-        QuickHelpText[ russian ] = "Óäàëèòü òåêóùóş êàğòèíó";
-        QuickHelpText[ polish ] = "Usuñ aktualny obraz";
-        QuickHelpText[ japanese ] = "ç¾åœ¨ã®ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒã‚’å‰Šé™¤";
-        QuickHelpText[ chinese_simplified ] = "åˆ é™¤å½“å‰çš„å›¾åƒ";
-        QuickHelpText[ chinese_traditional ] = "åˆªé™¤ç•¶å‰çš„å½±åƒ";
-        QuickHelpText[ arabic ] = "ÍĞİ ÇáÕæÑÉ ÇáÍÇáíÉ";
-        QuickHelpText[ greek ] = "ÄéáãñáöŞ ôñİ÷ùí åéêüíáò";
-        QuickHelpText[ korean ] = "í˜„ì¬ ì´ë¯¸ì§€ ì‚­ì œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Aktuelles Bild löschen";
-        QuickHelpText[ catalan ] = "Suprimeix la imatge actual";
-        QuickHelpText[ finnish ] = "Poista nykyinen kuva";
-        QuickHelpText[ czech ] = "Smazat aktuÃ¡lnÃ­ obrÃ¡zek";
-        QuickHelpText[ hebrew ] = "Aktuelles Bild lÃ¶schen";
-        QuickHelpText[ thai ] = "Delete Current Image";
-        QuickHelpText[ hindi ] = "à¤ªà¥à¤°à¤šà¤²à¤¿à¤¤ à¤šà¤¿à¤¤à¥à¤° à¤®à¤¿à¤Ÿà¤¾à¤“";
-        QuickHelpText[ slovak ] = "ZmazaÅ¥ aktuÃ¡lny obrÃ¡zok";
-        QuickHelpText[ hungarian ] = "AktuÃ¡lis kÃ©p tÃ¶rlÃ©se";
-        QuickHelpText[ slovenian ] = "ZbriÅ¡i trenutno sliko";
+        QuickHelpText [ de ] = "Aktuelles Bild löschen" ;
+        QuickHelpText [ en-US ] = "Delete Current Image" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_REMOVE_ALL
     {
@@ -1212,234 +325,70 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Alle Bilder löschen : Alle Bilder l÷schen */
-        QuickHelpText = "Alle Bilder löschen" ;
-        QuickHelpText [ ENGLISH ] = "Remove all pictures" ;
-        QuickHelpText [ english_us ] = "Delete All Images" ;
-        QuickHelpText [ dutch ] = "Alle afbeeldingen wissen" ;
-        QuickHelpText [ italian ] = "Cancella tutte le immagini" ;
-        QuickHelpText [ spanish ] = "Borrar todas las imágenes" ;
-        QuickHelpText [ french ] = "Supprimer toutes les images" ;
-        QuickHelpText [ danish ] = "Slet alle billeder" ;
-        QuickHelpText [ portuguese ] = "Elimina as imagens todas" ;
-        QuickHelpText [ portuguese_brazilian ] = "Excluir todas as imagens" ;
-        QuickHelpText [ swedish ] = "Radera alla bilder" ;
-        QuickHelpText[ russian ] = "Óäàëèòü âñå êàğòèíû";
-        QuickHelpText[ polish ] = "Usuñ wszystkie obrazy";
-        QuickHelpText[ japanese ] = "ã™ã¹ã¦ã®ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒã‚’å‰Šé™¤";
-        QuickHelpText[ chinese_simplified ] = "åˆ é™¤å…¨éƒ¨çš„å›¾åƒ";
-        QuickHelpText[ chinese_traditional ] = "åˆªé™¤æ‰€æœ‰çš„å½±åƒ";
-        QuickHelpText[ arabic ] = "ÍĞİ ßá ÇáÕæÑ";
-        QuickHelpText[ greek ] = "ÄéáãñáöŞ üëùí ôùí åéêüíùí";
-        QuickHelpText[ korean ] = "ëª¨ë“  ì´ë¯¸ì§€ ì‚­ì œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Alle Bilder löschen";
-        QuickHelpText[ catalan ] = "Elimina totes les imatges";
-        QuickHelpText[ finnish ] = "Poista kaikki kuvat";
-        QuickHelpText[ czech ] = "Smazat vÅ¡echny obrÃ¡zky";
-        QuickHelpText[ hebrew ] = "Alle Bilder lÃ¶schen";
-        QuickHelpText[ thai ] = "Delete All Images";
-        QuickHelpText[ hindi ] = "Ã Â¤Â¸Ã Â¤Â¬ Ã Â¤Å¡Ã Â¤Â¿Ã Â¤Â¤Ã Â¥ÂÃ Â¤Â° Ã Â¤Â®Ã Â¤Â¿Ã Â¤Å¸Ã Â¤Â¾Ã Â¤â€œ";
-        QuickHelpText[ slovak ] = "ZmazaÅ¥ vÅ¡etky obrÃ¡zky";
-        QuickHelpText[ hungarian ] = "Ã–sszes kÃ©p tÃ¶rlÃ©se";
-        QuickHelpText[ slovenian ] = "ZbriÅ¡i vse slike";
+        QuickHelpText [ de ] = "Alle Bilder löschen" ;
+        QuickHelpText [ en-US ] = "Delete All Images" ;
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COUNT
     {
         Pos = MAP_APPFONT ( 106 , 135 ) ;
         Size = MAP_APPFONT ( 26 , 10 ) ;
-        Text = "Anzahl" ;
-        Text [ ENGLISH ] = "Number" ;
-        Text [ norwegian ] = "Number" ;
-        Text [ italian ] = "Numero" ;
-        Text [ portuguese_brazilian ] = "Número" ;
-        Text [ portuguese ] = "Número" ;
-        Text [ finnish ] = "Ruutuja" ;
-        Text [ danish ] = "Antal" ;
-        Text [ french ] = "Nombre" ;
-        Text [ swedish ] = "Antal" ;
-        Text [ dutch ] = "Aantal" ;
-        Text [ spanish ] = "Cantidad" ;
-        Text [ english_us ] = "Number" ;
-        Text[ chinese_simplified ] = "æ•°ç›®";
-        Text[ russian ] = "Êîë-âî";
-        Text[ polish ] = "Iloœæ";
-        Text[ japanese ] = "æ•°";
-        Text[ chinese_traditional ] = "æ•¸ç›®";
-        Text[ arabic ] = "ÇáÚÏÏ";
-        Text[ greek ] = "ĞëŞèïò";
-        Text[ korean ] = "ìˆ˜";
-        Text[ turkish ] = "Sayı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Quantitat";
-        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚";
-        Text[ czech ] = "ÄŒÃ­slo";
-        Text[ hebrew ] = "Anzahl";
-        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-        Text[ slovak ] = "ÄŒÃ­slo";
-        Text[ hungarian ] = "SzÃ¡m";
-        Text[ slovenian ] = "Å tevilo";
+        Text [ de ] = "Anzahl" ;
+        Text [ en-US ] = "Number" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FI_COUNT
     {
         Pos = MAP_APPFONT ( 133 , 135 ) ;
         Size = MAP_APPFONT ( 15 , 10 ) ;
-        DeltaLang = < Default ; Default ; Default ; Default ; > ;
-        DeltaLang [ ENGLISH ] = < 2 ; Default ; Default ; Default ; > ;
+        DeltaLang [ de ]= < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ en-US ] = < 2 ; Default ; Default ; Default ; > ;
         Text = "67" ;
     };
     FixedLine GRP_BITMAP
     {
         Pos = MAP_APPFONT ( 6 , 120 ) ;
         Size = MAP_APPFONT ( 147 , 8 ) ;
-        Text = "Bild" ;
-        Text [ ENGLISH ] = "Picture" ;
-        Text [ dutch ] = "Afbeelding" ;
-        Text [ english_us ] = "Image" ;
-        Text [ italian ] = "Immagine" ;
-        Text [ spanish ] = "Imagen" ;
-        Text [ french ] = "Image" ;
-        Text [ swedish ] = "Bild" ;
-        Text [ danish ] = "Billede" ;
-        Text [ portuguese ] = "Imagem" ;
-        Text [ portuguese_brazilian ] = "Imagem" ;
-        Text[ chinese_simplified ] = "å›¾åƒ";
-        Text[ russian ] = "Èçîáğàæåíèå";
-        Text[ polish ] = "Obraz";
-        Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ç”»åƒ";
-        Text[ chinese_traditional ] = "å½±åƒ";
-        Text[ arabic ] = "ÇáÕæÑÉ";
-        Text[ greek ] = "Åéêüíá";
-        Text[ korean ] = "ì´ë¯¸ì§€";
-        Text[ turkish ] = "Görüntü";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imatge";
-        Text[ finnish ] = "Ruudut";
-        Text[ thai ] = "à¸ à¸²à¸";
-        Text[ czech ] = "ObrÃ¡zek";
-        Text[ hebrew ] = "Bild";
-        Text[ hindi ] = "Image";
-        Text[ slovak ] = "ObrÃ¡zok";
-        Text[ hungarian ] = "KÃ©p";
-        Text[ slovenian ] = "Podoba";
+        Text [ de ] = "Bild" ;
+        Text [ en-US ] = "Image" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_GROUP
     {
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text = "Gruppenobjekt" ;
-        Text [ ENGLISH ] = "Group object" ;
-        Text [ english_us ] = "Group object" ;
-        Text [ italian ] = "Oggetto di gruppo" ;
-        Text [ spanish ] = "Objeto de grupo" ;
-        Text [ french ] = "Objet de groupe" ;
-        Text [ dutch ] = "Groepsobject" ;
-        Text [ swedish ] = "Gruppobjekt" ;
-        Text [ danish ] = "Gruppeobjekt" ;
-        Text [ portuguese_brazilian ] = "Objeto de grupo" ;
-        Text [ portuguese ] = "Objecto de grupo" ;
-        Text[ chinese_simplified ] = "åˆ†ç»„å¯¹è±¡";
-        Text[ russian ] = "Îáúåêò ãğóïïû";
-        Text[ polish ] = "Obiekt grupy";
-        Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—åŒ–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-        Text[ chinese_traditional ] = "ç¾¤çµ„ç‰©ä»¶";
-        Text[ arabic ] = "ßÇÆä ãÌãæÚÉ";
-        Text[ greek ] = "Áíôéêåßìåíï ïìÜäáò";
-        Text[ korean ] = "ê·¸ë£¹ ê°œì²´";
-        Text[ turkish ] = "Grup nesnesi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Agrupa l'objecte";
-        Text[ finnish ] = "Objektiryhmä";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡à¸§à¸±à¸•à¸–à¸¸";
-        Text[ czech ] = "SkupinovÃ½ objekt";
-        Text[ hebrew ] = "Gruppenobjekt";
-        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤¸à¤®à¥‚à¤¹";
-        Text[ slovak ] = "ZoskupiÅ¥ objekty";
-        Text[ hungarian ] = "Csoportobjektum";
-        Text[ slovenian ] = "Skupinski predmet";
+        Text [ de ] = "Gruppenobjekt" ;
+        Text [ en-US ] = "Group object" ;
+        Text [ x-comment ] = " ";
     };
     RadioButton RBT_BITMAP
     {
         Pos = MAP_APPFONT ( 12 , 181 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text = "Bitmapobjekt" ;
-        Text [ ENGLISH ] = "Bitmap object" ;
-        Text [ dutch ] = "Bitmapobject" ;
-        Text [ english_us ] = "Bitmap object" ;
-        Text [ italian ] = "Oggetto bitmap" ;
-        Text [ spanish ] = "Objeto mapa de bits" ;
-        Text [ french ] = "Objet bitmap" ;
-        Text [ swedish ] = "Bitmapobjekt" ;
-        Text [ danish ] = "Bitmapobjekt" ;
-        Text [ portuguese_brazilian ] = "Objeto de bitmap" ;
-        Text [ portuguese ] = "Objecto de bitmap" ;
-        Text[ chinese_simplified ] = "ä½å›¾å¯¹è±¡";
-        Text[ russian ] = "Ğàñòğîâûé îáúåêò";
-        Text[ polish ] = "Obiekt mapy bitowej";
-        Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ— ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-        Text[ chinese_traditional ] = "é»é™£åœ–ç‰©ä»¶";
-        Text[ arabic ] = "ßÇÆä ÕæÑÉ äŞØíÉ";
-        Text[ greek ] = "Áíôéêåßìåíï Bitmap";
-        Text[ korean ] = "ë¹„íŠ¸ë§µ ê°œì²´";
-        Text[ turkish ] = "Bit eşlem nesnesi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Objecte de mapa de bits";
-        Text[ finnish ] = "Bittikarttaobjekti";
-        Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸šà¸´à¸—à¹à¸¡à¸›";
-        Text[ czech ] = "Objekt rastru";
-        Text[ hebrew ] = "Bitmapobjekt";
-        Text[ hindi ] = "à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥ à¤µà¤¸à¥à¤¤à¥";
-        Text[ slovak ] = "Objekt bitovej mapy";
-        Text[ hungarian ] = "BitkÃ©p objektum";
-        Text[ slovenian ] = "Predmet bitne slike";
+        Text [ de ] = "Bitmapobjekt" ;
+        Text [ en-US ] = "Bitmap object" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_ADJUSTMENT
     {
         Pos = MAP_APPFONT ( 12 , 198 ) ;
         Size = MAP_APPFONT ( 62 , 10 ) ;
-        DeltaLang = < Default ; Default ; Default ; Default ; > ;
-        DeltaLang [ ENGLISH ] = < -1 ; Default ; -2 ; Default ; > ;
-        Text = "Anpassung" ;
-        Text [ ENGLISH ] = "Adjustment" ;
-        Text [ norwegian ] = "Justering" ;
-        Text [ italian ] = "Adattamento" ;
-        Text [ portuguese_brazilian ] = "Alinhamento" ;
-        Text [ portuguese ] = "Alinhamento" ;
-        Text [ finnish ] = "Kohdistus" ;
-        Text [ danish ] = "Justering" ;
-        Text [ french ] = "Adaptation" ;
-        Text [ swedish ] = "Anpassning" ;
-        Text [ dutch ] = "Uitlijning" ;
-        Text [ spanish ] = "Ajuste" ;
-        Text [ english_us ] = "Alignment" ;
-        Text[ chinese_simplified ] = "è°ƒæ•´";
-        Text[ russian ] = "Âûğàâíèâàíèå";
-        Text[ polish ] = "Wyrównanie";
-        Text[ japanese ] = "é…ç½®";
-        Text[ chinese_traditional ] = "èª¿æ•´";
-        Text[ arabic ] = "ÇáãáÇÁãÉ";
-        Text[ greek ] = "Óôïß÷éóç";
-        Text[ korean ] = "ë§ì¶¤";
-        Text[ turkish ] = "Hizalama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Alineament";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "ZarovnÃ¡nÃ­";
-        Text[ hebrew ] = "â€®×™×©×•×¨â€¬";
-        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
-        Text[ slovak ] = "Zarovnanie";
-        Text[ hungarian ] = "IgazÃ­tÃ¡s";
-        Text[ slovenian ] = "Poravnava";
+        DeltaLang [ de ] = < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ en-US ] = < -1 ; Default ; -2 ; Default ; > ;
+        Text [ de ] = "Anpassung" ;
+        Text [ en-US ] = "Alignment" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_ADJUSTMENT
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 196 ) ;
         Size = MAP_APPFONT ( 72 , 100 ) ;
-        DeltaLang = < Default ; Default ; Default ; Default ; > ;
-        DeltaLang [ ENGLISH ] = < -1 ; Default ; Default ; Default ; > ;
+        DeltaLang [ de ] = < Default ; Default ; Default ; Default ; > ;
+        DeltaLang [ en-US ] = < -1 ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Links/Oben" ; Default ; > ;
             < "Links" ; Default ; > ;
@@ -1451,139 +400,7 @@ DockingWindow FLT_WIN_ANIMATION
             < "Rechts" ; Default ; > ;
             < "Rechts/Unten" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Links/Oben" ; Default ; > ;
-            < "Links" ; Default ; > ;
-            < "Links/Unten" ; Default ; > ;
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Unten" ; Default ; > ;
-            < "Rechts/Oben" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "Rechts/Unten" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "Links/Oben" ; Default ; > ;
-            < "Links" ; Default ; > ;
-            < "Links/Unten" ; Default ; > ;
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Unten" ; Default ; > ;
-            < "Rechts/Oben" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "Rechts/Unten" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "A sinistra/in alto" ; Default ; > ;
-            < "A sinistra" ; Default ; > ;
-            < "A sinistra/in basso" ; Default ; > ;
-            < "In alto" ; Default ; > ;
-            < "Al centro" ; Default ; > ;
-            < "In basso" ; Default ; > ;
-            < "A destra/in alto" ; Default ; > ;
-            < "A destra" ; Default ; > ;
-            < "A destra/in basso" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Esquerda Superior" ; Default ; > ;
-            < "Esquerda" ; Default ; > ;
-            < "Esquerda Inferior" ; Default ; > ;
-            < "Topo" ; Default ; > ;
-            < "Centralizado" ; Default ; > ;
-            < "Base" ; Default ; > ;
-            < "Direita Superior" ; Default ; > ;
-            < "Direita" ; Default ; > ;
-            < "Direita Inferior" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Esquerda/Em cima" ; Default ; > ;
-            < "Esquerda" ; Default ; > ;
-            < "Esquerda/Em baixo" ; Default ; > ;
-            < "Em cima" ; Default ; > ;
-            < "Centrado" ; Default ; > ;
-            < "Em baixo" ; Default ; > ;
-            < "Direita/Em cima" ; Default ; > ;
-            < "Direita" ; Default ; > ;
-            < "Direita/Em baixo" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Ylös vasemmalle" ; Default ; > ;
-            < "Vasemmalle" ; Default ; > ;
-            < "Alas vasemmalle" ; Default ; > ;
-            < "Ylös" ; Default ; > ;
-            < "Keskelle" ; Default ; > ;
-            < "Alas" ; Default ; > ;
-            < "Ylös oikealle" ; Default ; > ;
-            < "Oikealle" ; Default ; > ;
-            < "Alas oikealle" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Øverst til venstre" ; Default ; > ;
-            < "Venstre" ; Default ; > ;
-            < "Nederst til venstre" ; Default ; > ;
-            < "Top" ; Default ; > ;
-            < "Centreret" ; Default ; > ;
-            < "Bund" ; Default ; > ;
-            < "Øverst til højre" ; Default ; > ;
-            < "Højre" ; Default ; > ;
-            < "Nederst til højre" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "À gauche/En haut" ; Default ; > ;
-            < "À gauche" ; Default ; > ;
-            < "À gauche/En bas" ; Default ; > ;
-            < "En haut" ; Default ; > ;
-            < "Centré" ; Default ; > ;
-            < "En bas" ; Default ; > ;
-            < "À droite/En haut" ; Default ; > ;
-            < "À droite" ; Default ; > ;
-            < "À droite/En bas" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Vänster/uppe" ; Default ; > ;
-            < "Till vänster" ; Default ; > ;
-            < "Vänster/nere" ; Default ; > ;
-            < "Uppe" ; Default ; > ;
-            < "Centrerad" ; Default ; > ;
-            < "Nere" ; Default ; > ;
-            < "Höger/uppe" ; Default ; > ;
-            < "Till höger" ; Default ; > ;
-            < "Höger/nere" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Links/boven" ; Default ; > ;
-            < "Links" ; Default ; > ;
-            < "Links/onder" ; Default ; > ;
-            < "Boven" ; Default ; > ;
-            < "Gecentreerd" ; Default ; > ;
-            < "Onder" ; Default ; > ;
-            < "Rechts/boven" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "Rechts/onder" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Arriba a la izquierda" ; Default ; > ;
-            < "Izquierda" ; Default ; > ;
-            < "Abajo a la izquierda" ; Default ; > ;
-            < "Arriba" ; Default ; > ;
-            < "Centrado" ; Default ; > ;
-            < "Abajo" ; Default ; > ;
-            < "Arriba a la derecha" ; Default ; > ;
-            < "Derecha" ; Default ; > ;
-            < "Abajo a la derecha" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Top Left" ; Default ; > ;
             < "Left" ; Default ; > ;
@@ -1595,115 +412,7 @@ DockingWindow FLT_WIN_ANIMATION
             < "Right" ; Default ; > ;
             < "Bottom Right" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "å·¦/ä¸Š" ; Default ; > ;
-        < "å‘å·¦" ; Default ; > ;
-        < "å‘å·¦/å‘ä¸Š" ; Default ; > ;
-        < "å‘ä¸Š" ; Default ; > ;
-        < "å±…ä¸­" ; Default ; > ;
-        < "å‘ä¸‹" ; Default ; > ;
-        < "å‘å³/å‘ä¸Š" ; Default ; > ;
-        < "å‘å³" ; Default ; > ;
-        < "å‘å³/å‘ä¸‹" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Ñëåâà ñâåğõó" ; Default ; > ;
-        < "Ïî ëåâîìó êğàş" ; Default ; > ;
-        < "Ñëåâà ñíèçó" ; Default ; > ;
-        < "Ïî âåğõíåìó êğàş" ; Default ; > ;
-        < "Ïî öåíòğó" ; Default ; > ;
-        < "Ïî íèæíåìó êğàş" ; Default ; > ;
-        < "Ñïğàâà ñâåğõó" ; Default ; > ;
-        < "Ïî ïğàâîìó êğàş" ; Default ; > ;
-        < "Ñïğàâà âíèçó" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Do góry do lewej" ; Default ; > ;
-        < "Do lewej" ; Default ; > ;
-        < "Do do³u do lewej" ; Default ; > ;
-        < "Do góry" ; Default ; > ;
-        < "Do œrodka" ; Default ; > ;
-        < "Do do³u" ; Default ; > ;
-        < "Do góry do prawej" ; Default ; > ;
-        < "do prawej" ; Default ; > ;
-        < "Do do³u do prawej" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "å·¦/ä¸Š" ; Default ; > ;
-        < "å·¦" ; Default ; > ;
-        < "å·¦/ä¸‹" ; Default ; > ;
-        < "ä¸Š" ; Default ; > ;
-        < "ä¸­å¤®" ; Default ; > ;
-        < "ä¸‹" ; Default ; > ;
-        < "å³/ä¸Š" ; Default ; > ;
-        < "å³" ; Default ; > ;
-        < "å³/ä¸‹" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "å‘å·¦/å‘ä¸Š" ; Default ; > ;
-        < "å‘å·¦" ; Default ; > ;
-        < "å‘å·¦/å‘ä¸Š" ; Default ; > ;
-        < "å‘ä¸Š" ; Default ; > ;
-        < "ç½®ä¸­" ; Default ; > ;
-        < "å‘ä¸‹" ; Default ; > ;
-        < "å‘å³/å‘ä¸Š" ; Default ; > ;
-        < "å‘å³" ; Default ; > ;
-        < "å‘å³/å‘ä¸‹" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "íÓÇÑ/ÃÚáì" ; Default ; > ;
-        < "íÓÇÑ" ; Default ; > ;
-        < "íÓÇÑ/ÃÓİá" ; Default ; > ;
-        < "ÃÚáì" ; Default ; > ;
-        < "ÊæÓíØ" ; Default ; > ;
-        < "ÃÓİá" ; Default ; > ;
-        < "íãíä/ÃÚáì" ; Default ; > ;
-        < "íãíä" ; Default ; > ;
-        < "íãíä/ÃÓİá" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "ĞÜíù/ÄåîéÜ" ; Default ; > ;
-        < "ÁñéóôåñÜ" ; Default ; > ;
-        < "ÊÜôù/ÁñéóôåñÜ" ; Default ; > ;
-        < "ĞÜíù" ; Default ; > ;
-        < "Óôï êİíôñï" ; Default ; > ;
-        < "ÊÜôù" ; Default ; > ;
-        < "ĞÜíù/ÄåîéÜ" ; Default ; > ;
-        < "ÄåîéÜ" ; Default ; > ;
-        < "ÊÜôù/ÄåîéÜ" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ì™¼ìª½/ìœ„" ; Default ; > ;
-        < "ì™¼ìª½" ; Default ; > ;
-        < "ì™¼ìª½/ì•„ë˜" ; Default ; > ;
-        < "ìœ„" ; Default ; > ;
-        < "ê°€ìš´ë°" ; Default ; > ;
-        < "ì•„ë˜" ; Default ; > ;
-        < "ì˜¤ë¥¸ìª½/ìœ„" ; Default ; > ;
-        < "ì˜¤ë¥¸ìª½" ; Default ; > ;
-        < "ì˜¤ë¥¸ìª½/ì•„ë˜" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Sol üst" ; Default ; > ;
-        < "Sol" ; Default ; > ;
-        < "Sol alt" ; Default ; > ;
-        < "Üst" ; Default ; > ;
-        < "Orta" ; Default ; > ;
-        < "Alt" ; Default ; > ;
-        < "Sağ üst" ; Default ; > ;
-        < "Sağ" ; Default ; > ;
-        < "Sağ alt" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
@@ -1715,193 +424,25 @@ DockingWindow FLT_WIN_ANIMATION
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
-    StringList [ catalan ] =
-    {
-            < "Extrem superior esquerre" ; Default ; > ;
-        < "Esquerra" ; Default ; > ;
-        < "Part inferior esquerra" ; Default ; > ;
-        < "Superior" ; Default ; > ;
-        < "Centrat" ; Default ; > ;
-        < "Part inferior" ; Default ; > ;
-        < "Extrem superior dret" ; Default ; > ;
-        < "Dreta" ; Default ; > ;
-        < "Part inferior dreta" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¸šà¸™à¸‹à¹‰à¸²à¸¢" ; Default ; > ;
-        < "à¸‹à¹‰à¸²à¸¢" ; Default ; > ;
-        < "à¸¥à¹ˆà¸²à¸‡à¸‹à¹‰à¸²à¸¢" ; Default ; > ;
-        < "à¸šà¸™" ; Default ; > ;
-        < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡" ; Default ; > ;
-        < "à¸¥à¹ˆà¸²à¸‡" ; Default ; > ;
-        < "à¸šà¸™à¸‚à¸§à¸²" ; Default ; > ;
-        < "à¸‚à¸§à¸²" ; Default ; > ;
-        < "à¸¥à¹ˆà¸²à¸‡à¸‚à¸§à¸²" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Nahoru vlevo" ; Default ; > ;
-        < "Vlevo" ; Default ; > ;
-        < "DolÅ¯ vlevo" ; Default ; > ;
-        < "Nahoru" ; Default ; > ;
-        < "Na stÅ™ed" ; Default ; > ;
-        < "DolÅ¯" ; Default ; > ;
-        < "Nahoru vpravo" ; Default ; > ;
-        < "Vpravo" ; Default ; > ;
-        < "DolÅ¯ vpravo" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Links/Oben" ; Default ; > ;
-        < "Links" ; Default ; > ;
-        < "Links/Unten" ; Default ; > ;
-        < "Oben" ; Default ; > ;
-        < "Zentriert" ; Default ; > ;
-        < "Unten" ; Default ; > ;
-        < "Rechts/Oben" ; Default ; > ;
-        < "Rechts" ; Default ; > ;
-        < "Rechts/Unten" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤Šà¤ªà¤° à¤¬à¤¾à¤¯à¤¾à¤" ; Default ; > ;
-        < "à¤¬à¤¾à¤¯à¤¾à¤" ; Default ; > ;
-        < "à¤¨à¥€à¤šà¥‡ à¤¬à¤¾à¤¯à¤¾à¤ à¤“à¤°" ; Default ; > ;
-        < "à¤Šà¤ªà¤°" ; Default ; > ;
-        < "à¤•à¥‡à¤¨à¥à¤¦à¥à¤°à¤¿à¤¤" ; Default ; > ;
-        < "à¤¨à¥€à¤šà¥‡" ; Default ; > ;
-        < "à¤Šà¤ªà¤° à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾" ; Default ; > ;
-        < "à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾" ; Default ; > ;
-        < "à¤¨à¥€à¤šà¥‡ à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤°" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Nahor doÄ¾ava" ; Default ; > ;
-        < "VÄ¾avo" ; Default ; > ;
-        < "VÄ¾avo dole" ; Default ; > ;
-        < "Navrchu" ; Default ; > ;
-        < "Na stred" ; Default ; > ;
-        < "Dole" ; Default ; > ;
-        < "Doprava nahor" ; Default ; > ;
-        < "Vpravo" ; Default ; > ;
-        < "Vpravo dole" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Balra fent" ; Default ; > ;
-        < "Balra" ; Default ; > ;
-        < "Balra lent" ; Default ; > ;
-        < "FelÃ¼lre" ; Default ; > ;
-        < "KÃ¶zÃ©pre igazÃ­tott" ; Default ; > ;
-        < "Alulra" ; Default ; > ;
-        < "Jobbra fent" ; Default ; > ;
-        < "Jobbra" ; Default ; > ;
-        < "Jobbra lent" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Zgoraj levo" ; Default ; > ;
-        < "Levo" ; Default ; > ;
-        < "Spodaj levo" ; Default ; > ;
-        < "Zgoraj" ; Default ; > ;
-        < "Na sredini" ; Default ; > ;
-        < "Spodaj" ; Default ; > ;
-        < "Zgoraj desno" ; Default ; > ;
-        < "Desno" ; Default ; > ;
-        < "Spodaj desno" ; Default ; > ;
-    };
     };
     PushButton BTN_CREATE_GROUP
     {
         Pos = MAP_APPFONT ( 107 , 216 ) ;
         Size = MAP_APPFONT ( 41 , 14 ) ;
         TabStop = TRUE ;
-        Text = "Erstellen" ;
-        Text [ ENGLISH ] = "Create" ;
-        Text [ english_us ] = "Create" ;
-        Text [ italian ] = "Crea" ;
-        Text [ spanish ] = "Crear" ;
-        Text [ french ] = "Créer" ;
-        Text [ dutch ] = "Maken" ;
-        Text [ swedish ] = "Skapa" ;
-        Text [ danish ] = "Opret" ;
-        Text [ portuguese_brazilian ] = "Criar" ;
-        Text [ portuguese ] = "Criar" ;
-        Text[ chinese_simplified ] = "å»ºç«‹";
-        Text[ russian ] = "Ñîçäàòü";
-        Text[ polish ] = "Utwórz";
-        Text[ japanese ] = "ä½œæˆ";
-        Text[ chinese_traditional ] = "å»ºç«‹";
-        Text[ arabic ] = "ÅäÔÇÁ";
-        Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ë§Œë“¤ê¸°";
-        Text[ turkish ] = "Oluştur";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Crea";
-        Text[ finnish ] = "Luo";
-        Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡";
-        Text[ czech ] = "VytvoÅ™it";
-        Text[ hebrew ] = "Erstellen";
-        Text[ hindi ] = "à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-        Text[ slovak ] = "VytvoriÅ¥";
-        Text[ hungarian ] = "LÃ©trehozÃ¡s";
-        Text[ slovenian ] = "Ustvari";
+        Text [ de ] = "Erstellen" ;
+        Text [ en-US ] = "Create" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine GRP_ANIMATION_GROUP
     {
         Pos = MAP_APPFONT ( 6 , 155 ) ;
         Size = MAP_APPFONT ( 147 , 8 ) ;
-        Text = "Animationsgruppe" ;
-        Text [ ENGLISH ] = "Animation group" ;
-        Text [ norwegian ] = "Animasjonsgruppe" ;
-        Text [ italian ] = "Gruppo animazione" ;
-        Text [ portuguese_brazilian ] = "Grupo de animação" ;
-        Text [ portuguese ] = "Grupo de animação" ;
-        Text [ finnish ] = "Animaatioryhmä" ;
-        Text [ danish ] = "Animationsgruppe" ;
-        Text [ french ] = "Groupe animé" ;
-        Text [ swedish ] = "Animationsgrupp" ;
-        Text [ dutch ] = "Animatiegroep" ;
-        Text [ spanish ] = "Grupo de animación" ;
-        Text [ english_us ] = "Animation group" ;
-        Text[ chinese_simplified ] = "åŠ¨ç”»å°ç»„";
-        Text[ russian ] = "Ãğóïïà àíèìàöèè";
-        Text[ polish ] = "Grupa animacji";
-        Text[ japanese ] = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚°ãƒ«ãƒ¼ãƒ—";
-        Text[ chinese_traditional ] = "å‹•ç•«ç¾¤çµ„";
-        Text[ arabic ] = "ãÌãæÚÉ ÇáÍÑßÉ";
-        Text[ greek ] = "ÏìÜäá êßíçóçò";
-        Text[ korean ] = "ì• ë‹ˆë©”ì´ì…˜ ê·¸ë£¹";
-        Text[ turkish ] = "Animasyon grub";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Grup d'animació";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡à¸à¸²à¸£à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
-        Text[ czech ] = "Skupina animace";
-        Text[ hebrew ] = "Animationsgruppe";
-        Text[ hindi ] = "Animation group";
-        Text[ slovak ] = "Skupina animÃ¡cie";
-        Text[ hungarian ] = "AnimÃ¡ciÃ³csoport";
-        Text[ slovenian ] = "Animacijska skupina";
+        Text [ de ] = "Animationsgruppe" ;
+        Text [ en-US ] = "Animation group" ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "åŠ¨ç”»";
-    Text[ russian ] = "Àíèìàöèÿ";
-    Text[ polish ] = "Animacja";
-    Text[ japanese ] = "ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "å‹•ç•«";
-    Text[ arabic ] = "ÍÑßÉ";
-    Text[ greek ] = "Åöİ êßíçóçò";
-    Text[ korean ] = "ì• ë‹ˆë©”ì´ì…˜";
-    Text[ turkish ] = "Canlandırma";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Animació";
-    Text[ thai ] = "à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
-    Text[ czech ] = "Animace";
-    Text[ hebrew ] = "Animation";
-    Text[ hindi ] = "à¤¹à¥‚à¤²à¤¾à¤¸";
-    Text[ slovak ] = "AnimÃ¡cia";
-    Text[ hungarian ] = "AnimÃ¡ciÃ³";
-    Text[ slovenian ] = "Animacija";
+    Text [ x-comment ] = " ";
 };
 
 
