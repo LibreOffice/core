@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 09:31:11 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace dbaui
         OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
         sal_Bool                            m_bInKeyEvent;
+        sal_Bool                            m_bInSplitHandler;
 
     public:
         OQueryDesignView(OQueryContainerWindow* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
