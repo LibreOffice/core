@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-16 08:39:20 $
+ *  last change: $Author: ssa $ $Date: 2002-09-19 16:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6541,6 +6541,24 @@ void Window::SetPosSizePixel( long nX, long nY,
                 Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 GetParent()->ImplReMirror( aRect );
                 nX = aRect.nLeft;
+            }
+        }
+        if( !(nFlags & WINDOW_POSSIZE_X) )
+        {
+            // --- RTL ---  make sure the old right aligned position is not changed
+            //              system windows will always grow to the right
+            if( pWindow->GetParent() && pWindow->GetParent()->ImplHasMirroredGraphics() )
+            {
+                nFlags |= WINDOW_POSSIZE_X;
+                nSysFlags |= SAL_FRAME_POSSIZE_X;
+                nX = mpFrame->GetUnmirroredGeometry().nX - pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nX;
+                nX = pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nX + pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nWidth - mpFrame->GetUnmirroredGeometry().nWidth - 1 - mpFrame->GetUnmirroredGeometry().nX;
+                if(!(nFlags & WINDOW_POSSIZE_Y))
+                {
+                    nFlags |= WINDOW_POSSIZE_Y;
+                    nSysFlags |= SAL_FRAME_POSSIZE_Y;
+                    nY = mpFrame->GetUnmirroredGeometry().nY - pWindow->GetParent()->mpFrame->GetUnmirroredGeometry().nY;
+                }
             }
         }
         if( nFlags & WINDOW_POSSIZE_Y )

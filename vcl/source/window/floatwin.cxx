@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-08 15:22:34 $
+ *  last change: $Author: ssa $ $Date: 2002-09-19 16:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,12 @@
 #ifndef _SV_RC_H
 #include <rc.h>
 #endif
-
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
 #pragma hdrstop
 
 // =======================================================================
@@ -271,8 +276,23 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     Rectangle normRect( rRect );  // rRect is already relative to top-level window
     normRect.SetPos( pW->ScreenToOutputPixel( normRect.TopLeft() ) );
 
+    BOOL bRTL = Application::GetSettings().GetLayoutRTL();
+
     Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
                         pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );
+
+    Rectangle devRectRTL( devRect );
+    if( bRTL )
+    {
+        Point p = normRect.TopLeft();
+        long w = rRect.getWidth();
+        p.X() = p.X() - pW->GetPosPixel().X();
+        p.X() = pW->GetPosPixel().X() + pW->GetSizePixel().Width() - w - p.X();
+        Point p2 = normRect.BottomRight();
+        p2.X() = p.X()+w;
+        devRectRTL = Rectangle( pW->OutputToAbsoluteScreenPixel( p ),
+                             pW->OutputToAbsoluteScreenPixel( p2 ));
+    }
 
     USHORT      nArrangeAry[5];
     USHORT      nArrangeIndex;
@@ -316,8 +336,6 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     else
         nArrangeIndex = 0;
 
-    BOOL bRTL = Application::GetSettings().GetLayoutRTL() ? TRUE : FALSE;
-
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
         bLeft = FALSE;
@@ -332,7 +350,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 aPos.Y() -= pWindow->mnTopBorder;
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
-                    if( (devRect.Right()+aSize.Width()) > aScreenRect.Right() )
+                    if( (devRectRTL.Right()+aSize.Width()) > aScreenRect.Right() )
                         bBreak = FALSE;
                 }
                 else
@@ -346,7 +364,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 aPos.Y() -= pWindow->mnTopBorder;
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
-                    if( (devRect.Left() - aSize.Width()) < aScreenRect.Left() )
+                    if( (devRectRTL.Left() - aSize.Width()) < aScreenRect.Left() )
                         bBreak = FALSE;
                 }
                 else
@@ -395,13 +413,13 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
             }
             else
             {
-                 if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
-                 {
+                if ( !bRTL && aPos.X()+aSize.Width() > aScreenRect.Right() )
+                {
                     bLeft = TRUE;
                     aPos.X() = devRect.Right()-aSize.Width();
                     if ( aPos.X() < aScreenRect.Left() )
                         aPos.X() = aScreenRect.Left();
-                 }
+                }
             }
         }
 
@@ -427,6 +445,8 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     rArrangeIndex = nArrangeIndex;
 
     aPos = pW->AbsoluteScreenToOutputPixel( aPos );
+
+
     // caller expects cordinates relative to top-level win
     return pW->OutputToScreenPixel( aPos );
 }
