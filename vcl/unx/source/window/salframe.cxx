@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 13:38:56 $
+ *  last change: $Author: cp $ $Date: 2001-05-17 11:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #include "i18n_ic.hxx"
+#endif
+#ifndef _SAL_I18N_KEYSYM_HXX
+#include "i18n_keysym.hxx"
 #endif
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1982,11 +1985,12 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     KeySym          nKeySym;
     int             nLen = 2048;
     unsigned char   *pPrintable = (unsigned char*)alloca( nLen );
-    pPrintable[0] = 0;
 
     // singlebyte code composed by input method, the new default
     if (mpInputContext != NULL && mpInputContext->UseContext())
     {
+        // returns a keysym as well as the pPrintable (in system encoding)
+        // printable may be empty.
         Status nStatus;
         nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                 &nStatus, mpInputContext->GetContext() );
@@ -1994,7 +1998,6 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         {
             nLen *= 2;
             pPrintable = (unsigned char*)alloca( nLen );
-            pPrintable[ 0 ] = 0;
             nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                     &nStatus, mpInputContext->GetContext() );
         }
@@ -2004,8 +2007,6 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         // fallback, this should never ever be called
         Status nStatus = 0;
            nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen, &nStatus );
-        if( !nLen )
-            pPrintable[0] = 0;
      }
 
     USHORT nModCode = 0;
@@ -2058,9 +2059,18 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
 
     SalKeyEvent aKeyEvt;
     USHORT      nKeyCode;
+    char        aDummy;
 
-    nKeyCode = pDisplay_->GetKeyCode( nKeySym, (char*)pPrintable );
-    if( !nKeyCode && !pPrintable[0] )
+    // try to figure out the vcl code for the keysym
+    nKeyCode = pDisplay_->GetKeyCode( nKeySym, &aDummy );
+    // try to figure out a printable if XmbLookupString returns only a keysym
+    // and NOT a printable. Do not store it in pPrintable[0] since it is expected to
+    // be in system encoding, not unicode.
+    sal_Unicode nKeyString = 0x0;
+    if (nLen == 0)
+        nKeyString = KeysymToUnicode (nKeySym);
+    // if we have nothing we give up
+    if( !nKeyCode && !nLen && !nKeyString)
         return 0;
 
     rtl_TextEncoding nEncoding = gsl_getSystemTextEncoding();
@@ -2070,7 +2080,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
     sal_Size     nSize;
     pBuffer = (sal_Unicode*) malloc( nBufferSize + 2 );
     pBuffer[ 0 ] = 0;
-    if ( nEncoding != RTL_TEXTENCODING_UNICODE )
+    if (nLen > 0 && nEncoding != RTL_TEXTENCODING_UNICODE)
     {
         // create text converter
         rtl_TextToUnicodeConverter aConverter =
@@ -2080,7 +2090,6 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
 
         sal_uInt32  nConversionInfo;
         sal_Size    nConvertedChars;
-
 
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
@@ -2098,9 +2107,16 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         pString = pBuffer;
     }
     else
+    if (nLen > 0 /* nEncoding == RTL_TEXTENCODING_UNICODE */)
     {
         pString = (sal_Unicode*)pPrintable;
           nSize = nLen;
+    }
+    else
+    /* if (nKeyString != 0) */
+    {
+        pString = &nKeyString;
+        nSize = 1;
     }
 
     if (   mpInputContext != NULL
