@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:25:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,123 +98,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
-
-/*************************************************************************
-|*
-|* Controls (Windows) fuer Diaeffekte
-|*
-\************************************************************************/
-
-//========================================================================
-// DiaTimeControl:
-
-class DiaTimeControl : public TimeField
-{
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-
-protected:
-    virtual void    Up();
-    virtual void    Down();
-
-public:
-                DiaTimeControl( Window* pParent,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                WinBits nStyle = 0 );
-                DiaTimeControl( Window* pParent,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                ResId nRId );
-                ~DiaTimeControl();
-
-    DECL_LINK( ModifyDiaTimeHdl, void * );
-    DECL_LINK( GetFocusHdl, void * );
-};
-
-#ifdef _SD_DIACTRL_CXX
-
-//========================================================================
-// DiaEffectControl:
-
-class DiaEffectControl : public Window
-{
-public:
-    FadeEffectLB    aLbEffect;
-
-public:
-                DiaEffectControl( Window* pParent,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                  WinBits nStyle = 0 );
-                ~DiaEffectControl();
-
-    DECL_LINK( SelectDiaEffectHdl, void * );
-
-protected:
-    /** This method is called when the window gets the focus.  It grabs the
-        focus to this control so that it can be controlled with the
-        keyboard.
-    */
-    virtual void GetFocus (void);
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-    FixedText       aFtDescr;
-};
-
-//========================================================================
-// DiaSpeedControl:
-
-class DiaSpeedControl : public Window
-{
-public:
-    ListBox         aLbSpeed;
-
-public:
-                DiaSpeedControl( Window* pParent,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 WinBits nStyle = 0 );
-                ~DiaSpeedControl();
-
-    DECL_LINK( SelectDiaSpeedHdl, void * );
-
-protected:
-    /** This method is called when the window gets the focus.  It grabs the
-        focus to this control so that it can be controlled with the
-        keyboard.
-    */
-    virtual void GetFocus (void);
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-};
-
-//========================================================================
-// DiaAutoControl:
-
-class DiaAutoControl : public Window
-{
-public:
-    ListBox         aLbAuto;
-
-public:
-                DiaAutoControl( Window* pParent,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                WinBits nStyle = 0 );
-                ~DiaAutoControl();
-
-    DECL_LINK( SelectDiaAutoHdl, void * );
-
-protected:
-    /** This method is called when the window gets the focus.  It grabs the
-        focus to this control so that it can be controlled with the
-        keyboard.
-    */
-    virtual void GetFocus (void);
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
-    FixedText       aFtDescr;
-};
-
 //========================================================================
 // SdPagesField:
 
@@ -234,65 +117,6 @@ public:
     void            Update( const SfxUInt16Item* pItem );
 };
 
-
-/*************************************************************************
-|*
-|* Toolbox-Controller fuer Diaeffekte
-|*
-\************************************************************************/
-
-class SdTbxCtlDiaEffect: public SfxToolBoxControl
-{
-public:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
-
-            SFX_DECL_TOOLBOX_CONTROL();
-
-            SdTbxCtlDiaEffect( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-            ~SdTbxCtlDiaEffect() {}
-};
-
-class SdTbxCtlDiaSpeed: public SfxToolBoxControl
-{
-public:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
-
-            SFX_DECL_TOOLBOX_CONTROL();
-
-            SdTbxCtlDiaSpeed( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-            ~SdTbxCtlDiaSpeed() {}
-};
-
-class SdTbxCtlDiaAuto: public SfxToolBoxControl
-{
-public:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
-
-            SFX_DECL_TOOLBOX_CONTROL();
-
-            SdTbxCtlDiaAuto( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-            ~SdTbxCtlDiaAuto() {}
-};
-
-class SdTbxCtlDiaTime: public SfxToolBoxControl
-{
-public:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent );
-
-            SFX_DECL_TOOLBOX_CONTROL();
-
-            SdTbxCtlDiaTime( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-            ~SdTbxCtlDiaTime() {}
-};
-
 //========================================================================
 // SdTbxCtlDiaPages:
 //========================================================================
@@ -310,9 +134,7 @@ public:
     ~SdTbxCtlDiaPages();
 };
 
-#endif // _SD_DIACTRL_CXX
-
-#endif // _SD_TBXCTRLS_HXX
+#endif // _SD_DIACTRL_HXX
 
 
 
