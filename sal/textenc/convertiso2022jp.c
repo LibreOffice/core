@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022jp.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-19 17:50:03 $
+ *  last change: $Author: sb $ $Date: 2001-11-19 17:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,8 @@ sal_Size ImplConvertUnicodeToIso2022Jp(ImplTextConverterData const * pData,
             else
                 goto no_output;
         }
+        else if (nChar == 0x1B)
+            goto bad_input;
         else if (nChar < 0x80)
         {
             if (eSet != IMPL_UNICODE_TO_ISO_2022_JP_SET_ASCII)
