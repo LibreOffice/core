@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-06 12:49:42 $
+ *  last change: $Author: pb $ $Date: 2001-06-18 11:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,6 @@ SvtExtendedMultiLineEdit_Impl::SvtExtendedMultiLineEdit_Impl( Window* pParent ) 
 
 {
     SetLeftMargin( 10 );
-    SetAutoScroll( FALSE );
 }
 
 void SvtExtendedMultiLineEdit_Impl::Resize()
@@ -609,6 +608,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 
         if ( aPropSet.is() )
         {
+            pEditWin->SetAutoScroll( FALSE );
             USHORT nIndex = 0;
             rtl::OUString aStringValue;
             ::com::sun::star::util::DateTime aDateValue;
@@ -670,6 +670,9 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 
                 ++nIndex;
             }
+
+            pEditWin->SetSelection( Selection( 0, 0 ) );
+            pEditWin->SetAutoScroll( TRUE );
         }
 
         // info fields
