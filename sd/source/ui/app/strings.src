@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-13 16:28:25 $
+ *  last change: $Author: cl $ $Date: 2002-06-25 15:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5735,8 +5735,8 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Closeable = TRUE;
 
     HelpID = RID_UNDO_DELETE_WARNING;
-    Text = "%PRODUCTNAME 6.0" ;
-    Text [ ENGLISH ] = "%PRODUCTNAME 6.0" ;
+    Text = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME %PRODUCTVERSION" ;
 
     FixedImage IMG_UNDO_DELETE_WARNING
     {
@@ -5809,23 +5809,23 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
     };
-    Text[ english_us ] = "%PRODUCTNAME 6.0";
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ portuguese ] = "Hint";
     Text[ russian ] = "”Í‡Á‡ÌËÂ";
     Text[ greek ] = "Hint";
-    Text[ dutch ] = "%PRODUCTNAME 6.0";
-    Text[ french ] = "%PRODUCTNAME 6.0";
-    Text[ spanish ] = "%PRODUCTNAME 6.0";
+    Text[ dutch ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ finnish ] = "Hint";
-    Text[ italian ] = "%PRODUCTNAME 6.0";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ danish ] = "Hint";
-    Text[ swedish ] = "%PRODUCTNAME 6.0";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ polish ] = "WskazÛwka";
     Text[ portuguese_brazilian ] = "Hint";
-    Text[ japanese ] = "%PRODUCTNAME 6.0";
-    Text[ korean ] = "%PRODUCTNAME 6.0";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ turkish ] = "Hint";
     Text[ arabic ] = "Hint";
     Text[ catalan ] = "Hint";
