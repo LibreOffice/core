@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnmspe.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: cmc $ $Date: 2000-11-14 09:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,9 @@ XML_NAMESPACE( NUMBER,          9U )
 XML_NAMESPACE( PRESENTATION,    10U )
 XML_NAMESPACE( SVG,             11U )
 XML_NAMESPACE( CHART,           12U )
+XML_NAMESPACE( MATH,            13U )
 
-#define _XML_OLD_NAMESPACE_BASE 13U
+#define _XML_OLD_NAMESPACE_BASE 14U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
