@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:58:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3566,6 +3566,13 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
     return pRangeData;
 }
 
+
+const String& ScCompiler::GetStringFromOpCode( OpCode eOpCode, bool bEnglish )
+{
+    if( static_cast< USHORT >( eOpCode ) < nAnzStrings )
+        return bEnglish ? pSymbolTableEnglish[ eOpCode ] : pSymbolTableNative[ eOpCode ];
+    return EMPTY_STRING;
+}
 
 ScToken* ScCompiler::CreateStringFromToken( String& rFormula, ScToken* pToken,
         BOOL bAllowArrAdvance )
