@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 16:07:40 $
+ *  last change: $Author: oj $ $Date: 2001-01-31 10:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
             dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
             if(aName.getLength())
             {
-                aSql = aSql + aQuote + aName + aQuote
+                aSql = aSql + ::dbtools::quoteName( aQuote,aName )
                             + ::rtl::OUString::createFromAscii(" ON ")
                             + aComposedName
                             + ::rtl::OUString::createFromAscii(" ( ");
@@ -210,7 +210,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
                 for(sal_Int32 i=0;i<xColumns->getCount();++i)
                 {
                     xColumns->getByIndex(i) >>= xColProp;
-                    aSql = aSql + aQuote + comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+                    aSql = aSql + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
                     aSql = aSql +   (any2bool(xColProp->getPropertyValue(PROPERTY_ISASCENDING))
                                                 ?
                                     ::rtl::OUString::createFromAscii(" ASC")
@@ -232,7 +232,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 
                 xColumns->getByIndex(0) >>= xColProp;
 
-                aSql = aSql + aDot + aQuote + comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
+                aSql = aSql + aDot + ::dbtools::quoteName( aQuote,comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
             }
 
             Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -261,7 +261,8 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
         {
             ::rtl::OUString aName,aSchema;
             sal_Int32 nLen = elementName.indexOf('.');
-            aSchema = elementName.copy(0,nLen);
+            if(nLen != -1)
+                aSchema = elementName.copy(0,nLen);
             aName   = elementName.copy(nLen+1);
 
             ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP INDEX ");
@@ -273,8 +274,8 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
             ::rtl::OUString aComposedName;
             dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema2,aTable,aComposedName,sal_True);
 
-            aSql = aSql + aQuote + aSchema  + aQuote
-                        + aDot   + aQuote   + aName + aQuote
+            aSql = aSql + ::dbtools::quoteName( aQuote,aSchema)
+                        + aDot   + ::dbtools::quoteName( aQuote,aName)
                         + ::rtl::OUString::createFromAscii(" ON ")
                         + aComposedName;
 
