@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 08:48:42 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 10:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,18 @@ using namespace ::dbtools;
 
 using namespace ::comphelper;
 
+namespace
+{
+    void switchDesignModeImpl(OQueryContainerWindow* _pWindow,sal_Bool& _rbDesign)
+    {
+        if ( !_pWindow->switchView() )
+        {
+            _rbDesign = !_rbDesign;
+            _pWindow->switchView();
+        }
+    }
+}
+
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException )
 {
@@ -433,7 +445,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         delete m_pSqlIterator->getParseTree();
                         m_pSqlIterator->setParseTree(NULL);
                         m_bDesign = !m_bDesign;
-                        getContainer()->switchView();
+                        switchDesignModeImpl(getContainer(),m_bDesign);
                     }
                     else
                     {
@@ -452,8 +464,8 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 const OSQLTables& xTabs = m_pSqlIterator->getTables();
                                 if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT || xTabs.begin() == xTabs.end())
                                 {
-                                    ErrorBox aBox( getView(), ModuleRes( ERR_QRY_NOSELECT ) );
-                                    aBox.Execute();
+                                    ::rtl::OUString sError(String(ModuleRes(STR_QRY_NOSELECT)));
+                                    showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
                                 }
                                 else
                                 {
@@ -463,14 +475,14 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                     pNode->parseNodeToStr(  m_sStatement,
                                                             getMetaData()); // we don't want any international keywords here
                                     getContainer()->SaveUIConfig();
-                                    getContainer()->switchView();
+                                    switchDesignModeImpl(getContainer(),m_bDesign);
                                 }
                             }
                         }
                         else
                         {
-                            ErrorBox aBox( getView(), ModuleRes( ERR_QRY_SYNTAX ) );
-                            aBox.Execute();
+                            ::rtl::OUString sError(String(ModuleRes(STR_QRY_SYNTAX)));
+                            showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
                         }
                     }
                 }
@@ -630,8 +642,9 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             }
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
-        resetImpl();
         getContainer()->initialize();
+        resetImpl();
+        switchDesignModeImpl(getContainer(),m_bDesign);
         getUndoMgr()->Clear();
 
         if(m_bDesign && !m_sName.getLength())
@@ -1251,8 +1264,8 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     }
     else if(!m_sStatement.getLength())
     {
-        ErrorBox aBox( getView(), ModuleRes( ERR_QRY_NOSELECT ) );
-        aBox.Execute();
+        ::rtl::OUString sError(String(ModuleRes(STR_QRY_NOSELECT)));
+        showError(SQLException(sError,NULL,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000") ),1000,Any()));
     }
     else
         sTranslatedStmt = m_sStatement;
