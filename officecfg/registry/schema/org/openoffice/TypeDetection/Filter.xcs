@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Filter.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:21:32 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,51 +63,51 @@
 <oor:component-schema oor:name="Filter" oor:package="org.openoffice.TypeDetection" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <info>
         <author>AS</author>
-        <desc xml:lang="en-US">Contains common filters for Office. See package TypeDetection and TypeDetection_Types for other parts of type/filter configuration too.</desc>
+        <desc >Contains common filters for Office. See package TypeDetection and TypeDetection_Types for other parts of type/filter configuration too.</desc>
     </info>
     <templates>
 		<group oor:name="Filter">
-            <info><desc xml:lang="en-US">Lists filters that can import or export content.</desc></info>
+            <info><desc>Lists filters that can import or export content.</desc></info>
 			<prop oor:name="FileFormatVersion" oor:type="xs:int">
-                <info><desc xml:lang="en-US">An unique ID, which is used internal to differ between file formats of same type.</desc></info>
+                <info><desc>An unique ID, which is used internal to differ between file formats of same type.</desc></info>
 				<value>0</value>
 			</prop>
             <prop oor:name="Type" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Supported content type of this filter. Must be an internal type name.</desc></info>
+                <info><desc>Supported content type of this filter. Must be an internal type name.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="DocumentService" oor:type="xs:string">
-                <info><desc xml:lang="en-US">The uno service name of the supported office document type.</desc></info>
+                <info><desc>The uno service name of the supported office document type.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="UIComponent" oor:type="xs:string">
-                <info><desc xml:lang="en-US">The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
+                <info><desc>The uno implementation name a dialog, which is used to ask an user for special filter parameter (e.g. for csv).</desc></info>
 				<value/>
             </prop>
             <prop oor:name="UserData" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">Filter specific data.</desc></info>
+                <info><desc>Filter specific data.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="FilterService" oor:type="xs:string">
-                <info><desc xml:lang="en-US">The uno implementation name of the filter service.</desc></info>
+                <info><desc>The uno implementation name of the filter service.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="TemplateName" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Name of a corresponding template, which is merged together with the style seets of the loaded document.</desc></info>
+                <info><desc>Name of a corresponding template, which is merged together with the style seets of the loaded document.</desc></info>
 				<value/>
             </prop>
             <prop oor:name="Flags" oor:type="oor:string-list">
-                <info><desc xml:lang="en-US">Specify the filter in some further properties (e.g. import/export/..).</desc></info>
+                <info><desc>Specify the filter in some further properties (e.g. import/export/..).</desc></info>
 				<value/>
             </prop>
             <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
-                <info><desc xml:lang="en-US">Localized name of the filter, whch can be shown at the UI.</desc></info>
+                <info><desc>Localized name of the filter, whch can be shown at the UI.</desc></info>
             </prop>
 		</group>
 	</templates>
 	<component>
         <set oor:name="Filters" oor:node-type="Filter">
-            <info><desc xml:lang="en-US">Lists the registered office filters.</desc></info>
+            <info><desc>Lists the registered office filters.</desc></info>
         </set>
 	</component>
 </oor:component-schema>
