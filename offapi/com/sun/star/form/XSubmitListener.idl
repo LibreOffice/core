@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSubmitListener.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 19:45:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
     of verifying the data before submission.</p>
 
     @see XSubmit
+
+    @deprecated
+        This interface is superseded by the <type scope="com::sun::star::form::submission">XSubmissionVetoListener</type>
+        interface. New implementations should use the latter, if possible.
  */
 published interface XSubmitListener: com::sun::star::lang::XEventListener
 {
