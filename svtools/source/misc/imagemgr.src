@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:15:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ String STR_DESCRIPTION_CFGFILE
     Text[ dutch ] = "Configuratiebestand";
     Text[ chinese_simplified ] = "≈‰÷√Œƒº˛";
     Text[ greek ] = "¡Ò˜ÂﬂÔ ·Ò·Ï›ÙÒ˘Ì";
-    Text[ korean ] = "±∏º∫ ∆ƒ¿œ";
+    Text[ korean ] = "ƒ¡««±‘∑π¿Ãº« ∆ƒ¿œ";
     Text[ turkish ] = "Konfig¸rasyon dosyas˝";
     Text[ finnish ] = "Configuration file";
     Text[ catalan ] = "Configuration file";
@@ -538,7 +538,7 @@ String STR_DESCRIPTION_SCHART_DOC
     Text[ dutch ] = "%PRODUCTNAME diagram";
     Text[ chinese_simplified ] = "%PRODUCTNAME Õº±Ì";
     Text[ greek ] = "ƒÈ‹„Ò·ÏÏ· %PRODUCTNAME";
-    Text[ korean ] = "%PRODUCTNAME  Chart";
+    Text[ korean ] = "%PRODUCTNAME ¬˜∆Æ";
     Text[ turkish ] = "%PRODUCTNAME ˛emas˝";
     Text[ finnish ] = "%PRODUCTNAME Chart";
     Text[ catalan ] = "%PRODUCTNAME Chart";
@@ -565,7 +565,7 @@ String STR_DESCRIPTION_SDRAW_DOC
     Text[ dutch ] = "%PRODUCTNAME tekening";
     Text[ chinese_simplified ] = "%PRODUCTNAME ªÊÕº";
     Text[ greek ] = "”˜›‰ÈÔ (%PRODUCTNAME)";
-    Text[ korean ] = "%PRODUCTNAME Draw";
+    Text[ korean ] = "%PRODUCTNAME ±◊∏Æ±‚";
     Text[ turkish ] = "%PRODUCTNAME Áizimi";
     Text[ finnish ] = "Drawing (%PRODUCTNAME)";
     Text[ catalan ] = "Drawing (%PRODUCTNAME)";
@@ -700,7 +700,7 @@ String STR_DESCRIPTION_SIMAGE_DOC
     Text[ dutch ] = "%PRODUCTNAME afbeelding";
     Text[ chinese_simplified ] = "%PRODUCTNAME ÕºœÒ";
     Text[ greek ] = "%PRODUCTNAME - ≈ÈÍ¸Ì·";
-    Text[ korean ] = "%PRODUCTNAME  Image";
+    Text[ korean ] = "%PRODUCTNAME ¿ÃπÃ¡ˆ";
     Text[ turkish ] = "%PRODUCTNAME resmi";
     Text[ finnish ] = "Picture (%PRODUCTNAME)";
     Text[ catalan ] = "Picture (%PRODUCTNAME)";
@@ -1088,13 +1088,14 @@ String STR_DESCRIPTION_FACTORY_MATH
     Text[ polish ] = "Formu≥a";
     Text[ portuguese_brazilian ] = "Formula";
     Text[ japanese ] = "êîéÆ";
-    Text[ korean ] = "Formula";
+    Text[ korean ] = "ºˆΩƒ";
     Text[ chinese_simplified ] = "π´ Ω";
     Text[ chinese_traditional ] = "§Ω¶°";
     Text[ turkish ] = "Formula";
     Text[ arabic ] = "Formula";
     Text[ catalan ] = "Formula";
 };
+
 
 
 
