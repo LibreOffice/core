@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:06:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,8 +250,6 @@ public:
 
     SwAccessibleContext( SwAccessibleMap *pMap, sal_Int16 nRole,
                          const SwFrm *pFrm );
-    SwAccessibleContext( SwAccessibleMap *pMap, const ::rtl::OUString& rName,
-                         sal_Int16 nRole, const SwFrm *pFrm );
 
     //=====  XAccessible  =====================================================
 
