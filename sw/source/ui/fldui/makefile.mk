@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+#   last change: $Author: jp $ $Date: 2001-05-22 08:29:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ CXXFILES = \
         fldtdlg.cxx \
         fldvar.cxx \
         javaedit.cxx \
-        inpdlg.cxx
+        inpdlg.cxx \
+        xfldui.cxx
 
 SRCFILES =  \
         changedb.src \
@@ -120,10 +121,11 @@ SLOFILES =  \
         $(SLO)$/fldtdlg.obj \
         $(SLO)$/fldvar.obj \
         $(SLO)$/javaedit.obj \
-        $(SLO)$/inpdlg.obj
+        $(SLO)$/inpdlg.obj \
+        $(SLO)$/xfldui.obj
 
 EXCEPTIONSFILES =  \
-        $(SLO)$/fldmgr.obj
+        $(SLO)$/xfldui.obj
 
 # --- Tagets -------------------------------------------------------
 
