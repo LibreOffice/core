@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 11:40:04 $
+ *  last change: $Author: os $ $Date: 2001-05-09 12:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,13 +1558,24 @@ void SwXDocumentIndexMark::removeEventListener(const Reference< XEventListener >
 Reference< XPropertySetInfo >  SwXDocumentIndexMark::getPropertySetInfo(void)
     throw( RuntimeException )
 {
-    uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(_pMap);
-    // extend PropertySetInfo!
-    const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-    Reference< XPropertySetInfo >  xRef = new SfxExtItemPropertySetInfo(
-        aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
-        aPropSeq );
-    return xRef;
+    static uno::Reference< beans::XPropertySetInfo >  xInfos[3];
+    int nPos = 0;
+    switch(eType)
+    {
+        case TOX_INDEX: nPos = 0; break;
+        case TOX_CONTENT: nPos = 1; break;
+        case TOX_USER:  nPos = 2; break;
+    }
+    if(!xInfos[nPos].is())
+    {
+        uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(_pMap);
+        // extend PropertySetInfo!
+        const uno::Sequence<beans::Property> aPropSeq = xInfos[nPos]->getProperties();
+        xInfos[nPos] = new SfxExtItemPropertySetInfo(
+            aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
+            aPropSeq );
+    }
+    return xInfos[nPos];
 }
 /*-- 14.12.98 10:25:46---------------------------------------------------
 
