@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ BYTE ScGlobal::GetDefaultScriptType()
     //  to get consistent behavior of text in simple cells and EditEngine,
     //  also same as GetAppLanguage() in Writer)
 
-    return (BYTE) GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+    return (BYTE) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
