@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,17 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         buf.append( (sal_Unicode)'x' );
         buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_textColor, 16 ) );
         pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":text-color") ),
+                              buf.makeStringAndClear() );
+    }
+
+    // fill-color
+    if (_set & 0x10)
+    {
+        OUStringBuffer buf( 16 );
+        buf.append( (sal_Unicode)'0' );
+        buf.append( (sal_Unicode)'x' );
+        buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_fillColor, 16 ) );
+        pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":fill-color") ),
                               buf.makeStringAndClear() );
     }
 
@@ -630,6 +641,28 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
     }
 }
 //__________________________________________________________________________________________________
+void ElementDescriptor::readOrientationAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int32 const *)a.getValue())
+            {
+            case 0:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("horizontal") ) );
+                break;
+            case 1:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("vertical") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### illegal orientation value!" );
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
 void ElementDescriptor::readDefaults()
 {
     Any a( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) );
@@ -800,6 +833,10 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             {
                 continue;
             }
+            if ((bset & 0x10) && rStyle._fillColor != pStyle->_fillColor)
+            {
+                continue;
+            }
             if ((bset & 0x4) && rStyle._border != pStyle->_border)
             {
                 continue;
@@ -818,6 +855,10 @@ OUString StyleBag::getStyleId( Style const & rStyle )
             if (bnset & 0x2)
             {
                 pStyle->_textColor = rStyle._textColor;
+            }
+            if (bnset & 0x10)
+            {
+                pStyle->_fillColor = rStyle._fillColor;
             }
             if (bnset & 0x4)
             {
@@ -1049,7 +1090,7 @@ void SAL_CALL exportDialogModel(
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":fixed-line") ) );
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":fixedline") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readFixedLineModel( &all_styles );
             }

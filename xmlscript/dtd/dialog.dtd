@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.11 2001-04-04 14:35:07 dbo Exp $
+	$Id: dialog.dtd,v 1.12 2001-05-04 13:17:39 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -87,7 +87,10 @@
 		     dlg:datefield|
 		     dlg:numericfield|
 		     dlg:currencyfield|
-		     dlg:patternfield
+		     dlg:patternfield|
+		     dlg:fixedline|
+		     dlg:progressmeter|
+		     dlg:scrollbar
 		    )">
 
 <!ELEMENT dlg:window (dlg:styles*, dlg:event*, dlg:bulletinboard*)>
@@ -109,6 +112,7 @@
 <!ATTLIST dlg:style dlg:style-id CDATA #REQUIRED
 		    dlg:background-color %numeric; #IMPLIED
 		    dlg:text-color %numeric; #IMPLIED
+		    dlg:fill-color %numeric; #IMPLIED
 		    dlg:border (none|3d|simple) #IMPLIED
 		    dlg:font-name CDATA #IMPLIED
 		    dlg:font-height %numeric; #IMPLIED
@@ -290,3 +294,26 @@
 			   dlg:edit-mask CDATA #IMPLIED
 			   dlg:literal-mask CDATA #IMPLIED
 			   >
+
+<!ELEMENT dlg:fixedline (dlg:event*)>
+<!ATTLIST dlg:fixedline %default-attributes;
+			dlg:align (horizontal|vertical) #IMPLIED
+			dlg:value CDATA #IMPLIED
+			>
+
+<!ELEMENT dlg:scrollbar (dlg:event*)>
+<!ATTLIST dlg:scrollbar %default-attributes;
+			dlg:align (horizontal|vertical) #IMPLIED
+			dlg:curpos %numeric #IMPLIED
+			dlg:maxpos %numeric #IMPLIED
+			dlg:increment %numeric #IMPLIED
+			dlg:pageincrement %numeric #IMPLIED
+			dlg:visible-size %numeric #IMPLIED
+			>
+
+<!ELEMENT dlg:progressmeter (dlg:event*)>
+<!ATTLIST dlg:progressmeter %default-attributes;
+			    dlg:value %numeric #IMPLIED
+			    dlg:value-min %numeric #IMPLIED
+			    dlg:value-max %numeric #IMPLIED
+			    >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:09 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ OUString ControlElement::getControlId(
 bool StyleElement::importTextColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
-    if ((_inited & 0x1) != 0)
+    if ((_inited & 0x2) != 0)
     {
-        if ((_hasValue & 0x1) != 0)
+        if ((_hasValue & 0x2) != 0)
         {
             xProps->setPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ), makeAny( _textColor ) );
@@ -154,14 +154,40 @@ bool StyleElement::importTextColorStyle(
         }
         return false;
     }
-    _inited |= 0x1;
+    _inited |= 0x2;
 
     if (getLongAttr( &_textColor,
                      OUString( RTL_CONSTASCII_USTRINGPARAM("text-color") ), _xAttributes ))
     {
-        _hasValue |= 0x1;
+        _hasValue |= 0x2;
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ), makeAny( _textColor ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool StyleElement::importFillColorStyle(
+    Reference< beans::XPropertySet > const & xProps )
+{
+    if ((_inited & 0x10) != 0)
+    {
+        if ((_hasValue & 0x10) != 0)
+        {
+            xProps->setPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("FillColor") ), makeAny( _fillColor ) );
+            return true;
+        }
+        return false;
+    }
+    _inited |= 0x10;
+
+    if (getLongAttr( &_fillColor,
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("fill-color") ), _xAttributes ))
+    {
+        _hasValue |= 0x10;
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("FillColor") ), makeAny( _fillColor ) );
         return true;
     }
     return false;
@@ -170,9 +196,9 @@ bool StyleElement::importTextColorStyle(
 bool StyleElement::importBackgroundColorStyle(
     Reference< beans::XPropertySet > const & xProps )
 {
-    if ((_inited & 0x2) != 0)
+    if ((_inited & 0x1) != 0)
     {
-        if ((_hasValue & 0x2) != 0)
+        if ((_hasValue & 0x1) != 0)
         {
             xProps->setPropertyValue(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ), makeAny( _backgroundColor ) );
@@ -180,12 +206,12 @@ bool StyleElement::importBackgroundColorStyle(
         }
         return false;
     }
-    _inited |= 0x2;
+    _inited |= 0x1;
 
     if (getLongAttr( &_backgroundColor,
                      OUString( RTL_CONSTASCII_USTRINGPARAM("background-color") ), _xAttributes ))
     {
-        _hasValue |= 0x2;
+        _hasValue |= 0x1;
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ), makeAny( _backgroundColor ) );
         return true;
@@ -807,6 +833,35 @@ bool ImportContext::importTimeFormatProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importOrientationProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString aOrient( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aOrient.getLength())
+    {
+        sal_Int32 nOrient;
+        if (aOrient.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("horizontal") ))
+        {
+            nOrient = 0;
+        }
+        else if (aOrient.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("vertical") ))
+        {
+            nOrient = 1;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid orientation value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nOrient ) );
         return true;
     }
     return false;

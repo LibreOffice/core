@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,16 +684,83 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
+    // collect styles
+    Style aStyle( 0x2 | 0x8 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr)
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readOrientationAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
+                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readEvents();
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
+    // collect styles
+    Style aStyle( 0x1 | 0x4 | 0x10 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+        aStyle._set |= 0x4;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FillColor") ) ) >>= aStyle._descr)
+        aStyle._set |= 0x10;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValue") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMin") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMax") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-max") ) );
+    readEvents();
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
+    // collect styles
+    Style aStyle( 0x4 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border)
+        aStyle._set |= 0x4;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readOrientationAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
+                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("BlockIncrement") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":pageincrement") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineIncrement") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":increment") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScrollValue") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":curpos") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMax") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxpos") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleSize") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":visible-size") ) );
+    readEvents();
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readDialogModel( StyleBag * all_styles )

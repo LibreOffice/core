@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,53 @@ Reference< xml::XImportContext > ProgressBarElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    return Reference< xml::XImportContext >();
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
 }
 //__________________________________________________________________________________________________
 void ProgressBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFillColorStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValue") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMin") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-min") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMax") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("value-max") ),
+                            _xAttributes );
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -94,29 +135,114 @@ Reference< xml::XImportContext > ScrollBarElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    return Reference< xml::XImportContext >();
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
 }
 //__________________________________________________________________________________________________
 void ScrollBarElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBorderStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importOrientationProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                                   _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("BlockIncrement") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("pageincrement") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("LineIncrement") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("increment") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ScrollValue") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("curpos") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ScrollValueMax") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("maxpos") ),
+                            _xAttributes );
+    ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleSize") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("visible-size") ),
+                            _xAttributes );
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
 
-// fixed-line
+// fixedline
 //__________________________________________________________________________________________________
 Reference< xml::XImportContext > FixedLineElement::createChildContext(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    return Reference< xml::XImportContext >();
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // event
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    {
+        return new EventElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
 }
 //__________________________________________________________________________________________________
 void FixedLineElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ) );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importOrientationProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                                   _xAttributes );
+    ctx.importEvents( _events );
 }
 
 //##################################################################################################
@@ -1416,8 +1542,8 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     {
         return new PatternFieldElement( rLocalName, xAttributes, this, _pImport );
     }
-    // fixed-line
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fixed-line") ))
+    // fixedline
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("fixedline") ))
     {
         return new FixedLineElement( rLocalName, xAttributes, this, _pImport );
     }

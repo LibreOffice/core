@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ class StyleElement
     sal_Int32 _textColor;
     sal_Int16 _border;
     awt::FontDescriptor _descr;
+    sal_Int32 _fillColor;
 
     short _inited, _hasValue;
 
@@ -273,6 +274,8 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 
     bool importTextColorStyle(
+        Reference< beans::XPropertySet > const & xProps );
+    bool importFillColorStyle(
         Reference< beans::XPropertySet > const & xProps );
     bool importBackgroundColorStyle(
         Reference< beans::XPropertySet > const & xProps );
@@ -382,6 +385,9 @@ public:
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     bool importTimeFormatProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+    bool importOrientationProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };

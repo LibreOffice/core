@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:56 $
+ *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ struct Style
     sal_uInt32 _textColor;
     sal_Int16 _border;
     awt::FontDescriptor _descr;
+    sal_uInt32 _fillColor;
+
     short _all;
     short _set;
 
@@ -145,6 +147,7 @@ public:
     void readAlignAttr( OUString const & rPropName, OUString const & rAttrName );
     void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readOrientationAttr( OUString const & rPropName, OUString const & rAttrName );
     //
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue ) SAL_THROW( () );
 
