@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-27 14:18:58 $
+#   last change: $Author: hr $ $Date: 2003-08-07 15:10:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,10 +87,12 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP = export.map
+
 # END --------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
