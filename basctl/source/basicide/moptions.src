@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:37:45 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ dutch ] = "Help informatie" ;
         Text [ spanish ] = "Informaciones - Ayuda" ;
         Text [ english_us ] = "Help information" ;
-        Text[ chinese_simplified ] = "её®еЉ©иµ„ж–™";
+        Text[ chinese_simplified ] = "её®еЉ©дїЎжЃЇ";
         Text[ russian ] = "Справка-информация";
         Text[ polish ] = "Pomoc - Informacje";
         Text[ japanese ] = "пѕЌпѕ™пѕЊпѕџжѓ…е ±";
@@ -265,6 +265,7 @@ ModalDialog RID_MACROOPTIONS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Descripciуn";
 };
+
 
 
 
