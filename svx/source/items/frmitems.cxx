@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: os $ $Date: 2001-05-31 07:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ sal_Bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_R_REL_MARGIN:
         {
             sal_Int32 nRel;
-            if((rVal >>= nRel) && nRel > 1)
+            if((rVal >>= nRel) && nRel >= 0 && nRel < USHRT_MAX)
             {
                 if(MID_L_REL_MARGIN== nMemberId)
                     nPropLeftMargin = nRel;
