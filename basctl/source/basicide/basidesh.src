@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 16:13:58 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,22 +375,22 @@ String RID_STR_ERRORCHOOSEMACRO
     Text = "Auf Makros anderer Dokumente kann nicht zugegriffen werden.";
     Text [ English ] = "Macros from other documents are not accessible." ;
     Text[ english_us ] = "Macros from other documents are not accessible.";
-    Text[ portuguese ] = "Macros from other documents are not accessible.";
+    Text[ portuguese ] = "O acesso a macros de outros documentos � imposs�vel.";
     Text[ russian ] = "Macros from other documents are not accessible.";
     Text[ greek ] = "Macros from other documents are not accessible.";
     Text[ dutch ] = "Macros from other documents are not accessible.";
-    Text[ french ] = "Macros from other documents are not accessible.";
-    Text[ spanish ] = "Macros from other documents are not accessible.";
+    Text[ french ] = "Impossible d'acc�der aux macros des autres documents !";
+    Text[ spanish ] = "No se puede acceder a las macros de otros documentos.";
     Text[ finnish ] = "Macros from other documents are not accessible.";
-    Text[ italian ] = "Macros from other documents are not accessible.";
+    Text[ italian ] = "Impossibile accedere alle macro di altri documenti.";
     Text[ danish ] = "Macros from other documents are not accessible.";
     Text[ swedish ] = "Macros from other documents are not accessible.";
     Text[ polish ] = "Macros from other documents are not accessible.";
     Text[ portuguese_brazilian ] = "Macros from other documents are not accessible.";
-    Text[ japanese ] = "Macros from other documents are not accessible.";
+    Text[ japanese ] = "ほかのﾄﾞｷｭﾒﾝﾄのﾏｸﾛへはｱｸｾｽできません。";
     Text[ korean ] = "Macros from other documents are not accessible.";
     Text[ chinese_simplified ] = "Macros from other documents are not accessible.";
-    Text[ chinese_traditional ] = "Macros from other documents are not accessible.";
+    Text[ chinese_traditional ] = "無法存取其他文件的巨集。";
     Text[ turkish ] = "Macros from other documents are not accessible.";
     Text[ arabic ] = "Macros from other documents are not accessible.";
     Text[ catalan ] = "Macros from other documents are not accessible.";
@@ -2809,6 +2809,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
