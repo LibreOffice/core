@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 16:28:24 $
+ *  last change: $Author: kso $ $Date: 2001-02-20 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,8 @@ NeonUri::NeonUri( const OUString & inUri )
     mHostName   = OStringToOUString( theUri.host, RTL_TEXTENCODING_UTF8 );
     mPort       = theUri.port;
     mPath       = OStringToOUString( theUri.path, RTL_TEXTENCODING_UTF8 );
+
+    uri_free( &theUri );
 
     calculateURI ();
 }
