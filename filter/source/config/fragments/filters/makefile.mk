@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2005-02-02 13:52:11 $
+#   last change: $Date: 2005-03-21 13:13:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,13 +62,7 @@
 
 PRJ     = ..$/..$/..$/..
 TARGET  = FCFGPkgFilters
-PRJNAME = filter 
-
-# -----------------------------------------------------------------------------
-# include all package definition files
-# -----------------------------------------------------------------------------
-
-.INCLUDE: ..$/packagedef.mk
+PRJNAME = filter
 
 # -----------------------------------------------------------------------------
 # include global settings
@@ -76,19 +70,25 @@ PRJNAME = filter
 
 .INCLUDE: settings.mk
 
-FILTERS_LIST= \
-    $(foreach,i,$(all_fragments) $(foreach,j,$(FILTERS_4fcfg_$(i)) $(MISC)$/filters$/$(j:f)))
+# -----------------------------------------------------------------------------
+# include all package definition files
+# -----------------------------------------------------------------------------
+
+.INCLUDE: ..$/packagedef.mk
+
+#FILTERS_LIST= \
+#    $(ALL_UI_FILTERS)
 
 .INCLUDE: target.mk
 
 .IF "$(SOLAR_JAVA)"!=""
-ALLTAR: $(FILTERS_LIST) 
+ALLTAR: $(ALL_UI_FILTERS) 
 .ENDIF
 
-$(MISC)$/filters$/%.xcu : %.xcu
+$(DIR_LOCFRAG)$/filters$/%.xcu : %.xcu
     +$(MKDIRHIER) $(@:d)
     $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
 
-.IF "$(FILTERS_LIST)"!=""
-$(FILTERS_LIST) : localize.sdf
-.ENDIF          # "$(FILTERS_LIST)"!=""
+.IF "$(ALL_UI_FILTERS)"!=""
+$(ALL_UI_FILTERS) : localize.sdf
+.ENDIF          # "$(ALL_UI_FILTERS)"!=""
