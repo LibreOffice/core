@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-26 15:36:08 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         Point aP(aPnt);
         aP-=pPV->GetOffset();
         // Ringsum die TextEditArea ein Rand zum Selektieren ohne Textedit
-        Rectangle aBoundRect(pHitObj->GetBoundRect());
+        Rectangle aBoundRect(pHitObj->GetCurrentBoundRect());
 
         // #105130# Force to SnapRect when Fontwork
         if(pHitObj->ISA(SdrTextObj) && ((SdrTextObj*)pHitObj)->IsFontwork())
