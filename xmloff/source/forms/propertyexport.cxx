@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 12:18:58 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 13:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,115 +249,127 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::exportRemainingProperties()
     {
-        // the properties tag
-        SvXMLElementExport aPropertiesTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "properties", sal_True, sal_True);
+        // the properties tag (will be created if we have at least one no-default property)
+        SvXMLElementExport* pPropertiesTag = NULL;
 
-        Reference< XPropertyState > xPropertyState(m_xProps, UNO_QUERY);
-
-        Any aValue;
-        ::rtl::OUString sValue;
-        ::rtl::OUString sTypeDescription;
-
-        // loop through all the properties which are yet to be exported
-        for (   ConstStringSetIterator  aProperty = m_aRemainingProps.begin();
-                aProperty != m_aRemainingProps.end();
-                ++aProperty
-            )
+        try
         {
-            DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
+            Reference< XPropertyState > xPropertyState(m_xProps, UNO_QUERY);
 
-#ifdef DBG_UTIL
-            const ::rtl::OUString sPropertyName = *aProperty;
-#endif
-            // if the property state is DEFAULT, it does not need to be written
-            if (xPropertyState.is() && (PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState(*aProperty)))
-                continue;
+            Any aValue;
+            ::rtl::OUString sValue;
+            ::rtl::OUString sTypeDescription;
 
-            // add the name attribute
-            AddAttribute(XML_NAMESPACE_FORM, "property-name", *aProperty);
-
-            // get the value
-            aValue = m_xProps->getPropertyValue(*aProperty);
-
-            if (sal_False)
+            // loop through all the properties which are yet to be exported
+            for (   ConstStringSetIterator  aProperty = m_aRemainingProps.begin();
+                    aProperty != m_aRemainingProps.end();
+                    ++aProperty
+                )
             {
-                ::rtl::OUString sTemp;
-                aValue >>= sTemp;
-                aValue <<= makeAny(Sequence< ::rtl::OUString >(&sTemp, 1));
-            }
+                DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
 
-            // is it a sequence
-            sal_Bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
-            // the type of the property, maybe reduced to the element type of a sequence
-            Type aSimpleType;
-            if (bIsSequence)
-                aSimpleType = getSequenceElementType(aValue.getValueType());
-            else
-                aSimpleType = aValue.getValueType();
+    #ifdef DBG_UTIL
+                const ::rtl::OUString sPropertyName = *aProperty;
+    #endif
+                // if the property state is DEFAULT, it does not need to be written
+                if (xPropertyState.is() && (PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState(*aProperty)))
+                    continue;
 
-            // the type attribute
-            AddAttribute(XML_NAMESPACE_FORM, "property-type", implGetPropertyXMLType(aValue.getValueType()));
+                // now that we have the first sub-tag we need the form:properties element
+                if (!pPropertiesTag)
+                    pPropertiesTag = new SvXMLElementExport(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "properties", sal_True, sal_True);
 
-            if (bIsSequence)
-                // we have a special attribute indicating that the property is a list
-                AddAttribute(XML_NAMESPACE_FORM, "property-is-list", m_sValueTrue);
+                // add the name attribute
+                AddAttribute(XML_NAMESPACE_FORM, "property-name", *aProperty);
 
-            // start the property tag
-            SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property", sal_True, sal_True);
+                // get the value
+                aValue = m_xProps->getPropertyValue(*aProperty);
 
-            if (!bIsSequence)
-            {   // the simple case
-                sValue = implConvertAny(aValue);
-
-                SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
-                    // (no whitespace inside the tag)
-                m_rContext.getGlobalContext().GetDocHandler()->characters(sValue);
-                // done with this property
-                continue;
-            }
-
-            // the not-that-simple case, we need to iterate through the sequence elements
-            IIterator* pSequenceIterator = NULL;
-            switch (aSimpleType.getTypeClass())
-            {
-                case TypeClass_STRING:
-                    pSequenceIterator = new OSequenceIterator< ::rtl::OUString >(aValue);
-                    break;
-                case TypeClass_DOUBLE:
-                    pSequenceIterator = new OSequenceIterator< double >(aValue);
-                    break;
-                case TypeClass_BOOLEAN:
-                    pSequenceIterator = new OSequenceIterator< sal_Bool >(aValue);
-                    break;
-                case TypeClass_BYTE:
-                    pSequenceIterator = new OSequenceIterator< sal_Int8 >(aValue);
-                    break;
-                case TypeClass_SHORT:
-                    pSequenceIterator = new OSequenceIterator< sal_Int16 >(aValue);
-                    break;
-                case TypeClass_LONG:
-                    pSequenceIterator = new OSequenceIterator< sal_Int32 >(aValue);
-                    break;
-                case TypeClass_HYPER:
-                    pSequenceIterator = new OSequenceIterator< sal_Int64 >(aValue);
-                    break;
-                default:
-                    OSL_ENSURE(sal_False, "OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
-                    break;
-            }
-            if (pSequenceIterator)
-            {
-                ::rtl::OUString sCurrent;
-                while (pSequenceIterator->hasMoreElements())
+                if (sal_False)
                 {
+                    ::rtl::OUString sTemp;
+                    aValue >>= sTemp;
+                    aValue <<= makeAny(Sequence< ::rtl::OUString >(&sTemp, 1));
+                }
+
+                // is it a sequence
+                sal_Bool bIsSequence = TypeClass_SEQUENCE == aValue.getValueTypeClass();
+                // the type of the property, maybe reduced to the element type of a sequence
+                Type aSimpleType;
+                if (bIsSequence)
+                    aSimpleType = getSequenceElementType(aValue.getValueType());
+                else
+                    aSimpleType = aValue.getValueType();
+
+                // the type attribute
+                AddAttribute(XML_NAMESPACE_FORM, "property-type", implGetPropertyXMLType(aValue.getValueType()));
+
+                if (bIsSequence)
+                    // we have a special attribute indicating that the property is a list
+                    AddAttribute(XML_NAMESPACE_FORM, "property-is-list", m_sValueTrue);
+
+                // start the property tag
+                SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property", sal_True, sal_True);
+
+                if (!bIsSequence)
+                {   // the simple case
+                    sValue = implConvertAny(aValue);
+
                     SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
                         // (no whitespace inside the tag)
-                    m_rContext.getGlobalContext().GetDocHandler()->characters(implConvertAny(pSequenceIterator->nextElement()));
+                    m_rContext.getGlobalContext().GetDocHandler()->characters(sValue);
+                    // done with this property
+                    continue;
                 }
-            }
-            delete pSequenceIterator;
 
+                // the not-that-simple case, we need to iterate through the sequence elements
+                IIterator* pSequenceIterator = NULL;
+                switch (aSimpleType.getTypeClass())
+                {
+                    case TypeClass_STRING:
+                        pSequenceIterator = new OSequenceIterator< ::rtl::OUString >(aValue);
+                        break;
+                    case TypeClass_DOUBLE:
+                        pSequenceIterator = new OSequenceIterator< double >(aValue);
+                        break;
+                    case TypeClass_BOOLEAN:
+                        pSequenceIterator = new OSequenceIterator< sal_Bool >(aValue);
+                        break;
+                    case TypeClass_BYTE:
+                        pSequenceIterator = new OSequenceIterator< sal_Int8 >(aValue);
+                        break;
+                    case TypeClass_SHORT:
+                        pSequenceIterator = new OSequenceIterator< sal_Int16 >(aValue);
+                        break;
+                    case TypeClass_LONG:
+                        pSequenceIterator = new OSequenceIterator< sal_Int32 >(aValue);
+                        break;
+                    case TypeClass_HYPER:
+                        pSequenceIterator = new OSequenceIterator< sal_Int64 >(aValue);
+                        break;
+                    default:
+                        OSL_ENSURE(sal_False, "OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
+                        break;
+                }
+                if (pSequenceIterator)
+                {
+                    ::rtl::OUString sCurrent;
+                    while (pSequenceIterator->hasMoreElements())
+                    {
+                        SvXMLElementExport aValueTag(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, "property-value", sal_True, sal_False);
+                            // (no whitespace inside the tag)
+                        m_rContext.getGlobalContext().GetDocHandler()->characters(implConvertAny(pSequenceIterator->nextElement()));
+                    }
+                }
+                delete pSequenceIterator;
+            }
         }
+        catch(...)
+        {
+            delete pPropertiesTag;
+            throw;
+        }
+        delete pPropertiesTag;
     }
 
     //---------------------------------------------------------------------
@@ -758,6 +770,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/03/29 12:18:58  fs
+ *  #85097# when exporting boolean properties, allow for MAYBEVOID props
+ *
  *  Revision 1.13  2001/03/28 13:58:52  fs
  *  #85371# write target frame attribute even if the prop value is an empty string
  *
