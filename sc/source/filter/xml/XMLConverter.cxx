@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-27 11:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,21 +724,17 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
     sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
     {
-        if (sFormula[i] == '"')
+        if (sFormula[i] == '\'')
             bInQuotationMarks = !bInQuotationMarks;
-        if (sFormula[i] != '[' && sFormula[i] != ']')
-        {
-            if (sFormula[i] != '.' || (nCountBraces == 0 && bIsFormula) ||
-                !(chPrevious == '[' || chPrevious == ':' || chPrevious == ' ' || chPrevious == '='))
-                sBuffer.append(sFormula[i]);
-        }
-        else
-            if (!bInQuotationMarks)
-                if (sFormula[i] == '[')
-                    nCountBraces++;
-                else
-                    nCountBraces--;
-            else
+        if (bInQuotationMarks)
+            sBuffer.append(sFormula[i]);
+        else if (sFormula[i] == '[')
+            nCountBraces++;
+        else if (sFormula[i] == ']')
+            nCountBraces--;
+        else if ((sFormula[i] != '.') ||
+                ((nCountBraces == 0) && bIsFormula) ||
+                !((chPrevious == '[') || (chPrevious == ':') || (chPrevious == ' ') || (chPrevious == '=')))
                 sBuffer.append(sFormula[i]);
         chPrevious = sFormula[i];
     }
