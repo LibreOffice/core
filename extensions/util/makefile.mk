@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-20 16:21:52 $
+#   last change: $Author: os $ $Date: 2001-04-20 10:54:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,11 +67,12 @@ GEN_HID=TRUE
 
 # --- Settings ----------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
-LDUMP=ldump2.exe
+ALL: \
+    ALLTAR \
+    $(SRS)$/hidother.hid
+    
 
 .INCLUDE : target.mk
 
