@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
+#ifndef SVX_SPELL_PORTIONS_HXX
+#include <SpellPortions.hxx>
+#endif
 
 
 class SvUShorts;
@@ -212,6 +215,10 @@ struct ImplIMEInfos
     void    DestroyAttribs();
 };
 
+// #i18881# to be able to identify the postions of changed words
+// the positions of each portion need to be saved
+typedef std::vector<EditSelection>  SpellContentSelections;
+
 struct SpellInfo
 {
     EESpellState    eState;
@@ -219,7 +226,8 @@ struct SpellInfo
     EPaM            aSpellTo;
     sal_Bool        bSpellToEnd;
     sal_Bool        bMultipleDoc;
-
+    ::svx::SpellPortions    aLastSpellPortions;
+    SpellContentSelections  aLastSpellContentSelections;
     SpellInfo()
         { bSpellToEnd = sal_True; eState = EE_SPELL_OK; bMultipleDoc = sal_False; }
 };
@@ -654,6 +662,7 @@ private:
     EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, BOOL bAcceptStartOfWord = TRUE );
+    EditSelection       SelectSentence( const EditSelection& rCurSel );
     EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, USHORT nCharacterIteratorMode, BOOL bToLeft );
     EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, BOOL bStart );
 
@@ -963,6 +972,31 @@ public:
     String              ImpConvert( EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     sal_Bool            HasConvertibleTextPortion( LanguageType nLang );
+
+    //find the next error within the given selection - forward only!
+    ::com::sun::star::uno::Reference<
+                ::com::sun::star::linguistic2::XSpellAlternatives >
+                    ImpFindNextError(EditSelection& rSelection);
+    //initialize sentence spelling
+    void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
+    //spell and return a sentence
+    bool                SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill);
+    //applies a changed sentence
+    void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions);
+    //deinitialize sentence spelling
+    void            EndSpelling();
+    //adds one or more portions of text to the SpellPortions depending on language changes
+    void            AddPortionIterated(
+                        EditView& rEditView,
+                        const EditSelection rSel,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
+                        ::svx::SpellPortions& rToFill);
+    //adds one portion to the SpellPortions
+    void            AddPortion(
+                        const EditSelection rSel,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
+                        ::svx::SpellPortions& rToFill,
+                        bool bIsField );
 
     sal_Bool            Search( const SvxSearchItem& rSearchItem, EditView* pView );
     sal_Bool            ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
