@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-24 16:29:25 $
+*  last change: $Author: rt $ $Date: 2005-03-29 12:48:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -409,7 +409,7 @@ Module gid_Module_Root_Files_7
     Description = "gid_Module_Root_Files_7";
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Basic_Depot    
+    Files = (gid_File_Basic_Depot
 	gid_File_Basic_Euro,
 	gid_File_Basic_Form,
 	gid_File_Basic_Gimmicks,
@@ -710,6 +710,7 @@ Module gid_Module_Root_Files_7
 	gid_File_Xsl_Export_Common_Table_Table_Cells,
 	gid_File_Xsl_Export_Common_Table_Table_Columns,
 	gid_File_Xsl_Export_Common_Table_Table_Rows,
+    gid_File_Xsl_Export_Spreadsheetml_Formular,
 	gid_File_Xsl_Export_Spreadsheetml_Ooo2spreadsheetml,
 	gid_File_Xsl_Export_Spreadsheetml_Style_Mapping,
 	gid_File_Xsl_Export_Spreadsheetml_Styles,
