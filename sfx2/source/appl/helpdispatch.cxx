@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpdispatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-30 14:24:15 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,26 +125,16 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
         }
     }
 
-    // save url to history
-    m_rInterceptor.addURL( aURL.Complete );
-    // then dispatch
+    // if a keyword was found, then open it
     SfxHelpWindow_Impl* pHelpWin = m_rInterceptor.GetHelpWindow();
     DBG_ASSERT( pHelpWin, "invalid HelpWindow" );
-    if ( !bHasKeyword ||
-         INetURLObject( aURL.Complete ).GetHost() != pHelpWin->GetFactory() )
-    {
-        Reference < XNotifyingDispatch > xNotifyingDisp( m_xRealDispatch, UNO_QUERY );
-        if ( xNotifyingDisp.is() )
-        {
-            OpenStatusListener_Impl* pListener = (OpenStatusListener_Impl*)pHelpWin->getOpenListener().get();
-            DBG_ASSERT( pListener, "invalid XDispatchResultListener" );
-            pListener->SetURL( aURL.Complete );
-            xNotifyingDisp->dispatchWithNotification( aURL, aArgs, pListener );
-        }
-    }
-    // if a keyword was found, then open it
     if ( bHasKeyword )
+    {
         pHelpWin->OpenKeyword( sKeyword );
+        return;
+    }
+
+    pHelpWin->loadHelpContent(aURL.Complete);
 }
 
 // -----------------------------------------------------------------------
