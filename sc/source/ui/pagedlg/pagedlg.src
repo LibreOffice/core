@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ japanese ] = "•\\‚Ì¸ŞØ¯ÄŞü(~G)";
         Text[ chinese_traditional ] = "¤u§@ªíºô®æ(~G)";
         Text[ arabic ] = "ÔÈßÉ ÇáÌÏæá";
-        Text[ greek ] = "Ğëİãìá ğßíáêá";
+        Text[ greek ] = "Ğëİ~ãìá ğßíáêá";
         Text[ korean ] = "´«±İ¼±(~G)";
         Text[ turkish ] = "~Kılavuz çizgiler";
     };
@@ -772,9 +772,9 @@ TabPage RID_SCPAGE_TABLE
         Text [ portuguese_brazilian ] = "~Objects/Images" ;
         Text [ portuguese ] = "~Objectos/Imagens" ;
         Text [ finnish ] = "~Objects/Images" ;
-        Text [ danish ] = "Objekter/billeder" ;
+        Text [ danish ] = "Objekter/grafik" ;
         Text [ french ] = "~Objets/images" ;
-        Text [ swedish ] = "O~bjekt/grafiker" ;
+        Text [ swedish ] = "O~bjekt/grafik" ;
         Text [ dutch ] = "~Objecten/afbeeld." ;
         Text [ spanish ] = "~Objetos/Imágenes" ;
         Text [ ENGLISH_US ] = "~Objects/graphics" ;
@@ -1110,7 +1110,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_simplified ] = "×î¶àÒ³Êı(~M)";
         Text[ russian ] = "Ìàêñèìóì ñòğàíèö";
         Text[ polish ] = "Maks. licz~ba stron";
-        Text[ japanese ] = "Å‚‚ÌÍß°¼Ş”(~M)";
+        Text[ japanese ] = "Å‚Íß°¼Ş”(~M)";
         Text[ chinese_traditional ] = "³Ì¦h­¶¼Æ(~M)";
         Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
         Text[ greek ] = "Ìİ~ã. áñéèìüò óåëßäùí";
