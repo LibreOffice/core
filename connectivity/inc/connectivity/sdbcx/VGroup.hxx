@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VGroup.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 08:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include "connectivity/sdbcx/VCollection.hxx"
 #endif
-#ifndef _CONNECTIVITY_SIMPLEPROPERTYCONTAINER_HXX_
-#include "connectivity/simplepropertycontainer.hxx"
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include "connectivity/sdbcx/IRefreshable.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDescriptor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 08:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
 #define _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
 
-#ifndef _CONNECTIVITY_SIMPLEPROPERTYCONTAINER_HXX_
-#include "connectivity/simplepropertycontainer.hxx"
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -80,7 +80,7 @@ namespace connectivity
 {
     namespace sdbcx
     {
-        class ODescriptor : public connectivity::OSimplePropertyContainer
+        class ODescriptor : public ::comphelper::OPropertyContainer
         {
         protected:
             ::rtl::OUString         m_Name;
@@ -90,7 +90,7 @@ namespace connectivity
 
         public:
             ODescriptor(::cppu::OBroadcastHelper& _rBHelper,sal_Bool _bCase, sal_Bool _bNew = sal_False)
-                : connectivity::OSimplePropertyContainer(_rBHelper)
+                : ::comphelper::OPropertyContainer(_rBHelper)
                 , m_bNew(_bNew),m_aCase(_bCase){}
 
             sal_Bool isNew()  const { return m_bNew; }
