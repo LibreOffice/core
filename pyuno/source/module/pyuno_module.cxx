@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:58 $
+ *  last change: $Author: jbu $ $Date: 2003-04-06 17:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uuid.h>
+#include <rtl/bootstrap.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -230,20 +231,12 @@ static OUString getLibDir()
         {
             static OUString libDir;
 
-            OUString path;
-            if( Module::getUrlFromAddress( reinterpret_cast<void*>(getLibDir) , path ) )
+            // workarounds the $(ORIGIN) until it is available
+            if( Module::getUrlFromAddress( reinterpret_cast<void*>(getLibDir) , libDir ) )
             {
-                libDir = path.copy( 0, path.lastIndexOf( '/' ) );
-                OStringBuffer buf(path.getLength()+20);
-                buf.append( "PYUNOLIBDIR=" );
-                buf.append( OUStringToOString( libDir, osl_getThreadTextEncoding() ) );
-                OString o = buf.makeStringAndClear();
-
-                // leak the string, because on some platforms, putenv takes over ownership of the string
-                rtl_string_acquire( o.pData );
-
-                // needs to be replaced by rtl_setBootstrapVariable once it is available
-                putenv( (char*) o.getStr() );
+                libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
+                OUString name ( RTL_CONSTASCII_USTRINGPARAM( "PYUNOLIBDIR" ) );
+                rtl_bootstrap_set( name.pData, libDir.pData );
             }
             pLibDir = &libDir;
         }
@@ -260,7 +253,6 @@ static PyObject* getComponentContext (PyObject* self, PyObject* args)
 
         // getLibDir() must be called in order to set bootstrap variables correctly !
         OUString path( getLibDir());
-
         if( Runtime::isInitialized() )
         {
             Runtime runtime;
@@ -360,7 +352,7 @@ static PyObject * extractOneStringArg( PyObject *args, char *funcName )
         return NULL;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
-    if( !PyString_Check( obj ) )
+    if( !PyString_Check( obj ) && ! PyUnicode_Check(obj))
     {
         OStringBuffer buf;
         buf.append( funcName ).append( ": expecting one string argument" );
