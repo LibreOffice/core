@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:37:56 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,16 +200,7 @@ sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeExce
 void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-
-    OSL_ENSURE( !rBHelper.bInDispose, "Do not add listeners in the dispose call" );
-    OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
-
-    if ( !rBHelper.bInDispose && !rBHelper.bDisposed )
-    {
-        rBHelper.aLC.addInterface( getCppuType( ( Reference< XClipboardListener > * ) 0 ), listener );
-        m_pImpl->registerClipboardViewer( );
-    }
+    rBHelper.aLC.addInterface( getCppuType( &listener ), listener );
 }
 
 //------------------------------------------------------------------------
@@ -219,23 +210,14 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
 void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
     throw( RuntimeException )
 {
-    MutexGuard aGuard( rBHelper.rMutex );
-
-    OSL_ENSURE( !rBHelper.bInDispose, "Do not add listeners in the dispose call" );
-    OSL_ENSURE( !rBHelper.bDisposed, "Object is already disposed" );
-
-    if ( !rBHelper.bInDispose && !rBHelper.bDisposed )
-    {
-        rBHelper.aLC.removeInterface( getCppuType( ( Reference< XClipboardListener > * ) 0 ), listener );
-        m_pImpl->unregisterClipboardViewer( );
-    }
+    rBHelper.aLC.removeInterface( getCppuType( &listener ), listener );
 }
 
 //------------------------------------------------------------------------
 // getName
 //------------------------------------------------------------------------
 
-void SAL_CALL CWinClipboard::notifyAllClipboardListener( ) const
+void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
 {
     OInterfaceContainerHelper* pICHelper = rBHelper.aLC.getContainer(
         getCppuType( ( Reference< XClipboardListener > * ) 0 ) );
@@ -243,10 +225,7 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( ) const
     if ( pICHelper )
     {
         OInterfaceIteratorHelper iter( *pICHelper );
-
-        // todo !!!
-        // have to construct a transferable ...
-        ClipboardEvent aCBEvent;
+        ClipboardEvent aClipbEvent( *this, m_pImpl->getContents( ) );
 
         while( iter.hasMoreElements( ) )
         {
@@ -254,7 +233,7 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( ) const
             {
                 Reference< XClipboardListener > xCBListener( iter.next( ), UNO_QUERY );
                 if ( xCBListener.is( ) )
-                    xCBListener->changedContents( aCBEvent );
+                    xCBListener->changedContents( aClipbEvent );
             }
             catch( ... )
             {
@@ -262,23 +241,6 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( ) const
             }
         }
     }
-}
-
-//------------------------------------------------------------------------
-// determine if there are any clipboard listener
-//------------------------------------------------------------------------
-
-sal_Bool SAL_CALL CWinClipboard::hasClipboardListener( ) const
-{
-    sal_Bool bRet = sal_False;
-
-    OInterfaceContainerHelper* pICHelper =
-        rBHelper.aLC.getContainer( getCppuType( ( Reference< XClipboardListener > * ) 0 ) );
-
-    if ( pICHelper )
-        bRet = ( pICHelper->getLength( ) > 0 );
-
-    return bRet;
 }
 
 //------------------------------------------------
@@ -293,15 +255,15 @@ sal_Bool SAL_CALL CWinClipboard::hasClipboardListener( ) const
 
 void SAL_CALL CWinClipboard::dispose() throw(RuntimeException)
 {
-    MutexGuard  aGuard( m_aMtxForDispose );
-
     if ( !( rBHelper.bInDispose || rBHelper.bDisposed ) )
     {
         // do my own stuff
         m_pImpl->dispose( );
 
         // call the base class implementation first
-        WeakComponentImplHelper4< XClipboardEx, XFlushableClipboard, XClipboardNotifier, XServiceInfo >::dispose( );
+        WeakComponentImplHelper4< XClipboardEx,
+            XFlushableClipboard, XClipboardNotifier,
+            XServiceInfo >::dispose( );
     }
 }
 

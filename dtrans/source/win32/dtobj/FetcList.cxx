@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:36:04 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,6 +450,7 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
     catch(NoSuchElementException&)
     {
         OSL_ENSURE( sal_False, "Text data flavor without charset not allowed" );
+        charset = OUString::createFromAscii( "windows-1252" );
     }
     catch(...)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:37:30 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,15 +122,26 @@ CWinClipbImpl* CWinClipbImpl::s_pCWinClipbImpl = NULL;
 
 CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard ) :
     m_itsName( aClipboardName ),
-    m_pClipboardContent( NULL ),
     m_pWinClipboard( theWinClipboard ),
-    m_bInDispose( sal_False )
+    m_bInDispose( sal_False ),
+    m_bSelfTriggered( sal_False )
 {
     OSL_ASSERT( NULL != m_pWinClipboard );
 
     // necessary to reassociate from
     // the static callback function
     s_pCWinClipbImpl = this;
+
+    registerClipboardViewer( );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+CWinClipbImpl::~CWinClipbImpl( )
+{
+    unregisterClipboardViewer( );
 }
 
 //------------------------------------------------------------------------
@@ -139,11 +150,11 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
 
 Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( RuntimeException )
 {
-    if ( NULL != m_pClipboardContent )
+    MutexGuard  aGuard( m_aMutex );
+
+    if ( m_rCurrentClipbContent.is( ) )
     {
-        //return Reference< XTransferable >( m_pClipbContent->m_rXTDataSource );
-        //return m_pClipboardContent->m_rXTDataSource;
-        return Reference< XTransferable >( );
+        return m_rCurrentClipbContent;
     }
     else
     {
@@ -158,7 +169,6 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
         CDTransObjFactory objFactory;
 
         // remeber pIDo destroys itself due to the smart pointer
-        //return Reference< XTransferable >( static_cast< XTransferable* >( new CDOTransferable( pIDo ) ) );
         return objFactory.createTransferableFromDataObj( m_pWinClipboard->m_SrvMgr, pIDo );
     }
 }
@@ -173,8 +183,17 @@ void SAL_CALL CWinClipbImpl::setContents( const Reference< XTransferable >& xTra
 {
     CDTransObjFactory objFactory;
 
+    m_rOldClipbContent = m_rCurrentClipbContent;
+    m_rOldClipbOwner   = m_rCurrentClipbOwner;
+
+    m_rCurrentClipbContent = xTransferable;
+    m_rCurrentClipbOwner   = xClipboardOwner;
+
     IDataObjectPtr pIDataObj( objFactory.createDataObjFromTransferable(
-        m_pWinClipboard->m_SrvMgr , xTransferable ) );
+        m_pWinClipboard->m_SrvMgr , m_rCurrentClipbContent ) );
+
+    // used to differentiate in ClipboardContent changed handler
+    m_bSelfTriggered = sal_True;
 
     MTASetClipboard( pIDataObj );
 }
@@ -212,8 +231,7 @@ void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
 
 void SAL_CALL CWinClipbImpl::registerClipboardViewer( ) const
 {
-    if ( m_pWinClipboard->hasClipboardListener( ) )
-        MTARegisterClipboardViewer( CWinClipbImpl::onClipboardContentChanged );
+    MTARegisterClipboardViewer( CWinClipbImpl::onClipboardContentChanged );
 }
 
 //------------------------------------------------------------------------
@@ -222,8 +240,7 @@ void SAL_CALL CWinClipbImpl::registerClipboardViewer( ) const
 
 void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( ) const
 {
-    if ( !m_pWinClipboard->hasClipboardListener( ) )
-        MTARegisterClipboardViewer( NULL );
+    MTARegisterClipboardViewer( NULL );
 }
 
 //------------------------------------------------------------------------
@@ -232,6 +249,11 @@ void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( ) const
 
 void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 {
+    OSL_ENSURE( !m_rOldClipbContent.is( ) &&
+                !m_rOldClipbOwner.is( ) &&
+                !m_rCurrentClipbContent.is( ) &&
+                !m_rCurrentClipbOwner.is( ),
+                "Clipboard was not flushed before!" );
 }
 
 //------------------------------------------------------------------------
@@ -240,6 +262,38 @@ void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 
 void CALLBACK CWinClipbImpl::onClipboardContentChanged( void )
 {
+    ClearableMutexGuard aGuard( s_pCWinClipbImpl->m_aMutex );
+
+    Reference< XTransferable >   xClipbContent;
+    Reference< XClipboardOwner > xClipbOwner;
+
+    if ( s_pCWinClipbImpl->m_rOldClipbContent.is( ) && s_pCWinClipbImpl->m_rOldClipbOwner.is( ) )
+    {
+        s_pCWinClipbImpl->m_rOldClipbOwner->lostOwnership(
+            s_pCWinClipbImpl->m_pWinClipboard, s_pCWinClipbImpl->m_rOldClipbContent );
+        s_pCWinClipbImpl->m_rOldClipbOwner   = Reference< XClipboardOwner >( );
+        s_pCWinClipbImpl->m_rOldClipbContent = Reference< XTransferable >( );
+    }
+    else if ( !s_pCWinClipbImpl->m_bSelfTriggered &&
+              ( s_pCWinClipbImpl->m_rCurrentClipbContent.is( ) &&
+                s_pCWinClipbImpl->m_rCurrentClipbOwner.is( ) ) )
+    {
+        // save the state variables locally
+        xClipbContent = s_pCWinClipbImpl->m_rCurrentClipbContent;
+        xClipbOwner   = s_pCWinClipbImpl->m_rCurrentClipbOwner;
+
+        s_pCWinClipbImpl->m_rCurrentClipbOwner   = Reference< XClipboardOwner >( );
+        s_pCWinClipbImpl->m_rCurrentClipbContent = Reference< XTransferable >( );
+
+        // release the mutex, so that a getContent call would succeed
+        aGuard.clear( );
+
+        // notify the old ClipboardOwner
+        xClipbOwner->lostOwnership( s_pCWinClipbImpl->m_pWinClipboard, xClipbContent );
+    }
+
+    s_pCWinClipbImpl->m_bSelfTriggered = sal_False;
+
     // reassocition to instance through static member
     s_pCWinClipbImpl->m_pWinClipboard->notifyAllClipboardListener( );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:35:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,16 @@ void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cb
 
     if ( FAILED( hr ) )
         throw CStgTransferException( hr );
+
+#ifdef _DEBUG
+    HGLOBAL hGlob;
+    hr = GetHGlobalFromStream( m_lpStream, &hGlob );
+    OSL_ASSERT( SUCCEEDED( hr ) );
+
+    DWORD dwSize = GlobalSize( hGlob );
+    LPVOID lpdbgData = GlobalLock( hGlob );
+    GlobalUnlock( hGlob );
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -181,9 +191,18 @@ void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
         throw CStgTransferException( STG_E_MEDIUMFULL );
 
     HRESULT hr = CreateStreamOnHGlobal( hGlob, m_bDelStgOnRelease, &m_lpStream );
-
     if ( FAILED( hr ) )
+    {
+        GlobalFree( hGlob );
+        m_lpStream = NULL;
         throw CStgTransferException( hr );
+    }
+
+#ifdef _DEBUG
+    STATSTG statstg;
+    hr = m_lpStream->Stat( &statstg, STATFLAG_DEFAULT );
+    OSL_ASSERT( SUCCEEDED( hr ) );
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -191,8 +210,8 @@ void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
 //------------------------------------------------------------------------
 
 void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
-                                             sal_Bool bDelStgOnRelease,
-                                            sal_Bool bReleaseStreamOnDestr )
+                                         sal_Bool bDelStgOnRelease,
+                                        sal_Bool bReleaseStreamOnDestr )
 {
     OSL_ASSERT( !(bDelStgOnRelease && !bReleaseStreamOnDestr) );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:37:23 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@ class CWinClipboard;
 
 class CWinClipbImpl
 {
+public:
+    ~CWinClipbImpl( );
+
 protected:
     CWinClipbImpl( const ::rtl::OUString& aClipboardName, CWinClipboard* theWinClipboard );
 
@@ -140,11 +143,16 @@ protected:
 
     sal_Bool SAL_CALL isInDispose( ) const;
 
-    ::rtl::OUString         m_itsName;
-    IDataObjectPtr          m_pClipboardContent;
-    static CWinClipbImpl*   s_pCWinClipbImpl;
-    CWinClipboard*          m_pWinClipboard;
-    sal_Bool                m_bInDispose;
+    ::rtl::OUString                                                                             m_itsName;
+    static CWinClipbImpl*                                                                       s_pCWinClipbImpl;
+    CWinClipboard*                                                                              m_pWinClipboard;
+    sal_Bool                                                                                    m_bInDispose;
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >               m_rCurrentClipbContent;
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >               m_rOldClipbContent;
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >  m_rCurrentClipbOwner;
+    com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >  m_rOldClipbOwner;
+    sal_Bool                                                                                    m_bSelfTriggered;
+    osl::Mutex                                                                                  m_aMutex;
 
     friend class CWinClipboard;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 15:38:02 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,17 @@ class CWinClipbImpl;
 // by this class!
 //------------------------------------------------------------------------
 
+// helper class, so that the mutex is constructed
+// before the constructor of WeakComponentImplHelper
+// will be called and initialized with this mutex
+class CWinClipboardDummy
+{
+protected:
+    ::osl::Mutex m_aMutex;
+};
+
 class CWinClipboard :
+    public CWinClipboardDummy,
     public cppu::WeakComponentImplHelper4<
         ::com::sun::star::datatransfer::clipboard::XClipboardEx, \
         ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
@@ -188,12 +198,9 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    void     SAL_CALL notifyAllClipboardListener( ) const;
-    sal_Bool SAL_CALL hasClipboardListener( ) const;
+    void SAL_CALL notifyAllClipboardListener( );
 
 private:
-    ::osl::Mutex                                                                      m_aMutex;
-    ::osl::Mutex                                                                      m_aMtxForDispose;
     ::std::auto_ptr< CWinClipbImpl >                                                  m_pImpl;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
 

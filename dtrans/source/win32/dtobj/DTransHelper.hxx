@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 06:35:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-06 12:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ public:
 
     void SAL_CALL init(
         SIZE_T newSize,
-        sal_uInt32 uiFlags = GMEM_MOVEABLE | GMEM_ZEROINIT,
+        sal_uInt32 uiFlags = GHND,
         sal_Bool bDelStgOnRelease = sal_False,
         sal_Bool bReleasStreamOnDestr = sal_True );
 
