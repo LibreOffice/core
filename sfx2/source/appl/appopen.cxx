@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 16:04:06 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 10:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,19 +560,25 @@ SfxMedium* SfxApplication::InsertDocumentDialog
             pMedium = new SfxMedium(
                     aURL, SFX_STREAM_READONLY, FALSE, TRUE,
                     GetFilterMatcher().GetFilter( aFilter ), pSet );
-            pMedium->DownLoad();
-            SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
-            const SfxFilter* pFilter = 0;
-            if ( aMatcher.DetectFilter( *pMedium, &pFilter, FALSE ) != ERRCODE_NONE )
-                DELETEZ( pMedium );
-            else if( CheckPasswd_Impl( 0, GetPool(), pMedium ) == ERRCODE_ABORT )
-                DELETEZ( pMedium );
-        }
 
+            LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
+            SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
+            xLoader->SetFilterMatcher( &aMatcher );
+            xLoader->Start();
+            while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
+                Application::Yield();
+            pMedium = xLoader->GetMedium();
+
+            if( pMedium )
+                if( CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) ==
+                    ERRCODE_ABORT )
+                {
+                    DELETEZ( pMedium );
+                }
+        }
         delete pURLList;
         break;
     }
-
     return pMedium;
 }
 
