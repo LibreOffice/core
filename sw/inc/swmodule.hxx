@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:21:34 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,8 @@ class SwModule: public SwModuleDummy , public SfxListener
 
     // Hint abfangen fuer DocInfo
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    // form letter execution
+    void    GenerateFormLetter(BOOL bUseCurrentDocument);
 
 protected:
     // Briefumschlaege, Etiketten
@@ -226,9 +228,6 @@ public:
     SwDBConfig*         GetDBConfig();
     svx::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions&    GetAccessibilityOptions();
-
-    // UNO
-//  virtual Reflection* GetReflection( UsrUik aUIK );
 
     // Ueber Sichten iterieren
     static SwView*      GetFirstView();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 14:38:51 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,8 @@ public:
                         SvStringsDtor* pAllDBNames = 0 );
 
     BOOL IsAnyDatabaseFieldInDoc()const;
+    //check whether DB fields point to an available data source and returns it
+    BOOL IsFieldDataSourceAvailable(String& rUsedDataSource) const;
     void UpdateExpFlds(BOOL bCloseDB = FALSE);// nur alle ExpressionFelder updaten
     void SetFixFields( BOOL bOnlyTimeDate = FALSE,
                         const DateTime* pNewDateTime = 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:08:36 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,6 +904,12 @@
 #define HID_INSERT_IDX_MRK_PHONETIC_READING         (HID_BASE + 2175 )
 #define HID_COLUMN_VALUESET                         (HID_BASE + 2176 )
 #define HID_PVIEW_ZOOM_LB                           (HID_BASE + 2177 )
+#define HID_MAIL_MERGE_SELECT                       (HID_BASE + 2178 )
+#define HID_MAIL_MERGE_CREATE_FROM                  (HID_BASE + 2179 )
+#define HID_MAIL_MERGE_INSERT_FIELDS                (HID_BASE + 2180 )
+#define HID_PRINT_AS_MERGE                          (HID_BASE + 2181 )
+#define HID_MERGE_SOURCE_UNAVAILABLE                (HID_BASE + 2182 )
+#define HID_DATA_SOURCES_UNAVAILABLE                (HID_BASE + 2183 )
 
 
 
