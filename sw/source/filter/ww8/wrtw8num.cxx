@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:29:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -185,9 +183,9 @@ USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
 
 //GetFirstLineOffset should problem never appear unadorned apart from
 //here in the ww export filter
-sal_uInt16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
+sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
 {
-    sal_uInt16 nFirstLineOffset;
+    short nFirstLineOffset;
     if (rFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
         nFirstLineOffset = -rFmt.GetCharTextDistance();
     else
@@ -387,7 +385,7 @@ void SwWW8Writer::OutListTab()
             SwWW8Writer::WriteShort( *pTableStrm, 0 );
 
             sal_uInt16 nAbsLSpace = rFmt.GetAbsLSpace();
-            sal_uInt16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
+            sal_Int16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
 
             // write Papx
             BYTE* pData = aPapSprms + 2;
@@ -526,6 +524,9 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
         case SVX_ADJUST_BLOCKLINE:
             nb = 3;
             break;
+        case SVX_ADJUST_LEFT:
+        case SVX_ADJUST_END:
+            break;
     }
 
     if (GetWordFirstLineOffset(rFmt) < 0)
@@ -655,26 +656,35 @@ static void SwWw8_InsertAnlText( const String& rStr, BYTE*& rpCh,
     ByteToSVBT8( nb, r8Len );
 }
 
-void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
-                                USHORT& rCharLen, const SwNumRule& rRul,
-                                const SwNumFmt& rFmt, BYTE nSwLevel )
+void SwWW8Writer::BuildAnlvBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
+    USHORT& rCharLen, const SwNumRule& rRul, const SwNumFmt& rFmt,
+    BYTE nSwLevel)
 {
-    ByteToSVBT8( SwWW8Writer::GetNumId( rFmt.GetNumberingType() ), rAnlv.nfc );
+    ByteToSVBT8(SwWW8Writer::GetNumId(rFmt.GetNumberingType()), rAnlv.nfc);
 
     BYTE nb = 0;
-    switch( rFmt.GetNumAdjust() )
+    switch (rFmt.GetNumAdjust())
     {
-    case SVX_ADJUST_RIGHT: nb = 2; break;
-    case SVX_ADJUST_CENTER: nb = 1; break;
-    case SVX_ADJUST_BLOCK:
-    case SVX_ADJUST_BLOCKLINE: nb = 3; break;
+        case SVX_ADJUST_RIGHT:
+            nb = 2;
+            break;
+        case SVX_ADJUST_CENTER:
+            nb = 1;
+            break;
+        case SVX_ADJUST_BLOCK:
+        case SVX_ADJUST_BLOCKLINE:
+            nb = 3;
+            break;
+        case SVX_ADJUST_LEFT:
+        case SVX_ADJUST_END:
+            break;
     }
 
     bool bInclUpper = rFmt.GetIncludeUpperLevels() > 0;
     if( bInclUpper )
         nb |= 0x4;          // include previous levels
 
-    if( GetWordFirstLineOffset(rFmt) < 0 )
+    if (GetWordFirstLineOffset(rFmt) < 0)
         nb |= 0x8;          // number will be displayed using a hanging indent
     ByteToSVBT8( nb, rAnlv.aBits1 );
 
