@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:14 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 15:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2228,15 +2228,18 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             eHoriOri = aHoriOriTab[ nXAlign ];
             SwRelationOrient eHoriRel;
             eHoriRel = aRelOriTab[  nXRelTo ];
+            if ((eHoriRel == FRAME) && (eAnchor == FLY_PAGE))
+                eHoriRel = PRTAREA;
 
             /*
-             Absolute positions in winword for graphics are broken when the graphic is
-             in a table, all absolute positions now become relative to the top left
-             corner of that cell.  We really cannot import that feature correctly as
-             we have not the same functionality (yet). This normalizes the absolute
-             position by the left of the table, which at least puts it close, theres
-             nothing we can do about the vertical either.
-             */
+             Absolute positions in winword for graphics are broken when the
+             graphic is in a table, all absolute positions now become relative
+             to the top left corner of that cell.  We really cannot import
+             that feature correctly as we have not the same functionality
+             (yet). This normalizes the absolute position by the left of the
+             table, which at least puts it close, theres nothing we can do
+             about the vertical either.
+            */
             if (nTable && eAnchor == FLY_PAGE)
             {
                 pFSPA->nXaLeft -= GetTableLeft();
