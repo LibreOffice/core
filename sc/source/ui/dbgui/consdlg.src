@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:32:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "¨ηΌΖ(~F)";
         Text[ arabic ] = "ΗαΟΗαΙ";
         Text[ greek ] = "Κανόνας υπολογισμού";
-        Text[ korean ] = "°θ»κ΅΅±ΤΔΆ";
+        Text[ korean ] = "°θ»κ΅΅±ΤΔΆ(~F)";
         Text[ turkish ] = "Fonksi~yon";
         Text[ language_user1 ] = " ";
     };
@@ -559,7 +559,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "¦X¨Φ­pΊβ°Ο°μ(~C)";
         Text[ arabic ] = "δΨΗήΗΚ ΗαΟγΜ";
         Text[ greek ] = "Πε~ριοχές ενοποίησης";
-        Text[ korean ] = "ΕλΗΥ ΏµΏª";
+        Text[ korean ] = "ΕλΗΥ ΏµΏª(~C)";
         Text[ turkish ] = "Bir~leώtirme aralύklarύ";
         Text[ language_user1 ] = " ";
     };
@@ -587,7 +587,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "·½Έκ®Ζ°Ο°μ(~S)";
         Text[ arabic ] = "δΨΗή ΘνΗδΗΚ ΗαγΥΟΡ";
         Text[ greek ] = "Περιοχή προέλευσης δεδομένων";
-        Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝ ΏµΏª";
+        Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝ ΏµΏª(~S)";
         Text[ turkish ] = "Kaynak veri a~ralύklarύ";
         Text[ language_user1 ] = " ";
     };
@@ -615,7 +615,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "½Ζ»sµ²ªG¨μ(~T)";
         Text[ arabic ] = "δΣΞ ΗαδΚΗΖΜ Εαμ";
         Text[ greek ] = "Εμφάνιση αποτελεσμάτων από";
-        Text[ korean ] = "°α°ϊΈ¦ Γβ·Β";
+        Text[ korean ] = "°α°ϊΈ¦ Γβ·Β(~T)";
         Text[ turkish ] = "Sonuc~un gφsterileceπi yer";
         Text[ language_user1 ] = " ";
     };
@@ -644,7 +644,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "¦CΌΠΓD(~R)";
         Text[ arabic ] = "ΪδΗζνδ ΗαΥέζέ";
         Text[ greek ] = "Επιγραφή γραμμής";
-        Text[ korean ] = "Ηΰ ¶σΊ§";
+        Text[ korean ] = "Ηΰ ¶σΊ§(~R)";
         Text[ turkish ] = "Sa~tύr etiketleri";
         Text[ language_user1 ] = " ";
     };
@@ -667,10 +667,10 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ spanish ] = "Tνtulos de ~columnas" ;
         Text [ english_us ] = "C~olumn headers" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ΑΠ±κΜβ(~H)";
+        Text[ chinese_simplified ] = "ΑΠ±κΜβ(~O)";
         Text[ russian ] = "νΰηβΰνθώ ρςξλαφξβ";
         Text[ polish ] = "Nag³σwki kolumn";
-        Text[ japanese ] = "γ’[s(~H)";
+        Text[ japanese ] = "γ’[s(~O)";
         Text[ chinese_traditional ] = "ΔζΌΠΓD(~O)";
         Text[ arabic ] = "ΡΔζΣ ΗαΓΪγΟΙ";
         Text[ greek ] = "Κεφαλίδες στηλών";
@@ -731,7 +731,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "©M·½Έκ®Ζ³sµ²(~L)";
         Text[ arabic ] = "ΡΘΨ ΘΘνΗδΗΚ ΗαγΥΟΡ";
         Text[ greek ] = "Σύνδεση με δεδομένα προέλευσης";
-        Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝΏ΅ Ώ¬°α";
+        Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝΏ΅ Ώ¬°α(~L)";
         Text[ turkish ] = "Kaynak verilerine ~baπla";
         Text[ language_user1 ] = " ";
     };
@@ -803,7 +803,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "»θΑ¦";
+        Text[ korean ] = "»θΑ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
     };
@@ -833,7 +833,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "·sΌW(~A)";
         Text[ arabic ] = "ΕΦΗέΙ";
         Text[ greek ] = "Προσ~θήκη";
-        Text[ korean ] = "Γί°΅";
+        Text[ korean ] = "Γί°΅(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
     };
