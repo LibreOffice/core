@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:58:53 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 16:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ public:
 
        @return textual description of the selected redline data element
      */
-    String GetDescr(USHORT nPos = 0) const;
+    String GetDescr(USHORT nPos = 0);
 
     int operator==( const SwRedline& ) const;
     int operator<( const SwRedline& ) const;

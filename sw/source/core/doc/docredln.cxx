@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:02:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 16:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3616,7 +3616,7 @@ const SwRedlineData & SwRedline::GetRedlineData(USHORT nPos) const
     return *pCur;
 }
 
-String SwRedline::GetDescr(USHORT nPos) const
+String SwRedline::GetDescr(USHORT nPos)
 {
     String aResult;
 
