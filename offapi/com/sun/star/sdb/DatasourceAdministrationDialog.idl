@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatasourceAdministrationDialog.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ module com {  module sun {  module star {  module sdb {
     service.
     </p>
 */
-service DatasourceAdministrationDialog
+published service DatasourceAdministrationDialog
 {
     /** the title of the (dialog) window
     */
