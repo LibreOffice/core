@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:40:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,8 @@ TabPage RID_SVXPAGE_TEXTATTR
     Text[ slovak ] = "Text";
 };
  // ********************************************************************** EOF
+
+
 
 
 
