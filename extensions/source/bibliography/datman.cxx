@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:38:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,12 +630,15 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     aListBoxes[0]->InsertEntry(sNone);
     Reference< XNameAccess >  xFields = getColumns( pDatMan->getForm() );
     DBG_ASSERT(xFields.is(), "MappingDialog_Impl::MappingDialog_Impl : gave me an invalid form !");
-    Sequence<rtl::OUString> aNames = xFields->getElementNames();
-    sal_Int32 nFieldsCount = aNames.getLength();
-    const rtl::OUString* pNames = aNames.getConstArray();
+    if(xFields.is())
+    {
+        Sequence<rtl::OUString> aNames = xFields->getElementNames();
+        sal_Int32 nFieldsCount = aNames.getLength();
+        const rtl::OUString* pNames = aNames.getConstArray();
 
-    for(sal_Int32 nField = 0; nField < nFieldsCount; nField++)
-        aListBoxes[0]->InsertEntry(pNames[nField]);
+        for(sal_Int32 nField = 0; nField < nFieldsCount; nField++)
+            aListBoxes[0]->InsertEntry(pNames[nField]);
+    }
 
     Link aLnk = LINK(this, MappingDialog_Impl, ListBoxSelectHdl);
 
