@@ -63,6 +63,8 @@
 module com { module sun { module star { module auth {
 
 /** indicates failure to authenticate using the specified security context.
+
+    @since #107627#
  */
 exception AuthenticationFailedException : ::com::sun::star::uno::Exception
 {

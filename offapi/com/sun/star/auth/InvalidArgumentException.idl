@@ -63,6 +63,8 @@
 module com { module sun { module star { module auth {
 
 /** indicates an invalid argument was passed to SSO API.
+
+    @since #107627#
  */
 exception InvalidArgumentException : ::com::sun::star::uno::Exception
 {
