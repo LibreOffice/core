@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:19:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #ifndef _SVX_TSTPITEM_HXX
 #include <svx/tstpitem.hxx>
 #endif
+#include "svtools/urihelper.hxx"
 #if 0
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
@@ -933,8 +934,8 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
         sURL = aURL.GetURLNoMark(INetURLObject::DECODE_UNAMBIGUOUS);
         sMark = aURL.GetMark(INetURLObject::DECODE_UNAMBIGUOUS);
 
-        sURL = INetURLObject::AbsToRel(sURL, INetURLObject::WAS_ENCODED,
-            INetURLObject::DECODE_UNAMBIGUOUS);
+        sURL = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
+                                          sURL);
     }
 
     if (sMark.Len() && !sURL.Len())
