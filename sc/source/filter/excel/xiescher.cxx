@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:43:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ void XclImpEscherObj::Apply( ScfProgressBar& rProgress )
 {
     if( IsValid() )
     {
-        if( SdrPage* pPage = GetDoc().GetDrawLayer()->GetPage( mnScTab ) )
+        if( SdrPage* pPage = GetDoc().GetDrawLayer()->GetPage( static_cast<sal_uInt16>(mnScTab) ) )
             pPage->InsertObject( mpSdrObj.release() );
         // Trace if object is not printable.
         if(!GetPrintable())
@@ -944,7 +944,7 @@ XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj ) :
     XclImpEscherObj( rSrcObj )
 {
     mpChart.reset( new XclImpChart( *mpRD ) );
-    mpChart->nBaseTab = GetScTab();
+    mpChart->nBaseTab = static_cast<sal_uInt16>(GetScTab());
 }
 
 void XclImpEscherChart::SetChartData( XclImpChart* pChart )
@@ -1068,7 +1068,7 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 
 // Escher object data =========================================================
 
-XclImpEscherAnchor::XclImpEscherAnchor( USHORT nScTab )
+XclImpEscherAnchor::XclImpEscherAnchor( SCTAB nScTab )
 {
     memset( this, 0x00, sizeof( XclImpEscherAnchor ) );
     mnScTab = nScTab;
@@ -1132,7 +1132,7 @@ void XclImpEscherObjList::ReplaceLastObj( XclImpEscherObj* pEscherObj )
         AppendObj( pEscherObj );
 }
 
-XclImpEscherObj* XclImpEscherObjList::GetObj( USHORT nScTab, sal_uInt16 nObjId ) const
+XclImpEscherObj* XclImpEscherObjList::GetObj( SCTAB nScTab, sal_uInt16 nObjId ) const
 {
     if( nObjId != EXC_OBJ_INVALID_ID )
     {
@@ -1188,7 +1188,7 @@ void XclImpEscherObjList::UpdateCache()
 {
     if( const XclImpEscherObj* pEscherObj = GetLastObj() )
     {
-        USHORT nScTab = pEscherObj->GetScTab();
+        SCTAB nScTab = pEscherObj->GetScTab();
         sal_uInt32 nStrmPos = pEscherObj->GetStrmBegin();
 
         // #110252# ignore faked objects without corresponding Escher data (i.e. sheet-charts)
@@ -1536,12 +1536,12 @@ XclImpObjectManager::~XclImpObjectManager()
 {
 }
 
-const XclImpEscherObj* XclImpObjectManager::GetEscherObj( USHORT nScTab, sal_uInt16 nObjId ) const
+const XclImpEscherObj* XclImpObjectManager::GetEscherObj( SCTAB nScTab, sal_uInt16 nObjId ) const
 {
     return maEscherObjList.GetObj( nScTab, nObjId );
 }
 
-XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( USHORT nScTab, sal_uInt16 nObjId )
+XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( SCTAB nScTab, sal_uInt16 nObjId )
 {
     return maEscherObjList.GetObj( nScTab, nObjId );
 }
@@ -1590,7 +1590,7 @@ XclImpEscherTxo* XclImpObjectManager::GetEscherTxoAcc( sal_uInt32 nStrmPos )
     return const_cast< XclImpEscherTxo* >( GetEscherTxo( nStrmPos ) );
 }
 
-const XclImpEscherNote* XclImpObjectManager::GetEscherNote( USHORT nScTab, sal_uInt16 nObjId ) const
+const XclImpEscherNote* XclImpObjectManager::GetEscherNote( SCTAB nScTab, sal_uInt16 nObjId ) const
 {
     const XclImpEscherObj* pEscherObj = GetEscherObj( nScTab, nObjId );
     return PTR_CAST( XclImpEscherNote, pEscherObj );
@@ -1873,7 +1873,7 @@ void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrO
     }
 }
 
-void XclImpObjectManager::SetSkipObj( USHORT nScTab, sal_uInt16 nObjId )
+void XclImpObjectManager::SetSkipObj( SCTAB nScTab, sal_uInt16 nObjId )
 {
     maSkipObjVec.push_back( XclSkipObj( nScTab, nObjId ) );
 }
