@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 14:54:23 $
+ *  last change: $Author: nn $ $Date: 2002-12-03 15:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,8 @@
 #define HID_SC_DPLAY_ROW        ( HID_SC_OTHER_START + 6 )
 #define HID_SC_DPLAY_DATA       ( HID_SC_OTHER_START + 7 )
 #define HID_SC_DPLAY_SELECT     ( HID_SC_OTHER_START + 8 )
+
+#define HID_SC_DRAW_RENAME      ( HID_SC_OTHER_START + 9 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )

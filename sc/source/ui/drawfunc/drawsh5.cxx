@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:09:13 $
+ *  last change: $Author: nn $ $Date: 2002-12-03 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         String aDesc(ScResId(SCSTR_NAME));
 
                         SvxNameDialog* pDlg = new SvxNameDialog( NULL, aOldName, aDesc );
+                        pDlg->SetEditHelpId( HID_SC_DRAW_RENAME );
                         pDlg->SetText( aTitle );
                         pDlg->SetCheckNameHdl( LINK( this, ScDrawShell, NameObjectHdl ) );
 
