@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:15:02 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 // includes
 
 #include "basecontainer.hxx"
+#include "querytokenizer.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -144,6 +145,23 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
             throw (css::uno::RuntimeException);
+
+    //-------------------------------------------
+    // internal helper!
+
+    private:
+
+        //---------------------------------------
+
+        /** @short  implement the container string query: "matchByDocumentService=:iflags=:eflags=:..."
+
+            @param  lTokens
+                    the list of query tokens ans its values.
+
+            @return A string list of internal filter names, including
+                    all filters, which match this query.
+         */
+        OUStringList impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const;
 
     //-------------------------------------------
     // static uno helper!
