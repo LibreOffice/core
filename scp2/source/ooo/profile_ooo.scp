@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profile_ooo.scp,v $
 *
-*  $Revision: 1.1 $
+*  $Revision: 1.2 $
 *
-*  last change: $Author: is $ $Date: 2004-02-05 18:10:10 $
+*  last change: $Author: hr $ $Date: 2004-11-09 14:02:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -122,6 +122,17 @@ Profile gid_Profile_Uno_Ini
     Name = "unorc";
   #else
     Name = "uno.ini";
+  #endif
+    Dir = gid_Dir_Program;
+    Styles = (NETWORK);
+End
+
+Profile gid_Profile_Jvmfwk_Ini
+    ModuleID = gid_Module_Root;
+  #ifdef UNX
+    Name = "jvmfwk3rc";
+  #else
+    Name = "jvmfwk3.ini";
   #endif
     Dir = gid_Dir_Program;
     Styles = (NETWORK);
