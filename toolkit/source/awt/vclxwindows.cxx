@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
+ *  last change: $Author: tbe $ $Date: 2002-03-07 20:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _TOOLKIT_AWT_VCLXWINDOWS_HXX_
 #include <toolkit/awt/vclxwindows.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEBUTTON_HXX_
+#include <toolkit/awt/vclxaccessiblebutton.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWLISTBOX_HXX_
 #include <toolkit/awt/vclxaccessibledropdownlistbox.hxx>
@@ -342,6 +345,11 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         aEvent.ActionCommand = maActionCommand;
         maActionListeners.actionPerformed( aEvent );
     }
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleButton( this );
 }
 
 //  ----------------------------------------------------
