@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:20:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
-#endif
-#ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -2048,8 +2045,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         switch (eFill)
         {
             case XFILL_NONE:
-                aBrushItem.GetColor().SetTransparency(0xFE);
-                bBrushItemOk = true;
+                //Writer graphics don't have it yet
+                if (eShapeType != mso_sptPictureFrame)
+                {
+                    aBrushItem.GetColor().SetTransparency(0xFE);
+                    bBrushItemOk = true;
+                }
             break;
             case XFILL_SOLID:
                 {
@@ -2763,21 +2764,23 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             else
                 pObject->SetLayer(nDrawHeaven);
 
-            //#106167# The differences in anchoring between drawing
-            //objects and nondrawing objects is totally annoying. A pox
-            //on the stuipd things. Can't be in headers, don't work
-            //the same as graphics/frames, but almost can but then don't
-            //do what you expect. Cursed things.
-            const SwFmtHoriOrient *pHori =
-                (const SwFmtHoriOrient *)aFlySet.GetItem(RES_HORI_ORIENT);
-            if (pHori && pHori->GetHoriOrient() == HORI_NONE)
+            //#106167# Annoying problems with drawing objects
+            if (nInTable)
             {
-                SwFmtHoriOrient aHori(*pHori);
-                Point aPoint(pObject->GetAnchorPos());
-                aPoint.X() = aHori.GetPos();
-                aHori.SetPos(0);
-                aFlySet.ClearItem(RES_HORI_ORIENT);
-                pObject->SetAnchorPos(aPoint);
+                const SwFmtHoriOrient *pHori =
+                    (const SwFmtHoriOrient *)aFlySet.GetItem(RES_HORI_ORIENT);
+                if (
+                    pHori && pHori->GetRelationOrient() == FRAME &&
+                    pHori->GetHoriOrient() == HORI_NONE
+                   )
+                {
+                    SwFmtHoriOrient aHori(*pHori);
+                    Point aPoint(pObject->GetAnchorPos());
+                    aPoint.X() = aHori.GetPos();
+                    aHori.SetPos(0);
+                    aFlySet.ClearItem(RES_HORI_ORIENT);
+                    pObject->SetAnchorPos(aPoint);
+                }
             }
 
             /*
@@ -2945,21 +2948,16 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
-        SdrTextObj *pSdrTextObj = PTR_CAST(SdrTextObj, rpObject);
-        if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
-        {
-            rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT));
-            rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, pF->nYaBottom - pF->nYaTop,
-                pF->nXaRight - pF->nXaLeft));
-        }
-        else
-        {
-            rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
-                pF->nYaBottom - pF->nYaTop));
-        }
+        rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
+            pF->nYaBottom - pF->nYaTop));
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eShapeType, aInnerDist );
+
+
+        SdrTextObj *pSdrTextObj = PTR_CAST(SdrTextObj, rpObject);
+        if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
+            rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT));
 
         pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet);
         ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
@@ -3081,11 +3079,10 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
             String aGrfName( URIHelper::SmartRelToAbs(
                     ((SdrGrafObj*)rpObject)->GetFileName()) );
 
-            if ( GRAPHIC_NONE == rGraph.GetType() ||
-                FStatHelper::IsDocument( aGrfName ) )
+            if (GRAPHIC_NONE == rGraph.GetType() && CanUseRemoteLink(aGrfName))
             {
-                pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName, aEmptyStr,
-                    0 /*Graphic*/, &rFlySet, 0 /*SwFrmFmt*/);
+                pRetFrmFmt = rDoc.Insert( *pPaM, aGrfName, aEmptyStr, 0,
+                    &rFlySet, 0 /*SwFrmFmt*/);
                 bDone = true;
             }
         }
