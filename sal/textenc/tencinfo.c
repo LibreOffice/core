@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-12 14:49:04 $
+ *  last change: $Author: cp $ $Date: 2000-12-12 20:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,8 +583,11 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "ibm", aUnixCharsetIBMTab },
         { "koi8", aUnixCharsetKOI8Tab },
         { "jisx0208", aUnixCharsetJISX0208Tab },
+        { "jisx0208.1983", aUnixCharsetJISX0208Tab },
         { "jisx0201", aUnixCharsetJISX0201Tab },
+        { "jisx0201.1976", aUnixCharsetJISX0201Tab },
         { "jisx0212", aUnixCharsetJISX0212Tab },
+        { "jisx0212.1990", aUnixCharsetJISX0212Tab },
         { "gb2312", aUnixCharsetGBTab },
         { "gbk", aUnixCharsetGBKTab },
         { "big5", aUnixCharsetBIG5Tab },
@@ -593,7 +596,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "sunolcursor", aUnixCharsetSymbolTab },
         { "sunolglyph", aUnixCharsetSymbolTab },
         { "iso10646", aUnixCharsetUNICODETab },
-        { "ksc5601.1992", aUnixCharsetKoreanEUCTab },
+/*      { "ksc5601.1992", aUnixCharsetKoreanEUCTab }, */
 /*        { "tis620.2553",  },          */
 /*        { "sunudcja.1997",  },        */
 /*        { "sunudcko.1997",  },        */
