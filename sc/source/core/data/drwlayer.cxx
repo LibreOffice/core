@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-19 10:19:44 $
+ *  last change: $Author: cl $ $Date: 2002-09-23 16:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #include <svx/objfac3d.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
@@ -287,6 +290,8 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     SetScaleUnit(MAP_100TH_MM);
     SfxItemPool& rPool = GetItemPool();
     rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
+    SvxFrameDirectionItem aModeItem( FRMDIR_ENVIRONMENT, EE_PARA_WRITINGDIR );
+    rPool.SetPoolDefaultItem( aModeItem );
     rPool.FreezeIdRanges();                         // der Pool wird auch direkt verwendet
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
