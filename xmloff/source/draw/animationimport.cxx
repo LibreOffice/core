@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:31:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,12 +246,14 @@ public:
     Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
 
     bool convertAnimationValue( XMLTokenEnum eAttributeName, Any& rValue );
+    const OUString mastrHSL;
 };
 
 AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
 :   mrImport( rImport ),
     mpAnimationNodeTokenMap( NULL ),
-    mpAnimationNodeAttributeTokenMap( NULL )
+    mpAnimationNodeAttributeTokenMap( NULL ),
+    mastrHSL( RTL_CONSTASCII_USTRINGPARAM( "hsl" ) )
 {
 }
 
@@ -499,7 +501,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
 Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const OUString& rValue )
 {
     sal_Int32 nPos = rValue.indexOf( ',' );
-    if( nPos >= 0 )
+    if( nPos >= 0 && !rValue.matchIgnoreAsciiCase( mastrHSL ) )
     {
         ValuePair aPair;
         aPair.First = convertValue( eAttributeName, rValue.copy( 0, nPos ) );
@@ -519,40 +521,6 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
         case XML_HEIGHT:
         case XML_TRANSLATE:
         {
-/*
-            OUString aString( rValue );
-
-            const sal_Char* pSource[] = { "$x", "$y", "$width", "$height", NULL };
-            const sal_Char* pDest[] = { "$X", "$Y", "$Width", "$Height", NULL };
-            const sal_Int32 nLength[] = { 2, 2, 6, 7, 0 };
-
-            sal_Int32 nIndex = 0;
-            while( (nIndex = aString.indexOf( (sal_Unicode)'$', nIndex )) != -1  )
-            {
-                const sal_Char** ps = pSource;
-                const sal_Char** pd = pDest;
-                const sal_Int32* pl = nLength;
-
-                while( *ps )
-                {
-                    if( aString.matchAsciiL( *ps, *pl, nIndex ) )
-                    {
-                        const OUString aNew( OUString::createFromAscii( *pd ) );
-                        aString = aString.replaceAt( nIndex, *pl, aNew );
-                        break;
-                    }
-
-                    ps++;
-                    pd++;
-                    pl++;
-                }
-
-                if( *ps == 0 )
-                    nIndex++;
-            }
-
-            return makeAny( aString );
-*/
             return makeAny( rValue );
         }
 
