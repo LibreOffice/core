@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2000-11-01 14:36:10 $
+ *  last change: $Author: mfe $ $Date: 2000-12-06 16:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <osl/diagnose.h>
 #include <osl/profile.h>
 #include <osl/process.h>
+#include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <osl/util.h>
 
@@ -655,7 +656,7 @@ sal_Bool SAL_CALL osl_readProfileString(oslProfile Profile,
         }
         else
         {
-            pStr=pszDefault;
+            pStr=(sal_Char*)pszDefault;
         }
 
         if ( pStr != 0 )
@@ -764,7 +765,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     sal_Bool bRet = sal_False;
     sal_uInt32    NoEntry;
     sal_Char* pStr;
-    sal_Char        Line[1024] = "";
+    sal_Char*       Line = 0;
     osl_TProfileSection* pSec;
     osl_TProfileImpl*    pProfile = 0;
     osl_TProfileImpl*    pTmpProfile = 0;
@@ -806,6 +807,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
         return (sal_False);
     }
 
+    Line = (sal_Char*) malloc(strlen(pszEntry)+strlen(pszString)+48);
 
     if (! (pProfile->m_Flags & osl_Profile_SYSTEM))
     {
@@ -826,6 +828,8 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                 OSL_ASSERT(bRet);
 
                 pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
+
+                free(Line);
 
 #ifdef TRACE_OSL_PROFILE
                 OSL_TRACE("Out osl_writeProfileString [not added]\n");
@@ -856,6 +860,7 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
                 OSL_ASSERT(bRet);
 
                 pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
+                free(Line);
 
 #ifdef TRACE_OSL_PROFILE
                 OSL_TRACE("Out osl_writeProfileString [not inserted]\n");
@@ -883,6 +888,10 @@ sal_Bool SAL_CALL osl_writeProfileString(oslProfile Profile,
     OSL_ASSERT(bRet);
 
     pthread_mutex_unlock(&(pTmpProfile->m_AccessLock));
+    if ( Line!= 0 )
+    {
+        free(Line);
+    }
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("Out osl_writeProfileString [ok]\n");
