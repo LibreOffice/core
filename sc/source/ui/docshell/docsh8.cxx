@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-08-13 13:35:21 $
+ *  last change: $Author: nn $ $Date: 2001-10-05 17:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,9 +436,8 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                 aProgress.SetStateOnPercent( nRow );
         }
 
-        uno::Reference<lang::XComponent> xComponent( xRowSet, uno::UNO_QUERY );
-        if (xComponent.is())
-            xComponent->dispose();
+        comphelper::disposeComponent( xRowSet );
+        comphelper::disposeComponent( xConnection );
     }
     catch ( sdbc::SQLException& )
     {
@@ -1071,9 +1070,8 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
             }
         }
 
-        uno::Reference<lang::XComponent> xComponent( xRowSet, uno::UNO_QUERY );
-        if (xComponent.is())
-            xComponent->dispose();
+        comphelper::disposeComponent( xRowSet );
+        comphelper::disposeComponent( xConnection );
     }
     catch ( sdbc::SQLException& )
     {
