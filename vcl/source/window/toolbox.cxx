@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:05:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3504,19 +3504,21 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             pTempItem = &mpData->m_aItems[nPos+1];
             if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
             {
-                long nCenterPos;
+                long nCenterPos, nSlim;
                 SetLineColor( rStyleSettings.GetShadowColor() );
                 if ( IsHorizontal() )
                 {
+                    nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
                     nCenterPos = pItem->maRect.Center().X();
-                    DrawLine( Point( nCenterPos, pItem->maRect.Top()+3 ),
-                              Point( nCenterPos, pItem->maRect.Bottom()-3 ) );
+                    DrawLine( Point( nCenterPos, pItem->maRect.Top() + nSlim ),
+                              Point( nCenterPos, pItem->maRect.Bottom() - nSlim ) );
                 }
                 else
                 {
+                    nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
                     nCenterPos = pItem->maRect.Center().Y();
-                    DrawLine( Point( pItem->maRect.Left()+3, nCenterPos ),
-                              Point( pItem->maRect.Right()-3, nCenterPos ) );
+                    DrawLine( Point( pItem->maRect.Left() + nSlim, nCenterPos ),
+                              Point( pItem->maRect.Right() - nSlim, nCenterPos ) );
                 }
             }
         }
@@ -5401,18 +5403,24 @@ Size ToolBox::CalcWindowSizePixel( USHORT nCalcLines, WindowAlign eAlign ) const
         (eAlign == WINDOWALIGN_TOP || eAlign == WINDOWALIGN_BOTTOM) ? TB_CALCMODE_HORZ : TB_CALCMODE_VERT );
 }
 
-Size ToolBox::CalcPopupWindowSizePixel() const
+static USHORT ImplCountLineBreaks( const ToolBox *pThis )
 {
-    // count number of breaks and calc corresponding floating window size
     USHORT nLines = 0;
 
-    std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
+    std::vector< ImplToolItem >::const_iterator it = ((ToolBox*)pThis)->mpData->m_aItems.begin();
+    while ( it != ((ToolBox*)pThis)->mpData->m_aItems.end() )
     {
         if( it->meType == TOOLBOXITEM_BREAK )
             nLines++;
         it++;
     }
+    return nLines;
+}
+
+Size ToolBox::CalcPopupWindowSizePixel() const
+{
+    // count number of breaks and calc corresponding floating window size
+    USHORT nLines = ImplCountLineBreaks( this );
 
     if( nLines )
         nLines++;   // add the first line
@@ -5430,6 +5438,13 @@ Size ToolBox::CalcPopupWindowSizePixel() const
 
     pThis->mpData->mbAssumePopupMode = bPopup;
     return aSize;
+}
+
+Size ToolBox::CalcFloatingWindowSizePixel() const
+{
+    USHORT nLines = ImplCountLineBreaks( this );
+    nLines++; // add the first line
+    return CalcFloatingWindowSizePixel( nLines );
 }
 
 Size ToolBox::CalcFloatingWindowSizePixel( USHORT nCalcLines ) const
