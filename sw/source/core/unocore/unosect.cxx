@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 13:01:42 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,219 @@ void SwXTextSection::addVetoableChangeListener(const OUString& PropertyName, con
 void SwXTextSection::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
+}
+
+/*-- 08.11.00 10:47:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+PropertyState SwXTextSection::getPropertyState( const OUString& rPropertyName )
+    throw(UnknownPropertyException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< OUString > aNames(1);
+    aNames.getArray()[0] = rPropertyName;
+    return getPropertyStates(aNames).getConstArray()[0];
+}
+/*-- 08.11.00 10:47:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Sequence< PropertyState > SwXTextSection::getPropertyStates(
+    const Sequence< OUString >& rPropertyNames )
+        throw(UnknownPropertyException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< PropertyState > aStates(rPropertyNames.getLength());
+    SwSectionFmt*   pFmt = GetFmt();
+    if(pFmt||m_bIsDescriptor)
+    {
+        PropertyState* pStates = aStates.getArray();
+        const OUString* pNames = rPropertyNames.getConstArray();
+        for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
+        {
+            pStates[i] = PropertyState_DEFAULT_VALUE;
+            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                aPropSet.getPropertyMap(), pNames[i]);
+            if(!pMap)
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pNames[i];
+                throw aExcept;
+            }
+            switch(pMap->nWID)
+            {
+                case WID_SECT_CONDITION:
+                case WID_SECT_DDE_TYPE      :
+                case WID_SECT_DDE_FILE      :
+                case WID_SECT_DDE_ELEMENT   :
+                case WID_SECT_LINK     :
+                case WID_SECT_REGION :
+                case WID_SECT_VISIBLE   :
+                case WID_SECT_PROTECTED:
+                case  FN_PARAM_LINK_DISPLAY_NAME:
+                    pStates[i] = PropertyState_DIRECT_VALUE;
+                break;
+                default:
+                    if(pFmt)
+                        pStates[i] = aPropSet.getPropertyState(pNames[i], pFmt->GetAttrSet());
+                    else
+                    {
+                        const SfxPoolItem* pQueryItem = 0;
+                        if(RES_COL == pMap->nWID)
+                        {
+                            if(!pProps->pColItem)
+                                pStates[i] = PropertyState_DEFAULT_VALUE;
+                            else
+                                pStates[i] = PropertyState_DIRECT_VALUE;
+                        }
+                        else //if(RES_BACKGROUND == pMap->nWID)
+                        {
+                            if(!pProps->pBrushItem)
+                                pStates[i] = PropertyState_DEFAULT_VALUE;
+                            else
+                                pStates[i] = PropertyState_DIRECT_VALUE;
+                        }
+                    }
+            }
+        }
+    }
+    else
+        throw RuntimeException();
+    return aStates;
+}
+/*-- 08.11.00 10:47:55---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
+    throw(UnknownPropertyException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    SwSectionFmt*   pFmt = GetFmt();
+    if(pFmt||m_bIsDescriptor)
+    {
+        SwSection   aSection(CONTENT_SECTION, aEmptyStr);
+        SwSection* pSect = pFmt ? pFmt->GetSection() : 0;
+        if(pFmt)
+            aSection = *pSect;
+        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                                aPropSet.getPropertyMap(), rPropertyName);
+        if(!pMap)
+            throw UnknownPropertyException();
+        SfxItemSet* pNewAttrSet = 0;
+        switch(pMap->nWID)
+        {
+            case WID_SECT_CONDITION:
+            {
+                if(m_bIsDescriptor)
+                    pProps->sCondition = aEmptyStr;
+                else
+                    aSection.SetCondition(aEmptyStr);
+            }
+            break;
+            case WID_SECT_DDE_TYPE      :
+            case WID_SECT_DDE_FILE      :
+            case WID_SECT_DDE_ELEMENT   :
+            case WID_SECT_LINK     :
+            case WID_SECT_REGION :
+                aSection.SetType(CONTENT_SECTION);
+            break;
+            case WID_SECT_VISIBLE   :
+            {
+                if(m_bIsDescriptor)
+                    pProps->bHidden = FALSE;
+                else
+                    aSection.SetHidden(FALSE);
+            }
+            break;
+            case WID_SECT_PROTECTED:
+            {
+                if(m_bIsDescriptor)
+                    pProps->bProtect = FALSE;
+                else
+                    aSection.SetProtect(FALSE);
+            }
+            break;
+            default:
+                if(pFmt)
+                {
+                    const SfxItemSet& rOldAttrSet = pFmt->GetAttrSet();
+                    pNewAttrSet = new SfxItemSet(*rOldAttrSet.GetPool(),
+                                                pMap->nWID, pMap->nWID, 0);
+                    pNewAttrSet->ClearItem(pMap->nWID);
+                }
+                else
+                {
+                    if(RES_COL == pMap->nWID)
+                        DELETEZ(pProps->pColItem);
+                    else //if(RES_BACKGROUND == pMap->nWID)
+                        DELETEZ(pProps->pBrushItem);
+                }
+
+        }
+        if(pFmt)
+        {
+            SwDoc* pDoc = pFmt->GetDoc();
+            const SwSectionFmts& rFmts = pDoc->GetSections();
+            UnoActionContext aContext(pDoc);
+            for( sal_uInt16 i = 0; i < rFmts.Count(); i++ )
+            {
+                if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
+                {
+                    pDoc->ChgSection( i, aSection, pNewAttrSet, pDoc->IsInReading());
+                    break;
+                }
+            }
+            delete pNewAttrSet;
+        }
+    }
+    else
+        throw RuntimeException();
+}
+/*-- 08.11.00 10:47:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
+    throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    uno::Any aRet;
+    SwSectionFmt*   pFmt = GetFmt();
+    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                            aPropSet.getPropertyMap(), rPropertyName);
+    switch(pMap->nWID)
+    {
+        case WID_SECT_CONDITION:
+        case WID_SECT_DDE_TYPE      :
+        case WID_SECT_DDE_FILE      :
+        case WID_SECT_DDE_ELEMENT   :
+        case WID_SECT_REGION :
+        case FN_PARAM_LINK_DISPLAY_NAME:
+            aRet <<= OUString();
+        break;
+        case WID_SECT_LINK     :
+            aRet <<= SectionFileLink();
+        break;
+        case WID_SECT_VISIBLE   :
+        {
+            sal_Bool bTemp = TRUE;
+            aRet.setValue( &bTemp, ::getCppuBooleanType());
+        }
+        break;
+        case WID_SECT_PROTECTED:
+        {
+            sal_Bool bTemp = FALSE;
+            aRet.setValue( &bTemp, ::getCppuBooleanType());
+        }
+        break;
+        default:
+        if(pFmt)
+        {
+            SwDoc* pDoc = pFmt->GetDoc();
+            const SfxPoolItem& rDefItem =
+                pDoc->GetAttrPool().GetDefaultItem(pMap->nWID);
+            rDefItem.QueryValue(aRet, pMap->nMemberId);
+        }
+    }
+    return aRet;
 }
 /*-- 10.12.98 14:47:15---------------------------------------------------
 

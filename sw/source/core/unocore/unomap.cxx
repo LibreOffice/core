@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 15:03:33 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,6 +1091,20 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_BACK_TRANSPARENT ), RES_BACKGROUND,         &::getBooleanCppuType(),            PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_IS_COLLECT_AT_TEXT_END),RES_FTN_AT_TXTEND,         &::getBooleanCppuType(),                   PROPERTY_NONE ,MID_COLLECT                   },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_IS_RESTART_NUMBERING) ,RES_FTN_AT_TXTEND,      &::getBooleanCppuType(),                   PROPERTY_NONE , MID_RESTART_NUM },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_RESTART_NUMBERING_AT) ,RES_FTN_AT_TXTEND,      &::getCppuType((const sal_Int16*)0),                PROPERTY_NONE , MID_NUM_START_AT},
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_IS_OWN_NUMBERING)     ,RES_FTN_AT_TXTEND,  &::getBooleanCppuType(),                                                    PROPERTY_NONE ,  MID_OWN_NUM     },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_NUMBERING_TYPE)       ,RES_FTN_AT_TXTEND,      &::getCppuType((const sal_Int16*)0),                PROPERTY_NONE , MID_NUM_TYPE    },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_NUMBERING_PREFIX)     ,RES_FTN_AT_TXTEND,  &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,      MID_PREFIX      },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_NUMBERING_SUFFIX)     ,RES_FTN_AT_TXTEND,  &::getCppuType((const OUString*)0)  ,       PROPERTY_NONE,      MID_SUFFIX      },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_IS_COLLECT_AT_TEXT_END),RES_END_AT_TXTEND,        &::getBooleanCppuType(),                 PROPERTY_NONE , MID_COLLECT                      },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_IS_RESTART_NUMBERING)  ,RES_END_AT_TXTEND,        &::getBooleanCppuType(),                 PROPERTY_NONE , MID_RESTART_NUM  },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_RESTART_NUMBERING_AT)  ,RES_END_AT_TXTEND,     &::getCppuType((const sal_Int16*)0),             PROPERTY_NONE ,  MID_NUM_START_AT },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_IS_OWN_NUMBERING)      ,RES_END_AT_TXTEND,     &::getBooleanCppuType(),                                                 PROPERTY_NONE ,  MID_OWN_NUM      },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_TYPE)        ,RES_END_AT_TXTEND,       &::getCppuType((const sal_Int16*)0),               PROPERTY_NONE ,MID_NUM_TYPE     },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_PREFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_PREFIX       },
+                    { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_SUFFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_SUFFIX       },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSectionPropertyMap_Impl;

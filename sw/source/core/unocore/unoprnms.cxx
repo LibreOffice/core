@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 15:03:33 $
+ *  last change: $Author: os $ $Date: 2000-11-08 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,3 +553,20 @@ const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_IS_ON                    
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_HIDDEN_TEXT                     (MAP_CHAR_LEN("IsSkipHiddenText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_PROTECTED_TEXT                  (MAP_CHAR_LEN("IsSkipProtectedText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_DOCUMENT_INDEX_MARKS                    (MAP_CHAR_LEN("DocumentIndexMarks"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_IS_COLLECT_AT_TEXT_END     (MAP_CHAR_LEN("FootnoteIsCollectAtTextEnd"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_IS_RESTART_NUMBERING       (MAP_CHAR_LEN("FootnoteIsRestartNumbering"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_RESTART_NUMBERING_AT       (MAP_CHAR_LEN("FootnoteRestartNumberingAt"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_IS_OWN_NUMBERING           (MAP_CHAR_LEN("FootnoteIsOwnNumbering"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_NUMBERING_TYPE             (MAP_CHAR_LEN("FootnoteNumberingType"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_NUMBERING_PREFIX           (MAP_CHAR_LEN("FootnoteNumberingPrefix"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_NUMBERING_SUFFIX           (MAP_CHAR_LEN("FootnoteNumberingSuffix"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_IS_COLLECT_AT_TEXT_END      (MAP_CHAR_LEN("EndnoteIsCollectAtTextEnd"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_IS_RESTART_NUMBERING        (MAP_CHAR_LEN("EndnoteIsRestartNumbering"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_RESTART_NUMBERING_AT        (MAP_CHAR_LEN("EndnoteRestartNumberingAt"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_IS_OWN_NUMBERING            (MAP_CHAR_LEN("EndnoteIsOwnNumbering"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_TYPE              (MAP_CHAR_LEN("EndnoteNumberingType"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_PREFIX            (MAP_CHAR_LEN("EndnoteNumberingPrefix"));
+const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_SUFFIX            (MAP_CHAR_LEN("EndnoteNumberingSuffix"));
+
+
