@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ chinese_simplified ] = "Ј÷±ж¬ [DPI]";
         Text[ russian ] = "–азрешение [DPI]:";
         Text[ polish ] = "RozdzielczoЬж [~DPI]:";
-        Text[ japanese ] = "ЙрСЬ [DPI]";
+        Text[ japanese ] = "ЙрСЬУx [~DPI]";
         Text[ greek ] = "Ѕн№лхуз [~DPI]:";
         Text[ korean ] = "«Ўїуµµ [DPI]:(~D)";
         Text[ chinese_traditional ] = "Є—™RЂ„ [~DPI]";
@@ -664,7 +664,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text[ chinese_simplified ] = "’вЄц…и±Є√ї”–‘§ ”є¶ƒ№°£≤…”√∆’Ќ®µƒ…®√иЈљ љ‘§ ”њ…ƒ№–и“™љѕ≥§µƒ ±Љд°£";
     Text[ russian ] = "”стройство не настроено на создание предварительного просмотра. ¬место этого используетс€ в качестве предварительного просмотра обычное сканирование. Ётот процесс продлитс€ значительно дольше.";
     Text[ polish ] = "To urzєdzenie nie moњe utworzyж podglєdu. Zamiast tego zostanie zastosowany jako podglєd normalny tryb przeglєdu. To moњe trochк d≥uњej potrwaж.";
-    Text[ japanese ] = "В±Вћ√ё ё≤љВЌћяЏЋё≠∞ВћНмРђВ…ВЌУKВµВƒВҐВ№ВєВсБBВїВћВ©ВнВиВ…ХБТ ВћљЈђЁВ™ћяЏЋё≠∞В∆ВµВƒОgЧpВ≥ВкВ№ВЈВ™БAОЮК‘В™В©В©ВиВ№ВЈБB";
+    Text[ japanese ] = "В±Вћ√ё ё≤љВЌћяЏЋё≠∞ВћНмРђВ…ВЌУKВµВƒВҐВ№ВєВсБBВ©ВнВиВ…ћяЏЋё≠∞В∆ВµВƒХБТ ВћљЈђЁВ™ОgЧpВ≥ВкВ№ВЈВ™ОЮК‘В™П≠ВµВ©В©ВиВ№ВЈБB";
     Text[ chinese_traditional ] = "≥o≠”≥]≥∆®S¶≥≥]©wєwµш•\\ѓа°C¶]¶є±ƒ•ќіґ≥q™Ї±љіy§и¶°єwµшЈ|їЁ≠nЄы™ш™ЇЃ…ґ°°C";
     Text[ arabic ] = "«бће«“ џн— гхЏѕ б≈д‘«Ѕ гЏ«нд…. »ѕб«р гд е–«° ”жЁ н г «” ќѕ«г г”Ќ Џ«ѕн ягЏ«нд…. нгяд √д н” џ—ё –бя Ё —… √Ўжб »яЋн—.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
@@ -689,7 +689,7 @@ String RID_SANE_NOSANELIB_TXT
     Text[ chinese_simplified ] = "ќёЈ®≥х Љїѓ SANE љз√ж°£ќёЈ®÷і––…®√и„ч“µ°£";
     Text[ russian ] = "»нтерфейс SANE не удетс€ инициализировать. ѕроцесс сканировани€ невозможен.";
     Text[ polish ] = "Interfejsu SANE nie moњna zainincjowaж. Skanowanie niemoњliwe.";
-    Text[ japanese ] = "В±ВћSANE≤Ёј∞ћ™≤љВЌПЙКъЙїВ≈ВЂВ№ВєВсБBљЈђЁОјНsВЌХsЙ¬Ф\\В≈ВЈБB";
+    Text[ japanese ] = "В±Вћ SANE ≤Ёј∞ћ™≤љВЌПЙКъЙїВ≈ВЂВ№ВєВсВ≈ВµВљБBљЈђЁПИЧЭВЌОјНsВ≈ВЂВ№ВєВсБB";
     Text[ chinese_traditional ] = "µL™k™м©l§∆ SANE ђ…≠±°CµL™k∞х¶ж±љіyІ@Ј~°C";
     Text[ arabic ] = " Џ–—  Ћ»н  «бж«ће… SANE. бе–« Ё≈де гд џн— «бггяд ≈ћ—«Ѕ Џгбн… «бг”Ќ «б÷ж∆н.";
     Text[ dutch ] = "Het SANE interface kon niet worden geпnitialiseerd. Scannen is niet mogelijk.";
