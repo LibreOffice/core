@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:24:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,10 @@
 #include "xltools.hxx"
 #endif
 
-
 // Global data ================================================================
 
+class SfxMedium;
+class SvStorage;
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
 class EditEngine;
@@ -90,49 +91,53 @@ struct RootData;//!
 /** Stores global buffers and data needed elsewhere in the Excel filters. */
 struct XclRootData
 {
-    typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEngineDefaulterPtr;
-    typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEditEnginePtr;
+    typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEEDefaulterPtr;
+    typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEEPtr;
     typedef ::std::auto_ptr< EditEngine >               EditEnginePtr;
     typedef ::std::auto_ptr< ScExtDocOptions >          ScExtDocOptionsPtr;
     typedef ::std::auto_ptr< XclTracer >                XclTracerPtr;
 
-    XclBiff                     meBiff;         /// Current BIFF version.
-    ScDocument&                 mrDoc;          /// The source or destination document.
-    String                      maDocUrl;       /// Document URL of imported/exported file.
-    String                      maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
-    CharSet                     meCharSet;      /// Character set to import/export byte strings.
-    LanguageType                meSysLang;      /// System language.
-    LanguageType                meDocLang;      /// Document language (import: from file, export: from system).
-    LanguageType                meUILang;       /// UI language (import: from file, export: from system).
-    ScAddress                   maScMaxPos;     /// Highest Calc cell position.
-    ScAddress                   maXclMaxPos;    /// Highest Excel cell position.
-    ScAddress                   maMaxPos;       /// Highest position valid in Calc and Excel.
-    long                        mnCharWidth;    /// Width of '0' in default font (twips).
-    SCTAB                       mnScTab;        /// Current Calc sheet index.
-    bool                        mbTruncated;    /// Flag for the table truncated warning box.
+    XclBiff             meBiff;         /// Current BIFF version.
+    SfxMedium&          mrMedium;       /// The medium to import from.
+    ScDocument&         mrDoc;          /// The source or destination document.
+    String              maDocUrl;       /// Document URL of imported/exported file.
+    String              maBasePath;     /// Base path of imported/exported file (path of maDocUrl).
+    String              maPassw;        /// Entered password for stream encryption/decryption.
+    CharSet             meCharSet;      /// Character set to import/export byte strings.
+    LanguageType        meSysLang;      /// System language.
+    LanguageType        meDocLang;      /// Document language (import: from file, export: from system).
+    LanguageType        meUILang;       /// UI language (import: from file, export: from system).
+    ScAddress           maScMaxPos;     /// Highest Calc cell position.
+    ScAddress           maXclMaxPos;    /// Highest Excel cell position.
+    ScAddress           maMaxPos;       /// Highest position valid in Calc and Excel.
 
-    ScEditEngineDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
-    ScHeaderEditEnginePtr       mpHFEditEngine; /// Edit engine for header/footer.
-    EditEnginePtr               mpDrawEditEng;  /// Edit engine for text boxes.
+    ScEEDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
+    ScHeaderEEPtr       mpHFEditEngine; /// Edit engine for header/footer.
+    EditEnginePtr       mpDrawEditEng;  /// Edit engine for text boxes.
 
-    ScExtDocOptionsPtr          mpExtDocOpt;        /// Extended document options.
+    ScExtDocOptionsPtr  mpExtDocOpt;    /// Extended document options.
+    XclTracerPtr        mpTracer;       /// Filter tracer.
 
-    XclTracerPtr                mpTracer;       /// Filter tracer.
+    long                mnCharWidth;    /// Width of '0' in default font (twips).
+    SCTAB               mnScTab;        /// Current Calc sheet index.
+    const bool          mbExport;       /// false = Import, true = Export.
+    bool                mbTruncated;    /// Flag for the table truncated warning box.
+    bool                mbHasPassw;     /// true = Password already querried.
 
-    ::std::auto_ptr< RootData > mpRDP;//!
+    ::std::auto_ptr< RootData > mxRD;//!
 
 #ifdef DBG_UTIL
-    sal_Int32                   mnObjCnt;       /// Object counter for mem leak tests.
+    sal_Int32           mnObjCnt;       /// Object counter for mem leak tests.
 #endif
 
-    explicit                    XclRootData(
-                                    XclBiff eBiff,
-                                    ScDocument& rDocument,
-                                    const String& rDocUrl,
-                                    CharSet eCharSet );
-    virtual                     ~XclRootData();
+    explicit            XclRootData(
+                            XclBiff eBiff,
+                            SfxMedium& rMedium,
+                            ScDocument& rDocument,
+                            CharSet eCharSet,
+                            bool bExport );
+    virtual             ~XclRootData();
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -149,96 +154,105 @@ struct XclFontData;
 /** Access to global data for a filter object (imported or exported document) from other classes. */
 class XclRoot
 {
-private:
-    mutable XclRootData&        mrData;     /// Reference to the global data struct.
-
 public:
-                                XclRoot( const XclRoot& rRoot );
-    virtual                     ~XclRoot();
+                        XclRoot( const XclRoot& rRoot );
+    virtual             ~XclRoot();
 
-    XclRoot&                    operator=( const XclRoot& rRoot );
+    XclRoot&            operator=( const XclRoot& rRoot );
 
-    RootData*                   mpRD;//!
+    RootData*           mpRD;//!
 
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclRoot&       GetRoot() const { return *this; }
+    inline const XclRoot& GetRoot() const { return *this; }
     /** Returns the current BIFF version of the importer/exporter. */
-    inline XclBiff              GetBiff() const { return mrData.meBiff; }
+    inline XclBiff      GetBiff() const { return mrData.meBiff; }
     /** Returns the system language, i.e. for number formats. */
-    inline LanguageType         GetSysLanguage() const { return mrData.meSysLang; }
+    inline LanguageType GetSysLanguage() const { return mrData.meSysLang; }
     /** Returns the document language. */
-    inline LanguageType         GetDocLanguage() const { return mrData.meDocLang; }
+    inline LanguageType GetDocLanguage() const { return mrData.meDocLang; }
     /** Returns the UI language. */
-    inline LanguageType         GetUILanguage() const { return mrData.meUILang; }
-    /** Returns the current Calc sheet index. */
-    inline SCTAB                GetCurrScTab() const { return mrData.mnScTab; }
-    /** Returns whether the "some cells have been cut" warning box should show. */
-    inline bool                 IsTruncated() const { return mrData.mbTruncated; }
-
-    /** Returns the document URL of the imported/exported file. */
-    inline const String&        GetDocUrl() const { return mrData.maDocUrl; }
-    /** Returns the base path of the imported/exported file. */
-    inline const String&        GetBasePath() const { return mrData.maBasePath; }
+    inline LanguageType GetUILanguage() const { return mrData.meUILang; }
     /** Returns the character set to import/export byte strings. */
-    inline CharSet              GetCharSet() const { return mrData.meCharSet; }
+    inline CharSet      GetCharSet() const { return mrData.meCharSet; }
     /** Returns the width of the '0' character (default font) for the current printer (twips). */
-    inline long                 GetCharWidth() const { return mrData.mnCharWidth; }
+    inline long         GetCharWidth() const { return mrData.mnCharWidth; }
+    /** Returns the current Calc sheet index. */
+    inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
+    /** Returns whether the "some cells have been cut" warning box should show. */
+    inline bool         IsTruncated() const { return mrData.mbTruncated; }
 
-    /** Returns the destination document (import) or source document (export). */
-    inline ScDocument&          GetDoc() const { return mrData.mrDoc; }
-    /** Returns pointer to the destination document (import) or source document (export). */
-    inline ScDocument*          GetDocPtr() const { return &mrData.mrDoc; }
-    /** Returns the object shell of the Calc document. May be NULL (i.e. import from clipboard). */
-    SfxObjectShell*             GetDocShell() const;
-    /** Returns the object model of the Calc document. */
-    ScModelObj*                 GetDocModelObj() const;
-    /** Returns pointer to the printer of the Calc document. */
-    SfxPrinter*                 GetPrinter() const;
-    /** Returns the number formatter of the Calc document. */
-    SvNumberFormatter&          GetFormatter() const;
-    /** Returns the style sheet pool of the Calc document. */
-    ScStyleSheetPool&           GetStyleSheetPool() const;
-    /** Returns the defined names container of the Calc document. */
-    ScRangeName&                GetNamedRanges() const;
+    /** Returns the medium to import from. */
+    inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
+    /** Returns the document URL of the imported/exported file. */
+    inline const String& GetDocUrl() const { return mrData.maDocUrl; }
+    /** Returns the base path of the imported/exported file. */
+    inline const String& GetBasePath() const { return mrData.maBasePath; }
+    /** Queries a password from the user and returns it (empty string -> input cancelled). */
+    const String&       QueryPassword() const;
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */
-    SvStorage*                  GetRootStorage() const;
+    SvStorage*          GetRootStorage() const;
+    /** Tries to open a storage as child of the specified storage for writing. */
+    SvStorageRef        OpenStorage( SvStorage* pStrg, const String& rStrgName ) const;
+    /** Tries to open a storage as child of the root storage for writing. */
+    SvStorageRef        OpenStorage( const String& rStrgName ) const;
+    /** Tries to open a new stream in the specified storage for writing. */
+    SvStorageStreamRef  OpenStream( SvStorage* pStrg, const String& rStrmName ) const;
+    /** Tries to open a new stream in the root storage for writing. */
+    SvStorageStreamRef  OpenStream( const String& rStrmName ) const;
+
+    /** Returns the destination document (import) or source document (export). */
+    inline ScDocument&  GetDoc() const { return mrData.mrDoc; }
+    /** Returns pointer to the destination document (import) or source document (export). */
+    inline ScDocument*  GetDocPtr() const { return &mrData.mrDoc; }
+    /** Returns the object shell of the Calc document. May be NULL (i.e. import from clipboard). */
+    SfxObjectShell*     GetDocShell() const;
+    /** Returns the object model of the Calc document. */
+    ScModelObj*         GetDocModelObj() const;
+    /** Returns pointer to the printer of the Calc document. */
+    SfxPrinter*         GetPrinter() const;
+    /** Returns the number formatter of the Calc document. */
+    SvNumberFormatter&  GetFormatter() const;
+    /** Returns the style sheet pool of the Calc document. */
+    ScStyleSheetPool&   GetStyleSheetPool() const;
+    /** Returns the defined names container of the Calc document. */
+    ScRangeName&        GetNamedRanges() const;
 
     /** Returns the edit engine for import/export of rich strings etc. */
-    ScEditEngineDefaulter&      GetEditEngine() const;
+    ScEditEngineDefaulter& GetEditEngine() const;
     /** Returns the edit engine for import/export of headers/footers. */
-    ScHeaderEditEngine&         GetHFEditEngine() const;
+    ScHeaderEditEngine& GetHFEditEngine() const;
     /** Returns the edit engine for import/export of drawing text boxes. */
-    EditEngine&                 GetDrawEditEngine() const;
+    EditEngine&         GetDrawEditEngine() const;
 
     /** Returns the extended document options. */
-    ScExtDocOptions&            GetExtDocOptions() const;
+    ScExtDocOptions&    GetExtDocOptions() const;
 
     /** Returns the filter tracer. */
-    XclTracer&                  GetTracer() const;
+    XclTracer&          GetTracer() const;
 
     /** Returns the highest possible cell address in a Calc document. */
-    inline const ScAddress&     GetScMaxPos() const { return mrData.maScMaxPos; }
+    inline const ScAddress& GetScMaxPos() const { return mrData.maScMaxPos; }
     /** Returns the highest possible cell address in an Excel document (using current BIFF version). */
-    inline const ScAddress&     GetXclMaxPos() const { return mrData.maXclMaxPos; }
+    inline const ScAddress& GetXclMaxPos() const { return mrData.maXclMaxPos; }
     /** Returns the highest possible cell address valid in Calc and Excel (using current BIFF version). */
-    inline const ScAddress&     GetMaxPos() const { return mrData.maMaxPos; }
+    inline const ScAddress& GetMaxPos() const { return mrData.maMaxPos; }
 
 protected:
-    explicit                    XclRoot( XclRootData& rRootData );
+    explicit            XclRoot( XclRootData& rRootData );
 
     /** Sets the document language. */
-    inline void                 SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
+    inline void         SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
     /** Sets the UI language, i.e. if it has been read from a file. */
-    inline void                 SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
+    inline void         SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
     /** Sets the character set to import/export byte strings. */
-    inline void                 SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
+    inline void         SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
     /** Sets the width of the '0' character (default font) for the current printer (twips).
         @param rFontData  The font used for the '0' character. */
-    void                        SetCharWidth( const XclFontData& rFontData );
+    void                SetCharWidth( const XclFontData& rFontData );
     /** Increases the current Calc sheet index by 1. */
-    inline void                 IncCurrScTab() { ++mrData.mnScTab; }
+    inline void         IncCurrScTab() { ++mrData.mnScTab; }
 
     /** Checks if the passed cell address is valid.
         @descr  Sets the internal flag that produces a warning box, if the cell is
@@ -246,7 +260,7 @@ protected:
         @param rPos  The cell address to check.
         @param rMaxPos  Highest valid cell address.
         @return  true = cell address is valid. */
-    bool                        CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const;
+    bool                CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const;
     /** Checks and eventually crops the cell range to passed dimensions.
         @descr  Sets the internal flag that produces a warning box, if the cell range
         contains invalid cells. If the range is partly valid, this function sets
@@ -254,7 +268,7 @@ protected:
         @param rRange  (In/out) The cell range to check.
         @param rMaxPos  Highest valid cell address.
         @return  true = rRange contains a valid cell range (original or cropped). */
-    bool                        CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const;
+    bool                CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const;
     /** Checks and eventually crops the cell ranges to passed dimensions.
         @descr  Sets the internal flag that produces a warning box, if at least one
         cell range contains invalid cells. If the range is partly valid, this function
@@ -262,9 +276,11 @@ protected:
         full or partly will be removed from the list.
         @param rRangeList  (In/out) The cell range list to check.
         @param rMaxPos  Highest valid cell address. */
-    void                        CheckCellRangeList( ScRangeList& rRanges, const ScAddress& rMaxPos ) const;
-};
+    void                CheckCellRangeList( ScRangeList& rRanges, const ScAddress& rMaxPos ) const;
 
+private:
+    mutable XclRootData& mrData;    /// Reference to the global data struct.
+};
 
 // ============================================================================
 
