@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:23 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@
 		<xsl:param name = "context"/>
 		<xsl:param name = "component-schema"/>
 
-		<xsl:if test="count(descendant::value[(not (@xml:lang)) or (@xml:lang=$fallback-locale)]) or count(descendant-or-self::*[@oor:finalized='true'])">
+		<xsl:if test="count(descendant::value[(not (@xml:lang)) or (@xml:lang=$fallback-locale)]) or count(descendant-or-self::*[(@oor:finalized='true') or (@oor:mandatory='true') or (@oor:op='replace') or (@oor:op='remove')])">
 			<xsl:copy>
 				<xsl:apply-templates select = "@*"  mode="non-locale"/>
 				<xsl:choose>
