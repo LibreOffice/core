@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3557,7 +3557,7 @@ sal_uInt16 DbGridControl::GetColumnIdFromModelPos( sal_uInt16 nPos ) const
     }
 
     DbGridColumn* pCol = m_aColumns.GetObject(nPos);
-#if _DEBUG || DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 0) || DBG_UTIL
     // in der Debug-Version rechnen wir die ModelPos in eine ViewPos um und vergleichen das mit dem Wert,
     // den wir zurueckliefern werden (nId an der entsprechenden Col in m_aColumns)
 
