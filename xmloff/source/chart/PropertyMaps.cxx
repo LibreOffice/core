@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,15 +350,6 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     SvXMLUnitConverter::convertDouble( sValueBuffer, fVal );
                 }
                 break;
-            case XML_SCH_CONTEXT_SPECIAL_DATA_ROW_SOURCE:
-                {
-                    chart::ChartDataRowSource eRowSource;
-                    cppu::any2enum< chart::ChartDataRowSource >( eRowSource, rProperty.maValue );
-                    SvXMLUnitConverter::convertBool( sValueBuffer,
-                                                     ( eRowSource == chart::ChartDataRowSource_ROWS ));
-                }
-                break;
-
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
                 {
                     rProperty.maValue >>= nValue;
@@ -472,16 +463,6 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     SvXMLUnitConverter::convertDouble( fVal, rValue );
                     nValue = (sal_Int32)( fVal * 100.0 );
                     rProperty.maValue <<= nValue;
-                }
-                break;
-            case XML_SCH_CONTEXT_SPECIAL_DATA_ROW_SOURCE:
-                {
-                    SvXMLUnitConverter::convertBool( bValue, rValue );
-                    if( bValue ) // ie data in rows is true
-                    {
-                        chart::ChartDataRowSource eRowSource( chart::ChartDataRowSource_ROWS );
-                        rProperty.maValue <<= eRowSource;
-                    }
                 }
                 break;
             case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:

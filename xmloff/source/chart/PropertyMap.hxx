@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "StackedBarsConnected", CHART, connect_bars, XML_TYPE_BOOL ),
 
     // plot-area properties
-    MAP_SPECIAL( "DataRowSource", CHART, series_source, XML_SCH_TYPE_DATAROWSOURCE, DATA_ROW_SOURCE ),
+    MAP_ENTRY( "DataRowSource", CHART, series_source, XML_SCH_TYPE_DATAROWSOURCE ),
 
     // axis properties
     MAP_ENTRY( "DisplayLabels", CHART, display_label, XML_TYPE_BOOL ),
