@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 14:51:23 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,8 +274,8 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
         throw DisposedException();
 
     OPreparedStatement* pStmt = new OPreparedStatement(this,m_aTypeInfo);
-    pStmt->construct(sql);
     Reference< XPreparedStatement > xHoldAlive = pStmt;
+    pStmt->construct(sql);
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return pStmt;
 }

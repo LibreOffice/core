@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:40:11 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,8 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXES_HXX_
 #include "dbase/DIndexes.hxx"
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"

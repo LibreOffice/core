@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:38:52 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 #ifndef _UTL_UNO3_HXX_
 #include <unotools/uno3.hxx>
@@ -93,8 +93,8 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -177,7 +177,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
                                                                         ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                                                         ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 

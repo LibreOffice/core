@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-20 06:52:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/sdbcx/VColumn.hxx"
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_DBASE_TABLE_HXX_
 #include "dbase/DTable.hxx"
@@ -186,7 +186,7 @@ sal_Int64 ODbaseIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),ODbaseIndex_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),ODbaseIndex_BASE::getTypes());
 }
 
 //------------------------------------------------------------------

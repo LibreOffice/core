@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:31:35 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,32 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     String aFilenameExtension = m_pConnection->getExtension();
 
+    // check if any type is given
+    // when no types are given then we have to return all tables e.g. TABLE
+
     ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
+
+    sal_Bool bTableFound = sal_True;
+    sal_Int32 nLength = types.getLength();
+    if(nLength)
+    {
+        bTableFound = sal_False;
+
+        const ::rtl::OUString* pBegin = types.getConstArray();
+        const ::rtl::OUString* pEnd = pBegin + nLength;
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if(*pBegin == aTable || *pBegin == ::rtl::OUString::createFromAscii("%"))
+            {
+                bTableFound = sal_True;
+                break;
+            }
+        }
+    }
+    if(!bTableFound)
+        return xRef;
+
+    // scan the directory for tables
     ::rtl::OUString aName;
     xResultSet->beforeFirst();
     while(xResultSet->next())
@@ -234,7 +259,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 }
             }
         }
-        else // keine extension, dann selbst filtern
+        else // no extension, filter myself
         {
             sal_Bool bErg = sal_False;
             do

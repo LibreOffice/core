@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:39:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
@@ -132,7 +132,7 @@ Any SAL_CALL ODbaseResultSet::queryInterface( const Type & rType ) throw(Runtime
 // -------------------------------------------------------------------------
  Sequence<  Type > SAL_CALL ODbaseResultSet::getTypes(  ) throw( RuntimeException)
 {
-    return ::utl::concatSequences(OResultSet::getTypes(),ODbaseResultSet_BASE::getTypes());
+    return ::comphelper::concatSequences(OResultSet::getTypes(),ODbaseResultSet_BASE::getTypes());
 }
 
 // -------------------------------------------------------------------------

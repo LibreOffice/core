@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:30:09 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CONNECTIVITY_DATECONVERSION_HXX_
 #include "connectivity/DateConversion.hxx"
@@ -140,10 +140,10 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
         }
 
         m_pResultSet = createResultSet();
+        m_xRS = m_pResultSet;
         if(m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_UPDATE)
             m_pResultSet->describeParameter();
         m_aRow = new OValueVector();
-        m_xRS = m_pResultSet;
     }
     else
         throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
@@ -167,7 +167,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
                                         ::getCppuType( (const ::com::sun::star::uno::Reference< XParameters > *)0 ),
                                         ::getCppuType( (const ::com::sun::star::uno::Reference< XResultSetMetaDataSupplier > *)0 ));
 
-    return ::utl::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE2::getTypes());
 }
 // -------------------------------------------------------------------------
 
