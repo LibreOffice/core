@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: jl $ $Date: 2002-08-06 14:45:17 $
+#   last change: $Author: abi $ $Date: 2002-08-29 11:06:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.53 $$"
+LIBSMKREV!:="$$Revision: 1.54 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -183,6 +183,7 @@ JPEG3RDLIB=-ljpeglib
 NEON3RDLIB=-lneon
 BERKELEYLIB=-ldb-3.2
 BERKELEYCPPLIB=-ldb_cxx-3.2
+CURLLIB=-lcurl
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXDEBUGLIB=
@@ -344,6 +345,7 @@ JPEG3RDLIB=$(LIBPRE) jpeglib.lib
 NEON3RDLIB=$(LIBPRE) neon.lib
 BERKELEYLIB=$(LIBPRE) libdb32.lib
 BERKELEYCPPLIB=
+CURLLIB=$(LIBPRE) libcurl.lib
 CHAOSLIB=$(LIBPRE) ichaos.lib
 UUILIB=$(LIBPRE) iuui.lib
 DGLIB=
