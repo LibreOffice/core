@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:25:00 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:39:10 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,18 +48,13 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-OUT_COMP_CLASS = $(OUT_CLASS)/OfficeDevDesktopEnv
+EXAMPLE_NAME=OfficeDevDesktopEnv
+OUT_APP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
-JAR1_NAME=DesktopExample
-JAR1_JAR_NAME = $(JAR1_NAME).jar
-JAR1_JAR = $(OUT_CLASS)/$(JAR1_JAR_NAME)
-JAR1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(JAR1_NAME).Manifest
+APP1_NAME=DesktopExample
+APP1_JAR=$(OUT_APP_CLASS)/$(APP1_NAME).jar
 
-# often the java files are structured in a hierarchy similar to the package, 
-# for the example we know the package
-PACKAGE = OfficeDev/samples/DesktopEnvironment
-
-JAVAFILES  = \
+APP1_JAVAFILES  = \
 		   CustomizeView.java \
 		   Desk.java \
 		   DocumentView.java \
@@ -75,10 +70,15 @@ JAVAFILES  = \
 		   StatusView.java \
 		   ViewContainer.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
+APP1_CLASSFILES = $(patsubst %.java,$(OUT_APP_CLASS)/%.class,$(APP1_JAVAFILES))
+APP1_CLASSNAMES = $(patsubst %.java,%.class,$(APP1_JAVAFILES)) \
+		CustomizeView$(QUOTE)$$ClickListener.class \
+		DocumentView$(QUOTE)$$1.class \
+		DocumentView$(QUOTE)$$Reactor.class
+
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
 
 ifeq "$(OS)" "WIN"
 SUBDIR= nativelib/windows 
@@ -88,9 +88,8 @@ endif
 
 # Targets
 .PHONY: ALL
-ALL : \
-	$(SUBDIR) \
-	OfficeDevDesktopEnvExample
+ALL : $(SUBDIR) \
+	$(EXAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -98,20 +97,24 @@ include $(SETTINGS)/stdtarget.mk
 $(SUBDIR) :
 	$(MAKE) -C $@	  
 
-$(OUT_COMP_CLASS)/%.Manifest :
+$(APP1_CLASSFILES) : $(APP1_JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo Main-Class: OfficeDev.samples.DesktopEnvironment.Desk> $@
-	@echo Class-Path: sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar> $@
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_APP_CLASS) $(APP1_JAVAFILES) 
 
-$(CLASSFILES) : $(JAVAFILES)
+$(OUT_APP_CLASS)/$(APP1_NAME).mf :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: Desk>> $@
 
-$(JAR1_JAR) : $(JAR1_MANIFESTFILE) $(CLASSFILES)
+$(APP1_JAR) : $(OUT_APP_CLASS)/$(APP1_NAME).mf $(APP1_CLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
+	+cd $(subst /,$(PS),$(OUT_APP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(basename $(@F)).mf $(APP1_CLASSNAMES)
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
 
-OfficeDevDesktopEnvExample : $(JAR1_JAR)
+$(EXAMPLE_NAME) : $(APP1_JAR)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
@@ -122,11 +125,10 @@ OfficeDevDesktopEnvExample : $(JAR1_JAR)
 	@echo Start the example with jar -jar $(JAR1_JAR)
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(JAR1_JAR)
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" OfficeDev.samples.DesktopEnvironment.Desk
+%.run: $(OUT_APP_CLASS)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
 
 .PHONY: clean
 clean :
 	$(MAKE) -C $(SUBDIR) clean
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(JAR1_JAR)))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_CLASS))
