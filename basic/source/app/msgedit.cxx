@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:16:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,9 +768,8 @@ TTTreeListBox::TTTreeListBox( AppError* pParent, BasicFrame* pBF, WinBits nWinSt
 //, nDeselectParent(0)
 {}
 
-BOOL TTTreeListBox::DoubleClickHdl()
+BOOL TTTreeListBox::JumpToSourcecode( SvLBoxEntry *pThisEntry )
 {
-    SvLBoxEntry *pThisEntry = GetHdlEntry();
     if ( pThisEntry && pThisEntry->GetUserData() && ((TTDebugData*)pThisEntry->GetUserData())->aFilename.Len() > 0 )
     {
         TTDebugData *aData = (TTDebugData*)pThisEntry->GetUserData();
@@ -808,6 +807,11 @@ BOOL TTTreeListBox::DoubleClickHdl()
         return FALSE;
     }
     return TRUE;
+}
+
+BOOL TTTreeListBox::DoubleClickHdl()
+{
+    return JumpToSourcecode( GetHdlEntry() );
 }
 
 /*ULONG TTTreeListBox::SelectChildren( SvLBoxEntry* pParent, BOOL bSelect )
@@ -868,7 +872,10 @@ void TTTreeListBox::KeyInput( const KeyEvent& rKEvt )
             Control::GetParent()->Command( CommandEvent( Point(), RID_EDITDEL ) );
             break;
         default:
-            SvTreeListBox::KeyInput( rKEvt );
+            if ( rKEvt.GetKeyCode().GetCode() == KEY_RETURN )
+                JumpToSourcecode( GetCurEntry() );
+            else
+                SvTreeListBox::KeyInput( rKEvt );
     }
 }
 
