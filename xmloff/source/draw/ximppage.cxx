@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 13:58:46 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
