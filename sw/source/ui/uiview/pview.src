@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:51:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "ºÐÇÒ";
         TEXT[ turkish ] = "Daðýlým";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Distribución";
     };
     FixedText FT_ROWS
     {
@@ -129,6 +130,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "Çà(~R)";
         TEXT[ turkish ] = "Sa~týr";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Filas";
     };
     NumericField NF_ROWS
     {
@@ -173,6 +175,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¿­(~C)";
         TEXT[ turkish ] = "~Sütun";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Columnas";
     };
     NumericField NF_COLS
     {
@@ -217,6 +220,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¿Ü°û¼±";
         TEXT[ turkish ] = "Kenarlar";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Márgenes";
     };
     FixedText FT_LMARGIN
     {
@@ -246,6 +250,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¿ÞÂÊ(~L)";
         TEXT[ turkish ] = "S~ol";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Izquierda";
     };
     MetricField MF_LMARGIN
     {
@@ -291,6 +296,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¿À¸¥ÂÊ(~R)";
         TEXT[ turkish ] = "Sa~ð";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Derecha";
     };
     MetricField MF_RMARGIN
     {
@@ -336,6 +342,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "À§(~T)";
         TEXT[ turkish ] = "~Üst";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "A~rriba";
     };
     MetricField MF_TMARGIN
     {
@@ -381,6 +388,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¾Æ·¡(~B)";
         TEXT[ turkish ] = "~Alt";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "A~bajo";
     };
     MetricField MF_BMARGIN
     {
@@ -426,6 +434,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "°£°Ý";
         TEXT[ turkish ] = "Aralýk";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Espacio";
     };
     FixedText FT_HMARGIN
     {
@@ -455,6 +464,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¼öÆò(~H)";
         TEXT[ turkish ] = "~Yatay";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Horizontal";
     };
 
     MetricField MF_HMARGIN
@@ -501,6 +511,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¼öÁ÷(~V)";
         TEXT[ turkish ] = "~Dikey";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Vertical";
     };
 
     MetricField MF_VMARGIN
@@ -546,6 +557,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¼­½Ä";
         TEXT[ turkish ] = "Format";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Formato";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -557,9 +569,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Group = TRUE ;
             TEXT[ italian ] = "Orizzontale";
         TEXT[ portuguese_brazilian ] = "~Querformat";
-        TEXT[ portuguese ] = "Formato ~horizontal";
+        TEXT[ portuguese ] = "~Horizontal";
         TEXT[ danish ] = "Liggende";
-        TEXT[ french ] = "~Paysage";
+        TEXT[ french ] = "Pa~ysage";
         TEXT[ swedish ] = "~Liggande";
         TEXT[ dutch ] = "~Liggend";
         TEXT[ spanish ] = "~Horizontal";
@@ -576,6 +588,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "°¡·Î(~L)";
         TEXT[ turkish ] = "Ya~tay";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Horizontal";
     };
     RadioButton RB_PORTRAIT
     {
@@ -585,7 +598,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Portrait" ;
             TEXT[ italian ] = "Verticale";
         TEXT[ portuguese_brazilian ] = "Ho~chformat";
-        TEXT[ portuguese ] = "Formato ~vertical";
+        TEXT[ portuguese ] = "~Vertical";
         TEXT[ danish ] = "Stående";
         TEXT[ french ] = "P~ortrait";
         TEXT[ swedish ] = "S~tående";
@@ -604,6 +617,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¼¼·Î(~O)";
         TEXT[ turkish ] = "Di~key";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Vertical";
     };
     GroupBox GB_PREVIEW
     {
@@ -632,6 +646,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "¹Ì¸®º¸±â";
         TEXT[ turkish ] = "Önizleme";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Previsualización";
     };
     Window WIN_PREVIEW
     {
@@ -686,6 +701,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ greek ] = "ÐñïåðéëïãÞ";
         TEXT[ korean ] = "±âº»°ª(~D)";
         TEXT[ turkish ] = "Standar~t";
+        TEXT[ catalan ] = "~Predeterminado";
     };
     TEXT[ italian ] = "Opzioni di stampa";
     TEXT[ portuguese_brazilian ] = "Druckoptionen";
@@ -708,6 +724,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ korean ] = "ÀÎ¼â ¿É¼Ç";
     TEXT[ turkish ] = "Yazdýrma seçenekleri";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Opciones de impresión";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -760,6 +777,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ korean ] = "¿­(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Columnas";
     };
     FixedText FT_ROW
     {
@@ -791,6 +809,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ korean ] = "Çà(~R)";
         Text[ turkish ] = "S~atýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Filas";
     };
     NumericField ED_COL
     {
@@ -870,6 +889,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ korean ] = "º¸±â";
         Text[ turkish ] = "Görünüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ver";
     };
     Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁÐ";
     Text[ russian ] = "Ìàñøòàá";
@@ -883,6 +903,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ korean ] = "È®´ë/Ãà¼Ò";
     Text[ turkish ] = "Yakýnlaþtýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escala";
 };
 String RID_PVIEW_TOOLBOX
 {
@@ -909,6 +930,7 @@ String RID_PVIEW_TOOLBOX
     Text[ korean ] = "ÀÎ¼â ¹Ì¸®º¸±â";
     Text[ turkish ] = "Sayfa önizleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Vista preliminar";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
