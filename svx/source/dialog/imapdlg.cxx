@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-14 09:08:04 $
+ *  last change: $Author: cl $ $Date: 2002-06-18 08:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
     {
         case( TBI_APPLY ):
         {
+            URLLoseFocusHdl( NULL );
             SfxBoolItem aBoolItem( SID_IMAP_EXEC, TRUE );
             GetBindings().GetDispatcher()->Execute(
                 SID_IMAP_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
