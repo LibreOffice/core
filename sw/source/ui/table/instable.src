@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:03:23 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम";
         Text[ slovak ] = "Názov";
+        Text[ hungarian ] = "Név";
+        Text[ slovenian ] = "Ime";
     };
     FixedText FT_COL
     {
@@ -135,7 +137,7 @@ ModalDialog DLG_INSERT_TABLE
         Text [ portuguese_brazilian ] = "~Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
         Text [ finnish ] = "~Sarakkeet" ;
-        Text [ danish ] = "Kolonner" ;
+        Text [ danish ] = "~Kolonner" ;
         Text [ french ] = "~Colonnes" ;
         Text [ swedish ] = "Kolumner" ;
         Text [ dutch ] = "~Kolommen" ;
@@ -158,6 +160,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "~स्तंभें";
         Text[ slovak ] = "~Stĺpce";
+        Text[ hungarian ] = "~Oszlopok";
+        Text[ slovenian ] = "~Stolpci";
     };
     NumericField ED_COL
     {
@@ -185,7 +189,7 @@ ModalDialog DLG_INSERT_TABLE
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "R�kker" ;
+        Text [ danish ] = "~R�kker" ;
         Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
@@ -208,6 +212,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "~Zeilen";
         Text[ hindi ] = "~पंक्तियाँ";
         Text[ slovak ] = "~Riadky";
+        Text[ hungarian ] = "So~rok";
+        Text[ slovenian ] = "V~rstice";
     };
     NumericField ED_ROW
     {
@@ -239,7 +245,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ spanish ] = "Tama�o de la tabla";
         Text[ finnish ] = "Koko";
         Text[ italian ] = "Dimensioni tabella";
-        Text[ danish ] = "Tabelst�rrelse";
+        Text[ danish ] = "St�rrelse";
         Text[ swedish ] = "Tabellstorlek";
         Text[ polish ] = "Rozmiar tabeli";
         Text[ portuguese_brazilian ] = "Tamanho";
@@ -255,6 +261,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     CheckBox CB_HEADER
     {
@@ -266,7 +274,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ italian ] = "Intestazione";
         Text[ portuguese_brazilian ] = "Cabe�alho";
         Text[ portuguese ] = "~T�tulo";
-        Text[ danish ] = "Overskrift";
+        Text[ danish ] = "Tabeloverskrift";
         Text[ french ] = "Titre";
         Text[ swedish ] = "~�verskrift";
         Text[ dutch ] = "~Kop";
@@ -289,6 +297,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "शीर्षक";
         Text[ slovak ] = "Záhlavie";
+        Text[ hungarian ] = "F~ejléc";
+        Text[ slovenian ] = "Glava";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -300,7 +310,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ italian ] = "Ripeti su ogni pagina";
         Text[ portuguese_brazilian ] = "Re~petir cabe�alho";
         Text[ portuguese ] = "Repetir em to~das as p�ginas";
-        Text[ danish ] = "Gentag p� hver side";
+        Text[ danish ] = "~Gentag sidehoved";
         Text[ french ] = "R~�p�ter sur chaque page";
         Text[ swedish ] = "~Upprepa p� varje sida";
         Text[ dutch ] = "Op iedere pagina ~herhalen";
@@ -323,6 +333,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "Auf jeder Seite ~wiederholen";
         Text[ hindi ] = "शी~र्षक दुहराना ";
         Text[ slovak ] = "O~pakovať záhlavie";
+        Text[ hungarian ] = "Élőfej ~ismétlése";
+        Text[ slovenian ] = "Po~novi glavo";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -334,7 +346,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ italian ] = "Non separare la tabella";
         Text[ portuguese_brazilian ] = "N�o dividir a tabela";
         Text[ portuguese ] = "N�o ~dividir tabela";
-        Text[ danish ] = "Opdel tabel ikke";
+        Text[ danish ] = "Opdel ikke tabel";
         Text[ french ] = "Ne pas ~scinder le tableau";
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
@@ -357,6 +369,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "Tabelle ~nicht trennen";
         Text[ hindi ] = "सारणी को मत अलगाना";
         Text[ slovak ] = "Nerozdeľovať tabuľku";
+        Text[ hungarian ] = "Táblázat egybentartása";
+        Text[ slovenian ] = "Ne razdeli tabele";
     };
     CheckBox CB_BORDER
     {
@@ -368,7 +382,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ italian ] = "Bordo";
         Text[ portuguese_brazilian ] = "Borda";
         Text[ portuguese ] = "~Contornos";
-        Text[ danish ] = "Ramme";
+        Text[ danish ] = "Kant";
         Text[ french ] = "~Bordure";
         Text[ swedish ] = "Inra~mning";
         Text[ dutch ] = "~Omranding";
@@ -391,6 +405,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "~Umrandung";
         Text[ hindi ] = "किनारा";
         Text[ slovak ] = "Okraj";
+        Text[ hungarian ] = "S~zegély";
+        Text[ slovenian ] = "Obroba";
     };
     PushButton BT_AUTOFORMAT
     {
@@ -404,7 +420,7 @@ ModalDialog DLG_INSERT_TABLE
         Text [ portuguese_brazilian ] = "Auto~Formata��o..." ;
         Text [ portuguese ] = "~AutoFormato..." ;
         Text [ finnish ] = "Autom. ~muotoilu..." ;
-        Text [ danish ] = "AutoFormat..." ;
+        Text [ danish ] = "Auto~Format..." ;
         Text [ french ] = "~AutoFormat..." ;
         Text [ swedish ] = "~Autoformat..." ;
         Text [ dutch ] = "~AutoOpmaak..." ;
@@ -426,6 +442,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "‮עיצוב אוטומטי...‬";
         Text[ hindi ] = "स्वचालित ~रचना...";
         Text[ slovak ] = "Automatický ~formát...";
+        Text[ hungarian ] = "~Automatikus formázás...";
+        Text[ slovenian ] = "Sam~ooblikovanje...";
     };
     FixedLine FL_OPTIONS
     {
@@ -459,6 +477,8 @@ ModalDialog DLG_INSERT_TABLE
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     OKButton BT_OK
     {
@@ -495,7 +515,10 @@ ModalDialog DLG_INSERT_TABLE
     Text[ hebrew ] = "‮הוספת טבלה‬";
     Text[ hindi ] = "सारणी जोड़ो";
     Text[ slovak ] = "Vložiť tabuľku";
+    Text[ hungarian ] = "Táblázat beszúrása";
+    Text[ slovenian ] = "Vstavi tabelo";
 };
+
 
 
 
