@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-04-15 10:58:58 $
+ *  last change: $Author: svesik $ $Date: 2002-09-03 13:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <dos.h>
 #elif defined UNX
 #include <limits.h>
-#ifdef IRIX
+#if defined( IRIX ) || defined( UNX )
 #include <unistd.h>
 #endif
 #include <sys/times.h>
@@ -502,7 +502,13 @@ ULONG Time::GetSystemTicks()
 
     if ( !nImplTicksPerSecond )
     {
+#if defined( CLK_TCK )
         nImplTicksPerSecond = CLK_TCK;
+#elif defined( _SC_CLK_TCK )
+        nImplTicksPerSecond = sysconf(_SC_CLK_TCK);
+#else
+#error "I don't know how to get CLK_TCK."
+#endif
         dImplTicksPerSecond = nImplTicksPerSecond;
         dImplTicksULONGMAX  = (double)(ULONG)ULONG_MAX;
     }
