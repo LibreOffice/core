@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:46:36 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ const sal_uInt16 EXC_NOTAB                  = 0xFFFF;     /// An invalid Excel s
 
 #define EXC_STREAM_BOOK                     CREATE_STRING( "Book" )
 #define EXC_STREAM_WORKBOOK                 CREATE_STRING( "Workbook" )
+#define EXC_STREAM_CTLS                     CREATE_STRING( "Ctls" )
 
 // String import/export -------------------------------------------------------
 
