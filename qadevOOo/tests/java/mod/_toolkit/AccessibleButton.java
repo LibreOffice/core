@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-05-28 10:03:35 $
+ *  last change: $Date: 2003-09-08 12:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,21 @@
 
 package mod._toolkit;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleAction;
+import com.sun.star.accessibility.XAccessibleComponent;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
@@ -72,19 +87,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleAction;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleText;
-import com.sun.star.awt.XExtendedToolkit;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 /**
  * Object implements the following interfaces :
@@ -129,8 +131,6 @@ public class AccessibleButton extends lib.TestCase {
 
         XInterface oObj = null;
         XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
-        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( msf);
 
         try {
             oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit") ;
