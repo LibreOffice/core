@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ class SdXMLMasterPageContext: public SdXMLGenericPageContext
 {
     rtl::OUString               msPageMasterName;
     rtl::OUString               msName;
+    rtl::OUString               msDisplayName;
     rtl::OUString               msStyleName;
 
 public:
@@ -176,7 +177,9 @@ public:
     virtual void EndElement();
 
     const rtl::OUString& GetPageMasterName() const { return msPageMasterName; }
-    const rtl::OUString& GetName() const { return msName; }
+    const rtl::OUString& GetEncodedName() const { return msName; }
+    const rtl::OUString& GetDisplayName() const { return msDisplayName; }
+
 };
 DECLARE_LIST(ImpMasterPageList, SdXMLMasterPageContext*);
 
