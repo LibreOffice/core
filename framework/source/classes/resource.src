@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-14 09:37:20 $
+ *  last change: $Author: kz $ $Date: 2004-06-17 14:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,7 @@ String STR_SAVECOPYDOC
 
 ModalDialog DLG_LICENSE
 {
+    HelpId = HID_LICENSEDIALOG;
     Moveable        = TRUE ;
     Closeable       = TRUE ;
     OutputSize = TRUE ;
@@ -649,3 +650,4 @@ ModalDialog DLG_LICENSE
     Text[ hindi ] = "License Agreement";
     Text[ slovak ] = "Licenčný dohovor";
 };
+
