@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LFolderList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:56:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-03 10:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ sal_Bool SAL_CALL OEvoabFolderList::first(  ) throw(SQLException, RuntimeExcepti
 {
     sal_Bool bSuccess = seekRow(IResultSetHelper::FIRST);
 
-    OSL_TRACE("OEvoabFolderList::first(): returning %s\n", ::rtl::OUString::valueOf(bSuccess) );
+    EVO_TRACE_STRING("OEvoabFolderList::first(): returning %s\n", ::rtl::OUString::valueOf(bSuccess) );
     return bSuccess;
 }
 // -------------------------------------------------------------------------
@@ -657,7 +657,7 @@ sal_Bool SAL_CALL OEvoabFolderList::next(  ) throw(SQLException, RuntimeExceptio
 {
     sal_Bool bSuccess = seekRow(IResultSetHelper::NEXT);
 
-    OSL_TRACE("OEvoabFolderList::next(): returning %s\n", ::rtl::OUString::valueOf(bSuccess) );
+    EVO_TRACE_STRING("OEvoabFolderList::next(): returning %s\n", ::rtl::OUString::valueOf(bSuccess) );
     return bSuccess;
 }
 // -------------------------------------------------------------------------
@@ -665,7 +665,7 @@ sal_Bool SAL_CALL OEvoabFolderList::next(  ) throw(SQLException, RuntimeExceptio
 sal_Int32 SAL_CALL OEvoabFolderList::getRow(  ) throw(SQLException, RuntimeException)
 {
     sal_Bool bRet = fetchRow(m_aRow,getTableColumns().getBody());
-    OSL_TRACE("OEvoabFolderList::getRow()::fetchRow() = %s\n", ::rtl::OUString::valueOf(bRet) );
+    EVO_TRACE_STRING("OEvoabFolderList::getRow()::fetchRow() = %s\n", ::rtl::OUString::valueOf(bRet) );
 
     return bRet;
 }
