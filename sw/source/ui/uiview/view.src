@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:58:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message[ chinese_traditional ] = "§ä¨ì¡C";
     Message[ arabic ] = ".æÌöÏ ";
     Message[ greek ] = "âñİèçêå.";
-    Message[ korean ] = "Ã£¾ÒÀ½.";
+    Message[ korean ] = " Ã£¾ÒÀ½.";
     Message[ turkish ] = "bulundu.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "encontrado.";
@@ -710,7 +710,7 @@ String STR_NB_REPLACED
     Text[ chinese_traditional ] = "·j´M¶µ¥Ø³Q XX ¦¸¥N´À¡C";
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÈíÇäÇÊ ÇáÈÍË ××× ãÑÉ.";
     Text[ greek ] = "Æçôïıìåíï óôïé÷åßï áíôéêáôáóôÜèçêå XX öïñİò.";
-    Text[ korean ] = "°Ë»ö ¿ë¾î°¡  XX¹ø ´ëÃ¼µÊ.";
+    Text[ korean ] = "°Ë»ö ¿ë¾î°¡ XX¹ø ´ëÃ¼µÊ.";
     Text[ turkish ] = "Arama terimi XX kez değiştirildi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La expresión buscada ha sido reemplazada XX veces.";
@@ -1230,5 +1230,6 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
 
 
