@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-16 13:23:40 $
+#   last change: $Author: jsc $ $Date: 2001-03-19 17:28:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ USE_DEFFILE=	TRUE
 
 # --- Files --------------------------------------------------------
 
-
 # LIB1TARGET=	$(LB)$/a$(TARGET).lib
 # LIB1ARCHIV=	$(LB)$/lib$(TARGET)$(SALHELPER_MAJOR)$(COM).a
 # LIB1FILES=	$(LB)$/$(TARGET).lib
@@ -92,7 +91,7 @@ SLOFILES+=$(SLO)$/staticmb.obj
 #OBJFILES+=$(OBJ)$/staticmb.obj
 .ENDIF
 
-SHL1TARGET=	$(TARGET)$(CPPUHELPER_MAJOR)$(COM)
+SHL1TARGET=	$(TARGET)$(SALHELPER_MAJOR)$(COM)
 
 SHL1STDLIBS= \
         $(SALLIB)
