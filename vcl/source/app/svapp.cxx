@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: cd $ $Date: 2000-10-13 09:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,11 @@ void Application::FocusChanged()
 // -----------------------------------------------------------------------
 
 void Application::DataChanged( const DataChangedEvent& )
+{
+}
+
+// -----------------------------------------------------------------------
+void Application::Init()
 {
 }
 
