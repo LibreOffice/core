@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2001-12-04 15:26:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,7 @@
 #include <rc.h>
 #endif
 
-#ifdef REMOTE_APPSERVER
-#include <rmwindow.hxx>
-#endif
 
-#pragma hdrstop
 
 // =======================================================================
 
@@ -171,84 +167,16 @@ XubString KeyCode::GetName( Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
-#ifndef REMOTE_APPSERVER
     return pWindow->ImplGetFrame()->GetKeyName( GetFullCode() );
-#else
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->mpKeyNames )
-    {
-        pSVData->mpKeyNames = new KeyNames;
-        NMSP_CLIENT::KeyNameSequence aKeyNames;
-        pWindow->ImplGetFrame()->GetKeyNames( aKeyNames );
-        ULONG nNames = aKeyNames.getLength();
-        for ( USHORT n = 0; n < nNames; n++ )
-        {
-            const NMSP_CLIENT::IDLKeyNameInfo& rInfo = aKeyNames.getConstArray()[n];
-            pSVData->mpKeyNames->Insert( rInfo.nCode, new String( rInfo.aName )  );
-        }
-    }
-
-    String      aName;
-    const int   nMods = 3;
-    USHORT      nKeyCode = GetFullCode();
-    USHORT      aModifiers[nMods] = { KEY_MOD2, KEY_MOD1, KEY_SHIFT };
-    for ( USHORT n = 0; n < nMods; n++ )
-    {
-        USHORT nMod = aModifiers[n];
-        if ( nKeyCode & nMod )
-        {
-            String* pMod = pSVData->mpKeyNames->Get( nMod );
-            if ( pMod )
-            {
-                aName += *pMod;
-                aName += '+';
-            }
-        }
-    }
-
-    USHORT nCode = GetCode();
-    if ( (nCode >= KEY_0) && (nCode <= KEY_9) )
-        aName += (sal_Unicode)'0'+(nCode-KEY_0);
-    else if ( (nCode >= KEY_A) && (nCode <= KEY_Z) )
-        aName += (sal_Unicode)'A'+(nCode-KEY_A);
-    else if ( (nCode >= KEY_F1) && (nCode <= KEY_F9) )
-    {
-        aName += (sal_Unicode)'F';
-        aName += (sal_Unicode)'1' + (nCode-KEY_F1);
-    }
-    else if ( (nCode >= KEY_F10) && (nCode <= KEY_F19) )
-    {
-        aName += (sal_Unicode)'F';
-        aName += (sal_Unicode)'1';
-        aName += (sal_Unicode)'0' + (nCode-KEY_F10);
-    }
-    else if ( (nCode >= KEY_F20) && (nCode <= KEY_F26) )
-    {
-        aName += (sal_Unicode)'F';
-        aName += (sal_Unicode)'2';
-        aName += (sal_Unicode)'0' + (nCode-KEY_F20);
-    }
-    else
-    {
-        String* pName = pSVData->mpKeyNames->Get( nCode );
-        if ( pName )
-            aName += *pName;
-    }
-    return aName;
-#endif
 }
 
 // -----------------------------------------------------------------------
 
 XubString KeyCode::GetSymbolName( const XubString& rFontName, Window* pWindow ) const
 {
-#ifndef REMOTE_APPSERVER
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
     return pWindow->ImplGetFrame()->GetSymbolKeyName( rFontName, GetFullCode() );
-#else
-    return GetName( pWindow );
-#endif
 }
 
 // -----------------------------------------------------------------------
