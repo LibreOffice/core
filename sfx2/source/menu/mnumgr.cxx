@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-06 12:48:07 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 15:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,9 @@ SfxMenuIter_Impl* SfxMenuIter_Impl::NextItem()
         return NextItem();
 
     if ( _nId >= START_ITEMID_WINDOWLIST && _nId <= END_ITEMID_WINDOWLIST )
+        return NextItem();
+
+    if ( _nId == SID_ADDONS )
         return NextItem();
 
     // nicht alle Popups werden durchlaufen
@@ -1149,7 +1152,7 @@ BOOL SfxMenuManager::IsPopupFunction( USHORT nId )
     return nId == SID_PICKLIST ||
            nId == SID_MDIWINDOWLIST ||
            nId == SID_HELPMENU ||
-           nId == SID_HELPMENU;
+           nId == SID_ADDONLIST;
 }
 
 //====================================================================
