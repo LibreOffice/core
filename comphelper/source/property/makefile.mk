@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-20 19:53:24 $
+#   last change: $Author: mtg $ $Date: 2001-07-24 20:41:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/genericpropertyset.obj\
+SLOFILES= 	\
+            $(SLO)$/MasterPropertySetInfo.obj \
+            $(SLO)$/MasterPropertySet.obj \
+            $(SLO)$/ChainablePropertySetInfo.obj \
+            $(SLO)$/ChainablePropertySet.obj \
+            $(SLO)$/TypeGeneration.obj \
+            $(SLO)$/genericpropertyset.obj\
             $(SLO)$/propertysethelper.obj \
             $(SLO)$/propertysetinfo.obj \
             $(SLO)$/composedprops.obj \
@@ -81,7 +87,7 @@ SLOFILES=	$(SLO)$/genericpropertyset.obj\
             $(SLO)$/property.obj \
             $(SLO)$/propmultiplex.obj \
             $(SLO)$/propstate.obj \
-            $(SLO)$/propertycontainer.obj \
+            $(SLO)$/propertycontainer.obj
 
 # --- Targets ----------------------------------
 
