@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-09 09:33:46 $
+ *  last change: $Author: fme $ $Date: 2001-07-24 11:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,11 +1440,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwFldPortion *SwErgoSumPortion::Clone( const XubString &rExpand ) const
 {
-#ifdef ENABLEUNICODE
     UniString aTmp = UniString::CreateFromInt32( 0 );
-#else
-    XubString aTmp( MSHORT(0) );
-#endif
     return new SwErgoSumPortion( rExpand, aTmp );
 }
 
