@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
+ *  last change: $Author: ab $ $Date: 2001-03-12 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,12 @@
 #ifndef _COM_SUN_STAR_AWT_XVCLCONTAINERPEER_HPP_
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#endif
 
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 
@@ -92,11 +96,93 @@ public:
         : aName( rName )
     {
         xCtrl = rControl;
-
     }
 };
 
 DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
+
+
+//  ----------------------------------------------------
+//  Function to set the controls' visibility according
+//  to the dialog's "Step" property
+//  ----------------------------------------------------
+void implUpdateVisibility
+(
+    sal_Int32 nDialogStep,
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xControlContainer
+)
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > >
+        aCtrls = xControlContainer->getControls();
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >* pCtrls = aCtrls.getConstArray();
+    sal_uInt32 nCtrls = aCtrls.getLength();
+    sal_Bool bCompleteVisible = (nDialogStep == 0);
+    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl = pCtrls[ n ];
+
+        sal_Bool bVisible = bCompleteVisible;
+        if( !bVisible )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > xModel( xControl->getModel() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPSet
+                ( xModel, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                xInfo = xPSet->getPropertySetInfo();
+            ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
+            sal_Int32 nControlStep = 0;
+            if ( xInfo->hasPropertyByName( aPropName ) )
+            {
+                ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                aVal >>= nControlStep;
+            }
+            bVisible = (nControlStep == 0) || (nControlStep == nDialogStep);
+        }
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> xWindow
+            ( xControl, ::com::sun::star::uno::UNO_QUERY );
+        if( xWindow.is() )
+            xWindow->setVisible( bVisible );
+    }
+}
+
+
+//  ----------------------------------------------------
+//  class DialogStepChangedListener
+//  ----------------------------------------------------
+typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
+
+class DialogStepChangedListener: public PropertyChangeListenerHelper
+{
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
+
+public:
+    DialogStepChangedListener( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xControlContainer )
+        : mxControlContainer( xControlContainer ) {}
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
+
+    // XPropertyChangeListener
+    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+
+};
+
+void SAL_CALL DialogStepChangedListener::disposing( const  ::com::sun::star::lang::EventObject& _rSource)
+    throw( ::com::sun::star::uno::RuntimeException)
+{
+    mxControlContainer.clear();
+}
+
+void SAL_CALL DialogStepChangedListener::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt )
+    throw( ::com::sun::star::uno::RuntimeException)
+{
+    // evt.PropertyName HAS to be "Step" because we only use the listener for that
+    sal_Int32 nDialogStep;
+    evt.NewValue >>= nDialogStep;
+    implUpdateVisibility( nDialogStep, mxControlContainer );
+}
 
 
 //  ----------------------------------------------------
@@ -390,6 +476,28 @@ void UnoControlContainer::createPeer( const ::com::sun::star::uno::Reference< ::
         // alle Peers der Childs erzeugen
         if ( !mbCreatingCompatiblePeer )
         {
+            // Evaluate "Step" property
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > xModel( getModel() );
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPSet
+                ( xModel, ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                xInfo = xPSet->getPropertySetInfo();
+            ::rtl::OUString aPropName(RTL_CONSTASCII_USTRINGPARAM( "Step" ) );
+            if ( xInfo->hasPropertyByName( aPropName ) )
+            {
+                ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );
+                sal_Int32 nDialogStep;
+                aVal >>= nDialogStep;
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > xContainer =
+                    SAL_STATIC_CAST( ::com::sun::star::awt::XControlContainer*, this );
+                implUpdateVisibility( nDialogStep, xContainer );
+
+                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > xListener =
+                    SAL_STATIC_CAST( ::com::sun::star::beans::XPropertyChangeListener*,
+                        new DialogStepChangedListener( xContainer ) );
+                xPSet->addPropertyChangeListener( aPropName, xListener );
+            }
+
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > aCtrls = getControls();
             sal_uInt32 nCtrls = aCtrls.getLength();
             for( sal_uInt32 n = 0; n < nCtrls; n++ )
