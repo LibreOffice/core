@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2488,20 +2488,20 @@ void SdOutlineViewShell::VisAreaChanged(const Rectangle& rRect)
     reference).
 */
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible>
+    ::com::sun::star::accessibility::XAccessible>
     SdOutlineViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
 {
     if (GetController() != NULL)
     {
-        accessibility::AccessibleOutlineView* pDocumentView =
-            new accessibility::AccessibleOutlineView (
+        ::accessibility::AccessibleOutlineView* pDocumentView =
+            new ::accessibility::AccessibleOutlineView (
                 pWindow,
                 this,
                 GetController(),
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
         return ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>
+            ::com::sun::star::accessibility::XAccessible>
             (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
                 ::com::sun::star::uno::UNO_QUERY);
     }
