@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 14:23:54 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 16:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12959,7 +12959,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ dutch ] = "Snelheid tekstanimatie";
     Text[ chinese_simplified ] = "»ξ¶―±κΜβµΔΚύΔΏ";
     Text[ greek ] = "Αριθμός επαναλήψεων κινούμενου κειμένου";
-    Text[ korean ] = "Ή®ΐΪ, ΌψΘ― °³Όφ";
+    Text[ korean ] = "ΌψΘ― Ή®ΐΪ  °³Όφ";
     Text[ turkish ] = "Hareketli yazύ hareket sayύsύ";
 };
 
