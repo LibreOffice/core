@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-17 09:22:22 $
+ *  last change: $Author: oj $ $Date: 2002-03-18 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,20 +756,21 @@ void DlgFilterCrit::correctCondition(const ::rtl::OUString& _rColumnName,String&
     Reference< XRow> xRow(xRs,UNO_QUERY);
     // Information for a single SQL type
     // Loop on the result set
-    while (xRs->next())
-    {
-        if(nType == xRow->getShort(2))
+    if ( xRs.is() )
+        while ( xRs->next() )
         {
-            String sPreSuffix = xRow->getString(4);
-            if(!xRow->wasNull() && _rCondition.Search(sPreSuffix) == 0) // found prefix so remove it
-                _rCondition.Erase(0,sPreSuffix.Len());
-            sPreSuffix = xRow->getString(5);
-            if(!xRow->wasNull() && _rCondition.SearchCharBackward(sPreSuffix.GetBuffer()) == (_rCondition.Len()-sPreSuffix.Len())) // found suffix so remove it
-                _rCondition.Erase(_rCondition.Len()-1,1);
+            if(nType == xRow->getShort(2))
+            {
+                String sPreSuffix = xRow->getString(4);
+                if(!xRow->wasNull() && _rCondition.Search(sPreSuffix) == 0) // found prefix so remove it
+                    _rCondition.Erase(0,sPreSuffix.Len());
+                sPreSuffix = xRow->getString(5);
+                if(!xRow->wasNull() && _rCondition.SearchCharBackward(sPreSuffix.GetBuffer()) == (_rCondition.Len()-sPreSuffix.Len())) // found suffix so remove it
+                    _rCondition.Erase(_rCondition.Len()-1,1);
 
-            break;
+                break;
+            }
         }
-    }
 }
 // -----------------------------------------------------------------------------
 void DlgFilterCrit::addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition) const
@@ -788,16 +789,17 @@ void DlgFilterCrit::addQuoting(const ::rtl::OUString& _rColumnName,String& _rCon
     // Information for a single SQL type
     String aCondition = _rCondition;
     // Loop on the result set
-    while (xRs->next())
-    {
-        if(nType == xRow->getShort(2))
+    if ( xRs.is() )
+        while (xRs->next())
         {
-            aCondition = String(xRow->getString(4));
-            aCondition += _rCondition;
-            aCondition += String(xRow->getString(5));
-            break;
+            if(nType == xRow->getShort(2))
+            {
+                aCondition = String(xRow->getString(4));
+                aCondition += _rCondition;
+                aCondition += String(xRow->getString(5));
+                break;
+            }
         }
-    }
     _rCondition = aCondition;
 }
 // -----------------------------------------------------------------------------

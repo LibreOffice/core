@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:53:29 $
+ *  last change: $Author: oj $ $Date: 2002-03-18 14:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,12 +1052,13 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
             //  sal_Int32 nScale    = getINT32(descriptor->getPropertyValue(PROPERTY_SCALE));
             Reference<XResultSet> xTypes(m_pTable->getMetaData()->getTypeInfo());
             Reference<XRow> xRow(xTypes,UNO_QUERY);
-            while(xTypes->next())
-            {
-                aTypeName = xRow->getString(1); // must be fetched in order
-                if(xRow->getInt(2) == nType && xRow->getInt(3) >= nPrec)
-                    break;
-            }
+            if ( xTypes.is() )
+                while(xTypes->next())
+                {
+                    aTypeName = xRow->getString(1); // must be fetched in order
+                    if(xRow->getInt(2) == nType && xRow->getInt(3) >= nPrec)
+                        break;
+                }
 
             aSql += aTypeName + ::rtl::OUString::createFromAscii(" ");
         }
