@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-05-27 12:03:04 $
+ *  last change: $Date: 2003-11-18 16:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ import java.io.OutputStreamWriter;
 class Pump extends Thread {
     private LineNumberReader reader;
     private String pref ;
-    private Pump thread ;
     private StringBuffer buf = new StringBuffer(256);
     private PrintWriter log ;
 
@@ -145,6 +144,8 @@ public class ProcessHandler {
     private int exitValue = -1;
     private boolean isFinished = false;
     private boolean isStarted = false;
+    private boolean mbTimedOut = false;
+    private long mTimeOut = 0;
 
     private String stdInBuff = "";
     private Pump stdout = null ;
@@ -154,21 +155,33 @@ public class ProcessHandler {
     private Process proc = null ;
 
     /**
-     * Creates instance with specified external command and
-     * log stream where debug info is printed and output
-     * of external command.
-     */
-    public ProcessHandler(String cmdLine, PrintWriter log) {
-        this(cmdLine, log, null, null);
-    }
-    /**
      * Creates instance with specified external command.
      * Debug info and output
      * of external command is printed to stdout.
      */
     public ProcessHandler(String cmdLine) {
-        this(cmdLine, null, null, null);
+        this(cmdLine, null, null, null, 0);
     }
+
+    /**
+     * Creates instance with specified external command and
+     * log stream where debug info is printed and output
+     * of external command.
+     */
+    public ProcessHandler(String cmdLine, PrintWriter log) {
+        this(cmdLine, log, null, null, 0);
+    }
+
+    /**
+     * Creates instance with specified external command which
+     * will be executed in the some work directory.
+     * Debug info and output
+     * of external commandis printed to stdout.
+     */
+    public ProcessHandler(String cmdLine, File workDir) {
+        this(cmdLine, null, workDir, null, 0);
+    }
+
     /**
      * Creates instance with specified external command which
      * will be executed in the some work directory  and
@@ -179,6 +192,38 @@ public class ProcessHandler {
      */
     public ProcessHandler(String cmdLine, PrintWriter log,
                                             File workDir, String[] envVars) {
+        this(cmdLine, log, workDir, envVars, 0);
+    }
+
+    /**
+     * Creates instance with specified external command which
+     * will be executed in the some work directory  and
+     *
+     * @param log           log stream where debug info and output
+     *                      of external command is printed .
+     * @param workDir       The working directory of the new process
+     * @param envVars       The specified environment variables are
+     *                      set for the new process.
+     *                      If log stream is null, logging is printed to stdout.
+     * @param  timeOut      When started sychronisly, the maximum time the
+     *                      process will live. When the process being destroyed
+     *                      a log will be written out. It can be asked on
+     *                      <code>isTimedOut()</code> if it has been terminated.
+     *
+     *                      timeOut > 0
+     *                      Waits specified time in miliSeconds for
+     *                      process to exit and return its status.
+     *
+     *                      timeOut = 0
+     *                      Waits for the process to end regulary
+     *
+     *                      timeOut < 0
+     *                      Kills the process immediately
+     *
+     *
+     */
+    public ProcessHandler(String cmdLine, PrintWriter log,
+                          File workDir, String[] envVars, long timeOut) {
         this.cmdLine = cmdLine ;
         this.workDir = workDir;
         this.log = log;
@@ -188,15 +233,15 @@ public class ProcessHandler {
             this.log =  new PrintWriter(new OutputStreamWriter(System.out));
         else
             this.log = log;
+        this.mTimeOut = timeOut;
     }
-    /**
-     * Creates instance with specified external command which
-     * will be executed in the some work directory.
-     * Debug info and output
-     * of external commandis printed to stdout.
-     */
-    public ProcessHandler(String cmdLine, File workDir) {
-        this(cmdLine, null, workDir, null);
+
+    public boolean isTimedOut(){
+        return mbTimedOut;
+    }
+
+    private void setTimedOut(boolean bTimedOut){
+        mbTimedOut = bTimedOut;
     }
 
     /**
@@ -209,7 +254,7 @@ public class ProcessHandler {
      */
     public boolean executeSynchronously() {
         execute() ;
-        return waitFor() ;
+        return waitFor(mTimeOut) ;
     }
 
     /**
@@ -274,6 +319,16 @@ public class ProcessHandler {
      * asynchronously. Waits during specified time for process
      * to exit and return its status.
      *
+     * @param  timeOut      > 0
+     *                      Waits specified time in miliSeconds for
+     *                      process to exit and return its status.
+     *
+     *                      = 0
+     *                      Waits for the process to end regulary
+     *
+     *                      < 0
+     *                      Kills the process immediately
+     *
      * @return <code>true</code> if process correctly exited
      * (exit code doesn't affect to this result).
      */
@@ -294,14 +349,18 @@ public class ProcessHandler {
         } else {
             try {
                 while (!isFinished && timeout > 0) {
-                    isFinished = true ;
+                    isFinished = true;
                     Thread.sleep(1000);
                     timeout -= 1000 ;
                     try {
-                        exitValue = proc.exitValue() ;
+                        exitValue = proc.exitValue(); // throws exception if not finished
                     } catch (IllegalThreadStateException e) {
-                        isFinished = false ;
+                        isFinished = false;
                     }
+                }
+                if(timeout < 0){
+                    setTimedOut(true);
+                    log.println("The process has timed out!");
                 }
             } catch (InterruptedException ex) {
                 log.println("The process was interrupted: " + ex);
@@ -309,7 +368,9 @@ public class ProcessHandler {
         }
 
         if (!isFinished) {
+            log.println("Going to destroy the process!!");
             proc.destroy();
+            log.println("Process has been destroyed!");
         }
 
         try {
