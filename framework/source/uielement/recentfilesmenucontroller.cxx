@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recentfilesmenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:17:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& Source ) 
 void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
-    m_bDisabled = Event.IsEnabled;
+    m_bDisabled = !Event.IsEnabled;
 }
 
 // XMenuListener
@@ -328,7 +328,7 @@ void SAL_CALL RecentFilesMenuController::highlight( const css::awt::MenuEvent& r
 
 void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
-    static int NUM_OF_PICKLIST_ARGS = 2;
+    static int NUM_OF_PICKLIST_ARGS = 3;
 
     Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XDispatch >            xDispatch;
@@ -367,6 +367,10 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
             aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
             aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
 
+            // documents in the picklist will never be opened as templates
+            aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
+            aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
+
             ::rtl::OUString  aFilter( rRecentFile.aFilter );
             sal_Int32 nPos = aFilter.indexOf( '|' );
             if ( nPos >= 0 )
@@ -376,8 +380,8 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
                 if ( nPos < ( aFilter.getLength() - 1 ) )
                     aFilterOptions = aFilter.copy( nPos+1 );
 
-                aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
-                aArgsList[1].Value = makeAny( aFilterOptions );
+                aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+                aArgsList[2].Value = makeAny( aFilterOptions );
 
                 aFilter = aFilter.copy( 0, nPos-1 );
                 aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
