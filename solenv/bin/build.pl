@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.113 $
+#   $Revision: 1.114 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-28 16:36:07 $
+#   last change: $Author: vg $ $Date: 2004-08-20 15:34:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@
     use lib ("$ENV{SOLARENV}/bin/modules");
     if (defined $ENV{COMMON_ENV_TOOLS}) {
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
+        require CopyPrj; import CopyPrj;
     };
 
     my $log = undef;
@@ -93,7 +94,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.113 $ ';
+    $id_str = ' $Revision: 1.114 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -171,6 +172,7 @@
     $maximal_processes = 0; # the max number of the processes run
     %modules_types = (); # modules types ('mod', 'img', 'lnk') hash
     %platforms = (); # platforms available or being working with
+    %platforms_to_copy = (); # copy otput trees for the platforms when --prepare
 ### main ###
 
     &get_options;
@@ -1243,6 +1245,41 @@ sub checkout_module {
             &print_error ("Cannot checkout $prj_name. Check if you have login to server");
         };
     };
+    copy_output_trees($prj_name, $StandDir) if (defined $only_platform);
+};
+
+#
+# Procedure unpacks output trees after checkout
+#
+sub copy_output_trees {
+    return if (!defined $log);
+    return if (!scalar keys %platforms_to_copy);
+    my $module_name = shift;
+    my $src_dest = shift;
+    print "copyprj $module_name\n";
+
+    # hash, that should contain all the
+    # data needed by CopyPrj module
+    my %ENVHASH = ();
+    my %projects_to_copy = ();
+    $ENVHASH{'projects_hash'} = \%projects_to_copy;
+    $ENVHASH{'prj_to_copy'} = '';
+    $ENVHASH{'platforms_hash'} = \%platforms_to_copy;
+    $ENVHASH{'no_otree'} = 1;
+    $ENVHASH{'no_path'} = 1;
+    $ENVHASH{'only_otree'} = 1;
+    $ENVHASH{'only_update'} = 0;
+    $ENVHASH{'last_minor'} = 0;
+    $ENVHASH{'spec_src'} = 0;
+    $ENVHASH{'dest'} = "$src_dest";
+    $ENVHASH{'i_server'} = '';
+    $ENVHASH{'current_dir'} = cwd();
+    $ENVHASH{'remote'} = '';
+    # hack for SO environment
+    $ENVHASH{'SRC_ROOT'} = '/so/ws/' . $ENV{WORK_STAMP} . '/src';
+    $ENVHASH{'SRC_ROOT'} .= $ENV{UPDMINOREXT} if (defined $ENV{UPDMINOREXT});
+    $projects_to_copy{$module_name}++;
+    CopyPrj::copy_projects(\%ENVHASH);
 };
 
 #
@@ -1640,8 +1677,9 @@ sub get_platforms {
     my $platforms_ref = shift;
     if ($only_platform) {
         $$platforms_ref{$only_platform}++;
-        return;
+        $platforms_ref = \%platforms_to_copy;
     };
+
     my $solver = $ENV{SOLARVERSION};
     my ($iserverbin, @platforms_conf);
     $iserverbin = "i_server -d ";
@@ -1657,6 +1695,7 @@ sub get_platforms {
         my $s_path = $solver . '/' .  $_;
         $$platforms_ref{$_}++ if (-e $s_path);
     };
+    delete $platforms_to_copy{$only_platform} if (defined $only_platform);
     &print_error("There is no platform found!!") if (!scalar keys %platforms);
 };
 
