@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:04:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
 #include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp"
 #include <vector>
 
 using namespace ::System::Reflection;
@@ -227,14 +228,22 @@ Assembly * TypeEmitter::type_resolve(
     ::System::String * cts_name, bool throw_exc )
 {
     ::System::Type * ret_type = m_module_builder->GetType( cts_name, false );
-    if (0 == ret_type)
+    if (ret_type == 0)
     {
         iface_entry * entry = dynamic_cast< iface_entry * >(
             m_incomplete_ifaces->get_Item( cts_name ) );
         if (0 != entry)
             ret_type = entry->m_type_builder;
     }
-    if (0 == ret_type)
+        //try the cli_basetypes assembly
+    if (ret_type == 0)
+    {
+        ::System::Text::StringBuilder * builder = new ::System::Text::StringBuilder(cts_name);
+        builder->Append(S",cli_basetypes");
+        ret_type = ::System::Type::GetType(builder->ToString());
+    }
+
+    if (ret_type == 0)
     {
         // may call on type_resolve()
         return ::System::Type::GetType( cts_name, throw_exc );
@@ -243,245 +252,6 @@ Assembly * TypeEmitter::type_resolve(
     {
         return ret_type;
     }
-}
-
-//______________________________________________________________________________
-void TypeEmitter::emit_Any_boxed_ctor(
-    Emit::TypeBuilder * type_builder,
-    Emit::FieldBuilder * field_Type, Emit::FieldBuilder * field_Value,
-    ::System::Type * integral_type )
-{
-    ::System::Type * param_types __gc [] = new ::System::Type * __gc [ 1 ];
-    param_types[ 0 ] = integral_type;
-    Emit::ConstructorBuilder * ctor_builder =
-        type_builder->DefineConstructor(
-            c_ctor_method_attr, CallingConventions::Standard, param_types );
-    ctor_builder->DefineParameter( 1, ParameterAttributes::In, S"Value" );
-    Emit::ILGenerator * code = ctor_builder->GetILGenerator();
-    code->Emit( Emit::OpCodes::Ldarg_0 );
-    code->Emit( Emit::OpCodes::Ldtoken, integral_type );
-    code->Emit( Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-    code->Emit( Emit::OpCodes::Stfld, field_Type );
-    code->Emit( Emit::OpCodes::Ldarg_0 );
-    code->Emit( Emit::OpCodes::Ldarg_1 );
-    code->Emit( Emit::OpCodes::Box, integral_type );
-    code->Emit( Emit::OpCodes::Stfld, field_Value );
-    code->Emit( Emit::OpCodes::Ret );
-}
-//______________________________________________________________________________
-::System::Type * TypeEmitter::get_type_Any()
-{
-    if (0 == m_type_Any)
-    {
-        m_type_Any = get_type( S"uno.Any", false /* no exc */ );
-        if (0 == m_type_Any)
-        {
-            // define hardcoded type uno.Any
-            Emit::TypeBuilder * type_builder =
-                  m_module_builder->DefineType(
-                      S"uno.Any",
-                      (TypeAttributes) (TypeAttributes::Public |
-                                        TypeAttributes::Sealed |
-                                        TypeAttributes::SequentialLayout |
-                                        TypeAttributes::BeforeFieldInit |
-                                        TypeAttributes::AnsiClass),
-                      __typeof (::System::ValueType) );
-            Emit::FieldBuilder * field_Type = type_builder->DefineField(
-                S"Type", __typeof (::System::Type),
-                FieldAttributes::Public );
-            Emit::FieldBuilder * field_Value = type_builder->DefineField(
-                S"Value", __typeof (::System::Object),
-                FieldAttributes::Public );
-            Emit::FieldBuilder * field_VOID = type_builder->DefineField(
-                S"VOID", type_builder,
-                (FieldAttributes) (FieldAttributes::Public |
-                                   FieldAttributes::Static |
-                                   FieldAttributes::InitOnly) );
-            // .ctor( System.Type, System.Object )
-            ::System::Type * param_types __gc [] =
-                  new ::System::Type * __gc [ 2 ];
-            param_types[ 0 ] = __typeof (::System::Type);
-            param_types[ 1 ] = __typeof (::System::Object);
-            Emit::ConstructorBuilder * ctor_builder =
-                type_builder->DefineConstructor(
-                    c_ctor_method_attr, CallingConventions::Standard,
-                    param_types );
-            ctor_builder->DefineParameter(
-                1, ParameterAttributes::In, S"Type" );
-            ctor_builder->DefineParameter(
-                2, ParameterAttributes::In, S"Value" );
-            Emit::ILGenerator * code = ctor_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_Type );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_2 );
-            code->Emit( Emit::OpCodes::Stfld, field_Value );
-            code->Emit( Emit::OpCodes::Ret );
-            // .cctor
-            // xxx todo: potential problem?
-            // DefineTypeInitializer() does not apply the HideBySig attribute!
-            code = type_builder->DefineTypeInitializer()->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldsflda, field_VOID );
-            code->Emit( Emit::OpCodes::Ldtoken, __typeof (::System::Void) );
-            code->Emit(
-                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-            code->Emit( Emit::OpCodes::Ldnull );
-            code->Emit( Emit::OpCodes::Call, ctor_builder );
-            code->Emit( Emit::OpCodes::Ret );
-
-            // integral .ctors
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Char) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Boolean) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Byte) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Int16) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::UInt16) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Int32) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::UInt32) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Int64) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::UInt64) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Single) );
-            emit_Any_boxed_ctor(
-                type_builder, field_Type, field_Value,
-                __typeof (::System::Double) );
-
-            // .ctor( System.Type )
-            param_types = new ::System::Type * __gc [ 1 ];
-            param_types[ 0 ] = __typeof (::System::Type);
-            ctor_builder =
-                type_builder->DefineConstructor(
-                    c_ctor_method_attr, CallingConventions::Standard,
-                    param_types );
-            ctor_builder->DefineParameter(
-                1, ParameterAttributes::In, S"Value" );
-            code = ctor_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldtoken, __typeof (::System::Type) );
-            code->Emit(
-                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-            code->Emit( Emit::OpCodes::Stfld, field_Type );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_Value );
-            code->Emit( Emit::OpCodes::Ret );
-            // .ctor( System.String )
-            param_types[ 0 ] = __typeof (::System::String);
-            ctor_builder =
-                type_builder->DefineConstructor(
-                    c_ctor_method_attr, CallingConventions::Standard,
-                    param_types );
-            ctor_builder->DefineParameter(
-                1, ParameterAttributes::In, S"Value" );
-            code = ctor_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldtoken, __typeof (::System::String) );
-            code->Emit(
-                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-            code->Emit( Emit::OpCodes::Stfld, field_Type );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_Value );
-            code->Emit( Emit::OpCodes::Ret );
-
-            // public bool hasValue()
-            Emit::MethodBuilder * method_builder =
-                type_builder->DefineMethod(
-                    S"hasValue",
-                    (MethodAttributes) (MethodAttributes::Public |
-                                        MethodAttributes::HideBySig
-                                        /* | xxx todo: ??? compiler does not know Instance ???
-                                           MethodAttributes::Instance*/),
-                    __typeof (::System::Boolean),
-                    new ::System::Type * __gc [ 0 ] );
-            code = method_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_Type );
-            code->Emit(
-                Emit::OpCodes::Ldtoken, __typeof (::System::Void) );
-            code->Emit(
-                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-            code->Emit( Emit::OpCodes::Ceq );
-            code->Emit( Emit::OpCodes::Ldc_I4_0 );
-            code->Emit( Emit::OpCodes::Ceq );
-            code->Emit( Emit::OpCodes::Ret );
-
-            // public override String ToString()
-            method_builder =
-                type_builder->DefineMethod(
-                    S"ToString",
-                    (MethodAttributes) (MethodAttributes::Public |
-                                        MethodAttributes::Virtual |
-                                        MethodAttributes::HideBySig
-                                        /* | xxx todo: ??? compiler does not know Instance ???
-                                           MethodAttributes::Instance*/),
-                    __typeof (::System::String),
-                    new ::System::Type * __gc [ 0 ] );
-            code = method_builder->GetILGenerator();
-            Emit::LocalBuilder * local_var =
-                code->DeclareLocal( __typeof (::System::Object * __gc []) );
-            code->Emit( Emit::OpCodes::Ldc_I4_5 );
-            code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Object) );
-            code->Emit( Emit::OpCodes::Stloc, local_var );
-            code->Emit( Emit::OpCodes::Ldloc, local_var );
-            code->Emit( Emit::OpCodes::Ldc_I4_0 );
-            code->Emit( Emit::OpCodes::Ldstr, "uno.Any { Type=" );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_var );
-            code->Emit( Emit::OpCodes::Ldc_I4_1 );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_Type );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_var );
-            code->Emit( Emit::OpCodes::Ldc_I4_2 );
-            code->Emit( Emit::OpCodes::Ldstr, ", Value=" );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_var );
-            code->Emit( Emit::OpCodes::Ldc_I4_3 );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_Value );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_var );
-            code->Emit( Emit::OpCodes::Ldc_I4_4 );
-            code->Emit( Emit::OpCodes::Ldstr, " }" );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_var );
-            param_types = new ::System::Type * __gc [ 1 ];
-            param_types[ 0 ] = __typeof (::System::Object * __gc []);
-            code->Emit( Emit::OpCodes::Call,
-                        __typeof (::System::String)->GetMethod(
-                            "Concat", param_types ) );
-            code->Emit( Emit::OpCodes::Ret );
-
-            if (g_verbose)
-            {
-                ::System::Console::WriteLine(
-                    "> emitting integral type uno.Any" );
-            }
-            m_type_Any = type_builder->CreateType();
-        }
-        m_field_Any_VOID = m_type_Any->GetField( S"VOID" );
-    }
-    return m_type_Any;
 }
 
 //______________________________________________________________________________
@@ -507,8 +277,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             // default .ctor
             type_builder->DefineDefaultConstructor( c_ctor_method_attr );
             // .ctor
-            ::System::Type * param_types __gc [] =
-                  new ::System::Type * __gc [ 2 ];
+            ::System::Type * param_types[] =
+                  new ::System::Type *[ 2 ];
             param_types[ 0 ] = __typeof (::System::String);
             param_types[ 1 ] = __typeof (::System::Object);
             Emit::ConstructorBuilder * ctor_builder =
@@ -522,7 +292,7 @@ void TypeEmitter::emit_Any_boxed_ctor(
             Emit::ILGenerator * code = ctor_builder->GetILGenerator();
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldarg_1 );
-            param_types = new ::System::Type * __gc [ 1 ];
+            param_types = new ::System::Type * [ 1 ];
             param_types[ 0 ] = __typeof (::System::String);
             code->Emit(
                 Emit::OpCodes::Call,
@@ -566,8 +336,8 @@ void TypeEmitter::emit_Any_boxed_ctor(
             // default .ctor
             type_builder->DefineDefaultConstructor( c_ctor_method_attr );
             // .ctor
-            ::System::Type * param_types __gc [] =
-                  new ::System::Type * __gc [ 2 ];
+            ::System::Type * param_types [] =
+                  new ::System::Type * [ 2 ];
             param_types[ 0 ] = __typeof (::System::String);
             param_types[ 1 ] = __typeof (::System::Object);
             Emit::ConstructorBuilder * ctor_builder =
@@ -597,282 +367,6 @@ void TypeEmitter::emit_Any_boxed_ctor(
         }
     }
     return m_type_RuntimeException;
-}
-
-//______________________________________________________________________________
-ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
-{
-    if (0 == m_ctor_uno_MethodAttribute)
-    {
-        ::System::Type * type_MethodAttribute =
-              get_type( S"uno.MethodAttribute", false /* no exc */ );
-        if (0 == type_MethodAttribute)
-        {
-            // define hardcoded type uno.MethodAttribute
-            Emit::TypeBuilder * type_builder =
-                m_module_builder->DefineType(
-                    S"uno.MethodAttribute",
-                    (TypeAttributes) (TypeAttributes::Public |
-                                      TypeAttributes::Sealed |
-                                      TypeAttributes::BeforeFieldInit |
-                                      TypeAttributes::AnsiClass),
-                    __typeof (::System::Attribute) );
-            Emit::FieldBuilder * field_m_raises =
-                type_builder->DefineField(
-                    S"m_raises", __typeof (::System::Type * __gc []),
-                    FieldAttributes::Private );
-            Emit::FieldBuilder * field_m_oneway =
-                type_builder->DefineField(
-                    S"m_oneway", __typeof (bool), FieldAttributes::Private );
-            Emit::FieldBuilder * field_m_attribute_method =
-                type_builder->DefineField(
-                    S"m_attribute_method", __typeof (bool),
-                    FieldAttributes::Private );
-
-            // apply System.AttributeUsage attribute
-            ::System::Type * params __gc [] = new ::System::Type * __gc [ 1 ];
-            params[ 0 ] = __typeof (::System::AttributeTargets);
-            ::System::Object * args __gc [] = new ::System::Object * __gc [ 1 ];
-            args[ 0 ] = __box (::System::AttributeTargets::Method);
-            PropertyInfo * props __gc [] = new PropertyInfo * __gc [ 1 ];
-            props[ 0 ] = __typeof (::System::AttributeUsageAttribute)
-                ->GetProperty( S"Inherited" );
-            ::System::Object * props_args __gc [] =
-                  new ::System::Object * __gc [ 1 ];
-            props_args[ 0 ] = __box (false);
-            type_builder->SetCustomAttribute(
-                new Emit::CustomAttributeBuilder(
-                    __typeof (::System::AttributeUsageAttribute)
-                      ->GetConstructor( params ), args,
-                    props, props_args ) );
-
-            // default .ctor
-            Emit::ConstructorBuilder * ctor_builder =
-                type_builder->DefineConstructor(
-                    c_ctor_method_attr, CallingConventions::Standard,
-                    new ::System::Type * __gc [ 0 ] );
-            Emit::ILGenerator * code = ctor_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            // protected System.Attribute ctor
-            ConstructorInfo * base_ctor =
-                __typeof (::System::Attribute) ->GetConstructor(
-                    (BindingFlags) (BindingFlags::Instance |
-                                    BindingFlags::NonPublic),
-                    0, new ::System::Type * __gc [ 0 ], 0 );
-            code->Emit( Emit::OpCodes::Call, base_ctor );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldnull );
-            code->Emit( Emit::OpCodes::Stfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldc_I4_0 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_oneway );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldc_I4_0 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_attribute_method );
-            code->Emit( Emit::OpCodes::Ret );
-
-            // .ctor
-            ::System::Type * param_types __gc [] =
-                  new ::System::Type * __gc [ 3 ];
-            param_types[ 0 ] = __typeof (::System::Type * __gc []);
-            param_types[ 1 ] = __typeof (bool);
-            param_types[ 2 ] = __typeof (bool);
-            ctor_builder =
-                type_builder->DefineConstructor(
-                    c_ctor_method_attr, CallingConventions::Standard,
-                    param_types );
-            ctor_builder->DefineParameter(
-                1, ParameterAttributes::In, S"Raises" );
-            ctor_builder->DefineParameter(
-                2, ParameterAttributes::In, S"OneWay" );
-            ctor_builder->DefineParameter(
-                3, ParameterAttributes::In, S"AttributeMethod" );
-            code = ctor_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Call, base_ctor );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_2 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_oneway );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_3 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_attribute_method );
-            code->Emit( Emit::OpCodes::Ret );
-
-            // property Raises
-            const MethodAttributes c_property_method_attr = (MethodAttributes)
-                (MethodAttributes::Public |
-                 MethodAttributes::HideBySig |
-                 MethodAttributes::SpecialName |
-                 MethodAttributes::Instance);
-            ::System::Type * no_params __gc [] =
-                  new ::System::Type * __gc [ 0 ];
-            Emit::PropertyBuilder * property_builder =
-                type_builder->DefineProperty(
-                    S"Raises", PropertyAttributes::None,
-                    __typeof (::System::Type * __gc []), no_params );
-            // getter
-            Emit::MethodBuilder * method_builder =
-                type_builder->DefineMethod(
-                    S"get_Raises", c_property_method_attr,
-                    __typeof (::System::Type * __gc []), no_params );
-            code = method_builder->GetILGenerator();
-            Emit::LocalBuilder * local_ar0 =
-                code->DeclareLocal( __typeof (::System::Type * __gc []) );
-            Emit::LocalBuilder * local_ar1 =
-                code->DeclareLocal( __typeof (::System::Type * __gc []) );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            Emit::Label label_else = code->DefineLabel();
-            code->Emit( Emit::OpCodes::Brtrue_S, label_else );
-            code->Emit( Emit::OpCodes::Ldc_I4_1 );
-            code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Type) );
-            code->Emit( Emit::OpCodes::Stloc, local_ar1 );
-            code->Emit( Emit::OpCodes::Ldloc, local_ar1 );
-            code->Emit( Emit::OpCodes::Ldc_I4_0 );
-            code->Emit( Emit::OpCodes::Ldtoken, get_type_RuntimeException() );
-            code->Emit(
-                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_ar1 );
-            code->Emit( Emit::OpCodes::Ret );
-            code->MarkLabel( label_else );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldlen );
-            code->Emit( Emit::OpCodes::Conv_I4 );
-            code->Emit( Emit::OpCodes::Ldc_I4_1 );
-            code->Emit( Emit::OpCodes::Add );
-            code->Emit( Emit::OpCodes::Conv_Ovf_U4 );
-            code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Type) );
-            code->Emit( Emit::OpCodes::Stloc, local_ar0 );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldloc, local_ar0 );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldlen );
-            code->Emit( Emit::OpCodes::Conv_I4 );
-
-            param_types = new ::System::Type * __gc [ 3 ];
-            param_types[ 0 ] = __typeof (::System::Array);
-            param_types[ 1 ] = __typeof (::System::Array);
-            param_types[ 2 ] = __typeof (::System::Int32);
-            code->Emit(
-                Emit::OpCodes::Call,
-                __typeof (::System::Array)->GetMethod( "Copy", param_types ) );
-            code->Emit( Emit::OpCodes::Ldloc, local_ar0 );
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ldlen );
-            code->Emit( Emit::OpCodes::Conv_I4 );
-            code->Emit( Emit::OpCodes::Ldtoken, get_type_RuntimeException() );
-            code->Emit(
-                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-            code->Emit( Emit::OpCodes::Stelem_Ref );
-            code->Emit( Emit::OpCodes::Ldloc, local_ar0 );
-            code->Emit( Emit::OpCodes::Ret );
-            property_builder->SetGetMethod( method_builder );
-            // setter
-            params = new ::System::Type * __gc [ 1 ];
-            params[ 0 ] = __typeof (::System::Type * __gc []);
-            method_builder =
-                type_builder->DefineMethod(
-                    S"set_Raises", c_property_method_attr,
-                    __typeof (void), params );
-            method_builder->DefineParameter(
-                1, ParameterAttributes::In, S"value" );
-            code = method_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_raises );
-            code->Emit( Emit::OpCodes::Ret );
-            property_builder->SetSetMethod( method_builder );
-
-            // property OneWay
-            params[ 0 ] = __typeof (bool);
-            property_builder =
-                type_builder->DefineProperty(
-                    S"OneWay", PropertyAttributes::None,
-                    __typeof (bool), no_params );
-            // getter
-            method_builder =
-                type_builder->DefineMethod(
-                    S"get_OneWay", c_property_method_attr,
-                    __typeof (bool), no_params );
-            code = method_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_oneway );
-            code->Emit( Emit::OpCodes::Ret );
-            property_builder->SetGetMethod( method_builder );
-            // setter
-            method_builder =
-                type_builder->DefineMethod(
-                    S"set_OneWay", c_property_method_attr,
-                    __typeof (void), params );
-            method_builder->DefineParameter(
-                1, ParameterAttributes::In, S"value" );
-            code = method_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_oneway );
-            code->Emit( Emit::OpCodes::Ret );
-            property_builder->SetSetMethod( method_builder );
-
-            // property AttributeMethod
-            params[ 0 ] = __typeof (bool);
-            property_builder =
-                type_builder->DefineProperty(
-                    S"AttributeMethod", PropertyAttributes::None,
-                    __typeof (bool), no_params );
-            // getter
-            method_builder =
-                type_builder->DefineMethod(
-                    S"get_AttributeMethod", c_property_method_attr,
-                    __typeof (bool), no_params );
-            code = method_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldfld, field_m_attribute_method );
-            code->Emit( Emit::OpCodes::Ret );
-            property_builder->SetGetMethod( method_builder );
-            // setter
-            method_builder =
-                type_builder->DefineMethod(
-                    S"set_AttributeMethod", c_property_method_attr,
-                    __typeof (void), params );
-            method_builder->DefineParameter(
-                1, ParameterAttributes::In, S"value" );
-            code = method_builder->GetILGenerator();
-            code->Emit( Emit::OpCodes::Ldarg_0 );
-            code->Emit( Emit::OpCodes::Ldarg_1 );
-            code->Emit( Emit::OpCodes::Stfld, field_m_attribute_method );
-            code->Emit( Emit::OpCodes::Ret );
-            property_builder->SetSetMethod( method_builder );
-
-            if (g_verbose)
-            {
-                ::System::Console::WriteLine(
-                    "> emitting attribute type uno.MethodAttribute" );
-            }
-            type_MethodAttribute = type_builder->CreateType();
-        }
-        // retrieve default .ctor
-        ::System::Type * param_types __gc [] = new ::System::Type * __gc [ 0 ];
-        m_default_ctor_uno_MethodAttribute =
-            type_MethodAttribute->GetConstructor( param_types );
-        OSL_ASSERT( 0 != m_default_ctor_uno_MethodAttribute );
-        // retrieve .ctor
-        param_types = new ::System::Type * __gc [ 3 ];
-        param_types[ 0 ] = __typeof (::System::Type * __gc []);
-        param_types[ 1 ] = __typeof (bool);
-        param_types[ 2 ] = __typeof (bool);
-        m_ctor_uno_MethodAttribute =
-            type_MethodAttribute->GetConstructor( param_types );
-        OSL_ASSERT( 0 != m_ctor_uno_MethodAttribute );
-    }
-    return m_ctor_uno_MethodAttribute;
 }
 
 //______________________________________________________________________________
@@ -1043,13 +537,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     }
 
     ::System::String * cts_name = to_cts_name( uno_name );
-//remove later
-//     System::Console::WriteLine(System::String::Concat(cts_name, new System::String( S"\n")));
-//  if (cts_name->Equals(new System::String(S"unoidl.test.testtools.bridgetest.TestPolyStruct<[]any>")))
-//  {
-//      int a = 3;
-//  }
-//------------
+
     // if the struct is an instantiated polymorpic struct then we create the simple struct name
     // For example:
     // void func ([in] PolyStruct<boolean> arg);
@@ -1072,6 +560,31 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                                   TypeAttributes::AnsiClass),
                 base_type );
 
+        //Polymorphic struct, define uno.TypeParametersAttribute
+        Sequence< OUString > seq_type_parameters;
+        Reference< reflection::XStructTypeDescription> xStructTypeDesc(
+            xType, UNO_QUERY);
+        if (xStructTypeDesc.is())
+        {
+            seq_type_parameters = xStructTypeDesc->getTypeParameters();
+            int numTypes = 0;
+            if ((numTypes =seq_type_parameters.getLength()) > 0)
+            {
+                ::System::Object * aArg[] = new ::System::Object*[numTypes];
+                for (int i = 0; i < numTypes; i++)
+                    aArg[i] = ustring_to_String(seq_type_parameters.getConstArray()[i]);
+                ::System::Object * args[] = {aArg};
+
+                ::System::Type * arTypesCtor[] =
+                    {::System::Type::GetType(S"System.String[]")};
+                Emit::CustomAttributeBuilder * attrBuilder =
+                    new Emit::CustomAttributeBuilder(
+                        __typeof(::uno::TypeParametersAttribute)->GetConstructor(arTypesCtor),
+                        args);
+                type_builder->SetCustomAttribute(attrBuilder);
+            }
+        }
+
         // optional: lookup base type whether generated entry of this session
         struct_entry * base_type_entry = 0;
         if (0 != base_type)
@@ -1089,11 +602,6 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         sal_Int32 members_length = seq_members.getLength();
         OSL_ASSERT( seq_member_names.getLength() == members_length );
 
-        Sequence< OUString > seq_type_parameters;
-        Reference< reflection::XStructTypeDescription> xStructTypeDesc(
-            xType, UNO_QUERY);
-        if (xStructTypeDesc.is())
-            seq_type_parameters = xStructTypeDesc->getTypeParameters();
 
         sal_Int32 all_members_length = 0;
         sal_Int32 member_pos;
@@ -1125,12 +633,10 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         }
 
         // create all_members arrays; right order
-        ::System::String * all_member_names __gc [] =
-              new ::System::String * __gc [
-                  all_members_length + members_length ];
-        ::System::Type * all_param_types __gc [] =
-              new ::System::Type * __gc [
-                  all_members_length + members_length ];
+        ::System::String * all_member_names[] =
+              new ::System::String * [all_members_length + members_length ];
+        ::System::Type * all_param_types[] =
+              new ::System::Type * [all_members_length + members_length ];
         member_pos = 0;
         for ( sal_Int32 pos = base_types_list->get_Count(); pos--; )
         {
@@ -1151,7 +657,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 if (0 == entry)
                 {
                     // complete type
-                    FieldInfo * fields __gc [] =
+                    FieldInfo * fields [] =
                         base_type->GetFields(
                             (BindingFlags) (BindingFlags::Instance |
                                             BindingFlags::Public |
@@ -1184,23 +690,27 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
 
         // build up entry
         struct_entry * entry = new struct_entry();
-        entry->m_member_names = new ::System::String * __gc [ members_length ];
-        entry->m_param_types = new ::System::Type * __gc [ members_length ];
+        entry->m_member_names = new ::System::String * [ members_length ];
+        entry->m_param_types = new ::System::Type * [ members_length ];
 
         // add members
-        FieldInfo * members __gc [] = new FieldInfo * __gc [ members_length ];
+        Emit::FieldBuilder * members[] = new Emit::FieldBuilder * [ members_length ];
         Reference< reflection::XTypeDescription > const * pseq_members =
             seq_members.getConstArray();
         OUString const * pseq_member_names =
             seq_member_names.getConstArray();
+
+        int curParamIndex = 0; //count the fields which have parameterized types
         for ( member_pos = 0; member_pos < members_length; ++member_pos )
         {
             ::System::String * field_name =
                   ustring_to_String( pseq_member_names[ member_pos ] );
             ::System::Type * field_type;
             //Special handling of struct parameter types
+            bool bParameterizedType = false;
             if (pseq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
             {
+                bParameterizedType = true;
                 if (type_param_pos < seq_type_parameters.getLength())
                 {
                     field_type = __typeof(::System::Object);
@@ -1221,6 +731,26 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             members[ member_pos ] =
                 type_builder->DefineField(
                     field_name, field_type, FieldAttributes::Public );
+
+            //parameterized type (polymorphic struct) ?
+            if (bParameterizedType && xStructTypeDesc.is())
+            {
+                //get the name
+                OSL_ASSERT(seq_type_parameters.getLength() > curParamIndex);
+                ::System::String* sTypeName = ustring_to_String(
+                    seq_type_parameters.getConstArray()[curParamIndex++]);
+                ::System::Object * args[] = {sTypeName};
+                //set ParameterizedTypeAttribute
+                ::System::Type * arCtorTypes[] = {__typeof(::System::String)};
+
+                Emit::CustomAttributeBuilder * attrBuilder =
+                    new Emit::CustomAttributeBuilder(
+                        __typeof(::uno::ParameterizedTypeAttribute)
+                        ->GetConstructor(arCtorTypes),
+                        args);
+
+                members[member_pos]->SetCustomAttribute(attrBuilder);
+            }
             // add to all_members
             all_member_names[ all_members_length + member_pos ] = field_name;
             all_param_types[ all_members_length + member_pos ] = field_type;
@@ -1234,13 +764,13 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         Emit::ConstructorBuilder * ctor_builder =
             type_builder->DefineConstructor(
                 c_ctor_method_attr, CallingConventions::Standard,
-                new ::System::Type * __gc [ 0 ] );
+                new ::System::Type * [ 0 ] );
         Emit::ILGenerator * code = ctor_builder->GetILGenerator();
         code->Emit( Emit::OpCodes::Ldarg_0 );
         code->Emit(
             Emit::OpCodes::Call,
             0 == base_type_entry
-            ? base_type->GetConstructor( new ::System::Type * __gc [ 0 ] )
+            ? base_type->GetConstructor( new ::System::Type * [ 0 ] )
             : base_type_entry->m_default_ctor );
         // default initialize members
         for ( member_pos = 0; member_pos < members_length; ++member_pos )
@@ -1277,7 +807,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 if (field_type->get_FullName()->Equals( S"uno.Any" ))
                 {
                     code->Emit( Emit::OpCodes::Ldarg_0 );
-                    code->Emit( Emit::OpCodes::Ldsfld, m_field_Any_VOID );
+                    code->Emit( Emit::OpCodes::Ldsfld, __typeof(::uno::Any)->GetField(S"VOID"));
                     code->Emit( Emit::OpCodes::Stfld, field );
                 }
             }
@@ -1291,7 +821,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     code->Emit(
                         Emit::OpCodes::Newobj,
                         field_type->GetConstructor(
-                            new ::System::Type * __gc [ 0 ] ) );
+                            new ::System::Type * [ 0 ] ) );
                     code->Emit( Emit::OpCodes::Stfld, field );
                 }
             }
@@ -1312,8 +842,8 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         // call base .ctor
         code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
         sal_Int32 base_members_length = all_members_length - members_length;
-        ::System::Type * param_types __gc [] =
-              new ::System::Type * __gc [ base_members_length ];
+        ::System::Type * param_types [] =
+              new ::System::Type * [ base_members_length ];
         for ( member_pos = 0; member_pos < base_members_length; ++member_pos )
         {
             emit_ldarg( code, member_pos +1 );
@@ -1379,28 +909,9 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         {
             for (int i = 0; i < seqBaseTypes.getLength(); i++)
             {
-                Reference<reflection::XTypeDescription>& aType = seqBaseTypes[i];
-                Reference<reflection::XInterfaceTypeDescription2> xIfaceTd(
-                    aType, UNO_QUERY);
-                if (xIfaceTd.is() == sal_False)
-                {
-                    Reference<reflection::XIndirectTypeDescription> xIndTd(
-                        aType, UNO_QUERY_THROW);
-                    Reference<reflection::XTypeDescription> xRefTD;
-                    while (1)
-                    {
-                        Reference<reflection::XTypeDescription>  xRefTD =
-                            xIndTd->getReferencedType();
+                Reference<reflection::XInterfaceTypeDescription2> xIfaceTd =
+                    resolveInterfaceTypedef(seqBaseTypes[i]);
 
-                        Reference<reflection::XInterfaceTypeDescription2> xIfaceTd2(
-                            xRefTD, UNO_QUERY);
-                        if (xIfaceTd2.is())
-                        {
-                            xIfaceTd = xIfaceTd2;
-                            break;
-                        }
-                    }
-                }
                 if (xIfaceTd->getName().equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) == sal_False)
                 {
@@ -1408,8 +919,8 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 }
             }
 
-            ::System::Type * base_interfaces __gc [] =
-                  new ::System::Type * __gc [ vecBaseTypes.size() ];
+            ::System::Type * base_interfaces [] =
+                  new ::System::Type * [ vecBaseTypes.size() ];
 
             typedef std::vector<Reference<reflection::XInterfaceTypeDescription2> >::const_iterator it;
             int index = 0;
@@ -1441,6 +952,68 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     return ret_type;
 }
 
+
+//______________________________________________________________________________
+::System::Type * TypeEmitter::get_type(
+    Reference< reflection::XServiceTypeDescription2 > const & xType )
+{
+    if (xType->isSingleInterfaceBased() == sal_False)
+        return NULL;
+
+    System::String * cts_name = to_cts_name( xType->getName() );
+    System::Type * ret_type = get_type( cts_name, false /* no exc */ );
+    if (ret_type != NULL)
+        return ret_type;
+
+    TypeAttributes attr = (TypeAttributes) (TypeAttributes::Public |
+                                            TypeAttributes::Sealed |
+                                            TypeAttributes::BeforeFieldInit |
+                                            TypeAttributes::AnsiClass);
+
+    Emit::TypeBuilder * type_builder = m_module_builder->DefineType(
+        cts_name, attr);
+
+    // insert to be completed
+    service_entry * entry = new service_entry();
+    xType->acquire();
+    entry->m_xType = xType.get();
+    entry->m_type_builder = type_builder;
+    m_incomplete_services->Add(cts_name,entry );
+
+    return type_builder;
+}
+
+::System::Type * TypeEmitter::get_type(
+    Reference<reflection::XSingletonTypeDescription2 > const & xType )
+{
+    if (xType->isInterfaceBased() == sal_False)
+        return NULL;
+
+    ::System::String* cts_name = to_cts_name( xType->getName() );
+    ::System::Type * ret_type = get_type( cts_name, false /* no exc */ );
+    if (ret_type != NULL)
+        return ret_type;
+
+    TypeAttributes attr = static_cast<TypeAttributes>(
+        TypeAttributes::Public |
+        TypeAttributes::Sealed |
+        TypeAttributes::BeforeFieldInit |
+        TypeAttributes::AnsiClass);
+
+    Emit::TypeBuilder * type_builder = m_module_builder->DefineType(
+        cts_name, attr);
+
+    // insert to be completed
+    singleton_entry * entry = new singleton_entry();
+    xType->acquire();
+    entry->m_xType = xType.get();
+    entry->m_type_builder = type_builder;
+    m_incomplete_singletons->Add(cts_name,entry );
+
+    return type_builder;
+
+}
+
 //______________________________________________________________________________
 ::System::Type * TypeEmitter::complete_iface_type( iface_entry * entry )
 {
@@ -1452,27 +1025,10 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     {
         for (int i = 0; i < seqBaseTypes.getLength(); i++)
         {
-            Reference< reflection::XTypeDescription >  aBaseType = seqBaseTypes[i];
             //make sure we get the interface rather then a typedef
-            Reference<reflection::XIndirectTypeDescription> xIndTd(
-                aBaseType, UNO_QUERY);
-            if (xIndTd.is())
-            {
-                Reference<reflection::XTypeDescription> xRefTD;
-                while (1)
-                {
-                    Reference<reflection::XTypeDescription>  xRefTD =
-                        xIndTd->getReferencedType();
+            Reference<reflection::XInterfaceTypeDescription2> aBaseType =
+                resolveInterfaceTypedef( seqBaseTypes[i]);
 
-                    Reference<reflection::XInterfaceTypeDescription2> xIfaceTd2(
-                        xRefTD, UNO_QUERY);
-                    if (xIfaceTd2.is())
-                    {
-                        aBaseType = Reference<reflection::XTypeDescription>::query(xIfaceTd2);
-                        break;
-                    }
-                }
-            }
             if (aBaseType->getName().equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) == sal_False)
             {
@@ -1487,12 +1043,6 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             }
         }
     }
-
-    ConstructorInfo * ctor_MethodAttribute = get_ctor_uno_MethodAttribute();
-    Emit::CustomAttributeBuilder * default_MethodAttribute_builder =
-        new Emit::CustomAttributeBuilder(
-            m_default_ctor_uno_MethodAttribute,
-            new ::System::Object * __gc [ 0 ] );
 
     Sequence<
         Reference< reflection::XInterfaceMemberTypeDescription > > seq_members(
@@ -1526,11 +1076,12 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 Reference< reflection::XMethodParameter > > seq_parameters(
                     xMethod->getParameters() );
             sal_Int32 params_length = seq_parameters.getLength();
-            ::System::Type * param_types __gc [] =
-                  new ::System::Type * __gc [ params_length ];
+            ::System::Type * param_types [] =
+                  new ::System::Type * [ params_length ];
             Reference< reflection::XMethodParameter > const * parameters =
                 seq_parameters.getConstArray();
             // first determine all types
+            //Make the first param type as return type
             sal_Int32 params_pos = 0;
             for ( ; params_pos < params_length; ++params_pos )
             {
@@ -1546,11 +1097,19 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 }
                 param_types[ xParam->getPosition() ] = param_type;
             }
+
+
             // create method
-            method_builder = type_builder->DefineMethod(
-                ustring_to_String( xMethod->getMemberName() ),
-                c_method_attr, get_type( xMethod->getReturnType() ),
-                param_types );
+//             if (tb)
+//                 method_builder = type_builder->DefineMethod(
+//                 ustring_to_String( xMethod->getMemberName() ),
+//                 c_method_attr, tb,
+//                 param_types );
+//             else
+                method_builder = type_builder->DefineMethod(
+                    ustring_to_String( xMethod->getMemberName() ),
+                    c_method_attr, get_type( xMethod->getReturnType() ),
+                    param_types );
             // then define parameter infos
             params_pos = 0;
             for ( ; params_pos < params_length; ++params_pos )
@@ -1568,35 +1127,56 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     (ParameterAttributes) param_flags,
                     ustring_to_String( xParam->getName() ) );
             }
-            seq_exceptions = xMethod->getExceptions();
+            //Apply attribute TypeParametersAttribute to return value if it
+            //is a parameterized Type. Currently only structs can have parameters.
+            Reference<reflection::XStructTypeDescription> xReturnStruct(
+                xMethod->getReturnType(), UNO_QUERY);
 
-            // uno method attribute
-            Reference< reflection::XTypeDescription > const * exceptions =
-                seq_exceptions.getConstArray();
-            sal_Int32 exc_length = seq_exceptions.getLength();
-            if (0 == exc_length) // opt
+            if (xReturnStruct.is())
             {
-                method_builder->SetCustomAttribute(
-                    default_MethodAttribute_builder );
-            }
-            else
-            {
-                ::System::Type * exception_types __gc [] =
-                      new ::System::Type * __gc [ exc_length ];
-                for ( sal_Int32 exc_pos = 0; exc_pos < exc_length; ++exc_pos )
+                Sequence<Reference<reflection::XTypeDescription> > seq_type_args =
+                    xReturnStruct->getTypeArguments();
+                if (seq_type_args.getLength() != 0)
                 {
-                    Reference< reflection::XTypeDescription > const & xExc =
-                        exceptions[ exc_pos ];
-                    exception_types[ exc_pos ] = get_type( xExc );
+                    //get th ctor of the attribute
+                    ::System::Type * arCtor[] = {::System::Type::GetType(S"System.Type[]")};
+                    ConstructorInfo *info =  __typeof(::uno::TypeParametersAttribute)
+                            ->GetConstructor( arCtor);
+                    //Get the arguments for the attribute's ctor
+                    Reference<reflection::XTypeDescription> const * arXTypeArgs =
+                        seq_type_args.getConstArray();
+                    int numTypes = seq_type_args.getLength();
+                    ::System::Type * arCtsTypes[] = new ::System::Type*[numTypes];
+                    for (int i = 0; i < numTypes; i++)
+                        arCtsTypes[i] = get_type(arXTypeArgs[i]);
+                    ::System::Object * arArgs[] = {arCtsTypes};
+
+                    Emit::CustomAttributeBuilder * attrBuilder =
+                        new Emit::CustomAttributeBuilder(
+                            __typeof(::uno::TypeArgumentsAttribute)
+                            ->GetConstructor( arCtor),
+                            arArgs);
+
+                    method_builder->SetCustomAttribute(attrBuilder);
                 }
-                ::System::Object * args __gc [] =
-                      new ::System::Object * __gc [ 3 ];
-                args[ 0 ] = exception_types;
-                args[ 1 ] = __box (sal_False != xMethod->isOneway());
-                args[ 2 ] = __box (false);
-                method_builder->SetCustomAttribute(
+            }
+
+            //define UNO exception attribute (exceptions)--------------------------------------
+            Emit::CustomAttributeBuilder* attrBuilder =
+                get_iface_method_exception_attribute(xMethod);
+            if (attrBuilder != NULL)
+                method_builder->SetCustomAttribute(attrBuilder);
+
+            // oneway attribute
+            if (xMethod->isOneway())
+            {
+                ::System::Type * arCtorOneway[] = new ::System::Type*[0];
+                ::System::Object * arArgs[] = new ::System::Object*[0];
+                Emit::CustomAttributeBuilder * attrBuilder =
                     new Emit::CustomAttributeBuilder(
-                        ctor_MethodAttribute, args ) );
+                        __typeof(::uno::OnewayAttribute)->GetConstructor( arCtorOneway),
+                        arArgs);
+                method_builder->SetCustomAttribute(attrBuilder);
             }
         }
         else // attribute
@@ -1604,21 +1184,33 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             OSL_ASSERT(
                 TypeClass_INTERFACE_ATTRIBUTE == xMember->getTypeClass() );
             Reference<
-                reflection::XInterfaceAttributeTypeDescription > xAttribute(
+                reflection::XInterfaceAttributeTypeDescription2 > xAttribute(
                     xMember, UNO_QUERY_THROW );
 
             const MethodAttributes c_property_method_attr = (MethodAttributes)
                 (c_method_attr | MethodAttributes::SpecialName);
 
             ::System::Type * attribute_type = get_type( xAttribute->getType() );
-            ::System::Type * parameters __gc [] =
-                  new ::System::Type * __gc [ 0 ];
+            ::System::Type * parameters [] =
+                  new ::System::Type * [ 0 ];
 
             Emit::PropertyBuilder * property_builder =
                 type_builder->DefineProperty(
                     ustring_to_String( xAttribute->getMemberName() ),
                     PropertyAttributes::None,
                     attribute_type, parameters );
+
+            //set BoundAttribute, if necessary
+            if (xAttribute->isBound())
+            {
+                ConstructorInfo * ctorBoundAttr =
+                    __typeof(::uno::BoundAttribute)->GetConstructor(
+                        new System::Type*[0]);
+                Emit::CustomAttributeBuilder * attrBuilderBound =
+                    new Emit::CustomAttributeBuilder(
+                        ctorBoundAttr, new ::System::Object*[0]);
+                property_builder->SetCustomAttribute(attrBuilderBound);
+            }
 
             // getter
             Emit::MethodBuilder * method_builder =
@@ -1627,21 +1219,18 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                                        xAttribute->getMemberName() ),
                     c_property_method_attr, attribute_type, parameters );
 
-            // exception spec
-            ::System::Object * args __gc [] = new ::System::Object * __gc [ 3 ];
-            args[ 0 ] = 0; // implies com.sun.star.uno.RuntimeException
-            args[ 1 ] = __box (false);
-            args[ 2 ] = __box (true); // is AttributeMethod
-            Emit::CustomAttributeBuilder * attribute_builder =
-                new Emit::CustomAttributeBuilder( ctor_MethodAttribute, args );
+           //define UNO exception attribute (exceptions)--------------------------------------
+            Emit::CustomAttributeBuilder* attrBuilder =
+                get_exception_attribute(xAttribute->getGetExceptions());
+            if (attrBuilder != NULL)
+                method_builder->SetCustomAttribute(attrBuilder);
 
-            method_builder->SetCustomAttribute( attribute_builder );
             property_builder->SetGetMethod( method_builder );
 
             if (! xAttribute->isReadOnly())
             {
                 // setter
-                parameters = new ::System::Type * __gc [ 1 ];
+                parameters = new ::System::Type * [ 1 ];
                 parameters[ 0 ] = attribute_type;
                 method_builder =
                     type_builder->DefineMethod(
@@ -1651,7 +1240,12 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 // define parameter info
                 method_builder->DefineParameter(
                     1 /* starts with 1 */, ParameterAttributes::In, S"value" );
-                method_builder->SetCustomAttribute( attribute_builder );
+                //define UNO exception attribute (exceptions)--------------------------------------
+                Emit::CustomAttributeBuilder* attrBuilder =
+                    get_exception_attribute(xAttribute->getSetExceptions());
+                if (attrBuilder != NULL)
+                    method_builder->SetCustomAttribute(attrBuilder);
+
                 property_builder->SetSetMethod( method_builder );
             }
         }
@@ -1669,6 +1263,562 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     }
     return type_builder->CreateType();
 }
+
+
+//Examples of generated code
+//      public static XWeak constructor1(XComponentContext ctx)
+//      {
+//          XMultiComponentFactory factory = ctx.getServiceManager();
+//          if (factory == null)
+//              throw new com.sun.star.uno.DeploymentException("bla", null);
+//          return (XWeak) factory.createInstanceWithContext("service_specifier", ctx);
+//      }
+//      public static XWeak constructor2(XComponentContext ctx, int a, int b)
+//      {
+//          XMultiComponentFactory factory = ctx.getServiceManager();
+//          if (factory == null)
+//              throw new com.sun.star.uno.DeploymentException("bla", null);
+//          Any a1;
+//          a1 = new Any( typeof(int), a);
+//          Any a2;
+//          a2 = new Any( typeof(int), b);
+//          Any[] arAny = new Any[2];
+//          arAny[0] = a1;
+//          arAny[1] = a2;
+//          return (XWeak) factory.createInstanceWithArgumentsAndContext("service_specifier", arAny, ctx);
+//      }
+
+//      public static XWeak constructor3(XComponentContext ctx, params Any[] c)
+//      {
+//          XMultiComponentFactory factory = ctx.getServiceManager();
+//          if (factory == null)
+//              throw new com.sun.star.uno.DeploymentException("bla", null);
+//          return (XWeak) factory.createInstanceWithArgumentsAndContext("service_specifier", c, ctx);
+//      }
+::System::Type * TypeEmitter::complete_service_type(service_entry * entry)
+{
+    Emit::TypeBuilder * type_builder = entry->m_type_builder;
+    reflection::XServiceTypeDescription2 * xServiceType = entry->m_xType;
+
+    //Create the private default constructor
+    Emit::ConstructorBuilder* ctor_builder =
+        type_builder->DefineConstructor(
+            (MethodAttributes) (MethodAttributes::Private |
+                                MethodAttributes::HideBySig |
+                                MethodAttributes::SpecialName |
+                                MethodAttributes::RTSpecialName),
+            CallingConventions::Standard, NULL);
+
+    Emit::ILGenerator* ilGen = ctor_builder->GetILGenerator();
+    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    ilGen->Emit(
+            Emit::OpCodes::Call,
+            type_builder->BaseType->GetConstructor(new ::System::Type*[0]));
+    ilGen->Emit( Emit::OpCodes::Ret );
+
+
+    //Create the service constructors.
+    //obtain the interface which makes up this service, it is the return
+    //type of the constructor functions
+    Reference<reflection::XInterfaceTypeDescription2> xIfaceType(
+        xServiceType->getInterface(), UNO_QUERY);
+    if (xIfaceType.is () == sal_False)
+        xIfaceType = resolveInterfaceTypedef(xServiceType->getInterface());
+    System::Type * retType = get_type(xIfaceType);
+
+    //Create the ConstructorInfo for a DeploymentException
+    ::System::Type * typeDeploymentExc =
+          get_type(S"unoidl.com.sun.star.uno.DeploymentException", true);
+
+    ::System::Type * arTypeCtor[] = {__typeof(::System::String),
+                                         __typeof(::System::Object)};
+    ::System::Reflection::ConstructorInfo * ctorDeploymentException  =
+          typeDeploymentExc->GetConstructor(arTypeCtor);
+
+    Sequence<Reference<reflection::XServiceConstructorDescription> >  seqCtors =
+        xServiceType->getConstructors();
+
+    ::System::Type * type_uno_exception = get_type(S"unoidl.com.sun.star.uno.Exception", true);
+
+    for (int i = seqCtors.getLength() - 1; i >= 0; i--)
+    {
+        bool bParameterArray = false;
+        ::System::Type * typeAny = __typeof(::uno::Any);
+        const Reference<reflection::XServiceConstructorDescription> & ctorDes =
+            seqCtors[i];
+        //obtain the parameter types
+        Sequence<Reference<reflection::XParameter> > seqParams =
+            ctorDes->getParameters();
+        Reference<reflection::XParameter> const * arXParams = seqParams.getConstArray();
+        sal_Int32 cParams = seqParams.getLength();
+        ::System::Type * arTypeParameters[] = new ::System::Type* [cParams + 1];
+        arTypeParameters[0] = get_type(S"unoidl.com.sun.star.uno.XComponentContext", true);
+        for (int iparam = 0; iparam != cParams; iparam++)
+        {
+            if (arXParams[iparam]->isRestParameter())
+                arTypeParameters[iparam + 1] = __typeof(::uno::Any[]);
+            else
+                    arTypeParameters[iparam + 1] = get_type(arXParams[iparam]->getType());
+        }
+
+        //define method
+        System::String * ctorName;
+        if (ctorDes->isDefaultConstructor())
+            ctorName = new ::System::String(S"create");
+        else
+            ctorName = ustring_to_String(ctorDes->getName());
+        Emit::MethodBuilder* method_builder = type_builder->DefineMethod(
+            ctorName,
+            static_cast<MethodAttributes>(MethodAttributes::Public | MethodAttributes::HideBySig |
+                                          MethodAttributes::Static),
+            retType,
+            arTypeParameters);
+
+        //define UNO exception attribute (exceptions)--------------------------------------
+        Emit::CustomAttributeBuilder* attrBuilder = get_service_exception_attribute(ctorDes);
+        if (attrBuilder != NULL)
+            method_builder->SetCustomAttribute(attrBuilder);
+
+        //-------------------------------------------------------------
+        //define parameter attributes (paramarray), names etc.
+        //The first parameter is the XComponentContext, which cannot be obtained
+        //from reflection.
+        //The context is not part of the idl description
+        Emit::ParameterBuilder * param_builder = method_builder->DefineParameter(
+            1, ParameterAttributes::In, S"the_context");
+
+        Emit::ParameterBuilder * arParameterBuilder[] =
+            new Emit::ParameterBuilder * [cParams];
+        for (int iparam = 0; iparam != cParams; iparam++)
+        {
+            Reference<reflection::XParameter> const & aParam = arXParams[iparam];
+            ::System::String * sParamName = ustring_to_String(aParam->getName());
+
+            arParameterBuilder[iparam] = method_builder->DefineParameter(
+                iparam + 2, ParameterAttributes::In, sParamName);
+
+            if (aParam->isRestParameter())
+            {
+                bParameterArray = true;
+                //set the ParameterArrayAttribute
+                ::System::Reflection::ConstructorInfo* ctor_info =
+                    __typeof(System::ParamArrayAttribute)->GetConstructor(
+                        new ::System::Type*[0]);
+                Emit::CustomAttributeBuilder * attr_builder =
+                    new Emit::CustomAttributeBuilder(ctor_info, new ::System::Object*[0]);
+                arParameterBuilder[iparam]->SetCustomAttribute(attr_builder);
+                break;
+            }
+        }
+
+        Emit::ILGenerator * ilGen = method_builder->GetILGenerator();
+
+        //Define locals ---------------------------------
+        //XMultiComponentFactory
+        Emit::LocalBuilder* local_factory =
+            ilGen->DeclareLocal(
+                get_type(S"unoidl.com.sun.star.lang.XMultiComponentFactory", true));
+
+        //The return type
+        Emit::LocalBuilder* local_return_val =
+            ilGen->DeclareLocal(retType);
+
+        //Obtain the XMultiComponentFactory and throw an exception if we do not get one
+        ilGen->Emit(Emit::OpCodes::Ldarg_0);
+
+        ::System::Reflection::MethodInfo * methodGetServiceManager = get_type(
+            S"unoidl.com.sun.star.uno.XComponentContext", true)
+                ->GetMethod(S"getServiceManager");
+        ilGen->Emit(Emit::OpCodes::Callvirt, methodGetServiceManager);
+        ilGen->Emit(Emit::OpCodes::Stloc, local_factory);
+        ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
+        Emit::Label label1 = ilGen->DefineLabel();
+        ilGen->Emit(Emit::OpCodes::Brtrue, label1);
+        //The string for the exception
+        ::System::Text::StringBuilder * strbuilder = new ::System::Text::StringBuilder(256);
+        strbuilder->Append(S"The service unoidl.");
+        strbuilder->Append(to_cts_name(xServiceType->getName()));
+        strbuilder->Append(S" could not be created. The context failed to supply the service manager.");
+
+        ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
+        ilGen->Emit(Emit::OpCodes::Ldarg_0);
+        ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
+        ilGen->Emit(Emit::OpCodes::Throw);
+        ilGen->MarkLabel(label1);
+
+        //We create a try/ catch around the createInstanceWithContext, etc. functions
+        //There are 3 cases
+        //1. function do not specify exceptions. Then RuntimeExceptions are retrhown and other
+        //   exceptions produce a DeploymentException.
+        //2. function specify  Exception. Then all exceptions fly through
+        //3. function specifies exceptions but no Exception. Then these are rethrown
+        //   and other exceptions, except RuntimeException, produce a deployment exception.
+        //In case there are no parameters we call
+        //XMultiComponentFactory.createInstanceWithContext
+
+        ::System::Collections::ArrayList * arExceptionTypes =
+              get_service_ctor_method_exceptions_reduced(ctorDes->getExceptions());
+        if (arExceptionTypes->Contains(
+                type_uno_exception) == false)
+        {
+            ilGen->BeginExceptionBlock();
+        }
+        if (cParams == 0)
+        {
+            ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
+            ilGen->Emit(Emit::OpCodes::Ldstr, to_cts_name(xServiceType->getName()));
+            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+
+            ::System::Reflection::MethodInfo * methodCreate =
+                    local_factory->get_LocalType()->GetMethod(S"createInstanceWithContext");
+            ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
+        }
+        else if(bParameterArray)
+        {
+            //Service constructor with parameter array
+            ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
+            ilGen->Emit(Emit::OpCodes::Ldstr, to_cts_name(xServiceType->getName()));
+            ilGen->Emit(Emit::OpCodes::Ldarg_1);
+            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+            ::System::Reflection::MethodInfo * methodCreate =
+                    local_factory->get_LocalType()->GetMethod(S"createInstanceWithArgumentsAndContext");
+            ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
+        }
+        else
+        {
+            // Any param1, Any param2, etc.
+            // For each parameter,except the component context, and parameter array
+            // and Any is created.
+            Emit::LocalBuilder * arLocalAny[] = new Emit::LocalBuilder* [cParams];
+
+            for (int iParam = 0; iParam < cParams; iParam ++)
+            {
+                Reference<reflection::XParameter> const &  aParam = arXParams[iParam];
+                arLocalAny[iParam] = ilGen->DeclareLocal(typeAny);
+            }
+
+            //Any[]. This array is filled with the created Anys which contain the parameters
+            //and the values contained in the parameter array
+            Emit::LocalBuilder * local_anyParams =
+                ilGen->DeclareLocal(__typeof(::uno::Any[]));
+
+            //Create the Any for every argument, except for the parameter array
+            //arLocalAny contains the LocalBuilder for all these parameters.
+            //we call the ctor Any(Type, Object)
+            ::System::Type * arTypesCtorAny[] = {__typeof(::System::Type),
+                                                    __typeof(::System::Object)};
+            ::System::Reflection::ConstructorInfo * ctorAny =
+                    typeAny->GetConstructor( arTypesCtorAny);
+            for (int i = 0; i < arLocalAny->Length; i ++)
+            {
+                ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
+                ilGen->Emit(Emit::OpCodes::Ldtoken, arTypeParameters[i+1]);
+
+                ::System::Type * arTypeParams[] = {__typeof(::System::RuntimeTypeHandle)};
+                ilGen->Emit(Emit::OpCodes::Call,
+                            __typeof(::System::Type)->GetMethod(
+                                S"GetTypeFromHandle", arTypeParams));
+                ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
+                // if the parameter is a value type then we need to box it, because
+                // the Any ctor takes an Object
+                if (arTypeParameters[i+1]->IsValueType)
+                    ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
+                ilGen->Emit(Emit::OpCodes::Call, ctorAny);
+            }
+
+            //Create the Any[] that is passed to the
+            //createInstanceWithContext[AndArguments] function
+            ilGen->Emit(Emit::OpCodes::Ldc_I4, arLocalAny->Length);
+            ilGen->Emit(Emit::OpCodes::Newarr, typeAny);
+            ilGen->Emit(Emit::OpCodes::Stloc, local_anyParams);
+
+            //Assign all anys created from the parameters
+            //array to the Any[]
+            for (int i = 0; i < arLocalAny->Length; i++)
+            {
+                ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
+                ilGen->Emit(Emit::OpCodes::Ldc_I4, i);
+                ilGen->Emit(Emit::OpCodes::Ldelema, typeAny);
+                ilGen->Emit(Emit::OpCodes::Ldloc, arLocalAny[i]);
+                ilGen->Emit(Emit::OpCodes::Stobj, typeAny);
+            }
+            // call createInstanceWithContextAndArguments
+            ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
+            ilGen->Emit(Emit::OpCodes::Ldstr, to_cts_name(xServiceType->getName()));
+            ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
+            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+            ::System::Reflection::MethodInfo * methodCreate =
+                    local_factory->get_LocalType()->GetMethod(S"createInstanceWithArgumentsAndContext");
+            ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
+        }
+        //cast the object returned by the functions createInstanceWithContext or
+        //createInstanceWithArgumentsAndContext to the interface type
+        ilGen->Emit(Emit::OpCodes::Castclass, retType);
+        ilGen->Emit(Emit::OpCodes::Stloc, local_return_val);
+
+        //catch exceptions thrown by createInstanceWithArgumentsAndContext and createInstanceWithContext
+        if (arExceptionTypes->Contains(type_uno_exception) == false)
+        {
+            // catch (unoidl.com.sun.star.uno.RuntimeException) {throw;}
+            ilGen->BeginCatchBlock(get_type(S"unoidl.com.sun.star.uno.RuntimeException", true));
+            ilGen->Emit(Emit::OpCodes::Pop);
+            ilGen->Emit(Emit::OpCodes::Rethrow);
+
+            //catch and rethrow all other defined Exceptions
+            for (int i = 0; i < arExceptionTypes->Count; i++)
+            {
+                ::System::Type * excType = __try_cast<::System::Type*>(
+                    arExceptionTypes->get_Item(i));
+                if (excType->IsInstanceOfType(
+                        get_type(S"unoidl.com.sun.star.uno.RuntimeException", true)))
+                {// we have a catch for RuntimeException already defined
+                    continue;
+                }
+
+                //catch Exception and rethrow
+                ilGen->BeginCatchBlock(excType);
+                ilGen->Emit(Emit::OpCodes::Pop);
+                ilGen->Emit(Emit::OpCodes::Rethrow);
+            }
+            //catch (unoidl.com.sun.star.uno.Exception) {throw DeploymentException...}
+            ilGen->BeginCatchBlock(type_uno_exception);
+
+            //Define the local variabe that keeps the exception
+             Emit::LocalBuilder * local_exception = ilGen->DeclareLocal(
+                 type_uno_exception);
+
+             //Store the exception
+             ilGen->Emit(Emit::OpCodes::Stloc, local_exception);
+
+            //prepare the construction of the exception
+             strbuilder = new ::System::Text::StringBuilder(256);
+             strbuilder->Append(S"The context (com.sun.star.uno.XComponentContext) failed to supply the service ");
+             strbuilder->Append(to_cts_name(xServiceType->getName()));
+             strbuilder->Append(S": ");
+
+             ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
+
+            //add to the string the Exception.Message
+            ilGen->Emit(Emit::OpCodes::Ldloc, local_exception);
+            ilGen->Emit(Emit::OpCodes::Callvirt,
+                        type_uno_exception->GetProperty(S"Message")->GetGetMethod());
+            ::System::Type * arConcatParams [] = {__typeof(System::String),
+                                                  __typeof(System::String)};
+            ilGen->Emit(Emit::OpCodes::Call,
+                        __typeof(System::String)->GetMethod(S"Concat", arConcatParams));
+            //load contex argument
+            ilGen->Emit(Emit::OpCodes::Ldarg_0);
+            ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
+            ilGen->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
+
+            ilGen->EndExceptionBlock();
+        }
+
+
+        //Check if the service instance was create and throw a exception if not.
+        Emit::Label label_service_created = ilGen->DefineLabel();
+        ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
+        ilGen->Emit(Emit::OpCodes::Brtrue_S, label_service_created);
+
+        strbuilder = new ::System::Text::StringBuilder(256);
+        strbuilder->Append(S"The context (com.sun.star.uno.XComponentContext) failed to supply the service unoidl.");
+        strbuilder->Append(to_cts_name(xServiceType->getName()));
+        strbuilder->Append(S".");
+        ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
+        ilGen->Emit(Emit::OpCodes::Ldarg_0);
+        ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
+        ilGen->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
+
+        ilGen->MarkLabel(label_service_created);
+        ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
+        ilGen->Emit(Emit::OpCodes::Ret);
+
+    }
+    // remove from incomplete types map
+    ::System::String * cts_name = type_builder->get_FullName();
+    m_incomplete_services->Remove( cts_name );
+    xServiceType->release();
+    if (g_verbose)
+    {
+        ::System::Console::WriteLine(
+            "> emitting service type {0}", cts_name );
+    }
+    return type_builder->CreateType();
+}
+
+
+Emit::CustomAttributeBuilder* TypeEmitter::get_service_exception_attribute(
+    const Reference<reflection::XServiceConstructorDescription> & ctorDes  )
+{
+    return get_exception_attribute(ctorDes->getExceptions());
+}
+
+Emit::CustomAttributeBuilder* TypeEmitter::get_iface_method_exception_attribute(
+    const Reference< reflection::XInterfaceMethodTypeDescription >& xMethod )
+{
+
+    const Sequence<Reference<reflection::XTypeDescription> > seqTD = xMethod->getExceptions();
+    int len = seqTD.getLength();
+    Sequence<Reference<reflection::XCompoundTypeDescription> > seqCTD(len);
+    Reference<reflection::XCompoundTypeDescription> * arCTD = seqCTD.getArray();
+    for (int i = 0; i < len; i++)
+        arCTD[i] = Reference<reflection::XCompoundTypeDescription>(seqTD[i], UNO_QUERY_THROW);
+    return get_exception_attribute(seqCTD);
+}
+
+Emit::CustomAttributeBuilder* TypeEmitter::get_exception_attribute(
+
+    const Sequence<Reference< reflection::XCompoundTypeDescription > >& seq_exceptionsTd )
+{
+    Emit::CustomAttributeBuilder * attr_builder = NULL;
+
+    Reference< reflection::XCompoundTypeDescription > const * exceptions =
+        seq_exceptionsTd.getConstArray();
+
+    ::System::Type * arTypesCtor[] = {::System::Type::GetType(S"System.Type[]")};
+    ConstructorInfo * ctor_ExceptionAttribute =
+        __typeof(::uno::ExceptionAttribute)->GetConstructor(arTypesCtor);
+
+    sal_Int32 exc_length = seq_exceptionsTd.getLength();
+    if (exc_length != 0) // opt
+    {
+        ::System::Type * exception_types [] =
+              new ::System::Type * [ exc_length ];
+        for ( sal_Int32 exc_pos = 0; exc_pos < exc_length; ++exc_pos )
+        {
+            Reference< reflection::XCompoundTypeDescription > const & xExc =
+                exceptions[ exc_pos ];
+            exception_types[ exc_pos ] = get_type( xExc );
+        }
+        ::System::Object * args [] = {exception_types};
+        attr_builder = new Emit::CustomAttributeBuilder(
+            ctor_ExceptionAttribute, args );
+    }
+    return attr_builder;
+}
+
+
+::System::Type * TypeEmitter::complete_singleton_type(singleton_entry * entry)
+{
+    Emit::TypeBuilder * type_builder = entry->m_type_builder;
+    reflection::XSingletonTypeDescription2 * xSingletonType = entry->m_xType;
+    ::System::String* sSingletonName = to_cts_name(xSingletonType->getName());
+
+    //Create the private default constructor
+    Emit::ConstructorBuilder* ctor_builder =
+        type_builder->DefineConstructor(
+            static_cast<MethodAttributes>(MethodAttributes::Private |
+                                          MethodAttributes::HideBySig |
+                                          MethodAttributes::SpecialName |
+                                          MethodAttributes::RTSpecialName),
+            CallingConventions::Standard, NULL);
+
+    Emit::ILGenerator* ilGen = ctor_builder->GetILGenerator();
+    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    ilGen->Emit(
+            Emit::OpCodes::Call,
+            type_builder->BaseType->GetConstructor(new ::System::Type*[0]));
+    ilGen->Emit( Emit::OpCodes::Ret );
+
+
+    //obtain the interface which makes up this service, it is the return
+    //type of the constructor functions
+    Reference<reflection::XInterfaceTypeDescription2> xIfaceType(
+        xSingletonType->getInterface(), UNO_QUERY);
+    if (xIfaceType.is () == sal_False)
+        xIfaceType = resolveInterfaceTypedef(xSingletonType->getInterface());
+    System::Type * retType = get_type(xIfaceType);
+
+    //Create the ConstructorInfo for a DeploymentException
+    ::System::Type * typeDeploymentExc =
+          get_type(S"unoidl.com.sun.star.uno.DeploymentException", true);
+
+    ::System::Type * arTypeCtor[] = {__typeof(::System::String),
+                                         __typeof(::System::Object)};
+    ::System::Reflection::ConstructorInfo * ctorDeploymentException  =
+          typeDeploymentExc->GetConstructor(arTypeCtor);
+
+    //define method
+    ::System::Type * arTypeParameters[] = {get_type(S"unoidl.com.sun.star.uno.XComponentContext", true)};
+    Emit::MethodBuilder* method_builder = type_builder->DefineMethod(
+        new System::String(S"get"),
+        static_cast<MethodAttributes>(MethodAttributes::Public | MethodAttributes::HideBySig |
+                                      MethodAttributes::Static),
+        retType,
+        arTypeParameters);
+
+
+//         method_builder->SetCustomAttribute(get_service_ctor_method_attribute(ctorDes));
+
+    //The first parameter is the XComponentContext, which cannot be obtained
+    //from reflection.
+    //The context is not part of the idl description
+    Emit::ParameterBuilder * param_builder = method_builder->DefineParameter(
+        1, ParameterAttributes::In, S"the_context");
+
+
+    ilGen = method_builder->GetILGenerator();
+    //Define locals ---------------------------------
+    // Any, returned by XComponentContext.getValueByName
+    Emit::LocalBuilder* local_any =
+        ilGen->DeclareLocal(__typeof(::uno::Any));
+
+    //Call XContext::getValueByName
+    ilGen->Emit(Emit::OpCodes::Ldarg_0);
+    // build the singleton name : /singleton/unoidl.com.sun.star.XXX
+    ::System::Text::StringBuilder* sBuilder =
+          new ::System::Text::StringBuilder(S"/singletons/");
+    sBuilder->Append(sSingletonName);
+    ilGen->Emit(Emit::OpCodes::Ldstr, sBuilder->ToString());
+
+    ::System::Reflection::MethodInfo * methodGetValueByName =
+          get_type(S"unoidl.com.sun.star.uno.XComponentContext", true)->GetMethod(S"getValueByName");
+    ilGen->Emit(Emit::OpCodes::Callvirt, methodGetValueByName);
+    ilGen->Emit(Emit::OpCodes::Stloc_0);
+
+    //Contains the returned Any a value?
+    ilGen->Emit(Emit::OpCodes::Ldloca_S, local_any);
+    ::System::Reflection::MethodInfo * methodHasValue =
+          __typeof(::uno::Any)->GetMethod(S"hasValue");
+    ilGen->Emit(Emit::OpCodes::Call, methodHasValue);
+
+    //If not, then throw an DeploymentException
+    Emit::Label label_singleton_exists = ilGen->DefineLabel();
+    ilGen->Emit(Emit::OpCodes::Brtrue_S, label_singleton_exists);
+    sBuilder = new ::System::Text::StringBuilder(
+        S"Component context fails to supply singleton ");
+    sBuilder->Append(sSingletonName);
+    sBuilder->Append(S" of type ");
+    sBuilder->Append(retType->FullName);
+    sBuilder->Append(S".");
+    ilGen->Emit(Emit::OpCodes::Ldstr, sBuilder->ToString());
+    ilGen->Emit(Emit::OpCodes::Ldarg_0);
+    ::System::Type * arTypesCtorDeploymentException[] = {
+        __typeof(::System::String), __typeof(::System::Object)};
+    ilGen->Emit(Emit::OpCodes::Newobj,
+                get_type(S"unoidl.com.sun.star.uno.DeploymentException",true)
+                ->GetConstructor(arTypesCtorDeploymentException));
+    ilGen->Emit(Emit::OpCodes::Throw);
+    ilGen->MarkLabel(label_singleton_exists);
+
+    //Cast the singleton contained in the Any to the expected interface and return it.
+    ilGen->Emit(Emit::OpCodes::Ldloca_S, local_any);
+    ilGen->Emit(Emit::OpCodes::Call,  __typeof(::uno::Any)->GetProperty(S"Value")->GetGetMethod());
+    ilGen->Emit(Emit::OpCodes::Castclass, retType);
+    ilGen->Emit(Emit::OpCodes::Ret);
+
+    // remove from incomplete types map
+    ::System::String * cts_name = type_builder->get_FullName();
+    m_incomplete_singletons->Remove( cts_name );
+    xSingletonType->release();
+    if (g_verbose)
+    {
+        ::System::Console::WriteLine(
+            "> emitting singleton type {0}", cts_name );
+    }
+    return type_builder->CreateType();
+}
+
 
 //______________________________________________________________________________
 ::System::Type * TypeEmitter::get_type(
@@ -1705,7 +1855,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     case TypeClass_TYPE:
         return __typeof (::System::Type);
     case TypeClass_ANY:
-        return get_type_Any();
+        return __typeof(::uno::Any);
     case TypeClass_ENUM:
         return get_type( Reference< reflection::XEnumTypeDescription >(
                              xType, UNO_QUERY_THROW ) );
@@ -1741,8 +1891,14 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
             Reference< reflection::XConstantsTypeDescription >(
                 xType, UNO_QUERY_THROW ) );
     case TypeClass_SERVICE:
-    case TypeClass_MODULE:
+        return get_type(
+            Reference< reflection::XServiceTypeDescription2 >(
+                xType, UNO_QUERY_THROW) );
     case TypeClass_SINGLETON:
+        return get_type(
+            Reference< reflection::XSingletonTypeDescription2 >(
+                xType, UNO_QUERY_THROW) );
+    case TypeClass_MODULE:
         // ignore these
         return 0;
     default:
@@ -1764,29 +1920,104 @@ void TypeEmitter::Dispose()
         complete_iface_type(
             __try_cast< iface_entry * >( enumerator->get_Value() ) );
     }
-    m_incomplete_ifaces = 0;
+
+    while (true)
+    {
+        ::System::Collections::IDictionaryEnumerator * enumerator =
+              m_incomplete_services->GetEnumerator();
+        if (! enumerator->MoveNext())
+            break;
+        complete_service_type(
+            __try_cast< service_entry * >( enumerator->get_Value() ) );
+    }
+
+    while (true)
+    {
+        ::System::Collections::IDictionaryEnumerator * enumerator =
+              m_incomplete_singletons->GetEnumerator();
+        if (! enumerator->MoveNext())
+            break;
+        complete_singleton_type(
+            __try_cast< singleton_entry * >( enumerator->get_Value() ) );
+    }
 }
 //______________________________________________________________________________
 TypeEmitter::TypeEmitter(
     ::System::Reflection::Emit::ModuleBuilder * module_builder,
-    ::System::Reflection::Assembly * extra_assemblies __gc [] )
+    ::System::Reflection::Assembly * extra_assemblies [] )
     : m_module_builder( module_builder ),
       m_extra_assemblies( extra_assemblies ),
       m_method_info_Type_GetTypeFromHandle( 0 ),
       m_type_Exception( 0 ),
       m_type_RuntimeException( 0 ),
-      m_type_Any( 0 ),
-      m_field_Any_VOID( 0 ),
-      m_ctor_uno_MethodAttribute( 0 ),
-      m_default_ctor_uno_MethodAttribute( 0 ),
       m_incomplete_ifaces( new ::System::Collections::Hashtable() ),
+      m_incomplete_services(new ::System::Collections::Hashtable() ),
+      m_incomplete_singletons(new ::System::Collections::Hashtable() ),
       m_generated_structs( new ::System::Collections::Hashtable() )
 {
-    ::System::Type * param_types __gc [] = new ::System::Type * __gc [ 1 ];
+    ::System::Type * param_types[] = new ::System::Type * [ 1 ];
     param_types[ 0 ] = __typeof (::System::RuntimeTypeHandle);
     m_method_info_Type_GetTypeFromHandle =
         __typeof (::System::Type)
           ->GetMethod( "GetTypeFromHandle", param_types );
 }
+
+::System::Collections::ArrayList * TypeEmitter::get_service_ctor_method_exceptions_reduced(
+    const Sequence<Reference<reflection::XCompoundTypeDescription> > & seqExceptionsTd)
+{
+    if (seqExceptionsTd.getLength() == 0)
+        return new ::System::Collections::ArrayList();
+
+    ::System::Collections::ArrayList * arTypes = new ::System::Collections::ArrayList();
+    for (int i = 0; i < seqExceptionsTd.getLength(); i++)
+        arTypes->Add(get_type(to_cts_name(seqExceptionsTd[i]->getName()), true));
+
+    int start = 0;
+    while (true)
+    {
+        bool bRemove = false;
+        for (int i = start; i < arTypes->Count; i++)
+        {
+            ::System::Type * t = __try_cast<::System::Type*>(arTypes->get_Item(i));
+            for (int j = 0; j < arTypes->Count; j++)
+            {
+                if (t->IsSubclassOf(__try_cast<::System::Type*>(arTypes->get_Item(j))))
+                {
+                    arTypes->RemoveAt(i);
+                    bRemove = true;
+                    break;
+                }
+            }
+            if (bRemove)
+                break;
+            start++;
+        }
+
+        if (bRemove == false)
+            break;
+    }
+    return arTypes;
+}
+
+
+css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >
+resolveInterfaceTypedef(
+    const css::uno::Reference<css::reflection::XTypeDescription>& type)
+{
+    Reference<reflection::XInterfaceTypeDescription2>
+        xIfaceTd(type, UNO_QUERY);
+
+    if (xIfaceTd.is())
+        return xIfaceTd;
+
+    Reference<reflection::XIndirectTypeDescription> xIndTd(
+        type, UNO_QUERY);
+    if (xIndTd.is() == sal_False)
+        throw css::uno::Exception(
+            OUSTR("resolveInterfaceTypedef was called with an invalid argument"), 0);
+
+    return resolveInterfaceTypedef(xIndTd->getReferencedType());
+}
+
 
 }
