@@ -23983,3 +23983,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetFont@SvxFontPrevWindow@@QAEXABVSvxFont@@0@Z
 ?DataChanged@SvxRubyDialog@@MAEXABVDataChangedEvent@@@Z
 ?UpdateColors@SvxRubyDialog@@AAEXXZ
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx892221134@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
