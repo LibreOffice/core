@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 14:45:15 $
+ *  last change: $Author: os $ $Date: 2001-01-26 13:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,10 +513,14 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 aFormat >>= sFormat;
                                 com::sun::star::lang::Locale aLoc;
                                 aLocale >>= aLoc;
-                                nFmt = xDocNumberFormats->addNew( sFormat, aLoc ),
+                                long nKey = xDocNumberFormats->queryKey( sFormat, aLoc, sal_True);
+                                if(nKey < 0)
+                                {
+                                    nFmt = xDocNumberFormats->addNew( sFormat, aLoc );
+                                }
                                 pNew->nDBNumFmt = nFmt;
                             }
-                            catch(...)
+                            catch(Exception& rExcept)
                             {
                                 DBG_ERROR("illegal number format key")
                             }
