@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-04 17:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ScriptSecurityManager::ScriptSecurityManager(
         "ScriptSecurityManager::ScriptSecurityManager: cannot get ConfigurationProvider" );
     // create an instance of the ConfigurationAccess for accessing the
     // scripting security settings
-    Reference < lang::XMultiServiceFactory > m_xConfigProvFactory( xInterface, UNO_QUERY );
+    m_xConfigProvFactory = Reference < lang::XMultiServiceFactory > ( xInterface, UNO_QUERY );
     validateXRef( m_xConfigProvFactory,
         "ScriptSecurityManager::ScriptSecurityManager: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
 
@@ -417,12 +417,17 @@ void ScriptSecurityManager::removePermissionSettings ( ::rtl::OUString & scriptS
 void ScriptSecurityManager::readConfiguration()
     throw ( RuntimeException)
 {
+    Reference< XInterface > xInterface;
+    try
+    {
     beans::PropertyValue configPath;
     configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
     configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Common/Security/Scripting" );
     Sequence < Any > aargs( 1 );
     aargs[ 0 ] <<= configPath;
-    Reference< XInterface > xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configAccess,
+    validateXRef( m_xConfigProvFactory,
+        "ScriptSecurityManager::readConfiguration: ConfigProviderFactory no longer valid!" );
+    xInterface = m_xConfigProvFactory->createInstanceWithArguments( s_configAccess,
             aargs );
     validateXRef( xInterface,
         "ScriptSecurityManager::readConfiguration: cannot get ConfigurationAccess" );
@@ -430,8 +435,6 @@ void ScriptSecurityManager::readConfiguration()
     Reference < beans::XPropertySet > xPropSet( xInterface, UNO_QUERY );
     Any value;
 
-    try
-    {
         value=xPropSet->getPropertyValue( OUSTR( "Confirmation" ) );
         if ( sal_False == ( value >>= m_confirmationRequired ) )
         {
@@ -490,6 +493,24 @@ void ScriptSecurityManager::readConfiguration()
             OUSTR( "ScriptSecurityManager:readConfiguration: wrapped target exception? :" ).concat( wte.Message ),
             Reference< XInterface > () );
     }
+    catch ( Exception & e )
+    {
+        OSL_TRACE( "Unknown exception in readconf: %s",
+            ::rtl::OUStringToOString(e.Message ,
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
+        throw RuntimeException(
+            OUSTR( "ScriptSecurityManager:readConfiguration: exception? :" ).concat( e.Message ),
+            Reference< XInterface > () );
+    }
+#ifdef _DEBUG
+    catch ( ... )
+    {
+        OSL_TRACE( "Completely Unknown exception in readconf!!!!!!");
+        throw RuntimeException(
+            OUSTR( "ScriptSecurityManager:readConfiguration: exception? :" ),
+            Reference< XInterface > () );
+    }
+#endif
 
     int length = m_secureURL.getLength();
 
@@ -516,7 +537,7 @@ void ScriptSecurityManager::readConfiguration()
             ::rtl::OUStringToOString(
             xStringSubstitution->substituteVariables( m_secureURL[i], true ),
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        m_secureURL[i-1] = xStringSubstitution->substituteVariables( m_secureURL[i], true );
+        m_secureURL[i] = xStringSubstitution->substituteVariables( m_secureURL[i], true );
     }
 #ifdef _DEBUG
     int length2 = m_secureURL.getLength();
