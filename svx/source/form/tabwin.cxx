@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:04:35 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 10:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,6 @@ DBG_NAME(FmFieldWinListBox);
 //------------------------------------------------------------------------------
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_BORDER )
-    ,DragSourceHelper(this)
     ,pTabWin( pParent )
 {
     DBG_CTOR(FmFieldWinListBox,NULL);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:04:01 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 10:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@
 class FmFieldWin;
 class FmFieldWinListBox
                     :public SvTreeListBox
-                    ,public DragSourceHelper
 {
     FmFieldWin* pTabWin;
 
