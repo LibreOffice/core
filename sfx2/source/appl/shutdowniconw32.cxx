@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-13 12:49:52 $
+ *  last change: $Author: ssa $ $Date: 2001-06-15 08:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@ static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
 typedef struct tagMYITEM
 {
     OUString text;
-    //HBITMAP hBmp;
     UINT iconId;
 } MYITEM;
 
@@ -220,48 +219,6 @@ static bool isNT()
     return bWnt;
 }
 
-static HBITMAP createIconBitmap( UINT nIcon )
-{
-    HWND hwndDesktop = GetDesktopWindow();
-    HDC hdcDesktop = GetDC( hwndDesktop );
-    HDC hdcMem = CreateCompatibleDC( hdcDesktop );
-    COLORREF clrMenu = GetSysColor( COLOR_MENU );
-    HBRUSH hbrOld;
-    //HPEN hpenOld;
-    HBITMAP hbmOld;
-    //int fnDrawMode;
-    int cx, cy;
-
-    // Create a brush using the menu background color,
-    // and select it into the memory DC.
-
-    hbrOld = (HBRUSH) SelectObject(hdcMem, CreateSolidBrush(clrMenu));
-
-    // Load the icon and create the bitmap. Select it into the memory
-    // DC that was created and draw the icon in it.
-
-    cx = GetSystemMetrics( SM_CXSMICON );
-    cy = GetSystemMetrics( SM_CYSMICON );
-    HICON hIcon = (HICON) LoadImageA( GetModuleHandle( NULL ), MAKEINTRESOURCE( nIcon ),
-                                      IMAGE_ICON, cx, cy,
-                                      LR_DEFAULTCOLOR | LR_SHARED );
-
-    // Create the bitmap and select it into the DC.
-
-    HBITMAP hBmp = CreateCompatibleBitmap( hdcDesktop, cx+2, cy );
-    hbmOld = (HBITMAP) SelectObject(hdcMem, hBmp);
-
-    // Fill the background using the brush.
-    PatBlt(hdcMem, 0, 0, cx+2, cy, PATCOPY);
-    DrawIconEx( hdcMem, 0, 0, hIcon, cx, cy, 0, NULL, DI_NORMAL );
-
-    SelectObject(hdcMem, hbmOld);
-    DeleteObject(SelectObject(hdcMem, hbrOld));
-    DeleteDC(hdcMem);
-    ReleaseDC(hwndDesktop, hdcDesktop);
-
-    return hBmp;
-}
 
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int& pos, int bOwnerdraw )
 {
@@ -285,7 +242,6 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int&
 
             MYITEM *pMyItem = new MYITEM;
             pMyItem->text = text;
-            //pMyItem->hBmp = createIconBitmap( iconId );
             pMyItem->iconId = iconId;
             mi.dwItemData = (DWORD) pMyItem;
         }
@@ -323,7 +279,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, IDM_DRAW, ICON_DRAWING_DOCUMENT,
         pShutdownIcon->GetUrlDescription( OUString( RTL_CONSTASCII_USTRINGPARAM ( DRAW_URL ) ) ), pos, true );
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEXT_TEMPLATE,
-        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, false);
+        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_OPEN,   0, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, false );
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
@@ -355,7 +311,6 @@ static void deleteSystrayMenu( HMENU hMenu )
         if( pMyItem )
         {
             pMyItem->text = OUString();
-            //DeleteObject( pMyItem->hBmp );
             delete pMyItem;
         }
         mi.fMask = MIIM_DATA;
@@ -429,6 +384,8 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
                 case WM_LBUTTONDBLCLK:
                     //ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "slot:5500" ) ) );
+                    // due to #88164 we cannot open-from-template as default action
+                    // so stick with ordinary fileopen
                     ShutdownIcon::FileOpen();
                     break;
 
