@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:13:52 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 13:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ String RID_ERR_REFRESHING_FORM
 {
     Text = "Die Dateninhalte konnten nicht aktualisiert werden.";
     Text [ english ] = "The data content could not be refreshed.";
-    Text [ english_us ] = "The data content could not be updated";
+    Text [ english_us ] = "The data content could not be refreshed";
     Text[ portuguese ] = "Foi impossνvel actualizar o conteϊdo dos dados.";
     Text[ russian ] = "Ξανξβθςό ρξδεπζθμξε δΰννϋυ νεβξημξζνξ.";
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ενημέρωση των περιεχομένων των δεδομένων.";
@@ -257,6 +257,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ chinese_traditional ] = "µLªk§σ·sΈκ®Ζ¤Ί®e΅C";
     Text[ arabic ] = "ΚΪΠΡ ΚΝΟνΛ ΗαγΝΚζνΗΚ ΗαΘνΗδνΙ.";
     Text[ turkish ] = "The data content could not be refreshed.";
+    Text[ language_user1 ] = "The meaning here is 'refresh', not 'update'.";
 };
 
 String RID_STR_ERR_INSERTRECORD
