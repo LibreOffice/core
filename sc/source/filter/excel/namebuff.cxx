@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:44:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,53 +258,6 @@ String ShrfmlaBuffer::CreateName( const ScRange& r )
 
     return aName;
 }
-
-
-BOOL ShrfmlaBuffer::GetAddress( const String& rName, ScRange& rRet )
-{
-    static const xub_StrLen nBaseNameLen = sizeof( SHRFMLA_BASENAME ) - 1;
-    if( rName.EqualsAscii( SHRFMLA_BASENAME, 0, nBaseNameLen ) )
-    {
-        rRet.aStart.Set( 0, 0, 0 );
-        rRet.aEnd.Set( 0, 0, 0 );
-        String              aTmp( rName, nBaseNameLen, rName.Len() );
-
-        xub_StrLen          nPos = aTmp.Search( '_' );
-        if( nPos != STRING_NOTFOUND )
-        {
-            rRet.aStart.SetCol( static_cast<SCCOL>(aTmp.ToInt32()) );
-            aTmp.Erase( 0, nPos + 1 );
-
-            nPos = aTmp.Search( '_' );
-            if( nPos != STRING_NOTFOUND )
-            {
-                rRet.aStart.SetRow( static_cast<SCROW>(aTmp.ToInt32()) );
-                aTmp.Erase( 0, nPos + 1 );
-
-                nPos = aTmp.Search( '_' );
-                if( nPos != STRING_NOTFOUND )
-                {
-                    rRet.aEnd.SetCol( static_cast<SCCOL>(aTmp.ToInt32()) );
-                    aTmp.Erase( 0, nPos + 1 );
-                    nPos = aTmp.Search( '_' );
-                    if( nPos != STRING_NOTFOUND )
-                    {
-                        rRet.aEnd.SetRow( static_cast<SCROW>(aTmp.ToInt32()) );
-                        aTmp.Erase( 0, nPos + 1 );
-
-                        rRet.aStart.SetTab( static_cast<SCTAB>(aTmp.ToInt32()) );
-                        rRet.aEnd.SetTab( rRet.aStart.Tab() );
-                        return TRUE;
-                    }
-                }
-            }
-        }
-    }
-
-    return FALSE;
-}
-
-
 
 
 ExtSheetBuffer::~ExtSheetBuffer()
