@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 08:07:11 $
+ *  last change: $Author: fs $ $Date: 2002-06-10 14:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
-    if(!column.is() || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE))
+    if( !column.is() )
         throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
         *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 
