@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:23:39 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@ namespace dbaui
         /// late construction
         virtual void Construct();
         virtual void initialize();
-        virtual void GetFocus();
         virtual void KeyInput( const KeyEvent& rEvt );
 
         virtual void SaveTabWinUIConfig(OTableWindow* pWin);

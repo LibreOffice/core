@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-10 06:41:58 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 
 using namespace ::dbaui;
@@ -139,6 +142,7 @@ OTableBorderWindow::~OTableBorderWindow()
 {
     //////////////////////////////////////////////////////////////////////
     // Childs zerstoeren
+    //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
 
@@ -332,49 +336,6 @@ long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
     BOOL bHandled = FALSE;
     switch(rNEvt.GetType())
     {
-        case EVENT_KEYINPUT:
-        {
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const KeyCode& rCode = pKeyEvent->GetKeyCode();
-            if (rCode.IsMod1() || rCode.IsMod2())
-                break;
-            if (rCode.GetCode() != KEY_F6)
-                break;
-
-            Window* pLeft   = GetEditorCtrl();
-            Window* pRight  = getToolBox();
-            if ( rCode.IsShift() )
-            {
-                pLeft   = getToolBox();
-                pRight  = GetEditorCtrl();
-            }
-
-            if (pLeft && pLeft->HasChildPathFocus())
-            {
-                if (GetDescWin())
-                {
-                    GetDescWin()->GrabFocus();
-                    bHandled = TRUE;
-                }
-            }
-            else if (GetDescWin() && GetDescWin()->HasChildPathFocus())
-            {
-                if (pRight)
-                {
-                    pRight->GrabFocus();
-                    bHandled = TRUE;
-                }
-            }
-            else if (pRight && pRight->HasChildPathFocus())
-            {
-                if (pLeft)
-                {
-                    pLeft->GrabFocus();
-                    bHandled = TRUE;
-                }
-            }
-            break;
-        }
         case EVENT_GETFOCUS:
             if( GetDescWin()->HasChildPathFocus() )
                 m_eChildFocus = DESCRIPTION;
@@ -466,6 +427,12 @@ void OTableDesignView::reSync()
     OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
     if(pFieldDescr)
         GetDescWin()->DisplayData(pFieldDescr);
+}
+// -----------------------------------------------------------------------------
+void OTableDesignView::GetFocus()
+{
+    if ( GetEditorCtrl() )
+        GetEditorCtrl()->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 

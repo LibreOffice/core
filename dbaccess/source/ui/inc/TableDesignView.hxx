@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ namespace dbaui
 
         // window overloads
         virtual long            PreNotify( NotifyEvent& rNEvt );
+        virtual void            GetFocus();
 
         OTableEditorCtrl*       GetEditorCtrl() const { return m_pWin->GetEditorCtrl(); }
         OTableFieldDescWin*     GetDescWin()    const { return m_pWin->GetDescWin(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:05:25 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

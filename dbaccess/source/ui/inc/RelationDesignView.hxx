@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDesignView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ namespace dbaui
 
 
         virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual void GetFocus();
     };
 }
 #endif // DBAUI_RELATIONDESIGNVIEW_HXX
