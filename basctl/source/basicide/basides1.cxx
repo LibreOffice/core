@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:35:27 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 10:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,12 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             pTabBar->MakeVisible( pTabBar->GetCurPageId() );
         }
         break;
+        case SID_SHOW_PROPERTYBROWSER:
+        {
+            GetViewFrame()->ChildWindowExecute( rReq );
+            rReq.Done();
+        }
+        break;
     }
 }
 
@@ -973,6 +979,14 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
                     GetViewFrame()->GetSlotState( nWh, NULL, &rSet );
             }
             break;
+            case SID_SHOW_PROPERTYBROWSER:
+            {
+                if ( GetViewFrame()->KnowsChildWindow( nWh ) )
+                    rSet.Put( SfxBoolItem( nWh, GetViewFrame()->HasChildWindow( nWh ) ) );
+                else
+                    rSet.DisableItem( nWh );
+            }
+            break;
         }
     }
     if ( pCurWin )
@@ -986,7 +1000,7 @@ BOOL BasicIDEShell::HasUIFeature( ULONG nFeature )
     if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
     {
         // fade out (in) property browser in module (dialog) windows
-        if ( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
+        if ( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) && !pCurWin->IsReadOnly() )
             bResult = TRUE;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:35:27 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 10:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,11 +610,9 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                      ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
                 {
                     aPopup.EnableItem( aPopup.GetItemId( 0 ), FALSE );
-                    //aPopup.EnableItem( SID_BASICIDE_NEWMODULE, FALSE );
-                    //aPopup.EnableItem( SID_BASICIDE_NEWDIALOG, FALSE );
                     aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
                     aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
-                    //aPopup.RemoveDisabledEntries();
+                    aPopup.RemoveDisabledEntries();
                 }
             }
         }

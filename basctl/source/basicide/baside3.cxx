@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 10:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@ void DialogWindow::Resize()
 void DialogWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     pEditor->MouseButtonDown( rMEvt );
+
+    SfxBindings& rBindings = BasicIDE::GetBindings();
+    rBindings.Invalidate( SID_SHOW_PROPERTYBROWSER );
 }
 
 
@@ -414,6 +417,18 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
 
                     rSet.Put( aItem );
                 }
+            }
+            break;
+
+            case SID_SHOW_PROPERTYBROWSER:
+            {
+                BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_PROPERTYBROWSER ) && !pEditor->GetView()->HasMarkedObj() )
+                    rSet.DisableItem( nWh );
+
+                if ( IsReadOnly() )
+                    rSet.DisableItem( nWh );
             }
             break;
         }
@@ -649,7 +664,7 @@ void DialogWindow::DisableBrowser()
 {
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update( 0 );
 }
@@ -658,7 +673,7 @@ void DialogWindow::UpdateBrowser()
 {
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_BROWSER) : NULL;
+    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow(SID_SHOW_PROPERTYBROWSER) : NULL;
     if( pChildWin )
         ((PropBrw*)(pChildWin->GetWindow()))->Update(GetEditor()->GetView());
 }

@@ -288,6 +288,12 @@ SlotIdFile( "basidesh.hrc" )
             StateMethod = GetState;
         ]
 
+        SID_SHOW_PROPERTYBROWSER
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
         // ========================================================
         // Nur, wenn BasicFenster oben
         // ========================================================
