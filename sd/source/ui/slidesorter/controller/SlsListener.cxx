@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:51:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,14 @@ void Listener::Notify (
 
             case ViewShellHint::HINT_CHANGE_EDIT_MODE_END:
                 mrController.FinishEditModeChange();
+                break;
+
+            case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:
+                mrController.LockModelChange();
+                break;
+
+            case ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END:
+                mrController.UnlockModelChange();
                 break;
         }
     }
