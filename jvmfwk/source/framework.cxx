@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 12:49:17 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,17 @@ sal_Bool areEqualJavaInfo(
     return jfw_areEqualJavaInfo(pInfoA, pInfoB);
 }
 
+struct EqualInfo
+{
+    const JavaInfo *pInfo;
+    EqualInfo(const JavaInfo* info):pInfo(info){}
+
+    bool operator () (const JavaInfo*  pInfo2)
+    {
+        return areEqualJavaInfo(pInfo, pInfo2) == sal_True ? true : false;
+    }
+};
+
 void freeJavaInfo( JavaInfo * pInfo)
 {
     jfw_freeJavaInfo(pInfo);
@@ -133,6 +144,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
     if (errcode != JFW_E_NONE)
         return errcode;
+
     //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
     //Make sure that the contents are destroyed if this
     //function returns with an error
@@ -173,6 +185,11 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
                           freeJavaInfo);
+
+            rtl::OString msg = rtl::OUStringToOString(
+                library.sPath, osl_getThreadTextEncoding());
+            fprintf(stderr,"[jvmfwk] Could not load plugin %s\n" \
+                    "Modify the javavendors.xml accordingly!\n", msg.getStr());
             return JFW_E_NO_PLUGIN;
         }
         jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
@@ -193,6 +210,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         sal_Int32 cInfos = 0;
         JavaInfo** arInfos = NULL;
         javaPluginError plerr  = (*getAllJavaFunc)(
+            library.sVendor.pData,
             versionInfo.sMinVersion.pData,
             versionInfo.sMaxVersion.pData,
             versionInfo.getExcludeVersions(),
@@ -227,6 +245,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             return JFW_E_ERROR;
         }
         typedef std::vector<rtl::OString>::const_iterator citLoc;
+        //Check every manually added location
         for (citLoc ii = vecJRELocations.begin();
              ii != vecJRELocations.end(); ii++)
         {
@@ -252,28 +271,58 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                 return JFW_E_ERROR;
             }
             if (pInfo)
-                vecInfoManual.push_back(pInfo);
+            {
+                //Was this JRE already added?. Different plugins could detect
+                //the same JRE
+                it_info it_duplicate =
+                    std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
+                              EqualInfo(pInfo));
+                if (it_duplicate == vecInfoManual.end())
+                    vecInfoManual.push_back(pInfo);
+                else
+                    jfw_freeJavaInfo(pInfo);
+            }
         }
     }
-    //Check which JavaInfo from vector vecInfoManual is already
+    //Make sure vecInfoManual contains only JavaInfos for the vendors for which
+    //there is a javaSelection/plugins/library entry in the javavendors.xml
+    //To obtain the JavaInfos for the manually added JRE locations the function
+    //jfw_getJavaInfoByPath is called which can return a JavaInfo of any vendor.
+    std::vector<JavaInfo*> vecInfoManual2;
+    for (it_info ivm = vecInfoManual.begin(); ivm != vecInfoManual.end(); ivm++)
+    {
+        bool bAllowedVendor = false;
+        for (ci_pl ii = vecPlugins.begin(); ii != vecPlugins.end(); ii++)
+        {
+            if ( ii->sVendor.equals((*ivm)->sVendor))
+            {
+                vecInfoManual2.push_back(*ivm);
+                bAllowedVendor = true;
+                break;
+            }
+        }
+        if (bAllowedVendor == false)
+            jfw_freeJavaInfo(*ivm);
+    }
+    //Check which JavaInfo from vector vecInfoManual2 is already
     //contained in vecInfo. If it already exists then remove it from
-    //vecInfoManual
+    //vecInfoManual2
     for (it_info j = vecInfo.begin(); j != vecInfo.end(); j++)
     {
         it_info it_duplicate =
-            std::find_if(vecInfoManual.begin(), vecInfoManual.end(),
+            std::find_if(vecInfoManual2.begin(), vecInfoManual2.end(),
                          std::bind2nd(std::ptr_fun(areEqualJavaInfo), *j));
-        if (it_duplicate != vecInfoManual.end())
-            vecInfoManual.erase(it_duplicate);
+        if (it_duplicate != vecInfoManual2.end())
+            vecInfoManual2.erase(it_duplicate);
     }
     //create an fill the array of JavaInfo*
-    sal_Int32 nSize = vecInfo.size() + vecInfoManual.size();
+    sal_Int32 nSize = vecInfo.size() + vecInfoManual2.size();
     *pparInfo = (JavaInfo**) rtl_allocateMemory(
         nSize * sizeof(JavaInfo*));
     if (*pparInfo == NULL)
     {   //delete JavaInfo objects
         std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
-        std::for_each(vecInfoManual.begin(), vecInfoManual.end(), freeJavaInfo);
+        std::for_each(vecInfoManual2.begin(), vecInfoManual2.end(), freeJavaInfo);
         return JFW_E_ERROR;
     }
     typedef std::vector<JavaInfo*>::iterator it;
@@ -282,7 +331,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     for (it k = vecInfo.begin(); k != vecInfo.end(); k++)
         (*pparInfo)[index++] = *k;
     //Add the manually detected JREs
-    for (it l = vecInfoManual.begin(); l != vecInfoManual.end(); l++)
+    for (it l = vecInfoManual2.begin(); l != vecInfoManual2.end(); l++)
         (*pparInfo)[index++] = *l;
 
     *pSize = nSize;
@@ -531,6 +580,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         sal_Int32 cInfos = 0;
         JavaInfo** arInfos = NULL;
         javaPluginError plerr  = (*getAllJavaFunc)(
+            library.sVendor.pData,
             versionInfo.sMinVersion.pData,
             versionInfo.sMaxVersion.pData,
             versionInfo.getExcludeVersions(),
@@ -778,6 +828,12 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
     if (errcode != JFW_E_NONE)
         return errcode;
+    std::vector<rtl::OUString> vecVendors;
+    typedef std::vector<rtl::OUString>::const_iterator CIT_VENDOR;
+    errcode = jfw::getSupportedVendors(doc, context, & vecVendors);
+    if (errcode != JFW_E_NONE)
+        return errcode;
+
     //Use every plug-in library to determine if the path represents a
     //JRE. If a plugin recognized it then the loop will break
     typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
@@ -792,7 +848,13 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         osl::Module pluginLib(library.sPath);
 
         if (pluginLib.is() == sal_False)
+        {
+            rtl::OString msg = rtl::OUStringToOString(
+                library.sPath, osl_getThreadTextEncoding());
+            fprintf(stderr,"[jvmfwk] Could not load plugin %s\n" \
+                    "Modify the javavendors.xml accordingly!\n", msg.getStr());
             return JFW_E_NO_PLUGIN;
+        }
 
         jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
             (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
@@ -816,7 +878,19 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
 
         if (plerr == JFW_PLUGIN_E_NONE)
         {
-            *ppInfo = pInfo;
+            //check if the vendor of the found JRE is supported
+            rtl::OUString sVendor(pInfo->sVendor);
+            CIT_VENDOR ivendor = std::find(vecVendors.begin(), vecVendors.end(),
+                                      sVendor);
+            if (ivendor != vecVendors.end())
+            {
+                *ppInfo = pInfo;
+            }
+            else
+            {
+                *ppInfo = NULL;
+               errcode = JFW_E_NOT_RECOGNIZED;
+            }
             break;
         }
         else if(plerr == JFW_PLUGIN_E_FAILED_VERSION)
@@ -825,7 +899,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             errcode = JFW_E_FAILED_VERSION;
             break;
         }
-        else if (plerr = JFW_PLUGIN_E_NO_JRE)
+        else if (plerr == JFW_PLUGIN_E_NO_JRE)
         {// plugin does not recognize this path as belonging to JRE
             continue;
         }
@@ -844,7 +918,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
     //check if pInfo is the selected JRE
     JavaInfo *currentInfo = NULL;
     errcode = jfw_getSelectedJRE( & currentInfo);
-    if (errcode != JFW_E_NONE)
+    if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
         return errcode;
 
     if (jfw_areEqualJavaInfo(currentInfo, pInfo) == sal_False)
