@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:39:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 13:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 #include <dispatch/dispatchprovider.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
+#include <dispatch/interceptionhelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
@@ -270,7 +274,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_13                    (   Desktop                                                  ,
+DEFINE_XINTERFACE_14                    (   Desktop                                                  ,
                                             OWeakObject                                              ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider              ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo               ),
@@ -278,6 +282,7 @@ DEFINE_XINTERFACE_13                    (   Desktop                             
                                             DIRECT_INTERFACE( css::frame::XComponentLoader          ),
                                             DIRECT_INTERFACE( css::frame::XTasksSupplier            ),
                                             DIRECT_INTERFACE( css::frame::XDispatchProvider         ),
+                                            DIRECT_INTERFACE( css::frame::XDispatchProviderInterception),
                                             DIRECT_INTERFACE( css::frame::XFramesSupplier           ),
                                             DIRECT_INTERFACE( css::frame::XFrame                    ),
                                             DIRECT_INTERFACE( css::lang::XComponent                 ),
@@ -287,13 +292,14 @@ DEFINE_XINTERFACE_13                    (   Desktop                             
                                             DIRECT_INTERFACE( css::beans::XPropertySet              )
                                         )
 
-DEFINE_XTYPEPROVIDER_13                 (   Desktop                                                 ,
+DEFINE_XTYPEPROVIDER_14                 (   Desktop                                                 ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::frame::XDesktop                                    ,
                                             css::frame::XComponentLoader                            ,
                                             css::frame::XTasksSupplier                              ,
                                             css::frame::XDispatchProvider                           ,
+                                            css::frame::XDispatchProviderInterception               ,
                                             css::frame::XFramesSupplier                             ,
                                             css::frame::XFrame                                      ,
                                             css::lang::XComponent                                   ,
@@ -327,8 +333,18 @@ DEFINE_INIT_SERVICE                     (   Desktop,
 
                                                 //-------------------------------------------------------------------------------------------------------------
                                                 // Initialize a new dispatchhelper-object to handle dispatches.
+                                                // We use these helper as slave for our interceptor helper ... not directly!
+                                                // But he is event listener on THIS instance!
                                                 DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
-                                                m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+                                                css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+
+                                                //-------------------------------------------------------------------------------------------------------------
+                                                // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
+                                                // Set created dispatch provider as slowest slave of it.
+                                                // Hold interception helper by reference only - not by pointer!
+                                                // So it's easiear to destroy it.
+                                                InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
+                                                m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
                                                 //-------------------------------------------------------------------------------------------------------------
                                                 // I'am the desktop - and use my frame container in a special mode.
@@ -969,6 +985,36 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
 }
 
 /*-************************************************************************************************************//**
+    @interface  XDipsatchProviderInterception
+    @short      supports registration/deregistration of interception objects, which
+                are interested on special dispatches.
+
+    @descr      Its realy provided by an internal helper, which is used inside the dispatch api too.
+    @param      xInterceptor
+                the interceptor object, which wish to be (de)registered.
+
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+    throw( css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
+    xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+    throw( css::uno::RuntimeException)
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+
+    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
+    xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
+}
+
+/*-************************************************************************************************************//**
     @interface  XFramesSupplier
     @short      return access to append or remove childs on desktop
     @descr      We don't implement these interface directly. We use a helper class to do this.
@@ -1414,12 +1460,7 @@ void SAL_CALL Desktop::dispose() throw( css::uno::RuntimeException )
     m_aChildTaskContainer.clear();
 
     // Dispose our helper too.
-    css::uno::Reference< css::lang::XEventListener > xDispatchHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
     css::uno::Reference< css::lang::XEventListener > xFramesHelper  ( m_xFramesHelper  , css::uno::UNO_QUERY );
-    if( xDispatchHelper.is() == sal_True )
-    {
-        xDispatchHelper->disposing( aDisposeEvent );
-    }
     if( xFramesHelper.is() == sal_True )
     {
         xFramesHelper->disposing( aDisposeEvent );
