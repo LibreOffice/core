@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:59:28 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,33 +373,7 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
 
-#if 0
-    //Currently don't ever exprt as protected forms, we will import protected
-    //forms as "no design mode", but the opposite is not possible as the the
-    //default writer is "design", which would mean that users in word cannot
-    //edit any document :-(
-    //Readonly would be a better match, but form fields cannot be edited in
-    //that mode :-(
-    using namespace com::sun::star;
-
-    uno::Reference<lang::XComponent> xModelComp(
-        rWrt.pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xDocProps(
-        xModelComp, uno::UNO_QUERY);
-    if (xDocProps.is())
-    {
-        uno::Reference<beans::XPropertySetInfo> xInfo =
-            xDocProps->getPropertySetInfo();
-        if (xInfo.is() &&
-            xInfo->hasPropertyByName(C2U("ApplyFormDesignMode")))
-        {
-            sal_Bool bValue = cppu::any2bool(
-                xDocProps->getPropertyValue(C2U("ApplyFormDesignMode")));
-            if (!bValue)
-                rDop.fProtEnabled = 1;
-        }
-    }
-#endif
+    rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
 
 //  auch damit werden die DocStat-Felder in Kopf-/Fusszeilen nicht korrekt
 //  berechnet.
