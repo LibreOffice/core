@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-04 17:18:36 $
+ *  last change: $Author: bm $ $Date: 2001-05-15 12:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,58 +461,63 @@ void SchXMLChartContext::EndElement()
     }
     else
     {
+        // deprecated method
         // translate cell-address strings
-        uno::Reference< util::XStringMapping > xTableAddressMapper = mrImportHelper.GetTableAddressMapper();
-        if( xTableAddressMapper.is())
+        if( maSeriesAddresses.getLength() ||
+            msCategoriesAddress.getLength())
         {
-            // series
-            sal_Int32 nLength = maSeriesAddresses.getLength();
-            sal_Int32 nIdx;
-            uno::Sequence< rtl::OUString > aStrSeq( nLength * 2 + 1 );
-            sal_Bool bHasDomain = sal_False;
-
-            for( nIdx = 0; nIdx < nLength; nIdx++ )
+            uno::Reference< util::XStringMapping > xTableAddressMapper = mrImportHelper.GetTableAddressMapper();
+            if( xTableAddressMapper.is())
             {
-                aStrSeq[ nIdx * 2 ] = maSeriesAddresses[ nIdx ].DataRangeAddress;
-                aStrSeq[ nIdx * 2 + 1 ] = maSeriesAddresses[ nIdx ].LabelAddress;
+                // series
+                sal_Int32 nLength = maSeriesAddresses.getLength();
+                sal_Int32 nIdx;
+                uno::Sequence< rtl::OUString > aStrSeq( nLength * 2 + 1 );
+                sal_Bool bHasDomain = sal_False;
 
-                // domains
-                if( maSeriesAddresses[ nIdx ].DomainRangeAddresses.getLength())
+                for( nIdx = 0; nIdx < nLength; nIdx++ )
                 {
-                    xTableAddressMapper->mapStrings( maSeriesAddresses[ nIdx ].DomainRangeAddresses );
-                    bHasDomain = sal_True;
+                    aStrSeq[ nIdx * 2 ] = maSeriesAddresses[ nIdx ].DataRangeAddress;
+                    aStrSeq[ nIdx * 2 + 1 ] = maSeriesAddresses[ nIdx ].LabelAddress;
+
+                    // domains
+                    if( maSeriesAddresses[ nIdx ].DomainRangeAddresses.getLength())
+                    {
+                        xTableAddressMapper->mapStrings( maSeriesAddresses[ nIdx ].DomainRangeAddresses );
+                        bHasDomain = sal_True;
+                    }
                 }
-            }
-            // categories
-            aStrSeq[ nLength * 2 ] = msCategoriesAddress;
+                // categories
+                aStrSeq[ nLength * 2 ] = msCategoriesAddress;
 
-            // translate
-            xTableAddressMapper->mapStrings( aStrSeq );
+                // translate
+                xTableAddressMapper->mapStrings( aStrSeq );
 
-            // write back
-            sal_Int32 nOffset = 0;
-            for( nIdx = 0; nIdx < nLength; nIdx++ )
-            {
-                // #81525# convert addresses for xy charts
-                // this should be done by calc in the future
-                if( nIdx == 0 &&
-                    bHasDomain )
+                // write back
+                sal_Int32 nOffset = 0;
+                for( nIdx = 0; nIdx < nLength; nIdx++ )
                 {
-                    // enlarge the sequence
-                    maSeriesAddresses.realloc( maSeriesAddresses.getLength() + 1 );
+                    // #81525# convert addresses for xy charts
+                    // this should be done by calc in the future
+                    if( nIdx == 0 &&
+                        bHasDomain )
+                    {
+                        // enlarge the sequence
+                        maSeriesAddresses.realloc( maSeriesAddresses.getLength() + 1 );
 
-                    // copy the domain as first series
-                    if( maSeriesAddresses[ nIdx + nOffset ].DomainRangeAddresses.getLength() > 0 )
-                        maSeriesAddresses[ nIdx + nOffset ].DataRangeAddress =
-                            maSeriesAddresses[ nIdx + nOffset ].DomainRangeAddresses[ 0 ];
-                    // the current data range becomes the second series
-                    nOffset++;
+                        // copy the domain as first series
+                        if( maSeriesAddresses[ nIdx + nOffset ].DomainRangeAddresses.getLength() > 0 )
+                            maSeriesAddresses[ nIdx + nOffset ].DataRangeAddress =
+                                maSeriesAddresses[ nIdx + nOffset ].DomainRangeAddresses[ 0 ];
+                        // the current data range becomes the second series
+                        nOffset++;
+                    }
+
+                    maSeriesAddresses[ nIdx + nOffset ].DataRangeAddress = aStrSeq[ nIdx * 2 ];
+                    maSeriesAddresses[ nIdx + nOffset ].LabelAddress = aStrSeq[ nIdx * 2 + 1 ];
                 }
-
-                maSeriesAddresses[ nIdx + nOffset ].DataRangeAddress = aStrSeq[ nIdx * 2 ];
-                maSeriesAddresses[ nIdx + nOffset ].LabelAddress = aStrSeq[ nIdx * 2 + 1 ];
+                msCategoriesAddress = aStrSeq[ nLength * 2 ];
             }
-            msCategoriesAddress = aStrSeq[ nLength * 2 ];
         }
 
         // set table references at document
@@ -521,11 +526,28 @@ void SchXMLChartContext::EndElement()
             try
             {
                 uno::Any aAny;
-                aAny <<= msCategoriesAddress;
-                xProp->setPropertyValue( rtl::OUString::createFromAscii( "CategoriesRangeAddress" ), aAny );
+                if( msChartAddress.getLength())
+                {
+                    aAny <<= msChartAddress;
+                    xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "ChartRangeAddress" ), aAny );
+                }
+                else
+                {
+                    // deprecated
+                    if( msCategoriesAddress.getLength())
+                    {
+                        aAny <<= msCategoriesAddress;
+                        xProp->setPropertyValue( rtl::OUString::createFromAscii( "CategoriesRangeAddress" ), aAny );
+                    }
 
-                aAny <<= maSeriesAddresses;
-                xProp->setPropertyValue( rtl::OUString::createFromAscii( "SeriesAddresses" ), aAny );
+                    // deprecated
+                    if( maSeriesAddresses.getLength())
+                    {
+                        aAny <<= maSeriesAddresses;
+                        xProp->setPropertyValue( rtl::OUString::createFromAscii( "SeriesAddresses" ), aAny );
+                    }
+                }
+
             }
             catch( beans::UnknownPropertyException )
             {
@@ -561,7 +583,8 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     {
         case XML_TOK_CHART_PLOT_AREA:
             pContext = new SchXMLPlotAreaContext( mrImportHelper, GetImport(), rLocalName,
-                                                  maSeriesAddresses, msCategoriesAddress );
+                                                  maSeriesAddresses, msCategoriesAddress,
+                                                  msChartAddress );
             break;
 
         case XML_TOK_CHART_TITLE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-04 17:18:12 $
+ *  last change: $Author: bm $ $Date: 2001-05-15 12:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,13 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
 SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                                               SvXMLImport& rImport, const rtl::OUString& rLocalName,
                                               uno::Sequence< chart::ChartSeriesAddress >& rSeriesAddresses,
-                                              rtl::OUString& rCategoriesAddress ) :
+                                              ::rtl::OUString& rCategoriesAddress,
+                                              ::rtl::OUString& rChartAddress ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
         mrCategoriesAddress( rCategoriesAddress ),
+        mrChartAddress( rChartAddress ),
         mnDomainOffset( 0 ),
         mnSeries( 0 ),
         mnMaxSeriesLength( 0 ),
@@ -317,6 +319,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 break;
             case XML_TOK_PA_STYLE_NAME:
                 msAutoStyleName = aValue;
+                break;
+            case XML_TOK_PA_CHART_ADDRESS:
+                mrChartAddress = aValue;
                 break;
             default:
                 maSceneImportHelper.processSceneAttribute( nPrefix, aLocalName, aValue );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-04 17:18:20 $
+ *  last change: $Author: bm $ $Date: 2001-05-15 12:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,13 +134,15 @@ private:
     com::sun::star::awt::Size maSize;
     com::sun::star::awt::Point maPosition;
     ::rtl::OUString msAutoStyleName;
+    ::rtl::OUString& mrChartAddress;
 
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                            SvXMLImport& rImport, const rtl::OUString& rLocalName,
                            com::sun::star::uno::Sequence<
                                com::sun::star::chart::ChartSeriesAddress >& rSeriesAddresses,
-                           rtl::OUString& rCategoriesAddress );
+                           ::rtl::OUString& rCategoriesAddress,
+                           ::rtl::OUString& rChartAddress );
     virtual ~SchXMLPlotAreaContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
