@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:11:06 $
+ *  last change: $Author: fs $ $Date: 2000-12-12 16:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ hidspecial HID_DSADMIN_DATASOURCE_NEWDS                 { HelpId = HID_DSADMIN_D
 hidspecial HID_DSADMIN_DATASOURCE_DSLIST                { HelpId = HID_DSADMIN_DATASOURCE_DSLIST; };
 hidspecial HID_DSADMIN_USER_JDBC                        { HelpId = HID_DSADMIN_USER_JDBC; };
 hidspecial HID_DSADMIN_USER_ODBC                        { HelpId = HID_DSADMIN_USER_ODBC; };
-hidspecial HID_DSADMIN_USER_ADABAS                      { HelpId = HID_DSADMIN_USER_ADABAS
+hidspecial HID_DSADMIN_USER_ADABAS                      { HelpId = HID_DSADMIN_USER_ADABAS; };
 hidspecial HID_DSADMIN_PWDREC_JDBC                      { HelpId = HID_DSADMIN_PWDREC_JDBC; };
 hidspecial HID_DSADMIN_PWDREC_ODBC                      { HelpId = HID_DSADMIN_PWDREC_ODBC; };
 hidspecial HID_DSADMIN_PWDREC_ADABAS                    { HelpId = HID_DSADMIN_PWDREC_ADABAS; };
@@ -135,6 +135,9 @@ hidspecial HID_BROWSER_REFRESHCONN                      { HelpId = HID_BROWSER_R
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/12/08 21:11:06  fs
+ *  some new help ids for the data source browser
+ *
  *  Revision 1.6  2000/12/05 15:59:22  fs
  *  #79820# HID_DSADMIN_DIALOG
  *
