@@ -18338,3 +18338,15 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?LinkStubOnAsyncExecuteDrop@FmGridHeader@@CAJPAX0@Z
 ?OnAsyncExecuteDrop@FmGridHeader@@AAEJPAX@Z
 ?set@?$Reference@VXNumberFormats@util@star@sun@com@@@uno@star@sun@com@@QAAEPAVXNumberFormats@util@345@@Z
+?GetBackgroundColor@EditEngine@@QBE?AVColor@@XZ
+?SetBackgroundColor@EditEngine@@QAEXABVColor@@@Z
+?GetBackgroundColor@Outliner@@QBE?AVColor@@XZ
+?SetBackgroundColor@Outliner@@QAEXABVColor@@@Z
+?GetIndex@BitmapColor@@QBEEXZ
+?convertPropertyName@SvxShapeControl@@AAEXABVOUString@rtl@@AAV23@AAE@Z
+?getPropertyDefault@SvxShapeControl@@UAA?AVAny@uno@star@sun@com@@ABVOUString@rtl@@@Z
+?getPropertyState@SvxShapeControl@@UAA?AW4PropertyState@beans@star@sun@com@@ABVOUString@rtl@@@Z
+?getPropertyValue@SvxShapeControl@@UAA?AVAny@uno@star@sun@com@@ABVOUString@rtl@@@Z
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABW4FontSlant@awt@234@@Z
+?setPropertyToDefault@SvxShapeControl@@UAAXABVOUString@rtl@@@Z
+?setPropertyValue@SvxShapeControl@@UAAXABVOUString@rtl@@ABVAny@uno@star@sun@com@@@Z
