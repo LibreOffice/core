@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:48:50 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ italian ] = "Riga" ;
         QuickHelpText [ portuguese_brazilian ] = "Fileira" ;
         QuickHelpText [ portuguese ] = "Linha" ;
-        QuickHelpText [ finnish ] = "Rivi!" ;
+        QuickHelpText [ finnish ] = "Rivi" ;
         QuickHelpText [ danish ] = "RÊkke" ;
         QuickHelpText [ french ] = "Ligne" ;
         QuickHelpText [ swedish ] = "Rad" ;
@@ -155,15 +155,15 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ dutch ] = "Rij" ;
         QuickHelpText [ french ] = "Ligne" ;
         QuickHelpText[ russian ] = "—ÚÓÍ‡";
-        QuickHelpText[ polish ] = "Wiersz!";
-        QuickHelpText[ japanese ] = "çs!";
+        QuickHelpText[ polish ] = "Wiersz";
+        QuickHelpText[ japanese ] = "çs";
         QuickHelpText[ chinese_simplified ] = "––";
         QuickHelpText[ chinese_traditional ] = "ƒÊ";
         QuickHelpText[ arabic ] = "”ÿ—";
         QuickHelpText[ dutch ] = "Rij";
         QuickHelpText[ chinese_simplified ] = "––";
         QuickHelpText[ greek ] = "√Ò·ÏÏﬁ";
-        QuickHelpText[ korean ] = "«‡!";
+        QuickHelpText[ korean ] = "«‡";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -216,7 +216,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ italian ] = "Colonna" ;
         QuickHelpText [ portuguese_brazilian ] = "Coluna" ;
         QuickHelpText [ portuguese ] = "Coluna" ;
-        QuickHelpText [ finnish ] = "Sarake!" ;
+        QuickHelpText [ finnish ] = "Sarake" ;
         QuickHelpText [ danish ] = "Kolonne" ;
         QuickHelpText [ french ] = "Colonne" ;
         QuickHelpText [ swedish ] = "Kolumn" ;
@@ -226,15 +226,15 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ dutch ] = "Kolom" ;
         QuickHelpText [ french ] = "Colonne" ;
     QuickHelpText[ russian ] = "—ÚÓÎ·Âˆ";
-        QuickHelpText[ polish ] = "Kolumna!";
-        QuickHelpText[ japanese ] = "óÒ!";
+        QuickHelpText[ polish ] = "Kolumna";
+        QuickHelpText[ japanese ] = "óÒ";
         QuickHelpText[ chinese_simplified ] = "¡–";
         QuickHelpText[ chinese_traditional ] = "¶C";
         QuickHelpText[ arabic ] = "⁄„Êœ";
         QuickHelpText[ dutch ] = "Kolom";
         QuickHelpText[ chinese_simplified ] = "¡–";
         QuickHelpText[ greek ] = "”ÙﬁÎÁ";
-        QuickHelpText[ korean ] = "¥‹!";
+        QuickHelpText[ korean ] = "¥‹";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -272,21 +272,21 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ portuguese_brazilian ] = "Dokument" ;
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "ƒÓÍÛÏÂÌÚ";
-        QuickHelpText[ polish ] = "Dokument!";
-        QuickHelpText[ japanese ] = "ƒﬁ∑≠“›ƒ!";
+        QuickHelpText[ polish ] = "Dokument";
+        QuickHelpText[ japanese ] = "ƒﬁ∑≠“›ƒ";
         QuickHelpText[ chinese_simplified ] = "Œƒµµ";
         QuickHelpText[ chinese_traditional ] = "¿…Æ◊";
         QuickHelpText[ arabic ] = "„” ‰œ";
         QuickHelpText[ dutch ] = "Document";
         QuickHelpText[ chinese_simplified ] = "Œƒµµ";
         QuickHelpText[ greek ] = "∏„„Ò·ˆÔ";
-        QuickHelpText[ korean ] = "πÆº≠!";
+        QuickHelpText[ korean ] = "πÆº≠";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokument";
         QuickHelpText[ catalan ] = "Documento";
-        QuickHelpText[ finnish ] = "Asiakirja!";
+        QuickHelpText[ finnish ] = "Asiakirja";
     };
     ToolBox TBX_CMD
     {
@@ -1211,5 +1211,6 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
 
 
