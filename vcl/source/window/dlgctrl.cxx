@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-06 11:52:49 $
+ *  last change: $Author: cd $ $Date: 2002-11-25 10:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,7 +1011,9 @@ Window* Window::GetLabelFor() const
         )
         return NULL;
 
-    pWindow = pParent->GetParentLabelFor( this );
+    if ( mpRealParent )
+        pWindow = mpRealParent->GetParentLabelFor( this );
+
     if( pWindow )
         return pWindow;
 
@@ -1080,7 +1082,9 @@ Window* Window::GetLabeledBy() const
         )
         return NULL;
 
-    pWindow = pParent->GetParentLabeledBy( this );
+    if ( mpRealParent )
+        pWindow = mpRealParent->GetParentLabeledBy( this );
+
     if( pWindow )
         return pWindow;
 
