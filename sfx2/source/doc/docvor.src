@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:17:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ ModalDialog DLG_ORGANIZE
         Text [ english_us ] = "~Address Book..." ;
         Text[ portuguese ] = "~Livro de endereηos...";
         Text[ russian ] = "~ΐδπερνΰÿ κνθγΰ...";
-        Text[ greek ] = "~Ατζέντα διεθύνσεων...";
+        Text[ greek ] = "~Βιβλίο διεθύνσεων...";
         Text[ dutch ] = "~Adresboek...";
         Text[ french ] = "Carnet d'~adresses...";
         Text[ spanish ] = "~Libreta de direcciones...";
@@ -230,7 +230,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Modelos" ; Default ; > ;
+            < "Modelos de documentos" ; Default ; > ;
             < "Documentos" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -384,7 +384,7 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Modelos" ; Default ; > ;
+            < "Modelos de documentos" ; Default ; > ;
             < "Documentos" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -876,7 +876,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ english_us ] = "Set As Default Template" ;
                     Text[ portuguese ] = "~Definir como modelo padrγo";
                     Text[ russian ] = "Ρδελΰςό ψΰαλξνξμ οξ σμξλχΰνθώ";
-                    Text[ greek ] = "Set As Default Template";
+                    Text[ greek ] = "Ορισμός ως προεπιλεγμένου προτύπου";
                     Text[ dutch ] = "Als s~tandaardsjabloon";
                     Text[ french ] = "Dιfinir comme modθle ~par dιfaut";
                     Text[ spanish ] = "Definir como plantilla predeterminada";
@@ -907,7 +907,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ english_us ] = "Reset Default Template" ;
                     Text[ portuguese ] = "~Restaurar modelo padrγo";
                     Text[ russian ] = "~Βξρρςΰνξβθςό ρςΰνδΰπςνϋι ψΰαλξν";
-                    Text[ greek ] = "Reset Default Template";
+                    Text[ greek ] = "Επαναφορά προεπιλεγμένου προτύπου";
                     Text[ dutch ] = "~Standaardsjabloon";
                     Text[ french ] = "Restaurer le modθle par ~dιfaut";
                     Text[ spanish ] = "Restaurar plantilla predeterminada";
@@ -916,7 +916,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ danish ] = "Nulstil ~standardskabeloner";
                     Text[ swedish ] = "Εterstδll ~standardmall";
                     Text[ polish ] = "~Przywrσζ szablon domylny";
-                    Text[ portuguese_brazilian ] = "~Restaurar modelo padrγo";
+                    Text[ portuguese_brazilian ] = "~Restaurar o modelo padrγo";
                     Text[ japanese ] = "ζ¨™ζΊ–γƒ†γƒ³γƒ—γƒ¬γƒΌγƒγ‚’ε…ƒγ«ζ»γ™";
                     Text[ korean ] = "κΈ°λ³Έ μ„μ‹ νμΌμ„ μ›λλ€λ΅";
                     Text[ chinese_simplified ] = "ι‡θ®Ύζ ‡ε‡†ζ ·εΌ";
@@ -1030,6 +1030,7 @@ ModalDialog DLG_ORGANIZE
     Text[ slovak ] = "SprΓ΅va Ε΅ablΓ³n";
 };
  // ********************************************************************** EOF
+
 
 
 
