@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:21:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "attarray.hxx"
 #include "patattr.hxx"
 #include "docoptio.hxx"
+#include "cellform.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -381,12 +382,7 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
                         --nRow;
                         if ( bCalcAsShown )
                         {
-#ifndef WTC
-                            lcl_IterGetNumberFormat( nNumFormat,pAttrArray,
-#else
-                            lcl_IterGetNumberFormat( nNumFormat,
-                                (ScAttrArray const *&)pAttrArray,
-#endif
+                            lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
                                 nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
                             rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
                         }
@@ -404,12 +400,7 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
                             bNextValid = TRUE;
                             if ( bCalcAsShown )
                             {
-#ifndef WTC
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-#else
-                                lcl_IterGetNumberFormat( nNumFormat,
-                                    (ScAttrArray const *&)pAttrArray,
-#endif
                                     nAttrEndRow, pCol->pAttrArray, nNextRow, pDoc );
                                 fNextValue = pDoc->RoundValueAsShown( fNextValue, nNumFormat );
                             }
@@ -584,12 +575,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                             rValue = ((ScValueCell*)pCell)->GetValue();
                             if ( bCalcAsShown )
                             {
-#if ! ( defined WTC || defined IRIX || defined ICC || defined HPUX || defined C50 || defined C52  || ( defined GCC && __GNUC__ >= 3 ) )
                                 lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-#else
-                                lcl_IterGetNumberFormat( nNumFormat,
-                                    (ScAttrArray const *&)pAttrArray,
-#endif
                                     nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
                                 rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
                             }
@@ -808,7 +794,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
     aParam (rParam),
     nStopOnMismatch( nStopOnMismatchDisabled ),
     nTestEqualCondition( nTestEqualConditionDisabled ),
-    bAdvanceQuery( FALSE )
+    bAdvanceQuery( FALSE ),
+    bIgnoreMismatchOnLeadingStrings( FALSE )
 {
     nCol = aParam.nCol1;
     nRow = aParam.nRow1;
@@ -833,13 +820,20 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
 ScBaseCell* ScQueryCellIterator::GetThis()
 {
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-    SCCOLROW nFirstQueryField = aParam.GetEntry(0).nField;
+    const ScQueryEntry& rEntry = aParam.GetEntry(0);
+    SCCOLROW nFirstQueryField = rEntry.nField;
+    bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings &&
+        !rEntry.bQueryByString;
+    bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
+        !aParam.bHasHeader && rEntry.bQueryByString &&
+        ((aParam.bByRow && nRow == aParam.nRow1) ||
+         (!aParam.bByRow && nCol == aParam.nCol1));
     for ( ;; )
     {
         if ( nRow > aParam.nRow2 )
         {
             nRow = aParam.nRow1;
-            if (aParam.bHasHeader)
+            if (aParam.bHasHeader && aParam.bByRow)
                 nRow++;
             do
             {
@@ -848,25 +842,30 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 if ( bAdvanceQuery )
                 {
                     AdvanceQueryParamEntryField();
-                    nFirstQueryField = aParam.GetEntry(0).nField;
+                    nFirstQueryField = rEntry.nField;
                 }
                 pCol = &(pDoc->pTab[nTab])->aCol[nCol];
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
+            bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
+                !aParam.bHasHeader && rEntry.bQueryByString &&
+                aParam.bByRow;
         }
 
         while ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow < nRow )
             nColRow++;
 
-        if ( nColRow < pCol->nCount && pCol->pItems[nColRow].nRow <= aParam.nRow2 )
+        if ( nColRow < pCol->nCount &&
+                (nRow = pCol->pItems[nColRow].nRow) <= aParam.nRow2 )
         {
-            if ( pCol->pItems[nColRow].pCell->GetCellType() == CELLTYPE_NOTE )
-                nRow++;
+            ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
+            if ( pCell->GetCellType() == CELLTYPE_NOTE )
+                ++nRow;
+            else if (bAllStringIgnore && pCell->HasStringData())
+                ++nRow;
             else
             {
                 BOOL bTestEqualCondition;
-                nRow = pCol->pItems[nColRow].nRow;
-                ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
                 if ( (pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL,
                         (nCol == static_cast<SCCOL>(nFirstQueryField) ? pCell : NULL),
                         (nTestEqualCondition ? &bTestEqualCondition : NULL) ) )
@@ -877,13 +876,33 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 }
                 else if ( nStopOnMismatch )
                 {
-                    nStopOnMismatch |= nStopOnMismatchOccured;
                     // Yes, even a mismatch may have a fulfilled equal
                     // condition if regular expressions were involved and
                     // SC_LESS_EQUAL or SC_GREATER_EQUAL were queried.
                     if ( nTestEqualCondition && bTestEqualCondition )
+                    {
                         nTestEqualCondition |= nTestEqualConditionMatched;
-                    return NULL;
+                        nStopOnMismatch |= nStopOnMismatchOccured;
+                        return NULL;
+                    }
+                    bool bStop;
+                    if (bFirstStringIgnore)
+                    {
+                        if (pCell->HasStringData())
+                        {
+                            ++nRow;
+                            bStop = false;
+                        }
+                        else
+                            bStop = true;
+                    }
+                    else
+                        bStop = true;
+                    if (bStop)
+                    {
+                        nStopOnMismatch |= nStopOnMismatchOccured;
+                        return NULL;
+                    }
                 }
                 else
                     nRow++;
@@ -891,6 +910,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
         }
         else
             nRow = aParam.nRow2 + 1; // Naechste Spalte
+        bFirstStringIgnore = false;
     }
 }
 
@@ -919,12 +939,7 @@ ScBaseCell* ScQueryCellIterator::GetNext()
 ULONG ScQueryCellIterator::GetNumberFormat()
 {
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-#if ! ( defined WTC || defined IRIX  || defined ICC || defined HPUX || defined C50 || defined C52 || ( defined GCC && __GNUC__ >= 3 ) )
     lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-#else
-    lcl_IterGetNumberFormat( nNumFormat,
-        (ScAttrArray const *&)pAttrArray,
-#endif
         nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
     return nNumFormat;
 }
@@ -950,31 +965,43 @@ void ScQueryCellIterator::AdvanceQueryParamEntryField()
 }
 
 
-BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow )
+BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
+        SCROW& nFoundRow, BOOL bSearchForEqualAfterMismatch,
+        BOOL bIgnoreMismatchOnLeadingStringsP )
 {
     nFoundCol = MAXCOL+1;
     nFoundRow = MAXROW+1;
     SetStopOnMismatch( TRUE );      // assume sorted keys
     SetTestEqualCondition( TRUE );
-    if ( GetFirst() )
+    bIgnoreMismatchOnLeadingStrings = bIgnoreMismatchOnLeadingStringsP;
+    bool bRegExp = aParam.bRegExp && aParam.GetEntry(0).bQueryByString;
+    bool bBinary = !bRegExp && aParam.bByRow && (aParam.GetEntry(0).eOp ==
+            SC_LESS_EQUAL || aParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
+    if (bBinary ? (BinarySearch() ? GetThis() : 0) : GetFirst())
     {
+        // First equal entry or last smaller than (greater than) entry.
+        SCSIZE nColRowSave;
+        ScBaseCell* pNext = 0;
         do
         {
             nFoundCol = GetCol();
             nFoundRow = GetRow();
-        } while ( !IsEqualConditionFulfilled() && GetNext() );
+            nColRowSave = nColRow;
+        } while ( !IsEqualConditionFulfilled() && (pNext = GetNext()) );
+        // There may be no pNext but equal condition fulfilled if regular
+        // expressions are involved. Keep the found entry and proceed.
+        if (!pNext && !IsEqualConditionFulfilled())
+        {
+            // Step back to last in range and adjust position markers for
+            // GetNumberFormat() or similar.
+            nCol = nFoundCol;
+            nRow = nFoundRow;
+            nColRow = nColRowSave;
+        }
     }
     if ( IsEqualConditionFulfilled() )
     {
-        nFoundCol = GetCol();
-        nFoundRow = GetRow();
-        return TRUE;
-    }
-    if ( StoppedOnMismatch() )
-    {   // Assume found entry to be the last value less than or equal to query.
-        // But keep on searching for an equal match.
-        SetStopOnMismatch( FALSE );
-        SetTestEqualCondition( FALSE );
+        // Position on last equal entry.
         SCSIZE nEntries = aParam.GetEntryCount();
         for ( SCSIZE j = 0; j < nEntries; j++  )
         {
@@ -992,13 +1019,316 @@ BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW&
             else
                 break;  // for
         }
-        if ( GetNext() )
+        SCSIZE nColRowSave;
+        bIgnoreMismatchOnLeadingStrings = FALSE;
+        SetTestEqualCondition( FALSE );
+        do
         {
             nFoundCol = GetCol();
             nFoundRow = GetRow();
+            nColRowSave = nColRow;
+        } while (GetNext());
+        // Step back conditions same as above
+        nCol = nFoundCol;
+        nRow = nFoundRow;
+        nColRow = nColRowSave;
+        return TRUE;
+    }
+    if ( (bSearchForEqualAfterMismatch || aParam.bRegExp) &&
+            StoppedOnMismatch() )
+    {
+        // Assume found entry to be the last value less than respectively
+        // greater than the query. But keep on searching for an equal match.
+        SCSIZE nEntries = aParam.GetEntryCount();
+        for ( SCSIZE j = 0; j < nEntries; j++  )
+        {
+            ScQueryEntry& rEntry = aParam.GetEntry( j );
+            if ( rEntry.bDoQuery )
+            {
+                switch ( rEntry.eOp )
+                {
+                    case SC_LESS_EQUAL :
+                    case SC_GREATER_EQUAL :
+                        rEntry.eOp = SC_EQUAL;
+                    break;
+                }
+            }
+            else
+                break;  // for
+        }
+        SetStopOnMismatch( FALSE );
+        SetTestEqualCondition( FALSE );
+        if (GetNext())
+        {
+            // Last of a consecutive area, avoid searching the entire parameter
+            // range as it is a real performance bottleneck in case of regular
+            // expressions.
+            SCSIZE nColRowSave;
+            do
+            {
+                nFoundCol = GetCol();
+                nFoundRow = GetRow();
+                nColRowSave = nColRow;
+                SetStopOnMismatch( TRUE );
+            } while (GetNext());
+            nCol = nFoundCol;
+            nRow = nFoundRow;
+            nColRow = nColRowSave;
         }
     }
     return (nFoundCol <= MAXCOL) && (nFoundRow <= MAXROW);
+}
+
+
+ScBaseCell* ScQueryCellIterator::BinarySearch()
+{
+    nCol = aParam.nCol1;
+    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    if (!pCol->nCount)
+        return 0;
+
+    ScBaseCell* pCell;
+    SCSIZE nHi, nLo;
+    CollatorWrapper* pCollator = (aParam.bCaseSens ? ScGlobal::pCaseCollator :
+        ScGlobal::pCollator);
+    SvNumberFormatter& rFormatter = *(pDoc->GetFormatTable());
+    const ScQueryEntry& rEntry = aParam.GetEntry(0);
+    bool bLessEqual = rEntry.eOp == SC_LESS_EQUAL;
+    bool bByString = rEntry.bQueryByString;
+    bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings && !bByString;
+    bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
+        !aParam.bHasHeader && bByString;
+
+    nRow = aParam.nRow1;
+    if (aParam.bHasHeader)
+        nRow++;
+    const ColEntry* pItems = pCol->pItems;
+    if (pCol->Search( nRow, nLo ) && bFirstStringIgnore &&
+            pItems[nLo].pCell->HasStringData())
+    {
+        String aCellStr;
+        ULONG nFormat = pCol->GetNumberFormat( pItems[nLo].nRow);
+        ScCellFormat::GetInputString( pItems[nLo].pCell, nFormat, aCellStr,
+                rFormatter);
+        if (pCollator->compareString( aCellStr, *rEntry.pStr) != 0)
+            ++nLo;
+    }
+    if (!pCol->Search( aParam.nRow2, nHi ) && nHi>0)
+        --nHi;
+    while (bAllStringIgnore && nLo <= nHi && nLo < pCol->nCount &&
+            pItems[nLo].pCell->HasStringData())
+        ++nLo;
+
+    // Bookkeeping values for breaking up the binary search in case the data
+    // range isn't strictly sorted.
+    SCSIZE nLastInRange = nLo;
+    SCSIZE nFirstLastInRange = nLastInRange;
+    double fLastInRangeValue = bLessEqual ?
+        -(::std::numeric_limits<double>::max()) :
+            ::std::numeric_limits<double>::max();
+    String aLastInRangeString;
+    if (!bLessEqual)
+        aLastInRangeString.Assign( sal_Unicode(0xFFFF));
+    pCell = pItems[nLastInRange].pCell;
+    if (pCell->HasStringData())
+    {
+        ULONG nFormat = pCol->GetNumberFormat( pItems[nLastInRange].nRow);
+        ScCellFormat::GetInputString( pCell, nFormat, aLastInRangeString,
+                rFormatter);
+    }
+    else
+    {
+        switch ( pCell->GetCellType() )
+        {
+            case CELLTYPE_VALUE :
+                fLastInRangeValue =
+                    static_cast<ScValueCell*>(pCell)->GetValue();
+                break;
+            case CELLTYPE_FORMULA :
+                fLastInRangeValue =
+                    static_cast<ScFormulaCell*>(pCell)->GetValue();
+                break;
+        }
+    }
+
+    sal_Int32 nRes = 0;
+    bool bFound = false;
+    bool bDone = false;
+    while (nLo <= nHi && !bDone)
+    {
+        SCSIZE nMid = (nLo+nHi)/2;
+        SCSIZE i = nMid;
+        while (i <= nHi && pItems[i].pCell->GetCellType() == CELLTYPE_NOTE)
+            ++i;
+        if (i > nHi)
+        {
+            nHi = nMid - 1;
+            continue;   // while
+        }
+        BOOL bStr = pItems[i].pCell->HasStringData();
+        nRes = 0;
+        // compares are content<query:-1, content>query:1
+        // Cell value comparison similar to ScTable::ValidQuery()
+        if (!bStr && !bByString)
+        {
+            double nCellVal;
+            pCell = pItems[i].pCell;
+            switch ( pCell->GetCellType() )
+            {
+                case CELLTYPE_VALUE :
+                    nCellVal = static_cast<ScValueCell*>(pCell)->GetValue();
+                    break;
+                case CELLTYPE_FORMULA :
+                    nCellVal = static_cast<ScFormulaCell*>(pCell)->GetValue();
+                    break;
+                default:
+                    nCellVal = 0.0;
+            }
+            if ((nCellVal < rEntry.nVal) && !::rtl::math::approxEqual(
+                        nCellVal, rEntry.nVal))
+            {
+                nRes = -1;
+                if (bLessEqual)
+                {
+                    if (fLastInRangeValue < nCellVal)
+                    {
+                        fLastInRangeValue = nCellVal;
+                        nLastInRange = i;
+                    }
+                    else if (fLastInRangeValue > nCellVal)
+                    {
+                        // not strictly sorted, continue with GetThis()
+                        nLastInRange = nFirstLastInRange;
+                        bDone = true;
+                    }
+                }
+            }
+            else if ((nCellVal > rEntry.nVal) && !::rtl::math::approxEqual(
+                        nCellVal, rEntry.nVal))
+            {
+                nRes = 1;
+                if (!bLessEqual)
+                {
+                    if (fLastInRangeValue > nCellVal)
+                    {
+                        fLastInRangeValue = nCellVal;
+                        nLastInRange = i;
+                    }
+                    else if (fLastInRangeValue < nCellVal)
+                    {
+                        // not strictly sorted, continue with GetThis()
+                        nLastInRange = nFirstLastInRange;
+                        bDone = true;
+                    }
+                }
+            }
+        }
+        else if (bStr && bByString)
+        {
+            String aCellStr;
+            ULONG nFormat = pCol->GetNumberFormat( pItems[i].nRow);
+            ScCellFormat::GetInputString( pItems[i].pCell, nFormat, aCellStr,
+                    rFormatter);
+            nRes = pCollator->compareString( aCellStr, *rEntry.pStr);
+            if (nRes < 0 && bLessEqual)
+            {
+                sal_Int32 nTmp = pCollator->compareString( aLastInRangeString,
+                        aCellStr);
+                if (nTmp < 0)
+                {
+                    aLastInRangeString = aCellStr;
+                    nLastInRange = i;
+                }
+                else if (nTmp > 0)
+                {
+                    // not strictly sorted, continue with GetThis()
+                    nLastInRange = nFirstLastInRange;
+                    bDone = true;
+                }
+            }
+            else if (nRes > 0 && !bLessEqual)
+            {
+                sal_Int32 nTmp = pCollator->compareString( aLastInRangeString,
+                        aCellStr);
+                if (nTmp > 0)
+                {
+                    aLastInRangeString = aCellStr;
+                    nLastInRange = i;
+                }
+                else if (nTmp < 0)
+                {
+                    // not strictly sorted, continue with GetThis()
+                    nLastInRange = nFirstLastInRange;
+                    bDone = true;
+                }
+            }
+        }
+        else if (!bStr && bByString)
+        {
+            nRes = -1;  // numeric < string
+            if (bLessEqual)
+                nLastInRange = i;
+        }
+        else // if (bStr && !bByString)
+        {
+            nRes = 1;   // string > numeric
+            if (!bLessEqual)
+                nLastInRange = i;
+        }
+        if (nRes < 0)
+        {
+            if (bLessEqual)
+                nLo = nMid + 1;
+            else    // assumed to be SC_GREATER_EQUAL
+            {
+                if (nMid > 0)
+                    nHi = nMid - 1;
+                else
+                    bDone = true;
+            }
+        }
+        else if (nRes > 0)
+        {
+            if (bLessEqual)
+            {
+                if (nMid > 0)
+                    nHi = nMid - 1;
+                else
+                    bDone = true;
+            }
+            else    // assumed to be SC_GREATER_EQUAL
+                nLo = nMid + 1;
+        }
+        else
+        {
+            nLo = i;
+            bDone = bFound = true;
+        }
+    }
+    if (!bFound)
+    {
+        // If all hits didn't result in a moving limit there's something
+        // strange, e.g. data range not properly sorted, only identical values
+        // encountered, which doesn't mean there aren't any others in between..
+        // leave it to GetThis()
+        if (nLastInRange == nFirstLastInRange)
+            nLo = nFirstLastInRange;
+        else if (((nRes < 0 && bLessEqual) || nRes > 0) && nLo > 0)
+            --nLo;  // step back for subsequent GetThis() to find last in range
+    }
+    if (nLo < pCol->nCount && pCol->pItems[nLo].nRow <= aParam.nRow2)
+    {
+        nRow = pItems[nLo].nRow;
+        pCell = pItems[nLo].pCell;
+        nColRow = nLo;
+    }
+    else
+    {
+        nRow = aParam.nRow2 + 1;
+        pCell = 0;
+        nColRow = pCol->nCount - 1;
+    }
+    return pCell;
 }
 
 
