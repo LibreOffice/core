@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
 #define STR_EVENT_DEACTIVATEDOC                 (RID_SFX_APP_START+58)
 #define STR_EVENT_ONERROR                       (RID_SFX_APP_START+78)
 #define STR_EVENT_PREPARECLOSEDOC               (RID_SFX_APP_START+89)
-#define STR_EVENT_NEWMESSAGE                    (RID_SFX_APP_START+90)
+#define STR_EVENT_MODIFYCHANGED                 (RID_SFX_APP_START+90)
 #define STR_EVENT_SAVEDOCDONE                   (RID_SFX_APP_START+95)
 #define STR_EVENT_SAVEASDOCDONE                 (RID_SFX_APP_START+96)
 
