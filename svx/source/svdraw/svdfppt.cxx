@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-30 17:24:27 $
+ *  last change: $Author: sj $ $Date: 2002-10-08 11:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4276,64 +4276,50 @@ PPTCharSheet::PPTCharSheet( const PPTCharSheet& rAttr )
     *this = rAttr;
 }
 
-void PPTCharSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL bFirst, BOOL bSimpleText )
+void PPTCharSheet::Read( SvStream& rIn, sal_Bool bMasterStyle, sal_uInt32 nLevel, sal_Bool bFirst )
 {
     // Zeichenattribute
-    UINT32 nCMask;
+    sal_uInt32 nCMask;
+    sal_uInt16 nVal16;
     rIn >> nCMask;
 
     if ( nCMask & 0x0000FFFF )
     {
-        UINT16 nBitAttr;
-        maCharLevel[ nLevel ].mnFlags &= ~( (UINT16)nCMask );
+        sal_uInt16 nBitAttr;
+        maCharLevel[ nLevel ].mnFlags &= ~( (sal_uInt16)nCMask );
         rIn >> nBitAttr; // Bit-Attribute (Fett, Unterstrichen, ...)
         maCharLevel[ nLevel ].mnFlags |= nBitAttr;
     }
-    nCMask >>= 16;
-
-    // Die Sortierung der Char-Attribs ist etwas durcheinander...
-    static USHORT __READONLY_DATA aCharAttrTable[16] =
+    if ( nCMask & ( 1 << PPT_CharAttr_Font ) )                  // 0x00010000
+        rIn >> maCharLevel[ nLevel ].mnFont;
+    if ( nCMask & ( 1 << PPT_CharAttr_AsianOrComplexFont ) )    // 0x00200000
+        rIn >> maCharLevel[ nLevel ].mnAsianOrComplexFont;
+    if ( nCMask & ( 1 << PPT_CharAttr_Unknown2 ) )              // 0x00400000
+        rIn >> nVal16;
+    if ( nCMask & ( 1 << PPT_CharAttr_Symbol ) )                // 0x00800000
+        rIn >> nVal16;
+    if ( nCMask & ( 1 << PPT_CharAttr_FontHeight ) )            // 0x00020000
+        rIn >> maCharLevel[ nLevel ].mnFontHeight;
+    if ( nCMask & ( 1 << PPT_CharAttr_FontColor ) )             // 0x00040000
     {
-        16, 21, 22, 23, 17, 18, 19, 20,
-        24, 25, 26, 27, 28, 29, 30, 31
-    };
+        rIn >> maCharLevel[ nLevel ].mnFontColor;
+        if( ! (maCharLevel[ nLevel ].mnFontColor && 0xff000000 ) )
+            maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
+    }
+    if ( nCMask & ( 1 << PPT_CharAttr_Escapement ) )            // 0x00080000
+        rIn >> maCharLevel[ nLevel ].mnEscapement;
+    if ( nCMask & 0x00100000 )                                  // 0x00100000
+        rIn >> nVal16;
 
-    for ( UINT16 i = 16; i < 32; i++ )
+    nCMask >>= 24;
+    while( nCMask )
     {
-        UINT16 j = i;
-
-        // Reihenfolge ist bei einfachen Textobjekten normal...
-        if ( !bSimpleText )
-            j = aCharAttrTable[ i - 16 ];
-
-        if ( nCMask & ( 1 << ( j - 16 ) ) )
+        if ( nCMask & 1 )
         {
-            UINT16 nVal;
-            switch ( j )
-            {
-                case PPT_CharAttr_FontColor :
-                {
-                    rIn >> maCharLevel[ nLevel ].mnFontColor;
-                    if( ! (maCharLevel[ nLevel ].mnFontColor && 0xff000000 ) )
-                        maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
-                }
-                break;
-                case PPT_CharAttr_Font :
-                    rIn >> maCharLevel[ nLevel ].mnFont;
-                break;
-                case PPT_CharAttr_AsianOrComplexFont :
-                    rIn >> maCharLevel[ nLevel ].mnAsianOrComplexFont;
-                break;
-                case PPT_CharAttr_FontHeight :
-                    rIn >> maCharLevel[ nLevel ].mnFontHeight;
-                break;
-                case PPT_CharAttr_Escapement :
-                    rIn >> maCharLevel[ nLevel ].mnEscapement;
-                break;
-                default :
-                    rIn >> nVal;
-            }
+            DBG_ERROR( "PPTCharSheet::Read - unknown attribute, send me this document (SJ)" );
+            rIn >> nVal16;
         }
+        nCMask >>= 1;
     }
 }
 
@@ -4393,7 +4379,7 @@ PPTParaSheet::PPTParaSheet( const PPTParaSheet& rSheet )
 }
 
 void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool bMasterStyle,
-                    sal_uInt32 nLevel, sal_Bool bFirst, sal_Bool bSimpleText )
+                    sal_uInt32 nLevel, sal_Bool bFirst )
 {
     // Absatzattribute
     sal_uInt16  nVal16, i, nMask16;
@@ -4415,7 +4401,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
     if ( nPMask & 0x0040 )
     {
         rIn >> nVal16;
-            maParaLevel[ nLevel ].mnBulletHeight = nVal16;
+        maParaLevel[ nLevel ].mnBulletHeight = nVal16;
     }
     if ( nPMask & 0x0020 )
     {
@@ -4424,7 +4410,6 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
     }
     if ( bFirst )
     {
-
         if ( nPMask & 0xF00 )
         {   // AbsJust!
             rIn >> nVal16;
@@ -4442,35 +4427,19 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
             rIn >> maParaLevel[ nLevel ].mnBulletOfs;
         if ( nPMask & 0x20000 )
             rIn >> maParaLevel[ nLevel ].mnDefaultTab;
-
-        if ( bSimpleText )
+        if ( nPMask & 0x200000 )
         {
-            if ( nPMask & 0x40000 )
-                rIn >> nVal16;
+            // number of tabulators
+            rIn >> nVal16;
+            for ( i = 0; i < nVal16; i++ )
+                rIn >> nVal32;      // reading the tabulators
         }
-        else
-        {
-            if ( nPMask & 0x200000 )
-            {
-                // number of tabulators
-                rIn >> nVal16;
-                for ( i = 0; i < nVal16; i++ )
-                    rIn >> nVal32;      // reading the tabulators
-            }
-            if ( nPMask & 0x40000 )
-                rIn >> nVal16;
-            if ( nPMask & 0x80000 )
-                rIn >> maParaLevel[ nLevel ].mnAsianLineBreak;
-            if ( nPMask & 0x100000 )
-                rIn >> maParaLevel[ nLevel ].mnBiDi;
-
-            nPMask >>= 22;
-            while( nPMask & 1 )
-            {
-                rIn >> nVal16;
-                nPMask >>= 1;
-            }
-        }
+        if ( nPMask & 0x40000 )
+            rIn >> nVal16;
+        if ( nPMask & 0x80000 )
+            rIn >> maParaLevel[ nLevel ].mnAsianLineBreak;
+        if ( nPMask & 0x100000 )
+            rIn >> maParaLevel[ nLevel ].mnBiDi;
     }
     else
     {
@@ -4486,6 +4455,41 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
         if ( nPMask & 0x4000 )
             rIn >> maParaLevel[ nLevel ].mnLowerDist;
         if ( nPMask & 0x8000 )
+            rIn >> nVal16;
+        if ( nPMask & 0x100 )
+            rIn >> maParaLevel[ nLevel ].mnTextOfs;
+        if ( nPMask & 0x200 )
+            rIn >> nVal16;
+        if ( nPMask & 0x400 )
+            rIn >> maParaLevel[ nLevel ].mnBulletOfs;
+        if ( nPMask & 0x10000 )
+            rIn >> nVal16;
+        if ( nPMask & 0xe0000 )
+        {
+            sal_uInt16 nFlagsToModifyMask = (sal_uInt16)( ( nPMask >> 17 ) & 7 );
+            rIn >> nVal16;
+            // bits that are not involved to zero
+            nVal16 &= nFlagsToModifyMask;
+            // bits that are to change to zero
+            maParaLevel[ nLevel ].mnAsianLineBreak &=~nFlagsToModifyMask;
+            // now set the corresponding bits
+            maParaLevel[ nLevel ].mnAsianLineBreak |= nVal16;
+        }
+        if ( nPMask & 0x100000 )
+        {
+            // number of tabulators
+            rIn >> nVal16;
+            for ( i = 0; i < nVal16; i++ )
+                rIn >> nVal32;      // reading the tabulators
+        }
+        if ( nPMask & 0x200000 )
+            rIn >> maParaLevel[ nLevel ].mnBiDi;        // #88602#
+    }
+
+    nPMask >>= 22;
+    while( nPMask )
+    {
+        if ( nPMask & 1 )
         {
 #ifdef DBG_UTIL
             if (!(rManager.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
@@ -4495,47 +4499,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
 #endif
             rIn >> nVal16;
         }
-        if ( nPMask & 0x100 )
-            rIn >> maParaLevel[ nLevel ].mnTextOfs;
-        if ( nPMask & 0x200 )
-            rIn >> nVal16;
-        if ( nPMask & 0x400 )
-            rIn >> maParaLevel[ nLevel ].mnBulletOfs;
-        if ( nPMask & 0x10000 )
-            rIn >> nVal16;
-        if ( bSimpleText )
-            nPMask &=0x7ffff;
-        else
-        {
-            if ( nPMask & 0xe0000 )
-            {
-                sal_uInt16 nFlagsToModifyMask = (sal_uInt16)( ( nPMask >> 17 ) & 7 );
-                rIn >> nVal16;
-                // bits that are not involved to zero
-                nVal16 &= nFlagsToModifyMask;
-                // bits that are to change to zero
-                maParaLevel[ nLevel ].mnAsianLineBreak &=~nFlagsToModifyMask;
-                // now set the corresponding bits
-                maParaLevel[ nLevel ].mnAsianLineBreak |= nVal16;
-            }
-            if ( nPMask & 0x200000 )
-                rIn >> maParaLevel[ nLevel ].mnBiDi;        // #88602#
-            nPMask &=~0x2e0000;
-        }
-        nPMask >>= 18; // wenn normaler Text obere Flags ignorieren
-        for ( i = 18; nPMask; i++, nPMask >>= 1 )
-        {
-            if ( nPMask & 1 )
-            {
-#ifdef DBG_UTIL
-                if (!(rManager.rImportParam.nImportFlags & PPT_IMPORTFLAGS_NO_TEXT_ASSERT))
-                {
-                    DBG_ERROR( "PPTParaSheet::Read - unknown attribute, send me this document (SJ)" );
-                }
-#endif
-                rIn >> nVal16;
-            }
-        }
+        nPMask >>= 1;
     }
 }
 
@@ -4613,16 +4577,16 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             }
             else if ( nInstance == 4 )
                 bFoundTxMasterStyleAtom04 = TRUE;
-            UINT16 nLevelAnz;
+
+            sal_uInt16 nLevelAnz;
             rIn >> nLevelAnz;
             if ( nLevelAnz > 5 )
             {
                 DBG_ERROR( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
                 nLevelAnz = 5;
             }
-            USHORT nLev = 0;
-            BOOL bFirst = TRUE;
-            BOOL bSimpleText = FALSE;
+            sal_uInt16  nLev = 0;
+            sal_Bool    bFirst = sal_True;
 
             while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
             {
@@ -4631,20 +4595,18 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     mpParaSheet[ nInstance ]->maParaLevel[ nLev ] = mpParaSheet[ nInstance ]->maParaLevel[ nLev - 1 ];
                     mpCharSheet[ nInstance ]->maCharLevel[ nLev ] = mpCharSheet[ nInstance ]->maCharLevel[ nLev - 1 ];
                 }
+
                 // Ausnahme: Vorlage 5, 6 (MasterTitle Titel und SubTitel)
                 if ( nInstance >= TSS_TYPE_SUBTITLE )
                 {
-                    // NICHT bFirst
-                    bFirst = FALSE;
-                    bSimpleText = TRUE;
+                    bFirst = sal_False;
 
-                    // einen wegwerfen (evtl. Einruecktiefe? Oder Level?)
-                    UINT16 nShit;
-                    rIn >> nShit;
+                    sal_uInt16 nDontKnow;
+                    rIn >> nDontKnow;
                 }
-                mpParaSheet[ nInstance ]->Read( rManager, rIn, sal_True, nLev, bFirst, bSimpleText );
-                mpCharSheet[ nInstance ]->Read( rIn, sal_True, nLev, bFirst, bSimpleText );
-                bFirst = FALSE;
+                mpParaSheet[ nInstance ]->Read( rManager, rIn, sal_True, nLev, bFirst );
+                mpCharSheet[ nInstance ]->Read( rIn, sal_True, nLev, bFirst );
+                bFirst = sal_False;
                 nLev++;
             }
 #ifdef DBG_UTIL
@@ -4712,11 +4674,11 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 rIn >> aTxMasterStyleHd;
                 if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
                 {
-                    UINT16 nLevelAnz;
+                    sal_uInt16 nLevelAnz;
                     rIn >> nLevelAnz;
 
-                    USHORT nLev = 0;
-                    BOOL bFirst = TRUE;
+                    sal_uInt16 nLev = 0;
+                    sal_Bool bFirst = sal_True;
                     while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
                     {
                         if ( nLev )
@@ -4724,7 +4686,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                             mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
                             mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
                         }
-                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, sal_True, nLev, bFirst, sal_False );
+                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, sal_True, nLev, bFirst );
                         if ( !nLev )
                         {
                             // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
@@ -4740,8 +4702,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                                     rParaLevel.mnAsianLineBreak |= 4;
                             }
                         }
-                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, TRUE, nLev, bFirst, FALSE );
-                        bFirst = FALSE;
+                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, sal_True, nLev, bFirst );
+                        bFirst = sal_False;
                         nLev++;
                     }
                     break;
