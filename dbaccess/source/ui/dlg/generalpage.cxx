@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:02:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,6 +1271,7 @@ namespace dbaui
                     AddressBookTypes::getAddressURL( ABT_OUTLOOK ),
                     AddressBookTypes::getAddressURL( ABT_OE ),
                     AddressBookTypes::getAddressURL( ABT_LDAP ),
+                    AddressBookTypes::getAddressURL( ABT_EVOLUTION ),
                     AddressBookTypes::getAddressURL( ABT_MORK )
                 };
                 static String sAddressBookTypesTrans[]=
@@ -1278,6 +1279,7 @@ namespace dbaui
                     String(ModuleRes(STR_ADDRESSBOOK_OUTLOOK)),
                     String(ModuleRes(STR_ADDRESSBOOK_SYSTEM)),
                     String(ModuleRes(STR_ADDRESSBOOK_LDAP)),
+                    String(ModuleRes(STR_ADDRESSBOOK_EVOLUTION)),
                     String(ModuleRes(STR_ADDRESSBOOK_MOZILLA))
                 };
                 static sal_Int32 s_nTypes = sizeof(sAddressBookTypes)/sizeof(::rtl::OUString);
@@ -1430,6 +1432,13 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31.2.3.12.2  2003/05/26 16:48:16  fs
+ *  RESYNC: (1.31.2.3-1.33); FILE MERGED
+ *
+ *  Revision 1.33  2003/04/01 14:02:04  vg
+ *  INTEGRATION: CWS dba03 (1.31.2.3.4); FILE MERGED
+ *  2003/03/18 09:03:48 oj 1.31.2.3.4.1: #107728# use own interactionhandler
+ *
  *  Revision 1.31.2.3.4.1  2003/03/18 09:03:48  oj
  *  #107728# use own interactionhandler
  *
