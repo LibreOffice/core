@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-22 18:18:54 $
+ *  last change: $Author: sj $ $Date: 2001-02-07 17:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,25 +368,47 @@ class PPTExBulletProvider
                                 ~PPTExBulletProvider();
 };
 
-class Collection : private List
+class SoundEntry
 {
-        public:
+        sal_uInt32              nFileSize;
+        String                  aSoundURL;
 
-                                Collection() {}
-                                ~Collection();
+        String                  ImplGetName() const;
+        String                  ImplGetExtension() const;
 
-        sal_uInt32              GetCount() const;
+    public :
+
+        sal_Bool                IsSameURL( const String& rURL ) const;
+        sal_uInt32              GetFileSize( ) const { return nFileSize; };
+
+                                SoundEntry( const String& rSoundURL );
+
+        // returns the size of a complete SoundContainer
+        sal_uInt32              GetSize( sal_uInt32 nId ) const;
+        void                    Write( SvStream& rSt, sal_uInt32 nId );
+};
+class SoundCollection : private List
+{
+        const SoundEntry*       ImplGetByIndex( sal_uInt32 nId ) const;
+
+    public:
+
+                                SoundCollection() {}
+                                ~SoundCollection();
+
         sal_uInt32              GetId( const String& );
 
-        const String*           GetById( sal_uInt32 nId );
+        // returns the size of a complete SoundCollectionContainer
+        sal_uInt32              GetSize() const;
+        void                    Write( SvStream& rSt );
 };
 
 struct FontCollectionEntry
 {
-        String                              Name;
-        sal_Int16                           Family;
-        sal_Int16                           Pitch;
-        sal_Int16                           CharSet;
+        String                  Name;
+        sal_Int16               Family;
+        sal_Int16               Pitch;
+        sal_Int16               CharSet;
 
         FontCollectionEntry( const String& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Name    ( rName ),
@@ -881,7 +903,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         List                maTextRuleList;     // TextRuleEntry's
         List                maHyperlink;
         FontCollection      maFontCollection;
-        Collection          maSoundCollection;
+        SoundCollection     maSoundCollection;
 
         void                ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sal_uInt32 nInstance, sal_uInt32 nSlideId );
 
