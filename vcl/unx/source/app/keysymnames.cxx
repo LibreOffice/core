@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 14:08:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,7 @@ static const keyboard_layout type6_layout[] =
 #endif
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -619,7 +619,7 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
                 }
                 else
                     m_aKeyboardName = "<unknown keyboard>";
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define PRINT_ATOM( x ) { if( pXkbDesc->names->x ) { pAtom = XGetAtomName( GetDisplay(), pXkbDesc->names->x ); fprintf( stderr, "%s: %s\n", #x, pAtom ); XFree( (void*)pAtom ); } else fprintf( stderr, "%s: <nil>\n", #x ); }
 
                 PRINT_ATOM( keycodes );
