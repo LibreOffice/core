@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 09:29:43 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:01:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,13 +66,9 @@ PRJNAME=goodies
 TARGET=invader
 TARGETTYPE=GUI
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -96,7 +92,8 @@ SLOFILES= \
         $(SLO)$/monst.obj
 .ENDIF
 
-SRCFILES=gegner.src strings.src
+SRS1NAME=$(TARGET)
+SRC1FILES=gegner.src strings.src
 
 RESLIB1NAME=tfu
 RESLIB1SRSFILES=$(SRS)$/invader.srs
@@ -160,21 +157,6 @@ $(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
             -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
             -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
-.IF "$(GUI)"=="WIN"
-
-$(MISC)$/$(APP1TARGET).def : makefile.mk
-    echo  NAME			svdiff 								>$@
-    echo  DESCRIPTION	'Star Invader'		   >>$@
-    echo  EXETYPE		WINDOWS 						   >>$@
-    echo  STUB			'winSTUB.EXE'                      >>$@
-    echo  PROTMODE										   >>$@
-    echo  CODE			LOADONCALL MOVEABLE DISCARDABLE    >>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
-    echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32000							   >>$@
-
-.ENDIF
-
 # --- Def-File ---
 
 .IF "$(GUI)"=="WNT"
@@ -189,35 +171,6 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
         @+echo     StartInvader    @22                    >>$@
 
 .ENDIF
-
-.IF "$(GUI)"=="OS2"
-
-$(MISC)$/$(SHL1TARGET).def:\
-    makefile.mk \
-    $(MISC)$/$(SHL1TARGET).flt
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-.IF "$(COM)"!="WTC"
-    @echo LIBRARY     $(DLLNAME) INITINSTANCE                        >$@
-    @echo DESCRIPTION 'StarView Filter DLL'                         >>$@
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL                                    >>$@
-    @echo DATA        PRELOAD MULTIPLE NONSHARED                    >>$@
-    @echo EXPORTS                                                   >>$@
-.IF "$(COM)"=="ICC"
-    @echo    StartInvader		                                    >>$@
-.ELSE
-    @echo    _StartInvader		                                    >>$@
-.ENDIF
-.ELSE
-        @echo option DESCRIPTION 'StarWars Dll'		                    >$@
-        @echo name $(BIN)$/$(SHL1TARGET).dll                             >>$@
-    @echo StartInvader_ @2 				>>temp.def
-    @gawk -f s:\util\exp.awk temp.def				>>$@
-    del temp.def
-
-.ENDIF
-.ENDIF #os2
 
 $(MISC)$/$(SHL1TARGET).flt:
     @+echo $(MISC)
