@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-16 11:37:00 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 09:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,16 +292,16 @@ void SwRect::Justify()
 void SwRect::_Width( const long nNew ) { nWidth = nNew; }
 void SwRect::_Height( const long nNew ) { nHeight = nNew; }
 void SwRect::_Left( const long nLeft ){ nWidth += nX - nLeft; nX = nLeft; }
-void SwRect::_Right( const long nRight ){ nWidth = nRight - nX + 1; }
+void SwRect::_Right( const long nRight ){ nWidth = nRight - nX; }
 void SwRect::_Top( const long nTop ){ nHeight += nY - nTop; nY = nTop; }
-void SwRect::_Bottom( const long nBottom ){ nHeight = nBottom - nY + 1; }
+void SwRect::_Bottom( const long nBottom ){ nHeight = nBottom - nY; }
 
 long SwRect::_Width() const{ return nWidth; }
 long SwRect::_Height() const{ return nHeight; }
 long SwRect::_Left() const{ return nX; }
-long SwRect::_Right() const{ return nWidth ? nX + nWidth - 1 : nX; }
+long SwRect::_Right() const{ return nX + nWidth; }
 long SwRect::_Top() const{ return nY; }
-long SwRect::_Bottom() const{ return nHeight ? nY + nHeight - 1 : nY; }
+long SwRect::_Bottom() const{ return nY + nHeight; }
 
 void SwRect::AddWidth( const long nAdd ) { nWidth += nAdd; }
 void SwRect::AddHeight( const long nAdd ) { nHeight += nAdd; }

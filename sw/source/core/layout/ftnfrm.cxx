@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:20:36 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 09:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,17 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             SwTwips nDiff;
             if( IsInSct() )
             {
+#ifdef VERTICAL_LAYOUT
+                nDiff = (Frm().*fnRect->fnCheckLimit)(
+                                        (GetUpper()->*fnRect->fnGetLimit)() );
+                if( nDiff > 0 )
+                {
+                    if( nDiff > (Frm().*fnRect->fnGetHeight)() )
+                        nDiff = (Frm().*fnRect->fnGetHeight)();
+                    (Frm().*fnRect->fnAddBottom)( -nDiff );
+                    (Prt().*fnRect->fnAddHeight)( -nDiff );
+                }
+#else
                 nDiff = GetUpper()->Frm().Top() + GetUpper()->Prt().Top() +
                         GetUpper()->Prt().Height() - Frm().Top();
                 if( nDiff < Frm().Height() )
@@ -407,6 +418,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                     Frm().Height( nDiff );
                     Prt().Height( nDiff - Prt().Top() );
                 }
+#endif
             }
 #ifdef VERTICAL_LAYOUT
             nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
@@ -642,6 +654,8 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, BOOL bTst, BOOL bInfo )
     if ( pPage && (!pPage->IsFtnPage() || GetFmt()->GetDoc()->IsBrowseMode()) )
     {
         SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, bTst, bInfo );
+        if( IsInSct() && !bTst )
+            FindSctFrm()->InvalidateNextPos();
 #else
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, const SzPtr pDirection,
                                  BOOL bTst, BOOL bInfo )
