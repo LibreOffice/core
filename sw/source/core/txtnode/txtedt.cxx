@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 14:40:11 $
+ *  last change: $Author: jp $ $Date: 2000-12-13 14:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,8 @@ BOOL SwScanner::NextWord( LanguageType aLang )
 
     nBegin = aBound.startPos;
     nLen = aBound.endPos - nBegin;
+    if( !nLen )
+        return FALSE;
 
     aWord = rText.Copy( nBegin, nLen );
     if( bReverse )
