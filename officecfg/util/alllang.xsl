@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 07:50:37 $
+ *  last change: $Author: jb $ $Date: 2002-11-22 11:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,13 +185,13 @@
 			</xsl:when>
 			<xsl:when test="count (value[not (@xml:lang)])">
 			    <!-- copy locale independent values only, if the values differ -->				
-				<xsl:variable name="isEqual">
-					<xsl:call-template name="isEqual">
-						<xsl:with-param name="left"  select="$context/value"/>
-						<xsl:with-param name="right" select="value[not (@xml:lang)]"/>
+				<xsl:variable name="isRedundant">
+					<xsl:call-template name="isRedundant">
+						<xsl:with-param name="schemaval"  select="$context/value"/>
+						<xsl:with-param name="dataval" select="value[not (@xml:lang)]"/>
 					</xsl:call-template>						
 				</xsl:variable>
-				<xsl:if test="$isEqual ='false'">
+				<xsl:if test="$isRedundant ='false'">
 					<xsl:copy>
 						<xsl:apply-templates select = "@*" mode="non-locale"/>
 						<xsl:apply-templates select = "value" mode="non-locale"/>
@@ -230,16 +230,16 @@
 	</xsl:template>	
 
 <!-- compares two values -->
-	<xsl:template name="isEqual">		
-		<xsl:param name = "left"/>
-		<xsl:param name = "right"/>
+	<xsl:template name="isRedundant">		
+		<xsl:param name = "schemaval"/>
+		<xsl:param name = "dataval"/>
 		<xsl:choose>
-			<xsl:when test="not ($left)">
+			<xsl:when test="not ($dataval)">
+				<xsl:value-of select="true()"/>
+			</xsl:when>
+			<xsl:when test="not ($schemaval)">
 				<xsl:choose>
-					<xsl:when test=" not ($right) ">
-						<xsl:value-of select="true()"/>
-					</xsl:when>
-					<xsl:when test="string-length ($right) = 0 and not ($right/@xsi:nil)">						
+					<xsl:when test="$dataval/@xsi:nil='true'">						
 						<xsl:value-of select="true()"/>
 					</xsl:when>
 					<xsl:otherwise>
@@ -247,16 +247,17 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
-			<xsl:when test="not ($right)">
-				<xsl:value-of select="true()"/>
+			<xsl:when test="$schemaval/@xsi:nil='true'">
+				<xsl:choose>
+					<xsl:when test="$dataval/@xsi:nil='true'">						
+						<xsl:value-of select="true()"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="false()"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
-			<xsl:when test="$left/@xsi:nil='true' and $right/@xsi:nil='true'">
-				<xsl:value-of select="true()"/>
-			</xsl:when>
-			<xsl:when test="$left/@xsi:nil or $right/@xsi:nil">
-				<xsl:value-of select="false()"/>
-			</xsl:when>
-			<xsl:when test="$left = $right">
+			<xsl:when test="$schemaval = $dataval">
 				<xsl:value-of select="true()"/>
 			</xsl:when>
 			<xsl:otherwise>
