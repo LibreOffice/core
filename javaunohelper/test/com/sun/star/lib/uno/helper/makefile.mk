@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2002-06-13 09:06:11 $
+#   last change: $Author: jl $ $Date: 2002-08-06 13:55:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET  = com_sun_star_lib_uno_helper_test
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar jurt.jar ridl.jar
+JARFILES = sandbox.jar jurt.jar ridl.jar juh.jar
 
 JAVACLASSFILES=	\
     $(CLASSDIR)$/$(PACKAGE)$/WeakBase_Test.class \
