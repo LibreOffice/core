@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-15 15:52:50 $
+ *  last change: $Author: mt $ $Date: 2001-08-16 10:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,16 +613,15 @@ BOOL Outliner::ImpConvertEdtToOut(Paragraph* pPara,ULONG nPara,EditView* pView)
 
     // MT: OutlLevel wird beim RTF-Import von der EditEngine eingestellt,
     // weil String-Vergleich vom Vorlagen-Namen unbrauchbar
-    const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
-    USHORT nOutlLevel = rLevel.GetValue();
-
-    if ( !nPara )
-        nOutlLevel = nMinDepth;
-    else if( nOutlLevel < nMinDepth )
-        nOutlLevel = nMinDepth;
-    else if( nOutlLevel >= nMaxDepth )
-        nOutlLevel = nMaxDepth-1;
-
+    // Und für das Binaer-Format gilt der Level sowieso...
+    // => Einiges von oben kann bestimmt entfallen, oder?
+    USHORT nOutlLevel = nMinDepth;
+    if ( nPara )
+    {
+        const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL );
+        nOutlLevel = rLevel.GetValue();
+    }
+    ImplCheckDepth( nOutlLevel );
     ImplInitDepth( nPara, nOutlLevel, FALSE );
 
     return bConverted;
