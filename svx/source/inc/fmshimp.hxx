@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:17:38 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 12:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@
 #ifndef _CPPUHELPER_COMPBASE6_HXX_
 #include <cppuhelper/compbase6.hxx>
 #endif
+#ifndef _UTL_CONFIGITEM_HXX_
+#include <unotools/configitem.hxx>
+#endif
 
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
@@ -268,6 +271,22 @@ struct CursorActionDescription
 };
 
 //========================================================================
+class WizardUsageConfigItem : public ::utl::ConfigItem
+{
+protected:
+    sal_Bool    m_bUseThem;
+
+public:
+    WizardUsageConfigItem();
+
+    sal_Bool    getWizardUsage() const { return m_bUseThem; }
+    void        setWizardUsage(sal_Bool _bUseThem);
+//
+//protected:
+//  virtual void Commit();
+};
+
+//========================================================================
 class SfxViewFrame;
 typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XRowSetListener,
                                             ::com::sun::star::beans::XPropertyChangeListener,
@@ -314,6 +333,9 @@ class FmXFormShell : public FmXFormShell_BASE,
     DECLARE_STL_USTRINGACCESS_MAP(CursorActionDescription, CursorActions);
     CursorActions   m_aCursorActions;
         // all actions on async cursors
+
+    WizardUsageConfigItem   m_aWizardUsing;
+        // access to the configuration flag for the wizard using
 
     SvBools     m_aControlLocks;
         // while doing a async cursor action we have to lock all controls of the active controller.
@@ -372,8 +394,6 @@ class FmXFormShell : public FmXFormShell_BASE,
 
     sal_Int16       m_nLockSlotInvalidation;
     sal_Bool        m_bHadPropBrw:1;
-
-    sal_Bool        m_bUseWizards : 1;
 
     sal_Bool        m_bTrackProperties  : 1;
         // soll ich (bzw. der Owner diese Impl-Klasse) mich um die Aktualisierung des ::com::sun::star::beans::Property-Browsers kuemmern ?
@@ -512,8 +532,8 @@ public:
 
     void SetDesignMode(sal_Bool bDesign);
 
-    sal_Bool    GetWizardUsing() const { return m_bUseWizards; }
-    void    SetWizardUsing(sal_Bool bUseThem);
+    sal_Bool    GetWizardUsing() const { return m_aWizardUsing.getWizardUsage(); }
+    void        SetWizardUsing(sal_Bool _bUseThem) { m_aWizardUsing.setWizardUsage(_bUseThem); }
 
         // Setzen des Filtermodus
     sal_Bool isInFilterMode() const {return m_bFilterMode;}

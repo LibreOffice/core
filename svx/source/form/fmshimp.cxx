@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 16:14:53 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 12:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,9 @@
 #endif
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 extern sal_Int16 ControllerSlotMap[];
@@ -599,6 +602,33 @@ Reference< XForm> FmXFormShell::DetermineCurForm(const SdrMarkList& rMarkList, s
 
 
 //========================================================================
+//= WizardUsageConfigItem
+//========================================================================
+//------------------------------------------------------------------------
+WizardUsageConfigItem::WizardUsageConfigItem()
+    :ConfigItem(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
+    ,m_bUseThem(sal_True)
+{
+    // get (cache) the wizard usage flag
+    ::rtl::OUString sWizardUsageFlag = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    Sequence< Any > aFlags = GetProperties(Sequence< ::rtl::OUString >(&sWizardUsageFlag, 1));
+    if (1 == aFlags.getLength())
+        m_bUseThem = ::cppu::any2bool(aFlags[0]);
+}
+
+//------------------------------------------------------------------------
+void WizardUsageConfigItem::setWizardUsage(sal_Bool _bUseThem)
+{
+    m_bUseThem = _bUseThem;
+
+    Sequence< ::rtl::OUString > aNames(1);
+    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    Sequence< Any > aValues(1);
+    aValues[0] = ::cppu::bool2any(m_bUseThem);
+    PutProperties(aNames, aValues);
+}
+
+//========================================================================
 // class FmXFormShell
 //========================================================================
 DBG_NAME(FmXFormShell);
@@ -624,10 +654,6 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
-
-    m_bUseWizards = sal_False;
-        // defaulted for now. As soon as we have new wizards we need to store this information in the configuration
-        // (previously, it was located in the soffice.ini, which left us as storage of configuration data ...)
 
     // we are a DispatchInterceptor, so we want to be inserted into the frame's dispatch chain, thus having
     // a chance for frame-spanning communication (via UNO, not slots)
@@ -3596,13 +3622,19 @@ Reference< XPropertySet> FmXFormShell::GetBoundField(const Reference< XControl>&
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::SetWizardUsing(sal_Bool bUseThem)
-{
-    OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    OSL_ENSHURE(sal_False, "FmXFormShell: missing implementation here!");
-    // TODO: make this persistent as soon as the setting is stored in the configuration
-    m_bUseWizards = bUseThem;
-}
+//void FmXFormShell::SetWizardUsing(sal_Bool bUseThem)
+//{
+//  OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
+//
+//  m_bUseWizards = bUseThem;
+//
+//  // forward this to the configuration
+//  Sequence< ::rtl::OUString > aNames(1);
+//  aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+//  Sequence< Any > aValues(1);
+//  aValues[0] = bool2any(m_bUseWizards);
+//  m_aWizardUsing.SetProperties(aNames, aValues);
+//}
 
 //------------------------------------------------------------------------------
 FmXFormShell::ObjectRemoveListener::ObjectRemoveListener(FmXFormShell* pParent)
