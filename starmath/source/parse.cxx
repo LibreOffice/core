@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-12 16:13:07 $
+ *  last change: $Author: tl $ $Date: 2001-04-18 08:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,18 @@
 
 #define SMDLL 1
 
+#include <com/sun/star/i18n/UnicodeType.hpp>
+
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+
 #ifndef PARSE_HXX
 #include "parse.hxx"
 #endif
@@ -86,6 +98,9 @@
 
 #include "node.hxx"
 
+using namespace ::com::sun::star::i18n;
+
+///////////////////////////////////////////////////////////////////////////
 
 static inline BOOL strnccmp(const String &u1, xub_StrLen nIdx,
                               const sal_Char *s2, xub_StrLen nLen)
@@ -93,7 +108,7 @@ static inline BOOL strnccmp(const String &u1, xub_StrLen nIdx,
     return u1.EqualsIgnoreCaseAscii( s2, nIdx, nLen );
 }
 
-static const xub_Unicode aDelimiterTable[] =
+static const sal_Unicode aDelimiterTable[] =
 {
     ' ',    '\t',   '\n',   '\r',   '+',    '-',    '*',    '/',    '=',    '#',
     '%',    '\\',   '"',    '~',    '`',    '>',    '<',    '&',    '|',    '(',
@@ -113,7 +128,7 @@ SmToken::SmToken() :
     eType       (TUNKNOWN),
     cMathChar   ('\0')
 {
-    nGroup = nLevel = nRow = nCol = 0;
+    nRow = nCol = nGroup = nLevel = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -122,34 +137,34 @@ struct SmTokenTableEntry
 {
     const sal_Char* pIdent;
     SmTokenType     eType;
-    xub_Unicode     cMathChar;
+    sal_Unicode     cMathChar;
     ULONG           nGroup;
     USHORT          nLevel;
 };
 
 static const SmTokenTableEntry aTokenTable[] =
 {
-    { "#", TPOUND, '\0', 0, 0 },
-    { "##", TDPOUND, '\0', 0, 0 },
-    { "&", TAND, MS_AND, TGPRODUCT, 0 },
-    { "(", TLPARENT, MS_LPARENT, TGLBRACES, 5 },    //! 5 to continue expression
-    { ")", TRPARENT, MS_RPARENT, TGRBRACES, 0 },    //! 0 to terminate expression
-    { "*", TMULTIPLY, MS_MULTIPLY, TGPRODUCT, 0 },
-    { "+", TPLUS, MS_PLUS, TGUNOPER | TGSUM, 5 },
-    { "+-", TPLUSMINUS, MS_PLUSMINUS, TGUNOPER | TGSUM, 5 },
-    { "-", TMINUS, MS_MINUS, TGUNOPER | TGSUM, 5 },
-    { "-+", TMINUSPLUS, MS_MINUSPLUS, TGUNOPER | TGSUM, 5 },
-    { ".", TPOINT, '\0', 0, 0 },
-    { "/", TDIVIDEBY, MS_SLASH, TGPRODUCT, 0 },
-    { "<", TLT, MS_LT, TGRELATION, 0 },
-    { "<<", TLL, MS_LL, TGRELATION, 0 },
-    { "<=", TLE, MS_LE, TGRELATION, 0 },
-    { "<>", TNEQ, MS_NEQ, TGRELATION, 0},
-    { "<?>", TPLACE, MS_PLACE, 0, 5 },
-    { "=", TASSIGN, MS_ASSIGN, TGRELATION, 0},
-    { ">", TGT, MS_GT, TGRELATION, 0 },
-    { ">=", TGE, MS_GE, TGRELATION, 0 },
-    { ">>", TGG, MS_GG, TGRELATION, 0 },
+//  { "#", TPOUND, '\0', 0, 0 },
+//  { "##", TDPOUND, '\0', 0, 0 },
+//  { "&", TAND, MS_AND, TGPRODUCT, 0 },
+//  { "(", TLPARENT, MS_LPARENT, TGLBRACES, 5 },    //! 5 to continue expression
+//  { ")", TRPARENT, MS_RPARENT, TGRBRACES, 0 },    //! 0 to terminate expression
+//  { "*", TMULTIPLY, MS_MULTIPLY, TGPRODUCT, 0 },
+//  { "+", TPLUS, MS_PLUS, TGUNOPER | TGSUM, 5 },
+//  { "+-", TPLUSMINUS, MS_PLUSMINUS, TGUNOPER | TGSUM, 5 },
+//  { "-", TMINUS, MS_MINUS, TGUNOPER | TGSUM, 5 },
+//  { "-+", TMINUSPLUS, MS_MINUSPLUS, TGUNOPER | TGSUM, 5 },
+//  { ".", TPOINT, '\0', 0, 0 },
+//  { "/", TDIVIDEBY, MS_SLASH, TGPRODUCT, 0 },
+//  { "<", TLT, MS_LT, TGRELATION, 0 },
+//  { "<<", TLL, MS_LL, TGRELATION, 0 },
+//  { "<=", TLE, MS_LE, TGRELATION, 0 },
+//  { "<>", TNEQ, MS_NEQ, TGRELATION, 0},
+//  { "<?>", TPLACE, MS_PLACE, 0, 5 },
+//  { "=", TASSIGN, MS_ASSIGN, TGRELATION, 0},
+//  { ">", TGT, MS_GT, TGRELATION, 0 },
+//  { ">=", TGE, MS_GE, TGRELATION, 0 },
+//  { ">>", TGG, MS_GG, TGRELATION, 0 },
     { "Im" , TIM, MS_IM, TGSTANDALONE, 5 },
     { "MZ23", TDEBUG, '\0', TGATTRIBUT, 0 },
     { "Re" , TRE, MS_RE, TGSTANDALONE, 5 },
@@ -356,26 +371,53 @@ static const SmTokenTableEntry aTokenTable[] =
     { "widevec", TWIDEVEC, MS_VEC, TGATTRIBUT, 5},
     { "wp" , TWP, MS_WP, TGSTANDALONE, 5},
     { "yellow", TYELLOW, '\0', TGCOLOR, 0},
-    { "[", TLBRACKET, MS_LBRACKET, TGLBRACES, 5},   //! 5 to continue expression
-    { "\\", TESCAPE, '\0', 0, 5},
-    { "]", TRBRACKET, MS_RBRACKET, TGRBRACES, 0},   //! 0 to terminate expression
-    { "^", TRSUP, '\0', TGPOWER, 0},
-    { "_", TRSUB, '\0', TGPOWER, 0},
-    { "`", TSBLANK, '\0', TGBLANK, 5},
-    { "{", TLGROUP, MS_LBRACE, 0, 5},       //! 5 to continue expression
-    { "|", TOR, MS_OR, TGSUM, 0},
-    { "}", TRGROUP, MS_RBRACE, 0, 0},       //! 0 to terminate expression
-    { "~", TBLANK, '\0', TGBLANK, 5},
+//  { "[", TLBRACKET, MS_LBRACKET, TGLBRACES, 5},   //! 5 to continue expression
+//  { "\\", TESCAPE, '\0', 0, 5},
+//  { "]", TRBRACKET, MS_RBRACKET, TGRBRACES, 0},   //! 0 to terminate expression
+//  { "^", TRSUP, '\0', TGPOWER, 0},
+//  { "_", TRSUB, '\0', TGPOWER, 0},
+//  { "`", TSBLANK, '\0', TGBLANK, 5},
+//  { "{", TLGROUP, MS_LBRACE, 0, 5},       //! 5 to continue expression
+//  { "|", TOR, MS_OR, TGSUM, 0},
+//  { "}", TRGROUP, MS_RBRACE, 0, 0},       //! 0 to terminate expression
+//  { "~", TBLANK, '\0', TGBLANK, 5},
     { "", TEND, '\0', 0, 0}
 };
 
 
+static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
+{
+    const SmTokenTableEntry * pRes = 0;
+    if (rName.Len())
+    {
+        INT32 nEntries = sizeof( aTokenTable ) / sizeof( aTokenTable[0] );
+        for (INT32 i = 0;  i < nEntries;  ++i)
+        {
+            if (rName.EqualsIgnoreCaseAscii( aTokenTable[i].pIdent ))
+            {
+                pRes = &aTokenTable[i];
+                break;
+            }
+        }
+
+    }
+
+    return pRes;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////
 
+static CharClass aCharClass( SvxCreateLocale(
+                        Application::GetAppInternational().GetLanguage() ) );
 
-BOOL SmParser::IsDelimiter(sal_Unicode cChar)
+
+BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
     // returns 'TRUE' iff cChar is '\0' or a delimeter
 {
+    DBG_ASSERT( nPos <= rTxt.Len(), "index out of range" );
+
+    sal_Unicode cChar = rTxt.GetChar( nPos );
     if(!cChar)
         return TRUE;
 
@@ -385,88 +427,17 @@ BOOL SmParser::IsDelimiter(sal_Unicode cChar)
         if (*pDelim == cChar)
             break;
 
-    return (*pDelim != 0);
+    BOOL bIsDelim = *pDelim != 0;
+
+    INT16 nTypJp = aCharClass.getType( rTxt, nPos );
+    bIsDelim |= nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
+                nTypJp == com::sun::star::i18n::UnicodeType::CONTROL;
+
+    return bIsDelim;
 }
 
 
-#ifdef NOT_USED
-const xub_Unicode * SmParser::GetText(XubString &rText, const xub_Unicode *pPos)
-    // put text between current and next '"' in 'rText'. With '\' quoted
-    // chars will be inserted without '\'. Thus type '\"' to get '"' in
-    // the text and '\\' for '\'. ('pPos' has to point to start of the
-    // string (ie the opening '"' char).)
-{
-    const xub_Unicode *pEnd  = (const xub_Unicode *) BufferString + BufferString.Len();
-
-    DBG_ASSERT(*pPos == '"', "Dies ist kein Text");
-
-    // get string content without quoting '\'
-    rText.Erase();
-    pPos++;
-    while (pPos < pEnd  &&  *pPos != '"')
-        if (*pPos != '\\'  ||  ++pPos < pEnd)
-            rText += *pPos++;
-        else
-        {   Error(PE_UNEXPECTED_ENDOFINPUT);
-            return pEnd;
-        }
-
-    // check for irregular end of string
-    if (pPos == pEnd)
-    {   Error(PE_UNEXPECTED_ENDOFINPUT);
-        return pEnd;
-    }
-
-    // return pointer to char after closing '"'
-    return pPos + 1;
-}
-#endif
-
-
-const xub_Unicode * SmParser::SkipWhiteSpaces(const xub_Unicode *pPos, USHORT &nRow, USHORT &nCol)
-    // skip white-spaces while keeping track of actual row and column.
-{
-    DBG_ASSERT(pPos , "NULL pointer");
-
-    while (    *pPos != '\0'  &&  IsWhiteSpace(*pPos))
-    {   if (*pPos == CharLineEnd)
-        {   nRow    += 1;
-            nCol     = 0;
-        }
-        nCol++;
-        pPos++;
-    }
-
-    return pPos;
-}
-
-
-const xub_Unicode * SmParser::SkipComment(const xub_Unicode *pPos, USHORT &nRow, USHORT &nCol)
-    // skip rest of line if comment-start ('%%') is encountered.
-    // return pointer to char after line-end or (in case of end of buffer)
-    // return pointer to the terminating '\0' char.
-{
-    DBG_ASSERT(pPos, "NULL pointer");
-
-    if (!IsComment(pPos))
-        return pPos;
-
-    // skip rest of line
-    const xub_Unicode   *pStart = pPos;
-    while (*pPos != '\0'  &&  *pPos != CharLineEnd)
-        pPos++;
-    if (*pPos == CharLineEnd)
-    {   nRow += 1;
-        nCol  = 0;
-    }
-    else
-        nCol += pPos - pStart;
-
-    return *pPos == '\0' ? pPos : pPos + 1;
-}
-
-
-void SmParser::Insert(const XubString &rText, USHORT nPos)
+void SmParser::Insert(const String &rText, USHORT nPos)
 {
     BufferString.Insert(rText, nPos);
 
@@ -475,170 +446,508 @@ void SmParser::Insert(const XubString &rText, USHORT nPos)
     nTokenIndex += nLen;
 }
 
+// First character may be any alphabetic
+const sal_Int32 coStartFlags =
+        KParseTokens::ANY_LETTER_OR_NUMBER |
+        KParseTokens::IGNORE_LEADING_WS;
+
+// Continuing characters may be any alphanumeric or dot.
+const sal_Int32 coContFlags =
+    ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS;
+
 
 void SmParser::NextToken()
 {
-    //xub_Unicode *pBuffer = &BufferString[BufferIndex];
-    const sal_Unicode *pBuffer = BufferString.GetBuffer();
-    pBuffer += BufferIndex;
+    static const String aEmptyStr;
 
-    xub_StrLen  nLen    = BufferString.Len();
-
-    // skip comments and white-spaces
-    const sal_Unicode   *pStart;
+    xub_StrLen  nBufLen = BufferString.Len();
+    ParseResult aRes;
+    xub_StrLen  nRealStart;
+    BOOL        bCont;
     do
-    {   pStart  = pBuffer;
-        pBuffer = (xub_Unicode *) SkipWhiteSpaces(pStart, Row, Column);
-        pBuffer = (xub_Unicode *) SkipComment(pBuffer, Row, Column);
-    } while (pStart != pBuffer);
-    BufferIndex = pBuffer - BufferString.GetBuffer();
+    {
+        //?? does parseAnyToken handles Japanese spaces correct ??
+        // seems not to be so...
+        while (UnicodeType::SPACE_SEPARATOR ==
+                         aCharClass.getType( BufferString, BufferIndex ))
+            ++BufferIndex;
 
-    // set index of current token
-    nTokenIndex = BufferIndex;
+        aRes = aCharClass.parseAnyToken( BufferString, BufferIndex,
+                                            coStartFlags, aEmptyStr,
+                                            coContFlags, aEmptyStr );
 
-    // check for end of input
-    if ((BufferIndex >= nLen) || (*pBuffer == '\0'))
-    {   CurToken.eType     = TEND;
+        nRealStart = BufferIndex + (xub_StrLen) aRes.LeadingWhiteSpace;
+
+        bCont = FALSE;
+        if ( aRes.TokenType == 0  &&
+                nRealStart < nBufLen &&
+                CharLineEnd == BufferString.GetChar( nRealStart ) )
+        {
+            // keep data needed for tokens row and col entry up to date
+            ++Row;
+            ColOff = nRealStart;
+            BufferIndex = nRealStart + 1;
+            bCont = TRUE;
+        }
+        else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+        {
+            String aName( BufferString.Copy( nRealStart, 2 ));
+            if ( aName.EqualsAscii( "%%" ))
+            {
+                //SkipComment
+                BufferIndex = nRealStart + 2;
+                while (BufferIndex < nBufLen  &&
+                    CharLineEnd != BufferString.GetChar( BufferIndex ))
+                    ++BufferIndex;
+                bCont = TRUE;
+            }
+        }
+
+    } while (bCont);
+
+    CurToken.nRow   = Row;
+    CurToken.nCol   = nRealStart - ColOff + 1;
+
+    if (nRealStart >= nBufLen)
+    {
+        CurToken.eType     = TEND;
         CurToken.cMathChar = '\0';
         CurToken.nGroup    = 0;
         CurToken.nLevel    = 0;
         CurToken.aText.Erase();
-        CurToken.nRow      = Row;
-        CurToken.nCol      = Column;
-
-        return;
     }
-
-    // table lookup
-    int l = 0;
-    int h = sizeof(aTokenTable) / sizeof(aTokenTable[0]);
-    while (l < h-1)
+    else if (aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
     {
-        int     i       = l;
-        const sal_Char *pIdentI = aTokenTable[i].pIdent;
-        USHORT  n       = strlen(pIdentI);
-
-        if (n != 0  &&  strnccmp(BufferString, BufferIndex, pIdentI, n))
-        {   int  j        = i;
-            DBG_ASSERT(j + 1 < h, "Sm : index out of range");
-            const sal_Char *pIdentJ = aTokenTable[j + 1].pIdent;
-            int  m        = strlen(pIdentJ);
-            BOOL u        = strnccmp(BufferString, BufferIndex, pIdentJ, m);
-
-            BOOL bReCalcLen = FALSE;
-
-            while ( ( u || strnccmp(BufferString, BufferIndex, pIdentJ, n) )
-                    && (++j  < h - 1) )
-            {
-                if (u)
-                {
-                    i = j;
-                    bReCalcLen = TRUE;
-                }
-
-                pIdentJ = aTokenTable[j + 1].pIdent;
-                m       = strlen(pIdentJ);
-                u       = strnccmp(BufferString, BufferIndex, pIdentJ, m);
-            }
-
-            if (bReCalcLen)
-                n = strlen(aTokenTable[i].pIdent);
-
-            const SmTokenTableEntry &rTokenI = aTokenTable[i];
-            const sal_Unicode *pChar = BufferString.GetBuffer() + BufferIndex + n - 1;
-            if (IsDelimiter(*pChar) || IsDelimiter(*(pChar + 1)))
-            {   CurToken.eType     = rTokenI.eType;
-                CurToken.cMathChar = rTokenI.cMathChar;
-                CurToken.nGroup    = rTokenI.nGroup;
-                CurToken.nLevel    = rTokenI.nLevel;
-                CurToken.aText.AssignAscii( rTokenI.pIdent );
-                CurToken.nRow      = Row;
-                CurToken.nCol      = Column;
-
-                Column += n;
-                BufferIndex += n;
-
-                return;
-            }
-        }
-        l++;
-    }   // end of table lookup
-
-    if (*pBuffer == '"')
-        // text token
-    {   CurToken.eType      = TTEXT;
+        INT32 n = aRes.EndPos - nRealStart;
+        DBG_ASSERT( n >= 0, "length < 0" );
+        CurToken.eType      = TNUMBER;
         CurToken.cMathChar  = '\0';
         CurToken.nGroup     = 0;
         CurToken.nLevel     = 5;
-        CurToken.aText.Erase();
+        CurToken.aText      = BufferString.Copy( nRealStart, (xub_StrLen) n );
+
+        DBG_ASSERT( IsDelimiter( BufferString, (xub_StrLen) aRes.EndPos ),
+                "number really finished? (compatibility!)" );
+    }
+    else if (aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING)
+    {
+        CurToken.eType      = TTEXT;
+        CurToken.cMathChar  = '\0';
+        CurToken.nGroup     = 0;
+        CurToken.nLevel     = 5;
+        CurToken.aText      = aRes.DequotedNameOrString;
         CurToken.nRow       = Row;
-        CurToken.nCol       = Column + 1;
-
-        BufferIndex++;
-        pBuffer ++;
-        Column++;
-
-        while ((*pBuffer != '"') && (*pBuffer != '\0'))
-        {   if ((*pBuffer == '\n') || (*pBuffer == '\r'))
-            {   if (*pBuffer == '\n')
-                {   CurToken.aText += ' ';
-                    Row += 1;
-                }
-                else
-                    Column = 1;
-            }
-            else
-                CurToken.aText += *pBuffer;
-
-            Column++;
-            BufferIndex++;
-            pBuffer ++;
-        }
-
-        if (*pBuffer == '"')
-        {   BufferIndex++;
-            pBuffer ++;
-            Column++;
-        }
-        return;
+        CurToken.nCol       = nRealStart - ColOff + 2;
     }
+    else if (aRes.TokenType & KParseType::IDENTNAME)
+    {
+        INT32 n = aRes.EndPos - nRealStart;
+        DBG_ASSERT( n >= 0, "length < 0" );
+        String aName( BufferString.Copy( nRealStart, (xub_StrLen) n ) );
+        const SmTokenTableEntry *pEntry = GetTokenTableEntry( aName );
 
-    USHORT n;
-    for (n = 1; !IsDelimiter(BufferString.GetChar(BufferIndex + n));  n++)
-        ;
+        if (pEntry)
+        {
+            CurToken.eType      = pEntry->eType;
+            CurToken.cMathChar  = pEntry->cMathChar;
+            CurToken.nGroup     = pEntry->nGroup;
+            CurToken.nLevel     = pEntry->nLevel;
+            CurToken.aText.AssignAscii( pEntry->pIdent );
+        }
+        else
+        {
+            CurToken.eType      = TIDENT;
+            CurToken.cMathChar  = '\0';
+            CurToken.nGroup     = 0;
+            CurToken.nLevel     = 5;
+            CurToken.aText      = aName;
 
-    if (*pBuffer == '%')
-    {   CurToken.eType     = TSPECIAL;
+            DBG_ASSERT( IsDelimiter( BufferString, aRes.EndPos ),
+                    "identifier really finished? (compatibility!)" );
+        }
+    }
+    else if (aRes.TokenType == 0  &&  '_' == BufferString.GetChar( nRealStart ))
+    {
+        CurToken.eType     = TRSUB;
         CurToken.cMathChar = '\0';
-        CurToken.nGroup    = 0;
-        CurToken.nLevel    = 5;
-        CurToken.aText     = XubString(BufferString, BufferIndex + 1, n - 1);
-        CurToken.nRow      = Row;
-        CurToken.nCol      = Column + 1;
+        CurToken.nGroup    = TGPOWER;
+        CurToken.nLevel    = 0;
+        CurToken.aText.AssignAscii( "_" );
 
-        BufferIndex += n;
-        pBuffer++;
-        Column += n;
+        aRes.EndPos = nRealStart + 1;
+    }
+    else if (aRes.TokenType & KParseType::BOOLEAN)
+    {
+        long   &rnEndPos = aRes.EndPos;
+        String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
+        if (2 >= aName.Len())
+        {
+            sal_Unicode ch = aName.GetChar( 0 );
+            switch (ch)
+            {
+                case '<':
+                    {
+                        if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( "<<" ))
+                        {
+                            CurToken.eType     = TLL;
+                            CurToken.cMathChar = MS_LL;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( "<<" );
 
-        return;
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( "<=" ))
+                        {
+                            CurToken.eType     = TLE;
+                            CurToken.cMathChar = MS_LE;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( "<=" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( "<>" ))
+                        {
+                            CurToken.eType     = TNEQ;
+                            CurToken.cMathChar = MS_NEQ;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( "<>" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else if (BufferString.Copy( nRealStart, 3 ).
+                                EqualsAscii( "<?>" ))
+                        {
+                            CurToken.eType     = TPLACE;
+                            CurToken.cMathChar = MS_PLACE;
+                            CurToken.nGroup    = 0;
+                            CurToken.nLevel    = 5;
+                            CurToken.aText.AssignAscii( "<?>" );
+
+                            rnEndPos = nRealStart + 3;
+                        }
+                        else
+                        {
+                            CurToken.eType     = TLT;
+                            CurToken.cMathChar = MS_LT;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( "<" );
+                        }
+                    }
+                    break;
+                case '>':
+                    {
+                        if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( ">=" ))
+                        {
+                            CurToken.eType     = TGE;
+                            CurToken.cMathChar = MS_GE;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( ">=" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( ">>" ))
+                        {
+                            CurToken.eType     = TGG;
+                            CurToken.cMathChar = MS_GG;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( ">>" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else
+                        {
+                            CurToken.eType     = TGT;
+                            CurToken.cMathChar = MS_GT;
+                            CurToken.nGroup    = TGRELATION;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( ">" );
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+    else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
+    {
+        long   &rnEndPos = aRes.EndPos;
+        String  aName( BufferString.Copy( nRealStart, rnEndPos - nRealStart ) );
+
+        if( 1 == aName.Len() )
+        {
+            sal_Unicode ch = aName.GetChar( 0 );
+            switch (ch)
+            {
+                case '%':
+                    {
+                        //! modifies aRes.EndPos
+
+                        DBG_ASSERT( rnEndPos >= nBufLen  ||
+                                    '%' != BufferString.GetChar( rnEndPos ),
+                                "unexpected comment start" );
+
+                        // get identifier of user-defined character
+                        ParseResult aTmpRes = aCharClass.parseAnyToken(
+                                BufferString, rnEndPos,
+                                KParseTokens::ANY_LETTER,
+                                aEmptyStr,
+                                KParseTokens::ANY_LETTER | KParseTokens::ASC_DOT,
+                                aEmptyStr );
+
+                        xub_StrLen nTmpStart = rnEndPos +
+                                (xub_StrLen) aRes.LeadingWhiteSpace;
+
+                        INT32 n = aTmpRes.EndPos - nTmpStart;
+                        CurToken.eType      = TSPECIAL;
+                        CurToken.cMathChar  = '\0';
+                        CurToken.nGroup     = 0;
+                        CurToken.nLevel     = 5;
+                        CurToken.aText      = BufferString.Copy( nTmpStart, n );
+                        CurToken.nRow       = Row;
+                        CurToken.nCol       = nTmpStart - ColOff + 1;
+
+                        rnEndPos = aTmpRes.EndPos;
+                    }
+                    break;
+                case '[':
+                    {
+                        CurToken.eType     = TLBRACKET;
+                        CurToken.cMathChar = MS_LBRACKET;
+                        CurToken.nGroup    = TGLBRACES;
+                        CurToken.nLevel    = 5;
+                        CurToken.aText.AssignAscii( "[" );
+                    }
+                    break;
+                case '\\':
+                    {
+                        CurToken.eType     = TESCAPE;
+                        CurToken.cMathChar = '\0';
+                        CurToken.nGroup    = 0;
+                        CurToken.nLevel    = 5;
+                        CurToken.aText.AssignAscii( "\\" );
+                    }
+                    break;
+                case ']':
+                    {
+                        CurToken.eType     = TRBRACKET;
+                        CurToken.cMathChar = MS_RBRACKET;
+                        CurToken.nGroup    = TGRBRACES;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "]" );
+                    }
+                    break;
+                case '^':
+                    {
+                        CurToken.eType     = TRSUP;
+                        CurToken.cMathChar = '\0';
+                        CurToken.nGroup    = TGPOWER;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "^" );
+                    }
+                    break;
+                case '`':
+                    {
+                        CurToken.eType     = TSBLANK;
+                        CurToken.cMathChar = '\0';
+                        CurToken.nGroup    = TGBLANK;
+                        CurToken.nLevel    = 5;
+                        CurToken.aText.AssignAscii( "`" );
+                    }
+                    break;
+                case '{':
+                    {
+                        CurToken.eType     = TLGROUP;
+                        CurToken.cMathChar = MS_LBRACE;
+                        CurToken.nGroup    = 0;
+                        CurToken.nLevel    = 5;
+                        CurToken.aText.AssignAscii( "{" );
+                    }
+                    break;
+                case '|':
+                    {
+                        CurToken.eType     = TOR;
+                        CurToken.cMathChar = MS_OR;
+                        CurToken.nGroup    = TGSUM;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "|" );
+                    }
+                    break;
+                case '}':
+                    {
+                        CurToken.eType     = TRGROUP;
+                        CurToken.cMathChar = MS_RBRACE;
+                        CurToken.nGroup    = 0;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "}" );
+                    }
+                    break;
+                case '~':
+                    {
+                        CurToken.eType     = TBLANK;
+                        CurToken.cMathChar = '\0';
+                        CurToken.nGroup    = TGBLANK;
+                        CurToken.nLevel    = 5;
+                        CurToken.aText.AssignAscii( "~" );
+                    }
+                    break;
+                case '#':
+                    {
+                        if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( "##" ))
+                        {
+                            CurToken.eType     = TDPOUND;
+                            CurToken.cMathChar = '\0';
+                            CurToken.nGroup    = 0;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( "##" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else
+                        {
+                            CurToken.eType     = TPOUND;
+                            CurToken.cMathChar = '\0';
+                            CurToken.nGroup    = 0;
+                            CurToken.nLevel    = 0;
+                            CurToken.aText.AssignAscii( "#" );
+                        }
+                    }
+                    break;
+                case '&':
+                    {
+                        CurToken.eType     = TAND;
+                        CurToken.cMathChar = MS_AND;
+                        CurToken.nGroup    = TGPRODUCT;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "&" );
+                    }
+                    break;
+                case '(':
+                    {
+                        CurToken.eType     = TLPARENT;
+                        CurToken.cMathChar = MS_LPARENT;
+                        CurToken.nGroup    = TGLBRACES;
+                        CurToken.nLevel    = 5;     //! 0 to continue expression
+                        CurToken.aText.AssignAscii( "(" );
+                    }
+                    break;
+                case ')':
+                    {
+                        CurToken.eType     = TRPARENT;
+                        CurToken.cMathChar = MS_RPARENT;
+                        CurToken.nGroup    = TGRBRACES;
+                        CurToken.nLevel    = 0;     //! 0 to terminate expression
+                        CurToken.aText.AssignAscii( ")" );
+                    }
+                    break;
+                case '*':
+                    {
+                        CurToken.eType     = TMULTIPLY;
+                        CurToken.cMathChar = MS_MULTIPLY;
+                        CurToken.nGroup    = TGPRODUCT;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "*" );
+                    }
+                    break;
+                case '+':
+                    {
+                        if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( "+-" ))
+                        {
+                            CurToken.eType     = TPLUSMINUS;
+                            CurToken.cMathChar = MS_PLUSMINUS;
+                            CurToken.nGroup    = TGUNOPER | TGSUM;
+                            CurToken.nLevel    = 5;
+                            CurToken.aText.AssignAscii( "+-" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else
+                        {
+                            CurToken.eType     = TPLUS;
+                            CurToken.cMathChar = MS_PLUS;
+                            CurToken.nGroup    = TGUNOPER | TGSUM;
+                            CurToken.nLevel    = 5;
+                            CurToken.aText.AssignAscii( "+" );
+                        }
+                    }
+                    break;
+                case '-':
+                    {
+                        if (BufferString.Copy( nRealStart, 2 ).
+                                EqualsAscii( "-+" ))
+                        {
+                            CurToken.eType     = TMINUSPLUS;
+                            CurToken.cMathChar = MS_MINUSPLUS;
+                            CurToken.nGroup    = TGUNOPER | TGSUM;
+                            CurToken.nLevel    = 5;
+                            CurToken.aText.AssignAscii( "-+" );
+
+                            rnEndPos = nRealStart + 2;
+                        }
+                        else
+                        {
+                            CurToken.eType     = TMINUS;
+                            CurToken.cMathChar = MS_MINUS;
+                            CurToken.nGroup    = TGUNOPER | TGSUM;
+                            CurToken.nLevel    = 5;
+                            CurToken.aText.AssignAscii( "-" );
+                        }
+                    }
+                    break;
+                case '.':
+                    {
+                        CurToken.eType     = TPOINT;
+                        CurToken.cMathChar = '\0';
+                        CurToken.nGroup    = 0;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "." );
+                    }
+                    break;
+                case '/':
+                    {
+                        CurToken.eType     = TDIVIDEBY;
+                        CurToken.cMathChar = MS_SLASH;
+                        CurToken.nGroup    = TGPRODUCT;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "/" );
+                    }
+                    break;
+                case '=':
+                    {
+                        CurToken.eType     = TASSIGN;
+                        CurToken.cMathChar = MS_ASSIGN;
+                        CurToken.nGroup    = TGRELATION;
+                        CurToken.nLevel    = 0;
+                        CurToken.aText.AssignAscii( "=" );
+                    }
+                    break;
+            }
+        }
+    }
+    else
+    {
+        CurToken.eType      = TCHARACTER;
+        CurToken.cMathChar  = '\0';
+        CurToken.nGroup     = 0;
+        CurToken.nLevel     = 5;
+        CurToken.aText      = BufferString.Copy( nRealStart, 1 );
+
+        aRes.EndPos = nRealStart + 1;
     }
 
-    USHORT i;
-    for (i = 0; (i < n) && (IsDigit(*pBuffer) ||
-                            (*pBuffer == '.') ||
-                            (*pBuffer == ',')); i++)
-        pBuffer ++;
-
-    CurToken.eType      = (i < n) ? TIDENT : TNUMBER;
-    CurToken.cMathChar  = '\0';
-    CurToken.nGroup     = 0;
-    CurToken.nLevel     = 5;
-    CurToken.aText      = XubString(BufferString, BufferIndex, n);
-    CurToken.nRow       = Row;
-    CurToken.nCol       = Column;
-
-    BufferIndex += n;
-    Column += n;
+    if (TEND != CurToken.eType)
+        BufferIndex = (xub_StrLen)aRes.EndPos;
 }
 
 
@@ -661,11 +970,11 @@ void SmParser::Table()
     if (CurToken.eType != TEND)
         Error(PE_UNEXPECTED_CHAR);
 
-    USHORT n = NodeStack.Count();
+    ULONG n = NodeStack.Count();
 
     LineArray.SetSize(n);
 
-    for (USHORT i = 0; i < n; i++)
+    for (ULONG i = 0; i < n; i++)
         LineArray.Put(n - (i + 1), NodeStack.Pop());
 
     SmStructureNode *pSNode = new SmTableNode(CurToken);
@@ -913,7 +1222,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
     SmNodeArray  aSubNodes;
     aSubNodes.SetSize(1 + SUBSUP_NUM_ENTRIES);
     aSubNodes.Put(0, NodeStack.Pop());
-    for (int i = 1;  i < aSubNodes.GetSize();  i++)
+    for (USHORT i = 1;  i < aSubNodes.GetSize();  i++)
         aSubNodes.Put(i, NULL);
 
     // process all sub-/supscripts
@@ -1043,6 +1352,7 @@ void SmParser::Term()
             NextToken();
             break;
         case TIDENT :
+        case TCHARACTER :
             NodeStack.Push(new SmTextNode(CurToken, FNT_VARIABLE));
             NextToken();
             break;
@@ -1192,7 +1502,7 @@ void SmParser::Escape()
 {
     NextToken();
 
-    xub_Unicode cChar;
+    sal_Unicode cChar;
     switch (CurToken.eType)
     {   case TLPARENT :     cChar = MS_LPARENT;     break;
         case TRPARENT :     cChar = MS_RPARENT;     break;
@@ -1962,15 +2272,15 @@ SmParser::SmParser()
 }
 
 
-BOOL SmParser::CheckSyntax(const XubString &rBuffer)
+BOOL SmParser::CheckSyntax(const String &rBuffer)
 {
     SmErrDescList OldErrorList;
 
     BufferString = rBuffer;
     BufferIndex  =
     nTokenIndex  = 0;
-    Row    =
-    Column = 1;
+    Row    = 1;
+    ColOff = 0;
 
     NodeStack.Clear();
 
@@ -1984,7 +2294,7 @@ BOOL SmParser::CheckSyntax(const XubString &rBuffer)
 
     if (ErrDescList.Count() > 0)
     {
-        for (int i = 0;  i < ErrDescList.Count();  i++)
+        for (USHORT i = 0;  i < ErrDescList.Count();  i++)
             delete ErrDescList.Remove(i);
 
         ErrDescList = OldErrorList;
@@ -1997,16 +2307,16 @@ BOOL SmParser::CheckSyntax(const XubString &rBuffer)
 }
 
 
-SmNode *SmParser::Parse(const XubString &rBuffer)
+SmNode *SmParser::Parse(const String &rBuffer)
 {
     BufferString = rBuffer;
     BufferIndex  =
     nTokenIndex  = 0;
-    Row          =
-    Column       = 1;
+    Row          = 1;
+    ColOff       = 0;
     CurError     = -1;
 
-    for (int i = 0;  i < ErrDescList.Count();  i++)
+    for (USHORT i = 0;  i < ErrDescList.Count();  i++)
         delete ErrDescList.Remove(i);
 
     ErrDescList.Clear();
@@ -2026,7 +2336,7 @@ USHORT SmParser::AddError(SmParseError Type, SmNode *pNode)
 
     pErrDesc->Type  = Type;
     pErrDesc->pNode = pNode;
-    pErrDesc->Text  = XubString(SmResId(RID_ERR_IDENT));
+    pErrDesc->Text  = String(SmResId(RID_ERR_IDENT));
 
     USHORT  nRID;
     switch (Type)
@@ -2052,7 +2362,7 @@ USHORT SmParser::AddError(SmParseError Type, SmNode *pNode)
 
     ErrDescList.Insert(pErrDesc);
 
-    return ErrDescList.GetPos(pErrDesc);
+    return (USHORT) ErrDescList.GetPos(pErrDesc);
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-12 16:12:09 $
+ *  last change: $Author: tl $ $Date: 2001-04-18 08:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #define PARSE_HXX
 
 
-
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _STACK_HXX //autogen
 #include <tools/stack.hxx>
 #endif
@@ -153,16 +155,16 @@ enum SmTokenType
 struct SmToken
 {
     // token text
-    XubString   aText;
+    String  aText;
     // token info
     SmTokenType eType;
-    xub_Unicode     cMathChar;
+    sal_Unicode     cMathChar;
     // parse-help info
     ULONG       nGroup;
     USHORT      nLevel;
     // token position
-    USHORT      nRow;
-    USHORT      nCol;
+    INT32       nRow;
+    INT32       nCol;
 
     SmToken();
 };
@@ -188,7 +190,7 @@ struct SmErrorDesc
 {
     SmParseError  Type;
     SmNode       *pNode;
-    XubString         Text;
+    String        Text;
 };
 
 DECLARE_STACK(SmNodeStack,  SmNode *);
@@ -198,7 +200,7 @@ DECLARE_LIST(SmErrDescList, SmErrorDesc *);
 
 class SmParser
 {
-    XubString     BufferString;
+    String        BufferString;
     SmToken       CurToken;
     SmNodeStack   NodeStack;
     SmErrDescList ErrDescList;
@@ -206,8 +208,8 @@ class SmParser
     xub_StrLen    BufferIndex,
                   nTokenIndex;
     USHORT        Row,
-                  Column;
-    xub_Unicode       CharLineEnd;
+                  ColOff;
+    sal_Unicode   CharLineEnd;
     BOOL          bConvert40To50;
 
     // declare copy-constructor and assignment-operator private
@@ -215,17 +217,12 @@ class SmParser
     SmParser & operator = (const SmParser &);
 
 protected:
-    BOOL            IsDelimiter(xub_Unicode cChar);
+    BOOL            IsDelimiter( const String &rTxt, xub_StrLen nPos );
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
-    void            Insert(const XubString &rText, USHORT nPos);
+    void            Insert(const String &rText, USHORT nPos);
 
     inline BOOL     TokenInGroup(ULONG nGroup);
-    inline BOOL     IsWhiteSpace(const xub_Unicode cChar) const;
-    inline BOOL     IsComment(const xub_Unicode *pPos) const;
-
-    const xub_Unicode *     SkipWhiteSpaces(const xub_Unicode *pPos, USHORT &nRow, USHORT &nColumn);
-    const xub_Unicode *     SkipComment(const xub_Unicode *pPos, USHORT &nRow, USHORT &nColumn);
 
     // grammar
     void    Table();
@@ -264,10 +261,10 @@ protected:
 public:
                  SmParser();
 
-    BOOL         CheckSyntax(const XubString &rBuffer);
-    SmNode      *Parse(const XubString &rBuffer);
+    BOOL         CheckSyntax(const String &rBuffer);
+    SmNode      *Parse(const String &rBuffer);
 
-    const XubString & GetText() const { return BufferString; };
+    const String & GetText() const { return BufferString; };
 
     BOOL         IsConvert40To50() const         { return bConvert40To50; }
     void         SetConvert40To50(BOOL bConvert) { bConvert40To50 = bConvert; }
@@ -283,16 +280,6 @@ public:
 inline BOOL SmParser::TokenInGroup(ULONG nGroup)
 {
     return (CurToken.nGroup & nGroup) ? TRUE : FALSE;
-}
-
-inline BOOL SmParser::IsWhiteSpace(const xub_Unicode cChar) const
-{
-    return cChar == ' ' || cChar == '\t' || cChar == '\n' || cChar == '\r';
-}
-
-inline BOOL SmParser::IsComment(const xub_Unicode *pPos) const
-{
-    return *pPos == '%'  &&  *(pPos + 1) == '%';
 }
 
 
