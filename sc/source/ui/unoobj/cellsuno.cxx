@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:49:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7208,7 +7208,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
 
         aFileString = ScGlobal::GetAbsDocName( aFileString, pDocSh );
         if ( !aFilterString.Len() )
-            ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString );
+            ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, TRUE );
 
         //  remove application prefix from filter name here, so the filter options
         //  aren't reset when the filter name is changed in ScTableLink::DataChanged
