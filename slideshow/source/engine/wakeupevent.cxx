@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wakeupevent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:01:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,10 @@ namespace presentation
 {
     namespace internal
     {
-        WakeupEvent::WakeupEvent( ActivitiesQueue& rActivityQueue ) :
-            maTimer(),
+        WakeupEvent::WakeupEvent(
+            boost::shared_ptr<canvas::tools::ElapsedTime> const & pTimeBase,
+            ActivitiesQueue& rActivityQueue ) :
+            maTimer(pTimeBase),
             mnNextTime(0.0),
             mpActivity(),
             mrActivityQueue( rActivityQueue )
