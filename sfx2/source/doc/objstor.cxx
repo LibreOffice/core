@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: mav $ $Date: 2002-03-26 16:26:31 $
+ *  last change: $Author: as $ $Date: 2002-04-04 09:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,7 +1360,10 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
     }
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aArgs(1);
-    aArgs[0] <<= aFilterName;
+    ::com::sun::star::beans::PropertyValue aFilterProp;
+    aFilterProp.Name = DEFINE_CONST_UNICODE("FilterName");
+    aFilterProp.Value <<= aFilterName;
+    aArgs[0] <<= aFilterProp;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader;
     if ( aFilterImplName.getLength() )
         xLoader = ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter >
