@@ -23538,3 +23538,14 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx2018725072@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
 ?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx254466643@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx2470315298@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
+?getImplementationId@?$WeakComponentImplHelper2@VXEventListener@document@star@sun@com@@VXSelectionChangeListener@view@345@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+??0Rectangle@awt@star@sun@com@@QAE@XZ
+??1?$allocator@U?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@_STL@@@_STL@@QAE@XZ
+?GetChild@AccessibleParaManager@accessibility@@QBE?AU?$pair@V?$WeakCppRef@VXAccessible@accessibility@star@sun@com@drafts@@VAccessibleEditableTextPara@2@@accessibility@@URectangle@awt@star@sun@com@@@_STL@@K@Z
+?InitChild@AccessibleParaManager@accessibility@@ABEXAAVAccessibleEditableTextPara@2@AAVSvxEditSourceAdapter@@JK@Z
+?SetActive@AccessibleParaManager@accessibility@@QAEXE@Z
+?SetFocus@AccessibleParaManager@accessibility@@QAEXJ@Z
+?SetState@AccessibleParaManager@accessibility@@AAEXJF@Z
+?SetState@AccessibleParaManager@accessibility@@QAEXF@Z
+?UnSetState@AccessibleParaManager@accessibility@@AAEXJF@Z
+?UnSetState@AccessibleParaManager@accessibility@@QAEXF@Z
