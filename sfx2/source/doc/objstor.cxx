@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-23 09:49:09 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 12:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     SfxApplication* pApp = SFX_APP();
     pImp->nLoadedFlags = 0;
-    sal_Bool bHasStorage = !pFilter || ( pFilter->IsOwnFormat() && pFilter->UsesStorage() && !(pFilter->GetFilterFlags() & SFX_FILTER_PLUGIN ) );
+    sal_Bool bHasStorage = !pFilter || ( pFilter->IsOwnFormat() && pFilter->UsesStorage() );
     if ( !bHasStorage && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
     {
         bHasStorage = pMed->TryStorage();
