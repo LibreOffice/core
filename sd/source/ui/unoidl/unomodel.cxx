@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-12 15:39:45 $
+ *  last change: $Author: sj $ $Date: 2002-12-02 14:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,9 @@
 #ifndef _SVX_UNOPOOL_HXX_
 #include <svx/unopool.hxx>
 #endif
-
+#ifndef _SVDORECT_HXX
+#include <svx/svdorect.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -147,6 +149,9 @@
 
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
 #endif
 
 #include <svx/unoshape.hxx>
@@ -1428,6 +1433,67 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     return aRenderer;
 }
 
+struct ImplRenderPaintProc
+{
+    const SdrLayerAdmin& rLayerAdmin;
+    SdrPageView* pSdrPageView;
+
+    sal_Bool IsVisible  ( const SdrObject* pObj ) const;
+    sal_Bool IsPrintable( const SdrObject* pObj ) const;
+
+    ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView ) :
+        rLayerAdmin     ( rLA ),
+        pSdrPageView    ( pView )
+    {}
+
+    DECL_LINK(_ImplRenderPaintProc, SdrPaintProcRec*);
+};
+sal_Bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
+{
+    sal_Bool bVisible = sal_True;
+    SdrLayerID nLayerId = pObj->GetLayer();
+    if( pSdrPageView )
+    {
+        const SdrLayer* pSdrLayer = rLayerAdmin.GetLayer( nLayerId );
+        if ( pSdrLayer )
+        {
+            String aLayerName = pSdrLayer->GetName();
+            bVisible = pSdrPageView->IsLayerVisible( aLayerName );
+        }
+    }
+    return bVisible;
+}
+sal_Bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
+{
+    sal_Bool bPrintable = sal_True;
+    SdrLayerID nLayerId = pObj->GetLayer();
+    if( pSdrPageView )
+    {
+        const SdrLayer* pSdrLayer = rLayerAdmin.GetLayer( nLayerId );
+        if ( pSdrLayer )
+        {
+            String aLayerName = pSdrLayer->GetName();
+            bPrintable = pSdrPageView->IsLayerPrintable( aLayerName );
+        }
+    }
+    return bPrintable;
+
+}
+IMPL_LINK( ImplRenderPaintProc, _ImplRenderPaintProc, SdrPaintProcRec*, pRecord )
+{
+    SdrObject* pObj = pRecord->pObj;
+    if( !pObj->IsEmptyPresObj() && IsVisible( pObj ) && IsPrintable( pObj ) )
+    {
+        pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+    }
+    else
+    {
+        if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
+            pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+    }
+    return 0;
+}
+
 void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& rSelection,
                                           const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1455,10 +1521,16 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
             if( pOut )
             {
-                SdClientView*   pView = new SdClientView( pDocShell, pOut, NULL );
-                Rectangle       aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
-                Region          aRegion( aVisArea );
-                Point           aOrigin;
+                SdClientView*           pView = new SdClientView( pDocShell, pOut, NULL );
+                Rectangle               aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
+                Region                  aRegion( aVisArea );
+                Point                   aOrigin;
+
+                SdViewShell* pOldViewSh = pDocShell->GetViewShell();
+                SdView* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
+                ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
+                    pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL );
+                const Link aRenderPaintProc( LINK( &aImplRenderPaintProc, ImplRenderPaintProc, _ImplRenderPaintProc ) );
 
                 pView->SetHlplVisible( sal_False );
                 pView->SetGridVisible( sal_False );
@@ -1475,7 +1547,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 if( xModel == pDocShell->GetModel() )
                 {
                     pView->ShowPage( pDoc->GetSdPage( nPageNumber - 1, PK_STANDARD ), aOrigin );
-                    pView->InitRedraw( pOut, aRegion );
+                    SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
+                    pPV->InitRedraw( pOut, aRegion, 0, &aRenderPaintProc );
                 }
                 else
                 {
@@ -1498,8 +1571,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 if( pShape )
                                 {
                                     SdrObject* pObj = pShape->GetSdrObject();
-
-                                    if( pObj && pObj->GetPage() )
+                                    if( pObj && pObj->GetPage()
+                                        && aImplRenderPaintProc.IsVisible( pObj )
+                                            && aImplRenderPaintProc.IsPrintable( pObj ) )
                                     {
                                         if( !pPV )
                                             pPV = pView->ShowPage( pObj->GetPage(), aOrigin );
