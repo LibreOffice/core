@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-28 13:07:19 $
+ *  last change: $Author: as $ $Date: 2002-05-30 12:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
 {
 }
 
-css::uno::WeakReference< css::mozilla::XPluginInstance > DispatchProvider::m_xPluginInterceptor=css::uno::WeakReference< css::mozilla::XPluginInstance >();
+css::uno::WeakReference< css::mozilla::XPluginInstance > DispatchProvider::m_xPluginInterceptor=NULL;
 
 //_________________________________________________________________________________________________________________
 
@@ -367,10 +367,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         return NULL;
     }
 
-    // If we must load such URL we should check if ucb support it.
-    // Otherwhise we create some dispatch objects which can't handle them.
-    sal_Bool bIsLoadable = implts_isLoadableContent(aURL);
-
     /*  TODO: In special plugin mode we must use the already found plugin frame to forward the request
             to the browser. Thats the only solution till we get the functionality to create
             an emtpy browser task synchronously.
@@ -395,7 +391,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     //-----------------------------------------------------------------------------------------------------
     if (sTargetFrameName==SPECIALTARGET_BLANK)
     {
-        if (bIsLoadable)
+        if (implts_isLoadableContent(aURL))
         {
             if (xPlugin.is())
             {
@@ -418,7 +414,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     else
     if (sTargetFrameName==SPECIALTARGET_DEFAULT)
     {
-        if (bIsLoadable)
+        if (implts_isLoadableContent(aURL))
         {
             if (xPlugin.is())
             {
@@ -445,8 +441,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         (sTargetFrameName.getLength()<1      )
        )
     {
-        if (!bIsLoadable)
-            xDispatcher = implts_searchProtocolHandler(aURL);
+        xDispatcher = implts_searchProtocolHandler(aURL);
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -497,10 +492,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
                                                                                                 sal_Int32                                 nSearchFlags     )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
-
-    // If we must load such URL we should check if ucb support it.
-    // Otherwhise we create some dispatch objects which can't handle them.
-    sal_Bool bIsLoadable = implts_isLoadableContent(aURL);
 
     /*  TODO: In special plugin mode we must use the already found plugin frame to forward the request
             to the browser. Thats the only solution till we get the functionality to create
@@ -629,8 +620,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         // "ftp" isn't available. So we suppress creation of our self dispatcher.
         // The result will be clear. He can't handle it - but he would try it.
         if (
-            ( ! xDispatcher.is() )  &&
-            ( bIsLoadable        )
+            ( ! xDispatcher.is()             )  &&
+            ( implts_isLoadableContent(aURL) )
            )
         {
             xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
@@ -701,10 +692,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
 
-    // If we must load such URL we should check if ucb support it.
-    // Otherwhise we create some dispatch objects which can't handle them.
-    sal_Bool bIsLoadable = implts_isLoadableContent(aURL);
-
     //-----------------------------------------------------------------------------------------------------
     // I.I) "_blank", "_default", "_self", ""
     //  Such requests must be forwarded to the browser!
@@ -718,7 +705,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
         (sTargetFrameName.getLength()<1         )
        )
     {
-        if (bIsLoadable)
+        if (implts_isLoadableContent(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER, xPlugin );
     }
 
@@ -738,7 +725,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryPlugi
             ( nSearchFlags & css::frame::FrameSearchFlag::CREATE )
            )
         {
-            if (bIsLoadable)
+            if (implts_isLoadableContent(aURL))
                 xDispatcher = implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER, xPlugin );
         }
     }
