@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:19:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #define _TOOLKIT_HELPER_PROPERTY_HXX_
+
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #include <sal/types.h>
 
@@ -222,7 +226,7 @@ namespace rtl {
 #define PROPERTY_STATE_ON                       1
 #define PROPERTY_STATE_DONTCARE                 2
 
-sal_uInt16                          GetPropertyId( const ::rtl::OUString& rPropertyName );
+TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const ::rtl::OUString& rPropertyName );
 const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
 const ::rtl::OUString&              GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
