@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-13 14:27:06 $
+ *  last change: $Author: pw $ $Date: 2000-10-16 13:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,27 +209,6 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
     _InitCtor();
     if (xNumberFormatsSupplier.is())
         pNumImport = new SvXMLNumFmtHelper(xNumberFormatsSupplier);
-
-    /*
-    if( xModel.is() )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFact( xModel, ::com::sun::star::uno::UNO_QUERY);
-        if( xServiceFact.is() )
-        {
-            try
-            {
-                xGradientHelper =  com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xServiceFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable"))), uno::UNO_QUERY);
-                xHatchHelper =  com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xServiceFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable"))), uno::UNO_QUERY);
-                xBitmapHelper =  com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xServiceFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable"))), uno::UNO_QUERY);
-                xTransGradientHelper =  com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xServiceFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable"))), uno::UNO_QUERY);
-                xMarkerHelper =  com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xServiceFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"))), uno::UNO_QUERY);
-                xDashHelper =  com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >(xServiceFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable"))), uno::UNO_QUERY);
-            }
-            catch( lang::ServiceNotRegisteredException& )
-            {}
-        }
-    }
-    */
 }
 
 SvXMLImport::~SvXMLImport() throw ()
@@ -466,4 +445,145 @@ SchXMLImportHelper* SvXMLImport::CreateChartImport()
     return new SchXMLImportHelper();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Get or create fill/line/lineend-style-helper
+//
 
+const Reference< container::XNameContainer > & SvXMLImport::GetGradientHelper()
+{
+    if( !xGradientHelper.is() )
+    {
+        if( xModel.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFact( xModel, UNO_QUERY);
+            if( xServiceFact.is() )
+            {
+                try
+                {
+                    xGradientHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GradientTable" ) ) ), UNO_QUERY);
+                }
+                catch( lang::ServiceNotRegisteredException& )
+                {}
+            }
+        }
+    }
+
+    return xGradientHelper;
+}
+
+const Reference< container::XNameContainer > & SvXMLImport::GetHatchHelper()
+{
+    if( !xHatchHelper.is() )
+    {
+        if( xModel.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFact( xModel, UNO_QUERY);
+            if( xServiceFact.is() )
+            {
+                try
+                {
+                    xHatchHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.HatchTable" ) ) ), UNO_QUERY);
+                }
+                catch( lang::ServiceNotRegisteredException& )
+                {}
+            }
+        }
+    }
+
+    return xHatchHelper;
+}
+
+const Reference< container::XNameContainer > & SvXMLImport::GetBitmapHelper()
+{
+    if( !xBitmapHelper.is() )
+    {
+        if( xModel.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFact( xModel, UNO_QUERY);
+            if( xServiceFact.is() )
+            {
+                try
+                {
+                    xBitmapHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.BitmapTable" ) ) ), UNO_QUERY);
+                }
+                catch( lang::ServiceNotRegisteredException& )
+                {}
+            }
+        }
+    }
+
+    return xBitmapHelper;
+}
+
+const Reference< container::XNameContainer > & SvXMLImport::GetTransGradientHelper()
+{
+    if( !xTransGradientHelper.is() )
+    {
+        if( xModel.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFact( xModel, UNO_QUERY);
+            if( xServiceFact.is() )
+            {
+                try
+                {
+                    xTransGradientHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TransparencyGradientTable" ) ) ), UNO_QUERY);
+                }
+                catch( lang::ServiceNotRegisteredException& )
+                {}
+            }
+        }
+    }
+
+    return xTransGradientHelper;
+}
+
+const Reference< container::XNameContainer > & SvXMLImport::GetMarkerHelper()
+{
+    if( !xMarkerHelper.is() )
+    {
+        if( xModel.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFact( xModel, UNO_QUERY);
+            if( xServiceFact.is() )
+            {
+                try
+                {
+                    xMarkerHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) ) ), UNO_QUERY);
+                }
+                catch( lang::ServiceNotRegisteredException& )
+                {}
+            }
+        }
+    }
+
+    return xMarkerHelper;
+}
+
+const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
+{
+    if( !xDashHelper.is() )
+    {
+        if( xModel.is() )
+        {
+            Reference< lang::XMultiServiceFactory > xServiceFact( xModel, UNO_QUERY);
+            if( xServiceFact.is() )
+            {
+                try
+                {
+                    xDashHelper =  Reference< container::XNameContainer >( xServiceFact->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DashTable" ) ) ), UNO_QUERY);
+                }
+                catch( lang::ServiceNotRegisteredException& )
+                {}
+            }
+        }
+    }
+
+    return xDashHelper;
+}
