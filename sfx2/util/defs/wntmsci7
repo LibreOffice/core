@@ -7434,3 +7434,4 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ??1OStringBuffer@rtl@@QAE@XZ
 ?GetActiveHelpString@SfxContentHelper@@SA?AVString@@ABV2@@Z
 ?makeStringAndClear@OStringBuffer@rtl@@QAE?AVOString@2@XZ
+??0PickListEntry@SfxPickList@@QAE@ABVString@@00@Z
