@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-04 15:19:54 $
+ *  last change: $Author: sab $ $Date: 2000-12-05 09:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1886,6 +1886,14 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
     if (xShapeProps.is())
     {
+        uno::Any aAny = xShapeProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")));
+        sal_Int32 nZOrder;
+        if (aAny >>= nZOrder)
+        {
+            rtl::OUStringBuffer sBuffer;
+            GetMM100UnitConverter().convertNumber(sBuffer, nZOrder);
+            AddAttribute(XML_NAMESPACE_TABLE, sXML_zindex, sBuffer.makeStringAndClear());
+        }
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
         {
