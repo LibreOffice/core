@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:49:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ chinese_traditional ] = "­S³ò";
         Text[ arabic ] = "ÇáãÚÇííÑ";
         Text[ greek ] = "ÊñéôŞñéá";
-        Text[ korean ] = "°Ë»ö ±âÁØ";
+        Text[ korean ] = "±âÁØ";
         Text[ turkish ] = "Ölçütler";
         Text[ language_user1 ] = " ";
     };
@@ -485,7 +485,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ russian ] = "=;<>;<;<=;>;>=;ğàâíî;íå ğàâíî;íóëü;íå íóëü";
         Text[ dutch ] = "=;<>;<;<=;>;>=;gelijk;niet gelijk aan;leeg;niet leeg";
         Text[ french ] = "=;<>;<;<=;>;>=;comme;différent de;vide;non vide";
-        Text[ spanish ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
+        Text[ spanish ] = "=;<>;<;<=;>;>=;como;no como;vacío;no vacío";
         Text[ italian ] = "=;<>;<;<=;>;>=;simile;non simile;nullo;non nullo";
         Text[ danish ] = "=;<>;<;<=;>;>=;som;ikke som;tom;ikke tom";
         Text[ swedish ] = "=;<>;<;<=;>;>=;lika med;inte lika med;noll;inte noll";
