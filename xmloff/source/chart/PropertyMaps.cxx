@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: bm $ $Date: 2000-09-27 15:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include "EnumPropertyHdl.hxx"
+#endif
+#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#include "XMLConstantsPropertyHandler.hxx"
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include "attrlist.hxx"
@@ -289,7 +292,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
 
             case XML_SCH_TYPE_SOLID_TYPE:
                 // here we have a constant rather than an enum
-                pHdl = new XMLEnumPropertyHdl( aXMLChartSolidTypeEnumMap, ::getCppuType((const sal_Int32*)0) );
+                pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
                 break;
         }
         if( pHdl )
