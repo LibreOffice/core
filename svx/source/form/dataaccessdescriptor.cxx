@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 12:37:54 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 10:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,14 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
+    const ODataAccessDescriptor& ODataAccessDescriptor::operator=(const ODataAccessDescriptor& _rSource)
+    {
+        delete m_pImpl;
+        m_pImpl = new ODADescriptorImpl(*_rSource.m_pImpl);
+        return *this;
+    }
+
+    //--------------------------------------------------------------------
     ODataAccessDescriptor::ODataAccessDescriptor( const Reference< XPropertySet >& _rValues )
         :m_pImpl(new ODADescriptorImpl)
     {
@@ -503,6 +511,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/11 12:37:54  fs
+ *  initial checkin - encapsulating descriptors of data access related transferable objects
+ *
  *
  *  Revision 1.0 10.04.01 17:25:31  fs
  ************************************************************************/
