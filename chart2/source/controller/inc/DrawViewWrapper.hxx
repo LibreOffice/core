@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 16:29:26 $
+ *  last change: $Author: iha $ $Date: 2003-12-10 18:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ public:
     SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;
     SdrOutliner* getOutliner() const;
+
+    SfxItemSet   getPositionAndSizeItemSetFromMarkedObject() const;
 
 private:
     mutable SdrPageView*            m_pWrappedDLPageView;
