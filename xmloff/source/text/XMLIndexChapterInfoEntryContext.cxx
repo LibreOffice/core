@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexChapterInfoEntryContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,15 @@ XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
     SvXMLImport& rImport,
     XMLIndexTemplateContext& rTemplate,
     sal_uInt16 nPrfx,
-    const OUString& rLocalName ) :
-        XMLIndexSimpleEntryContext(rImport, rTemplate.sTokenChapterInfo,
+    const OUString& rLocalName,
+    sal_Bool bT ) :
+        XMLIndexSimpleEntryContext(rImport,
+                                   (bT ? rTemplate.sTokenEntryNumber
+                                          : rTemplate.sTokenChapterInfo),
                                    rTemplate, nPrfx, rLocalName),
         nChapterInfo(ChapterFormat::NAME_NUMBER),
-        bChapterInfoOK(sal_False)
+        bChapterInfoOK(sal_False),
+        bTOC( bT )
 {
 }
 
@@ -161,7 +165,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
                 bCharStyleNameOK = sal_True;
             }
-            else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )
+            else if ( !bTOC && IsXMLToken( sLocalName, XML_DISPLAY ) )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
@@ -195,10 +199,13 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     // entry name and (optionally) style name in parent class
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
-    // chapter info field
-    sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
-    rValues[nIndex].Name = rTemplateContext.sChapterFormat;
-    Any aAny;
-    aAny <<= nChapterInfo;
-    rValues[nIndex].Value = aAny;
+    if( bChapterInfoOK )
+    {
+        // chapter info field
+        sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
+        rValues[nIndex].Name = rTemplateContext.sChapterFormat;
+        Any aAny;
+        aAny <<= nChapterInfo;
+        rValues[nIndex].Value = aAny;
+    }
 }
