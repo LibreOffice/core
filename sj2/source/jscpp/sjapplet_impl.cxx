@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 09:13:40 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,8 +278,8 @@ SjApplet2_Impl::~SjApplet2_Impl() throw()
         catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
         {
         }
-#endif
     }
+#endif
 }
 
 void SjApplet2_Impl::init(Window * pParentWin,
