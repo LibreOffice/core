@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_NAS NAS_INCLUDES NEON_CONFIG SYSTEM_NEON NEON_LIBS NEON_CFLAGS PSDK_HOME DIRECTXSDK_HOME EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_NAS NAS_INCLUDES NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -990,7 +990,7 @@ Optional Packages:
 
   --with-system-nas      Use nas already on system
 
-  --with-system-neon      Use neon 0.23.x already on system
+  --with-system-neon     Use neon already on system
 
   --with-stlport4         The location that STLport4 is installed in. The STL
                           header files are assumed to be in stlport4-home/stlport
@@ -11085,16 +11085,20 @@ if test -n "$with_system_neon" -o -n "$with_system_libs" && \
 	test "$with_system_neon" != "no"; then
         echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
-        # Extract the first word of "neon-config", so it can be a program name with args.
-set dummy neon-config; ac_word=$2
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_NEON_CONFIG+set}" = set; then
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  case $NEON_CONFIG in
+  case $PKG_CONFIG in
   [\\/]* | ?:[\\/]*)
-  ac_cv_path_NEON_CONFIG="$NEON_CONFIG" # Let the user override the test with a path.
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
   ;;
   *)
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
@@ -11104,48 +11108,83 @@ do
   test -z "$as_dir" && as_dir=.
   for ac_exec_ext in '' $ac_executable_extensions; do
   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_NEON_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
 done
 
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
   ;;
 esac
 fi
-NEON_CONFIG=$ac_cv_path_NEON_CONFIG
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
 
-if test -n "$NEON_CONFIG"; then
-  echo "$as_me:$LINENO: result: $NEON_CONFIG" >&5
-echo "${ECHO_T}$NEON_CONFIG" >&6
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
-        if test -z "$NEON_CONFIG"; then
-           { { echo "$as_me:$LINENO: error: no neon found in \$PATH, install neon" >&5
-echo "$as_me: error: no neon found in \$PATH, install neon" >&2;}
-   { (exit 1); exit 1; }; }
-        else
-           echo "$as_me:$LINENO: checking whether neon version is 0.23.x" >&5
-echo $ECHO_N "checking whether neon version is 0.23.x... $ECHO_C" >&6
-           # check whether we have 0.23.x. 0.24.x is API-incompatible....
-           NEON_VER=$($NEON_CONFIG --version | $AWK '{print $2}' \
-               | cut -d"." -f1,2)
-           if test "$NEON_VER" = "0.23"; then
-               echo "$as_me:$LINENO: result: yes" >&5
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for neon >= 0.24.0" >&5
+echo $ECHO_N "checking for neon >= 0.24.0... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "neon >= 0.24.0" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-               SYSTEM_NEON=YES
-               NEON_CFLAGS="$($NEON_CONFIG --cflags) -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
-               NEON_LIBS=$($NEON_CONFIG --libs)
-           else
-               { { echo "$as_me:$LINENO: error: no. neon 0.24.x is API-incompatible. use 0.23.x" >&5
-echo "$as_me: error: no. neon 0.24.x is API-incompatible. use 0.23.x" >&2;}
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking NEON_CFLAGS" >&5
+echo $ECHO_N "checking NEON_CFLAGS... $ECHO_C" >&6
+            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.24.0"`
+            echo "$as_me:$LINENO: result: $NEON_CFLAGS" >&5
+echo "${ECHO_T}$NEON_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking NEON_LIBS" >&5
+echo $ECHO_N "checking NEON_LIBS... $ECHO_C" >&6
+            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.24.0"`
+            echo "$as_me:$LINENO: result: $NEON_LIBS" >&5
+echo "${ECHO_T}$NEON_LIBS" >&6
+        else
+            NEON_CFLAGS=""
+            NEON_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.24.0"`
+            echo $NEON_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (neon >= 0.24.0) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (neon >= 0.24.0) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
-           fi
-	fi
+  fi
+
+        NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
+        SYSTEM_NEON=YES
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -14699,10 +14738,9 @@ s,@XINC@,$XINC,;t t
 s,@XLIB@,$XLIB,;t t
 s,@SYSTEM_NAS@,$SYSTEM_NAS,;t t
 s,@NAS_INCLUDES@,$NAS_INCLUDES,;t t
-s,@NEON_CONFIG@,$NEON_CONFIG,;t t
-s,@SYSTEM_NEON@,$SYSTEM_NEON,;t t
-s,@NEON_LIBS@,$NEON_LIBS,;t t
 s,@NEON_CFLAGS@,$NEON_CFLAGS,;t t
+s,@NEON_LIBS@,$NEON_LIBS,;t t
+s,@SYSTEM_NEON@,$SYSTEM_NEON,;t t
 s,@PSDK_HOME@,$PSDK_HOME,;t t
 s,@DIRECTXSDK_HOME@,$DIRECTXSDK_HOME,;t t
 s,@EXTRA_DOTNET_FILES@,$EXTRA_DOTNET_FILES,;t t
