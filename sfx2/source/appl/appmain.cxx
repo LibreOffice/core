@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 13:09:25 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 13:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@
 #include "mnumgr.hxx"
 #include "stbmgr.hxx"
 #include "imgmgr.hxx"
-#include "eacopier.hxx"
 #include "appuno.hxx"
 #include "objuno.hxx"
 #include "app.hrc"
@@ -176,8 +175,6 @@ static SfxItemInfo __READONLY_DATA aItemInfos[] =
     { 0, 0 }
 };
 #endif
-
-static SfxEA_Copier* pEA_Copier = 0;
 
 //===================================================================
 
@@ -267,9 +264,6 @@ void SfxApplication::Exit()
 
 void SfxApplication::PreInit( )
 {
-    // in Tools das kopieren von EAs ermoeglichen
-    if ( !pEA_Copier )
-        pEA_Copier = new SfxEA_Copier;
 }
 
 USHORT SfxApplication::ParseCommandLine_Impl()
