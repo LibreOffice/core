@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:55:34 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ String ScCompiler::MakeColStr( USHORT nCol )
     else
     {
         if (nCol < 26)
-            return String( 'A' + (sal_uChar) nCol ) ;
+            return String( static_cast< sal_Unicode >('A' + (sal_uChar) nCol) );
         else
         {
             String aString;
