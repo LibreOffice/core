@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-29 17:43:42 $
+ *  last change: $Author: hdu $ $Date: 2002-07-30 10:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,36 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& ) = 0;
     virtual void    Draw() const = 0;
-    virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const = 0;
+    virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
 };
+
+// -----------------------------------------------------------------------
+
+bool WinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
+{
+    bool bRet = false;
+
+    bool bHasGlyphs = HasGlyphs();
+    for( int nStart = 0;;)
+    {
+        Point aPos;
+        long nLGlyph;
+        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
+            break;
+
+        // get outline of individual glyph
+        PolyPolygon aGlyphOutline;
+        if( rSalGraphics.GetGlyphOutline( nLGlyph, bHasGlyphs, aGlyphOutline ) )
+            bRet = true;
+
+        // insert outline at correct position
+        aGlyphOutline.Move( aPos.X(), aPos.Y() );
+        for( int j = 0; j < aGlyphOutline.Count(); ++j )
+            rPolyPoly.Insert( aGlyphOutline[j] );
+    }
+
+    return bRet;
+}
 
 // =======================================================================
 
@@ -109,13 +137,14 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
     virtual void    Draw() const;
-    virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
+//  virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
     virtual Point   GetCharPosition( int nCharIndex, bool bRTL ) const;
     virtual long    FillDXArray( long* pDXArray ) const;
     virtual int     GetTextBreak( long nMaxWidth ) const;
+    virtual bool    HasGlyphs() const { return mbEnableGlyphs; }
 
 protected:
     void            Justify( long nNewWidth );
@@ -200,7 +229,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
         // LLA: #100683# gpf in setup, looks like memory overwriter
         //      we set lpClass to size of nMaxGlyphCount
-        pGcpClass = new char[nMaxGlyphCount];
+        pGcpClass = new char[ nMaxGlyphCount ];
         pGcpClass[0] = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) ?
             GCPCLASS_PREBOUNDLTR : GCPCLASS_PREBOUNDRTL;
         nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
@@ -217,13 +246,17 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     {
         // convert into ANSI code page
         UINT nACP = GetACP();
-        int nMBLen = ::WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
-            nMaxGlyphCount, NULL, 0, NULL, NULL );
+        int nMBLen = ::WideCharToMultiByte( nACP,
+            WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
+            rArgs.mpStr + rArgs.mnFirstCharIndex, nMaxGlyphCount,
+            NULL, 0, NULL, NULL );
         if( (nMBLen <= 0) || (nMBLen >= 8 * nMaxGlyphCount) )
             return false;
         char* pMBStr = (char*)alloca( nMBLen+1 );
-        ::WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
-            nMaxGlyphCount, pMBStr, nMBLen, NULL, NULL );
+        ::WideCharToMultiByte( nACP,
+            WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
+            rArgs.mpStr + rArgs.mnFirstCharIndex, nMaxGlyphCount,
+            pMBStr, nMBLen, NULL, NULL );
         // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
@@ -239,15 +272,16 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
     // #101097# fixup display of notdef glyphs
     // TODO: is there a way to convince Win32(incl W95) API to use notdef directly?
-    for( int i = 0; i < nMaxGlyphCount; ++i )
+    int i;
+    for( i = 0; i < mnGlyphCount; ++i )
     {
         if( !mpGlyphAdvances[i] && (!aGCP.lpGlyphs || (mpOutGlyphs[i] == 3)) )
         {
             if( mnNotdefWidth < 0 )
             {
                 SIZE aExtent;
-                char c = 0;
-                mnNotdefWidth = GetTextExtentPoint32A(mhDC,&c,1,&aExtent) ? aExtent.cx : 0;
+                WCHAR c = 0xFFFF;
+                mnNotdefWidth = GetTextExtentPoint32W(mhDC,&c,1,&aExtent) ? aExtent.cx : 0;
             }
             mpOutGlyphs[i] = 0;
             mpGlyphAdvances[i] = mnNotdefWidth;
@@ -258,20 +292,23 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     // fixup strong RTL layout by reversing glyph order
     // TODO: mirror glyphs
     if( 0 == (~rArgs.mnFlags & (SAL_LAYOUT_BIDI_RTL|SAL_LAYOUT_BIDI_RTL))
-    && (1 < nMaxGlyphCount) )
+    && (1 < mnGlyphCount) )
     {
         mpGlyphs2Chars = new UINT[ nMaxGlyphCount ];
-        for( int i = 0, j = nMaxGlyphCount; --j >= i; ++i )
+        i = 0;
+        for( int j = mnGlyphCount; --j >= i; ++i )
         {
             WCHAR nTempGlyph = mpOutGlyphs[ i ];
             int nTempAdvance = mpGlyphAdvances[ i ];
             mpOutGlyphs[ i ]        = mpOutGlyphs[ j ];
             mpGlyphAdvances[ i ]    = mpGlyphAdvances[ j ];
-            mpGlyphs2Chars[ i ]     = j;
+            mpGlyphs2Chars[ i ]     = j + (nMaxGlyphCount - mnGlyphCount);
             mpOutGlyphs[ j ]        = nTempGlyph;
             mpGlyphAdvances[ j ]    = nTempAdvance;
-            mpGlyphs2Chars[ j ]     = i;
+            mpGlyphs2Chars[ j ]     = i + (nMaxGlyphCount - mnGlyphCount);
         }
+       for(; i < nMaxGlyphCount; ++i )
+            mpGlyphs2Chars[ i ] = -1;
     }
 
     // calculate mpChars2Glyphs
@@ -279,10 +316,9 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( mpGlyphs2Chars != NULL )
     {
         mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
-        int i;
         for( i = 0; i < mnGlyphCount; ++i )
             mpChars2Glyphs[ mpGlyphs2Chars[ i ] ] = i;
-        for( ; i < nMaxGlyphCount; ++i )
+        for(; i < nMaxGlyphCount; ++i )
             mpChars2Glyphs[ i ] = -1;
     }
 
@@ -302,7 +338,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         int nLen = mnGlyphCount;
         if( rArgs.mnFirstCharIndex + nLen < rArgs.mnLength )
             ++nLen;
-        for( int i = 1; i < nLen; ++i )
+        for( i = 1; i < nLen; ++i )
         {
             if( (0x3000 == (0xFF00 & pStr[i-1]))
             &&  (0x3000 == (0xFF00 & pStr[i])) )
@@ -383,15 +419,9 @@ void SimpleWinLayout::Draw() const
 #ifndef DEBUG_GETNEXTGLYPHS
     Point aPos = GetDrawPosition();
 
-/* TODO: remove
-    static const char* pEnv = getenv( "SAL_RTL_ENABLED" );
-    if( pEnv )  // HACK for Bidi-Testing
-        aPos.X() = aPos.X() - mnWidth;
-*/
-
     ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
         mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
-#else
+#else // DEBUG_GETNEXTGLYPHS
     #define MAXGLYPHCOUNT 12
     long pLGlyphs[ MAXGLYPHCOUNT ];
     long pWidths[ MAXGLYPHCOUNT ];
@@ -414,32 +444,36 @@ void SimpleWinLayout::Draw() const
         ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
             pWGlyphs, nGlyphs, pGlyphWidths );
     }
-#endif
+#endif // DEBUG_GETNEXTGLYPHS
 }
 
 // -----------------------------------------------------------------------
 
+/* TODO: remove because of WinLayout::GetOutline
 bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
     bool bRet = false;
+    Point aPos;
 
-    Point aRelPos(0,0);
     for( int i = 0; i < mnGlyphCount; ++i )
     {
+        long nLGlyph = mpOutGlyphs[i];
+
         // get outline of individual glyph
         PolyPolygon aGlyphOutline;
-        if( rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], mbEnableGlyphs, aGlyphOutline ) )
+        if( rSalGraphics.GetGlyphOutline( nLGlyph, mbEnableGlyphs, aGlyphOutline ) )
             bRet = true;
 
         // insert outline at correct position
-        aGlyphOutline.Move( aRelPos.X(), aRelPos.Y() );
-        aRelPos.X() += mpGlyphAdvances[i];
+        aGlyphOutline.Move( aPos.X(), aPos.Y() );
+        aPos.X() += mpGlyphAdvances[i];
         for( int j = 0; j < aGlyphOutline.Count(); ++j )
             rPolyPoly.Insert( aGlyphOutline[j] );
     }
 
     return bRet;
 }
+*/
 
 // -----------------------------------------------------------------------
 
@@ -498,7 +532,8 @@ Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
         for( int i = 0; i < nCharLimit; ++i )
         {
             int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-            nXPos += mpGlyphAdvances[j];
+            if( j >= 0 )
+                nXPos += mpGlyphAdvances[j];
         }
     }
     else        // relative to right edge?
@@ -510,7 +545,8 @@ Point SimpleWinLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
         for( int i = nCharStart; i < nCharLimit; ++i )
         {
             int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-            nXPos -= mpGlyphAdvances[j];
+            if( j >= 0 )
+                nXPos -= mpGlyphAdvances[j];
         }
     }
 
@@ -568,7 +604,8 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
     for( i = 0; i < mnGlyphCount; ++i )
     {
         int j = !mpChars2Glyphs ? i : mpChars2Glyphs[i];
-        mpGlyphAdvances[j] = pDXArray[i] - mnWidth;
+        if( j >= 0 )
+            mpGlyphAdvances[j] = pDXArray[i] - mnWidth;
         mnWidth = pDXArray[i];
     }
 }
@@ -578,7 +615,15 @@ void SimpleWinLayout::ApplyDXArray( const long* pDXArray )
 #ifdef USE_UNISCRIBE
 #include <Usp10.h>
 
-struct VisualItem;
+struct VisualItem
+{
+    SCRIPT_ITEM*    mpScriptItem;
+    int             mnMinGlyphPos;
+    int             mnEndGlyphPos;
+    int             mnMinCharPos;
+    int             mnEndCharPos;
+    long            mnPixelWidth;
+};
 
 class UniscribeLayout : public WinLayout
 {
@@ -588,7 +633,7 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
     virtual void    Draw() const;
-    virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
+//  virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
@@ -629,16 +674,6 @@ private:
     // platform specific info
     HDC                     mhDC;
     mutable SCRIPT_CACHE    maScriptCache;
-};
-
-struct VisualItem
-{
-    SCRIPT_ITEM*    mpScriptItem;
-    int             mnMinGlyphPos;
-    int             mnEndGlyphPos;
-    int             mnMinCharPos;
-    int             mnEndCharPos;
-    long            mnPixelWidth;
 };
 
 // -----------------------------------------------------------------------
@@ -1142,6 +1177,7 @@ void UniscribeLayout::Draw() const
 
 // -----------------------------------------------------------------------
 
+/* TODO: remove because of WinLayout::GetOutline
 bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
     Point aRelPos = Point(0,0);
@@ -1188,6 +1224,7 @@ bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
 
     return true;
 }
+*/
 
 // -----------------------------------------------------------------------
 
@@ -1398,9 +1435,17 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
     {
         // #99019# don't use glyph indices for non-TT fonts
         // also for printer, because the drivers often transparently replace TTs with PS fonts
-        // TODO: use a cached value from SetFont
+        // TODO: use a cached value from upper layers
         DWORD nFLI = GetFontLanguageInfo( maGraphicsData.mhDC );
         bool bEnableGlyphs = ((nFLI & GCP_GLYPHSHAPE) != 0);
+        if( !bEnableGlyphs )
+        {
+            TEXTMETRICA aTextMetricA;
+            if(  GetTextMetricsA( maGraphicsData.mhDC, &aTextMetricA )
+            &&  (aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE )
+            && !(aTextMetricA.tmPitchAndFamily & TMPF_DEVICE ) )
+                bEnableGlyphs = true;
+        }
         pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs, bEnableGlyphs );
     }
 
