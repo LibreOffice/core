@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:37:58 $
+ *  last change: $Author: mfe $ $Date: 2001-02-27 15:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/time.h>
+#include <sys/timeb.h>
 
 extern sal_Bool TimeValueToFileTime(const TimeValue *cpTimeVal, FILETIME *pFTime);
 
@@ -225,4 +226,25 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     return sal_False;
 }
 
+
+static struct _timeb startTime;
+static sal_Bool bGlobalTimer = sal_False;
+
+sal_uInt32 SAL_CALL osl_getGlobalTimer()
+{
+  struct _timeb currentTime;
+  sal_uInt32 nSeconds;
+
+  if ( bGlobalTimer == sal_False )
+  {
+      _ftime( &startTime );
+      bGlobalTimer=sal_True;
+  }
+
+  _ftime( &currentTime );
+
+  nSeconds = (sal_uInt32)( currentTime.time - startTime.time );
+
+  return ( nSeconds * 1000 ) + (long)( currentTime.millitm - startTime.millitm );
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-18 16:13:19 $
+ *  last change: $Author: mfe $ $Date: 2001-02-27 15:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,39 @@
 
 
 #include "rtl/ustring.hxx"
+#include "osl/time.h"
 #include <stdio.h>
+
+
+/*
+ *   mfe : maybe it would be wishful to include initialization
+ *         of the global timer in dllmain or _init directly.
+ *         But noneoftheless this (should) work too.
+ */
+namespace osl
+{
+
+class OGlobalTimer
+{
+
+public:
+
+    OGlobalTimer() {
+        getTime();
+    }
+
+    sal_uInt32 getTime()
+    {
+        return osl_getGlobalTimer();
+    }
+
+
+};
+
+static OGlobalTimer aGlobalTimer;
+
+}
+
 
 extern "C"
 {

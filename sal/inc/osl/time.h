@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:47:00 $
+ *  last change: $Author: mfe $ $Date: 2001-02-27 15:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,42 +76,41 @@ extern "C" {
 
 typedef struct _oslDateTime
 {
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** contains the nanoseconds .
     */
     sal_uInt32 NanoSeconds;
 
-    //-------------------------------------------------------------------------
     /** contains the seconds (0-59).
     */
     sal_uInt16 Seconds;
 
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** contains the minutes (0-59).
     */
     sal_uInt16 Minutes;
 
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** contains the hour (0-23).
     */
     sal_uInt16 Hours;
 
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** is the day of month (1-31).
     */
     sal_uInt16 Day;
 
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** is the day of week (0-6 , 0 : Sunday).
     */
     sal_uInt16 DayOfWeek;
 
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** is the month of year (1-12).
     */
     sal_uInt16 Month;
 
-    //-------------------------------------------------------------------------
+    /*----------------------------------------------------------------------*/
     /** is the year.
     */
     sal_uInt16 Year;
@@ -160,6 +159,12 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
 */
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal );
 
+
+/** Get the value of the global timer
+    @return current timer value in milli seconds
+ */
+
+sal_uInt32 SAL_CALL osl_getGlobalTimer();
 
 #ifdef __cplusplus
 }
