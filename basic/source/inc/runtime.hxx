@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:36 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ class SbiInstance
     String          aErrorMsg;      // letzte Error-Message fuer $ARG
     USHORT          nErl;           // aktuelle Fehlerzeile
     BOOL            bReschedule;    // Flag: TRUE = Reschedule in Hauptschleife
+    BOOL            bCompatibility; // Flag: TRUE = VBA runtime compatibility mode
 
     ComponentVector_t ComponentVector;
 
@@ -237,6 +238,8 @@ public:
     xub_StrLen GetErl()             { return nErl; }
     void    EnableReschedule( BOOL bEnable ) { bReschedule = bEnable; }
     BOOL    IsReschedule( void ) { return bReschedule; }
+    void    EnableCompatibility( BOOL bEnable ) { bCompatibility = bEnable; }
+    BOOL    IsCompatibility( void ) { return bCompatibility; }
 
     ComponentVector_t& getComponentVector( void )  { return ComponentVector; }
 
@@ -272,6 +275,17 @@ struct RefSaveItem
 
     RefSaveItem() { pNext = NULL; }
 };
+
+// #111851 Object class to store type
+class TypeHolderObject : public SbxObject
+{
+public:
+    TypeHolderObject( const String& rObjectType )
+        : SbxObject( rObjectType )
+    {}
+    TYPEINFO();
+};
+
 
 // #72732 Spezielle SbxVariable, die beim put/get prueft,
 // ob der Kontext fuer eine UnoClass sinnvoll ist. Sonst
