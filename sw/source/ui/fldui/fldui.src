@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:33:09 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 20:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,10 +723,10 @@ String STR_COMBINED_CHARS
     TEXT[ portuguese ] = "Combine characters";
     TEXT[ russian ] = "Êîìáèíèğîâàòü çíàêè";
     TEXT[ greek ] = "Óõíäõáóìüò ÷áñáêôŞñùí";
-    TEXT[ dutch ] = "Combine characters";
+    TEXT[ dutch ] = "Tekens combineren";
     TEXT[ french ] = "Combiner les caractères";
     TEXT[ spanish ] = "Combinar caracteres";
-    TEXT[ italian ] = "Combine characters";
+    TEXT[ italian ] = "Combina caratteri";
     TEXT[ danish ] = "Combine characters";
     TEXT[ swedish ] = "Kombinera tecken";
     TEXT[ polish ] = "Kombinacja znaków";
@@ -2903,7 +2903,7 @@ String FMT_MARK_FRAME
     Text[ chinese_simplified ] = "¿ò";
     Text[ russian ] = "Ğàìêà";
     Text[ polish ] = "Ramka";
-    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
+    Text[ japanese ] = "˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ";
     Text[ greek ] = "Ğåñßãñáììá";
@@ -3192,10 +3192,10 @@ String STR_COMBCHRS_FT
     TEXT[ portuguese ] = "Ch~aracters";
     TEXT[ russian ] = "Çíàêè";
     TEXT[ greek ] = "×áñáêôŞñåò";
-    TEXT[ dutch ] = "Ch~aracters";
+    TEXT[ dutch ] = "~Tekens";
     TEXT[ french ] = "~Caractères";
     TEXT[ spanish ] = "C~arácter";
-    TEXT[ italian ] = "Ch~aracters";
+    TEXT[ italian ] = "C~arattere";
     TEXT[ danish ] = "Ch~aracters";
     TEXT[ swedish ] = "Te~cken";
     TEXT[ polish ] = "Znaki";
