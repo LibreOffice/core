@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-10 16:47:28 $
+ *  last change: $Author: mt $ $Date: 2002-07-09 10:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2199,10 +2199,14 @@ SV_IMPL_PTRARR( NotifyList, EENotifyPtr );
 
 void Outliner::ImplBlockInsertionCallbacks( BOOL b )
 {
-    DBG_ASSERT( b != bBlockInsCallback, "ImplBlockInsertionCallbacks ?!" );
-    if ( b != bBlockInsCallback )
+    if ( b )
     {
-        bBlockInsCallback = b;
+        bBlockInsCallback++;
+    }
+    else
+    {
+        DBG_ASSERT( bBlockInsCallback, "ImplBlockInsertionCallbacks ?!" );
+        bBlockInsCallback--;
         if ( !bBlockInsCallback )
         {
             // Call blocked notify events...
