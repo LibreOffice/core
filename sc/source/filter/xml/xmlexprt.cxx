@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:15 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,41 +636,44 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
         pShapeList = pSharedData->GetShapesContainer()->GetShapes();
         aShapeItr = pShapeList->begin();
     }
-    for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+    if (pSharedData->HasDrawPage())
     {
-        uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
-        uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
-        if (xShapes.is())
+        for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
         {
-            GetShapeExport()->seekShapes(xShapes);
-            uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
-            if( xFormsSupplier.is() )
+            uno::Reference<drawing::XDrawPage> xDrawPage(pSharedData->GetDrawPage(nTable));
+            uno::Reference<drawing::XShapes> xShapes (xDrawPage, uno::UNO_QUERY);
+            if (xShapes.is())
             {
-                uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
-                if( xForms.is() && xForms->hasElements() )
+                GetShapeExport()->seekShapes(xShapes);
+                uno::Reference< form::XFormsSupplier > xFormsSupplier( xDrawPage, uno::UNO_QUERY );
+                if( xFormsSupplier.is() )
                 {
-                    GetFormExport()->examineForms(xDrawPage);
-                    pSharedData->SetDrawPageHasForms(nTable, sal_True);
+                    uno::Reference< container::XNameContainer > xForms( xFormsSupplier->getForms() );
+                    if( xForms.is() && xForms->hasElements() )
+                    {
+                        GetFormExport()->examineForms(xDrawPage);
+                        pSharedData->SetDrawPageHasForms(nTable, sal_True);
+                    }
                 }
-            }
-            ScMyTableShapes* pTableShapes = pSharedData->GetTableShapes();
-            if (pTableShapes)
-            {
-                ScMyTableXShapes::iterator aItr = (*pTableShapes)[nTable].begin();
-                while (aItr != (*pTableShapes)[nTable].end())
+                ScMyTableShapes* pTableShapes = pSharedData->GetTableShapes();
+                if (pTableShapes)
                 {
-                    GetShapeExport()->collectShapeAutoStyles(*aItr);
-                    GetProgressBarHelper()->Increment();
-                    aItr++;
+                    ScMyTableXShapes::iterator aItr = (*pTableShapes)[nTable].begin();
+                    while (aItr != (*pTableShapes)[nTable].end())
+                    {
+                        GetShapeExport()->collectShapeAutoStyles(*aItr);
+                        GetProgressBarHelper()->Increment();
+                        aItr++;
+                    }
                 }
-            }
-            if (pShapeList)
-            {
-                while (aShapeItr != pShapeList->end() && (static_cast<sal_Int32>(aShapeItr->aAddress.Tab()) == nTable))
+                if (pShapeList)
                 {
-                    GetShapeExport()->collectShapeAutoStyles(aShapeItr->xShape);
-                    GetProgressBarHelper()->Increment();
-                    aShapeItr++;
+                    while (aShapeItr != pShapeList->end() && (static_cast<sal_Int32>(aShapeItr->aAddress.Tab()) == nTable))
+                    {
+                        GetShapeExport()->collectShapeAutoStyles(aShapeItr->xShape);
+                        GetProgressBarHelper()->Increment();
+                        aShapeItr++;
+                    }
                 }
             }
         }

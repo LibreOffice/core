@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 10:44:22 $
+ *  last change: $Author: sab $ $Date: 2001-08-01 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ public:
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
     void SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms);
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
+    sal_Bool HasDrawPage() { return pDrawPages != NULL; }
     sal_Bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
