@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:45:07 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,9 +680,9 @@ TabPage RID_SVXPAGE_POSITION
     StringList [ chinese_simplified ] =
     {
             < "???????" ; > ;
-        < "?????" ; > ;
+        < "??'??" ; > ;
         < "????" ; > ;
-        < "?????" ; > ;
+        < "??'??" ; > ;
         < "????? ???-" ; > ;
         < "????? ????" ; > ;
         < "????? ???-" ; > ;
@@ -1788,4 +1788,5 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posici?? y tama??";
 };
  // ********************************************************************** EOF
+
 
