@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-04 14:34:19 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 12:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,6 +1519,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
             case DataType::VARCHAR:
             case DataType::DECIMAL:
             case DataType::NUMERIC:
+            case DataType::LONGVARCHAR:
                 _xParams->setString(parameterIndex,::comphelper::getString(x));
                 break;
             case DataType::BIGINT:
@@ -1570,7 +1571,6 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-            case DataType::LONGVARCHAR:
                 {
                     Sequence< sal_Int8> aBytes;
                     if(x >>= aBytes)
@@ -1708,6 +1708,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2001/12/04 14:34:19  oj
+ *  #95553# check if scale is greater than 0
+ *
  *  Revision 1.42  2001/10/30 15:26:27  oj
  *  #93939# composeTableName remember values from metadata now
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-01 07:03:25 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 12:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ void OTools::getValue(  OConnection* _pConnection,
                         void* _pValue,
                         SQLINTEGER _rSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SQLINTEGER pcbValue;
+    SQLINTEGER pcbValue = SQL_NULL_DATA;
     OTools::ThrowException(_pConnection,
                             (*(T3SQLGetData)_pConnection->getOdbcFunction(ODBC3SQLGetData))(_aStatementHandle,
                                         (SQLUSMALLINT)columnIndex,

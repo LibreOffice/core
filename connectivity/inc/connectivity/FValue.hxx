@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 06:58:32 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 12:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ namespace connectivity
         }
 
         ORowSetValue(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH) :
-            m_eTypeKind(::com::sun::star::sdbc::DataType::LONGVARCHAR)
+            m_eTypeKind(::com::sun::star::sdbc::DataType::LONGVARBINARY)
             ,m_bBound(sal_True)
             ,m_bNull(sal_True)
         {
