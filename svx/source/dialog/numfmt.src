@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:40:03 $
+ *  last change: $Author: bm $ $Date: 2001-02-07 12:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text [ dutch ] = "Getalnotatie" ;
     Text [ spanish ] = "Formato numérico" ;
     Text [ english_us ] = "Number Format" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_CATEGORY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Kategorie" ;
         Text [ ENGLISH ] = "~Category" ;
         Text [ norwegian ] = "~Category" ;
@@ -114,8 +114,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ListBox LB_CATEGORY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 70 , 48 ) ;
+        Pos = MAP_APPFONT ( 6 , 13  ) ;
+        Size = MAP_APPFONT ( 70 , 72 ) ;
         AutoHScroll = TRUE ;
         StringList =
         {
@@ -443,8 +443,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     FixedText FT_EDFORMAT
     {
-        Pos = MAP_APPFONT ( 6 , 92 ) ;
-        Size = MAP_APPFONT ( 114 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 141  ) ;
+        Size = MAP_APPFONT ( 167 , 8 ) ;
         Text = "Format-~Code" ;
         Text [ ENGLISH ] = "Format-~Description" ;
         Text [ norwegian ] = "Format-~Beskrivelse" ;
@@ -472,26 +472,26 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Edit ED_FORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 102 ) ;
-        Size = MAP_APPFONT ( 114 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 151  ) ;
+        Size = MAP_APPFONT ( 199 , 12 ) ;
     };
     FixedText FT_COMMENT
     {
-        Pos = MAP_APPFONT ( 6 , 117 ) ;
-        Size = MAP_APPFONT ( 144 , 24 ) ;
+        Pos = MAP_APPFONT ( 6 , 167  ) ;
+        Size = MAP_APPFONT ( 248 , 16 ) ;
         WordBreak = TRUE ;
     };
     Edit ED_COMMENT
     {
         Hide = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 117 ) ;
-        Size = MAP_APPFONT ( 141 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 167  ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
     };
     FixedText FT_FORMAT
     {
         Pos = MAP_APPFONT ( 82 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Format" ;
         Text [ ENGLISH ] = "~Format" ;
         Text [ norwegian ] = "~Format" ;
@@ -520,8 +520,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ListBox LB_CURRENCY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 14 ) ;
-        Size = MAP_APPFONT ( 90 , 75 ) ;
+        Pos = MAP_APPFONT ( 82 , 13  ) ;
+        Size = MAP_APPFONT ( 90 , 71 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
 
@@ -617,15 +617,15 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         HelpId = HID_NUMBERFORMAT_LB_FORMAT ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 82 , 30 ) ;
-        Size = MAP_APPFONT ( 90 , 59 ) ;
+        Pos = MAP_APPFONT ( 82 , 29  ) ;
+        Size = MAP_APPFONT ( 90 , 56 ) ;
         TabStop = TRUE ;
     };
 
     FixedText FT_DECIMALS
     {
-        Pos = MAP_APPFONT ( 184 , 15 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 103  ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
         Text = "N~achkommastellen" ;
         Text [ ENGLISH ] = "~Precision" ;
         Text [ norwegian ] = "~Precision" ;
@@ -653,7 +653,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     NumericField ED_DECIMALS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 184 , 26 ) ;
+        Pos = MAP_APPFONT ( 84 , 101  ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Spin = TRUE ;
         Maximum = 20 ;
@@ -665,8 +665,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     FixedText FT_LEADZEROES
     {
-        Pos = MAP_APPFONT ( 184 , 41 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 119  ) ;
+        Size = MAP_APPFONT ( 69 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Führende ~Nullen : F³hrende ~Nullen */
         Text = "Führende ~Nullen" ;
         Text [ ENGLISH ] = "~Leading Zeroes" ;
@@ -695,7 +695,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     NumericField ED_LEADZEROES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 184 , 52 ) ;
+        Pos = MAP_APPFONT ( 84 , 117  ) ;
         Size = MAP_APPFONT ( 24 , 12 ) ;
         Spin = TRUE ;
         Maximum = 20 ;
@@ -707,8 +707,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     CheckBox BTN_NEGRED
     {
-        Pos = MAP_APPFONT ( 184 , 69 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Pos = MAP_APPFONT ( 133 , 102  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Negativ in ~Rot" ;
         Text [ ENGLISH ] = "~Mark negative red" ;
         Text [ norwegian ] = "~Marker negativ rød Mark negative red" ;
@@ -735,8 +735,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     CheckBox BTN_THOUSAND
     {
-        Pos = MAP_APPFONT ( 184 , 81 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Pos = MAP_APPFONT ( 133 , 118  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Tausenderpunkt" ;
         Text [ ENGLISH ] = "~Thousands point" ;
         Text [ norwegian ] = "~Tusen punkter Thousands point" ;
@@ -763,8 +763,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     GroupBox GB_OPTIONS
     {
-        Pos = MAP_APPFONT ( 178 , 3 ) ;
-        Size = MAP_APPFONT ( 76 , 93 ) ;
+        Pos = MAP_APPFONT ( 6 , 90  ) ;
+        Size = MAP_APPFONT ( 248 , 45 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -791,8 +791,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     };
     FixedText FT_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 6 , 66 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Pos = MAP_APPFONT ( 178 , 3  ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "S~prache" ;
         Text [ ENGLISH ] = "~Language" ;
         Text [ norwegian ] = "~Language" ;
@@ -821,14 +821,14 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Border = TRUE ;
         Sort = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 76 ) ;
-        Size = MAP_APPFONT ( 70 , 60 ) ;
+        Pos = MAP_APPFONT ( 178 , 13  ) ;
+        Size = MAP_APPFONT ( 76 , 80 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_PREVIEW
     {
-        Pos = MAP_APPFONT ( 178 , 102 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 178 , 32  ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Preview" ;
         Text [ norwegian ] = "Preview" ;
@@ -857,13 +857,13 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 114 ) ;
+        Pos = MAP_APPFONT ( 178 , 42  ) ;
         Size = MAP_APPFONT ( 76 , 18 ) ;
     };
     ImageButton IB_ADD
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 123 , 102 ) ;
+        Pos = MAP_APPFONT ( 209 , 151  ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_ADD ;
         QuickHelpText = "Hinzufügen" ;
@@ -897,7 +897,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_REMOVE
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 149 , 102 ) ;
+        Pos = MAP_APPFONT ( 242 , 151  ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_REMOVE ;
         QuickHelpText = "Entfernen" ;
@@ -930,7 +930,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_INFO
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 135 , 102 ) ;
+        Pos = MAP_APPFONT ( 226 , 151  ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_INFO ;
         QuickHelpText = "Kommentar ändern" ;
@@ -1007,3 +1007,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ language_user1 ] = " ";
 };
  // ********************************************************************** EOF
+
+
+
+
