@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-17 15:06:36 $
+ *  last change: $Author: khz $ $Date: 2000-10-25 14:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2037,8 +2037,6 @@ BOOL SwWW8ImplReader::SetShadow( SvxShadowItem& rShadow,
 
 void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
 {
-    //USHORT nInnerMargn = 0;
-
     // 'dptSpace' is stored in 3 bits of 'Border Code (BRC)'
     if( bVer67 )
         rInnerDist = Rectangle(((pbrc[ 1 ].aBits1[1] >> 3) & 0x1f) * 20,
@@ -2050,12 +2048,6 @@ void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
                                 (pbrc[ 0 ].aBits2[1]       & 0x1f) * 20,
                                 (pbrc[ 3 ].aBits2[1]       & 0x1f) * 20,
                                 (pbrc[ 2 ].aBits2[1]       & 0x1f) * 20 );
-
-    /*
-        for( int n = 0; n < 4; ++n )
-            nInnerMargn += ( pbrc[ n ].aBits2[1]       & 0x1f); // dxpSpace
-    //return nInnerMargn * 5;           // von Pt nach Twips / 4 Kanten
-    */
 }
 
 
@@ -3536,14 +3528,8 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
     //sprmPDxaLeft
     case     17:
     case 0x840F:
-        if( nPara < 0 )
-            nPara = 0;
         if( !aLR.GetTxtFirstLineOfst() )
             aLR.SetTxtFirstLineOfst( 1 );
-        else
-        if( aLR.GetTxtFirstLineOfst() < -nPara )
-            // Erstzeileneinzug anpassen, sonst weigert sich SetTxtLeft()
-            aLR.SetTxtFirstLineOfst( -nPara );
 
         aLR.SetTxtLeft( nPara );
         if( pAktColl )
@@ -3560,8 +3546,6 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
     //sprmPDxaLeft1
     case     19:
     case 0x8411:
-        if( -nPara > (short)aLR.GetTxtLeft() )
-            nPara = -(short)aLR.GetTxtLeft();
         aLR.SetTxtFirstLineOfst( nPara );
         if( pAktColl )
         {
@@ -3575,8 +3559,6 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
     //sprmPDxaRight
     case     16:
     case 0x840E:
-        if( nPara < 0 )
-            nPara = 0;
         aLR.SetRight( nPara );
         break;
     default: return;
@@ -4750,12 +4732,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.2 2000-10-17 15:06:36 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.3 2000-10-25 14:10:36 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/17 15:06:36  khz
+      Bug #79439# WW border ordering is different than StarWriter's
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 

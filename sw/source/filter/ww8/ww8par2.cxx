@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: khz $ $Date: 2000-10-25 14:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,10 +1138,12 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass )
 
     WW8PLCFx_Cp_FKP* pPap = pIoClass->pPlcxMan->GetPapPLCF();
 
+
+    eOri = HORI_LEFT;
+
     // process pPap until end of table found
     do{
         short nTabeDxaNew     = SHRT_MAX;
-        eOri                  = HORI_LEFT;
         pNewBand->nGapHalf    = 0;
         pNewBand->nLineHeight = 0;
         BOOL bTabRowJustRead  = FALSE;
@@ -1499,7 +1501,7 @@ void WW8TabDesc::CalcDefaults()
     long nRight   = pIo->nPgWidth - pIo->nPgRight - pIo->nPgLeft;
 
      // set Position if not on adjusted to left border
-    if((MINLAY < nMinLeft) && (HORI_LEFT == eOri))
+    if((MINLAY < abs( nMinLeft )) && (HORI_LEFT == eOri))
     {
         if(MINLAY > abs(nMidTab - nRight/2))// very near the center IS centered
             eOri = HORI_CENTER;
@@ -3024,11 +3026,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.2 2000-10-25 14:10:36 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.80  2000/09/18 16:05:00  willem.vandorp
       OpenOffice header added.
 
