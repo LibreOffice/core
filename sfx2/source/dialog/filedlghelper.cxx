@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-04 11:52:27 $
+ *  last change: $Author: dv $ $Date: 2001-05-07 15:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+#ifndef _FILTER_HXX
+#include <svtools/filter.hxx>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
@@ -163,22 +166,23 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
     Reference < XFilePicker >   mxFileDlg;
 
-    SfxFilterMatcher           *mpMatcher;
-    OUString                    maPath;
-    OUString                    maCurFilter;
-    ErrCode                     mnError;
-    sal_Bool                    mbHasPassword   : 1;
-    sal_Bool                    mbHasVersions   : 1;
-    sal_Bool                    mbHasAutoExt    : 1;
-    sal_Bool                    mbHasLink       : 1;
-    sal_Bool                    mbHasPreview    : 1;
+    SfxFilterMatcher       *mpMatcher;
+    OUString                maPath;
+    OUString                maCurFilter;
+    ErrCode                 mnError;
+    sal_Bool                mbHasPassword   : 1;
+    sal_Bool                mbHasVersions   : 1;
+    sal_Bool                mbHasAutoExt    : 1;
+    sal_Bool                mbHasLink       : 1;
+    sal_Bool                mbHasPreview    : 1;
 
-    sal_Bool                    mbDeleteMatcher : 1;
-    sal_Bool                    mbInsert        : 1;
+    sal_Bool                mbDeleteMatcher : 1;
+    sal_Bool                mbInsert        : 1;
 
 private:
     void                    addFilters( sal_uInt32 nFlags,
                                         const SfxObjectFactory& rFactory );
+    void                    addGraphicFilter();
     void                    enablePasswordBox();
     void                    updateVersions();
     void                    dispose();
@@ -349,6 +353,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( sal_uInt32 nFlags )
     mbHasAutoExt    = sal_False;
     mbHasPassword   = sal_False;
     mbHasVersions   = sal_False;
+    mbHasPreview    = sal_False;
+    mbHasLink       = sal_False;
     mbDeleteMatcher = sal_False;
     mbInsert        = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
 
@@ -369,7 +375,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( sal_uInt32 nFlags )
 
     Sequence < Any > aServiceName(1);
 
-    if ( WB_SAVEAS == ( nFlags & WB_SAVEAS ) )
+    if ( nFlags & WB_SAVEAS )
     {
         if ( nFlags & SFXWB_PASSWORD )
         {
@@ -379,6 +385,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( sal_uInt32 nFlags )
         }
         else
             aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_SAVE ) );
+    }
+    else if ( nFlags & SFXWB_GRAPHIC )
+    {
+        aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_LINK_PREVIEWBOX ) );
+        mbHasPreview = sal_True;
+        mbHasLink = sal_True;
     }
     else if ( !mbInsert )
     {
@@ -392,7 +404,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( sal_uInt32 nFlags )
         xInit->initialize( aServiceName );
 
     // set multiselection mode
-    if ( ( nFlags & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
+    if ( nFlags & SFXWB_MULTISELECTION )
         mxFileDlg->setMultiSelectionMode( sal_True );
 
     // the "insert file" dialog needs another title
@@ -440,10 +452,10 @@ ErrCode FileDialogHelper_Impl::execute( const String&   rPath,
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
 
-    saveConfig();
-
     if ( nRet != FileDialogResults::CANCEL )
     {
+        saveConfig();
+
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
@@ -596,6 +608,52 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     }
 }
 
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::addGraphicFilter()
+{
+    Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
+
+    if ( ! xFltMgr.is() )
+        return;
+
+    // create the list of filters
+    GraphicFilter*  pGraphicFilter = new GraphicFilter;
+    USHORT          i, nCount = pGraphicFilter->GetImportFormatCount();
+
+    // compute the extension string for all known import filters
+    String aExtensions;
+
+    for ( i = 0; i < nCount; i++ )
+    {
+        String aWildcard = pGraphicFilter->GetImportWildcard( i );
+
+        if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
+        {
+            if ( aExtensions.Len() )
+                aExtensions += sal_Unicode(';');
+            aExtensions += aWildcard;
+        }
+    }
+
+#if defined(WIN) || defined(WNT)
+    if ( aExtensions.Len() > 240 )
+        aExtensions = String::CreateFromAscii( FILEDIALOG_FILTER_ALL );
+#endif
+
+    xFltMgr->appendFilter( String( SfxResId( STR_SFX_IMPORT_ALL ) ),
+                           aExtensions );
+
+    // Now add the filter
+    for ( i = 0; i < nCount; i++ )
+    {
+        String aName = pGraphicFilter->GetImportFormatName( i );
+        String aWildcard = pGraphicFilter->GetImportWildcard( i );
+        xFltMgr->appendFilter( aName, aWildcard );
+    }
+
+    delete pGraphicFilter;
+}
+
 /*
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::initGraphic( sal_uInt32 nFlags )
@@ -610,47 +668,6 @@ void FileDialogHelper_Impl::initGraphic( sal_uInt32 nFlags )
     const SfxStringItem* pFilterItem =
         (const SfxStringItem*)pSfxApp->GetItem( SID_IMPORT_GRAPH_LASTFILTER );
 
-    // Filter ermitteln
-    GraphicFilter*  pGraphicFilter = GetGrfFilter();
-    USHORT          i, nCount = pGraphicFilter->GetImportFormatCount();
-
-    // Filter "Alle"
-    String aExtensions;
-
-    for ( i = 0; i < nCount; i++ )
-    {
-        String aWildcard =
-            ::GetImportFormatWildcard( *pGraphicFilter, i, pResImpl->pStrings );
-
-        if ( aExtensions.Search( aWildcard ) == STRING_NOTFOUND )
-        {
-            if ( aExtensions.Len() )
-                aExtensions += sal_Unicode(';');
-            aExtensions += aWildcard;
-        }
-    }
-#if defined(WIN) || defined(WNT)
-    if ( aExtensions.Len() < 240 )
-        AddFilter( pResImpl->pStrings[STR_IMPORT_ALL], aExtensions );
-    else
-        AddFilter( SVX_RESSTR( RID_SVXSTR_ALL_FILES ),
-                   UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
-#else
-    AddFilter( pResImpl->pStrings[STR_IMPORT_ALL], aExtensions );
-#endif
-
-    // Filter eintragen
-
-    for ( i = 0; i < nCount; i++ )
-    {
-        String aName =
-            ::GetImportFormatName( *pGraphicFilter, i, pResImpl->pStrings );
-        String aWildcard =
-            ::GetImportFormatWildcard( *pGraphicFilter, i, pResImpl->pStrings );
-        String aOSType =
-            ::GetImportFormatOSType( *pGraphicFilter, i, pResImpl->pStrings );
-        AddFilter( aName, aWildcard, aOSType );
-    }
 #endif  //--**--
 }
 
@@ -750,6 +767,9 @@ FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags )
 {
     mpImp = new FileDialogHelper_Impl( nFlags );
     mxImp = mpImp;
+
+    if ( nFlags & SFXWB_GRAPHIC )
+        mpImp->addGraphicFilter();
 }
 
 // ------------------------------------------------------------------------
@@ -852,52 +872,7 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
     return aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
 }
 
-// ------------------------------------------------------------------------
-
-void AddFiltersToDialog( const SfxObjectFactory& rFactory,
-                         SfxFilterFlags nFlags,
-                         Reference< XFilterManager > xFilterManager )
-{
-    // create the list of filters
-    SfxFilterMatcher    *pMatcher;
-    sal_Bool             bDeleteMatcher;
-
-    if ( !&rFactory )
-    {
-        SfxApplication *pSfxApp = SFX_APP();
-
-        pMatcher = &pSfxApp->GetFilterMatcher();
-        bDeleteMatcher = sal_False;
-    }
-    else
-    {
-        pMatcher = new SfxFilterMatcher( rFactory.GetFilterContainer() );
-        bDeleteMatcher = sal_True;
-    }
-
-    USHORT nFilterFlags = SFX_FILTER_EXPORT;
-
-    if( WB_OPEN == ( nFlags & WB_OPEN ) )
-        nFilterFlags = SFX_FILTER_IMPORT;
-
-    SfxFilterMatcherIter aIter( pMatcher, nFilterFlags, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
-    const SfxFilter* pDef = aIter.First();
-
-    for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
-    {
-        OUString aUIName( pFilter->GetUIName() );
-        xFilterManager->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
-    }
-
-    if ( bDeleteMatcher )
-        delete pMatcher;
-}
-
-
-
-
-
 
 // ------------------------------------------------------------------------
 
-}
+}   // end of namespace sfx2
