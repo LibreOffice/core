@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-09 08:58:00 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,7 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nLen );
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
+    aDrawInf.SetFont( pFnt );
 #endif
     aDrawInf.SetKanaComp( nComp );
     return pFnt->_GetTxtSize( aDrawInf );
@@ -506,6 +507,7 @@ void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
     SwDrawTextInfo aDrawInf( pVsh, *pOut, pSI, *pTxt, nIdx, nLen );
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
+    aDrawInf.SetFont( pFnt );
 #endif
     aDrawInf.SetKanaComp( nComp );
     SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
@@ -534,6 +536,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
     SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nMaxLen );
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
+    aDrawInf.SetFont( pFnt );
 #endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
@@ -555,6 +558,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                              *pTxt, GetIdx(), nMaxLen );
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
+    aDrawInf.SetFont( pFnt );
 #endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( 0 );
@@ -578,6 +582,7 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
                              *pTxt, GetIdx(), nMaxLen );
 #ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pFrm );
+    aDrawInf.SetFont( pFnt );
 #endif
     aDrawInf.SetKanaComp( nComp );
     aDrawInf.SetHyphPos( &rExtraCharPos );

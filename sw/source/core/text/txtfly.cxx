@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-18 13:47:16 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,12 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         // Nun ueberpruefen wir jede Portion, die sich haette senken koennen,
         // ob sie mit dem Fly ueberlappt.
         const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
+#ifdef VERTICAL_LAYOUT
+        aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() -
+                          GetCurr()->GetLineDescent() - GetCurr()->Height();
+#else
         aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
+#endif
         aLine.Height( GetCurr()->Height() );
 
         while( pPos )
@@ -589,7 +594,11 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             CalcRealHeight();
 
         if ( pCurr->GetRealHeight() > nHeight )
+#ifdef VERTICAL_LAYOUT
+            nTop += pCurr->GetRealHeight() - pCurr->GetLineDescent() - nHeight;
+#else
             nTop += pCurr->GetRealHeight() - nHeight;
+#endif
         else
             // important for fixed space between lines
             nHeight = pCurr->GetRealHeight();

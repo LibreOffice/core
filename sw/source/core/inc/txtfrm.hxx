@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-17 12:37:46 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,8 @@ public:
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
 
+    // returns the grids distance bRow = true => horizontal distance
+    USHORT GetGridDist( sal_Bool bRow ) const;
 #endif
 };
 

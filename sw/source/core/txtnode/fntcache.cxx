@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-12 12:45:07 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,56 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
     if ( STRING_LEN == rInf.GetLen() )
         rInf.SetLen( rInf.GetText().Len() );
+
+#ifdef VERTICAL_LAYOUT
+    if ( rInf.GetFrm() )
+    {
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        {
+            long* pKernArray = new long[rInf.GetLen()];
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                        rInf.GetIdx(), rInf.GetLen() );
+
+            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+
+            USHORT i = 1;
+            while ( nWidthPerChar > i * nGridWidth )
+                ++i;
+
+            nWidthPerChar = i * nGridWidth;
+
+            // position of first character
+            xub_Unicode nCh = rInf.GetText().GetChar( rInf.GetIdx() );
+            long nCharWidth;
+            rInf.GetOut().GetCharWidth( nCh, nCh, &nCharWidth );
+
+            aPos.X() += ( nWidthPerChar - nCharWidth ) / 2;
+            long nNextFix = nCharWidth / 2;
+
+            // calculate offsets
+            for ( xub_StrLen j = 1; j < rInf.GetLen(); ++j )
+            {
+                nCh = rInf.GetText().GetChar( rInf.GetIdx() + j );
+                long nScr;
+                rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
+
+                nNextFix += nWidthPerChar;
+                pKernArray[ j - 1 ] = nNextFix - ( nScr / 2 );
+            }
+
+            if ( bSwitchH2V )
+                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                pKernArray, rInf.GetIdx(), rInf.GetLen() );
+
+            delete[] pKernArray;
+            return;
+        }
+    }
+#endif
+
     // "No screen adj"
     if ( bPrt || (
         rInf.GetShell()->GetDoc()->IsBrowseMode() &&
@@ -784,6 +834,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         const Fraction aTmp( 1, 1 );
         BOOL bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
+
+#ifdef VERTICAL_LAYOUT
+        if ( bSwitchH2V )
+            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+#endif
+
         if( rInf.GetSpace() )
         // Hack, solange DrawStretchText auf Druckern nicht funktioniert:
         //  || bStretch || rInf.GetKern() )
@@ -832,11 +888,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
                 // Bei durch/unterstr. Blocksatz erfordert ein Blank am Ende
                 // einer Textausgabe besondere Massnahmen:
-#ifdef VERTICAL_LAYOUT
-                if ( bSwitchH2V )
-                    rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
-#endif
-
                 if( bPaintBlank && rInf.GetLen() && ( CH_BLANK ==
                     rInf.GetText().GetChar( rInf.GetIdx()+rInf.GetLen()-1 ) ) )
                 {
@@ -987,6 +1038,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         if ( ( nCnt == 1 ) && rInf.GetSpace() && ( cChPrev == CH_BLANK ) )
         {
             pKernArray[0] = rInf.GetSpace() + rInf.GetKern();
+
+#ifdef VERTICAL_LAYOUT
+            if ( bSwitchH2V )
+                rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+#endif
+
             rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
                 RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
             if( bBullet )
@@ -1430,10 +1487,29 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                                                            rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( 0 );
         }
+
         aTxtSize.Height() = rInf.GetpOut()->GetTextHeight();
     }
     if ( rInf.GetKern() && nLn )
         aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
+
+#ifdef VERTICAL_LAYOUT
+    if ( rInf.GetFrm() && nLn )
+    {
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        {
+            long nWidthPerChar = aTxtSize.Width() / nLn;
+
+            USHORT i = 1;
+            while ( nWidthPerChar > i * nGridWidth )
+                ++i;
+
+            aTxtSize.Width() = i * nGridWidth * nLn;
+        }
+    }
+#endif
+
     aTxtSize.Height() += nLeading;
     return aTxtSize;
 }
@@ -1466,6 +1542,33 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     xub_StrLen nCnt = 0;
     xub_StrLen nSpaceSum = 0;
     long nKernSum = 0;
+
+#ifdef VERTICAL_LAYOUT
+    if ( rInf.GetFrm() && rInf.GetLen() )
+    {
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        {
+            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+
+            USHORT i = 1;
+            while ( nWidthPerChar > i * nGridWidth )
+                ++i;
+
+            nWidthPerChar = i * nGridWidth;
+
+            i = 1;
+            while ( i * nWidthPerChar < rInf.GetOfst() )
+            {
+                ++i;
+                ++nCnt;
+            }
+
+            delete[] pKernArray;
+            return nCnt;
+        }
+    }
+#endif
 
     while ( ( nRight < long( rInf.GetOfst() ) ) && ( nCnt < rInf.GetLen() ) )
     {
@@ -1626,6 +1729,39 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
     USHORT nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
                                                : rInf.GetLen() );
+
+#ifdef VERTICAL_LAYOUT
+    if ( rInf.GetFrm() )
+    {
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
+        {
+            long* pKernArray = new long[rInf.GetLen()];
+            rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                        rInf.GetIdx(), rInf.GetLen() );
+
+
+            long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
+
+            USHORT i = 1;
+            while ( nWidthPerChar > i * nGridWidth )
+                ++i;
+
+            nWidthPerChar = i * nGridWidth;
+            long nCurrPos = nWidthPerChar;
+
+            while( nTxtBreak < rInf.GetLen() && nTextWidth >= nCurrPos )
+            {
+                nCurrPos += nWidthPerChar;
+                ++nTxtBreak;
+            }
+
+            delete[] pKernArray;
+            return nTxtBreak + rInf.GetIdx();
+        }
+    }
+#endif
+
     if( aSub[nActual].IsCapital() && nLn )
         nTxtBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
         rInf.GetScriptInfo(), rInf.GetText(), nTextWidth,0, rInf.GetIdx(),nLn );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-09 08:58:00 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,8 +274,20 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn, sal_Bool bBG 
     SetWhichPor( POR_KERN );
     if( nKern > 0 )
         Width( nKern );
-    rPortion.Insert( this );
+     rPortion.Insert( this );
 }
+
+#ifdef VERTICAL_LAYOUT
+SwKernPortion::SwKernPortion( const SwLinePortion& rPortion )
+{
+    Height( rPortion.Height() );
+    SetAscent( rPortion.GetAscent() );
+
+    nLineLength = 0;
+    bBackground = sal_False;
+    SetWhichPor( POR_KERN );
+}
+#endif
 
 void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {

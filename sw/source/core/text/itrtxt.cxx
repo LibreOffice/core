@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-09 08:58:00 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,12 @@ void SwTxtIter::Init()
 void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
 {
     rHeight = GetLineHeight();
+#ifdef VERTICAL_LAYOUT
+    rAscent = pCurr->GetAscent() + rHeight - pCurr->GetLineDescent() -
+              pCurr->Height();
+#else
     rAscent = pCurr->GetAscent() + rHeight - pCurr->Height();
+#endif
 }
 
 /*************************************************************************
@@ -156,6 +161,28 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
 {
     KSHORT nLineHeight = pCurr->Height();
     pCurr->SetClipping( sal_False );
+
+#ifdef VERTICAL_LAYOUT
+    USHORT nGridHeight = pFrm->GetGridDist( sal_False );
+    if ( nGridHeight )
+    {
+        USHORT i = 1;
+
+        const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
+        if ( pSpace && SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
+            i = pSpace->GetPropLineSpace() / 100;
+
+        while ( nLineHeight > i * nGridHeight )
+            ++i;
+
+        USHORT nTmpHeight = i * nGridHeight;
+
+        pCurr->SetLineDescent( ( nTmpHeight - pCurr->Height() ) / 2 );
+        pCurr->SetRealHeight( nTmpHeight );
+        return;
+    }
+#endif
+
     // Das Dummyflag besitzen Zeilen, die nur Flyportions enthalten, diese
     // sollten kein Register etc. beachten. Dummerweise hat kann es eine leere
     // Zeile am Absatzende geben (bei leeren Abs„tzen oder nach einem
@@ -221,6 +248,7 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
 #ifdef DEBUG
         KSHORT nDummy = nLineHeight + 1;
 #endif
+
         if( IsRegisterOn() )
         {
 #ifdef VERTICAL_LAYOUT
@@ -455,7 +483,11 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const USHORT nPorAscent,
                                     const sal_Bool bAutoToCentered ) const
 {
+#ifdef VERTICAL_LAYOUT
+    USHORT nOfst = rLine.GetRealHeight() - rLine.GetLineDescent() - rLine.Height();
+#else
     USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
+#endif
 
     switch ( GetLineInfo().GetVertAlign() ) {
         case SvxParaVertAlignItem::TOP :

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-14 12:03:34 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ public:
         nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
 #ifdef VERTICAL_LAYOUT
         bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = bSpaceStop = FALSE;
+        pFrm = 0;
 #else
         bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = FALSE;
 #endif

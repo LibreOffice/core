@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-17 14:19:08 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,25 @@ sal_Bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
         nFirstDiff = 0;
     PrtWidth( (Fix() - rInf.X()) + PrtWidth() + nFirstDiff );
 #else
+
+#ifdef VERTICAL_LAYOUT
+    USHORT nTmpWidth = Fix() - rInf.X() + PrtWidth();
+    const USHORT nGridWidth = rInf.GetTxtFrm()->GetGridDist( sal_True );
+
+    if ( nGridWidth )
+    {
+        USHORT i = 1;
+        while ( nTmpWidth > i * nGridWidth )
+            ++i;
+
+        nTmpWidth = i * nGridWidth;
+    }
+
+    PrtWidth( nTmpWidth );
+#else
     PrtWidth( (Fix() - rInf.X()) + PrtWidth() );
+#endif
+
 #endif
     if( !Width() )
     {
@@ -652,7 +670,24 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     if( nFlags & SETBASE_ROTATE )
         SvXSize( aBoundRect.SSize() );
     else
+#ifdef VERTICAL_LAYOUT
+    {
+        const USHORT nGridWidth = rFrm.GetGridDist( sal_True );
+
+        if ( nGridWidth )
+        {
+            USHORT i = 1;
+            while ( aBoundRect.Width() > i * nGridWidth )
+                ++i;
+
+            aBoundRect.Width( i * nGridWidth );
+        }
+
         SvLSize( aBoundRect.SSize() );
+    }
+#else
+        SvLSize( aBoundRect.SSize() );
+#endif
     if( Height() )
     {
         if ( nRelPos < 0 )

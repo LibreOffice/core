@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,23 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             }
             case POR_TABLEFT:
             {
+#ifdef VERTICAL_LAYOUT
+                USHORT nTmpWidth = (USHORT)(GetTabPos() - rInf.X());
+                const USHORT nGridWidth = rInf.GetTxtFrm()->GetGridDist( sal_True );
+
+                if ( nGridWidth )
+                {
+                    USHORT i = 0;
+                    while ( nTmpWidth > i * nGridWidth )
+                        ++i;
+
+                    nTmpWidth = i * nGridWidth;
+                }
+
+                PrtWidth( nTmpWidth );
+#else
                 PrtWidth( GetTabPos() - rInf.X() );
+#endif
                 bFull = rInf.Width() <= rInf.X() + PrtWidth();
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-02 13:28:47 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,13 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     }
 
     SwLinePortion *pPor = NewPortion( rInf );
+
+#ifdef VERTICAL_LAYOUT
+    SwKernPortion* pGridKernPortion = 0;
+    if ( pPor->IsKernPortion() )
+        pGridKernPortion = (SwKernPortion*)pPor;
+#endif
+
     sal_Bool bFull;
     SwTwips nUnderLineStart = 0;
     rInf.Y( Y() );
@@ -493,7 +500,13 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if( pPor->InFldGrp() && ! pPor->IsFtnPortion() )
             ((SwFldPortion*)pPor)->CheckScript( rInf );
 
+#ifdef VERTICAL_LAYOUT
+        const USHORT nGridWidth = pFrm->GetGridDist( sal_True );
+        if( ! nGridWidth && rInf.HasScriptSpace() &&
+            rInf.GetLast() && rInf.GetLast()->InTxtGrp()
+#else
         if( rInf.HasScriptSpace() && rInf.GetLast() && rInf.GetLast()->InTxtGrp()
+#endif
             && rInf.GetLast()->Width() && !rInf.GetLast()->InNumberGrp() )
         {
             BYTE nNxtActual = rInf.GetFont()->GetActual();
@@ -561,6 +574,15 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 }
             }
         }
+#ifdef VERTICAL_LAYOUT
+        else if ( nGridWidth && SW_CJK != rInf.GetFont()->GetActual() &&
+                  ! pGridKernPortion )
+        {
+            // insert a grid kerning portion
+            pGridKernPortion = new SwKernPortion( *pCurr );
+            InsertPortion( rInf, pGridKernPortion );
+        }
+#endif
 
         // the multi-portion has it's own format function
         if( pPor->IsMultiPortion() && !pMulti )
@@ -584,6 +606,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // 2. Right Tab
         // 3. Multiportions
         // 4. DropCaps
+        // 5. Grid Mode
         else if ( ( ! rInf.GetPaintOfst() || nUnderLineStart < rInf.GetPaintOfst() ) &&
                   // 1. Underlined portions
                   nUnderLineStart &&
@@ -603,7 +626,13 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                    // 3. Multi Portion and 4. Drop Caps
                      ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() )&&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
+#ifdef VERTICAL_LAYOUT
+                       rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() ) ||
+                   // 5. Grid Mode
+                     ( nGridWidth && pGridKernPortion )
+#else
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
+#endif
                    )
                 )
             // we store the beginning of the critical portion as our
@@ -624,7 +653,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         if ( !bFull )
         {
             rInf.ClrUnderFlow();
+#ifdef VERTICAL_LAYOUT
+            if( ! nGridWidth && rInf.HasScriptSpace() && pPor->InTxtGrp() &&
+#else
             if( rInf.HasScriptSpace() && pPor->InTxtGrp() &&
+#endif
                 pPor->GetLen() && !pPor->InFldGrp() )
             {
                 // The distance between two different scripts is set
@@ -653,6 +686,47 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 }
             }
         }
+
+#ifdef VERTICAL_LAYOUT
+        if ( nGridWidth )
+        {
+            xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
+
+            // if next position behind portion has ASIAN script we want to
+            // snap to our grid
+            if ( pGridKernPortion && pGridKernPortion != pPor &&
+                 ( bFull || nTmp == rInf.GetTxt().Len() ||
+                   2 == pScriptInfo->ScriptType( nTmp ) ) )
+            {
+                // calculate size
+                SwLinePortion* pTmpPor = pGridKernPortion;
+                USHORT nSumWidth = pPor->Width();
+                while ( pTmpPor )
+                {
+                    nSumWidth += pTmpPor->Width();
+                    pTmpPor = pTmpPor->GetPortion();
+                }
+
+                USHORT i = 1;
+                while ( nSumWidth > i * nGridWidth )
+                    ++i;
+
+                const USHORT nKernWidth = i * nGridWidth - nSumWidth;
+                const USHORT nKernWidth_1 = nKernWidth / 2;
+
+                if ( nKernWidth_1 < rInf.Width() - rInf.X() - pPor->Width() )
+                {
+                    pGridKernPortion->Width( nKernWidth_1 );
+                    rInf.X( rInf.X() + nKernWidth_1 );
+
+                    if ( !bFull )
+                        new SwKernPortion( *pPor, nKernWidth - nKernWidth_1 );
+                }
+
+                pGridKernPortion = 0;
+            }
+        }
+#endif
 
         rInf.SetFull( bFull );
 
@@ -944,6 +1018,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             rInf.SetArrowDone( sal_True );
         }
 
+#ifdef VERTICAL_LAYOUT
+        if ( ! pPor && GetTxtFrm()->GetGridDist( sal_True ) &&
+             ! pCurr->GetPortion() && SW_CJK != rInf.GetFont()->GetActual() )
+            pPor = new SwKernPortion( *pCurr );
+#endif
+
         // 2) Die Zeilenreste (mehrzeilige Felder)
         if( !pPor )
         {
@@ -991,6 +1071,12 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         // 4) Die DropCaps
         if( !pPor && GetDropFmt() )
             pPor = (SwLinePortion*)NewDropPortion( rInf );
+
+#ifdef VERTICAL_LAYOUT
+        if ( ! pPor && GetTxtFrm()->GetGridDist( sal_True ) &&
+             ! pCurr->GetPortion() && SW_CJK != rInf.GetFont()->GetActual() )
+            pPor = new SwKernPortion( *pCurr );
+#endif
     }
     return pPor;
 }

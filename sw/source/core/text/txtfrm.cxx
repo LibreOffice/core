@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-14 12:13:58 $
+ *  last change: $Author: fme $ $Date: 2002-01-11 14:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,13 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#endif
+
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
 #endif
@@ -325,6 +332,21 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
     Point aTmp( nLimit, 0 );
     SwitchVerticalToHorizontal( aTmp );
     return aTmp.Y();
+}
+
+USHORT SwTxtFrm::GetGridDist( sal_Bool bRow ) const
+{
+#ifndef GRID_MODE
+    return 0;
+#endif
+
+    const SwPageFrm* pPageFrm = FindPageFrm();
+    SwPageDesc* pDesc = ((SwPageFrm*)pPageFrm)->FindPageDesc();
+
+    if( pDesc )
+        return bRow ? pDesc->GetRegHeight() : pDesc->GetRegHeight();
+
+    return 0;
 }
 
 SwFrmSwapper::SwFrmSwapper( const SwTxtFrm* pTxtFrm, sal_Bool bSwapIfNotSwapped )
