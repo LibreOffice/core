@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 14:05:43 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:20:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ INCPRE+=	$(OUT)$/inc$/comprehensive
 CPPUMAKERFLAGS += -C
 .ELSE
 UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc -I$(SOLARINCDIR)$/external$/atl
+INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 .ENDIF
 
 UNOTYPES= com.sun.star.lang.XInitialization \
@@ -98,7 +98,7 @@ UNOTYPES= com.sun.star.lang.XInitialization \
           com.sun.star.datatransfer.dnd.XDropTargetListener \
           com.sun.star.datatransfer.dnd.DNDConstants		\
           com.sun.star.datatransfer.dnd.XDragSource
- 
+
 
 
 .IF "$(depend)" != ""
@@ -112,7 +112,7 @@ APP1OBJS=	$(OBJ)$/dndTest.obj	\
         $(OBJ)$/atlwindow.obj \
         $(OBJ)$/targetlistener.obj \
         $(OBJ)$/sourcelistener.obj \
-        $(OBJ)$/dataobject.obj 	
+        $(OBJ)$/dataobject.obj
 
 LIBCIMT=msvcrtd.lib
 
@@ -127,7 +127,7 @@ APP1STDLIBS= \
     comsupp.lib		\
     oleaut32.lib	\
     gdi32.lib		\
-    uuid.lib		
+    uuid.lib
 
 APP1LIBS=	\
             $(SLB)$/dtobjfact.lib	\
