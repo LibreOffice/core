@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-21 16:28:54 $
+ *  last change: $Author: mba $ $Date: 2001-04-18 15:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,11 @@ String SfxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
         {
             // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
             USHORT nId = pInfo->nOrd;
+#if SUPD>628
+            String aText = Application::GetHelp()->GetHelpText( nId, this );
+#else
             String aText = Application::GetHelp()->GetHelpText( nId );
+#endif
             if ( !aText.Len() )
                 aText = SFX_SLOTPOOL().GetSlotHelpText_Impl( nId );
             return aText;
@@ -1283,7 +1287,11 @@ IMPL_LINK( SfxStatusBarConfigListBox, TimerHdl, Timer*, pTimer)
     {
         SfxStatBarInfo_Impl* pInfo = (SfxStatBarInfo_Impl*) pEntry->GetUserData();
         if ( !pInfo->aHelpText.Len() )
+#if SUPD>628
+            pInfo->aHelpText = Application::GetHelp()->GetHelpText( pInfo->nId, this );
+#else
             pInfo->aHelpText = Application::GetHelp()->GetHelpText( pInfo->nId );
+#endif
         Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), pInfo->aHelpText );
     }
 
