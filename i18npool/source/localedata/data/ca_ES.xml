@@ -325,16 +325,16 @@
 <ReservedWords>
 <trueWord>veritat</trueWord>
 <falseWord>fals</falseWord>
-<quarter1Word>1r quart</quarter1Word>
-<quarter2Word>2n quart</quarter2Word>
-<quarter3Word>3r quart</quarter3Word>
-<quarter4Word>4t quart</quarter4Word>
+<quarter1Word>1er trimestre</quarter1Word>
+<quarter2Word>2on trimestre</quarter2Word>
+<quarter3Word>3er trimestre</quarter3Word>
+<quarter4Word>4rt trimestre</quarter4Word>
 <aboveWord>sobre</aboveWord>
 <belowWord>sota</belowWord>
-<quarter1Abbreviation>Q1</quarter1Abbreviation>
-<quarter2Abbreviation>Q2</quarter2Abbreviation>
-<quarter3Abbreviation>Q3</quarter3Abbreviation>
-<quarter4Abbreviation>Q4</quarter4Abbreviation>
+<quarter1Abbreviation>1T</quarter1Abbreviation>
+<quarter2Abbreviation>2T</quarter2Abbreviation>
+<quarter3Abbreviation>3T</quarter3Abbreviation>
+<quarter4Abbreviation>4T</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
 <LC_NumberingLevel ref="en_US"/>
