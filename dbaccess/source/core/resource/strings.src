@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:10:56 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,357 +63,168 @@
 
 String RID_STR_TRIED_OPEN_TABLE
 {
-    Text = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
-    Text [ english ] = "Tried to open the table $name$";
-    Text [ english_us ] = "Tried to open the table $name$.";
-    Text[ portuguese ] = "Tentativa de abrir a tabela $name$.";
-    Text[ russian ] = "Áûëà ñîâåğøåíà ïîïûòêà îòêğûòü òàáëèöó $name$";
-    Text[ greek ] = "Åğé÷åéñŞèçêå ôï Üíïéãìá ôïõ ğßíáêá $name$.";
-    Text[ dutch ] = "Er is getracht tabel $name$ te openen.";
-    Text[ french ] = "Une tentative d'ouverture de la table $name$ a eu lieu.";
-    Text[ spanish ] = "Intento de apertura de la tabla $name$";
-    Text[ italian ] = "Tentativo di aprire la tabella $name$";
-    Text[ danish ] = "Det blev forsøgt at åbne tabellen $name$.";
-    Text[ swedish ] = "Försök gjordes att öppna tabellen $name$";
-    Text[ polish ] = "Próbowano otworzyæ tabelê $name$.";
-    Text[ portuguese_brazilian ] = "Tentativa de abrir a tabela $name$.";
-    Text[ japanese ] = "$name$ ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’é–‹ã“ã†ã¨ã—ã¾ã—ãŸã€‚";
-    Text[ korean ] = "$name$ í…Œì´ë¸”ì„ ì—´ë ¤ê³  ì‹œë„í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å·²ç»å°è¯•è¿‡æ‰“å¼€è¡¨æ ¼ $name$ ã€‚";
-    Text[ chinese_traditional ] = "å·²ç¶“å˜—è©¦éé–‹å•Ÿè¡¨æ ¼ $name$ ã€‚";
-    Text[ turkish ] = "$name$ tablosu açılmaya çalışıldı";
-    Text[ arabic ] = "Êã ãÍÇæáÉ İÊÍ ÇáÌÏæá $name$.";
-    Text[ finnish ] = "Yritettiin avata taulua $name$.";
-    Text[ catalan ] = "S'ha intentat obrir la taula $name$.";
-    Text[ thai ] = "à¸à¸¢à¸²à¸¢à¸²à¸¡à¹€à¸›à¸´à¸”à¸•à¸²à¸£à¸²à¸‡ $name$";
-    Text[ czech ] = "Pokus o otevÅ™enÃ­ tabulky $name$.";
-    Text[ hebrew ] = "Es wurde versucht, die Tabelle $name$ zu Ã¶ffnen.";
-    Text[ hindi ] = "$name$ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‹ à¤–à¥‹à¤²à¤¨à¥‡ à¤•à¤¾ à¤ªà¥à¤°à¤¯à¤¤à¥à¤¨ à¤•à¤¿à¤¯à¤¾ à¥¤";
-    Text[ slovak ] = "Pokus o otvorenie tabuÄ¾ky $name$.";
-    Text[ hungarian ] = "KÃ­sÃ©rlet a kÃ¶vetkezÅ‘ tÃ¡bla megnyitÃ¡sÃ¡ra: $name$.";
-    Text[ slovenian ] = "PoskuÅ¡ali ste odpreti tabelo $name$.";
+    Text [ de ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
+    Text [ en-US ] = "Tried to open the table $name$.";
 };
 String RID_STR_CONNECTION_INVALID
 {
-    Text = "Es konnte keine Verbindung erstellt werden.";
-    Text [ english ] = "The connection could not be established.";
-    Text [ english_us ] = "No connection could be established.";
-    Text[ portuguese ] = "Impossível estabelecer ligação.";
-    Text[ russian ] = "Íå óäàëîñü óñòàíîâèòü ñâÿçü.";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ç óıíäåóç!";
-    Text[ dutch ] = "Er kan geen verbinding tot stand worden gebracht!";
-    Text[ french ] = "Impossible d'établir une connexion !";
-    Text[ spanish ] = "No se pudo crear ninguna conexión.";
-    Text[ italian ] = "Impossibile creare il collegamento!";
-    Text[ danish ] = "Der kunne ikke etableres forbindelse.";
-    Text[ swedish ] = "Det gick inte att skapa en förbindelse.";
-    Text[ polish ] = "Nie uda³o siê nawi¹zaæ po³¹czenia.";
-    Text[ portuguese_brazilian ] = "Não foi possível estabelecer a conexão.";
-    Text[ japanese ] = "æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ì—°ê²°í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•å»ºç«‹è¿æ¥ï¼";
-    Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹é€£ç·š!";
-    Text[ turkish ] = "Bir bağlantı kurulamadı!";
-    Text[ arabic ] = "Not possible to create a connection!";
-    Text[ finnish ] = "Yhteyden muodostaminen ei onnistunut.";
-    Text[ catalan ] = "No s'ha pogut establir una connexió";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¹„à¸”à¹‰";
-    Text[ czech ] = "NepodaÅ™ilo se vytvoÅ™it pÅ™ipojenÃ­.";
-    Text[ hebrew ] = "Es konnte keine Verbindung erstellt werden.";
-    Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Nemohlo byÅ¥ vytvorenÃ© spojenie.";
-    Text[ hungarian ] = "Nem sikerÃ¼lt lÃ©trehozni a kapcsolatot.";
-    Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave.";
+    Text [ de ] = "Es konnte keine Verbindung erstellt werden.";
+    Text [ en-US ] = "No connection could be established.";
 };
 
 String RID_STR_TABLE_IS_FILTERED
 {
-    Text = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
-    Text [ english ] = "The table $name$ already exists, but hidden because it's filtered out.";
-    Text [ english_us ] = "The table $name$ already exists. It is not visible because it has been filtered out.";
-    Text[ portuguese ] = "A tabela $name$ já existe. Como foi filtrada, não se encontra visível.";
-    Text[ russian ] = "Òàáëèöà $name$ óæå ñóùåñòâóåò. Îíà íå âèäíà, òàê êàê îòôèëüòğîâàíà.";
-    Text[ greek ] = "Ï ğßíáêáò $name$ õğÜñ÷åé Şäç. Äåí åßíáé ïñáôüò åğåéäŞ İ÷åé áğïññéöèåß áğü ôï ößëôñï.";
-    Text[ dutch ] = "Tabel $name$ bestaat reeds. Hij is alleen niet zichtbaar omdat hij is uitgefilterd!";
-    Text[ french ] = "La table $name$ existe déjà ; comme elle a été filtrée, elle n'est pas visible.";
-    Text[ spanish ] = "La tabla $name$ ya existe. Sin embargo no es visible por haber sido filtrada.";
-    Text[ italian ] = "Il nome della tabella $name$ esiste già; non è visibile in quanto è stato filtrato.";
-    Text[ danish ] = "Tabellen $name$ findes allerede. Den er ikke synlig, da den er filtreret fra.";
-    Text[ swedish ] = "Tabellen $name$ finns redan. Den är inte synlig eftersom den har filtrerats bort.";
-    Text[ polish ] = "Tabela $name$ ju¿ istnieje. Nie jest widoczna, poniewa¿ zosta³a przefiltrowana.";
-    Text[ portuguese_brazilian ] = "A tabela $name$ já existe. Como foi filtrada, não se encontra visível.";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ« $name$ ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ãƒ•ã‚£ãƒ«ã‚¿ã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€è¡¨ç¤ºã•ã‚Œã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "$name$ í…Œì´ë¸”ì€ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤. ì´ í…Œì´ë¸”ì€ í•„í„°ë§ì´ ë˜ì–´ ë³´ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "è¡¨æ ¼ $name$ å·²ç»å­˜åœ¨ã€‚å› ä¸ºå·²ç»ç­›é€‰å‡ºè¿™ä¸ªè¡¨æ ¼ï¼Œæ‰€ä»¥æ— æ³•æ˜¾ç¤ºå®ƒã€‚";
-    Text[ chinese_traditional ] = "é€™å€‹è¡¨æ ¼ $name$ å·²ç¶“å­˜åœ¨ã€‚å› çˆ²å·²ç¶“ç¯©é¸å®ƒè€Œç„¡æ³•é¡¯ç¤ºã€‚";
-    Text[ turkish ] = "$name$ tablosu zaten mevcut,sadece filtrelenebilir!";
-    Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
-    Text[ finnish ] = "Taulu $name$ on jo olemassa. Se ei näy, koska se on suodatettu pois näkyvistä.";
-    Text[ catalan ] = "La taula $name$ ja existeix i ha estat filtrada.";
-    Text[ thai ] = "à¸¡à¸µà¸•à¸²à¸£à¸²à¸‡ $name$ à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§ à¸¡à¸±à¸™à¹„à¸”à¹‰à¸–à¸¹à¸à¸à¸£à¸­à¸‡à¹à¸¥à¹‰à¸§";
-    Text[ czech ] = "Tabulka $name$ jiÅ¾ existuje. NenÃ­ viditelnÃ¡, protoÅ¾e byla odfiltrovÃ¡na.";
-    Text[ hebrew ] = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ $name$ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¥¤ à¤¯à¤¹ à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿à¤—à¥‹à¤šà¤° à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ, à¤•à¥à¤¯à¥‹à¤‚ à¤•à¤¿ à¤‡à¤¸à¤•à¥‹ à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "TabuÄ¾ka $name$ uÅ¾ existuje. Nieje viditeÄ¾nÃ¡, pretoÅ¾e bola odfiltrovanÃ¡.";
-    Text[ hungarian ] = "$name$: a tÃ¡bla mÃ¡r lÃ©tezik, de ki van szÅ±rve, ezÃ©rt nem lÃ¡thatÃ³.";
-    Text[ slovenian ] = "Tabela $name$ Å¾e obstaja. Tabela ni vidna, ker je bil njen prikaz filtriran.";
+    Text [ de ] = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
+    Text [ en-US ] = "The table $name$ already exists. It is not visible because it has been filtered out.";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
 {
-    Text = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
-    Text [ english ] = "You have no write access to the configuration data the object is based on.";
-    Text [ english_us ] = "You have no write access to the configuration data the object is based on.";
-    Text[ portuguese ] = "Não possui direitos de escrita sobre os dados de configuração do objecto.";
-    Text[ russian ] = "Âû íå îáëàäàåòå ïğàâàìè íà èçìåíåíèå êîíôèãóğàöèè äàííîãî îáúåêòà.";
-    Text[ greek ] = "Äåí İ÷åôå äéêáéşìáôá åããñáöŞò óôá äåäïìİíá äéáìüñöùóçò ôïõ áíôéêåéìİíïõ.";
-    Text[ dutch ] = "U heeft geen schrijfrechten op de configuratiegegevens van het object.";
-    Text[ french ] = "Vous n'avez pas d'accès en écriture sur les données de configuration de l'objet.";
-    Text[ spanish ] = "No posee derecho de escritura sobre los datos de configuración del objeto.";
-    Text[ finnish ] = "Kirjoitusoikeudet objektin perustana oleviin kokoonpanotietoihin puuttuvat.";
-    Text[ italian ] = "Non avete accesso ai dati di configurazione dell'oggetto.";
-    Text[ danish ] = "Du har ikke skriveadgang til objektets konfigurationsdata.";
-    Text[ swedish ] = "Du har ingen skrivåtkomst till objektets konfigurationsdata.";
-    Text[ polish ] = "Brak praw na zapisywanie danych konfiguracyjnych obiektu.";
-    Text[ portuguese_brazilian ] = "Você não tem permissão de gravação sobre os dados de configuração os quais se baseiam o objeto.";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¨­å®šãƒ‡ãƒ¼ã‚¿ã¸ã®æ›¸ãè¾¼ã¿æ¨©ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ê°œì²´ ì„¤ì • ë°ì´í„°ì— ëŒ€í•œ ì“°ê¸° ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ‚¨æ²¡æœ‰æƒé™è¯»å–è¿™ä¸ªå¯¹è±¡çš„é…ç½®æ•°æ®ã€‚";
-    Text[ chinese_traditional ] = "æ‚¨æ²’æœ‰æ¬Šé™å­˜å–é€™å€‹ç‰©ä»¶çš„é…ç½®è³‡æ–™ã€‚";
-    Text[ turkish ] = "Konfigürasyon verisinin kurulu olduğu neseye yazma hakkınız  yok.";
-    Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
-    Text[ catalan ] = "No teniu accés d'escriptura a les dades de configuració en què està basat l'objecte.";
-    Text[ thai ] = "à¸„à¸¸à¸“à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸à¸²à¸£à¹€à¸‚à¸µà¸¢à¸™à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸šà¸™à¸à¸·à¹‰à¸™à¸à¸²à¸™à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "NemÃ¡te pÅ™Ã­stup pro zÃ¡pis do konfiguraÄnÃ­ch dat, na nichÅ¾ je tento objekt zaloÅ¾en.";
-    Text[ hebrew ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
-    Text[ hindi ] = "à¤†à¤ªà¤•à¥‹ à¤µà¤¸à¥à¤¤à¥ à¤•à¥‡ à¤†à¤§à¤¾à¤°à¤¿à¤¤ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‡à¤‚ à¤²à¤¿à¤–à¤¨à¥‡ à¤•à¤¾ à¤…à¤§à¤¿à¤•à¤¾à¤° à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "NemÃ¡te prÃ­stup na zapisovanie ku konfiguraÄnÃ½m dÃ¡tam, na ktorÃ½ch je zaloÅ¾enÃ½ objekt.";
-    Text[ hungarian ] = "Nincs Ã­rÃ¡si joga a konfigurÃ¡ciÃ³s adatra, amelyen az objektum alapul.";
-    Text[ slovenian ] = "Nimate pisalnega dostopa do konfiguracijskih podatkov, na katerih temelji predmet.";
+    Text [ de ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
+    Text [ en-US ] = "You have no write access to the configuration data the object is based on.";
 };
 
 
 String RID_STR_COULDNOTCONNECT_UNSPECIFIED
 {
-    Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
-    Text [ english ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
-    Text [ english_us ] = "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.";
-    Text[ portuguese ] = "Foi impossível estabelecer a ligação à fonte de dados externa. Ocorreu um erro desconhecido. Provavelmente o controlador está com defeito.";
-    Text[ russian ] = "Íåâîçìîæíî ïîäêëş÷èòüñÿ ê âíåøíåìó èñòî÷íèêó äàííûõ. Íåèçâåñòíàÿ îøèáêà. Âîçìîæíû íåïîëàäêè ñ äğàéâåğîì.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá óıíäåóçò ìå ôçí åîùôåñéêŞ ğñïİëåõóç äåäïìİíùí. ĞáñïõóéÜóôçêå İíá Üãíùóôï óöÜëìá. Ôï ğñüãñáììá ïäŞãçóçò åíäİ÷åôáé íá åßíáé åëáôôùìáôéêü.";
-    Text[ dutch ] = "Door een onbekende fout (waarschijnlijk is de driver niet in orde) kan de verbinding met de externe gegevensbron niet tot stand worden gebracht.";
-    Text[ french ] = "Impossible d'établir une connexion à la source de données externe : erreur inconnue. Le pilote fait probablement défaut.";
-    Text[ spanish ] = "La conexión a la fuente de datos externa no se pudo realizar. Se ha producido un error desconocido. Es posible que el controlador esté defectuoso.";
-    Text[ finnish ] = "Yhteyttä ulkoiseen tietolähteeseen ei voitu muodostaa. Ilmeni tuntematon virhe. Ohjain on ehkä viallinen.";
-    Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati esterna a causa di un errore non classificato. Probabile difetto al driver.";
-    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. Der opstod en ukendt fejl. Driveren er sandsynligvis defekt. .";
-    Text[ swedish ] = "Det gick inte att skapa förbindelsen till den externa datakällan. Ett okänt fel uppstod. Det är antagligen fel på drivrutinen.";
-    Text[ polish ] = "Nie uda³o siê nawi¹zaæ po³¹czenia z zewnêtrznym Ÿród³em danych. Wyst¹pi³ nieznany b³¹d. Prawdopodobnie sterownik jest wadliwy.";
-    Text[ portuguese_brazilian ] = "Não foi possível estabelecer a conexão com a fonte de dados externa. Ocorreu um erro desconhecido. Provavelmente o controlador está com defeito.";
-    Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚ä¸æ˜ãªã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚ãƒ‰ãƒ©ã‚¤ãƒã«ãƒˆãƒ©ãƒ–ãƒ«ãŒã‚ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚";
-    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì›ë³¸ìœ¼ë¡œ ì—°ê²°í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. SDBC ë“œë¼ì´ë²„ì— ì˜¤ë¥˜ê°€ ìˆì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•ä¸å¤–éƒ¨æ•°æ®æºå»ºç«‹è¿æ¥ã€‚å‡ºç°äº†ä¸€ä¸ªä¸æ˜çš„é”™è¯¯ã€‚å¯èƒ½æ˜¯é©±åŠ¨ç¨‹åºå·²ç»æŸåã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•èˆ‡å¤–éƒ¨çš„è³‡æ–™æºé€£ç·šã€‚å‡ºç¾ä¸€å€‹ä¸æ˜çš„éŒ¯èª¤ã€‚åŸå› å¯èƒ½æ˜¯é©…å‹•ç¨‹å¼å·²ç¶“æå£ã€‚";
-    Text[ turkish ] = "Harici veri kaynağına bağlantı kurulamadı.Bilinmeyen bir hata oluştu.SDBC sürücüsü bozulmuş olabilir.";
-    Text[ arabic ] = "The connection to the external data source could not be established. An unknown error occured. Most probably, the SDBC driver is defect.";
-    Text[ catalan ] = "No s'ha pogut establir la connexió a la base de dades externa. El més probable és que sigui un defecte del controlador SDBC.";
-    Text[ thai ] = "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.";
-    Text[ czech ] = "NepodaÅ™ilo se vytvoÅ™it pÅ™ipojenÃ­ k externÃ­mu zdroji dat. DoÅ¡lo k neznÃ¡mÃ© chybÄ›. PravdÄ›podobnÄ› je poÅ¡kozen ovladaÄ.";
-    Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
-    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ à¤à¤• à¤…à¤œà¥à¤à¤¾à¤¤ à¤—à¤²à¤¤à¥€ à¤˜à¤Ÿà¤¿à¤¤ à¤¹à¥à¤† à¥¤ à¤¶à¤¾à¤¯à¤¦ à¤¡à¥à¤°à¤‡à¤µà¤° à¤¦à¥‹à¤·à¤¯à¥à¤•à¥à¤¤ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Spojenie k externÃ©mu zdroju dÃ¡t nemohlo byÅ¥ vytvorenÃ©. Objavila sa neznÃ¡ma chyba. Driver je pravdepodobne chybnÃ½.";
-    Text[ hungarian ] = "A kÃ¼lsÅ‘ adatforrÃ¡shoz valÃ³ csatlakozÃ¡s nem sikerÃ¼lt. Ismeretlen hiba tÃ¶rtÃ©nt. Az illesztÅ‘program valÃ³szÃ­nÅ±leg hibÃ¡s.";
-    Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave z zunanjim virom podatkov. Pojavila se je neznana napaka. Verjetno je okvarjen gonilnik.";
+    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
+    Text [ en-US ] = "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.";
 };
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
 {
-    Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
-    Text [ english ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
-    Text [ english_us ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
-    Text[ portuguese ] = "Foi impossível estabelecer a ligação à fonte de dados externa. O controlador SDBC para o URL indicado não foi encontrado.";
-    Text[ russian ] = "Íåâîçìîæíî ïîäêëş÷èòüñÿ ê âíåøíåìó èñòî÷íèêó äàííûõ. Äëÿ çàäàííîãî URL íå íàéäåí äğàéâåğ SDBC.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá óıíäåóçò ìå ôçí åîùôåñéêŞ ğñïİëåõóç äåäïìİíùí. Äåí âñİèçêå ğñüãñáììá ïäŞãçóçò SDBC ãéá ôï óõãêåêñéìİíï URL.";
-    Text[ dutch ] = "De verbinding met de externe gegevensbron kan niet tot stand worden gebracht omdat er geen SDBC-driver voor de opgegeven URL is gevonden.";
-    Text[ french ] = "Impossible d'établir une connexion à la source de données externe : le pilote SDBC n'a pas pu être détecté pour l'URL spécifié.";
-    Text[ spanish ] = "No se pudo realizar la conexión a la fuente de datos externa porque no se encontró ningún controlador SDBC para la URL indicada.";
-    Text[ finnish ] = "Yhteyttä ulkoiseen tietolähteeseen ei voitu muodostaa. Annetulle URL-osoitteelle ei löytynyt SDBC-ohjainta.";
-    Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna in quanto non è stato trovato il driver SDBC per l'indirizzo URL stabilito.";
-    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. Der blev ikke fundet nogen SDBC-driver til den angivne URL.";
-    Text[ swedish ] = "Det gick inte att skapa förbindelsen till den externa datakällan. Det gick inte att hitta någon SDBC-drivrutin för den angivna URL:en.";
-    Text[ polish ] = "Nie uda³o siê nawi¹zaæ po³¹czenia z zewnêtrznym Ÿród³em danych. Nie znaleziono sterownika SDCB dla podanego adresu URL.";
-    Text[ portuguese_brazilian ] = "Não foi possível estabelecer a conexão com a fonte de dados externa. O driver SDBC para a URL indicada não foi encontrado.";
-    Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚æŒ‡å®šã—ãŸ URL ã‚¢ãƒ‰ãƒ¬ã‚¹ã® SDBC ãƒ‰ãƒ©ã‚¤ãƒã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì›ë³¸ìœ¼ë¡œ ì—°ê²°í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. ì§€ì •ëœ URLì— ëŒ€í•œ SDBC ë“œë¼ì´ë²„ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•ä¸å¤–éƒ¨æ•°æ®æºå»ºç«‹è¿æ¥ã€‚æ— æ³•åœ¨æŒ‡å®šçš„ URL å¤„æ‰¾åˆ° SDBC é©±åŠ¨ç¨‹åºã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•èˆ‡å¤–éƒ¨çš„è³‡æ–™æºé€£ç·šã€‚ç„¡æ³•åœ¨æŒ‡å®šçš„ URL ä½ç½®æ‰¾åˆ° SDBC é©…å‹•ç¨‹å¼ã€‚";
-    Text[ turkish ] = "Harici veri kaynağına bağlantı kurulamadı. Verilen URL için SDBC sürücüsü bulunamadı.";
-    Text[ arabic ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
-    Text[ catalan ] = "No s'ha pogut establir la connexió a la base de dades externa. No s'ha trobat el controlador SDBC per aquesta URL.";
-    Text[ thai ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
-    Text[ czech ] = "NepodaÅ™ilo se vytvoÅ™it pÅ™ipojenÃ­ k externÃ­mu zdroji dat. Pro zadanÃ© URL nebyl nalezen Å¾Ã¡dnÃ½ SDBC ovladaÄ.";
-    Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber fÃ¼r die angegebene URL gefunden.";
-    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ à¤¦à¥€ à¤¹à¥à¤¯à¥€ URL à¤•à¥‡à¤²à¤¿à¤ à¤•à¥‹à¤ˆ SDBC à¤¡à¥à¤°à¤‡à¤µà¤° à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤† à¥¤";
-    Text[ slovak ] = "Spojenie k externÃ©mu zdroju dÃ¡t nemohlo byÅ¥ vytvorenÃ©. Pre zadanÃº URL adresu nebol nÃ¡jdenÃ½ SDBC driver.";
-    Text[ hungarian ] = "A kÃ¼lsÅ‘ adatforrÃ¡shoz valÃ³ csatlakozÃ¡s nem sikerÃ¼lt. Nem talÃ¡lhatÃ³ SDBC-illesztÅ‘program a megadott URL-hez.";
-    Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave z zunanjim virom podatkov. Za podani URL ni bil najden SDBC-gonilnik.";
+    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
+    Text [ en-US ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
 };
 
 String RID_STR_COULDNOTLOAD_MANAGER
 {
-    Text = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
-    Text [ english ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
-    Text [ english_us ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
-    Text[ portuguese ] = "Foi impossível estabelecer a ligação à base de dados externa. Não foi possível carregar o gestor de controladores SDBC.";
-    Text[ russian ] = "Íåâîçìîæíî ïîäêëş÷èòüñÿ ê âíåøíåìó èñòî÷íèêó äàííûõ. Äèñïåò÷åğ äğàéâåğà SDBC íå çàãğóæàåòñÿ.";
-    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá óıíäåóçò ìå ôçí åîùôåñéêŞ ğñïİëåõóç äåäïìİíùí. Äåí Şôáí äõíáôŞ ç öüñôùóç ôçò äéá÷åßñéóçò ğñïãñáììÜôùí ïäŞãçóçò SDBC.";
-    Text[ dutch ] = "De verbinding met de externe gegevensbron kan niet tot stand worden gebracht omdat het SDBC-driverbeheer niet kan worden geladen. ";
-    Text[ french ] = "Impossible d'établir une connexion à la source de données externe : le gestionnaire de pilotes SDBC n'a pas pu être chargé.";
-    Text[ spanish ] = "No se pudo realizar la conexión a la fuente de datos externa porque no se pudo cargar el gestor de controladores SDBC.";
-    Text[ finnish ] = "Yhteyttä ulkoiseen tietolähteeseen ei voitu muodostaa. SDBC-ohjaimen hallintaa ei voitu ladata.";
-    Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna in quanto non è stato caricato il gestore del driver SDBC.";
-    Text[ danish ] = "Der kunne ikke oprettes forbindelse til den eksterne datakilde. SDBC-driverhåndteringen kunne ikke indlæses.";
-    Text[ swedish ] = "Det gick inte att skapa förbindelsen till den externa datakällan. Det gick inte att ladda managern för SDBC-drivrutinen.";
-    Text[ polish ] = "Nie uda³o siê nawi¹zaæ po³¹czenia z zewnêtrznym Ÿród³em danych. Nie mo¿na za³adowaæ mened¿era sterownika SDCB.";
-    Text[ portuguese_brazilian ] = "Não foi possível estabelecer a conexão com o banco de dados externa. Não foi possível carregar o gerenciador de drivers SDBC.";
-    Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¸æ¥ç¶šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚SDBC ãƒ‰ãƒ©ã‚¤ãƒã®ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¯èª­ã¿è¾¼ã¿ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì›ë³¸ìœ¼ë¡œ ì—°ê²°í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. SDBC ë“œë¼ì´ë²„ ë§¤ë‹ˆì €ë¥¼ ë¡œë“œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•ä¸å¤–éƒ¨æ•°æ®æºå»ºç«‹è¿æ¥ã€‚æ— æ³•è£…å…¥ SDBC é©±åŠ¨ç¨‹åºç®¡ç†å™¨ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•èˆ‡å¤–éƒ¨çš„è³‡æ–™æºé€£ç·šã€‚ç„¡æ³•è¼‰å…¥ SDBC é©…å‹•ç¨‹å¼ç®¡ç†å“¡ã€‚";
-    Text[ turkish ] = "Harici veri kaynağına olan bağlantı sağlanamadı. SDBC sürücü yöneticisi yüklenemedi.";
-    Text[ arabic ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
-    Text[ catalan ] = "No s'ha pogut establir la connexió a la base de dades externa. No s'ha pogut carregar el controlador SDBC.";
-    Text[ thai ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
-    Text[ czech ] = "NepodaÅ™ilo se vytvoÅ™it pÅ™ipojenÃ­ k externÃ­mu zdroji dat. NepodaÅ™ilo se naÄÃ­st manaÅ¾er SDBC ovladaÄÅ¯.";
-    Text[ hebrew ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
-    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤•à¤¨à¥‡à¤•à¥à¤¶à¤¨ à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤ SDBC à¤¡à¥à¤°à¤‡à¤µà¤° à¤ªà¥à¤°à¤¬à¤‚à¤§à¤• à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Spojenie k externÃ©mu zdroju dÃ¡t nemohlo byÅ¥ vytvorenÃ©. Nemohol byÅ¥ spustenÃ½ SDBC driver manager.";
-    Text[ hungarian ] = "A kÃ¼lsÅ‘ adatforrÃ¡shoz valÃ³ csatlakozÃ¡s nem sikerÃ¼lt. Nem sikerÃ¼lt betÃ¶lteni az SDBC-illesztÅ‘programkezelÅ‘t.";
-    Text[ slovenian ] = "Ni mogoÄe vzpostaviti povezave z zunanjim virom podatkov. Upravitelja SDBC-gonilnikov ni mogoÄe naloÅ¾iti.";
+    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
+    Text [ en-US ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
 
 String RID_STR_ONLY_QUERY
 {
-    Text = "Der gesetzte Befehl ist kein SELECT-Befehl.\nEs sind nur Abfragen erlaubt.";
-    Text [ english_us ] = "The given command is not a SELECT statement.\n Only queries are allowed.";
+    Text [ de ] = "Der gesetzte Befehl ist kein SELECT-Befehl.\nEs sind nur Abfragen erlaubt.";
+    Text [ en-US ] = "The given command is not a SELECT statement.\n Only queries are allowed.";
 };
 String RID_STR_NO_VALUE_CHANGED
 {
-    Text = "Es wurden keine Werte verändert.";
-    Text [ english_us ] = "No values were modified.";
+    Text [ de ] = "Es wurden keine Werte verändert.";
+    Text [ en-US ] = "No values were modified.";
 };
 String RID_STR_NO_XROWUPDATE
 {
-    Text = "Es konnten keine Werte eingefügt werden. Die XRowUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
-    Text [ english_us ] = "Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.";
+    Text [ de ] = "Es konnten keine Werte eingefügt werden. Die XRowUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
+    Text [ en-US ] = "Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.";
 };
 String RID_STR_NO_XRESULTSETUPDATE
 {
-    Text = "Es konnten keine Werte eingefügt werden. Die XResultSetUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
-    Text [ english_us ] = "Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.";
+    Text [ de ] = "Es konnten keine Werte eingefügt werden. Die XResultSetUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
+    Text [ en-US ] = "Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.";
 };
 String RID_STR_NO_UPDATE_MISSING_CONDITION
 {
-    Text = "Die Werte konnten nicht verändert, auf Grund einer fehlenden Bedingung.";
-    Text [ english_us ] = "Values could not be modified, due to a missing condition statement.";
+    Text [ de ] = "Die Werte konnten nicht verändert, auf Grund einer fehlenden Bedingung.";
+    Text [ en-US ] = "Values could not be modified, due to a missing condition statement.";
 };
 String RID_STR_NO_COLUMN_ADD
 {
-    Text = "Das Hinzufügen von Spalten wird nicht unterstützt.";
-    Text [ english_us ] = "The adding of columns is not supported.";
+    Text [ de ] = "Das Hinzufügen von Spalten wird nicht unterstützt.";
+    Text [ en-US ] = "The adding of columns is not supported.";
 };
 String RID_STR_NO_COLUMN_DROP
 {
-    Text = "Das Löschen von Spalten wird nicht unterstützt.";
-    Text [ english_us ] = "The dropping of columns is not supported.";
+    Text [ de ] = "Das Löschen von Spalten wird nicht unterstützt.";
+    Text [ en-US ] = "The dropping of columns is not supported.";
 };
 String RID_STR_NO_CONDITION_FOR_PK
 {
-    Text = "Es konnte keine WHERE-Bedingung für den Primärschlüssel erstellt werden.";
-    Text [ english_us ] = "The WHERE condition could not be created for the primary key.";
+    Text [ de ] = "Es konnte keine WHERE-Bedingung für den Primärschlüssel erstellt werden.";
+    Text [ en-US ] = "The WHERE condition could not be created for the primary key.";
 };
 String RID_STR_COLUMN_UNKNOWN_PROP
 {
-    Text = "Die Spalte unterstützt die Eigenschaft '%value' nicht.";
-    Text [ english_us ] = "The column does not support the property '%value'.";
+    Text [ de ] = "Die Spalte unterstützt die Eigenschaft '%value' nicht.";
+    Text [ en-US ] = "The column does not support the property '%value'.";
 };
 String RID_STR_COLUMN_NOT_SEARCHABLE
 {
-    Text = "In dieser Spalte kann nicht gesucht werden.";
-    Text [ english_us ] = "The column is not searchable!";
+    Text [ de ] = "In dieser Spalte kann nicht gesucht werden.";
+    Text [ en-US ] = "The column is not searchable!";
 };
 String RID_STR_NOT_SEQUENCE_INT8
 {
-    Text = "Der Wert der Spalten ist nicht vom Type Sequence<sal_Int8>.";
-    Text [ english_us ] = "The value of the columns is not of the type Sequence<sal_Int8>.";
+    Text [ de ] = "Der Wert der Spalten ist nicht vom Type Sequence<sal_Int8>.";
+    Text [ en-US ] = "The value of the columns is not of the type Sequence<sal_Int8>.";
 };
 String RID_STR_COLUMN_NOT_VALID
 {
-    Text = "Die Spalte ist nicht gültig.";
-    Text [ english_us ] = "The column is not valid.";
+    Text [ de ] = "Die Spalte ist nicht gültig.";
+    Text [ en-US ] = "The column is not valid.";
 };
 String RID_STR_COLUMN_MUST_VISIBLE
 {
-    Text = "Die Spalte '%name' muß als Spalte sichtbar sein.";
-    Text [ english_us ] = "The column '%name' must be visible as a column.";
+    Text [ de ] = "Die Spalte '%name' muß als Spalte sichtbar sein.";
+    Text [ en-US ] = "The column '%name' must be visible as a column.";
 };
 String RID_STR_NO_XQUERIESSUPPLIER
 {
-    Text = "Die Schnittstelle XQueriesSupplier ist nicht verfügbar.";
-    Text [ english_us ] = "The interface XQueriesSupplier is not available.";
+    Text [ de ] = "Die Schnittstelle XQueriesSupplier ist nicht verfügbar.";
+    Text [ en-US ] = "The interface XQueriesSupplier is not available.";
 };
 String RID_STR_NOT_SUPPORTED_BY_DRIVER
 {
-    Text = "Der Treiber unterstützt diese Funktion nicht.";
-    Text [ english_us ] = "The driver does not support this function.";
+    Text [ de ] = "Der Treiber unterstützt diese Funktion nicht.";
+    Text [ en-US ] = "The driver does not support this function.";
 };
 String RID_STR_NO_ABS_ZERO
 {
-    Text = "Ein 'absolute(0)' Aufruf ist nicht erlaubt.";
-    Text [ english_us ] = "An 'absolute(0)' call is not allowed.";
+    Text [ de ] = "Ein 'absolute(0)' Aufruf ist nicht erlaubt.";
+    Text [ en-US ] = "An 'absolute(0)' call is not allowed.";
 };
 String RID_STR_NO_RELATIVE
 {
-    Text = "Eine relative Positionierung ist in diesem Status nicht erlaubt.";
-    Text [ english_us ] = "Relative positioning is not allowed in this state.";
+    Text [ de ] = "Eine relative Positionierung ist in diesem Status nicht erlaubt.";
+    Text [ en-US ] = "Relative positioning is not allowed in this state.";
 };
 String RID_STR_NO_REFESH_AFTERLAST
 {
-    Text = "Eine Zeile kann nicht aktualisiert werden, wenn das ResultSet hinter der letzten Zeile steht.";
-    Text [ english_us ] = "A row  cannot be refreshed when the ResultSet is positioned after  the last row.";
+    Text [ de ] = "Eine Zeile kann nicht aktualisiert werden, wenn das ResultSet hinter der letzten Zeile steht.";
+    Text [ en-US ] = "A row  cannot be refreshed when the ResultSet is positioned after  the last row.";
 };
 String RID_STR_NO_MOVETOINSERTROW_CALLED
 {
-    Text = "Das Einfügen einer neuen Zeile ist nicht erlaubt, wenn das ResultSet sich nicht vorher auf die Einfügezeile bewegt.";
-    Text [ english_us ] = "A new row cannot be inserted when the ResultSet is not first moved to the insert row.";
+    Text [ de ] = "Das Einfügen einer neuen Zeile ist nicht erlaubt, wenn das ResultSet sich nicht vorher auf die Einfügezeile bewegt.";
+    Text [ en-US ] = "A new row cannot be inserted when the ResultSet is not first moved to the insert row.";
 };
 String RID_STR_NO_UPDATEROW
 {
-    Text = "Eine Zeile kann in diesem Status nicht verändert werden.";
-    Text [ english_us ] = "A row cannot be modified in this state";
+    Text [ de ] = "Eine Zeile kann in diesem Status nicht verändert werden.";
+    Text [ en-US ] = "A row cannot be modified in this state";
 };
 String RID_STR_NO_DELETEROW
 {
-    Text = "Eine Zeile kann in diesem Status nicht gelöscht werden.";
-    Text [ english_us ] = "A row cannot be deleted in this state.";
+    Text [ de ] = "Eine Zeile kann in diesem Status nicht gelöscht werden.";
+    Text [ en-US ] = "A row cannot be deleted in this state.";
 };
 String RID_STR_NO_TABLE_RENAME
 {
-    Text = "Der Treiber unterstützt das Umbenennen einer Tabelle nicht.";
-    Text [ english_us ] = "The driver does not support table renaming.";
+    Text [ de ] = "Der Treiber unterstützt das Umbenennen einer Tabelle nicht.";
+    Text [ en-US ] = "The driver does not support table renaming.";
 };
 String RID_STR_NO_ALTER_COLUMN_DEF
 {
-    Text = "Der Treiber unterstützt das Verändern einer Spaltendefinition nicht.";
-    Text [ english_us ] = "The driver does not support the modification of column descriptions.";
+    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition nicht.";
+    Text [ en-US ] = "The driver does not support the modification of column descriptions.";
 };
 String RID_STR_COLUMN_ALTER_BY_NAME
 {
-    Text = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Namens, nicht.";
-    Text [ english_us ] = "The driver does not support the modification of column descriptions by changing the name.";
+    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Namens, nicht.";
+    Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the name.";
 };
 String RID_STR_COLUMN_ALTER_BY_INDEX
 {
-    Text = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
-    Text [ english_us ] = "The driver does not support the modification of column descriptions by changing the  index.";
+    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
+    Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the  index.";
 };
