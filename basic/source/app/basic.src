@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:39:56 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,11 +725,11 @@ ErrorBox IDS_PATTERNNOTFOUND {
     TITLE [ english_us ] = "StarBasic Error";
     MESSAGE = "Suchbegriff nicht gefunden!";
     MESSAGE [ english_us ] = "Search key not found!";
-    MESSAGE[ portuguese ] = "Impossível encontrar expressão procurada!";
+    MESSAGE[ portuguese ] = "Erro StarBasic";
     MESSAGE[ russian ] = "Search key not found!";
     MESSAGE[ greek ] = "Search key not found!";
     MESSAGE[ dutch ] = "Zoekbegrip niet gevonden!";
-    MESSAGE[ french ] = "Élément recherché introuvable !";
+    MESSAGE[ french ] = "Terme recherché introuvable !";
     MESSAGE[ spanish ] = "¡No se encontró el término buscado!";
     MESSAGE[ italian ] = "Impossibile trovare chiave di ricerca.";
     MESSAGE[ danish ] = "Search key not found!";
@@ -741,7 +741,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     MESSAGE[ chinese_simplified ] = "Search key not found!";
     MESSAGE[ chinese_traditional ] = "Search key not found!";
     MESSAGE[ arabic ] = "Search term not found!";
-    Title[ portuguese ] = "StarBasic-Fehler";
+    Title[ portuguese ] = "StarBasic-Fehler!";
     Title[ russian ] = "StarBasic-Fehler";
     Title[ greek ] = "StarBasic Error";
     Title[ dutch ] = "StarBasic-Fehler";
