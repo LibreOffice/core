@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:45:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΪΟ ία ΗαΞαΗνΗ ΗαγζΜζΟΙ έν δΨΗή ΘνΗδΗΚ γΗ ζΗαΚν Κέν γΝΚζνΗΚεΗ ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Telt alle cellen van een gegevensbereik, waarvan de inhoud aan de criteria voldoet.";
             Text[ chinese_simplified ] = "θ®΅η®—δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„ε•ε…ƒζ Όζ•°η›®γ€‚";
-            Text[ greek ] = "Αριθμεί όλα τα κελιά μιας περιοχής δεδομένων τα οποία δεν είναι κενά και εκπληρώνουν τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Αριθμεί όλα τα κελιά μιας περιοχής δεδομένων τα οποία δεν είναι κενά και πληρούν τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” μ…€μ κ°μλ¥Ό μ…‰λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcreleri sayar.";
             Text[ language_user1 ] = " ";
@@ -374,7 +374,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΪΟ ία ΗαΞαΗνΗ ΫνΡ ΗαέΗΡΫΙ ΗαγζΜζΟΙ έν δΨΗή ΘνΗδΗΚ γΗ΅ ζΗαΚν Κέν γΝΚζνΗΚεΗ ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Telt alle niet-lege cellen van een gegevensbereik waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "θ®΅η®—δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„δΈ”δΈζ―η©Ίη™½η„ε•ε…ƒζ Όζ•°η›®γ€‚";
-            Text[ greek ] = "Αριθμεί όλα τα κελιά μιας περιοχής δεδομένων τα οποία δεν είναι κενά και εκπληρώνουν τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Αριθμεί όλα τα κελιά μιας περιοχής δεδομένων τα οποία δεν είναι κενά και πληρούν τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λΉ„μ–΄ μμ§€ μ•μ€ λª¨λ“  μ…€μ κ°μλ¥Ό μ…‰λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda bulunup iηerikleri arama φlηόtlerine uyan ve boώ olmayan hόcreleri sayar.";
             Text[ language_user1 ] = " ";
@@ -623,7 +623,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Κίζδ ΗαζΣΨ ΗαΝΣΗΘν αία ΗαΞαΗνΗ ΗαγζΜζΟΙ δΨΗή ΘνΗδΗΚ γΗ ζΗαΚν Κέν γΝΚζνΗΚεΗ ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Berekent de gemiddelde waarde van alle cellen van een gegevensbereik waarvan de inhoud overeenkomt met de zoekcriteria.";
             Text[ chinese_simplified ] = "θ®΅η®—δΈ€δΈªζ•°ζ®εΊεδΈ­η¬¦εζε―»ζ΅δ»¶η„ζ•°ζ®η„εΉ³ε‡ε€Όγ€‚";
-            Text[ greek ] = "Δίνει την μέση τιμή όλων των κελιών μιας περιοχής δεδομένων, της οποίας τα περιεχόμενα εκπληρώνουν τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Δίνει την μέση τιμή όλων των κελιών μιας περιοχής δεδομένων, της οποίας τα περιεχόμενα πληρούν τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λª¨λ“  μ…€μ ν‰κ· κ°’μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan hόcrelerin ortalamasύnύ verir.";
             Text[ language_user1 ] = " ";
@@ -872,7 +872,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΣΚΞΡΜ γΝΚζμ ΞανΙ δΨΗή ΘνΗδΗΚ Κέν ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Geeft de inhoud van de cel in een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "η΅®ε®δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„η¬¬δΈ€δΈªε•ε…ƒζ Όη„ε†…ε®Ήγ€‚";
-            Text[ greek ] = "Δίνει το περιεχόμενο ενός κελιού μιας περιοχής δεδομένων, του οποίο το περιεχόμενο εκπληρώνει τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Δίνει το περιεχόμενο ενός κελιού μιας περιοχής δεδομένων, του οποίο το περιεχόμενο πληροί τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” μ…€μ λ‚΄μ©μ„ μ§€μ •ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηeriπi arama φlηόtlerine uyan hόcrenin iηeriπini verir.";
             Text[ language_user1 ] = " ";
@@ -1121,7 +1121,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΟΟ ΗαΝΟ ΗαΓήΥμ αία ΞαΗνΗ δΨΗή ΘνΗδΗΚ γΗ Κέν γΝΚζνΗΚεΗ ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Bepaalt de maximumwaarde van alle cellen van een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "ζ‰Ύε‡Ίζ•°ζ®εΊεδΈ­η¬¦εζε―»ζ΅δ»¶η„ε•ε…ƒζ Όη„ζ€ε¤§ζ•°ε€Όγ€‚";
-            Text[ greek ] = "Καθορίζει .την μέγιστη τιμή όλων των κελιών μιας περιοχής δεδομένων, της οποίας τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Καθορίζει την μέγιστη τιμή όλων των κελιών μιας περιοχής δεδομένων, της οποίας τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λª¨λ“  μ…€μ μµλ€κ°’μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin azami deπerini verir.";
             Text[ language_user1 ] = " ";
@@ -1619,7 +1619,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΦΡΘ ήνγ ία ΞαΗνΗ δΨΗή ΘνΗδΗΚ γΗ Κέν ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Vermenigvuldigt alle cellen in een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„ζ‰€ζ‰ε•ε…ƒζ Όη„δΉη§―γ€‚";
-            Text[ greek ] = "Πολλαπλασιάζει όλα τα κελιά της περιοχής δεδομένων, των οποίων τα περιεχόμενα εκπληρώνουν τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Πολλαπλασιάζει όλα τα κελιά της περιοχής δεδομένων, των οποίων τα περιεχόμενα πληρούν τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λª¨λ“  μ…€μ„ κ³±ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri alanύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcreleri ηarpar.";
             Text[ language_user1 ] = " ";
@@ -1868,7 +1868,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΟΟ ΗαΗδΝΡΗέ ΗαγΪνΗΡν αία ΞαΗνΗ δΨΗή ΘνΗδΗΚ γΗ΅ ζΗαΚν Κέν ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Bepaalt de standaarddeviatie van alle cellen in een gegevensbereik, waarvan de inhoud voldoet aan de criteria.";
             Text[ chinese_simplified ] = "δΌ°η®—δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„ζ‰€ζ‰ε•ε…ƒζ ΌδΈ­\nζ•°ζ®η„ζ ‡ε‡†εε·®γ€‚";
-            Text[ greek ] = "Ορίζει την τυπική απόκλιση όλων των κελιών μιας περιοχής δεδομένων, τα περιεχόμενα των οποίων εκπληρώνουν τα κριτήρια αναζήτησης.";
+            Text[ greek ] = "Ορίζει την τυπική απόκλιση όλων των κελιών μιας περιοχής δεδομένων, τα περιεχόμενα των οποίων πληρούν τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λª¨λ“  μ…€μ ν‘μ¤€ νΈμ°¨λ¥Ό κ³„μ‚°ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin standart sapmasύnύ hesaplar.";
             Text[ language_user1 ] = " ";
@@ -2117,7 +2117,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΟΟ ΗαΗδΝΡΗέ ΗαγΪνΗΡν ΗαγΚΪαή ΘΗαγΜΚγΪ ΘΓίαγε ΗΣΚδΗΟΗπ αία ΞαΗνΗ δΨΗή ΘνΗδΗΚ Κέν γΝΚζνΗΚεΗ ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Berekent de standaarddeviatie m.b.t. de hele populatie van de cellen van een gegevensbereik, waarvan de inhoud aan de criteria voldoet.";
             Text[ chinese_simplified ] = "θ®΅η®—δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„ζ‰€ζ‰ε•ε…ƒζ ΌδΈ­ζ•°ζ®η„ζ€»δ½“ζ ‡ε‡†εε·®γ€‚";
-            Text[ greek ] = "Ορίζει την τυπική απόκλιση σχετικά με τον συνολικό πληθυσμό όλων των κελιών μιας περιοχής δεδομένων, τα περιεχόμενα των οποίων εκπληρώνου? ";
+            Text[ greek ] = "Επιστρέφει την τυπική απόκλιση σε σχέση με τον πληθυσμό όλων των κελιών μιας περιοχής δεδομένων που συμφωνεί με τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λª¨λ“  μ…€μ λª¨μ§‘λ‹¨μ— κ΄€λ ¨λ ν‘μ¤€ νΈμ°¨λ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin popόlasyonu ile ilgili standart sapmayύ belirler.";
             Text[ language_user1 ] = " ";
@@ -2864,7 +2864,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΣΘ ΚΘΗνδ ΗαγΜΚγΪ ΘΓίγαε ΗΣΚδΗΟΗπ Εαμ ία ΞαΗνΗ δΨΗή ΘνΗδΗΚ γΗ Κέν γΝΚζνΗΚεΗ ΘγΪΗννΡ ΗαΘΝΛ.";
             Text[ dutch ] = "Bepaalt de variantie m.b.t. de hele populatie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "θ®΅η®—δΈ€δΈªζ•°ζ®εΊεε†…η¬¦εζε―»ζ΅δ»¶η„ζ‰€ζ‰ε•ε…ƒζ ΌδΈ­ζ•°ζ®η„ζ€»δ½“ζ–Ήε·®γ€‚";
-            Text[ greek ] = "Υπολογίζει τη διακύμανση του πληθυσμού με βάση όλα τα κελιά της περιοχής δεδομένων, των οποίων τα περιεχόμενα επαληθεύουν τα κριτήρια αναζ ";
+            Text[ greek ] = "Καθορίζει τη διακύμανση ενός πληθυσμού βάσει όλων των κελιών σε μια περιοχή δεδομένων όπου τα περιεχόμενα συμφωνούν με τα κριτήρια αναζήτησης.";
             Text[ korean ] = "κ²€μƒ‰ κΈ°μ¤€κ³Ό μΌμΉν•λ” κ°’μ„ ν¬ν•¨ν•λ” λª¨λ“  μ…€μ„ κΈ°μ¤€μΌλ΅ λª¨μ§‘λ‹¨ λ¶„μ‚°μ„ μ§€μ •ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin popόlasyonu ile ilgili varyansύ belirler.";
             Text[ language_user1 ] = " ";
@@ -5354,7 +5354,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΟΟ Ηανζγ ΗαΓζα έν ΗαΓΣΘζΪ.";
             Text[ dutch ] = "Bepaalt de eerste dag van de week (1 = zondag, andere waarde = maandag).";
             Text[ chinese_simplified ] = "θ®Ύε®ζ―ε‘¨η„η¬¬δΈ€ε¤©(1 = ζζζ—¥οΌε¦ε™ = ζζδΈ€οΌ‰γ€‚";
-            Text[ greek ] = "Ορίζει την πρώτη ημέρα της εβδομάδας.";
+            Text[ greek ] = "Δείχνει την πρώτη ημέρα της εβδομάδας (1 = Κυριακή, άλλες τιμές = Δευτέρα).";
             Text[ korean ] = "μ£Όμ μ‹μ‘ μ”μΌμ„ λ‚νƒ€λƒ…λ‹λ‹¤(1=μΌμ”μΌ, λ‹¤λ¥Έ κ°’=μ›”μ”μΌ).";
             Text[ turkish ] = "Haftanύn birinci gόnόnό belirler. ( 1 = Pazar, diπer deπiώkenler = Pazartesi )";
             Text[ language_user1 ] = " ";
@@ -10680,7 +10680,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΣΘ ΗΣΚεαΗί ΗαγζΜζΟΗΚ έν έΚΡΙ γΝΟΟΙ΅ ΘΗΣΚΞΟΗγ ΨΡνήΙ ΗαΗΣΚεαΗί ΗαγΚδΗήΥ ΗαγÒΟζΜ.";
             Text[ dutch ] = "Variable declining balance. Berekent de afschrijving van activa over een bepaalde periode met behulp van de \"variable declining balance\"-methode..";
             Text[ chinese_simplified ] = "ε―εδ½™ιΆι€’ε‡ζ³•γ€‚θ®΅η®—ζ‡ε®ζι—΄ε†…η„η®—ζ―ι€’ε‡ε‹θµ„δΊ§ζζ—§ιΆγ€‚";
-            Text[ greek ] = "\"Variable declining balance\". Υπολογίζει την αριθμητική-φθίνουσα απόσβεση μιας συγκεκριμένης περιόδου.";
+            Text[ greek ] = "Variable declining balance. Υπολογίζει την αριθμητική-φθίνουσα απόσβεση μιας συγκεκριμένης περιόδου.";
             Text[ korean ] = "λ³€λ™ μ²΄κ°λ²•μ…λ‹λ‹¤. νΉμ • κΈ°κ°„μ μ •λ¥  κ°κ°€μƒκ°μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Deπiώken azalan bakiye. Belirli bir dφnem iηin aritmetik-azalan amortismandeπerini hesaplar.";
             Text[ language_user1 ] = " ";
@@ -11565,7 +11565,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΣΘ ΗαήνγΙ ΗαΥΗένΙ ΗαΝΗανΙ αΗΣΚΛγΗΡ ΗΣΚδΗΟΗπ Εαμ γΪΟα ΗαΞΥγ ζΕαμ ΣαΣαΙ ΗαΟέΪΗΚ ΗαγΣΚήΘανΙ.";
             Text[ dutch ] = "Berekent de netto huidige waarde van een investering op basis van een rentevoet bij periodieke betalingen.";
             Text[ chinese_simplified ] = "ε‡€η°ι‡‘ε€Όγ€‚ε¨θ΄΄η°η‡ε›Ίε®δΈ”ε®ζζ”―δ»η„ζƒ…ε†µδΈ‹δΈοΌθ®΅η®—δΈ€ι΅Ήζ•θµ„η„ε‡€η°ι‡‘ε€Όγ€‚";
-            Text[ greek ] = "Καθαρή παρούσα αξία. Υπολογίζει την αξία του κεφαλαίου μιας επένδυσης σε βάση ενός παράγοντα προεξοφλητικού επιτοκίου με περιοδικές πληρω ";
+            Text[ greek ] = "Καθαρή παρούσα αξία. Υπολογίζει την καθαρή παρούσα αξία μιας επένδυσης βάσει μιας σειράς περιοδικών πληρωμών και ενός προεξοφλητικού επιτοκίου.";
             Text[ korean ] = "μ ν„μ¬ κ°€μΉμ…λ‹λ‹¤. μ •κΈ°μ μΌλ΅ μΌμ • κΈμ•΅μ„ λ‚©μ…ν•κ³  μΌμ •ν• μ΄μμ¨μ„ μ μ©ν•λ” ν¬μμ μ ν„μ¬ κ°€μΉλ¥Ό κ³„μ‚°ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Bugόnkό net deπer. Bir yatύrύmύn, periyodik φdemeler ve indirim oranύ faktφrό bazύnda bugόnkό net deπerini hesaplar.";
             Text[ language_user1 ] = " ";
@@ -11822,7 +11822,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Υένέ Γζ γΡΜΪ Εαμ ΞαΗνΗ ΚΚΨΗΘή γΝΚζνΗΚεΗ γΪ ΗαΟέΪΗΚ. ";
             Text[ dutch ] = "Matrix of celverwijzing naar cellen waarvan de inhoud overeenkomt met de betalingen.";
             Text[ chinese_simplified ] = "ε«ζ‰ζ”―δ»ι‡‘ιΆη„ε•ε…ƒζ Όη»„ζ–ε•ε…ƒζ ΌεΌ•η”¨γ€‚ ";
-            Text[ greek ] = "Μήτρα ή αναφορά κελιού σε κελιά, των οποίων τα περιεχόμενα αντιστοιχούν στις πληρωμές. ";
+            Text[ greek ] = "Πίνακας ή παραπομπή κελιού σε κελιά, των οποίων τα περιεχόμενα αντιστοιχούν στις πληρωμές. ";
             Text[ korean ] = "μ…€μ λ‚΄μ©μ΄ μ§€λ¶μ— ν•΄λ‹Ήν•λ” μ…€μ λ°°μ—΄ λλ” μ°Έμ΅°μ…λ‹λ‹¤. ";
             Text[ turkish ] = "έηerikleri, φdemelere uyan hόcrelere referans ya da matris. ";
             Text[ language_user1 ] = " ";
@@ -11913,7 +11913,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Returns the modified internal rate of return for a series of investments.";
             Text[ portuguese ] = "Calcula a taxa de rentabilidade interna de uma sιrie de investimentos.";
             Text[ russian ] = "Βϋχθρλÿες μξδθτθφθπξβΰννσώ βνσςπεννώώ νξπμσ οπθαϋλθ πÿδΰ θνβερςθφθι.";
-            Text[ greek ] = "Υπολογίζει την τροποποιημένη εσωτερική ροή επιτοκίου μιας σειράς επενδύσεων.";
+            Text[ greek ] = "Επιστρέφει τον τροποποιημένο εσωτερικό συντελεστή απόδοσης για μια σειρά επενδύσεων.";
             Text[ dutch ] = "Geeft als resultaat de gemodificeerde interne rentevoet in een reeks van investeringen.";
             Text[ french ] = "Calcule le taux de rentabilitι interne modifiι pour une sιrie d'investissements.";
             Text[ spanish ] = "Calcula el tipo de interιs de una serie de inversiones.";
@@ -11979,7 +11979,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "An array or reference to cells whose contents correspond to the payments.";
             Text[ portuguese ] = "Uma matriz ou uma referκncia a cιlulas, cujos conteϊdos correspondem aos pagamentos.";
             Text[ russian ] = "Μΰρρθβ θλθ ρρϋλκΰ νΰ ÿχεικθ, ρξδεπζθμξε κξςξπϋυ ρξξςβεςρςβσες ολΰςεζΰμ.";
-            Text[ greek ] = "Μια μήτρα ή μια αναφορά σε κελιά, των οποίων τα περιεχόμενα αντιστοιχούν στις πληρωμές.";
+            Text[ greek ] = "Ένας πίνακας ή μια παραπομπή σε κελιά των οποίων τα περιεχόμενα αντιστοιχούν στις πληρωμές.";
             Text[ dutch ] = "Matrix of celverwijzing naar cellen waarvan de inhoud overeenkomt met de betalingen.";
             Text[ french ] = "Une matrice ou une rιfιrence ΰ des cellules dont le contenu correspond aux paiements.";
             Text[ spanish ] = "Matriz o referencia de celda a celdas cuyo contenido corresponde a los pagos.";
@@ -12039,7 +12039,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Interest rate for investments (the negative values in the array).";
             Text[ portuguese ] = "Taxa de juro dos investimentos (valores negativos da matriz).";
             Text[ russian ] = "Νξπμΰ οπθαϋλθ θνβερςθφθθ (ξςπθφΰςελόνϋε ηνΰχενθÿ μΰρρθβΰ).";
-            Text[ greek ] = "Ροή επιτοκίου των επενδύσεων (οι αρνητικές τιμές της μήτρας).";
+            Text[ greek ] = "Το επιτόκιο για επενδύσεις (οι αρνητικές τιμές στον πίνακα).";
             Text[ dutch ] = "rentevoet bij investeringen (de negatieve waarden in de matrix).";
             Text[ french ] = "Taux de rentabilitι des investissements (les valeurs nιgatives de la matrice).";
             Text[ spanish ] = "Tipo de interιs de las inversiones (los valores negativos de la matriz).";
@@ -12069,7 +12069,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "reinvest_rate";
             Text[ portuguese ] = "Reinvestimento";
             Text[ russian ] = "Οξβςξπνΰÿ θνβερςθφθÿ";
-            Text[ greek ] = "Επανεπένδυση";
+            Text[ greek ] = "επιτόκιο_επανεπένδυσης";
             Text[ dutch ] = "Herinvestering";
             Text[ french ] = "Rιinvestissement";
             Text[ spanish ] = "Reinversiσn";
@@ -12099,7 +12099,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "interest rate for reinvestments (the positive values in the array).";
             Text[ portuguese ] = "Taxa de juro dos reinvestimentos (valores positivos da matriz).";
             Text[ russian ] = "Νξπμΰ οπθαϋλθ οξβςξπνϋυ θνβερςθφθι (οξλξζθςελόνϋε ηνΰχενθÿ μΰρρθβΰ).";
-            Text[ greek ] = "Ροή επιτοκίου της επαναεπένδυσης (οι θετικές τιμές της μήτρας).";
+            Text[ greek ] = "Το επιτόκιο για επανεπενδύσεις (οι θετικές τιμές στον πίνακα).";
             Text[ dutch ] = "Rentevoet bij herinvesteringen (de positieve waarden in de matrix).";
             Text[ french ] = "Taux de rentabilitι des rιinvestissements (les valeurs positives de la matrice).";
             Text[ spanish ] = "Tipo de interιs de las reinversiones (los valores positivos de la matriz)";
@@ -12133,7 +12133,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Returns the amount of interest for constant amortization rates.";
             Text[ portuguese ] = "Calcula o montante dos juros a taxas de amortizaηγo constantes.";
             Text[ russian ] = "Βϋχθρλÿες πΰημεπ οπξφενςνξι ρςΰβκθ οπθ οξρςξÿννϋυ νξπμΰυ οξγΰψενθÿ.";
-            Text[ greek ] = "Returns the amount of interest for constant redemption rates.";
+            Text[ greek ] = "Επιστρέφει το ποσό του τόκου για σταθερά χρεολυτικά επιτόκια.";
             Text[ dutch ] = "Berekent de hoogte van de rente bij gelijkblijvende aflossingstermijnen.";
             Text[ french ] = "Calcule le montant des intιrκts pour un emprunt ΰ remboursement constant.";
             Text[ spanish ] = "Calcula los intereses en una amortizaciσn constante.";
@@ -12169,7 +12169,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "rate";
             Text[ portuguese ] = "Taxa";
             Text[ russian ] = "Οπξφενς";
-            Text[ greek ] = "Επιτόκιο";
+            Text[ greek ] = "επιτόκιο";
             Text[ dutch ] = "rente";
             Text[ french ] = "Taux";
             Text[ spanish ] = "Interιs";
@@ -12199,7 +12199,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Interest rate for a single amortization rate.";
             Text[ portuguese ] = "Taxa de juro correspondente a um determinado perνodo de amortizaηγo.";
             Text[ russian ] = "Γξδξβξι οπξφενς ηΰ ξδνσ νξπμσ οξγΰψενθÿ.";
-            Text[ greek ] = "Interest rate of a single redemption rate.";
+            Text[ greek ] = "Το επιτόκιο για την περίπτωση μοναδικού χρεολυτικού επιτοκίου.";
             Text[ dutch ] = "Rentevoet voor een aflossingstermijn.";
             Text[ french ] = "Taux d'intιrκt pour une pιriode d'amortissement.";
             Text[ spanish ] = "Tipo de interιs para una tasa de amortizaciσn.";
@@ -12229,7 +12229,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Period";
             Text[ portuguese ] = "Perνodo";
             Text[ russian ] = "Οεπθξδ";
-            Text[ greek ] = "Χρονικό διάστημα";
+            Text[ greek ] = "Περίοδος";
             Text[ dutch ] = "termijn";
             Text[ french ] = "Pιriodes";
             Text[ spanish ] = "Perνodo";
@@ -12259,7 +12259,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Number of amortization periods for the calculation of the interest.";
             Text[ portuguese ] = "Nϊmero de perνodos de amortizaηγo para o cαlculo dos juros.";
             Text[ russian ] = "Κξλθχερςβξ οεπθξδξβ οξγΰψενθÿ δλÿ πΰρχεςΰ οπξφενςνξι ρςΰβκθ.";
-            Text[ greek ] = "Count of amortization periods for the calculation of the interest.";
+            Text[ greek ] = "Αριθμός χρεολυτικών περιόδων για τον υπολογισμό του τόκου.";
             Text[ dutch ] = "Aantal aflossingstermijnen voor de berekening van de rente.";
             Text[ french ] = "Nombre de pιriodes d'amortissement pour le calcul des intιrκts.";
             Text[ spanish ] = "Cantidad de periodos de amortizaciσn para el cαlculo de intereses.";
@@ -12289,7 +12289,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "total_periods";
             Text[ portuguese ] = "Total_perνodos";
             Text[ russian ] = "Βρεγξ οεπθξδξβ";
-            Text[ greek ] = "total_periods";
+            Text[ greek ] = "σύνολο_περιόδων";
             Text[ dutch ] = "gehele_termijn";
             Text[ french ] = "Durιe_totale";
             Text[ spanish ] = "Perνodo_total";
@@ -12319,7 +12319,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Sum total of amortization periods.";
             Text[ portuguese ] = "Soma total dos perνodos de amortizaηγo.";
             Text[ russian ] = "Ξαωεε κξλθχερςβξ οεπθξδξβ οξγΰψενθÿ.";
-            Text[ greek ] = "Sum total of amortization periods.";
+            Text[ greek ] = "Συνολικό άθροισμα των χρεολυτικών περιόδων.";
             Text[ dutch ] = "Totaal aantal aflossingstermijnen.";
             Text[ french ] = "Nombre total de pιriodes d'amortissement.";
             Text[ spanish ] = "Cantidad total de periodos de amortizaciσn.";
@@ -12349,7 +12349,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "invest";
             Text[ portuguese ] = "Investimento";
             Text[ russian ] = "Θνβερςθφθÿ";
-            Text[ greek ] = "invest";
+            Text[ greek ] = "επένδυση";
             Text[ dutch ] = "investering";
             Text[ french ] = "Investissement";
             Text[ spanish ] = "Inversiσn";
@@ -12379,7 +12379,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Amount of the investment.";
             Text[ portuguese ] = "Montante do investimento.";
             Text[ russian ] = "Ρσμμΰ θνβερςθφθθ.";
-            Text[ greek ] = "Amount of the investment.";
+            Text[ greek ] = "Το ποσό της επένδυσης.";
             Text[ dutch ] = "Investeringsbedrag";
             Text[ french ] = "Montant de l'investissement.";
             Text[ spanish ] = "Cantidad de la inversiσn.";
@@ -12928,7 +12928,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚήΟγ TRUE΅ ΕΠΗ ίΗδΚ value γΡΜΪΗπ.";
             Text[ dutch ] = "Resulteert in WAAR als de waarde een verwijzing is.";
             Text[ chinese_simplified ] = "ε¦‚ζθΏ™δΈªζ•°ε€Όζ―δΈ€δΈªεΌ•η”¨οΌι‚£ε°±ει¦ TRUE γ€‚";
-            Text[ greek ] = "Δίνει TRUE αν η τιμή είναι μια αναφορά.";
+            Text[ greek ] = "Δίνει TRUE αν η τιμή είναι μια παραπομπή.";
             Text[ korean ] = "κ°’μ΄ μ°Έμ΅°μ΄λ©΄ TRUEλ¥Ό λλ ¤μ¤λ‹λ‹¤.";
             Text[ turkish ] = "Deπer bir referans ise sonuη DOΠRU olur.";
             Text[ language_user1 ] = " ";
@@ -13267,7 +13267,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚήΟγ TRUE΅ ΕΠΗ ίΗδΚ value ΚΤνΡ Εαμ ΞανΙ έΗΡΫΙ.";
             Text[ dutch ] = "Resulteert in WAAR als de waarde een verwijzing naar een lege cel is.";
             Text[ chinese_simplified ] = "ε¦‚ζζ•°ε€Όζ―δΈ€δΈªη©Ίη™½η„ε•ε…ƒζ Όη„εΌ•η”¨οΌι‚£δΉε°±ει¦ TRUE γ€‚";
-            Text[ greek ] = "Δίνει TRUE αν η τιμή είναι μια αναφορά σε ένα κενό κελί.";
+            Text[ greek ] = "Δίνει TRUE αν η τιμή είναι μια παραπομπή σε ένα κενό κελί.";
             Text[ korean ] = "κ°’μ΄ λΉ μ…€μ„ μ°Έμ΅°ν•λ©΄ TRUEλ¥Ό λλ ¤μ¤λ‹λ‹¤.";
             Text[ turkish ] = "Deπer, boώ bir hόcreyle ilgiliyse alύyorsa sonuη DOΠRU olur.";
             Text[ language_user1 ] = " ";
@@ -13986,7 +13986,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -14079,7 +14079,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Reference";
             Text[ portuguese ] = "Referκncia";
             Text[ russian ] = "Ρρϋλκΰ";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ dutch ] = "Referentie";
             Text[ french ] = "Rιfιrence";
             Text[ spanish ] = "Referencia";
@@ -14412,7 +14412,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Determines information about address, formatting or contents of a cell.";
             Text[ portuguese ] = "Devolve informaηυes sobre endereηo, formato ou conteϊdo de uma cιlula.";
             Text[ russian ] = "Ξοπεδελÿες θντξπμΰφθώ ξα ΰδπερε, τξπμΰςθπξβΰνθθ θλθ ρξδεπζθμξμ ÿχεικθ.";
-            Text[ greek ] = "Determines information about address, formatting or contents of a cell.";
+            Text[ greek ] = "Καθορίζει πληροφορίες σχετικά με τη διεύθυνση, τη μορφοποίηση ή τα περιεχόμενα ενός κελιού.";
             Text[ dutch ] = "Geeft als resultaat gegevens over adres, opmaak of inhoud van een cel.";
             Text[ french ] = "Renvoie des informations concernant la position, le format ou le contenu d'une cellule.";
             Text[ spanish ] = "Determina la informaciσn sobre direcciones, formato o contenido de una celda.";
@@ -14478,7 +14478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "String that specifies the type of information.";
             Text[ portuguese ] = "Cadeia de caracteres que determina o tipo de informaηγo.";
             Text[ russian ] = "Ρςπξκΰ, σκΰηϋβΰώωΰÿ ςθο θντξπμΰφθθ.";
-            Text[ greek ] = "Κείμενο, το οποίο καθορίζει τον τύπο της πληροφορίας";
+            Text[ greek ] = "Συμβολοσειρά που καθορίζει τον τύπο της πληροφορίας.";
             Text[ dutch ] = "Tekenreeks die bepalend is voor het soort gegevens.";
             Text[ french ] = "Chaξne de caractθres dιterminant le type d'information.";
             Text[ spanish ] = "Cadena de caracteres que determina el tipo de informaciσn.";
@@ -14508,7 +14508,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ english_us ] = "Reference";
             Text[ portuguese ] = "Referκncia";
             Text[ russian ] = "Ρρϋλκΰ";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ dutch ] = "referentie";
             Text[ french ] = "Rιfιrence";
             Text[ spanish ] = "Referencia";
@@ -14584,7 +14584,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "Οεπεδΰες ηνΰχενθε τξπμσλϋ β ςεκσωει οξηθφθθ.";
             Text[ polish ] = "Oblicza bieΏΉcΉ wartoζ formu³y w aktualnej pozycji.";
             Text[ japanese ] = "γ“γ®δ½η½®γ®γ“γ®ι–Άζ•°γ§γ®ζ•°εΌγ®ζ•°ε€¤γ‚’θΏ”γ—γΎγ™γ€‚";
-            Text[ language_user1 ] = "Fehl; Fehler im Deutschen: Posktion";
+            Text[ language_user1 ] = "; Fehl; Fehler im Deutschen: Posktion";
             Text[ chinese_traditional ] = "θ¨η®—ε‡½ζ•Έε…¬εΌζ‰€ε¨δ½η½®η„ηΎε€Όγ€‚";
             Text[ arabic ] = "ΚΝΣΘ ΗαήνγΙ ΗαΝΗανΙ ααΥνΫΙ έν ΗαγζΦΪ ΗαΝΗαν.";
             Text[ dutch ] = "Berekent de huidige waarde van de formule op de plaats waar deze functie zich bevindt.";
@@ -15564,7 +15564,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΓΣ ΗαΠν ΣνΡέΪ Εανε ΗαΓΣΗΣ.";
             Text[ dutch ] = "Macht is de exponent die de macht aangeeft tot welke u getal wilt verheffen.";
             Text[ chinese_simplified ] = "ζ‡ζ•°οΌεΊ•ζ•°ζ‰θ―¥ζ‡ζ•°ζ¬΅εΉ‚δΉζ–Ήγ€‚";
-            Text[ greek ] = "Η δύναμη εις την οποία θα υψωθεί ο αριθμός.";
+            Text[ greek ] = "Η δύναμη στην οποία θα υψωθεί ο αριθμός.";
             Text[ korean ] = "λ°‘μκ°€ κ±°λ“­ μ κ³±λ  μ§€μμ…λ‹λ‹¤.";
             Text[ turkish ] = "Sayύnύn kuvvetinin alύnacaπύ όs";
             Text[ language_user1 ] = " ";
@@ -17252,7 +17252,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns the arccosine of a number." ;
             Text [ norwegian ] = "Berechnet den Arkuskosinus einer Zahl." ;
             Text [ italian ] = "Restituisce l'arcocoseno di un numero." ;
-            Text [ portuguese_brazilian ] = "Retorna o arco co-seno de um nϊmero." ;
+            Text [ portuguese_brazilian ] = "Retorna o arco cosseno de um nϊmero." ;
             Text [ portuguese ] = "Devolve o arco coseno de um nϊmero." ;
             Text [ finnish ] = "Palauttaa luvun arkuskosinin." ;
             Text [ danish ] = "Beregner et tals arcus cosinus." ;
@@ -17327,7 +17327,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "is the cosine of the angle you want and must be from -1 to 1." ;
             Text [ norwegian ] = "Ein Wert zwischen -1 und 1, dessen Arkuskosinus bestimmt werden soll" ;
             Text [ italian ] = "Valore tra -1 e 1 di cui bisogna calcolare l'arcoseno." ;
-            Text [ portuguese_brazilian ] = "Um valor entre -1 e 1 para qual o arco co-seno deverα ser retornado." ;
+            Text [ portuguese_brazilian ] = "Um valor entre -1 e 1 para qual o arco cosseno deverα ser retornado." ;
             Text [ portuguese ] = "ι o valor entre -1 e 1, cujo arco coseno deverα ser calculado." ;
             Text [ finnish ] = "Jokin arvo -1 - 1, jonka arkuskosini palautetaan." ;
             Text [ danish ] = "En vζrdi mellem -1 og 1, som arcus cosinus skal beregnes for." ;
@@ -17480,7 +17480,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns the inverse hyperbolic cosine of a number." ;
             Text [ norwegian ] = "Berechnet den Areakosinus (inverser hyperbolischer Kosinus) einer Zahl." ;
             Text [ italian ] = "Restituisce l'inversa del coseno iperbolico di un numero." ;
-            Text [ portuguese_brazilian ] = "Retorna o arco co-seno hiperbσlico de um nϊmero." ;
+            Text [ portuguese_brazilian ] = "Retorna o arco cosseno hiperbσlico de um nϊmero." ;
             Text [ portuguese ] = "Devolve o coseno hiperbσlico inverso de um nϊmero." ;
             Text [ finnish ] = "Palauttaa luvun kδδnteisen hyperbolisen kosinin." ;
             Text [ danish ] = "Beregner et tals inverse hyperbolske cosinus." ;
@@ -17556,7 +17556,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "is any real number equal to or greater than 1." ;
             Text [ norwegian ] = "Ein Wert grφίer oder gleich 1, dessen Areakosinus berechnet werden soll." ;
             Text [ italian ] = "Valore maggiore o uguale a 1 di cui si vuole calcolare l'inversa del coseno iperbolico." ;
-            Text [ portuguese_brazilian ] = "Um valor maior ou igual a 1 do qual o arco co-seno hiperbσlico deverα ser retornado." ;
+            Text [ portuguese_brazilian ] = "Um valor maior ou igual a 1 do qual o arco cosseno hiperbσlico deverα ser retornado." ;
             Text [ portuguese ] = "ι qualquer nϊmero real igual ou maior a 1" ;
             Text [ finnish ] = "Luku (yksi tai suurempi), jonka hyperbolinen kosini palautetaan." ;
             Text [ danish ] = "En vζrdi stψrre eller lig med 1, som den inverse hyperbolske cosinus skal beregnes for." ;
@@ -18166,7 +18166,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns the cosine of the given angle." ;
             Text [ norwegian ] = "Berechnet den Kosinus einer Zahl." ;
             Text [ italian ] = "Restituisce il coseno di un numero." ;
-            Text [ portuguese_brazilian ] = "Retorna o co-seno de um nϊmero." ;
+            Text [ portuguese_brazilian ] = "Retorna o cosseno de um nϊmero." ;
             Text [ portuguese ] = "Devolve o coseno de um nϊmero." ;
             Text [ finnish ] = "Palauttaa luvun kosinin." ;
             Text [ danish ] = "Beregner et tals cosinus." ;
@@ -18241,7 +18241,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "is the angle in radians for which you want the cosine." ;
             Text [ norwegian ] = "Der Winkel im Bogenmaί (Radiant), dessen Kosinus berechnet werden soll." ;
             Text [ italian ] = "L'angolo in radianti di cui si desidera calcolare il coseno." ;
-            Text [ portuguese_brazilian ] = "O βngulo em radianos para qual o co-seno deverα ser retornado." ;
+            Text [ portuguese_brazilian ] = "O βngulo em radianos para qual o cosseno deverα ser retornado." ;
             Text [ portuguese ] = "ι o βngulo em radianos para o qual deseja obter o coseno." ;
             Text [ finnish ] = "Kulma (radiaaneina), jonka kosini lasketaan." ;
             Text [ danish ] = "Den vinkel i radianer hvis cosinus skal beregnes." ;
@@ -18622,7 +18622,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns the hyperbolic cosine of a number." ;
             Text [ norwegian ] = "Berechnet den Hyperbelkosinus (hyperbolischer Kosinus) einer Zahl." ;
             Text [ italian ] = "Restituisce il coseno iperbolico di un numero." ;
-            Text [ portuguese_brazilian ] = "Retorna o co-seno hiperbσlico de um nϊmero." ;
+            Text [ portuguese_brazilian ] = "Retorna o cosseno hiperbσlico de um nϊmero." ;
             Text [ portuguese ] = "Devolve o coseno hiperbσlico de um nϊmero." ;
             Text [ finnish ] = "Palauttaa luvun hyperbolisen kosinin." ;
             Text [ danish ] = "Beregner et tals hyperbolske cosinus." ;
@@ -18697,7 +18697,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "is any real number." ;
             Text [ norwegian ] = "Der Wert, dessen Hyperbelkosinus berechnet werden soll." ;
             Text [ italian ] = "Numero di cui si desidera calcolare il coseno iperbolico." ;
-            Text [ portuguese_brazilian ] = "O valor para qual o co-seno hiperbσlico deverα ser retornado." ;
+            Text [ portuguese_brazilian ] = "O valor para qual o cosseno hiperbσlico deverα ser retornado." ;
             Text [ portuguese ] = "ι qualquer nϊmero real maior ou igual a 1." ;
             Text [ finnish ] = "Luku, jonka hyperbolinen kosini palautetaan." ;
             Text [ danish ] = "Den vζrdi som den hyperbolske cosinus skal beregnes for." ;
@@ -20418,7 +20418,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns a subtotal in a list or database." ;
             Text [ norwegian ] = "Funktion zur Berechnung von Zwischenergebnissen in Tabellen." ;
             Text [ italian ] = "Restituisce un subtotale in un elenco o in un database." ;
-            Text [ portuguese_brazilian ] = "Calcula subtotais em uma planilha." ;
+            Text [ portuguese_brazilian ] = "Calcula sub totais em uma planilha." ;
             Text [ portuguese ] = "Calcula subtotais numa folha de cαlculo ou base de dados." ;
             Text [ finnish ] = "Laskee laskentataulukon vδlisummat." ;
             Text [ danish ] = "Funktion til beregning af subtotaler i tabeller." ;
@@ -20435,7 +20435,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΣΘ ΗαγΜΗγνΪ ΗαέΡΪνΙ έν ΜΟζα Γζ ήΗΪΟΙ ΘνΗδΗΚ.";
             Text[ dutch ] = "Functie ter berekening van subtotalen in werkbladen";
             Text[ chinese_simplified ] = "θ®΅η®—ζ•°ζ®ε•ζ–ζ•°ζ®εΊ“δΈ­η„ε†η±»ζ±‡ζ€»γ€‚";
-            Text[ greek ] = "Συνάρτηση για τον υπολογισμό των μερικών αποτελεσμάτων σε πίνακες.";
+            Text[ greek ] = "Συνάρτηση για τον υπολογισμό των μερικών αποτελεσμάτων σε υπολογιστικά φύλλα.";
             Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈμ—μ„ λ¶€λ¶„ν•©μ„ κ³„μ‚°ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Tablolarda ara toplam hesaplama fonksiyonu.";
             Text[ language_user1 ] = " ";
@@ -21884,7 +21884,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΕΠΗ Κγ ΕΟΞΗα ήνγΙ ΡήγνΙ ΫνΡ γΣΗζνΙ ααΥέΡ΅ νΚγ ΚήΡνΘεΗ ΡήγνΗπ ααΓΪαμ ΚΘΪΗπ ααÒνΗΟΙ ΗαγΪΨΗΙ΅ ζΠαί ΕΠΗ ίΗδΚ ΗαήνγΙ ΣΗαΘΙ.";
             Text[ dutch ] = "Als aangegeven en niet gelijk aan nul, dan wordt bij een negatief getal en stapgrootte naar boven afgerond..";
             Text[ chinese_simplified ] = "ε¦‚ζθ®Ύε®δΈη­‰δΊι›¶οΌε¨θ΄ζ•°ε’θ΄εΊζ•°η„ζƒ…ε†µδΈ‹ζ²Ώ\nη»ε―Ήε€ΌεΆε¤§η„ζ–Ήε‘θε…¥γ€‚";
-            Text[ greek ] = "Αν ορίζεται και είναι διάφορο του μηδενός, τότε στη περίπτωση αρνητικού αριθμού και βήματος γίνεται στρογγυλοποίηση προς τα πάνω αναλογικ? ";
+            Text[ greek ] = "Αν οριστεί και δεν είναι μηδέν, τότε στρογγυλοποιείται προς τα πάνω σύμφωνα με το ποσό όταν έχει αρνητικό πρόσημο και σημασία.";
             Text[ korean ] = "μ§€μ •ν• μ«μκ°€ 0μ΄ μ•„λ‹λ©΄ μμ λ° μ μκ°’μΈ κ²½μ° μ΄μ•΅μ— λ”°λΌ λ°μ¬λ¦Όν•©λ‹λ‹¤.";
             Text[ turkish ] = "Belirtildiπinde ve sύfύra eώit olmadύπύnda, negatif sayύlar ve adύmlar iηin meblaπa gφre yukarύ yuvarlama yapύlύr.";
             Text[ language_user1 ] = " ";
@@ -22131,7 +22131,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΕΠΗ Κγ ΕΟΞΗα ήνγΙ ΡήγνΙ ΫνΡ γΣΗζνΙ ααΥέΡ΅ νΚγ ΚήΡνΘεΗ ΡήγνΗπ ααΓΪαμ ΚΘΪΗπ ααÒνΗΟΙ ΗαγΪΨΗΙ΅ ζΠαί ΕΠΗ ίΗδΚ ΗαήνγΙ ΣΗαΘΙ.";
             Text[ dutch ] = "Indien aangegeven en niet gelijk aan nul, wordt bij een negatief getal en bij negatieve stapgrootte afgerond.";
             Text[ chinese_simplified ] = "ε¦‚ζθ®Ύε®δΈη­‰δΊι›¶οΌε¨θ΄ζ•°ε’θ΄εΊζ•°η„ζƒ…ε†µδΈ‹ζ²Ώ\nη»ε―Ήε€Όε‡ε°η„ζ–Ήε‘ε»ε°Ύθε…¥γ€‚";
-            Text[ greek ] = "Αν ορίζεται και είναι διάφορο του μηδέν, τότε στη περίπτωση αρνητικού αριθμού και βήματος γίνεται στρογγυλοποίηση προς τα κάτω αναλογικά π ";
+            Text[ greek ] = "Αν οριστεί και δεν είναι μηδέν, τότε στρογγυλοποιείται προς τα κάτω σύμφωνα με το ποσό όταν έχει αρνητικό πρόσημο και σημασία.";
             Text[ korean ] = "μ§€μ •ν• μ«μκ°€ 0μ΄ μ•„λ‹λ©΄ μμ λ° μ μκ°’μΈ κ²½μ° μ–‘μ— λ”°λΌ λ°λ²„λ¦Όν•©λ‹λ‹¤.";
             Text[ turkish ] = "Belirtildiπinde ve sύfύra eώit olmadύπύnda, negatif sayύ ve adύm iηin meblaπa gφre aώaπύ yuvarlanύr.";
             Text[ language_user1 ] = " ";
@@ -22396,7 +22396,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Κδήα ΗαγΥέζέΙ γδ γίΗδ αΒΞΡ. ΚΣΚΘΟα Υέζέ ζΓΪγΟΙ γΥέζέΙ.";
             Text[ dutch ] = "Matrix transpositie. Verwisselt rijen en kolommen van een matrix.";
             Text[ chinese_simplified ] = "η©ιµθ½¬η½®γ€‚θ½¬η½®δΈ€δΈªη©ιµη„ε—ε’θ΅γ€‚";
-            Text[ greek ] = "Αντιμετάθεση μήτρας. Ανταλλαγή γραμμών και στηλών μιας μήτρας.";
+            Text[ greek ] = "Αντιμετάθεση πίνακα. Ανταλλαγή γραμμών και στηλών ενός πίνακα.";
             Text[ korean ] = "λ°°μ—΄ μ΄ν•­μ…λ‹λ‹¤. λ°°μ—΄μ ν–‰κ³Ό μ—΄μ„ κµν™ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Matris transpozisyonu. Bir matrisin satύr ve sόtunlarύnύ birbirleri ile deπiώtirir.";
             Text[ language_user1 ] = " ";
@@ -22436,7 +22436,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "Array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -22470,7 +22470,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Υένέ ΪΟΟν νΝΚζν Ϊαμ ΪΟΟς γΚΣΗζς γδ ΗαΥέζέ ζΗαΓΪγΟΙ.";
             Text[ dutch ] = "De matrix waarvan de rijen en kolommen worden verwisseld.";
             Text[ chinese_simplified ] = "ε…¶ε—ε’θ΅ι€θ¦θΏ›θ΅θ½¬η½®η„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα στην οποία πρόκειται να γίνει αντιμετάθεση των γραμμών με τις στήλες.";
+            Text[ greek ] = "Ο πίνακας στον οποίο πρόκειται να γίνει αντιμετάθεση των γραμμών με τις στήλες.";
             Text[ korean ] = "ν–‰κ³Ό μ—΄μ„ μ΄ν•­ν•  λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Satύr ve sόtunlarύ birbirleri ile deπiώtirilen matris.";
             Text[ language_user1 ] = " ";
@@ -22508,7 +22508,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΪΨν ΗαγΥέζέΙ ΗαδΗΚΜΙ Ϊδ ΦΡΘ Υένένδ.";
             Text[ dutch ] = "Vermenigvuldigt twee matrices.";
             Text[ chinese_simplified ] = "η©ιµδΉη§―γ€‚θ®΅η®—δΈ¤δΈªη©ιµη„δΉη§―γ€‚";
-            Text[ greek ] = "Πολλαπλασιασμός μήτρας. Σχηματίζει το γινόμενο δύο μητρών.";
+            Text[ greek ] = "Πολλαπλασιασμός πίνακα. Σχηματίζει το γινόμενο δύο πινάκων.";
             Text[ korean ] = "λ°°μ—΄ κ³±μ…μ…λ‹λ‹¤. λ‘ λ°°μ—΄μ κ³±μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Matris ηarpύmύ. έki matrisin ηarpύm sonucunu verir.";
             Text[ language_user1 ] = " ";
@@ -22548,7 +22548,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "Array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -22583,7 +22583,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαγΥέζέΙ ΗαΓζαμ γδ ΗαΓΡήΗγ ΗαγΡΗΟ ΦΡΘεΗ.";
             Text[ dutch ] = "De eerste matrix voor de vermenigvuldiging.";
             Text[ chinese_simplified ] = "η”¨δΊθ®΅η®—η©ιµδΉη§―η„η¬¬δΈ€δΈªη©ιµγ€‚";
-            Text[ greek ] = "Η πρώτη μήτρα για το γινόμενο μητρών.";
+            Text[ greek ] = "Ο πρώτος πίνακας για το γινόμενο πινάκων.";
             Text[ korean ] = "λ°°μ—΄ κ³±μ…μ„ μ„ν• μ²« λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Matris ηarpύmύ iηin birinci matris.";
             Text[ language_user1 ] = " ";
@@ -22617,7 +22617,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "Array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -22651,7 +22651,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαγΥέζέΙ ΗαΛΗδνΙ ΗαΚν ΚΝΚζν Ϊαμ ΪΟΟ γδ ΗαΥέζέ γΣΗζς αΪΟΟ ΓΪγΟΙ ΗαγΥέζέΙ ΗαΓζαμ.";
             Text[ dutch ] = "De tweede matrix met hetzelfde aantal rijen als de eerste matrix kolommen heeft.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªη©ιµη„θ΅ζ•°ε’η¬¬δΈ€δΈªη©ιµε’ε—ζ•°η›Έη­‰γ€‚";
-            Text[ greek ] = "Η δεύτερη μήτρα με πλήθος γραμμών ίσο με τον πλήθος στηλών της πρώτης μήτρας.";
+            Text[ greek ] = "Ο δεύτερος πίνακας με πλήθος γραμμών ίσο με τον πλήθος στηλών του πρώτου πίνακα.";
             Text[ korean ] = "μ²« λ²μ§Έ λ°°μ—΄μ μ—΄ μμ™€ κ°™μ€ μμ ν–‰μ„ κ°€μ§„ λ‘ λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Birinci matrisin sόtun sayύsύna eώit satύr sayύsύ olan ikinci matris.";
             Text[ language_user1 ] = " ";
@@ -22689,7 +22689,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΪνδ γΝΟΟ ΗαΚδΩνγΙ αΥένέ.";
             Text[ dutch ] = "Berekent de determinant van een matrix.";
             Text[ chinese_simplified ] = "η΅®ε®η©ιµθ΅ε—εΌη„ε€Όγ€‚";
-            Text[ greek ] = "Ορίζει την ορίζουσα μιας μήτρας.";
+            Text[ greek ] = "Ορίζει την ορίζουσα ενός πίνακα.";
             Text[ korean ] = "λ°°μ—΄μ ν–‰λ ¬μ‹μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Matris determinantύnύ belirler.";
             Text[ language_user1 ] = " ";
@@ -22729,7 +22729,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "Array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -22763,7 +22763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ ΪΟΟνΙ ΚΝΚζν Ϊαμ ΪΟΟς γΚΣΗζς γδ ΗαΥέζέ ζΗαΓΪγΟΙ.";
             Text[ dutch ] = "De matrix waarvan de determinant wordt berekend.";
             Text[ chinese_simplified ] = "θ¦η΅®ε®ε…¶θ΅ε—εΌε€Όη„ζ•°η»„γ€‚";
-            Text[ greek ] = "Η μήτρα, της οποίας πρόκειται να οριστεί η ορίζουσα.";
+            Text[ greek ] = "Ο πίνακας, του οποίου πρόκειται να οριστεί η ορίζουσα.";
             Text[ korean ] = "ν–‰λ ¬μ‹μ„ μ§€μ •ν•λ” λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Determinantύ belirlenen matris.";
             Text[ language_user1 ] = " ";
@@ -22801,7 +22801,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΟΟ ΗαΚδΩνγΙ ΫνΡ ΗαγδέΡΟΙ ααΚδΩνγΙ ΗαγΞÒδΙ έν Υένέ.";
             Text[ dutch ] = "Berekent de inverse van een matrix.";
             Text[ chinese_simplified ] = "ζ±‚δΈ€δΈªη©ιµη„ι€†η©ιµγ€‚";
-            Text[ greek ] = "Ορίζει την ανάστροφη μήτρα μιας μήτρας.";
+            Text[ greek ] = "Ορίζει τον ανάστροφο πίνακα ενός πίνακα.";
             Text[ korean ] = "μ—­λ°°μ—΄μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Matrisin tersini verir.";
             Text[ language_user1 ] = " ";
@@ -22841,7 +22841,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "Array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -22875,7 +22875,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ ΪΟΟνΙ ΚΝΚζν Ϊαμ ΪΟΟς γΚΣΗζς γδ ΗαΥέζέ ζΗαΓΪγΟΙ.";
             Text[ dutch ] = "De matrix waarvan de inverse wordt berekend.";
             Text[ chinese_simplified ] = "θ¦η»“ζε…¶ι€†η©ιµη„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα που πρόκειται να αντιστραφεί.";
+            Text[ greek ] = "Ο πίνακας που πρόκειται να αντιστραφεί.";
             Text[ korean ] = "μ—­λ°°μ—΄μ„ κµ¬ν•  λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Tersine ηevirilen matris.";
             Text[ language_user1 ] = " ";
@@ -22914,7 +22914,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΝΣΘ ΗαγΥέζέΙ ΗαζΝΟζνΙ ΗαΚΡΘνΪνΙ αΝΜγ γΝΟΟ.";
             Text[ dutch ] = "Bepaalt de vierkante eenheidsmatrix van een bepaalde grootte.";
             Text[ chinese_simplified ] = "η΅®ε®δΈ€δΈªη»™ε®θ΅ε—ζ•°η„ζ­£ζ–Ήε•ε…ƒη©ιµγ€‚";
-            Text[ greek ] = "Ορίζει την τετραγωνική μοναδιαία μήτρα ενός συγκεκριμένου μεγέθους.";
+            Text[ greek ] = "Ορίζει τον τετραγωνικό μοναδιαίο πίνακα ενός συγκεκριμένου μεγέθους.";
             Text[ korean ] = "νΉμ • ν¬κΈ°μ μ λ‹νƒ€λ¦¬ μ κ³± λ°°μ—΄μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Belirli bir bόyόklόπόn όniter kare matrisini verir.";
             Text[ language_user1 ] = " ";
@@ -23067,7 +23067,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "Array ";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "Array ";
-            Text[ greek ] = "Μήτρα ";
+            Text[ greek ] = "Πίνακας ";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris ";
             Text[ language_user1 ] = " ";
@@ -23101,7 +23101,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "array1;array2... ΝΚμ 30 ΥένέΗπ ΚΡνΟ ΦΡΘ γίζδΗΚεΗ.";
             Text[ dutch ] = "Matrix 1; Matrix 2,... zijn maximaal 30 matrices waarvan de argumenten worden vermenigvuldigd.";
             Text[ chinese_simplified ] = "ζ•°η»„ 1; ζ•°η»„ 2,... ζ―1θ‡³ 30 δΈªζ•°η»„οΌε…¶η›ΈεΊ”ε…ƒη΄ ι€θ¦θΏ›θ΅η›ΈδΉεΉ¶ζ±‚ε’γ€‚";
-            Text[ greek ] = "Μήτρα 1, Μήτρα 2,... είναι έως και 30 μήτρες των οποίων θα πολλαπλασιαστούν τα ορίσματά τους.";
+            Text[ greek ] = "Πίνακας 1, Πίνακας 2,... είναι έως και 30 πίνακες των οποίων θα πολλαπλασιαστούν τα ορίσματά τους.";
             Text[ korean ] = "λ°°μ—΄ 1, λ°°μ—΄ 2...λ” μΈμλ¥Ό κ³±ν•  30κΉμ§€μ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Matris 1; matris 2,... Deπiώkenleri ηarpύlan ve sayύlarύ 30'u bulan matrislerdir.";
             Text[ language_user1 ] = " ";
@@ -23139,7 +23139,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΜγΪ ΗαέΗΡή Θνδ γΡΘΪΗΚ Υένένδ.";
             Text[ dutch ] = "Berekent de som van het verschil tussen de kwadraten van twee matrices.";
             Text[ chinese_simplified ] = "δΈ¤δΈªζ•°η»„δΈ­ε―ΉεΊ”ζ•°ε€Όη„εΉ³ζ–Ήε·®δΉ‹ε’γ€‚";
-            Text[ greek ] = "Αθροίζει τις διαφορές των τετραγώνων δύο μητρών.";
+            Text[ greek ] = "Αθροίζει τις διαφορές των τετραγώνων δύο πινάκων.";
             Text[ korean ] = "λ‘ λ°°μ—΄ μ κ³±μ μ°¨μ΄ ν•©μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "έki matrisin karelerinin farklarύnύ toplar.";
             Text[ language_user1 ] = " ";
@@ -23179,7 +23179,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ_X";
             Text[ dutch ] = "Matrix_X";
             Text[ chinese_simplified ] = "array_X";
-            Text[ greek ] = "Μήτρα_Χ";
+            Text[ greek ] = "Πίνακας_Χ";
             Text[ korean ] = "array_x";
             Text[ turkish ] = "Matris_X";
             Text[ language_user1 ] = " ";
@@ -23213,7 +23213,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΓζα γδ Ηαήνγ.";
             Text[ dutch ] = "De eerste matrix waarvan de argumenten in het kwadraat worden opgeteld.";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Πρώτη μήτρα, της οποίας αθροίζονται τα τετράγωνα των ορισμάτων της.";
+            Text[ greek ] = "Πρώτος πίνακας, του οποίου αθροίζονται τα τετράγωνα των ορισμάτων του.";
             Text[ korean ] = "μΈμ μ κ³±μ μ΄ν•©μ„ κµ¬ν•  μ²« λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έηerdiπi deπiώkenlerin karelerinin toplandύπύ birinci matris.";
             Text[ language_user1 ] = " ";
@@ -23247,7 +23247,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ_Y";
             Text[ dutch ] = "Matrix_Y";
             Text[ chinese_simplified ] = "array_Y";
-            Text[ greek ] = "Μήτρα_Y";
+            Text[ greek ] = "Πίνακας_Y";
             Text[ korean ] = "array_y";
             Text[ turkish ] = "Matris_Y";
             Text[ language_user1 ] = " ";
@@ -23281,7 +23281,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΛΗδν γδ Ηαήνγ.";
             Text[ dutch ] = "De tweede matrix waarvan de argumenten in het kwadraat worden afgetrokken.";
             Text[ chinese_simplified ] = "ε…¶ε…ƒδ»¶η„εΉ³ζ–Ήε€Όη›Έε‡η„η¬¬δΊδΈªη©ιµγ€‚";
-            Text[ greek ] = "Δεύτερη μήτρα, της οποίας θα αφαιρεθούν τα τετράγωνα των ορισμάτων της.";
+            Text[ greek ] = "Δεύτερος πίνακας, του οποίου θα αφαιρεθούν τα τετράγωνα των ορισμάτων του.";
             Text[ korean ] = "μΈμ μ κ³±μ„ λΊ„ λ‘ λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έηerdiπi deπiώkenlerin karelerinin ηύkartύldύπύ ikinci matris.";
             Text[ language_user1 ] = " ";
@@ -23319,7 +23319,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΜγΪ γΜγζΪ γΡΘΪΗΚ Υένένδ.";
             Text[ dutch ] = "Telt de sommen van de kwadraten van twee matrices bij elkaar op.";
             Text[ chinese_simplified ] = "δΈ¤δΈªζ•°η»„δΈ­ε―ΉεΊ”ζ•°ε€Όη„εΉ³ζ–Ήε’δΉ‹ε’γ€‚";
-            Text[ greek ] = "Αθροίζει τα επιμέρους αθροίσματα των τετραγώνων δύο μητρών.";
+            Text[ greek ] = "Αθροίζει τα επιμέρους αθροίσματα των τετραγώνων δύο πινάκων.";
             Text[ korean ] = "λ‘ λ°°μ—΄ μ κ³± ν•©μ μ΄ν•©μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "έki matrisin karelerinin toplamύnύ alύr.";
             Text[ language_user1 ] = " ";
@@ -23359,7 +23359,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ_X";
             Text[ dutch ] = "Matrix_X";
             Text[ chinese_simplified ] = "array_X";
-            Text[ greek ] = "Μήτρα_Χ";
+            Text[ greek ] = "Πίνακας_Χ";
             Text[ korean ] = "array_x";
             Text[ turkish ] = "Matris_X";
             Text[ language_user1 ] = " ";
@@ -23393,7 +23393,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗΗαΓζα γδ Ηαήνγ.";
             Text[ dutch ] = "De eerste matrix waarvan de argumenten in het kwadraat worden opgeteld.";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Πρώτη μήτρα, της οποίας αθροίζονται τα τετράγωνα των ορισμάτων της.";
+            Text[ greek ] = "Πρώτος πίνακας, του οποίου αθροίζονται τα τετράγωνα των ορισμάτων του.";
             Text[ korean ] = "μΈμ μ κ³±μ μ΄ν•©μ„ κµ¬ν•  μ²« λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έηerdiπi deπiώkenlerin karelerinin toplandύπύ birinci matris.";
             Text[ language_user1 ] = " ";
@@ -23427,7 +23427,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ_Y";
             Text[ dutch ] = "Matrix_Y";
             Text[ chinese_simplified ] = "array_Y";
-            Text[ greek ] = "Μήτρα_Y";
+            Text[ greek ] = "Πίνακας_Y";
             Text[ korean ] = "array_y";
             Text[ turkish ] = "Matris_Y";
             Text[ language_user1 ] = " ";
@@ -23461,7 +23461,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΛΗδν γδ Ηαήνγ.";
             Text[ dutch ] = "De tweede matrix waarvan de argumenten in het kwadraat worden opgeteld.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Δεύτερη μήτρα, της οποίας πρόκειται να προστεθούν τα τετράγωνα των ορισμάτων της.";
+            Text[ greek ] = "Δεύτερος πίνακας, του οποίου πρόκειται να προστεθούν τα τετράγωνα των ορισμάτων του.";
             Text[ korean ] = "μΈμ μ κ³±μ μ΄ν•©μ„ κµ¬ν•  λ‘ λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έηerdiπi deπiώkenlerin karelerinin toplandύπύ ikinci matris.";
             Text[ language_user1 ] = " ";
@@ -23499,7 +23499,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΚΜγΪ γΡΘΪΗΚ ΗαέΗΡή Θνδ Υένένδ.";
             Text[ dutch ] = "Berekent de som van de kwadraten van de verschillen van twee matrices.";
             Text[ chinese_simplified ] = "δΈ¤δΈªζ•°η»„δΈ­ε―ΉεΊ”ζ•°ε€ΌδΉ‹ε·®η„εΉ³ζ–Ήε’γ€‚";
-            Text[ greek ] = "Αθροίζει τα τετράγωνα των διαφορών (υπολοίπων) δύο μητρών.";
+            Text[ greek ] = "Αθροίζει τα τετράγωνα των διαφορών (υπολοίπων) δύο πινάκων.";
             Text[ korean ] = "λ‘ λ°°μ—΄ μ°¨μ΄μ μ κ³±μ ν•©μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "έki matrisin farklarύnύn karelerini toplar.";
             Text[ language_user1 ] = " ";
@@ -23539,7 +23539,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ_X";
             Text[ dutch ] = "Matrix_X";
             Text[ chinese_simplified ] = "array_X";
-            Text[ greek ] = "Μήτρα_Χ";
+            Text[ greek ] = "Πίνακας_Χ";
             Text[ korean ] = "array_x";
             Text[ turkish ] = "Matris_X";
             Text[ language_user1 ] = " ";
@@ -23573,7 +23573,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΓζα γδ Ηαήνγ.";
             Text[ dutch ] = "De eerste matrix voor het vormen van de verschillen tussen de argumenten.";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Πρώτη μήτρα για τον σχηματισμό των διαφορών ορισμάτων.";
+            Text[ greek ] = "Πρώτος πίνακας για τον σχηματισμό των διαφορών ορισμάτων.";
             Text[ korean ] = "μΈμ μ°¨μ΄ κ³„μ‚°μ„ μ„ν• μ²« λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Deπiώken farklarύnύn oluώturulmasύ iηin birinci matris.";
             Text[ language_user1 ] = " ";
@@ -23607,7 +23607,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "γΥέζέΙ_Y";
             Text[ dutch ] = "Matrix_Y";
             Text[ chinese_simplified ] = "array_Y";
-            Text[ greek ] = "Μήτρα_Y";
+            Text[ greek ] = "Πίνακας_Y";
             Text[ korean ] = "array_y";
             Text[ turkish ] = "Matris_Y";
             Text[ language_user1 ] = " ";
@@ -23641,7 +23641,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΛΗδν γδ Ηαήνγ.";
             Text[ dutch ] = "De tweede matrix voor het vormen van de verschillen tussen de argumenten.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Δεύτερη μήτρα, για τον σχηματισμό των διαφορών των ορισμάτων.";
+            Text[ greek ] = "Δεύτερος πίνακας, για τον σχηματισμό των διαφορών των ορισμάτων.";
             Text[ korean ] = "μΈμ μ°¨μ΄ κ³„μ‚°μ„ μ„ν• λ‘ λ²μ§Έ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Deπiώken farklarύnύn oluώturulmasύ iηin birinci matris.";
             Text[ language_user1 ] = " ";
@@ -23685,7 +23685,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΣΘ ΚζÒνΪ ΗαΚζΗΚΡ ίΥένέ ΪγζΟν.";
             Text[ dutch ] = "Maakt een frequentieverdeling als verticale matrix.";
             Text[ chinese_simplified ] = "θ®΅η®—δΈ€δΈªιΆ‘η‡ε†εΈƒοΌδ»¥ε—η©ιµζ–ΉεΌζΎη¤Ίη»“ζγ€‚";
-            Text[ greek ] = "Σχηματίζει την κατανομή συχνότητας ως κατακόρυφη μήτρα.";
+            Text[ greek ] = "Σχηματίζει την κατανομή συχνότητας ως κατακόρυφος πίνακας.";
             Text[ korean ] = "λ„μ λ¶„ν¬λ¥Ό μ„Έλ΅ λ°°μ—΄ ν•νƒλ΅ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Sόtun matrisi ώeklinde bir sύklύk daπύtύmύ oluώturur.";
             Text[ language_user1 ] = " ";
@@ -23759,7 +23759,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γδΩζγΙ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de gegevens.";
             Text[ chinese_simplified ] = "θ¦θ®΅η®—ε…¶ιΆ‘η‡ε†εΈƒη„ζ•°ζ®η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων.";
             Text[ korean ] = "λ°μ΄ν„°μ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Veri matrisi.";
             Text[ language_user1 ] = " ";
@@ -23827,7 +23827,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ γδ ΗαέζΗΥα Γζ γΡΜΪ Εαμ έζΗΥα ΝνΛ ΚΡνΟ ΚΜγνΪ Ηαήνγ ΗαγζΜζΟΙ έν data_array.";
             Text[ dutch ] = "De matrix voor waardegroepen.";
             Text[ chinese_simplified ] = "η”¨δΊζ„ζιΆ‘η‡θ®΅η®—ε†ζ®µη‚Ήη„ζ•°ζ®η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα για τον σχηματισμό της κλάσης.";
+            Text[ greek ] = "Ο πίνακας για τον σχηματισμό της κλάσης.";
             Text[ korean ] = "ν΄λμ¤ ν•μ„±μ„ μ„ν• λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Sύnύf oluώturma matrisi.";
             Text[ language_user1 ] = " ";
@@ -23866,7 +23866,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΡΜΪ ΥένέΗπ νΪΘΡ Ϊδ ΗαΞΨ ΗαγΣΚήνγ ΗαγαΗΖγ ΘΗαΤία ΗαΓγΛα ααΘνΗδΗΚ Ϊδ ΨΡνή ΗΣΚΞΟΗγ ΨΡνήΙ ΗαήνγΙ ΗαΥΫΡμ αγΜγζΪ ΗαγΡΘΪΗΚ.";
             Text[ dutch ] = "Berekent de parameters van een lineaire trend als matrix.";
             Text[ chinese_simplified ] = "θ®΅η®—ηΊΏζ€§ε›ε½’η„ζ•°η»„ε‹η³»ζ•°γ€‚";
-            Text[ greek ] = "Υπολογίζει τις παραμέτρους της γραμμικής παλινδρόμησης ως μήτρα.";
+            Text[ greek ] = "Υπολογίζει τις παραμέτρους της γραμμικής παλινδρόμησης ως πίνακας.";
             Text[ korean ] = "μ„ ν• νκ·€μ λ§¤κ° λ³€μλ¥Ό λ°°μ—΄ ν•νƒλ΅ κ³„μ‚°ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Doπrusal regresyonun parametrelerini matris olarak hesaplar.";
             Text[ language_user1 ] = " ";
@@ -23940,7 +23940,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ γδ ήνγ Υ.";
             Text[ dutch ] = "De matrix van de Y-gegevens";
             Text[ chinese_simplified ] = "Y ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24008,7 +24008,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ΗΞΚνΗΡνΙ γδ ήνγ Σ.";
             Text[ dutch ] = "De matrix van de X-gegevens";
             Text[ chinese_simplified ] = "X ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων X.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων X.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X  verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24111,7 +24111,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Stats";
             Text[ dutch ] = "Parameter";
             Text[ chinese_simplified ] = "stats";
-            Text[ greek ] = "Παράμετροι";
+            Text[ greek ] = "Στατιστικά στοιχεία";
             Text[ korean ] = "stats";
             Text[ turkish ] = "Parametreler";
             Text[ language_user1 ] = " ";
@@ -24185,7 +24185,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΣΘ Υένέ γδ Ηαήνγ ΚΪΘΡ Ϊδ ΗαγδΝδμ ΗαΓΣν ΗαγΝΣζΘ έν ΚΝανα ΗαΗδΝΟΗΡ ανδΗΣΘ ΗαΘνΗδΗΚ ΗαΞΗΥΙ Θί.";
             Text[ dutch ] = "Berekent de parameters van een exponentiλle trend als matrix.";
             Text[ chinese_simplified ] = "θ®΅η®—ζθΏ°ζ‡ζ•°ε›ε½’ζ›²ηΊΏη„ζ•°η»„γ€‚";
-            Text[ greek ] = "Υπολογίζει τις παραμέτρους της εκθετικής παλινδρόμησης ως μήτρα.";
+            Text[ greek ] = "Υπολογίζει τις παραμέτρους της εκθετικής παλινδρόμησης ως πίνακας.";
             Text[ korean ] = "μ§€μ νκ·€ κ³΅μ„ μ λ§¤κ° λ³€μλ¥Ό λ°°μ—΄ ν•νƒλ΅ κ³„μ‚°ν•©λ‹λ‹¤.";
             Text[ turkish ] = "άstel regresyonun parametrelerini matris olarak hesaplar.";
             Text[ language_user1 ] = " ";
@@ -24259,7 +24259,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ γδ ήνγ Υ.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„ Yγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24327,7 +24327,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ΗΞΚνΗΡνΙ γδ ήνγ Σ.";
             Text[ dutch ] = "De matrix van de X-gegevens";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„ Xγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων X.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων X.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24430,7 +24430,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Stats";
             Text[ dutch ] = "Parameter";
             Text[ chinese_simplified ] = "stats";
-            Text[ greek ] = "Παράμετροι";
+            Text[ greek ] = "Στατιστικά στοιχεία";
             Text[ korean ] = "stats";
             Text[ turkish ] = "Parametreler";
             Text[ language_user1 ] = " ";
@@ -24577,7 +24577,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ γδ ήνγ Υ ΚΪΡέεΗ γΣΘήΗπ γδ ΗαΪαΗήΙ y = mx + b.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "Y-ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24645,7 +24645,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γδΩζγΙ ήνγ Σ ίΓΣΗΣ ααΗδΝΟΗΡ.";
             Text[ dutch ] = "De matrix van de X-gegevens als basis voor de regressie.";
             Text[ chinese_simplified ] = "δ½δΈΊε›ε½’θ®΅η®—εΊη΅€η„ X-ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ ως βάση για την παλινδρόμηση.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ ως βάση για την παλινδρόμηση.";
             Text[ korean ] = "νκ·€μ— λ€ν• κΈ°μ΄λ΅μ„μ X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Regresyon temeli olarak X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24713,7 +24713,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ήνγ Σ ΜΟνΟΙ γΨΗΘήΙ αήνγ Υ΅ ΗαΚν ΚΡνΟ γδ TREND ΝΣΗΘεΗ.";
             Text[ dutch ] = "De matrix van de X-gegevens voor de herberekening van waarden.";
             Text[ chinese_simplified ] = "η”¨δΊθ®΅η®—ζ–°ζ•°ε€Όη„ X-ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ για τον εκ νέου υπολογισμό των τιμών.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ για τον εκ νέου υπολογισμό των τιμών.";
             Text[ korean ] = "κ°’μ μ¬κ³„μ‚°μ„ μ„ν• X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Deπerlerin yeniden hesaplanmasύ iηin X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24893,7 +24893,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ γδ ήνγ Υ.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„ Y γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -24961,7 +24961,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ήνγ Σ ίΓΣΗΣ ααΗδΝΟΗΡ.";
             Text[ dutch ] = "De matrix van de X-gegevens als basis voor de regressie.";
             Text[ chinese_simplified ] = "X-ζ•°ζ®η»„ε½“δ½ε›ε½’η„εΊζ•°γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ ως βάση για την παλινδρόμηση.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ ως βάση για την παλινδρόμηση.";
             Text[ korean ] = "νκ·€μ— λ€ν• κΈ°μ΄λ΅μ„μ X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Regresyon baz olarak X veri matrisi.";
             Text[ language_user1 ] = " ";
@@ -25029,7 +25029,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ήνγ Σ ΜΟνΟΙ γΨΗΘήΙ αήνγ Υ΅ ΗαΚν ΚΡνΟ γδ GROWTH ΝΣΗΘεΗ.";
             Text[ dutch ] = "De matrix van de X-gegevens ter berekening van nieuwe waarden.";
             Text[ chinese_simplified ] = "η”¨δΊι‡ζ–°ιΆ„ζµ‹ζ‡ζ•°θ¶‹εΏε€Όη„ζ–°η„ X ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ για τον εκ νέου υπολογισμό των τιμών.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ για τον εκ νέου υπολογισμό των τιμών.";
             Text[ korean ] = "κ°’μ μ¬κ³„μ‚°μ„ μ„ν• X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Deπerlerin yeniden hesaplanmasύ iηin X veri matrisi.";
             Text[ language_user1 ] = " ";
@@ -27887,7 +27887,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ έν ΗαΪνδΙ.";
             Text[ dutch ] = "De matrix van de gegevens in de steekproef.";
             Text[ chinese_simplified ] = "ε®δΉ‰η›Έε―Ήδ½η½®η„ζ•°η»„ζ–ζ•°ε€ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -28067,7 +28067,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή γδ Ηαήνγ ΗαΪΟΟνΙ ΗαγΡΗΟ ΚΪννδ ήνγΙ ΗαΡΘΪν αεΗ.";
             Text[ dutch ] = "De matrix van de gegevens in de steekproef.";
             Text[ chinese_simplified ] = "ι€θ¦ζ±‚εΎ—ε››ε†δ½ζ•°ε€Όη„ζ½ζ ·ζ•°η»„ζ–ζ•°ε­—ε‹ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -28248,7 +28248,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ έν ΗαΪνδΙ.";
             Text[ dutch ] = "De matrix van de gegevens van de steekproef.";
             Text[ chinese_simplified ] = "η”±ζ½ζ ·η»„ζη„ζ•°ζ®η»„ζ–ζ•°ζ®εΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -28428,7 +28428,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΥένέ Γζ δΨΗή ΗαΘνΗδΗΚ ΗαΠν ΚΡνΟ ΚΝΟνΟ ΗαήνγΙ ΗαΓΥΫΡ ένε ΘΪΟ ΪΟΟ γδ Ηαήνγ  k ΗαΓΥΫΡ γδεΗ.";
             Text[ dutch ] = "De matrix van de gegevens in de steekproef.";
             Text[ chinese_simplified ] = "η”¨δΊζ‰Ύε°η¬¬ k δΈªζ€ε°ε€Όη„ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -28610,7 +28610,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ έν ΗαΪνδΙ.";
             Text[ dutch ] = "De matrix van de gegevens in de steekproef.";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -28859,7 +28859,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ γδ ήΗΖγΙ ΓΡήΗγ Γζ γΡΜΪ Εαμ ήΗΖγΙ ΓΡήΗγ.";
             Text[ dutch ] = "De matrix met de gegevens van de steekproef.";
             Text[ chinese_simplified ] = "ε…ε«δΈ€η»„ζ•°ε­—η„ζ•°η»„ζ–εΌ•η”¨γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -29039,7 +29039,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ έν ΗαΪνδΙ.";
             Text[ dutch ] = "De matrix van de gegevens in de steekproef.";
             Text[ chinese_simplified ] = "θ¦ζ±‚ε…¶εΉ³ε‡ε€Όη„ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnekteki verilerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -29220,7 +29220,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ έν ΗαΪνδΙ.";
             Text[ dutch ] = "De matrix van de gegevens in de steekproef.";
             Text[ chinese_simplified ] = "ε…·ζ‰ε„θ‡ªη›ΈεΊ”ζ¦‚η‡ε€Όη„ x ζ•°ε€ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων στο δείγμα.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων στο δείγμα.";
             Text[ korean ] = "ν‘λ³Έ μ§‘λ‹¨μ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Φrnek veri matrisi.";
             Text[ language_user1 ] = " ";
@@ -29289,7 +29289,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ΗΝΚγΗαΗΚ γήΚΡδΙ γΪ Ηαήνγ ΗαγζΜζΟΙ έν x_range.";
             Text[ dutch ] = "De matrix van de bijbehorende kansen.";
             Text[ chinese_simplified ] = "δΈ x_range δΈ­ζ•°ε€Όη›Έε―ΉεΊ”η„δΈ€η»„ζ¦‚η‡ε€Όγ€‚";
-            Text[ greek ] = "Η μήτρα των αντίστοιχων πιθανοτήτων.";
+            Text[ greek ] = "Ο πίνακας των αντίστοιχων πιθανοτήτων.";
             Text[ korean ] = "μ—°κ΄€λ ν™•λ¥ μ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έlgili olasύlύklarύn matrisi.";
             Text[ language_user1 ] = " ";
@@ -33726,7 +33726,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "A" ;
             Text [ norwegian ] = "Anfang" ;
             Text [ italian ] = "Inizio" ;
-            Text [ portuguese_brazilian ] = "Inicio" ;
+            Text [ portuguese_brazilian ] = "Inνcio" ;
             Text [ portuguese ] = "A" ;
             Text [ finnish ] = "Aloita" ;
             Text [ danish ] = "Start" ;
@@ -37125,7 +37125,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή ΗαΘνΗδΗΚ ΗαγΡΗΟ ΗΞΚΘΗΡ x γήΗΡδΙ Θε.";
             Text[ dutch ] = "De matrix van de gegevens.";
             Text[ chinese_simplified ] = "θ¦ζ£€ιªη„ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων.";
             Text[ korean ] = "λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Veri matrisi.";
             Text[ language_user1 ] = " ";
@@ -37374,7 +37374,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ ΗαΚν Κγ γΤΗεΟΚεΗ.";
             Text[ dutch ] = "De matrix van de waargenomen gegevens.";
             Text[ chinese_simplified ] = "ε«θ§‚ε―ζ•°ζ®η„θ΅ε—γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων παρατήρησης.";
+            Text[ greek ] = "Η Ο πίνακας των δεδομένων παρατήρησης.";
             Text[ korean ] = "κ΄€μΈ΅λ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έzlenen deπerlerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -37442,7 +37442,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΘνΗδΗΚ ΗαγΚζήΪΙ.";
             Text[ dutch ] = "De matrix van de verwachte gegevens.";
             Text[ chinese_simplified ] = "ε«ζεΎ…ζ•°ζ®η„θ΅ε—γ€‚";
-            Text[ greek ] = "Η μήτρα των αναμενόμενων δεδομένων.";
+            Text[ greek ] = "Ο πίνακας των αναμενόμενων δεδομένων.";
             Text[ korean ] = "μμƒλ λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Beklenen deπerlerin matrisi.";
             Text[ language_user1 ] = " ";
@@ -37554,7 +37554,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΓζα γδ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de eerste record.";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„η„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα της πρώτης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της πρώτης εγγραφής.";
             Text[ korean ] = "μ²« λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Birinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -37622,7 +37622,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΥένέ Γζ ΗαδΨΗή ΗαΛΗδν γδ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de tweede record.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªζ•°ζ®η»„η„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα της δεύτερης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της δεύτερης εγγραφής.";
             Text[ korean ] = "λ‘ λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έkinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -37734,7 +37734,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ΗαΘνΗδΗΚ ΗαΓζαμ.";
             Text[ dutch ] = "De matrix van de eerste record..";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„η„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα της πρώτης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της πρώτης εγγραφής.";
             Text[ korean ] = "μ²« λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Birinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -37802,7 +37802,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ΗαΘνΗδΗΚ ΗαΛΗδνΙ.";
             Text[ dutch ] = "De matrix van de tweede record.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα της δεύτερης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της δεύτερης εγγραφής.";
             Text[ korean ] = "λ‘ λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έkinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -38050,7 +38050,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή γδ δήΗΨ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de Y-gegevens";
             Text[ chinese_simplified ] = "Y - ζ•°η»„ζ–ζ•°ζ®η‚ΉεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38118,7 +38118,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή γδ δήΗΨ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de X-gegevens";
             Text[ chinese_simplified ] = "X - ζ•°η»„ζ–ζ•°ζ®η‚ΉεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων X.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων X.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38230,7 +38230,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ΚΗΘΪΙ γδ ΗαΘνΗδΗΚ Γζ ΗαγΤΗεΟΗΚ.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "Y-ε› ει‡ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38298,7 +38298,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ γΣΚήαΙ γδ ΗαΘνΗδΗΚ Γζ ΗαγΤΗεΟΗΚ.";
             Text[ dutch ] = "De matrix van de X-gegevens.";
             Text[ chinese_simplified ] = "X-θ‡ªει‡ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38410,7 +38410,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή ΞαΗνΗ νΝΚζν Ϊαμ δήΗΨ ΘνΗδΗΚ ΪΟΟνΙ ΚΗΘΪΙ.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "ζ•°ε­—ε‹ε› ει‡ζ•°η»„ζ–ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38478,7 +38478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ δήΗΨ ΘνΗδΗΚ γΣΚήαΙ.";
             Text[ dutch ] = "De matrix van de X-gegevens.";
             Text[ chinese_simplified ] = "θ‡ªει‡ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38590,7 +38590,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή δήΗΨ ΘνΗδΗΚ ΚΗΘΪΙ.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "Y-ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38658,7 +38658,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή δήΗΨ ΘνΗδΗΚ γΣΚήαΙ.";
             Text[ dutch ] = "De matrix van de X-gegevens.";
             Text[ chinese_simplified ] = "X-ζ•°ζ®η»„γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων X.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων X.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X verileri matrisi.";
             Text[ language_user1 ] = " ";
@@ -38770,7 +38770,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ήνγ γΣΚήαΙ.";
             Text[ dutch ] = "De matrix van het eerste gegevensbereik.";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„η„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα της πρώτης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της πρώτης εγγραφής.";
             Text[ korean ] = "μ²« λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Birinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -38838,7 +38838,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΜγζΪΙ ήνγ ΚΗΘΪΙ.";
             Text[ dutch ] = "De matrix van het tweede gegevensbereik.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªζ•°ζ®η»„η„η©ιµγ€‚";
-            Text[ greek ] = "Η μήτρα της δεύτερης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της δεύτερης εγγραφής.";
             Text[ korean ] = "λ‘ λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έkinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -38950,7 +38950,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΣΜα ΗαΓζα.";
             Text[ dutch ] = "De matrix van de eerste record.";
             Text[ chinese_simplified ] = "η¬¬δΈ€η»„ζ•°ζ®ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα της πρώτης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της πρώτης εγγραφής.";
             Text[ korean ] = "μ²« λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Birinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -39018,7 +39018,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΣΜα ΗαΛΗδν.";
             Text[ dutch ] = "De matrix met de tweede record.";
             Text[ chinese_simplified ] = "η¬¬δΊη»„ζ•°ζ®ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα της δεύτερης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της δεύτερης εγγραφής.";
             Text[ korean ] = "λ‘ λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έkinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -39130,7 +39130,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΣΜα ΗαΓζα.";
             Text[ dutch ] = "De matrix met de eerste record.";
             Text[ chinese_simplified ] = "η¬¬δΈ€δΈªζ•°ζ®η»„η„ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα της πρώτης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας πρώτης εγγραφής.";
             Text[ korean ] = "μ²« λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Birinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -39198,7 +39198,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΥέζέΙ ΗαΣΜα ΗαΛΗδν.";
             Text[ dutch ] = "De matrix met de tweede record.";
             Text[ chinese_simplified ] = "η¬¬δΊδΈªζ•°ζ®η»„η„ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα της δεύτερης εγγραφής.";
+            Text[ greek ] = "Ο πίνακας της δεύτερης εγγραφής.";
             Text[ korean ] = "λ‘ λ²μ§Έ λ μ½”λ“ λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "έkinci veri kόmesinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -39378,7 +39378,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ ΚΗΘΪ Γζ δΨΗή γδ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de Y-gegevens.";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„ Y γ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Y.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Y.";
             Text[ korean ] = "Y λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "Y verilerinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -39446,7 +39446,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ γΣΚήα Γζ δΨΗή γδ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix van de X-gegevens.";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„ Xγ€‚";
-            Text[ greek ] = "Η μήτρα των δεδομένων Χ.";
+            Text[ greek ] = "Ο πίνακας των δεδομένων Χ.";
             Text[ korean ] = "X λ°μ΄ν„° λ°°μ—΄μ…λ‹λ‹¤.";
             Text[ turkish ] = "X verilerinin matrisi.";
             Text[ language_user1 ] = " ";
@@ -39484,7 +39484,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ γΡΜΪ ΞανΙ ίδΥ.";
             Text[ dutch ] = "Interpreteert verwijzing naar een cel als tekst";
             Text[ chinese_simplified ] = "η”¨ζ–‡ε­—ζ¥η΅®ε®δΈ€δΈªε•ε…ƒζ Όη„εΌ•η”¨ε°ε€γ€‚";
-            Text[ greek ] = "Ορίζει την αναφορά σε ένα κελί ως κείμενο.";
+            Text[ greek ] = "Ορίζει την παραπομπή σε ένα κελί ως κείμενο.";
             Text[ korean ] = "μ…€ μ°Έμ΅°λ¥Ό ν…μ¤νΈλ΅ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Bir hόcreye alύnan referansύ metin olarak dφndόrόr.";
             Text[ language_user1 ] = " ";
@@ -39728,7 +39728,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "sheet_text";
             Text[ dutch ] = "Werkblad";
             Text[ chinese_simplified ] = "sheet_text";
-            Text[ greek ] = "Πίνακας";
+            Text[ greek ] = "Φύλλο";
             Text[ korean ] = "μ‹νΈ";
             Text[ turkish ] = "Tablo";
             Text[ language_user1 ] = " ";
@@ -39762,7 +39762,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗΣγ ΜΟζα γΡΜΪ ΗαΞανΙ.";
             Text[ dutch ] = "De werkbladnaam van de celverwijzing";
             Text[ chinese_simplified ] = "δ½Ώη”¨ε•ε…ƒζ ΌεΌ•η”¨η„ε·¥δ½θ΅¨εη§°γ€‚";
-            Text[ greek ] = "Το όνομα του πίνακα μιας αναφοράς κελιού.";
+            Text[ greek ] = "Το όνομα του υπολογιστικού φύλλου μιας παραπομπής κελιού.";
             Text[ korean ] = "μ…€ μ°Έμ΅°μ μ¤ν”„λ λ“μ‹νΈ μ΄λ¦„μ…λ‹λ‹¤.";
             Text[ turkish ] = "Hόcre referansύnύn tablo adύ.";
             Text[ language_user1 ] = " ";
@@ -39841,7 +39841,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -39875,7 +39875,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΡΜΪ δΨΗή (γΚΪΟΟ).";
             Text[ dutch ] = "De verwijzing naar een (meervoudig) bereik.";
             Text[ chinese_simplified ] = "εΌ•η”¨δΈ€δΈª(ε¤ι‡)εΊεγ€‚";
-            Text[ greek ] = "Η αναφορά σε μια (πολλαπλή) περιοχή.";
+            Text[ greek ] = "Η παραπομπή σε μια (πολλαπλή) περιοχή.";
             Text[ korean ] = "(λ‹¤μ¤‘) λ²”μ„ μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "(Ηoklu) aralύπa referans.";
             Text[ language_user1 ] = " ";
@@ -39989,7 +39989,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟνΟ ζΣνΨΙ ΗαήνγΙ ΗαγΡΗΟ ΗΞΚνΗΡεΗ.";
             Text[ dutch ] = "De index van de gekozen waarde (1..30).";
             Text[ chinese_simplified ] = "θ¦ι€‰ζ‹©ζ•°ε€Ό1θ‡³30δΈªη„η΄ΆεΌ•γ€‚";
-            Text[ greek ] = "Το ευρετήριο της τιμής (1..30) το οποίο επιλέχθηκε.";
+            Text[ greek ] = "Το επιλεγμένο ευρετήριο της τιμής (1..30).";
             Text[ korean ] = "μ„ νƒν• κ°’(1~30)μ μƒ‰μΈμ…λ‹λ‹¤.";
             Text[ turkish ] = "(1..30) arasύ deπerin dizini seηildi.";
             Text[ language_user1 ] = " ";
@@ -40096,7 +40096,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ Ρήγ ΗαΪγζΟ έν ΗαγΡΜΪ ΗαγΪΨμ.";
             Text[ dutch ] = "Geeft het kolomnummer van een verwijzing.";
             Text[ chinese_simplified ] = "η΅®ε®δΈ€δΈªεΌ•η”¨η„ε†…ιƒ¨ε—ε·γ€‚";
-            Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό στήλης μιας αναφοράς.";
+            Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό στήλης μιας παραπομπής.";
             Text[ korean ] = "μ°Έμ΅°μ λ‚΄λ¶€ μ—΄ λ²νΈλ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Referansύn iη sόtun numarasύnύ dφndόrόr.";
             Text[ language_user1 ] = " ";
@@ -40136,7 +40136,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -40170,7 +40170,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαγΡΜΪ Εαμ ΞανΙ Γζ δΨΗή.";
             Text[ dutch ] = "Verwijzing naar een cel of een bereik.";
             Text[ chinese_simplified ] = "θ¦θ·εΎ—ε…¶ε—ζ ‡η„ε•ε…ƒζ Όζ–ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η αναφορά σε ένα κελί ή σε μια περιοχή.";
+            Text[ greek ] = "Η παραπομπή σε ένα κελί ή σε μια περιοχή.";
             Text[ korean ] = "μ…€ λλ” λ²”μ„ μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "Hόcre ya da aralύk referansύ.";
             Text[ language_user1 ] = " ";
@@ -40208,7 +40208,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ Ρήγ ΗαΥέ ΗαΟΗΞαν αγΡΜΪ.";
             Text[ dutch ] = "Geeft als resultaat het rijnummer van een verwijzing.";
             Text[ chinese_simplified ] = "η»™ε®εΌ•η”¨η„θ΅ε·γ€‚";
-            Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό της γραμμής μιας αναφοράς.";
+            Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό της γραμμής μιας παραπομπής.";
             Text[ korean ] = "μ°Έμ΅°μ λ‚΄λ¶€ ν–‰ λ²νΈλ¥Ό μ§€μ •ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Referansύn iη satύr numarasύnύ belirler.";
             Text[ language_user1 ] = " ";
@@ -40248,7 +40248,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -40282,7 +40282,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΞανΙ Γζ δΨΗή ΗαΞαΗνΗ ΗαγΡΗΟ γΪΡέΙ Ρήγ ΗαΥέ ΗαΞΗΥ Θε.";
             Text[ dutch ] = "De verwijzing naar een cel of een cellenbereik.";
             Text[ chinese_simplified ] = "ζ―ι€θ¦εΎ—ε°ε…¶θ΅ε·η„ε•ε…ƒζ Όζ–ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η αναφορά σε ένα κελί ή σε μια περιοχή.";
+            Text[ greek ] = "Η παραπομπή σε ένα κελί ή σε μια περιοχή.";
             Text[ korean ] = "μ…€ λλ” λ²”μ„ μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "Hόcre ya da aralύk referansύ.";
             Text[ language_user1 ] = " ";
@@ -40318,7 +40318,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ Ρήγ ΗαΜΟζα ΗαΟΗΞαν αγΡΜΪ Γζ αΣαΣαΙ δΥνΙ.";
             Text[ dutch ] = "Bepaalt het interne werkbladnummer van een verwijzing of een tekenreeks.";
             Text[ chinese_simplified ] = "η΅®ε®δΈ€δΈªεΌ•η”¨ζ–δΈ€δΈªε­—δΈ²η„ε·¥δ½θ΅¨ε·η γ€‚";
-            Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό πίνακα μιας αναφοράς ή μιας ακολουθίας χαρακτήρων.";
+            Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό φύλλου μιας παραπομπής ή μιας ακολουθίας χαρακτήρων.";
             Text[ korean ] = "μ°Έμ΅° λλ” λ¬Έμμ—΄μ λ‚΄λ¶€ μ‹νΈ λ²νΈλ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Referans ya da dizenin iη tablo numarasύnύ verir.";
             Text[ language_user1 ] = " ";
@@ -40357,7 +40357,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -40390,7 +40390,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαγΡΜΪ Εαμ ΞανΙ Γζ δΨΗή Γζ ΣαΣαΙ ΓΝΡέ γδ ΗΣγ ΜΟζα.";
             Text[ dutch ] = "De verwijzing naar een cel, een bereik of naar de tekenreeks van een werkbladnaam.";
             Text[ chinese_simplified ] = "ε―ΉδΈ€δΈªε•ε…ƒζ Όζ–δΈ€δΈªεΊεζ–δΈ€δΈªε·¥δ½θ΅¨εη§°ε­—δΈ²η„εΌ•η”¨γ€‚";
-            Text[ greek ] = "Η αναφορά σε ένα κελί ή σε μια περιοχή ή η ακολουθία χαρακτήρων ενός ονόματος πίνακα.";
+            Text[ greek ] = "Η παραπομπή σε ένα κελί ή σε μια περιοχή ή η ακολουθία χαρακτήρων ενός ονόματος φύλλου.";
             Text[ korean ] = "μ…€μ΄λ‚ λ²”μ„ λλ” μ‹νΈ μ΄λ¦„μ λ¬Έμμ—΄μ— λ€ν• μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "Hόcre ya da aralύk ya da bir tablo adύnύn karakter zincirine referans.";
             Text[ language_user1 ] = " ";
@@ -40429,7 +40429,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ Ρήγ ΗαΓΪγΟΙ έν γΡΜΪ Γζ Υένέ.";
             Text[ dutch ] = "Bepaalt het aantal kolommen in een verwijzing of een matrix.";
             Text[ chinese_simplified ] = "ζ±‚εΎ—δΈ€δΈªεΌ•η”¨ζ–ζ•°η»„(η©ιµ)η„ε—ζ•°η›®γ€‚";
-            Text[ greek ] = "Ορίζει το πλήθος των στηλών μιας αναφοράς ή μιας μήτρας.";
+            Text[ greek ] = "Ορίζει το πλήθος των στηλών μιας παραπομπής ή ενός πίνακα.";
             Text[ korean ] = "λ°°μ—΄ λλ” μ°Έμ΅°μ— μλ” μ—΄ μλ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Referans ya da matrisin sόtun sayύsύnύ belirler.";
             Text[ language_user1 ] = " ";
@@ -40469,7 +40469,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -40503,7 +40503,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΥένέ (ΗαγΡΜΪ) ΗαΠν νΜΘ ΚΝΟνΟ ΪΟΟ ΓΪγΟΚε.";
             Text[ dutch ] = "De matrix (de verwijzing), waarvan het aantal kolommen wordt bepaald.";
             Text[ chinese_simplified ] = "θ¦η΅®ε®ε…¶ε—ζ•°η„ε•ε…ƒζ ΌεΊε(εΌ•η”¨)γ€‚";
-            Text[ greek ] = "Η μήτρα (η αναφορά) της οποίας ορίζεται το πλήθος στηλών.";
+            Text[ greek ] = "Ο πίνακας (η παραπομπή) του οποίου ορίζεται το πλήθος στηλών.";
             Text[ korean ] = "μ—΄ μλ¥Ό μ§€μ •ν•λ” λ°°μ—΄(μ°Έμ΅°)μ…λ‹λ‹¤.";
             Text[ turkish ] = "Sόtun sayύsύ belirlenecek matris (referans).";
             Text[ language_user1 ] = " ";
@@ -40541,7 +40541,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ ΪΟΟ Υέζέ γΡΜΪ Γζ Υένέ.";
             Text[ dutch ] = "Geeft als resultaat het aantal rijen in een verwijzing of matrix.";
             Text[ chinese_simplified ] = "η»™ε®εΌ•η”¨ζ–ζ•°η»„η„θ΅ζ•°γ€‚";
-            Text[ greek ] = "Ορίζει το πλήθος των γραμμών μιας αναφοράς ή μιας μήτρας.";
+            Text[ greek ] = "Ορίζει το πλήθος των γραμμών μιας παραπομπής ή ενός πίνακα.";
             Text[ korean ] = "μ°Έμ΅° λλ” λ°°μ—΄μ— μλ” ν–‰ μλ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Referans ya da matris satύr sayύsύnύ belirler.";
             Text[ language_user1 ] = " ";
@@ -40581,7 +40581,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -40615,7 +40615,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΥένέ (ΗαγΡΜΪ) ΗαγΡΗΟ ΚΝΟνΟ ΪΟΟ Υέζέε.";
             Text[ dutch ] = "De matrix (de verwijzing) waarvan het aantal rijen wordt bepaald.";
             Text[ chinese_simplified ] = "ζ―ι€θ¦εΎ—ε°ε…¶θ΅ε·η„η©ιµζ–εΌ•η”¨η„ε•ε…ƒζ ΌεΊεγ€‚";
-            Text[ greek ] = "Η μήτρα (η αναφορά) της οποίας ορίζεται το πλήθος γραμμών.";
+            Text[ greek ] = "Ο πίνακας (η παραπομπή) του οποίου ορίζεται το πλήθος γραμμών.";
             Text[ korean ] = "ν–‰ μλ¥Ό μ§€μ •ν•λ” λ°°μ—΄(μ°Έμ΅°)μ…λ‹λ‹¤.";
             Text[ turkish ] = "Satύr sayύsύ belirlenen matris (referans).";
             Text[ language_user1 ] = " ";
@@ -40651,7 +40651,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ ΪΟΟ ΜΟΗζα ΗαγΡΜΪ ΗαγΪΨμ. ΕΠΗ αγ νΚγ ΕΟΞΗα γΪαγΙ΅ έΣζέ νΚγ ΕΡΜΗΪ ΪΟΟ ΗαΜΟΗζα έν ΗαγΣΚδΟ.";
             Text[ dutch ] = "Bepaalt het aantal werkbladen van een verwijzing. Is er geen parameter opgegeven, dan wordt het aantal werkbladen van het document teruggegeven.";
             Text[ chinese_simplified ] = "η΅®ε®δΈ€δΈªεΌ•η”¨η„ε·¥δ½θ΅¨ζ•°η›®γ€‚ε¦‚ζζ²΅ζ‰η»™ε®ε‚ζ•°οΌ\nι‚£δΉει¦η„ζ―ζ–‡ζ΅£η„ε·¥δ½θ΅¨ζ€»ζ•°γ€‚";
-            Text[ greek ] = "Ορίζει το πλήθος των των πινάκων μιας αναφοράς. Αν δεν οριστεί παράμετρος, επιστρέφει ο πλήθος πινάκων ενός εγγράφου..";
+            Text[ greek ] = "Ορίζει το πλήθος των φύλλων μιας παραπομπής. Αν δεν οριστεί παράμετρος, επιστρέφει το πλήθος φύλλων ενός εγγράφου.";
             Text[ korean ] = "μ§€μ •ν• μ°Έμ΅°μ μ‹νΈ μλ¥Ό κµ¬ν•©λ‹λ‹¤. λ§¤κ° λ³€μλ¥Ό μ…λ ¥ν•μ§€ μ•μ€ κ²½μ° λ¬Έμ„μ μ΄ μ‹νΈ μλ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Referansύn tablo sayύsύnύ belirler. Parametre girilmemiώse, belgedeki toplam tablo sayύsύ verilir.";
             Text[ language_user1 ] = " ";
@@ -40690,7 +40690,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -40723,7 +40723,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαγΡΜΪ Εαμ ΞανΙ Γζ δΨΗή.";
             Text[ dutch ] = "De verwijzing naar een cel of een bereik.";
             Text[ chinese_simplified ] = "δΈ€δΈªε•ε…ƒζ ΌεΌ•η”¨ζ–δΈ€δΈªεΊεεΌ•η”¨γ€‚";
-            Text[ greek ] = "Η αναφορά σε ένα κελί ή σε μια περιοχή.";
+            Text[ greek ] = "Η παραπομπή σε ένα κελί ή σε μια περιοχή.";
             Text[ korean ] = "μ…€ λλ” λ²”μ„ μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "Hόcre ya da aralύπa referans.";
             Text[ language_user1 ] = " ";
@@ -40763,7 +40763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΘΝΛ Γέήν ζΕΤΗΡΙ Εαμ ΗαΞαΗνΗ ΗαγζΜζΟΙ ΘΗαΓΣέα.";
             Text[ dutch ] = "Horizontaal zoeken en verwijzen naar de zich daaronder bevindende cellen.";
             Text[ chinese_simplified ] = "ζ°΄εΉ³ζ–Ήε‘ζε―»ζδΈªε•ε…ƒζ ΌεΉ¶εΌ•η”¨ε…¶δΈ‹ζ–Ήη„ε•ε…ƒζ Όγ€‚";
-            Text[ greek ] = "Οριζόντια αναζήτηση και αναφορά σε παρακάτω τοποθετημένα κελιά.";
+            Text[ greek ] = "Οριζόντια αναζήτηση και παραπομπή σε παρακάτω τοποθετημένα κελιά.";
             Text[ korean ] = "μ•„λμ— μ„μΉν• μ…€μ κ°€λ΅ κ²€μƒ‰ λ° μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "Altύnda bulunan hόcrelere yatay referans ve arama.";
             Text[ language_user1 ] = " ";
@@ -40871,7 +40871,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Table_array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "table_array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -40906,7 +40906,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή νυΘΝΛ ένε Ϊδ ΗαΘνΗδΗΚ.";
             Text[ dutch ] = "De matrix of het bereik voor de verwijzing.";
             Text[ chinese_simplified ] = "ζ―η©ιµζ•°ζ®η»„ζ–η”¨ζ¥ζε―»ζ•°ζ®η„εΊεγ€‚";
-            Text[ greek ] = "Η μήτρα ή η περιοχή για την αναφορά.";
+            Text[ greek ] = "Ο πίνακας ή η περιοχή για την παραπομπή.";
             Text[ korean ] = "μ°Έμ΅°μ— λ€ν• λ°°μ—΄ λλ” λ²”μ„μ…λ‹λ‹¤.";
             Text[ turkish ] = "Referans matrisi ya da aralύπύ.";
             Text[ language_user1 ] = " ";
@@ -40974,7 +40974,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Ρήγ ΗαΥέ έν ΗαΥένέ ΗαΠν νΜΘ ΕΡΜΗΪ Ηαήνγ ΗαγΨΗΘήΙ γδε.";
             Text[ dutch ] = "Rijnummer in de matrix.";
             Text[ chinese_simplified ] = "ζ•°ζ®εΊε†…η„θ΅εΊε·γ€‚";
-            Text[ greek ] = "Δείκτης γραμμών στη μήτρα.";
+            Text[ greek ] = "Δείκτης γραμμών στον πίνακα.";
             Text[ korean ] = "λ°°μ—΄μ ν–‰ μƒ‰μΈμ…λ‹λ‹¤.";
             Text[ turkish ] = "Matrisdeki satύr indisi.";
             Text[ language_user1 ] = " ";
@@ -41043,7 +41043,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΕΠΗ ίΗδΚ ΗαήνγΙ TRUE Γζ γεγαΙ΅ νΜΘ ΚΡΚνΘ Υέ ΘΝΛ ΗαΥένέ ΚΡΚνΘΗπ ΚΥΗΪΟνΗπ.";
             Text[ dutch ] = "Is de logische waarde WAAR of niet aangegeven dan moet de zoekrij van de matrix oplopend gesorteerd zijn.";
             Text[ chinese_simplified ] = "θ‹¥ε€Όζ―\"true\"ζ–ζ²΅ζ‰ζ‡ε®οΌι‚£δΉζ•°η»„\nη„ζ¥ζ‰Ύθ΅ε°±εΏ…ι΅»ζ‰δΈε‡ι΅ΊεΊζ’ε—γ€‚";
-            Text[ greek ] = "Αν η τιμή είναι TRUE ή δεν ορίστηκε, πρέπει η γραμμή αναζήτησης της μήτρας να είναι ταξινομημένη κατά αύξουσα σειρά.";
+            Text[ greek ] = "Αν η τιμή είναι TRUE ή δεν ορίστηκε, πρέπει η γραμμή αναζήτησης του πίνακα να είναι ταξινομημένη κατά αύξουσα σειρά.";
             Text[ korean ] = "κ°’μ„ μ§€μ •ν•μ§€ μ•μ•κ±°λ‚ TRUEμ΄λ©΄, λ°°μ—΄μ κ²€μƒ‰ ν–‰μ΄ μ¤λ¦„μ°¨μμΌλ΅ μ •λ ¬λμ–΄ μμ–΄μ•Ό ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Deπer DOΠRU ya da belirtilmemiώse, matrisin arama satύrύ artan dόzende sύralanmalύdύr.";
             Text[ language_user1 ] = " ";
@@ -41081,7 +41081,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΘΝΛ ΪγζΟνΗπ Λγ ΗαΕΤΗΡΙ Εαμ ΗαΞαΗνΗ ΗαγΜΗζΡΙ.";
             Text[ dutch ] = "Verticaal zoeken en verwijzing naar naastliggende cellen.";
             Text[ chinese_simplified ] = "ε¨ζ•°ζ®η»„η„ι¦–ε—ζ¥ζ‰Ύζ‡ε®η„ζ•°ε€ΌοΌεΉ¶θΏ”ε›ζ•°ε€Όζ‰€ε¨θ΅\nδΈ­ζ‡ε®ε—ε¤„η„ζ•°ε€Όγ€‚";
-            Text[ greek ] = "Κατακόρυφη αναζήτηση και αναφορά στα διπλανά κελιά.";
+            Text[ greek ] = "Κατακόρυφη αναζήτηση και παραπομπή στα διπλανά κελιά.";
             Text[ korean ] = "ν‘μ‹λ μ…€μ μ„Έλ΅ κ²€μƒ‰ λ° μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "Komώu hόcrelere referans ve dikey arama.";
             Text[ language_user1 ] = " ";
@@ -41189,7 +41189,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Table_array";
             Text[ dutch ] = "Matrix";
             Text[ chinese_simplified ] = "table_array";
-            Text[ greek ] = "Μήτρα";
+            Text[ greek ] = "Πίνακας";
             Text[ korean ] = "λ°°μ—΄";
             Text[ turkish ] = "Matris";
             Text[ language_user1 ] = " ";
@@ -41224,7 +41224,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Υένέ Γζ δΨΗή νΚγ ΗΣΚΡΟΗΟ ΗαΘνΗδΗΚ ένε.";
             Text[ dutch ] = "De matrix of het bereik voor de verwijzing.";
             Text[ chinese_simplified ] = "η©ιµζ•°ζ®η»„ζ–δΈ€δΈªεΌ•η”¨η„εΊεγ€‚";
-            Text[ greek ] = "Η μήτρα ή η περιοχή για την αναφορά.";
+            Text[ greek ] = "Ο πίνακας ή η περιοχή για την παραπομπή.";
             Text[ korean ] = "μ°Έμ΅°μ— λ€ν• λ°°μ—΄ λλ” λ²”μ„μ…λ‹λ‹¤.";
             Text[ turkish ] = "Referans ile ilgili matris ya da aralύk.";
             Text[ language_user1 ] = " ";
@@ -41292,7 +41292,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Ρήγ ΗαΪγζΟ έν table_array ΗαΠν νΜΘ ΕΡΜΗΪ ΗαήνγΙ ΗαγΨΗΘήΙ γδε.";
             Text[ dutch ] = "Kolommenindex in de matrix";
             Text[ chinese_simplified ] = "ζ•°ζ®η»„ε†…ιƒ¨η„ε—εΊε·γ€‚";
-            Text[ greek ] = "Δείκτης στηλών στη μήτρα.";
+            Text[ greek ] = "Δείκτης στηλών στον πίνακα.";
             Text[ korean ] = "λ°°μ—΄μ μ—΄ μƒ‰μΈ λ²νΈμ…λ‹λ‹¤.";
             Text[ turkish ] = "Matrisin sόtun dizini.";
             Text[ language_user1 ] = " ";
@@ -41326,7 +41326,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Sort order";
             Text[ dutch ] = "Gesorteerd";
             Text[ chinese_simplified ] = "sort order";
-            Text[ greek ] = "Ταξινομημένα";
+            Text[ greek ] = "Σειρά ταξινόμησης";
             Text[ korean ] = "μ •λ ¬ μμ„";
             Text[ turkish ] = "Sύralama";
             Text[ language_user1 ] = " ";
@@ -41361,7 +41361,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΕΠΗ ίΗδΚ ΗαήνγΙ TRUE Γζ γεγαΙ΅ νΜΘ ΚΡΚνΘ Υέ ΘΝΛ ΗαΥένέ ΚΡΚνΘΗπ ΚΥΗΪΟνΗπ.";
             Text[ dutch ] = "Is het resultaat WAAR of niet aangegeven, dan moet de zoekkolom van de matrix oplopend gesorteerd zijn.";
             Text[ chinese_simplified ] = "θ‹¥ε€Όζ―TRUEζ–ζ²΅ζ‰ζ‡ε®οΌι‚£δΉζ•°η»„η„ε—ε¨ζ¥ζ‰Ύζ—¶ε°±ζ‰δΈε‡ι΅ΊεΊζ’ε—γ€‚";
-            Text[ greek ] = "Αν η τιμή είναι TRUE ή δεν ορίστηκε, πρέπει η στήλη αναζήτησης της μήτρας να είναι ταξινομημένη κατά αύξουσα σειρά.";
+            Text[ greek ] = "Αν η τιμή είναι TRUE ή δεν ορίστηκε, πρέπει η στήλη αναζήτησης του πίνακα να είναι ταξινομημένη κατά αύξουσα σειρά.";
             Text[ korean ] = "κ°’μ„ μ§€μ •ν•μ§€ μ•μ•κ±°λ‚ TRUEμ΄λ©΄, λ°°μ—΄μ κ²€μƒ‰ μ—΄μ΄ μ¤λ¦„μ°¨μμΌλ΅ μ •λ ¬λμ–΄ μμ–΄μ•Ό ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Deπer DOΠRU ya da belirtilmemiώse, matrisin arama sόtunu artan dόzende sύralanmalύdύr.";
             Text[ language_user1 ] = " ";
@@ -41399,7 +41399,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ γΡΜΪ Εαμ ΞανΙ έν δΨΗή γΪΨμ.";
             Text[ dutch ] = "Definieert een verwijzing naar een cel uit een aangegeven bereik.";
             Text[ chinese_simplified ] = "ει¦δΈ€δΈªη»™ε®εΊεδΈ­η„ε•ε…ƒζ ΌεΌ•η”¨ε†…ε®Ήγ€‚";
-            Text[ greek ] = "Ορίζει μια αναφορά σε ένα κελί μια επιλεγμένης περιοχής.";
+            Text[ greek ] = "Ορίζει μια παραπομπή σε ένα κελί μια επιλεγμένης περιοχής.";
             Text[ korean ] = "μ •μλ λ²”μ„μ—μ„ μ…€ μ°Έμ΅°λ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Belirtilen aralύktan bir hόcre referansύ tanύmlar.";
             Text[ language_user1 ] = " ";
@@ -41439,7 +41439,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -41456,7 +41456,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "is a reference to one or more cell ranges." ;
             Text [ norwegian ] = "Der Bezug auf einen (Mehrfach-)Bereich." ;
             Text [ italian ] = "Il riferimento ad un'area (multipla)." ;
-            Text [ portuguese_brazilian ] = "A referκncia a um  intervalo (mϊltiplo) de cιlulas." ;
+            Text [ portuguese_brazilian ] = "A referκncia a um intervalo (mϊltiplo) de cιlulas." ;
             Text [ portuguese ] = "ι a referκncia a um ou vαrios intervalos de cιlulas." ;
             Text [ finnish ] = "Viittaus moniosaiseen alueeseen" ;
             Text [ danish ] = "En reference til et (multi-)omrεde." ;
@@ -41473,7 +41473,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαγΡΜΪ Εαμ δΨΗή (γΚΪΟΟ).";
             Text[ dutch ] = "De verwijzing naar ιιn of meer cellenbereiken.";
             Text[ chinese_simplified ] = "δΈ€δΈª(ε¤ι‡)εΊεη„εΌ•η”¨γ€‚";
-            Text[ greek ] = "Η αναφορά σε μια (πολλαπλή) περιοχή.";
+            Text[ greek ] = "Η παραπομπή σε μια (πολλαπλή) περιοχή.";
             Text[ korean ] = "(λ‹¤μ¤‘) λ²”μ„ μ°Έμ΅°μ…λ‹λ‹¤.";
             Text[ turkish ] = "(Ηoklu) aralύπa alύnan referans.";
             Text[ language_user1 ] = " ";
@@ -41715,7 +41715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ γΝΚζνΗΚ ΞανΙ γΝΟΟΙ ίγΡΜΪ έν ΣαΣαΙ δΥνΙ";
             Text[ dutch ] = "Definieert de inhoud van een aangegeven cel die een verwijzing bevat in de vorm van tekst.";
             Text[ chinese_simplified ] = "η΅®ε®δΈ€δΈªδ»¥ζ–‡ε­—ζ ΌεΌθΎ“ε…¥η„ε•ε…ƒζ ΌεΌ•η”¨η„ε†…ε®Ήγ€‚";
-            Text[ greek ] = "Ορίζει το περιεχόμενο ενός κελιού το οποίο έχει οριστεί ως αναφορά σε μορφή κειμένου.";
+            Text[ greek ] = "Ορίζει το περιεχόμενο ενός κελιού το οποίο έχει οριστεί ως παραπομπή σε μορφή κειμένου.";
             Text[ korean ] = "ν…μ¤νΈ ν•μ‹μΌλ΅ μ°Έμ΅°λ μ…€μ λ‚΄μ©μ„ κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Metin ώeklinde referans alύnan bir hόcrenin iηeriπini tanύmlar.";
             Text[ language_user1 ] = " ";
@@ -41755,7 +41755,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Ref_text";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "ref_text";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "ref ";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -41789,7 +41789,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαΞανΙ ΗαγΡΗΟ Κήννγ γΝΚζνΗΚεΗ ίγΡΜΪ Ϊαμ Τία δΥ ( Ϊαμ ΣΘνα ΗαγΛΗα\"A1\").";
             Text[ dutch ] = "De cel waarvan de inhoud moet worden geοnterpreteerd als een verwijzing in de vorm van tekst (bijv. \"A1\").";
             Text[ chinese_simplified ] = "ε•ε…ƒζ ΌοΌε…¶ε†…ε®Ήδ½Ώη”¨ζ–‡ε­—ζ ΌεΌη„εΌ•η”¨(ε¦‚ \"A1\")γ€‚";
-            Text[ greek ] = "Το κελί, του οποίου πρόκειται να αποτιμηθεί το περιεχόμενο ως αναφορά σε μορφή κειμένου (π.χ. \"A1\").";
+            Text[ greek ] = "Το κελί, του οποίου πρόκειται να αποτιμηθεί το περιεχόμενο ως παραπομπή σε μορφή κειμένου (π.χ. \"A1\").";
             Text[ korean ] = "κ³„μ‚°ν•  λ‚΄μ©μ΄ μλ” μ…€μ€ ν…μ¤νΈ ν•μ‹μΌλ΅ μ°Έμ΅°λ©λ‹λ‹¤(μ: \"A1\").";
             Text[ turkish ] = "έηeriπi deπerlendirilecek hόcre metin ώeklinde  (Φrn. \"A1\") referans alύnacak.";
             Text[ language_user1 ] = " ";
@@ -42183,7 +42183,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Lookup_array";
             Text[ dutch ] = "Zoekmatrix";
             Text[ chinese_simplified ] = "lookup_array";
-            Text[ greek ] = "Μήτρα αναζήτησης";
+            Text[ greek ] = "Πίνακας αναζήτησης";
             Text[ korean ] = "lookup_array";
             Text[ turkish ] = "Arama matrisi";
             Text[ language_user1 ] = " ";
@@ -42217,7 +42217,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαγΥέζέΙ (ΗαδΨΗή) ΗαΚν Σζέ νΚγ ΗαΘΝΛ ένεΗ.";
             Text[ dutch ] = "De matrix (het bereik) waarin wordt gezocht.";
             Text[ chinese_simplified ] = "θ¦ε¨ε…¶δΈ­ζε―»η„ζ•°ζ®η»„(εΊε)γ€‚";
-            Text[ greek ] = "Η μήτρα (η περιοχή) στη οποία γίνεται η αναζήτηση";
+            Text[ greek ] = "Ο πίνακας (η περιοχή) στον οποίο γίνεται η αναζήτηση";
             Text[ korean ] = "κ²€μƒ‰μ΄ μν–‰λλ” λ°°μ—΄(λ²”μ„)μ…λ‹λ‹¤.";
             Text[ turkish ] = "Arama yapύlan matris (aralύk).";
             Text[ language_user1 ] = " ";
@@ -42324,7 +42324,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝΟΟ γΡΜΪ Κγ ΕÒΗΝΚε Ϊδ δήΨΙ ΗαΕδΨαΗή.";
             Text[ dutch ] = "Geeft als resultaat een verwijzing die is verschoven ten opzichte van het uitgangspunt.";
             Text[ chinese_simplified ] = "η΅®ε®δ»ζ‡ε®εΊη‚Ήε‡Ίε‘η§»ε¨εη„εΌ•η”¨εΊεγ€‚";
-            Text[ greek ] = "Ορίζει μια αναφορά η οποία μετακινήθηκε σχετικά με το αρχικό σημείο.";
+            Text[ greek ] = "Ορίζει μια παραπομπή η οποία μετακινήθηκε σχετικά με το αρχικό σημείο.";
             Text[ korean ] = "μ‹μ‘ μ„μΉμ™€ λΉ„κµν•μ—¬ μ΄λ™ν• μ°Έμ΅°λ¥Ό κµ¬ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Ηύkύώ noktasύna gφre taώύnan bir referans tanύmlar.";
             Text[ language_user1 ] = " ";
@@ -42364,7 +42364,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομπή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -42398,7 +42398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαγΡΜΪ ααΞανΙ ΗαΚν ΚΡνΟ ΚΝΟνΟ ΗαΕÒΗΝΙ ΘΟΑ γδεΗ.";
             Text[ dutch ] = "De verwijzing (de cel) van waaruit de verschuiving wordt bepaald.";
             Text[ chinese_simplified ] = "η”¨δΊθ®΅η®—η§»ε¨η„ζ‡ε®εΊη‚Ή(ε•ε…ƒζ Ό)γ€‚";
-            Text[ greek ] = "Η αναφορά (το κελί) από την οποία ορίζεται η μετακίνηση.";
+            Text[ greek ] = "Η παραπομπή (το κελί) από την οποία ορίζεται η μετακίνηση.";
             Text[ korean ] = "μ΄λ™ κΈ°μ¤€μ΄ λλ” μ°Έμ΅°(μ…€)μ…λ‹λ‹¤.";
             Text[ turkish ] = "Taώύnmanύn belirlenmeye baώlanacaπύ referans (hόcre).";
             Text[ language_user1 ] = " ";
@@ -42603,7 +42603,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΪΟΟ Υέζέ ΗαγΡΜΪ ΗαΠν ΚγΚ ΕÒΗΝΚε.";
             Text[ dutch ] = "Het aantal rijen van de verschoven verwijzing.";
             Text[ chinese_simplified ] = "εΌ•η”¨εΊεη„θ΅ζ•°γ€‚";
-            Text[ greek ] = "Το πλήθος των γραμμών της αναφοράς που μετακινήθηκε.";
+            Text[ greek ] = "Το πλήθος των γραμμών της παραπομπής που μετακινήθηκε.";
             Text[ korean ] = "μ΄λ™ν• μ°Έμ΅°μ ν–‰ μμ…λ‹λ‹¤.";
             Text[ turkish ] = "Taώύnan referansύn satύr sayύsύ.";
             Text[ language_user1 ] = " ";
@@ -42671,7 +42671,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΪΟΟ ΓΪγΟΙ ΗαγΡΜΪ ΗαΠν ΚγΚ ΕÒΗΝΚε.";
             Text[ dutch ] = "Het aantal kolommen van de verschoven verwijzing.";
             Text[ chinese_simplified ] = "η§»ε¨η„εΌ•η”¨εΊεη„ε—ζ•°γ€‚";
-            Text[ greek ] = "Το πλήθος των στηλών της αναφοράς που μετακινήθηκε.";
+            Text[ greek ] = "Το πλήθος των στηλών της παραπομπής που μετακινήθηκε.";
             Text[ korean ] = "μ΄λ™ν• μ°Έμ΅°μ μ—΄ μμ…λ‹λ‹¤.";
             Text[ turkish ] = "Taώύnan referansύn sόtun sayύsύ.";
             Text[ language_user1 ] = " ";
@@ -42749,7 +42749,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "reference";
             Text[ dutch ] = "Verwijzing";
             Text[ chinese_simplified ] = "reference";
-            Text[ greek ] = "Αναφορά";
+            Text[ greek ] = "Παραπομή";
             Text[ korean ] = "μ°Έμ΅°";
             Text[ turkish ] = "Referans";
             Text[ language_user1 ] = " ";
@@ -42783,7 +42783,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "γΡΜΪ ααΞανΙ ΗαΚν ΝΟΛ ένεΗ ΗαΞΨΓ.";
             Text[ dutch ] = "De verwijzing (cel) waarin de fout is opgetreden.";
             Text[ chinese_simplified ] = "ε‡Ίη°ι”™θ――η„ε•ε…ƒζ ΌεΌ•η”¨γ€‚";
-            Text[ greek ] = "Η αναφορά (το κελί) στην οποία παρουσιάστηκε σφάλμα.";
+            Text[ greek ] = "Η παραπομπή (το κελί) στην οποία παρουσιάστηκε σφάλμα.";
             Text[ korean ] = "μ¤λ¥κ°€ λ°μƒν• μ°Έμ΅°(μ…€)μ…λ‹λ‹¤.";
             Text[ turkish ] = "Hatanύn meydana geldiπi referans (hόcre).";
             Text[ language_user1 ] = " ";
@@ -42824,7 +42824,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ greek ] = "Εφαρμόζει ένα πρότυπο μορφοποίησης στο κελί του τύπου.";
             Text[ korean ] = "μμ‹ μ…€μ— μ¤νƒ€μΌμ„ μ μ©ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Formόl hόcresine bir biηim uygular.";
-            Text[ language_user1 ] = "All ; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EMp.s. Formatvorlage ist Style im Gegensatz zu Dok-vorlage (template). ODER ist es in Calc was Besonderes?";
+            Text[ language_user1 ] = "; All ; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EMp.s. Formatvorlage ist Style im Gegensatz zu Dok-vorlage (template). ODER ist es in Calc was Besonderes?";
             Text[ catalan ] = "Aplica un estil a la cel.la de fσrmules.";
             Text[ thai ] = "ΰΉƒΰΈΰΉ‰ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΉ€ΰΈ‹ΰΈ¥ΰΈ¥ΰΉΰΈªΰΈΉΰΈ•ΰΈ£";
             Text[ czech ] = "PouΕΎije definovanΓ½ styl na buΕku se vzorcem.";
@@ -42898,7 +42898,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ greek ] = "Όνομα του προτύπου που πρόκειται να εφαρμοστεί.";
             Text[ korean ] = "μ μ©ν•  μ¤νƒ€μΌ μ΄λ¦„μ…λ‹λ‹¤.";
             Text[ turkish ] = "Uygulanacak biηimin adύ.";
-            Text[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+            Text[ language_user1 ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
             Text[ catalan ] = "Nom de l'estil que s'ha d'aplicar.";
             Text[ thai ] = "ΰΉƒΰΈΰΉ‰ΰΈΰΈ·ΰΉΰΈ­ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
             Text[ czech ] = "NΓ΅zev pouΕΎitΓ©ho stylu.";
@@ -42967,7 +42967,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ greek ] = "Η διάρκεια (σε δευτερόλεπτα) κατά την οποία το πρότυπο παραμένει έγκυρο.";
             Text[ korean ] = "μ¤νƒ€μΌμ΄ μ ν¨ν•  μ‹κ°„(μ΄)μ…λ‹λ‹¤.";
             Text[ turkish ] = "Biηimin geηerli olacaπύ sόre (saniye biriminden).";
-            Text[ language_user1 ] = "All ; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+            Text[ language_user1 ] = "; All ; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
             Text[ catalan ] = "Temps (en segons) que l'estil romandrΰ vΰlid.";
             Text[ thai ] = "ΰΉ€ΰΈ§ΰΈ¥ΰΈ² (ΰΉƒΰΈ™ΰΈ§ΰΈ΄ΰΈ™ΰΈ²ΰΈ—ΰΈµ) ΰΈ—ΰΈµΰΉΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ«ΰΈ¥ΰΈ·ΰΈ­ΰΈ­ΰΈΆΰΈΉΰΉΰΈ—ΰΈµΰΉΰΈ–ΰΈΉΰΈΰΈ•ΰΉ‰ΰΈ­ΰΈ‡";
             Text[ czech ] = "Δas (v sekundΓ΅ch), po kterΓ½ bude styl aktivnΓ­.";
@@ -43035,7 +43035,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ greek ] = "Το στυλ που θα εφαρμοστεί μετά την λήξη του χρόνου.";
             Text[ korean ] = "μ‹κ°„μ΄ λ§λ£λ ν›„μ— μ μ©ν•  μ¤νƒ€μΌμ…λ‹λ‹¤.";
             Text[ turkish ] = "Sόre dolduktan sonra uygulanacak biηim.";
-            Text[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+            Text[ language_user1 ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
             Text[ catalan ] = "Estil que s'ha d'aplicar desprιs que expiri el temps.";
             Text[ thai ] = "ΰΉƒΰΈΰΉ‰ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡ΰΉ€ΰΈ§ΰΈ¥ΰΈ²ΰΈ«ΰΈ΅ΰΈ”ΰΈ­ΰΈ²ΰΈΆΰΈΈ";
             Text[ czech ] = "Styl, kterΓ½ bude pouΕΎit po vyprΕ΅enΓ­ ΔasovΓ©ho limitu.";
@@ -43574,7 +43574,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Ρήγ΅ Γζ γΡΜΪ Εαμ ΞανΙ ΘεΗ Ρήγ΅ Γζ ΥνΫΙ Κήνγ Εαμ Ρήγ.";
             Text[ dutch ] = "Waarde is een getal, een verwijzing naar een cel die een getal bevat, of een formule die een getal als resultaat te zien geeft.";
             Text[ chinese_simplified ] = "ζ―δΈ€δΈªζ•°ε­—οΌδΈ€δΈªε«ζ‰ζ•°ε­—η„ε•ε…ƒζ ΌεΌ•η”¨οΌ\nζ–θ€…ζ―δΈ€δΈªθ®΅η®—ζ•°ε­—η„ε…¬εΌγ€‚";
-            Text[ greek ] = "Τιμή είναι ένας αριθμός, μια αναφορά σε ένα κελί το οποία περιέχει έναν αριθμό, ή ένας τύπος που έχει ως αποτέλεσμα έναν αριθμό.";
+            Text[ greek ] = "Τιμή είναι ένας αριθμός, μια παραπομπή σε ένα κελί το οποία περιέχει έναν αριθμό, ή ένας τύπος που έχει ως αποτέλεσμα έναν αριθμό.";
             Text[ korean ] = "κ°’μ€ μ«μ, μ«μλ¥Ό ν¬ν•¨ν•λ” μ…€ μ°Έμ΅° λλ” μ«μλ΅ ν‘μ‹λλ” μμ‹μ…λ‹λ‹¤.";
             Text[ turkish ] = "Deπer, bir sayύ, sayύ iηeren bir hόcre referansύ ya da sayύ veren bir formόldόr.";
             Text[ language_user1 ] = " ";
@@ -44202,7 +44202,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΘΝΛ Ϊδ ΜÒΑ γδ ίαγΙ έν δΥ γΪ γΡΗΪΗΙ ΗαΓΝΡέ ΗαίΘνΡΙ ζΗαΥΫνΡΙ.";
             Text[ dutch ] = "Zoekt een gedeelte van een woord (er wordt daarbij onderscheid gemaakt tussen hoofdletters en kleine letters).";
             Text[ chinese_simplified ] = "δ»¥εΊε†ε¤§ε°ε†™ε­—ζ―η„ζ–ΉεΌε¨δΈ€δΈªε­—δΈ²ε†…ζ¥ζ‰ΎζδΈ€δΈªε­—δΈ²γ€‚";
-            Text[ greek ] = "Αναζητεί τμήμα μιας λέξης σε ένα κείμενο λαμβάνοντας υπόψη της γραφής (Κεφαλαία-Πεζά).";
+            Text[ greek ] = "Αναζητεί τμήμα μιας λέξης σε ένα κείμενο λαμβάνοντας υπόψη της γραφής (Διάκριση πεζών - κεφαλαίων).";
             Text[ korean ] = "ν…μ¤νΈ λ¬Έμμ—΄μ„ λ‹¤λ¥Έ ν…μ¤νΈμ—μ„ μ°Ύμµλ‹λ‹¤(λ€/μ†λ¬Έμ κµ¬λ¶„).";
             Text[ turkish ] = "Metin iηinde sφzcόk parηalarύ arar (bόyόk/kόηόk harf duyarlύ).";
             Text[ language_user1 ] = " ";
@@ -45985,7 +45985,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Decimals";
             Text[ dutch ] = "Aantal decimalen";
             Text[ chinese_simplified ] = "decimals";
-            Text[ greek ] = "Δεκαδικά";
+            Text[ greek ] = "Δεκαδικοί";
             Text[ korean ] = "μ†μ";
             Text[ turkish ] = "Onluk";
             Text[ catalan ] = "decimals";
@@ -46052,7 +46052,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "T";
             Text[ dutch ] = "Geen scheidingsteken voor duizendtallen";
             Text[ chinese_simplified ] = "T";
-            Text[ greek ] = "Τ";
+            Text[ greek ] = "Χωρίς διαχωριστικά χιλιάδων";
             Text[ korean ] = "μ² λ‹¨μ„ κµ¬λ¶„ κΈ°νΈ μ—†μ";
             Text[ turkish ] = "Binler ayracύ yok";
             Text[ language_user1 ] = " ";
@@ -46086,7 +46086,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ήνγΙ γδΨήνΙ ΚΝΟΟ γΗ ΕΠΗ ίΗδ γδ ΗαΦΡζΡν ζΦΪ έζΗΥα Θνδ ΗαΓΡήΗγ.";
             Text[ dutch ] = "Geen scheidingstekens voor duizendtallen. Als de waarheidswaarde, indien beschikbaar, WAAR (ongelijk aan O) is, dan worden er geen scheidingstekens gezet.";
             Text[ chinese_simplified ] = "εƒδ½η‚Ήγ€‚η»™ε®ζ―ε¦δ½Ώη”¨εƒδ½η‚Ήγ€‚ε¦‚ζι€»θΎ‘ε€Όε­ε¨εΉ¶δΈ”ζ― true(δΈη­‰δΊ0)οΌε™δΈδ½Ώη”¨εƒδ½η‚Ήγ€‚";
-            Text[ greek ] = "Διαχωριστικό χιλίων. Ορίζει αν εμφανίζονται διαχωριστικά χιλίων.";
+            Text[ greek ] = "Χωρίς διαχωριστικό χιλιάδων. Τιμή αληθής, αν υπάρχει και είναι ΑΛΗΘΗΣ (διάφορο του 0), δεν ορίζονται διαχωριστικά χιλιάδων.";
             Text[ korean ] = "μ² λ‹¨μ„ κµ¬λ¶„ κΈ°νΈλ¥Ό μ‚¬μ©ν•μ§€ μ•μµλ‹λ‹¤. True κ°’μ΄ μ΅΄μ¬ν•κ³  0μ΄ μ•„λ‹ TRUEμΈ κ²½μ°, μ² λ‹¨μ„ κµ¬λ¶„ κΈ°νΈλ¥Ό μ„¤μ •ν•μ§€ μ•μµλ‹λ‹¤.";
             Text[ turkish ] = "Basamak ayύracύ yok. ";
             Text[ language_user1 ] = " ";
@@ -47759,7 +47759,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΚΝζα ήνγΙ ΚΘΪΗπ αΕΟΞΗα έν ΜΟζα convert.ini.";
             Text[ dutch ] = "Berekent een waarde aan de hand van een omrekeningstabel uit de configuratie (calc.xml).";
             Text[ chinese_simplified ] = "ζ‰η…§δΈ€δΈªι…η½®ζ–‡δ»¶(calc.xml)η„ζΆη®—θ΅¨ζ¥ζΆη®—ζδΈ€δΈªζ•°ε€Όγ€‚";
-            Text[ greek ] = "Μετατρέπει μια τιμή σύμφωνα με μια καταχώριση του πίνακα convert.ini.";
+            Text[ greek ] = "Μετατρέπει μια τιμή σύμφωνα με έναν πίνακα μετατροπής στη ρύθμιση διαμόρφωσης (calc.xml).";
             Text[ korean ] = "μ„¤μ •μ λ³€ν™ ν‘(calc.xml)μ— λ”°λΌ κ°’μ„ λ³€ν™ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Yapύlandύrma iηindeki dφnόώόm tablosuna (calc.xml) gφre deπeri dφnόώtόrόr.";
             Text[ language_user1 ] = " ";
@@ -47898,7 +47898,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαζΝΟΙ ΗαΚν νΚγ ΗαΚΝζνα γδεΗ (γΡΗΪΗΙ ΗαΓΝΡέ ΗαίΘνΡΙ ζΗαΥΫνΡΙ).";
             Text[ dutch ] = "Eenheid van waaruit wordt omgerekend, hoofdletters/kleine letters zijn relevant.";
             Text[ chinese_simplified ] = "θ¦θΆ«θ½¬ζΆη„εζ‰η„θ΄§εΈε•δ½οΌεΊε†ε¤§ε°ε†™γ€‚";
-            Text[ greek ] = "Μονάδα από την οποία γίνεται η μετατροπή. Πεζά/Κεφαλαία γράμματα θα λαμβάνονται υπόψη.";
+            Text[ greek ] = "Μονάδα από την οποία γίνεται η μετατροπή, διάκριση πεζών - κεφαλαίων.";
             Text[ korean ] = "λ³€ν™ν•  λ‹¨μ„μ…λ‹λ‹¤. λ€/μ†λ¬Έμλ¥Ό κµ¬λ¶„ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Dφnόώtόrme kaynak birimi, bόyόk/kόηόk harf duyarlύlύπύ φnemli.";
             Text[ language_user1 ] = " ";
@@ -47964,7 +47964,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ΗαζΝΟΙ ΗαΚν νΚγ ΗαΚΝζνα ΕανεΗ (γΡΗΪΗΙ ΗαΓΝΡέ ΗαίΘνΡΙ ζΗαΥΫνΡΙ).";
             Text[ dutch ] = "Eenheid waarnaar wordt geconverteerd, hoofdletters/kleine letters zijn relevant.";
             Text[ chinese_simplified ] = "θ¦θ½¬ζΆζη„θ΄§εΈε•δ½οΌεΊε†ε¤§ε°ε†™γ€‚";
-            Text[ greek ] = "Μονάδα από την οποία γίνεται η μετατροπή. Πεζά/Κεφαλαία γράμματα θα λαμβάνονται υπόψη.";
+            Text[ greek ] = "Μονάδα από την οποία γίνεται η μετατροπή, διάκριση πεζών - κεφαλαίων.";
             Text[ korean ] = "λ³€ν™ν•  λ‹¨μ„μ…λ‹λ‹¤. λ€/μ†λ¬Έμλ¥Ό κµ¬λ¶„ν•©λ‹λ‹¤.";
             Text[ turkish ] = "Dφnόώtόrme hedef birimi, bόyόk/kόηόk harf duyarlύlύπύ φnemli.";
             Text[ language_user1 ] = " ";
@@ -48147,7 +48147,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ english_us ] = "Calculates the value of a Roman numeral.";
             Text[ portuguese ] = "Calcula o valor de um algarismo romano.";
             Text[ russian ] = "Οπεξαπΰησες πθμρκξε χθρλξ β ΰπΰαρκξε.";
-            Text[ greek ] = "Υπολογίζει την τιμή ενός ρωμαϊκού αριθμού.";
+            Text[ greek ] = "Υπολογίζει την τιμή ενός αριθμητικού ρωμαϊκού τύπου.";
             Text[ dutch ] = "Berekent de waarde van een Romeins cijfer.";
             Text[ french ] = "Calcule la valeur d'un nombre en chiffres romains.";
             Text[ spanish ] = "Calcula el valor de un nϊmero romano.";
@@ -48213,7 +48213,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ english_us ] = "The text that represents a Roman numeral.";
             Text[ portuguese ] = "O texto que representa um nϊmero romano.";
             Text[ russian ] = "Òεκρς, οπεδρςΰβλÿώωθι πθμρκξε χθρλξ.";
-            Text[ greek ] = "Το κείμενο που παριστάνει έναν λατινικό αριθμό.";
+            Text[ greek ] = "Το κείμενο που αναπαριστά ένα αριθμητικό ρωμαϊκού τύπου.";
             Text[ dutch ] = "De tekst die een Romeins cijfer weergeeft.";
             Text[ french ] = "Le nombre en chiffres romains sous forme de texte.";
             Text[ spanish ] = "El texto que representa un nϊmero romano.";
@@ -48242,6 +48242,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
