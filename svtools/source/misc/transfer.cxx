@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 13:53:24 $
+ *  last change: $Author: jp $ $Date: 2001-02-05 14:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,12 +177,17 @@ TransferableHelper::~TransferableHelper()
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
-    maAny = Any();
+    if( !maAny.hasValue() || !maFormats.size() ||
+        maLastFormat != rFlavor.MimeType )
+    {
+        maLastFormat = rFlavor.MimeType;
+        maAny = Any();
 
-    if( !maFormats.size() )
-        AddSupportedFormats();
+        if( !maFormats.size() )
+            AddSupportedFormats();
 
-    GetData( rFlavor );
+        GetData( rFlavor );
+    }
 
     return maAny;
 }
