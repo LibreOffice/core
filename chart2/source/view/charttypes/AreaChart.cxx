@@ -187,7 +187,7 @@ double AreaChart::getMinimumX()
     if( m_bCategoryXAxis )
         return VSeriesPlotter::getMinimumX();
 
-    double fMinimum, double fMaximum;
+    double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMinimum;
 }
@@ -197,7 +197,7 @@ double AreaChart::getMaximumX()
     if( m_bCategoryXAxis )
         return VSeriesPlotter::getMaximumX();
 
-    double fMinimum, double fMaximum;
+    double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMaximum;
 }
