@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 09:49:07 $
+ *  last change: $Author: cl $ $Date: 2001-11-13 13:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,11 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 break;
 
             case ID_TIMEFIELD:
+                mpImpl->mbBoolean2 = sal_False;
+                mpImpl->mbBoolean1 = sal_False;
+                mpImpl->mnInt32 = SVXTIMEFORMAT_STANDARD;
+                break;
+
             case ID_EXT_TIMEFIELD:
                 mpImpl->mbBoolean2 = sal_False;
                 mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
