@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 12:59:37 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ OHTMLReader::~OHTMLReader()
 // ---------------------------------------------------------------------------
 SvParserState OHTMLReader::CallParser()
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
     SvParserState  eParseState = HTMLParser::CallParser();
@@ -276,6 +277,7 @@ SvParserState OHTMLReader::CallParser()
 // -----------------------------------------------------------------------------
 rtl_TextEncoding OHTMLReader::GetEncodingByMIME( const String& rMime )
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     ByteString sType;
     ByteString sSubType;
     INetContentTypeParameterList aParameters;
@@ -296,6 +298,7 @@ rtl_TextEncoding OHTMLReader::GetEncodingByMIME( const String& rMime )
 // ---------------------------------------------------------------------------
 void OHTMLReader::NextToken( int nToken )
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     if(m_bError || !m_nRows) // falls Fehler oder keine Rows mehr zur "Uberpr"ufung dann gleich zur"uck
         return;
     if(!m_bMetaOptions)
@@ -472,6 +475,7 @@ void OHTMLReader::NextToken( int nToken )
 //---------------------------------------------------------------------------------
 void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken)
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     sal_Bool bHorJustifyCenterTH = (nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions* pOptions = GetOptions();
     sal_Int16 nArrLen = pOptions->Count();
@@ -519,6 +523,7 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,String *pValue,int nToken)
 //---------------------------------------------------------------------------------
 void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     const HTMLOptions* pOptions = GetOptions();
     sal_Int16 nArrLen = pOptions->Count();
     for ( sal_Int16 i = 0; i < nArrLen; i++ )
@@ -567,6 +572,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 // ---------------------------------------------------------------------------
 sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
@@ -587,6 +593,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
 // ---------------------------------------------------------------------------
 sal_Bool OHTMLReader::CreateTable(int nToken)
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     String aTempName(ModuleRes(STR_TBL_TITLE));
     aTempName = aTempName.GetToken(0,' ');
     aTempName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTempName )));
@@ -702,6 +709,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 // -----------------------------------------------------------------------------
 void OHTMLReader::setTextEncoding()
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
     USHORT nContentOption = HTML_O_CONTENT;
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
@@ -746,11 +754,13 @@ void OHTMLReader::setTextEncoding()
 // -----------------------------------------------------------------------------
 void OHTMLReader::release()
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     ReleaseRef();
 }
 // -----------------------------------------------------------------------------
 OWizTypeSelect* OHTMLReader::createPage(Window* _pParent)
 {
+    DBG_CHKTHIS(OHTMLReader,NULL);
     return new OWizHTMLExtend(_pParent,rInput);
 }
 // -----------------------------------------------------------------------------
