@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:57:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ class ScNamePasteDlg;
 class ScPivotFilterDlg;
 class ScDPFunctionDlg;
 class ScDPSubtotalDlg;
+class ScDPNumGroupDlg;
+class ScDPDateGroupDlg;
 class ScDPShowDetailDlg;
 class ScNewScenarioDlg;
 class ScShowTabDlg;
@@ -294,6 +296,19 @@ class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg  //add for S
     virtual void FillLabelData( ScDPLabelData& rLabelData ) const;
 };
 
+class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScDPNumGroupDlg_Impl, ScDPNumGroupDlg );
+    virtual ScDPNumGroupInfo GetGroupInfo() const;
+};
+
+class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
+{
+    DECL_ABSTDLG_BASE( AbstractScDPDateGroupDlg_Impl, ScDPDateGroupDlg );
+    virtual ScDPNumGroupInfo GetGroupInfo() const;
+    virtual sal_Int32 GetDatePart() const;
+};
+
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDPShowDetailDlg_Impl, ScDPShowDetailDlg);
@@ -454,6 +469,16 @@ public:
                                                                 const ScDPFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout );
+
+    virtual AbstractScDPNumGroupDlg * CreateScDPNumGroupDlg( Window* pParent,
+                                                                const ResId& rResId,
+                                                                const ScDPNumGroupInfo& rInfo );
+
+    virtual AbstractScDPDateGroupDlg * CreateScDPDateGroupDlg( Window* pParent,
+                                                                const ResId& rResId,
+                                                                const ScDPNumGroupInfo& rInfo,
+                                                                sal_Int32 nDatePart,
+                                                                const Date& rNullDate );
 
     virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( Window* pParent, const ResId& rResId,
                                                                 ScDPObject& rDPObj,
