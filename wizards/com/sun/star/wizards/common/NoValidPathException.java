@@ -5,7 +5,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class NoValidPathException extends Exception {
 
     public NoValidPathException(XMultiServiceFactory xMSF) {
-        SystemDialog.showErrorBox(xMSF, "dbwizres", "dbw", 506); // OfficePathnotavailable
+        SystemDialog.showErrorBox(xMSF, "dbwizres", "dbw", 521); // OfficePathnotavailable
     }
 
 }
