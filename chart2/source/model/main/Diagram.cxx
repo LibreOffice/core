@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-27 10:49:06 $
+ *  last change: $Author: bm $ $Date: 2003-12-04 14:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,11 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOINT_HPP_
-#include <drafts/com/sun/star/layout/RelativePoint.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
+#include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <drafts/com/sun/star/layout/RelativeSize.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
@@ -102,6 +105,7 @@ namespace
 enum
 {
     PROP_DIAGRAM_REL_POS,
+    PROP_DIAGRAM_REL_SIZE,
     PROP_DIAGRAM_SCENE_PROPERTIES
 };
 
@@ -111,7 +115,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "RelativePosition" ),
                   PROP_DIAGRAM_REL_POS,
-                  ::getCppuType( reinterpret_cast< const layout::RelativePoint * >(0)),
+                  ::getCppuType( reinterpret_cast< const layout::RelativePosition * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "RelativeSize" ),
+                  PROP_DIAGRAM_REL_SIZE,
+                  ::getCppuType( reinterpret_cast< const layout::RelativeSize * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
