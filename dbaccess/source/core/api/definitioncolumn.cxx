@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:02:24 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,16 @@ void OTableColumnDescriptor::setFastPropertyValue_NoBroadcast(
     }
     ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
+
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OTableColumnDescriptor::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
+{
+    sal_Int64 nReturn = OColumn::getSomething( aIdentifier );
+    if ( !nReturn )
+        nReturn = OColumnSettings::getSomething( aIdentifier );
+    return nReturn;
+}
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OTableColumnDescriptor::getParent(  ) throw (RuntimeException)
 {
@@ -597,6 +607,15 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     return aSNS;
 }
 
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OTableColumnDescriptorWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
+{
+    sal_Int64 nReturn = OColumnWrapper::getSomething( aIdentifier );
+    if ( !nReturn )
+        nReturn = OColumnSettings::getSomething( aIdentifier );
+    return nReturn;
+}
+
 // comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptorWrapper::createArrayHelper( sal_Int32 nId ) const
@@ -787,7 +806,14 @@ OTableColumnWrapper::OTableColumnWrapper(const Reference< XPropertySet >& rCol
     osl_incrementInterlockedCount(&m_refCount);
     if ( _xColDefintion.is() )
     {
-        ::comphelper::copyProperties(_xColDefintion,this);
+        try
+        {
+            ::comphelper::copyProperties(_xColDefintion,this);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OTableColumnWrapper::OTableColumnWrapper: caught an exception!");
+        }
     }
     osl_decrementInterlockedCount(&m_refCount);
 }
