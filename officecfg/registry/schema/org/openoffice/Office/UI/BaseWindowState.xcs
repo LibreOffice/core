@@ -3,9 +3,9 @@
  *
  *  $RCSfile: BaseWindowState.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:27:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@
 	<component>
 		<group oor:name="UIElements">
 		    <info>
-		        <desc>Contains user interface element state data specific for the database table module."</desc>
+		        <desc>Contains user interface element state data specific for the database module."</desc>
 		    </info>
 			<set oor:name="States" oor:node-type="WindowStateType" oor:component="org.openoffice.Office.UI.WindowState">
 		        <info>
-		            <desc>Contains states of all known dockable user interface elements of the database table module."</desc>
+		            <desc>Contains states of all known dockable user interface elements of the database module."</desc>
 		        </info>
 			</set>
 		</group>
