@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:50:24 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,9 +667,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 pDataStream->SeekRel( nNameLen );
             }
 
-            Rectangle aRect( 0,0, aPD.nWidth,  aPD.nHeight);
-            SvxMSDffImportData aData( aRect );
-            pObject = pMSDffManager->ImportObj(*pDataStream, &aData, &aRect);
+            Rectangle aChildRect;
+            Rectangle aClientRect( 0,0, aPD.nWidth,  aPD.nHeight);
+            SvxMSDffImportData aData( aClientRect );
+            pObject = pMSDffManager->ImportObj(*pDataStream, &aData, aClientRect, aChildRect );
             if (pObject)
             {
                 // fuer den Rahmen
