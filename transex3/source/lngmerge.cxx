@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:25:21 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,11 @@
 // local includes
 #include "lngmerge.hxx"
 #include "utf8conv.hxx"
-
+#include <iostream>
+using namespace std;
 //
 // class LngParser
 //
-
 /*****************************************************************************/
 LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat , bool bQuiet_in )
 /*****************************************************************************/
@@ -84,8 +84,15 @@ LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat , 
         SvFileStream aStream( String( sSource, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
         if ( aStream.IsOpen()) {
             ByteString sLine;
+            bool bFirstLine = true;
             while ( !aStream.IsEof()) {
                 aStream.ReadLine( sLine );
+
+                if( bFirstLine ){       // Always remove UTF8 BOM from the first line
+                    Export::RemoveUTF8ByteOrderMarker( sLine );
+                    bFirstLine = false;
+                }
+
                 pLines->Insert( new ByteString( sLine ), LIST_APPEND );
             }
         }
