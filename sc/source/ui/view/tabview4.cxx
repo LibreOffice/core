@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:01:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,18 +129,18 @@ void ScTabView::ShowRefTip()
     BOOL bDone = FALSE;
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && Help::IsQuickHelpEnabled() )
     {
-        USHORT nStartX = aViewData.GetRefStartX();
-        USHORT nStartY = aViewData.GetRefStartY();
-        USHORT nEndX   = aViewData.GetRefEndX();
-        USHORT nEndY   = aViewData.GetRefEndY();
+        SCCOL nStartX = aViewData.GetRefStartX();
+        SCROW nStartY = aViewData.GetRefStartY();
+        SCCOL nEndX   = aViewData.GetRefEndX();
+        SCROW nEndY   = aViewData.GetRefEndY();
         if ( nEndX != nStartX || nEndY != nStartY )     // nicht fuer einzelne Zelle
         {
             BOOL bLeft = ( nEndX < nStartX );
             BOOL bTop  = ( nEndY < nStartY );
             PutInOrder( nStartX, nEndX );
             PutInOrder( nStartY, nEndY );
-            USHORT nCols = nEndX+1-nStartX;
-            USHORT nRows = nEndY+1-nStartY;
+            SCCOL nCols = nEndX+1-nStartX;
+            SCROW nRows = nEndY+1-nStartY;
 
             String aHelp = ScGlobal::GetRscString( STR_QUICKHELP_REF );
             aHelp.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%1")),
@@ -196,10 +196,10 @@ void ScTabView::StopRefMode()
                 aViewData.GetTabNo() <= aViewData.GetRefEndZ() )
         {
             ScDocument* pDoc = aViewData.GetDocument();
-            USHORT nStartX = aViewData.GetRefStartX();
-            USHORT nStartY = aViewData.GetRefStartY();
-            USHORT nEndX = aViewData.GetRefEndX();
-            USHORT nEndY = aViewData.GetRefEndY();
+            SCCOL nStartX = aViewData.GetRefStartX();
+            SCROW nStartY = aViewData.GetRefStartY();
+            SCCOL nEndX = aViewData.GetRefEndX();
+            SCROW nEndY = aViewData.GetRefEndY();
             if ( nStartX == nEndX && nStartY == nEndY )
                 pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
@@ -244,10 +244,10 @@ void ScTabView::DoneRefMode( BOOL bContinue )
     if ( bWasRef && aViewData.GetTabNo() >= aViewData.GetRefStartZ() &&
                     aViewData.GetTabNo() <= aViewData.GetRefEndZ() )
     {
-        USHORT nStartX = aViewData.GetRefStartX();
-        USHORT nStartY = aViewData.GetRefStartY();
-        USHORT nEndX = aViewData.GetRefEndX();
-        USHORT nEndY = aViewData.GetRefEndY();
+        SCCOL nStartX = aViewData.GetRefStartX();
+        SCROW nStartY = aViewData.GetRefStartY();
+        SCCOL nEndX = aViewData.GetRefEndX();
+        SCROW nEndY = aViewData.GetRefEndY();
         if ( nStartX == nEndX && nStartY == nEndY )
             pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
@@ -255,7 +255,7 @@ void ScTabView::DoneRefMode( BOOL bContinue )
     }
 }
 
-void ScTabView::UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ )
+void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
 {
     ScDocument* pDoc = aViewData.GetDocument();
 
@@ -275,12 +275,12 @@ void ScTabView::UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ )
          nCurZ != aViewData.GetRefEndZ() )
     {
         ScMarkData& rMark = aViewData.GetMarkData();
-        USHORT nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.GetTabNo();
 
-        USHORT nStartX = aViewData.GetRefStartX();
-        USHORT nStartY = aViewData.GetRefStartY();
-        USHORT nEndX = aViewData.GetRefEndX();
-        USHORT nEndY = aViewData.GetRefEndY();
+        SCCOL nStartX = aViewData.GetRefStartX();
+        SCROW nStartY = aViewData.GetRefStartY();
+        SCCOL nEndX = aViewData.GetRefEndX();
+        SCROW nEndY = aViewData.GetRefEndY();
         if ( nStartX == nEndX && nStartY == nEndY )
             pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, nTab );
         ScUpdateRect aRect( nStartX, nStartY, nEndX, nEndY );
@@ -308,16 +308,16 @@ void ScTabView::UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ )
         {
             PutInOrder(nStartX,nEndX);
             PutInOrder(nStartY,nEndY);
-            pDoc->SetEmbedded( ScTripel(nStartX,nStartY,nTab), ScTripel(nEndX,nEndY,nTab) );
+            pDoc->SetEmbedded( ScRange(nStartX,nStartY,nTab, nEndX,nEndY,nTab) );
             ScDocShell* pDocSh = aViewData.GetDocShell();
             pDocSh->UpdateOle( &aViewData, TRUE );
             pDocSh->SetDocumentModified();
         }
 
-        USHORT nPaintStartX;
-        USHORT nPaintStartY;
-        USHORT nPaintEndX;
-        USHORT nPaintEndY;
+        SCCOL nPaintStartX;
+        SCROW nPaintStartY;
+        SCCOL nPaintEndX;
+        SCROW nPaintEndY;
         if (aRect.GetDiff( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY ))
             PaintArea( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY, SC_UPDATE_MARKS );
     }
@@ -329,14 +329,14 @@ void ScTabView::UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ )
         String aHelpStr;
         ScRange aMarkRange;
         aViewData.GetSimpleArea( aMarkRange );
-        USHORT nEndX = aViewData.GetRefEndX();
-        USHORT nEndY = aViewData.GetRefEndY();
+        SCCOL nEndX = aViewData.GetRefEndX();
+        SCROW nEndY = aViewData.GetRefEndY();
         ScRange aDelRange;
         if ( aViewData.GetFillMode() == SC_FILL_MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
         {
             aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
-            USHORT nCols = nEndX + 1 - aViewData.GetRefStartX();    // Reihenfolge ist richtig
-            USHORT nRows = nEndY + 1 - aViewData.GetRefStartY();
+            SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
+            SCROW nRows = nEndY + 1 - aViewData.GetRefStartY();
             aHelpStr.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%1")),
                                        String::CreateFromInt32(nRows) );
             aHelpStr.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%2")),
@@ -348,8 +348,8 @@ void ScTabView::UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ )
             aHelpStr = pDoc->GetAutoFillPreview( aMarkRange, nEndX, nEndY );
 
         //  je nach Richtung die obere oder untere Ecke:
-        USHORT nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
-        USHORT nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
+        SCCOL nAddX = ( nEndX >= aMarkRange.aEnd.Col() ) ? 1 : 0;
+        SCROW nAddY = ( nEndY >= aMarkRange.aEnd.Row() ) ? 1 : 0;
         Point aPos = aViewData.GetScrPos( nEndX+nAddX, nEndY+nAddY, aViewData.GetActivePart() );
         aPos.X() += 8;
         aPos.Y() += 4;
@@ -362,7 +362,7 @@ void ScTabView::UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ )
     }
 }
 
-void ScTabView::InitRefMode( USHORT nCurX, USHORT nCurY, USHORT nCurZ, ScRefType eType, BOOL bPaint )
+void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, BOOL bPaint )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
@@ -374,10 +374,10 @@ void ScTabView::InitRefMode( USHORT nCurX, USHORT nCurY, USHORT nCurZ, ScRefType
 
         if (nCurZ == aViewData.GetTabNo() && bPaint)
         {
-            USHORT nStartX = nCurX;
-            USHORT nStartY = nCurY;
-            USHORT nEndX = nCurX;
-            USHORT nEndY = nCurY;
+            SCCOL nStartX = nCurX;
+            SCROW nStartY = nCurY;
+            SCCOL nEndX = nCurX;
+            SCROW nEndY = nCurY;
             pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
             //! nur Markierung ueber Inhalte zeichnen!
@@ -430,13 +430,13 @@ long ScTabView::GetScrollBarPos( ScrollBar& rScroll, BOOL bLayoutRTL )
 
 //  UpdateScrollBars - sichtbaren Bereich und Scrollweite der Scrollbars einstellen
 
-long lcl_UpdateBar( ScrollBar& rScroll, USHORT nSize )      // Size = (komplette) Zellen
+long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (komplette) Zellen
 {
     long nOldPos;
     long nNewPos;
 
     nOldPos = rScroll.GetThumbPos();
-    rScroll.SetPageSize( nSize );
+    rScroll.SetPageSize( static_cast<long>(nSize) );
     nNewPos = rScroll.GetThumbPos();
 #ifndef UNX
     rScroll.SetPageSize( 1 );               // immer moeglich !
@@ -445,13 +445,13 @@ long lcl_UpdateBar( ScrollBar& rScroll, USHORT nSize )      // Size = (komplette
     return nNewPos - nOldPos;
 }
 
-long lcl_GetScrollRange( USHORT nDocEnd, USHORT nPos, USHORT nVis, USHORT nMax, USHORT nStart )
+long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, SCCOLROW nMax, SCCOLROW nStart )
 {
     // get the end (positive) of a scroll bar range that always starts at 0
 
     ++nVis;
     ++nMax;     // for partially visible cells
-    USHORT nEnd = Max(nDocEnd, (USHORT)(nPos+nVis)) + nVis;
+    SCCOLROW nEnd = Max(nDocEnd, (SCCOLROW)(nPos+nVis)) + nVis;
     if (nEnd > nMax)
         nEnd = nMax;
 
@@ -464,19 +464,19 @@ void ScTabView::UpdateScrollBars()
     BOOL        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
     BOOL        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument* pDoc = aViewData.GetDocument();
-    USHORT      nTab = aViewData.GetTabNo();
+    SCTAB       nTab = aViewData.GetTabNo();
     BOOL        bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-    USHORT      nUsedX;
-    USHORT      nUsedY;
+    SCCOL       nUsedX;
+    SCROW       nUsedY;
     pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cachen !!!!!!!!!!!!!!!
 
-    USHORT nVisXL = 0;
-    USHORT nVisXR = 0;
-    USHORT nVisYB = 0;
-    USHORT nVisYT = 0;
+    SCCOL nVisXL = 0;
+    SCCOL nVisXR = 0;
+    SCROW nVisYB = 0;
+    SCROW nVisYT = 0;
 
-    USHORT nStartX = 0;
-    USHORT nStartY = 0;
+    SCCOL nStartX = 0;
+    SCROW nStartY = 0;
     if (aViewData.GetHSplitMode()==SC_SPLIT_FIX)
         nStartX = aViewData.GetFixPosX();
     if (aViewData.GetVSplitMode()==SC_SPLIT_FIX)
@@ -529,10 +529,10 @@ void ScTabView::UpdateScrollBars()
         ScSplitPos eActive = aViewData.GetActivePart();
         ScHSplitPos eHWhich = WhichH( eActive );
         ScVSplitPos eVWhich = WhichV( eActive );
-        USHORT nPosX = aViewData.GetPosX(eHWhich);
-        USHORT nPosY = aViewData.GetPosY(eVWhich);
-        USHORT nEndX = nPosX + ( ( eHWhich == SC_SPLIT_LEFT ) ? nVisXL : nVisXR );
-        USHORT nEndY = nPosY + ( ( eVWhich == SC_SPLIT_TOP ) ? nVisYT : nVisYB );
+        SCCOL nPosX = aViewData.GetPosX(eHWhich);
+        SCROW nPosY = aViewData.GetPosY(eVWhich);
+        SCCOL nEndX = nPosX + ( ( eHWhich == SC_SPLIT_LEFT ) ? nVisXL : nVisXR );
+        SCROW nEndY = nPosY + ( ( eVWhich == SC_SPLIT_TOP ) ? nVisYT : nVisYB );
         if ( nEndX > MAXCOL ) nEndX = MAXCOL;
         if ( nEndY > MAXROW ) nEndY = MAXROW;
         ScRange aVisible( nPosX, nPosY, nTab, nEndX, nEndY, nTab );
@@ -586,7 +586,7 @@ void ScTabView::InterpretVisible()
     if ( !pDoc->GetAutoCalc() )
         return;
 
-    USHORT nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.GetTabNo();
     for (USHORT i=0; i<4; i++)
     {
         //  rely on gridwin pointers to find used panes
@@ -597,10 +597,10 @@ void ScTabView::InterpretVisible()
             ScHSplitPos eHWhich = WhichH( ScSplitPos(i) );
             ScVSplitPos eVWhich = WhichV( ScSplitPos(i) );
 
-            USHORT  nX1 = aViewData.GetPosX( eHWhich );
-            USHORT  nY1 = aViewData.GetPosY( eVWhich );
-            USHORT  nX2 = nX1 + aViewData.VisibleCellsX( eHWhich );
-            USHORT  nY2 = nY1 + aViewData.VisibleCellsY( eVWhich );
+            SCCOL   nX1 = aViewData.GetPosX( eHWhich );
+            SCROW   nY1 = aViewData.GetPosY( eVWhich );
+            SCCOL   nX2 = nX1 + aViewData.VisibleCellsX( eHWhich );
+            SCROW   nY2 = nY1 + aViewData.VisibleCellsY( eVWhich );
 
             if (nX2 > MAXCOL) nX2 = MAXCOL;
             if (nY2 > MAXROW) nY2 = MAXROW;
