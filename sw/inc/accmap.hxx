@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 12:37:59 $
+ *  last change: $Author: dvo $ $Date: 2002-05-29 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ public:
     Rectangle PixelToCore (const Rectangle& rRect) const;
 
 private:
-    inline PreviewAdjust(const Point& rPoint, sal_Bool bFromPreview) const;
+    inline void PreviewAdjust(const Point& rPoint, sal_Bool bFromPreview) const;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-27 15:06:40 $
+ *  last change: $Author: dvo $ $Date: 2002-05-29 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1985,8 +1985,8 @@ Rectangle SwAccessibleMap::PixelToCore( const Rectangle& rRect ) const
     return aRect;
 }
 
-inline SwAccessibleMap::PreviewAdjust( const Point& rPoint,
-                                       sal_Bool bFromPreview ) const
+inline void SwAccessibleMap::PreviewAdjust( const Point& rPoint,
+                                            sal_Bool bFromPreview ) const
 {
     if( GetShell()->IsPreView() )
     {
