@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:59:57 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:17:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,12 +81,8 @@ SRC1FILES =\
     toolbox.src
 
 SLOFILES =	\
-        $(SLO)$/tbxmgr.obj \
-        $(SLO)$/tbxchild.obj \
-        $(SLO)$/tbxopdlg.obj \
-        $(SLO)$/imgmgr.obj \
-        $(SLO)$/tbxconf.obj \
-        $(SLO)$/tbxitem.obj
+                $(SLO)$/tbxitem.obj \
+                $(SLO)$/imgmgr.obj
 
 # --- Tagets -------------------------------------------------------
 
