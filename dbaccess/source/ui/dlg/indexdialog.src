@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-11 05:18:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Nowy indeks";
                 Text[ portuguese_brazilian ] = "new index";
                 Text[ japanese ] = "V‹Kì¬²İÃŞ¯¸½";
-                Text[ korean ] = "new index";
+                Text[ korean ] = "»õ·Î¿î »öÀÎ";
                 Text[ chinese_simplified ] = "ĞÂ½¨Ë÷Òı";
                 Text[ chinese_traditional ] = "¶}±Ò·s¯Á¤Ş";
                 Text[ turkish ] = "new index";
@@ -142,7 +142,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Usuñ bie¿¹cy indeks";
                 Text[ portuguese_brazilian ] = "drop current index";
                 Text[ japanese ] = "Œ»İ‚Ì²İÃŞ¯¸½‚Ìíœ";
-                Text[ korean ] = "drop current index";
+                Text[ korean ] = "ÇöÀçÀÇ »öÀÎ »èÁ¦";
                 Text[ chinese_simplified ] = "É¾³ıµ±Ç°µÄË÷Òı";
                 Text[ chinese_traditional ] = "§R°£·í«eªº¯Á¤Ş";
                 Text[ turkish ] = "drop current index";
@@ -170,7 +170,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zmieñ nazwê bie¿¹cego indeksu";
                 Text[ portuguese_brazilian ] = "rename current index";
                 Text[ japanese ] = "Œ»İ‚Ì²İÃŞ¯¸½‚Ì–¼‘O‚ğ•ÏX";
-                Text[ korean ] = "rename current index";
+                Text[ korean ] = "ÇöÀçÀÇ »öÀÎ Àç¸í¸í";
                 Text[ chinese_simplified ] = "ÖØÃüÃûµ±Ç°µÄË÷Òı";
                 Text[ chinese_traditional ] = "­«·s©R¦W·í«eªº¯Á¤Ş";
                 Text[ turkish ] = "rename current index";
@@ -198,7 +198,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zapisz bie¿¹cy indeks";
                 Text[ portuguese_brazilian ] = "save current index";
                 Text[ japanese ] = "Œ»İ‚Ì²İÃŞ¯¸½‚Ì•Û‘¶";
-                Text[ korean ] = "save current index";
+                Text[ korean ] = "ÇöÀçÀÇ »öÀÎ ÀúÀå";
                 Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄË÷Òı";
                 Text[ chinese_traditional ] = "Àx¦s·í«eªº¯Á¤Ş";
                 Text[ turkish ] = "save current index";
@@ -226,7 +226,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ polish ] = "Zresetuj bie¿¹cy indeks";
                 Text[ portuguese_brazilian ] = "reset current index";
                 Text[ japanese ] = "Œ»İ‚Ì²İÃŞ¯¸½‚ğŒ³‚É–ß‚·";
-                Text[ korean ] = "reset current index";
+                Text[ korean ] = "ÇöÀçÀÇ »öÀÎ ¸®¼Â";
                 Text[ chinese_simplified ] = "ÖØÉèµ±Ç°µÄË÷Òı";
                 Text[ chinese_traditional ] = "­«³]·í«eªº¯Á¤Ş";
                 Text[ turkish ] = "reset current index";
@@ -262,7 +262,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Szczegó³y indeksu";
         Text[ portuguese_brazilian ] = "Index details";
         Text[ japanese ] = "²İÃŞ¯¸½‚ÌÚ×";
-        Text[ korean ] = "Index details";
+        Text[ korean ] = "»öÀÎ ¼¼ºÎ»çÇ×";
         Text[ chinese_simplified ] = "Ë÷ÒıÏ¸½Ú";
         Text[ chinese_traditional ] = "¯Á¤Ş²Ó¸`";
         Text[ turkish ] = "Index details";
@@ -311,13 +311,13 @@ ModalDialog DLG_INDEXDESIGN
         SVLook = TRUE;
         Text = "~Eindeutig";
         Text [ english ] = "~Unique";
-        Text [ english_us ] = "Unique";
-        Text[ portuguese ] = "Único";
+        Text [ english_us ] = "~Unique";
+        Text[ portuguese ] = "Ú~nico";
         Text[ russian ] = "Îäíîçíà÷íî";
         Text[ greek ] = "Ìïíáäéêü";
-        Text[ dutch ] = "Duidelijk";
-        Text[ french ] = "Unique";
-        Text[ spanish ] = "Único";
+        Text[ dutch ] = "~Duidelijk";
+        Text[ french ] = "~Unique";
+        Text[ spanish ] = "Ú~nico";
         Text[ italian ] = "Univoco";
         Text[ danish ] = "Unique";
         Text[ swedish ] = "~Entydig";
@@ -352,13 +352,13 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Pola";
         Text[ portuguese_brazilian ] = "Fields";
         Text[ japanese ] = "Ì¨°ÙÄŞ";
-        Text[ korean ] = "Fields";
+        Text[ korean ] = "ÇÊµå";
         Text[ chinese_simplified ] = "×Ö¶Î";
         Text[ chinese_traditional ] = "Äæ¦ì";
         Text[ turkish ] = "Fields";
         Text[ arabic ] = "ÍŞæá";
         Text[ catalan ] = "Fields";
-        Text[ finnish ] = "Felder";
+        Text[ finnish ] = "Kentät";
     };
     Control CTR_FIELDS
     {
@@ -388,13 +388,13 @@ ModalDialog DLG_INDEXDESIGN
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "~Close";
         Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ korean ] = "~Close";
+        Text[ korean ] = "~´İ±â";
         Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
         Text[ chinese_traditional ] = "Ãö³¬(~C)";
         Text[ turkish ] = "~Close";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ catalan ] = "~Close";
-        Text[ finnish ] = "S~chließen";
+        Text[ finnish ] = "Sulje";
     };
     HelpButton HB_HELP
     {
@@ -413,13 +413,13 @@ ModalDialog DLG_INDEXDESIGN
     Text[ polish ] = "Indeksy";
     Text[ portuguese_brazilian ] = "Indexes";
     Text[ japanese ] = "²İÃŞ¯¸½";
-    Text[ korean ] = "Indexes";
+    Text[ korean ] = "»öÀÎ";
     Text[ chinese_simplified ] = "Ë÷Òı";
     Text[ chinese_traditional ] = "¯Á¤Ş";
     Text[ turkish ] = "Indexes";
     Text[ arabic ] = "İåÇÑÓ";
     Text[ catalan ] = "Indexes";
-    Text[ finnish ] = "Indizes";
+    Text[ finnish ] = "Hakemistot";
 };
 
 String STR_TAB_INDEX_SORTORDER
@@ -437,7 +437,7 @@ String STR_TAB_INDEX_SORTORDER
     Text [ portuguese ] = "Ordem de classificação" ;
     Text [ chinese_simplified ] = "ÅÅĞò¹æÔò";
     Text [ russian ] = "Ïîğÿäîê ñîğòèğîâêè";
-    Text [ polish ] = "Kolejnoœæ sortowania";
+    Text [ polish ] = "Kolejno?æ sortowania";
     Text [ japanese ] = "•À‚×‘Ö‚¦‡˜";
     Text [ chinese_traditional ] = "±Æ§Ç³W«h";
     Text [ arabic ] = "ÊÑÊíÈ ÇáİÑÒ";
@@ -466,7 +466,7 @@ String STR_TAB_INDEX_FIELD
     Text[ polish ] = "Pole indeksu";
     Text[ portuguese_brazilian ] = "Index field";
     Text[ japanese ] = "²İÃŞ¯¸½Ì¨°ÙÄŞ";
-    Text[ korean ] = "Index field";
+    Text[ korean ] = "»öÀÎ ÇÊµå";
     Text[ chinese_simplified ] = "Ë÷Òı×Ö¶Î";
     Text[ chinese_traditional ] = "¯Á¤ŞÄæ¦ì";
     Text[ turkish ] = "Index field";
@@ -496,10 +496,10 @@ String STR_ORDER_ASCENDING
     Text [ dutch ] = "Oplopend";
     Text [ chinese_simplified ] = "ÏòÉÏ";
     Text [ greek ] = "Áıîïõóá";
-    Text [ korean ] = "¿À¸§ Â÷¼ø";
+    Text [ korean ] = "¿À¸§Â÷¼ø";
     Text[ turkish ] = "Ascending";
     Text[ catalan ] = "Ascendente";
-    Text[ finnish ] = "Aufsteigend";
+    Text[ finnish ] = "nouseva";
 };
 String STR_ORDER_DESCENDING
 {
@@ -526,7 +526,7 @@ String STR_ORDER_DESCENDING
     Text [ korean ] = "³»¸²Â÷¼ø";
     Text[ turkish ] = "Descending";
     Text[ catalan ] = "Descendente";
-    Text[ finnish ] = "Absteigend";
+    Text[ finnish ] = "laskeva";
 };
 
 String STR_CONFIRM_DROP_INDEX
@@ -546,7 +546,7 @@ String STR_CONFIRM_DROP_INDEX
     Text[ polish ] = "Na pewno usun¹æ indeks '$name$'?";
     Text[ portuguese_brazilian ] = "Do you really want to drop the index '$name$'?";
     Text[ japanese ] = "²İÃŞ¯¸½ '$name$' ‚ğíœ‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "Do you really want to drop the index '$name$'?";
+    Text[ korean ] = "»öÀÎ '$name$'(À»)¸¦ Á¤¸» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ chinese_simplified ] = "ÕæÒªÉ¾³ıË÷Òı'$name$'£¿";
     Text[ chinese_traditional ] = "¯u­n§R°£¯Á¤Ş'$name$'¡H";
     Text[ turkish ] = "Do you really want to drop the index '$name$'?";
@@ -587,9 +587,9 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Message[ danish ] = "Der Index muß mindestens ein Feld enthalten.";
     Message[ swedish ] = "Indexet måste innehålla minst ett fält.";
     Message[ polish ] = "Indeks musi zawieraæ co najmniej jedno pole.";
-    Message[ portuguese_brazilian ] = "Der Index muß mindestens ein Feld enthalten.";
+    Message[ portuguese_brazilian ] = "Der Index mu? mindestens ein Feld enthalten.";
     Message[ japanese ] = "²İÃŞ¯¸½‚É‚ÍÌ¨°ÙÄŞ‚ªÅ’á‚P‚Â‚Í•K—v‚Å‚·B";
-    Message[ korean ] = "Der Index muß mindestens ein Feld enthalten.";
+    Message[ korean ] = "»öÀÎÀº ÃÖ¼ÒÇÑ ÇÏ³ªÀÇ ÇÊµå¸¦ Æ÷ÇÔÇØ¾ß ÇÕ´Ï´Ù.";
     Message[ chinese_simplified ] = "Ë÷Òı±ØĞëÖÁÉÙº¬ÓĞÒ»¸ö×Ö¶Î¡£";
     Message[ chinese_traditional ] = "¯Á¤Ş¥²¶·¦Ü¤Ö§t¦³¤@­ÓÄæ¦ì¡C";
     Message[ turkish ] = "Der Index muß mindestens ein Feld enthalten.";
@@ -606,7 +606,7 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Title[ polish ] = "Zapisz indeks!";
     Title[ portuguese_brazilian ] = "Save Index";
     Title[ japanese ] = "²İÃŞ¯¸½‚Ì•Û‘¶!";
-    Title[ korean ] = "Save Index";
+    Title[ korean ] = "»öÀÎ ÀúÀå!";
     Title[ chinese_simplified ] = "´æÅÌË÷Òı!";
     Title[ chinese_traditional ] = "Àx¦s¯Á¤Ş!";
     Title[ turkish ] = "Save Index";
@@ -641,7 +641,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Message[ polish ] = "Zapisaæ modyfikacje bie¿¹cego indeksu?";
     Message[ portuguese_brazilian ] = "Do you want to save the changes made on the current index?";
     Message[ japanese ] = "Œ»İ‚Ì²İÃŞ¯¸½‚Ås‚Á‚½•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
-    Message[ korean ] = "Do you want to save the changes made on the current index?";
+    Message[ korean ] = "ÇöÀç »öÀÎÀÇ º¯°æµÈ »çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Message[ chinese_simplified ] = "Òª´æÅÌµ±Ç°Ë÷ÒıµÄĞŞ¸ÄÄÚÈİ£¿";
     Message[ chinese_traditional ] = "­nÀx¦s·í«e¯Á¤ŞªºÅÜ§ó¤º®e¡H";
     Message[ turkish ] = "Do you want to save the changes made on the current index?";
@@ -655,10 +655,10 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ italian ] = "close index design!";
     Title[ danish ] = "close index design";
     Title[ swedish ] = "Lämna indexutkast!";
-    Title[ polish ] = "Opuœæ projekt indeksu!";
+    Title[ polish ] = "Opu?æ projekt indeksu!";
     Title[ portuguese_brazilian ] = "close index design";
     Title[ japanese ] = "²İÃŞ¯¸½‚ÌÃŞ»Ş²İ‚ğ•Â‚¶‚é!";
-    Title[ korean ] = "close index design";
+    Title[ korean ] = "»öÀÎ µğÀÚÀÎ ´İ±â!";
     Title[ chinese_simplified ] = "¹Ø±ÕË÷ÒıÉè¼Æ!";
     Title[ chinese_traditional ] = "Ãö³¬¯Á¤Ş³]­p!";
     Title[ turkish ] = "close index design";
@@ -710,10 +710,10 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ italian ] = "In una definizione di indice una colonna di tabella può apparire solo una volta, tuttavia la colonna \"$name$\" appare due volte.";
     Text[ danish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ swedish ] = "I en indexdefinition får varje tabellkolumn förekomma högst en gång, men du har använt kolumnen \"$name$\" två gånger.";
-    Text[ polish ] = "U¿y³eœ dwa razy kolumny \"$name$\" - uwzglêdnij, ¿e pojedyncze kolumny tabeli wystêpowaæ mog¹ w definicji indeksu tylko raz!";
+    Text[ polish ] = "U¿y³e? dwa razy kolumny \"$name$\" - uwzglêdnij, ¿e pojedyncze kolumny tabeli wystêpowaæ mog¹ w definicji indeksu tylko raz!";
     Text[ portuguese_brazilian ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ japanese ] = "²İÃŞ¯¸½‚Ì’è‹`‚Å‚ÍAÃ°ÌŞÙ‚Ì—ñ‚ÌŒ©o‚µ‚ÍŠeˆê‰ñ‚¸‚Â‚µ‚©g‚¦‚Ü‚¹‚ñB—ñ‚ÌŒ©o‚µ \"$name$\" ‚ÍA“ñ‰ñ–Ú‚Ì“ü—Í‚Å‚·B";
-    Text[ korean ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
+    Text[ korean ] = "»öÀÎ Á¤ÀÇ¿¡¼­, °¢ µµÇ¥ ¿­Àº ÃÖ´ë ÇÑ¹ø ÀÔ·ÂÇÒ ¼ö ÀÖÁö¸¸, »ç¿ëÀÚ´Â ¿­ \"$name$\" (À»)¸¦ µÎ¹ø ÀÔ·ÂÇÏ¿´½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚÒ»¸öË÷Òı¶¨ÒåÖ®ÖĞ½öÔÊĞíÒ»´ÎÊ¹ÓÃÒ»¸öÁĞÃû³Æ¡£µ«ÊÇÄúµÚ¶ş´ÎÊ¹ÓÃÁĞÃû³Æ \"$name$\" ¡£";
     Text[ chinese_traditional ] = "¦b¤@­Ó¯Á¤Ş©w¸q¤§¤¤¶È¤¹³\\³Ì¦h¤@¦¸¨Ï¥Î¤@­ÓÄæ¦WºÙ¡C¦ı¬O±z²Ä¤G¦¸¨Ï¥ÎÄæ¦WºÙ \"$name$\" ¡C";
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
@@ -725,6 +725,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/11 05:18:16  kz
+ *  Merge SRC631: 11.05.01 - 07:17:45 (NoBranch)
+ *
  *  Revision 1.10  2001/05/07 12:20:54  oj
  *  insert mnemonic
  *
