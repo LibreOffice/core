@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 09:10:14 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 09:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3604,6 +3604,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getProper
 //  ----------------------------------------------------
 UnoNumericFieldControl::UnoNumericFieldControl()
 {
+    mnFirst = 0;
+    mnLast = 0x7FFFFFFF;
 }
 
 ::rtl::OUString UnoNumericFieldControl::GetComponentServiceName()
@@ -3624,6 +3626,16 @@ IMPL_XTYPEPROVIDER_START( UnoNumericFieldControl )
     getCppuType( ( uno::Reference< awt::XNumericField>* ) NULL ),
     UnoEditControl::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void UnoNumericFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
+    xField->setFirst( mnFirst );
+    xField->setLast( mnLast );
+}
+
 
 void UnoNumericFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
@@ -3674,24 +3686,32 @@ double UnoNumericFieldControl::getMax() throw(uno::RuntimeException)
 
 void UnoNumericFieldControl::setFirst( double Value ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoNumericFieldControl::setFirst not supported" );
+    mnFirst = Value;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setFirst( mnFirst );
+    }
 }
 
 double UnoNumericFieldControl::getFirst() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoNumericFieldControl::getFirst not supported" );
-    return 0;
+    return mnFirst;
 }
 
 void UnoNumericFieldControl::setLast( double Value ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoNumericFieldControl::setLast not supported" );
+    mnLast = Value;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XNumericField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setLast( mnLast );
+    }
 }
 
 double UnoNumericFieldControl::getLast() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoNumericFieldControl::getLast not supported" );
-    return 0;
+    return mnLast;
 }
 
 void UnoNumericFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException)
@@ -3720,13 +3740,14 @@ double UnoNumericFieldControl::getSpinSize() throw(uno::RuntimeException)
 
 void UnoNumericFieldControl::setDecimalDigits( sal_Int16 Digits ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoNumericFieldControl::setDecimalDigits not supported" );
+    uno::Any aAny;
+    aAny <<= Digits;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, sal_True );
 }
 
 sal_Int16 UnoNumericFieldControl::getDecimalDigits() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoNumericFieldControl::getDecimalDigits not supported" );
-    return 0;
+    return ImplGetPropertyValue_INT16( BASEPROPERTY_DECIMALACCURACY );
 }
 
 //  ----------------------------------------------------
@@ -3803,6 +3824,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPrope
 //  ----------------------------------------------------
 UnoCurrencyFieldControl::UnoCurrencyFieldControl()
 {
+    mnFirst = 0;
+    mnLast = 0x7FFFFFFF;
 }
 
 ::rtl::OUString UnoCurrencyFieldControl::GetComponentServiceName()
@@ -3823,6 +3846,15 @@ IMPL_XTYPEPROVIDER_START( UnoCurrencyFieldControl )
     getCppuType( ( uno::Reference< awt::XCurrencyField>* ) NULL ),
     UnoEditControl::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void UnoCurrencyFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
+    xField->setFirst( mnFirst );
+    xField->setLast( mnLast );
+}
 
 void UnoCurrencyFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
@@ -3873,24 +3905,32 @@ double UnoCurrencyFieldControl::getMax() throw(uno::RuntimeException)
 
 void UnoCurrencyFieldControl::setFirst( double Value ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoCurrencyFieldControl::setFirst not supported" );
+    mnFirst = Value;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setFirst( mnFirst );
+    }
 }
 
 double UnoCurrencyFieldControl::getFirst() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoCurrencyFieldControl::getFirst not supported" );
-    return 0;
+    return mnFirst;
 }
 
 void UnoCurrencyFieldControl::setLast( double Value ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoCurrencyFieldControl::setLast not supported" );
+    mnLast = Value;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XCurrencyField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setLast( mnLast );
+    }
 }
 
 double UnoCurrencyFieldControl::getLast() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoCurrencyFieldControl::getLast not supported" );
-    return 0;
+    return mnLast;
 }
 
 void UnoCurrencyFieldControl::setStrictFormat( sal_Bool bStrict ) throw(uno::RuntimeException)
@@ -3919,13 +3959,14 @@ double UnoCurrencyFieldControl::getSpinSize() throw(uno::RuntimeException)
 
 void UnoCurrencyFieldControl::setDecimalDigits( sal_Int16 Digits ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoCurrencyFieldControl::setDecimalDigits not supported" );
+    uno::Any aAny;
+    aAny <<= Digits;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DECIMALACCURACY ), aAny, sal_True );
 }
 
 sal_Int16 UnoCurrencyFieldControl::getDecimalDigits() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoCurrencyFieldControl::getDecimalDigits not supported" );
-    return 0;
+    return ImplGetPropertyValue_INT16( BASEPROPERTY_DECIMALACCURACY );
 }
 
 //  ----------------------------------------------------
