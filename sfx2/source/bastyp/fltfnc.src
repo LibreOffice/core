@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 19:27:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ turkish ] = "Bu üyelik, çevrimdýþý kipte okunmak üzere ayarlanmýþtýr.\n\n%PRODUCTNAME þu an çevrimiçi kipinde. %PRODUCTNAME, çevrimdýþý kipe geçsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\n%PRODUCTNAME se encuentra sin embargo en modo en línea. ¿Desea cambiar %PRODUCTNAME al modo desconectado?";
+    Text[ finnish ] = "Tilaus on määritetty luettavaksi offline-tilassa.\n\n%PRODUCTNAME on käytettävissä vain online-tilassa. Siirrytäänkö offline-tilaan?";
 };
 String STR_FILTER_EXTERNAL
 {
@@ -111,6 +112,7 @@ String STR_FILTER_EXTERNAL
     Text[ turkish ] = "Diðer uygulama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Otra aplicación";
+    Text[ finnish ] = "Muu sovellus";
 };
 
 String STR_FILTER_COMPONENT
@@ -136,6 +138,7 @@ String STR_FILTER_COMPONENT
     Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  %PRODUCTNAME";
     Text[ turkish ] = "%PRODUCTNAME bileþeni";
     Text[ catalan ] = "%PRODUCTNAME Componentes";
+    Text[ finnish ] = "Tuotteen %PRODUCTNAME osa";
 };
 
 String STR_FILTER_NOT_INSTALLED
@@ -162,6 +165,7 @@ String STR_FILTER_NOT_INSTALLED
     Text[ turkish ] = "Seçilen $(FILTER) filtresi kurulu deðil.\nÞimdi kurmak ister misiniz ?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El filtro seleccionado $(FILTER) no ha sido instalado.\n¿Desea instalarlo?";
+    Text[ finnish ] = "Valittua suodatinta $(FILTER) ei ole asennettu.\nHaluatko asentaa suodattimen nyt?";
 };
 
 String STR_FILTER_CONSULT_SERVICE
@@ -188,4 +192,5 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ turkish ] = "Seçilen $(FILTER) filtresi sürümünüzde bulunmuyor.\nSipariþ etmek için gereken bilgileri web sitemizde bulabilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El filtro seleccionado $(FILTER) no está incluido en su edición.\nEn nuestra página de Internet encontrará las informaciones para poder pedirlos.";
+    Text[ finnish ] = "Valittu suodatin $(FILTER) ei sisälly laitokseen.\nTilausohjeet ovat kotisivullamme.";
 };
