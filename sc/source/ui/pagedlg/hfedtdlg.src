@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:58:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 /* StarView ressource file */
-
 #include "hfedtdlg.hrc"
 #define HFEDIT_DLGTITLE \
     Text = "Kopf-/Fußzeilen" ; \
@@ -774,14 +773,14 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Linkerbereik" ;
         Text [ spanish ] = "Área ~izquierda" ;
         Text [ english_us ] = "~Left area" ;
-        Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
+        Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ";
         Text[ russian ] = "Ëåâàÿ îáëàñòü";
         Text[ polish ] = "~Lewy obszar";
         Text[ japanese ] = "å·¦ã®ç¯„å›²(~L)";
         Text[ chinese_traditional ] = "å·¦å€åŸŸ(~L)";
         Text[ arabic ] = "ãäØŞÉ íÓÑì";
         Text[ dutch ] = "~Linkerbereik";
-        Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
+        Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ";
         Text[ greek ] = "ÁñéóôåñŞ ğåñéï÷Ş";
         Text[ korean ] = "ì™¼ìª½ ì˜ì—­(~L)";
         Text[ turkish ] = "~Sol bölüm";
@@ -821,14 +820,14 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Middelste bereik" ;
         Text [ spanish ] = "Área ~central" ;
         Text [ english_us ] = "~Center area" ;
-        Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ(~C)";
+        Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ";
         Text[ russian ] = "Öåíòğàëüíàÿ îáëàñòü";
         Text[ polish ] = "Œr~odkowy obszar";
         Text[ japanese ] = "ä¸­å¤®ã®ç¯„å›²(~C)";
         Text[ chinese_traditional ] = "ä¸­é–“å€åŸŸ(~C)";
         Text[ arabic ] = "ãäØŞÉ æÓØì";
         Text[ dutch ] = "~Middelste bereik";
-        Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ(~C)";
+        Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ";
         Text[ greek ] = "ÊåíôñéêŞ ğåñéï÷Ş";
         Text[ korean ] = "ì¤‘ì‹¬ ì˜ì—­(~C)";
         Text[ turkish ] = "~Orta bölüm";
@@ -868,14 +867,14 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Rechterbereik" ;
         Text [ spanish ] = "Área ~derecha" ;
         Text [ english_us ] = "R~ight area" ;
-        Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
+        Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ";
         Text[ russian ] = "Ïğàâàÿ îáëàñòü";
         Text[ polish ] = "Prawy obszar";
         Text[ japanese ] = "å³ã®ç¯„å›²(~I)";
         Text[ chinese_traditional ] = "å³å€åŸŸ(~I)";
         Text[ arabic ] = "ãäØŞÉ íãäì";
         Text[ dutch ] = "~Rechterbereik";
-        Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
+        Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
         Text[ korean ] = "ì˜¤ë¥¸ìª½ ì˜ì—­(~I)";
         Text[ turkish ] = "S~ağ bölüm";
