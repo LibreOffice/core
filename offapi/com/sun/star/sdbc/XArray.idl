@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XArray.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
  module com {  module sun {  module star {  module container {
-interface XNameAccess;
+ published interface XNameAccess;
 };};};};
 
 #ifndef __com_sun_star_sdbc_SQLException_idl__
@@ -75,7 +75,7 @@ interface XNameAccess;
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XResultSet;
+ published interface XResultSet;
 
 
 // DocMerge from xml: interface com::sun::star::container::com::sun::star::sdbc::XArray
@@ -91,7 +91,7 @@ interface XResultSet;
 
     is implemented using a SQL LOCATOR(array) internally.
  */
-interface XArray: com::sun::star::uno::XInterface
+published interface XArray: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::container::com::sun::star::sdbc::XArray::getBaseTypeName
