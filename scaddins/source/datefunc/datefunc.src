@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 21:48:37 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Determines the number of weeks in a specific period.";
             Text[ russian ] = "Вычисляет количество недель в определенном периоде времени.";
             Text[ greek ] = "Determines the number of weeks in a specific period.";
-            Text[ dutch ] = "Determines the number of weeks in a specific period.";
+            Text[ dutch ] = "Berekent het aantal weken binnen een bepaalde periode.";
             Text[ french ] = "Calcule le nombre de semaines dans une pйriode dйterminйe.";
             Text[ spanish ] = "Calcula el nъmero de semanas en un periodo determinado.";
             Text[ finnish ] = "Determines the number of weeks in a specific period.";
@@ -128,7 +128,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "First day of the period.";
             Text[ russian ] = "Первый день периода.";
             Text[ greek ] = "First day of the period.";
-            Text[ dutch ] = "First day of the period.";
+            Text[ dutch ] = "De eerste dag van de periode.";
             Text[ french ] = "Premier jour de la pйriode.";
             Text[ spanish ] = "Primer dнa del periodo";
             Text[ finnish ] = "First day of the period.";
@@ -180,7 +180,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Last day of the period.";
             Text[ russian ] = "Последний день периода.";
             Text[ greek ] = "Last day of the period.";
-            Text[ dutch ] = "Last day of the period.";
+            Text[ dutch ] = "Laatste dag van de periode.";
             Text[ french ] = "Dernier jour de la pйriode.";
             Text[ spanish ] = "Ъltimo dнa del periodo.";
             Text[ finnish ] = "Last day of the period.";
@@ -288,7 +288,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Start date";
             Text[ russian ] = "Нач_дата";
             Text[ greek ] = "Start date";
-            Text[ dutch ] = "Start date";
+            Text[ dutch ] = "Begindatum";
             Text[ french ] = "Date initiale";
             Text[ spanish ] = "Fecha inicial";
             Text[ finnish ] = "Start date";
@@ -340,7 +340,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "End date";
             Text[ russian ] = "Кон_дата";
             Text[ greek ] = "End date";
-            Text[ dutch ] = "End date";
+            Text[ dutch ] = "Einddatum";
             Text[ french ] = "Date de fin";
             Text[ spanish ] = "Fecha final";
             Text[ finnish ] = "End date";
@@ -392,7 +392,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Mode";
             Text[ russian ] = "Тип";
             Text[ greek ] = "Mode";
-            Text[ dutch ] = "Mode";
+            Text[ dutch ] = "Type";
             Text[ french ] = "Mode";
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Mode";
@@ -448,7 +448,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Determines the number of years in a specific period.";
             Text[ russian ] = "Вычисляет количество лет в определенном периоде времени.";
             Text[ greek ] = "Determines the number of years in a specific period.";
-            Text[ dutch ] = "Determines the number of years in a specific period.";
+            Text[ dutch ] = "Berekent het aantal jaren binnen een bepaalde periode.";
             Text[ french ] = "Calcule le nombre d'annйes dans une pйriode dйterminйe.";
             Text[ spanish ] = "Calcula el nъmero de aсos en un determinado periodo.";
             Text[ finnish ] = "Determines the number of years in a specific period.";
@@ -500,7 +500,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "First day of the period.";
             Text[ russian ] = "Первый день периода.";
             Text[ greek ] = "First day of the period.";
-            Text[ dutch ] = "First day of the period.";
+            Text[ dutch ] = "Eerste dag van de periode.";
             Text[ french ] = "Premier jour de la pйriode.";
             Text[ spanish ] = "Primer dнa del periodo.";
             Text[ finnish ] = "First day of the period.";
@@ -526,7 +526,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "End date";
             Text[ russian ] = "Кон_дата";
             Text[ greek ] = "End date";
-            Text[ dutch ] = "End date";
+            Text[ dutch ] = "Einddatum";
             Text[ french ] = "Date de fin";
             Text[ spanish ] = "Fecha final";
             Text[ finnish ] = "End date";
@@ -552,7 +552,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Last day of the period.";
             Text[ russian ] = "Последний день периода.";
             Text[ greek ] = "Last day of the period.";
-            Text[ dutch ] = "Last day of the period.";
+            Text[ dutch ] = "Laatste dag van de periode.";
             Text[ french ] = "Dernier jour de la pйriode.";
             Text[ spanish ] = "Ъltimo dнa del periodo.";
             Text[ finnish ] = "Last day of the period.";
@@ -578,7 +578,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Mode";
             Text[ russian ] = "Тип";
             Text[ greek ] = "Mode";
-            Text[ dutch ] = "Mode";
+            Text[ dutch ] = "Type";
             Text[ french ] = "Mode";
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Mode";
@@ -634,7 +634,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
             Text[ russian ] = "Возвращает 1 (ИСТИНА), если указанная дата выпадает на высокосный год, в противном случае возвращает значение 0 (ЛОЖЬ).";
             Text[ greek ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
-            Text[ dutch ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
+            Text[ dutch ] = "Geeft als resultaat 1 (WAAR) als de aangegeven datum in een schrikkeljaar valt, anders 0 (ONWAAR).";
             Text[ french ] = "Renvoie 1 (VRAI) si l'annйe d'une date est bissextile, sinon 0 (FAUX).";
             Text[ spanish ] = "Devuelve 1 (VERDADERO) si la fecha indicada es aсo bisiesto, de lo contrario 0 (FALSO).";
             Text[ finnish ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
@@ -660,7 +660,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Date";
             Text[ russian ] = "Дата";
             Text[ greek ] = "Date";
-            Text[ dutch ] = "Date";
+            Text[ dutch ] = "Datum";
             Text[ french ] = "Date";
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
@@ -686,7 +686,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Any day in the desired year.";
             Text[ russian ] = "Любой день заданного года.";
             Text[ greek ] = "Any day in the desired year.";
-            Text[ dutch ] = "Any day in the desired year.";
+            Text[ dutch ] = "Een willekeurige dag in het gewenste jaar.";
             Text[ french ] = "Un jour quelconque dans l'annйe en question.";
             Text[ spanish ] = "Cualquier dнa en un aсo deseado.";
             Text[ finnish ] = "Any day in the desired year.";
@@ -716,7 +716,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Returns the number of days of the month in relation to the date entered.";
             Text[ russian ] = "Возвращает число дней в месяце, на который приходится указанная дата.";
             Text[ greek ] = "Returns the number of days of the month in relation to the date entered.";
-            Text[ dutch ] = "Returns the number of days of the month in relation to the date entered.";
+            Text[ dutch ] = "Geeft als resultaat het aantal dagen van de maand waarin de aangegeven datum valt.";
             Text[ french ] = "Renvoie le nombre de jours dans le mois en relation avec la date indiquйe.";
             Text[ spanish ] = "Devuelve la cantidad de dнas del mes en el que figure la fecha indicada.";
             Text[ finnish ] = "Returns the number of days of the month in relation to the date entered.";
@@ -742,7 +742,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Date";
             Text[ russian ] = "Дата";
             Text[ greek ] = "Date";
-            Text[ dutch ] = "Date";
+            Text[ dutch ] = "Datum";
             Text[ french ] = "Date";
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
@@ -768,7 +768,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ portuguese ] = "Any day in the desired month.";
             Text[ russian ] = "Любой день заданного месяца.";
             Text[ greek ] = "Any day in the desired month.";
-            Text[ dutch ] = "Any day in the desired month.";
+            Text[ dutch ] = "Een willekeurige dag in de gewenste maand.";
             Text[ french ] = "Un jour quelconque dans le mois en question.";
             Text[ spanish ] = "Cualquier dнa en un mes deseado.";
             Text[ finnish ] = "Any day in the desired month.";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
