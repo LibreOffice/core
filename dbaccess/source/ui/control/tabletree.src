@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 16:42:23 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ String STR_COULDNOTCONNECT
     Text[ polish ] = "Brak po��czenia z URL #connurl#.";
     Text[ portuguese_brazilian ] = "A connection could not be established for URL #connurl#.";
     Text[ japanese ] = "URL #connurl# へ接続できませんでした。";
-    Text[ korean ] = "URL #connurl#에 대한 연결을 구축하지 못했습니다 .";
+    Text[ korean ] = "URL #connurl#에 연결하지 못했습니다 .";
     Text[ chinese_simplified ] = "无法和 URL #connurl# 建立连接。";
     Text[ chinese_traditional ] = "無法連線到 URL #connurl# 。";
     Text[ turkish ] = "A connection could not be established for URL #connurl#.";
@@ -239,7 +239,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ polish ] = "Sprawd� bie��ce konfiguracje, np. nazw� u�ytkownika i has�o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text[ japanese ] = "ユーザー名やパスワードなど現在設定されている内容をもう一度チェックしてください。";
-    Text[ korean ] = "현재의 설정을 점검하십시오,  예를 들면 사용자 이름/ 패스워드와 관련해서.";
+    Text[ korean ] = "사용자 이름과 패스워드 등의 현재 설정을 점검하십시오.";
     Text[ chinese_simplified ] = "请您检查当前的设定，如使用名和密码。";
     Text[ chinese_traditional ] = "請您檢查目前的設定，如使用者和密碼。";
     Text[ turkish ] = "Please check the current settings, e.g. with respect to user name and password.";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/12/14 16:42:23  obo
+ *  Merge SRC641: 14.12.01 - 17:41:28
+ *
  *  Revision 1.20  2001/11/29 11:24:25  pb
  *  fix: #93646# correct german spellcheck
  *
@@ -414,6 +417,7 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
 
 
 
