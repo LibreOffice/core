@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-08 14:49:46 $
+ *  last change: $Author: sj $ $Date: 2001-02-13 18:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,10 @@ static const sal_Int32 mso_sptDefault8100[] =
 static const sal_Int32 mso_sptDefault10800[] =
 {
     1, 10800
+};
+static const sal_Int32 mso_sptDefault16200and5400[] =
+{
+    2, 16200, 5400
 };
 
 static const sal_Int32 mso_sptArcDefault[] =
@@ -623,10 +627,6 @@ static const SvxMSDffCalculationData mso_sptArrowCalc[] =
     { 0x6001, 0x401, 0x400, 10800 },
     { 0xa000, 0x401, 0, 0x406 }
 };
-static const sal_Int32 mso_sptArrowDefault[] =
-{
-    2, 16200, 5400
-};
 static const sal_Int32 mso_sptArrowTextRect[] =
 {
     1, 0, 0 MSO_I, 5 MSO_I, 2 MSO_I
@@ -636,7 +636,7 @@ static const mso_AutoShape msoArrow =
     (sal_Int32*)mso_sptArrowVert, sizeof( mso_sptArrowVert ) >> 3,
     (sal_uInt16*)mso_sptArrowSegm, sizeof( mso_sptArrowSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptArrowCalc, sizeof( mso_sptArrowCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptArrowDefault,
+    (sal_Int32*)mso_sptDefault16200and5400,
     (sal_Int32*)mso_sptArrowTextRect,
     (sal_Int32*)NULL,
     0x80000000, 0x80000000
@@ -689,10 +689,6 @@ static const sal_uInt16 mso_sptDownArrowSegm[] =
 {
     0x4000, 0x0006, 0x6001, 0x8000
 };
-static const sal_Int32 mso_sptDownArrowDefault[] =
-{
-    2, 16200, 5400
-};
 static const sal_Int32 mso_sptDownArrowTextRect[] =
 {
     1, 0 MSO_I, 0, 2 MSO_I, 5 MSO_I
@@ -702,7 +698,7 @@ static const mso_AutoShape msoDownArrow =
     (sal_Int32*)mso_sptDownArrowVert, sizeof( mso_sptDownArrowVert ) >> 3,
     (sal_uInt16*)mso_sptDownArrowSegm, sizeof( mso_sptDownArrowSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptArrowCalc, sizeof( mso_sptArrowCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptDownArrowDefault,
+    (sal_Int32*)mso_sptDefault16200and5400,
     (sal_Int32*)mso_sptDownArrowTextRect,
     (sal_Int32*)NULL,
     0x80000000, 0x80000000
@@ -1185,8 +1181,8 @@ static const mso_AutoShape msoCurvedRightArrow =
     0x80000000, 0x80000000
 };
 
-static const sal_Int32 mso_sptStripedRightArrowVert[] =             // adjustment1 : x 3375 - 21600
-{                                                           // adjustment2 : y 0 - 10800
+static const sal_Int32 mso_sptStripedRightArrowVert[] =         // adjustment1 : x 3375 - 21600
+{                                                               // adjustment2 : y 0 - 10800
     3375,   0 MSO_I,
     1 MSO_I,0 MSO_I,
     1 MSO_I,0,
@@ -1213,23 +1209,57 @@ static const SvxMSDffCalculationData mso_sptStripedRightArrowCalc[] =
 {
     { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
     { 0x2000, DFF_Prop_adjustValue, 0, 0 },
-    { 0x8000, 21600, 0, DFF_Prop_adjust2Value }
-};
-static const sal_Int32 mso_sptStripedRightArrowDefault[] =
-{
-    2, 16200, 5400
+    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
+    { 0x8000, 21600, 0, 0x401 },
+    { 0x6001, 0x403, 0x400, 10800 },
+    { 0x6000, 0x401, 0x404, 0 }
 };
 static const sal_Int32 mso_sptStripedRightArrowTextRect[] =
 {
-    0
+    1, 3375, 0 MSO_I, 5 MSO_I, 2 MSO_I
 };
 static const mso_AutoShape msoStripedRightArrow =
 {
     (sal_Int32*)mso_sptStripedRightArrowVert, sizeof( mso_sptStripedRightArrowVert ) >> 3,
     (sal_uInt16*)mso_sptStripedRightArrowSegm, sizeof( mso_sptStripedRightArrowSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptStripedRightArrowCalc, sizeof( mso_sptStripedRightArrowCalc ) / sizeof( SvxMSDffCalculationData ),
-    (sal_Int32*)mso_sptStripedRightArrowDefault,
+    (sal_Int32*)mso_sptDefault16200and5400,
     (sal_Int32*)mso_sptStripedRightArrowTextRect,
+    (sal_Int32*)NULL,
+    0x80000000, 0x80000000
+};
+
+static const sal_Int32 mso_sptNotchedRightArrowVert[] =         // adjustment1 : x 0 - 21600    (default 16200)
+{                                                               // adjustment2 : y 0 - 10800    (default 5400)
+    0, 1 MSO_I,
+    0 MSO_I, 1 MSO_I,
+    0 MSO_I, 0,
+    21600, 10800,
+    0 MSO_I, 21600,
+    0 MSO_I, 2 MSO_I,
+    0, 2 MSO_I,
+    5 MSO_I, 10800
+};
+static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
+{
+    { 0x2000, DFF_Prop_adjustValue, 0, 0 },
+    { 0x2000, DFF_Prop_adjust2Value, 0, 0 },
+    { 0x8000, 21600, 0, DFF_Prop_adjust2Value },
+    { 0x8000, 21600, 0, DFF_Prop_adjustValue },
+    { 0x8000, 10800, 0, DFF_Prop_adjust2Value },
+    { 0x6001, 0x403, 0x404, 10800 }
+};
+static const sal_Int32 mso_sptNotchedRightArrowTextRect[] =
+{
+    0
+};
+static const mso_AutoShape msoNotchedRightArrow =
+{
+    (sal_Int32*)mso_sptNotchedRightArrowVert, sizeof( mso_sptNotchedRightArrowVert ) >> 3,
+    (sal_uInt16*)NULL, 0,
+    (SvxMSDffCalculationData*)mso_sptNotchedRightArrowCalc, sizeof( mso_sptNotchedRightArrowCalc ) / sizeof( SvxMSDffCalculationData ),
+    (sal_Int32*)mso_sptDefault16200and5400,
+    (sal_Int32*)mso_sptNotchedRightArrowTextRect,
     (sal_Int32*)NULL,
     0x80000000, 0x80000000
 };
@@ -5271,6 +5301,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptBentUpArrow :           pDefAutoShape = &msoBentUpArrow; break;
 //      case mso_sptCurvedRightArrow :      pDefAutoShape = &msoCurvedRightArrow; break;    // !!!!!
         case mso_sptStripedRightArrow :     pDefAutoShape = &msoStripedRightArrow; break;
+        case mso_sptNotchedRightArrow :     pDefAutoShape = &msoNotchedRightArrow; break;
         case mso_sptHomePlate :             pDefAutoShape = &msoHomePlate; break;
         case mso_sptChevron :               pDefAutoShape = &msoChevron; break;
         case mso_sptRightArrowCallout :     pDefAutoShape = &msoRightArrowCallout; break;
