@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 08:52:40 $
+ *  last change: $Author: os $ $Date: 2002-09-09 09:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
                             SfxMedium** ppMed = 0 );
 
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
-void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE);
+void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE, BOOL bWithDefault = FALSE);
 //inserts a string sorted into a ListBox,
 USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset);
 

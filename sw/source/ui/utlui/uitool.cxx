@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 08:53:58 $
+ *  last change: $Author: os $ $Date: 2002-09-09 09:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,7 @@ USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, USHORT nOffset
     }
     return rToFill.InsertEntry(rEntry, i);
 }
-void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
+void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted, BOOL bWithDefault)
 {
     BOOL bHasOffset = rToFill.GetEntryCount() > 0;
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
@@ -813,7 +813,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
     SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sStandard );
     while(pBase)
     {
-        if(pBase->GetName() !=  sStandard)
+        if(bWithDefault || pBase->GetName() !=  sStandard)
         {
             USHORT nPos;
             if(bSorted)

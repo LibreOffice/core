@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-05 12:14:51 $
+ *  last change: $Author: os $ $Date: 2002-09-09 09:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2657,6 +2657,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
 {
     String sText;
     FormTokenType eTokenType;
+    String sCharStyle;
     if(pBtn == &aEntryNoPB)
     {
         sText.AssignAscii(SwForm::aFormEntryNum);
@@ -2689,6 +2690,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     {
         sText.AssignAscii(SwForm::aFormLinkStt);
         eTokenType = TOKEN_LINK_START;
+        sCharStyle = String(SW_RES(STR_POOLCHR_INET_NORMAL));
     }
     else if(pBtn == &aTabPB)
     {
@@ -2696,6 +2698,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
         eTokenType = TOKEN_TAB_STOP;
     }
     SwFormToken aInsert(eTokenType);
+    aInsert.sCharStyleName = sCharStyle;
     aInsert.nTabStopPosition = 0;
     aTokenWIN.InsertAtSelection(sText, aInsert);
     ModifyHdl(0);
@@ -2989,11 +2992,16 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
-    ::FillCharStyleListBox(aCharStyleLB, pDocSh, TRUE);
+    ::FillCharStyleListBox(aCharStyleLB, pDocSh, TRUE, TRUE);
+    const String sDefault(SW_RES(STR_POOLCOLL_STANDARD));
     for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
     {
-        aMainEntryStyleLB.InsertEntry( aCharStyleLB.GetEntry(i) );
-        aMainEntryStyleLB.SetEntryData(i, aCharStyleLB.GetEntryData(i));
+        String sEntry = aCharStyleLB.GetEntry(i);
+        if(sDefault != sEntry)
+        {
+            aMainEntryStyleLB.InsertEntry( sEntry );
+            aMainEntryStyleLB.SetEntryData(i, aCharStyleLB.GetEntryData(i));
+        }
     }
     aMainEntryStyleLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                 RES_POOLCHR_IDX_MAIN_ENTRY, aEmptyStr ));

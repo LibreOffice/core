@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-26 09:30:00 $
+ *  last change: $Author: os $ $Date: 2002-09-09 09:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1714,6 +1714,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx, USHORT nCount,
 
         SvxTabStopItem aTStops( 0, 0 );
         xub_StrLen nLinkStartPosition = STRING_NOTFOUND;
+        String  sLinkCharacterStyle; //default to "Default" character style - which is none
         String sURL;
         // create an enumerator
         SwFormTokenEnumerator aTokenEnum = GetTOXForm().CreateTokenEnumerator(nLvl);
@@ -1864,7 +1865,8 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx, USHORT nCount,
 
             case TOKEN_LINK_START:
                 nLinkStartPosition = rTxt.Len();
-                break;
+                sLinkCharacterStyle = aToken.sCharStyleName;
+            break;
 
             case TOKEN_LINK_END:
                     //TODO: only paired start/end tokens are valid
@@ -1880,9 +1882,25 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx, USHORT nCount,
                         if( !sURL.Len() )
                             break;
                     }
-                    aLinkArr.Insert( new LinkStruct(sURL, nLinkStartPosition,
-                                                    nEnd), aLinkArr.Count() );
+                    LinkStruct* pNewLink = new LinkStruct(sURL, nLinkStartPosition,
+                                                    nEnd);
+                    pNewLink->aINetFmt.SetVisitedFmt(sLinkCharacterStyle);
+                    pNewLink->aINetFmt.SetINetFmt(sLinkCharacterStyle);
+                    if(sLinkCharacterStyle.Len())
+                    {
+                        USHORT nPoolId =
+                            SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, GET_POOLID_CHRFMT );
+                        pNewLink->aINetFmt.SetVisitedFmtId(nPoolId);
+                        pNewLink->aINetFmt.SetINetFmtId(nPoolId);
+                    }
+                    else
+                    {
+                        pNewLink->aINetFmt.SetVisitedFmtId(USHRT_MAX);
+                        pNewLink->aINetFmt.SetINetFmtId(USHRT_MAX);
+                    }
+                    aLinkArr.Insert( pNewLink, aLinkArr.Count() );
                     nLinkStartPosition = STRING_NOTFOUND;
+                    sLinkCharacterStyle.Erase();
                 }
                 break;
 
