@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:55:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,8 @@ public:
                             ScDPDimension( ScDPSource* pSrc, long nD );
     virtual                 ~ScDPDimension();
 
-    long                    GetSourceDim() const    { return nSourceDim; }
+    long                    GetDimension() const    { return nDim; }        // dimension index in source
+    long                    GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
 
     ScDPDimension*          CreateCloneObject();
     ScDPHierarchies*        GetHierarchiesObject();
@@ -473,6 +474,9 @@ public:
     virtual long                getUsedHierarchy() const;
     virtual void                setUsedHierarchy(long nNew);
     virtual BOOL                isDuplicated() const;
+
+    BOOL                        HasSelectedPage() const     { return bHasSelectedPage; }
+    const ScDPItemData&         GetSelectedData();
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
