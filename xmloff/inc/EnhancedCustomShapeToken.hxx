@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeToken.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:04:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,8 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
 
     enum EnhancedCustomShapeTokenEnum
     {
-        EAS_predefined_type,
+        EAS_type,
+        EAS_name,
         EAS_mirror_horizontal,
         EAS_mirror_vertical,
         EAS_viewBox,
@@ -102,7 +103,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_enhanced_path,
         EAS_path_stretchpoint_x,
         EAS_path_stretchpoint_y,
-        EAS_text_frames,
+        EAS_text_areas,
         EAS_glue_points,
         EAS_glue_point_type,
         EAS_glue_point_leaving_directions,
@@ -110,7 +111,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_text_path_mode,
         EAS_text_path_scale_x,
         EAS_text_path_same_letter_heights,
-        EAS_adjustments,
+        EAS_modifiers,
         EAS_equation,
         EAS_formula,
         EAS_handle,
@@ -128,7 +129,7 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
 
         EAS_CustomShapeEngine,
         EAS_CustomShapeData,
-        EAS_PredefinedType,
+        EAS_Type,
         EAS_MirroredX,
         EAS_MirroredY,
         EAS_ViewBox,
@@ -175,7 +176,8 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_RadiusRangeMaximum,
         EAS_Coordinates,
         EAS_Segments,
-        EAS_StretchPoint,
+        EAS_StretchX,
+        EAS_StretchY,
         EAS_TextFrames,
         EAS_GluePoints,
         EAS_GluePointLeavingDirections,
