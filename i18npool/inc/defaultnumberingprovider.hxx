@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-24 23:10:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _COM_SUN_STAR_I18N_XTRANSLITERATION_HPP_
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #endif
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
 #include <transliterationImpl.hxx>
 
@@ -138,8 +139,11 @@ public:
                 throw( com::sun::star::uno::RuntimeException );
 private:
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr;
+    com::sun::star::uno::Reference < com::sun::star::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     TransliterationImpl* translit;
     rtl::OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
+        throw(com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isScriptFlagEnabled(const rtl::OUString& aName )
         throw(com::sun::star::uno::RuntimeException);
 };
 } } } }

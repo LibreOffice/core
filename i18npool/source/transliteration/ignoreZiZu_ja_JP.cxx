@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreZiZu_ja_JP.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2002-08-27 12:11:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 // prevent internal compiler error with MSVC6SP3
-#include <utility>
+#include <stl/utility>
 
 #define TRANSLITERATION_ZiZu_ja_JP
 #include <transliteration_Ignore.hxx>

@@ -148,7 +148,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
-<FormatCode>MM/DD/YY HH:MM</FormatCode>
+<FormatCode>MM/DD/YY HH:MM AM/PM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME"  formatindex="47">

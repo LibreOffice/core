@@ -1,5 +1,5 @@
-mkdir: %_DEST%\xml
-..\xml\*.xml %_DEST%\xml\*.xml
+mkdir: %_DEST%\xml%_EXT%
+..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\i18npool
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-05 23:35:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_KPARSETOKENS_HPP_
@@ -530,7 +530,7 @@ void cclass_Unicode::initParserTable( const Locale& rLocale, sal_Int32 startChar
         LocaleDataItem aItem =
             xLocaleData->getLocaleItem( aParserLocale );
 //!TODO: theoretically separators may be a string, adjustment would have to be
-//! done here and in parsing and in SolarMath::StringToDouble
+//! done here and in parsing and in ::rtl::math::stringToDouble()
         cGroupSep = aItem.thousandSeparator.getStr()[0];
         cDecimalSep = aItem.decimalSeparator.getStr()[0];
     }
@@ -786,7 +786,6 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     const sal_Unicode* pSrc = pSym;
     OUString aSymbol;
     sal_Unicode c = *pSrc;
-    sal_Int32 nPosition = 0;
     sal_Unicode cLast = 0;
     int nDecSeps = 0;
     BOOL bQuote = FALSE;
@@ -796,7 +795,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
 
     while ( (c != 0) && (eState != ssStop) )
     {
-        UPT_FLAG_TYPE nMask = getFlags( pStart, nPosition );
+        UPT_FLAG_TYPE nMask = getFlags( pStart, pSrc - pStart );
         if ( nMask & TOKEN_EXCLUDED )
             eState = ssBounce;
         if ( bMightBeWord )
@@ -806,9 +805,8 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             else
                 bMightBeWord = ((nMask & TOKEN_WORD) != 0);
         }
-        sal_Int32 nParseTokensType = getParseTokensType( pStart, nPosition );
+        sal_Int32 nParseTokensType = getParseTokensType( pStart, pSrc - pStart );
         pSrc++;
-        nPosition++;
         switch (eState)
         {
             case ssGetChar :
@@ -902,7 +900,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 }
                 else if ( c == 'E' || c == 'e' )
                 {
-                    UPT_FLAG_TYPE nNext = getFlags( pStart, nPosition );
+                    UPT_FLAG_TYPE nNext = getFlags( pStart, pSrc - pStart );
                     if ( nNext & TOKEN_VALUE_EXP )
                         ;   // keep it going
                     else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
@@ -917,7 +915,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( (cLast == 'E') || (cLast == 'e') )
                     {
-                        UPT_FLAG_TYPE nNext = getFlags( pStart, nPosition );
+                        UPT_FLAG_TYPE nNext = getFlags( pStart, pSrc - pStart );
                         if ( nNext & TOKEN_VALUE_EXP_VALUE )
                             ;   // keep it going
                         else if ( bMightBeWord && ((nNext & TOKEN_WORD) || !*pSrc) )
@@ -991,7 +989,6 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     {   // "" => literal " escaped
                         aSymbol += OUString( pSym, pSrc - pSym );
                         pSrc++;
-                        nPosition++;
                     }
                     else
                     {
@@ -1018,7 +1015,6 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             pSrc = pSym;
             aSymbol = OUString();
             c = *pSrc;
-        nPosition = 0;
             cLast = 0;
             nDecSeps = 0;
             bQuote = FALSE;
@@ -1047,7 +1043,6 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             if ( eState == ssStopBack )
             {   // put back
                 pSrc--;
-        nPosition--;
                 bMightBeWord = bMightBeWordLast;
                 eState = ssStop;
             }
@@ -1070,9 +1065,8 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     r.EndPos = nPos + (pSrc - pStart);
     if ( r.TokenType & KParseType::ASC_NUMBER )
     {
-        int nErrno;
-        r.Value = SolarMath::StringToDouble( pStart + r.LeadingWhiteSpace,
-            cGroupSep, cDecimalSep, nErrno );
+        r.Value = rtl_math_uStringToDouble( pStart + r.LeadingWhiteSpace,
+                pStart + r.EndPos, cDecimalSep, cGroupSep, NULL, NULL );
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }
@@ -1106,9 +1100,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
         // transliterate to ASCII
         aTmp = xNatNumSup->getNativeNumberString( aTmp, aParserLocale,
                 NativeNumberMode::NATNUM0 );
-        int nErrno;
-        r.Value = SolarMath::StringToDouble( aTmp.getStr(), cGroupSep,
-                cDecimalSep, nErrno );
+        r.Value = ::rtl::math::stringToDouble( aTmp, cDecimalSep, cGroupSep, NULL, NULL );
         if ( bMightBeWord )
             r.TokenType |= KParseType::IDENTNAME;
     }

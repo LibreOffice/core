@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-06 01:19:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,9 +269,13 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
             getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
 }
 
+#if (_MSC_VER < 1300)
 sal_Bool SAL_CALL operator == (const Locale& l1, const Locale& l2) {
     return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
 }
+#else
+extern sal_Bool SAL_CALL operator == (const Locale& l1, const Locale& l2);
+#endif
 
 sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( RuntimeException )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#if !defined( WIN32 ) && !defined( MACOSX )
+#if !defined( WIN32 ) && !defined( MACOSX ) && !defined( FREEBSD)
 #include <alloca.h>
 #endif
 #include <tools/list.hxx>

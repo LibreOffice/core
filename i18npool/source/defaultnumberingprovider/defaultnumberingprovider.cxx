@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-24 23:11:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,28 +186,28 @@ void failedToConvert( int i, int last )
 }
 
 static
-void lcl_formatChars( char A, int n, OUString& s )
+void lcl_formatChars( sal_Unicode table[], int tableSize, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>AA, 27=>AB, ...
      // if A=='a' then 0=>a, 1=>b, ..., 25=>z, 26=>aa, 27=>ab, ...
 
-     if( n>=26 ) lcl_formatChars( A, (n-26)/26, s );
+     if( n>=tableSize ) lcl_formatChars( table, tableSize, (n-tableSize)/tableSize, s );
 
-     s += OUString::valueOf( (sal_Unicode) (( n%26 ) + A) );
+     s += OUString::valueOf( table[ n % tableSize ] );
 }
 
 static
-void lcl_formatChars1( char A, int n, OUString& s )
+void lcl_formatChars1( sal_Unicode table[], int tableSize, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>AA, 27=>BB, ...
      // if A=='a' then 0=>a, 1=>b, ..., 25=>z, 26=>aa, 27=>bb, ...
 
-     int repeat_count = n / 26 + 1;
+     int repeat_count = n / tableSize + 1;
 
      for( int i=0; i<repeat_count; i++ )
-     s += OUString::valueOf( (sal_Unicode) (( n%26 ) + A) );
+     s += OUString::valueOf( table[ n%tableSize ] );
 }
 
 static
@@ -296,15 +296,22 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
       // append prefix
       if( !should_ignore(prefix) ) result += prefix;
 
+      static sal_Unicode upperLetter[26] = { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49,
+                                                    0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50, 0x51, 0x52,
+                                                    0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A };
+      static sal_Unicode lowerLetter[26] = { 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69,
+                                                    0x6A, 0x6B, 0x6C, 0x6D, 0x6E, 0x6F, 0x70, 0x71, 0x72,
+                                                    0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7A };
+
       // append formatted number
       using namespace style::NumberingType;
       switch( numType )
       {
           case CHARS_UPPER_LETTER:
-               lcl_formatChars( 'A', number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>AB, ...
+               lcl_formatChars( upperLetter, 26, number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>AB, ...
                break;
           case CHARS_LOWER_LETTER:
-               lcl_formatChars( 'a', number-1, result );
+               lcl_formatChars( lowerLetter, 26, number-1, result );
                break;
           case ROMAN_UPPER:
                result += toRoman( number );
@@ -328,10 +335,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                throw IllegalArgumentException();
                break;
           case CHARS_UPPER_LETTER_N:
-               lcl_formatChars1( 'A', number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
+               lcl_formatChars1( upperLetter, 26, number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
                break;
           case CHARS_LOWER_LETTER_N:
-               lcl_formatChars1( 'a', number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
+               lcl_formatChars1( lowerLetter, 26,  number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
                break;
           case TRANSLITERATION:
            try {
@@ -413,18 +420,28 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
       case HANGUL_JAMO_KO:
           table = table_HangulJamo_ko;
           tableSize = sizeof(table_HangulJamo_ko) / sizeof(sal_Unicode);
+          recycleSymbol = sal_True;
           break;
       case HANGUL_SYLLABLE_KO:
           table = table_HangulSyllable_ko;
           tableSize = sizeof(table_HangulSyllable_ko) / sizeof(sal_Unicode);
+          recycleSymbol = sal_True;
           break;
       case HANGUL_CIRCLED_JAMO_KO:
           table = table_HangulCircledJamo_ko;
           tableSize = sizeof(table_HangulCircledJamo_ko) / sizeof(sal_Unicode);
+          recycleSymbol = sal_True;
           break;
       case HANGUL_CIRCLED_SYLLABLE_KO:
           table = table_HangulCircledSyllable_ko;
           tableSize = sizeof(table_HangulCircledSyllable_ko) / sizeof(sal_Unicode);
+          recycleSymbol = sal_True;
+          break;
+      case CHARS_ARABIC:
+          lcl_formatChars(table_Alphabet_ar, sizeof(table_Alphabet_ar) / sizeof(sal_Unicode), number - 1, result);
+          break;
+      case CHARS_THAI:
+          lcl_formatChars(table_Alphabet_th, sizeof(table_Alphabet_th) / sizeof(sal_Unicode), number - 1, result);
           break;
 
           default:
@@ -451,43 +468,51 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
 /* -----------------------------21.02.01 15:57--------------------------------
 
  ---------------------------------------------------------------------------*/
+
+#define LANG_ALL    (1 << 0)
+#define LANG_CJK    (1 << 1)
+#define LANG_CTL    (1 << 2)
+
 struct Supported_NumberingType
 {
     sal_Int16       nType;
     const sal_Char* cSymbol;
+    sal_Int16       langOption;
 };
 static const Supported_NumberingType aSupportedTypes[] =
 {
-    {style::NumberingType::CHARS_UPPER_LETTER,  "A"},
-    {style::NumberingType::CHARS_LOWER_LETTER,  "a"},
-    {style::NumberingType::ROMAN_UPPER,             "I"},
-    {style::NumberingType::ROMAN_LOWER,             "i"},
-    {style::NumberingType::ARABIC,              "1"},
-    {style::NumberingType::NUMBER_NONE,             "''"},
-    {style::NumberingType::CHAR_SPECIAL,            "Bullet"},
-    {style::NumberingType::PAGE_DESCRIPTOR,         "Page"},
-    {style::NumberingType::BITMAP,              "Bitmap"},
-    {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA"},
-    {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa"},
-    {style::NumberingType::NATIVE_NUMBERING,    "Native Numbering"},
-    {style::NumberingType::FULLWIDTH_ARABIC,    NULL},
-    {style::NumberingType::CIRCLE_NUMBER,       NULL},
-    {style::NumberingType::NUMBER_LOWER_ZH,     NULL},
-    {style::NumberingType::NUMBER_UPPER_ZH,     NULL},
-    {style::NumberingType::NUMBER_UPPER_ZH_TW,  NULL},
-    {style::NumberingType::TIAN_GAN_ZH,     NULL},
-    {style::NumberingType::DI_ZI_ZH,        NULL},
-    {style::NumberingType::NUMBER_TRADITIONAL_JA,   NULL},
-    {style::NumberingType::AIU_FULLWIDTH_JA,    NULL},
-    {style::NumberingType::AIU_HALFWIDTH_JA,    NULL},
-    {style::NumberingType::IROHA_FULLWIDTH_JA,  NULL},
-    {style::NumberingType::IROHA_HALFWIDTH_JA,  NULL},
-    {style::NumberingType::NUMBER_UPPER_KO,     NULL},
-    {style::NumberingType::NUMBER_HANGUL_KO,    NULL},
-    {style::NumberingType::HANGUL_JAMO_KO,      NULL},
-    {style::NumberingType::HANGUL_SYLLABLE_KO,  NULL},
-    {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL},
-    {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,  NULL},
+    {style::NumberingType::CHARS_UPPER_LETTER,  "A", LANG_ALL},
+    {style::NumberingType::CHARS_LOWER_LETTER,  "a", LANG_ALL},
+    {style::NumberingType::ROMAN_UPPER,             "I", LANG_ALL},
+    {style::NumberingType::ROMAN_LOWER,             "i", LANG_ALL},
+    {style::NumberingType::ARABIC,              "1", LANG_ALL},
+    {style::NumberingType::NUMBER_NONE,             "''", LANG_ALL},
+    {style::NumberingType::CHAR_SPECIAL,            "Bullet", LANG_ALL},
+    {style::NumberingType::PAGE_DESCRIPTOR,         "Page", LANG_ALL},
+    {style::NumberingType::BITMAP,              "Bitmap", LANG_ALL},
+    {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA", LANG_ALL},
+    {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa", LANG_ALL},
+    {style::NumberingType::NATIVE_NUMBERING,    "Native Numbering", LANG_CJK|LANG_CTL},
+    {style::NumberingType::FULLWIDTH_ARABIC,    NULL, LANG_CJK},
+    {style::NumberingType::CIRCLE_NUMBER,       NULL, LANG_CJK},
+    {style::NumberingType::NUMBER_LOWER_ZH,     NULL, LANG_CJK},
+    {style::NumberingType::NUMBER_UPPER_ZH,     NULL, LANG_CJK},
+    {style::NumberingType::NUMBER_UPPER_ZH_TW,  NULL, LANG_CJK},
+    {style::NumberingType::TIAN_GAN_ZH,     NULL, LANG_CJK},
+    {style::NumberingType::DI_ZI_ZH,        NULL, LANG_CJK},
+    {style::NumberingType::NUMBER_TRADITIONAL_JA,   NULL, LANG_CJK},
+    {style::NumberingType::AIU_FULLWIDTH_JA,    NULL, LANG_CJK},
+    {style::NumberingType::AIU_HALFWIDTH_JA,    NULL, LANG_CJK},
+    {style::NumberingType::IROHA_FULLWIDTH_JA,  NULL, LANG_CJK},
+    {style::NumberingType::IROHA_HALFWIDTH_JA,  NULL, LANG_CJK},
+    {style::NumberingType::NUMBER_UPPER_KO,     NULL, LANG_CJK},
+    {style::NumberingType::NUMBER_HANGUL_KO,    NULL, LANG_CJK},
+    {style::NumberingType::HANGUL_JAMO_KO,      NULL, LANG_CJK},
+    {style::NumberingType::HANGUL_SYLLABLE_KO,  NULL, LANG_CJK},
+    {style::NumberingType::HANGUL_CIRCLED_JAMO_KO,  NULL, LANG_CJK},
+    {style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO,  NULL, LANG_CJK},
+    {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
+    {style::NumberingType::CHARS_THAI,  NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
@@ -516,13 +541,58 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
     }
 }
 
+sal_Bool SAL_CALL
+DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(RuntimeException)
+{
+    if (! xHierarchicalNameAccess.is()) {
+    Reference< XInterface > xInterface;
+
+    xInterface = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"));
+    Reference< XMultiServiceFactory > xConfigProvider =
+        Reference< XMultiServiceFactory >(xInterface, UNO_QUERY );
+
+    if (! xConfigProvider.is())
+        throw RuntimeException();
+
+    Sequence< Any > aArgs(1);
+    beans::PropertyValue aPath;
+    aPath.Name = OUString::createFromAscii("nodepath");
+    aPath.Value <<= OUString::createFromAscii("/org.openoffice.Office.Common/I18N"),
+    aArgs[0] <<= aPath;
+
+    xInterface = xConfigProvider->createInstanceWithArguments(
+        OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), aArgs);
+
+    xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
+
+    if (! xHierarchicalNameAccess.is())
+        throw RuntimeException();
+    }
+
+    Any aEnabled = xHierarchicalNameAccess->getByHierarchicalName(aName);
+
+    sal_Bool enabled = sal_False;
+
+    aEnabled >>= enabled;
+
+    return enabled;
+}
+
 Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
                 throw(RuntimeException)
 {
     Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
     sal_Int16* pArray = aRet.getArray();
-    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
+
+    sal_Bool cjkEnabled = isScriptFlagEnabled(OUString::createFromAscii("CJK/CJKFont"));
+    sal_Bool ctlEnabled = isScriptFlagEnabled(OUString::createFromAscii("CTL/CTLFont"));
+
+    for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++) {
+        if ( (aSupportedTypes[i].langOption & LANG_ALL) ||
+            (aSupportedTypes[i].langOption & LANG_CJK) && cjkEnabled ||
+            (aSupportedTypes[i].langOption & LANG_CTL) && ctlEnabled)
         pArray[i] = aSupportedTypes[i].nType;
+    }
     return aRet;
 }
 /* -----------------------------21.02.01 15:57--------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,84 +182,6 @@ private :
 } // star
 } // sun
 } // com
-
-
-  /********************************************************************
-
-    Source Code Control System - Updates
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1  2002/03/26 13:36:40  bustamam
-    #97583# add Include files
-
-    Revision 1.22  2001/11/12 19:34:11  er
-    #94609# del: numberformatcode.hxx
-
-    Revision 1.21  2001/10/19 21:16:43  bustamam.harun
-    #84725# Add XServiceInfo implementation
-
-    Revision 1.20  2001/09/24 14:59:50  jp
-    script of character 0x1 and 0x2 are WEAK - this are our fields
-
-    Revision 1.19  2001/04/12 23:53:54  bustamam.harun
-    Fix compile problem on Solaris: change String to rtl::OUString
-
-    Revision 1.18  2001/03/28 09:24:12  tl
-    #84966 aEmptyPropValSeq member removed
-
-    Revision 1.17  2000/12/05 15:22:58  jp
-    Bug #81298#: CTOR with MultiServiceFactory
-
-    Revision 1.16  2000/11/18 22:57:37  bustamam.harun
-    change to ::i18n
-
-    Revision 1.15  2000/10/29 17:01:45  er
-    i18n API moved from com.sun.star.lang to com.sun.star.i18n
-
-    Revision 1.14  2000/10/25 14:02:21  tl
-    linguistic => linguistic2 : member of type PropertyValues as argument for hyphenate added
-
-    Revision 1.13  2000/10/22 19:07:03  er
-    SRC610 MUST: ::comphelper::getProcessServiceFactory
-
-    Revision 1.12  2000/08/18 00:37:30  gmu
-    new files for cjk breakiterators
-
-    Revision 1.11  2000/08/11 12:41:46  jp
-    Bug #77428#: change int to sal_Int32, change size of some static array
-
-    Revision 1.10  2000/08/10 15:18:58  jp
-    remove the not used methods queryInterface/acquire/release - because it's handled by the base class correct!
-
-    Revision 1.9  2000/07/03 10:13:11  gmu
-    added getScriptClass()
-
-    Revision 1.8  2000/06/30 10:38:06  jp
-    change the OWeak base class to the WeakImpHelper class
-
-    Revision 1.7  2000/06/23 11:36:47  gmu
-    changed API to reflect changes in IDL file
-
-    Revision 1.6  2000/06/20 16:02:56  hr
-    #includes with lowercase letters
-
-    Revision 1.5  2000/06/14 13:32:28  sse
-    Merged Begin and End word breaking
-
-    Revision 1.4  2000/06/14 08:25:06  sse
-    Updated hyphenator interface
-
-    Revision 1.3  2000/06/13 08:13:00  sse
-    new breakiterator API
-
-    Revision 1.2  2000/06/09 10:10:59  sse
-    Initial version of unicode breakiterator
-
-    Revision 1.1  2000/06/07 12:22:43  mt
-    BreakIterator
-
-
-  *********************************************************************/
 
 
 #endif // _I18N_BREAKITERATOR_HXX_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2002-12-06 18:51:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,8 +566,8 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
                 // take last 2 digits
-                value %= 100;
-                // fall through
+                sprintf(aStr, "%02d", value % 100); //10021 - checked^M
+                break;
             case CalendarDisplayCode::LONG_DAY:
                 sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;

@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.16 $
+#*  $Revision: 1.17 $
 #*
-#*  last change: $Author: er $ $Date: 2002-11-17 21:23:13 $
+#*  last change: $Author: hr $ $Date: 2003-03-26 10:54:43 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -141,6 +141,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_fr_FR.cxx  \
     $(MISC)$/localedata_fr_LU.cxx  \
     $(MISC)$/localedata_fr_MC.cxx  \
+    $(MISC)$/localedata_gu_IN.cxx  \
     $(MISC)$/localedata_he_IL.cxx  \
     $(MISC)$/localedata_hi_IN.cxx  \
     $(MISC)$/localedata_hu_HU.cxx  \
@@ -151,11 +152,13 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ja_JP.cxx  \
     $(MISC)$/localedata_kn_IN.cxx  \
     $(MISC)$/localedata_ko_KR.cxx  \
+    $(MISC)$/localedata_mr_IN.cxx  \
     $(MISC)$/localedata_nb_NO.cxx  \
     $(MISC)$/localedata_nl_BE.cxx  \
     $(MISC)$/localedata_nl_NL.cxx  \
     $(MISC)$/localedata_nn_NO.cxx  \
     $(MISC)$/localedata_no_NO.cxx  \
+    $(MISC)$/localedata_pa_IN.cxx  \
     $(MISC)$/localedata_pl_PL.cxx  \
     $(MISC)$/localedata_pt_BR.cxx  \
     $(MISC)$/localedata_pt_PT.cxx  \
@@ -165,9 +168,6 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_sv_SE.cxx  \
     $(MISC)$/localedata_ta_IN.cxx  \
     $(MISC)$/localedata_te_IN.cxx  \
-    $(MISC)$/localedata_gu_IN.cxx  \
-    $(MISC)$/localedata_mr_IN.cxx  \
-    $(MISC)$/localedata_pa_IN.cxx  \
     $(MISC)$/localedata_th_TH.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
     $(MISC)$/localedata_zh_CN.cxx  \
@@ -243,39 +243,39 @@ DEF3NAME=	$(SHL3TARGET)
 DEFLIB3NAME=	$(SHL3TARGET)
 SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB) $(LINK_LOCALEDATA_ES_LIB)
 SHL3OBJS=	\
-    $(SLO)$/localedata_de_DE.obj	\
-    $(SLO)$/localedata_fr_FR.obj	\
-    $(SLO)$/localedata_it_IT.obj	\
-    $(SLO)$/localedata_sv_SE.obj	\
     $(SLO)$/localedata_ca_ES.obj	\
     $(SLO)$/localedata_cs_CZ.obj	\
     $(SLO)$/localedata_da_DK.obj	\
     $(SLO)$/localedata_de_AT.obj	\
     $(SLO)$/localedata_de_CH.obj	\
+    $(SLO)$/localedata_de_DE.obj	\
+    $(SLO)$/localedata_de_LI.obj	\
     $(SLO)$/localedata_de_LU.obj	\
     $(SLO)$/localedata_el_GR.obj	\
+    $(SLO)$/localedata_et_EE.obj	\
     $(SLO)$/localedata_fi_FI.obj	\
     $(SLO)$/localedata_fr_BE.obj	\
     $(SLO)$/localedata_fr_CA.obj	\
     $(SLO)$/localedata_fr_CH.obj	\
+    $(SLO)$/localedata_fr_FR.obj	\
     $(SLO)$/localedata_fr_LU.obj	\
     $(SLO)$/localedata_fr_MC.obj	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
+    $(SLO)$/localedata_it_IT.obj	\
+    $(SLO)$/localedata_nb_NO.obj	\
     $(SLO)$/localedata_nl_BE.obj	\
     $(SLO)$/localedata_nl_NL.obj	\
-    $(SLO)$/localedata_no_NO.obj	\
     $(SLO)$/localedata_nn_NO.obj	\
+    $(SLO)$/localedata_no_NO.obj	\
     $(SLO)$/localedata_pl_PL.obj	\
     $(SLO)$/localedata_pt_BR.obj	\
     $(SLO)$/localedata_pt_PT.obj	\
     $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_sl_SI.obj	\
     $(SLO)$/localedata_sv_FI.obj	\
-    $(SLO)$/localedata_tr_TR.obj	\
-    $(SLO)$/localedata_nb_NO.obj	\
-    $(SLO)$/localedata_de_LI.obj	\
-    $(SLO)$/localedata_et_EE.obj
+    $(SLO)$/localedata_sv_SE.obj	\
+    $(SLO)$/localedata_tr_TR.obj
 
 LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
 LIB3OBJFILES=$(SHL3OBJS)
@@ -294,18 +294,18 @@ SHL4OBJS= \
     $(SLO)$/localedata_ar_LB.obj \
     $(SLO)$/localedata_ar_SA.obj \
     $(SLO)$/localedata_ar_TN.obj \
+    $(SLO)$/localedata_gu_IN.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hi_IN.obj \
     $(SLO)$/localedata_hu_HU.obj \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
-    $(SLO)$/localedata_ko_KR.obj \
     $(SLO)$/localedata_kn_IN.obj \
-    $(SLO)$/localedata_ta_IN.obj \
-    $(SLO)$/localedata_te_IN.obj \
-    $(SLO)$/localedata_gu_IN.obj \
+    $(SLO)$/localedata_ko_KR.obj \
     $(SLO)$/localedata_mr_IN.obj \
     $(SLO)$/localedata_pa_IN.obj \
+    $(SLO)$/localedata_ta_IN.obj \
+    $(SLO)$/localedata_te_IN.obj \
     $(SLO)$/localedata_th_TH.obj \
     $(SLO)$/localedata_zh_CN.obj \
     $(SLO)$/localedata_zh_HK.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-20 20:14:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,35 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
     return LBI->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
+static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, sal_Bool bDirection)
+{
+    switch (rWordType) {
+        case WordType::ANYWORD_IGNOREWHITESPACES:
+        if (bDirection)
+            while (nPos < len && unicode::isWhiteSpace(Text[nPos])) nPos++;
+        else
+            while (nPos > 0 && unicode::isWhiteSpace(Text[nPos])) nPos--;
+        break;
+        case WordType::DICTIONARY_WORD:
+        if (bDirection)
+            while (nPos < len && (unicode::isWhiteSpace(Text[nPos]) ||
+                ! (Text[nPos] == 0x002E || unicode::isAlphaDigit(Text[nPos])))) nPos++;
+        else
+            while (nPos > 0 && (unicode::isWhiteSpace(Text[nPos]) ||
+                ! (Text[nPos] == 0x002E || unicode::isAlphaDigit(Text[nPos])))) nPos--;
+        break;
+        case WordType::WORD_COUNT:
+        if (bDirection)
+            while (nPos < len && (unicode::isWhiteSpace(Text[nPos]) ||
+                    ! unicode::isAlphaDigit(Text[nPos]))) nPos++;
+        else
+            while (nPos > 0 && (unicode::isWhiteSpace(Text[nPos]) ||
+                    ! unicode::isAlphaDigit(Text[nPos]))) nPos--;
+        break;
+    }
+    return nPos;
+}
+
 Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 nStartPos,
     const Locale& rLocale, sal_Int16 rWordType ) throw(RuntimeException)
 {
@@ -114,8 +143,18 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
         result.endPos = result.startPos = 0;
     else if (nStartPos >= len)
         result.endPos = result.startPos = len;
-    else
-        result = LBI->nextWord(Text, nStartPos, rLocale, rWordType);
+        else {
+            result = LBI->nextWord(Text, nStartPos, rLocale, rWordType);
+
+        nStartPos = skipSpace(Text, result.startPos, len, rWordType, sal_True);
+
+        if ( nStartPos != result.startPos) {
+        if( nStartPos >= len )
+            result.startPos = result.endPos = len;
+        else
+            result = LBI->getWordBoundary(Text, nStartPos, rLocale, rWordType, sal_True);
+        }
+    }
     return result;
 }
 
@@ -135,27 +174,17 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
         return result;
     }
 
-    if(rWordType == WordType::ANYWORD_IGNOREWHITESPACES || rWordType == WordType::DICTIONARY_WORD) {
+    sal_Int32 nPos = skipSpace(Text, nStartPos-1, len, rWordType, sal_False) + 1;
 
-        sal_Int32 oPos = nStartPos;
-
-        while(nStartPos > 1 && unicode::isWhiteSpace(Text[nStartPos - 1])) nStartPos--;
-
-        if( !nStartPos ) {
-        result.startPos = result.endPos = nStartPos;
-        return result;
-        }
-
-        // if some spaces are skiped, and the script type is Asian with no CJK rLocale, we have to return
-        // (nStartPos, -1) for caller to send correct rLocale for loading correct dictionary.
-        if (oPos != nStartPos && !isCJK(rLocale) && getScriptClass(Text[nStartPos-1]) == ScriptType::ASIAN) {
-        result.startPos = nStartPos;
+    // if some spaces are skiped, and the script type is Asian with no CJK rLocale, we have to return
+    // (nStartPos, -1) for caller to send correct rLocale for loading correct dictionary.
+    if (nPos != nStartPos && !isCJK(rLocale) && getScriptClass(Text[nPos-1]) == ScriptType::ASIAN) {
+        result.startPos = nPos;
         result.endPos = -1;
         return result;
-        }
     }
 
-    return LBI->previousWord(Text, nStartPos, rLocale, rWordType);
+    return LBI->previousWord(Text, nPos, rLocale, rWordType);
 }
 
 
@@ -167,17 +196,25 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
         result.endPos = result.startPos = 0;
     else if (nPos > len)
         result.endPos = result.startPos = len;
-    else
+    else {
+        nPos = skipSpace(Text, nPos, len, rWordType, bDirection);
         result = LBI->getWordBoundary(Text, nPos, rLocale, rWordType, bDirection);
+    }
     return result;
 }
 
 sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int32 nPos,
     const Locale& rLocale, sal_Int16 rWordType ) throw(RuntimeException)
 {
-        if (unicode::isWhiteSpace(Text[nPos])) return false;
+    sal_Int32 len = Text.getLength();
 
-    result = getWordBoundary(Text, nPos, rLocale, rWordType, true);
+        if (nPos < 0 || nPos >= len) return sal_False;
+
+    sal_Int32 tmp = skipSpace(Text, nPos, len, rWordType, sal_True);
+
+    if (tmp != nPos) return sal_False;
+
+    result = getWordBoundary(Text, nPos, rLocale, rWordType, sal_True);
 
         return result.startPos == nPos;
 }
@@ -185,18 +222,17 @@ sal_Bool SAL_CALL BreakIteratorImpl::isBeginWord( const OUString& Text, sal_Int3
 sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 nPos,
     const Locale& rLocale, sal_Int16 rWordType ) throw(RuntimeException)
 {
-        sal_Int32 len = Text.getLength();
+    sal_Int32 len = Text.getLength();
 
-        if (nPos < 0 || nPos > len ||
-        rWordType == WordType::ANYWORD_IGNOREWHITESPACES && unicode::isWhiteSpace(Text[nPos]))
-        return false;
+        if (nPos <= 0 || nPos > len) return sal_False;
 
-    result = getWordBoundary(Text, nPos, rLocale, rWordType, false);
+    sal_Int32 tmp = skipSpace(Text, nPos-1, len, rWordType, sal_False) + 1;
 
-    if (result.endPos == len && rWordType == WordType::ANYWORD_IGNOREWHITESPACES)
-               return false;
+    if (tmp != nPos) return sal_False;
 
-        return (result.endPos == nPos && !unicode::isWhiteSpace(Text[result.startPos]));
+    result = getWordBoundary(Text, nPos, rLocale, rWordType, sal_False);
+
+        return result.endPos == nPos;
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,

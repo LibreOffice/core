@@ -1,4 +1,4 @@
-inp  i18npool    :   bridges sax stoc comphelper tools icu NULL
+inp  i18npool    :   bridges sax stoc comphelper tools icu svtools NULL
 inp  i18npool                                    usr1    -   all inp_mkout NULL
 inp  i18npool\source\unotypes                    nmake   -   all inp_utypes NULL
 inp  i18npool\source\registerservices            nmake   -   all inp_rserv inp_utypes NULL

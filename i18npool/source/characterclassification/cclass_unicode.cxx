@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-11-19 22:23:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,46 +219,3 @@ Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( 
 
 } } } }
 
-/**************************************************************************
-
-    Source Code Control System - Updates
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2002/03/26 16:59:03  er
-    #97583# it's dual licensed, LGPL and SISSL
-
-    Revision 1.1  2002/03/26 06:31:13  bustamam
-    #97583# Add Character Classification
-
-    Revision 1.4  2001/10/19 21:24:42  bustamam.harun
-    #84725# add XServiceInfo implementation
-
-    Revision 1.3  2001/05/18 17:58:15  er
-    #79771# optimize: disentangled: cclass_Unicode not derived from CharacterClassificationImpl; reuse instance if locale didn't change; OUString instead of String
-
-    Revision 1.2  2001/04/12 23:55:36  bustamam.harun
-    Fix compile problem on Solaris: change String to OUString
-
-    Revision 1.1  2001/03/27 21:10:36  bustamam.harun
-    Rename characterclassification to cclass_Unicode
-
-    Revision 1.8  2001/01/29 17:06:50  er
-    cclass_Unicode with service manager
-
-    Revision 1.7  2000/10/29 17:02:41  er
-    i18n API moved from com.sun.star.lang to com.sun.star.i18n
-
-    Revision 1.6  2000/08/11 14:52:52  er
-    removed queryInterface/aquire/release, using WeakImplHelper instead
-
-    Revision 1.5  2000/07/19 10:59:59  er
-    toUpper, toLower, toTitle: nCount characters are converted; other: optimizations
-
-    Revision 1.4  2000/07/06 15:46:57  gmu
-    implemented parsing functions
-
-    Revision 1.1  2000/07/06 08:52:43  er
-    new: cclass_Unicode with parser
-
-
-**************************************************************************/

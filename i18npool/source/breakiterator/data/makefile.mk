@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-05-02 21:43:34 $
+#*  last change: $Author: hr $ $Date: 2003-03-26 10:54:34 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -48,7 +48,9 @@ LIBTARGET=NO
 
 # Fix heap limit problem on MSC
 .IF "$(OS)" == "WNT"
+.IF  "$(COMEX)" != "8"
 CDEFS+=-Zm300
+.ENDIF
 .ENDIF
 
 # --- Files --------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-18 13:53:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 10:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <stdlib.h>
 #include <math.h>
 
 #include "calendar_hijri.hxx"
