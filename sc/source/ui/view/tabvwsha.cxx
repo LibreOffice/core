@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-18 12:31:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
         USHORT                  nEndRow     = 0;
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                  nEndCol,   nEndRow,   nEndTab, FALSE );
+                                  nEndCol,   nEndRow,   nEndTab );
 
         PutInOrder( nStartCol, nEndCol );
         PutInOrder( nStartRow, nEndRow );
