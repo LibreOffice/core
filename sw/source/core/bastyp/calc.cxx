@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-25 17:49:48 $
+ *  last change: $Author: jp $ $Date: 2001-02-09 14:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,6 +967,11 @@ if( !nUseOld )
                         bSetError = TRUE;
                 }
             }
+        }
+        else if( nRealStt == sCommand.Len() )
+        {
+            eCurrOper = CALC_ENDCALC;
+            bSetError = FALSE;
         }
 
         if( bSetError )
