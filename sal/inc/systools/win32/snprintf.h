@@ -64,11 +64,14 @@ _SNPRINTF_DLLIMPORT int __cdecl snwprintf( wchar_t *buffer, size_t count, const 
 /* SBCS and MBCS version */
 _SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char *format, ... );
 
+/* Conflict with STL_port inline implementation */
+#if 0
 /* UNICODE version */
 _SNPRINTF_DLLIMPORT int __cdecl vsnwprintf( wchar_t *buffer, size_t count, const wchar_t *format, va_list ap );
 
 /* SBCS and MBCS version */
 _SNPRINTF_DLLIMPORT int __cdecl vsnprintf( char *buffer, size_t count, const char *format, va_list ap );
+#endif
 
 #ifdef __cplusplus
 }
