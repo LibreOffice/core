@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:29:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <sot/clsids.hxx>
 #include <svtools/securityoptions.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
@@ -97,10 +98,11 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/topfrm.hxx>
+#include <sfx2/objface.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svtools/fltrcfg.hxx>
-#include <so3/clsids.hxx>
+//REMOVE    #include <so3/clsids.hxx>
 #include <unotools/charclass.hxx>
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
@@ -121,10 +123,10 @@
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
-#ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-#define SO2_DECL_SVSTORAGESTREAM_DEFINED
-SO2_DECL_REF(SvStorageStream)
-#endif
+//REMOVE    #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
+//REMOVE    #define SO2_DECL_SVSTORAGESTREAM_DEFINED
+//REMOVE    SO2_DECL_REF(SotStorageStream)
+//REMOVE    #endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -174,6 +176,8 @@ SO2_DECL_REF(SvStorageStream)
 #include <rtl/logfile.hxx>
 #endif
 
+using namespace com::sun::star;
+
 // STATIC DATA -----------------------------------------------------------
 
 //  Stream-Namen im Storage
@@ -220,14 +224,7 @@ SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 }
 
 //  GlobalName der aktuellen Version:
-SFX_IMPL_OBJECTFACTORY( ScDocShell, SFXOBJECTSHELL_STD_NORMAL, scalc, SvGlobalName(SO3_SC_CLASSID) )
-{
-    Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
-    //Factory().GetFilterContainer()->SetDetectFilter( ScDLL::DetectFilter );
-    Factory().RegisterMenuBar( ScResId(SCCFG_MENUBAR) );
-    Factory().RegisterPluginMenuBar( ScResId(SCCFG_PLUGINMENU) );
-    Factory().RegisterAccel( ScResId(SCCFG_ACCELERATOR) );
-}
+SFX_IMPL_OBJECTFACTORY( ScDocShell, SvGlobalName(SO3_SC_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "scalc" )
 
 TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-Info ?
 
@@ -238,36 +235,9 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
                                         String* pAppName,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
-                                        long nFileFormat ) const
+                                        sal_Int32 nFileFormat ) const
 {
-    SfxInPlaceObject::FillClass( pClassName, pFormat, pAppName,
-                                pFullTypeName, pShortTypeName, nFileFormat );
-
-    if ( nFileFormat == SOFFICE_FILEFORMAT_31 )
-    {
-        *pClassName     = SvGlobalName( SO3_SC_CLASSID_30 );
-        *pFormat        = SOT_FORMATSTR_ID_STARCALC_30;
-        *pAppName       = String( ScResId( SCSTR_30_APPLICATION ) );
-        *pFullTypeName  = String( ScResId( SCSTR_30_LONG_DOCNAME ) );
-        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
-    }
-    else if ( nFileFormat == SOFFICE_FILEFORMAT_40 )
-    {
-        *pClassName     = SvGlobalName( SO3_SC_CLASSID_40 );
-        *pFormat        = SOT_FORMATSTR_ID_STARCALC_40;
-        *pAppName       = String( ScResId( SCSTR_40_APPLICATION ) );
-        *pFullTypeName  = String( ScResId( SCSTR_40_LONG_DOCNAME ) );
-        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
-    }
-    else if ( nFileFormat == SOFFICE_FILEFORMAT_50 )
-    {
-        *pClassName     = SvGlobalName( SO3_SC_CLASSID_50 );
-        *pFormat        = SOT_FORMATSTR_ID_STARCALC_50;
-        *pAppName       = String( ScResId( SCSTR_50_APPLICATION ) );
-        *pFullTypeName  = String( ScResId( SCSTR_50_LONG_DOCNAME ) );
-        *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
-    }
-    else if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
+    if ( nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = SOT_FORMATSTR_ID_STARCALC_60;
@@ -312,15 +282,15 @@ SCTAB ScDocShell::GetSaveTab()
 }
 
 //------------------------------------------------------------------
-
-BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
+/*
+BOOL ScDocShell::LoadCalc( SotStorage* pStor )      // StarCalc 3, 4 or 5 file
 {
     //  MacroCallMode is no longer needed, state is kept in SfxObjectShell now
 
     BOOL bRet = TRUE;
 
-    SvStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName), STREAM_STD_READ );
-    SvStorageStreamRef aDocStm  = pStor->OpenStream( String::CreateFromAscii(pStarCalcDoc), STREAM_STD_READ );
+    SotStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName), STREAM_STD_READ );
+    SotStorageStreamRef aDocStm  = pStor->OpenStream( String::CreateFromAscii(pStarCalcDoc), STREAM_STD_READ );
     ULONG nPoolErr = aPoolStm->GetError();
     ULONG nDocErr  = aDocStm->GetError();
 
@@ -476,7 +446,7 @@ BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 }
 
 
-BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
+BOOL ScDocShell::SaveCalc( SotStorage* pStor )          // Calc 3, 4 or 5 file
 {
     BOOL bRet = TRUE;
 
@@ -488,7 +458,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
         pProgress = new ScProgress( this, ScGlobal::GetRscString(STR_SAVE_DOC), nRange );
     }
 
-    SvStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName) );
+    SotStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName) );
     if( !aPoolStm->GetError() )
     {
         aPoolStm->SetVersion(pStor->GetVersion());
@@ -505,7 +475,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
 
     if ( bRet && eShellMode != SFX_CREATE_MODE_ORGANIZER )
     {
-        SvStorageStreamRef aDocStm  = pStor->OpenStream( String::CreateFromAscii(pStarCalcDoc) );
+        SotStorageStreamRef aDocStm  = pStor->OpenStream( String::CreateFromAscii(pStarCalcDoc) );
         if( !aDocStm->GetError() )
         {
             aDocStm->SetVersion(pStor->GetVersion());
@@ -545,6 +515,7 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
 
     return bRet;
 }
+*/
 
 sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 {
@@ -678,7 +649,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         DBG_ERROR("The Modificator should exist");
 }
 
-BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
+BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
 
@@ -688,13 +659,17 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 
     BeforeXMLLoading();
 
-    ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
+    ScXMLImportWrapper aImport( aDocument, pMedium, xStor );
 
     sal_Bool bRet(sal_False);
+    ErrCode nError = ERRCODE_NONE;
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-        bRet = aImport.Import(sal_False);
+        bRet = aImport.Import(sal_False, nError);
     else
-        bRet = aImport.Import(sal_True);
+        bRet = aImport.Import(sal_True, nError);
+
+    if ( nError )
+        pMedium->SetError( nError );
 
     AfterXMLLoading(bRet);
 
@@ -703,11 +678,11 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     return bRet;
 }
 
-BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
+BOOL ScDocShell::SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
 
-    ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
+    ScXMLImportWrapper aImport( aDocument, pMedium, xStor );
     sal_Bool bRet(sal_False);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(sal_False);
@@ -716,14 +691,13 @@ BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
     return bRet;
 }
 
-BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
+BOOL __EXPORT ScDocShell::Load( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    DBG_ASSERT( pStor, "Load without storage?" );
-    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+    DBG_ASSERT( xStor.is(), "Load without storage?" );
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
@@ -731,7 +705,7 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 
     GetUndoManager()->Clear();
 
-    BOOL bRet = SfxInPlaceObject::Load( pStor );
+    BOOL bRet = SfxObjectShell::Load( xStor );
     if( bRet )
     {
         if (GetMedium())
@@ -740,7 +714,6 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
             nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
         }
 
-        if (bXML)
         {
             //  prepare a valid document for XML filter
             //  (for ConvertFrom, InitNew is called before)
@@ -748,17 +721,15 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
             aDocument.GetStyleSheetPool()->CreateStandardStyles();
             aDocument.UpdStlShtPtrsFrmNms();
 
-            bRet = LoadXML( GetMedium(), pStor );
+            bRet = LoadXML( GetMedium(), xStor );
         }
-        else
-            bRet = LoadCalc( pStor );
     }
 
-    if (!bRet && !pStor->GetError())
-        pStor->SetError( SVSTREAM_FILEFORMAT_ERROR );
+    if (!bRet && !GetMedium()->GetError())
+        GetMedium()->SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-    if (pStor->GetError())
-        SetError( pStor->GetError() );
+    if (GetMedium()->GetError())
+        SetError( GetMedium()->GetError() );
 
     InitItems();
     CalcOutputFactor();
@@ -813,14 +784,13 @@ void __EXPORT ScDocShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
     // Inhalte fuer Organizer laden
 
 
-BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
+BOOL __EXPORT ScDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    DBG_ASSERT( pStor, "Nanu... LoadFrom ohne Storage?" );
-    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+    DBG_ASSERT( xStor.is(), "Nanu... LoadFrom ohne Storage?" );
 
     WaitObject aWait( GetDialogParent() );
 
@@ -832,52 +802,12 @@ BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
         nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
     }
 
-    if ( bXML )
-    {
-        //  until loading/saving only the styles in XML is implemented,
-        //  load the whole file
+    //  until loading/saving only the styles in XML is implemented,
+    //  load the whole file
+    bRet = LoadXML( GetMedium(), xStor );
+    InitItems();
 
-        bRet = LoadXML( GetMedium(), pStor );
-        InitItems();
-    }
-    else
-    {
-        SvStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName), STREAM_STD_READ );
-        if ( !aPoolStm->GetError() )
-        {
-            aPoolStm->SetVersion(pStor->GetVersion());
-
-            aDocument.Clear();                      // keine Referenzen auf Pool behalten!
-            RemoveItem( SID_ATTR_CHAR_FONTLIST );
-            RemoveItem( ITEMID_COLOR_TABLE );
-            RemoveItem( ITEMID_GRADIENT_LIST );
-            RemoveItem( ITEMID_HATCH_LIST );
-            RemoveItem( ITEMID_BITMAP_LIST );
-            RemoveItem( ITEMID_DASH_LIST );
-            RemoveItem( ITEMID_LINEEND_LIST );
-
-            aDocument.LoadPool( *aPoolStm, TRUE );      // TRUE: RefCounts aus Datei laden
-            bRet = (aPoolStm->GetError() == 0);
-            DBG_ASSERT( bRet, "Error in pool stream" );
-
-            //  UpdateStdNames is called from ScDocument::Load, but is also needed
-            //  if only the styles are loaded!
-            ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
-            if (pStylePool)
-                pStylePool->UpdateStdNames();   // correct style names for different languages
-
-            //  Hier auf keinen Fall LoadCompleted, weil ohne Laden der Tabellen die RefCounts
-            //  nicht hochgezaehlt wurden.
-            //  Die Items wuerden dann geloescht, und beim Speichern wuerde Muell herauskommen.
-            //  Darum die Ref-Counts aus der Datei laden (TRUE bei LoadPool).
-            //  (Bug #37635#)
-
-            InitItems();
-            //  CalcOutputFactor interessiert hier nicht
-        }
-    }
-
-    SfxObjectShell::LoadFrom( pStor );
+    SfxObjectShell::LoadFrom( xStor );
 
     return bRet;
 }
@@ -925,22 +855,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
         if (!bCalc3 && !bCalc4)
             aDocument.SetInsertingFromOtherDoc( TRUE );
 
-        if (bCalc3 || bCalc4)                   // Calc3/4 - "Import"
-        {
-            //  wait cursor is handled with progress bar
-            SvStorage* pStor = rMedium.GetStorage();
-            if ( pStor )
-            {
-                bRet = SfxInPlaceObject::Load( pStor );
-                if( bRet )
-                    bRet = LoadCalc( pStor );
-                if (!bRet && !pStor->GetError())
-                    pStor->SetError( SVSTREAM_FILEFORMAT_ERROR );
-            }
-            else
-                DBG_ERROR("Calc3/4: kein Storage");
-        }
-        else if (aFltName.EqualsAscii(pFilterXML))
+        if (aFltName.EqualsAscii(pFilterXML))
             bRet = LoadXML( &rMedium, NULL );
         else if (aFltName.EqualsAscii(pFilterSc10))
         {
@@ -993,8 +908,6 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                     bRet = TRUE;
-
-//              rMedium.CloseInStream();
             }
         }
         else if ( aFltName.EqualsAscii(pFilterExcel4) || aFltName.EqualsAscii(pFilterExcel5) ||
@@ -1176,8 +1089,6 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
                 else
                     bRet = TRUE;
-
-                rMedium.CloseInStream();
             }
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
@@ -1342,26 +1253,14 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 }
 
 
-void __EXPORT ScDocShell::HandsOff()
-{
-    ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
-
-    SfxInPlaceObject::HandsOff();
-
-    if( pDrawLayer )
-        pDrawLayer->ReleasePictureStorage();
-}
-
-
 BOOL __EXPORT ScDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    SvStorage* pStor = GetStorage();
-    DBG_ASSERT( pStor, "Save: no storage" );
-    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+    uno::Reference < embed::XStorage > xStor = GetStorage();
+    DBG_ASSERT( xStor.is(), "Save: no storage" );
 
     //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
 
@@ -1371,33 +1270,23 @@ BOOL __EXPORT ScDocShell::Save()
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
-        SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
-
-    // #77577# save additionally XML in storage
-    if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bXML )
-        AddXMLAsZipToTheStorage( *pStor );
+        SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     //  wait cursor is handled with progress bar
-    BOOL bRet = SfxInPlaceObject::Save();
+    BOOL bRet = SfxObjectShell::Save();
     if( bRet )
-    {
-        if (bXML)
-            bRet = SaveXML( NULL, pStor );
-        else
-            bRet = SaveCalc( pStor );
-    }
+        bRet = SaveXML( NULL, xStor );
     return bRet;
 }
 
 
-BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
+BOOL __EXPORT ScDocShell::SaveAs( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    DBG_ASSERT( pStor, "SaveAs without storage?" );
-    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+    DBG_ASSERT( xStor.is(), "SaveAs without storage?" );
 
     //  DoEnterHandler hier nicht (wegen AutoSave), ist im ExecuteSave
 
@@ -1407,21 +1296,12 @@ BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
-        SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
-
-    // #77577# save additionally XML in storage
-    if ( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED && !bXML )
-        AddXMLAsZipToTheStorage( *pStor );
+        SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     //  wait cursor is handled with progress bar
-    BOOL bRet = SfxInPlaceObject::SaveAs( pStor );
+    BOOL bRet = SfxObjectShell::SaveAs( xStor );
     if( bRet )
-    {
-        if (bXML)
-            bRet = SaveXML( NULL, pStor );
-        else
-            bRet = SaveCalc( pStor );
-    }
+        bRet = SaveXML( NULL, xStor );
 
     return bRet;
 }
@@ -1851,7 +1731,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
-        SvInPlaceObject::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
+        SfxObjectShell::SetVisArea( Rectangle() );     // normal bearbeitet -> keine VisArea
 
     DBG_ASSERT( rMed.GetFilter(), "Filter == 0" );
 
@@ -1871,39 +1751,10 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     }
     else
 */
-    if ( aFltName.EqualsAscii(pFilterSc30) || aFltName.EqualsAscii(pFilterSc40) )
+    if (aFltName.EqualsAscii(pFilterXML))
     {
-        //  Calc3/4 - "Export"
-        //! wird nicht gerufen (geht ueber Save/SaveAs) - wird das noch gebraucht ???????
-
-        DBG_ERROR("ConvertTo fuer altes Calc gibt's noch...");
-        SvStorage* pStor = rMed.GetStorage();
-        if ( pStor )
-        {
-            //  wait cursor is handled with progress bar
-            bRet = SfxInPlaceObject::SaveAs( pStor );
-            if( bRet )
-                bRet = SaveCalc( pStor );
-
-            String aShortTypeName = String( ScResId(SCSTR_SHORT_SCDOC_NAME) );  // "Dokument"
-            if ( aFltName.EqualsAscii(pFilterSc30) )
-            {
-                //  Ole-Geraffel auf 3.0-Werte setzen:
-                SvGlobalName aName( SO3_SC_CLASSID_30 );
-                UINT32 nClip = SOT_FORMATSTR_ID_STARCALC_30;
-                pStor->SetClass( aName, nClip, aShortTypeName );
-            }
-            else
-            {
-                //  Ole-Geraffel auf 4.0-Werte setzen:
-                SvGlobalName aName( SO3_SC_CLASSID_40 );
-                UINT32 nClip = SOT_FORMATSTR_ID_STARCALC_40;
-                pStor->SetClass( aName, nClip, aShortTypeName );
-            }
-        }
-    }
-    else if (aFltName.EqualsAscii(pFilterXML))
-    {
+        //TODO/LATER: this shouldn't happen!
+        DBG_ERROR("XML filter in ConvertFrom?!");
         bRet = SaveXML( &rMed, NULL );
     }
     else if (aFltName.EqualsAscii(pFilterExcel5) || aFltName.EqualsAscii(pFilterExcel95) ||
@@ -2118,9 +1969,9 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 }
 
 
-BOOL __EXPORT ScDocShell::SaveCompleted( SvStorage * pStor )
+BOOL __EXPORT ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
 {
-    return SfxInPlaceObject::SaveCompleted( pStor );
+    return SfxObjectShell::SaveCompleted( xStor );
 }
 
 
@@ -2262,7 +2113,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
     SetPool( &SC_MOD()->GetPool() );
 
-    SetShell(this);
     bIsInplace = rShell.bIsInplace;
 
     pDocFunc = new ScDocFunc(*this);
@@ -2293,7 +2143,6 @@ ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
 
     SetPool( &SC_MOD()->GetPool() );
 
-    SetShell(this);
     bIsInplace = (eMode == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
@@ -2361,7 +2210,7 @@ SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
 
 void ScDocShell::SetModified( BOOL bModified )
 {
-    SfxInPlaceObject::SetModified( bModified );
+    SfxObjectShell::SetModified( bModified );
     Broadcast( SfxSimpleHint( SFX_HINT_DOCCHANGED ) );
 }
 
