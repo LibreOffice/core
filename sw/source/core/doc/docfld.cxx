@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2286,7 +2286,7 @@ void SwDoc::SetFixFields( BOOL bOnlyTimeDate, const DateTime* pNewDateTime )
                     {
                         bChgd = TRUE;
                         ((SwDateTimeField*)pFld->GetFld())->SetDateTime(
-                                                    nDate, nTime );
+                                                    DateTime(Date(nDate), Time(nTime)) );
                     }
                     break;
 
