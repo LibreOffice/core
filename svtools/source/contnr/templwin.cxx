@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:42:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,44 +318,6 @@ void ODocumentInfoPreview::Clear()
 void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const String& rURL)
 {
     Reference< XPropertySet > aPropSet( _xDocInfo, UNO_QUERY );
-
-    Reference< XMultiPropertySet > aMultiSet( _xDocInfo, UNO_QUERY );
-    if ( aMultiSet.is() )
-    {
-        String aText;
-        Reference< XPropertySetInfo > aInfoSet = aMultiSet->getPropertySetInfo();
-        if ( aInfoSet.is() )
-        {
-            Sequence< Property > aProps = aInfoSet->getProperties();
-            const Property* pProps  = aProps.getConstArray();
-            sal_uInt32 nCount = aProps.getLength();
-
-            for ( sal_uInt32 i = 0; i < nCount; ++i )
-            {
-                aText += String( pProps[i].Name );
-                aText += '\n';
-            }
-        }
-    }
-
-    if ( aPropSet.is() )
-    {
-        String aText;
-        Reference< XPropertySetInfo > aInfoSet = aPropSet->getPropertySetInfo();
-        if ( aInfoSet.is() )
-        {
-            Sequence< Property > aProps = aInfoSet->getProperties();
-            const Property* pProps  = aProps.getConstArray();
-            sal_uInt32 nCount = aProps.getLength();
-
-            for ( sal_uInt32 i = 0; i < nCount; ++i )
-            {
-                aText += String( pProps[i].Name );
-                aText += '\n';
-            }
-        }
-    }
-
     if ( aPropSet.is() )
     {
         m_pEditWin->SetAutoScroll( FALSE );
@@ -1138,6 +1100,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                         {
                             xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
                             ViewEmptyWin();
+                            m_aOpenURL = rtl::OUString();
                         }
                         else
                             m_aOpenURL = aDispURL;
