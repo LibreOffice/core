@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:05:45 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:03:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,9 @@ SLOFILES =	\
         $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj
+
+EXCEPTIONSFILES = \
+        $(SLO)$/doclay.obj
 
 # --- Tagets -------------------------------------------------------
 
