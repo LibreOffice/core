@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-26 07:40:52 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@ public:
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     OUTPUT_OPERATOR
 };
 

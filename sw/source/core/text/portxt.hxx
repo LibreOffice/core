@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:45:21 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@ public:
             SwHolePortion( const SwTxtPortion &rPor );
     inline const KSHORT GetBlankWidth( ) const { return nBlankWidth; }
     inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     virtual SwLinePortion *Compress();
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

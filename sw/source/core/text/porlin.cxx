@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,6 @@ KSHORT SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
 {
     return 0;
 }
-
-#ifdef OLDRECYCLE
-
-sal_Bool SwLinePortion::MayRecycle() const { return sal_True; }
-
-#endif
 
 /*************************************************************************
  *               SwLinePortion::SwLinePortion( )

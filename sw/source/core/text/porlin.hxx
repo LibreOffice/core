@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-11 06:54:45 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,6 @@ public:
     inline const MSHORT GetWhichPor( )          { return nWhichPor; }
 
 // Gruppenabfragen:
-    inline const sal_Bool MayRecycle()  const
-        { return nWhichPor & PORGRP_NOTRECY ? sal_False : sal_True; }
     inline const sal_Bool InTxtGrp( )   const { return nWhichPor & PORGRP_TXT ? sal_True : sal_False; }
     inline const sal_Bool InGlueGrp( )  const { return nWhichPor & PORGRP_GLUE ? sal_True : sal_False;}
     inline const sal_Bool InTabGrp( )   const { return nWhichPor & PORGRP_TAB ? sal_True : sal_False; }

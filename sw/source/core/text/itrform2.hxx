@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ class SwNumberPortion;
 class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
+class SvLongs;
 
 /*************************************************************************
  *                      class SwTxtFormatter
@@ -111,10 +112,6 @@ class SwTxtFormatter : public SwTxtPainter
     void BuildPortions( SwTxtFormatInfo &rInf );
     BOOL BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
 
-    // Initialisierung oder Wiederverwertung alter Portions
-    void Recycle( SwTxtFormatInfo &rInf );
-
-
     // Berechnung des emulierten rechten Rands
     void CalcFlyWidth( SwTxtFormatInfo &rInf );
 
@@ -130,7 +127,14 @@ class SwTxtFormatter : public SwTxtPainter
     // errechnet den Ascent und die Hoehe aus der Fontmetric
     void CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor );
 
-    // wird von Recycle() gerufen.
+    // determines, if a optimized repaint rectange is allowed
+    sal_Bool AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const;
+
+    // calculates and sets the optimized repaint offset
+    long CalcOptRepaint( SwTxtFormatInfo& rInf,
+                         const SvLongs* pFlyStart );
+
+    // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );
 
     // Sind wir in der ersten zu formatierenden Zeile?

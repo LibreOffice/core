@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 05:51:09 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,23 +318,9 @@ xub_StrLen SwDropPortion::GetCrsrOfst( const KSHORT nOfst ) const
     return 0;
 }
 
-#ifdef OLDRECYCLE
-/*************************************************************************
- *                virtual SwDropPortion::MayRecycle()
- *************************************************************************/
-
-
-sal_Bool SwDropPortion::MayRecycle() const
-{
-    return sal_False;
-}
-#endif
-
 /*************************************************************************
  *                SwTxtFormatter::CalcDropHeight()
  *************************************************************************/
-
-
 
 void SwTxtFormatter::CalcDropHeight( const MSHORT nLines )
 {

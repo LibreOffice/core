@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,6 @@
 
 xub_StrLen SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
 { return SwLinePortion::GetCrsrOfst( nOfst ); }
-
-#ifdef OLDRECYCLE
-
-sal_Bool SwExpandPortion::MayRecycle() const { return sal_False; }
-
-#endif
 
 /*************************************************************************
  *              virtual SwExpandPortion::GetExpTxt()

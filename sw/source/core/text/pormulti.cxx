@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-17 16:06:29 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,7 +606,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs ) : SwMultiPortion( nEnd )
 {
     SetRuby();
-    ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby exspected" );
+    ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
     ASSERT( RES_TXTATR_CJK_RUBY == rCreate.pAttr->Which(), "Wrong attribute" );
     const SwFmtRuby& rRuby = rCreate.pAttr->GetRuby();
     nAdjustment = rRuby.GetAdjustment();
@@ -619,6 +619,8 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         const SwAttrSet& rSet = pFmt->GetAttrSet();
          pRubyFont = new SwFont( rFnt );
         pRubyFont->SetDiffFnt( &rSet, &rDoc );
+        // we do not allow a vertical font for the ruby text
+        pRubyFont->SetVertical( 0 );
     }
     else
         pRubyFont = NULL;
@@ -1603,7 +1605,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
         if( pFirstRest )
         {
-            ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest exspected");
+            ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest expected");
             SwFldPortion *pFld =
                 ((SwFldPortion*)pFirstRest)->Clone(
                     ((SwFldPortion*)pFirstRest)->GetExp() );
@@ -1634,7 +1636,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 pNextFirst = aInf.GetRest();
                 if( pSecondRest )
                 {
-                    ASSERT( pSecondRest->InFldGrp(), "Fieldrest exspected");
+                    ASSERT( pSecondRest->InFldGrp(), "Fieldrest expected");
                     SwFldPortion *pFld = ((SwFldPortion*)pSecondRest)->Clone(
                                     ((SwFldPortion*)pSecondRest)->GetExp() );
                     pFld->SetFollow( sal_True );
@@ -1752,7 +1754,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     if( bRet )
     {
         ASSERT( !pNextFirst || pNextFirst->InFldGrp(),
-            "BuildMultiPortion: Surprising restportion, field exspected" );
+            "BuildMultiPortion: Surprising restportion, field expected" );
         SwMultiPortion *pTmp;
         if( rMulti.IsDouble() )
             pTmp = new SwDoubleLinePortion( ((SwDoubleLinePortion&)rMulti),
@@ -1760,7 +1762,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         else if( rMulti.IsRuby() )
         {
             ASSERT( !pNextSecond || pNextSecond->InFldGrp(),
-                "BuildMultiPortion: Surprising restportion, field exspected" );
+                "BuildMultiPortion: Surprising restportion, field expected" );
 
             if ( rInf.GetIdx() == rInf.GetLineStart() )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,6 @@
 /*************************************************************************
  *                      class SwGluePortion
  *************************************************************************/
-
-#ifdef OLDRECYCLE
-
-sal_Bool SwGluePortion::MayRecycle() const { return sal_False; }
-
-#endif
 
 SwGluePortion::SwGluePortion( const KSHORT nInitFixWidth )
     : nFixWidth( nInitFixWidth )
@@ -237,12 +231,6 @@ SwMarginPortion::SwMarginPortion( const KSHORT nFixWidth )
 {
     SetWhichPor( POR_MARGIN );
 }
-
-#ifdef OLDRECYCLE
-
-sal_Bool SwMarginPortion::MayRecycle() const { return sal_False; }
-
-#endif
 
 /*************************************************************************
  *                SwMarginPortion::AdjustRight()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:11:20 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@ public:
     inline void SetBlankWidth( const KSHORT nNew ) { nBlankWidth = nNew; }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     OUTPUT_OPERATOR
 };
 

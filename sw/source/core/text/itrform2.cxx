@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:42:04 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@
 #include <porhyph.hxx>
 #endif
 #ifndef _GUESS_HXX
-#include <guess.hxx>        // Recycle()
+#include <guess.hxx>
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // GetFrmRstHeight, etc
@@ -143,6 +143,8 @@
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
+#define _SVSTDARR_LONGS
+#include <svtools/svstdarr.hxx>
 
 #ifdef DEBUG
 #ifndef _NDTXT_HXX
@@ -240,258 +242,6 @@ KSHORT SwTxtFormatter::GetFrmRstHeight() const
         return pCurr->Height();
     else
         return KSHORT( nHeight );
-}
-
-/*************************************************************************
- *                      SwTxtFormatter::Recycle()
- *************************************************************************/
-
-/* Recycle dient nicht nur der Optimierung, sondern soll gleichzeitig
- * unsere Probleme mit dem WYSIWYG (flackern und tanzen) loesen helfen.
- * Recycle betrachtet den Bereich einer Zeile _vor_ nReformat.
- * 4 Faelle koennen auftreten:
- * 1) pCurr ist hinter nReformat
- *    Init, sal_False
- * 2) pCurr wurde nagelneu angelegt
- *    -> pPos == 0, sal_False
- * 3) pCurr hatte Portions und nReformat liegt in der Zeile
- *    -> pPos != 0, sal_True
- * 4) pCurr hatte Portions und nReformat liegt aber _nicht_ in der Zeile
- *    -> pPos == 0, sal_True
- * Fall 4 sollte u.U. in ein ASSERT laufen.
- *
- * sal_True, wenn recyclet wurde ...
- */
-
-void SwTxtFormatter::Recycle( SwTxtFormatInfo &rInf )
-{
-#ifndef PRODUCT
-    // Durch das 0 setzen wird Recycle() ausgelassen.
-    if( OPTLOW( rInf ) )
-        pCurr->SetLen(0);
-#endif
-    // GetRest() liefert den (Feld-)Ueberhang der vorigen Zeile zurueck.
-    // Dann gibt es natuerlich nichts zu recyclen ..
-    if( rInf.GetRest() || HasChanges() )
-    {
-        FormatReset( rInf );
-        return;
-    }
-
-    // Optimierung fuer Zeilen, die aus dem Rennen sind
-    xub_StrLen nReformat = rInf.GetReformatStart();
-
-    // Bei rechtsbuendig, zentriert und Blocksatz wird returnt ...
-    sal_Bool bRecycle = IsFirstReformat() && pCurr->GetLen();
-    if( bRecycle )
-    {
-        switch( GetAdjust() )
-        {
-            case SVX_ADJUST_BLOCK:
-            {
-                if( IsLastBlock() || IsLastCenter() )
-                    bRecycle = sal_False;
-                else
-                {
-                    // ????: Blank in der letzten Masterzeile (blocksat.sdw)
-                    bRecycle = 0 == pCurr->GetNext() && !pFrm->GetFollow();
-                    if ( bRecycle )
-                    {
-                        SwLinePortion *pPos = pCurr->GetFirstPortion();
-                        while ( pPos && !pPos->IsFlyPortion() )
-                            pPos = pPos->GetPortion();
-                        bRecycle = !pPos;
-                    }
-                }
-            }
-            break;
-            case SVX_ADJUST_CENTER:
-            case SVX_ADJUST_RIGHT:
-            {
-                bRecycle = sal_False;
-            }
-            break;
-            default: ;
-        }
-    }
-
-    // Schon wieder ein Sonderfall: unsichtbare SoftHyphs
-    if( bRecycle && STRING_LEN != nReformat )
-    {
-        const xub_Unicode cCh = rInf.GetTxt().GetChar( nReformat );
-        bRecycle = ( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
-                    || !rInf.HasHint( nReformat );
-    }
-
-    if( !bRecycle )
-    {
-        FormatReset( rInf );
-        return;
-    }
-
-    // alle Portions retten, die vor nReformat liegen.
-    // pPos kann nie 0 werden.
-    SwLinePortion *pPos = pCurr->GetFirstPortion();
-    SwLinePortion *pLast = pPos;
-
-    // bTabFlag warnt uns vor rechtsbdg. Tabs
-    sal_Bool bTabFlag = pPos->InTabGrp() && !pPos->IsTabLeftPortion();
-
-    const SwScriptInfo& rSI =
-            ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
-    USHORT nMinSize;
-    USHORT nMaxSizeDiff;
-
-    while( pPos->GetPortion() && rInf.GetIdx() + pPos->GetLen() < nReformat )
-    {
-        DBG_LOOP;
-
-        // for portions to be recycled, we have to provide the correct
-        // maximum sizes (used for compression)
-        // three conditions have to be fulfilled:
-        // A the paragraph contains kanas / asian punctuation
-        // B Current font is CJK
-        // C we disable kana compression in multi line portions
-        if ( rSI.CountCompChg() && ! pPos->IsMultiPortion() &&
-             ! pPos->InFldGrp() &&  ! pPos->IsDropPortion() )
-        {
-            // switch to current font
-            SeekAndChg( rInf );
-
-            USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) ?
-                                10000 :
-                                    0 ;
-
-            // we omit GetTxtSize if possible
-            if ( nMaxComp )
-            {
-                rInf.GetTxtSize( &rSI, rInf.GetIdx(), pPos->GetLen(),
-                                 nMaxComp, nMinSize, nMaxSizeDiff );
-                if ( nMaxSizeDiff )
-                {
-                    // we have to reset the width to the minimum size,
-                    // SwTxtGuess::Guess requires this
-                    pPos->Width( nMinSize );
-                    rInf.SetMaxWidthDiff( (ULONG)pPos, nMaxSizeDiff );
-                }
-            }
-        }
-
-        pPos->Move( rInf );
-        pLast = pPos;
-        pPos = pPos->GetPortion();
-
-        if ( bTabFlag )
-            bTabFlag = !( pLast->IsTabLeftPortion() || pLast->IsFlyPortion() );
-
-        bTabFlag = bTabFlag || (pPos->InTabGrp() && !pPos->IsTabLeftPortion());
-        if( pPos->IsFtnPortion() )
-            rInf.SetFtnInside( sal_True );
-    }
-
-    // bBrkBefore ist sal_True, wenn die BrkPos vor oder auf nReformat liegt,
-    // d.h. dass die pPos in jedem Fall neuformatiert werden muss.
-    rInf.SetLen( nReformat );
-
-    // 6736: Worte hinter Flys, Blank einfuegen.
-    // 6820: Rechtstabs und Blanks
-    xub_StrLen nWordStart = nReformat ?
-        SwTxtGuess::GetWordStart( rInf, nReformat - 1 ) : 0;
-
-    const sal_Bool bBrkBefore = bTabFlag || pLast->InTabnLftGrp() ||
-        pPos->IsQuoVadisPortion() ||
-        (pLast->IsFlyPortion() && (!nReformat || rInf.GetIdx() >= nWordStart) );
-    // Wenn pLast nicht recyclebar ist (R/Z/D-Tabs und SoftHyphs etc)
-    // dann muss diese Portion mit in die Neuformatierung aufgenommen
-    // werden. D.h: pLast wandert um einen zurueck und rInf muss
-    // um den entsprechenden Betrag zurueckgestellt werden.
-
-    if( bBrkBefore )
-    {
-        // 13713: Bei nicht recyclebaren Tabs (rechtsbdg. etc.) muss man
-        // bis zur letzten Nichttextportion zurueckgehen!
-        if( pPos == pLast )
-            pLast = pLast->FindPrevPortion( pCurr );
-        while( pLast != pCurr &&
-              ( !pLast->MayRecycle() || pPos->IsFlyPortion() || bTabFlag ) )
-        {
-            if ( bTabFlag )
-                bTabFlag = pLast->InTxtGrp();
-            else
-                bTabFlag = pLast->InTabGrp();
-
-            rInf.SetIdx( rInf.GetIdx() - pLast->GetLen() );
-            rInf.X( rInf.X() - pLast->Width() );
-            pPos = pLast;
-            pLast = pLast->FindPrevPortion( pCurr );
-        }
-    }
-
-    // Wunder der Technik: der PaintOfst ist die Position in der
-    // Zeile, wo es gleich weiter geht.
-    long nPOfst = 0;
-
-    if ( pPos->InTxtGrp() && rInf.GetIdx() < --nWordStart &&
-         rInf.GetIdx() + pPos->GetLen() > nWordStart )
-    {
-        SwRect aRect;
-        GetCharRect( &aRect, nWordStart );
-        nPOfst = aRect.Left();
-    }
-    else
-        nPOfst = rInf.X() + GetLeftMargin();
-
-// AMA-Test: Problem, wenn diese Portion in die naechste Zeile rutscht,
-// behauptet IsFirstReformat, dass die Zeile recycled werden kann, weil
-// Reformat-Start in der Zeile liegt ( aber erst durch das Rutschen! ).
-// Loesung: wir drehen am Reformat-Start
-    rInf.GetParaPortion()->GetReformat()->LeftMove( rInf.GetIdx() );
-#ifdef DEBUG
-    SwTwips nOffset =  rInf.X() + GetLeftMargin();
-#endif
-    pPos = pLast == pPos ? pCurr : pLast;
-
-    // nach pPos die Sintflut
-    pPos->Truncate();
-
-    // 9118: pLast ist eine NumPortion, SetNumDone ist nicht sal_True
-    // Alternative: alle Flags setzen...
-    if( pPos == pCurr || !rInf.GetIdx() || pPos->IsErgoSumPortion() )
-    {
-        if( pPos->IsGrfNumPortion() )
-        {
-            if( nReformat && !((SwGrfNumPortion*)pPos)->IsHide() )
-                rInf.SetNumDone( sal_True );
-            else
-            {
-                nPOfst = 0;
-                FormatReset( rInf );
-            }
-        }
-        else
-            FormatReset( rInf );
-    }
-
-    if ( nPOfst )
-        rInf.SetPaintOfst( nPOfst );
-    rInf.SetLen(0);
-
-    // Wir muessen die pCurr-Daten, die sonst waehrend der Fahrt
-    // in NewTxtPortion() ermittelt werden, auf Vordermann bringen.
-    pLast = pCurr->GetPortion();
-    if( pLast )
-    {
-        pCurr->Init( pLast );
-        while( pLast )
-        {
-            DBG_LOOP;
-            if( pCurr->Height() < pLast->Height() )
-                pCurr->Height( pLast->Height() );
-            if( pCurr->GetAscent() < pLast->GetAscent() )
-                pCurr->SetAscent( pLast->GetAscent() );
-            pLast = pLast->GetPortion();
-        }
-    }
 }
 
 /*************************************************************************
@@ -704,30 +454,29 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
     rInf.ChkNoHyph( CntEndHyph(), CntMidHyph() );
 
-    // Es durchaus sein, dass pCurr durch Recycle() Daten enthaelt.
     // Erst NewTxtPortion() entscheidet, ob pCurr in pPor landet.
     // Wir muessen in jedem Fall dafuer sorgen, dass der Font eingestellt
     // wird. In CalcAscent geschieht dies automatisch.
-    rInf.SetLast( pCurr->FindLastPortion() );
+    rInf.SetLast( pCurr );
     rInf.ForcedLeftMargin( 0 );
-    if( rInf.GetLast() == pCurr )
+
+    ASSERT( pCurr->FindLastPortion() == pCurr, "pLast supposed to equal pCurr" );
+
+    if( !pCurr->GetAscent() && !pCurr->Height() )
+        CalcAscent( rInf, pCurr );
+
+    SeekAndChg( rInf );
+
+    // In CalcFlyWidth wird Width() verkuerzt, wenn eine FlyPortion vorliegt.
+    ASSERT( !rInf.X() || pMulti, "SwTxtFormatter::BuildPortion X=0?" );
+    CalcFlyWidth( rInf );
+    SwFlyPortion *pFly = rInf.GetFly();
+    if( pFly )
     {
-        if( !pCurr->GetAscent() && !pCurr->Height() )
-            CalcAscent( rInf, pCurr );
-
-        SeekAndChg( rInf );
-
-        // In CalcFlyWidth wird Width() verkuerzt, wenn eine FlyPortion vorliegt.
-        ASSERT( !rInf.X() || pMulti, "SwTxtFormatter::BuildPortion X=0?" );
-        CalcFlyWidth( rInf );
-        SwFlyPortion *pFly = rInf.GetFly();
-        if( pFly )
-        {
-            if ( 0 < pFly->Fix() )
-                ClearFly( rInf );
-            else
-                rInf.SetFull(sal_True);
-        }
+        if ( 0 < pFly->Fix() )
+            ClearFly( rInf );
+        else
+            rInf.SetFull(sal_True);
     }
 
     SwLinePortion *pPor = NewPortion( rInf );
@@ -798,9 +547,8 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         long nLeft = GetLeftMargin();
         SwTwips nPaintOfs = rInf.GetPaintOfst();
 #endif
-        if ( pPor->IsFlyPortion() && ( SVX_ADJUST_BLOCK == GetAdjust() )
-             && ( rInf.X() + GetLeftMargin() >= rInf.GetPaintOfst() ) )
-            rInf.SetPaintOfst( 0 );
+        if ( pPor->IsFlyPortion() )
+            pCurr->SetFly( sal_True );
 
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
             ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
@@ -988,8 +736,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     nNextAttr = pScriptInfo->NextScriptChg( rInf.GetIdx() );
     if( nNextChg > nNextAttr )
         nNextChg = nNextAttr;
-    if ( nNextChg > 1 + rInf.GetIdx() && ' ' == rInf.GetChar( nNextChg-1 ) )
-        --nNextChg;
 
     // 7515, 7516, 3470, 6441 : Turbo-Boost
     // Es wird unterstellt, dass die Buchstaben eines Fonts nicht
@@ -1439,22 +1185,47 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     if ( pFld && pFld->InFldGrp() )
         pSaveFld = new SwFldPortion( *((SwFldPortion*)pFld) );
 
+    // for an optimal repaint rectangle, we want to compare fly portions
+    // before and after the BuildPortions call
+    const sal_Bool bOptimizeRepaint = AllowRepaintOpt( GetInfo() );
+    SvLongs* pFlyStart = 0;
+
+    // these are the conditions for a fly position comparison
+    if ( bOptimizeRepaint && pCurr->IsFly() )
+    {
+        pFlyStart = new SvLongs;
+        SwLinePortion* pPor = pCurr->GetFirstPortion();
+        long nPOfst = 0;
+        USHORT nCnt = 0;
+
+        while ( pPor )
+        {
+            if ( pPor->IsFlyPortion() )
+                // insert start value of fly portion
+                pFlyStart->Insert( nPOfst, nCnt++ );
+
+            nPOfst += pPor->Width();
+            pPor = pPor->GetPortion();
+        }
+    }
+
     // Hier folgt bald die Unterlaufpruefung.
     while( bBuild )
     {
         sal_Bool bOldNumDone = GetInfo().IsNumDone();
         sal_Bool bOldArrowDone = GetInfo().IsArrowDone();
         GetInfo().SetFtnInside( sal_False );
-        FeedInf( GetInfo() );
 
-        Recycle( GetInfo() );   // initialisiert sich oder rettet Portions
+        FormatReset( GetInfo() );
 
         if( bOldNumDone )
             GetInfo().SetNumDone( sal_True );
         if( bOldArrowDone )
             GetInfo().SetArrowDone( sal_True );
 
+        // build new portions for this line
         BuildPortions( GetInfo() );
+
         if( GetInfo().IsStop() )
         {
             pCurr->SetLen( 0 );
@@ -1513,6 +1284,15 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
                 pCurr->Truncate();
             }
         }
+    }
+
+    // calculate optimal repaint rectangle
+    if ( bOptimizeRepaint )
+    {
+        GetInfo().SetPaintOfst( CalcOptRepaint( GetInfo(), pFlyStart ) );
+        GetInfo().GetParaPortion()->GetReformat()->LeftMove( GetInfo().GetIdx() );
+        if ( pFlyStart )
+            delete pFlyStart;
     }
 
     // delete master copy of rest portion
@@ -1681,4 +1461,116 @@ KSHORT SwTxtFormatter::_CalcFitToContent()
         nMaxWidth = nWidth + nMargin;
     return KSHORT(nMaxWidth);
 }
+
+/*************************************************************************
+ *                      SwTxtFormatter::AllowRepaintOpt()
+ *
+ * determines if the calculation of a repaint offset is allowed
+ * otherwise each line is painted from 0 (this is a copy of the beginning
+ * of the former SwTxtFormatter::Recycle() function
+ *************************************************************************/
+sal_Bool SwTxtFormatter::AllowRepaintOpt( const SwTxtFormatInfo& rInf ) const
+{
+    // reformat position in front of current line? Only in this case
+    // we want to set the repaint offset
+    sal_Bool bOptimizeRepaint = IsFirstReformat() && pCurr->GetLen();
+
+    // a special case is the last line of a block adjusted paragraph:
+    if ( bOptimizeRepaint )
+    {
+        switch( GetAdjust() )
+        {
+        case SVX_ADJUST_BLOCK:
+        {
+            if( IsLastBlock() || IsLastCenter() )
+                bOptimizeRepaint = sal_False;
+            else
+            {
+                // ????: Blank in der letzten Masterzeile (blocksat.sdw)
+                bOptimizeRepaint = 0 == pCurr->GetNext() && !pFrm->GetFollow();
+                if ( bOptimizeRepaint )
+                {
+                    SwLinePortion *pPos = pCurr->GetFirstPortion();
+                    while ( pPos && !pPos->IsFlyPortion() )
+                        pPos = pPos->GetPortion();
+                    bOptimizeRepaint = !pPos;
+                }
+            }
+            break;
+        }
+        case SVX_ADJUST_CENTER:
+        case SVX_ADJUST_RIGHT:
+            bOptimizeRepaint = sal_False;
+            break;
+        default: ;
+        }
+    }
+
+    return bOptimizeRepaint;
+}
+
+/*************************************************************************
+ *                      SwTxtFormatter::CalcOptRepaint()
+ *
+ * calculates an optimal repaint offset for the current line
+ *************************************************************************/
+long SwTxtFormatter::CalcOptRepaint( SwTxtFormatInfo& rInf,
+                                     const SvLongs* pFlyStart )
+{
+    if ( IsFirstReformat() )
+    // the reformat position is behind out new line, that means
+    // something of our text has moved to the next line
+        return 0;
+
+    if ( ! pFlyStart && ! pCurr->IsFly() )
+    {
+        // in case we do not have any fly in our line, our repaint position
+        // is the changed position - 1
+        xub_StrLen nReformat = rInf.GetReformatStart();
+
+        // for different safety reasons (e.g., PostIts) we step back
+        if ( nReformat )
+            nReformat--;
+
+        SwRect aRect;
+
+        ASSERT( nReformat < rInf.GetIdx(), "Reformat too small for me!" );
+        GetCharRect( &aRect, nReformat );
+
+        return aRect.Left();
+    }
+    else
+    {
+        // nReformat may be wrong, if something around flys has changed:
+        // we compare the former and the new fly positions in this line
+        // if anything has changed, we carefully have to adjust the right
+        // repaint position
+        long nPOfst = 0;
+        USHORT nCnt = 0;
+        USHORT nX = 0;
+        SwLinePortion* pPor = pCurr->GetFirstPortion();
+
+        while ( pPor )
+        {
+            if ( pPor->IsFlyPortion() )
+            {
+                // compare start of fly with former start of fly
+                if ( pFlyStart &&
+                     nCnt < pFlyStart->Count() &&
+                     nX == (*pFlyStart)[ nCnt ] )
+                    // found fix position, nothing has changed left from nX
+                    nPOfst = nX + pPor->Width();
+                else
+                    break;
+
+                nCnt++;
+            }
+            nX += pPor->Width();
+            pPor = pPor->GetPortion();
+        }
+
+        return nPOfst + GetLeftMargin();
+    }
+}
+
 

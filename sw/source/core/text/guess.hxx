@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:38:20 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,6 @@ public:
     inline xub_StrLen BreakPos() const {return nBreakPos; }
     inline uno::Reference< XHyphenatedWord > HyphWord() const
         { return xHyphWord; }
-    static xub_StrLen GetWordStart( const SwTxtFormatInfo &rInf,
-                    const xub_StrLen nPos );
 };
 
 #endif

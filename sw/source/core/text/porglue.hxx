@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@ public:
     inline void MoveAllGlue( SwGluePortion *pTarget );
     inline void MoveHalfGlue( SwGluePortion *pTarget );
     inline void AdjFixWidth();
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
@@ -124,9 +121,6 @@ class SwMarginPortion : public SwGluePortion
 public:
         SwMarginPortion( const KSHORT nFixWidth );
         void AdjustRight( const SwLineLayout* pCurr );
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     OUTPUT_OPERATOR
 };
 

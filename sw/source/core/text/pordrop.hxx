@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pordrop.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-20 14:50:04 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,6 @@ public:
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
 
     inline MSHORT GetLines() const { return nLines; }
     inline KSHORT GetDistance() const { return nDistance; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-12 12:42:24 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@ private:
     sal_Bool bMidHyph   : 1;
     sal_Bool bTab       : 1;
     sal_Bool bFly       : 1;
-    sal_Bool bFlyCnt    : 1;
     sal_Bool bRest      : 1;
     sal_Bool bBlinking  : 1;
     sal_Bool bClipping  : 1; // Clipping erforderlich wg. exakter Zeilenhoehe
@@ -178,8 +177,6 @@ public:
     inline sal_Bool IsTab() const { return bTab; }
     inline void SetFly( const sal_Bool bNew ) { bFly = bNew; }
     inline sal_Bool IsFly() const { return bFly; }
-    inline void SetFlyCnt( const sal_Bool bNew ) { bFlyCnt = bNew; }
-    inline sal_Bool IsFlyCnt() const { return bFlyCnt; }
     inline void SetRest( const sal_Bool bNew ) { bRest = bNew; }
     inline sal_Bool IsRest() const { return bRest; }
     inline void SetBlinking( const sal_Bool bNew = sal_True ) { bBlinking = bNew; }
@@ -360,7 +357,7 @@ public:
 
 inline void SwLineLayout::ResetFlags()
 {
-    bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly = bFlyCnt
+    bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly
     = bRest = bBlinking = bClipping = bContent = bRedline
     = bForcedLeftMargin = bHanging = sal_False;
     pSpaceAdd = NULL;

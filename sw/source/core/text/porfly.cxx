@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-19 09:23:53 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,6 @@
  *
  * Wir erwarten ein framelokales SwRect !
  *************************************************************************/
-
-#ifdef OLDRECYCLE
-
-sal_Bool SwFlyPortion::MayRecycle() const { return sal_False; }
-
-#endif
 
 void SwFlyPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {

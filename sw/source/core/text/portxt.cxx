@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,16 +582,6 @@ SwHolePortion::SwHolePortion( const SwTxtPortion &rPor )
     SetAscent( rPor.GetAscent() );
     SetWhichPor( POR_HOLE );
 }
-
-#ifdef OLDRECYCLE
-
-
-
-sal_Bool SwHolePortion::MayRecycle() const { return sal_False; }
-
-#endif
-
-
 
 SwLinePortion *SwHolePortion::Compress() { return this; }
 

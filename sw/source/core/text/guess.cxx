@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-07 11:37:09 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,26 +110,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
-
-/*************************************************************************
- *                      SwTxtGuess::GetWordStart
- *
- * determines the word at nPos and returns its left boundary
- *************************************************************************/
-
-xub_StrLen SwTxtGuess::GetWordStart( const SwTxtFormatInfo &rInf,
-                                     const xub_StrLen nPos )
-{
-    if (! pBreakIt->xBreak.is() )
-        return nPos;
-
-    // get word boundaries
-    Boundary aBound =
-        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), rInf.GetIdx(),
-        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-        WordType::DICTIONARY_WORD, sal_True );
-    return (xub_StrLen)aBound.startPos;
-}
 
 /*************************************************************************
  *                      SwTxtGuess::Guess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portab.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,6 @@ public:
     inline SwTabRightPortion( const KSHORT nTabPos, const xub_Unicode cFill='\0' )
          : SwTabPortion( nTabPos, cFill )
     { SetWhichPor( POR_TABRIGHT ); }
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     OUTPUT_OPERATOR
 };
 
@@ -124,9 +121,6 @@ public:
     inline SwTabCenterPortion( const KSHORT nTabPos, const xub_Unicode cFill='\0' )
          : SwTabPortion( nTabPos, cFill )
     { SetWhichPor( POR_TABCENTER ); }
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     OUTPUT_OPERATOR
 };
 
@@ -142,9 +136,6 @@ public:
                                 const xub_Unicode cFill = '\0' )
          : SwTabPortion( nTabPos, cFill ), cTab(cTab)
     { SetWhichPor( POR_TABDECIMAL ); }
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const;
-#endif
     inline xub_Unicode GetTabDecimal() const { return cTab; }
     OUTPUT_OPERATOR
 };

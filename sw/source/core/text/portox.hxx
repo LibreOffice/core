@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@ class SwToxPortion : public SwTxtPortion
 public:
     inline  SwToxPortion(){ SetWhichPor( POR_TOX ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-#ifdef OLDRECYCLE
-    virtual sal_Bool MayRecycle() const { return sal_False; }
-#endif
     OUTPUT_OPERATOR
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,44 +499,3 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         }
     }
 }
-
-
-/*************************************************************************
- *                class SwTabRightPortion
- *************************************************************************/
-
-#ifdef OLDRECYCLE
-
-
-
-sal_Bool SwTabRightPortion::MayRecycle() const { return sal_False; }
-
-#endif
-
-/*************************************************************************
- *                class SwTabCenterPortion
- *************************************************************************/
-
-#ifdef OLDRECYCLE
-
-
-
-sal_Bool SwTabCenterPortion::MayRecycle() const { return sal_False; }
-
-#endif
-
-/*************************************************************************
- *                class SwTabDecimalPortion
- *************************************************************************/
-
-#ifdef OLDRECYCLE
-
-
-
-sal_Bool SwTabDecimalPortion::MayRecycle() const { return sal_False; }
-
-#endif
-
-
-
-
