@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-18 09:39:27 $
+ *  last change: $Author: jl $ $Date: 2002-06-18 14:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2846,11 +2846,11 @@
         <prop oor:name="Enable" oor:type="xs:boolean">
           <!-- OldPath: Java -->
           <!-- OldLocation: java.ini -->
-          <!-- Responsible: MHE -->
+          <!-- Responsible: JL -->
           <!-- UIHints: Tools  Options  Browser  Other  [Section] Applets -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Enables/Disables Applets. Important for Writer (NOT for plugged browsers)</desc>
+            <desc xml:lang="en-US">Enables/disables Java applets in Office documents.</desc>
             <label xml:lang="en-US">Enable Applets</label>
           </info>
         </prop>
