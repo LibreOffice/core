@@ -86,7 +86,7 @@ Dim RetValue
 	DialogModel.cbGoOn.DefaultButton = True
 	RetValue = MainDialog.Execute
 	Select Case RetValue
-		Case 0 
+		Case 0
 			MainDialog.Dispose()
 			oBaseDocument.Dispose()
 		Case 1
@@ -113,15 +113,15 @@ End Function
 Sub ReloadCurrentDocument()
 Dim OldDocIndex as Integer
 On Local Error Goto ErrorOcurred
-	oBaseDocument.LockControllers
 	OldDocIndex = CurDocIndex
 	CurDocIndex = GetCurIndex(DialogModel.lbTemplate, Layout(), NumberofLayouts%, 2)
 	If OldDocIndex &lt;&gt; CurDocIndex Then
+		oBaseDocument.LockControllers
 		ToggleDialogControls(False)
 		oCursor = oBaseDocument.Text.CreateTextCursor()
 		oCursor.GotoStart(False)
 		oCursor.GotoEnd(True)
-		oCursor.SetPropertyToDefault(&quot;CharHeight&quot;)
+		oCursor.SetAllPropertiesToDefault()
 		oCursor.InsertDocumentfromURL(FileStr, NoArgs())
 		SetBulletAndGraphics
 		CheckControls(oBaseDocument.DrawPage)
@@ -220,7 +220,7 @@ Dim oDocument as Object
 &apos; links for the template created by the AutoPilot because then it is not
 &apos; possible to modify the template.
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	oDocument = StarDesktop.ActiveFrame.Controller.Model
+	oDocument = ThisComponent
 	AttachBasicMacroToEvent(oDocument,&quot;OnSaveDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)
 	AttachBasicMacroToEvent(oDocument,&quot;OnSaveAsDone&quot;, &quot;WebWizard.HtmlAutoPilotBasic.CopyGraphics()&quot;)	
 End Sub
