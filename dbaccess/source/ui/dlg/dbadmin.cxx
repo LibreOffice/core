@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 16:13:26 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 16:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,6 +1459,13 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
         case DST_ODBC: pRelevantItems = OOdbcDetailsPage::getDetailIds(); break;
         case DST_DBASE: pRelevantItems = ODbaseDetailsPage::getDetailIds(); break;
         case DST_TEXT: pRelevantItems = OTextDetailsPage::getDetailIds(); break;
+        case DST_CALC:
+            {
+                // spreadsheet currently has no options page
+                static sal_Int32 nRelevantIds[] = { 0 };
+                pRelevantItems = nRelevantIds;
+            }
+            break;
     }
     return pRelevantItems;
 }
@@ -2235,6 +2242,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/01/26 16:13:26  fs
+ *  added the query administration page
+ *
  *  Revision 1.30  2001/01/26 06:59:12  fs
  *  some basics for the query administration page - not enabled yet
  *
