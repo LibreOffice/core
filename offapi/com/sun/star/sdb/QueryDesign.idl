@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesign.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:25:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module sdb {
     @see com::sun::star::sdb::ContentLoader
 */
 
-service QueryDesign
+published service QueryDesign
 {
     /** allows the component to be plugged into frames.
     */
