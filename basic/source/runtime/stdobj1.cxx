@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-07-05 10:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,10 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+#include <svtools/transfer.hxx>
 #include "runtime.hxx"
 #pragma hdrstop
 #include "stdobj1.hxx"
@@ -356,6 +354,43 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
 
 //-----------------------------------------------------------------------------
+
+/*
+class TransferableHelperImpl : public TransferableHelper
+{
+    SotFormatStringId   mFormat;
+    String              mString;
+    Graphic             mGraphic;
+
+    virtual void        AddSupportedFormats();
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+
+public:
+    TransferableHelperImpl( void ) { mFormat = 0; }
+    TransferableHelperImpl( const String& rStr )
+        mFormat( FORMAT_STRING ), mString( rStr ) {}
+    TransferableHelperImpl( const Graphic& rGraphic );
+        mFormat( FORMAT_BITMAP ), mGraphic( rGraphic ) {}
+
+};
+
+void TransferableHelperImpl::AddSupportedFormats()
+{
+}
+
+sal_Bool TransferableHelperImpl::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
+    if( nFormat == FORMAT_STRING )
+    {
+    }
+    else if( nFormat == FORMAT_BITMAP ||
+             nFormat == FORMAT_GDIMETAFILE )
+    {
+    }
+}
+*/
+
 void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar, BOOL )
 {
     if( pPar && (pPar->Count() > 1) )
@@ -364,7 +399,7 @@ void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar, BOOL )
         return;
     }
 
-    Clipboard::Clear();
+    //Clipboard::Clear();
 }
 
 void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
@@ -382,6 +417,7 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
         return;
     }
 
+    /*
     if( nFormat == FORMAT_STRING )
         pVar->PutString( Clipboard::PasteString() );
     else
@@ -394,6 +430,7 @@ void SbStdClipboard::MethGetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
         ((SbStdPicture*)(SbxObject*)xPic)->SetGraphic( aGraph );
         pVar->PutObject( xPic );
     }
+    */
 }
 
 void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar, BOOL )
@@ -411,7 +448,8 @@ void SbStdClipboard::MethGetFormat( SbxVariable* pVar, SbxArray* pPar, BOOL )
         return;
     }
 
-    pVar->PutBool( Clipboard::HasFormat( nFormat ) );
+    pVar->PutBool( FALSE );
+    //pVar->PutBool( Clipboard::HasFormat( nFormat ) );
 }
 
 void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
@@ -422,7 +460,8 @@ void SbStdClipboard::MethGetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
         return;
     }
 
-    pVar->PutString( Clipboard::PasteString() );
+    pVar->PutString( String() );
+    //pVar->PutString( Clipboard::PasteString() );
 }
 
 void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
@@ -440,6 +479,7 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
         return;
     }
 
+    /*
     if( nFormat == FORMAT_STRING )
     {
         Clipboard::CopyString( pPar->Get(1)->GetString() );
@@ -453,6 +493,7 @@ void SbStdClipboard::MethSetData( SbxVariable* pVar, SbxArray* pPar, BOOL )
         if( pObj && pObj->IsA( TYPE( SbStdPicture ) ) )
             ((SbStdPicture*)(SbxObject*)pObj)->GetGraphic().Copy();
     }
+    */
 }
 
 void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
@@ -463,7 +504,7 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar, BOOL )
         return;
     }
 
-    Clipboard::CopyString( pPar->Get(1)->GetString() );
+    // Clipboard::CopyString( pPar->Get(1)->GetString() );
 }
 
 
