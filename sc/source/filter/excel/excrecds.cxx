@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:32:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1878,7 +1878,13 @@ XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
     {
         UINT16 nCount = rRootData.pDoc->GetPrintRangeCount( nScTab );
         for( UINT16 nIx = 0 ; nIx < nCount ; nIx++ )
-            Append( *rRootData.pDoc->GetPrintRange( nScTab, nIx ) );
+        {
+            ScRange aRange( *rRootData.pDoc->GetPrintRange( nScTab, nIx ) );
+            // ScDocument does not care about sheet index in print ranges
+            aRange.aStart.SetTab( nScTab );
+            aRange.aEnd.SetTab( nScTab );
+            Append( aRange );
+        }
     }
     CreateFormula( rRootData );
 }
@@ -1889,15 +1895,14 @@ XclPrintRange::XclPrintRange( RootData& rRootData, UINT16 nScTab ) :
 XclPrintTitles::XclPrintTitles( RootData& rRootData, UINT16 nScTab ) :
         XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTTITLES )
 {
-    UINT16 nXclTab = rRootData.pER->GetTabIdBuffer().GetXclTab( nScTab );
     const ScRange* pRange = rRootData.pDoc->GetRepeatColRange( nScTab );
     if( pRange )
-        Append( ScRange( pRange->aStart.Col(), 0, nXclTab,
-            pRange->aEnd.Col(), rRootData.nRowMax, nXclTab ) );
+        Append( ScRange( pRange->aStart.Col(), 0, nScTab,
+            pRange->aEnd.Col(), rRootData.nRowMax, nScTab ) );
     pRange = rRootData.pDoc->GetRepeatRowRange( nScTab );
     if( pRange )
-        Append( ScRange( 0, pRange->aStart.Row(), nXclTab,
-            rRootData.nColMax, pRange->aEnd.Row(), nXclTab ) );
+        Append( ScRange( 0, pRange->aStart.Row(), nScTab,
+            rRootData.nColMax, pRange->aEnd.Row(), nScTab ) );
     CreateFormula( rRootData );
 }
 
