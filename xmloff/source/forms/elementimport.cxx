@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 13:44:04 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 07:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,11 @@ namespace xmloff
         if (s_sElementTranslations.end() != aPos)
             return aPos->second;
 
+#if SUPD<624
+        // compatibility
+        if (_rName.compareToAscii("text-area"))
+            return TEXT_AREA;
+#endif
         return UNKNOWN;
     }
 
@@ -1094,6 +1099,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/02/13 13:44:04  fs
+ *  create an OPasswordImport if necessary
+ *
  *  Revision 1.10  2001/02/13 09:09:32  fs
  *  #83529# introducing ORadioImport - need special handling for DefaultState / State
  *
