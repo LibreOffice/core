@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:22:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,227 +744,30 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
 
 void ImplWinFontData::ReadCmapTable( HDC hDC )
 {
-    // get the CMAP table from the font selected into the DC
+    CmapResult aResult;
+    aResult.mnCount     = 0;
+    aResult.mbSymbolic  = (meWinCharSet == SYMBOL_CHARSET);
+    aResult.mbRecoded   = true;
+
+    // get the CMAP table from the font which is selected into the DC
     const DWORD CmapTag = CalcTag( "cmap" );
     DWORD nRC = ::GetFontData( hDC, CmapTag, 0, NULL, 0 );
-    const int nLength = nRC;
-    std::vector<unsigned char> aCmap;
-    unsigned char* pCmap = NULL;
-    int nSubTables = 0;
-
     // read the CMAP table if available
     if( nRC != GDI_ERROR )
     {
-        aCmap.reserve( nLength );
-        pCmap = &aCmap[0];
+        const int nLength = nRC;
+        std::vector<unsigned char> aCmap( nLength );
+        unsigned char* pCmap = &aCmap[0];
         nRC = ::GetFontData( hDC, CmapTag, 0, pCmap, nLength );
+        // parse the CMAP table
         if( nRC == nLength )
-            if( !GetUShort( pCmap ) ) // simple check for CMAP corruption
-                nSubTables = GetUShort( pCmap + 2 );
+            ParseCMAP( pCmap, nLength, aResult );
     }
 
-    // find the most interesting subtable in the CMAP
-    rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
-    int nOffset = 0;
-    int nFormat = -1;
-    int nBestVal = 0;
-    for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
-    {
-        int nPlatform = GetUShort( p );
-        int nEncoding = GetUShort( p+2 );
+    mbDisableGlyphApi |= aResult.mbRecoded;
 
-        int nValue;
-        if( nPlatform==3 && nEncoding==1 )       // Win Unicode
-            nValue = 24;
-        else if( nPlatform==3 && nEncoding==10 ) // Win UCS-4
-            nValue = 23;
-        else if( nPlatform==1 && nEncoding==3 )  // Mac Unicode>2.0
-            nValue = 22;
-        else if( nPlatform==1 && nEncoding==0 )  // Mac Unicode<2.0
-            nValue = 21;
-        else if( nPlatform==3 && nEncoding>=2 )  // non-Unicode
-            nValue = 11;
-        else if( nPlatform==3 && nEncoding==0 )  // Win Symbol
-            nValue = 1;
-        else
-            continue;                           // ignore other encodings
-
-        int nTmpOffset = GetUInt( p+4 );
-        int nTmpFormat = GetUShort( pCmap + nTmpOffset );
-        if( nTmpFormat == 12 )                  // 32bit code -> glyph map format
-            nValue += 3;
-        else if( nTmpFormat != 4 )              // 16bit code -> glyph map format
-            continue;                           // ignore other formats
-
-        if( nBestVal < nValue )
-        {
-            nBestVal = nValue;
-            nOffset = nTmpOffset;
-            nFormat = nTmpFormat;
-
-            int nPlatformEncoding = (nPlatform << 8) + nEncoding;
-            switch( nPlatformEncoding )
-            {
-                default:     // fall through
-                case 0x001:  // fall through
-                case 0x002:  // fall through
-                case 0x003:  // fall through
-                case 0x301:  eRecodeFrom = RTL_TEXTENCODING_UNICODE; break;
-                case 0x302:  eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS; break;
-                case 0x303:  eRecodeFrom = RTL_TEXTENCODING_GB_18030; break;
-                case 0x304:  eRecodeFrom = RTL_TEXTENCODING_BIG5; break;
-                case 0x305:  eRecodeFrom = RTL_TEXTENCODING_MS_949; break;
-                case 0x306:  eRecodeFrom = RTL_TEXTENCODING_MS_1361; break;
-            }
-        }
-    }
-
-    // parse the best CMAP subtable
-    int nRangeCount = 0;
-    sal_uInt32* pCodePairs = NULL;
-
-    // format 4, the most common 16bit char mapping table
-    if( (nFormat == 4) && ((nOffset+16) < nLength) )
-    {
-        int nSegCount = GetUShort( pCmap + nOffset + 6 );
-        nRangeCount = nSegCount/2 - 1;
-        pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
-        const unsigned char* pLimit = pCmap + nOffset + 14;
-        const unsigned char* pBegin = pLimit + 2 + nSegCount;
-        sal_uInt32* pCP = pCodePairs;
-        for( int i = 0; i < nRangeCount; ++i )
-        {
-            sal_uInt32 cMinChar = GetUShort( pBegin + 2*i );
-            sal_uInt32 cMaxChar = GetUShort( pLimit + 2*i );
-            if( cMinChar > cMaxChar )   // no sane font should trigger this
-                break;
-            if( cMaxChar == 0xFFFF )
-                break;
-            *(pCP++) = cMinChar;
-            *(pCP++) = cMaxChar + 1;
-        }
-        nRangeCount = (pCP - pCodePairs) / 2;
-    }
-    // format 12, the most common 32bit char mapping table
-    else if( (nFormat == 12) && ((nOffset+16) < nLength) )
-    {
-        nRangeCount = GetUInt( pCmap + nOffset + 12 ) / 12;
-        pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
-        const unsigned char* pGroup = pCmap + nOffset + 16;
-        sal_uInt32* pCP = pCodePairs;
-        for( int i = 0; i < nRangeCount; ++i )
-        {
-            sal_uInt32 cMinChar = GetUShort( pGroup + 0 );
-            sal_uInt32 cMaxChar = GetUShort( pGroup + 4 );
-            pGroup += 12;
-            if( cMinChar > cMaxChar )   // no sane font should trigger this
-                break;
-            *(pCP++) = cMinChar;
-            *(pCP++) = cMaxChar + 1;
-        }
-        nRangeCount = (pCP - pCodePairs) / 2;
-    }
-
-    if( nRangeCount <= 0 )
-    {
-        // even when no CMAP is available we know it for symbol fonts
-        if( meWinCharSet == SYMBOL_CHARSET )
-        {
-            nRangeCount = 2;
-            pCodePairs = new sal_uInt32[4];
-            pCodePairs[0] = 0x0020;    // aliased symbols
-            pCodePairs[1] = 0x0100;
-            pCodePairs[2] = 0xF020;    // original symbols
-            pCodePairs[3] = 0xF100;
-        }
-    }
-    else
-    {
-        // recode the code ranges to their unicode encoded ranges
-        rtl_TextToUnicodeConverter aConverter = NULL;
-        rtl_UnicodeToTextContext aCvtContext = NULL;
-
-        if( eRecodeFrom != RTL_TEXTENCODING_UNICODE )
-        {
-            aConverter = rtl_createTextToUnicodeConverter( eRecodeFrom );
-            aCvtContext = rtl_createTextToUnicodeContext( aConverter );
-            mbDisableGlyphApi = true;
-        }
-
-        if( aConverter && aCvtContext )
-        {
-            // determine the set of supported unicodes from encoded ranges
-            typedef std::set<sal_uInt32> IntSet;
-            IntSet aSupportedUnicodes;
-
-            static const int NINSIZE = 64;
-            static const int NOUTSIZE = 64;
-            sal_Char    cCharsInp[ NINSIZE ];
-            sal_Unicode cCharsOut[ NOUTSIZE ];
-            sal_uInt32* pCP = pCodePairs;
-            for( int i = 0; i < nRangeCount; ++i )
-            {
-                sal_uInt32 cMin = *(pCP++);
-                sal_uInt32 cEnd = *(pCP++);
-                while( cMin < cEnd )
-                {
-                   int j = 0;
-                   for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
-                   {
-                       if( cMin >= 0x0100 )
-                           cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
-                       if( (cMin >= 0x0100) || (cMin < 0x00A0)  )
-                          cCharsInp[ j++ ] = static_cast<sal_Char>(cMin);
-                   }
-
-                   sal_uInt32 nCvtInfo;
-                   sal_Size nSrcCvtBytes;
-                   int nOutLen = rtl_convertTextToUnicode(
-                       aConverter, aCvtContext,
-                       cCharsInp, j, cCharsOut, NOUTSIZE,
-                       RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE
-                       | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
-                       &nCvtInfo, &nSrcCvtBytes );
-
-                   for( j = 0; j < nOutLen; ++j )
-                       aSupportedUnicodes.insert( cCharsOut[j] );
-                }
-            }
-
-            rtl_destroyTextToUnicodeConverter( aCvtContext );
-            rtl_destroyTextToUnicodeConverter( aConverter );
-
-            // convert the set of supported unicodes to ranges
-            typedef std::vector<sal_uInt32> IntVector;
-            IntVector aSupportedRanges;
-
-            IntSet::const_iterator itChar = aSupportedUnicodes.begin();
-            for(; itChar != aSupportedUnicodes.end(); ++itChar )
-            {
-                if( aSupportedRanges.empty()
-                || (aSupportedRanges.back() != *itChar) )
-                {
-                    // add new range beginning with current unicode
-                    aSupportedRanges.push_back( *itChar );
-                    aSupportedRanges.push_back( 0 );
-                }
-
-                // extend existing range to include current unicode
-                aSupportedRanges.back() = *itChar + 1;
-            }
-
-            // make a pCodePairs array using the vector from above
-            delete[] pCodePairs;
-            nRangeCount = aSupportedRanges.size() / 2;
-            pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
-            IntVector::const_iterator itInt = aSupportedRanges.begin();
-            for( pCP = pCodePairs; itInt != aSupportedRanges.end(); ++itInt )
-                *(pCP++) = *itInt;
-        }
-    }
-
-    if( nRangeCount > 0 )
-        mpUnicodeMap = new ImplFontCharMap( nRangeCount, pCodePairs );
+    if( aResult.mnCount > 0 )
+        mpUnicodeMap = new ImplFontCharMap( aResult.mnCount, aResult.mpCodes );
     else
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
 }
