@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-26 11:44:11 $
+ *  last change: $Author: sb $ $Date: 2001-12-20 08:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,7 @@ class Marshal implements IMarshal {
     void writeSequence(ITypeDescription iTypeDescription, Object object) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeSequence:" + iTypeDescription + " " + object);
 
+        iTypeDescription = iTypeDescription.getComponentType();
         if(iTypeDescription.getTypeClass() == TypeClass.BYTE) // write a byte sequence ?
             writebyteSequence((byte [])object);
 
@@ -446,7 +447,6 @@ class Marshal implements IMarshal {
 
             writeCompressedInt(size);
 
-            iTypeDescription = iTypeDescription.getComponentType();
             for(int i = 0; i < size; ++ i)
                 writeObject(iTypeDescription, Array.get(object, i));
         }
