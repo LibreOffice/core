@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-22 11:14:21 $
+ *  last change: $Author: pb $ $Date: 2002-09-13 12:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #include "svtools.hrc"
 #include "fileview.hrc"
+
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
+#include "AccessibleBrowseBoxObjType.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
@@ -313,6 +317,9 @@ private:
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
+    String                  msAccessibleDescText;
+    String                  msFolder;
+    String                  msFile;
     sal_uInt32              mnSearchIndex;
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
@@ -323,13 +330,12 @@ private:
     sal_Bool        Kill( const OUString& rURL );
 
 protected:
-    virtual BOOL    DoubleClickHdl();
+    virtual BOOL            DoubleClickHdl();
+    virtual ::rtl::OUString GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
 
 public:
-                    ViewTabListBox_Impl( Window* pParentWin,
-                                         SvtFileView_Impl* pParent,
-                                         sal_Int16 nFlags );
-                   ~ViewTabListBox_Impl();
+    ViewTabListBox_Impl( Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
+   ~ViewTabListBox_Impl();
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
@@ -346,8 +352,8 @@ public:
 
     DECL_LINK( ResetQuickSearch_Impl, Timer * );
 
-    virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopentry );
+    virtual PopupMenu*  CreateContextMenu( void );
+    virtual void        ExcecuteContextMenuAction( USHORT nSelectedPopentry );
 };
 
 // class HashedEntry --------------------------------------------------
@@ -814,12 +820,15 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
 
     SvHeaderTabListBox( pParentWin, WB_TABSTOP ),
 
-    mpHeaderBar     ( NULL ),
-    mpParent        ( pParent ),
-    mnSearchIndex   ( 0 ),
-    mbResizeDisabled( sal_False ),
-    mbAutoResize    ( sal_False ),
-    mbEnableDelete  ( sal_True )
+    mpHeaderBar         ( NULL ),
+    mpParent            ( pParent ),
+    msAccessibleDescText( SvtResId( STR_SVT_ACC_DESC_FILEVIEW ) ),
+    msFolder            ( SvtResId( STR_SVT_ACC_DESC_FOLDER ) ),
+    msFile              ( SvtResId( STR_SVT_ACC_DESC_FILE ) ),
+    mnSearchIndex       ( 0 ),
+    mbResizeDisabled    ( sal_False ),
+    mbAutoResize        ( sal_False ),
+    mbEnableDelete      ( sal_True )
 
 {
     Size aBoxSize = pParentWin->GetSizePixel();
@@ -1100,7 +1109,7 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
     if ( bFound )
     {
         SvLBoxEntry* pEntry = GetEntry( mnSearchIndex );
-        SelectAll( FALSE );
+        SvLBox::SelectAll( FALSE );
         Select( pEntry );
         SetCurEntry( pEntry );
         MakeVisible( pEntry );
@@ -1124,6 +1133,31 @@ BOOL ViewTabListBox_Impl::DoubleClickHdl()
         // (I really doubt that this behaviour of the SvImpLBox does make any sense at all, but
         // who knows ...)
         // 07.12.2001 - 95727 - fs@openoffice.org
+}
+
+::rtl::OUString ViewTabListBox_Impl::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+{
+    ::rtl::OUString sRet = SvHeaderTabListBox::GetAccessibleDescription( _eType, _nPos );
+    if ( ::svt::BBTYPE_TABLECELL == _eType )
+    {
+        sal_Int32 nRow = _nPos / GetColumnCount();
+        SvLBoxEntry* pEntry = GetEntry( nRow );
+        if ( pEntry )
+        {
+            SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
+            if ( pData )
+            {
+                static const String sVar1( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+                static const String sVar2( RTL_CONSTASCII_USTRINGPARAM( "%2" ) );
+                String aText( msAccessibleDescText );
+                aText.SearchAndReplace( sVar1, pData->mbIsFolder ? msFolder : msFile );
+                aText.SearchAndReplace( sVar2, pData->maURL );
+                sRet += ::rtl::OUString( aText );
+            }
+        }
+    }
+
+    return sRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1426,7 +1460,7 @@ void SvtFileView::ExecuteFilter( const String& rFilter )
 
 void SvtFileView::SetNoSelection()
 {
-    mpImp->mpView->SelectAll( FALSE );
+    mpImp->mpView->SvLBox::SelectAll( FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -2055,7 +2089,7 @@ void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::InitSelection()
 {
-    mpView->SelectAll( sal_False );
+    mpView->SvLBox::SelectAll( sal_False );
     SvLBoxEntry* pFirst = mpView->First();
     if ( pFirst )
         mpView->SetCursor( pFirst, sal_True );
