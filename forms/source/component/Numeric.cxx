@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:54:43 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ Sequence<Type> ONumericModel::_getTypes()
 DBG_NAME( ONumericModel )
 //------------------------------------------------------------------
 ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
-                :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_CONTROL_NUMERICFIELD, sal_True, sal_True )
+                :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( ONumericModel, NULL );
