@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 20:20:16 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,8 @@ ErrorBox MSG_ERR_READ_CFG
     Message [ english_us ] = "Error reading configuration file." ;
     Message[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ÅäÖÃÎÄ¼şÊ±·¢Éú´íÎó¡£";
     Message[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà êîíôèãóğàöèè.";
-    Message[ polish ] = "B³¹d przy odczycie konfiguracji.";
-    Message[ japanese ] = "İ’è‚ğ“Ç‚İæ‚éÛ‚Ì´×°¡";
+    Message[ polish ] = "B³¹d w odczytywaniu konfiguracji.";
+    Message[ japanese ] = "İ’èÌ§²Ù“Ç‚İæ‚è‚ÌÛ‚Ì´×°B";
     Message[ chinese_traditional ] = "¦bÅª¨ú°t¸mÀÉ®×®Éµo¥Í¿ù»~¡C";
     Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ãáİ ÇáÊßæíä.";
     Message[ dutch ] = "Fout bij het lezen van het configuratiebestand.";
@@ -490,7 +490,7 @@ String STR_RECOVER_QUERY
     Text [ danish ] = "Skal filen \"$1\" gendannes?" ;
     Text [ italian ] = "Volete recuperare il file \"$1\"?" ;
     Text [ spanish ] = "¿Desea restaurar el archivo \"$1\"?" ;
-    Text [ french ] = "Le fichier \"$1\" doit-il être restauré ?" ;
+    Text [ french ] = "Restaurer le fichier \"$1\" ?" ;
     Text [ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?" ;
     Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
     Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
@@ -1661,14 +1661,14 @@ String STR_RESEXCEPTION
     TEXT [ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie juist is doorgevoerd." ;
     TEXT [ spanish ] = "No se encuentran archivos importantes del programa. Compruebe la instalación." ;
     TEXT [ english_us ] = "There are files missing. Please check application setup." ;
-    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò²¿¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
+    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò×é¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
     TEXT[ russian ] = "Íå íàéäåíû âàæíûå ÷àñòè ïğîãğàììû. Ïğîâåğüòå, ïîæàëóéñòà, óñòàíîâêó ïğèëîæåíèÿ.";
     TEXT[ polish ] = "Wa¿ne czêœci programu nie zosta³y znalezione.SprawdŸ instalacjê aplikacji.";
     TEXT[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ì‘åØ‚È•”•ª‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B";
-    TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¥²­nªºµ{¦¡³¡¥ó¡C½ĞÀË¬d±zªº¦w¸Ë¡C";
+    TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¥²­nªºµ{¦¡¤¸¥ó¡C½ĞÀË¬d±zªº¦w¸Ë¡C";
     TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÃÌÒÇÁ åÇãÉ ãä ÇáÈÑäÇãÌ. ÇáÑÌÇÁ ÇáÊÍŞŞ ãä ÕÍÉ ÚãáíÉ ÇáÊËÈíÊ ÚäÏß.";
     TEXT[ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie juist is doorgevoerd.";
-    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò²¿¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
+    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò×é¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
     TEXT[ greek ] = "Äåí âñİèçêáí ïñéóìİíá óçìáíôéêÜ ôìŞìáôá ôïõ ğñïãñÜììáôïò. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóŞ óáò.";
     TEXT[ korean ] = "Áß¿äÇÑ ÇÁ·Î±×·¥ ºÎºĞÀ» Ã£Áö ¸øÇß½À´Ï´Ù. ¼³Ä¡¸¦ °Ë»çÇÏ½Ê½Ã¿À.";
     TEXT[ turkish ] = "Önemli program öğeleri bulunamadı. Kurulumunuzu kontrol edin.";
@@ -1992,7 +1992,7 @@ String MSG_IOERR_SHARING
     Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡ÎÄ¼ş $(FILE) Ê±·¢Éú´íÎó¡£";
     Text[ russian ] = "Îøèáêà ïğè êîëëåêòèâíîì äîñòóïå ê ôàéëó $(FILE).";
     Text[ polish ] = "Brak wspólnego dostêpu do pliku $(FILE).";
-    Text[ japanese ] = "Ì§²Ù$(FILE)‚Ö‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°¡";
+    Text[ japanese ] = "Ì§²Ù $(FILE) ‚Ö‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°B";
     Text[ chinese_traditional ] = "¦b¦P®ÉÅª¨úÀÉ®×$(FILE) ®Éµo¥Í¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáæÕæá ÇáãÔÊÑß Åáì Çáãáİ $(FILE).";
     Text[ dutch ] = "Fout bij gelijktijdige toegang tot $(FILE).";
@@ -2994,14 +2994,14 @@ String RID_ENVTOOLBOX
     Text [ danish ] = "Funktionslinje" ;
     Text [ portuguese_brazilian ] = "Funktionsleiste" ;
     Text [ portuguese ] = "Barra de funções" ;
-    Text[ chinese_simplified ] = "¹¤¾ßÀ¸";
+    Text[ chinese_simplified ] = "¹¦ÄÜÀ¸";
     Text[ russian ] = "Ïàíåëü ôóíêöèé";
     Text[ polish ] = "Pasek funkcji";
     Text[ japanese ] = "Ì§İ¸¼®İÊŞ°";
     Text[ chinese_traditional ] = "¤u¨ã¦C";
     Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
     Text[ dutch ] = "Werkbalk";
-    Text[ chinese_simplified ] = "¹¤¾ßÀ¸";
+    Text[ chinese_simplified ] = "¹¦ÄÜÀ¸";
     Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
     Text[ korean ] = "±â´É ¸ğÀ½";
     Text[ turkish ] = "İşlev çubuğu";
@@ -3382,8 +3382,8 @@ String STR_CORRUPT_INSTALLATION
     Text[ portuguese_brazilian ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
     Text[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ì‘åØ‚È•”•ª‚Í³í‚É‰Šú‰»‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯ÌßÌßÛ¸Ş×Ñ‚ğµÌß¼®İ‚ÌC•œ‚ÅŠJn‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "ÇÁ·Î±×·¥ÀÇ Áß¿ä ºÎºĞÀ» Á¤È®ÇÏ°Ô ÃÊ±âÈ­ÇÏÁö ¸øÇß½À´Ï´Ù.\n¿É¼Ç/º¹±¸·Î SetupÀ» ½ÃÀÛÇÏ½Ê½Ã¿À.";
-    Text[ chinese_simplified ] = "ÎŞ·¨ÕıÈ·³õÊ¼»¯ÖØÒªµÄ³Ì²¿¼ş¡£\nÇëÄúÆô¶¯°²×°³ÌĞò£¬Ö´ĞĞÑ¡ÏîĞŞ²¹¡£";
-    Text[ chinese_traditional ] = "µLªk¥¿½Tªì©l¤Æ­«­nªºµ{¦¡³¡¥ó¡C½Ğ±z±Ò°Ê¦w¸Ëµ{¦¡¡A°õ¦æ­×Î`¿ï¶µ¡C";
+    Text[ chinese_simplified ] = "ÎŞ·¨ÕıÈ·³õÊ¼»¯ÖØÒªµÄ³ÌĞò×é¼ş¡£\nÇëÄúÆô¶¯°²×°³ÌĞò£¬Ö´ĞĞÑ¡ÏîĞŞ²¹¡£";
+    Text[ chinese_traditional ] = "µLªk¥¿½Tªì©l¤Æ­«­nªºµ{¦¡¤¸¥ó¡C½Ğ±Ò°Ê¦w¸Ëµ{¦¡¡A°õ¦æ­×Î`¿ï¶µ¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊËÈíÊ ÈÚÖ ÚäÇÕÑ ÇáÈÑäÇãÌ ÇáåÇãÉ ÈÔßá ÕÍíÍ.\nÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ ÈÇáÎíÇÑ /repair.";
     Text[ turkish ] = "Önemli program öğeleri doğru bir şekilde başlatılamadı.\nKurulumu /repair seçeneği ile başlatın.";
     Text[ catalan ] = "Algunos componentes importantes del programa no se pudieron instalar.\nInicie por favor el programa de instalación con la opción /repair.";
@@ -4159,6 +4159,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
