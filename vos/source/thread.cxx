@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 09:44:09 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,10 +122,7 @@ OThread::~OThread()
 {
     if (m_hThread != 0)
     {
-        if (! m_bTerminating)
-            kill();
-
-        osl_freeThreadHandle(m_hThread);
+        osl_destroyThread(m_hThread);
     }
 
     osl_destroyCondition( m_aCondition );
@@ -236,7 +233,8 @@ void OThread::kill()
         // flag we are shutting down
         m_bTerminating = sal_True;
 
-        osl_destroyThread(m_hThread);
+        terminate();
+        join();
     }
 }
 
