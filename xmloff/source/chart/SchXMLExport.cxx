@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-22 12:29:33 $
+ *  last change: $Author: bm $ $Date: 2001-03-27 13:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 #ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>
 #endif
+// header for any2enum
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
@@ -173,11 +177,12 @@ SchXMLExportHelper::SchXMLExportHelper(
     SvXMLAutoStylePoolP& rASPool ) :
         mrExport( rExport ),
         mrAutoStylePool( rASPool ),
-        mnColCount( 0 ),
-        mnRowCount( 0 ),
+        mnSeriesCount( 0 ),
+        mnSeriesLength( 0 ),
         mnDomainAxes( 0 ),
-        mbHasRowDescriptions( sal_False ),
-        mbHasColumnDescriptions( sal_False ),
+        mbHasSeriesLabels( sal_False ),
+        mbHasCategoryLabels( sal_False ),
+        mbRowSourceColumns( sal_True ),
         msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
     msTableName = rtl::OUString::createFromAscii( "local-table" );
@@ -233,7 +238,7 @@ void SchXMLExportHelper::collectAutoStyles( uno::Reference< chart::XChartDocumen
 void SchXMLExportHelper::exportChart( uno::Reference< chart::XChartDocument > rChartDoc,
                                       sal_Bool bIncludeTable )
 {
-    if( ! bIncludeTable )
+    if( ! bIncludeTable )       // embedded chart in calc or writer getting data from container
     {
         // get table addresses from model
         uno::Reference< lang::XServiceInfo > xServ( rChartDoc, uno::UNO_QUERY );
@@ -302,6 +307,28 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                                         sal_Bool bExportContent,
                                         sal_Bool bIncludeTable )
 {
+    uno::Reference< chart::XDiagram > xDiagram = rChartDoc->getDiagram();
+
+    // determine if data is in rows
+    sal_Bool bSwitchData = sal_False;
+    uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
+    if( xDiaProp.is())
+    {
+        try
+        {
+            chart::ChartDataRowSource eRowSource;
+            uno::Any aAny =
+                xDiaProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )));
+
+            cppu::any2enum< chart::ChartDataRowSource >( eRowSource, aAny );
+            mbRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
+        }
+        catch( uno::Exception )
+        {
+            DBG_ERROR( "exportChart: Error getting Property \"DataRowSource\"" );
+        }
+    }
+
     if( ! rChartDoc.is())
     {
         DBG_ERROR( "No XChartDocument was given for export." );
@@ -341,8 +368,8 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     // get some values of general interest
 
     // reset
-    mbHasColumnDescriptions = mbHasRowDescriptions = sal_False;
-    mnColCount = mnRowCount = 0;
+    mbHasSeriesLabels = mbHasCategoryLabels = sal_False;
+    mnSeriesCount = mnSeriesLength = 0;
 
     // set
     uno::Reference< chart::XChartDataArray > xData( rChartDoc->getData(), uno::UNO_QUERY );
@@ -354,18 +381,24 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
         {
             // determine size of data
             const uno::Sequence< double >* pSequence = xValues.getConstArray();
-            mnColCount = pSequence->getLength();
-            mnRowCount = xValues.getLength();
+            mnSeriesCount = mbRowSourceColumns
+                ? pSequence->getLength()
+                : xValues.getLength();
+            mnSeriesLength = mbRowSourceColumns
+                ? xValues.getLength()
+                : pSequence->getLength();
 
             // determine existence of headers
-            uno::Sequence< rtl::OUString > xRowDescr = xData->getRowDescriptions();
-            uno::Sequence< rtl::OUString > xColDescr = xData->getColumnDescriptions();
-            mbHasColumnDescriptions = ( xColDescr.getLength() > 0 );
-            mbHasRowDescriptions = ( xRowDescr.getLength() > 0 );
+            uno::Sequence< rtl::OUString > xSeriesLabels = mbRowSourceColumns
+                ? xData->getColumnDescriptions()
+                : xData->getRowDescriptions();
+            uno::Sequence< rtl::OUString > xCategoryLabels = mbRowSourceColumns
+                ? xData->getRowDescriptions()
+                : xData->getColumnDescriptions();
+            mbHasCategoryLabels = ( xCategoryLabels.getLength() > 0 );
+            mbHasSeriesLabels = ( xSeriesLabels.getLength() > 0 );
         }
     }
-
-    uno::Reference< chart::XDiagram > xDiagram = rChartDoc->getDiagram();
 
     // chart element
     // -------------
@@ -652,38 +685,44 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
         }
 
         uno::Sequence< uno::Sequence< double > > xValues = rData->getData();
-
         if( xValues.getLength())
         {
+            if( ! mbRowSourceColumns )
+                swapDataArray( xValues );
+
             const uno::Sequence< double >* pSequence = xValues.getConstArray();
             const double* pData = 0;
 
-            sal_Int32 nCol, nRow;
+            sal_Int32 nSeries, nDataPoint;
 
             // export column headers
-              uno::Sequence< rtl::OUString > xRowDescr = rData->getRowDescriptions();
-              uno::Sequence< rtl::OUString > xColDescr = rData->getColumnDescriptions();
-            sal_Int32 nColDescrLength = xColDescr.getLength();
-            sal_Int32 nRowDescrLength = xRowDescr.getLength();
+            uno::Sequence< rtl::OUString > xSeriesLabels = mbRowSourceColumns
+                ? rData->getColumnDescriptions()
+                : rData->getRowDescriptions();
+            uno::Sequence< rtl::OUString > xCategoryLabels = mbRowSourceColumns
+                ? rData->getRowDescriptions()
+                : rData->getColumnDescriptions();
+            sal_Int32 nSeriesLablesLength = xSeriesLabels.getLength();
+            sal_Int32 nCategoryLabelsLength = xCategoryLabels.getLength();
 
             // columns
-            if( mbHasRowDescriptions )
+            if( mbHasCategoryLabels )
             {
                 // row description are put in the first column
                 SvXMLElementExport aHeaderColumns( mrExport, XML_NAMESPACE_TABLE, sXML_table_header_columns, sal_True, sal_True );
                 SvXMLElementExport aHeaderColumn( mrExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True );
             }
             // non-header columns
-            if( mnColCount )
+            if( mnSeriesCount )
             {
                 SvXMLElementExport aColumns( mrExport, XML_NAMESPACE_TABLE, sXML_table_columns, sal_True, sal_True );
                 mrExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_number_columns_repeated,
-                                       rtl::OUString::valueOf( (sal_Int64) mnColCount ));
+                                       rtl::OUString::valueOf( (sal_Int64) mnSeriesCount ));
                 SvXMLElementExport aColumn( mrExport, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True );
             }
 
             // rows
-            if( mbHasColumnDescriptions )
+            if( mbHasSeriesLabels )
             {
                 SvXMLElementExport aHeaderRows( mrExport, XML_NAMESPACE_TABLE, sXML_table_header_rows, sal_True, sal_True );
                 SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True );
@@ -691,37 +730,37 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                 {
                     SvXMLElementExport aEmptyCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
                 }
-                for( nCol = 0; nCol < nColDescrLength; nCol++ )
+                for( nSeries = 0; nSeries < nSeriesLablesLength; nSeries++ )
                 {
                     mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_string );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
                     SvXMLElementExport aP( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                    mrExport.GetDocHandler()->characters( xColDescr[ nCol ] );
+                    mrExport.GetDocHandler()->characters( xSeriesLabels[ nSeries ] );
                 }
             }
 
             // export data
             SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, sXML_table_rows, sal_True, sal_True );
-            for( nRow = 0; nRow < mnRowCount; nRow++ )
+            for( nDataPoint = 0; nDataPoint < mnSeriesLength; nDataPoint++ )
             {
                 // <table:table-row>
                 SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True );
-                pData = pSequence[ nRow ].getConstArray();
+                pData = pSequence[ nDataPoint ].getConstArray();
 
-                if( mbHasRowDescriptions )
+                if( mbHasCategoryLabels )
                 {
                     // cells containing row descriptions (in the first column)
                     mrExport.AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_value_type, sXML_string );
                     SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True );
                     SvXMLElementExport aP( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                    if( nRow < nRowDescrLength )
-                        mrExport.GetDocHandler()->characters( xRowDescr[ nRow ] );
+                    if( nDataPoint < nCategoryLabelsLength )
+                        mrExport.GetDocHandler()->characters( xCategoryLabels[ nDataPoint ] );
                 }
 
-                for( nCol = 0; nCol < mnColCount; nCol++ )
+                for( nSeries = 0; nSeries < mnSeriesCount; nSeries++ )
                 {
                     // get string by value
-                    fData = pData[ nCol ];
+                    fData = pData[ nSeries ];
 
                         // convert NaN
                     if( bConvertNaN &&  // implies xChartData.is()
@@ -845,32 +884,11 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
 
     // categories element
     // ------------------
-    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-    sal_Bool bRowSourceColumns;
-    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
-    if( xProp.is())
-    {
-        try
-        {
-            uno::Any aAny( xProp->getPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" ))));
-            aAny >>= eDataRowSource;
-            bRowSourceColumns = ( eDataRowSource == chart::ChartDataRowSource_COLUMNS );
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_WARNING( "Required property not found in Diagram" );
-        }
-    }
-    sal_Int32 nNumOfSeries = bRowSourceColumns
-        ? mnColCount
-        : mnRowCount;
-    sal_Int32 nColOffset = mbHasColumnDescriptions? 1: 0;
-    sal_Int32 nRowOffset = mbHasRowDescriptions? 1: 0;
+    sal_Int32 nDataPointOffset = mbHasSeriesLabels? 1 : 0;
+    sal_Int32 nSeriesOffset = mbHasCategoryLabels ? 1 : 0;
 
     if( bExportContent &&
-        (( bRowSourceColumns && mbHasRowDescriptions ) ||
-         ( ! bRowSourceColumns && mbHasColumnDescriptions )))
+        mbHasCategoryLabels )
     {
         // fill msString with cell-range-address of categories
         if( bIncludeTable )
@@ -878,18 +896,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             // export own table references
             msStringBuffer.append( msTableName );
 
-            if( bRowSourceColumns )
-            {
-                getCellAddress( 0, nRowOffset );
-                msStringBuffer.append( (sal_Unicode) ':' );
-                getCellAddress( 0, mnRowCount );
-            }
-            else
-            {
-                getCellAddress( nColOffset, 0 );
-                msStringBuffer.append( (sal_Unicode) ':' );
-                getCellAddress( mnColCount, 0 );
-            }
+            getCellAddress( 0, nDataPointOffset );
+            msStringBuffer.append( (sal_Unicode) ':' );
+            getCellAddress( 0, mnSeriesLength + nDataPointOffset - 1 );
+
             msString = msStringBuffer.makeStringAndClear();
         }
         else
@@ -912,7 +922,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
     sal_Bool bWrite = sal_False;
     sal_Int32 nAttachedAxis;
 
-    for( sal_Int32 nSeries = mnDomainAxes; nSeries < nNumOfSeries; nSeries++ )
+    for( sal_Int32 nSeries = mnDomainAxes; nSeries < mnSeriesCount; nSeries++ )
     {
         nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
 
@@ -944,41 +954,21 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
             {
                 // export own table references
                 msStringBuffer.append( msTableName );
-                if( bRowSourceColumns )
-                {
-                    getCellAddress( nSeries + nColOffset, nRowOffset );
-                    msStringBuffer.append( (sal_Unicode) ':' );
-                    getCellAddress( nSeries + nColOffset, mnRowCount );
-                }
-                else
-                {
-                    getCellAddress( nColOffset, nSeries + nRowOffset );
-                    msStringBuffer.append( (sal_Unicode) ':' );
-                    getCellAddress( mnColCount, nSeries + nRowOffset );
-                }
+
+                getCellAddress( nSeries + nDataPointOffset, nSeriesOffset );
+                msStringBuffer.append( (sal_Unicode) ':' );
+                getCellAddress( nSeries + nDataPointOffset, nSeriesOffset + mnSeriesLength - 1 );
+
                 msString = msStringBuffer.makeStringAndClear();
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_values_cell_range_address, msString );
 
                 // reference to label
-                if( bRowSourceColumns )
+                if( mbHasSeriesLabels )
                 {
-                    if( mbHasColumnDescriptions )
-                    {
-                        msStringBuffer.append( msTableName );
-                        getCellAddress( nSeries + nColOffset, 0 );
-                        msString = msStringBuffer.makeStringAndClear();
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address, msString );
-                    }
-                }
-                else
-                {
-                    if( mbHasRowDescriptions )
-                    {
-                        msStringBuffer.append( msTableName );
-                        getCellAddress( 0, nSeries + nRowOffset );
-                        msString = msStringBuffer.makeStringAndClear();
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address, msString );
-                    }
+                    msStringBuffer.append( msTableName );
+                    getCellAddress( nSeries + nDataPointOffset, 0 );
+                    msString = msStringBuffer.makeStringAndClear();
+                    mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_label_cell_address, msString );
                 }
             }
             else
@@ -1035,18 +1025,10 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 {
                     // first series has a domain, that is the first table row (column)
                     msStringBuffer.append( msTableName );
-                    if( bRowSourceColumns )
-                    {
-                        getCellAddress( nColOffset + nDomain, nRowOffset );
-                        msStringBuffer.append( (sal_Unicode) ':' );
-                        getCellAddress( nColOffset + nDomain, mnRowCount );
-                    }
-                    else
-                    {
-                        getCellAddress( nColOffset, nRowOffset + nDomain );
-                        msStringBuffer.append( (sal_Unicode) ':' );
-                        getCellAddress( mnColCount, nRowOffset + nDomain );
-                    }
+
+                    getCellAddress( nDomain + nSeriesOffset, nDataPointOffset );
+                    msStringBuffer.append( (sal_Unicode) ':' );
+                    getCellAddress( nDomain + nSeriesOffset, nDataPointOffset + mnSeriesLength - 1 );
                 }
                 else
                 {
@@ -1086,16 +1068,23 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         sal_Int32 nRepeated = 1;
         if( mxExpPropMapper.is())
         {
-            const sal_Int32 nSeriesCount =
-                ( bRowSourceColumns ? mnRowCount: mnColCount );
             sal_Bool bIsEmpty = sal_False;
             rtl::OUString aLastASName;
             aASName = rtl::OUString();
 
-            for( sal_Int32 nElement = 0; nElement < nSeriesCount; nElement++ )
+            for( sal_Int32 nElement = 0; nElement < mnSeriesLength; nElement++ )
             {
                 // get property states for autostyles
-                xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
+                try
+                {
+                    xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
+                }
+                catch( uno::Exception aEx )
+                {
+                    String aStr( aEx.Message );
+                    ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
+                    DBG_ERROR1( "Exception caught during Export of data point: %s", aBStr.GetBuffer());
+                }
                 if( xPropSet.is())
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                 bIsEmpty = ( aPropertyStates.size() == 0 );
@@ -1807,6 +1796,24 @@ void SchXMLExportHelper::addSize( uno::Reference< drawing::XShape > xShape )
     }
 }
 
+void SchXMLExportHelper::swapDataArray( com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< double > >& rSequence )
+{
+    sal_Int32 nOuterSize = rSequence.getLength();
+    sal_Int32 nInnerSize = rSequence[0].getLength();    // assume that all subsequences have same length
+    sal_Int32 i, o;
+
+    uno::Sequence< uno::Sequence< double > > aResult( nInnerSize );
+    uno::Sequence< double >* pArray = aResult.getArray();
+    for( i = 0; i < nInnerSize; i++ )
+    {
+        pArray->realloc( nOuterSize );
+        for( o = 0 ; o < nOuterSize ; o++ )
+            aResult[ i ][ o ] = rSequence[ o ][ i ];
+    }
+
+    rSequence = aResult;
+}
+
 // ========================================
 // class SchXMLExport
 // ========================================
@@ -1907,6 +1914,7 @@ void SchXMLExport::SetProgress( sal_Int32 nPercentage )
     if( mxStatusIndicator.is())
         mxStatusIndicator->setValue( nPercentage );
 }
+
 
 // export components ========================================
 
