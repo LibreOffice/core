@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatusDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:13:53 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,10 @@
 
 package com.sun.star.wizards.web;
 
-import com.sun.star.awt.*;
+import com.sun.star.awt.XButton;
+import com.sun.star.awt.XFixedText;
+import com.sun.star.awt.XProgressBar;
+import com.sun.star.awt.XWindowListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Renderer;
@@ -93,6 +96,10 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     private boolean enableBreak = false;
     private boolean closeOnFinish = true;
     private MethodInvocation finishedMethod;
+
+    private UnoDialog parent;
+
+    private boolean finished;
 
     /**
      * Note on the argument resource:
@@ -146,6 +153,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     }
 
     private void setStatus(int status) {
+        if (finished) return;
         progressBar.setValue(status);
     }
 
@@ -161,6 +169,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * @param max
      */
     private void setMax(int max) {
+        if (finished) return;
         Helper.setUnoPropertyValue(getModel(progressBar),"ProgressValueMax", new Integer(max));
     }
 
@@ -169,6 +178,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * to the given event.
      */
     public void taskStarted(TaskEvent te) {
+        finished = false;
         initProgressBar(te.getTask());
     }
 
@@ -176,10 +186,18 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * closes the dialog.
      */
     public void taskFinished(TaskEvent te) {
-          if (closeOnFinish)
+        finished = true;
+        if (closeOnFinish) {
               xDialog.endExecute();
-          else
-              Helper.setUnoPropertyValue(getModel(btnCancel),"Label",res[2]);
+            //parent.xWindow.setEnable(true);
+            try {
+               xComponent.dispose();
+               //System.out.println("disposed");
+            }
+            catch (Exception ex) {ex.printStackTrace();}
+         }
+         else
+               Helper.setUnoPropertyValue(getModel(btnCancel),"Label",res[2]);
     }
 
     /**
@@ -209,12 +227,13 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      * @param parent the parent dialog
      * @param r what to do
      */
-    public void execute(final UnoDialog parent, final Task task, Runnable r) {
+    public void execute(final UnoDialog parent_, final Task task, Runnable r, String title) {
         try {
+            this.parent = parent_;
             runnable = r;
-
-            new Thread() {
-                public void run() {
+            Helper.setUnoPropertyValue( this.xDialogModel, "Title", title );
+            //new Thread() {
+              //  public void run() {
                     try {
                         //TODO change this to another execute dialog method.
                         task.addTaskListener(StatusDialog.this);
@@ -230,8 +249,8 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-            }.start();
+                //}
+            //}.start();
 
         }
         catch (Exception ex) {
@@ -252,6 +271,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
      */
     public void performRunnable() {
         new Thread(runnable).start();
+        //runnable.run();
     }
 
     /**
@@ -275,5 +295,6 @@ public class StatusDialog extends UnoDialog2 implements TaskListener {
     public void setFinishedMethod(MethodInvocation mi) {
         finishedMethod = mi;
     }
+
 
 }
