@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-07 14:40:51 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 12:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ using namespace ::ucb;
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+//#include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -369,13 +369,16 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
     INetURLObject aURL( NewFolderURL, INET_PROT_FILE );
     String aNewFolderURLStr = aURL.GetMainURL();
     String aTitle = aURL.getName();
-    aURL.removeSegment();
-
-    // Does the base folder exist? Otherwise create it first
-    String aBaseFolderURLStr = aURL.GetMainURL();
-    if( !isFolder( aBaseFolderURLStr ) )
+    if ( aTitle.Len() )
     {
-        createFolder( aBaseFolderURLStr );
+        aURL.removeSegment();
+
+        // Does the base folder exist? Otherwise create it first
+        String aBaseFolderURLStr = aURL.GetMainURL();
+        if( !isFolder( aBaseFolderURLStr ) )
+        {
+            createFolder( aBaseFolderURLStr );
+        }
     }
 
     Sequence<OUString> aNames(2);
@@ -531,17 +534,18 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
+/*
     InsertCommandArgument aInsertArg;
     aInsertArg.Data = Reference< XInputStream >();
     aInsertArg.ReplaceExisting = sal_True;
-
+*/
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
     Content aCnt( aFileObj.GetMainURL(), mxEnvironment );
     Any aCmdArg;
+/*
     aCmdArg <<= aInsertArg;
     aCnt.executeCommand( OUString::createFromAscii( "insert" ), aCmdArg );
-
-
+*/
     Reference< XActiveDataStreamer > xSink = (XActiveDataStreamer*)new OActiveDataStreamer();
     Reference< XInterface > xSinkIface = Reference< XInterface >::query( xSink );
 
