@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:05:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 #define ITEMID_SCRIPTSPACE 0
 #define ITEMID_HANGINGPUNCTUATION 0
 #define ITEMID_FRAMEDIR 0
+#define ITEMID_CHARHIDDEN 0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -174,6 +175,7 @@
 #include "hngpnctitem.hxx"
 #include "scriptspaceitem.hxx"
 #include "frmdiritem.hxx"
+#include "charhiddenitem.hxx"
 
 
 #ifndef _RTFTOKEN_H
@@ -386,7 +388,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_INTBL:
             case RTF_PAGEBB:
             case RTF_SBYS:
-            case RTF_V:
             case RTF_CS:
             case RTF_LS:
             case RTF_ILVL:
@@ -1108,21 +1109,26 @@ ATTR_SETEMPHASIS:
                 break;
 
             case RTF_EMBO:
-                if( PLAINID->nRelief )
+                if (PLAINID->nRelief)
                 {
-                    pSet->Put( SvxCharReliefItem( RELIEF_EMBOSSED,
-                                                    PLAINID->nRelief ));
+                    pSet->Put(SvxCharReliefItem(RELIEF_EMBOSSED,
+                        PLAINID->nRelief));
                 }
                 break;
-
             case RTF_IMPR:
-                if( PLAINID->nRelief )
+                if (PLAINID->nRelief)
                 {
-                    pSet->Put( SvxCharReliefItem( RELIEF_ENGRAVED,
-                                                    PLAINID->nRelief ));
+                    pSet->Put(SvxCharReliefItem(RELIEF_ENGRAVED,
+                        PLAINID->nRelief));
                 }
                 break;
-
+            case RTF_V:
+                if (PLAINID->nHidden)
+                {
+                    pSet->Put(SvxCharHiddenItem(nTokenValue != 0,
+                        PLAINID->nHidden));
+                }
+                break;
             case RTF_CHBGFDIAG:
             case RTF_CHBGDKVERT:
             case RTF_CHBGDKHORIZ:
