@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-16 11:14:00 $
+#   last change: $Author: hr $ $Date: 2004-12-17 11:51:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,10 @@ USE_LDUMP2=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_GTK)" == "TRUE"
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
+.ENDIF         # "$(ENABLE_GTK)" == "TRUE"
 
 # --- fps dynlib ----------------------------------------------
 
