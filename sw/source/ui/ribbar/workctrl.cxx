@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 12:24:41 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
 void SwTbxInsertCtrl::Select( BOOL bMod1 )
 {
     if(nLastSlotId)
-        SfxViewFrame::Current()->GetDispatcher()->Execute(nLastSlotId);
+        GetBindings().Execute(nLastSlotId);
 }
 
 /**********************************************************************
@@ -385,7 +385,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
 
     if (GetId() == FN_INSERT_FIELD_CTRL)
     {
-        SfxViewFrame::Current()->GetDispatcher()->Execute(nId);
+        GetBindings().Execute(nId);
     }
     else
     {
@@ -581,9 +581,11 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     }
     else
     {
+        const SfxPoolItem* aItems[2];
         SfxBoolItem aNext(FN_SCROLL_NEXT_PREV, NID_NEXT == nSet);
-        SfxViewFrame::Current()->GetDispatcher()->
-                Execute(FN_SCROLL_NEXT_PREV,SFX_CALLMODE_SYNCHRON ,&aNext, 0L);
+        aItems[0] = &aNext;
+        aItems[1] = NULL;
+        GetBindings().ExecuteSynchron(FN_SCROLL_NEXT_PREV,aItems, 0L);
     }
     return 0;
 }
