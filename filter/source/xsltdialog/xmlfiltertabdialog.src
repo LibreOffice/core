@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:52:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,19 @@ TabDialog DLG_XML_FILTER_TABDIALOG
                 Text[ korean ] = "일반";
                 Text[ chinese_simplified ] = "常规";
                 Text[ chinese_traditional ] = "一般";
+                Text[ portuguese ] = "Geral";
+                Text[ russian ] = "�����";
+                Text[ greek ] = "������";
+                Text[ dutch ] = "Algemeen";
+                Text[ finnish ] = "Yleist�";
+                Text[ czech ] = "Obecné";
+                Text[ polish ] = "Og�lne";
+                Text[ portuguese_brazilian ] = "Geral";
+                Text[ arabic ] = "���";
+                Text[ hebrew ] = "‮כללי‬";
+                Text[ catalan ] = "Continguts";
+                Text[ thai ] = "ทั่วไป";
+                Text[ slovak ] = "Všeobecné";
             };
             PageItem RID_XML_FILTER_TABPAGE_XSLT
             {
@@ -99,11 +112,12 @@ TabDialog DLG_XML_FILTER_TABDIALOG
                 Text[ french ] = "Transformation";
                 Text[ spanish ] = "Transformaci�n";
                 Text[ italian ] = "Trasformazione";
-                Text[ swedish ] = "Omvandling";
+                Text[ swedish ] = "Transformering";
                 Text[ japanese ] = "変換";
                 Text[ korean ] = "변환";
                 Text[ chinese_simplified ] = "转换";
                 Text[ chinese_traditional ] = "轉換";
+                Text[ slovak ] = "Transformácia";
             };
         };
     };
@@ -115,6 +129,9 @@ TabDialog DLG_XML_FILTER_TABDIALOG
     Text[ korean ] = "XML 필터: %s";
     Text[ chinese_simplified ] = "XML 筛选器：%s";
     Text[ chinese_traditional ] = "XML 篩選器: %s";
+    Text[ slovak ] = "XML Filter: %s";
 };
+
+
 
 
