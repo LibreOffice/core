@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:22:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "αΗ νζΜΟ ήΗγζΣ γΡΗΟέΗΚ ααΫΙ ΗαΚν Κγ ΚΝΟνΟεΗ.\nΗαΡΜΗΑ έΝΥ ΗαΚΛΘνΚ ΗαΞΗΥ Θί΅ Λγ ΗαήνΗγ ΘΚΛΘνΚ ΗααΫΙ ΗαγΨαζΘΙ΅ ΕΠΗ αÒγ ΗαΓγΡ";
         Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "ζ‚¨ζ‰€θ®Ύε®η„θ―­θ¨€ζ²΅ζ‰η›ΈεΊ”η„εδΉ‰θ―θ―ε…Έγ€‚\nθ―·ζ‚¨ζ£€ζ¥ε®‰θ£…οΌε¦‚ζ‰εΏ…θ¦οΌθ―·ζ‚¨ε®‰θ£…ζ‰€θ¦δ½Ώη”¨η„θ―­θ¨€η‰ζ¬γ€‚";
-        Text[ greek ] = "Δεν υπάρχει διαθέσιμος θησαυρός λέξεων για την επιλεγμένη \nγλώσσα. Παρακαλώ ελέγξτε την εγκατάσταση και, αν χρειαστεί, εκτελέστε την εγκατ ";
+        Text[ greek ] = "Δεν υπάρχει θησαυρός διαθέσιμος για την τρέχουσα γλώσσα.\nΕλέγξτε την εγκατάσταση και εγκαταστήστε τη γλώσσα που θέλετε";
         Text[ korean ] = "μ„¤μ •λ μ–Έμ–΄μ— λ€ν• λ™μμ–΄ μ‚¬μ „μ„ μ‚¬μ©ν•  μ μ—†μµλ‹λ‹¤.\nμ„¤μΉ μƒνƒλ¥Ό κ²€μ‚¬ν• λ‹¤μ ν•„μ”ν•λ©΄ μ›ν•λ” μ–Έμ–΄λ¥Ό μ„¤μΉν•μ‹­μ‹μ¤";
         Text[ turkish ] = "Ayarlanan dile iliώkin eώanlamlύlar mevcut deπil.\nLόtfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
@@ -319,7 +319,7 @@ Resource RID_SVXERRCODE
         TEXT[ english_us ] = "$(ARG1) is not supported by the spellcheck function or is not presently active.\nPlease check your installation and, if necessary, install the required language module\n or activate it under 'Tools - Options -  Language Settings - Writing Aids'.";
         TEXT[ portuguese ] = "$(ARG1) nγo tem suporte para verificaηγo ortogrαfica ou encontra-se desactivado. \nConfira a sua instalaηγo e, se necessαrio, instale o mσdulo linguνstico desejado\nou entγo active-o em 'Ferramentas - Opηυes - Configuraηγo da lνngua - Linguνstica'.";
         TEXT[ russian ] = "$(ARG1) ÿηϋκξβξι μξδσλό νε οξδδεπζθβΰεςρÿ οπξβεπκξι ξπτξγπΰτθθ θλθ β νΰρςξÿωθι μξμενς νεΰκςθβεν. Οπξβεπόςε σρςΰνξβκσ θ, β ρλσχΰε νεξαυξδθμξρςθ, σρςΰνξβθςε ςπεασεμϋε ÿηϋκξβϋε μξδσλθ θλθ βκλώχθςε δΰννϋι ÿηϋκξβξι μξδσλό β 'Ρεπβθρ - Οΰπΰμεςπϋ - Νΰρςπξικθ ÿηϋκΰ - Λθνγβθρςθκΰ'.";
-        TEXT[ greek ] = "$(ARG1) δεν είναι διαθέσιμο για τον ορθογραφικό έλεγχο.\nΠαρακαλώ ελέγξτε την εγκατάσταση και εγκαταστήστε αν χρειαστεί την γλώσσα που επιθυμ? ";
+        TEXT[ greek ] = "Το $(ARG1) δεν υποστηρίζεται από τη λειτουργία ορθογραφικού ελέγχου ή δεν είναι ενεργό αυτήν τη στιγμή.\nΕλέγξτε την εγκατάσταση και, αν είναι απαραίτητο,\nεγκαταστήστε τη λειτουργική μονάδα της γλώσσας που θέλετε ή ενεργοποιήστε την\nαπό την επιλογή \"Εργαλεία - Επιλογές -  Ρυθμίσεις γλώσσας - Βοηθήματα γραφής\".";
         TEXT[ dutch ] = "$(ARG1) wordt niet ondersteund door de controle, of is momenteel niet geactiveerd. \nControleer uw installatie en installeer eventueel de gewenste taalmodule\nof activeer de betreffende taalmodule onder 'Extra - Opties - Taalinstellingen - Linguοstiek' ";
         TEXT[ french ] = "$(ARG1) n'est pas supportι par la vιrification ou n'est actuellement pas actif.\nVιrifiez l'installation et installez le cas ιchιant le module de langue requis, ou activez-le sous 'Outils - Options - Paramθtres linguistiques - Linguistique'.";
         TEXT[ spanish ] = "$(ARG1) no estα disponible para la revisiσn ortogrαfica o no estα activo en este momento.\n Examine la instalaciσn e instale en caso dado el idioma deseado\no active el mσdulo correspondiente en 'Herramientas - Opciones - Configuraciσn de idiomas - Lingόνstica'.";
@@ -328,7 +328,7 @@ Resource RID_SVXERRCODE
         TEXT[ danish ] = "$(ARG1) understψttes ikke af kontrollen eller er ikke aktiveret i ψjeblikket.\nKontroller installationen, og installer eventuelt det nψdvendige sprogmodul,\neller aktiver det pεgζldende sprogmodul under 'Supplerende - Indstillinger -  Sprogindstillinger - Lingvistik'.";
         TEXT[ swedish ] = "$(ARG1) stφds inte av kontrollen resp., δr inte aktiverat fφr nδrvarande.\nKontrollera installationen och installera eventuellt den nφdvδndiga sprεkmodulen\nresp. aktivera motsvarande sprεkmodul under \"Verktyg - Alternativ - Sprεkinstδllningar - Lingvistik\".";
         TEXT[ polish ] = "$(ARG1) nie jest obs³ugiwany przez funkcjκ sprawdzania pisowni albo nie jest teraz aktywny.\nSprawd instalacjκ i ewentualnie zainstaluj wymagany modu³ jκzyka\nlub uaktywnij go, wydajΉc sekwencjκ poleceρ 'Narzκdzia - Opcje - Konfiguracja jκzykσw - Pisownia'.";
-        TEXT[ portuguese_brazilian ] = "$(ARG1) nγo possui suporte para verificaηγo ortogrαfica ou encontra-se desativado. \nConfira a sua instalaηγo e, se necessαrio, instale o mσdulo linguνstico desejado\nou entγo active-o em 'Ferramentas - Opηυes - Configuraηγo do Idioma - Linguνstica'.";
+        TEXT[ portuguese_brazilian ] = "$(ARG1) nγo possui suporte para verificaηγo ortogrαfica ou encontra-se desativado. \nConfira a sua instalaηγo e, se necessαrio, instale o mσdulo lingόνstico desejado\nou entγo ative-o em 'Ferramentas - Opηυes - Configuraηγo do Idioma - Lingόνstica'.";
         TEXT[ japanese ] = "$(ARG1)γ®γ‚Ήγƒγƒ«γƒγ‚§γƒƒγ‚―γ―ζ”―ζ΄γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚γ‚γ‚‹γ„γ―ηΎε¨γ‚Άγ‚―γƒ†γ‚£γƒ–γ§γ―γ‚γ‚γΎγ›γ‚“γ€‚\nγ‚¤γƒ³γ‚ΉγƒγƒΌγƒ«γ•γ‚γ¦γ„γ‚‹γƒ—γƒ­γ‚°γƒ©γƒ γ‚’γƒγ‚§γƒƒγ‚―γ—γ¦γ€εΏ…θ¦γ«εΏγγ¦γ‚Ήγƒγƒ«γƒγ‚§γƒƒγ‚―γ«εΏ…θ¦γªθ¨€θªγ‚’γ‚¤γƒ³γ‚Ήγƒ-γƒ«γ™γ‚‹γ‹γ€\nγƒ΅γƒ‹γƒ¥γƒΌ γƒ„γƒΌγƒ« β†’ γ‚ªγƒ—γ‚·γƒ§γƒ³ β†’ θ¨€θªθ¨­ε® β†’ ζ–‡η« ζ ΅ζ­£γ§εΏ…θ¦γªθ¨€θªγƒΆγ‚Έγƒ¥γƒΌγƒ«γ‚’γ‚ªγƒ³γ«γ—γΎγ™γ€‚";
         TEXT[ korean ] = "$(ARG1)μ€(λ”) λ§μ¶¤λ²• κ²€μ‚¬μ—μ„ μ§€μ›ν•μ§€ μ•κ±°λ‚ ν™μ„±ν™”λμ§€ μ•μ•μµλ‹λ‹¤.\n μ„¤μΉλ¥Ό μ κ²€ν•΄λ³΄μ‹­μ‹μ¤. ν•„μ”ν• μ–Έμ–΄ λª¨λ“μ„ μ„¤μΉν•κ±°λ‚ [λ„κµ¬] - [μµμ…] - [μ–Έμ–΄ μ„¤μ •] - [λ§μ¶¤λ²• κµμ •] λ©”λ‰΄μ—μ„ ν•΄λ‹Ήν•λ” μ–Έμ–΄ λª¨λ“μ„ ν™μ„±ν™”ν•΄μ•Ό ν•  μλ„ μμµλ‹λ‹¤.";
         TEXT[ chinese_simplified ] = "$(ARG1)δΈζ”―ζζ‹Όε†™ζ£€ζ¥εθƒ½ζ–θ€…η›®ε‰ζªε―η”¨θ―¥εθƒ½γ€‚\nθ―·ζ‚¨ζ£€ζ¥ε®‰θ£…οΌε¦‚ζ‰εΏ…θ¦θ―·ε®‰θ£…ζ‰€ι€η„θ―­θ¨€ζ¨΅ε—\nζ–θ€…ε€ε©θε•ε‘½δ»¤β€ε·¥ε…· - ι€‰ι΅Ή... - θ―­θ¨€θ®Ύε® - θ―­θ¨€θ§„ε™β€ε―η”¨η›ΈεΊ”η„θ―­θ¨€ζ¨΅ε—γ€‚";
@@ -703,7 +703,7 @@ Resource RID_SVXERRCODE
         Text[ english_us ] = "An error occurred while reading one of the bullets. Not all of the bullets were loaded.";
         Text[ portuguese ] = "Surgiu um erro durante a leitura de uma marca. Foi impossνvel carregα-las todas.";
         Text[ russian ] = "Ξψθακΰ χςενθÿ μΰπκεπΰ. Νε σδΰεςρÿ ηΰγπσηθςό βρε μΰπκεπϋ.";
-        Text[ greek ] = "Κατά την ανάγνωση μιας κουκίδας παρουσιάστηκε ένα σφάλμα. Δεν ήταν δυνατόν να γίνει φόρτωση όλων των κουκίδων";
+        Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την ανάγνωση μιας από τις κουκίδες. Δεν φορτώθηκαν όλες οι κουκίδες.";
         Text[ dutch ] = "Fout bij laden van opsommingsteken. Niet alle tekens kunnen worden geladen.";
         Text[ french ] = "Une erreur s'est produite pendant la lecture d'une puce. Certaines puces n'ont pas pu κtre chargιes.";
         Text[ spanish ] = "Ha ocurrido un error al leer una viρeta. No se pudieron cargar todas las viρetas.";
@@ -792,6 +792,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
