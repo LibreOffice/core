@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:58:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,26 +705,27 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
 
     switch( aLVL.nNFC )
     {
-        case   0:
+        case 0:
             eType = SVX_NUM_ARABIC;
             break;
-        case   1:
+        case 1:
             eType = SVX_NUM_ROMAN_UPPER;
             break;
-        case   2:
+        case 2:
             eType = SVX_NUM_ROMAN_LOWER;
             break;
-        case   3:
+        case 3:
             eType = SVX_NUM_CHARS_UPPER_LETTER_N;
             break;
-        case   4:
+        case 4:
             eType = SVX_NUM_CHARS_LOWER_LETTER_N;
             break;
-        case   5:
+        case 5:
             // eigentlich: ORDINAL
             eType = SVX_NUM_ARABIC;
             break;
-        case  23:
+        case 23:
+        case 25:    //#114412#
             eType = SVX_NUM_CHAR_SPECIAL;
             break;
         case 255:
@@ -1254,25 +1255,25 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 memset(&aItemSet, 0,  sizeof( aItemSet ));
                 memset(&aCharFmt, 0,  sizeof( aCharFmt ));
 
+                //2.2.2.0 skip inter-group of override header ?
+                //See #i25438# for why I moved this here, compare
+                //that original bugdoc's binary to what it looks like
+                //when resaved with word, i.e. there is always a
+                //4 byte header, there might be more than one if
+                //that header was 0xFFFFFFFF, e.g. #114412# ?
+                sal_uInt32 nTest;
+                rSt >> nTest;
+                do
+                    rSt >> nTest;
+                while (nTest == 0xFFFFFFFF);
+                rSt.SeekRel(-4);
+
                 std::deque<bool> aNotReallyThere(WW8ListManager::nMaxLevel);
                 sal_uInt8 nLevel = 0;
                 for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     WW8LFOLVL aLFOLVL;
                     bLVLOk = false;
-
-                    //
-                    // 2.2.2.0 fuehrende 0xFF ueberspringen
-                    //
-                    sal_uInt8 n1;
-                    do
-                    {
-                        rSt >> n1;
-                        if (rSt.GetError())
-                            break;
-                    }
-                    while( 0xFF == n1 );
-                    rSt.SeekRel( -1 );
 
                     //
                     // 2.2.2.1 den LFOLVL einlesen
