@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 16:58:53 $
+ *  last change: $Author: os $ $Date: 2001-04-17 10:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,20 +288,11 @@ hidspecial HID_TABORDER_CONTROLS            { HelpId = HID_TABORDER_CONTROLS    
 
 hidspecial HID_POPUP_LINEEND                { HelpId = HID_POPUP_LINEEND            ;};
 hidspecial HID_POPUP_LINEEND_CTRL           { HelpId = HID_POPUP_LINEEND_CTRL       ;};
-hidspecial HID_BORDER_DISTANCE_DLG      { HelpId = HID_BORDER_DISTANCE_DLG ;};
 
 hidspecial HID_PROP_EFFECTIVEMIN        { HelpId = HID_PROP_EFFECTIVEMIN ;};
 hidspecial HID_PROP_EFFECTIVEMAX        { HelpId = HID_PROP_EFFECTIVEMAX ;};
 hidspecial HID_PROP_EFFECTIVEDEFAULT    { HelpId = HID_PROP_EFFECTIVEDEFAULT ;};
 hidspecial HID_PROP_CONTROLLABEL        { HelpId = HID_PROP_CONTROLLABEL ;};
-
-hidspecial HID_BORDER_DISTANCE_DLG_LEFT     { HelpID =      HID_BORDER_DISTANCE_DLG_LEFT          ;};
-hidspecial HID_BORDER_DISTANCE_DLG_RIGHT    { HelpID =         HID_BORDER_DISTANCE_DLG_RIGHT      ;};
-hidspecial HID_BORDER_DISTANCE_DLG_TOP      { HelpID =         HID_BORDER_DISTANCE_DLG_TOP        ;};
-hidspecial HID_BORDER_DISTANCE_DLG_BOTTOM   { HelpID =         HID_BORDER_DISTANCE_DLG_BOTTOM     ;};
-hidspecial HID_BORDER_DISTANCE_DLG_HELP_PB  { HelpID =        HID_BORDER_DISTANCE_DLG_HELP_PB     ;};
-hidspecial HID_BORDER_DISTANCE_DLG_SYNC_CB  { HelpID =        HID_BORDER_DISTANCE_DLG_SYNC_CB     ;};
-hidspecial HID_BORDER_DISTANCE_DLG_EXAMPLE  { HelpID =        HID_BORDER_DISTANCE_DLG_EXAMPLE     ;};
 
 hidspecial HID_GRID_TRAVEL_FIRST            { HelpID = HID_GRID_TRAVEL_FIRST ;};
 hidspecial HID_GRID_TRAVEL_PREV             { HelpID = HID_GRID_TRAVEL_PREV ;};
