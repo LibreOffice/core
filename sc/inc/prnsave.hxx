@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsave.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:48:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_PRNSAVE_HXX
 #define SC_PRNSAVE_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -96,16 +100,16 @@ public:
 
 class ScPrintRangeSaver
 {
-    USHORT              nTabCount;
+    SCTAB               nTabCount;
     ScPrintSaverTab*    pData;      // Array
 
 public:
-            ScPrintRangeSaver( USHORT nCount );
+            ScPrintRangeSaver( SCTAB nCount );
             ~ScPrintRangeSaver();
 
-    USHORT                  GetTabCount() const     { return nTabCount; }
-    ScPrintSaverTab&        GetTabData(USHORT nTab);
-    const ScPrintSaverTab&  GetTabData(USHORT nTab) const;
+    SCTAB                   GetTabCount() const     { return nTabCount; }
+    ScPrintSaverTab&        GetTabData(SCTAB nTab);
+    const ScPrintSaverTab&  GetTabData(SCTAB nTab) const;
 
     BOOL    operator==( const ScPrintRangeSaver& rCmp ) const;
 };
