@@ -38,9 +38,5 @@ $(CLASSFILES) : $(OUT) $(OUT_CLASS) $(JAVAFILES)
 notesaccess: $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute
-	@echo java -classpath $(subst \\,\,$(DK_CLASSPATH)) NotesAccess
+	@echo java -classpath $(subst \\,\,$(DK_CLASSPATH)) NotesAccess $(OSEP)Connection$(CSEP) $(OSEP)Host$(CSEP) $(OSEP)User$(CSEP) $(OSEP)Password$(CSEP) $(OSEP)Database$(CSEP)
 	@echo --------------------------------------------------------------------------------
-
-run :
-	java -classpath $(DK_CLASSPATH) WriterSelector
-

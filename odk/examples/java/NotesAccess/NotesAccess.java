@@ -23,25 +23,64 @@ import com.sun.star.table.XCell;
  * with existing values of documents from a Lotus Notes database.
  */
 public class NotesAccess implements Runnable {
+  /** Connection to the office.
+   */
+  static String stringOfficeConnection = "";
+
   /** Host server of the Domino Directory.
    */
-  String stringHost = null;
+  static String stringHost = "";
 
   /** User in the host's Domino Directory.
    */
-  String stringUser = "";
+  static String stringUser = "";
 
   /** Password for the user in the host's Domino Directory.
    */
-  String stringPassword = "";
+  static String stringPassword = "";
+
+  /** Database with documents to get data from.
+   */
+  static String stringDatabase = "";
 
   /** Reading the arguments and constructing the thread.
    * @param argv Holding values for the host, user, and the password of the user.
    */
-  public static void main( String argv[] ) {
+  public static void main( String args[] ) {
     Thread thread;
 
-    if( argv.length < 1 ) {
+    if ( args.length < 5 ) {
+      System.out.println(
+      "usage: java -classpath .;<Office path>/program/classes/jurt.jar;" +
+      "<Office path>/program/classes/ridl.jar;" +
+      "<Office path>/program/classes/sandbox.jar;" +
+      "<Office path>/program/classes/unoil.jar;" +
+      "<Office path>/program/classes/juh.jar " +
+      "DocumentSaver \"<Connection>\" \"<Domino Host>\" \"<User>\" \"<Password>\" \"<Database>\"" );
+      System.out.println( "\ne.g.:" );
+      System.out.println(
+      "java -classpath .;d:/office60/program/classes/jurt.jar;" +
+      "d:/office60/program/classes/ridl.jar;" +
+      "d:/office60/program/classes/sandbox.jar;" +
+      "d:/office60/program/classes/unoil.jar; " +
+      "d:/office60/program/classes/juh.jar " +
+      "DocumentSaver \"socket,host=localhost,port=8100;urp\"" +
+      " \"\" \"\" \"\" " +
+      "\"F:\\odk3.0.0\\examples\\java\\NotesAccess\\Stocks.nsf\"" );
+      System.exit( 1 );
+    }
+
+    stringOfficeConnection = args[ 0 ].trim();
+    if ( !args[ 1 ].trim().equals( "" ) ) {
+      stringHost = args[ 1 ].trim();
+    }
+    if ( !args[ 2 ].trim().equals( "" ) ) {
+      stringUser = args[ 2 ].trim();
+    }
+    stringPassword = args[ 3 ].trim();
+    stringDatabase = args[ 4 ].trim();
+
+    if ( stringHost.equals( "" ) ) {
       // Initializing.
       NotesAccess notesaccess = new NotesAccess();
 
@@ -50,7 +89,7 @@ public class NotesAccess implements Runnable {
     }
     else {
       // Extracting the host, user, and password.
-      NotesAccess notesaccess = new NotesAccess( argv );
+      NotesAccess notesaccess = new NotesAccess();
 
       // Allowing remote calls to the Domino classes.
       thread = new Thread( ( Runnable ) notesaccess );
@@ -58,24 +97,6 @@ public class NotesAccess implements Runnable {
 
     // Starting the thread.
     thread.start();
-  }
-
-  /** The constructor extracts the values for the host, user, and password given
-   * as arguments.
-   * @param argv Holding values for the host, user, and the password of the user.
-   */
-  public NotesAccess( String argv[] ) {
-    // Getting the host.
-    stringHost = argv[ 0 ];
-
-    if ( argv.length >= 2 ) {
-      // Getting the user.
-      stringUser = argv[ 1 ];
-    }
-    if ( argv.length >= 3 ) {
-      // Getting the password for the user.
-      stringPassword = argv[ 2 ];
-    }
   }
 
   /** This is the default constructor without arguments.
@@ -93,6 +114,19 @@ public class NotesAccess implements Runnable {
       XMultiServiceFactory xmultiservicefactory =
       com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
 
+      // NOTE: This is special code, that is only necessary, when connecting to
+      //       a Sun ONE Webtop !
+      // Connection: "portal,host=<portalhost>,port=<port>,service=soffice,user=<username>,password=<passwd>"
+      if ( stringOfficeConnection.regionMatches( 0, "portal", 0, 6 ) ) {
+        com.sun.star.loader.XImplementationLoader ximplementationloader =
+        ( com.sun.star.loader.XImplementationLoader ) UnoRuntime.queryInterface(
+        com.sun.star.loader.XImplementationLoader.class,
+        xmultiservicefactory.createInstance( "com.sun.star.loader.Java" ) );
+        com.sun.star.container.XSet xset = (com.sun.star.container.XSet)
+        UnoRuntime.queryInterface( com.sun.star.container.XSet.class,
+        xmultiservicefactory );
+      }
+
       /* Creates an instance of the component UnoUrlResolver which
          supports the services specified by the factory. */
       Object objectUrlResolver = xmultiservicefactory.createInstance(
@@ -106,7 +140,7 @@ public class NotesAccess implements Runnable {
       // Resolves an object that is specified as follow:
       // uno:<connection description>;<protocol description>;<initial object name>
       Object objectInitial = xurlresolver.resolve(
-      "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" );
+      "uno:"+ stringOfficeConnection + ";StarOffice.ServiceManager" );
 
       // Create a service manager from the initial object
       xmultiservicefactory = ( XMultiServiceFactory )
@@ -154,8 +188,7 @@ public class NotesAccess implements Runnable {
       }
 
       // Getting the specified Notes database.
-      Database database = session.getDatabase( "",
-      "F:\\odk3.0.0\\examples\\java\\NotesAccess\\Stocks.nsf" );
+      Database database = session.getDatabase( "", stringDatabase );
 
       // Getting a collection of all documents from the database.
       DocumentCollection documentcollection = database.getAllDocuments();
