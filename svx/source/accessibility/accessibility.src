@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:28:02 $
+ *  last change: $Author: kz $ $Date: 2002-11-05 06:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,14 +155,14 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
     Text[ danish ] = "none";
     Text[ swedish ] = "Ingen";
     Text[ polish ] = "none";
-    Text[ portuguese_brazilian ] = "none";
+    Text[ portuguese_brazilian ] = "Nenhum";
     Text[ japanese ] = "なし";
     Text[ korean ] = "없음";
     Text[ chinese_simplified ] = "无";
     Text[ chinese_traditional ] = "無";
     Text[ turkish ] = "none";
     Text[ arabic ] = "none";
-    Text[ catalan ] = "none";
+    Text[ catalan ] = "Cap";
     Text[ thai ] = "ไม่มี";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
