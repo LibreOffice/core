@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-02 20:09:43 $
+ *  last change: $Author: rt $ $Date: 2002-08-05 20:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String SV_BUTTONTEXT_OK
     TEXT[ korean ] = "확인";
     TEXT[ turkish ] = "Tamam";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Aceptar";
+    TEXT[ catalan ] = "D'acord";
     TEXT[ finnish ] = "OK";
     TEXT[ thai ] = "ตกลง";
 };
@@ -120,7 +120,7 @@ String SV_BUTTONTEXT_CANCEL
     TEXT[ korean ] = "취소";
     TEXT[ turkish ] = "�ptal";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Cancelar";
+    TEXT[ catalan ] = "Cancel.la";
     TEXT[ finnish ] = "Peruuta";
     TEXT[ thai ] = "ยกเลิก";
 };
@@ -210,7 +210,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ korean ] = "반복(~R)";
     TEXT[ turkish ] = "Y~inele";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Reintentar";
+    TEXT[ catalan ] = "~Reintenta";
     TEXT[ finnish ] = "~Yrit� uudelleen";
     TEXT[ thai ] = "~ลองใหม่";
 };
@@ -240,7 +240,7 @@ String SV_BUTTONTEXT_HELP
     TEXT[ korean ] = "도움말(~H)";
     TEXT[ turkish ] = "~Yard�m";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ay~uda";
+    TEXT[ catalan ] = "~Ajuda";
     TEXT[ finnish ] = "~Ohje";
     TEXT[ thai ] = "~ช่วยเหลือ";
 };
@@ -270,7 +270,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ korean ] = "옵션(~M)";
     TEXT[ turkish ] = "A~yr�nt�lar";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "~Opciones";
+    TEXT[ catalan ] = "~M�s";
     TEXT[ finnish ] = "~Lis��";
     TEXT[ thai ] = "~รายละเอียด";
 };
@@ -279,6 +279,27 @@ String SV_BUTTONTEXT_IGNORE
 {
     Text = "~Ignorieren";
     Text [ English ] = "~Ignore";
+    Text[ english_us ] = "~Ignore";
+    Text[ portuguese ] = "~Ignore";
+    Text[ russian ] = "~Ignore";
+    Text[ greek ] = "~Ignore";
+    Text[ dutch ] = "~Ignore";
+    Text[ french ] = "~Ignore";
+    Text[ spanish ] = "~Ignore";
+    Text[ finnish ] = "~Ignore";
+    Text[ italian ] = "~Ignore";
+    Text[ danish ] = "~Ignore";
+    Text[ swedish ] = "~Ignore";
+    Text[ polish ] = "~Ignore";
+    Text[ portuguese_brazilian ] = "~Ignore";
+    Text[ japanese ] = "~Ignore";
+    Text[ korean ] = "~Ignore";
+    Text[ chinese_simplified ] = "~Ignore";
+    Text[ chinese_traditional ] = "~Ignore";
+    Text[ turkish ] = "~Ignore";
+    Text[ arabic ] = "~Ignore";
+    Text[ catalan ] = "~Ignore";
+    Text[ thai ] = "~Ignore";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
