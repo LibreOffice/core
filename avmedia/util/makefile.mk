@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+#   last change: $Author: vg $ $Date: 2005-03-23 12:32:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,6 +63,8 @@
 PRJ=..
 PRJNAME=avmedia
 TARGET=avmedia
+GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings ----------------------------------
 
