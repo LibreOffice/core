@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
 
- *  last change: $Author: rt $ $Date: 2004-09-20 15:15:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,9 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-        const BYTE nFldDir = rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
+        const BYTE nFldDir = IsNumberPortion() ?
+                             rSI.GetDefaultDir() :
+                             rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
         if ( UBIDI_RTL == nFldDir )
         {
             UErrorCode nError = U_ZERO_ERROR;
@@ -361,24 +363,22 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
         aLayoutModeModifier.SetAuto();
 
+        // Field portion has to be split in several parts if
+        // 1. There are script/direction changes inside the field
+        // 2. There are portion breaks (tab, break) inside the field:
         const xub_StrLen nOldFullLen = rInf.GetLen();
-        const MSHORT nFollow = IsFollow() ? 0 : 1;
-        xub_StrLen nFullLen;
-
-        // Look for portion breaks (special characters like tab, break...)
-        nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(),
-                   rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
-        if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
-            --nFullLen;
+        xub_StrLen nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(), rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
+        if ( nNextScriptChg < nFullLen )
+        {
+            nFullLen = nNextScriptChg;
+            rInf.SetHookChar( 0 );
+        }
+        rInf.SetLen( nFullLen );
 
         if ( STRING_LEN != rInf.GetUnderScorePos() &&
              rInf.GetUnderScorePos() > rInf.GetIdx() )
              rInf.SetUnderScorePos( rInf.GetIdx() );
 
-        // field portion has to break if script changes
-        nFullLen = Min( nFullLen, nNextScriptChg );
-
-        rInf.SetLen( nFullLen );
         if( pFnt )
             pFnt->GoMagic( rInf.GetVsh(), pFnt->GetActual() );
 
@@ -388,6 +388,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         // gesetzt und wird in nRest uebertragen. Ansonsten bleibt die
         // Laenge erhalten und wuerde auch in nRest einfliessen!
         SetLen(0);
+           const MSHORT nFollow = IsFollow() ? 0 : 1;
 
         // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
         // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
