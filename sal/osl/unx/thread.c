@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obr $ $Date: 2001-04-11 11:33:07 $
+ *  last change: $Author: hro $ $Date: 2001-05-09 15:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1118,11 +1118,17 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
     /* check if thread key exists */
     if( -1 == gTextEncodingKey )
     {
-        rtl_TextEncoding defaultEncoding = osl_getTextEncodingFromLocale( NULL );
+        rtl_TextEncoding defaultEncoding;
+
         oslMutex         globalMutex = *osl_getGlobalMutex();
 
         /* creation of thread key must be thread save */
         osl_acquireMutex( globalMutex );
+
+        if ( NULL != (pszEncoding = getenv( "SOLAR_USER_RTL_TEXTENCODING" )) )
+            defaultEncoding = atoi(pszEncoding);
+        else
+            defaultEncoding = osl_getTextEncodingFromLocale( NULL );
 
         if( -1 == gTextEncodingKey )
         {
