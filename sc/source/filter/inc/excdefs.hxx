@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-19 13:24:08 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,13 @@
 #define EXC_SXFIELD_16BIT           0x0200
 
 #define EXC_SXITEM_
+
+//_________________________________________________________
+// defines for web queries
+// (0x00DC) SXEXT, PARAMQRY, (0x0803) WEBQRYSETTINGS
+
+#define EXC_PQRY_TABLES             0x0100
+#define EXC_WQSETT_SPECTABLES       0x0002
 
 //_________________________________________________________
 // defines for change tracking

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-28 13:51:21 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2228,7 +2228,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 UINT16 __nFlags = Read2( rIn );
                 STARTFLAG();
                 ADDFLAG( 0x0001, " fAuto" );
-                ADDFLAG( 0xFFFE, " *UNKNOWN*" );
+                ADDRESERVED( 0xFFFE );
                 UINT16 nCol1, nRow1, nCol2, nRow2;
                 rIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
                 ADDTEXT( "   range: " );        __AddRef( t, nCol1, nRow1 );
@@ -3053,7 +3053,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x00000014, " fDescr" );
                 ADDFLAG( 0x00000008, " fMark" );
                 ADDFLAG( 0x00000100, " fNetwork" );
-                ADDFLAG( 0xFFFFFEE0, " !UNKNOWN!" );
+                ADDRESERVED( 0xFFFFFEE0 );
                 PRINT();
 
                 //description
@@ -3259,20 +3259,30 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 rIn >> __nFlags;
                 STARTFLAG();
-                ADDFLAG( 0x0001, "fImportPRE " );
-                ADDFLAG( 0x0002, "fIgnoreSep " );
-                ADDFLAG( 0x0004, "fUseSetting " );
-                ADDFLAG( 0x0010, "fIgnoreDate " );
-                ADDFLAG( 0x0020, "fWhatIsIt? " );
-                ADDFLAG( 0xFFC8, "!UNKNOWN! " );
+                ADDFLAG( 0x0001, " fImportPRE" );
+                ADDFLAG( 0x0002, " fIgnoreSep" );
+                ADDFLAG( 0x0004, " fUseSetting" );
+                ADDFLAG( 0x0010, " fIgnoreDate" );
+                ADDFLAG( 0x0020, " fWhatIsIt?" );
+                ADDRESERVED( 0xFFC8 );
                 PRINT();
                 LINESTART();
-                ADDTEXT( "unknown: " );
-                for( nCnt = 0; nCnt < 9; nCnt++ )
-                {
-                    ADDTEXT( " " );
-                    ADDHEX( 2 );
-                }
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0002, " fTables" );
+                ADDRESERVED( 0xFFFD );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "unknown: " );             ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "refresh: " );             ADDDEC( 2 );
+                ADDTEXT( "   unknown: " );          ADDHEX( 2 );
+                ADDTEXT( " " );                     ADDHEX( 2 );
                 PRINT();
             }
             break;
@@ -3486,7 +3496,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     ADDFLAG( 0x0001, " fAuto" );
                     ADDFLAG( 0x0010, " fNoBackg" );
                     ADDFLAG( 0x0020, " fNoFore" );
-                    ADDFLAG( 0xFFCE, " UNKNOWN" );
+                    ADDRESERVED( 0xFFCE );
                     PRINT();
                 }
                 LINESTART();
