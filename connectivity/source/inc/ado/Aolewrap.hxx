@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:39:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace connectivity
         // Template-Klasse WpOLEBase<class T>
         // ==================================
         //
-        // Objekte dieser Klasse hält einen Zeiger auf ein Interface vom Typ T.
+        // Objekte dieser Klasse haelt einen Zeiger auf ein Interface vom Typ T.
         // Es gibt Konstruktoren und Zuweisungsoperator die sicherstellen, dass
         // AddRef() und Release() entsprechend den COM-Konventionen gerufen werden.
         // Ein Objekt kann auch keinen Zeiger halten (Nullzeiger), dann ergibt
@@ -170,12 +170,12 @@ namespace connectivity
         // Diese Klasse, welche sich von WpOLEBase<Ts> ableitet, abstrahiert die
         // den DAO-Collections gemeinsamen Eigenschaften:
         //
-        // Sie werden über ein Interface Ts (etwa: DAOFields) angesprochen
+        // Sie werden ueber ein Interface Ts (etwa: DAOFields) angesprochen
         // und koennen ueber get_Item (hier:GetItem) Items des Typs T (genauer:
         // mit Interface T, etwa DAOField) herausgeben.
         //
         // Diese Wrapperklasse gibt aber nicht ein Interface T heraus,
-        // sondern ein Objekt der Klasse WrapT. Dieses muß eine Konstruktion
+        // sondern ein Objekt der Klasse WrapT. Dieses muss eine Konstruktion
         // durch T zulassen, vorzugsweise ist es von WpOLEBase<T> abgeleitet.
         //
 
