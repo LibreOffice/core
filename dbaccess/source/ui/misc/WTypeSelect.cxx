@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 14:33:48 $
+ *  last change: $Author: hr $ $Date: 2002-05-15 09:25:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,8 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ImageList aImageList(ModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS));
+    ModuleRes aModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS);
+    ImageList aImageList(aModuleRes);
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     m_aTypeControl.Show();
