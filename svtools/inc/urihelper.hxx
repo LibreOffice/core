@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 14:23:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #define SVTOOLS_URIHELPER_HXX
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
@@ -79,6 +82,11 @@
 #include <tools/urlobj.hxx>
 #endif
 
+namespace com { namespace sun { namespace star {
+    namespace uno { class XComponentContext; }
+    namespace uri { class XUriReference; }
+} } }
+namespace rtl { class OUString; }
 class ByteString;
 class CharClass;
 class UniString;
@@ -120,38 +128,56 @@ void SetMaybeFileHdl(Link const & rTheMaybeFileHdl);
 //============================================================================
 Link GetMaybeFileHdl();
 
-//============================================================================
-inline UniString
-SmartRelToAbs(ByteString const & rTheRelURIRef,
-              bool bIgnoreFragment = false,
-              INetURLObject::EncodeMechanism eEncodeMechanism
-                  = INetURLObject::WAS_ENCODED,
-              INetURLObject::DecodeMechanism eDecodeMechanism
-                  = INetURLObject::DECODE_TO_IURI,
-              rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-              INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT)
-{
-    return SmartRel2Abs(INetURLObject(INetURLObject::GetBaseURL()),
-                        rTheRelURIRef, GetMaybeFileHdl(), true,
-                        bIgnoreFragment, eEncodeMechanism, eDecodeMechanism,
-                        eCharset, false, eStyle);
-}
+/**
+   Converts a URI reference to a relative one, ignoring certain differences (for
+   example, treating file URLs for case-ignoring file systems
+   case-insensitively).
 
-inline UniString
-SmartRelToAbs(UniString const & rTheRelURIRef,
-              bool bIgnoreFragment = false,
-              INetURLObject::EncodeMechanism eEncodeMechanism
-                  = INetURLObject::WAS_ENCODED,
-              INetURLObject::DecodeMechanism eDecodeMechanism
-                  = INetURLObject::DECODE_TO_IURI,
-              rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
-              INetURLObject::FSysStyle eStyle = INetURLObject::FSYS_DETECT)
-{
-    return SmartRel2Abs(INetURLObject(INetURLObject::GetBaseURL()),
-                        rTheRelURIRef, GetMaybeFileHdl(), true,
-                        bIgnoreFragment, eEncodeMechanism, eDecodeMechanism,
-                        eCharset, false, eStyle);
-}
+   @param context a component context; must not be null
+
+   @param baseUriReference a base URI reference
+
+   @param uriReference a URI reference
+
+   @return a URI reference representing the given uriReference relative to the
+   given baseUriReference; if the given baseUriReference is not an absolute,
+   hierarchical URI reference, or the given uriReference is not a valid URI
+   reference, null is returned
+
+   @exception std::bad_alloc if an out-of-memory condition occurs
+
+   @exception com::sun::star::uno::RuntimeException if any error occurs
+ */
+com::sun::star::uno::Reference< com::sun::star::uri::XUriReference >
+normalizedMakeRelative(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    const & context,
+    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference);
+
+/**
+   A variant of normalizedMakeRelative with a simplified interface.
+
+   Internally calls normalizedMakeRelative with the default component context.
+
+   @param baseUriReference a base URI reference, passed to
+   normalizedMakeRelative
+
+   @param uriReference a URI reference, passed to normalizedMakeRelative
+
+   @return if the XUriReference returnd by normalizedMakeRelative is empty,
+   uriReference is returned unmodified; otherwise, the result of calling
+   XUriReference::getUriReference on the XUriReference returnd by
+   normalizedMakeRelative is returned
+
+   @exception std::bad_alloc if an out-of-memory condition occurs
+
+   @exception com::sun::star::uno::RuntimeException if any error occurs
+
+   @deprecated
+   No code should rely on the default component context.
+*/
+rtl::OUString simpleNormalizedMakeRelative(
+    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference);
 
 //============================================================================
 UniString
