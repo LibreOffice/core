@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-09 17:00:20 $
+ *  last change: $Author: mba $ $Date: 2002-01-17 09:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 
 #pragma hdrstop
 
@@ -144,6 +147,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <ucbhelper/content.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -184,6 +188,8 @@ extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 using namespace ::cppu;
 
@@ -611,6 +617,42 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     if ( bOk )
     {
+        try
+        {
+            ::ucb::Content aContent( pMedium->GetName(), Reference < XCommandEnvironment >() );
+            Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            if ( xProps.is() )
+            {
+                ::rtl::OUString aAuthor( RTL_CONSTASCII_USTRINGPARAM("Author") );
+                ::rtl::OUString aKeywords( RTL_CONSTASCII_USTRINGPARAM("Keywords") );
+                ::rtl::OUString aSubject( RTL_CONSTASCII_USTRINGPARAM("Subject") );
+                Any aAny;
+                ::rtl::OUString aValue;
+                SfxDocumentInfo& rInfo = GetDocInfo();
+                if ( xProps->hasPropertyByName( aAuthor ) )
+                {
+                    aAny = aContent.getPropertyValue( aAuthor );
+                    if ( ( aAny >>= aValue ) )
+                        rInfo.SetCreated( SfxStamp( String( aValue ) ) );
+                }
+                if ( xProps->hasPropertyByName( aKeywords ) )
+                {
+                    aAny = aContent.getPropertyValue( aKeywords );
+                    if ( ( aAny >>= aValue ) )
+                        rInfo.SetKeywords( aValue );
+                }
+                if ( xProps->hasPropertyByName( aSubject ) )
+                {
+                    aAny = aContent.getPropertyValue( aSubject );
+                    if ( ( aAny >>= aValue ) )
+                        rInfo.SetTheme( aValue );
+                }
+            }
+        }
+        catch( Exception& )
+        {
+        }
+
         ::rtl::OUString aTitle = GetTitle( SFX_TITLE_DETECT );
 
         // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
@@ -1008,6 +1050,37 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         if ( pImp->bIsSaving )
             SetEAs_Impl(rMedium);
+
+        try
+        {
+            ::ucb::Content aContent( rMedium.GetName(), Reference < XCommandEnvironment >() );
+            Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            if ( xProps.is() )
+            {
+                ::rtl::OUString aAuthor( RTL_CONSTASCII_USTRINGPARAM("Author") );
+                ::rtl::OUString aKeywords( RTL_CONSTASCII_USTRINGPARAM("Keywords") );
+                ::rtl::OUString aSubject( RTL_CONSTASCII_USTRINGPARAM("Subject") );
+                Any aAny;
+                if ( xProps->hasPropertyByName( aAuthor ) )
+                {
+                    aAny <<= ::rtl::OUString( GetDocInfo().GetCreated().GetName() );
+                    aContent.setPropertyValue( aAuthor, aAny );
+                }
+                if ( xProps->hasPropertyByName( aKeywords ) )
+                {
+                    aAny <<= ::rtl::OUString( GetDocInfo().GetKeywords() );
+                    aContent.setPropertyValue( aKeywords, aAny );
+                }
+                if ( xProps->hasPropertyByName( aSubject ) )
+                {
+                    aAny <<= ::rtl::OUString( GetDocInfo().GetTheme() );
+                    aContent.setPropertyValue( aSubject, aAny );
+                }
+            }
+        }
+        catch( Exception& )
+        {
+        }
     }
 
     return bOk;
