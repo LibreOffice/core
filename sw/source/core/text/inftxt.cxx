@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 10:06:34 $
+ *  last change: $Author: ama $ $Date: 2000-11-06 09:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bMulti( rNew.IsMulti() ),
-      bFirstMulti( rNew.IsFirstMulti() )
+      bFirstMulti( rNew.IsFirstMulti() ),
+      bRuby( rNew.IsRuby() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -340,7 +341,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bNotEOL = sal_False;
     bStopUnderFlow = sal_False;
     bSpecialUnderline = sal_False;
-    bMulti = bFirstMulti = sal_False;
+    bMulti = bFirstMulti = bRuby = sal_False;
     SetLen( GetMinLen( *this ) );
 }
 
@@ -362,7 +363,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bMulti( rNew.IsMulti() ),
-      bFirstMulti( rNew.IsFirstMulti() )
+      bFirstMulti( rNew.IsFirstMulti() ),
+      bRuby( rNew.IsRuby() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
