@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-10 11:23:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,7 @@ void SmSymSetManager::Save()
         }
         DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
         rCfg.ReplaceSymbols( pSymbols, nSaveSymbolCnt );
-        delete pSymbols;
+        delete [] pSymbols;
     }
 }
 
