@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,25 +72,25 @@ class SfxItemSet;
 #define DLG_STD         0
 #define DLG_ENVELOP     2
 
-class SwParaDlg: public SfxTabDialog
-{
-    SwView& rView;
-    USHORT nHtmlMode;
-    BYTE nDlgMode;
-    BOOL bDrawParaDlg;
-
-    void PageCreated(USHORT nID, SfxTabPage& rPage);
-
-public:
-    SwParaDlg(  Window *pParent,
-                SwView& rVw,
-                const SfxItemSet&,
-                BYTE nDialogMode,
-                const String *pCollName = 0,
-                BOOL bDraw = FALSE,
-                UINT16 nDefPage = 0);
-    ~SwParaDlg();
-};
+//CHINA001 class SwParaDlg: public SfxTabDialog
+//CHINA001 {
+//CHINA001 SwView& rView;
+//CHINA001 USHORT nHtmlMode;
+//CHINA001 BYTE nDlgMode;
+//CHINA001 BOOL bDrawParaDlg;
+//CHINA001
+//CHINA001 void PageCreated(USHORT nID, SfxTabPage& rPage);
+//CHINA001
+//CHINA001 public:
+//CHINA001 SwParaDlg(  Window *pParent,
+//CHINA001 SwView& rVw,
+//CHINA001 const SfxItemSet&,
+//CHINA001 BYTE nDialogMode,
+//CHINA001 const String *pCollName = 0,
+//CHINA001 BOOL bDraw = FALSE,
+//CHINA001 UINT16 nDefPage = 0);
+//CHINA001 ~SwParaDlg();
+//CHINA001 };
 
 
 #endif
