@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:48:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ FuPresentationLayout::FuPresentationLayout (
                 {
                     ::sd::View* pView =
                           static_cast<DrawViewShell*>(pViewShell)->GetView();
-                    USHORT nPgNum = pSelectedPage->GetMasterPage(0)->GetPageNum();
+                    USHORT nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();
 
                     if (static_cast<DrawViewShell*>(pViewShell)->GetPageKind() == PK_NOTES)
                         nPgNum++;
