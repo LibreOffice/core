@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:25:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5685,14 +5685,14 @@ String STR_ExchangeClpPaste
     Text [ dutch ] = "Inhoud van het Klembord plakken" ;
     Text [ spanish ] = "Pegar contenido del portapapeles" ;
     Text [ english_us ] = "Paste Clipboard" ;
-    Text[ chinese_simplified ] = "²åÈë¼ôÌù°åÄÚÈİ";
+    Text[ chinese_simplified ] = "Õ³Ìù¼ôÌù°åÄÚÈİ";
     Text[ russian ] = "Âñòàâèòü áóôåğ îáìåíà";
     Text[ polish ] = "Wklej schowek";
     Text[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚Ì“\\‚è•t‚¯";
     Text[ chinese_traditional ] = "¶K¤W°Å¶KÃ¯¤º®e";
     Text[ arabic ] = "áÕŞ ÇáÍÇİÙÉ";
     Text[ dutch ] = "Inhoud van het Klembord plakken";
-    Text[ chinese_simplified ] = "²åÈë¼ôÌù°åÄÚÈİ";
+    Text[ chinese_simplified ] = "Õ³Ìù¼ôÌù°åÄÚÈİ";
     Text[ greek ] = "Åğéêüëëçóç ğñü÷åéñïõ";
     Text[ korean ] = "Å¬¸³º¸µå ºÙ¿©³Ö±â";
     Text[ turkish ] = "Pano içeriğini yapıştır";
@@ -9110,14 +9110,14 @@ String STR_ItemNam_CAPTIONFIXEDANGLE
     Text [ spanish ] = "Ángulo dado" ;
     Text [ french ] = "Angle donné" ;
     Text [ dutch ] = "Gegeven hoek" ;
-    Text[ chinese_simplified ] = "Ô¤Éè½Ç¶È";
+    Text[ chinese_simplified ] = "Ô¤ÖÃ½Ç¶È";
     Text[ russian ] = "Çàäàíèå óãëà";
     Text[ polish ] = "Podany k¹t";
     Text[ japanese ] = "İ’è‚³‚ê‚½Šp“x";
     Text[ chinese_traditional ] = "¹w³]¨¤«×";
     Text[ arabic ] = "ÇáÒÇæíÉ ÇáãÚØÇÉ";
     Text[ dutch ] = "Gegeven hoek";
-    Text[ chinese_simplified ] = "Ô¤Éè½Ç¶È";
+    Text[ chinese_simplified ] = "Ô¤ÖÃ½Ç¶È";
     Text[ greek ] = "Äåäïìİíç ãùíßá";
     Text[ korean ] = "ÁÖ¾îÁø °¢µµ";
     Text[ turkish ] = "Belirlenen açı";
@@ -9399,14 +9399,14 @@ String STR_ItemNamSET_OUTLINER
     Text [ french ] = "Attributs texte" ;
     Text [ dutch ] = "Tekstattributen" ;
     Text [ portuguese ] = "Atributos do texto" ;
-    Text[ chinese_simplified ] = "ÎÄ±¾ÊôĞÔ";
+    Text[ chinese_simplified ] = "ÎÄ×ÖÊôĞÔ";
     Text[ russian ] = "Àòğèáóòû òåêñòà";
     Text[ polish ] = "Atrybuty tekstu";
     Text[ japanese ] = "Ã·½Ä‚Ì‘®«";
     Text[ chinese_traditional ] = "¤å¦rÄİ©Ê";
     Text[ arabic ] = "ÓãÇÊ ÇáäÕ";
     Text[ dutch ] = "Tekstattributen";
-    Text[ chinese_simplified ] = "ÎÄ±¾ÊôĞÔ";
+    Text[ chinese_simplified ] = "ÎÄ×ÖÊôĞÔ";
     Text[ greek ] = "Éäéüôçôåò êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
     Text[ turkish ] = "Metin öznitelikleri";
@@ -16871,11 +16871,11 @@ String SIP_EE_CHAR_FONTINFO
     Text[ polish ] = "Czcionka";
     Text[ portuguese_brazilian ] = "Font";
     Text[ japanese ] = "•¶š—ñ";
-    Text[ chinese_simplified ] = "×ÖÌå";
+    Text[ chinese_simplified ] = "×Ö·û¼¯";
     Text[ chinese_traditional ] = "¦r«¬";
     Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
     Text[ dutch ] = "Tekenset";
-    Text[ chinese_simplified ] = "×ÖÌå";
+    Text[ chinese_simplified ] = "×Ö·û¼¯";
     Text[ greek ] = "Óåô ÷áñáêôŞñùí";
     Text[ korean ] = "¹®ÀÚÁıÇÕ";
     Text[ turkish ] = "Karakter kümesi";
@@ -17632,6 +17632,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
