@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-26 12:58:36 $
+ *  last change: $Author: ka $ $Date: 2001-02-27 11:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,8 +686,8 @@ void TransferableHelper::StartDrag( Window& rWindow, sal_Int8 nDnDSourceActions,
         const Point         aPt( rWindow.GetPointerPosPixel() );
 
         aEvt.DragAction = DNDConstants::ACTION_COPY;
-        aEvt.DragOrigin.X = aPt.X();
-        aEvt.DragOrigin.Y = aPt.Y();
+        aEvt.DragOriginX = aPt.X();
+        aEvt.DragOriginY = aPt.Y();
         aEvt.DragSource = xDragSource;
 
         try

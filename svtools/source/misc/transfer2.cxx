@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-26 12:58:36 $
+ *  last change: $Author: ka $ $Date: 2001-02-27 11:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject
 void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE ) throw( RuntimeException )
 {
     Application::GetSolarMutex().acquire();
-    const sal_Int8 nRet = mrParent.ExecuteDrop( rDTDE.DropAction, Point( rDTDE.Location.X, rDTDE.Location.Y ),
+    const sal_Int8 nRet = mrParent.ExecuteDrop( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ),
                                                 rDTDE.SourceActions, rDTDE.Transferable );
 
     if( DNDConstants::ACTION_NONE == nRet )
@@ -170,7 +170,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
 void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE ) throw( RuntimeException )
 {
     Application::GetSolarMutex().acquire();
-    const sal_Int8 nRet = mrParent.AcceptDrop( rDTDE.DropAction, Point( rDTDE.Location.X, rDTDE.Location.Y ),
+    const sal_Int8 nRet = mrParent.AcceptDrop( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ),
                                                rDTDE.SourceActions );
 
     if( DNDConstants::ACTION_NONE == nRet )
