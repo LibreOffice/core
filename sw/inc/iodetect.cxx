@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:17:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     sal_Char aBuffer[4098];
     const ULONG nMaxRead = sizeof(aBuffer) - 2;
     ULONG nBytesRead;
-    //if (pMedium)
+    if (pMedium)
     {
         SvStream* pIStrm = pMedium->GetInStream();
         if( !pIStrm || SVSTREAM_OK != pIStrm->GetError() )
