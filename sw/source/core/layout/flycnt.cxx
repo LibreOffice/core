@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-14 14:14:14 $
+ *  last change: $Author: ama $ $Date: 2001-05-11 13:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,7 +1658,16 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     aFrm.Bottom() > (pOrient->Frm().Top() + pOrient->Prt().Bottom()) )
             {
                 // Vorsicht, auch innerhalb von Bereichen duerfen keine neuen Seiten angelegt werden
-                const BOOL bSct = pOrient->IsInSct();
+                BOOL bSct = pOrient->IsInSct();
+                if( bSct )
+                {
+                    const SwFrm* pTmp = pOrient->FindSctFrm()->GetUpper();
+                    if( aFrm.Bottom() > (pTmp->Frm().Top() + pTmp->Prt().Bottom()) )
+                        pOrient = pTmp;
+                    else
+                        break;
+                    bSct = pOrient->IsInSct();
+                }
                 if ( !bSct && Frm().Top() == pOrient->Frm().Top() + pOrient->Prt().Top() )
                     //Das teil passt nimmer, da hilft auch kein moven.
                     break;

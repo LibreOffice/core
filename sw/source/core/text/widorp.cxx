@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2001-05-11 14:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
  * FindBreak()
  */
 
-sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine,
+sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     sal_Bool bHasToFit )
 {
     sal_Bool bRet = sal_True;
@@ -343,7 +343,7 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine,
     rLine.Bottom();
     if( !IsBreakNow( rLine ) )
         bRet = sal_False;
-    if( !FindWidows( pFrm, rLine ) )
+    if( !FindWidows( pFrame, rLine ) )
     {
         sal_Bool bBack = sal_False;
         while( IsBreakNow( rLine ) )
@@ -358,9 +358,11 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrm, SwTxtMargin &rLine,
         // die Orphansregel verletzt wird, machen wir mal eine Ausnahme:
         // Wir lassen einfach eine Dummyline zurueck und wandern mit dem Text
         // komplett auf die naechste Seite/Spalte.
-        if( bHasToFit && bRet && rLine.GetLineNr() <= nOldOrphans &&
-            rLine.GetInfo().GetParaPortion()->IsDummy() )
+        if( rLine.GetLineNr() <= nOldOrphans &&
+            rLine.GetInfo().GetParaPortion()->IsDummy() &&
+            ( ( bHasToFit && bRet ) || SwTxtFrmBreak::IsBreakNow( rLine ) ) )
             rLine.Top();
+
         rLine.TruncLines( sal_True );
         bRet = bBack;
     }
