@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:13:10 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,26 +344,32 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_OBJECT_ALIGN_LEFT:
+        case SID_ALIGN_ANY_LEFT:
             if (pView->IsAlignPossible())
                 pView->AlignMarkedObjects(SDRHALIGN_LEFT, SDRVALIGN_NONE);
             break;
         case SID_OBJECT_ALIGN_CENTER:
+        case SID_ALIGN_ANY_HCENTER:
             if (pView->IsAlignPossible())
                 pView->AlignMarkedObjects(SDRHALIGN_CENTER, SDRVALIGN_NONE);
             break;
         case SID_OBJECT_ALIGN_RIGHT:
+        case SID_ALIGN_ANY_RIGHT:
             if (pView->IsAlignPossible())
                 pView->AlignMarkedObjects(SDRHALIGN_RIGHT, SDRVALIGN_NONE);
             break;
         case SID_OBJECT_ALIGN_UP:
+        case SID_ALIGN_ANY_TOP:
             if (pView->IsAlignPossible())
                 pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_TOP);
             break;
         case SID_OBJECT_ALIGN_MIDDLE:
+        case SID_ALIGN_ANY_VCENTER:
             if (pView->IsAlignPossible())
                 pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_CENTER);
             break;
         case SID_OBJECT_ALIGN_DOWN:
+        case SID_ALIGN_ANY_BOTTOM:
             if (pView->IsAlignPossible())
                 pView->AlignMarkedObjects(SDRHALIGN_NONE, SDRVALIGN_BOTTOM);
             break;
