@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 09:48:03 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #include "xstorage.hxx"
 
 using namespace ::com::sun::star;
+
+void completeStorageStreamCopy_Impl( const uno::Reference< io::XStream >& xSource,
+                              const uno::Reference< io::XStream >& xDest );
 
 sal_Bool SequencesEqual( uno::Sequence< sal_Int8 > aSequence1, uno::Sequence< sal_Int8 > aSequence2 )
 {
@@ -601,6 +604,47 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::GetStreamProperties()
 }
 
 //-----------------------------------------------
+void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream >& xDestStream,
+                                                const uno::Sequence< sal_Int8 >& aKey )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
+
+    if ( m_pAntiImpl )
+    {
+        m_pAntiImpl->CopyToStreamInternally_Impl( xDestStream );
+    }
+    else
+    {
+        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::ELEMENT_READ, aKey );
+        if ( !xOwnStream.is() )
+            throw io::IOException(); // TODO
+
+        completeStorageStreamCopy_Impl( xOwnStream, xDestStream );
+    }
+
+}
+
+//-----------------------------------------------
+void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream >& xDestStream )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
+
+    if ( m_pAntiImpl )
+    {
+        m_pAntiImpl->CopyToStreamInternally_Impl( xDestStream );
+    }
+    else
+    {
+        uno::Reference< io::XStream > xOwnStream = GetStream( embed::ElementModes::ELEMENT_READ );
+        if ( !xOwnStream.is() )
+            throw io::IOException(); // TODO
+
+        completeStorageStreamCopy_Impl( xOwnStream, xDestStream );
+    }
+
+}
+
+//-----------------------------------------------
 uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMode, const uno::Sequence< sal_Int8 >& aKey )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
@@ -845,6 +889,7 @@ void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
 //-----------------------------------------------
 OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > xStream )
 : m_pImpl( pImpl )
+, m_bInStreamDisconnected( sal_False )
 {
     OSL_ENSURE( pImpl && xStream.is(), "No base implementation!\n" );
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
@@ -881,6 +926,62 @@ OWriteStream::~OWriteStream()
 
     if ( m_pData )
         delete m_pData;
+}
+
+void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStream >& xDest )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_xInStream.is() )
+        throw uno::RuntimeException();
+
+    if ( !m_xSeekable.is() )
+        throw uno::RuntimeException();
+
+    uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY );
+    if ( !xDestProps.is() )
+        throw uno::RuntimeException(); //TODO
+
+    uno::Reference< io::XOutputStream > xDestOutStream = xDest->getOutputStream();
+    if ( !xDestOutStream.is() )
+        throw io::IOException(); // TODO
+
+    sal_Int64 nCurPos = m_xSeekable->getPosition();
+    m_xSeekable->seek( 0 );
+
+    uno::Exception eThrown;
+    sal_Bool bThrown = sal_False;
+    try {
+        copyInputToOutput_Impl( m_xInStream, xDestOutStream );
+    }
+    catch ( uno::Exception& e )
+    {
+        eThrown = e;
+        bThrown = sal_True;
+    }
+
+    // position-related section below is critical
+    // if it fails the stream will become invalid
+    try {
+        m_xSeekable->seek( nCurPos );
+    }
+    catch ( uno::Exception& )
+    {
+        // TODO: set the stoream in invalid state or dispose
+        OSL_ENSURE( sal_False, "The stream become invalid during copiing!\n" );
+        throw uno::RuntimeException();
+    }
+
+    if ( bThrown )
+        throw eThrown;
+
+    // now the properties can be copied
+    const char* pStrings[3] = { "MediaType", "Compressed", "Encrypted" };
+    for ( int ind = 0; ind < 3; ind++ )
+    {
+        ::rtl::OUString aPropName = ::rtl::OUString::createFromAscii( pStrings[ind] );
+        xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
+    }
 }
 
 //-----------------------------------------------
@@ -966,11 +1067,14 @@ void SAL_CALL OWriteStream::closeInput(  )
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !m_xInStream.is() )
+    if ( m_bInStreamDisconnected || !m_xInStream.is() )
         throw io::NotConnectedException();
 
-    m_xInStream->closeInput();
-    m_xInStream = uno::Reference< io::XInputStream >();
+    // the input part of the stream stays open for internal purposes ( to allow reading during copiing )
+    // since it can not be reopened until output part is closed, it will be closed with output part.
+    m_bInStreamDisconnected = sal_True;
+    // m_xInStream->closeInput();
+    // m_xInStream = uno::Reference< io::XInputStream >();
 
     if ( !m_xOutStream.is() )
         dispose();
@@ -985,7 +1089,7 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !m_xInStream.is() )
+    if ( m_bInStreamDisconnected || !m_xInStream.is() )
         return uno::Reference< io::XInputStream >();
 
     return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
@@ -1081,7 +1185,7 @@ void SAL_CALL OWriteStream::closeOutput()
 
     CloseOutput_Impl();
 
-    if ( !m_xInStream.is() )
+    if ( m_bInStreamDisconnected || !m_xInStream.is() )
         dispose();
 }
 
