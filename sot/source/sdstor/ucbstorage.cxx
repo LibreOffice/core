@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:07:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2893,7 +2893,7 @@ BOOL UCBStorage::CopyTo( BaseStorage* pDestStg ) const
 BOOL UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const String& rNew )
 {
     if( !rElemName.Len() )
-        return NULL;
+        return FALSE;
 
     if ( pDest == ((BaseStorage*) this) )
     {
