@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-01 13:32:10 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 11:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
         aHelpPB     ( this, ResId( PB_HELP ) ),
         aModulesGB  ( this, ResId( GB_EDIT_MODULES_OPTIONS ) ),
         aLanguageFT ( this, ResId( FT_EDIT_MODULES_LANGUAGE ) ),
-        aLanguageLB ( this, ResId( LB_EDIT_MODULES_LANGUAGE ) ),
+        aLanguageLB ( this, ResId( LB_EDIT_MODULES_LANGUAGE ), FALSE ),
         aModulesCLB ( this, ResId( CLB_EDIT_MODULES_MODULES ) ),
         aPrioUpPB   ( this, ResId( PB_EDIT_MODULES_PRIO_UP ) ),
         aPrioDownPB ( this, ResId( PB_EDIT_MODULES_PRIO_DOWN ) ),
