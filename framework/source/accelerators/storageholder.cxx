@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storageholder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:06:44 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,27 @@ StorageHolder::~StorageHolder()
 {
     // TODO implement me
     // dispose/clear etcpp.
+}
+
+//-----------------------------------------------
+void StorageHolder::forgetCachedStorages()
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    TPath2StorageInfo::iterator pIt;
+    for (  pIt  = m_lStorages.begin();
+           pIt != m_lStorages.end()  ;
+         ++pIt                       )
+    {
+        TStorageInfo& rInfo = pIt->second;
+        // TODO think about listener !
+        rInfo.Storage.clear();
+    }
+    m_lStorages.clear();
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
 }
 
 //-----------------------------------------------

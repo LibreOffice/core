@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storageholder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:08:14 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,11 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         /** @short  TODO
          */
         virtual ~StorageHolder();
+
+        //---------------------------------------
+        /** @short  TODO
+         */
+        virtual void forgetCachedStorages();
 
         //---------------------------------------
         /** @short  TODO

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:37:38 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,13 +1161,20 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
+    // SAFE ->
     ResetableGuard aGuard( m_aLock );
+
+    if (m_xAccConfig.is())
+        return m_xAccConfig;
+
     Reference< XMultiServiceFactory > xSMGR         = m_xServiceManager;
     Reference< XStorage >             xDocumentRoot = m_xDocConfigStorage;
-    aGuard.unlock();
 
-    Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_DOCUMENTACCELERATORCONFIGURATION);
-    Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
+    aGuard.unlock();
+    // <- SAFE
+
+    Reference< XInterface >      xAccConfig = xSMGR->createInstance(SERVICENAME_DOCUMENTACCELERATORCONFIGURATION);
+    Reference< XInitialization > xInit      (xAccConfig, UNO_QUERY_THROW);
 
     PropertyValue aProp;
     aProp.Name    = ::rtl::OUString::createFromAscii("DocumentRoot");
@@ -1178,7 +1185,13 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() th
 
     xInit->initialize(lArgs);
 
-    return xManager;
+    // SAFE ->
+    aGuard.lock();
+    m_xAccConfig = xAccConfig;
+    aGuard.unlock();
+    // <- SAFE
+
+    return xAccConfig;
 }
 
 Reference< XInterface > SAL_CALL UIConfigurationManager::getEventsManager() throw (::com::sun::star::uno::RuntimeException)
@@ -1211,6 +1224,10 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     // We store the new storage. Be careful it could be an empty reference!
     m_xDocConfigStorage = Storage;
     m_bReadOnly         = sal_True;
+
+    Reference< XUIConfigurationStorage > xAccUpdate(m_xAccConfig, UNO_QUERY);
+    if ( xAccUpdate.is() )
+        xAccUpdate->setStorage( m_xDocConfigStorage );
 
     if ( m_xImageManager.is() )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:51:32 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xImageManager;
+            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xAccConfig;
    };
 }
 

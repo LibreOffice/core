@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:07:15 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#endif
+
 //__________________________________________
 // other includes
 
@@ -109,6 +113,7 @@ namespace framework
 class DocumentAcceleratorConfiguration : public AcceleratorConfiguration
                                        , public css::lang::XServiceInfo
                                        , public css::lang::XInitialization
+                                       , public dcss::ui::XUIConfigurationStorage
 {
     //______________________________________
     // member
@@ -144,6 +149,13 @@ class DocumentAcceleratorConfiguration : public AcceleratorConfiguration
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException);
 
+        // XUIConfigurationStorage
+        virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+            throw(css::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL hasStorage()
+            throw(css::uno::RuntimeException);
+
     //______________________________________
     // helper
 
@@ -152,6 +164,11 @@ class DocumentAcceleratorConfiguration : public AcceleratorConfiguration
         //----------------------------------
         /** read all data into the cache. */
         void impl_ts_fillCache();
+
+        //----------------------------------
+        /** forget all currently cached data AND(!)
+            forget all currently used storages. */
+        void impl_ts_clearCache();
 };
 
 } // namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2004-10-14 09:26:21 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,15 +100,17 @@ namespace framework
 
 //-----------------------------------------------
 // XInterface, XTypeProvider, XServiceInfo
-DEFINE_XINTERFACE_2(DocumentAcceleratorConfiguration            ,
-                    AcceleratorConfiguration                    ,
-                    DIRECT_INTERFACE(css::lang::XServiceInfo)   ,
-                    DIRECT_INTERFACE(css::lang::XInitialization))
+DEFINE_XINTERFACE_3(DocumentAcceleratorConfiguration                   ,
+                    AcceleratorConfiguration                           ,
+                    DIRECT_INTERFACE(css::lang::XServiceInfo)          ,
+                    DIRECT_INTERFACE(css::lang::XInitialization)       ,
+                    DIRECT_INTERFACE(dcss::ui::XUIConfigurationStorage))
 
-DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration,
-                                      AcceleratorConfiguration        ,
-                                      css::lang::XServiceInfo         ,
-                                      css::lang::XInitialization      )
+DEFINE_XTYPEPROVIDER_3_WITH_BASECLASS(DocumentAcceleratorConfiguration ,
+                                      AcceleratorConfiguration         ,
+                                      css::lang::XServiceInfo          ,
+                                      css::lang::XInitialization       ,
+                                      dcss::ui::XUIConfigurationStorage)
 
 DEFINE_XSERVICEINFO_MULTISERVICE(DocumentAcceleratorConfiguration                   ,
                                  ::cppu::OWeakObject                                ,
@@ -157,6 +159,36 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
 }
 
 //-----------------------------------------------
+void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+    throw(css::uno::RuntimeException)
+{
+    // Attention! xStorage must be accepted too, if it's NULL !
+
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+    sal_Bool bForgetOldStorages = m_xDocumentRoot.is();
+    m_xDocumentRoot = xStorage;
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+
+    if (bForgetOldStorages)
+        impl_ts_clearCache();
+
+    if (xStorage.is())
+        impl_ts_fillCache();
+}
+
+//-----------------------------------------------
+sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
+    throw(css::uno::RuntimeException)
+{
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+    return m_xDocumentRoot.is();
+    // <- SAFE ----------------------------------
+}
+
+//-----------------------------------------------
 void DocumentAcceleratorConfiguration::impl_ts_fillCache()
 {
     // SAFE -> ----------------------------------
@@ -197,6 +229,12 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
         { throw exRun; }
     catch(const css::uno::Exception&)
         {}
+}
+
+//-----------------------------------------------
+void DocumentAcceleratorConfiguration::impl_ts_clearCache()
+{
+    m_aPresetHandler.forgetCachedStorages();
 }
 
 } // namespace framework

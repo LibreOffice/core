@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:36:46 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,11 +211,25 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
 //-----------------------------------------------
 PresetHandler::~PresetHandler()
 {
-    m_aSharedStorages->m_lStoragesUser.closePath(m_sRelPath);
-    // in document case share and user are the same ...
-    // so we would close the same path a second time, which isnt allowed!
-    if (m_eConfigType != E_DOCUMENT)
-        m_aSharedStorages->m_lStoragesShare.closePath(m_sRelPath);
+    forgetCachedStorages();
+}
+
+//-----------------------------------------------
+void PresetHandler::forgetCachedStorages()
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    m_xWorkingStorageShare.clear();
+    m_xWorkingStorageUser.clear();
+
+    m_aSharedStorages->m_lStoragesUser.forgetCachedStorages();
+    m_aSharedStorages->m_lStoragesShare.forgetCachedStorages();
+
+    m_lDocumentStorages.forgetCachedStorages();
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
 }
 
 //-----------------------------------------------
@@ -389,8 +403,19 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         xUser  = getOrCreateRootStorageUser();
     }
 
-    sal_Int32 eShareMode = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE); // means: use existing storage or create empty one!
-    sal_Int32 eUserMode  = (css::embed::ElementModes::READWRITE                                     ); // means: use existing storage or create empty one ... and use it readonly if no write access!
+    // a) inside share layer we should not create any new structures ... We jave to use
+    //    existing ones only!
+    // b) inside user layer we can (SOFT mode!) but sometimes we shouldnt (HARD mode!)
+    //    create new empty structures. We should preferr using of any existing structure.
+    sal_Int32 eShareMode    = (css::embed::ElementModes::READ      | css::embed::ElementModes::NOCREATE);
+    sal_Int32 eUserModeHard = (css::embed::ElementModes::READWRITE | css::embed::ElementModes::NOCREATE);
+    sal_Int32 eUserModeSoft = (css::embed::ElementModes::READWRITE                                     );
+
+    // Prefer HARD mode for user layer (especialy for global or module based configurations, where
+    // our setup is responsible to create all needed structures.
+    // But switch to SOFT mode in case document based configuration is used.
+    // Then we may be must create our own structures!
+    sal_Int32 eUserMode = eUserModeHard;
 
     ::rtl::OUStringBuffer sRelPathBuf(1024);
     ::rtl::OUString       sRelPath;
@@ -424,6 +449,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_DOCUMENT :
         {
+            eUserMode = eUserModeSoft;
             sRelPathBuf.append(sResource);
             sRelPath = sRelPathBuf.makeStringAndClear();
 
@@ -439,7 +465,6 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         }
         break;
     }
-
 
     if (
         (aLocale     != ::comphelper::Locale::X_NOTRANSLATE()) && // localized level?
@@ -797,30 +822,55 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
                                                                                                       sal_Bool              bShare ,
                                                                                                 const ::comphelper::Locale& aLocale)
 {
-    css::uno::Reference< css::embed::XStorage > xPath;
-    ::rtl::OUString                             sLocalizedPath;
-    ::comphelper::Locale                        aTryLocale = aLocale;
-    while (sal_True)
-    {
-        sLocalizedPath  = sPath;
-        sLocalizedPath += PATH_SEPERATOR;
-        sLocalizedPath += aTryLocale.toISO();
+    css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
+    ::std::vector< ::rtl::OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
+    ::std::vector< ::rtl::OUString >::const_iterator pLocaleFolder = ::comphelper::Locale::getFallback(lSubFolders, aLocale.toISO());
 
-        xPath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
-        if (!xPath.is())
-        {
-            if (::comphelper::Locale::getFallback(aTryLocale))
-                continue;
-        }
-        break;
-    }
+    if (pLocaleFolder == lSubFolders.end())
+        return css::uno::Reference< css::embed::XStorage >();
 
-    // return localized path as result too
-    if (xPath.is())
+    ::rtl::OUString sLocalizedPath;
+    sLocalizedPath  = sPath;
+    sLocalizedPath += PATH_SEPERATOR;
+    sLocalizedPath += *pLocaleFolder;
+
+    css::uno::Reference< css::embed::XStorage > xLocalePath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
+
+    if (xLocalePath.is())
         sPath = sLocalizedPath;
     else
         sPath = ::rtl::OUString();
-    return xPath;
+
+    return xLocalePath;
+}
+
+//-----------------------------------------------
+::std::vector< ::rtl::OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
+{
+    css::uno::Reference< css::container::XNameAccess > xAccess(xFolder, css::uno::UNO_QUERY);
+    if (!xAccess.is())
+        return ::std::vector< ::rtl::OUString >();
+
+          ::std::vector< ::rtl::OUString >      lSubFolders;
+    const css::uno::Sequence< ::rtl::OUString > lNames = xAccess->getElementNames();
+    const ::rtl::OUString*                      pNames = lNames.getConstArray();
+          sal_Int32                             c      = lNames.getLength();
+          sal_Int32                             i      = 0;
+
+    for (i=0; i<c; ++i)
+    {
+        try
+        {
+            if (xFolder->isStorageElement(pNames[i]))
+                lSubFolders.push_back(pNames[i]);
+        }
+        catch(const css::uno::RuntimeException& exRun)
+            { throw exRun; }
+        catch(const css::uno::Exception&)
+            {}
+    }
+
+    return lSubFolders;
 }
 
 //-----------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:53:27 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,10 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
         virtual ~PresetHandler();
 
         //---------------------------------------
+        /** @short  free all currently cache(!) storages. */
+        void forgetCachedStorages();
+
+        //---------------------------------------
         /** @short  return access to the internaly used and cached root storage.
 
             @descr  These root storages are the base of all further opened
@@ -570,6 +574,17 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                                                sal_Int32             eMode  ,
                                                                                                sal_Bool              bShare ,
                                                                                          const ::comphelper::Locale& aLocale);
+
+        //---------------------------------------
+        /** @short  returns the names of all sub storages of specified storage.
+
+            @param  xFolder
+                    the base storage for this operation.
+
+            @return [vector< string >]
+                    a list of folder names.
+         */
+        ::std::vector< ::rtl::OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
 };
 
 } // namespace framework
