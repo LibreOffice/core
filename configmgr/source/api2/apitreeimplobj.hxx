@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-08 09:43:54 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include "noderef.hxx"
 #include "configset.hxx"
 
+#include "confevents.hxx"
+
 #include <osl/mutex.hxx>
 #include <vos/ref.hxx>
 #include <stl/memory>
@@ -98,7 +100,9 @@ namespace configmgr
         class ObjectRegistry;
         typedef vos::ORef<ObjectRegistry> ObjectRegistryHolder;
 
-        typedef ::com::sun::star::uno::XInterface UnoInterface;
+        typedef uno::XInterface UnoInterface;
+        typedef uno::Reference<UnoInterface> UnoInterfaceRef;
+        typedef uno::Reference<com::sun::star::lang::XComponent> ComponentRef;
 
 //-----------------------------------------------------------------------------
 // API object implementation wrappers
@@ -124,14 +128,15 @@ namespace configmgr
         };
 
     //-------------------------------------------------------------------------
-        class ApiTreeImpl : public com::sun::star::lang::XEventListener, NotCopyable
+        class ApiTreeImpl : private com::sun::star::lang::XEventListener, private INodeListener, NotCopyable
         {
             typedef configuration::Tree Tree;
-            UnoInterface*       m_pInstance;
             Tree                m_aTree;
             NotifierImplHolder  m_aNotifier;
+            ComponentRef        m_xProvider;
             ApiProvider&        m_rProvider;
             ApiTreeImpl*        m_pParentTree;
+            UnoInterface*       m_pInstance;
         public:
             explicit ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl& rParentTree);
             explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree = 0);
@@ -155,20 +160,41 @@ namespace configmgr
             ISynchronizedData*          getProviderLock() const { return m_rProvider.getSourceLock(); }
             ISynchronizedData*          getDataLock() const     { return configuration::getRootLock(m_aTree); }
             osl::Mutex&                 getApiLock() const;
+
+            /// toggle whether this object relays notifications from the base provider
+            bool                        enableNotification(bool bEnable);
+            /// wire this to a new parent tree
+            void                        haveNewParent(ApiTreeImpl* pNewParent);
         private:
             void init(ApiTreeImpl*  pParentTree);
             void setParentTree(ApiTreeImpl* pNewParentTree);
             void deinit();
 
-            uno::Reference<com::sun::star::lang::XComponent> getOwnerComponent();
-            uno::Reference<com::sun::star::lang::XComponent> getParentComponent();
-            uno::Reference<com::sun::star::lang::XComponent> getProviderComponent();
+            void implDisposeTree();
+            void implDisposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
+
+            ComponentRef getParentComponent();
+            ComponentRef getProviderComponent();
 
         // XEventListener
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
             virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw();
             virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
+
+        // IConfigListener
+            virtual void disposing(IConfigBroadcaster* pSource) ;
+        //INodeListener : IConfigListener
+            virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
+            virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
+        public:
+            IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
+            void implSetLocation();
+        private:
+            IConfigBroadcaster* m_pNotificationSource;
+            OUString            m_aLocationPath;
+
+        // ---------------------------------------------------------------------------------------------------
         };
 //-----------------------------------------------------------------------------
     }

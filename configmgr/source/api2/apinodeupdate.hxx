@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,13 @@ namespace configmgr
         class TreeSetUpdater;
         class ValueSetUpdater;
         class SetElementFactory;
+        class ElementTree;
 
         class NodeUpdate;
     }
     namespace configapi
     {
+        class SetElement;
 
         typedef uno::XInterface UnoInterface;
         typedef uno::Any UnoAny;
@@ -117,12 +119,24 @@ namespace configmgr
             configuration::ValueSetUpdater      getNodeUpdater();
         };
 
+        /// informs a <type>SetElement</type> that it should now link to the given SetElement
+        void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement);
+
+        /// informs a <type>SetElement</type> that it should now link to the given SetElement
+        bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const& aElementTree);
+
+        /// informs a <type>SetElement</type> that it should now unlink from its owning SetElement
+        void detachSetElement(SetElement& aElement);
+
+        /// informs a <type>SetElement</type> that it should now unlink from its owning SetElement
+        bool detachSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree);
+
     // Guarding and locking implementations
         /// guards a NodeGroupAccess, or NodeSetAccess; provides an object (write)/provider(read) lock; ensures object was not disposed
         class UpdateGuardImpl : NotCopyable
         {
-            OReadSynchronized   m_aProviderLock;
-            OWriteSynchronized  m_aLock;
+            OReadSynchronized           m_aProviderLock;
+            OClearableWriteSynchronized m_aLock;
             NodeAccess&         m_rNode;
         public:
             UpdateGuardImpl(NodeGroupAccess& rNode) throw();
@@ -130,10 +144,12 @@ namespace configmgr
             ~UpdateGuardImpl() throw ();
         public:
             NodeAccess& get()        const { return m_rNode; }
+
+            void downgrade() { m_aLock.downgrade(); }
         };
 
     // Thin Wrappers around NodeAccesses: Provide guarding and convenient access
-        /// wraps a NodeAccess; provides an object (write) lock, ensures object was not disposed
+        /// wraps a NodeAccess; provides an object (write)/provider(read) lock, ensures object was not disposed
         template <class Access>
         class GuardedNodeUpdate
         {
@@ -145,6 +161,8 @@ namespace configmgr
 
             Access& operator *() const  { return  get(); }
             Access* operator->() const  { return &get(); }
+
+            void clearForBroadcast() { m_aImpl.downgrade(); }
         };
 
         /// wraps a NodeGroupAccess; provides an object (write) lock, ensures object was not disposed

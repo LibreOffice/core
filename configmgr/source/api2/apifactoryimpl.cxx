@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,11 @@ NodeElement* ReadOnlyObjectFactory::doCreateGroupMember(configuration::Tree cons
 }
 //-----------------------------------------------------------------------------
 
-NodeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate)
+TreeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate)
 {
     OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a root object without a tree");
 
-    NodeElement * pResult = 0;
+    TreeElement * pResult = 0;
     if (!pSetElementTemplate)
     {
          ORootElementGroupInfo * pNewObject = new ORootElementGroupInfo(m_rProvider, aTree);
@@ -148,7 +148,7 @@ NodeElement* ReadOnlyObjectFactory::doCreateAccessRoot(configuration::Tree const
 }
 
 //-----------------------------------------------------------------------------
-NodeElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree const& aElementTree, Template* pSetElementTemplate)
+SetElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree const& aElementTree, Template* pSetElementTemplate)
 {
     OSL_ENSURE(aElementTree.isValid(), "ERROR: trying to create a set element object without a tree");
 
@@ -169,7 +169,7 @@ NodeElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTre
         }
     }
 
-    NodeElement * pResult = 0;
+    SetElement * pResult = 0;
     if (!pSetElementTemplate)
     {
          OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree,m_rProvider,pParentContext);
@@ -269,11 +269,11 @@ NodeElement* UpdateObjectFactory::doCreateGroupMember(configuration::Tree const&
 }
 //-----------------------------------------------------------------------------
 
-NodeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate)
+TreeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& aTree, Template* pSetElementTemplate)
 {
     OSL_ENSURE(!aTree.isEmpty(), "ERROR: trying to create a root object without a tree");
 
-    NodeElement * pResult = 0;
+    TreeElement * pResult = 0;
     if (implIsReadOnly(aTree,aTree.getRootNode()))
     {
         OSL_ENSURE(false, "WARNING: Trying to create an 'Update Access' on a read-only tree/node");
@@ -316,7 +316,7 @@ NodeElement* UpdateObjectFactory::doCreateAccessRoot(configuration::Tree const& 
 }
 
 //-----------------------------------------------------------------------------
-NodeElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree const& aElementTree, Template* pSetElementTemplate)
+SetElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree const& aElementTree, Template* pSetElementTemplate)
 {
     OSL_ENSURE(aElementTree.isValid(), "ERROR: trying to create a set element object without a tree");
 
@@ -337,7 +337,7 @@ NodeElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree 
         }
     }
 
-    NodeElement * pResult = 0;
+    SetElement * pResult = 0;
     if (implIsReadOnly(aTree,aTree.getRootNode()))
     {
         if (!pSetElementTemplate)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,6 @@ namespace configmgr
 
         // ---------------------------------------------------------------------------------------------------
             bool checkAlive(uno::XInterface* pObject) const throw(css::lang::DisposedException);
-            void disposeNode(NodeRef const& aNode, css::lang::EventObject const& aEvt) const;
-            void disposeTree(css::lang::EventObject const& aEvt) const;
 
         // ---------------------------------------------------------------------------------------------------
             /// Add a <type scope='com::sun::star::lang'>XEventListener</type> observing <var>aNode</var>.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notifierimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,15 +110,14 @@ namespace configmgr
         public:
             /// construct this around the given Implementation, for the given tree
             NotifierImpl();
+            ~NotifierImpl();
 
             /// retrieve the mutex that is used by this
             osl::Mutex& mutex() const { return m_aMutex; }
 
-            /// Dispose the entry for  <var>aNode</var> and inform any listeners observing it.
-            //void disposeNode(Key const& aNode, css::lang::EventObject const& aEvt);
-
-            /// Dispose the whole notifier and inform any listeners observing it.
-            void dispose(css::lang::EventObject const& aEvt);
+            /// dispose the given node, notifying listeners and sublisteners
+            //  (really bad style to put this here - should move to apinotifierimpl.cxx :-( )
+            bool disposeNodeHelper(Key const& aNode, css::lang::EventObject const& aEvt) const;
 
             /// Add a <type scope='com::sun::star::lang'>XEventListener</type> observing <var>aNode</var>.
             void add(Key const& aNode, uno::Reference< css::lang::XEventListener > const& xListener)

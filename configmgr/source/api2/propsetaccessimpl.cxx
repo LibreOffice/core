@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
 
             aTree.integrate(aChange, aNode, true);
 
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -244,6 +245,7 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
 
             aTree.integrate(aChanges, aNode, true);
 
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChanges);
         }
     }
@@ -310,6 +312,7 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
 
             aTree.integrate(aChange, aNode, false);
 
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -393,8 +396,8 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
 
             aTree.integrate(aChanges, aNode, false);
 
-            if (!aChanges.isEmpty())
-                aSender.notifyListeners(aChanges);
+            impl.clearForBroadcast();
+            aSender.notifyListeners(aChanges);
         }
     }
     catch (configuration::TypeMismatch& ex)
@@ -833,6 +836,7 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
 
             aTree.integrate(aChange, aNode, true);
 
+            impl.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }

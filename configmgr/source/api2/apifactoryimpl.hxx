@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@ namespace configmgr
             ~ReadOnlyObjectFactory();
 
             virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
-            virtual NodeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate);
-            virtual NodeElement*    doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual SetElement* doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
         };
         // used to create UNO objects
         class UpdateObjectFactory : public Factory
@@ -90,8 +90,8 @@ namespace configmgr
             ~UpdateObjectFactory();
 
             virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate);
-            virtual NodeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate);
-            virtual NodeElement*    doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate);
+            virtual SetElement* doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate);
         private:
             bool implIsReadOnly(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
         };

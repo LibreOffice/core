@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "configset.hxx"
 #include "configgroup.hxx"
 #include "configpath.hxx"
+#include "apifactory.hxx"
 
 namespace configmgr
 {
@@ -110,6 +111,67 @@ configuration::TreeSetUpdater NodeTreeSetAccess::getNodeUpdater()
 configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater()
 {
     return configuration::ValueSetUpdater(getTree(),getNode(),getElementInfo());
+}
+//-----------------------------------------------------------------------------
+
+void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement)
+{
+    using configuration::NodeID;
+    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getTree().getRootNode()) ==
+                NodeID(aElement.getTree().getContextTree(),aElement.getTree().getContextNode()),
+                "ERROR: Attaching an unrelated SetElement to a SetInfoAccess");
+    aElement.haveNewParent(&aSet);
+}
+//-----------------------------------------------------------------------------
+
+bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const& aElementTree)
+{
+    using configuration::NodeID;
+    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getTree().getRootNode()) ==
+                NodeID(aElementTree.getTree().getContextTree(),aElementTree.getTree().getContextNode()),
+                "ERROR: Attaching an unrelated ElementTree to a SetInfoAccess");
+
+    Factory& rFactory = aSet.getFactory();
+
+    if (SetElement* pSetElement = rFactory.findSetElement(aElementTree))
+    {
+        // the factory always does an extra acquire
+        UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+
+        attachSetElement(aSet, *pSetElement);
+        return true;
+    }
+    else
+        return false;
+
+}
+//-----------------------------------------------------------------------------
+
+void detachSetElement(SetElement& aElement)
+{
+    OSL_ENSURE( aElement.getTree().getContextTree().isEmpty(),
+                "ERROR: Detaching a SetElement that has a parent");
+
+    aElement.haveNewParent(0);
+}
+//-----------------------------------------------------------------------------
+
+bool detachSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree)
+{
+    OSL_ENSURE( aElementTree.getTree().getContextTree().isEmpty(),
+                "ERROR: Detaching an ElementTree that has a parent");
+
+    if (SetElement* pSetElement = rFactory.findSetElement(aElementTree))
+    {
+        // the factory always does an extra acquire
+        UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
+
+        detachSetElement(*pSetElement);
+        return true;
+    }
+    else
+        return false;
+
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #include "apitreeimplobj.hxx"
 #include "configset.hxx"
 #include "confignotifier.hxx"
+#include "committer.hxx"
+#include "apinodeaccess.hxx"
 
 namespace configmgr
 {
@@ -120,7 +122,7 @@ configuration::ElementTree SetElement::getElementTree() const
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetElementInfo   SetElement::getTemplateInfo() const
+configuration::SetElementInfo SetElement::getTemplateInfo() const
 {
     configuration::ElementTree aTree = configuration::ElementTree::extract(getTree());
     OSL_ENSURE(aTree.isValid(), "This really must be a set element");
@@ -128,6 +130,13 @@ configuration::SetElementInfo   SetElement::getTemplateInfo() const
 }
 //-----------------------------------------------------------------------------
 
+void SetElement::haveNewParent(NodeSetInfoAccess* pNewParent)
+{
+    ApiTreeImpl* pNewParentImpl = pNewParent ? &pNewParent->getApiTree() : 0;
+
+    this->getApiTree().haveNewParent( pNewParentImpl );
+}
+//-----------------------------------------------------------------------------
 // configuration::RootTree  RootElement::getRootTree() const;
 
 //-----------------------------------------------------------------------------
@@ -144,6 +153,12 @@ ISynchronizedData * UpdateRootElement::getDataLock()
 ISynchronizedData * UpdateRootElement::getProviderLock()
 {
     return getApiTree().getProviderLock();
+}
+//-----------------------------------------------------------------------------
+
+Committer UpdateRootElement::getCommitter()
+{
+    return Committer(getApiTree());
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,11 @@ namespace configmgr
             NodeElement* findElement(configuration::NodeID const& aNode);
 
             NodeElement*    makeGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
-            NodeElement*    makeAccessRoot(configuration::Tree const& aTree);
-            NodeElement*    makeSetElement(configuration::ElementTree const& aTree);
+            TreeElement*    makeAccessRoot(configuration::Tree const& aTree);
+            SetElement*     makeSetElement(configuration::ElementTree const& aTree);
 
-            void    registerElement(configuration::NodeID const& aNode, NodeElement& rElement);
+            SetElement*     findSetElement(configuration::ElementTree const& aTree);
+
             void    revokeElement(configuration::NodeID const& aNode);
             void    revokeElement(configuration::NodeID const& aNode, NodeElement& rElement);
 
@@ -136,8 +137,8 @@ namespace configmgr
             uno::Sequence< sal_Int8 > doGetElementTunnelID() const { return m_aTunnelID.getImplementationId(); }
 
             virtual NodeElement*    doCreateGroupMember(configuration::Tree const& aTree, configuration::NodeRef const& aNode, configuration::Template* pSetElementTemplate) = 0;
-            virtual NodeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate) = 0;
-            virtual NodeElement*    doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate) = 0;
+            virtual TreeElement*    doCreateAccessRoot(configuration::Tree const& aTree, configuration::Template* pSetElementTemplate) = 0;
+            virtual SetElement*     doCreateSetElement(configuration::ElementTree const& aTree, configuration::Template* pSetElementTemplate) = 0;
 
             static ApiTreeImpl& getImplementation(NodeElement& pElement);
         private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ namespace configmgr
         class Tree;
         class ElementTree;
 //      class RootTree;
-        class Committer;
 
         class SetElementInfo;
     }
@@ -91,6 +90,8 @@ namespace configmgr
 //-----------------------------------------------------------------------------
         class Factory;
         class Notifier;
+        class Committer;
+        class NodeSetInfoAccess;
 //-----------------------------------------------------------------------------
     // API object implementation wrappers
     //-------------------------------------------------------------------------
@@ -156,6 +157,7 @@ namespace configmgr
         class SetElement : public TreeElement
         {
         public:
+            void haveNewParent(NodeSetInfoAccess* pNewParent);
             configuration::ElementTree      getElementTree() const;
             configuration::SetElementInfo   getTemplateInfo() const;
         };
@@ -172,7 +174,7 @@ namespace configmgr
         class UpdateRootElement : public RootElement
         {
         public:
-            void commit() const;
+            Committer getCommitter();
 
             ISynchronizedData * getDataLock();
             ISynchronizedData * getProviderLock();

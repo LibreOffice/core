@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-09 14:24:01 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 #include "confproviderimpl2.hxx"
+#include "apitypes.hxx"
 #include "apifactoryimpl.hxx"
 #include "apitreeimplobj.hxx"
 #include "apitreeaccess.hxx"
@@ -159,6 +160,11 @@ namespace configmgr
     void ConfigurationProviderImpl2::updateTree(TreeChangeList& aChanges) throw (lang::WrappedTargetException, uno::RuntimeException)
     {
         m_pConfiguration->updateTree(aChanges);
+    }
+
+    void ConfigurationProviderImpl2::notifyUpdate(TreeChangeList const& aChanges) const throw (uno::RuntimeException)
+    {
+        m_pConfiguration->notifyUpdate(aChanges);
     }
 
     ::std::auto_ptr<INode> ConfigurationProviderImpl2::createInstance(const ::rtl::OUString& _rTemplateName) throw (uno::Exception)
@@ -323,21 +329,23 @@ namespace configmgr
 
     // parser methods
     //--------------------------------------------------------------------------
-    void createAndFillAHashSet2(HashSet& aArgs)
+    HashSet const&  createAndFillAHashSet2()
     {
+        static HashSet aSet;
         static bFilled = false;
         if (!bFilled)
         {
-            aArgs.insert(ASCII("nodepath"));
-            aArgs.insert(ASCII("user"));
-            aArgs.insert(ASCII("depth"));
-            aArgs.insert(ASCII("locale"));
+            aSet.insert(ASCII("nodepath"));
+            aSet.insert(ASCII("user"));
+            aSet.insert(ASCII("depth"));
+            aSet.insert(ASCII("locale"));
 
             bFilled = true;
         }
+        return aSet;
     }
 
-    bool lookup2(HashSet &aSet, rtl::OUString aWord)
+    bool lookup2(HashSet const& aSet, rtl::OUString aWord)
     {
         HashSet::const_iterator it = aSet.find(aWord);
         return it != aSet.end() ? true : false;
@@ -349,8 +357,7 @@ namespace configmgr
         beans::PropertyValue aCurrent;
         const uno::Any* pCurrent = _rArgs.getConstArray();
 
-        static HashSet aSet;
-        createAndFillAHashSet2(aSet);
+        HashSet const& aSet = createAndFillAHashSet2();
         bool bParamOk = false;
         for (sal_Int32 i=0; i<_rArgs.getLength(); ++i, ++pCurrent)
         {
@@ -376,6 +383,7 @@ namespace configmgr
                 }
             }
         }
+
         return true;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "confignotifier.hxx"
 
 #include "confsvccomponent.hxx"
+#include "committer.hxx"
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/configuration/XTemplateContainer.hpp>
@@ -95,6 +96,7 @@ namespace configmgr
         using uno::Any;
         using uno::Sequence;
         using lang::NoSupportException;
+        using lang::WrappedTargetException;
 
         using configuration::NodeRef;
         using configuration::Tree;
@@ -474,13 +476,56 @@ void implSetLocale( RootElement& rElement, const css::lang::Locale& eLocale ) th
 
 void implCommitChanges( UpdateRootElement& rElement ) throw(css::lang::WrappedTargetException, uno::RuntimeException)
 {
+    // quick check to avoid big locks for nothing (has its own locking)
+    if (!implHasPendingChanges(rElement)) return;
+
+    try
+    {
+        rElement.getCommitter().commit();
+    }
+
+    // map configuration::Exceptions
+    catch (configuration::WrappedUnoException& ex)
+    {
+        Reference<uno::XInterface> xContext( rElement.getUnoInstance() );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration: can't commit Changes: ") );
+        throw WrappedTargetException( sMessage += ex.extractMessage(), xContext, ex.getAnyUnoException() );
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rElement.getUnoInstance() );
+        e.unhandled();
+    }
+
+    // filter/wrap uno::Exceptions
+    catch (WrappedTargetException& )    { throw; }
+    catch (RuntimeException& )          { throw; }
+    catch (uno::Exception& ex)
+    {
+        Reference<uno::XInterface> xContext( rElement.getUnoInstance() );
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration: can't commit Changes: ") );
+        throw WrappedTargetException( sMessage += ex.Message, xContext, uno::makeAny(ex));
+    }
 }
 //-----------------------------------------------------------------------------
 
 sal_Bool implHasPendingChanges( TreeElement& rElement ) throw(uno::RuntimeException)
 {
-    GuardedTreeElement aLocked(rElement);
-    return aLocked->getTree().hasChanges();
+    try
+    {
+        GuardedTreeElement aLocked(rElement);
+        return aLocked->getTree().hasChanges();
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rElement.getUnoInstance() );
+        e.unhandled();
+    }
+
+    OSL_ENSHURE(false,"Unreachable Code");
+    return false;
 }
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ NodeElement* Factory::findElement(NodeID const& aNodeID)
     return doFindElement(aNodeID);
 }
 //-----------------------------------------------------------------------------
-
+/*
 void Factory::registerElement(NodeID const& aNodeID, NodeElement& rElement)
 {
     osl::MutexGuard aLock(this->doGetMutex());
@@ -254,6 +254,7 @@ void Factory::registerElement(NodeID const& aNodeID, NodeElement& rElement)
         doRegisterElement(aNodeID, &rElement);
     }
 }
+*/
 //-----------------------------------------------------------------------------
 
 void Factory::revokeElement(NodeID const& aNodeID)
@@ -277,7 +278,7 @@ UnoInterfaceRef Factory::makeUnoAccessRoot(Tree const& aTree)
     return implToUno(makeAccessRoot(aTree));
 }
 //-----------------------------------------------------------------------------
-NodeElement* Factory::makeAccessRoot(Tree const& aTree)
+TreeElement* Factory::makeAccessRoot(Tree const& aTree)
 {
     OSL_PRECOND( !aTree.isEmpty() , "ERROR: Configuration: Making element from tree requires valid tree");
     if (aTree.isEmpty()) return 0;
@@ -293,7 +294,8 @@ NodeElement* Factory::makeAccessRoot(Tree const& aTree)
     osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aRoot);
-    NodeElement* pRet = doFindElement(aNodeID);
+    // must be a tree element if it is a tree root
+    TreeElement* pRet = static_cast<TreeElement*>(doFindElement(aNodeID));
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
@@ -353,7 +355,7 @@ UnoInterfaceRef Factory::makeUnoSetElement(ElementTree const& aElementTree)
 }
 //-----------------------------------------------------------------------------
 
-NodeElement* Factory::makeSetElement(ElementTree const& aElementTree)
+SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
 {
     OSL_PRECOND( aElementTree.isValid() , "ERROR: Configuration: Making element from tree requires valid tree");
     if (!aElementTree.isValid()) return 0;
@@ -369,7 +371,8 @@ NodeElement* Factory::makeSetElement(ElementTree const& aElementTree)
     osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aRoot);
-    NodeElement* pRet = doFindElement(aNodeID);
+    // must be a set element if it wraps a ElementTree
+    SetElement* pRet = static_cast<SetElement*>( doFindElement(aNodeID) );
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
@@ -378,6 +381,29 @@ NodeElement* Factory::makeSetElement(ElementTree const& aElementTree)
 
         implHaveNewElement(aNodeID,pRet);
     }
+    return pRet;
+}
+//-----------------------------------------------------------------------------
+
+SetElement* Factory::findSetElement(ElementTree const& aElementTree)
+{
+    OSL_PRECOND( aElementTree.isValid() , "ERROR: Configuration: Making element from tree requires valid tree");
+    if (!aElementTree.isValid()) return 0;
+
+    Tree aTree = aElementTree.getTree();
+    OSL_ENSURE(!aTree.isEmpty(),"INTERNAL ERROR: Element Tree has no Tree");
+
+    NodeRef aRoot = aTree.getRootNode();
+    OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
+
+    OSL_ENSURE( !configuration::isSimpleValue(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
+
+    osl::MutexGuard aLock(this->doGetMutex());
+
+    NodeID aNodeID(aTree,aRoot);
+    // must be a set element if it wraps a ElementTree
+    SetElement* pRet = static_cast<SetElement*>( doFindElement(aNodeID) );
+
     return pRet;
 }
 //-----------------------------------------------------------------------------

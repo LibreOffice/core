@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ namespace configmgr
     {
         class Factory;
         class Notifier;
+        class SetElement;
 
         class ApiTreeImpl;
 
@@ -136,14 +137,6 @@ namespace configmgr
         */
         UnoAny  makeElement(configapi::Factory& rFactory, configuration::ElementTree const& aTree);
 
-        /** extracts a <type scope='configmgr::configuration'>Tree</type> from a <type scope='com::sun::star::uno'>Any</type>
-            which must contain an object which wraps an instance of the template available in <var>aElementInfo</var>.
-            <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided
-                to resolve inner nodes (which may suppose that the object was created using the same factory)</p>
-            <p> returns an empty <type scope='configmgr::configuration'>Tree</type> if <var>aElement</var> is empty.</p>
-            <p> May throw exceptions if the type doesn't match the template.</p>
-        */
-        configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo );
 
         // Info interfaces for Group Nodes
         class NodeGroupInfoAccess : public NodeAccess
@@ -155,9 +148,22 @@ namespace configmgr
         // Info interfaces for Set Nodes
         class NodeSetInfoAccess : public NodeAccess
         {
+            friend class SetElement;
         public:
             configuration::SetElementInfo getElementInfo() const;
         };
+
+        /** extracts a <type scope='configmgr::configuration'>ElementTree</type> from a <type scope='com::sun::star::uno'>Any</type>
+            which must contain an object which wraps an instance of the template available in <var>aElementInfo</var>.
+            <p> Uses the <type scope='configmgr::configapi'>Factory</type> provided
+                to resolve inner nodes (which may suppose that the object was created using the same factory)</p>
+            <p> returns an empty <type scope='configmgr::configuration'>Tree</type> if <var>aElement</var> is empty.</p>
+            <p> May throw exceptions if the type doesn't match the template.</p>
+        */
+        configuration::ElementTree extractElementTree(Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo );
+
+        /// finds a existing <type>SetElement</type> for a given <type scope='configmgr::configuration'>ElementTree</type>
+        SetElement* findSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree);
 
     // Guarding and locking implementations
         /// guards a NodeAccess; provides an object (read) lock, ensures object was not disposed

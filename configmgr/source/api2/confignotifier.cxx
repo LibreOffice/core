@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,11 @@ NotifierImpl::NotifierImpl()
 , m_aListeners(m_aMutex)
 {
 }
+// ---------------------------------------------------------------------------------------------------
+
+NotifierImpl::~NotifierImpl()
+{
+}
 
 // ---------------------------------------------------------------------------------------------------
 /*void NotifierImpl::disposeNode(Key const& aNode, css::lang::EventObject const& aEvt)
@@ -209,17 +214,76 @@ NotifierImpl::NotifierImpl()
 }
 */
 // ---------------------------------------------------------------------------------------------------
-void Notifier::disposeNode(NodeRef const& aNode, css::lang::EventObject const& aEvt) const
+bool NotifierImpl::disposeNodeHelper(Key const& aNode, css::lang::EventObject const& aEvt) const
 {
-//  m_aImpl->disposeNode( NodeID(m_aTree,aNode), aEvt );
-}
-// ---------------------------------------------------------------------------------------------------
-void NotifierImpl::dispose(css::lang::EventObject const& aEvt)
-{
-    if (m_aListeners.dispose(aEvt ))
+    using configuration::NodeIDList;
+    using configuration::getAllChildrenHelper;
+    using com::sun::star::lang::XEventListener;
+    using com::sun::star::beans::XPropertyChangeListener;
+    using com::sun::star::beans::XVetoableChangeListener;
+
+    osl::ClearableMutexGuard aGuard( mutex() );
+
+    if (m_aListeners.isAlive())
     {
-        m_aListeners.endDisposing();
+        // collect a list of all relevant listeners
+        typedef std::vector< uno::Reference< XEventListener> > EventListeners;
+        EventListeners aNotifyListeners;
+
+        // collect the child listeners for properties
+        NodeIDList aChildNodes;
+        getAllChildrenHelper(aNode, aChildNodes);
+
+        for (NodeIDList::const_iterator it = aChildNodes.begin(); it !=aChildNodes.end(); ++it)
+        {
+            if (ListenerContainer* pSubContainer = m_aListeners.getContainer( *it ) )
+            {
+                ListenerContainerIterator<XPropertyChangeListener> itProps(*pSubContainer);
+                while (itProps.hasMoreElements())
+                {
+                    uno::Reference< XPropertyChangeListener > xListener = itProps.next();
+                    aNotifyListeners.push_back( xListener.get() );
+                    pSubContainer->removeInterface( xListener );
+                }
+
+                ListenerContainerIterator<XVetoableChangeListener> itVetos(*pSubContainer);
+                while (itVetos.hasMoreElements())
+                {
+                    uno::Reference< XVetoableChangeListener > xListener = itVetos.next();
+                    aNotifyListeners.push_back( xListener.get() );
+                    pSubContainer->removeInterface( xListener );
+                }
+            }
+        }
+        // collect the direct listeners
+        if (ListenerContainer* pThisContainer = m_aListeners.getContainer( aNode ) )
+        {
+            ListenerContainerIterator<XEventListener> itAllEvents(*pThisContainer);
+            while (itAllEvents.hasMoreElements())
+            {
+                uno::Reference< XEventListener > xListener = itAllEvents.next();
+
+                // skip propertylisteners
+                if (uno::Reference< XPropertyChangeListener >::query(xListener).is()) continue;
+                if (uno::Reference< XVetoableChangeListener >::query(xListener).is()) continue;
+
+                aNotifyListeners.push_back( xListener );
+                pThisContainer->removeInterface( xListener );
+            }
+        }
+
+        // now do the dispose notifications
+        aGuard.clear();
+
+        for(EventListeners::iterator itNotify = aNotifyListeners.begin(); itNotify != aNotifyListeners.end(); ++it)
+        {
+            OSL_ASSERT(itNotify->is());
+            (*itNotify)->disposing(aEvt);
+        }
+        return true;
     }
+    else
+        return false;
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -317,7 +381,6 @@ void Notifier::remove(NodeRef const& aNode, uno::Reference< css::beans::XPropert
     if (xListener.is())
         m_aImpl->remove( NodeID(m_aTree,aNode), xListener );
 }
-// ---------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
@@ -370,8 +433,6 @@ DisposeGuard::DisposeGuard(TreeElement& rTree) throw(css::lang::DisposedExceptio
 {
     rTree.checkAlive();
 }
-// ---------------------------------------------------------------------------------------------------
-
 // ---------------------------------------------------------------------------------------------------
     }
 }

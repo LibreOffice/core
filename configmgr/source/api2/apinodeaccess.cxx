@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,17 @@ configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoA
 }
 //-----------------------------------------------------------------------------
 
+SetElement* findSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree)
+{
+    SetElement* pSetElement = rFactory.findSetElement(aElementTree);
+    if (pSetElement)
+    {
+        // the factory always does an extra acquire
+        pSetElement->getUnoInstance()->release();
+    }
+    return pSetElement;
+}
+//-----------------------------------------------------------------------------
 
 configuration::SetElementInfo NodeSetInfoAccess::getElementInfo() const
 {

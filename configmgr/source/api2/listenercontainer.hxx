@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,11 +142,13 @@ namespace configmgr
              */
             MultiListenerContainer(osl::Mutex& rMutex)
             : m_aBroadcastHelper(rMutex)
+            , m_bDisposeLock(false)
             {}
 
             ~MultiListenerContainer()
             {
                 OSL_ENSURE(isDisposed(), "ERROR: Object was not disposed properly");
+                if (m_bDisposeLock) mutex().release();
             }
         public:
             /// get the mutex thatthis object uses
@@ -173,12 +175,28 @@ namespace configmgr
             /**
              * Call disposing on all object in all the containers that
              * support XEventListener. Then clear the container.
+             */
+            void dispose( const lang::EventObject & rEvt ) throw(uno::RuntimeException);
+
+            /**
+             * Start disposing this object, leave the mutex locked for dispose processing
              * @return <TRUE/>
              *      if disposing has been started
              * @return <FALSE/>
              *      if disposing had already been started before
              */
-            bool dispose( const lang::EventObject & rEvt ) throw(uno::RuntimeException);
+            bool beginDisposing() throw();
+            /**
+             * Continue disposing this object leave the mutex unlocked
+             * <p>  Call disposing on all object in all the containers that
+             *      support XEventListener. Then clear the container.
+             * </p>
+             * @return <TRUE/>
+             *      if disposing has been started
+             * @return <FALSE/>
+             *      if disposing had already been started before
+             */
+            void notifyDisposing( const lang::EventObject & rEvt ) throw(uno::RuntimeException);
 
             /// mark the end of the dispose processing
             void endDisposing() throw();
@@ -218,6 +236,7 @@ namespace configmgr
             typedef cppu::OBroadcastHelperVar< ContainerHelper, Key >                           BroadcastHelper;
         private:
             BroadcastHelper m_aBroadcastHelper;
+            bool m_bDisposeLock;
         };
 //-----------------------------------------------------------------------------
 
@@ -255,15 +274,24 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_>
-        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::dispose(const lang::EventObject & rEvt) throw(uno::RuntimeException)
+        void MultiListenerContainer<Key_,KeyHash_,KeyEq_>::dispose(const lang::EventObject & rEvt) throw(uno::RuntimeException)
         {
-            osl::ClearableMutexGuard aGuard( mutex() );
+            if (beginDisposing())
+            {
+                notifyDisposing( rEvt );
+                endDisposing();
+            }
+        }
+//-----------------------------------------------------------------------------
+        template <class Key_, class KeyHash_, class KeyEq_>
+        bool MultiListenerContainer<Key_,KeyHash_,KeyEq_>::beginDisposing() throw()
+        {
+            osl::MutexGuard aGuard( mutex() );
             if (isAlive())
             {
+                mutex().acquire();
                 m_aBroadcastHelper.bInDispose = sal_True;
-
-                aGuard.clear();
-                m_aBroadcastHelper.aLC.disposeAndClear( rEvt );
+                m_bDisposeLock = true;
 
                 return true;
             }
@@ -271,13 +299,38 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_>
+        void MultiListenerContainer<Key_,KeyHash_,KeyEq_>::notifyDisposing(const lang::EventObject & rEvt) throw(uno::RuntimeException)
+        {
+            OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
+            OSL_ENSURE(m_bDisposeLock,"Duplicate call for dispose notification or disposing is not taking place");
+
+            if (m_bDisposeLock)
+            {
+                OSL_ASSERT(m_aBroadcastHelper.bInDispose);
+                m_bDisposeLock = false;
+                mutex().release();
+
+                m_aBroadcastHelper.aLC.disposeAndClear( rEvt );
+            }
+        }
+//-----------------------------------------------------------------------------
+        template <class Key_, class KeyHash_, class KeyEq_>
         void MultiListenerContainer<Key_,KeyHash_,KeyEq_>::endDisposing() throw()
         {
             OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
+
             if (!isAlive())
             {
+                OSL_ENSURE(!m_bDisposeLock,"Did you forget to notify ?");
+
                 m_aBroadcastHelper.bDisposed = sal_True;
                 m_aBroadcastHelper.bInDispose = sal_False;
+
+                if (m_bDisposeLock)
+                {
+                    m_bDisposeLock = false;
+                    mutex().release();
+                }
             }
         }
 //-----------------------------------------------------------------------------
