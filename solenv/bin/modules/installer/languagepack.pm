@@ -2,9 +2,6 @@
 #
 #   $RCSfile: languagepack.pm,v $
 #
-#   $Revision: 1.3 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:52:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +87,13 @@ sub select_language_items
 
         if (!($ismultilingual))
         {
+            # Files with style "LANGUAGEPACK" also have to be included into the language pack
+
+            my $styles = "";
+            if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+            if ( $styles =~ /\bLANGUAGEPACK\b/ ) { push(@itemsarray, $oneitem); }
+
             next;   # single language files are not included into language pack
         }
 
@@ -260,6 +264,7 @@ sub put_productname_into_script
 
     my $productname = $variableshashref->{'PRODUCTNAME'};
     $productname = lc($productname);
+    $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     my $infoline = "Adding productname $productname into language pack script\n";
     push( @installer::globals::logfileinfo, $infoline);
