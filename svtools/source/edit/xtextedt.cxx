@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2002-12-03 12:02:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,9 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
             rSel.GetEnd().GetPara() = nNode;
             rSel.GetEnd().GetIndex() = nEndPos;
             // Ueber den Absatz selektieren?
-            if( nEndPos == (-1) ) // USHORT fuer 0 und -1 !
+            // Select over the paragraph?
+            // FIXME  This should be max long...
+            if( nEndPos == (-1) ) // USHORT for 0 and -1 !
             {
                 if ( (rSel.GetEnd().GetPara()+1) < GetParagraphCount() )
                 {
@@ -392,7 +394,6 @@ BOOL ExtTextView::ImpIndentBlock( BOOL bRight )
 
     ULONG nStartPara = aSel.GetStart().GetPara();
     ULONG nEndPara = aSel.GetEnd().GetPara();
-    BOOL bIndentAll = TRUE;
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
         nEndPara--; // den dann nicht einruecken...
