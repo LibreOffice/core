@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-#include "calbck.hxx"
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -84,7 +86,6 @@ class Time;
 class _SetGetExpFlds;
 class SwEditShell;
 class SvStringsDtor;
-namespace com{namespace star { namespace sun {namespace uno{ class Any;}}}}
 class SvNumberFormatter;
 
 #endif      // FIELDIDS_ONLY
@@ -135,6 +136,7 @@ enum RES_FIELDS
     RES_SCRIPTFLD,
     RES_DATETIMEFLD,
     RES_AUTHORITY,  //Table of authorities
+    RES_COMBINED_CHARS,
     RES_FIELDS_END
 };
 
@@ -186,6 +188,7 @@ enum SwFldTypesEnum
     TYP_JUMPEDITFLD,
     TYP_SCRIPTFLD,              // 40
     TYP_AUTHORITY,
+    TYP_COMBINED_CHARS,
     TYP_END
 };
 

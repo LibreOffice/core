@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:06:40 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ enum
     GRP_DOC_END     =  GRP_DOC_BEGIN + 11,
 
     GRP_FKT_BEGIN   =  GRP_DOC_END,
-    GRP_FKT_END     =  GRP_FKT_BEGIN + 6,
+    GRP_FKT_END     =  GRP_FKT_BEGIN + 7,
 
     GRP_REF_BEGIN   =  GRP_FKT_END,
     GRP_REF_END     =  GRP_REF_BEGIN + 2,
@@ -356,6 +356,7 @@ static const SwFldPack __FAR_DATA aSwFlds[] =
     TYP_INPUTFLD,       FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0,
     TYP_MACROFLD,       0,                  0,              0,                  0,
     TYP_JUMPEDITFLD,    0,                  0,              FMT_MARK_BEGIN,     FMT_MARK_END,
+    TYP_COMBINED_CHARS,  0,                 0,              0,                  0,
     TYP_HIDDENTXTFLD,   0,                  0,              0,                  0,
     TYP_HIDDENPARAFLD,  0,                  0,              0,                  0,
 
@@ -1007,6 +1008,13 @@ BOOL SwFldMgr::InsertFld(USHORT         nType,
             pFld = new SwScriptField(pType, rPar1, rPar2, (BOOL)nFormat);
             break;
         }
+        case TYP_COMBINED_CHARS:
+        {
+            SwCombinedCharFieldType* pType = (SwCombinedCharFieldType*)
+                                pSh->GetFldType( 0, RES_COMBINED_CHARS );
+            pFld = new SwCombinedCharField( pType, rPar1 );
+        }
+        break;
         case TYP_AUTHORITY:
         {
             SwAuthorityFieldType* pType =
@@ -1844,7 +1852,8 @@ void SwFieldType::_GetFldName()
         STR_INTERNETFLD,
         STR_JUMPEDITFLD,
         STR_SCRIPTFLD,
-        STR_AUTHORITY
+        STR_AUTHORITY,
+        STR_COMBINED_CHARS
     };
 
     // Infos fuer Felder einfuegen

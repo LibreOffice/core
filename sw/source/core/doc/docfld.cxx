@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:23:48 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1625,7 +1625,7 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwDateTimeFieldType(this), nFldType++ );
     pFldTypes->Insert( new SwChapterFieldType, nFldType++ );
     pFldTypes->Insert( new SwPageNumberFieldType, nFldType++ );
-    pFldTypes->Insert( new SwAuthorFieldType(this),nFldType++ );
+    pFldTypes->Insert( new SwAuthorFieldType, nFldType++ );
     pFldTypes->Insert( new SwFileNameFieldType(this), nFldType++ );
     pFldTypes->Insert( new SwDBNameFieldType(this), nFldType++);
     pFldTypes->Insert( new SwGetExpFieldType(this), nFldType++ );
@@ -1648,6 +1648,7 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwRefPageGetFieldType( this ), nFldType++ );
     pFldTypes->Insert( new SwJumpEditFieldType( this ), nFldType++ );
     pFldTypes->Insert( new SwScriptFieldType( this ), nFldType++ );
+    pFldTypes->Insert( new SwCombinedCharFieldType, nFldType++ );
 
     // Types muessen am Ende stehen !!
     // Im InsertFldType wird davon ausgegangen !!!!

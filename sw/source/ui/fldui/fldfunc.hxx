@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ class SwFldFuncPage : public SwFldPage
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SelectHdl, ListBox* pLB = 0 );
     DECL_LINK( InsertMacroHdl, ListBox* pLB = 0 );
+    DECL_LINK( ModifyHdl, Edit *pEd = 0 );
 
     // Macro ausw„hlen
     DECL_LINK( MacroHdl, Button * );

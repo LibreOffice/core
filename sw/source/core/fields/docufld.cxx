@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 16:49:00 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,10 +449,9 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
     Beschreibung: SwAuthorFieldType
  --------------------------------------------------------------------*/
 
-SwAuthorFieldType::SwAuthorFieldType(SwDoc* pDocument)
+SwAuthorFieldType::SwAuthorFieldType()
     : SwFieldType( RES_AUTHORFLD )
 {
-    pDoc = pDocument;
 }
 
 String SwAuthorFieldType::Expand(sal_uInt32 nFmt) const
@@ -468,8 +467,7 @@ String SwAuthorFieldType::Expand(sal_uInt32 nFmt) const
 
 SwFieldType* SwAuthorFieldType::Copy() const
 {
-    SwAuthorFieldType *pTmp = new SwAuthorFieldType(pDoc);
-    return pTmp;
+    return new SwAuthorFieldType;
 }
 
 /*--------------------------------------------------------------------
@@ -485,16 +483,17 @@ SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
 String SwAuthorField::Expand() const
 {
     if (!IsFixed())
-        ((SwAuthorField*)this)->aContent = ((SwAuthorFieldType*)GetTyp())->Expand(GetFormat());
+        ((SwAuthorField*)this)->aContent =
+                    ((SwAuthorFieldType*)GetTyp())->Expand(GetFormat());
 
     return aContent;
 }
 
 SwField* SwAuthorField::Copy() const
 {
-    SwAuthorField *pTmp = new SwAuthorField((SwAuthorFieldType*)GetTyp(), GetFormat());
+    SwAuthorField *pTmp = new SwAuthorField( (SwAuthorFieldType*)GetTyp(),
+                                                GetFormat());
     pTmp->SetExpansion(aContent);
-
     return pTmp;
 }
 
@@ -891,10 +890,12 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
             ASSERT( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
     }
 
+    String sRet;
     if( nVal <= SHRT_MAX )
-        return FormatNumber( (sal_uInt16)nVal, nFmt );
-
-    return nVal;
+        sRet = FormatNumber( (sal_uInt16)nVal, nFmt );
+    else
+        sRet = String::CreateFromInt32( nVal );
+    return sRet;
 }
 
 SwFieldType* SwDocStatFieldType::Copy() const
@@ -2015,14 +2016,14 @@ SwField* SwRefPageSetField::Copy() const
  ---------------------------------------------------------------------------*/
 String SwRefPageSetField::GetPar2() const
 {
-    return String::CreateFromInt32(GetOffset());
+    return String::CreateFromInt32( GetOffset() );
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwRefPageSetField::SetPar2(const String& rStr)
 {
-    SetOffset(rStr.ToInt32());
+    SetOffset( (short) rStr.ToInt32() );
 }
 
 /*-----------------05.03.98 14:52-------------------
@@ -2473,3 +2474,79 @@ BOOL SwJumpEditField::PutValue( const uno::Any& rAny, const String& rProperty )
 #endif
     return sal_True;
 }
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: Combined Character Fieldtype / Field
+ --------------------------------------------------------------------*/
+
+SwCombinedCharFieldType::SwCombinedCharFieldType()
+    : SwFieldType( RES_COMBINED_CHARS )
+{
+}
+
+SwFieldType* SwCombinedCharFieldType::Copy() const
+{
+    return new SwCombinedCharFieldType;
+}
+
+/* --------------------------------------------------------------------*/
+
+SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
+                                            const String& rChars )
+    : SwField( pFTyp, 0 ),
+    sCharacters( rChars.Copy( 0, MAX_COMBINED_CHARACTERS ))
+{
+}
+
+String  SwCombinedCharField::Expand() const
+{
+    return sCharacters;
+}
+
+SwField* SwCombinedCharField::Copy() const
+{
+    return new SwCombinedCharField( (SwCombinedCharFieldType*)GetTyp(),
+                                        sCharacters );
+}
+
+const String& SwCombinedCharField::GetPar1() const
+{
+    return sCharacters;
+}
+
+void SwCombinedCharField::SetPar1(const String& rStr)
+{
+    sCharacters = rStr.Copy( 0, MAX_COMBINED_CHARACTERS );
+}
+
+BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
+                                        const String& rProperty ) const
+{
+    if( rProperty.EqualsAscii( UNO_NAME_CONTENT ) ||
+        rProperty.EqualsAscii( UNO_NAME_CURRENT_PRESENTATION ))
+        rAny <<= rtl::OUString( sCharacters );
+#ifdef DBG_UTIL
+    else
+        DBG_ERROR("Welches Property?")
+#endif
+    return sal_True;
+}
+
+BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
+                                        const String& rProperty )
+{
+    if( rProperty.EqualsAscii(UNO_NAME_CONTENT) ||
+        rProperty.EqualsAscii(UNO_NAME_CURRENT_PRESENTATION))
+    {
+        OUString uTmp;
+        rAny >>= uTmp;
+        sCharacters = String( uTmp );
+    }
+#ifdef DBG_UTIL
+    else
+        DBG_ERROR("Welches Property?")
+#endif
+    return sal_True;
+}
+

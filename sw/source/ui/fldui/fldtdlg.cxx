@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,8 +451,10 @@ void SwFldDlg::Activate()
     ReInitTabPage(TP_FLD_VAR);
 
     if (!bHtmlMode)
+    {
         ReInitTabPage(TP_FLD_REF);
-
+        ReInitTabPage(TP_FLD_FUNC);
+    }
 }
 
 /*--------------------------------------------------------------------
@@ -482,6 +484,9 @@ void SwFldDlg::InsertHdl()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:36  hr
+    initial import
+
     Revision 1.26  2000/09/18 16:05:29  willem.vandorp
     OpenOffice header added.
 

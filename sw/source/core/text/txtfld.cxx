@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-06 15:26:23 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,24 +153,24 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     {
         case RES_SCRIPTFLD:
         case RES_POSTITFLD:
-        {
             pRet = new SwPostItsPortion( RES_SCRIPTFLD == pFld->GetTyp()->Which() );
             break;
-        }
-        case RES_HIDDENTXTFLD:
-        {
-#ifdef OWN_YOUR_OWN_RISK
-            if( bName )
-                pRet = new SwFldPortion(pFld->GetCntnt( TRUE ));
-            else
-                pRet = new SwCombinedPortion(pFld->GetCntnt( FALSE ));
-#else
-            pRet = new SwHiddenPortion(pFld->GetCntnt( bName ));
-#endif
+
+        case RES_COMBINED_CHARS:
+            {
+                String sStr( pFld->GetCntnt( bName ));
+                if( bName )
+                    pRet = new SwFldPortion( sStr );
+                else
+                    pRet = new SwCombinedPortion( sStr );
+            }
             break;
-        }
+
+        case RES_HIDDENTXTFLD:
+            pRet = new SwHiddenPortion(pFld->GetCntnt( bName ));
+            break;
+
         case RES_CHAPTERFLD:
-        {
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
                 ((SwChapterField*)pFld)->ChangeExpansion( pFrame,
@@ -178,7 +178,6 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             }
             pRet = new SwFldPortion( pFld->GetCntnt( bName ) );
             break;
-        }
 
         case RES_DOCSTATFLD:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )

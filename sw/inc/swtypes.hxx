@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:16:31 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ enum SwGetPoolIdFromName
 };
 
 // Anzahl der SystemField-Types vom SwDoc
-#define INIT_FLDTYPES   30
+#define INIT_FLDTYPES   31
 // Anzahl der vordefinierten Seq-Feldtypen. Es handelt sich dabei
 // immer um die letzen Felder vor INIT_FLDTYPES
 #define INIT_SEQ_FLDTYPES   4

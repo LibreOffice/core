@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:29:29 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,6 +715,12 @@ String STR_JUMPEDITFLD
     Text[ turkish ] = "Genel arama  karakteri";
     Text[ language_user1 ] = " ";
 };
+String STR_COMBINED_CHARS
+{
+    TEXT = "Zeichen kombinieren" ;
+    TEXT [ English ] = "Combine characters" ;
+};
+
  //
  // Bereich Referenzen
  //
@@ -3159,6 +3165,11 @@ String STR_PROMPT
     TEXT[ korean ] = "ÂüÁ¶(~R)";
     TEXT[ turkish ] = "Bilgi";
     TEXT[ language_user1 ] = " ";
+};
+String STR_COMBCHRS_FT
+{
+    TEXT = "Ze~ichen" ;
+    TEXT [ English ] = "Ch~aracters" ;
 };
 String STR_SETNO
 {

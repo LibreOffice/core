@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     FreeResource();
 
     aNameED.SetPosPixel(Point(aNameED.GetPosPixel().X(), aFormatLB.GetPosPixel().Y()));
+
+    aNameED.SetModifyHdl(LINK(this, SwFldFuncPage, ModifyHdl));
 
     sOldValueFT = aValueFT.GetText();
     sOldNameFT = aNameFT.GetText();
@@ -438,6 +440,18 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
                 // bShowSelection = TRUE;
                 break;
 
+            case TYP_COMBINED_CHARS:
+                {
+                    aNameFT.SetText(SW_RESSTR(STR_COMBCHRS_FT));
+                    aNameED.EnableDrop(TRUE);
+                    bName = TRUE;
+
+                    const USHORT nLen = aNameED.GetText().Len();
+                    if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
+                        bInsert = FALSE;
+                }
+                break;
+
             default:
                 break;
         }
@@ -465,7 +479,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
         aValueED.Enable(bValue);
         aMacroBT.Enable(bMacro);
 
-        EnableInsert(bInsert);
+        EnableInsert( bInsert );
     }
 
     return 0;
@@ -479,8 +493,8 @@ IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, pBox )
 {
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
-    if (nTypeId == TYP_MACROFLD)
-        aNameED.SetText(aSelectionLB.GetSelectEntry());
+    if( TYP_MACROFLD == nTypeId )
+        aNameED.SetText( aSelectionLB.GetSelectEntry() );
 
     return 0;
 }
@@ -616,6 +630,8 @@ BOOL __EXPORT SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
+    ModifyHdl();    // Insert ggf enablen/disablen
+
     return FALSE;
 }
 
@@ -683,9 +699,31 @@ void    SwFldFuncPage::FillUserData()
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
+
+IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
+{
+    String aName(aNameED.GetText());
+    const USHORT nLen = aName.Len();
+
+    BOOL bEnable = TRUE;
+    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+
+    if( TYP_COMBINED_CHARS == nTypeId &&
+        (!nLen || nLen > MAX_COMBINED_CHARACTERS ))
+        bEnable = FALSE;
+
+    EnableInsert( bEnable );
+
+    return 0;
+}
+
+
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:36  hr
+    initial import
+
     Revision 1.28  2000/09/18 16:05:28  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2001-01-18 14:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,9 +225,8 @@ public:
 
 class SwAuthorFieldType : public SwFieldType
 {
-    SwDoc *pDoc;
 public:
-    SwAuthorFieldType(SwDoc*);
+    SwAuthorFieldType();
 
     String                  Expand(ULONG) const;
     virtual SwFieldType*    Copy() const;
@@ -769,7 +768,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: PostIts
+    Beschreibung: Script Fieldtype
  --------------------------------------------------------------------*/
 
 class SwScriptFieldType : public SwFieldType
@@ -782,7 +781,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: PostIt
+    Beschreibung: Script Field
  --------------------------------------------------------------------*/
 
 class SwScriptField : public SwField
@@ -812,6 +811,44 @@ public:
     void                    SetCodeURL( BOOL bURL ) { bCodeURL = bURL; }
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+};
+
+/*--------------------------------------------------------------------
+    Beschreibung: Combined Character Fieldtype
+ --------------------------------------------------------------------*/
+
+class SwCombinedCharFieldType : public SwFieldType
+{
+public:
+    SwCombinedCharFieldType();
+
+    virtual SwFieldType*    Copy() const;
+};
+
+/*--------------------------------------------------------------------
+    Beschreibung: Script Field
+ --------------------------------------------------------------------*/
+
+#define MAX_COMBINED_CHARACTERS     6
+
+class SwCombinedCharField : public SwField
+{
+    String  sCharacters;    // combine these characters
+
+public:
+    SwCombinedCharField( SwCombinedCharFieldType*, const String& rChars );
+
+    virtual String          Expand() const;
+    virtual SwField*        Copy() const;
+
+    // Characters
+    virtual const String&   GetPar1() const;
+    virtual void            SetPar1(const String& rStr);
+
+    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal,
+                                        const String& rProperty ) const;
+    virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal,
+                                        const String& rProperty );
 };
 
 
