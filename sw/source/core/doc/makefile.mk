@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:53:20 $
+#   last change: $Author: hr $ $Date: 2003-07-16 18:09:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,7 +123,7 @@ SLOFILES =	\
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SLOFILES += $(SLO)$/gcc_outl.obj
 .ENDIF
 
