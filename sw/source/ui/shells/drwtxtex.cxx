@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:41:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -648,21 +651,27 @@ ASK_ESCAPE:
             break;
 
         case FN_THESAURUS_DLG:
-            {
-                // disable "Thesaurus" if the language is not supported
-                const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
-                                GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage())) );
-                LanguageType nLang = ((const SvxLanguageItem &)
-                                                        rItem).GetLanguage();
-                //
-                uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
-                if (!xThes.is() || nLang == LANGUAGE_NONE ||
-                    !xThes->hasLocale( SvxCreateLocale( nLang ) ))
-                    rSet.DisableItem( FN_THESAURUS_DLG );
-                nSlotId = 0;
-            }
-            break;
+        {
+            // disable "Thesaurus" if the language is not supported
+            const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
+                            GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                            GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage())) );
+            LanguageType nLang = ((const SvxLanguageItem &)
+                                                    rItem).GetLanguage();
+            //
+            uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+            if (!xThes.is() || nLang == LANGUAGE_NONE ||
+                !xThes->hasLocale( SvxCreateLocale( nLang ) ))
+                rSet.DisableItem( FN_THESAURUS_DLG );
+            nSlotId = 0;
+        }
+        break;
+        case SID_HANGUL_HANJA_CONVERSION:
+        {
+            if (!SvtCJKOptions().IsAnyEnabled())
+                rSet.DisableItem(nWhich);
+        }
+        break;
 
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
