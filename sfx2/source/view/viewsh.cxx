@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:37:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,6 +440,11 @@ void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* pClient )
 
 void SfxViewShell::UIActivating( SfxInPlaceClient* pClient )
 {
+    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
+    if ( xParentFrame.is() )
+        xParentFrame->setActiveFrame( xOwnFrame );
+
     pFrame->GetBindings().HidePopups(TRUE);
     pFrame->GetDispatcher()->Update_Impl( TRUE );
 }
@@ -452,6 +457,11 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* pClient )
         SFX_APP()->GetViewFrame() != pFrame )
             pFrame->GetDispatcher()->Update_Impl( TRUE );
     pFrame->GetBindings().HidePopups(FALSE);
+
+    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
+    if ( xParentFrame.is() )
+        xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
 }
 
 //--------------------------------------------------------------------
@@ -513,14 +523,6 @@ void SfxViewShell::Activate( BOOL bMDI )
         SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
         if ( pSh->GetModel().is() )
             pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame()->GetController() );
-        if ( pSh && pSh->GetMedium() && pSh->GetMedium()->GetName().Len() )
-            INetURLObject::SetBaseURL( pSh->GetBaseURL() );
-        else
-        {
-            INetURLObject aObject( SvtPathOptions().GetWorkPath() );
-            aObject.setFinalSlash();
-            INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
-        }
 
         SfxObjectShell::SetWorkingDocument( pSh );
     }
@@ -808,7 +810,6 @@ SfxViewShell::SfxViewShell
     if ( pFrame->GetParentViewFrame() )
         pImp->bPlugInsActive = pFrame->GetParentViewFrame()->GetViewShell()->pImp->bPlugInsActive;
     pImp->eScroll = SCROLLING_DEFAULT;
-    pImp->pSetDescr = NULL;
     pImp->nPrinterLocks = 0;
     pImp->pMenuBarResId = 0;
     pImp->pAccelResId = 0;
@@ -1395,21 +1396,6 @@ SfxScrollingMode SfxViewShell::GetScrollingMode() const
 void SfxViewShell::SetScrollingMode( SfxScrollingMode eMode )
 {
     pImp->eScroll = eMode;
-}
-
-//--------------------------------------------------------------------
-
-SfxFrameSetDescriptor* SfxViewShell::GetFrameSet_Impl() const
-{
-    return pImp->pSetDescr;
-}
-
-//--------------------------------------------------------------------
-
-void SfxViewShell::SetFrameSet_Impl( SfxFrameSetDescriptor* pD )
-{
-//  delete pImp->pSetDescr;
-    pImp->pSetDescr = pD;
 }
 
 //--------------------------------------------------------------------
