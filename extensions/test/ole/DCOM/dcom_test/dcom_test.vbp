@@ -1,9 +1,11 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINNT\System32\stdole2.tlb#OLE Automation
-Module=Module1; Module1.bas
+Module=Module1; ..\..\..\..\..\..\Projects\VBasic\dcom_test\Module1.bas
 Startup="Sub Main"
 HelpFile=""
 Title="dcom_test"
+ExeName32="dcom_test.exe"
+Path32="..\..\..\..\..\..\Projects\VBasic\dcom_test"
 Command32=""
 Name="dcom_test"
 HelpContextID="0"
