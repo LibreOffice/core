@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OCommandDefinition.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:39 $
+ *  last change:$Date: 2003-05-27 12:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public class OCommandDefinition extends TestCase {
         XMultiServiceFactory xMSF = null ;
 
         try {
-            xMSF = Param.getMSF();
+            xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance( "com.sun.star.sdb.QueryDefinition" );
         }
         catch( com.sun.star.uno.Exception e ) {
