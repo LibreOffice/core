@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:59:29 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:10:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -248,22 +248,32 @@ sub register_unocomponents
                 $filestring =~ s/\;\s*$//;
                 chdir($onesourcepath);
 
-                $systemcall = "$$regcompfileref -register -s -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote;
+                my @regcompoutput = ();
 
-                my $returnvalue = system($systemcall);
+                $systemcall = "$$regcompfileref -register -s -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " |";
 
-                my $infoline;
+                open (REG, "$systemcall");
+                while (<REG>) {push(@regcompoutput, $_); }
+                close (REG);
+
+                my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+                my $infoline = "Systemcall: $systemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+
                 if ($returnvalue)
                 {
                     $infoline = "ERROR: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
                     $error_occured = 1;
                 }
                 else
                 {
                     $infoline = "SUCCESS: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
                 }
-
-                push( @installer::globals::logfileinfo, $infoline);
 
                 chdir($from);
 
@@ -329,11 +339,21 @@ sub register_javacomponents
 
                     my $fileurl = make_file_url($onesourcepath);
 
-                    $systemcall = "$$regcompfileref -register -s -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote;
+                    my @regcompoutput = ();
 
-                    my $returnvalue = system($systemcall);
+                    $systemcall = "$$regcompfileref -register -s -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " |";
 
-                    my $infoline;
+                    open (REG, "$systemcall");
+                    while (<REG>) {push(@regcompoutput, $_); }
+                    close (REG);
+
+                    my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+                    my $infoline = "Systemcall: $systemcall\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+
                     if ($returnvalue)
                     {
                         $infoline = "ERROR: $systemcall\n";
