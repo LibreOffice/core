@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-09 10:19:54 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:37:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,7 @@
 #
 #
 #*************************************************************************
+
 PRJ=..$/..
 
 PRJNAME=bridges
@@ -69,6 +70,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(SOLAR_JAVA)"==""
+nojava:
+    @echo "Not building jni-uno bridge because Java is disabled"
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
