@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-21 15:13:01 $
+#   last change: $Author: toconnor $ $Date: 2003-01-21 16:20:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@
   <!-- =================== Environmental Properties ======================= -->
 
   <property name="prj" value=".."/>
+  <property file="${prj}/java/build.env"/>
   <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="on"/>
   <property name="debug"   value="on"/>
@@ -145,6 +146,9 @@
     <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/MemoryUsage/parcel-descriptor.xml"/>
     <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/MemoryUsage/"/>
     <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/MemoryUsage/"/>
+    <mkdir dir="${out}/class/examples/InteractiveBeanShell"/>
+    <copy file="${prj}/examples/java/interactive.bsh" todir="${out}/class/examples/InteractiveBeanShell/"/>
+    <copy file="${prj}/examples/java/interactive.xml" tofile="${out}/class/examples/InteractiveBeanShell/parcel-descriptor.xml"/>
   </target>
 
   <!-- ===================== Build UNO package ========================= -->
@@ -158,6 +162,8 @@
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfstorage.db"/>
     </exec>
+    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
+        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
@@ -168,6 +174,8 @@
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
+        todir="${out}/class/sframework/skip_registration"/>
+    <copy file="${install.dir}/bsh-1.2b7.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
   <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
@@ -180,6 +188,8 @@
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfstorage.db"/>
     </exec>
+    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
+        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
@@ -189,6 +199,8 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${install.dir}/bsh-1.2b7.jar"
+        todir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/wntmsci7${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
@@ -202,6 +214,8 @@
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfstorage.db"/>
     </exec>
+    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
+        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
@@ -211,6 +225,8 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${install.dir}/bsh-1.2b7.jar"
+        todir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/unxlngi4${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
@@ -224,6 +240,8 @@
         <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfstorage.db"/>
     </exec>
+    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
+        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/solaris_sparc.plt"/>
@@ -233,11 +251,13 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
+    <copy file="${install.dir}/bsh-1.2b7.jar"
+        todir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/unxsols3${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
   <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_win7,buildunopackage_linux,buildunopackage_solaris">
-    <zip destfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
+    <zip zipfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
         basedir="${out}/class/sframework">
     </zip>
     <copy file="${prj}/common/bin/scripting${env.UPD}01.res"
@@ -280,9 +300,9 @@
     <mkdir dir="${out}/class/sframeworkinstall/ide"/>
     <copy todir="${out}/class/sframeworkinstall/ide">
         <fileset dir="${out}/class/">
-            <include name="**/OfficeScripting.jar"/>
-            <include name="**/idesupport.jar"/>
-            <include name="**/office.jar"/>
+            <include name="OfficeScripting.jar"/>
+            <include name="idesupport.jar"/>
+            <include name="office.jar"/>
         </fileset>
     </copy>
   </target>

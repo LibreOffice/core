@@ -155,8 +155,13 @@ public class XmlUpdater extends Thread {
         File scriptsDir = new File( scriptsPath );
     File highlightDir = new File( scriptsPath+"Highlight" );
     File memoryDir = new File( scriptsPath+"MemoryUsage" );
+    File bshDir = new File( scriptsPath+"InteractiveBeanShell" );
         if( !highlightDir.mkdirs() ) {
             System.out.println( "Highlight script directory failed");
+        }
+        if( !bshDir.mkdirs() )
+    {
+            System.out.println( "InteractiveBeanShell script directory failed");
         }
         if( !memoryDir.mkdirs() )
     {
@@ -267,6 +272,23 @@ public class XmlUpdater extends Thread {
     }
     else {
         System.out.println( "MemoryUsage script already deployed" );
+        }
+
+    File script = new File( scriptsPath+File.separator+"InteractiveBeanShell"+File.separator+"interactive.bsh" );
+    if( !script.exists() ) {
+        if (!zd.extractEntry("examples/InteractiveBeanShell/interactive.bsh",scriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
+        {
+            onInstallComplete();
+            return;
+        }
+        if (!zd.extractEntry("examples/InteractiveBeanShell/parcel-descriptor.xml",scriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
+        {
+            onInstallComplete();
+            return;
+        }
+    }
+    else {
+        System.out.println( "InteractiveBeanShell script already deployed" );
         }
 
 // Robert Kinsella test 2 end
