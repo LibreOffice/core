@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 10:54:27 $
+ *  last change: $Author: mt $ $Date: 2001-07-30 13:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,9 +912,9 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
         aNewVisArea.Left() -= ndY;
         aNewVisArea.Right() -= ndY;
     }
-    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth() ) )
+    if ( ( nRangeCheck == RGCHK_PAPERSZ1 ) && ( aNewVisArea.Right() > (long)pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) ) )
     {
-        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth() - aNewVisArea.Right();    // negativ
+        long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( FALSE ) - aNewVisArea.Right();     // negativ
         aNewVisArea.Move( nDiff, 0 );   // koennte im neg. Bereich landen...
     }
     if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != RGCHK_NONE ) )

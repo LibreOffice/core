@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 07:49:27 $
+ *  last change: $Author: mt $ $Date: 2001-07-30 13:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <wghtitem.hxx>
 #include <postitem.hxx>
 #include <udlnitem.hxx>
+#include <adjitem.hxx>
 #include <scripttypeitem.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
@@ -2364,7 +2365,7 @@ ULONG ImpEditEngine::GetTextHeight() const
     return nCurTextHeight;
 }
 
-ULONG ImpEditEngine::CalcTextWidth()
+ULONG ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
 {
     // Wenn noch nicht formatiert und nicht gerade dabei.
     // Wird in der Formatierung bei AutoPageSize gerufen.
@@ -2385,9 +2386,6 @@ ULONG ImpEditEngine::CalcTextWidth()
     for ( USHORT nPara = 0; nPara < nParas; nPara++ )
     {
         ParaPortion* pPortion = GetParaPortions().GetObject( nPara );
-//      SvxAdjust eJustification = SVX_ADJUST_LEFT;
-//      if ( !aStatus.IsOutliner() )
-//          eJustification = ((const SvxAdjustItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
         const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
 
         if ( pPortion->IsVisible() )
@@ -2405,8 +2403,6 @@ ULONG ImpEditEngine::CalcTextWidth()
                 // Papierbreite ab, hier nicht erwuenscht.
                 // Am besten generell nicht auf StartPosX verlassen,
                 // es muss auch die rechte Einrueckung beruecksichtigt werden!
-                // if ( ( eJustification == SVX_ADJUST_CENTER ) || ( eJustification == SVX_ADJUST_RIGHT ) )
-                // ...
                 nCurWidth = GetXValue( rLRItem.GetTxtLeft() );
                 if ( nLine == 0 )
                 {
@@ -2420,7 +2416,7 @@ ULONG ImpEditEngine::CalcTextWidth()
                     }
                 }
                 nCurWidth += GetXValue( rLRItem.GetRight() );
-                nCurWidth += CalcLineWidth( pPortion, pLine );
+                nCurWidth += CalcLineWidth( pPortion, pLine, bIgnoreExtraSpace );
                 if ( nCurWidth > nMaxWidth )
                 {
                     nMaxWidth = nCurWidth;
@@ -2435,25 +2431,44 @@ ULONG ImpEditEngine::CalcTextWidth()
     return (ULONG)nMaxWidth;
 }
 
-ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine )
+ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace )
 {
+    SvxAdjust eJustification = SVX_ADJUST_LEFT;
+    if ( !aStatus.IsOutliner() )
+        eJustification = ((const SvxAdjustItem&)pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_JUST)).GetAdjust();
+
     // Berechnung der Breite ohne die Indents...
     ULONG nWidth = 0;
+    USHORT nPos = pLine->GetStart();
     for ( USHORT nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
     {
         TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( nTP );
         switch ( pTextPortion->GetKind() )
         {
-            case PORTIONKIND_TEXT:
             case PORTIONKIND_FIELD:
             case PORTIONKIND_HYPHENATOR:
             case PORTIONKIND_TAB:
-//          case PORTIONKIND_EXTRASPACE:
             {
                 nWidth += pTextPortion->GetSize().Width();
             }
             break;
+            case PORTIONKIND_TEXT:
+            {
+                if ( ( eJustification != SVX_ADJUST_BLOCK ) || ( !bIgnoreExtraSpace ) )
+                {
+                    nWidth += pTextPortion->GetSize().Width();
+                }
+                else
+                {
+                    SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
+                    SeekCursor( pPortion->GetNode(), nPos+1, aTmpFont );
+                    aTmpFont.SetPhysFont( GetRefDevice() );
+                    nWidth += aTmpFont.QuickGetTextSize( GetRefDevice(), *pPortion->GetNode(), nPos, pTextPortion->GetLen(), NULL ).Width();
+                }
+            }
+            break;
         }
+        nPos += pTextPortion->GetLen();
     }
     return nWidth;
 }

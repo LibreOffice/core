@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-18 15:16:25 $
+ *  last change: $Author: mt $ $Date: 2001-07-30 13:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,8 +737,8 @@ public:
 
     sal_uInt32      CalcTextHeight();
     sal_uInt32      GetTextHeight() const;
-    sal_uInt32      CalcTextWidth();
-    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine );
+    sal_uInt32      CalcTextWidth( BOOL bIgnoreExtraSpace );
+    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace );
     sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
     sal_uInt16      GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
     sal_uInt16      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );

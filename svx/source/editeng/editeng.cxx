@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:28 $
+ *  last change: $Author: mt $ $Date: 2001-07-30 13:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,7 @@ sal_uInt32 EditEngine::GetTextHeight() const
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth();
+    sal_uInt32 nHeight = !IsVertical() ? pImpEditEngine->GetTextHeight() : pImpEditEngine->CalcTextWidth( FALSE );
     return nHeight;
 }
 
@@ -1026,7 +1026,7 @@ sal_uInt32 EditEngine::CalcTextWidth()
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
-    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth() : pImpEditEngine->GetTextHeight();
+    sal_uInt32 nWidth = !IsVertical() ? pImpEditEngine->CalcTextWidth( FALSE ) : pImpEditEngine->GetTextHeight();
      return nWidth;
 }
 
@@ -1551,7 +1551,7 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
             EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
             if ( ( aDocPos.X() >= pLine->GetStartPosX() - nBorder ) &&
                  ( aDocPos.X() <= pLine->GetStartPosX() +
-                         pImpEditEngine->CalcLineWidth( pParaPortion, pLine ) + nBorder ) )
+                         pImpEditEngine->CalcLineWidth( pParaPortion, pLine, FALSE ) + nBorder ) )
             {
                  bTextPos = sal_True;
             }
