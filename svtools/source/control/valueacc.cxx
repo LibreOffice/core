@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-05 15:32:10 $
+ *  last change: $Author: ka $ $Date: 2002-05-21 07:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,81 +480,6 @@ awt::Size SAL_CALL ValueSetAcc::getSize()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSetAcc::isShowing()
-    throw (uno::RuntimeException)
-{
-    const ::vos::OGuard aGuard( maMutex );
-    return mpParent->IsVisible();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL ValueSetAcc::isVisible()
-    throw (uno::RuntimeException)
-{
-    const ::vos::OGuard aGuard( maMutex );
-    return mpParent->IsVisible();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL ValueSetAcc::isFocusTraversable()
-    throw (uno::RuntimeException)
-{
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL ValueSetAcc::addFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
-    throw (uno::RuntimeException)
-{
-    const ::vos::OGuard aGuard( maMutex );
-
-    if( rxListener.is() )
-    {
-           ::std::vector< uno::Reference< awt::XFocusListener > >::const_iterator aIter = mxFocusListeners.begin();
-        sal_Bool bFound = sal_False;
-
-        while( !bFound && ( aIter != mxFocusListeners.end() ) )
-        {
-            if( *aIter == rxListener )
-                bFound = sal_True;
-            else
-                aIter++;
-        }
-
-        if (!bFound)
-            mxFocusListeners.push_back( rxListener );
-    }
-}
-
-// -----------------------------------------------------------------------------
-void SAL_CALL ValueSetAcc::removeFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
-    throw (uno::RuntimeException)
-{
-    const ::vos::OGuard aGuard( maMutex );
-
-    if( rxListener.is() )
-    {
-           ::std::vector< uno::Reference< awt::XFocusListener > >::iterator aIter = mxFocusListeners.begin();
-        sal_Bool bFound = sal_False;
-
-        while( !bFound && ( aIter != mxFocusListeners.end() ) )
-        {
-            if( *aIter == rxListener )
-            {
-                mxFocusListeners.erase( aIter );
-                bFound = sal_True;
-            }
-            else
-                aIter++;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-
 void SAL_CALL ValueSetAcc::grabFocus()
     throw (uno::RuntimeException)
 {
@@ -993,45 +918,6 @@ awt::Size SAL_CALL ValueItemAcc::getSize()
     }
 
     return aRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL ValueItemAcc::isShowing()
-    throw (uno::RuntimeException)
-{
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL ValueItemAcc::isVisible()
-    throw (uno::RuntimeException)
-{
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL ValueItemAcc::isFocusTraversable()
-    throw (uno::RuntimeException)
-{
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------------
-
-void SAL_CALL ValueItemAcc::addFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
-    throw (uno::RuntimeException)
-{
-    // nothing to do
-}
-
-// -----------------------------------------------------------------------------
-void SAL_CALL ValueItemAcc::removeFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
-    throw (uno::RuntimeException)
-{
-    // nothing to do
 }
 
 // -----------------------------------------------------------------------------
