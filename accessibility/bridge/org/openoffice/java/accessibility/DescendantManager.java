@@ -61,7 +61,7 @@ import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 public abstract class DescendantManager extends Component {
     protected XAccessibleSelection unoAccessibleSelection = null;
@@ -89,7 +89,7 @@ public abstract class DescendantManager extends Component {
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_SELECTION_EVENT:
+                case AccessibleEventId.SELECTION_CHANGED:
                     firePropertyChange(javax.accessibility.AccessibleContext.ACCESSIBLE_SELECTION_PROPERTY, null, null);
                     break;
                 default:
@@ -183,7 +183,7 @@ public abstract class DescendantManager extends Component {
         /** Removes the specified child of the object from the object's selection */
         public void removeAccessibleSelection(int i) {
             try {
-                unoAccessibleSelection.deselectSelectedAccessibleChild(i);
+                unoAccessibleSelection.deselectAccessibleChild(i);
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             } catch (com.sun.star.uno.RuntimeException e) {
             }
