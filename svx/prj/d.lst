@@ -603,6 +603,7 @@ hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svx\xmlcnitm.hxx
 ..\xml\SvxUnoTextField.xml %_DEST%\xml%_EXT%\SvxUnoTextField.xml
 ..\xml\SvxUnoTextRange.xml %_DEST%\xml%_EXT%\SvxUnoTextRange.xml
 ..\xml\SvxUnoTextRangeEnumeration.xml %_DEST%\xml%_EXT%\SvxUnoTextRangeEnumeration.xml
+..\xml\SvxGraphicExporter.xml %_DEST%\xml%_EXT%\SvxGraphicExporter.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
