@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testnativethreadpoolclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:20:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "test/javauno/nativethreadpool/XRelay.hpp"
 #include "test/javauno/nativethreadpool/XSource.hpp"
 
+#include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 #include "com/sun/star/connection/ConnectionSetupException.hpp"
 #include "com/sun/star/connection/NoConnectException.hpp"
@@ -143,28 +144,13 @@ sal_Int32 Client::run(css::uno::Sequence< rtl::OUString > const &)
             rtl::OUString::createFromAscii("osl::ThreadData::setData failed"),
             static_cast< cppu::OWeakObject * >(this));
     }
-    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver;
-    try {
-        resolver = css::uno::Reference< css::bridge::XUnoUrlResolver >(
-            factory->createInstanceWithContext(
-                rtl::OUString::createFromAscii(
-                    "com.sun.star.bridge.UnoUrlResolver"),
-                context),
-            css::uno::UNO_QUERY_THROW);
-    } catch (css::uno::RuntimeException &) {
-        throw;
-    } catch (css::uno::Exception & e) {
-        throw css::lang::WrappedTargetRuntimeException(
-            rtl::OUString::createFromAscii(
-                "creating com.sun.star.uno.UnoUrlResolver service"),
-            static_cast< cppu::OWeakObject * >(this), css::uno::makeAny(e));
-    }
     css::uno::Reference< test::javauno::nativethreadpool::XSource > source;
     try {
         source
             = css::uno::Reference< test::javauno::nativethreadpool::XSource >(
-                resolver->resolve(rtl::OUString::createFromAscii(
-                    "uno:socket,host=localhost,port=3830;urp;test")),
+                css::bridge::UnoUrlResolver::create(context)->resolve(
+                    rtl::OUString::createFromAscii(
+                        "uno:socket,host=localhost,port=3830;urp;test")),
                 css::uno::UNO_QUERY_THROW);
     } catch (css::connection::NoConnectException & e) {
         throw css::lang::WrappedTargetRuntimeException(
