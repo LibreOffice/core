@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:45:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ arabic ] = "����� ������� ������ %1";
     Text[ catalan ] = "Assignaci� de columnes per a la taula %1";
     Text[ thai ] = "เค้าโครงคอลัมน์ของตาราง %1";
-    Text[ language_user1 ] = "EM (29 July 2002): this was just a German spelling error, no change in translation";
+    Text[ language_user1 ] = "; EM (29 July 2002): this was just a German spelling error, no change in translation";
     Text[ czech ] = "Rozložení sloupců pro tabulku %1";
     Text[ hebrew ] = "Spaltenzuordnung für Tabelle %1";
     Text[ hindi ] = "सारणी %1 केलिए स्तंभ के अभिन्यास";
@@ -601,7 +601,7 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ danish ] = "V�lg datakilde";
     Text[ swedish ] = "V�lj datak�lla";
     Text[ polish ] = "Wyb�r �r�d�a danych";
-    Text[ portuguese_brazilian ] = "Select data source";
+    Text[ portuguese_brazilian ] = "Selecione a fonte de dados";
     Text[ japanese ] = "データソースの選択";
     Text[ korean ] = "데이터 원본 선택";
     Text[ chinese_simplified ] = "选择数据源";
@@ -615,6 +615,7 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ hindi ] = "ड़ॉटा मूल चुनो";
     Text[ slovak ] = "Vyberte zdroj dát";
 };
+
 
 
 
