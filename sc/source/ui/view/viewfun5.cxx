@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:07:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@
 #include <sfx2/docfile.hxx>
 #include <so3/ipobj.hxx>
 #include <so3/svstor.hxx>
-#include <offmgr/app.hxx>
 #include <so3/clsids.hxx>
 #include <sot/formats.hxx>
 #include <svtools/pathoptions.hxx>
