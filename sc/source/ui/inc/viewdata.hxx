@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-18 10:40:48 $
+ *  last change: $Author: nn $ $Date: 2001-04-27 08:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,7 @@ public:
 inline long ScViewData::ToPixel( USHORT nTwips, double nFactor )
 {
     long nRet = (long)( nTwips * nFactor );
-    if (!nRet)
+    if ( !nRet && nTwips )
         nRet = 1;
     return nRet;
 }
