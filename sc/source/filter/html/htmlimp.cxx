@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:49:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@
 
 //------------------------------------------------------------------------
 
-FltError ScImportHTML( SvStream &rStream, ScDocument *pDoc,
+FltError ScImportHTML( SvStream &rStream, const String& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, BOOL bCalcWidthHeight )
 {
-    ScHTMLImport aImp( pDoc, rRange, bCalcWidthHeight );
-    FltError nErr = (FltError) aImp.Read( rStream );
+    ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
+    FltError nErr = (FltError) aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
     aImp.WriteToDocument( TRUE, nOutputFactor );
@@ -106,7 +106,7 @@ FltError ScImportHTML( SvStream &rStream, ScDocument *pDoc,
 }
 
 
-ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const ScRange& rRange, BOOL bCalcWidthHeight ) :
+ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight ) :
     ScEEImport( pDocP, rRange )
 {
     Size aPageSize;
@@ -140,7 +140,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const ScRange& rRange, BOOL bCalc
             SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
     if( bCalcWidthHeight )
-        pParser = new ScHTMLLayoutParser( pEngine, aPageSize, pDocP );
+        pParser = new ScHTMLLayoutParser( pEngine, rBaseURL, aPageSize, pDocP );
     else
         pParser = new ScHTMLQueryParser( pEngine, pDocP );
 }
