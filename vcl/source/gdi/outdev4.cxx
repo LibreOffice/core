@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-25 13:54:24 $
+ *  last change: $Author: ka $ $Date: 2001-07-27 08:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,8 +673,10 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
 
             if( bMtf )
                 mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
+#ifndef REMOTE_APPSERVER
             else
                 ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
+#endif
         }
 #ifndef REMOTE_APPSERVER
         else
