@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-13 19:27:43 $
+ *  last change: $Author: hr $ $Date: 2000-11-21 17:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/whiter.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -1783,7 +1784,7 @@ void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
     rSet.Put( SfxUInt16Item( SID_TBXCTL_INSCELLS, nInsCellsCtrlState ) );
 
     //  ohne installiertes Chart darf Chart nicht Default sein...
-    if ( nInsObjCtrlState == SID_DRAW_CHART && !SFX_APP()->HasFeature(SFX_FEATURE_SCHART) )
+    if ( nInsObjCtrlState == SID_DRAW_CHART && !SvtModuleOptions().IsChart() )
         nInsObjCtrlState = SID_INSERT_OBJECT;
 
     rSet.Put( SfxUInt16Item( SID_TBXCTL_INSOBJ,   nInsObjCtrlState ) );
