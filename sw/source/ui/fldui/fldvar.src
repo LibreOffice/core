@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:03:08 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,17 +89,18 @@ TabPage TP_FLD_VAR
         Text [ spanish ] = "~Tipo de campo" ;
         Text [ english_us ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ(~T)";
+        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
+        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
+        Text[ korean ] = "í•„ë“œ ìœ í˜•(~T)";
         Text[ turkish ] = "A~lan tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipo de campo";
+        Text[ catalan ] = "~Tipus";
+        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
     };
     ListBox LB_VARTYPE
     {
@@ -126,18 +127,19 @@ TabPage TP_FLD_VAR
         Text [ french ] = "~Sélection" ;
         Text [ dutch ] = "~Selectie" ;
         Text [ portuguese ] = "~Selecção" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ(~E)";
+        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
         Text[ russian ] = "Âûáîğ";
         Text[ polish ] = "~Wybór";
-        Text[ japanese ] = "‘I‘ğ(~E)";
-        Text[ chinese_traditional ] = "¿ï¨ú(~E)";
+        Text[ japanese ] = "é¸æŠ(~E)";
+        Text[ chinese_traditional ] = "é¸å–(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~E)";
+        Text[ korean ] = "ì„ íƒ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Selección";
+        Text[ catalan ] = "~Selecció";
         Text[ finnish ] = "~Valinta";
+        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
     };
     ListBox LB_VARSELECTION
     {
@@ -163,18 +165,19 @@ TabPage TP_FLD_VAR
         Text [ french ] = "F~ormat" ;
         Text [ dutch ] = "~Formaat" ;
         Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ chinese_simplified ] = "æ ¼å¼";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®";
-        Text[ chinese_traditional ] = "®æ¦¡(~F)";
+        Text[ japanese ] = "æ›¸å¼";
+        Text[ chinese_traditional ] = "æ ¼å¼";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "¼­½Ä";
+        Text[ korean ] = "ì„œì‹";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormato";
-        Text[ finnish ] = "Muotoile";
+        Text[ catalan ] = "Formata";
+        Text[ finnish ] = "Muoto";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     ListBox LB_VARFORMAT
     {
@@ -205,22 +208,23 @@ TabPage TP_FLD_VAR
         TEXT [ finnish ] = "~Näkymätön" ;
         TEXT [ danish ] = "Usynlig" ;
         TEXT [ french ] = "Invisible" ;
-        TEXT [ swedish ] = "Os~ynlig" ;
+        TEXT [ swedish ] = "Os~ynligt" ;
         TEXT [ dutch ] = "~Onzichtbaar" ;
         TEXT [ spanish ] = "Invisi~ble" ;
         TEXT [ english_us ] = "Invisi~ble" ;
         TabStop = TRUE ;
-        TEXT[ chinese_simplified ] = "ÒşÈëµÄ(~B)";
+        TEXT[ chinese_simplified ] = "éšå…¥çš„(~B)";
         TEXT[ russian ] = "Íåâèäèìûé";
         TEXT[ polish ] = "Niewid~oczny";
-        TEXT[ japanese ] = "”ñ•\\¦(~B)";
-        TEXT[ chinese_traditional ] = "Áô¤Jªº(~B)";
+        TEXT[ japanese ] = "éè¡¨ç¤º(~B)";
+        TEXT[ chinese_traditional ] = "éš±å…¥çš„(~B)";
         TEXT[ arabic ] = "ÛíÑ ãÑÆí";
         TEXT[ greek ] = "Ìç ïñáôÜ";
-        TEXT[ korean ] = "¾Èº¸ÀÓ(~B)";
+        TEXT[ korean ] = "ì•ˆë³´ì„(~B)";
         TEXT[ turkish ] = "Görünmez";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Invisi~ble";
+        TEXT[ catalan ] = "invisi~ble";
+        TEXT[ thai ] = "à¸¡à¸­à¸‡à¹„à¸¡à¹ˆà¹€~à¸«à¹‡à¸™";
     };
     FixedText FT_VARCHAPTERHEADER
     {
@@ -238,18 +242,19 @@ TabPage TP_FLD_VAR
         Text [ french ] = "Numérotation par chapitre" ;
         Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
         Text [ portuguese ] = "Numeração por capítulos" ;
-        Text[ chinese_simplified ] = "°´ÕÂ±àºÅ";
+        Text[ chinese_simplified ] = "æŒ‰ç« èŠ‚ç¼–å·";
         Text[ russian ] = "Íóìåğàöèÿ ïî ãëàâàì";
         Text[ polish ] = "Numeracja wed³ug rozdzia³ów ";
-        Text[ japanese ] = "Í‚²‚Æ‚Ì”Ô†•t‚¯";
-        Text[ chinese_traditional ] = "«ö³¹½s¸¹";
+        Text[ japanese ] = "ç« ã”ã¨ã®ç•ªå·ä»˜ã‘";
+        Text[ chinese_traditional ] = "æŒ‰ç« ç¯€ç·¨è™Ÿ";
         Text[ arabic ] = "ÊÑŞíã İÕæá";
         Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
-        Text[ korean ] = "Àåº°·Î ¹øÈ£¸Å±â±â";
+        Text[ korean ] = "ì¥ë³„ë¡œ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeración de capítulos";
+        Text[ catalan ] = "Numeració de capítols";
         Text[ finnish ] = "Numerointi luvuittain";
+        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¹‚à¸”à¸¢à¸šà¸—";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
@@ -267,18 +272,19 @@ TabPage TP_FLD_VAR
         Text [ french ] = "Ni~veau" ;
         Text [ dutch ] = "N~iveau" ;
         Text [ portuguese ] = "~Nível" ;
-        Text[ chinese_simplified ] = "¼¶(~L)";
+        Text[ chinese_simplified ] = "çº§(~L)";
         Text[ russian ] = "Óğîâåíü";
         Text[ polish ] = "Poziom";
-        Text[ japanese ] = "ÚÍŞÙ(~L)";
-        Text[ chinese_traditional ] = "¯Å(~L)";
+        Text[ japanese ] = "ãƒ¬ãƒ™ãƒ«(~L)";
+        Text[ chinese_traditional ] = "ç´š(~L)";
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
-        Text[ korean ] = "¼öÁØ(~L)";
+        Text[ korean ] = "ìˆ˜ì¤€(~L)";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nivel";
+        Text[ catalan ] = "~Nivell";
         Text[ finnish ] = "~Taso";
+        Text[ thai ] = "~à¸£à¸°à¸”à¸±à¸š";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -334,7 +340,7 @@ TabPage TP_FLD_VAR
         };
     StringList [ chinese_simplified ] =
     {
-             < "ÎŞ" ; > ;
+             < "æ— " ; > ;
     };
     StringList [ russian ] =
     {
@@ -346,7 +352,7 @@ TabPage TP_FLD_VAR
     };
     StringList [ japanese ] =
     {
-             < "‚È‚µ" ; > ;
+             < "ãªã—" ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -354,7 +360,7 @@ TabPage TP_FLD_VAR
     };
     StringList [ chinese_traditional ] =
     {
-             < "µL" ; > ;
+             < "ç„¡" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -366,7 +372,7 @@ TabPage TP_FLD_VAR
     };
     StringList [ korean ] =
     {
-             < "¾øÀ½" ; > ;
+             < "ì—†ìŒ" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -374,11 +380,15 @@ TabPage TP_FLD_VAR
     };
     StringList [ catalan ] =
     {
-             < "Ninguno" ; > ;
+             < "Cap" ; > ;
     };
     StringList [ finnish ] =
     {
              < "Ei mitään" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¹„à¸¡à¹ˆà¸¡à¸µ" ; > ;
     };
     };
     FixedText FT_VARSEPARATOR
@@ -397,18 +407,19 @@ TabPage TP_FLD_VAR
         Text [ french ] = "~Séparateur" ;
         Text [ dutch ] = "~Scheidingsteken" ;
         Text [ portuguese ] = "~Separador" ;
-        Text[ chinese_simplified ] = "·Ö¸ô·û(~S)";
+        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦(~S)";
         Text[ russian ] = "Ğàçäåëèòåëü";
         Text[ polish ] = "Separator";
-        Text[ japanese ] = "‹æØ‚è‹L†(~S)";
-        Text[ chinese_traditional ] = "³s±µ²Å(~S)";
+        Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·(~S)";
+        Text[ chinese_traditional ] = "é€£æ¥ç¬¦(~S)";
         Text[ arabic ] = "İÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "±¸ºĞÀÚ(~S)";
+        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸(~S)";
         Text[ turkish ] = "A~yırma işareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
         Text[ finnish ] = "~Erotin";
+        Text[ thai ] = "~à¸•à¸±à¸§à¹à¸¢à¸";
     };
     Edit ED_VARSEPARATOR
     {
@@ -432,21 +443,22 @@ TabPage TP_FLD_VAR
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "No~me" ;
         Text [ spanish ] = "~Nombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "Na~am" ;
         Text [ portuguese ] = "No~me" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~M)";
+        Text[ chinese_simplified ] = "åç§°(~M)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~M)";
-        Text[ chinese_traditional ] = "¦WºÙ(~M)";
+        Text[ japanese ] = "åå‰(~M)";
+        Text[ chinese_traditional ] = "åç¨±(~M)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~M)";
+        Text[ korean ] = "ì´ë¦„(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
-        Text[ finnish ] = "~Nimi";
+        Text[ catalan ] = "No~m";
+        Text[ finnish ] = "Ni~mi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
     };
     Edit ED_VARNAME
     {
@@ -474,17 +486,18 @@ TabPage TP_FLD_VAR
         Text [ spanish ] = "~Valor" ;
         Text [ english_us ] = "~Value" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÊıÖµ(~V)";
+        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
         Text[ russian ] = "Çíà÷åíèå";
         Text[ polish ] = "Wartoœæ";
-        Text[ japanese ] = "’l(~V)";
-        Text[ chinese_traditional ] = "¼Æ­È(~V)";
+        Text[ japanese ] = "å€¤(~V)";
+        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
         Text[ arabic ] = "ŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª(V)(~V)";
+        Text[ korean ] = "ê°’(~V)";
         Text[ turkish ] = "De~ğer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
+        Text[ thai ] = "~à¸„à¹ˆà¸²";
     };
     Edit ED_VARVALUE
     {
@@ -505,7 +518,11 @@ TabPage TP_FLD_VAR
             {
                 Identifier = BT_VARAPPLY ;
                 HelpID = HID_FLDVAR_APPLY ;
-                ItemBitmap = Bitmap { File = "sc20558.bmp" ; };
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap{ File = "sc20558.bmp" ;};
+                    MaskColor = IMAGE_MASK_COLOR ;
+                };
                 Text = "Übernehmen" ;
                 Text [ English ] = "Apply" ;
                 Text [ norwegian ] = "Benytt" ;
@@ -519,23 +536,28 @@ TabPage TP_FLD_VAR
                 Text [ dutch ] = "Overnemen" ;
                 Text [ spanish ] = "Aplicar" ;
                 Text [ english_us ] = "Apply" ;
-                Text[ chinese_simplified ] = "Ó¦ÓÃ";
+                Text[ chinese_simplified ] = "é‡‡ç”¨";
                 Text[ russian ] = "Ïğèìåíèòü";
                 Text[ polish ] = "Zastosuj";
-                Text[ japanese ] = "“K—p";
-                Text[ chinese_traditional ] = "¨Ï¥Î";
+                Text[ japanese ] = "é©ç”¨";
+                Text[ chinese_traditional ] = "æ¡ç”¨";
                 Text[ arabic ] = "ÊØÈíŞ";
                 Text[ greek ] = "ÅöáñìïãŞ";
-                Text[ korean ] = "Àû¿ë";
+                Text[ korean ] = "ì ìš©";
                 Text[ turkish ] = "Kullan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Aplicar";
+                Text[ catalan ] = "Aplica";
+                Text[ thai ] = "à¹ƒà¸Šà¹‰";
             };
             ToolBoxItem
             {
                 Identifier = BT_VARDELETE ;
                 HelpID = HID_FLDVAR_DELETE ;
-                ItemBitmap = Bitmap { File = "sc20557.bmp" ; };
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap{ File = "sc20557.bmp" ;};
+                    MaskColor = IMAGE_MASK_COLOR ;
+                };
                 Text = "Löschen" ;
                 Text [ ENGLISH ] = "Delete" ;
                 Text [ norwegian ] = "Slett" ;
@@ -549,17 +571,18 @@ TabPage TP_FLD_VAR
                 Text [ dutch ] = "Wissen" ;
                 Text [ spanish ] = "Eliminar" ;
                 Text [ english_us ] = "Delete" ;
-                Text[ chinese_simplified ] = "É¾³ı";
+                Text[ chinese_simplified ] = "åˆ é™¤";
                 Text[ russian ] = "Óäàëèòü";
                 Text[ polish ] = "Usuñ";
-                Text[ japanese ] = "íœ";
-                Text[ chinese_traditional ] = "§R°£";
+                Text[ japanese ] = "å‰Šé™¤";
+                Text[ chinese_traditional ] = "åˆªé™¤";
                 Text[ arabic ] = "ÍĞİ";
                 Text[ greek ] = "ÄéáãñáöŞ";
-                Text[ korean ] = "»èÁ¦";
+                Text[ korean ] = "ì‚­ì œ";
                 Text[ turkish ] = "Sil";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Eliminar";
+                Text[ catalan ] = "Suprimeix";
+                Text[ thai ] = "à¸¥à¸š";
             };
         };
     };
@@ -568,24 +591,21 @@ TabPage TP_FLD_VAR
     Text [ swedish ] = "Variabler" ;
     Text [ danish ] = "Variabler" ;
     Text [ italian ] = "Variabili" ;
-    Text [ spanish ] = "Variables" ;
+    Text [ spanish ] = "Predeterminaciones" ;
     Text [ french ] = "Variables" ;
     Text [ dutch ] = "Variabelen" ;
     Text [ portuguese ] = "Variáveis" ;
-    Text[ chinese_simplified ] = "±äÁ¿";
+    Text[ chinese_simplified ] = "å˜é‡";
     Text[ russian ] = "Ïåğåìåííûå";
     Text[ polish ] = "Zmienne";
-    Text[ japanese ] = "•Ï”";
-    Text[ chinese_traditional ] = "ÅÜ¶q";
+    Text[ japanese ] = "å¤‰æ•°";
+    Text[ chinese_traditional ] = "è®Šé‡";
     Text[ arabic ] = "ãÊÛíÑÇÊ";
     Text[ greek ] = "Ìåôáâëçôİò";
-    Text[ korean ] = "º¯¼ö";
+    Text[ korean ] = "ë³€ìˆ˜";
     Text[ turkish ] = "Değişkenler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Variables";
     Text[ finnish ] = "Muuttujat";
+    Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸£";
 };
-
-
-
-
