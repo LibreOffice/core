@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 13:45:28 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class SdDrawDocument;
 class SdDrawDocShell;
 class SfxRequest;
 class Dialog;
+class SdrObject;
 
 #define HITPIX    2                    // Hit-Toleranz in Pixel
 #define DRGPIX    2                    // Drag MinMove in Pixel
@@ -175,6 +176,9 @@ class FuPoor
             { bNoScrollUntilInside = bNoScroll; }
 
     void StartDelayToScrollTimer ();
+
+    // #97016#
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
 

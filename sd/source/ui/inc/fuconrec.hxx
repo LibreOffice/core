@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@ class FuConstRectangle : public FuConstruct
 
     void SetAttributes(SfxItemSet& rAttr, SdrObject* pObj);
     void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj);
+
+    // #97016#
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
 

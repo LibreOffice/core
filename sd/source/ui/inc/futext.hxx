@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@ class OutlinerParaObject;
 \************************************************************************/
 class FuText : public FuConstruct
 {
+    // #97016#
+    void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
+    void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
+    void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);
+    void ImpSetAttributesFitCommon(SdrTextObj* pTxtObj);
+
  protected:
     SdrTextObj*         pTextObj;
     Link                aOldLink;
@@ -125,6 +131,9 @@ class FuText : public FuConstruct
     void        DoExecute ();
 
     DECL_LINK(SpellError, void* );
+
+    // #97016#
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
 

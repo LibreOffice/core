@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 17:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ public:
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
+
+    // #97016#
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
 
