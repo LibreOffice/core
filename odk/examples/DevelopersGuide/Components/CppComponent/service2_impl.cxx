@@ -2,9 +2,9 @@
  *
  *  $RCSfile: service2_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:13:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -59,53 +59,38 @@ namespace my_sc_impl
 extern Sequence< OUString > SAL_CALL  getSupportedServiceNames_MyService1Impl();
 extern OUString SAL_CALL getImplementationName_MyService1Impl();
 extern Reference< XInterface > SAL_CALL create_MyService1Impl(
-                                        Reference< XComponentContext > const & xContext )
-                                            SAL_THROW( () );
+    Reference< XComponentContext > const & xContext )
+    SAL_THROW( () );
 
 static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 {
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-//      MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("my_module.MyService2"));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
+    Sequence<OUString> names(1);
+    names[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("my_module.MyService2"));
+    return names;
 }
 
 static OUString getImplementationName_MyService2Impl()
 {
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-//      MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_implementation.MyService2") );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+                         "my_module.my_sc_implementation.MyService2") );
 }
 
 class MyService2Impl : public ::cppu::WeakImplHelper3<
       ::my_module::XSomething, lang::XServiceInfo, lang::XInitialization >
 {
-    OUString m_arg;
+    OUString m_sData;
 public:
     // focus on three given interfaces,
     // no need to implement XInterface, XTypeProvider, XWeak
 
-    // XInitialization will be called upon createInstanceWithArguments[AndContext]()
+    // XInitialization will be called upon
+    // createInstanceWithArguments[AndContext]()
     virtual void SAL_CALL initialize( Sequence< Any > const & args )
         throw (Exception);
     // XSomething
     virtual OUString SAL_CALL methodOne( OUString const & str )
+        throw (RuntimeException);
+    virtual OUString SAL_CALL methodTwo( )
         throw (RuntimeException);
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -115,45 +100,64 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
 };
+
 // XInitialization implemention
 void MyService2Impl::initialize( Sequence< Any > const & args )
     throw (Exception)
 {
-    if (1 != args.getLength())
+    if (args.getLength() != 1)
     {
         throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("give a string instanciating this component!") ),
-            (::cppu::OWeakObject *)this, // resolve to XInterface reference
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                          "give a string instanciating this component!") ),
+            // resolve to XInterface reference:
+            static_cast< ::cppu::OWeakObject * >(this),
             0 ); // argument pos
     }
-    if (! (args[ 0 ] >>= m_arg))
+    if (! (args[ 0 ] >>= m_sData))
     {
         throw lang::IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no string given as argument!") ),
-            (::cppu::OWeakObject *)this, // resolve to XInterface reference
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                          "no string given as argument!") ),
+            // resolve to XInterface reference:
+            static_cast< ::cppu::OWeakObject * >(this),
             0 ); // argument pos
     }
 }
+
 // XSomething implementation
 OUString MyService2Impl::methodOne( OUString const & str )
     throw (RuntimeException)
 {
+    m_sData = str;
     return OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "called methodOne() of MyService2 implementation: ") ) + m_arg + str;
+        "called methodOne() of MyService2 implementation: ") ) + m_sData;
 }
+
+OUString MyService2Impl::methodTwo( )
+    throw (RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "called methodTwo() of MyService2 implementation: ") ) + m_sData;
+}
+
 // XServiceInfo implementation
 OUString MyService2Impl::getImplementationName()
     throw (RuntimeException)
 {
     // unique implementation name
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("my_module.my_sc_impl.MyService2") );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM(
+                         "my_module.my_sc_impl.MyService2") );
 }
+
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
     // this object only supports one service, so the test is simple
-    return serviceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("my_module.MyService2") );
+    return serviceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
+                                         "my_module.MyService2") );
 }
+
 Sequence< OUString > MyService2Impl::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -164,7 +168,7 @@ Reference< XInterface > SAL_CALL create_MyService2Impl(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( () )
 {
-    return static_cast< lang::XTypeProvider * >( new MyService2Impl() );
+    return static_cast< ::cppu::OWeakObject * >( new MyService2Impl );
 }
 
 }
@@ -176,12 +180,14 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     {
         create_MyService1Impl, getImplementationName_MyService1Impl,
-        getSupportedServiceNames_MyService1Impl, ::cppu::createSingleComponentFactory,
+        getSupportedServiceNames_MyService1Impl,
+        ::cppu::createSingleComponentFactory,
         0, 0
     },
     {
         create_MyService2Impl, getImplementationName_MyService2Impl,
-        getSupportedServiceNames_MyService2Impl, ::cppu::createSingleComponentFactory,
+        getSupportedServiceNames_MyService2Impl,
+        ::cppu::createSingleComponentFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
