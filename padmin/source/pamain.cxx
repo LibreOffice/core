@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 16:24:50 $
+ *  last change: $Author: jbu $ $Date: 2002-10-01 10:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #include <helper.hxx>
 #endif
 
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
-#include <cppuhelper/servicefactory.hxx>
+#ifndef _CPPUHELPER_BOOTSTRAP_HXX_
+#include <cppuhelper/bootstrap.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -92,6 +92,10 @@
 
 #ifndef _UCBHELPER_CONFIGURATIONKEYS_HXX_
 #include <ucbhelper/configurationkeys.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
 using namespace padmin;
@@ -133,30 +137,8 @@ void MyApp::Main()
     //-------------------------------------------------
     // create the global service-manager
     //-------------------------------------------------
-
-    OUString aReadRdbName( Application::GetAppFileName() );
-    int nLastSlash = aReadRdbName.lastIndexOf( '/' );
-    if( nLastSlash >= 0 )
-        aReadRdbName = aReadRdbName.copy( 0, nLastSlash+1 );
-    else
-        aReadRdbName = OUString();
-    aReadRdbName += OUString::createFromAscii( "applicat.rdb" );
-
-    OUString aWriteRdbName( OUString::createFromAscii( "/tmp/padmin" ) );
-    aWriteRdbName += OUString::valueOf( (sal_Int32)getpid() );
-    aWriteRdbName += OUString::createFromAscii( ".rdb" );
-
-#ifdef DEBUG
-    printf( "using write registry %s\n", OUStringToOString( aWriteRdbName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-    printf( "using read registry %s\n", OUStringToOString( aReadRdbName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
-    Reference< XMultiServiceFactory > xFactory( createRegistryServiceFactory( aWriteRdbName, aReadRdbName ) );
-    if( xFactory.is() )
-        setProcessServiceFactory( xFactory );
-#ifdef DEBUG
-    else
-        fprintf( stderr, "could not create service factory\n" );
-#endif
+    Reference< XComponentContext > xCtx = defaultBootstrap_InitialComponentContext();
+    Reference< XMultiServiceFactory > xFactory(  xCtx->getServiceManager(), UNO_QUERY );
 
     /*
      *  Create UCB.
@@ -181,6 +163,4 @@ void MyApp::Main()
      */
     ::ucb::ContentBroker::deinitialize();
 
-    OString aTmp( OUStringToOString( aWriteRdbName, RTL_TEXTENCODING_ISO_8859_1 ) );
-    unlink( aTmp.getStr() );
 }
