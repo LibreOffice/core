@@ -13469,3 +13469,7 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?GetBoundingBox@SvtIconChoiceCtrl@@QBE?AVRectangle@@PAVSvxIconChoiceCtrlEntry@@@Z
 ?GetDisplayText@SvxIconChoiceCtrlEntry@@QBE?AVString@@XZ
 ?RemoveEventListener@SvtIconChoiceCtrl@@QAEXABVLink@@@Z
+?DbgName_AccessibleIconChoiceCtrl@svt@@YAPAUDbgDataType@@XZ
+?DbgName_AccessibleIconChoiceCtrlEntry@svt@@YAPAUDbgDataType@@XZ
+??ATEWritingDirectionInfos@@QBEAAUTEWritingDirectionInfo@@G@Z
+?Insert@TEWritingDirectionInfos@@QAEXPBV1@GGG@Z
