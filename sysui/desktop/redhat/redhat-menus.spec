@@ -1,5 +1,5 @@
 Summary: OpenOffice.org desktop integration
-Name: openoffice-redhat-menus
+Name: openofficeorg-redhat-menus
 Version: 2.0
 Release: 1
 Group: Office
@@ -67,24 +67,6 @@ OpenOffice.org desktop integration
 /usr/share/icons/gnome/16x16/mimetypes/%PREFIX-master-document.png
 /usr/share/icons/gnome/16x16/mimetypes/%PREFIX-formula.png
 /usr/share/icons/gnome/16x16/mimetypes/%PREFIX-database.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-writer.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-calc.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-draw.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-impress.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-math.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-base.png
-/usr/share/icons/gnome/22x22/apps/%PREFIX-printeradmin.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-text.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-text-template.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-spreadsheet.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-spreadsheet-template.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-drawing.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-drawing-template.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-presentation.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-presentation-template.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-master-document.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-formula.png
-/usr/share/icons/gnome/22x22/mimetypes/%PREFIX-database.png
 /usr/share/icons/gnome/32x32/apps/%PREFIX-writer.png
 /usr/share/icons/gnome/32x32/apps/%PREFIX-calc.png
 /usr/share/icons/gnome/32x32/apps/%PREFIX-draw.png
@@ -139,24 +121,6 @@ OpenOffice.org desktop integration
 /usr/share/icons/hicolor/16x16/mimetypes/%PREFIX-master-document.png
 /usr/share/icons/hicolor/16x16/mimetypes/%PREFIX-formula.png
 /usr/share/icons/hicolor/16x16/mimetypes/%PREFIX-database.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-writer.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-calc.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-draw.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-impress.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-math.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-base.png
-/usr/share/icons/hicolor/22x22/apps/%PREFIX-printeradmin.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-text.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-text-template.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-spreadsheet.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-spreadsheet-template.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-drawing.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-drawing-template.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-presentation.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-presentation-template.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-master-document.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-formula.png
-/usr/share/icons/hicolor/22x22/mimetypes/%PREFIX-database.png
 /usr/share/icons/hicolor/32x32/apps/%PREFIX-writer.png
 /usr/share/icons/hicolor/32x32/apps/%PREFIX-calc.png
 /usr/share/icons/hicolor/32x32/apps/%PREFIX-draw.png
@@ -211,24 +175,6 @@ OpenOffice.org desktop integration
 /usr/share/icons/locolor/16x16/mimetypes/%PREFIX-master-document.png
 /usr/share/icons/locolor/16x16/mimetypes/%PREFIX-formula.png
 /usr/share/icons/locolor/16x16/mimetypes/%PREFIX-database.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-writer.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-calc.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-draw.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-impress.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-math.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-base.png
-/usr/share/icons/locolor/22x22/apps/%PREFIX-printeradmin.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-text.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-text-template.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-spreadsheet.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-spreadsheet-template.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-drawing.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-drawing-template.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-presentation.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-presentation-template.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-master-document.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-formula.png
-/usr/share/icons/locolor/22x22/mimetypes/%PREFIX-database.png
 /usr/share/icons/locolor/32x32/apps/%PREFIX-writer.png
 /usr/share/icons/locolor/32x32/apps/%PREFIX-calc.png
 /usr/share/icons/locolor/32x32/apps/%PREFIX-draw.png
