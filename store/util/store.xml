@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name> store </module-name>
+    <project-build-dependency>  sal </project-build-dependency>
+    <runtime-module-dependency> sal </runtime-module-dependency>
+</module-description>
