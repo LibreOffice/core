@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 14:27:15 $
+ *  last change: $Author: mav $ $Date: 2002-04-26 11:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,9 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
     const short             m_nDialogType;
 
+    SfxFilterFlags          m_nMustFlags;
+    SfxFilterFlags          m_nDontFlags;
+
     ErrCode                 mnError;
     sal_Bool                mbHasPassword           : 1;
     sal_Bool                mbIsPwdEnabled          : 1;
@@ -290,7 +293,9 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
 private:
     void                    addFilters( sal_uInt32 nFlags,
-                                        const SfxObjectFactory& rFactory );
+                                        const SfxObjectFactory& rFactory,
+                                        SfxFilterFlags nMust,
+                                        SfxFilterFlags nDont );
     void                    addFilter( const OUString& rFilterName,
                                        const OUString& rExtension );
     void                    addGraphicFilter();
@@ -546,7 +551,7 @@ const SfxFilter* FileDialogHelper_Impl::getCurentSfxFilter()
 
     const SfxFilter* pFilter = NULL;
     if ( mpMatcher )
-        pFilter = mpMatcher->GetFilter4UIName( aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
+        pFilter = mpMatcher->GetFilter4UIName( aFilterName, m_nMustFlags, m_nDontFlags );
 
     return pFilter;
 }
@@ -948,6 +953,14 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
     mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
     mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
     mbIsSaveDlg             = sal_False;
+
+    // default settings
+    m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG;
+    if( WB_OPEN == ( nFlags & WB_OPEN ) )
+        m_nMustFlags = SFX_FILTER_IMPORT;
+    else
+        m_nMustFlags = SFX_FILTER_EXPORT;
+
 
     mpMatcher = NULL;
     mpGraphicFilter = NULL;
@@ -1428,7 +1441,7 @@ OUString FileDialogHelper_Impl::getRealFilter() const
     if ( aFilter.getLength() && mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
-                                        aFilter, 0, SFX_FILTER_NOTINFILEDLG );
+                                        aFilter, m_nMustFlags, m_nDontFlags );
         if ( pFilter )
             aFilter = pFilter->GetFilterName();
     }
@@ -1495,7 +1508,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
     if ( rFilter.getLength() && mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter(
-                                        rFilter, 0, SFX_FILTER_NOTINFILEDLG );
+                                        rFilter, m_nMustFlags, m_nDontFlags );
         if ( pFilter )
             maCurFilter = pFilter->GetUIName();
     }
@@ -1521,7 +1534,9 @@ void FileDialogHelper_Impl::createMatcher( const SfxObjectFactory& rFactory )
 
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
-                                        const SfxObjectFactory& rFactory )
+                                        const SfxObjectFactory& rFactory,
+                                        SfxFilterFlags nMust,
+                                        SfxFilterFlags nDont )
 {
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
 
@@ -1543,13 +1558,10 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         mbDeleteMatcher = sal_True;
     }
 
-    USHORT nFilterFlags = SFX_FILTER_EXPORT;
+    m_nMustFlags |= nMust;
+    m_nDontFlags |= nDont;
 
-    if( WB_OPEN == ( nFlags & WB_OPEN ) )
-        nFilterFlags = SFX_FILTER_IMPORT;
-
-    sal_Bool    bHasAll = sal_False;
-    SfxFilterMatcherIter aIter( mpMatcher, nFilterFlags, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
+    SfxFilterMatcherIter aIter( mpMatcher, m_nMustFlags, m_nDontFlags );
 
     // append the filters
     ::rtl::OUString sFirstFilter;
@@ -1915,13 +1927,15 @@ void FileDialogHelper_Impl::setDefaultValues()
 // ------------------------------------------------------------------------
 
 FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags,
-                                    const SfxObjectFactory& rFact )
+                                    const SfxObjectFactory& rFact,
+                                    SfxFilterFlags nMust,
+                                    SfxFilterFlags nDont )
 {
     mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags );
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, rFact );
+    mpImp->addFilters( nFlags, rFact, nMust, nDont );
 }
 
 // ------------------------------------------------------------------------
@@ -1936,13 +1950,15 @@ FileDialogHelper::FileDialogHelper( sal_uInt32 nFlags )
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags,
-                                    const SfxObjectFactory& rFact )
+                                    const SfxObjectFactory& rFact,
+                                    SfxFilterFlags nMust,
+                                    SfxFilterFlags nDont )
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, rFact );
+    mpImp->addFilters( nFlags, rFact, nMust, nDont );
 }
 
 // ------------------------------------------------------------------------

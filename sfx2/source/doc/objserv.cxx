@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-23 14:28:31 $
+ *  last change: $Author: mav $ $Date: 2002-04-26 11:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,12 +351,11 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         {
             // check if we have a filter which allows for filter options
             sal_Bool bAllowOptions = sal_False;
+            SfxFilterFlags nMust = SFX_FILTER_EXPORT | ( bSaveTo ? 0 : SFX_FILTER_IMPORT );
+            SfxFilterFlags nDont = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | ( bIsExport ? SFX_FILTER_IMPORT : 0 );
 
             SfxFilterMatcher aMatcher( GetFactory().GetFilterContainer() );
-            SfxFilterMatcherIter aIter(
-                                &aMatcher,
-                                SFX_FILTER_EXPORT | ( bSaveTo ? 0 : SFX_FILTER_IMPORT ),
-                                SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | ( bIsExport ? SFX_FILTER_IMPORT : 0 ) );
+            SfxFilterMatcherIter aIter( &aMatcher, nMust, nDont );
 
             const SfxFilter* pFilter;
             for ( pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
@@ -378,12 +377,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 aDialogFlags = SFXWB_EXPORT;
             }
 
-            sfx2::FileDialogHelper aFileDlg( aDialogMode, aDialogFlags );
+            sfx2::FileDialogHelper aFileDlg( aDialogMode, aDialogFlags, GetFactory(), nMust, nDont );
             aFileDlg.CreateMatcher( GetFactory() );
-
-            // fill in filter list
-            for ( pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )
-                aFileDlg.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
             if ( HasName() )
             {
@@ -421,9 +416,8 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
             }
 
-            String aFilterUIName;
             SfxItemSet* pTempSet = NULL;
-            if ( aFileDlg.Execute( pTempSet, aFilterUIName ) != ERRCODE_NONE )
+            if ( aFileDlg.Execute( pTempSet, aFilterName ) != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
                 return sal_False;
@@ -432,12 +426,6 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             // merge in results of the dialog execution
             if( pTempSet )
                 pParams->Put( *pTempSet );
-
-            // find the internal filter name
-            for ( pFilter = aIter.First(); pFilter && pFilter->GetUIName() != aFilterUIName; pFilter = aIter.Next() );
-
-            if ( pFilter )
-                aFilterName = pFilter->GetFilterName();
 
             // get the path from the dialog
             aURL.SetURL( aFileDlg.GetPath() );
