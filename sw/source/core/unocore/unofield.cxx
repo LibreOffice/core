@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 15:57:57 $
+ *  last change: $Author: os $ $Date: 2001-04-20 11:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,16 +1027,39 @@ OUString SwXFieldMaster::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXFieldMaster::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextFieldMaster") == rServiceName;
+    sal_Bool bRet = sal_False;
+    if(!rServiceName.compareToAscii("com.sun.star.text.TextFieldMaster"))
+        bRet = sal_True;
+    if(nResTypeId == RES_USERFLD)
+        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.User");
+    else if(nResTypeId == RES_DBFLD)
+        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.Database");
+    else if(nResTypeId == RES_SETEXPFLD)
+        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.SetExpression");
+    else if(nResTypeId == RES_DDEFLD)
+        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.DDE");
+    else if(nResTypeId == RES_AUTHORITY)
+        bRet = !rServiceName.compareToAscii("com.sun.star.text.fieldmaster.Bibliography");
+    return bRet;
 }
 /* -----------------------------06.04.00 13:22--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.TextFieldMaster");
+    if(nResTypeId == RES_USERFLD)
+        pArray[1] = C2U("com.sun.star.text.fieldmaster.User");
+    else if(nResTypeId == RES_DBFLD)
+        pArray[1] = C2U("com.sun.star.text.fieldmaster.Database");
+    else if(nResTypeId == RES_SETEXPFLD)
+        pArray[1] = C2U("com.sun.star.text.fieldmaster.SetExpression");
+    else if(nResTypeId == RES_DDEFLD)
+        pArray[1] = C2U("com.sun.star.text.fieldmaster.DDE");
+    else if(nResTypeId == RES_AUTHORITY)
+        pArray[1] = C2U("com.sun.star.text.fieldmaster.Bibliography");
     return aRet;
 }
 /*-- 14.12.98 11:08:33---------------------------------------------------
