@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: kr $ $Date: 2001-08-06 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,13 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
         jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
+
             if(!out)
+            {
+                t.pEnv->ExceptionClear();
                 out = t.pEnv->FindClass(::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_ASCII_US));
+            }
+
             ThrowSQLException(t.pEnv,0);
             // und aufraeumen
         } //mID
