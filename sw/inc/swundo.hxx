@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:18:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-21 12:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ enum SwUndoStdId
     UNDO_SETFLYFRMFMT,                      // 84
     UNDO_SETRUBYATTR,                       // 85
 
-    UNDO_DUMMY_2,                           // 86
+    UNDO_TMPAUTOCORR,                       // 86 #102505#
     UNDO_DUMMY_3,                           // 87
     UNDO_DUMMY_4,                           // 88
     UNDO_DUMMY_5,                           // 89
