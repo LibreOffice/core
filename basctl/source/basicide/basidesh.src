@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:57:09 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 07:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2347,7 +2347,7 @@ String RID_STR_OVERWRITEMODE
 */
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap { FILE = "sc_ide.bmp" ; };
+    Prefix = "sc";
     MASKCOLOR
     IdList =
     {
@@ -2400,7 +2400,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
 };
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap { FILE = "lc_ide.bmp" ; };
+    Prefix = "lc";
     MASKCOLOR
     IdList =
     {
@@ -3644,7 +3644,7 @@ Menu RID_POPUP_DLGED
 };
 ImageList RID_IMGLST_OBJECTS
 {
-    ImageBitmap = Bitmap { FILE = "im_ges.bmp" ; };
+    Prefix = "im";
     MASKCOLOR
     IdList =
     {
@@ -3661,7 +3661,7 @@ ImageList RID_IMGLST_OBJECTS
 };
 ImageList RID_IMGLST_OBJECTS_HC
 {
-    ImageBitmap = Bitmap { FILE = "imh_ges.bmp" ; };
+    Prefix = "imh";
     MASKCOLOR
     IdList =
     {
@@ -3678,7 +3678,7 @@ ImageList RID_IMGLST_OBJECTS_HC
 };
 ImageList RID_IMGLST_LAYOUT
 {
-    ImageBitmap = Bitmap { FILE = "im_ges2.bmp" ; };
+    Prefix = "im";
     MASKCOLOR
     IdList =
     {
@@ -3690,7 +3690,7 @@ ImageList RID_IMGLST_LAYOUT
 };
 ImageList RID_IMGLST_LAYOUT_HC
 {
-    ImageBitmap = Bitmap { FILE = "imh_ges2.bmp" ; };
+    Prefix = "imh";
     MASKCOLOR
     IdList =
     {
