@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-05 12:48:46 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,18 +588,16 @@ inline ScDocument* ScNotesChilds::GetDocument() const
 
 struct ScShapeChild
 {
-    ScShapeChild() : mpAccShape(NULL), mpRelationCell(NULL) {}
+    ScShapeChild() : mpAccShape(NULL) {}
     ScShapeChild(const ScShapeChild& rOld);
     ~ScShapeChild();
     mutable accessibility::AccessibleShape* mpAccShape;
-    mutable ScAddress*          mpRelationCell; // if it is NULL this shape is anchored on the table
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
 };
 
 ScShapeChild::ScShapeChild(const ScShapeChild& rOld)
 :
 mpAccShape(rOld.mpAccShape),
-mpRelationCell(rOld.mpRelationCell),
 mxShape(rOld.mxShape)
 {
     if (mpAccShape)
@@ -687,16 +685,12 @@ private:
 
     void FindChanged(ScShapeChildVec& aOld, ScShapeChildVec& aNew) const;
     void FindChanged(ScShapeRange& aOld, ScShapeRange& aNew) const;
-    uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScShapeChild& aShape) const;
-    ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
-    void SetAnchor(ScShapeChild& rShape) const;
     accessibility::AccessibleShape* GetAccShape(const ScShapeChild& rShape) const;
     accessibility::AccessibleShape* GetAccShape(const ScShapeChildVec& rShapes, sal_Int32 nIndex) const;
     void FillShapes(const Rectangle& aPixelPaintRect, const MapMode& aMapMode, sal_uInt8 nRangeId);
     sal_Bool FindShape(ScShapeChildVec& rShapes, const uno::Reference <drawing::XShape>& xShape, ScShapeChildVec::iterator& rItr) const;
 //    void AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
 //    void RemoveShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
-    void CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID);
     SdrPage* GetDrawPage() const;
 };
 
@@ -748,9 +742,6 @@ void ScShapeChilds::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 {
                     case HINT_OBJCHG :         // Objekt geaendert
                     {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            CheckWhetherAnchorChanged(xShape, pObj->GetLayer());
                     }
                     break;
                     // no longer necessary
@@ -1085,88 +1076,6 @@ uno::Reference<XAccessible> ScShapeChilds::GetAt(const awt::Point& rPoint) const
     return xAcc;
 }
 
-uno::Reference<XAccessibleRelationSet> ScShapeChilds::GetRelationSet(const ScShapeChild& aShape) const
-{
-    utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper();
-
-    if(pRelationSet && mpAccDoc)
-    {
-        uno::Reference<XAccessible> xAccessible = mpAccDoc->GetCurrentAccessibleTable(); // should be the current table
-        if (aShape.mpRelationCell && xAccessible.is())
-        {
-            uno::Reference<XAccessibleTable> xAccTable (xAccessible->getAccessibleContext(), uno::UNO_QUERY);
-            if (xAccTable.is())
-                xAccessible = xAccTable->getAccessibleCellAt(aShape.mpRelationCell->Row(), aShape.mpRelationCell->Col());
-        }
-        AccessibleRelation aRelation;
-        aRelation.TargetSet.realloc(1);
-        aRelation.TargetSet[0] = xAccessible;
-        aRelation.RelationType = AccessibleRelationType::CONTROLLED_BY;
-        pRelationSet->AddRelation(aRelation);
-    }
-
-    return pRelationSet;
-}
-
-ScAddress* ScShapeChilds::GetAnchor(const uno::Reference<drawing::XShape>& xShape) const
-{
-    ScAddress* pAddress = NULL;
-    if (mpViewShell)
-    {
-        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-        uno::Reference<beans::XPropertySet> xShapeProp(xShape, uno::UNO_QUERY);
-        if (pShapeImp && xShapeProp.is())
-        {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
-            {
-                if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
-                {
-                    ScDocument* pDoc = mpViewShell->GetDocument();
-                    if (pDoc)
-                    {
-                        rtl::OUString sCaptionShape(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"));
-                        awt::Point aPoint(xShape->getPosition());
-                        awt::Size aSize(xShape->getSize());
-                        rtl::OUString sType(xShape->getShapeType());
-                        Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                        if ( sType.equals(sCaptionShape) )
-                        {
-                            awt::Point aRelativeCaptionPoint;
-                            rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
-                            xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
-                            Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
-                            Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
-                            aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
-                            aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
-                        }
-                        ScRange aRange = pDoc->GetRange(mpViewShell->GetLocationData().GetPrintTab(), aRectangle);
-                        pAddress = new ScAddress(aRange.aStart);
-                    }
-                }
-//              else
-//                  do nothing, because it is always a NULL Pointer
-            }
-        }
-    }
-
-    return pAddress;
-}
-
-void ScShapeChilds::SetAnchor(ScShapeChild& rShape) const
-{
-    ScAddress* pAddress = GetAnchor(rShape.mxShape);
-    if ((pAddress && rShape.mpRelationCell && (*pAddress != *(rShape.mpRelationCell))) ||
-        (!pAddress && rShape.mpRelationCell) || (pAddress && !rShape.mpRelationCell))
-    {
-        if (rShape.mpRelationCell)
-            delete rShape.mpRelationCell;
-        rShape.mpRelationCell = pAddress;
-        if (rShape.mpAccShape)
-            rShape.mpAccShape->SetRelationSet(GetRelationSet(rShape));
-    }
-}
-
 accessibility::AccessibleShape* ScShapeChilds::GetAccShape(const ScShapeChild& rShape) const
 {
     if (!rShape.mpAccShape)
@@ -1178,7 +1087,6 @@ accessibility::AccessibleShape* ScShapeChilds::GetAccShape(const ScShapeChild& r
         {
             rShape.mpAccShape->acquire();
             rShape.mpAccShape->Init();
-            rShape.mpAccShape->SetRelationSet(GetRelationSet(rShape));
         }
     }
     return rShape.mpAccShape;
@@ -1221,7 +1129,6 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
                             case SC_LAYER_INTERN:
                             case SC_LAYER_FRONT:
                             {
-                                SetAnchor(aShape);
                                 maShapeRanges[nRangeId].maForeShapes.push_back(aShape);
                                 bForeAdded = sal_True;
                             }
@@ -1234,7 +1141,6 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
                             break;
                             case SC_LAYER_CONTROLS:
                             {
-                                SetAnchor(aShape);
                                 maShapeRanges[nRangeId].maControls.push_back(aShape);
                                 bControlAdded = sal_True;
                             }
@@ -1408,44 +1314,6 @@ sal_Bool ScShapeChilds::FindShape(ScShapeChildVec& rShapes, const uno::Reference
         ++aItr;
     }
 }*/
-
-void ScShapeChilds::CheckWhetherAnchorChanged(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
-{
-    ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
-    ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
-    ScShapeChildVec::iterator aFindItr;
-    while (aItr != aEndItr)
-    {
-        switch (aLayerID)
-        {
-            case SC_LAYER_INTERN:
-            case SC_LAYER_FRONT:
-            {
-                if (FindShape(aItr->maForeShapes, xShape, aFindItr))
-                    SetAnchor(*aFindItr);
-            }
-            break;
-            case SC_LAYER_BACK:
-            {
-                if (FindShape(aItr->maBackShapes, xShape, aFindItr))
-                    SetAnchor(*aFindItr);
-            }
-            break;
-            case SC_LAYER_CONTROLS:
-            {
-                if (FindShape(aItr->maControls, xShape, aFindItr))
-                    SetAnchor(*aFindItr);
-            }
-            break;
-            default:
-            {
-                DBG_ERRORFILE("I don't know this layer.")
-            }
-            break;
-        }
-        ++aItr;
-    }
-}
 
 SdrPage* ScShapeChilds::GetDrawPage() const
 {
