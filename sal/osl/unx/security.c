@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:22:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,6 +882,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
     rtl_string2UString( ustrIdent, pszIdent, rtl_str_getLength( pszIdent ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+    OSL_ASSERT(*ustrIdent != NULL);
 
     return bRet;
 }
@@ -915,6 +916,7 @@ sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
 
     rtl_string2UString( ustrName, pszName, rtl_str_getLength( pszName ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+    OSL_ASSERT(*ustrName != NULL);
 
     return bRet;
 }
@@ -945,6 +947,7 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
     if ( bRet == sal_True )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+        OSL_ASSERT(*pustrDirectory != NULL);
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
 
@@ -1009,6 +1012,7 @@ sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **pustrDire
     if ( bRet == sal_True )
     {
         rtl_string2UString( pustrDirectory, pszDirectory, rtl_str_getLength( pszDirectory ), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS );
+        OSL_ASSERT(*pustrDirectory != NULL);
         osl_getFileURLFromSystemPath( *pustrDirectory, pustrDirectory );
     }
 
