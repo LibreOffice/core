@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jsc $ $Date: 2001-06-01 08:47:51 $
+#   last change: $Author: sb $ $Date: 2001-06-05 15:21:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ CFLAGS+= -GR
 .ENDIF
 
 SLOFILES=	\
-        $(SLO)$/dynload.obj
+        $(SLO)$/dynload.obj \
+        $(SLO)$/simplereferenceobject.obj
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
