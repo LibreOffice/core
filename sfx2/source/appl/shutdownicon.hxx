@@ -65,6 +65,8 @@ class ShutdownIcon :    public ShutdownIconServiceBase
         static bool GetAutostartW32( const ::rtl::OUString& aShortcutName );
         static void EnterModalMode();
         static void LeaveModalMode();
+
+        friend class SfxNotificationListener_Impl;
 #endif
 
     public:

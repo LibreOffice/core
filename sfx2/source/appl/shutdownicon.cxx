@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 14:54:18 $
+ *  last change: $Author: hro $ $Date: 2001-11-26 12:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,9 @@ public:
 
 void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException )
 {
-    ShutdownIcon* pIcon = ShutdownIcon::getInstance();
+#ifdef WNT
+    ShutdownIcon::LeaveModalMode();
+#endif
 }
 
 void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& aEvent ) throw( RuntimeException )
@@ -341,7 +343,12 @@ void ShutdownIcon::FromTemplate()
             pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
+            {
+#ifdef WNT
+                EnterModalMode();
+#endif
                 xNotifyer->dispatchWithNotification( aTargetURL, aArgs, new SfxNotificationListener_Impl() );
+            }
             else
                 xDisp->dispatch( aTargetURL, aArgs );
         }
