@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:15:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,6 +850,7 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
     {
         pOld->CheckCharFmts( &rDoc );
         pOld->SetContinusNum( rRule.IsContinusNum() );
+        pOld->SetRuleType( rRule.GetRuleType() );
         return ;
     }
 
@@ -897,6 +898,7 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
     pOld->CheckCharFmts( &rDoc );
     pOld->SetInvalidRule( TRUE );
     pOld->SetContinusNum( rRule.IsContinusNum() );
+    pOld->SetRuleType( rRule.GetRuleType() );
 
     if( !pRuleInfo )
         delete pUpd;
