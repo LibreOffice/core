@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:12 $
+ *  last change: $Author: mfe $ $Date: 2001-02-06 17:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,9 +341,54 @@ protected:
     sal_Int32              m_NoResources;
 };
 
+
+
+/** get extended arguments from command line and an argument file
+    the file name is given on the command line as "@filename"
+    (filename must be in our UNC notation!)
+    enumeration starts with 0 (i.e. argv[1])
+    each line in the file will be treated as one argument
+    @see also OProcess and OStartupInfo
+*/
+
+class OExtCommandLineImpl;
+
+class OExtCommandLine : public OObject
+{
+    VOS_DECLARE_CLASSINFO(VOS_NAMESPACE(OExtCommandLine, vos));
+    static NAMESPACE_VOS(OMutex) aMutex;
+    static NAMESPACE_VOS(OExtCommandLineImpl)* pExtImpl;
+
+public:
+
+    /** Constructor.
+    */
+    OExtCommandLine();
+
+    /** Destructor
+    */
+    virtual ~OExtCommandLine();
+
+    /** @return the number of extended command line arguments.
+     */
+    sal_uInt32 SAL_CALL getCommandArgCount();
+
+
+    /** get the nArg-th extended command argument
+        @param nArg [in] the number of extended argument to return.
+        @param strCommandArg [out] the string that receives the argument.
+        @return sal_True   if the nArg-th argument has been retriveded successfully
+        @return sal_False  on all other cases
+    */
+    sal_Bool SAL_CALL getCommandArg(sal_uInt32 nArg, NAMESPACE_RTL(OUString)& strCommandArg);
+
+
+};
+
 #ifdef _USE_NAMESPACE
 }
 #endif
 
 #endif  // _VOS_PROCESS_HXX_
+
 

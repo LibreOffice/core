@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-03 14:21:00 $
+ *  last change: $Author: mfe $ $Date: 2001-02-06 17:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,12 @@
 
 
 #include <cstdarg>
+#include <vector>
+#include <rtl/ustring.hxx>
 
 #include "vos/process.hxx"
 #include "vos/diagnose.hxx"
+#include <osl/file.hxx>
 
 #define MAX_RESOURCES   100
 #define MAX_ARGS        100
@@ -469,4 +472,152 @@ OStartupInfo::TStartupError OStartupInfo::getEnvironment(const rtl::OUString& st
 }
 
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OExtCommandLineImpl
+//
+
+namespace vos
+{
+
+class OExtCommandLineImpl
+{
+    void init();
+
+    ::std::vector< ::rtl::OUString > aExtArgVector;
+    sal_uInt32 m_nArgCount;
+
+public:
+
+    OExtCommandLineImpl();
+    ~OExtCommandLineImpl();
+
+    sal_uInt32 SAL_CALL getCommandArgCount();
+
+    sal_Bool SAL_CALL getCommandArg(sal_uInt32 nArg, ::rtl::OUString& strCommandArg);
+};
+
+}
+
+OExtCommandLineImpl::OExtCommandLineImpl()
+    : m_nArgCount(0)
+{
+    init();
+}
+
+OExtCommandLineImpl::~OExtCommandLineImpl()
+{
+
+}
+
+
+sal_uInt32 SAL_CALL OExtCommandLineImpl::getCommandArgCount()
+{
+    return m_nArgCount;
+}
+
+
+sal_Bool SAL_CALL OExtCommandLineImpl::getCommandArg(sal_uInt32 nArg, ::rtl::OUString& strCommandArg)
+{
+    if ( nArg >= m_nArgCount )
+    {
+        return sal_False;
+    }
+
+    strCommandArg = aExtArgVector[nArg];
+
+    return sal_True;
+}
+
+
+void OExtCommandLineImpl::init()
+{
+    OStartupInfo aStartInfo;
+    sal_uInt32 nIndex=0;
+    sal_uInt32 nArgs = aStartInfo.getCommandArgCount();
+
+    for ( nIndex = 0 ; nIndex < nArgs ; ++nIndex )
+    {
+        ::rtl::OUString aString;
+        sal_Bool bRet = aStartInfo.getCommandArg(nIndex,aString);
+
+        if ( aString[0] == (sal_Unicode) '@' )
+        {
+            ::rtl::OUString aFileName = aString.copy(1);
+            ::osl::File aFile(aFileName);
+            ::rtl::ByteSequence aSeq;
+
+            ::osl::FileBase::RC aErr = aFile.open(OpenFlag_Read);
+
+            if ( aErr != ::osl::FileBase::E_None )
+            {
+                break;
+            }
+
+            do
+            {
+                aErr = aFile.readLine(aSeq);
+                if ( aSeq.getLength() != 0 )
+                {
+                    ::rtl::OUString newString((sal_Char*)aSeq.getArray(), aSeq.getLength(), RTL_TEXTENCODING_ASCII_US);
+                    aExtArgVector.push_back( newString );
+                    m_nArgCount++;
+                }
+            }
+            while ( aErr == ::osl::FileBase::E_None && aSeq.getLength() > 0 );
+
+            aFile.close();
+            aFile.remove(aFileName);
+        }
+        else
+        {
+            aExtArgVector.push_back( aString );
+            m_nArgCount++;
+        }
+    }
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// OExtCommandLine
+//
+
+OMutex OExtCommandLine::aMutex;
+OExtCommandLineImpl* OExtCommandLine::pExtImpl=0;
+
+
+VOS_IMPLEMENT_CLASSINFO(
+    VOS_CLASSNAME(OExtCommandLine, vos),
+    VOS_NAMESPACE(OExtCommandLine, vos),
+    VOS_NAMESPACE(OObject, vos), 0);
+
+OExtCommandLine::OExtCommandLine()
+{
+    OGuard Guard(aMutex);
+
+    if ( pExtImpl == NULL )
+    {
+        pExtImpl = new OExtCommandLineImpl;
+    }
+}
+
+OExtCommandLine::~OExtCommandLine()
+{
+
+
+}
+
+sal_uInt32 SAL_CALL OExtCommandLine::getCommandArgCount()
+{
+    return pExtImpl->getCommandArgCount();
+}
+
+
+sal_Bool SAL_CALL OExtCommandLine::getCommandArg(sal_uInt32 nArg, ::rtl::OUString& strCommandArg)
+{
+    return pExtImpl->getCommandArg(nArg,strCommandArg);
+}
 
