@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:06:13 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ SalData::SalData()
     pXLib_          = NULL;
     m_pSalDisplay   = NULL;
     pInstance_      = NULL;
+    m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
 }
