@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 09:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,8 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     MutexGuard aGuard(m_aMutex);
     if (DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
+    if(!_rName.getLength())
+        throw IllegalArgumentException(_rName, Reference<XNamingService>(this),1);
 
     ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
     if (aExistent != m_aDatabaseObjects.end())

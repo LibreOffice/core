@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:06:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 09:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #ifndef _DBA_CONFIGNODE_HXX_
 #include "confignode.hxx"
 #endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -166,8 +169,7 @@ typedef ::cppu::ImplHelper6 <   ::com::sun::star::lang::XServiceInfo,
                                 ::com::sun::star::sdb::XQueryDefinitionsSupplier
                             >   ODatabaseSource_Base;
 
-class ODatabaseSource
-                    :public ::comphelper::OBaseMutex
+class ODatabaseSource   :public ::comphelper::OBaseMutex
                     ,public OSubComponent
                     ,public OContainerElement
                     ,public OConfigurationFlushable
