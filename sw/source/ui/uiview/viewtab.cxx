@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-09-18 11:03:26 $
+ *  last change: $Author: os $ $Date: 2002-09-26 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,7 +1238,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const long nPageWidth  = rPageRect.Width();
     const long nPageHeight = rPageRect.Height();
 
-    const SwPageDesc& rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
+    const SwPageDesc& rDesc = rSh.GetPageDesc(
+                IsTabColFromDoc() ? rSh.GetMousePageDesc(aTabColFromDocPos) : rSh.GetCurPageDesc() );
+
     const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrmDir();
     const BOOL bVerticalWriting = rSh.IsInVerticalText();
 
