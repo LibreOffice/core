@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_pipe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-07 09:17:07 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 11:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include "osl/security.hxx"
 #include "acceptor.hxx"
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 
@@ -192,7 +193,7 @@ namespace io_acceptor
 
     void PipeAcceptor::init()
     {
-        m_pipe = Pipe( m_sPipeName.pData , osl_Pipe_CREATE );
+        m_pipe = Pipe( m_sPipeName.pData , osl_Pipe_CREATE , osl::Security() );
         if( ! m_pipe.is() )
         {
             OUString error = OUString::createFromAscii( "io.acceptor: Couldn't setup pipe " );
