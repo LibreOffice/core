@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-17 21:00:19 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 21:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ catalan ] = "Quan s'elimini aquesta taula també de suprimiran les seves relacions associades. Voleu continuar?";
 };
+
 
 
 
