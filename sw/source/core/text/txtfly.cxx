@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-05 14:12:56 $
+ *  last change: $Author: fme $ $Date: 2002-06-17 11:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2400,6 +2400,17 @@ _FlyCntnt SwTxtFly::GetOrder( const SdrObject *pObj ) const
     // Beim Durchlauf und Nowrap wird smart ignoriert.
     if( SURROUND_THROUGHT == eOrder || SURROUND_NONE == eOrder )
         return eOrder;
+
+#ifdef BIDI
+    // left is left and right is right
+    if ( pCurrFrm->IsRightToLeft() )
+    {
+        if ( SURROUND_LEFT == eOrder )
+            eOrder = SURROUND_RIGHT;
+        else if ( SURROUND_RIGHT == eOrder )
+            eOrder = SURROUND_LEFT;
+    }
+#endif
 
     // "idealer Seitenumlauf":
     if( SURROUND_IDEAL == eOrder )

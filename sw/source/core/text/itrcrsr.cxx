@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-14 14:29:02 $
+ *  last change: $Author: fme $ $Date: 2002-06-17 11:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,18 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     }
     const SvxAdjustItem& rAdjust = pFrm->GetTxtNode()->GetSwAttrSet().GetAdjust();
     nAdjust = rAdjust.GetAdjust();
+
+#ifdef BIDI
+    // left is left and right is right
+    if ( pFrm->IsRightToLeft() )
+    {
+        if ( SVX_ADJUST_LEFT == nAdjust )
+            nAdjust = SVX_ADJUST_RIGHT;
+        else if ( SVX_ADJUST_RIGHT == nAdjust )
+            nAdjust = SVX_ADJUST_LEFT;
+    }
+#endif
+
     bOneBlock = rAdjust.GetOneWord() == SVX_ADJUST_BLOCK;
     bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
     bLastCenter = rAdjust.GetLastBlock() == SVX_ADJUST_CENTER;

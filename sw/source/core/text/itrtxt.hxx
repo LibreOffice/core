@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-12 11:17:31 $
+ *  last change: $Author: fme $ $Date: 2002-06-17 11:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,9 @@ public:
     inline sal_Bool IsLastBlock() const { return bLastBlock; }
     inline sal_Bool IsLastCenter() const { return bLastCenter; }
     inline MSHORT GetAdjust() const { return nAdjust; }
+#ifndef BIDI
     inline void SetAdjust( const MSHORT nNew ) { nAdjust = nNew; }
+#endif
     inline KSHORT GetLineWidth() const
            { return KSHORT( Right() - GetLeftMargin() + 1 ); }
     inline SwTwips GetLeftMin() const { return nFirst < nLeft ? nFirst : nLeft; }
