@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:16 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:46:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ CXX=g++
 # name of C Compiler
 CC=gcc 
 # flags for C and C++ Compiler
-CFLAGS=-w -c $(INCLUDE) -I$(SOLARENV)/unxbsds/usr/include
+CFLAGS=-c $(INCLUDE) -I$(SOLARENV)/unxbsds/usr/include
 # flags for the C++ Compiler
 CFLAGSCC= -pipe 
 
