@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smdetect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:44:17 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -107,6 +104,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
 
 #ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
@@ -139,9 +139,11 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <sfx2/brokenpackageint.hxx>
 
 #include "document.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::frame;
@@ -169,11 +171,16 @@ SmFilterDetect::~SmFilterDetect()
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
+    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+
+    sal_Bool bRepairPackage = sal_False;
+    sal_Bool bRepairAllowed = sal_False;
 
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
@@ -183,6 +190,8 @@ SmFilterDetect::~SmFilterDetect()
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
+    sal_Int32 nIndexOfDocumentTitle = -1;
+
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
@@ -223,6 +232,10 @@ SmFilterDetect::~SmFilterDetect()
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
             lDescriptor[nProperty].Value >>= xInteraction;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
+            lDescriptor[nProperty].Value >>= bRepairPackage;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
+            nIndexOfDocumentTitle = nProperty;
     }
 
     // can't check the type for external filters, so set the "dont" flag accordingly
@@ -267,9 +280,8 @@ SmFilterDetect::~SmFilterDetect()
 
             if ( bIsStorage )
             {
-                // checking for some storage based formats
-                // mba: where's the check for SM3.0/4.0 ??
-                SotStorage* pStorage = aMedium.GetStorage();
+                //TODO/LATER: factor this out!
+                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -296,27 +308,72 @@ SmFilterDetect::~SmFilterDetect()
                 }
                 else
                 {
-                    SfxFilterMatcher aMatcher( String::CreateFromAscii("smath") );
-                    const SfxFilter* pFilter = 0;
-                    if (aFilterName.Len())
-                        pFilter = aMatcher.GetFilter4FilterName(aFilterName);
-
-                    ULONG nFormat = pStorage->GetFormat();
-                    // check preselection
-                    if ( pFilter && pFilter->GetFormat() != nFormat )
-                            // preselected Filter has different ClipboardId -> doesn't match
-                            pFilter = 0;
-
-                    // make real detection by clipboard ID
-                    if( !pFilter )
-                        pFilter = aMatcher.GetFilter4ClipBoardId( nFormat );
-
                     aFilterName.Erase();
-                    aTypeName.Erase();
-                    if (pFilter)
+
+                    try
                     {
-                        aFilterName = pFilter->GetName();
-                        aTypeName = pFilter->GetTypeName();
+                        const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
+                                SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
+                                SfxFilterMatcher(String::CreateFromAscii("smath")).GetFilter4EA( aTypeName ) : 0;
+                        String aFilterName;
+                        if ( pFilter )
+                            aFilterName = pFilter->GetName();
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, &aFilterName );
+                    }
+                    catch( lang::WrappedTargetException& aWrap )
+                    {
+                        packages::zip::ZipIOException aZipException;
+
+                        // repairing is done only if this type is requested from outside
+                        if ( ( aWrap.TargetException >>= aZipException ) && aTypeName.Len() )
+                        {
+                            if ( xInteraction.is() )
+                            {
+                                // the package is broken one
+                                   aDocumentTitle = aMedium.GetURLObject().getName(
+                                                            INetURLObject::LAST_SEGMENT,
+                                                            true,
+                                                            INetURLObject::DECODE_WITH_CHARSET );
+
+                                if ( !bRepairPackage )
+                                {
+                                    // ask the user whether he wants to try to repair
+                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
+
+                                    xInteraction->handle( xRequest );
+
+                                    bRepairAllowed = pRequest->isApproved();
+                                }
+
+                                if ( !bRepairAllowed )
+                                {
+                                    // repair either not allowed or not successful
+                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
+                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
+                                       xInteraction->handle( xRequest );
+                                }
+                            }
+
+                            if ( !bRepairAllowed )
+                                aTypeName.Erase();
+                        }
+                    }
+                    catch( uno::RuntimeException& )
+                    {
+                        throw;
+                    }
+                    catch( uno::Exception& )
+                    {
+                        aTypeName.Erase();
+                    }
+
+                       if ( aTypeName.Len() )
+                    {
+                           const SfxFilter* pFilter =
+                                    SfxFilterMatcher( String::CreateFromAscii("smath") ).GetFilter4EA( aTypeName );
+                        if ( pFilter )
+                            aFilterName = pFilter->GetName();
                     }
                 }
             }
@@ -326,27 +383,39 @@ SmFilterDetect::~SmFilterDetect()
                 //the MathML filter. There are all sorts of things wrong with
                 //this approach, to be fixed at a better level than here
                 SvStream *pStrm = aMedium.GetInStream();
+                aTypeName.Erase();
                 if (pStrm && !pStrm->GetError())
                 {
-                    const int nSize = 5;
-                    sal_Char aBuffer[nSize+1];
-                    aBuffer[nSize] = 0;
-                    ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
-                    pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                    if (nBytesRead == nSize)
+                    SotStorageRef aStorage = new SotStorage ( pStrm, FALSE );
+                    if ( !aStorage->GetError() )
                     {
-                        if (0 == strncmp( "<?xml",aBuffer,nSize))
+                        if ( aStorage->IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Equation Native" ) ) ) )
+                            aTypeName.AssignAscii( "math_MathType_3x" );
+                    }
+                    else
+                    {
+                        const int nSize = 5;
+                        sal_Char aBuffer[nSize+1];
+                        aBuffer[nSize] = 0;
+                        ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
+                        pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+                        if (nBytesRead == nSize)
                         {
-                            static const sal_Char sFltrNm_2[] = MATHML_XML;
-                            static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
-                            aFilterName.AssignAscii( sFltrNm_2 );
-                            aTypeName.AssignAscii( sTypeNm_2 );
-    /*
-                            const SfxFilter* pFilt = SFX_APP()->GetFilter(
-                                            SmDocShell::Factory(), sFltrNm );
-                            *ppFilter = pFilt;
-    */
+                            if (0 == strncmp( "<?xml",aBuffer,nSize))
+                            {
+                                static const sal_Char sFltrNm_2[] = MATHML_XML;
+                                static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
+                                aFilterName.AssignAscii( sFltrNm_2 );
+                                aTypeName.AssignAscii( sTypeNm_2 );
+                            }
                         }
+                    }
+
+                    if ( aTypeName.Len() )
+                    {
+                        const SfxFilter* pFilt = SfxFilterMatcher( String::CreateFromAscii("smath") ).GetFilter4EA( aTypeName );
+                        if ( pFilt )
+                            aFilterName = pFilt->GetName();
                     }
                 }
             }
@@ -382,6 +451,45 @@ SmFilterDetect::~SmFilterDetect()
         }
         else
             lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
+    }
+
+    if ( !bRepairPackage && bRepairAllowed )
+    {
+        lDescriptor.realloc( nPropertyCount + 1 );
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("RepairPackage");
+        lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
+        nPropertyCount++;
+
+        bOpenAsTemplate = sal_True;
+
+        // TODO/LATER: set progress bar that should be used
+    }
+
+    if ( bOpenAsTemplate )
+    {
+        if ( nIndexOfTemplateFlag == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfTemplateFlag].Value <<= bOpenAsTemplate;
+    }
+
+    if ( aDocumentTitle.getLength() )
+    {
+        // the title was set here
+        if ( nIndexOfDocumentTitle == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("DocumentTitle");
+            lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
     }
 
     if ( !aFilterName.Len() )
