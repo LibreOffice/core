@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:09:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,18 @@ sal_Bool makeValidTypeFile(const ::rtl::OString& targetFileName,
 sal_Bool removeTypeFile(const ::rtl::OString& fileName);
 
 ::rtl::OUString convertToFileUrl(const ::rtl::OString& fileName);
+
+//*************************************************************************
+// Global exception to signal problems when a type cannot be dumped
+//*************************************************************************
+class CannotDumpException
+{
+public:
+    CannotDumpException(const ::rtl::OString& msg)
+        : m_message(msg) {}
+
+    ::rtl::OString  m_message;
+};
 
 
 #endif // _CODEMAKER_GLOBAL_HXX_
