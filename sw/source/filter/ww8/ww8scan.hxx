@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:52:14 $
+ *  last change: $Author: cmc $ $Date: 2001-04-25 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ struct WW8PLCFxSave1
     ULONG nPLCFxPos;
     ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
     long nPLCFxMemOfs;
+    WW8_CP nStartCp;        // for cp based iterator like PAP and CHP
     WW8_FC nStartFC;
     WW8_CP nAttrStart;
     WW8_CP nAttrEnd;
@@ -1562,12 +1563,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.9 2001-04-20 14:52:14 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.10 2001-04-25 14:06:21 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/04/20 14:52:14  cmc
+      New algorithm to find character and paragraph properties in fastsave documents
+
       Revision 1.8  2001/03/16 14:34:34  cmc
       ##503##,##508##,##176##,##502##,##516##,##517##,#78761#,#78762#,#84406#,#83168#,#84126# New piecetable handling and new undocumented sprms, disable by defining CRUEL_CUT, fixes quite a bit I hope
 

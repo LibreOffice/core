@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:52:14 $
+ *  last change: $Author: cmc $ $Date: 2001-04-25 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3712,7 +3712,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes )
             pRes->nSprmId = p->pIdStk->Top();       // hole Ende-Position
         else
         {
-            ASSERT( !this, "Keine Id auf dem Stack" );
+            ASSERT( !this, "No Id on the Stack" );
             pRes->nSprmId = 0;
         }
     }
@@ -4016,6 +4016,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
             WW8PLCFxDesc aD;
             aD.nStartPos = LONG_MAX;
             pPLCFx->GetSprms( &aD );
+            rSave.nStartCp = aD.nStartPos;
             rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
         }
     }
@@ -4029,7 +4030,8 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
-            aD.nStartPos = LONG_MAX;
+            aD.nStartPos = rSave.nStartCp;
+            pPLCFx->SeekPos(aD.nStartPos);
             pPLCFx->GetSprms( &aD );
             pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
         }
@@ -6363,11 +6365,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.13 2001-04-20 14:52:14 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.14 2001-04-25 14:06:21 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/04/20 14:52:14  cmc
+      New algorithm to find character and paragraph properties in fastsave documents
+
       Revision 1.12  2001/04/06 12:37:12  cmc
       ##657## NetBSD bad alignment crash fix
 
