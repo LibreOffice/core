@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 15:40:07 $
+ *  last change: $Author: tl $ $Date: 2001-02-27 14:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,24 +328,27 @@ INT16 DicEvtListenerHelper::EndCollectEvents()
 
 INT16 DicEvtListenerHelper::FlushEvents()
 {
-    // build DictionaryListEvent to pass on to listeners
-    uno::Sequence< DictionaryEvent > aDicEvents;
-    if (nNumVerboseListeners > 0)
-        aDicEvents = aCollectDicEvt;
-    DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
-
-    // pass on event
-    cppu::OInterfaceIteratorHelper aIt( aDicListEvtListeners );
-    while (aIt.hasMoreElements())
+    if (0 != nCondensedEvt)
     {
-        Reference< XDictionaryListEventListener > xRef( aIt.next(), UNO_QUERY );
-        if (xRef.is())
-            xRef->processDictionaryListEvent( aEvent );
-    }
+        // build DictionaryListEvent to pass on to listeners
+        uno::Sequence< DictionaryEvent > aDicEvents;
+        if (nNumVerboseListeners > 0)
+            aDicEvents = aCollectDicEvt;
+        DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
 
-    // clear "list" of events
-    nCondensedEvt = 0;
-    aCollectDicEvt.realloc( 0 );
+        // pass on event
+        cppu::OInterfaceIteratorHelper aIt( aDicListEvtListeners );
+        while (aIt.hasMoreElements())
+        {
+            Reference< XDictionaryListEventListener > xRef( aIt.next(), UNO_QUERY );
+            if (xRef.is())
+                xRef->processDictionaryListEvent( aEvent );
+        }
+
+        // clear "list" of events
+        nCondensedEvt = 0;
+        aCollectDicEvt.realloc( 0 );
+    }
 
     return nNumCollectEvtListeners;
 }
