@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.31 $
+*  $Revision: 1.32 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-03 13:18:29 $
+*  last change: $Author: hr $ $Date: 2004-08-03 14:58:16 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -186,13 +186,29 @@ File gid_File_Lib_Behelper
   #endif
 End
 
-// BM: #117495# remove chart2 from setup.  I just comment this
-// out, because it will later be re-added
+File gid_File_Lib_Ldapbe2
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(ldapbe2.uno,UNXSUFFIX));
+  #else
+    Name = "ldapbe2.uno.dll";
+  #endif
+End
 
-// STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
-// STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
-// STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
-// STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
+
+
+
+
+STD_UNO_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
+
+STD_UNO_LIB_FILE(gid_File_Lib_Chartmodel, chartmodel)
+
+STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
+
+STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
 
 #if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
