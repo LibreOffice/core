@@ -1,15 +1,63 @@
 #*************************************************************************
-#*
-#*    $Workfile:   tg_shl.mk  $
-#*
-#*    Ersterstellung    MH 01.09.97
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-26 21:41:43 $
-#*    $Revision: 1.8 $
-#*
-#*    $Logfile:   T:/solar/inc/tg_shl.mkv  $
-#*
-#*    Copyright (c) 1990-1999, STAR DIVISION
-#*
+#
+#   $RCSfile: tg_shl.mk,v $
+#
+#   $Revision: 1.9 $
+#
+#   last change: $Author: hjs $ $Date: 2000-10-30 13:14:55 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
 #*************************************************************************
 
 MKFILENAME:=tg_shl.mk
@@ -158,9 +206,14 @@ SHL$(TNR)ALLRES+=$(SHL$(TNR)DEFAULTRES)
 SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 
+.IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
+SHL$(TNR)DESCRIPTIONOBJ*=$(SLO)$/default_description.obj
+.ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
+
 .IF "$(SHL$(TNR)TARGETN)"!=""
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
+                    $(SHL$(TNR)DESCRIPTIONOBJ)\
                     $(SHL$(TNR)LIBS)\
                     $(USE_$(TNR)IMPLIB_DEPS)\
                     $(USE_SHL$(TNR)DEF)\
@@ -206,7 +259,7 @@ $(SHL$(TNR)TARGETN) : \
         @$(mktmp $(SHL$(TNR)LIBS:+"+\n") $(SHL$(TNR)STDLIBS:+"+\n") $(STDSHL:+"+\n")), \
         $(SHL$(TNR)DEF:+"\n")
 .ELSE
-    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL$(TNR)LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL$(TNR)STDLIBS:^"-l") $(SHL$(TNR)OBJS) $(VERSIONOBJ) $(SHL$(TNR)DEF)
+    $(LINK) -o $@ -Zdll -Zmap=$(MISC)$/$(@:b).map -L$(LB)  $(SHL$(TNR)LIBS:^"-l") -Ln:\toolkit4\lib -Ln:\emx09d\lib\mt  -Ln:\emx09d\lib -L$(SOLARLIBDIR) $(STDSLO) $(STDSHL:^"-l") $(SHL$(TNR)STDLIBS:^"-l") $(SHL$(TNR)OBJS) $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)DEF)
 .ENDIF
 .IF "$(SHL$(TNR)RES)" != ""
     $(RCLINK) $(RCLINKFLAGS) $(SHL$(TNR)RES) $@
@@ -262,7 +315,7 @@ $(SHL$(TNR)TARGETN) : \
         -def:$(SHL$(TNR)DEF) \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ) \
-        $(VERSIONOBJ) $(SHL$(TNR)OBJS) \
+        $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
         $(STDSHL) \
@@ -273,7 +326,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
+        $(STDOBJ) $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL$(TNR)STDLIBS) $(STDSHL) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
@@ -287,7 +340,7 @@ $(SHL$(TNR)TARGETN) : \
         -def:$(SHL$(TNR)DEF) \
         $(USE_$(TNR)IMPLIB) \
         $(STDOBJ) \
-        $(VERSIONOBJ) $(SHL$(TNR)OBJS) \
+        $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
         $(STDSHL) \
@@ -301,7 +354,7 @@ $(SHL$(TNR)TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL$(TNR)IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL$(TNR)OBJS) $(VERSIONOBJ)   \
+        $(SHL$(TNR)OBJS) $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)   \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
         $(STDSHL)                           \
@@ -320,7 +373,7 @@ $(SHL$(TNR)TARGETN) : \
         -map:$(MISC)$/$(@:B).map				\
         $(LB)$/$(SHL$(TNR)IMPLIB).exp				\
         $(STDOBJ)							\
-        $(SHL$(TNR)OBJS) $(VERSIONOBJ)    \
+        $(SHL$(TNR)OBJS) $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)    \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
         $(STDSHL)                           \
@@ -369,7 +422,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
-    $(VERSIONOBJ) -o $@ \
+    $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
@@ -392,7 +445,7 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL$(TNR)OBJS) `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL$(TNR)OBJS) `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)) $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 

@@ -218,6 +218,10 @@ $(DEF1TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF1EXPORT1)"!=""
     @echo $(DEF1EXPORT1)										>>$@
 .ENDIF
@@ -668,6 +672,10 @@ $(DEF2TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF2EXPORT1)"!=""
     @echo $(DEF2EXPORT1)										>>$@
 .ENDIF
@@ -1118,6 +1126,10 @@ $(DEF3TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF3EXPORT1)"!=""
     @echo $(DEF3EXPORT1)										>>$@
 .ENDIF
@@ -1568,6 +1580,10 @@ $(DEF4TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF4EXPORT1)"!=""
     @echo $(DEF4EXPORT1)										>>$@
 .ENDIF
@@ -2018,6 +2034,10 @@ $(DEF5TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF5EXPORT1)"!=""
     @echo $(DEF5EXPORT1)										>>$@
 .ENDIF
@@ -2468,6 +2488,10 @@ $(DEF6TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF6EXPORT1)"!=""
     @echo $(DEF6EXPORT1)										>>$@
 .ENDIF
@@ -2918,6 +2942,10 @@ $(DEF7TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF7EXPORT1)"!=""
     @echo $(DEF7EXPORT1)										>>$@
 .ENDIF
@@ -3368,6 +3396,10 @@ $(DEF8TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF8EXPORT1)"!=""
     @echo $(DEF8EXPORT1)										>>$@
 .ENDIF
@@ -3818,6 +3850,10 @@ $(DEF9TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF9EXPORT1)"!=""
     @echo $(DEF9EXPORT1)										>>$@
 .ENDIF
@@ -4268,6 +4304,10 @@ $(DEF10TARGETN): \
     @echo EXPORTS												>>$@
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@
+#	getDescriptionFunc fuer alle!?
+.IF "$(DESCRIPTION)"!=""
+    @echo getDescriptionFunc	>>$@
+.ENDIF			# "$(DESCRIPTION)"!=""
 .IF "$(DEF10EXPORT1)"!=""
     @echo $(DEF10EXPORT1)										>>$@
 .ENDIF

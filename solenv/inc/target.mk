@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:05 $
+#   last change: $Author: hjs $ $Date: 2000-10-30 13:14:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -330,11 +330,6 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 .ENDIF			# "$(GUI)"=="OS2"
 .ENDIF			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
-
-.IF "$(UNOTYPES)" != ""
-UNOUCRHEADER=$(foreach,j,$(subst,.,$/ $(UNOTYPES)) $(UNOUCROUT)$/$(j:+".hpp"))
-UNOUCRTARGET:=$(UNOUCRHEADER)
-.ENDIF			# "$(UNOTYPES)" != ""
 
 .IF "$(JARFILES)"!=""
 NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell $(FIND) $(JARDIR) -name $i) $(SOLARBINDIR)$/$i $(shell $(FIND) $(JARDIR) -name $i)))
@@ -1142,40 +1137,65 @@ COMPRDB*:=$(SOLARBINDIR)$/applicat.rdb
 .ENDIF			# "$(UNOUCRRDB)"!=""
 .ENDIF
 .IF "$(COMP1TYPELIST)"!=""
+UNOTYPES+=$($(COMP1TYPELIST)_XML2CMPTYPES)
+SHL1DESCRIPTIONOBJ*=$(SLO)$/$(COMP1TYPELIST)_description.obj
 COMP1RDBTARGETN:=$(BIN)$/$(COMP1TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP2TYPELIST)"!=""
+UNOTYPES+=$($(COMP2TYPELIST)_XML2CMPTYPES)
+SHL2DESCRIPTIONOBJ*=$(SLO)$/$(COMP2TYPELIST)_description.obj
 COMP2RDBTARGETN:=$(BIN)$/$(COMP2TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP3TYPELIST)"!=""
+UNOTYPES+=$($(COMP3TYPELIST)_XML2CMPTYPES)
+SHL3DESCRIPTIONOBJ*=$(SLO)$/$(COMP3TYPELIST)_description.obj
 COMP3RDBTARGETN:=$(BIN)$/$(COMP3TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP4TYPELIST)"!=""
+UNOTYPES+=$($(COMP4TYPELIST)_XML2CMPTYPES)
+SHL4DESCRIPTIONOBJ*=$(SLO)$/$(COMP4TYPELIST)_description.obj
 COMP4RDBTARGETN:=$(BIN)$/$(COMP4TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP5TYPELIST)"!=""
+UNOTYPES+=$($(COMP5TYPELIST)_XML2CMPTYPES)
+SHL5DESCRIPTIONOBJ*=$(SLO)$/$(COMP5TYPELIST)_description.obj
 COMP5RDBTARGETN:=$(BIN)$/$(COMP5TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP6TYPELIST)"!=""
+UNOTYPES+=$($(COMP6TYPELIST)_XML2CMPTYPES)
+SHL6DESCRIPTIONOBJ*=$(SLO)$/$(COMP6TYPELIST)_description.obj
 COMP6RDBTARGETN:=$(BIN)$/$(COMP6TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP7TYPELIST)"!=""
+UNOTYPES+=$($(COMP7TYPELIST)_XML2CMPTYPES)
+SHL7DESCRIPTIONOBJ*=$(SLO)$/$(COMP7TYPELIST)_description.obj
 COMP7RDBTARGETN:=$(BIN)$/$(COMP7TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP8TYPELIST)"!=""
+UNOTYPES+=$($(COMP8TYPELIST)_XML2CMPTYPES)
+SHL8DESCRIPTIONOBJ*=$(SLO)$/$(COMP8TYPELIST)_description.obj
 COMP8RDBTARGETN:=$(BIN)$/$(COMP8TYPELIST).rdb
 .ENDIF
 
 .IF "$(COMP9TYPELIST)"!=""
+UNOTYPES+=$($(COMP9TYPELIST)_XML2CMPTYPES)
+SHL9DESCRIPTIONOBJ*=$(SLO)$/$(COMP9TYPELIST)_description.obj
 COMP9RDBTARGETN:=$(BIN)$/$(COMP9TYPELIST).rdb
 .ENDIF
+
+#moved here to get UNOTYPES from COMPxTYPELIST
+.IF "$(UNOTYPES)" != ""
+UNOUCRHEADER=$(foreach,j,$(subst,.,$/ $(UNOTYPES)) $(UNOUCROUT)$/$(j:+".hpp"))
+UNOUCRTARGET:=$(UNOUCRHEADER)
+.ENDIF			# "$(UNOTYPES)" != ""
+
 
 .IF "$(HELPIDFILES)"!=""
 MAKE_HELPIDS=$(MISC)$/helpids.don
@@ -2021,10 +2041,6 @@ $(GENJAVAFILES) : $(RDB)
 $(JAVATARGET) : $(GENJAVAFILES)
 .ENDIF			# "$(GENJAVAFILES)"!=""
 
-.IF "$(SUBDIRS)"!=""
-$(SUBDIRS) : $(SUBDIRSDEPS)
-.ENDIF			 "$(SUBDIRS)"!=""
-
 #mhtest:
 #	@echo MYUNOIDLTARGETS : $(MYUNOIDLTARGETS) $(SLOFILES)
 #	@echo MHMISC_ : $(UNOIDLTARGETS) $(IDLPACKAGE) xxxx $(_PACKAGE)
@@ -2858,12 +2874,28 @@ $(ALLPARFILES): $(LNGFILES)
 wordcount:
     +wc *.* >> $(TMP)$/wc.lst
 
+.ELSE
+
+# ----------
+# - DEPEND -
+# ----------
+
+ALLTAR : ALLDEP \
+        $(SUBDIRS)
+
+.INCLUDE : tg_dep.mk
+
+.ENDIF
+
 .IF "$(SUBDIRS)"!=""
+
+$(SUBDIRS) : $(SUBDIRSDEPS)
+
 .IF "$(mk_tmp)$(BSCLIENT)"!=""
 $(SUBDIRS)  .PHONY :
     @+echo ignoring SUBDIRS
 
-.ELSE
+.ELSE			# "$(mk_tmp)$(BSCLIENT)"!=""
 #.IF "$(PRJNAME)"!="sw"
 .IF "$(GUI)"!="UNX"
 $(SUBDIRS) .PHONY :
@@ -2872,23 +2904,11 @@ $(SUBDIRS) .PHONY :
         cd
         @$(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
     ]
-.ELSE
+.ELSE			# "$(GUI)"!="UNX"
 $(SUBDIRS) .PHONY :
     +cd $@; $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
-.ENDIF
+.ENDIF			# "$(GUI)"!="UNX"
 #.ENDIF
-.ENDIF
-.ENDIF
-
-.ELSE
-
-# ----------
-# - DEPEND -
-# ----------
-
-ALLTAR : ALLDEP
-
-.INCLUDE : tg_dep.mk
-
-.ENDIF
+.ENDIF			# "$(mk_tmp)$(BSCLIENT)"!=""
+.ENDIF			# "$(SUBDIRS)"!=""
 
