@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:36:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1949,139 +1949,6 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     const SwDSParam* pParam = GetNewDBMgr()->CreateDSData(aData);
     String* pNew = new String( rDBName );
     rDBNameList.Insert( pNew, rDBNameList.Count() );
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
-BOOL SwDoc::RenameUserFields( const String& rOldName, const String& rNewName )
-{
-    USHORT n;
-    BOOL bRet = FALSE;
-    String sFormel;
-
-    SwSectionFmts& rArr = GetSections();
-    for( n = rArr.Count(); n; )
-    {
-        SwSection* pSect = rArr[ --n ]->GetSection();
-
-        if( pSect )
-        {
-            sFormel = pSect->GetCondition();
-            RenameUserFld( rOldName, rNewName, sFormel );
-            pSect->SetCondition( sFormel );
-        }
-    }
-
-    const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
-    const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-
-    for( n = 0; n < nMaxItems; ++n )
-    {
-        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) ))
-            continue;
-
-        SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
-        SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-        if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
-            continue;
-
-        SwField* pFld = pFmtFld->GetFld();
-        BOOL bExpand = FALSE;
-
-        switch( pFld->GetTyp()->Which() )
-        {
-        case RES_USERFLD:
-            if( rSCmp.isEqual( rOldName, pFld->GetTyp()->GetName() ))
-            {
-                SwUserFieldType* pOldTyp = (SwUserFieldType*)pFld->GetTyp();
-
-                SwUserFieldType* pTyp = (SwUserFieldType*)InsertFldType(
-                        SwUserFieldType(this, rNewName));
-
-                pTyp->SetContent(pOldTyp->GetContent());
-                pTyp->SetType(pOldTyp->GetType());
-                pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
-                pFld->ChgTyp(pTyp);
-
-                bExpand = TRUE;
-            }
-            break;
-
-        case RES_DBNUMSETFLD:
-        case RES_DBNEXTSETFLD:
-        case RES_HIDDENTXTFLD:
-        case RES_HIDDENPARAFLD:
-            sFormel = pFld->GetPar1();
-            RenameUserFld( rOldName, rNewName, sFormel );
-            pFld->SetPar1( sFormel );
-            bExpand = TRUE;
-            break;
-
-        case RES_SETEXPFLD:
-            if( rSCmp.isEqual( rOldName, pFld->GetTyp()->GetName() ))
-            {
-                SwSetExpFieldType* pOldTyp = (SwSetExpFieldType*)pFld->GetTyp();
-
-                SwSetExpFieldType* pTyp = (SwSetExpFieldType*)InsertFldType(
-                        SwSetExpFieldType(this, rNewName, pOldTyp->GetType()));
-                pTyp->Add( pFmtFld );   // Feld auf neuen Typ umhaengen
-                pFld->ChgTyp( pTyp );
-
-                bExpand = TRUE;
-            }
-            // Kein break!!!
-
-        case RES_GETEXPFLD:
-        case RES_TABLEFLD:
-            sFormel = pFld->GetFormula();
-            RenameUserFld( rOldName, rNewName, sFormel );
-            pFld->SetPar2( sFormel );
-            bExpand = TRUE;
-            break;
-        }
-
-        if( bExpand )
-        {
-            pTxtFld->ExpandAlways();
-            bRet = TRUE;
-        }
-    }
-    SetModified();
-
-    return bRet;
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void SwDoc::RenameUserFld( const String& rOldName, const String& rNewName,
-                            String& rFormel )
-{
-    const CharClass& rCC = GetAppCharClass();
-
-    String  sFormel( rCC.upper( rFormel ));
-    String  sOldName( rCC.upper( rOldName ));
-    xub_StrLen nPos;
-
-    if( !FindOperator( rOldName ) &&
-        !sOldName.Equals( rCC.upper( rNewName ) ) )
-    {
-        nPos = 0;
-
-        while ((nPos = sFormel.Search(sOldName, nPos)) != STRING_NOTFOUND)
-        {
-            if(!nPos || !rCC.isLetterNumeric( sFormel, nPos - 1 ))
-            {
-                rFormel.Erase( nPos, rOldName.Len() );
-                rFormel.Insert( rNewName, nPos );
-                sFormel = rCC.upper( rFormel );
-            }
-        }
-    }
 }
 
 /*--------------------------------------------------------------------
