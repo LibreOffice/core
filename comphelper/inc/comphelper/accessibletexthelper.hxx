@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:33:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 
 //..............................................................................
@@ -94,7 +97,7 @@ namespace comphelper
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleText
     */
-    class OCommonAccessibleText
+    class COMPHELPER_DLLPUBLIC OCommonAccessibleText
     {
     private:
         ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator >             m_xBreakIter;
@@ -161,7 +164,7 @@ namespace comphelper
     /** a helper class for implementing an AccessibleExtendedComponent which at the same time
         supports an XAccessibleText interface
     */
-    class OAccessibleTextHelper : public OAccessibleExtendedComponentHelper,
+    class COMPHELPER_DLLPUBLIC OAccessibleTextHelper : public OAccessibleExtendedComponentHelper,
                                   public OCommonAccessibleText,
                                   public OAccessibleTextHelper_Base
     {

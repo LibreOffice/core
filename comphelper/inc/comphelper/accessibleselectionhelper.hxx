@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:33:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 #define ACCESSIBLE_SELECTION_CHILD_ALL  ((sal_Int32)-1)
 #define ACCESSIBLE_SELECTION_CHILD_SELF ((sal_Int32)-2)
@@ -93,7 +96,7 @@ namespace comphelper
     /** base class encapsulating common functionality for the helper classes implementing
         the XAccessibleSelection
     */
-    class OCommonAccessibleSelection
+    class COMPHELPER_DLLPUBLIC OCommonAccessibleSelection
     {
     protected:
 
@@ -138,7 +141,7 @@ namespace comphelper
     /** a helper class for implementing an AccessibleSelection which at the same time
         supports an XAccessibleSelection interface.
     */
-    class OAccessibleSelectionHelper : public OAccessibleComponentHelper,
+    class COMPHELPER_DLLPUBLIC OAccessibleSelectionHelper : public OAccessibleComponentHelper,
                                        public OCommonAccessibleSelection,
                                        public OAccessibleSelectionHelper_Base
     {
