@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 13:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 
 #include "svdstr.hrc"
 #include "svdglob.hxx"
-
-#ifndef _SOT_DTRANS_HXX
-#include <sot/dtrans.hxx>
-#endif
 
 #ifndef _SVDVIEW_HXX
 #include "svdview.hxx"
