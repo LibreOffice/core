@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:39:55 $
+ *  last change: $Author: fs $ $Date: 2001-03-14 09:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
-        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;Text" ;
+        Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;Texto";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;“ÂÍÒÚ";
         Text[ greek ] = "Adabas;JDBC;ODBC;dBase; ÂﬂÏÂÌÔ";
@@ -106,6 +106,7 @@ Resource RSC_DATASOURCE_TYPES
         Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;§Â¶r";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;‰’;„” ‰œ Ãœ«Ê·";
+        Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
     };
 };
 
@@ -115,7 +116,7 @@ Resource RSC_CHARSETS
     {
         Text = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
         Text [ english ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-        Text [ english_us ] = "Ansi;Mac;DOS;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+        Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
         Text[ language_user1 ] = "Please take care of the numer of tokens in the translated string (Tokens are the units separated by ; characters). It must be exactly the same number as in the original (untranslated) string. Thanks.";
         Text[ portuguese ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
         Text[ russian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);—ËÒÚÂÏ‡";
@@ -134,6 +135,7 @@ Resource RSC_CHARSETS
         Text[ chinese_traditional ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);®t≤Œ";
         Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
         Text[ arabic ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);‰Ÿ«„";
+        Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
     };
 };
 
@@ -189,6 +191,9 @@ String STR_OBJECT_ALREADY_EXSISTS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/03/09 20:39:55  kz
+ *  Merge SRC624: 09.03.01 - 21:40:01 (NoBranch)
+ *
  *  Revision 1.12  2001/02/13 09:48:18  fs
  *  #83632# merge IBMPC, IBMPC(850), DOS
  *
