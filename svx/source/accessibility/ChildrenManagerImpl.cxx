@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:38:26 $
+ *  last change: $Author: af $ $Date: 2002-04-22 08:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
@@ -165,7 +166,7 @@ uno::Reference<XAccessible>
                     rChildDescriptor.mxShape,
                     mxParent,
                     mrShapeTreeInfo);
-            rChildDescriptor.mpAccessibleShape = pShape;
+            //            rChildDescriptor.mpAccessibleShape = pShape;
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
                 static_cast<uno::XWeak*>(pShape),
                 uno::UNO_QUERY);
@@ -174,20 +175,7 @@ uno::Reference<XAccessible>
             bChildHasBeenCreated = rChildDescriptor.mxAccessibleShape.is();
         }
     }
-    /*
-    if (bChildHasBeenCreated && bSendEventOnCreation && mxParent.is())
-    {
-        OSL_TRACE ("sending events for new shape");
-        // Create event and inform listeners of the object creation.
-        uno::Any aNewShape;
-        aNewShape <<= rChildDescriptor.mxAccessibleShape;
-        mrContext.CommitChange (
-            AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
-            aNewShape,
-            uno::Any());
-        OSL_TRACE ("done sending events for new shape");
-    }
-    */
+
     return rChildDescriptor.mxAccessibleShape;
 }
 
@@ -354,7 +342,7 @@ void ChildrenManagerImpl::MergeAccessibilityInformation (
             if (aOldChildDescriptor->mxAccessibleShape.is())
             {
                 I->mxAccessibleShape = aOldChildDescriptor->mxAccessibleShape;
-                I->mpAccessibleShape = aOldChildDescriptor->mpAccessibleShape;
+                //                I->mpAccessibleShape = aOldChildDescriptor->mpAccessibleShape;
                 I->mbCreateEventPending = false;
             }
     }
@@ -372,8 +360,9 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
         // Tell shape of changed visible area.  To do this, fake a
         // change of the view forwarder.  (Actually we usually get here
         // as a result of a change of the view forwarder).
-        if (I->mpAccessibleShape != NULL)
-            I->mpAccessibleShape->ViewForwarderChanged (
+        AccessibleShape* pShape = I->GetAccessibleShape ();
+        if (pShape != NULL)
+            pShape->ViewForwarderChanged (
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
                 mrShapeTreeInfo.GetViewForwarder());
     }
@@ -443,6 +432,11 @@ void ChildrenManagerImpl::ClearAccessibleShapeList (void)
                 AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
                 uno::Any(),
                 aShape);
+
+            // Dispose the object.
+            Reference<lang::XComponent> xComponent (I->mxAccessibleShape, uno::UNO_QUERY);
+            xComponent->dispose ();
+            I->mxAccessibleShape = NULL;
         }
     maVisibleChildren.clear ();
 }
@@ -512,8 +506,9 @@ void SAL_CALL
             {
                 OSL_TRACE ("   Found accessible object for shape.");
                 ChildDescriptor& rChildDescriptor = maVisibleChildren[i];
-                if (rChildDescriptor.mpAccessibleShape != NULL)
-                    rChildDescriptor.mpAccessibleShape->CommitChange (
+                AccessibleShape* pShape = rChildDescriptor.GetAccessibleShape();
+                if (pShape != NULL)
+                    pShape->CommitChange (
                         AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT,
                         uno::Any(),
                         uno::Any());
@@ -555,10 +550,11 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
     {
         ::vos::OGuard aGuard (maMutex);
         for (long i=0; i<maVisibleChildren.size(); i++)
-            if (maVisibleChildren[i].mpAccessibleShape != NULL)
-                maVisibleChildren[i].mpAccessibleShape->ViewForwarderChanged (
-                    aChangeType,
-                    pViewForwarder);
+        {
+            AccessibleShape* pShape = maVisibleChildren[i].GetAccessibleShape();
+            if (pShape != NULL)
+                pShape->ViewForwarderChanged (aChangeType, pViewForwarder);
+        }
     }
 }
 
@@ -570,15 +566,18 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
 ChildDescriptor::ChildDescriptor (const uno::Reference<
         drawing::XShape>& xShape)
     : mxShape (xShape),
-      mpAccessibleShape (NULL),
+      mxAccessibleShape (NULL),
       mbCreateEventPending (true)
 {
     // Empty.
 }
 
+
+
+
 ChildDescriptor::ChildDescriptor (AccessibleShape* pShape)
     : mxShape (NULL),
-      mpAccessibleShape (pShape),
+      //      mpAccessibleShape (pShape),
       mxAccessibleShape (pShape),
       mbCreateEventPending (true)
 {
@@ -586,6 +585,12 @@ ChildDescriptor::ChildDescriptor (AccessibleShape* pShape)
 }
 
 
+
+
+AccessibleShape* ChildDescriptor::GetAccessibleShape (void) const
+{
+    return static_cast<AccessibleShape*> (mxAccessibleShape.get());
+}
 
 
 
