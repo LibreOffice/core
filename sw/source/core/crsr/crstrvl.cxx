@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-08 15:05:55 $
+ *  last change: $Author: jp $ $Date: 2002-02-14 12:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,9 +866,9 @@ FASTBOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
     SwCrsrSaveState aSaveState( *pCrsr );
 
-    rFnd.GetPosOfContent(  *pCrsr->GetPoint() );
-
-    FASTBOOL bRet = !pCurCrsr->IsSelOvr();
+    rFnd.GetPosOfContent( *pCrsr->GetPoint() );
+    FASTBOOL bRet = !pCurCrsr->IsSelOvr( SELOVER_CHECKNODESSECTION |
+                                         SELOVER_TOGGLE );
     if( bRet )
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
     return bRet;
