@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 21:36:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3794,7 +3794,7 @@ String STR_EXPORT_STANDARD
     Text[ polish ] = "Standard";
     Text[ japanese ] = "•W€(~O)";
     Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ korean ] = "È¨(~O)";
+    Text[ korean ] = "Ç¥ÁØ";
     Text[ chinese_traditional ] = "¼Ğ·Ç(~O)";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
@@ -3916,7 +3916,7 @@ String STR_UNDO_COPYOBJECTS
     Text [ danish ] = "dupliker" ;
     Text [ french ] = "Dupliquer" ;
     Text [ swedish ] = "duplicera" ;
-    Text [ dutch ] = "verveelvoudigen" ;
+    Text [ dutch ] = "Verveelvoudigen" ;
     Text [ spanish ] = "reproducir" ;
     Text [ english_us ] = "Duplicate" ;
     Text[ chinese_simplified ] = "¸´ÖÆ";
@@ -4549,7 +4549,7 @@ String STR_ASK_DELETE_PAGE
     Text = "Wollen Sie die Seite '$' wirklich löschen?" ;
     Text [ ENGLISH ] = "Do you really want to delete the page '$'?" ;
     Text [ norwegian ] = "Do you really want to delete the page '$'?" ;
-    Text [ italian ] = "Si vuole eliminare veramente la pagina $?" ;
+    Text [ italian ] = "Volete eliminare veramente la pagina $?" ;
     Text [ portuguese_brazilian ] = "Do you really want to delete the page $?" ;
     Text [ portuguese ] = "Deseja realmente eliminar a página \"$\"?" ;
     Text [ french ] = "Voulez-vous vraiment supprimer la page '$' ?" ;
@@ -4950,12 +4950,12 @@ String STR_SAVE_PACKED_DOCUMENT
     Text[ swedish ] = "Komprimera document";
     Text[ polish ] = "Zapakuj dokument";
     Text[ portuguese_brazilian ] = "Pack document";
-    Text[ japanese ] = "Pack document";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìˆ³k";
     Text[ korean ] = "Pack document";
     Text[ chinese_simplified ] = "Ñ¹ËõÎÄµµ";
     Text[ chinese_traditional ] = "À£ÁY¤å¥ó";
     Text[ turkish ] = "Pack document";
-    Text[ arabic ] = "Pack document";
+    Text[ arabic ] = "ÖÛØ ÇáãÓÊäÏ";
 };
 String STR_ACTION_NOTPOSSIBLE
 {
@@ -6920,7 +6920,7 @@ String STR_EFFECT_FADE_FROM_L
     Text[ chinese_simplified ] = "´Ó×óÃæÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñëåâà";
     Text[ polish ] = "Przenikaj z lewej";
-    Text[ japanese ] = "¶‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "¶‚©‚çÜ²Ìß";
     Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò áğü áñéóôåñÜ";
     Text[ korean ] = "¿ŞÂÊºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¥ªº¥º¥Áô¥X";
@@ -6935,7 +6935,7 @@ String STR_EFFECT_FADE_FROM_T
     Text [ norwegian ] = "Fade from top" ;
     Text [ italian ] = "Dissolvi dall'alto" ;
     Text [ portuguese_brazilian ] = "Descrescer do tipo" ;
-    Text [ portuguese ] = "Dissolver a partir de cima" ;
+    Text [ portuguese ] = "Dissolver a partir do topo" ;
     Text [ finnish ] = "Häivytä ylhäältä" ;
     Text [ danish ] = "Ton over nedad" ;
     Text [ french ] = "Fondu enchaîné à partir du haut" ;
@@ -6946,7 +6946,7 @@ String STR_EFFECT_FADE_FROM_T
     Text[ chinese_simplified ] = "´ÓÉÏÃæÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñâåğõó";
     Text[ polish ] = "Przenikaj od góry";
-    Text[ japanese ] = "ã‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "ã‚©‚çÜ²Ìß";
     Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò áğü ğÜíù";
     Text[ korean ] = "À§ºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¤Wº¥º¥Áô¥X";
@@ -6961,7 +6961,7 @@ String STR_EFFECT_FADE_FROM_R
     Text [ norwegian ] = "Fade from right" ;
     Text [ italian ] = "Dissolvi da destra" ;
     Text [ portuguese_brazilian ] = "Desvanescer da direita" ;
-    Text [ portuguese ] = "Esbater da direita" ;
+    Text [ portuguese ] = "Dissolver a partir da direita" ;
     Text [ finnish ] = "Häivytä oikealta" ;
     Text [ danish ] = "Ton over mod venstre" ;
     Text [ french ] = "Fondu enchaîné à partir de la droite" ;
@@ -6972,7 +6972,7 @@ String STR_EFFECT_FADE_FROM_R
     Text[ chinese_simplified ] = "´ÓÓÒÃæÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñïğàâà";
     Text[ polish ] = "Przenikaj z prawej";
-    Text[ japanese ] = "‰E‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "‰E‚©‚çÜ²Ìß";
     Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò áğü äåîéÜ";
     Text[ korean ] = "¿À¸¥ÂÊºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¥kº¥º¥Áô¥X";
@@ -6998,7 +6998,7 @@ String STR_EFFECT_FADE_FROM_B
     Text[ chinese_simplified ] = "´ÓÏÂÃæÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñíèçó";
     Text[ polish ] = "Przenikaj od do³u";
-    Text[ japanese ] = "‰º‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "‰º‚©‚çÜ²Ìß";
     Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò áğü êÜôù";
     Text[ korean ] = "¾Æ·¡ºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¤Uº¥º¥Áô¥X";
@@ -7067,14 +7067,14 @@ String STR_EFFECT_DISCARD_FROM_L
     Text [ finnish ] = "Poista vasemmalta" ;
     Text [ danish ] = "Afdæk mod højre" ;
     Text [ french ] = "Découvrir à partir de la gauche" ;
-    Text [ swedish ] = "Avtäck från vänster" ;
+    Text [ swedish ] = "Täck av från vänster" ;
     Text [ dutch ] = "Vertonen vanaf links" ;
     Text [ spanish ] = "Entrar desde la izquierda" ;
     Text [ english_us ] = "Uncover From Left" ;
     Text[ chinese_simplified ] = "´Ó×óÃæ»ºÂıÀ©Õ¹";
     Text[ russian ] = "Îòêğûòü ñëåâà";
     Text[ polish ] = "Odkryj z lewej";
-    Text[ japanese ] = "¶‚©‚çŒ»‚êo‚é";
+    Text[ japanese ] = "¶‚©‚ç½×²ÄŞ²İ";
     Text[ greek ] = "ÁğïêÜëõøç áğü áñéóôåñÜ";
     Text[ korean ] = "¿ŞÂÊºÎÅÍ ³ëÃâ";
     Text[ chinese_traditional ] = "±q¥ªÅãÅS";
@@ -7086,7 +7086,7 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text = "Von links oben aufdecken" ;
     Text [ ENGLISH ] = "Discard from upper left" ;
     Text [ english_us ] = "Uncover From Top Left" ;
-    Text[ portuguese ] = "Discard from Top Left";
+    Text[ portuguese ] = "Descobrir a partir do topo esquerdo";
     Text[ russian ] = "Îòêğûòü ñâåğõó ñëåâà";
     Text[ greek ] = "ÅìöÜíéóç áğü ğÜíù áñéóôåñÜ";
     Text[ dutch ] = "Vertonen vanaf linksboven";
@@ -7094,22 +7094,22 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text[ spanish ] = "Entrar desde arriba izquierda";
     Text[ italian ] = "Scopri dall'alto a sinistra";
     Text[ danish ] = "Discard from Top Left";
-    Text[ swedish ] = "Discard from Top Left";
+    Text[ swedish ] = "Täck av uppifrån vänster";
     Text[ polish ] = "Odkryj z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard from Top Left";
-    Text[ japanese ] = "Discard from Top Left";
+    Text[ japanese ] = "¶ã‚©‚ç½×²ÄŞ²İ";
     Text[ korean ] = "Discard from Top Left";
     Text[ chinese_simplified ] = "´Ó×óÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤WÂX®i";
     Text[ turkish ] = "Discard from Top Left";
-    Text[ arabic ] = "Discard from Top Left";
+    Text[ arabic ] = "ßÔİ ãä ÃÚáì ÇáíÓÇÑ";
 };
 String STR_EFFECT_DISCARD_FROM_T
 {
     Text = "Von oben aufdecken" ;
     Text [ ENGLISH ] = "Discard from top" ;
     Text [ english_us ] = "Uncover From Top" ;
-    Text[ portuguese ] = "Discard from Top";
+    Text[ portuguese ] = "Descobrir a partir do topo";
     Text[ russian ] = "Îòêğûòü ñâåğõó";
     Text[ greek ] = "ÅìöÜíéóç áğü ğÜíù";
     Text[ dutch ] = "Vertonen vanaf boven";
@@ -7117,22 +7117,22 @@ String STR_EFFECT_DISCARD_FROM_T
     Text[ spanish ] = "Entrar desde arriba";
     Text[ italian ] = "Scopri dall'alto";
     Text[ danish ] = "Discard from Top";
-    Text[ swedish ] = "Discard from Top";
+    Text[ swedish ] = "Täck av uppifrån";
     Text[ polish ] = "Odkryj od góry";
     Text[ portuguese_brazilian ] = "Discard from Top";
-    Text[ japanese ] = "Discard from Top";
+    Text[ japanese ] = "ã‚©‚ç½×²ÄŞ²İ";
     Text[ korean ] = "Discard from Top";
     Text[ chinese_simplified ] = "´ÓÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤WÂX®i";
     Text[ turkish ] = "Discard from Top";
-    Text[ arabic ] = "Discard from Top";
+    Text[ arabic ] = "ßÔİ ãä ÃÚáì";
 };
 String STR_EFFECT_DISCARD_FROM_UR
 {
     Text = "Von rechts oben aufdecken" ;
     Text [ ENGLISH ] = "Discard from upper right" ;
     Text [ english_us ] = "Uncover From Upper Right" ;
-    Text[ portuguese ] = "Discard from Upper Right";
+    Text[ portuguese ] = "Descobrir a partir do topo direito";
     Text[ russian ] = "Îòêğûòü ñâåğõó ñïğàâà";
     Text[ greek ] = "ÅìöÜíéóç áğü ğÜíù äåîéÜ";
     Text[ dutch ] = "Vertonen vanaf boven";
@@ -7140,15 +7140,15 @@ String STR_EFFECT_DISCARD_FROM_UR
     Text[ spanish ] = "Entrar desde arriba a la derecha";
     Text[ italian ] = "Scopri dal basso a destra";
     Text[ danish ] = "Discard from Upper Right";
-    Text[ swedish ] = "Discard from Upper Right";
+    Text[ swedish ] = "Täck av uppifrån höger";
     Text[ polish ] = "Odkryj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard from Upper Right";
-    Text[ japanese ] = "Discard from Upper Right";
+    Text[ japanese ] = "‰Eã‚©‚ç½×²ÄŞ²İ";
     Text[ korean ] = "Discard from Upper Right";
     Text[ chinese_simplified ] = "´ÓÓÒÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤WÂX®i";
     Text[ turkish ] = "Discard from Upper Right";
-    Text[ arabic ] = "Discard from Upper Right";
+    Text[ arabic ] = "ßÔİ ãä ÃÚáì Çáíãíä";
 };
 String STR_EFFECT_DISCARD_FROM_R
 {
@@ -7161,14 +7161,14 @@ String STR_EFFECT_DISCARD_FROM_R
     Text [ finnish ] = "Poista oikealta" ;
     Text [ danish ] = "Afdæk mod venstre" ;
     Text [ french ] = "Découvrir à partir de la droite" ;
-    Text [ swedish ] = "Avtäck från höger" ;
+    Text [ swedish ] = "Täck av från höger" ;
     Text [ dutch ] = "Vertonen vanaf rechts" ;
     Text [ spanish ] = "Entrar desde la derecha" ;
     Text [ english_us ] = "Uncover From Right" ;
     Text[ chinese_simplified ] = "´ÓÓÒÃæ»ºÂıÀ©Õ¹";
     Text[ russian ] = "Îòêğûòü ñïğàâà";
     Text[ polish ] = "Odkryj z prawej";
-    Text[ japanese ] = "‰E‚©‚çŒ»‚êo‚é";
+    Text[ japanese ] = "‰E‚©‚ç½×²ÄŞ²İ";
     Text[ greek ] = "ÁğïêÜëõøç áğü äåîéÜ";
     Text[ korean ] = "¿À¸¥ÂÊºÎÅÍ ³ëÃâ";
     Text[ chinese_traditional ] = "±q¥kÅãÅS";
@@ -7180,7 +7180,7 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text = "Von rechts unten aufdecken" ;
     Text [ ENGLISH ] = "Discard from lower right" ;
     Text [ english_us ] = "Uncover From Lower Right" ;
-    Text[ portuguese ] = "Discard from Lower Right";
+    Text[ portuguese ] = "Descobrir a partir da base direita";
     Text[ russian ] = "Îòêğûòü ñíèçó ñïğàâà";
     Text[ greek ] = "ÅìöÜíéóç áğü êÜôù äåîéÜ";
     Text[ dutch ] = "Vertonen vanaf rechtsonder";
@@ -7188,15 +7188,15 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text[ spanish ] = "Entrar desde abajo a la derecha";
     Text[ italian ] = "Scopri dal basso a destra";
     Text[ danish ] = "Discard from Lower Right";
-    Text[ swedish ] = "Discard from Lower Right";
+    Text[ swedish ] = "Täck av nedifrån höger";
     Text[ polish ] = "Odkryj z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Right";
-    Text[ japanese ] = "Discard from Lower Right";
+    Text[ japanese ] = "‰E‰º‚©‚ç½×²ÄŞ²İ";
     Text[ korean ] = "Discard from Lower Right";
     Text[ chinese_simplified ] = "´ÓÓÒÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤UÂX®i";
     Text[ turkish ] = "Discard from Lower Right";
-    Text[ arabic ] = "Discard from Lower Right";
+    Text[ arabic ] = "ßÔİ ãä ÃÏäì Çáíãíä";
 };
 String STR_EFFECT_DISCARD_FROM_B
 {
@@ -7209,14 +7209,14 @@ String STR_EFFECT_DISCARD_FROM_B
     Text [ finnish ] = "Poista alhaalta" ;
     Text [ danish ] = "Afdæk opad" ;
     Text [ french ] = "Découvrir à partir du bas" ;
-    Text [ swedish ] = "Avtäck nedifrån" ;
+    Text [ swedish ] = "Täck av nedifrån" ;
     Text [ dutch ] = "Vertonen vanaf beneden" ;
     Text [ spanish ] = "Entrar desde abajo" ;
     Text [ english_us ] = "Uncover From Bottom" ;
     Text[ chinese_simplified ] = "´ÓÏÂ·½»ºÂıÀ©Õ¹";
     Text[ russian ] = "Îòêğûòü ñíèçó";
     Text[ polish ] = "Odkryj z do³u";
-    Text[ japanese ] = "‰º‚©‚çŒ»‚êo‚é";
+    Text[ japanese ] = "‰º‚©‚ç½×²ÄŞ²İ";
     Text[ greek ] = "ÁğïêÜëõøç áğü êÜôù";
     Text[ korean ] = "¾Æ·¡ºÎÅÍ ³ëÃâ";
     Text[ chinese_traditional ] = "±q¤UÅãÅS";
@@ -7228,7 +7228,7 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text = "Von links unten aufdecken" ;
     Text [ ENGLISH ] = "Discard from lower left" ;
     Text [ english_us ] = "Uncover From Lower Left" ;
-    Text[ portuguese ] = "Discard from Lower Left";
+    Text[ portuguese ] = "Descobrir a partir da base esquerda";
     Text[ russian ] = "Îòêğûòü ñíèçó ñëåâà";
     Text[ greek ] = "ÅìöÜíéóç áğü êÜôù áñéóôåñÜ";
     Text[ dutch ] = "Vertonen vanaf linksonder";
@@ -7236,84 +7236,84 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text[ spanish ] = "Entrar desde arriba a la izquierda";
     Text[ italian ] = "Scopri dal basso a sinistra";
     Text[ danish ] = "Discard from Lower Left";
-    Text[ swedish ] = "Discard from Lower Left";
+    Text[ swedish ] = "Täck av nedifrån vänster";
     Text[ polish ] = "Odkryj z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Left";
-    Text[ japanese ] = "Discard from Lower Left";
+    Text[ japanese ] = "¶‰º‚©‚ç½×²ÄŞ²İ";
     Text[ korean ] = "Discard from Lower Left";
     Text[ chinese_simplified ] = "´Ó×óÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤UÂX®i";
     Text[ turkish ] = "Discard from Lower Left";
-    Text[ arabic ] = "Discard from Lower Left";
+    Text[ arabic ] = "ßÔİ ãä ÃÏäì ÇáíÓÇÑ";
 };
 String STR_EFFECT_DISCARD_S_FROM_L
 {
     Text = "Von links verkürzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from left" ;
     Text [ english_us ] = "Uncover Object From Left" ;
-    Text[ portuguese ] = "Discard short from Left";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñëåâà";
+    Text[ portuguese ] = "Descobrir a partir da esquerda";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñëåâà";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü áñéóôåñÜ";
     Text[ dutch ] = "Vertonen vanaf links, verkort";
     Text[ french ] = "Découvrir l'objet à partir de la gauche";
     Text[ spanish ] = "Entrar localmente desde la izquierda";
     Text[ italian ] = "Scopri ridotto da sinistra";
     Text[ danish ] = "Discard short from Left";
-    Text[ swedish ] = "Discard short from Left";
+    Text[ swedish ] = "Täck av objekt från vänster";
     Text[ polish ] = "Odkryj w ramce obiektu z lewej";
     Text[ portuguese_brazilian ] = "Discard short from Left";
-    Text[ japanese ] = "Discard short from Left";
+    Text[ japanese ] = "¶‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Left";
     Text[ chinese_simplified ] = "´Ó×ó»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª½wºCÂX®i";
     Text[ turkish ] = "Discard short from Left";
-    Text[ arabic ] = "Discard short from Left";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÇáíÓÇÑ";
 };
 String STR_EFFECT_DISCARD_S_FROM_UL
 {
     Text = "Von links oben verkürzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from upper left" ;
     Text [ english_us ] = "Uncover Object From Upper Left" ;
-    Text[ portuguese ] = "Discard short from Upper Left";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñëåâà ñâåğõó";
+    Text[ portuguese ] = "Descobrir a partir do topo esquerdo";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñëåâà ñâåğõó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü ğÜíù áñéóôåñÜ";
     Text[ dutch ] = "Vertonen vanaf linksboven, verkort";
     Text[ french ] = "Découvrir l'objet à partir de la gauche, en haut";
     Text[ spanish ] = "Entrar localmente desde arriba a la izquierda";
     Text[ italian ] = "Scopri ridotto dal basso a sinistra";
     Text[ danish ] = "Discard short from Upper Left";
-    Text[ swedish ] = "Discard short from Upper Left";
+    Text[ swedish ] = "Täck av objekt uppifrån vänster";
     Text[ polish ] = "Odkryj w ramce obiektu z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Left";
-    Text[ japanese ] = "Discard short from Upper Left";
+    Text[ japanese ] = "¶ã‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Upper Left";
     Text[ chinese_simplified ] = "´Ó×óÉÏ»ºÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤W½wºCÂX®i";
     Text[ turkish ] = "Discard short from Upper Left";
-    Text[ arabic ] = "Discard short from Upper Left";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÚáì ÇáíÓÇÑ";
 };
 String STR_EFFECT_DISCARD_S_FROM_T
 {
     Text = "Von oben verkürzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from top" ;
     Text [ english_us ] = "Uncover Object From Top" ;
-    Text[ portuguese ] = "Discard short from Top";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñâåğõó";
+    Text[ portuguese ] = "Descobrir a partir do topo";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñâåğõó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü ğÜíù";
     Text[ dutch ] = "Vertonen vanaf boven, verkort";
     Text[ french ] = "Découvrir l'objet à partir du haut";
     Text[ spanish ] = "Entrar localmente desde arriba";
     Text[ italian ] = "Scopri ridotto dall'alto";
     Text[ danish ] = "Discard short from Top";
-    Text[ swedish ] = "Discard short from Top";
+    Text[ swedish ] = "Täck av objekt uppifrån";
     Text[ polish ] = "Odkryj w ramce obiektu od góry";
     Text[ portuguese_brazilian ] = "Discard short from Top";
-    Text[ japanese ] = "Discard short from Top";
+    Text[ japanese ] = "ã‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Top";
     Text[ chinese_simplified ] = "´ÓÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤W½wºCÂX®i";
     Text[ turkish ] = "Discard short from Top";
-    Text[ arabic ] = "Discard short from Top";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÚáì";
 };
 String STR_EFFECT_DISCARD_S_FROM_UR
 {
@@ -7321,45 +7321,45 @@ String STR_EFFECT_DISCARD_S_FROM_UR
     Text [ ENGLISH ] = "Discard short from upper right" ;
     Text [ english_us ] = "Uncover Object From Upper Right" ;
     Text[ portuguese ] = "Descobrir a partir do topo direito";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñïğàâà ñâåğõó";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñïğàâà ñâåğõó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü ğÜíù äåîéÜ";
     Text[ dutch ] = "Verkort uitrollen vanaf rechtsboven";
     Text[ french ] = "Découvrir l'objet à partir de la droite, en haut";
     Text[ spanish ] = "Mostrar localmente desde arriba a la derecha";
     Text[ italian ] = "Scopri ridotto dall'alto a sinistra";
     Text[ danish ] = "Discard short from Upper Right";
-    Text[ swedish ] = "Discard short from Upper Right";
+    Text[ swedish ] = "Täck av objekt uppifrån höger";
     Text[ polish ] = "Odkryj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Right";
-    Text[ japanese ] = "Discard short from Upper Right";
+    Text[ japanese ] = "‰Eã‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Upper Right";
     Text[ chinese_simplified ] = "´ÓÓÒÉÏ»ºÂıµØÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤W½wºC¦aÂX®i";
     Text[ turkish ] = "Discard short from Upper Right";
-    Text[ arabic ] = "Discard short from Upper Right";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÚáì Çáíãíä";
 };
 String STR_EFFECT_DISCARD_S_FROM_R
 {
     Text = "Von rechts verkürzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from right" ;
     Text [ english_us ] = "Uncover Object From Right" ;
-    Text[ portuguese ] = "Discard short from Right";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñïğàâà";
+    Text[ portuguese ] = "Descobrir a partir da direita";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñïğàâà";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü äåîéÜ";
     Text[ dutch ] = "Vertonen vanaf rechts, verkort";
     Text[ french ] = "Découvrir l'objet à partir de la droite";
     Text[ spanish ] = "Entrar localmente desde la derecha";
     Text[ italian ] = "Scopri ridotto da destra";
     Text[ danish ] = "Discard short from Right";
-    Text[ swedish ] = "Discard short from Right";
+    Text[ swedish ] = "Täck av objekt från höger";
     Text[ polish ] = "Odkryj w ramce obiektu z prawej";
     Text[ portuguese_brazilian ] = "Discard short from Right";
-    Text[ japanese ] = "Discard short from Right";
+    Text[ japanese ] = "‰E‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Right";
     Text[ chinese_simplified ] = "´ÓÓÒ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k½wºCÂX®i";
     Text[ turkish ] = "Discard short from Right";
-    Text[ arabic ] = "Discard short from Right";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä Çáíãíä";
 };
 String STR_EFFECT_DISCARD_S_FROM_LR
 {
@@ -7367,45 +7367,45 @@ String STR_EFFECT_DISCARD_S_FROM_LR
     Text [ ENGLISH ] = "Discard short from lower right" ;
     Text [ english_us ] = "Uncover Object From Lower Right" ;
     Text[ portuguese ] = "Descobrir a partir da base esquerda";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñïğàâà ñíèçó";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñïğàâà ñíèçó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü êÜôù äåîéÜ";
     Text[ dutch ] = "Verkort uitrollen vanaf rechtsonder";
     Text[ french ] = "Découvrir l'objet à partir de la droite, en bas";
     Text[ spanish ] = "Mostrar localmente desde abajo a la derecha";
     Text[ italian ] = "Scopri ridotto dal basso a destra";
     Text[ danish ] = "Discard short from Lower Right";
-    Text[ swedish ] = "Discard short from Lower Right";
+    Text[ swedish ] = "Täck av objekt nedifrån höger";
     Text[ polish ] = "Odkryj w ramce obiektu z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Right";
-    Text[ japanese ] = "Discard short from Lower Right";
+    Text[ japanese ] = "‰E‰º‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Lower Right";
     Text[ chinese_simplified ] = "´ÓÓÒÏÂ»ºÂıµØÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤U½wºC¦aÂX®i";
     Text[ turkish ] = "Discard short from Lower Right";
-    Text[ arabic ] = "Discard short from Lower Right";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÏäì Çáíãíä";
 };
 String STR_EFFECT_DISCARD_S_FROM_B
 {
     Text = "Von unten verkürzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short from bottom" ;
     Text [ english_us ] = "Uncover Object From Bottom" ;
-    Text[ portuguese ] = "Discard short from Bottom";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñíèçó";
+    Text[ portuguese ] = "Descobrir a partir da base";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñíèçó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü êÜôù";
     Text[ dutch ] = "Vertonen vanaf beneden, verkort";
     Text[ french ] = "Découvrir l'objet à partir du bas";
     Text[ spanish ] = "Entrar localmente desde abajo";
     Text[ italian ] = "Scopri ridotto dal basso";
     Text[ danish ] = "Discard short from Bottom";
-    Text[ swedish ] = "Discard short from Bottom";
+    Text[ swedish ] = "Täck av objekt nedifrån";
     Text[ polish ] = "Odkryj w ramce obiektu od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Bottom";
-    Text[ japanese ] = "Discard short from Bottom";
+    Text[ japanese ] = "‰º‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Bottom";
     Text[ chinese_simplified ] = "´ÓÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤U½wºCÂX®i";
     Text[ turkish ] = "Discard short from Bottom";
-    Text[ arabic ] = "Discard short from Bottom";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÓİá";
 };
 String STR_EFFECT_DISCARD_S_FROM_LL
 {
@@ -7413,22 +7413,22 @@ String STR_EFFECT_DISCARD_S_FROM_LL
     Text [ ENGLISH ] = "Discard short from lower left" ;
     Text [ english_us ] = "Uncover Object From Lower Left" ;
     Text[ portuguese ] = "Descobrir a partir da base esquerda";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå ñëåâà ñíèçó";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà ñëåâà ñíèçó";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç áğü êÜôù áñéóôåñÜ";
     Text[ dutch ] = "Verkort uitrollen vanaf linksonder";
     Text[ french ] = "Découvrir l'objet à partir de la gauche, en bas";
     Text[ spanish ] = "Mostrar localmente desde abajo a la izquierda";
     Text[ italian ] = "Scopri ridotto dal basso a sinistra";
     Text[ danish ] = "Discard short from Lower Left";
-    Text[ swedish ] = "Discard short from Lower Left";
+    Text[ swedish ] = "Täck av objekt nedifrån vänster";
     Text[ polish ] = "Odkryj w ramce obiektu z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Left";
-    Text[ japanese ] = "Discard short from Lower Left";
+    Text[ japanese ] = "¶‰º‚©‚çËß°¸";
     Text[ korean ] = "Discard short from Lower Left";
     Text[ chinese_simplified ] = "´Ó×ó»ºÂıµØÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤U½wºC¦aÂX®i";
     Text[ turkish ] = "Discard short from Lower Left";
-    Text[ arabic ] = "Discard short from Lower Left";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÏäì ÇáíÓÇÑ";
 };
 String STR_EFFECT_VERTICAL_STRIPES
 {
@@ -7531,7 +7531,7 @@ String STR_EFFECT_VERTICAL_CHECKERBOARD
     Text = "Vertikales Schachbrett" ;
     Text [ ENGLISH ] = "Vertical checkerboard";
     Text [ english_us ] = "Vertical Checkerboard";
-    Text[ portuguese ] = "Vertical checkerboard";
+    Text[ portuguese ] = "Tabuleiro de xadrez vertical";
     Text[ russian ] = "Â øàõìàòíîì ïîğÿäêå, âåğòèêàëüíî";
     Text[ greek ] = "Êáôáêüñõöç óêáêéİñá";
     Text[ dutch ] = "Verticaal schaakbord";
@@ -7542,12 +7542,12 @@ String STR_EFFECT_VERTICAL_CHECKERBOARD
     Text[ swedish ] = "Vertikalt schackbräde";
     Text[ polish ] = "Pionowa szachownica";
     Text[ portuguese_brazilian ] = "Vertical checkerboard";
-    Text[ japanese ] = "Vertical checkerboard";
+    Text[ japanese ] = "c‚ÉÁª¯¶°Ü²Ìß";
     Text[ korean ] = "Vertical checkerboard";
     Text[ chinese_simplified ] = "´¹Ö±Ïò¹ú¼ÊÏóÆåÅÌ";
     Text[ chinese_traditional ] = "««ª½¦V°ê»Ú¶H´Ñ½L";
     Text[ turkish ] = "Vertical checkerboard";
-    Text[ arabic ] = "Vertical checkerboard";
+    Text[ arabic ] = "áæÍ ÔØÑäÌ ÑÃÓí";
 };
 String STR_EFFECT_HORIZONTAL_CHECKERBOARD
 {
@@ -7565,12 +7565,12 @@ String STR_EFFECT_HORIZONTAL_CHECKERBOARD
     Text[ swedish ] = "Horisontellt schackbräde";
     Text[ polish ] = "Pozioma szachownica";
     Text[ portuguese_brazilian ] = "Horizontal checkerboard";
-    Text[ japanese ] = "Horizontal checkerboard";
+    Text[ japanese ] = "‰¡‚ÉÁª¯¶°Ü²Ìß";
     Text[ korean ] = "Horizontal checkerboard";
     Text[ chinese_simplified ] = "Ë®Æ½Ïò¹ú¼ÊÏóÆåÅÌ";
     Text[ chinese_traditional ] = "¤ô¥­¦V°ê»Ú¶H´Ñ½L";
     Text[ turkish ] = "Horizontal checkerboard";
-    Text[ arabic ] = "Horizontal checkerboard";
+    Text[ arabic ] = "áæÍ ÔØÑäÌ ÃİŞí";
 };
 String STR_EFFECT_ROLL_FROM_L
 {
@@ -7824,12 +7824,12 @@ String STR_EFFECT_FADE_FROM_UL
     Text [ dutch ] = "Bedekken vanaf linksboven" ;
     Text [ swedish ] = "Tona över uppifrån vänster" ;
     Text [ danish ] = "Ton over mod højre nedad" ;
-    Text [ portuguese ] = "Esbater a partir do topo esquerdo" ;
+    Text [ portuguese ] = "Dissolver a partir do topo esquerdo" ;
     Text [ portuguese_brazilian ] = "Von links oben blenden" ;
     Text[ chinese_simplified ] = "´Ó×óÉÏ½ÇÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñâåğõó ñëåâà";
     Text[ polish ] = "Przenikaj od lewej z góry";
-    Text[ japanese ] = "¶ã‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "¶ã‚©‚çÜ²Ìß";
     Text[ greek ] = "Áğï÷ñùìáôéóìüò áğü ğÜíù áñéóôåñÜ";
     Text[ korean ] = "À§ ¿ŞÂÊºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¥ª¤Wº¥º¥Áô¥X";
@@ -7855,7 +7855,7 @@ String STR_EFFECT_FADE_FROM_UR
     Text[ chinese_simplified ] = "´ÓÓÒÉÏ½ÇÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñâåğõó ñïğàâà";
     Text[ polish ] = "Przenikaj od prawej z góry";
-    Text[ japanese ] = "‰Eã‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "‰Eã‚©‚çÜ²Ìß";
     Text[ greek ] = "Áğï÷ñùìáôéóìüò áğü ğÜíù äåîéÜ";
     Text[ korean ] = "À§ ¿À¸¥ÂÊºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¥k¤Wº¥º¥Áô¥X";
@@ -7876,12 +7876,12 @@ String STR_EFFECT_FADE_FROM_LL
     Text [ french ] = "Fondu enchaîné à partir de la gauche, en bas" ;
     Text [ swedish ] = "Tona över nerifrån vänster" ;
     Text [ danish ] = "Ton over mod højre opad" ;
-    Text [ portuguese ] = "Esbater a partir da base esquerda " ;
+    Text [ portuguese ] = "Dissolver a partir da base esquerda " ;
     Text [ portuguese_brazilian ] = "Von links unten blenden" ;
     Text[ chinese_simplified ] = "´Ó×óÏÂ½ÇÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñíèçó ñëåâà";
     Text[ polish ] = "Przenikaj od lewej z do³u";
-    Text[ japanese ] = "¶‰º‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "¶‰º‚©‚çÜ²Ìß";
     Text[ greek ] = "Áğï÷ñùìáôéóìüò áğü êÜôù áñéóôåñÜ";
     Text[ korean ] = "¾Æ·¡ ¿ŞÂÊºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¥ª¤Uº¥º¥Áô¥X";
@@ -7907,11 +7907,11 @@ String STR_EFFECT_FADE_FROM_LR
     Text[ chinese_simplified ] = "´ÓÓÒÏÂ½ÇÖğ½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ ñíèçó ñïğàâà";
     Text[ polish ] = "Przenikaj od prawej z do³u";
-    Text[ japanese ] = "‰E‰º‚©‚çÌª°ÄŞµ°ÊŞ°‚µ‚Ä‚¢‚­";
+    Text[ japanese ] = "‰E‰º‚©‚çÜ²Ìß";
     Text[ greek ] = "Áğï÷ñùìáôéóìüò áğü êÜôù äåîéÜ";
     Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊºÎÅÍ ¿À¹ö ·¦";
     Text[ chinese_traditional ] = "±q¥kº¥º¥Áô¥X";
-    Text[ arabic ] = "ÊÛØíÉ ãä ÃÓİá Çáíãíä";
+    Text[ arabic ] = "ÊÛØíÉ ãä ÃÏäì Çáíãíä";
     Text[ turkish ] = "Sağ alttan ser";
 };
 String STR_EFFECT_CLOSE_VERTICAL
@@ -8049,7 +8049,7 @@ String STR_EFFECT_MOVE_TO_L
     Text[ chinese_simplified ] = "Ïò×óÒÆ¶¯";
     Text[ russian ] = "Ïåğåìåùåíèå âëåâî";
     Text[ polish ] = "Przesuñ w lewo";
-    Text[ japanese ] = "¶‚ÖˆÚ“®";
+    Text[ japanese ] = "¶‚ÉˆÚ“®";
     Text[ greek ] = "Ìåôáêßíçóç ğñïò ôá áñéóôåñÜ";
     Text[ korean ] = "¿ŞÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_traditional ] = "¦V¥ª²¾°Ê";
@@ -8072,12 +8072,12 @@ String STR_EFFECT_MOVE_TO_UL
     Text[ swedish ] = "Flytta upp till vänster";
     Text[ polish ] = "Przesuñ w lewo do góry";
     Text[ portuguese_brazilian ] = "Move to upper left";
-    Text[ japanese ] = "Move to upper left";
+    Text[ japanese ] = "¶ã‚ÉˆÚ“®";
     Text[ korean ] = "Move to upper left";
     Text[ chinese_simplified ] = "Ïò×óÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª¤W²¾°Ê";
     Text[ turkish ] = "Move to upper left";
-    Text[ arabic ] = "Move to upper left";
+    Text[ arabic ] = "ÊÍÑíß Åáì ÃÚáì ÇáíÓÇÑ";
 };
 String STR_EFFECT_MOVE_TO_T
 {
@@ -8095,7 +8095,7 @@ String STR_EFFECT_MOVE_TO_T
     Text[ chinese_simplified ] = "ÏòÉÏÒÆ¶¯";
     Text[ russian ] = "Ïåğåìåùåíèå ââåğõ";
     Text[ polish ] = "Przesuñ w górê";
-    Text[ japanese ] = "ã‚ÖˆÚ“®";
+    Text[ japanese ] = "ã‚ÉˆÚ“®";
     Text[ greek ] = "Ìåôáêßíçóç ğñïò ôá ğÜíù";
     Text[ korean ] = "À§·Î ÀÌµ¿";
     Text[ chinese_traditional ] = "¦V¤W²¾°Ê";
@@ -8118,12 +8118,12 @@ String STR_EFFECT_MOVE_TO_UR
     Text[ swedish ] = "Flytta upp till höger";
     Text[ polish ] = "Przesuñ w prawo do góry";
     Text[ portuguese_brazilian ] = "Move to upper right";
-    Text[ japanese ] = "Move to upper right";
+    Text[ japanese ] = "‰Eã‚ÉˆÚ“®";
     Text[ korean ] = "Move to upper right";
     Text[ chinese_simplified ] = "ÏòÓÒÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k¤W²¾°Ê";
     Text[ turkish ] = "Move to upper right";
-    Text[ arabic ] = "Move to upper right";
+    Text[ arabic ] = "ÊÍÑíß Åáì ÃÚáì Çáíãíä";
 };
 String STR_EFFECT_MOVE_TO_R
 {
@@ -8141,7 +8141,7 @@ String STR_EFFECT_MOVE_TO_R
     Text[ chinese_simplified ] = "ÏòÓÒÒÆ¶¯";
     Text[ russian ] = "Ïåğåìåùåíèå âïğàâî";
     Text[ polish ] = "Przesuñ w prawo";
-    Text[ japanese ] = "‰E‚ÖˆÚ“®";
+    Text[ japanese ] = "‰E‚ÉˆÚ“®";
     Text[ greek ] = "Ìåôáêßíçóç ğñïò ôá äåîéÜ";
     Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_traditional ] = "¦V¥k²¾°Ê";
@@ -8164,12 +8164,12 @@ String STR_EFFECT_MOVE_TO_LR
     Text[ swedish ] = "Flytta ner till höger";
     Text[ polish ] = "Przesuñ w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower right";
-    Text[ japanese ] = "Move to lower right";
+    Text[ japanese ] = "‰E‰º‚ÉˆÚ“®";
     Text[ korean ] = "Move to lower right";
     Text[ chinese_simplified ] = "ÏòÓÒÏÂÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k¤U²¾°Ê";
     Text[ turkish ] = "Move to lower right";
-    Text[ arabic ] = "Move to lower right";
+    Text[ arabic ] = "ÊÍÑíß Åáì ÃÏäì Çáíãíä";
 };
 String STR_EFFECT_MOVE_TO_B
 {
@@ -8187,7 +8187,7 @@ String STR_EFFECT_MOVE_TO_B
     Text[ chinese_simplified ] = "ÏòÏÂÒÆ¶¯";
     Text[ russian ] = "Ïåğåìåùåíèå âíèç";
     Text[ polish ] = "Przesuñ w dó³";
-    Text[ japanese ] = "‰º‚ÖˆÚ“®";
+    Text[ japanese ] = "‰º‚ÉˆÚ“®";
     Text[ greek ] = "Ìåôáêßíçóç ğñïò ôá êÜôù";
     Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿";
     Text[ chinese_traditional ] = "¦V¤U²¾°Ê";
@@ -8210,196 +8210,196 @@ String STR_EFFECT_MOVE_TO_LL
     Text[ swedish ] = "Flytta ner till vänster";
     Text[ polish ] = "Przesuñ w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower left";
-    Text[ japanese ] = "Move to lower left";
+    Text[ japanese ] = "¶‰º‚ÉˆÚ“®";
     Text[ korean ] = "Move to lower left";
     Text[ chinese_simplified ] = "Ïò×óÏÂÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª¤U²¾°Ê";
     Text[ turkish ] = "Move to lower left";
-    Text[ arabic ] = "Move to lower left";
+    Text[ arabic ] = "ÊÍÑíß Åáì ÃÏäì ÇáíÓÇÑ";
 };
 String STR_EFFECT_MOVE_S_TO_L
 {
     Text = "Nach links verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to left" ;
     Text [ english_us ] = "Move Object To Left" ;
-    Text[ portuguese ] = "Move short to left";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âëåâî";
+    Text[ portuguese ] = "Mover objecto para a esquerda";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âëåâî";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá áñéóôåñÜ";
     Text[ dutch ] = "Naar links bewegen, verkort";
     Text[ french ] = "Déplacer l'objet vers la gauche";
     Text[ spanish ] = "Mover localmente hacia la izquierda";
     Text[ italian ] = "Sposta ridotto a sinistra";
     Text[ danish ] = "Move short to left";
-    Text[ swedish ] = "Flytta förkortat till vänster";
+    Text[ swedish ] = "Flytta objekt till vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo";
     Text[ portuguese_brazilian ] = "Move short to left";
-    Text[ japanese ] = "Move short to left";
+    Text[ japanese ] = "¶‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to left";
     Text[ chinese_simplified ] = "Ïò×ó»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª½wºCÂX®i";
     Text[ turkish ] = "Move short to left";
-    Text[ arabic ] = "Move short to left";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÇáíÓÇÑ";
 };
 String STR_EFFECT_MOVE_S_TO_UL
 {
     Text = "Nach links oben verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to upper left" ;
     Text [ english_us ] = "Move Object To Upper Left" ;
-    Text[ portuguese ] = "Move short to upper left";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âëåâî ââåğõ";
+    Text[ portuguese ] = "Mover objecto para topo esquerdo";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âëåâî ââåğõ";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá ğÜíù áñéóôåñÜ";
     Text[ dutch ] = "Verkort bewegen naar linksboven";
     Text[ french ] = "Déplacer l'objet vers la gauche, en haut";
     Text[ spanish ] = "Mover localmente hacia arriba a la izquierda";
     Text[ italian ] = "Sposta ridotto in alto a sinistra";
     Text[ danish ] = "Move short to upper left";
-    Text[ swedish ] = "Flytta förkortat, upp till vänster";
+    Text[ swedish ] = "Flytta objekt upp till vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper left";
-    Text[ japanese ] = "Move short to upper left";
+    Text[ japanese ] = "¶ã‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to upper left";
     Text[ chinese_simplified ] = "Ïò×óÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª¤W²¾°Ê";
     Text[ turkish ] = "Move short to upper left";
-    Text[ arabic ] = "Move short to upper left";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÚáì ÇáíÓÇÑ";
 };
 String STR_EFFECT_MOVE_S_TO_T
 {
     Text = "Nach oben verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to top" ;
     Text [ english_us ] = "Move Object Upwards" ;
-    Text[ portuguese ] = "Move short to top";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå ââåğõ";
+    Text[ portuguese ] = "Mover objecto para o topo";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà ââåğõ";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá ğÜíù";
     Text[ dutch ] = "Naar boven bewegen, verkort";
     Text[ french ] = "Déplacer l'objet vers le haut";
     Text[ spanish ] = "Mover localmente hacia arriba";
     Text[ italian ] = "Sposta ridotto verso l'alto";
     Text[ danish ] = "Move short to top";
-    Text[ swedish ] = "Flytta förkortat uppåt";
+    Text[ swedish ] = "Flytta objekt uppåt";
     Text[ polish ] = "Wysuñ z ramki obiektu do góry";
     Text[ portuguese_brazilian ] = "Move short to top";
-    Text[ japanese ] = "Move short to top";
+    Text[ japanese ] = "ã‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to top";
     Text[ chinese_simplified ] = "ÏòÉÏ»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¤W½wºCÂX®i";
     Text[ turkish ] = "Move short to top";
-    Text[ arabic ] = "Move short to top";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÚáì";
 };
 String STR_EFFECT_MOVE_S_TO_UR
 {
     Text = "Nach rechts oben verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to upper right" ;
     Text [ english_us ] = "Move Object To Upper Right" ;
-    Text[ portuguese ] = "Move short to upper right";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âïğàâî ââåğõ";
+    Text[ portuguese ] = "Mover objecto para topo direito";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âïğàâî ââåğõ";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá ğÜíù äåîéÜ";
     Text[ dutch ] = "Verkort bewegen naar rechtsboven";
     Text[ french ] = "Déplacer l'objet vers la droite, en haut";
     Text[ spanish ] = "Mostrar localmente hacia arriba a la derecha";
     Text[ italian ] = "Sposta ridotto in alto a destra";
     Text[ danish ] = "Move short to upper right";
-    Text[ swedish ] = "Flytta förkortat, upp till höger";
+    Text[ swedish ] = "Flytta objekt upp till höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper right";
-    Text[ japanese ] = "Move short to upper right";
+    Text[ japanese ] = "‰Eã‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to upper right";
     Text[ chinese_simplified ] = "ÏòÓÒÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k¤W²¾°Ê";
     Text[ turkish ] = "Move short to upper right";
-    Text[ arabic ] = "Move short to upper right";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÚáì Çáíãíä";
 };
 String STR_EFFECT_MOVE_S_TO_R
 {
     Text = "Nach rechts verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to right" ;
     Text [ english_us ] = "Move Object To Right" ;
-    Text[ portuguese ] = "Move short to right";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âïğàâî";
+    Text[ portuguese ] = "Mover objecto para a direita";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âïğàâî";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá äåîéÜ";
     Text[ dutch ] = "Naar rechts bewegen, verkort";
     Text[ french ] = "Déplacer l'objet vers la droite";
     Text[ spanish ] = "Mover dismiuido hacia la derecha";
     Text[ italian ] = "Sposta ridotto a destra";
     Text[ danish ] = "Move short to right";
-    Text[ swedish ] = "Flytta förkortat till höger";
+    Text[ swedish ] = "Flytta objekt till höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo";
     Text[ portuguese_brazilian ] = "Move short to right";
-    Text[ japanese ] = "Move short to right";
+    Text[ japanese ] = "‰E‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to right";
     Text[ chinese_simplified ] = "ÏòÓÒ»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k½wºC²¾°Ê";
     Text[ turkish ] = "Move short to right";
-    Text[ arabic ] = "Move short to right";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì Çáíãíä";
 };
 String STR_EFFECT_MOVE_S_TO_LR
 {
     Text = "Nach rechts unten verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to lower right" ;
     Text [ english_us ] = "Move Object To Lower Right" ;
-    Text[ portuguese ] = "Move short to lower right";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âïğàâî âíèç";
+    Text[ portuguese ] = "Mover objecto para a base direita";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âïğàâî âíèç";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá êÜôù äåîéÜ";
     Text[ dutch ] = "Verkort bewegen naar rechtsonder";
     Text[ french ] = "Déplacer l'objet vers la droite, en bas";
     Text[ spanish ] = "Mostrar localmente hacia abajo a la derecha";
     Text[ italian ] = "Sposta ridotto in basso a destra";
     Text[ danish ] = "Move short to lower right";
-    Text[ swedish ] = "Flytta förkortat, ner till höger";
+    Text[ swedish ] = "Flytta objekt ner till höger";
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move short to lower right";
-    Text[ japanese ] = "Move short to lower right";
+    Text[ japanese ] = "‰E‰º‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to lower right";
     Text[ chinese_simplified ] = "ÏòÓÒÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "¦V¥k¤U½wºCÂX®i";
     Text[ turkish ] = "Move short to lower right";
-    Text[ arabic ] = "Move short to lower right";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÏäì Çáíãíä";
 };
 String STR_EFFECT_MOVE_S_TO_B
 {
     Text = "Nach unten verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to bottom" ;
     Text [ english_us ] = "Move Object Downwards" ;
-    Text[ portuguese ] = "Move short to bottom";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âíèç";
+    Text[ portuguese ] = "Mover objecto para a base";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âíèç";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá êÜôù";
     Text[ dutch ] = "Naar beneden bewegen, verkort";
     Text[ french ] = "Déplacer l'objet vers le bas";
     Text[ spanish ] = "Mover localmente hacia abajo";
     Text[ italian ] = "Sposta ridotto verso il basso";
     Text[ danish ] = "Move short to bottom";
-    Text[ swedish ] = "Flytta förkortat neråt";
+    Text[ swedish ] = "Flytta objekt nedåt";
     Text[ polish ] = "Wysuñ z ramki obiektu w dó³";
     Text[ portuguese_brazilian ] = "Move short to bottom";
-    Text[ japanese ] = "Move short to bottom";
+    Text[ japanese ] = "‰º‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to bottom";
     Text[ chinese_simplified ] = "ÏòÏÂ»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¤U½wºC²¾°Ê";
     Text[ turkish ] = "Move short to bottom";
-    Text[ arabic ] = "Move short to bottom";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÓİá";
 };
 String STR_EFFECT_MOVE_S_TO_LL
 {
     Text = "Nach links unten verkürzt bewegen" ;
     Text [ ENGLISH ] = "Move short to lower left" ;
     Text [ english_us ] = "Move Object To Lower Left" ;
-    Text[ portuguese ] = "Move short to lower left";
-    Text[ russian ] = "Äâèæåíèå íà ìåñòå âëåâî âíèç";
+    Text[ portuguese ] = "Mover objecto para a base esquerda";
+    Text[ russian ] = "Äâèæåíèå èç ğàìêè îáúåêòà âëåâî âíèç";
     Text[ greek ] = "Óıíôïìç ìåôáêßíçóç ğñïò ôá êÜôù áñéóôåñÜ";
     Text[ dutch ] = "Verkort bewegen naar linksonder";
     Text[ french ] = "Déplacer l'objet vers la gauche, en bas";
     Text[ spanish ] = "Mover localmente hacia abajo a la izquierda";
     Text[ italian ] = "Sposta ridotto in basso a sinistra";
     Text[ danish ] = "Move short to lower left";
-    Text[ swedish ] = "Flytta förkortat, ner till vänster";
+    Text[ swedish ] = "Flytta objekt ner till vänster";
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move short to lower left";
-    Text[ japanese ] = "Move short to lower left";
+    Text[ japanese ] = "¶‰º‚É­‚µˆÚ“®";
     Text[ korean ] = "Move short to lower left";
     Text[ chinese_simplified ] = "Ïò×óÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "¦V¥ª¤U½wºCÂX®i";
     Text[ turkish ] = "Move short to lower left";
-    Text[ arabic ] = "Move short to lower left";
+    Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÏäì ÇáíÓÇÑ";
 };
 String STR_EFFECT_SPIRALIN_L
 {
@@ -8559,12 +8559,12 @@ String STR_EFFECT_STRTCH
     Text[ swedish ] = "Sträck";
     Text[ polish ] = "Rozci¹gnij";
     Text[ portuguese_brazilian ] = "Stretch";
-    Text[ japanese ] = "½ÄÚ¯Á";
+    Text[ japanese ] = "½Ş°Ñ²İ";
     Text[ korean ] = "Stretch";
     Text[ chinese_simplified ] = "À©Õ¹";
     Text[ chinese_traditional ] = "ÂX®i";
     Text[ turkish ] = "Stretch";
-    Text[ arabic ] = "Stretch";
+    Text[ arabic ] = "ÊãÏÏ";
 };
 String STR_EFFECT_STRTCH_FROM_L
 {
@@ -8582,12 +8582,12 @@ String STR_EFFECT_STRTCH_FROM_L
     Text[ swedish ] = "Sträck från vänster";
     Text[ polish ] = "Rozci¹gnij z lewej";
     Text[ portuguese_brazilian ] = "Stretch from left";
-    Text[ japanese ] = "¶‚©‚ç½ÄÚ¯Á";
+    Text[ japanese ] = "¶‚©‚ç½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from left";
     Text[ chinese_simplified ] = "´Ó×óÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ªÂX®i";
     Text[ turkish ] = "Stretch from left";
-    Text[ arabic ] = "Stretch from left";
+    Text[ arabic ] = "ÊãÏÏ ãä ÇáíÓÇÑ";
 };
 String STR_EFFECT_STRTCH_FROM_UL
 {
@@ -8605,12 +8605,12 @@ String STR_EFFECT_STRTCH_FROM_UL
     Text[ swedish ] = "Sträck uppifrån vänster";
     Text[ polish ] = "Rozci¹gnij z lewej od góry";
     Text[ portuguese_brazilian ] = "Stretch from upper left";
-    Text[ japanese ] = "¶‚©‚çã‚Ö½ÄÚ¯Á";
+    Text[ japanese ] = "¶‚©‚çã‚Ö½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from upper left";
     Text[ chinese_simplified ] = "´Ó×óÉÏÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤WÂX®i";
     Text[ turkish ] = "Stretch from upper left";
-    Text[ arabic ] = "Stretch from upper left";
+    Text[ arabic ] = "ÊãÏÏ ãä ÃÚáì ÇáíÓÇÑ";
 };
 String STR_EFFECT_STRTCH_FROM_T
 {
@@ -8628,12 +8628,12 @@ String STR_EFFECT_STRTCH_FROM_T
     Text[ swedish ] = "Sträck uppifrån";
     Text[ polish ] = "Rozci¹gnij od góry";
     Text[ portuguese_brazilian ] = "Stretch from top";
-    Text[ japanese ] = "ã‚©‚ç½ÄÚ¯Á";
+    Text[ japanese ] = "ã‚©‚ç½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from top";
     Text[ chinese_simplified ] = "´ÓÉÏÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤WÂX®i";
     Text[ turkish ] = "Stretch from top";
-    Text[ arabic ] = "Stretch from top";
+    Text[ arabic ] = "ÊãÏÏ ãä ÃÚáì";
 };
 String STR_EFFECT_STRTCH_FROM_UR
 {
@@ -8651,12 +8651,12 @@ String STR_EFFECT_STRTCH_FROM_UR
     Text[ swedish ] = "Sträck uppifrån höger";
     Text[ polish ] = "Rozci¹gnij z prawej od góry";
     Text[ portuguese_brazilian ] = "Stretch from upper right";
-    Text[ japanese ] = "‰E‚©‚çã‚Ö½ÄÚ¯Á";
+    Text[ japanese ] = "‰E‚©‚çã‚Ö½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from upper right";
     Text[ chinese_simplified ] = "´ÓÓÒÉÏÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤WÂX®i";
     Text[ turkish ] = "Stretch from upper right";
-    Text[ arabic ] = "Stretch from upper right";
+    Text[ arabic ] = "ÊãÏÏ ãä ÃÚáì Çáíãíä";
 };
 String STR_EFFECT_STRTCH_FROM_R
 {
@@ -8674,12 +8674,12 @@ String STR_EFFECT_STRTCH_FROM_R
     Text[ swedish ] = "Sträck från höger";
     Text[ polish ] = "Rozci¹gnij z prawej";
     Text[ portuguese_brazilian ] = "Stretch from right";
-    Text[ japanese ] = "‰E‚©‚ç½ÄÚ¯Á";
+    Text[ japanese ] = "‰E‚©‚ç½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from right";
     Text[ chinese_simplified ] = "´ÓÓÒÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥kÂX®i";
     Text[ turkish ] = "Stretch from right";
-    Text[ arabic ] = "Stretch from right";
+    Text[ arabic ] = "ÊãÏÏ ãä Çáíãíä";
 };
 String STR_EFFECT_STRTCH_FROM_LR
 {
@@ -8697,12 +8697,12 @@ String STR_EFFECT_STRTCH_FROM_LR
     Text[ swedish ] = "Sträck nerifrån höger";
     Text[ polish ] = "Rozci¹gnij z prawej od do³u";
     Text[ portuguese_brazilian ] = "Stretch from lower right";
-    Text[ japanese ] = "‰E‚©‚ç‰º‚Ö½ÄÚ¯Á";
+    Text[ japanese ] = "‰E‚©‚ç‰º‚Ö½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from lower right";
     Text[ chinese_simplified ] = "´ÓÓÒÏÂÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤UÂX®i";
     Text[ turkish ] = "Stretch from lower right";
-    Text[ arabic ] = "Stretch from lower right";
+    Text[ arabic ] = "ÊãÏÏ ãä ÃÏäì Çáíãíä";
 };
 String STR_EFFECT_STRTCH_FROM_B
 {
@@ -8720,12 +8720,12 @@ String STR_EFFECT_STRTCH_FROM_B
     Text[ swedish ] = "Sträck nerifrån";
     Text[ polish ] = "Rozci¹gnij od do³u";
     Text[ portuguese_brazilian ] = "Stretch from bottom";
-    Text[ japanese ] = "‰º‚©‚ç½ÄÚ¯Á";
+    Text[ japanese ] = "‰º‚©‚ç½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from bottom";
     Text[ chinese_simplified ] = "´ÓÏÂÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤WÂX®i";
     Text[ turkish ] = "Stretch from bottom";
-    Text[ arabic ] = "Stretch from bottom";
+    Text[ arabic ] = "ÊãÏÏ ãä ÃÓİá";
 };
 String STR_EFFECT_STRTCH_FROM_LL
 {
@@ -8743,12 +8743,12 @@ String STR_EFFECT_STRTCH_FROM_LL
     Text[ swedish ] = "Sträck nerifrån vänster";
     Text[ polish ] = "Rozci¹gnij z lewej od do³u";
     Text[ portuguese_brazilian ] = "Stretch from lower left";
-    Text[ japanese ] = "¶‚©‚ç‰º‚Ö½ÄÚ¯Á";
+    Text[ japanese ] = "¶‚©‚ç‰º‚Ö½Ş°Ñ²İ";
     Text[ korean ] = "Stretch from lower left";
     Text[ chinese_simplified ] = "´Ó×óÏÂÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤UÂX®i";
     Text[ turkish ] = "Stretch from lower left";
-    Text[ arabic ] = "Stretch from lower left";
+    Text[ arabic ] = "ÊãÏÏ ãä ÃÏäì ÇáíÓÇÑ";
 };
 String STR_EFFECT_STRTCH_ROTATE
 {
@@ -8766,12 +8766,12 @@ String STR_EFFECT_STRTCH_ROTATE
     Text[ swedish ] = "Sträck och rotera";
     Text[ polish ] = "Rozci¹gnij i obróæ";
     Text[ portuguese_brazilian ] = "Stretch and rotate";
-    Text[ japanese ] = "½ÄÚ¯Á‚Æ‰ñ“]";
+    Text[ japanese ] = "½ÄÚ¯Á‚ÆÀ°İ";
     Text[ korean ] = "Stretch and rotate";
     Text[ chinese_simplified ] = "À©Õ¹ºÍĞı×ª";
     Text[ chinese_traditional ] = "ÂX®i©M±ÛÂà";
     Text[ turkish ] = "Stretch and rotate";
-    Text[ arabic ] = "Stretch and rotate";
+    Text[ arabic ] = "ÊãÏÏ æÏæÑÇä";
 };
 String STR_EFFECT_STRTCH_HORIZONTAL
 {
@@ -8789,12 +8789,12 @@ String STR_EFFECT_STRTCH_HORIZONTAL
     Text[ swedish ] = "Sträck horisontellt";
     Text[ polish ] = "Rozci¹gnij w poziomie";
     Text[ portuguese_brazilian ] = "Stretch horizontal";
-    Text[ japanese ] = "ã‰º‚É½ÄÚ¯Á";
+    Text[ japanese ] = "¶‰E‚É½ÄÚ¯Á";
     Text[ korean ] = "Stretch horizontal";
     Text[ chinese_simplified ] = "Ë®Æ½ÏòÀ©Õ¹";
     Text[ chinese_traditional ] = "¤ô¥­ÂX®i";
     Text[ turkish ] = "Stretch horizontal";
-    Text[ arabic ] = "Stretch horizontal";
+    Text[ arabic ] = "ÊãÏÏ ÃİŞí";
 };
 String STR_EFFECT_STRTCH_VERTICAL
 {
@@ -8812,12 +8812,12 @@ String STR_EFFECT_STRTCH_VERTICAL
     Text[ swedish ] = "Sträck vertikalt";
     Text[ polish ] = "Rozci¹gnij w pionie";
     Text[ portuguese_brazilian ] = "Stretch vertical";
-    Text[ japanese ] = "¶‰E‚É½ÄÚ¯Á";
+    Text[ japanese ] = "ã‰º‚É½ÄÚ¯Á";
     Text[ korean ] = "Stretch vertical";
     Text[ chinese_simplified ] = "´¹Ö±ÏòÀ©Õ¹";
     Text[ chinese_traditional ] = "««ª½ÂX®i";
     Text[ turkish ] = "Stretch vertical";
-    Text[ arabic ] = "Stretch vertical";
+    Text[ arabic ] = "ÊãÏÏ ÑÃÓí";
 };
 String STR_EFFECT_ROTATE_HORIZONTAL
 {
@@ -8835,12 +8835,12 @@ String STR_EFFECT_ROTATE_HORIZONTAL
     Text[ swedish ] = "Rotera horisontellt";
     Text[ polish ] = "Obróæ w poziomie";
     Text[ portuguese_brazilian ] = "Rotate horizontally";
-    Text[ japanese ] = "ã‰º‚É‰ñ“]";
+    Text[ japanese ] = "¶‰E‚ÉÀ°İ";
     Text[ korean ] = "Rotate horizontally";
     Text[ chinese_simplified ] = "Ë®Æ½ÏòĞı×ª";
     Text[ chinese_traditional ] = "¤ô¥­±ÛÂà";
     Text[ turkish ] = "Rotate horizontally";
-    Text[ arabic ] = "Rotate horizontally";
+    Text[ arabic ] = "ÏæÑÇä ÃİŞí";
 };
 String STR_EFFECT_ROTATE_VERTICAL
 {
@@ -8858,12 +8858,12 @@ String STR_EFFECT_ROTATE_VERTICAL
     Text[ swedish ] = "Rotera vertikalt";
     Text[ polish ] = "Obróæ w pionie";
     Text[ portuguese_brazilian ] = "Rotate vertically";
-    Text[ japanese ] = "ã‰º‚É‰ñ“]";
+    Text[ japanese ] = "ã‰º‚ÉÀ°İ";
     Text[ korean ] = "Rotate vertically";
     Text[ chinese_simplified ] = "´¹Ö±ÏòĞı×ª";
     Text[ chinese_traditional ] = "««ª½±ÛÂà";
     Text[ turkish ] = "Rotate vertically";
-    Text[ arabic ] = "Rotate vertically";
+    Text[ arabic ] = "ÏæÑÇä ÑÃÓí";
 };
 
 String STR_GENERAL_PUBLISHING_ERROR
@@ -9230,7 +9230,7 @@ String STR_EFFECT_STRETCH_FROM_T
     Text[ chinese_simplified ] = "ÏòÉÏÉìÕ¹";
     Text[ russian ] = "Íàñëîåíèå ñâåğõó";
     Text[ polish ] = "Kropla z góry";
-    Text[ japanese ] = "ã‚©‚çLk";
+    Text[ japanese ] = "ã‚©‚ç½ÄÚ¯Á";
     Text[ greek ] = "Óôáãüíá áğü ğÜíù";
     Text[ korean ] = "À§ºÎÅÍ ´Ã¸²";
     Text[ chinese_traditional ] = "±q¤W¦ù®i";
@@ -9276,7 +9276,7 @@ String STR_EFFECT_STRETCH_FROM_B
     Text[ chinese_simplified ] = "ÏòÏÂÉìÕ¹";
     Text[ russian ] = "Íàñëîåíèå ñíèçó";
     Text[ polish ] = "Kropla z do³u";
-    Text[ japanese ] = "‰º‚©‚çLk";
+    Text[ japanese ] = "‰º‚©‚ç½ÄÚ¯Á";
     Text[ greek ] = "Óôáãüíá áğü êÜôù";
     Text[ korean ] = "¾Æ·¡ºÎÅÍ ´Ã¸²";
     Text[ chinese_traditional ] = "±q¤U¦ù®i";
@@ -9420,7 +9420,7 @@ String STR_EFFECT_LASER_FROM_R
     Text[ polish ] = "Efekt lasera z prawej";
     Text[ japanese ] = "‰E‚©‚çÚ°»Ş°Œø‰Ê";
     Text[ greek ] = "Åöİ ëİéæåñ áğü äåîéÜ";
-    Text[ korean ] = "¿À¸¥ÂÊºÎÅÍ ·¹ÀÌÀú È¿°ú";
+    Text[ korean ] = "¿À¸¥ÂÊ¿¡¼­ºÎÅÍ ·¹ÀÌÀú È¿°ú";
     Text[ chinese_traditional ] = "¥k¤èªº¹p®g®ÄªG";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä Çáíãíä";
     Text[ turkish ] = "Sağdan lazer efekti";
@@ -9459,12 +9459,12 @@ String STR_EFFECT_LASER_FROM_UL
     Text [ dutch ] = "Lasereffect van linksboven" ;
     Text [ swedish ] = "Lasereffekt uppifrån/vänster" ;
     Text [ danish ] = "Lasereffekt mod højre nedad" ;
-    Text [ portuguese ] = "Efeitos de laser a partir da esquerda, em cima" ;
+    Text [ portuguese ] = "Efeitos de laser a partir do topo esquerdo" ;
     Text [ portuguese_brazilian ] = "Lasereffekt von oben links" ;
     Text[ chinese_simplified ] = "×óÉÏ·½µÄ¼¤¹âĞ§¹û";
     Text[ russian ] = "İôôåêò ëàçåğà ñâåğõó ñëåâà";
     Text[ polish ] = "Efekt lasera z góry, z lewej";
-    Text[ japanese ] = "ã•û‚Ì¶‘¤‚©‚çÚ°»Ş°Œø‰Ê";
+    Text[ japanese ] = "¶ã‚©‚çÚ°»Ş°Œø‰Ê";
     Text[ greek ] = "Åöİ ëİéæåñ áğü ğÜíù áñéóôåñÜ";
     Text[ korean ] = "À§ ¿ŞÂÊºÎÅÍ ·¹ÀÌÀú È¿°ú";
     Text[ chinese_traditional ] = "¥ª¤W¤èªº¹p®g®ÄªG";
@@ -9487,7 +9487,7 @@ String STR_EFFECT_LASER_FROM_UR
     Text[ chinese_simplified ] = "ÓÒÉÏ·½µÄ¼¤¹âĞ§¹û";
     Text[ russian ] = "İôôåêò ëàçåğà ñâåğõó ñïğàâà";
     Text[ polish ] = "Efekt lasera z góry, z prawej";
-    Text[ japanese ] = "ã•û‚Ì‰E‘¤‚©‚çÚ°»Ş°Œø‰Ê";
+    Text[ japanese ] = "‰Eã‚©‚çÚ°»Ş°Œø‰Ê";
     Text[ greek ] = "Åöİ ëİéæåñ áğü ğÜíù äåîéÜ";
     Text[ korean ] = "À§ ¿À¸¥ÂÊºÎÅÍ ·¹ÀÌÀú È¿°ú";
     Text[ chinese_traditional ] = "¥k¤W¤èªº¹p®g®ÄªG";
@@ -9505,16 +9505,16 @@ String STR_EFFECT_LASER_FROM_LL
     Text [ french ] = "Effet laser à partir de la gauche, en bas" ;
     Text [ swedish ] = "Lasereffekt nedifrån/vänster" ;
     Text [ danish ] = "Lasereffekt mod højre opad" ;
-    Text [ portuguese ] = "Efeitos de laser a partir da esquerda, em baixo" ;
+    Text [ portuguese ] = "Efeitos de laser a partir da base esquerda" ;
     Text [ portuguese_brazilian ] = "Lasereffekt von unten links" ;
     Text[ chinese_simplified ] = "×ó·½µÄ¼¤¹âĞ§¹û";
     Text[ russian ] = "İôôåêò ëàçåğà ñíèçó ñëåâà";
     Text[ polish ] = "Efekt lasera z do³u, z lewej";
-    Text[ japanese ] = "‰º•û‚Ì¶‘¤‚©‚çÚ°»Ş°Œø‰Ê";
+    Text[ japanese ] = "¶‰º‚©‚çÚ°»Ş°Œø‰Ê";
     Text[ greek ] = "Åöİ ëİéæåñ áğü êÜôù áñéóôåñÜ";
     Text[ korean ] = "¾Æ·¡ ¿ŞÂÊºÎÅÍ ·¹ÀÌÀú È¿°ú";
     Text[ chinese_traditional ] = "¥ª¤èªº¹p®g®ÄªG";
-    Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÓİá ÇáíÓÇÑ";
+    Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÏäì ÇáíÓÇÑ";
     Text[ turkish ] = "Sol alttan lazer efekti";
 };
 String STR_EFFECT_LASER_FROM_LR
@@ -9533,11 +9533,11 @@ String STR_EFFECT_LASER_FROM_LR
     Text[ chinese_simplified ] = "ÓÒ·½µÄ¼¤¹âĞ§¹û";
     Text[ russian ] = "İôôåêò ëàçåğà ñíèçó ñïğàâà";
     Text[ polish ] = "Efekt lasera z do³u, z prawej";
-    Text[ japanese ] = "‰º•û‚Ì‰E‘¤‚©‚çÚ°»Ş°Œø‰Ê";
+    Text[ japanese ] = "‰E‰º‚©‚çÚ°»Ş°Œø‰Ê";
     Text[ greek ] = "Åöİ ëİéæåñ áğü êÜôù äåîéÜ";
     Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊºÎÅÍ ·¹ÀÌÀú È¿°ú";
     Text[ chinese_traditional ] = "¥k¤èªº¹p®g®ÄªG";
-    Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÓİá Çáíãíä";
+    Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÏäì Çáíãíä";
     Text[ turkish ] = "Sağ alttan lazer efekti";
 };
 String STR_EFFECT_FAVOURITES
@@ -9596,14 +9596,14 @@ String STR_EFFECT_DISCARD
     Text [ italian ] = "Sovrapposizione" ;
     Text [ spanish ] = "Entrar" ;
     Text [ french ] = "Découvrir" ;
-    Text [ swedish ] = "Avtäcka" ;
+    Text [ swedish ] = "Täck av" ;
     Text [ danish ] = "Afdæk" ;
     Text [ portuguese ] = "Descobrir" ;
     Text [ portuguese_brazilian ] = "Aufdecken" ;
     Text[ chinese_simplified ] = "ÏÔÂ¶";
     Text[ russian ] = "Îòêğûòü";
     Text[ polish ] = "Odkryj";
-    Text[ japanese ] = "Œ»‚êo‚é";
+    Text[ japanese ] = "½×²ÄŞ²İ";
     Text[ greek ] = "ÁğïêÜëõøç";
     Text[ korean ] = "³ëÃâ";
     Text[ chinese_traditional ] = "ÅãÅS";
@@ -9615,23 +9615,23 @@ String STR_EFFECT_DISCARD_SHORT
     Text = "Verkürzt aufdecken" ;
     Text [ ENGLISH ] = "Discard short" ;
     Text [ english_us ] = "Uncover Object" ;
-    Text[ portuguese ] = "Discard short";
-    Text[ russian ] = "Îòêğûòü íà ìåñòå";
+    Text[ portuguese ] = "Descobrir objecto";
+    Text[ russian ] = "Îòêğûòü â ğàìêå îáúåêòà";
     Text[ greek ] = "Óıíôïìç åìöÜíéóç";
     Text[ dutch ] = "Vertonen, verkort";
     Text[ french ] = "Découvrir l'objet";
     Text[ spanish ] = "Entrar localmente";
     Text[ italian ] = "Scopri ridotto";
     Text[ danish ] = "Discard short";
-    Text[ swedish ] = "Discard short";
+    Text[ swedish ] = "Täck av objekt";
     Text[ polish ] = "Odkryj w ramce obiektu";
     Text[ portuguese_brazilian ] = "Discard short";
-    Text[ japanese ] = "Discard short";
+    Text[ japanese ] = "Ëß°¸";
     Text[ korean ] = "Discard short";
     Text[ chinese_simplified ] = "»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "½wºCÂX®i";
     Text[ turkish ] = "Discard short";
-    Text[ arabic ] = "Discard short";
+    Text[ arabic ] = "ßÔİ ãŞÊÖÈ";
 };
 String STR_EFFECT_FADE
 {
@@ -9805,7 +9805,7 @@ String STR_EFFECT_STRETCH
     Text [ danish ] = "Dråber" ;
     Text [ italian ] = "Trascina" ;
     Text [ spanish ] = "Gotear" ;
-    Text [ french ] = "Goutte" ;
+    Text [ french ] = "Goutte-à-goutte" ;
     Text [ portuguese ] = "Gotas" ;
     Text [ portuguese_brazilian ] = "Tropfen" ;
     Text[ chinese_simplified ] = "ÉìÕ¹";
@@ -9833,7 +9833,7 @@ String STR_EFFECT_APPEAR
     Text[ swedish ] = "Framträda";
     Text[ polish ] = "Uka¿";
     Text[ portuguese_brazilian ] = "Appear";
-    Text[ japanese ] = "Œ©‚¹‚é";
+    Text[ japanese ] = "±Ëß±";
     Text[ chinese_simplified ] = "ÏÔÊ¾";
     Text[ greek ] = "ÅìöÜíéóç";
     Text[ korean ] = "³ªÅ¸³»±â";
@@ -10860,7 +10860,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_50
     Text [ danish ] = "StarOffice 5.0 præsentation" ;
     Text [ italian ] = "Presentazione StarOffice 5.0" ;
     Text [ spanish ] = "Presentación de StarOffice 5.0" ;
-    Text [ french ] = "Présentation StarOffice 5.0" ;
+    Text [ french ] = "StarOffice 5.0 Présentation" ;
     Text [ portuguese ] = "Apresentação (StarOffice 5.0)" ;
     Text [ portuguese_brazilian ] = "StarOffice 5.0 Präsentation" ;
     Text[ chinese_simplified ] = "StarOffice 5.0 ÑİÊ¾ÎÄ¸å";
@@ -10884,7 +10884,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_40
     Text [ danish ] = "StarOffice 4.0 præsentation" ;
     Text [ italian ] = "Grafica / presentazione StarOffice 4.0" ;
     Text [ spanish ] = "Presentación de StarOffice 4.0" ;
-    Text [ french ] = "Présentation StarOffice 4.0" ;
+    Text [ french ] = "StarOffice 4.0 Présentation" ;
     Text [ portuguese ] = "Apresentação (StarOffice 4.0)" ;
     Text [ portuguese_brazilian ] = "StarOffice 4.0 Graphik / Präsentation" ;
     Text[ chinese_simplified ] = "StarOffice 4.0 ÑİÊ¾ÎÄ¸å";
@@ -10908,7 +10908,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_31
     Text [ danish ] = "StarOffice 3.0 grafik / præsentation" ;
     Text [ italian ] = "Grafica / presentazione StarOffice 3.0" ;
     Text [ spanish ] = "Imagen / Presentación de StarOffice 3.0" ;
-    Text [ french ] = "Image / Présentation StarOffice 3.0" ;
+    Text [ french ] = "StarOffice 3.0 Image / Présentation" ;
     Text [ portuguese ] = "Gráfica/Apresentação (StarOffice 3.0)" ;
     Text [ portuguese_brazilian ] = "StarOffice 3.0 Graphik / Präsentation" ;
     Text[ chinese_simplified ] = "StarOffice 3.0 Í¼ĞÎ/ÑİÊ¾ÎÄ¸å";
@@ -10955,7 +10955,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
     Text [ danish ] = "StarOffice 5.0 tegning" ;
     Text [ italian ] = "Disegno StarOffice 5.0" ;
     Text [ spanish ] = "Dibujo de StarOffice 5.0 " ;
-    Text [ french ] = "Dessin StarOffice 5.0" ;
+    Text [ french ] = "StarOffice 5.0 Dessin" ;
     Text [ dutch ] = "StarOffice 5.0 tekening" ;
     Text[ chinese_simplified ] = "StarOffice 5.0 »æÍ¼";
     Text[ russian ] = "Ğèñóíîê StarOffice 5.0";
@@ -12177,12 +12177,12 @@ String STR_GRAFCROP
     Text[ swedish ] = "Beskär";
     Text[ polish ] = "Przytnij";
     Text[ portuguese_brazilian ] = "Crop";
-    Text[ japanese ] = "Crop";
+    Text[ japanese ] = "ÄØĞİ¸Ş";
     Text[ korean ] = "Crop";
     Text[ chinese_simplified ] = "¼ôÏÂ";
     Text[ chinese_traditional ] = "°Å¤U";
     Text[ turkish ] = "Crop";
-    Text[ arabic ] = "Crop";
+    Text[ arabic ] = "ÇŞÊÕÇÕ";
 };
 String STR_UNDO_GRAFMODE
 {
@@ -12224,7 +12224,7 @@ String STR_UNDO_GRAFRED
     Text[ polish ] = "Zawartoœæ czerw.";
     Text[ portuguese_brazilian ] = "Red portion";
     Text[ japanese ] = "ÔF‚ÌŠ„‡";
-    Text[ korean ] = "Àû»öÀÇ ºñÀ²";
+    Text[ korean ] = "Àû»öºÎºĞ";
     Text[ chinese_simplified ] = "ºìÉ«±ÈÀı";
     Text[ chinese_traditional ] = "¬õ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
@@ -12247,7 +12247,7 @@ String STR_UNDO_GRAFGREEN
     Text[ polish ] = "Zawartoœæ zielonego";
     Text[ portuguese_brazilian ] = "Green portion";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡";
-    Text[ korean ] = "³ì»öÀÇ ºñÀ²";
+    Text[ korean ] = "³ì»öºÎºĞ";
     Text[ chinese_simplified ] = "ÂÌÉ«±ÈÀı";
     Text[ chinese_traditional ] = "ºñ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
@@ -12270,7 +12270,7 @@ String STR_UNDO_GRAFBLUE
     Text[ polish ] = "Zawartoœæ niebiesk.";
     Text[ portuguese_brazilian ] = "Blue portion";
     Text[ japanese ] = "ÂF‚ÌŠ„‡";
-    Text[ korean ] = "Ã»»öÀÇ ºñÀ²";
+    Text[ korean ] = "Ã»»öºÎºĞ";
     Text[ chinese_simplified ] = "À¶É«±ÈÀı";
     Text[ chinese_traditional ] = "ÂÅ¦â¤ñ¨Ò";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
@@ -12293,7 +12293,7 @@ String STR_UNDO_GRAFLUMINANCE
     Text[ polish ] = "Jasnoœæ";
     Text[ portuguese_brazilian ] = "Luminance";
     Text[ japanese ] = "–¾“x";
-    Text[ korean ] = "¸íµµ";
+    Text[ korean ] = "¹à±â";
     Text[ chinese_simplified ] = "ÁÁ¶È";
     Text[ chinese_traditional ] = "«G«×";
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
