@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 08:28:26 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 09:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,32 +312,28 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
         {
             LanguageType nLangType = aLangTable.GetTypeAtIndex( i );
             BOOL bInsert = FALSE;
-            if ( nLangType != LANGUAGE_SYSTEM  &&
-                 nLangType != LANGUAGE_NONE )
+            if ( nLangType != LANGUAGE_DONTKNOW &&
+                 nLangType != LANGUAGE_SYSTEM   &&
+                 nLangType != LANGUAGE_NONE     &&
+                !(LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9) )
             {
-                if (nLangList & LANG_LIST_ALL)
+                if (!bInsert && (nLangList & LANG_LIST_ALL))
                     bInsert |= TRUE;
-                if (nLangList & LANG_LIST_WESTERN)
+                if (!bInsert && (nLangList & LANG_LIST_WESTERN))
                     bInsert |= SCRIPTTYPE_LATIN == GetScriptTypeOfLanguage( nLangType );
-                if (nLangList & LANG_LIST_CTL)
+                if (!bInsert && (nLangList & LANG_LIST_CTL))
                     bInsert |= SCRIPTTYPE_COMPLEX == GetScriptTypeOfLanguage( nLangType );
-                if (nLangList & LANG_LIST_CJK)
+                if (!bInsert && (nLangList & LANG_LIST_CJK))
                     bInsert |= SCRIPTTYPE_ASIAN == GetScriptTypeOfLanguage( nLangType );
-                if (nLangList & LANG_LIST_FBD_CHARS)
+                if (!bInsert && (nLangList & LANG_LIST_FBD_CHARS))
                     bInsert |= lcl_HasLanguage( aForbiddenCharLang,
                                         nForbiddenCharLang, nLangType );
-                if (nLangList & LANG_LIST_SPELL_AVAIL)
+                if (!bInsert && (nLangList & LANG_LIST_SPELL_AVAIL))
                     bInsert |= lcl_SeqHasLang( aSpellAvailLang, nLangType );
-                if (nLangList & LANG_LIST_HYPH_AVAIL)
+                if (!bInsert && (nLangList & LANG_LIST_HYPH_AVAIL))
                     bInsert |= lcl_SeqHasLang( aHyphAvailLang, nLangType );
-                if (nLangList & LANG_LIST_THES_AVAIL)
+                if (!bInsert && (nLangList & LANG_LIST_THES_AVAIL))
                     bInsert |= lcl_SeqHasLang( aThesAvailLang, nLangType );
-            }
-
-            if ((LANGUAGE_DONTKNOW == nLangType)  ||
-                (LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9))
-            {
-                bInsert = FALSE;
             }
 
             if (bInsert)
