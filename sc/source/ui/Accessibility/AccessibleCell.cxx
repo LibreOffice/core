@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 07:57:48 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 15:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,9 @@
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
-#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
-#include <svx/AccessibleTextHelper.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
-
 #include <float.h>
 
 using namespace ::com::sun::star;
@@ -144,9 +143,9 @@ ScAccessibleCell::ScAccessibleCell(
         ScAccessibleDocument* pAccDoc)
     :
     ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
+    accessibility::AccessibleStaticTextBase(this, CreateEditSource(pViewShell, rCellAddress, eSplitPos)),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mpTextHelper(NULL),
     mpAccDoc(pAccDoc)
 {
 }
@@ -162,12 +161,25 @@ ScAccessibleCell::~ScAccessibleCell()
     }
 }
 
-void SAL_CALL ScAccessibleCell::disposing()
-{
-    if (mpTextHelper)
-        DELETEZ(mpTextHelper);
+    //=====  XInterface  =====================================================
 
-    ScAccessibleCellBase::disposing();
+uno::Any SAL_CALL ScAccessibleCell::queryInterface( uno::Type const & rType )
+    throw (uno::RuntimeException)
+{
+    SC_QUERYINTERFACE( XAccessibleText )
+    return ScAccessibleCellBaseImpl::queryInterface(rType);
+}
+
+void SAL_CALL ScAccessibleCell::acquire()
+    throw ()
+{
+    ScAccessibleCellBase::acquire();
+}
+
+void SAL_CALL ScAccessibleCell::release()
+    throw ()
+{
+    ScAccessibleCellBase::release();
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -178,10 +190,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
 {
      ScUnoGuard aGuard;
     IsObjectValid();
-    if(!mpTextHelper)
-        CreateTextHelper();
 
-    return mpTextHelper->GetAt(rPoint);
+    return NULL;
 }
 
 void SAL_CALL ScAccessibleCell::grabFocus(  )
@@ -249,9 +259,8 @@ sal_Int32 SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (!mpTextHelper)
-        CreateTextHelper();
-    return mpTextHelper->GetChildCount();
+
+    return 0;
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -261,9 +270,8 @@ uno::Reference< XAccessible > SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (!mpTextHelper)
-        CreateTextHelper();
-    return mpTextHelper->GetChild(nIndex);
+
+    return NULL;
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
@@ -344,6 +352,15 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
 
 //=====  XTypeProvider  =======================================================
 
+uno::Sequence< uno::Type > SAL_CALL ScAccessibleCell::getTypes()
+        throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Type > aSeq;
+    aSeq.realloc(1);
+    aSeq[0] = getCppuType((const uno::Reference<XAccessibleText>*)0);
+    return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), aSeq);
+}
+
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleCell::getImplementationId(void)
     throw (uno::RuntimeException)
@@ -360,12 +377,6 @@ uno::Sequence<sal_Int8> SAL_CALL
 }
 
     //====  internal  =========================================================
-
-void ScAccessibleCell::ChangeEditMode()
-{
-    if (mpTextHelper)
-        mpTextHelper->UpdateChildren();
-}
 
 sal_Bool ScAccessibleCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
@@ -426,16 +437,13 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     return pDoc;
 }
 
-void ScAccessibleCell::CreateTextHelper()
+::std::auto_ptr< SvxEditSource > ScAccessibleCell::CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos)
 {
-    if (!mpTextHelper)
-    {
-        ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
-            (new ScAccessibleCellTextData(mpViewShell, maCellAddress, meSplitPos));
-        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
+    ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData
+        (new ScAccessibleCellTextData(pViewShell, aCell, eSplitPos));
+    ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleCellTextData));
 
-        mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
-    }
+    return pEditSource;
 }
 
 void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelationSet)

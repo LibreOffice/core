@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 07:50:01 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 15:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,21 +79,20 @@
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
 #endif
+#ifndef _SVX_ACCESSILE_STATIC_TEXT_BASE_HXX_
+#include <svx/AccessibleStaticTextBase.hxx>
+#endif
 
 class ScTabViewShell;
 class ScAccessibleDocument;
-
-namespace accessibility
-{
-    class AccessibleTextHelper;
-}
 
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleCell</code> service.
 */
 class ScAccessibleCell
-    :   public  ScAccessibleCellBase
+    :   public  ScAccessibleCellBase,
+        public  accessibility::AccessibleStaticTextBase
 {
 public:
     //=====  internal  ========================================================
@@ -109,7 +108,15 @@ public:
 protected:
     virtual ~ScAccessibleCell();
 public:
-    virtual void SAL_CALL disposing();
+    ///=====  XInterface  =====================================================
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire() throw ();
+
+    virtual void SAL_CALL release() throw ();
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -173,21 +180,20 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
+    /// returns the possible types
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
+        throw (::com::sun::star::uno::RuntimeException);
+
     /** Returns a implementation id.
     */
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL
         getImplementationId(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    ///=====   internal  ======================================================
-
-    void ChangeEditMode();
-
 private:
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccDoc;
-
-    accessibility::AccessibleTextHelper* mpTextHelper;
 
     ScSplitPos meSplitPos;
 
@@ -204,7 +210,7 @@ private:
 
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
 
-    void CreateTextHelper();
+    ::std::auto_ptr< SvxEditSource > CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos);
 
     void FillDependends(utl::AccessibleRelationSetHelper* pRelationSet);
     void FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet);
