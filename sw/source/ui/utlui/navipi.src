@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:51:58 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "³Ή¤Ι―Ε";
                 Text[ arabic ] = "έΥα αΓΪαμ";
                 Text[ greek ] = "Προβιβασμός κεφαλαίου";
-                Text[ korean ] = "ΐε ½Β°έ";
+                Text[ korean ] = "ΐε£¬³τ°Τ";
                 Text[ turkish ] = "Bφlόmό yukarύ al";
             };
             ToolBoxItem
@@ -359,7 +359,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "³Ή­°―Ε";
                 Text[ arabic ] = "έΥα αΓΣέα";
                 Text[ greek ] = "Υποβιβασμός κεφαλαίου";
-                Text[ korean ] = "ΐε ³·Γί±β";
+                Text[ korean ] = "ΐε£¬³·°Τ";
                 Text[ turkish ] = "Bφlόmό aώaπύ ηek";
             };
             ToolBoxItem
@@ -388,7 +388,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "Εγ¥ά/Ατ¤J²M³ζ¤θ¶τ";
                 Text[ arabic ] = "ΕΩεΗΡ/ΕΞέΗΑ ΥδΟζή ΗαΗΞΚνΗΡ";
                 Text[ greek ] = "Πλαίσιο επιλογής Ναι/Όχι";
-                Text[ korean ] = "Έ®½ΊΖ® ΉΪ½Ί ½ΓΐΫ/ΑΎ·α";
+                Text[ korean ] = "Έρ·Ο»σΐΪ ³ªΕΈ³»±β/Όϋ±β±β";
                 Text[ turkish ] = "Liste kutusu aηύk/kapalύ";
             };
             ToolBoxItem
@@ -413,8 +413,8 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "¤Α΄«¤Ί®eΐΛµψ";
                 Text[ arabic ] = "ΚΘΟνα ΨΡνήΙ ΪΡΦ ΗαγΝΚζνΗΚ";
                 Text[ greek ] = "Προβολή περιεχομένων Ναι/Όχι";
-                Text[ korean ] = "³»Ώλ ΊΈ±β";
-                Text[ turkish ] = "έηerik gφrόnόmό";
+                Text[ korean ] = "³»ΏλΊΈ±β΅΅ΐόΘ―";
+                Text[ turkish ] = "έηerik gφrόnόmόnό deπiώtir";
             };
             ToolBoxItem
             {
@@ -445,7 +445,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "³]©w΄£Ώτ";
                 Text[ arabic ] = "ζΦΪ ΪαΗγΙ ΚΠίνΡ";
                 Text[ greek ] = "Ορισμός υπενθύμισης";
-                Text[ korean ] = "ΉΜΈ®ΎΛΈ² Ό³Α¤";
+                Text[ korean ] = "Έ¶ΔΏ Ό³Α¤";
                 Text[ turkish ] = "Anύmsatύcύ yerleώtir";
             };
             ToolBoxItem
@@ -567,7 +567,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "Εγ¥άªΊ¤jΊυ―Ε";
                 Text[ arabic ] = "γΣΚζνΗΚ ΗαΪδΗζνδ ΗαΩΗεΡΙ";
                 Text[ greek ] = "Εμφανιζόμενα επίπεδα επικεφαλίδων";
-                Text[ korean ] = "Ώά°ϋΌ± ΌφΑΨ";
+                Text[ korean ] = "³ªΕΈ³ª΄Β΅΅Η¥Α¦ΌφΑΨ";
                 Text[ turkish ] = "Gφrόntόlenen baώlύk dόzeyleri";
             };
             ToolBoxItem
@@ -599,7 +599,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "¤Ι―Ε";
                 Text[ arabic ] = "γΣΚζμ αΓΪαμ";
                 Text[ greek ] = "Προβιβασμός επιπέδου";
-                Text[ korean ] = "ΌφΑΨ ΏΓΈ®±β";
+                Text[ korean ] = "ΌφΑΨ ³τΐΜ±β";
                 Text[ turkish ] = "Dόzeyi yukarύ al";
             };
             ToolBoxItem
@@ -716,7 +716,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "§σ·s";
                 Text[ arabic ] = "ΚΝΟνΛ";
                 Text[ greek ] = "Ενημέρωση";
-                Text[ korean ] = "Ύχ µ¥ΐΜΖ®";
+                Text[ korean ] = "Ύχµ¥ΐΜΖ®";
                 Text[ turkish ] = "Gόncelle";
             };
             ToolBoxItem
@@ -771,7 +771,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "ΐx¦s¤Ί®e";
                 Text[ arabic ] = "ΝέΩ ΗαγΝΚζνΗΚ";
                 Text[ greek ] = "Αποθήκευση και των περιεχομένων";
-                Text[ korean ] = "³»Ώλ ΐϊΐε";
+                Text[ korean ] = "³»ΏλΗΤ²²΅΅ΐϊΐε";
                 Text[ turkish ] = "έηeriπi de kaydet";
             };
             ToolBoxItem
@@ -896,7 +896,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¤jΊυ―Ε";
         Text[ arabic ] = "γΣΚζνΗΚ ΗαΚήΣνγ";
         Text[ greek ] = "Επίπεδα διάρθρωσης";
-        Text[ korean ] = "Ώά°ϋΌ± ΌφΑΨ";
+        Text[ korean ] = "΄Ω΄ά°θ΅΅΄ά°θ";
         Text[ turkish ] = "Anahat dόzeyleri";
     };
     String ST_DRAGMODE
@@ -1153,7 +1153,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "§σ·s(~U)";
         Text[ arabic ] = "ΚΝΟνΛ";
         Text[ greek ] = "~Ενημέρωση";
-        Text[ korean ] = "Ύχ µ¥ΐΜΖ®(~U)";
+        Text[ korean ] = "Ύχµ¥ΐΜΖ®(~U)";
         Text[ turkish ] = "~Gόncelle";
     };
     String ST_EDIT_CONTENT
@@ -1345,7 +1345,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ΝΠέ";
         Text[ greek ] = "Διαγραφή";
-        Text[ korean ] = "»θΑ¦(~D)";
+        Text[ korean ] = "»θΑ¦";
         Text[ turkish ] = "~Sil";
     };
     String ST_UPDATE_SEL
@@ -1461,7 +1461,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¨ϊ®ψ¥ΨΏύ(~R)";
         Text[ arabic ] = "ΕÒΗαΙ ΗαέεΡΣ";
         Text[ greek ] = "Κατάργηση ευρετηρίου";
-        Text[ korean ] = "»φΐΞ »θΑ¦(~R)";
+        Text[ korean ] = "»φΐΞ ΗΨΑ¦(~R)";
         Text[ turkish ] = "D~izini kaldύr";
     };
     String ST_REMOVE_TBL_PROTECTION
@@ -1486,7 +1486,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¨ϊ®ψ«OΕ@(~U)";
         Text[ arabic ] = "ΕαΫΗΑ ΗαΝγΗνΙ";
         Text[ greek ] = "Άρση προστασίας";
-        Text[ korean ] = "ΊΈΘ£ ΗΨΑ¦(~U)";
+        Text[ korean ] = "ΊΈΘ£ ΗΨΑ¦";
         Text[ turkish ] = "Korumayύ ~kaldύr";
     };
     String ST_INVISIBLE
@@ -1532,7 +1532,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¨S¦³§δ¨μΐΙ®Χ΅G ";
         Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ Ηαγαέ: ";
         Text[ greek ] = "Δεν βρέθηκε το αρχείο: ";
-        Text[ korean ] = "ΖΔΐΟΐΜ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω: ";
+        Text[ korean ] = "ΖΔΐΟΐ»΅΅Γ£Αφ΅΅ΈψΗί½ΐ΄Ο΄Ω: ";
         Text[ turkish ] = "Dosya bulunamadύ: ";
     };
     String ST_RENAME
