@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:07:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,10 +297,7 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             // XMenuBarMergingAcceptor
             //---------------------------------------------------------------------------------------------------------
-            virtual sal_Bool SAL_CALL setMergeMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& ContainerMenuBar,
-                                                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& ContainerDispatchProvider,
-                                                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& EmbedObjectMenuBar,
-                                                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& EmbedObjectDispatchProvider )
+            virtual sal_Bool SAL_CALL setMergedMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
                                                        throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL removeMergedMenuBar(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -485,6 +482,12 @@ namespace framework
             void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
             sal_Bool    implts_showProgressBar();
             sal_Bool    implts_hideProgressBar();
+
+            void    implts_setInplaceMenuBar(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
+                            throw (::com::sun::star::uno::RuntimeException);
+            void    implts_resetInplaceMenuBar()
+                            throw (::com::sun::star::uno::RuntimeException);
 
             void implts_updateUIElementsVisibleState( sal_Bool bShow );
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
