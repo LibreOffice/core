@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventattachermgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 namespace com { namespace sun { namespace star {
 namespace uno {
     class Exception;
@@ -85,14 +89,14 @@ namespace beans {
 namespace comphelper
 {
 
-::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >
 createEventAttacherManager(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection > & rIntrospection,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
     throw( ::com::sun::star::uno::Exception );
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >
 createEventAttacherManager(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
     throw( ::com::sun::star::uno::Exception );
