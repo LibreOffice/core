@@ -7,341 +7,66 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Tabellenname</value>
                     <value xml:lang="en-US">Table Name</value>
-                    <value xml:lang="ar">اسم الجدول</value>
-                    <value xml:lang="no">Table Name</value>
-                    <value xml:lang="ca">Nom de la taula</value>
-                    <value xml:lang="zh-TW">表格名稱</value>
-                    <value xml:lang="cs">Název tabulky</value>
-                    <value xml:lang="da">Tabelnavn</value>
-                    <value xml:lang="el">Όνομα πίνακα</value>
-                    <value xml:lang="es">Nombre de la tabla</value>
-                    <value xml:lang="fi">Taulukon nimi</value>
-                    <value xml:lang="fr">Nom de la table</value>
-                    <value xml:lang="he">Tabellenname</value>
-                    <value xml:lang="it">Nome tabella</value>
-                    <value xml:lang="ja">テーブル名</value>
-                    <value xml:lang="ko">테이블 이름</value>
-                    <value xml:lang="nl">Tabelnaam</value>
-                    <value xml:lang="pl">Nazwa tabeli</value>
-                    <value xml:lang="pt-BR">Nome da tabela</value>
-                    <value xml:lang="ru">Имя таблицы</value>
-                    <value xml:lang="sk">Názov tabuľky</value>
-                    <value xml:lang="sv">Tabellnamn</value>
-                    <value xml:lang="th">ชื่อตาราง</value>
-                    <value xml:lang="tr">Tablo adı</value>
-                    <value xml:lang="hi">Table Name</value>
-                    <value xml:lang="zh-CN">表格名称</value>
-                    <value xml:lang="pt">Nome da tabela</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/ClearQuery" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Abfrage löschen</value>
                     <value xml:lang="en-US">Clear Query</value>
-                    <value xml:lang="ar">حذف الاستفسار</value>
-                    <value xml:lang="no">Clear Query</value>
-                    <value xml:lang="ca">Esborra la consulta</value>
-                    <value xml:lang="zh-TW">清除查詢</value>
-                    <value xml:lang="cs">Vyčistit dotaz</value>
-                    <value xml:lang="da">Ryd forespørgsel</value>
-                    <value xml:lang="el">Διαγραφή ερωτήματος</value>
-                    <value xml:lang="es">Borrar la consulta</value>
-                    <value xml:lang="fi">Tyhjennä kysely</value>
-                    <value xml:lang="fr">Supprimer la requête</value>
-                    <value xml:lang="he">Abfrage löschen</value>
-                    <value xml:lang="it">Elimina ricerca</value>
-                    <value xml:lang="ja">クエリーの削除</value>
-                    <value xml:lang="ko">쿼리 지우기</value>
-                    <value xml:lang="nl">Query wissen</value>
-                    <value xml:lang="pl">Usuń kwerendy</value>
-                    <value xml:lang="pt-BR">Limpar consulta</value>
-                    <value xml:lang="ru">Удалить запрос</value>
-                    <value xml:lang="sk">Vyčistiť dotaz</value>
-                    <value xml:lang="sv">Radera sökning</value>
-                    <value xml:lang="th">Clear Query</value>
-                    <value xml:lang="tr">Sorgu Temizle</value>
-                    <value xml:lang="hi">Clear Query</value>
-                    <value xml:lang="zh-CN">删除查询</value>
-                    <value xml:lang="pt">Eliminar consulta</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/AddRelation" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Neue Relation...</value>
                     <value xml:lang="en-US">New Relation...</value>
-                    <value xml:lang="ar">علاقة جديدة...</value>
-                    <value xml:lang="no">New Relation...</value>
-                    <value xml:lang="ca">New Relation...</value>
-                    <value xml:lang="zh-TW">新關係...</value>
-                    <value xml:lang="cs">Nová relace...</value>
-                    <value xml:lang="da">Ny relation...</value>
-                    <value xml:lang="el">Δημιουργία σχέσης ...</value>
-                    <value xml:lang="es">Relación nueva...</value>
-                    <value xml:lang="fi">Uusi yhteys...</value>
-                    <value xml:lang="fr">Nouvelle relation ...</value>
-                    <value xml:lang="he">Neue Relation...</value>
-                    <value xml:lang="it">Nuova relazione...</value>
-                    <value xml:lang="ja">新しいリレーション...</value>
-                    <value xml:lang="ko">새 관계...</value>
-                    <value xml:lang="nl">Nieuwe relatie...</value>
-                    <value xml:lang="pl">Nowa relacja ...</value>
-                    <value xml:lang="pt-BR">Nova relação...</value>
-                    <value xml:lang="ru">Создать связь...</value>
-                    <value xml:lang="sk">Nová relácia...</value>
-                    <value xml:lang="sv">Ny relation ...</value>
-                    <value xml:lang="th">ความสัมพันธ์ใหม่...</value>
-                    <value xml:lang="tr">Yeni İlişki...</value>
-                    <value xml:lang="hi">New Relation...</value>
-                    <value xml:lang="zh-CN">新的关系...</value>
-                    <value xml:lang="pt">Nova relação...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/IndexDesign" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">I~ndexentwurf...</value>
                     <value xml:lang="en-US">~Index Design...</value>
-                    <value xml:lang="ar">تصميم الفهرس</value>
-                    <value xml:lang="no">~Index Design...</value>
-                    <value xml:lang="ca">Disseny de l'índex</value>
-                    <value xml:lang="zh-TW">索引設計(~I)...</value>
-                    <value xml:lang="cs">Návrh rejstříku...</value>
-                    <value xml:lang="da">I~ndeksdesign...</value>
-                    <value xml:lang="el">~Σχεδιασμός ευρετηρίου...</value>
-                    <value xml:lang="es">D~iseño de índice...</value>
-                    <value xml:lang="fi">~Indeksin rakenne...</value>
-                    <value xml:lang="fr">Ébauche d'i~ndex...</value>
-                    <value xml:lang="he">I~ndexentwurf...</value>
-                    <value xml:lang="it">~Struttura indice...</value>
-                    <value xml:lang="ja">インデックスデザイン(~I)...</value>
-                    <value xml:lang="ko">색인 디자인(~I)...</value>
-                    <value xml:lang="nl">~Ontwerp-index...</value>
-                    <value xml:lang="pl">Projekt ~indeksu...</value>
-                    <value xml:lang="pt-BR">E~sboçar índice...</value>
-                    <value xml:lang="ru">Проектирование индекса...</value>
-                    <value xml:lang="sk">Návrh ~indexu...</value>
-                    <value xml:lang="sv">I~ndexutkast...</value>
-                    <value xml:lang="th">~ออกแบบดัชนี...</value>
-                    <value xml:lang="tr">İndex tasarımı..</value>
-                    <value xml:lang="hi">~अनुक्रमणिका डिसैन...</value>
-                    <value xml:lang="zh-CN">索引设计(~I)...</value>
-                    <value xml:lang="pt">E~sboçar índice...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/ChangeDesignMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Design-Ansicht an-, ausschalten</value>
                     <value xml:lang="en-US">Switch Design View On/Off</value>
-                    <value xml:lang="ar">إظهار/إخفاء عرض التصميم</value>
-                    <value xml:lang="no">Switch Design View On/Off</value>
-                    <value xml:lang="ca">Switch Design View On/Off</value>
-                    <value xml:lang="zh-TW">啟動或關閉設計檢視</value>
-                    <value xml:lang="cs">Pohled návrhu zap/vyp</value>
-                    <value xml:lang="da">Slå designvisning til/fra</value>
-                    <value xml:lang="el">Προβολή σχεδιασμού Ναι/Όχι</value>
-                    <value xml:lang="es">Activar/desactivar la vista Diseño</value>
-                    <value xml:lang="fi">Ota suunnittelunäkymä käyttöön/pois käytöstä</value>
-                    <value xml:lang="fr">(Dés)activer le mode Ébauche</value>
-                    <value xml:lang="he">Design-Ansicht an-, ausschalten</value>
-                    <value xml:lang="it">Attiva/disattiva vista Disegno</value>
-                    <value xml:lang="ja">デザインビューの切り替え オン/オフ</value>
-                    <value xml:lang="ko">디자인 보기 적용/해제</value>
-                    <value xml:lang="nl">Ontwerpmodus in-/uitschakelen</value>
-                    <value xml:lang="pl">Włącz / Wyłącz tryb projektu</value>
-                    <value xml:lang="pt-BR">Ativar/Desativar Modo de Esboço</value>
-                    <value xml:lang="ru">Вкл./выкл. вид дизайна</value>
-                    <value xml:lang="sk">Pohľad na návrh prepínača zapnúť/vypnúť</value>
-                    <value xml:lang="sv">Sätt på/stäng av designvy</value>
-                    <value xml:lang="th">Switch Design View On/Off</value>
-                    <value xml:lang="tr">Tasarım Görüntüsü Aç/Kapa</value>
-                    <value xml:lang="hi">Switch Design View On/Off</value>
-                    <value xml:lang="zh-CN">打开或关闭设计视图</value>
-                    <value xml:lang="pt">Activar/desactivar modo Esboço</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/AddTable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Tabellen hinzufügen...</value>
                     <value xml:lang="en-US">Add Tables...</value>
-                    <value xml:lang="ar">إضافة جداول</value>
-                    <value xml:lang="no">Add Tables...</value>
-                    <value xml:lang="ca">Afegeix les taules</value>
-                    <value xml:lang="zh-TW">新增表格...</value>
-                    <value xml:lang="cs">Přidat tabulky...</value>
-                    <value xml:lang="da">Tilføj tabeller...</value>
-                    <value xml:lang="el">Προσθήκη πίνακα</value>
-                    <value xml:lang="es">Añadir tablas</value>
-                    <value xml:lang="fi">Lisää taulukoita</value>
-                    <value xml:lang="fr">Ajouter des tables...</value>
-                    <value xml:lang="he">Tabellen hinzufügen...</value>
-                    <value xml:lang="it">Aggiungi tabelle...</value>
-                    <value xml:lang="ja">テーブルの追加...</value>
-                    <value xml:lang="ko">테이블 추가...</value>
-                    <value xml:lang="nl">Tabellen toevoegen</value>
-                    <value xml:lang="pl">Dodaj tabelę...</value>
-                    <value xml:lang="pt-BR">Adicionar tabelas</value>
-                    <value xml:lang="ru">Добавить таблицы...</value>
-                    <value xml:lang="sk">Pridať tabuľky...</value>
-                    <value xml:lang="sv">Lägg till tabeller...</value>
-                    <value xml:lang="th">Add Tables...</value>
-                    <value xml:lang="tr">Tablo Ekle...</value>
-                    <value xml:lang="hi">Add Tables...</value>
-                    <value xml:lang="zh-CN">新增表格...</value>
-                    <value xml:lang="pt">Adicionar tabelas...</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/ViewFunctions" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Funktionen</value>
                     <value xml:lang="en-US">Functions</value>
-                    <value xml:lang="ar">دالات</value>
-                    <value xml:lang="no">Functions</value>
-                    <value xml:lang="ca">Funcions</value>
-                    <value xml:lang="zh-TW">功能</value>
-                    <value xml:lang="cs">Funkce</value>
-                    <value xml:lang="da">Funktioner</value>
-                    <value xml:lang="el">Συναρτήσεις</value>
-                    <value xml:lang="es">Funciones</value>
-                    <value xml:lang="fi">Toiminnot</value>
-                    <value xml:lang="fr">Fonctions</value>
-                    <value xml:lang="he">Funktionen</value>
-                    <value xml:lang="it">Funzioni</value>
-                    <value xml:lang="ja">関数</value>
-                    <value xml:lang="ko">기능</value>
-                    <value xml:lang="nl">Functies</value>
-                    <value xml:lang="pl">Funkcje</value>
-                    <value xml:lang="pt-BR">Funções</value>
-                    <value xml:lang="ru">Функции</value>
-                    <value xml:lang="sk">Funkcie</value>
-                    <value xml:lang="sv">Funktioner</value>
-                    <value xml:lang="th">ฟังก์ชั่น</value>
-                    <value xml:lang="tr">Fonksiyonlar</value>
-                    <value xml:lang="hi">Functions</value>
-                    <value xml:lang="zh-CN">功能</value>
-                    <value xml:lang="pt">Funções</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/ViewAliases" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Aliasname</value>
                     <value xml:lang="en-US">Alias</value>
-                    <value xml:lang="ar">اسم مستعار</value>
-                    <value xml:lang="no">Alias</value>
-                    <value xml:lang="ca">Àlies</value>
-                    <value xml:lang="zh-TW">代用名</value>
-                    <value xml:lang="cs">Alias</value>
-                    <value xml:lang="da">Aliasnavn</value>
-                    <value xml:lang="el">Ψευδώνυμο</value>
-                    <value xml:lang="es">Alias</value>
-                    <value xml:lang="fi">Tunnus</value>
-                    <value xml:lang="fr">Alias</value>
-                    <value xml:lang="he">Aliasname</value>
-                    <value xml:lang="it">Nome alias</value>
-                    <value xml:lang="ja">エイリアス名</value>
-                    <value xml:lang="ko">별칭</value>
-                    <value xml:lang="nl">Aliasnaam</value>
-                    <value xml:lang="pl">Nazwa alias</value>
-                    <value xml:lang="pt-BR">Nome alias</value>
-                    <value xml:lang="ru">Псевдоним</value>
-                    <value xml:lang="sk">Alias</value>
-                    <value xml:lang="sv">Aliasnamn</value>
-                    <value xml:lang="th">นามแฝง</value>
-                    <value xml:lang="tr">Takma Ad</value>
-                    <value xml:lang="hi">Alias</value>
-                    <value xml:lang="zh-CN">别名</value>
-                    <value xml:lang="pt">Nome alias</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/ExecuteQuery" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Abfrage ausführen</value>
                     <value xml:lang="en-US">Run Query</value>
-                    <value xml:lang="ar">تنفيذ</value>
-                    <value xml:lang="no">Run Query</value>
-                    <value xml:lang="ca">Executa la consulta</value>
-                    <value xml:lang="zh-TW">執行查詢</value>
-                    <value xml:lang="cs">Spustit dotaz</value>
-                    <value xml:lang="da">Kør forespørgsel</value>
-                    <value xml:lang="el">Εκτέλεση</value>
-                    <value xml:lang="es">Ejecutar la consulta</value>
-                    <value xml:lang="fi">Suorita</value>
-                    <value xml:lang="fr">Exécuter la requête</value>
-                    <value xml:lang="he">Abfrage ausführen</value>
-                    <value xml:lang="it">Esegui ricerca</value>
-                    <value xml:lang="ja">クエリーの実行</value>
-                    <value xml:lang="ko">쿼리 실행</value>
-                    <value xml:lang="nl">Voltooien</value>
-                    <value xml:lang="pl">Wykonaj</value>
-                    <value xml:lang="pt-BR">Executar</value>
-                    <value xml:lang="ru">Выполнить</value>
-                    <value xml:lang="sk">Spustiť dotaz</value>
-                    <value xml:lang="sv">Utför sökning</value>
-                    <value xml:lang="th">ใช้งานแบบสอบถาม</value>
-                    <value xml:lang="tr">Sorgu Çalıştır</value>
-                    <value xml:lang="hi">Run Query</value>
-                    <value xml:lang="zh-CN">执行查询</value>
-                    <value xml:lang="pt">Executar</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/EsacpeProcessing" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">SQL-Kommando direkt ausführen</value>
                     <value xml:lang="en-US">Run SQL command directly</value>
-                    <value xml:lang="ar">تنفيذ أمر SQL مباشرة</value>
-                    <value xml:lang="no">Run SQL command directly</value>
-                    <value xml:lang="ca">Executa l'ordre SQL directament</value>
-                    <value xml:lang="zh-TW">直接執行 SQL 指令</value>
-                    <value xml:lang="cs">Spustit SQL příkaz přímo</value>
-                    <value xml:lang="da">Kør SQL-kommando direkte</value>
-                    <value xml:lang="el">Άμεση εκτέλεση εντολής SQL</value>
-                    <value xml:lang="es">Ejecutar directamente la orden SQL</value>
-                    <value xml:lang="fi">Suorita SQL-komento suoraan</value>
-                    <value xml:lang="fr">Exécuter directement l'instruction SQL</value>
-                    <value xml:lang="he">SQL-Kommando direkt ausführen</value>
-                    <value xml:lang="it">Esegui direttamente comando SQL</value>
-                    <value xml:lang="ja">SQL コマンドを直接実行</value>
-                    <value xml:lang="ko">SQL 명령 즉각 실행</value>
-                    <value xml:lang="nl">SQL-commando onmiddellijk uitvoeren</value>
-                    <value xml:lang="pl">Wykonaj bezpośrednio polecenie SQL</value>
-                    <value xml:lang="pt-BR">Comando SQL nativo</value>
-                    <value xml:lang="ru">Выполнить непосредственно команду SQL</value>
-                    <value xml:lang="sk">Spustiť SQL príkaz priamo</value>
-                    <value xml:lang="sv">Utför SQL-kommando direkt</value>
-                    <value xml:lang="th">ใช้งานคำสั่ง SQL โดยตรง</value>
-                    <value xml:lang="tr">Doğrudan SQL komutunu çalıştır</value>
-                    <value xml:lang="hi">Run SQL command directly</value>
-                    <value xml:lang="zh-CN">直接执行 SQL 指令</value>
-                    <value xml:lang="pt">Executar comando SQL directamente</value>
                 </prop>
             </node>
             <node oor:name=".uno:DB/DistinctValues" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Eindeutige Werte</value>
                     <value xml:lang="en-US">Distinct Values</value>
-                    <value xml:lang="ar">قيم واضحة</value>
-                    <value xml:lang="no">Distinct Values</value>
-                    <value xml:lang="ca">Valors diferents</value>
-                    <value xml:lang="zh-TW">明確的數值</value>
-                    <value xml:lang="cs">Jedinečné hodnoty</value>
-                    <value xml:lang="da">Entydige værdier</value>
-                    <value xml:lang="el">Διακριτικές τιμές</value>
-                    <value xml:lang="es">Valores inequívocos</value>
-                    <value xml:lang="fi">Erityisarvot</value>
-                    <value xml:lang="fr">Valeurs distinctes</value>
-                    <value xml:lang="he">Eindeutige Werte</value>
-                    <value xml:lang="it">Valori distinti</value>
-                    <value xml:lang="ja">固有値</value>
-                    <value xml:lang="ko">명료값</value>
-                    <value xml:lang="nl">Duidelijke waarden</value>
-                    <value xml:lang="pl">Jednoznaczne wartości</value>
-                    <value xml:lang="pt-BR">Valores distintos</value>
-                    <value xml:lang="ru">Однозначные значения</value>
-                    <value xml:lang="sk">Jedinečné hodnoty</value>
-                    <value xml:lang="sv">Entydiga värden</value>
-                    <value xml:lang="th">ค่าเฉพาะ</value>
-                    <value xml:lang="tr">Birbirinden Farklı Değerler</value>
-                    <value xml:lang="hi">Distinct Values</value>
-                    <value xml:lang="zh-CN">明确的数值</value>
-                    <value xml:lang="pt">Valores unívocos</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormSlots/saveRecord" oor:op="replace">
