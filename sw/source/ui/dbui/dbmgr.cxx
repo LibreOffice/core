@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:43:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,7 +1197,8 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                     aPrtMonDlg.aPrinter.SetText( sAddress );
 
                     // Rechenzeit fuer EMail-Monitor:
-                    for (USHORT i = 0; i < 25; i++)
+                    USHORT i;
+                    for ( i = 0; i < 25; i++)
                         Application::Reschedule();
 
                     sAddress.Insert(String::CreateFromAscii("mailto:"), 0);
