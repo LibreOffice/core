@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-03 12:33:08 $
+#   last change: $Author: fs $ $Date: 2001-05-07 13:52:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,9 +74,17 @@ BOOTSTRAP_SERVICE=	FALSE
 .INCLUDE :  		settings.mk
 .INCLUDE :  		sv.mk
 
+# --- defines ------------------------------------------------------
+
+CDEFS+=-DCOMPMOD_NAMESPACE=framework
+
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			$(SLO)$/otasksaccess.obj	 					\
+SLOFILES=			$(SLO)$/modulefwk.obj	 						\
+                    $(SLO)$/timerhelper.obj	 						\
+                    $(SLO)$/helpagentdispatcher.obj	 				\
+                    $(SLO)$/helpagentwindow.obj	 					\
+                    $(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/ostatusindicatorfactory.obj				\
                     $(SLO)$/otasksenumeration.obj					\
                     $(SLO)$/ocomponentaccess.obj 					\
@@ -91,6 +99,12 @@ SLOFILES=			$(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/omenudispatcher.obj						\
                     $(SLO)$/imageproducer.obj
 
+SRCFILES=			helpagent.src
+
+RESLIB1NAME=		fwk
+RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
+RESLIB1DEPN=		helpagent.src									\
+                    helpagent.hrc
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :			target.mk

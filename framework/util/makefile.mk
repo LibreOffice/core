@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-03 12:34:05 $
+#   last change: $Author: fs $ $Date: 2001-05-07 13:53:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,10 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/resetableguard.obj			\
                 $(SLO)$/gate.obj					\
                 $(SLO)$/omenudispatcher.obj			\
+                $(SLO)$/modulefwk.obj				\
+                $(SLO)$/timerhelper.obj				\
+                $(SLO)$/helpagentdispatcher.obj		\
+                $(SLO)$/helpagentwindow.obj			\
                 $(SLO)$/menumanager.obj				\
                 $(SLO)$/bmkmenu.obj
 
