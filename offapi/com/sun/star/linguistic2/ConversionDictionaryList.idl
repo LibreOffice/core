@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConversionDictionaryList.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:14:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ module com { module sun { module star { module linguistic2 {
 
      @since #107627#
 */
-service ConversionDictionaryList
+published service ConversionDictionaryList
 {
     interface com::sun::star::linguistic2::XConversionDictionaryList;
     interface com::sun::star::lang::XComponent;
