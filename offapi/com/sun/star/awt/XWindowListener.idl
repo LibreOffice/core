@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWindowListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:49:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     <p>Component events are provided <strong>only</strong> for
     notification purposes.  Moves and resizes will be handled
-    interally by the window component, so that GUI layout works properly
+    internally by the window component, so that GUI layout works properly
     regardless of whether a program registers such a listener or not.</p>
  */
 published interface XWindowListener: com::sun::star::lang::XEventListener
