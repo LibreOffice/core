@@ -7488,7 +7488,7 @@ SfxUInt16Item Signature SID_SIGNATURE
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt16Item Signature SID_SIGNATURE
+SfxUInt16Item MacroSignature SID_MACRO_SIGNATURE
 [
     /* flags: */
     AutoUpdate = FALSE,
