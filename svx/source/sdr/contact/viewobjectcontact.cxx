@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 11:33:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _SDR_ANIMATION_ANIMATIONINFO_HXX
 #include <svx/sdr/animation/animationinfo.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
+#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -368,6 +372,9 @@ namespace sdr
                 && GetObjectContact().DoVisualizeEnteredGroup()
                 && !rDisplayInfo.OutputToPrinter());
 
+            // get the correct redirector
+            ViewObjectContactRedirector* pRedirector = GetRedirector();
+
             if(bDoGhostedDisplaying)
             {
                 // display contents normal
@@ -381,7 +388,14 @@ namespace sdr
             if(GetViewContact().ShouldPaintObject(rDisplayInfo, *this)
                 && rDisplayInfo.DoContinuePaint())
             {
-                PaintObject(rDisplayInfo);
+                if(pRedirector)
+                {
+                    pRedirector->PaintObject(*this, rDisplayInfo);
+                }
+                else
+                {
+                    PaintObject(rDisplayInfo);
+                }
             }
 
             // handle paint of sub-hierarchy
@@ -532,6 +546,22 @@ namespace sdr
         sal_Bool ViewObjectContact::HasAnimationState() const
         {
             return (0L != mpAnimationState);
+        }
+
+        // get the correct redirector
+        ViewObjectContactRedirector* ViewObjectContact::GetRedirector() const
+        {
+            // Test for redirectors. First the global one (from ObjectContact), then at the to be displayed object.
+            ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
+            ViewObjectContactRedirector* pObjectRedirector = GetViewContact().GetViewObjectContactRedirector();
+
+            // object rediretor wins
+            if(pObjectRedirector)
+            {
+                pRedirector = pObjectRedirector;
+            }
+
+            return pRedirector;
         }
     } // end of namespace contact
 } // end of namespace sdr
