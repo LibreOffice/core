@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-07-11 09:11:02 $
+ *  last change: $Author: ka $ $Date: 2002-07-25 11:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,54 +132,6 @@
         </prop>
       </group>
       <group oor:name="Other">
-        <prop oor:name="StatusbarFunction" oor:type="xs:int">
-          <!-- OldPath: Calc/Layout -->
-          <!-- OldLocation: Soffice.cfg -->
-          <!-- Responsible: NN -->
-          <!-- UIHints: (Status Bar) -->
-          <value>9</value>
-          <info>
-            <desc xml:lang="en-US">Specifies the standard formula displayed in the Status Bar</desc>
-            <label xml:lang="en-US">Statusbar Function</label>
-          </info>
-          <constraints>
-            <enumeration oor:value="0">
-              <info>
-                <desc xml:lang="en-US">None</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="1">
-              <info>
-                <desc xml:lang="en-US">Average</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="2">
-              <info>
-                <desc xml:lang="en-US">Count Numbers</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="3">
-              <info>
-                <desc xml:lang="en-US">Count All</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="4">
-              <info>
-                <desc xml:lang="en-US">Max</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="5">
-              <info>
-                <desc xml:lang="en-US">Min</desc>
-              </info>
-            </enumeration>
-            <enumeration oor:value="9">
-              <info>
-                <desc xml:lang="en-US">Sum</desc>
-              </info>
-            </enumeration>
-          </constraints>
-        </prop>
         <group oor:name="TabStop">
           <!-- OldPath: Impress/Layout -->
           <!-- OldLocation: Soffice.cfg -->
