@@ -514,6 +514,9 @@ void SplineCalculater::CalculateBSplines(
     rResult.SequenceZ[0].realloc(nNewSectorCount+1);
     double* pNewX = rResult.SequenceX[0].getArray();
     double* pNewY = rResult.SequenceY[0].getArray();
+    double* pNewZ = rResult.SequenceZ[0].getArray();
+
+    double zValue = rInput.SequenceZ[0][0];
 
     for(sal_Int32 j=0; j<=nHalf; j++ )
     {
@@ -527,6 +530,9 @@ void SplineCalculater::CalculateBSplines(
         pNewY[j]                   = fY1;
         pNewX[nNewSectorCount - j] = floor(dXDown);//(sal_Int32)(floor(dXDown)+0.5);
         pNewY[nNewSectorCount - j] = fY2;
+
+        pNewZ[j]                   = zValue;
+        pNewZ[nNewSectorCount - j] = zValue;
 
         x      += xStep;
         dXUp   += dStep;
