@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localisationoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ void SvtLocalisationOptions_Impl::Notify( const Sequence< OUString >& seqPropert
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtLocalisationOptions_Impl::SvtLocalisationOptions_Impl()\nWho has changed the value type of \"Office.Common\\View\\Localisation\\DialogScale\"?" );
             seqValues[nProperty] >>= m_nDialogScale;
         }
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         else DBG_ASSERT( sal_False, "SvtLocalisationOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
