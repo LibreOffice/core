@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-24 14:39:50 $
+ *  last change: $Author: mh $ $Date: 2002-10-24 09:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2733,7 +2733,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         InsertTxbxText( pSdrTextObj, &aObjSize, pRecord->aTextId.nTxBxS,
             pRecord->aTextId.nSequence, nGrafAnchorCp, pRetFrmFmt,
             (pSdrTextObj != pTrueObject) || (0 != pGroupObject),
-            bEraseThisObject, false, 0, 0, 0, pRecord);
+            bEraseThisObject, 0, 0, 0, 0, pRecord);
 
         // wurde dieses Objekt ersetzt ??
         if( bEraseThisObject )

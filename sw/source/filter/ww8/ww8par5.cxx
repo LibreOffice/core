@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-10 16:49:22 $
+ *  last change: $Author: mh $ $Date: 2002-10-24 09:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2974,7 +2974,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     if( 1 < nIndexCols )
         bDontCreateSep = true;
 
-    rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase(), false);
+    rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase());
 
     // Setze Ende in Stack
     pRefStck->SetAttr( *pPos, RES_FLTR_TOX );
