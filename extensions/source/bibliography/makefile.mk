@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:08:34 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:53:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=bib
 TARGET=bib
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-IMGLST_SRS=$(SRS)$/bib.srs
 
 # --- Settings -----------------------------------------------------
 
