@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:09:43 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,10 @@ TabDialog TAB_OUTLINEBULLET
     Text[ hindi ] = "संख्या देना/बुल्लेट्स";
     Text[ slovak ] = "Číslovanie/odrážky";
 };
+
+
+
+
 
 
 
