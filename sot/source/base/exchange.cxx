@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 22:18:01 $
+ *  last change: $Author: mh $ $Date: 2004-11-28 16:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ namespace
             /*129 SOT_FORMATSTR_ID_STARCALC_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII, "Calc 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*130 SOT_FORMATSTR_ID_STARCHART_8*/           { MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII, "Chart 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*131 SOT_FORMATSTR_ID_STARMATH_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII, "Math 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*132 SOT_FORMATSTR_ID_STARBASE_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+            /*132 SOT_FORMATSTR_ID_STARBASE_8*/            { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*133 SOT_FORMATSTR_ID_XFORMS */               { "application/x-openoffice-xforms;windows_formatname=\"??? Format\"", "???", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
             };
         return &aInstance[0];
