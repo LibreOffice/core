@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 17:56:32 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2765,12 +2765,16 @@ SystemWindow* SfxBindings::GetSystemWindow() const
 BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
 {
     ::com::sun::star::util::URL aURL;
+    aURL.Complete = rCommand;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( aURL );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
     if ( xDisp.is() )
     {
-        xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
+        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
+        aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:select") );
+        xDisp->dispatch( aURL, aSeq );
         return TRUE;
     }
 

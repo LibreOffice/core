@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-11-29 11:05:24 $
+ *  last change: $Author: mba $ $Date: 2001-12-21 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,8 +280,11 @@ void SfxUnoControllerItem::GetNewDispatch()
 void SfxUnoControllerItem::Execute()
 {
     // dispatch the resource
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq(1);
+    aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Referer") );
+    aSeq[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:select") );
     if ( xDispatch.is() )
-        xDispatch->dispatch( aCommand, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >() );
+        xDispatch->dispatch( aCommand, aSeq );
 }
 
 void SfxUnoControllerItem::ReleaseBindings()
