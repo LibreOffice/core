@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:29:43 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,18 +195,3 @@ void SdFilter::CreateProgress()
     }
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Bool SdFilter::Import()
-{
-    DBG_ERROR( "Not implemented" );
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SdFilter::Export()
-{
-    DBG_ERROR( "Not implemented" );
-    return sal_False;
-}
