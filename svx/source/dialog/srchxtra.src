@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:25:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ english_us ] = "Font Effects" ;
                 Text[ portuguese ] = "Efeitos do tipo de letra";
                 Text[ russian ] = "έττεκςϋ ψπθτςΰ";
-                Text[ greek ] = "Εφέ γραμματοσειράς";
+                Text[ greek ] = "Εφέ χαρακτήρων";
                 Text[ dutch ] = "Schrifteffecten";
                 Text[ french ] = "Effets de caractθres";
                 Text[ spanish ] = "Efectos de fuente";
@@ -271,7 +271,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiαtica";
                 Text[ russian ] = "ΐηθΰςρκθε ψπθτςϋ";
-                Text[ greek ] = "Ασιατική τυπογραφία";
+                Text[ greek ] = "Ασιάτικη τυπογραφία";
                 Text[ dutch ] = "Asiatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografνa asiαtica";
@@ -594,7 +594,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ swedish ] = "Instδllningar" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
-        Text [ portuguese ] = "Predefiniηυes" ;
+        Text [ portuguese ] = "Definiηυes" ;
         Text[ chinese_simplified ] = "Ιθ¶¨";
         Text[ russian ] = "Νΰρςπξικθ";
         Text[ polish ] = "Ustawienia";
