@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 10:15:24 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,18 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
 
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandFailedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
+#include <com/sun/star/ucb/XCommandInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XARCHIVER_HPP_
 #include <com/sun/star/util/XArchiver.hpp>
 #endif
@@ -179,7 +191,6 @@ using namespace ::com::sun::star::io;
 #include <ucbhelper/content.hxx>
 #include <sot/stg.hxx>
 
-#include "ucbhelp.hxx"
 #include "helper.hxx"
 #include "request.hxx"      // SFX_ITEMSET_SET
 #include "app.hxx"          // GetFilterMatcher
@@ -549,7 +560,7 @@ void SfxPoolCancelManager::Cancel()
 class SfxMedium_Impl : public SvCompatWeakBase
 {
 public:
-    Reference < XContent > xContent;
+    ::ucb::Content  aContent;
     sal_Bool bUpdatePickList : 1;
     sal_Bool bIsTemp        : 1;
     sal_Bool bUsesCache     : 1;
@@ -739,25 +750,23 @@ long SfxMedium::GetFileVersion() const
 //------------------------------------------------------------------
 Reference < XContent > SfxMedium::GetContent() const
 {
-    if ( !pImp->xContent.is() )
+    if ( !pImp->aContent.get().is() )
     {
+        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         if ( aName.Len() )
         {
             String aTemp;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
-            pImp->xContent = UCB_Helper::CreateContent( aTemp );
+            ::ucb::Content::create( aTemp, xEnv, pImp->aContent );
         }
         else if ( aLogicName.Len() )
         {
             String aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            pImp->xContent = UCB_Helper::CreateContent( aURL );
+            ::ucb::Content::create( aURL, xEnv, pImp->aContent );
         }
     }
 
-    if ( pImp->xContent.is() )
-        return pImp->xContent;
-    else
-        return NULL;
+    return pImp->aContent.get();
 }
 
 //------------------------------------------------------------------
@@ -1300,8 +1309,8 @@ void SfxMedium::Transfer_Impl()
 {
     if( pImp->pTempFile && ( !eError || eError & ERRCODE_WARNING_MASK ) )
     {
-        Reference < XContent > xContent = GetContent();
-        if ( !xContent.is() )
+        GetContent();
+        if ( !pImp->aContent.get().is() )
         {
             eError = ERRCODE_IO_NOTEXISTS;
             return;
@@ -1370,174 +1379,122 @@ void SfxMedium::Transfer_Impl()
         }
 
         sal_Bool bSuccess = sal_False;
-
-        // check wether the the temp file has the same protocol
-        // scheme as the destination, wether the destination supports
-        // the transfer command and wether or not the command
-        // executed successfully
-
-        BOOL            bTryTransfer = FALSE;
-        String          aFileName;
-        INetURLObject   aDest = GetURLObject();
-        INetURLObject   aSource( pImp->pTempFile->GetURL() );
-
-        aFileName = GetLongName();
-        if ( !aFileName.Len() )
-            aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
-                                   INetURLObject::DECODE_WITH_CHARSET );
-
-        if ( aDest.GetProtocol() == aSource.GetProtocol() )
+        INetURLObject aDest( GetURLObject() );
+        if ( aDest.removeSegment() )
         {
-            bTryTransfer = UCB_Helper::HasCommand( xContent,
-                                                   WID_TRANSFER );
+            // create content for the parent folder and call transfer on that content with the source content
+            // and the destination file name as parameters
+            Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+            ::ucb::Content aSourceContent;
+            ::ucb::Content aTransferContent;
+
+            // source is the temp file written so far
+            INetURLObject aSource( pImp->pTempFile->GetURL() );
+            String aFileName = GetLongName();
+            if ( !aFileName.Len() )
+                aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+
+            if ( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) &&
+                ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTransferContent ) )
+            {
+                // free resources, otherwise the transfer may fail
+                Close();
+
+                // check for external parameters that may customize the handling of NameClash situations
+                SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
+                SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
+                sal_Int32 nNameClash;
+                if ( pOverWrite && !pOverWrite->GetValue() )
+                    // argument says: never overwrite
+                    nNameClash = NameClash::ERROR;
+                else if ( pRename && pRename->GetValue() )
+                    // argument says: rename file
+                    nNameClash = NameClash::RENAME;
+                else
+                    // default is overwrite existing files
+                    nNameClash = NameClash::OVERWRITE;
+
+                BOOL bSuccess = FALSE;
+                try
+                {
+                    bSuccess = aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_MOVE, aFileName, nNameClash );
+                }
+                catch ( ::com::sun::star::ucb::CommandAbortedException& )
+                {
+                    eError = ERRCODE_ABORT;
+                }
+                catch ( ::com::sun::star::ucb::CommandFailedException& )
+                {
+                    eError = ERRCODE_ABORT;
+                }
+                catch ( ::com::sun::star::ucb::InteractiveIOException& r )
+                {
+                    if ( r.Code == IOErrorCode_ACCESS_DENIED )
+                        eError = ERRCODE_IO_ACCESSDENIED;
+                    else if ( r.Code == IOErrorCode_NOT_EXISTING )
+                        eError = ERRCODE_IO_NOTEXISTS;
+                    else if ( r.Code == IOErrorCode_CANT_READ )
+                        eError = ERRCODE_IO_CANTREAD;
+                    else
+                        eError = ERRCODE_IO_GENERAL;
+                }
+                catch ( ::com::sun::star::uno::Exception& )
+                {
+                    eError = ERRCODE_IO_GENERAL;
+                }
+
+                if ( bSuccess && !::utl::UCBContentHelper::IsDocument( pImp->pTempFile->GetURL() ) )
+                {
+                    // if the transfer was done by a direct move, the source file is gone
+                    // so we have to destroy the TempFile object that points to it
+                    pImp->pTempFile->EnableKillingFile( sal_False );
+                    delete pImp->pTempFile;
+                    pImp->pTempFile = NULL;
+
+                    // without a TempFile the physical and logical name should be the same
+                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
+                    return;
+                }
+            }
         }
-
-        // free resources, otherwise the transfer may fail
-        Close();
-        if ( bTryTransfer && aDest.removeSegment() )
-        {
-            // content says: direct transfer is possible
-            TransferInfo    aInfo;
-            String          aParentURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
-            Any             aAny;
-
-            aInfo.MoveData = sal_True;
-            aInfo.SourceURL = aSource.GetMainURL( INetURLObject::NO_DECODE );
-            aInfo.NewTitle = aFileName;
-
-            SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
-            SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
-
-            if ( pOverWrite && !pOverWrite->GetValue() )
-            {
-                aInfo.NameClash = NameClash::ERROR;
-            }
-            else if ( pRename && pRename->GetValue() )
-            {
-                aInfo.NameClash = NameClash::RENAME;
-            }
-            else
-            {
-                aInfo.NameClash = NameClash::OVERWRITE;
-            }
-
-            aAny <<= aInfo;
-            UCB_Helper::ExecuteCommand( aParentURL, WID_TRANSFER, aAny, &bSuccess );
-            if ( bSuccess )
-            {
-                // when the transfer command executed successful, there will be no tempfile
-                // anymore ( because the file has been moved! ), so we have to get rid of it
-                pImp->pTempFile->EnableKillingFile( sal_False );
-                delete pImp->pTempFile;
-                pImp->pTempFile = NULL;
-                ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
-                return;
-            }
-        }
-
-        if ( !bSuccess )
-        {
-            // direct transfer impossible or failed: transfer data as stream
-            SvStream *pStream = new SvFileStream( pImp->pTempFile->GetFileName(), STREAM_STD_READ );
-            SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
-            Reference < ::com::sun::star::io::XInputStream > xStream = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
-
-            Any aAny;
-            InsertCommandArgument aArg;
-            aArg.Data = xStream;
-            aArg.ReplaceExisting = sal_True;
-            aAny <<= aArg;
-
-            UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
-            delete pStream;
-        }
-
-        if ( !bSuccess )
-            eError = ERRCODE_IO_GENERAL;
     }
 }
 
 //------------------------------------------------------------------
 void SfxMedium::DoBackup_Impl()
 {
-    INetURLObject   aDest;
-    INetURLObject   aSource = GetURLObject();
-    String          aParentURL;
-    String          aFileName;
-    String          aBakDir = SvtPathOptions().GetBackupPath();
-    BOOL            bTryTransfer = FALSE;
     sal_Bool        bSuccess = sal_False;
-    Reference < XContent > xContent;
 
-    // Backup Path gesetzt ? Dann diesen benutzen.
+    // get path for backups
+    String aBakDir = SvtPathOptions().GetBackupPath();
     if( aBakDir.Len() )
     {
-        aDest.SetURL( aBakDir );
+        // create content for the parent folder ( = backup folder )
+        ::ucb::Content  aContent;
+        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+        ::ucb::Content::create( aBakDir, xEnv, aContent );
+
+        // source file name is the logical name of this medium
+        INetURLObject aSource( GetURLObject() );
+
+        // save as ".bak" file
+        INetURLObject aDest( aBakDir );
         aDest.insertName( aSource.getName() );
-    }
-    else
-    {
-        aDest = GetURLObject();
-    }
+        aDest.setExtension( DEFINE_CONST_UNICODE( "bak" ) );
+        String aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
-    aDest.setExtension( DEFINE_CONST_UNICODE( "bak" ) );
-    aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
-                           INetURLObject::DECODE_WITH_CHARSET );
-
-    // check wether the the temp file has the same protocol
-    // scheme as the destination, wether the destination supports
-    // the transfer command and wether or not the command
-    // executed successfully
-
-    if ( aDest.GetProtocol() == aSource.GetProtocol() )
-    {
-        INetURLObject aDestDir = aDest;
-        if ( aDestDir.removeSegment() )
+        // create a content for the source file
+        ::ucb::Content aSourceContent;
+        if ( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aSourceContent ) )
         {
-            aParentURL = aDestDir.GetMainURL( INetURLObject::NO_DECODE );
-            xContent = UCB_Helper::CreateContent( aParentURL );
-            if ( xContent.is() )
+            try
             {
-                bTryTransfer = UCB_Helper::HasCommand( xContent,
-                                               WID_TRANSFER );
+                // do the transfer ( copy source file to backup dir )
+                bSuccess = aContent.transferContent( aSourceContent, ::ucb::InsertOperation_COPY, aFileName, NameClash::OVERWRITE );
             }
-        }
-    }
-
-    if ( bTryTransfer )
-    {
-        TransferInfo    aInfo;
-        Any             aAny;
-
-        aInfo.MoveData = sal_True;
-        aInfo.SourceURL = aSource.GetMainURL( INetURLObject::NO_DECODE );
-        aInfo.NewTitle = aFileName;
-        aInfo.NameClash = NameClash::OVERWRITE;
-
-        aAny <<= aInfo;
-        Close();
-        UCB_Helper::ExecuteCommand( xContent, WID_TRANSFER,
-                                    aAny, &bSuccess );
-    }
-
-    if ( !bSuccess )
-    {
-        xContent = UCB_Helper::CreateContent( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
-        if ( xContent.is() )
-        {
-            SvStream *pStream = GetInStream();
-            SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
-            Reference < ::com::sun::star::io::XInputStream > xStream
-                    = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
-
-            Any aAny;
-            InsertCommandArgument aArg;
-
-            aArg.Data = xStream;
-            aArg.ReplaceExisting = sal_True;
-            aAny <<= aArg;
-
-            UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
+            catch ( ::com::sun::star::uno::Exception& )
+            {
+            }
         }
     }
 
@@ -1569,12 +1526,18 @@ void SfxMedium::GetMedium_Impl()
         {
             if ( GetContent().is() && !IsReadOnly() )
             {
-                Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_READONLY ) );
-                BOOL bReadonly;
-                if ( ( aAny >>= bReadonly ) && bReadonly )
+                try
                 {
-                    GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
-                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                    Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly" )) );
+                    BOOL bReadonly;
+                    if ( ( aAny >>= bReadonly ) && bReadonly )
+                    {
+                        GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                        SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                    }
+                }
+                catch ( ::com::sun::star::uno::Exception& )
+                {
                 }
             }
 
@@ -1945,7 +1908,7 @@ void SfxMedium::Close()
     if ( pOutStream )
         CloseOutStream_Impl();
 
-    pImp->xContent = Reference < XContent >();
+    pImp->aContent = ::ucb::Content();
 }
 
 //------------------------------------------------------------------
@@ -1953,7 +1916,7 @@ void SfxMedium::Close()
 void SfxMedium::RefreshName_Impl()
 {
 #if 0   //(dv)
-    if ( pImp->xContent.is() )
+    if ( pImp->aContent.get().is() )
     {
         String aNameP = pImp->xAnchor->GetViewURL();
         pImp->aOrigURL = aNameP;
@@ -2001,7 +1964,7 @@ void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
         pImp->aOrigURL = aNameP;
     aLogicName = aNameP;
     DELETEZ( pURLObj );
-    pImp->xContent = ::com::sun::star::uno::Reference < ::com::sun::star::ucb::XContent > ();
+    pImp->aContent = ::ucb::Content();
     Init_Impl();
 }
 
@@ -2024,7 +1987,7 @@ void SfxMedium::SetPhysicalName( const String& rNameP )
         }
 
         if ( aName.Len() || rNameP.Len() )
-            pImp->xContent = Reference < XContent >();
+            pImp->aContent = ::ucb::Content();
 
         aName = rNameP;
         bTriedStorage = sal_False;
@@ -2289,12 +2252,16 @@ sal_Bool SfxMedium::SupportsMIME_Impl() const
 
     if( eProt == INET_PROT_FTP )
     {
-        Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
-        sal_Bool bIsFolder = FALSE;
-        if ( ( aAny >>= bIsFolder ) && bIsFolder )
-            return SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-        else
-            return sal_False;
+        try
+        {
+            Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")) );
+            sal_Bool bIsFolder = FALSE;
+            if ( ( aAny >>= bIsFolder ) && bIsFolder )
+                return SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
     }
 
     return sal_False;
