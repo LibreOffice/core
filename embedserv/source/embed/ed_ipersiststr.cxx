@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 13:51:22 $
+ *  last change: $Author: mav $ $Date: 2003-04-02 15:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 
 using namespace ::com::sun::star;
 
+extern ::rtl::OUString  getStorageTypeFromGUID_Impl( GUID* guid );
 extern ::rtl::OUString  getServiceNameFromGUID_Impl( GUID* );
 extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 // extern CLIPFORMAT        getClipFormatFromGUID_Impl( GUID* );
@@ -441,7 +442,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                 if ( hr == S_OK )
                 {
-                    ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+                    ::rtl::OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
                     CLIPFORMAT cf = RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???

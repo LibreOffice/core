@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-25 08:23:04 $
+ *  last change: $Author: mav $ $Date: 2003-04-02 15:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,25 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+::rtl::OUString getStorageTypeFromGUID_Impl( GUID* guid )
+{
+    if ( *guid == OID_WriterTextServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarWriterDocument.6" ) );
+
+    if ( *guid == OID_CalcServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarCalcDocument.6" ) );
+
+    if ( *guid == OID_DrawingServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarDrawDocument.6" ) );
+
+    if ( *guid == OID_PresentationServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarImpressDocument.6" ) );
+
+    if ( *guid == OID_MathServer )
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "soffice.StarMathDocument.6" ) );
+
+    return ::rtl::OUString();
+}
 
 ::rtl::OUString getServiceNameFromGUID_Impl( GUID* guid )
 {
