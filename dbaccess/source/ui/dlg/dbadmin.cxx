@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 15:32:14 $
+ *  last change: $Author: fs $ $Date: 2001-03-13 10:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,7 +829,7 @@ void ODbAdminDialog::applyChangesAsync()
 short ODbAdminDialog::Ok()
 {
     short nResult = SfxTabDialog::Ok();
-    return (AR_LEAVE_MODIFIED == implApplyChanges()) ? RET_OK : RET_CANCEL;
+    return (AR_LEAVE_MODIFIED == implApplyChanges(sal_False)) ? RET_OK : RET_CANCEL;
         // TODO : AR_ERROR is not handled correctly, we always close the dialog here
 }
 
@@ -1690,7 +1690,7 @@ IMPL_LINK(ODbAdminDialog, OnRestoreDatasource, Window*, _pWindow)
 }
 
 //-------------------------------------------------------------------------
-ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
+ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges(const sal_Bool _bActivateOnSuccess)
 {
     if (!PrepareLeaveCurrentPage())
     {   // the page did not allow us to leave
@@ -1911,7 +1911,8 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     GetApplyButton()->Enable(sal_False);
 
 
-    ShowPage(GetCurPageId());
+    if (_bActivateOnSuccess)
+        ShowPage(GetCurPageId());
         // This does the usual ActivatePage, so the pages can save their current status.
         // This way, next time they're asked what has changed since now and here, they really
         // can compare with the status they have _now_ (not the one they had before this apply call).
@@ -2299,6 +2300,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37  2001/03/05 15:32:14  fs
+ *  #84620# remove the reset button
+ *
  *  Revision 1.36  2001/02/20 13:18:26  fs
  *  #84151# when entering the queries page for a new data source, apply the changes asynchronously
  *

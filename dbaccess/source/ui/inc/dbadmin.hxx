@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 13:15:59 $
+ *  last change: $Author: fs $ $Date: 2001-03-13 10:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,8 +602,11 @@ protected:
         AR_KEEP                 // don't leave the page (e.g. because an error occured)
     };
     /** apply all changes made
+        @param  _bActivateOnSuccess
+            Set to <TRUE/> if you want the method to activage the current page upon successfully applying everything.
+            (This is needed sometimes to correctly re-initialize the current page)
     */
-    ApplyResult implApplyChanges();
+    ApplyResult implApplyChanges(const sal_Bool _bActivateOnSuccess = sal_True);
 
     /** extracts the connection type from the given set<p/>
         The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
@@ -642,6 +645,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/02/20 13:15:59  fs
+ *  #84151# applyChanges -> applyChangesAsync / +OnAsyncapplyChanges
+ *
  *  Revision 1.10  2001/02/05 13:47:11  fs
  *  #83430# +applyChanges / +isApplyable
  *
