@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:23:41 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,11 +1077,11 @@ void ScTable::CompileAll()
 }
 
 
-void ScTable::CompileXML()
+void ScTable::CompileXML( ScProgress& rProgress )
 {
     for (USHORT i=0; i <= MAXCOL; i++)
     {
-        aCol[i].CompileXML();
+        aCol[i].CompileXML( rProgress );
     }
 }
 

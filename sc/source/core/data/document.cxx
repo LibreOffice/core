@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: er $ $Date: 2002-09-25 14:43:21 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #ifndef SC_DOCITER_HXX
 #include "dociter.hxx"
 #endif
+#include "progress.hxx"
 #ifndef __SGI_STL_SET
 #include <set>
 #endif
@@ -2258,8 +2259,11 @@ void ScDocument::CompileXML()
 {
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );
+    ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
+                STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
+
     for (USHORT i=0; i<=MAXTAB; i++)
-        if (pTab[i]) pTab[i]->CompileXML();
+        if (pTab[i]) pTab[i]->CompileXML( aProgress );
 
     if ( pCondFormList )
         pCondFormList->CompileXML();

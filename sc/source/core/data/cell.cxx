@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2002-09-16 12:37:31 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,7 +1104,7 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 }
 
 
-void ScFormulaCell::CompileXML()
+void ScFormulaCell::CompileXML( ScProgress& rProgress )
 {
     if ( cMatrixFlag == MM_REFERENCE )
     {   // is already token code via ScDocFunc::EnterMatrix, ScDocument::InsertMatrixFormula
@@ -1118,6 +1118,8 @@ void ScFormulaCell::CompileXML()
     aComp.SetImportXML( TRUE );
     String aFormula;
     aComp.CreateStringFromTokenArray( aFormula );
+    pDocument->DecXMLImportedFormulaCount( aFormula.Len() );
+    rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
     // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
     if ( pCode )
         pCode->Clear();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-10-12 12:31:57 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2010,7 +2010,7 @@ void ScColumn::CompileAll()
 }
 
 
-void ScColumn::CompileXML()
+void ScColumn::CompileXML( ScProgress& rProgress )
 {
     if (pItems)
         for (USHORT i = 0; i < nCount; i++)
@@ -2019,7 +2019,7 @@ void ScColumn::CompileXML()
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 USHORT nRow = pItems[i].nRow;
-                ((ScFormulaCell*)pCell)->CompileXML();
+                ((ScFormulaCell*)pCell)->CompileXML( rProgress );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener geloescht/eingefuegt?
             }
