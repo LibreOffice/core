@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:35:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ public:
     void InitImageList();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
+    DECL_LINK( ToolBoxDropdownClickHdl, ToolBox* );
 
 protected:
     virtual void    Select();
