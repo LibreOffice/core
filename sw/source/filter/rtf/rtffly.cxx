@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:24:57 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,17 @@ void SwRTFParser::SetFlysInDoc()
     aFlyArr.Remove(0, aFlyArr.Count());
 }
 
+// clips the text box to the min or max position if it is outside our min or max boundry
+long SwRTFParser::GetSafePos(long nPos)
+{
+    if(nPos > SHRT_MAX)
+        nPos = SHRT_MAX;
+    else if(nPos < SHRT_MIN)
+        nPos = SHRT_MIN;
+
+    return nPos;
+}
+
 void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 {
     // ein Set fuer die FrmFmt-Attribute
@@ -702,7 +713,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         case RTF_POSNEGX:
         case RTF_POSX:      aHori.SetHoriOrient( HORI_NONE );
-                            aHori.SetPos( (long)nTokenValue );
+                            aHori.SetPos( GetSafePos((long)nTokenValue) );
                             break;
         case RTF_POSXC:     aHori.SetHoriOrient( HORI_CENTER );     break;
         case RTF_POSXI:     aHori.SetHoriOrient( HORI_LEFT );
@@ -716,7 +727,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         case RTF_POSNEGY:
         case RTF_POSY:      aVert.SetVertOrient( VERT_NONE );
-                            aVert.SetPos( (long)nTokenValue );
+                            aVert.SetPos( GetSafePos((long)nTokenValue) );
                             break;
         case RTF_POSYT:     aVert.SetVertOrient( VERT_TOP );    break;
         case RTF_POSYB:     aVert.SetVertOrient( VERT_BOTTOM ); break;
