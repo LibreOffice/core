@@ -8391,3 +8391,9 @@ _real@8@bffdf1a9fbe76c8b4000
 ??_C@_0DM@MOKM@O?3?2SRC630?2src?2xmloff?2source?2text@
 ??_C@_0DF@NILN@O?3?2SRC630?2src?2xmloff?2source?2form@
 ??_C@_0DJ@BFHI@O?3?2SRC630?2src?2xmloff?2source?2form@
+??1XMLTextFrameHint_Impl@@UAE@XZ
+??_7XMLTextFrameHint_Impl@@6B@
+??_GXMLTextFrameHint_Impl@@UAEPAXI@Z
+?GetTextContent@XMLTextFrameHint_Impl@@QBE?AV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@XZ
+?GetTextContent@XMLTextFrameContext@@QBE?AV?$Reference@VXTextContent@text@star@sun@com@@@uno@star@sun@com@@XZ
+??0XMLTextFrameHyperlinkContext@@QAE@AAVSvXMLImport@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@W4TextContentAnchorType@text@678@PAV?$Reference@VXTextContent@text@star@sun@com@@@5678@PAW49text@678@@Z
