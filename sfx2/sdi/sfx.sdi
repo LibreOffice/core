@@ -7796,10 +7796,10 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_APPLICATION;
 ]
 
