@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:08 $
+ *  last change: $Author: thb $ $Date: 2004-02-25 09:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <math.h>
 #endif
 
+#ifndef _BGFX_TUPLE_B2ITUPLE_HXX
+#include <basegfx/tuple/b2ituple.hxx>
+#endif
+
 namespace basegfx
 {
     /** Base class for all Points/Vectors with two double values
@@ -122,6 +126,16 @@ namespace basegfx
         B2DTuple(const B2DTuple& rTup)
         :   mfX( rTup.mfX ),
             mfY( rTup.mfY )
+        {}
+
+        /** Create a copy of a 2D integer Tuple
+
+            @param rTup
+            The 2D Tuple which will be copied.
+        */
+        B2DTuple(const B2ITuple& rTup)
+        :   mfX( rTup.getX() ),
+            mfY( rTup.getY() )
         {}
 
         ~B2DTuple()
