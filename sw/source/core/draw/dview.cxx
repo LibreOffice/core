@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:27:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-15 13:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,13 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
             }
         }
     }
+#ifdef ACCESSIBLE_LAYOUT
+    else
+    {
+        rImp.DisposeAccessibleObj( pObj );
+        rImp.AddAccessibleObj( pObj );
+    }
+#endif
 }
 
 /*************************************************************************
