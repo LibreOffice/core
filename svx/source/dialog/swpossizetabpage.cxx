@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 12:16:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,11 +829,19 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 USHORT nMapPos = GetMapPos(m_pVMap, m_aVertLB);
                 short nAlign = GetAlignment(m_pVMap, nMapPos, m_aVertLB, m_aVertToLB);
                 short nRel = GetRelation(m_pVMap, m_aVertToLB);
-                const long nVertByPos =
-                            m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP));
-                if(nAlign != rVertOrient.GetValue()||
-                    nRel != rVertRelation.GetValue()||
-                        m_aVertByMF.IsEnabled() && nVertByPos != rVertPosition.GetValue())
+                // --> OD 2004-10-21 #i34055# - convert vertical position for
+                // as-character anchored objects
+                long nVertByPos =
+                        m_aVertByMF.Denormalize(m_aVertByMF.GetValue(FUNIT_TWIP));
+                if ( GetAnchorType() == TextContentAnchorType_AS_CHARACTER )
+                {
+                    nVertByPos *= -1;
+                }
+                // <--
+                if ( nAlign != rVertOrient.GetValue() ||
+                     nRel != rVertRelation.GetValue() ||
+                     ( m_aVertByMF.IsEnabled() &&
+                       nVertByPos != rVertPosition.GetValue() ) )
                 {
                     rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, nAlign));
                     rSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, nRel));
