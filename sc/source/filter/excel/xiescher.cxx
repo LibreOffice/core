@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:19:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ const DffRecordHeader* XclImpStreamConsumer::ConsumeRecord( XclImpStream& rSrcSt
     if( !nSrcSize )
         return NULL;
 
-    rSrcStrm.Seek( RECORD_SEEK_TO_BEGIN );
+    rSrcStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
     sal_Char* pBuf = new sal_Char[ nSrcSize ];
     rSrcStrm.Read( pBuf, nSrcSize );
     aStrm.Write( pBuf, nSrcSize );
@@ -872,7 +872,7 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                 rStrm >> n16;     // string length
                 if( n16 )
                 {   // the 4th way Xcl stores a unicode string: not even a Grbit byte present if length 0
-                    rStrm.AppendUniString( aUserName, n16 );
+                    aUserName = rStrm.ReadUniString( n16 );
                     // 0:= ID follows, 1:= pad byte + ID
 #ifndef PRODUCT
                     sal_Int32 nLeft = sal_Int32(nFmlaLen) - (rStrm.GetRecPos() - nPos0);
@@ -1569,7 +1569,7 @@ void XclImpObjectManager::ReadMsodrawinggroup( XclImpStream& rStrm )
 
 void XclImpObjectManager::ReadMsodrawing( XclImpStream& rStrm )
 {
-    rStrm.InitializeRecord( false );    // disable internal CONTINUE handling
+    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
 
     if( !maStreamConsumer.HasData() )
         return;
@@ -1614,7 +1614,7 @@ void XclImpObjectManager::ReadMsodrawingselection( XclImpStream& rStrm )
 
 void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
 {
-    rStrm.InitializeRecord( false );      // disable internal CONTINUE handling
+    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
 
     sal_uInt16 nSubRecId, nSubRecSize;
     bool bLoop = true;
@@ -1645,7 +1645,7 @@ void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
 
 void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 {
-    rStrm.InitializeRecord( false );      // disable internal CONTINUE handling
+    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
 
     sal_uInt16 nAlign, nTextLen, nFormCnt;
     ::std::auto_ptr< XclImpString > pString;
@@ -1668,9 +1668,8 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
         DBG_ASSERT( bValid, "XclImpObjectManager::ReadTxo - missing CONTINUE record" );
         if( bValid )
         {
-            rStrm.InitializeRecord( false );
-            String aText;
-            rStrm.AppendUniString( aText, nTextLen );
+            rStrm.ResetRecord( false );
+            String aText( rStrm.ReadUniString( nTextLen ) );
             pString.reset( new XclImpString( aText ) );
         }
     }
@@ -1683,7 +1682,7 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
         DBG_ASSERT( bValid, "XclImpObjectManager::ReadTxo - missing CONTINUE record" );
         if( bValid )
         {
-            rStrm.InitializeRecord( false );
+            rStrm.ResetRecord( false );
 
             sal_uInt16 nChar, nFont;
             sal_uInt16 nCount = nFormCnt - 1;
