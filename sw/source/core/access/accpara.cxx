@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
+ *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,25 +366,6 @@ SwPaM* SwAccessibleParagraph::GetCrsr()
     }
 
     return pCrsr;
-}
-
-SwCrsrShell* SwAccessibleParagraph::GetCrsrShell()
-{
-    // first, get the view shell
-    DBG_ASSERT( GetMap() != NULL, "no map?" );
-    ViewShell* pViewShell = GetMap()->GetShell();
-    DBG_ASSERT( pViewShell != NULL,
-                "No view shell? Then what are you looking at?" );
-
-    SwCrsrShell* pCrsrShell = NULL;
-
-    // see if our view shell is a cursor shell
-    if( pViewShell->ISA( SwCrsrShell ) )
-    {
-        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
-    }
-
-    return pCrsrShell;
 }
 
 sal_Bool SwAccessibleParagraph::IsHeading() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 15:27:21 $
+ *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 
 class Window;
 class SwAccessibleMap;
+class SwCrsrShell;
 namespace utl { class AccessibleStateSetHelper; };
 
 class SwAccessibleContext :
@@ -161,6 +162,11 @@ protected:
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
     const SwAccessibleMap *GetMap() const { return pMap; }
+
+    /** convenience method to get SwCrsrShell through accessibility map
+     * @returns SwCrsrShell, or NULL if none is found */
+    SwCrsrShell* GetCrsrShell();
+    const SwCrsrShell* GetCrsrShell() const;
 
     // Notify all children that the vis araea has changed.
     // The SwFrm might belong to the current object or to any other child or

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 14:36:48 $
+ *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ class SwAccessibleParagraph :
     /// -1 if there is no selection in the this paragraph
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
     SwPaM* GetCrsr();          /// helper for GetSelection and getCaretPosition
-    SwCrsrShell* GetCrsrShell();    /// helper for GetCrsr and setSelection
 
     /// for cut/copy/paste: execute a particular slot at the view shell
     void ExecuteAtViewShell( UINT16 nSlot );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:34:00 $
+ *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
+
 #ifndef _ACCCONTEXT_HXX
 #include "acccontext.hxx"
 #endif
@@ -75,15 +79,21 @@
 
 class SwTabFrm;
 class SwAccessibleTableData_Impl;
+class SwAccessibleTableEventList_Impl;
+class SwTableBox;
 
 class SwAccessibleTable :
         public  SwAccessibleContext,
-        public  ::drafts::com::sun::star::accessibility::XAccessibleTable
+        public  ::drafts::com::sun::star::accessibility::XAccessibleTable,
+        public  ::drafts::com::sun::star::accessibility::XAccessibleSelection
 {
     SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
     const SwSelBoxes *GetSelBoxes() const;
 
     void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
+
+    /** get the SwTableBox* for the given child */
+    const SwTableBox* GetTableBox( sal_Int32 ) const;
 
 protected:
 
@@ -231,6 +241,38 @@ public:
     virtual void DisposeChild( const SwFrm *pFrm, sal_Bool bRecursive );
     virtual void InvalidateChildPosOrSize( const SwFrm *pFrm,
                                         const SwRect& rFrm );
+
+    //=====  XAccessibleSelection  ============================================
+
+    virtual void SAL_CALL selectAccessibleChild(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected(
+        sal_Int32 nChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL clearAccessibleSelection(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL selectAllAccessible(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL deselectSelectedAccessibleChild(
+        sal_Int32 nSelectedChildIndex )
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
+                ::com::sun::star::uno::RuntimeException );
+
 };
 
 inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()

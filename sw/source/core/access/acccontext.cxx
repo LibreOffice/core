@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-06 12:25:14 $
+ *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
+#ifndef _CRSRSH_HXX
+#include <crsrsh.hxx>
+#endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
 #endif
@@ -192,6 +195,33 @@ Window *SwAccessibleContext::GetWindow()
 
     return pWin;
 }
+
+// get ViewShell from accessibility map, and cast to cursor shell
+SwCrsrShell* SwAccessibleContext::GetCrsrShell()
+{
+    SwCrsrShell* pCrsrShell;
+    ViewShell* pViewShell = GetMap()->GetShell();
+    if( pViewShell->ISA( SwCrsrShell ) )
+        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
+    else
+        pCrsrShell = NULL;
+
+    return pCrsrShell;
+}
+
+const SwCrsrShell* SwAccessibleContext::GetCrsrShell() const
+{
+    // just like non-const GetCrsrShell
+    const SwCrsrShell* pCrsrShell;
+    const ViewShell* pViewShell = GetMap()->GetShell();
+    if( pViewShell->ISA( SwCrsrShell ) )
+        pCrsrShell = static_cast<const SwCrsrShell*>( pViewShell );
+    else
+        pCrsrShell = NULL;
+
+    return pCrsrShell;
+}
+
 
 enum Action { NONE, SCROLLED, SCROLLED_WITHIN,
                           SCROLLED_IN, SCROLLED_OUT };
