@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:40:54 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include "exchange.hxx"
 #include "formats.hxx"
 #include "filelist.hxx"
+#include "clsids.hxx"
+
+#include <tools/globname.hxx>
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -1645,3 +1648,34 @@ USHORT SotExchange::GetExchangeAction(
                                             nUserAction, rFormat, rDefaultAction,
                                             nOnlyTestFormat, &rxTransferable ) );
 }
+
+USHORT SotExchange::IsChart(  const SvGlobalName& rName )
+{
+    USHORT nRet=0;
+    if ( rName == SvGlobalName( SO3_SCH_CLASSID_60 ) )
+        nRet = SOFFICE_FILEFORMAT_60;
+    else if ( rName == SvGlobalName( SO3_SCH_CLASSID_50 ) )
+        nRet = SOFFICE_FILEFORMAT_50;
+    else if ( rName == SvGlobalName( SO3_SCH_CLASSID_40 ) )
+        nRet = SOFFICE_FILEFORMAT_40;
+    else if ( rName == SvGlobalName( SO3_SCH_CLASSID_30 ) )
+        nRet = SOFFICE_FILEFORMAT_31;
+
+    return nRet;
+}
+
+USHORT SotExchange::IsMath(  const SvGlobalName& rName )
+{
+    USHORT nRet=0;
+    if ( rName == SvGlobalName( SO3_SM_CLASSID_60 ) )
+        nRet = SOFFICE_FILEFORMAT_60;
+    else if ( rName == SvGlobalName( SO3_SM_CLASSID_50 ) )
+        nRet = SOFFICE_FILEFORMAT_50;
+    else if ( rName == SvGlobalName( SO3_SM_CLASSID_40 ) )
+        nRet = SOFFICE_FILEFORMAT_40;
+    else if ( rName == SvGlobalName( SO3_SM_CLASSID_30 ) )
+        nRet = SOFFICE_FILEFORMAT_31;
+
+    return nRet;
+}
+
