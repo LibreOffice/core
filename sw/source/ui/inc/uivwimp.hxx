@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:55:32 $
+ *  last change: $Author: tl $ $Date: 2002-11-11 12:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #ifndef _SWVIEW_HXX //autogen
 #include <view.hxx>
 #endif
+
+#include <sfx2/objsh.hxx>
 
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -142,6 +144,11 @@ class SwView_Impl
     STAR_REFERENCE( frame::XDispatchProviderInterceptor )   xDisProvInterceptor;
     STAR_REFERENCE( view::XSelectionSupplier )              *pxXTextView;       // UNO object
 
+    // temporary document for printing text of selection / multi selection
+    // in PDF export.
+    SfxObjectShellRef           xTmpSelDocSh;
+    SvEmbeddedObjectRef         aEmbeddedObjRef;
+
     SwView* pView;
     SwScannerEventListener*     pScanEvtLstnr;
     SwClipboardChangeListener*  pClipEvtLstnr;
@@ -162,6 +169,9 @@ public:
     SwScannerEventListener&         GetScannerEventListener();
 
     void                            AddClipboardListener();
+
+    SfxObjectShellRef &             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
+    SvEmbeddedObjectRef &           GetEmbeddedObjRef()     { return (SvEmbeddedObjectRef&)(long&)aEmbeddedObjRef; }
 };
 #endif
 
