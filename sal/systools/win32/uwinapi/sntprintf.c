@@ -8,21 +8,24 @@
 
 #if _MSC_VER < 1300
 
-#include <limits.h>
-#define MAXSTR  INT_MAX
-
 /*  The non-debug versions of _vscprintf/_scprintf are just calls
-    to _vsprintf/_sprintf with string buffer pointer set to NULL */
+    to _vsprintf/_sprintf with string buffer pointer set to NULL,
+    requires MSVCRT version 7.0 */
 
 static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
 {
-    FILE    str = { 0 };
+    FILE    *fp = _tfopen( _T("NUL"), _T("wb") );
 
-    str._cnt = MAXSTR;
-    str._base = str._ptr = NULL;
-    str._flag = _IOWRT|_IOSTRG;
+    if ( fp )
+    {
+        int retval = _vftprintf( fp, format, ap );
 
-    return _vftprintf( &str, format, ap );
+        fclose( fp );
+
+        return retval;
+    }
+
+    return -1;
 }
 #endif
 
