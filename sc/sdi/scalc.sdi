@@ -7382,3 +7382,28 @@ SfxVoidItem SelectTables SID_SELECT_TABLES
     GroupId = GID_EDIT;
 ]
 
+ScProtectionAttr Protection SID_SCATTR_PROTECTION
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+

@@ -11,7 +11,16 @@ TypeLibFile( "scslots.tlb" )
 ModulePrefix( "Sc" )
 ]
 {
-    item  double      ScDoubleItem;
+    struct ScProtection
+    {
+        BOOL    Locked              MID_1;
+        BOOL    FormulasHidden      MID_2;
+        BOOL    Hidden              MID_3;
+        BOOL    HiddenInPrintout    MID_4
+    };
+    item ScProtection ScProtectionAttr;
+
+    item double ScDoubleItem;
 
     //----------------------------------------------------------
     // bei Problemen ggF. "von Hand" includen (=Copy/Paste)
