@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-25 09:10:49 $
+ *  last change: $Author: obr $ $Date: 2001-05-28 09:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3615,7 +3615,7 @@ oslFileError getResolvedURL(rtl_uString* ustrPath, rtl_uString** pustrResolvedUR
 
 static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
 {
-    sal_Int32   nIndex = 7;
+    sal_Int32   nIndex = 6;
 
     std::vector< rtl::OUString >    aTokenStack;
 
@@ -3639,7 +3639,7 @@ static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::O
 
 
     std::vector< rtl::OUString >::iterator it;
-    aAbsPath = rtl::OUString::createFromAscii("file://");
+    aAbsPath = rtl::OUString::createFromAscii("file:/");
 
     for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
     {
