@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-09 15:29:26 $
+ *  last change: $Author: obr $ $Date: 2002-08-19 11:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,11 +260,13 @@ public class AccessBridge {
                     }
                 } else {
                     System.err.println("InfoProvider service not found.");
+                    throw new com.sun.star.uno.RuntimeException("RemoteAccessBridge service not found.\n");
                 }
             }
 
             catch (com.sun.star.uno.Exception e) {
                 System.err.println(e.getMessage());
+                throw new com.sun.star.uno.RuntimeException(e.getMessage());
             }
 
             xSingleServiceFactory = FactoryHelper.getServiceFactory(_AccessBridge.class,
