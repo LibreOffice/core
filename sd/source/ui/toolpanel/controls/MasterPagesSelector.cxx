@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:44:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include "../TitledControl.hxx"
 #include "../ControlContainer.hxx"
 
+#ifndef _SFXOBJFACE_HXX
+#include <sfx2/objface.hxx>
+#endif
 #ifndef _SDRESID_HXX
 #include "sdresid.hxx"
 #endif
