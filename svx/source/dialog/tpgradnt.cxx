@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:07:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,11 @@
 #include "xtable.hxx"
 #include "xpool.hxx"
 #include "drawitem.hxx"
-#include "tabarea.hxx"
+#include "cuitabarea.hxx"
 #include "tabarea.hrc"
-#include "dlgname.hxx"
+#include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 #include "dlgname.hrc"
+#include "svxdlg.hxx" //CHINA001
 #include "dialmgr.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
@@ -337,17 +338,23 @@ long SvxGradientTabPage::CheckChanges_Impl()
         {
             ResMgr* pMgr = DIALOG_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
-            SvxMessDialog aMessDlg( DLGWIN,
-                String( ResId( RID_SVXSTR_GRADIENT, pMgr ) ),
-                String( ResId( RID_SVXSTR_ASK_CHANGE_GRADIENT, pMgr ) ),
-                &aWarningBoxImage );
-
-            aMessDlg.SetButtonText( MESS_BTN_1,
+            //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
+            //CHINA001  String( ResId( RID_SVXSTR_GRADIENT, pMgr ) ),
+            //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_GRADIENT, pMgr ) ),
+            //CHINA001  &aWarningBoxImage );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, ResId(RID_SVXDLG_MESSBOX),
+                                                        String( ResId( RID_SVXSTR_GRADIENT, pMgr ) ),
+                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_GRADIENT, pMgr ) ),
+                                                        &aWarningBoxImage );
+            DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
+            aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
                                     String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );
-            aMessDlg.SetButtonText( MESS_BTN_2,
+            aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
                                     String( ResId( RID_SVXSTR_ADD, pMgr ) ) );
 
-            short nRet = aMessDlg.Execute();
+            short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
 
             switch( nRet )
             {
@@ -371,6 +378,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
                 break;
                 // return( TRUE ); // Abbruch
             }
+            delete aMessDlg; //add by CHINA001
         }
     }
     nPos = aLbGradients.GetSelectEntryPos();
@@ -504,7 +512,11 @@ IMPL_LINK( SvxGradientTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
                 bDifferent = FALSE;
     }
 
-    SvxNameDialog* pDlg     = new SvxNameDialog( DLGWIN, aName, aDesc );
+    //CHINA001 SvxNameDialog* pDlg     = new SvxNameDialog( DLGWIN, aName, aDesc );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     WarningBox*    pWarnBox = NULL;
     USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
@@ -598,7 +610,11 @@ IMPL_LINK( SvxGradientTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         String aName( pGradientList->Get( nPos )->GetName() );
         String aOldName = aName;
 
-        SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pGradientList->Count();
         BOOL bDifferent = FALSE;
