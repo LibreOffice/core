@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 19:16:29 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,8 +481,8 @@ void SAL_CALL ChartController
     if( m_pDrawViewWrapper )
         m_pDrawViewWrapper->SetMarkHdlHidden(TRUE);
 
-    delete m_pChartView; m_pChartView = NULL;
     DELETEZ( m_pDrawViewWrapper );
+    delete m_pChartView; m_pChartView = NULL;
 }
 
         sal_Bool SAL_CALL ChartController
