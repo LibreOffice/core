@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:04:34 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -218,8 +217,13 @@ void FTPURL::parse(const rtl::OUString& url)
             m_aUsername = aExpr;
     }
 
-    l = m_aHost.indexOf(sal_Unicode(':'));
-    if(l != -1) {
+    l = m_aHost.lastIndexOf(sal_Unicode(':'));
+    sal_Int32 ipv6Back = m_aHost.lastIndexOf(sal_Unicode(']'));
+    if((ipv6Back == -1 && l != -1) // not ipv6, but a port
+       ||
+       (ipv6Back != -1 && 1+ipv6Back == l) // ipv6, and a port
+    )
+    {
         if(1+l<m_aHost.getLength())
             m_aPort = m_aHost.copy(1+l);
         m_aHost = m_aHost.copy(0,l);
@@ -393,10 +397,6 @@ namespace ftp {
 }
 
 
-extern "C" int  no_func(void  *client,  char  *prompt, char*
-                        buffer, int buflen ) { return 1; }
-
-
 #define SET_CONTROL_CONTAINER \
     MemoryContainer control;                                      \
     curl_easy_setopt(curl,                                        \
@@ -413,25 +413,13 @@ extern "C" int  no_func(void  *client,  char  *prompt, char*
     curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);    \
     curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data)
 
-#define SET_URL_BASE(url)                                         \
+#define SET_URL(url)                                              \
     rtl::OString urlParAscii(url.getStr(),                        \
                              url.getLength(),                     \
                              RTL_TEXTENCODING_UTF8);              \
     curl_easy_setopt(curl,                                        \
-                                         CURLOPT_URL,             \
-                     urlParAscii.getStr());                       \
-
-//CURLOPT_PASSWDFUNCTION deprecated
-#if defined(CURLOPT_PASSWDFUNCTION) && CURLOPT_PASSWDFUNCTION != 0
-#define SET_URL(url)                                              \
-    SET_URL_BASE(url)                                             \
-    curl_easy_setopt(curl,                                        \
-                     CURLOPT_PASSWDFUNCTION,                      \
-                     no_func)
-#else
-#define SET_URL(url)                                              \
-    SET_URL_BASE(url)
-#endif
+                     CURLOPT_URL,                                 \
+                     urlParAscii.getStr());
 
         // Setting username:password
 #define SET_USER_PASSWORD(username,password)                      \
@@ -829,7 +817,7 @@ void FTPURL::del() const
 
     if(aDirentry.m_nMode & INETCOREFTP_FILEMODE_ISDIR) {
         std::vector<FTPDirentry> vec = list(sal_Int16(OpenMode::ALL));
-        for( int i = 0; i < vec.size(); ++i )
+        for( unsigned int i = 0; i < vec.size(); ++i )
             try {
                 FTPURL url(vec[i].m_aURL,m_pFCP);
                 url.del();
