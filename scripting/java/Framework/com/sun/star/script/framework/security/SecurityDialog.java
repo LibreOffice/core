@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-12 16:20:45 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-14 16:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ XInitialization {
 
     private static final String _checkBoxName = "CheckBox";
     private static final String _checkBoxString = "Add this directory to the list of secure paths: ";
+    private static final String _label5Name = "Label5";
 
     private static final String _title = "Run Macro";
     private static final String _runMacro = "Run";
@@ -130,30 +131,43 @@ XInitialization {
     private static final int runButtonH = 13;
     private static final int doNotRunButtonW = 40;
     private static final int doNotRunButtonH = 13;
+
+    // label for warning dialog
     private static final int label1X = 20;
     private static final int label1Y = 9;
     private static final int label1W = 210;
     private static final int label1H = 10;
+
+    // labels for confirmation dialog
     private static final int label2X = 22;
     private static final int label2Y = 7;
     private static final int label2W = 210;
-    private static final int label2H = 7;
+    private static final int label2H = 8;
     private static final int label3X = 22;
     private static final int label3Y = 15;
     private static final int label3W = 210;
-    private static final int label3H = 7;
+    private static final int label3H = 8;
     private static final int label4X = 22;
     private static final int label4Y = 23;
     private static final int label4W = 210;
-    private static final int label4H = 7;
+    private static final int label4H = 8;
+
+    // checkbox for confirmation dialog
     private static final int checkBoxX = 22;
     private static final int checkBoxY = 40;
     private static final int checkBoxW = 210;
     private static final int checkBoxH = 9;
+    // extra label if path longer than 21 chars
+    private static final int label5X = 22;
+    private static final int label5Y = 48;
+    private static final int label5W = 210;
+    private static final int label5H = 9;
 
     private boolean checkBoxDialog;
     private short _checkBoxState = (short)0;
+    private boolean extraPathLine=false;
     private String checkBoxPath="";
+    private String checkBoxPath2="";
     private String _pushed = _doNotRunButtonName;
 
     private XComponentContext _xComponentContext;
@@ -177,6 +191,13 @@ XInitialization {
             checkBoxPath = (String) args[0];
             System.out.println("path: "+checkBoxPath);
             checkBoxDialog=true;
+            if( checkBoxPath.length() > 21 )
+            {
+                extraPathLine=true;
+                cbIncrH+=12;
+                checkBoxPath2=checkBoxPath.substring(21);
+                checkBoxPath=checkBoxPath.substring(0,21);
+            }
 
         }
         else
@@ -372,6 +393,23 @@ XInitialization {
             xNameCont.insertByName( _label3Name, label3Model );
             xNameCont.insertByName( _label4Name, label4Model );
             xNameCont.insertByName( _checkBoxName, checkBoxModel );
+
+            if ( extraPathLine == true )
+            {
+            // create the label model and set the properties
+            Object label5Model = xMultiServiceFactory.createInstance(
+                "com.sun.star.awt.UnoControlFixedTextModel" );
+            XPropertySet xPSetLabel5 = ( XPropertySet )UnoRuntime.queryInterface(
+                XPropertySet.class, label5Model );
+            xPSetLabel5.setPropertyValue( "PositionX", new Integer( label5X ));
+            xPSetLabel5.setPropertyValue( "PositionY", new Integer( label5Y ));
+            xPSetLabel5.setPropertyValue( "Width", new Integer( label5W ));
+            xPSetLabel5.setPropertyValue( "Height", new Integer( label5H ));
+            xPSetLabel5.setPropertyValue( "Name", _label5Name );
+            xPSetLabel5.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel5.setPropertyValue( "Label", checkBoxPath2 );
+            xNameCont.insertByName( _label5Name, label5Model );
+            }
         }
         else
         {
