@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:47:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "pathoptions.hxx"
 
@@ -1035,6 +1036,8 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
+                case PATH_USERDICTIONARY:/*-Wall???*/           break;
+                case PATH_USERCONFIG:/*-Wall???*/           break;
             }
 
             sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
@@ -1124,4 +1127,3 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
     *aRet.getArray() = OUString::createFromAscii("com.sun.star.config.SpecialConfigManager");
     return aRet;
 }
-
