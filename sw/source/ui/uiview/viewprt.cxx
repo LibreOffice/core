@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-28 12:32:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFX_MISCCFG_HXX
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #endif
 #ifndef _SVX_PRTQRY_HXX
 #include <svx/prtqry.hxx>
