@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:37:55 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,7 @@ class SwUndoInsertLabel : public SwUndo
     };
 
     String sText;
-    Point aPos;                 // fuer Zeichen-Objekte
+    // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
     USHORT nFldId;
     SwLabelType eType;
     BYTE nLayerId;              // fuer Zeichen-Objekte
@@ -1628,7 +1628,7 @@ public:
 
     void SetUndoKeep()  { bUndoKeep = TRUE; }
     void SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet, SwFrmFmt& rNewFly );
-    void SetDrawObj( const Point& rPos, BYTE nLayerId );
+    void SetDrawObj( BYTE nLayerId );
 };
 
 //--------------------------------------------------------------------
