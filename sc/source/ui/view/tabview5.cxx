@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:09:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 
 void __EXPORT ScTabView::Init()
 {
+    //  RTL layout of the view windows is done manually, because it depends on the
+    //  sheet orientation, not the UI setting
+    pFrameWin->EnableRTL( FALSE );
+
     USHORT i;
 
     aScrollTimer.SetTimeout(10);
@@ -149,6 +153,15 @@ void __EXPORT ScTabView::Init()
     // scroll direction will be wrong
     aHScrollLeft.EnableRTL ( FALSE );
     aHScrollRight.EnableRTL ( FALSE );
+
+    //  Mirroring is disabled for all scrollbars, completely handled manually.
+    //  The other windows in the view call EnableRTL in their ctors.
+    aVScrollTop.EnableRTL( FALSE );
+    aVScrollBottom.EnableRTL( FALSE );
+    aScrollBarBox.EnableRTL( FALSE );
+
+    // Tabbar initially left-to-right, done via SetMirrored(), not via EnableRTL()
+    pTabControl->SetMirrored( Application::GetSettings().GetLayoutRTL() );
 
     //  Hier noch nichts anzeigen (Show), weil noch falsch angeordnet ist
     //  Show kommt dann aus UpdateShow beim ersten Resize
@@ -619,6 +632,9 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
     if (nScrollX || nScrollY)
     {
         ScDocument* pDoc = aViewData.GetDocument();
+        if ( pDoc->IsNegativePage( nTab ) )
+            nScrollX = -nScrollX;
+
         double nPPTX = aViewData.GetPPTX();
         double nPPTY = aViewData.GetPPTY();
         ScSplitPos eWhich = aViewData.GetActivePart();
