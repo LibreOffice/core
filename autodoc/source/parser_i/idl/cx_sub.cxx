@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_sub.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,16 @@ Context_MLComment::ReadCharChain( CharacterSource & io_rText )
     char cNext = NULCH;
 
     do {
-        if ( jumpTo(io_rText,'*') == NULCH )
-            throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
+        do {
+            cNext = jumpTo(io_rText,'*','\n');
+            if (cNext == '\n')
+            {
+                Receiver().Increment_CurLine();
+                cNext = io_rText.MoveOn();
+            }
+            else if (cNext == NULCH)
+                throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
+        } while (cNext != '*');
 
         cNext = jumpOver(io_rText,'*');
         if (cNext == NULCH)
@@ -121,6 +129,8 @@ Context_SLComment::ReadCharChain( CharacterSource & io_rText )
         jumpOverEol(io_rText);
     io_rText.CutToken();
     SetToken(0);
+
+    Receiver().Increment_CurLine();
 }
 
 void
@@ -131,11 +141,17 @@ Context_Praeprocessor::ReadCharChain( CharacterSource & io_rText )
         jumpOverEol(io_rText);
     io_rText.CutToken();
     SetToken(0);
+
+    Receiver().Increment_CurLine();
 }
 
 void
 Context_Assignment::ReadCharChain( CharacterSource &    io_rText )
 {
+    // KORR_FUTURE
+    // How to handle new lines within this, so he y get realised by
+    //  ParserInfo?
+
     char cNext = NULCH;
     do {
         if ( (cNext = jumpTo(io_rText,';',',','"','}')) == NULCH )
@@ -160,7 +176,5 @@ Context_Assignment::ReadCharChain( CharacterSource &    io_rText )
 }
 
 
-
 }   // namespace uidl
 }   // namespace csi
-
