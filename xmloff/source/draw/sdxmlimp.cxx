@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ static __FAR_DATA SvXMLTokenMapEntry aStylesElemTokenMap[] =
     { XML_NAMESPACE_STYLE,  sXML_page_master,               XML_TOK_STYLES_PAGE_MASTER              },
     { XML_NAMESPACE_STYLE,  sXML_presentation_page_layout,  XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
     { XML_NAMESPACE_STYLE,  sXML_style,                     XML_TOK_STYLES_STYLE    },
+    { XML_NAMESPACE_NUMBER, sXML_date_style,                XML_TOK_STYLES_DATE_STYLE },
+    { XML_NAMESPACE_NUMBER, sXML_time_style,                XML_TOK_STYLES_TIME_STYLE },
     XML_TOKEN_MAP_END
 };
 
@@ -975,4 +977,3 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
         pValues++;
     }
 }
-

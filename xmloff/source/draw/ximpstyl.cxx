@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-18 07:48:51 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,10 @@
 
 #ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
 #include "XMLGraphicsDefaultStyle.hxx"
+#endif
+
+#ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#include "XMLNumberStylesImport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1074,6 +1078,12 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleChildContext(
             // style:presentation-page-layout inside office:styles context
             pContext = new SdXMLPresentationPageLayoutContext(GetSdImport(), nPrefix, rLocalName, xAttrList);
             break;
+        }
+        case XML_TOK_STYLES_DATE_STYLE:
+        case XML_TOK_STYLES_TIME_STYLE:
+        {
+            // number:date-style or number:time-style
+            pContext = new SdXMLNumberFormatImportContext( GetSdImport(), nPrefix, rLocalName, xAttrList );
         }
     }
 

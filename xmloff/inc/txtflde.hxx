@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:16 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,8 @@ protected:
         double fValue,          /// float content; possibly invalid
         sal_Bool bExportValue,  /// export value attribute?
         sal_Bool bExportValueType,  /// export value-type attribute?
-        sal_Bool bExportStyle); /// export style-sttribute?
+        sal_Bool bExportStyle,  /// export style-sttribute?
+        sal_Bool bTimeStyle = sal_False);   // exporting a time style?
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(

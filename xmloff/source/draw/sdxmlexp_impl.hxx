@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 22:02:09 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@ class SdXMLExport : public SvXMLExport
     XMLShapeExportPropertyMapper*       mpPropertySetMapper;
     XMLPageExportPropertyMapper*        mpPresPagePropsMapper;
 
+    sal_uInt32                  mnUsedDateStyles;           // this is a bitfield of the used formatings for date fields
+    sal_uInt32                  mnUsedTimeStyles;           // this is a bitfield of the used formatings for time fields
+
     sal_Bool                    mbIsDraw;
     sal_Bool                    mbFamilyGraphicUsed;
     sal_Bool                    mbFamilyPresentationUsed;
@@ -212,6 +215,11 @@ public:
     void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = TRUE; }
     BOOL IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
     void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = TRUE; }
+
+    virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False );
+    virtual void exportDataStyles();
+    virtual void exportAutoDataStyles();
+    virtual rtl::OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
 };
 
 #endif  //  _SDXMLEXP_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 10:59:52 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,10 @@
 
 #ifndef _XMLOFF_VISAREAEXPORT_HXX
 #include "VisAreaExport.hxx"
+#endif
+
+#ifndef _XMLOFF_NUMBERSTYLESEXPORT_HXX
+#include "XMLNumberStylesExport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -547,7 +551,9 @@ SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
-    msPageLayoutNames( RTL_CONSTASCII_USTRINGPARAM("PageLayoutNames") )
+    msPageLayoutNames( RTL_CONSTASCII_USTRINGPARAM("PageLayoutNames") ),
+    mnUsedDateStyles( NULL ),
+    mnUsedTimeStyles( NULL )
 {
 
 
@@ -2162,6 +2168,66 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
         uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), uno::UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat )
+{
+    sal_Int32 nFormat = nNumberFormat;
+    if( nNumberFormat > 1 )
+        nFormat -= 2;
+
+    const sal_uInt32 nIndex = 1 << nFormat;
+
+    if( bTimeFormat )
+    {
+        mnUsedTimeStyles |= nIndex;
+    }
+    else
+    {
+        mnUsedDateStyles |= nIndex;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::exportDataStyles()
+{
+    // there are no data styles to export in draw/impress yet
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::exportAutoDataStyles()
+{
+    for( sal_Int16 nDateFormat = 0; nDateFormat < SdXMLNumberStylesExporter::getDateStyleCount(); nDateFormat++ )
+    {
+        const sal_uInt32 nIndex = 1 << nDateFormat;
+        if( (mnUsedDateStyles & nIndex) != 0 )
+            SdXMLNumberStylesExporter::exportDateStyle( *this, nDateFormat );
+    }
+
+    for( sal_Int16 nTimeFormat = 0; nTimeFormat < SdXMLNumberStylesExporter::getTimeStyleCount(); nTimeFormat++ )
+    {
+        const sal_uInt32 nIndex = 1 << nTimeFormat;
+        if( (mnUsedTimeStyles & nIndex) != 0 )
+            SdXMLNumberStylesExporter::exportTimeStyle( *this, nTimeFormat );
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+OUString SdXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat ) const
+{
+    if( bTimeFormat )
+    {
+        return SdXMLNumberStylesExporter::getTimeStyleName( nNumberFormat );
+    }
+    else
+    {
+        return SdXMLNumberStylesExporter::getDateStyleName( nNumberFormat );
     }
 }
 

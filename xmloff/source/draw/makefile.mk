@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: dvo $ $Date: 2001-03-29 14:40:26 $
+#   last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/XMLNumberStyles.obj\
         $(SLO)$/XMLGraphicsDefaultStyle.obj\
         $(SLO)$/viewcontext.obj\
         $(SLO)$/eventimp.obj\

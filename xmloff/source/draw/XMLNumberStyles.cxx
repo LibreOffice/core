@@ -1,0 +1,658 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XMLNumberStyles.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#ifndef _XMLOFF_NUMBERSTYLESEXPORT_HXX
+#include <XMLNumberStylesExport.hxx>
+#endif
+
+#ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#include <XMLNumberStylesImport.hxx>
+#endif
+
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
+
+#include "xmlkywd.hxx"
+#include "sdxmlexp_impl.hxx"
+#include "sdxmlimp_impl.hxx"
+
+using namespace rtl;
+
+struct SdXMLDataStyleNumber
+{
+    const char* mpNumberStyle;
+    sal_Bool    mbLong;
+    sal_Bool    mbTextual;
+    sal_Bool    mbDecimal02;
+    const char* mpText;
+}
+    aSdXMLDataStyleNumbers[] =
+{
+    { sXML_day,         sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_day,         sal_True,       sal_False,      sal_False,      NULL },
+    { sXML_month,       sal_True,       sal_False,      sal_False,      NULL },
+    { sXML_month,       sal_False,      sal_True,       sal_False,      NULL },
+    { sXML_month,       sal_True,       sal_True,       sal_False,      NULL },
+    { sXML_year,        sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_year,        sal_True,       sal_False,      sal_False,      NULL },
+    { sXML_day_of_week, sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_day_of_week, sal_True,       sal_False,      sal_False,      NULL },
+    { sXML_text,        sal_False,      sal_False,      sal_False,      "."  },
+    { sXML_text,        sal_False,      sal_False,      sal_False,      " "  },
+    { sXML_text,        sal_False,      sal_False,      sal_False,      ", " },
+    { sXML_text,        sal_False,      sal_False,      sal_False,      ". " },
+    { sXML_hours,       sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_minutes,     sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_text,        sal_False,      sal_False,      sal_False,      ":"  },
+    { sXML_am_pm,       sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_seconds,     sal_False,      sal_False,      sal_False,      NULL },
+    { sXML_seconds,     sal_False,      sal_False,      sal_True,       NULL },
+    { NULL }
+};
+
+// date
+
+#define DATA_STYLE_NUMBER_END               0
+#define DATA_STYLE_NUMBER_DAY               1   // <number:day/>
+#define DATA_STYLE_NUMBER_DAY_LONG          2   // <number:day number:style="long"/>
+#define DATA_STYLE_NUMBER_MONTH_LONG        3   // <number:month number:style="long"/>
+#define DATA_STYLE_NUMBER_MONTH_TEXT        4   // <number:month number:textual="true"/>
+#define DATA_STYLE_NUMBER_MONTH_LONG_TEXT   5   // <number:month number:style="long" number:textual="true"/>
+#define DATA_STYLE_NUMBER_YEAR              6   // <number:year/>
+#define DATA_STYLE_NUMBER_YEAR_LONG         7   // <number:year number:style="long"/>
+#define DATA_STYLE_NUMBER_DAYOFWEEK         8   // <number:day-of-week/>
+#define DATA_STYLE_NUMBER_DAYOFWEEK_LONG    9   // <number:day-of-week number:style="long"/>
+#define DATA_STYLE_NUMBER_TEXT_POINT        10  // <number:text>.</number:text>
+#define DATA_STYLE_NUMBER_TEXT_SPACE        11  // <number:text> </number:text>
+#define DATA_STYLE_NUMBER_TEXT_COMMASPACE   12  // <number:text>, </number:text>
+#define DATA_STYLE_NUMBER_TEXT_POINTSPACE   13  // <number:text>. </number:text>
+#define DATA_STYLE_NUMBER_HOURS             14  // <number:hours/>
+#define DATA_STYLE_NUMBER_MINUTES           15  // <number:minutes/>
+#define DATA_STYLE_NUMBER_TEXT_COLON        16  // <number:text>:</number:text>
+#define DATA_STYLE_NUMBER_AMPM              17  // <number:am-pm/>
+#define DATA_STYLE_NUMBER_SECONDS           18  // <number:seconds/>
+#define DATA_STYLE_NUMBER_SECONDS_02        19  // <number:seconds number:/>
+
+
+struct SdXMLFixedDataStyle
+{
+    const char* mpName;
+    sal_Bool    mbAutomatic;
+    sal_Bool    mbDateStyle;
+    sal_uInt8   mpFormat[8];
+};
+
+const SdXMLFixedDataStyle aSdXML_Standard_Short =
+{
+    "D1", sal_True, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAY_LONG,
+        DATA_STYLE_NUMBER_TEXT_POINT,
+        DATA_STYLE_NUMBER_MONTH_LONG,
+        DATA_STYLE_NUMBER_TEXT_POINT,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_Standard_Long =
+{
+    "D2", sal_True, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAYOFWEEK_LONG,
+        DATA_STYLE_NUMBER_TEXT_COMMASPACE,
+        DATA_STYLE_NUMBER_DAY,
+        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
+        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
+        DATA_STYLE_NUMBER_TEXT_SPACE,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_DateStyle_1 =
+{
+    "D3", sal_False, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAY_LONG,
+        DATA_STYLE_NUMBER_TEXT_POINT,
+        DATA_STYLE_NUMBER_MONTH_LONG,
+        DATA_STYLE_NUMBER_TEXT_POINT,
+        DATA_STYLE_NUMBER_YEAR,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_DateStyle_2 =
+{
+    "D4", sal_False, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAY_LONG,
+        DATA_STYLE_NUMBER_TEXT_POINT,
+        DATA_STYLE_NUMBER_MONTH_LONG,
+        DATA_STYLE_NUMBER_TEXT_POINT,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_DateStyle_3 =
+{
+    "D5", sal_False, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAY,
+        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
+        DATA_STYLE_NUMBER_MONTH_TEXT,
+        DATA_STYLE_NUMBER_TEXT_SPACE,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_DateStyle_4 =
+{
+    "D6", sal_False, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAY,
+        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
+        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
+        DATA_STYLE_NUMBER_TEXT_SPACE,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_DateStyle_5 =
+{
+    "D7", sal_False, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAYOFWEEK,
+        DATA_STYLE_NUMBER_TEXT_COMMASPACE,
+        DATA_STYLE_NUMBER_DAY,
+        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
+        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
+        DATA_STYLE_NUMBER_TEXT_SPACE,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_DateStyle_6 =
+{
+    "D8", sal_False, sal_True,
+    {
+        DATA_STYLE_NUMBER_DAYOFWEEK_LONG,
+        DATA_STYLE_NUMBER_TEXT_COMMASPACE,
+        DATA_STYLE_NUMBER_DAY,
+        DATA_STYLE_NUMBER_TEXT_POINTSPACE,
+        DATA_STYLE_NUMBER_MONTH_LONG_TEXT,
+        DATA_STYLE_NUMBER_TEXT_SPACE,
+        DATA_STYLE_NUMBER_YEAR_LONG,
+        0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_1 =
+{   "T1", sal_True, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_SECONDS,
+        DATA_STYLE_NUMBER_AMPM,
+        0, 0,
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_2 =
+{   "T2", sal_False, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        0, 0, 0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_3 =
+{   "T3", sal_False, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_SECONDS,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_4 =
+{   "T4", sal_False, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_SECONDS_02,
+        0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_5 =
+{   "T5", sal_False, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        DATA_STYLE_NUMBER_AMPM,
+        0, 0, 0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_6 =
+{   "T6", sal_False, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_SECONDS,
+        DATA_STYLE_NUMBER_AMPM,
+        0, 0
+    }
+};
+
+const SdXMLFixedDataStyle aSdXML_TimeStyle_7 =
+{   "T7", sal_False, sal_False,
+    {
+        DATA_STYLE_NUMBER_HOURS,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_MINUTES,
+        DATA_STYLE_NUMBER_TEXT_COLON,
+        DATA_STYLE_NUMBER_SECONDS_02,
+        DATA_STYLE_NUMBER_AMPM,
+        0, 0
+    }
+};
+
+const SdXMLFixedDataStyle* aSdXMLFixedDateFormats[SdXMLDateFormatCount] =
+{
+    &aSdXML_Standard_Short,
+    &aSdXML_Standard_Long,
+    &aSdXML_DateStyle_1,
+    &aSdXML_DateStyle_2,
+    &aSdXML_DateStyle_3,
+    &aSdXML_DateStyle_4,
+    &aSdXML_DateStyle_5,
+    &aSdXML_DateStyle_6,
+};
+
+const SdXMLFixedDataStyle* aSdXMLFixedTimeFormats[SdXMLTimeFormatCount] =
+{
+    &aSdXML_TimeStyle_1,
+    &aSdXML_TimeStyle_2,
+    &aSdXML_TimeStyle_3,
+    &aSdXML_TimeStyle_4,
+    &aSdXML_TimeStyle_5,
+    &aSdXML_TimeStyle_6,
+    &aSdXML_TimeStyle_7
+};
+
+static SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* pStyle )
+{
+    OUString sAttrValue;
+
+    // name
+    sAttrValue = OUString::createFromAscii( pStyle->mpName );
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, sXML_name, sAttrValue );
+
+    // family
+    sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("data-style"));
+    rExport.AddAttribute( XML_NAMESPACE_STYLE, sXML_family, sAttrValue );
+
+    if( pStyle->mbAutomatic )
+    {
+        sAttrValue = OUString::createFromAscii( sXML_true );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_automatic_order, sAttrValue );
+    }
+
+    SvXMLElementExport aElement( rExport, XML_NAMESPACE_NUMBER, pStyle->mbDateStyle ? sXML_date_style : sXML_time_style, sal_True, sal_True );
+
+    const sal_uInt8* pElements = (const sal_uInt8*)&pStyle->mpFormat[0];
+
+    while( *pElements )
+    {
+        SdXMLDataStyleNumber& rElement = aSdXMLDataStyleNumbers[ (*pElements++) - 1 ];
+
+        if( rElement.mbDecimal02 )
+        {
+            sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2"));
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_decimal_places, sAttrValue );
+        }
+
+        if( rElement.mbLong )
+        {
+            sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_long));
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_style, sAttrValue );
+        }
+
+        if( rElement.mbTextual )
+        {
+            sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true));
+            rExport.AddAttribute( XML_NAMESPACE_NUMBER, sXML_textual, sAttrValue );
+        }
+
+        SvXMLElementExport aNumberStyle( rExport, XML_NAMESPACE_NUMBER, rElement.mpNumberStyle, sal_True, sal_False );
+        if( rElement.mpText )
+        {
+            sAttrValue = OUString::createFromAscii( rElement.mpText );
+            rExport.GetDocHandler()->characters( sAttrValue );
+        }
+    }
+}
+
+void SdXMLNumberStylesExporter::exportTimeStyle( SdXMLExport& rExport, sal_Int32 nStyle )
+{
+    DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount), "Unknown time style!" )
+    SdXMLExportStyle( rExport, aSdXMLFixedTimeFormats[ nStyle ] );
+}
+
+void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32 nStyle )
+{
+    DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLDateFormatCount), "Unknown date style!" )
+    SdXMLExportStyle( rExport, aSdXMLFixedDateFormats[ nStyle ] );
+}
+
+OUString SdXMLNumberStylesExporter::getTimeStyleName(const sal_Int32 nTimeFormat )
+{
+    sal_Int32 nFormat = nTimeFormat;
+    if( nFormat > 1 )
+        nFormat -= 2;
+
+    if( (nFormat >= 0) && (nFormat < SdXMLTimeFormatCount) )
+    {
+        return OUString::createFromAscii(aSdXMLFixedTimeFormats[nFormat]->mpName );
+    }
+    else
+    {
+        return OUString();
+    }
+}
+
+OUString SdXMLNumberStylesExporter::getDateStyleName(const sal_Int32 nDateFormat )
+{
+    sal_Int32 nFormat = nDateFormat;
+    if( nFormat > 1 )
+        nFormat -= 2;
+
+    if( (nFormat >= 0) && (nFormat < SdXMLDateFormatCount) )
+    {
+        return OUString::createFromAscii(aSdXMLFixedDateFormats[nFormat]->mpName );
+    }
+    else
+    {
+        return OUString();
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////
+// import
+
+class SdXMLNumberFormatMemberImportContext : public SvXMLImportContext
+{
+private:
+    SdXMLNumberFormatImportContext* mpParent;
+
+    OUString maNumberStyle;
+    sal_Bool mbLong;
+    sal_Bool mbTextual;
+    sal_Bool mbDecimal02;
+    OUString maText;
+
+public:
+    TYPEINFO();
+
+    SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        SdXMLNumberFormatImportContext* pParent );
+    virtual ~SdXMLNumberFormatMemberImportContext();
+
+    virtual void EndElement();
+
+    virtual void Characters( const ::rtl::OUString& rChars );
+};
+
+TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
+
+SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+    mpParent( pParent ),
+    maNumberStyle( rLocalName )
+{
+    mbLong = sal_False;
+    mbTextual = sal_False;
+    mbDecimal02 = sal_False;
+
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+
+        if( nPrefix == XML_NAMESPACE_NUMBER )
+        {
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_decimal_places ) ) )
+            {
+                mbDecimal02 =  sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("2") );
+            }
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_style ) ) )
+            {
+                mbLong = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_long ) );
+            }
+            else if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_textual ) ) )
+            {
+                mbTextual = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
+            }
+        }
+    }
+
+}
+
+SdXMLNumberFormatMemberImportContext::~SdXMLNumberFormatMemberImportContext()
+{
+}
+
+void SdXMLNumberFormatMemberImportContext::EndElement()
+{
+    if( mpParent )
+        mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
+}
+
+void SdXMLNumberFormatMemberImportContext::Characters( const ::rtl::OUString& rChars )
+{
+    maText += rChars;
+}
+
+TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
+
+
+SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList)
+:   SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList),
+    mbAutomatic( sal_False ), mnIndex(0), mrImport( rImport ), mnKey( -1 )
+{
+    mbTimeStyle = rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_time_style ) );
+
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        OUString sValue = xAttrList->getValueByIndex( i );
+
+        if( nPrefix == XML_NAMESPACE_NUMBER )
+        {
+            if( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_automatic_order ) ) )
+            {
+                mbAutomatic = sValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_true ) );
+            }
+        }
+    }
+}
+
+SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
+{
+}
+
+void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool   bDecimal02, OUString& rText )
+{
+    if( mnIndex == -1 || mnIndex == 8 )
+    {
+        mnIndex = -1;
+        return;
+    }
+
+    const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
+    for( sal_uInt8 nIndex = 0; pStyleMember->mpNumberStyle; nIndex++, pStyleMember++ )
+    {
+        if( ((rNumberStyle.compareToAscii( pStyleMember->mpNumberStyle ) == 0) &&
+            (pStyleMember->mbLong == bLong) &&
+            (pStyleMember->mbTextual == bTextual) &&
+            (pStyleMember->mbDecimal02 == bDecimal02) &&
+            ( ( (pStyleMember->mpText == NULL) && (rText.getLength() == 0) ) ||
+              ( pStyleMember->mpText && (rText.compareToAscii( pStyleMember->mpText )  == 0 )) ) ) )
+        {
+            mnElements[mnIndex++] = nIndex + 1;
+            return;
+        }
+    }
+}
+
+sal_Bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pStyle ) const
+{
+    if( pStyle->mbAutomatic != mbAutomatic )
+        return sal_False;
+
+    for( sal_Int16 nIndex = 0; nIndex < 8; nIndex++ )
+    {
+        if( pStyle->mpFormat[nIndex] != mnElements[nIndex] )
+            return sal_False;
+    }
+
+    return sal_True;
+}
+
+void SdXMLNumberFormatImportContext::EndElement()
+{
+    for( ; mnIndex < 8; mnIndex++ )
+    {
+        mnElements[mnIndex] = 0;
+    }
+
+    if( mbTimeStyle )
+    {
+        // compare import with all time styles
+        for( sal_Int16 nFormat = 0; nFormat < SdXMLTimeFormatCount; nFormat++ )
+        {
+            if( compareStyle( aSdXMLFixedTimeFormats[nFormat] ) )
+            {
+                mnKey = nFormat + 2;
+                break;
+            }
+        }
+    }
+    else
+    {
+        // compare import with all date styles
+        for( sal_Int16 nFormat = 0; nFormat < SdXMLDateFormatCount; nFormat++ )
+        {
+            if( compareStyle( aSdXMLFixedDateFormats[nFormat] ) )
+            {
+                mnKey = nFormat + 2;
+                break;
+            }
+        }
+    }
+}
+
+SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this );
+}
