@@ -1,32 +1,5 @@
 UDK_3.1 {
     global:
-        # jvmaccess/javainfo.hxx:
-        ??0InitException@JavaInfo@jvmaccess@@QAE@XZ; # jvmaccess::JavaInfo::InitException::InitException()
-        ??0InitException@JavaInfo@jvmaccess@@QAE@ABV012@@Z; # jvmaccess::JavaInfo::InitException::InitException(InitException const &)
-        ??1InitException@JavaInfo@jvmaccess@@UAE@XZ; # jvmaccess::JavaInfo::InitException::~InitException()
-        ??4InitException@JavaInfo@jvmaccess@@QAEAAV012@ABV012@@Z; # jvmaccess::JavaInfo::InitException::operator=(InitException const &)
-        ??0UnsupportedException@JavaInfo@jvmaccess@@QAE@XZ; # jvmaccess::JavaInfo::UnsupportedException::UnsupportedException()
-        ??0UnsupportedException@JavaInfo@jvmaccess@@QAE@ABV012@@Z; # jvmaccess::JavaInfo::UnsupportedException::UnsupportedException(UnsupportedException const &)
-        ??1UnsupportedException@JavaInfo@jvmaccess@@UAE@XZ; # jvmaccess::JavaInfo::UnsupportedException::~UnsupportedException()
-        ??4UnsupportedException@JavaInfo@jvmaccess@@QAEAAV012@ABV012@@Z; # jvmaccess::JavaInfo::UnsupportedException::operator =(UnsupportedException const &)
-        ??0JavaInfo@jvmaccess@@QAE@ABVOUString@rtl@@@Z; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &)
-        ??0JavaInfo@jvmaccess@@QAE@ABVOUString@rtl@@H@Z; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &, int)
-        ??0JavaInfo@jvmaccess@@QAE@ABV01@@Z; # jvmaccess::JavaInfo::JavaInfo(JavaInfo const &)
-        ??1JavaInfo@jvmaccess@@QAE@XZ; # jvmaccess::JavaInfo::~JavaInfo()
-        ??4JavaInfo@jvmaccess@@QAEAAV01@ABV01@@Z; # jvmaccess::JavaInfo::operator =(JavaInfo const &)
-        ?createAllInfo@JavaInfo@jvmaccess@@SAXPAV?$vector@VJavaInfo@jvmaccess@@V?$allocator@VJavaInfo@jvmaccess@@@_STL@@@_STL@@@Z; # jvmaccess::JavaInfo::createAllInfo(std::vector< JavaInfo > *)
-        ?createBestInfo@JavaInfo@jvmaccess@@SA?AV12@_N@Z; # jvmaccess::JavaInfo::createBestInfo(bool)
-        ?isSame@JavaInfo@jvmaccess@@QBE_NABV12@@Z; # jvmaccess::JavaInfo::isSame(JavaInfo const &) const
-        ?isEqual@JavaInfo@jvmaccess@@QBE_NABV12@@Z; # jvmaccess::JavaInfo::isEqual(JavaInfo const &) const
-        ?compareVersions@JavaInfo@jvmaccess@@QBEHABV12@@Z; # jvmaccess::JavaInfo::compareVersions(JavaInfo const &) const
-        ?getVersion@JavaInfo@jvmaccess@@QBEABVOUString@rtl@@XZ; # jvmaccess::JavaInfo::getVersion() const
-        ?getInstallationLocation@JavaInfo@jvmaccess@@QBEABVOUString@rtl@@XZ; # jvmaccess::JavaInfo::getInstallationLocation() const
-        ?getType@JavaInfo@jvmaccess@@QBEABVOUString@rtl@@XZ; # jvmaccess::JavaInfo::getType() const
-        ?getRuntimeLibLocation@JavaInfo@jvmaccess@@QBEABVOUString@rtl@@XZ; # jvmaccess::JavaInfo::getRuntimeLibLocation() const
-        ?supportsAccessibility@JavaInfo@jvmaccess@@QBE_NXZ; # jvmaccess::JavaInfo::supportsAccessibility() const
-        ?getLibLocations@JavaInfo@jvmaccess@@QBEABVOUString@rtl@@XZ; # jvmaccess::JavaInfo::getLibLocations() const
-        ?getJarFilePath@JavaInfo@jvmaccess@@QBE?AVOUString@rtl@@ABV34@@Z; # jvmaccess::JavaInfo::getJarFilePath(rtl::OUString const &) const
-
         # jvmaccess/virtualmachine.hxx:
         ??0CreationException@AttachGuard@VirtualMachine@jvmaccess@@QAE@XZ; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
         ??0CreationException@AttachGuard@VirtualMachine@jvmaccess@@QAE@ABV0123@@Z; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
