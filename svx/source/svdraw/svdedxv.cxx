@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-24 17:06:13 $
+ *  last change: $Author: dl $ $Date: 2000-11-30 12:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #include <vcl/cursor.hxx>
 #endif
 
+
+#include "editobj.hxx"
+#include "outlobj.hxx"
 #include "scripttypeitem.hxx"
 #include "svditext.hxx"
 #include "svdoutl.hxx"
@@ -1275,20 +1278,46 @@ void SdrObjEditView::ImpMakeTextCursorAreaVisible()
 
 USHORT SdrObjEditView::GetScriptType() const
 {
-    USHORT nScriptType = SCRIPTTYPE_LATIN;
+    USHORT nScriptType = 0;
 
     if( IsTextEdit() )
     {
         if( pTextEditObj->GetOutlinerParaObject() )
-            /* nScriptType = pTextEditObj->GetOutlinerParaObject()->GetScriptType(); */
+            nScriptType = pTextEditObj->GetOutlinerParaObject()->GetTextObject().GetScriptType();
 
-        if(pTextEditOutlinerView)
+        if( pTextEditOutlinerView )
             nScriptType = pTextEditOutlinerView->GetSelectedScriptType();
     }
-//  else
-//  {
-//        return SdrGlueEditView::GetAttributes(rTargetSet, bOnlyHardAttr);
-//  }
+    else
+    {
+        sal_uInt32 nMarkCount( aMark.GetMarkCount() );
+
+        for( sal_uInt32 i = 0; i < nMarkCount; i++ )
+        {
+            OutlinerParaObject* pParaObj = aMark.GetMark( i )->GetObj()->GetOutlinerParaObject();
+
+            if( pParaObj )
+            {
+                USHORT nType = pParaObj->GetTextObject().GetScriptType();
+
+                switch ( nType )
+                {
+                    case SCRIPTTYPE_LATIN:
+                        nScriptType |= SCRIPTTYPE_LATIN;
+                    break;
+                    case SCRIPTTYPE_ASIAN:
+                        nScriptType |= SCRIPTTYPE_ASIAN;
+                    break;
+                    case SCRIPTTYPE_COMPLEX:
+                        nScriptType |= SCRIPTTYPE_COMPLEX;
+                    break;
+                }
+            }
+        }
+    }
+
+    if( nScriptType == 0 )
+        nScriptType = SCRIPTTYPE_LATIN;
 
     return nScriptType;
 }
