@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:09:17 $
+ *  last change: $Author: vg $ $Date: 2001-11-07 21:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ String RID_SVXITEMS_EXTRAS_CHARCOLOR
     Text [ swedish ] = "Teckenf�rg" ;
     Text [ dutch ] = "Tekenkleur" ;
     Text [ spanish ] = "Color del car�cter" ;
-    Text [ english_us ] = "Font Color" ;
+    Text [ english_us ] = "Font color" ;
     Text[ chinese_simplified ] = "字符颜色";
     Text[ russian ] = "���� ������";
     Text[ polish ] = "Kolor czcionki";
@@ -3264,7 +3264,7 @@ String RID_ATTR_TABSTOP
     Text [ swedish ] = "Tabulatorer" ;
     Text [ dutch ] = "Tabstops" ;
     Text [ spanish ] = "Tabuladores" ;
-    Text [ english_us ] = "Tab Stops" ;
+    Text [ english_us ] = "Tab stops" ;
     Text[ chinese_simplified ] = "制表符";
     Text[ russian ] = "����������";
     Text[ polish ] = "Tabulatory";
@@ -3357,12 +3357,12 @@ String RID_ATTR_CHAR_POSTURE
     Text [ swedish ] = "Teckensnittsst�llning" ;
     Text [ dutch ] = "Letterpositie" ;
     Text [ spanish ] = "Posici�n de la fuente" ;
-    Text [ english_us ] = "Font Posture" ;
-    Text[ chinese_simplified ] = "字体位置";
+    Text [ english_us ] = "Font posture" ;
+    Text[ chinese_simplified ] = "字体式样";
     Text[ russian ] = "��������� ������";
     Text[ polish ] = "Pozycja czcionki";
-    Text[ japanese ] = "ﾌｫﾝﾄの形態";
-    Text[ chinese_traditional ] = "字型位置";
+    Text[ japanese ] = "ﾌｫﾝﾄのｽﾀｲﾙ";
+    Text[ chinese_traditional ] = "字型式樣";
     Text[ arabic ] = "��� ����";
     Text[ greek ] = "���� ��������������";
     Text[ korean ] = "글꼴 위치";
@@ -3384,7 +3384,7 @@ String RID_ATTR_CHAR_WEIGHT
     Text [ swedish ] = "Teckenstyrka" ;
     Text [ dutch ] = "Letterdikte" ;
     Text [ spanish ] = "Peso de fuente" ;
-    Text [ english_us ] = "Font Weight" ;
+    Text [ english_us ] = "Font weight" ;
     Text[ chinese_simplified ] = "字体粗细";
     Text[ russian ] = "������� ������";
     Text[ polish ] = "Grubo�� czcionki";
@@ -3438,7 +3438,7 @@ String RID_ATTR_CHAR_WORDLINEMODE
     Text [ swedish ] = "Ordvis" ;
     Text [ dutch ] = "Alleen woorden" ;
     Text [ spanish ] = "Solo palabras" ;
-    Text [ english_us ] = "Individual Words" ;
+    Text [ english_us ] = "Individual words" ;
     Text[ chinese_simplified ] = "逐字";
     Text[ russian ] = "������ �����";
     Text[ polish ] = "Tylko s�owa";
@@ -3542,16 +3542,16 @@ String RID_ATTR_CHAR_FONTHEIGHT
     Text [ portuguese ] = "Altura do tipo de letra" ;
     Text [ finnish ] = "Fontin korkeus" ;
     Text [ danish ] = "Skrifth�jde" ;
-    Text [ french ] = "Hauteur des caract�res" ;
+    Text [ french ] = "Taille" ;
     Text [ swedish ] = "Teckenstorlek" ;
     Text [ dutch ] = "Letterhoogte" ;
     Text [ spanish ] = "Altura de la fuente" ;
-    Text [ english_us ] = "Font Height" ;
-    Text[ chinese_simplified ] = "字体高度";
+    Text [ english_us ] = "Font size" ;
+    Text[ chinese_simplified ] = "字体规格";
     Text[ russian ] = "������ ������";
     Text[ polish ] = "Wysoko�� czcionki";
-    Text[ japanese ] = "ﾌｫﾝﾄの縦";
-    Text[ chinese_traditional ] = "字型高度";
+    Text[ japanese ] = "ﾌｫﾝﾄのｻｲｽﾞ";
+    Text[ chinese_traditional ] = "字型規格";
     Text[ arabic ] = "������ ����";
     Text[ greek ] = "���� ��������������";
     Text[ korean ] = "글꼴 높이";
@@ -3577,7 +3577,7 @@ String RID_ATTR_CHAR_PROPSIZE
     Text[ chinese_simplified ] = "标准字体大小";
     Text[ russian ] = "������ �������.";
     Text[ polish ] = "Wzgl�dna wielko�� czcionki";
-    Text[ japanese ] = "相対ﾌｫﾝﾄｻｲｽﾞ";
+    Text[ japanese ] = "相対的なﾌｫﾝﾄのｻｲｽﾞ";
     Text[ chinese_traditional ] = "標準字型大小";
     Text[ arabic ] = "����� ������ ����";
     Text[ greek ] = "����. ������� ��������������";
@@ -3600,7 +3600,7 @@ String RID_ATTR_CHAR_COLOR
     Text [ swedish ] = "Teckenf�rg" ;
     Text [ dutch ] = "Letterkleur" ;
     Text [ spanish ] = "Color de fuente" ;
-    Text [ english_us ] = "Font Color" ;
+    Text [ english_us ] = "Font color" ;
     Text[ chinese_simplified ] = "字体颜色";
     Text[ russian ] = "���� ������";
     Text[ polish ] = "Kolor czcionki";
@@ -3876,7 +3876,7 @@ String RID_ATTR_PARA_LINESPACE
     Text [ swedish ] = "Radavst�nd" ;
     Text [ dutch ] = "Regelafstand" ;
     Text [ spanish ] = "Interlineado" ;
-    Text [ english_us ] = "Line Spacing" ;
+    Text [ english_us ] = "Line spacing" ;
     Text[ chinese_simplified ] = "行距";
     Text[ russian ] = "����� ��������";
     Text[ polish ] = "Odst�p wierszy";
@@ -3969,7 +3969,7 @@ String RID_ATTR_PARA_SPLIT
     Text [ swedish ] = "Dela stycke" ;
     Text [ dutch ] = "Alinea splitsen" ;
     Text [ spanish ] = "Dividir p�rrafo" ;
-    Text [ english_us ] = "Split Paragraph" ;
+    Text [ english_us ] = "Split paragraph" ;
     Text[ chinese_simplified ] = "分开段落";
     Text[ russian ] = "��������� �����";
     Text[ polish ] = "Podziel akapit";
@@ -4284,7 +4284,7 @@ String RID_ATTR_PARA_KEEP
     Text [ swedish ] = "H�ll ihop stycken" ;
     Text [ dutch ] = "Alinea's bijeenhouden" ;
     Text [ spanish ] = "Mantener p�rrafos juntos" ;
-    Text [ english_us ] = "Keep with Next Paragraph" ;
+    Text [ english_us ] = "Keep with next paragraph" ;
     Text[ chinese_simplified ] = "与下段同页";
     Text[ russian ] = "������ �� ��������� �������";
     Text[ polish ] = "Razem z nast�pnym";
@@ -4305,7 +4305,7 @@ String RID_ATTR_FLASH
     Text[ russian ] = "Blinking";
     Text[ greek ] = "Blinking";
     Text[ dutch ] = "Blinking";
-    Text[ french ] = "Blinking";
+    Text[ french ] = "Clignotant";
     Text[ spanish ] = "Blinking";
     Text[ finnish ] = "Blinking";
     Text[ italian ] = "Blinking";
@@ -4329,7 +4329,7 @@ String RID_ATTR_PARA_REGISTER
     Text[ russian ] = "Register-true";
     Text[ greek ] = "Register-true";
     Text[ dutch ] = "Register-true";
-    Text[ french ] = "Register-true";
+    Text[ french ] = "Contr�le de rep�rage";
     Text[ spanish ] = "Register-true";
     Text[ finnish ] = "Register-true";
     Text[ italian ] = "Register-true";
@@ -4348,12 +4348,12 @@ String RID_ATTR_PARA_REGISTER
 String RID_ATTR_BRUSH_CHAR
 {
     Text = "Zeichenhintergrund" ;
-    Text[ english_us ] = "Character Background";
+    Text[ english_us ] = "Character background";
     Text[ portuguese ] = "Character Background";
     Text[ russian ] = "Character Background";
     Text[ greek ] = "Character Background";
     Text[ dutch ] = "Character Background";
-    Text[ french ] = "Character Background";
+    Text[ french ] = "Trame de fond";
     Text[ spanish ] = "Character Background";
     Text[ finnish ] = "Character Background";
     Text[ italian ] = "Character Background";
@@ -4372,12 +4372,12 @@ String RID_ATTR_BRUSH_CHAR
 String RID_ATTR_CHAR_CJK_FONT
 {
     Text = "Asiatische Schrift" ;
-    Text [ english_us ] = "Asian Font" ;
+    Text [ english_us ] = "Asian font" ;
     Text[ portuguese ] = "Asian Font";
     Text[ russian ] = "Asian Font";
     Text[ greek ] = "Asian Font";
     Text[ dutch ] = "Asian Font";
-    Text[ french ] = "Asian Font";
+    Text[ french ] = "Police asiatique";
     Text[ spanish ] = "Asian Font";
     Text[ finnish ] = "Asian Font";
     Text[ italian ] = "Asian Font";
@@ -4396,12 +4396,12 @@ String RID_ATTR_CHAR_CJK_FONT
 String RID_ATTR_CHAR_CJK_FONTHEIGHT
 {
     Text = "Schriftgrad asiatische Schrift" ;
-    Text [ english_us ] = "Size asian font" ;
+    Text [ english_us ] = "Size of Asian font" ;
     Text[ portuguese ] = "Size asian font";
     Text[ russian ] = "Size asian font";
     Text[ greek ] = "Size asian font";
     Text[ dutch ] = "Size asian font";
-    Text[ french ] = "Size asian font";
+    Text[ french ] = "Taille police asiatique";
     Text[ spanish ] = "Size asian font";
     Text[ finnish ] = "Size asian font";
     Text[ italian ] = "Size asian font";
@@ -4409,10 +4409,10 @@ String RID_ATTR_CHAR_CJK_FONTHEIGHT
     Text[ swedish ] = "Teckenstorlek asiatiskt teckensnitt";
     Text[ polish ] = "Size asian font";
     Text[ portuguese_brazilian ] = "Size asian font";
-    Text[ japanese ] = "ﾌｫﾝﾄの縦 日本語用ﾌｫﾝﾄ";
+    Text[ japanese ] = "日本語用ﾌｫﾝﾄのｻｲｽﾞ";
     Text[ korean ] = "Size asian font";
-    Text[ chinese_simplified ] = "中日韩文字的字体高度";
-    Text[ chinese_traditional ] = "中日韓文字的字型高度";
+    Text[ chinese_simplified ] = "中日韩文字的字体规格";
+    Text[ chinese_traditional ] = "中日韓文字的字型規格";
     Text[ turkish ] = "Size asian font";
     Text[ arabic ] = "Size asian font";
     Text[ catalan ] = "Size asian font";
@@ -4420,12 +4420,12 @@ String RID_ATTR_CHAR_CJK_FONTHEIGHT
 String RID_ATTR_CHAR_CJK_LANGUAGE
 {
     Text = "Sprache asiatische Schrift" ;
-    Text [ english_us ] = "Language asian font" ;
+    Text [ english_us ] = "Language of Asian fonts" ;
     Text[ portuguese ] = "Language asian font";
     Text[ russian ] = "Language asian font";
     Text[ greek ] = "Language asian font";
     Text[ dutch ] = "Language asian font";
-    Text[ french ] = "Language asian font";
+    Text[ french ] = "Langue police asiatique";
     Text[ spanish ] = "Language asian font";
     Text[ finnish ] = "Language asian font";
     Text[ italian ] = "Language asian font";
@@ -4433,7 +4433,7 @@ String RID_ATTR_CHAR_CJK_LANGUAGE
     Text[ swedish ] = "Spr�k asiatiskt teckensnitt";
     Text[ polish ] = "Language asian font";
     Text[ portuguese_brazilian ] = "Language asian font";
-    Text[ japanese ] = "言語 日本語用ﾌｫﾝﾄ";
+    Text[ japanese ] = "日本語用ﾌｫﾝﾄの言語";
     Text[ korean ] = "Language asian font";
     Text[ chinese_simplified ] = "中日韩文字语言";
     Text[ chinese_traditional ] = "中日韓文字語言";
@@ -4444,12 +4444,12 @@ String RID_ATTR_CHAR_CJK_LANGUAGE
 String RID_ATTR_CHAR_CJK_POSTURE
 {
     Text = "Schriftstellung asiatische Schrift" ;
-    Text [ english_us ] = "Posture asian font" ;
+    Text [ english_us ] = "Posture of Asian fonts" ;
     Text[ portuguese ] = "Posture asian font";
     Text[ russian ] = "Posture asian font";
     Text[ greek ] = "Posture asian font";
     Text[ dutch ] = "Posture asian font";
-    Text[ french ] = "Posture asian font";
+    Text[ french ] = "Inclinaison police asiatique";
     Text[ spanish ] = "Posture asian font";
     Text[ finnish ] = "Posture asian font";
     Text[ italian ] = "Posture asian font";
@@ -4457,10 +4457,10 @@ String RID_ATTR_CHAR_CJK_POSTURE
     Text[ swedish ] = "Posture asian font";
     Text[ polish ] = "Posture asian font";
     Text[ portuguese_brazilian ] = "Posture asian font";
-    Text[ japanese ] = "ﾌｫﾝﾄの形態 日本語用ﾌｫﾝﾄ";
+    Text[ japanese ] = "日本語用ﾌｫﾝﾄのｽﾀｲﾙ";
     Text[ korean ] = "Posture asian font";
-    Text[ chinese_simplified ] = "中日韩文字的字体高度";
-    Text[ chinese_traditional ] = "中日韓文字字型的位置";
+    Text[ chinese_simplified ] = "中日韩文字的字体式样";
+    Text[ chinese_traditional ] = "中日韓文字字型的式樣";
     Text[ turkish ] = "Posture asian font";
     Text[ arabic ] = "Posture asian font";
     Text[ catalan ] = "Posture asian font";
@@ -4468,12 +4468,12 @@ String RID_ATTR_CHAR_CJK_POSTURE
 String RID_ATTR_CHAR_CJK_WEIGHT
 {
     Text = "Schriftst�rke asiatische Schrift" ;
-    Text [ english_us ] = "Weight asian font" ;
+    Text [ english_us ] = "Weight of Asian fonts" ;
     Text[ portuguese ] = "Weight asian font";
     Text[ russian ] = "Weight asian font";
     Text[ greek ] = "Weight asian font";
     Text[ dutch ] = "Weight asian font";
-    Text[ french ] = "Weight asian font";
+    Text[ french ] = "Graisse police asiatique";
     Text[ spanish ] = "Weight asian font";
     Text[ finnish ] = "Weight asian font";
     Text[ italian ] = "Weight asian font";
@@ -4481,7 +4481,7 @@ String RID_ATTR_CHAR_CJK_WEIGHT
     Text[ swedish ] = "Weight asian font";
     Text[ polish ] = "Weight asian font";
     Text[ portuguese_brazilian ] = "Weight asian font";
-    Text[ japanese ] = "ﾌｫﾝﾄの太さ 日本語用ﾌｫﾝﾄ";
+    Text[ japanese ] = "日本語用ﾌｫﾝﾄの太さ";
     Text[ korean ] = "Weight asian font";
     Text[ chinese_simplified ] = "中日韩文字的字体粗细";
     Text[ chinese_traditional ] = "中日韓文字字型的粗細";
@@ -4497,7 +4497,7 @@ String RID_ATTR_CHAR_CTL_FONT
     Text[ russian ] = "Complex scripts";
     Text[ greek ] = "Complex scripts";
     Text[ dutch ] = "Complex scripts";
-    Text[ french ] = "Complex scripts";
+    Text[ french ] = "Scripts complexes";
     Text[ spanish ] = "Complex scripts";
     Text[ finnish ] = "Complex scripts";
     Text[ italian ] = "Complex scripts";
@@ -4516,12 +4516,12 @@ String RID_ATTR_CHAR_CTL_FONT
 String RID_ATTR_CHAR_CTL_FONTHEIGHT
 {
     Text = "Schriftgrad komplexe Skripte" ;
-    Text [ english_us ] = "Size complex scripts" ;
+    Text [ english_us ] = "Size of complex scripts" ;
     Text[ portuguese ] = "Size complex scripts";
     Text[ russian ] = "Size complex scripts";
     Text[ greek ] = "Size complex scripts";
     Text[ dutch ] = "Size complex scripts";
-    Text[ french ] = "Size complex scripts";
+    Text[ french ] = "Taille scripts complexes";
     Text[ spanish ] = "Size complex scripts";
     Text[ finnish ] = "Size complex scripts";
     Text[ italian ] = "Size complex scripts";
@@ -4529,10 +4529,10 @@ String RID_ATTR_CHAR_CTL_FONTHEIGHT
     Text[ swedish ] = "Teckenstorlek komplexa teckensnitt";
     Text[ polish ] = "Size complex scripts";
     Text[ portuguese_brazilian ] = "Size complex scripts";
-    Text[ japanese ] = "ﾌｫﾝﾄの縦 混在文章";
+    Text[ japanese ] = "混在文章用ﾌｫﾝﾄのｻｲｽﾞ";
     Text[ korean ] = "Size complex scripts";
-    Text[ chinese_simplified ] = "复杂的文字的字体高度";
-    Text[ chinese_traditional ] = "複雜的文字的字型高度";
+    Text[ chinese_simplified ] = "复杂的文字的字体规格";
+    Text[ chinese_traditional ] = "複雜的文字的字型規格";
     Text[ turkish ] = "Size complex scripts";
     Text[ arabic ] = "Size complex scripts";
     Text[ catalan ] = "Size complex scripts";
@@ -4540,12 +4540,12 @@ String RID_ATTR_CHAR_CTL_FONTHEIGHT
 String RID_ATTR_CHAR_CTL_LANGUAGE
 {
     Text = "Sprache komplexe Skripte" ;
-    Text [ english_us ] = "Language complex scripts" ;
+    Text [ english_us ] = "Language of complex scripts" ;
     Text[ portuguese ] = "Language complex scripts";
     Text[ russian ] = "Language complex scripts";
     Text[ greek ] = "Language complex scripts";
     Text[ dutch ] = "Language complex scripts";
-    Text[ french ] = "Language complex scripts";
+    Text[ french ] = "Langue scripts complexes";
     Text[ spanish ] = "Language complex scripts";
     Text[ finnish ] = "Language complex scripts";
     Text[ italian ] = "Language complex scripts";
@@ -4553,7 +4553,7 @@ String RID_ATTR_CHAR_CTL_LANGUAGE
     Text[ swedish ] = "Spr�k komplexa skript";
     Text[ polish ] = "Language complex scripts";
     Text[ portuguese_brazilian ] = "Language complex scripts";
-    Text[ japanese ] = "言語 混在文章";
+    Text[ japanese ] = "混在文章用の言語";
     Text[ korean ] = "Language complex scripts";
     Text[ chinese_simplified ] = "复杂的文字语言";
     Text[ chinese_traditional ] = "複雜的文字語言";
@@ -4564,12 +4564,12 @@ String RID_ATTR_CHAR_CTL_LANGUAGE
 String RID_ATTR_CHAR_CTL_POSTURE
 {
     Text = "Schriftstellung komplexe Skripte" ;
-    Text [ english_us ] = "Posture complex scripts" ;
+    Text [ english_us ] = "Posture of complex scripts" ;
     Text[ portuguese ] = "Posture complex scripts";
     Text[ russian ] = "Posture complex scripts";
     Text[ greek ] = "Posture complex scripts";
     Text[ dutch ] = "Posture complex scripts";
-    Text[ french ] = "Posture complex scripts";
+    Text[ french ] = "Inclinaison scripts complexes";
     Text[ spanish ] = "Posture complex scripts";
     Text[ finnish ] = "Posture complex scripts";
     Text[ italian ] = "Posture complex scripts";
@@ -4577,10 +4577,10 @@ String RID_ATTR_CHAR_CTL_POSTURE
     Text[ swedish ] = "Teckensnittsst�llning komplexa skript";
     Text[ polish ] = "Posture complex scripts";
     Text[ portuguese_brazilian ] = "Posture complex scripts";
-    Text[ japanese ] = "ﾌｫﾝﾄの形態 混在文章";
+    Text[ japanese ] = "混在文章用ﾌｫﾝﾄのｽﾀｲﾙ";
     Text[ korean ] = "Posture complex scripts";
-    Text[ chinese_simplified ] = "复杂的文字的字体位置";
-    Text[ chinese_traditional ] = "複雜的文字的字型位置";
+    Text[ chinese_simplified ] = "复杂的文字的字体式样";
+    Text[ chinese_traditional ] = "複雜的文字的字型式樣";
     Text[ turkish ] = "Posture complex scripts";
     Text[ arabic ] = "Posture complex scripts";
     Text[ catalan ] = "Posture complex scripts";
@@ -4588,12 +4588,12 @@ String RID_ATTR_CHAR_CTL_POSTURE
 String RID_ATTR_CHAR_CTL_WEIGHT
 {
     Text = "Schriftst�rke komplexe Skripte" ;
-    Text [ english_us ] = "Weight complex scripts" ;
+    Text [ english_us ] = "Weight of complex scripts" ;
     Text[ portuguese ] = "Weight complex scripts";
     Text[ russian ] = "Weight complex scripts";
     Text[ greek ] = "Weight complex scripts";
     Text[ dutch ] = "Weight complex scripts";
-    Text[ french ] = "Weight complex scripts";
+    Text[ french ] = "Graisse scripts complexes";
     Text[ spanish ] = "Weight complex scripts";
     Text[ finnish ] = "Weight complex scripts";
     Text[ italian ] = "Weight complex scripts";
@@ -4601,7 +4601,7 @@ String RID_ATTR_CHAR_CTL_WEIGHT
     Text[ swedish ] = "Weight complex scripts";
     Text[ polish ] = "Weight complex scripts";
     Text[ portuguese_brazilian ] = "Weight complex scripts";
-    Text[ japanese ] = "ﾌｫﾝﾄの太さ 混在文章";
+    Text[ japanese ] = "混在文章用ﾌｫﾝﾄの太さ";
     Text[ korean ] = "Weight complex scripts";
     Text[ chinese_simplified ] = "复杂的文字的字体粗细";
     Text[ chinese_traditional ] = "複雜的文字的字型粗細";
@@ -4612,12 +4612,12 @@ String RID_ATTR_CHAR_CTL_WEIGHT
 String RID_ATTR_CHAR_TWO_LINES
 {
     Text = "Doppelzeilig";
-    Text [ english_us ] = "Double lined" ;
+    Text [ english_us ] = "Double-lined" ;
     Text[ portuguese ] = "Double lined";
     Text[ russian ] = "Double lined";
     Text[ greek ] = "Double lined";
     Text[ dutch ] = "Double lined";
-    Text[ french ] = "Double lined";
+    Text[ french ] = "Deux lignes en une";
     Text[ spanish ] = "Double lined";
     Text[ finnish ] = "Double lined";
     Text[ italian ] = "Double lined";
@@ -4641,7 +4641,7 @@ String RID_ATTR_CHAR_EMPHASISMARK
     Text[ russian ] = "Emphasis mark";
     Text[ greek ] = "Emphasis mark";
     Text[ dutch ] = "Emphasis mark";
-    Text[ french ] = "Emphasis mark";
+    Text[ french ] = "Caract�res d'accentuation";
     Text[ spanish ] = "Emphasis mark";
     Text[ finnish ] = "Emphasis mark";
     Text[ italian ] = "Emphasis mark";
@@ -4665,7 +4665,7 @@ String RID_ATTR_PARA_SCRIPTSPACE
     Text[ russian ] = "Text spacing";
     Text[ greek ] = "Text spacing";
     Text[ dutch ] = "Text spacing";
-    Text[ french ] = "Text spacing";
+    Text[ french ] = "Espacement du texte";
     Text[ spanish ] = "Text spacing";
     Text[ finnish ] = "Text spacing";
     Text[ italian ] = "Text spacing";
@@ -4689,7 +4689,7 @@ String RID_ATTR_PARA_HANGPUNCTUATION
     Text[ russian ] = "Hanging punctuation";
     Text[ greek ] = "Hanging punctuation";
     Text[ dutch ] = "Hanging punctuation";
-    Text[ french ] = "Hanging punctuation";
+    Text[ french ] = "Ponctuation en retrait";
     Text[ spanish ] = "Hanging punctuation";
     Text[ finnish ] = "Hanging punctuation";
     Text[ italian ] = "Hanging punctuation";
@@ -4697,7 +4697,7 @@ String RID_ATTR_PARA_HANGPUNCTUATION
     Text[ swedish ] = "H�ngande interpunktion";
     Text[ polish ] = "Hanging punctuation";
     Text[ portuguese_brazilian ] = "Hanging punctuation";
-    Text[ japanese ] = "句読点のぶらさげを行う";
+    Text[ japanese ] = "句読点のぶら下げ";
     Text[ korean ] = "Hanging punctuation";
     Text[ chinese_simplified ] = "行末附加标点符号";
     Text[ chinese_traditional ] = "行末附加標點符號";
@@ -4713,7 +4713,7 @@ String RID_ATTR_PARA_FORBIDDEN_RULES
     Text[ russian ] = "Forbidden characters";
     Text[ greek ] = "Forbidden characters";
     Text[ dutch ] = "Forbidden characters";
-    Text[ french ] = "Forbidden characters";
+    Text[ french ] = "Caract�res non permis";
     Text[ spanish ] = "Forbidden characters";
     Text[ finnish ] = "Forbidden characters";
     Text[ italian ] = "Forbidden characters";
@@ -4756,12 +4756,12 @@ String RID_ATTR_CHAR_ROTATED
 String RID_ATTR_CHAR_SCALEWIDTH
 {
     Text = "Skalierung";
-    Text [ english_us ] = "Scaling" ;
+    Text [ english_us ] = "Scale" ;
     Text[ portuguese ] = "Scaling";
     Text[ russian ] = "Scaling";
     Text[ greek ] = "Scaling";
     Text[ dutch ] = "Scaling";
-    Text[ french ] = "Scaling";
+    Text[ french ] = "�chelle";
     Text[ spanish ] = "Scaling";
     Text[ finnish ] = "Scaling";
     Text[ italian ] = "Scaling";
@@ -4809,7 +4809,7 @@ String RID_PARA_VERTALIGN
     Text[ russian ] = "Vertical text alignment";
     Text[ greek ] = "Vertical text alignment";
     Text[ dutch ] = "Vertical text alignment";
-    Text[ french ] = "Vertical text alignment";
+    Text[ french ] = "Alignement vertical du texte";
     Text[ spanish ] = "Vertical text alignment";
     Text[ finnish ] = "Vertical text alignment";
     Text[ italian ] = "Vertical text alignment";
@@ -6104,7 +6104,7 @@ String RID_SVXITEMS_FMTSPLIT_TRUE
     Text [ swedish ] = "Dela stycke" ;
     Text [ dutch ] = "De alinea splitsen" ;
     Text [ spanish ] = "Dividir p�rrafo" ;
-    Text [ english_us ] = "Split Paragraph" ;
+    Text [ english_us ] = "Split paragraph" ;
     Text[ chinese_simplified ] = "分开段落";
     Text[ russian ] = "��������� �����";
     Text[ polish ] = "Podziel akapit";
@@ -7934,7 +7934,7 @@ String RID_SVXITEMS_BRUSH_CHAR
     Text[ swedish ] = "Teckenbakgrund";
     Text[ dutch ] = "Tekenachtergrond";
     Text[ spanish ] = "Fondo de car�cter";
-    Text[ english_us ] = "Character Background";
+    Text[ english_us ] = "Character background";
     Text[ chinese_simplified ] = "字符背景";
     Text[ russian ] = "��� ������";
     Text[ polish ] = "T�o znaku";
@@ -8661,6 +8661,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
