@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-19 12:10:02 $
+ *  last change: $Author: pb $ $Date: 2000-12-20 05:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
         rURL += '?';
     else
         rURL += '&';
-    rURL += DEFINE_CONST_UNICODE("Locale=");
+    rURL += DEFINE_CONST_UNICODE("Language=");
     rURL += aHelpOpt.GetLocale();
     rURL += DEFINE_CONST_UNICODE("&System=");
     rURL += aHelpOpt.GetSystem();
