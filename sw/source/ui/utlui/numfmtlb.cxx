@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 17:57:10 $
+ *  last change: $Author: os $ $Date: 2001-09-04 12:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,78 +378,72 @@ void NumFormatListBox::SetDefFormat(const ULONG nDefFmt)
         return;
     }
 
-    if (!nDefFmt)
-        SelectEntryPos(nStdEntry);
+    SvNumberFormatter* pFormatter;
+    if (pOwnFormatter)
+        pFormatter = pOwnFormatter;
     else
     {
-        SvNumberFormatter* pFormatter;
+        SwView *pView = GetView();
+        SwWrtShell &rSh = pView->GetWrtShell();
+        pFormatter = rSh.GetNumberFormatter();
+    }
 
-        if (pOwnFormatter)
-            pFormatter = pOwnFormatter;
-        else
+    short nType = pFormatter->GetType(nDefFmt);
+
+    SetFormatType(nType);
+
+    ULONG nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefFmt, eCurLanguage);
+
+    for (USHORT i = 0; i < GetEntryCount(); i++)
+    {
+        if (nFormat == (ULONG)GetEntryData(i))
         {
-            SwView *pView = GetView();
-            SwWrtShell &rSh = pView->GetWrtShell();
-            pFormatter = rSh.GetNumberFormatter();
+            SelectEntryPos(i);
+            nStdEntry = i;
+            nDefFormat = GetFormat();
+            return;
         }
+    }
 
-        short nType = pFormatter->GetType(nDefFmt);
+    // Kein Eintrag gefunden:
+    double fValue = GetDefValue(pFormatter, nType);
+    String sValue;
+    Color* pCol = 0;
 
-        SetFormatType(nType);
+    if (nType == NUMBERFORMAT_TEXT)
+    {
+        String sTxt(C2S("\"ABC\""));
+        pFormatter->GetOutputString(sTxt, nDefFmt, sValue, &pCol);
+    }
+    else
+        pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);
 
-        ULONG nFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nDefFmt, eCurLanguage);
-
-        for (USHORT i = 0; i < GetEntryCount(); i++)
-        {
-            if (nFormat == (ULONG)GetEntryData(i))
-            {
-                SelectEntryPos(i);
-                nStdEntry = i;
-                nDefFormat = GetFormat();
-                return;
-            }
-        }
-
-        // Kein Eintrag gefunden:
-        double fValue = GetDefValue(pFormatter, nType);
-        String sValue;
-        Color* pCol = 0;
-
-        if (nType == NUMBERFORMAT_TEXT)
-        {
-            String sTxt(C2S("\"ABC\""));
-            pFormatter->GetOutputString(sTxt, nDefFmt, sValue, &pCol);
-        }
-        else
-            pFormatter->GetOutputString(fValue, nDefFmt, sValue, &pCol);
-
-        USHORT nPos = 0;
-        while ((ULONG)GetEntryData(nPos) == ULONG_MAX)
-            nPos++;
+    USHORT nPos = 0;
+    while ((ULONG)GetEntryData(nPos) == ULONG_MAX)
+        nPos++;
 
 //
-        ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
-        ULONG nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
-        ULONG nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
-        BOOL bSysLang = FALSE;
-        if(::GetSystemLanguage() == eCurLanguage)
-            bSysLang = TRUE;
-        ULONG nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFmt, LANGUAGE_SYSTEM );
-        ULONG nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFmt, LANGUAGE_SYSTEM );
-        ULONG nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );
+    ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
+    ULONG nSysShortDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eCurLanguage);
+    ULONG nSysLongDateFmt = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eCurLanguage);
+    BOOL bSysLang = FALSE;
+    if(::GetSystemLanguage() == eCurLanguage)
+        bSysLang = TRUE;
+    ULONG nNumFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysNumFmt, LANGUAGE_SYSTEM );
+    ULONG nShortDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysShortDateFmt, LANGUAGE_SYSTEM );
+    ULONG nLongDateFormatForLanguage = pFormatter->GetFormatForLanguageIfBuiltIn(nSysLongDateFmt, LANGUAGE_SYSTEM );
 
-        if(nDefFmt == nSysNumFmt||
-            nDefFmt == nSysShortDateFmt||
-            nDefFmt == nSysLongDateFmt||
-            bSysLang && (nDefFmt == nNumFormatForLanguage ||
-            nDefFmt == nShortDateFormatForLanguage ||
-            nDefFmt == nLongDateFormatForLanguage ))
-            sValue += String(SW_RES(RID_STR_SYSTEM));
+    if(nDefFmt == nSysNumFmt||
+        nDefFmt == nSysShortDateFmt||
+        nDefFmt == nSysLongDateFmt||
+        bSysLang && (nDefFmt == nNumFormatForLanguage ||
+        nDefFmt == nShortDateFormatForLanguage ||
+        nDefFmt == nLongDateFormatForLanguage ))
+        sValue += String(SW_RES(RID_STR_SYSTEM));
 
-        nPos = InsertEntry(sValue, nPos);   // Als ersten numerischen Eintrag einfuegen
-        SetEntryData(nPos, (void*)nDefFmt);
-        SelectEntryPos(nPos);
-    }
+    nPos = InsertEntry(sValue, nPos);   // Als ersten numerischen Eintrag einfuegen
+    SetEntryData(nPos, (void*)nDefFmt);
+    SelectEntryPos(nPos);
     nDefFormat = GetFormat();
 }
 
@@ -600,121 +594,3 @@ void NumFormatListBox::Clear()
     nCurrFormatType = -1;
 }
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2000/12/13 14:27:53  jp
-      use new shell method for asking the current language
-
-      Revision 1.4  2000/11/20 09:02:23  jp
-      should change: use LocaleDataWrapper
-
-      Revision 1.3  2000/10/20 14:18:07  os
-      use comphelper methods
-
-      Revision 1.2  2000/10/20 09:51:30  os
-      change: use SvNumberFormatter ctor using XMultiServiceFactory
-
-      Revision 1.1.1.1  2000/09/18 17:14:50  hr
-      initial import
-
-      Revision 1.31  2000/09/18 16:06:18  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.30  2000/04/18 15:14:08  os
-      UNICODE
-
-      Revision 1.29  2000/03/03 15:17:05  os
-      StarView remainders removed
-
-      Revision 1.28  2000/02/25 09:53:39  hr
-      #73447#: removed temporary
-
-      Revision 1.27  2000/02/11 15:00:49  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.26  1999/06/28 12:54:58  JP
-      Bug #67242#: SetFormatType - use eCurLanguage
-
-
-      Rev 1.25   28 Jun 1999 14:54:58   JP
-   Bug #67242#: SetFormatType - use eCurLanguage
-
-      Rev 1.24   28 Jun 1999 13:57:44   JP
-   Bug #67247#: SetFormatType - support of FormatTypeAll
-
-      Rev 1.23   18 Jun 1999 15:28:02   OS
-   #60657# Manual sorted number formats
-
-      Rev 1.22   10 Jun 1999 13:14:52   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.21   10 Feb 1999 14:13:02   OS
-   #52055# Systemformate koennen auch unter 0x5000 liegen
-
-      Rev 1.20   21 Jan 1999 11:07:18   OS
-   #52055# [System] an Systemformat anhaengen
-
-      Rev 1.19   15 Jun 1998 12:27:56   OM
-   #51009# Numberformatter-Listbox ViewPtr reinreichen
-
-      Rev 1.18   20 May 1998 14:24:02   OM
-   Kombinierte DateTime-Formate verarbeiten
-
-      Rev 1.17   19 May 1998 14:24:30   OM
-   #47310 Definierte Standardwerte und keine Sprachauswahl
-
-      Rev 1.16   11 Feb 1998 16:30:32   OM
-   Textdarstellung fuer Felder
-
-      Rev 1.15   13 Jan 1998 15:03:10   OM
-   Formula-Field wieder unterstuetzt
-
-      Rev 1.14   12 Jan 1998 12:57:12   OM
-   Alle Sprachen anzeigen
-
-      Rev 1.13   12 Jan 1998 12:42:16   OM
-   Alle Sprachen anzeigen
-
-      Rev 1.12   09 Jan 1998 10:07:26   OM
-   Sprache organisieren
-
-      Rev 1.11   08 Jan 1998 17:49:00   OM
-   Neue Datumsfelder einfuegen
-
-      Rev 1.10   06 Jan 1998 18:14:12   OM
-   Felbefehl-Dlg
-
-      Rev 1.9   19 Dec 1997 18:23:54   OM
-   Feldbefehl-bearbeiten Dlg
-
-      Rev 1.8   16 Dec 1997 17:04:50   OM
-   Feldbefehle bearbeiten
-
-      Rev 1.7   11 Dec 1997 17:01:26   OM
-   Feldumstellung
-
-      Rev 1.6   29 Nov 1997 15:08:58   MA
-   includes
-
-      Rev 1.5   21 Nov 1997 17:19:04   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.4   21 Nov 1997 12:10:16   MA
-   includes
-
-      Rev 1.3   20 Nov 1997 17:02:34   OM
-   Neuer Felddialog
-
-      Rev 1.2   10 Nov 1997 15:29:04   OM
-   Zahlenformat-Listbox
-
-      Rev 1.1   07 Nov 1997 16:56:08   OM
-   NumberFormat-Listbox
-
-      Rev 1.0   07 Nov 1997 16:37:08   OM
-   Initial revision.
-
-*************************************************************************/
