@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-16 12:20:02 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 11:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1074,7 +1074,7 @@ String SCSTR_NOTEMPTY
     Text[ chinese_simplified ] = "- ä¸ç©ºç¼º -";
     Text[ russian ] = "- íå ïóñòî -";
     Text[ polish ] = "-nie pusty -";
-    Text[ japanese ] = "- ç©ºç™½ãªã— -";
+    Text[ japanese ] = "- ç©ºç™½ã§ãªã„ -";
     Text[ chinese_traditional ] = "- ä¸ç©ºç¼º -";
     Text[ arabic ] = "- ÛíÑ İÇÑÛ -";
     Text[ greek ] = "- ü÷é êåíü -";
@@ -3009,6 +3009,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
