@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 10:58:45 $
+ *  last change: $Author: jp $ $Date: 2001-04-30 15:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,11 @@
 #ifndef _SV_RESARY_HXX
 #include <vcl/resary.hxx>
 #endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
 
-#define STAR_REFERENCE(aType) \
-    ::com::sun::star::uno::Reference< ::com::sun::star::aType >
+
 /* -----------------09.06.99 14:36-------------------
  *
  * --------------------------------------------------*/
