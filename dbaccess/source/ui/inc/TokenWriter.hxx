@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ namespace dbaui
         ODatabaseExport*    m_pReader;
         sal_Int32*          m_pRowMarker; // wenn gesetzt, dann nur diese Rows kopieren
         sal_Bool            m_bInInitialize;
+        sal_Bool            m_bCheckOnly;
 
         // export data
         ODatabaseImportExport(  const ::svx::ODataAccessDescriptor& _aDataDescriptor,
@@ -153,6 +154,9 @@ namespace dbaui
 
         virtual void initialize();
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+        void enableCheckOnly() { m_bCheckOnly = sal_True; }
+        sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
     };
 
     // =========================================================================

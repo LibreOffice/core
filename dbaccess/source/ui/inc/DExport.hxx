@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 11:07:09 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ namespace dbaui
         sal_Bool            m_bDontAskAgain;// Falls beim Einf"ugen ein Fehler auftritt, soll die Fehlermeldung nicht
         sal_Bool            m_bIsAutoIncrement; // if PKey is set by user
         sal_Bool            m_bFoundTable;      // set to true when a table was found
+        sal_Bool            m_bCheckOnly;
 
 
         virtual sal_Bool        CreateTable(int nToken)         = 0;
@@ -197,6 +198,9 @@ namespace dbaui
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
         String  ShortenFieldName( const String& rName, xub_StrLen nNewLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& rDestList );
         virtual void release() = 0;
+
+        void enableCheckOnly() { m_bCheckOnly = sal_True; }
+        sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
     };
 }
 

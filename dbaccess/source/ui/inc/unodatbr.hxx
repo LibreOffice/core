@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:23:25 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
 
 // =========================================================================
 class SvLBoxEntry;
@@ -134,9 +137,13 @@ namespace dbaui
 
         struct DropDescriptor
         {
-            TransferableDataHelper  aDroppedData;
-            SvLBoxEntry*            pDroppedAt;
-            sal_Bool                bTable;
+            ::svx::ODataAccessDescriptor    aDroppedData;
+            String                          aUrl;
+            SotStorageStreamRef             aHtmlRtfStorage;
+            SvLBoxEntry*                    pDroppedAt;
+            sal_Bool                        bTable;
+            sal_Bool                        bHtml;
+            sal_Bool                        bError;
 
             DropDescriptor() : pDroppedAt(NULL), bTable(sal_True) { }
         };
@@ -351,8 +358,21 @@ namespace dbaui
         void    implRemoveQuery( SvLBoxEntry* _pApplyTo );
         void    implDropTable( SvLBoxEntry* _pApplyTo );
         void    implRenameEntry( SvLBoxEntry* _pApplyTo );
-        void    implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData );
-        void    implPasteQuery( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rPasteData );
+
+        /** copies a table, either if it is a common table or comes from html,rtf (opens a dialog)
+            @param  _pApplyTo   to which this opertion applies
+            @param  _rTransData the data to transfer
+        */
+        void    implPasteTable( SvLBoxEntry* _pApplyTo, const TransferableDataHelper& _rTransData );
+        void    implPasteTable( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData );
+        void    implPasteQuery( SvLBoxEntry* _pApplyTo, const ::svx::ODataAccessDescriptor& _rPasteData );
+
+        /** copies a html or rtf table.
+            @param  _rDesc  information about the source to copy
+            @param  _bCheck when set to <TRUE/> only a check is performed, no dialog is shown, otherwise a dialog appears
+            @return <TRUE/> when the stream contains a table otherwise <FALSE/>
+        */
+        sal_Bool copyHtmlRtfTable(DropDescriptor& _rDesc, sal_Bool _bCheck);
 
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );

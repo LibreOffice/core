@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 12:35:02 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1656,11 +1656,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 break;
 
             case ID_BROWSER_PASTE:
-                aReturn.aState = makeAny( (sal_Bool)sal_False );
-                    // since fixing 99030, this is defined as meaning "please do not display a drop down
-                    // menu for the clipboard formats to paste".
-                    // 22.05.2002 - 99030 - fs@openoffice.org
-
                 // first look which side is active
                 if(m_pTreeView->HasChildPathFocus())
                 {
@@ -3910,7 +3905,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         case ID_TREE_QUERY_PASTE:
         {
             TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-            implPasteQuery( pEntry, aTransferData );
+            implPasteQuery( pEntry, ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
         }
         break;
 
