@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:02:55 $
+#   last change: $Author: obo $ $Date: 2003-09-04 08:32:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,7 @@ SRS1NAME=$(TARGET)
 SRC1FILES =	\
         TableGrantCtrl.src	\
         undosqledit.src		\
-        tabletree.src		\
-        marktree.src
+        tabletree.src		
 
 # ... exception files .........................
 
