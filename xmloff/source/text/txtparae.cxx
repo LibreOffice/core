@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 10:16:30 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 11:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,18 +829,28 @@ void XMLTextParagraphExport::collectFrames()
             TextContentAnchorType eAnchor;
             aAny >>= eAnchor;
 
-            switch( eAnchor )
+            if( TextContentAnchorType_AT_PAGE != eAnchor &&
+                TextContentAnchorType_AT_FRAME != eAnchor )
+                continue;
+
+            Reference<XServiceInfo> xServiceInfo( xShape,
+                                                  UNO_QUERY );
+            if( xServiceInfo->supportsService( sTextFrameService ) ||
+                  xServiceInfo->supportsService( sTextGraphicService ) ||
+                xServiceInfo->supportsService( sTextEmbeddedService ) )
+                continue;
+
+            if( TextContentAnchorType_AT_PAGE == eAnchor )
             {
-            case TextContentAnchorType_AT_PAGE:
                 if( !pPageShapeIdxs )
                     pPageShapeIdxs = new SvLongs;
                 pPageShapeIdxs->Insert( i, pPageShapeIdxs->Count() );
-                break;
-            case TextContentAnchorType_AT_FRAME:
+            }
+            else
+            {
                 if( !pFrameShapeIdxs )
                     pFrameShapeIdxs = new SvLongs;
                 pFrameShapeIdxs->Insert( i, pFrameShapeIdxs->Count() );
-                break;
             }
         }
     }
