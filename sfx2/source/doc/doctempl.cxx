@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-10 17:52:10 $
+ *  last change: $Author: dv $ $Date: 2000-12-11 08:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2246,11 +2246,7 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
 //  OUString aLinkURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
 //  aLinkURL += OUString( '/' ) + maTitle + OUString( '/' ) + rTitle;
 
-    try
-    {
-        aLink = Content( aLinkURL, aCmdEnv );
-    }
-    catch( ContentCreationException& )
+    if ( ! Content::create( aLinkURL, aCmdEnv, aLink ) )
     {
         Sequence< OUString > aNames(3);
         OUString* pNames = aNames.getArray();
@@ -2288,8 +2284,6 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
             return NULL;
         }
     }
-    catch ( Exception& )
-    { return NULL; }
 
     EntryData_Impl *pEntry;
     sal_Bool        bFound = sal_False;
@@ -2794,11 +2788,7 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                 OUString aNewFolderURL = aNewFolderObj.GetMainURL();
                 OUString aId = xContentAccess->queryContentIdentifierString();
 
-                try
-                {
-                    aFolder = Content( aNewFolderURL, aCmdEnv );
-                }
-                catch( ContentCreationException& )
+                if ( ! Content::create( aNewFolderURL, aCmdEnv, aFolder ) )
                 {
                     pValues[0] = makeAny( aTitle );
                     pValues[1] = makeAny( sal_Bool( sal_True ) );
@@ -2884,12 +2874,9 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
     OUString aNewFolderURL = aNewFolderObj.GetMainURL();
     Content aFolder;
 
-    try
-    {
-        Reference< XCommandEnvironment > aCmdEnv;
-        aFolder = Content( aNewFolderURL, aCmdEnv );
-    }
-    catch( ContentCreationException& )
+    Reference< XCommandEnvironment > aCmdEnv;
+
+    if ( ! Content::create( aNewFolderURL, aCmdEnv, aFolder ) )
     {
         OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
 
