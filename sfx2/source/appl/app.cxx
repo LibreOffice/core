@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-21 11:42:05 $
+ *  last change: $Author: mba $ $Date: 2001-03-27 15:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,9 @@ SfxApplication::SfxApplication()
     pImp->bAutoSaveNow = sal_False;
     pImp->pTemplateDlg = 0;
     pImp->pBasicMgr = 0;
+#if SUPD>614
     pImp->pDialogContainer = 0;
+#endif
     pImp->pBasicTestWin = 0;
     pImp->pSfxResManager = 0;
     pImp->pSimpleResManager = 0;
