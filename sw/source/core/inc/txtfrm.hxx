@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:16:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,14 +606,6 @@ public:
     {
         return mnHeightOfLastLine;
     }
-
-    /** method to invalidate printing area of next frame
-
-        OD 09.01.2004 #i11859#
-
-        @author OD
-    */
-    void InvalidateNextPrtArea();
 };
 
 /*************************************************************************
