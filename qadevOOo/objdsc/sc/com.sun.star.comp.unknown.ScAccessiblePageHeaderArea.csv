@@ -1,3 +1,5 @@
+"ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"
+"ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"removeEventListener()"
 "ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleComponent";"containsPoint()"
 "ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleComponent";"getAccessibleAtPoint()"
 "ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleComponent";"getBounds()"
@@ -17,5 +19,3 @@
 "ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleRelationSet()"
 "ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleContext";"getAccessibleStateSet()"
 "ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleContext";"getLocale()"
-"ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"
-"ScAccessiblePageHeaderArea";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"removeEventListener()"
