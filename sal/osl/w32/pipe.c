@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-27 10:54:08 $
+ *  last change: $Author: dic $ $Date: 2001-06-26 13:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,22 +729,29 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
         os.hEvent = pPipe->m_AcceptEvent;
         ResetEvent(pPipe->m_AcceptEvent);
 
-        ConnectNamedPipe(pPipe->m_File, &os);
-
-        // blocking call to accept
-        if( ! GetOverlappedResult(
-                pPipe->m_File,
-                &os,
-                &nBytesTransfered,
-                TRUE ) )
+        // If `ConnectNamedPipe' reports accepted connection,
+        // don't try to block then. Otherwise, a race with
+        // `osl_receivePipe' is possible: it issues
+        // `ResetEvent'. Grrr.
+        if (!ConnectNamedPipe(pPipe->m_File, &os) &&
+            !(GetLastError() == ERROR_PIPE_CONNECTED))
         {
-            // check, if between ConnectNamePipe and GetOverlappedResult
-            // a successful connect took place
-            DWORD dw = GetLastError();
-            if( ERROR_PIPE_CONNECTED != dw )
+            // blocking call to accept
+            if( ! GetOverlappedResult(
+                    pPipe->m_File,
+                    &os,
+                    &nBytesTransfered,
+                    TRUE ) )
             {
-                // no successful connect (in general, pipe has been destroyed)
-                return 0;
+                // check, if between ConnectNamePipe and
+                // GetOverlappedResult a successful connect took place
+                DWORD dw = GetLastError();
+                if( ERROR_PIPE_CONNECTED != dw )
+                {
+                    // no successful connect (in general, pipe has been
+                    // destroyed)
+                    return 0;
+                }
             }
         }
 
