@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-12 12:58:27 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 11:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #include "ole2uno.hxx"
 
 #include <tools/presys.h>
-#include "stdafx.h"
+#define _WIN32_WINNT 0x0400
+#define _WIN32_DCOM
+#include <atlbase.h>
 #include <vector>
 #include <hash_map>
 #include <tools/postsys.h>
