@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 14:26:04 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,7 +1477,7 @@ TabPage RID_SVXPAGE_BROWSER_OTHER
         Text [ portuguese ] = "PlugIns" ;
         Text[ chinese_simplified ] = "Plug-Ins";
         Text[ russian ] = "Plug-Ins";
-        Text[ polish ] = "Dodatki PlugIns";
+        Text[ polish ] = "Wtyczki Plug-In";
         Text[ japanese ] = "Ìß×¸Þ²Ý";
         Text[ chinese_traditional ] = "Plug-Ins";
         Text[ arabic ] = "Plug-Ins";
@@ -2246,7 +2246,7 @@ TabPage RID_SVXPAGE_INET_SSLSITE
         stringlist [ swedish ] =
         {
             < "Alla certifikat" ; > ;
-            < "Site certifikat" ; > ;
+            < "Webbplatscertifikat" ; > ;
             < "Certifikatsutfärdare" ; > ;
         };
         stringlist [ danish ] =
