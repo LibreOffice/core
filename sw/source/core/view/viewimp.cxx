@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:26:00 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,18 +493,6 @@ void SwViewImp::InvalidateAccessibleEditableState( sal_Bool bAllShells,
     {
         GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
     }
-}
-
-void SwViewImp::InvalidateAccessibleOpaqueState()
-{
-    ViewShell *pVSh = GetShell();
-    ViewShell *pTmp = pVSh;
-    do
-    {
-        if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_OPAQUE );
-        pTmp = (ViewShell *)pTmp->GetNext();
-    } while ( pTmp != pVSh );
 }
 
 void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
