@@ -7823,3 +7823,4 @@ _TI4?AVout_of_range@_STL@@
 ?clear@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@UStringPair@beans@star@sun@com@@U?$_Nonconst_traits@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@UStringPair@beans@star@sun@com@@U?$_Nonconst_traits@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@@4@U?$less@VOUString@rtl@@@4@V?$allocator@U?$pair@$$CBVOUString@rtl@@U?$_List_iterator@UStringPair@beans@star@sun@com@@U?$_Nonconst_traits@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@@4@@_STL@@QAEXXZ
 ?deallocate@?$allocator@U?$_List_node@U_tagFilterClass@sfx2@@@_STL@@@_STL@@QBEXPAU?$_List_node@U_tagFilterClass@sfx2@@@2@I@Z
 ?getSeparatorString@sfx2@@YAABVOUString@rtl@@XZ
+?SetNoName@SfxObjectShell@@QAEXXZ
