@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 10:57:07 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 11:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
+#include <com/sun/star/formula/SymbolDescriptor.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -111,22 +114,15 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #endif
-
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _XMLENUMS_HXX_
+#include <xmlenums.hxx>
 #endif
 
 using namespace com::sun::star;
 
-enum XMLForbiddenCharactersEnum
-{
-    XML_FORBIDDEN_CHARACTER_LANGUAGE,
-    XML_FORBIDDEN_CHARACTER_COUNTRY,
-    XML_FORBIDDEN_CHARACTER_VARIANT,
-    XML_FORBIDDEN_CHARACTER_BEGIN_LINE,
-    XML_FORBIDDEN_CHARACTER_END_LINE,
-    XML_FORBIDDEN_CHARACTER_MAX
-};
 
 //------------------------------------------------------------------
 
@@ -790,6 +786,100 @@ void XMLConfigItemMapIndexedContext::EndElement()
                 DBG_ERROR( "could not get the XForbiddenCharacters from document!" );
                 rAny <<= aProps.GetIndexContainer();
             }
+        }
+        else if( maConfigItemName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Symbols" ) ) )
+        {
+            uno::Reference< container::XIndexAccess > xIndex( aProps.GetIndexContainer(), uno::UNO_QUERY );
+
+            const sal_Int32 nCount = xIndex->getCount();
+            uno::Sequence < beans::PropertyValue > aProps;
+            uno::Sequence < formula::SymbolDescriptor > aSymbolList ( nCount );
+
+            formula::SymbolDescriptor *pDescriptor = aSymbolList.getArray();
+
+            const rtl::OUString sName     ( RTL_CONSTASCII_USTRINGPARAM ( "Name" ) );
+            const rtl::OUString sExportName ( RTL_CONSTASCII_USTRINGPARAM ( "ExportName" ) );
+            const rtl::OUString sFontName ( RTL_CONSTASCII_USTRINGPARAM ( "FontName" ) );
+            const rtl::OUString sSymbolSet ( RTL_CONSTASCII_USTRINGPARAM ( "SymbolSet" ) );
+            const rtl::OUString sCharacter ( RTL_CONSTASCII_USTRINGPARAM ( "Character" ) );
+            const rtl::OUString sCharSet  ( RTL_CONSTASCII_USTRINGPARAM ( "CharSet" ) );
+            const rtl::OUString sFamily   ( RTL_CONSTASCII_USTRINGPARAM ( "Family" ) );
+            const rtl::OUString sPitch    ( RTL_CONSTASCII_USTRINGPARAM ( "Pitch" ) );
+            const rtl::OUString sWeight   ( RTL_CONSTASCII_USTRINGPARAM ( "Weight" ) );
+            const rtl::OUString sItalic   ( RTL_CONSTASCII_USTRINGPARAM ( "Italic" ) );
+            sal_Int16 nNumFullEntries = 0;
+
+            for ( sal_Int32 i = 0; i < nCount; i++ )
+            {
+                if ((xIndex->getByIndex( i ) >>= aProps) && (aProps.getLength() == XML_SYMBOL_DESCRIPTOR_MAX ) )
+                {
+                    sal_Bool bHaveName = sal_False, bHaveExportName = sal_False, bHaveCharSet = sal_False,
+                              bHaveFontName = sal_False, bHaveFamily = sal_False, bHavePitch = sal_False,
+                              bHaveWeight = sal_False, bHaveItalic = sal_False, bHaveSymbolSet = sal_False,
+                             bHaveCharacter = sal_False;
+                    beans::PropertyValue *pSymbol = aProps.getArray();
+
+                    for ( sal_Int32 j = 0 ; j < XML_SYMBOL_DESCRIPTOR_MAX ; j++ )
+                    {
+                        if (pSymbol->Name.equals ( sName ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].sName;
+                            bHaveName = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sExportName ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].sExportName;
+                            bHaveExportName = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sFontName ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].sFontName;
+                            bHaveFontName = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sCharSet ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharSet;
+                            bHaveCharSet = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sFamily ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].nFamily;
+                            bHaveFamily = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sPitch ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].nPitch;
+                            bHavePitch = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sWeight ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].nWeight;
+                            bHaveWeight = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sItalic ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].nItalic;
+                            bHaveItalic = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sSymbolSet ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].sSymbolSet;
+                            bHaveSymbolSet = sal_True;
+                        }
+                        else if (pSymbol->Name.equals (sCharacter ) )
+                        {
+                            pSymbol->Value >>= pDescriptor[nNumFullEntries].nCharacter;
+                            bHaveCharacter = sal_True;
+                        }
+                        pSymbol++;
+                    }
+                    if ( bHaveName && bHaveExportName && bHaveCharSet && bHaveFontName && bHaveCharacter
+                         && bHaveFamily && bHavePitch && bHaveWeight && bHaveItalic && bHaveSymbolSet)
+                        nNumFullEntries++;
+                }
+            }
+            aSymbolList.realloc (nNumFullEntries);
+            rAny <<= aSymbolList;
         }
         else
         {
