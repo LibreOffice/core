@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-27 23:19:32 $
+ *  last change: $Author: rt $ $Date: 2001-12-04 18:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1844,7 +1844,7 @@ String RID_STR_TABSTOP
     Text[ russian ] = "Tabstop";
     Text[ polish ] = "Tabstop";
     Text[ japanese ] = "οΎ€οΎοΎο½½οΎ„ο½―οΎοΎ";
-    Text[ chinese_traditional ] = "θ£½θ΅¨η¬¦";
+    Text[ chinese_traditional ] = "ε®δ½ιµ";
     Text[ greek ] = "Στηλοθέτης";
     Text[ korean ] = "νƒ­ μ„μΉ";
     Text[ arabic ] = "ΪαΗγΙ ΜΟζαΙ";
@@ -4860,6 +4860,9 @@ String RID_STR_TEXT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/11/27 23:19:32  rt
+ *  Merge SRC641: 27.11.01 - 23:17:43
+ *
  *  Revision 1.37  2001/11/22 23:34:38  obo
  *  Merge SRC641: 22.11.01 - 23:34:56
  *
@@ -4974,6 +4977,7 @@ String RID_STR_TEXT
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
