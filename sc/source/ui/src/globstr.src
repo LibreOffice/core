@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:27:58 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "´¡¤J´«Äæ";
         Text[ arabic ] = "ÅÏÑÇÌ İÇÕá Õİæİ";
         Text[ greek ] = "ÅéóáãùãŞ áëëáãŞò ãñáììŞò";
-        Text[ korean ] = "Çà ³ª´©±â »ğÀÔ";
+        Text[ korean ] = "°³Çà »ğÀÔ";
         Text[ turkish ] = "Satır sonu ekle";
         Text[ language_user1 ] = " ";
     };
@@ -723,7 +723,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "§R°£´«Äæ²Å";
         Text[ arabic ] = "ÍĞİ İÇÕá ÇáÃÓØÑ";
         Text[ greek ] = "ÄéáãñáöŞ áëëáãŞò ãñáììŞò";
-        Text[ korean ] = "Çâ ºĞ¸® »èÁ¦";
+        Text[ korean ] = "°³Çà »èÁ¦";
         Text[ turkish ] = "Satır sonunu sil";
         Text[ language_user1 ] = " ";
     };
@@ -2112,7 +2112,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "½s¿è°Ï°ì¦WºÙ";
         Text[ arabic ] = "ÊÍÑíÑ ÃÓãÇÁ äØÇŞÇÊ";
         Text[ greek ] = "Åğåîåñãáóßá ïíïìÜôùí ğåñéï÷şí";
-        Text[ korean ] = "¹üÀ§ ÀÌ¸§ ÆíÁı";
+        Text[ korean ] = "¹üÀ§ ÀÌ¸§  ÆíÁı";
         Text[ turkish ] = "Aralık adlarını düzenle";
         Text[ language_user1 ] = " ";
     };
@@ -2168,28 +2168,28 @@ Resource RID_GLOBSTR
     };
     String STR_MSSG_DOSUBTOTALS_0
     {
-        Text = "StarOffice Calc" ;
+        Text = "%PRODUCTNAME Calc" ;
         Text [ ENGLISH ] = "StarCalc" ;
         Text [ norwegian ] = "StarCalc" ;
-        Text [ italian ] = "StarOffice Calc" ;
-        Text [ portuguese_brazilian ] = "StarOffice Calc" ;
-        Text [ portuguese ] = "StarOffice Calc" ;
+        Text [ italian ] = "%PRODUCTNAME Calc" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc" ;
+        Text [ portuguese ] = "%PRODUCTNAME Calc" ;
         Text [ finnish ] = "StarCalc" ;
-        Text [ danish ] = "StarOffice Calc" ;
-        Text [ french ] = "StarOffice Calc" ;
-        Text [ swedish ] = "StarOffice Calc" ;
-        Text [ dutch ] = "StarOffice Calc" ;
-        Text [ spanish ] = "StarOffice Calc" ;
-        Text [ english_us ] = "StarOffice Calc" ;
-        Text[ chinese_simplified ] = "StarOffice Calc";
-        Text[ russian ] = "StarOffice Calc";
-        Text[ polish ] = "StarOffice Calc";
-        Text[ japanese ] = "StarOffice Calc";
-        Text[ chinese_traditional ] = "StarOffice Calc";
-        Text[ arabic ] = "StarOffice Calc";
-        Text[ greek ] = "StarOffice Calc";
-        Text[ korean ] = "StarOffice Calc";
-        Text[ turkish ] = "StarOffice Calc";
+        Text [ danish ] = "%PRODUCTNAME Calc" ;
+        Text [ french ] = "%PRODUCTNAME Calc" ;
+        Text [ swedish ] = "%PRODUCTNAME Calc" ;
+        Text [ dutch ] = "%PRODUCTNAME Calc" ;
+        Text [ spanish ] = "%PRODUCTNAME Calc" ;
+        Text [ english_us ] = "%PRODUCTNAME Calc" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc";
+        Text[ russian ] = "%PRODUCTNAME Calc";
+        Text[ polish ] = "%PRODUCTNAME Calc";
+        Text[ japanese ] = "%PRODUCTNAME Calc";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc";
+        Text[ arabic ] = "%PRODUCTNAME Calc";
+        Text[ greek ] = "%PRODUCTNAME Calc";
+        Text[ korean ] = "%PRODUCTNAME Calc";
+        Text[ turkish ] = "%PRODUCTNAME Calc";
         Text[ language_user1 ] = " ";
     };
     String STR_MSSG_DOSUBTOTALS_1
@@ -3407,7 +3407,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¼Æ¥Ø";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "ĞËÇÈÏÓ";
-        Text[ korean ] = "Ä«¿îÆ®";
+        Text[ korean ] = "¼ö";
         Text[ turkish ] = "COUNT";
         Text[ language_user1 ] = " ";
     };
@@ -4140,7 +4140,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­n±N¿ï¨úªº°Ï°ì¥[¤J¤è®×¡H";
         Text[ arabic ] = "åá ÊÑíÏ ÅÖÇİÉ ÇáäØÇŞÇÊ ÇáãÍÏÏÉ Åáì ÇáÓíäÇÑíæ¿";
         Text[ greek ] = "Åğİêôáóç óåíáñßïõ êáôÜ ôéò åğéëåãìİíåò ğåñéï÷İò;";
-        Text[ korean ] = "½Ã³ª¸®¿À¸¦ ¸¶Å·µÈ ¿µ¿ª¸¸Å­ È®ÀåÇÒ±î¿ä?";
+        Text[ korean ] = "½Ã³ª¸®¿À¸¦ ¸¶Å·µÈ ¹üÀ§¸¸Å­ È®ÀåÇÒ±î¿ä?";
         Text[ turkish ] = "Seçili aralıklar, senaryoya eklensin mi?";
         Text[ language_user1 ] = " ";
     };
@@ -4167,7 +4167,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "­n«Ø¥ß¤@­Ó¤è®×´N¥²¶·¥ı³]©w¤@­Ó¤è®×°Ï°ì¡C";
         Text[ arabic ] = "áÅäÔÇÁ ÓíäÇÑíæ íÌÈ Ãä íÊã ÊÍÏíÏ äØÇŞÇÊ ÇáÓíäÇÑíæ.";
         Text[ greek ] = "Ãéá ôç äçìéïõñãßá åíüò óåíáñßïõ ğñİğåé íá åğéëå÷èïıí ïé ğåñéï÷İò ôïõ.";
-        Text[ korean ] = "»õ·Î¿î ½Ã³ª¸®¿À¸¦ ¸¸µé±â À§ÇØ¼­ ½Ã³ª¸®¿À ¹üÀ§°¡ ¸¶Å·µÇ¾î¾ß ÇÕ´Ï´Ù.";
+        Text[ korean ] = "»õ·Î¿î ½Ã³ª¸®¿À¸¦ ¸¸µé¼ö ÀÖµµ·Ï ÇÏ±â À§ÇØ¼­´Â½Ã³ª¸®¿À ¹üÀ§°¡ ¸¶Å·µÇ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "Senaryonun oluşturulabilmesi için senaryo aralıkları işaretlenmelidir.";
         Text[ language_user1 ] = " ";
     };
@@ -4351,7 +4351,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¼Æ¥Ø";
         Text[ arabic ] = "ÚÏÏ";
         Text[ greek ] = "ĞëŞèïò";
-        Text[ korean ] = "Ä«¿îÆ®";
+        Text[ korean ] = "¼ö";
         Text[ turkish ] = "Anzahl";
         Text[ language_user1 ] = " ";
     };
@@ -6095,7 +6095,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¬°¤F¨Ï¥Î¦Û°Ê®æ¦¡¡A\n±z¥²¶·¦Ü¤Ö¿ï¨ú¤F\n3x3 ¤u§@ªí°Ï°ì¡C";
         Text[ arabic ] = "áßí ÊÓÊÎÏã ÇáÊäÓíŞ ÇáÊáŞÇÆí¡\níÌÈ Ãä ÊÍÏÏ äØÇŞ İí ÇáÌÏæá áÇ íŞá Úä\n3x3 ÎáÇíÇ.";
         Text[ greek ] = "Ãéá íá åöáñìïóôåß ç ÁõôïÌïñöŞ,\nğñİğåé íá İ÷åé åğéëåãåß ìéá ğåñéï÷Ş åíüò ğßíáêá ìå êåëéÜ\näéáóôÜóåùí ôïõëÜ÷éóôïí 3÷3.";
-        Text[ korean ] = "ÀÚµ¿ ¼­½ÄÀ» Àû¿ëÇÒ ¼ö ÀÖ±â À§ÇØ¼­´Â,\nÃÖ¼ÒÇÑ \n 3x3¼¿ÀÇ µµÇ¥ ¿µ¿ªÀÌ ¸¶Å·µÇ¾î¾ß ÇÕ´Ï´Ù.";
+        Text[ korean ] = "ÀÚµ¿ ¼­½ÄÀ» Àû¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÏ±â À§ÇØ¼­´Â,\nÃÖ¼ÒÇÑ \n 3x3¼¿ÀÇ µµÇ¥ ¿µ¿ªÀÌ ¸¶Å·µÇ¾î¾ß ÇÕ´Ï´Ù.";
         Text[ turkish ] = "otomatik formatlamayı kullanabilmek için\n en az 3x3 hücre büyüklüğünde bir tablo aralığı seçilmiş olmalıdır.";
         Text[ language_user1 ] = " ";
     };
@@ -6717,7 +6717,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¨S¦³ÀË¬d«÷¦rªº¥\\¯à¡C\n½ĞÀË¬d±zªº¦w¸Ë¡A­Y¦³¥²­n½Ğ¦w¸Ë©Ò­n¨Ï¥Îªº»y¨¥ª©¥»";
         Text[ arabic ] = "ÛíÑ ãÊæİÑ ááÊÏŞíŞ ÇáÅãáÇÆí. \nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
         Text[ greek ] = "äåí åßíáé äéáèİóéìï ãéá ôïí İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé áí ÷ñåéáóôåß, íá \nãßíåé åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
-        Text[ korean ] = " ¸ÂÃã¹ı °Ë»ç°¡ ºÒ°¡´ÉÇÕ´Ï´Ù.\n»ç¿ëÀÚÀÇ ¼³Ä¡¸¦ È®ÀÎÇÑ ´ÙÀ½ \nÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = " ¸ÂÃã¹ı °Ë»ç°¡ ºÒ°¡´ÉÇÕ´Ï´Ù.\n»ç¿ëÀÚÀÇ ¼³Ä¡¸¦ È®ÀÎÇÑ ´ÙÀ½ \nÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "denetim için mevcut değil.\nKurulumu kontrol edip\ngerekirse istenen dili yükleyin";
         Text[ language_user1 ] = " ";
     };
@@ -7238,51 +7238,51 @@ Resource RID_GLOBSTR
     String STR_MSSG_SEARCHANDREPLACE_1
     {
         /* ### ACHTUNG: Neuer Text in Resource? StarCalc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen? : StarCalc hat bis zum Anfang der Tabelle gesucht. M÷chten Sie die Suche am Tabellenende fortsetzen? */
-        Text = "StarOffice Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
+        Text = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
         Text [ ENGLISH ] = "StarCalc has searched to the beginning of the table. Do you want to continue at the end?" ;
-        Text [ english_us ] = "StarOffice Calc has searched to the beginning of the sheet. Do you want to continue at the end?" ;
-        Text [ italian ] = "StarOffice Calc ha effettuato la ricerca fino all'inizio della tabella. Volete continuare dalla fine?" ;
-        Text [ spanish ] = "StarOffice Calc ha buscado hasta el comienzo de la hoja. ¿Desea continuar la búsqueda por el final?" ;
-        Text [ french ] = "StarOffice Calc a atteint le début du classeur. Souhaitez-vous reprendre la recherche à la fin du classeur ?" ;
-        Text [ dutch ] = "StarOffice Calc heeft tot aan het begin van het werkblad gezocht. Wilt u het zoeken aan het einde voortzetten?" ;
-        Text [ swedish ] = "StarOffice Calc har sökt till början av tabellen.Vill Du att sökningen skall fortsätta vid tabellens slut?" ;
-        Text [ danish ] = "StarOffice Calc har søgt til begyndelsen af arket. Vil du fortsætte søgningen fra arkets slutning?" ;
-        Text [ portuguese ] = "O StarOffice Calc procurou até ao princípio da folha. Deseja continuar a procura no fim?" ;
-        Text [ portuguese_brazilian ] = "StarOffice Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
-        Text[ chinese_simplified ] = "StarOffice Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íÊ×¶Ë¡£Òª×Ô¹¤×÷±íÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
-        Text[ russian ] = "StarOffice Calc îñóùåñòâèë ïîèñê â íà÷àëå ëèñòà. Ïğîäîëæèòü ïîèñê â êîíöå ëèñòà?";
-        Text[ polish ] = "StarOffice Calc szuka³ do pocz¹tku arkusza. Czy chcesz kontynuowaæ wyszukiwanie na koñcu arkusza?";
-        Text[ japanese ] = "StarOffice Calc ‚Í•\\‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•\\‚ÌI‚è‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
-        Text[ chinese_traditional ] = "StarOffice Calc ¤w¸g´M§ä¨ì¤u§@ªí­ººİ¡C­nÄ~Äò´M§ä¨ì¤u§@ªí§Àºİ¡H";
-        Text[ arabic ] = "ÈÍË StarOffice Calc ÍÊì ÈÏÇíÉ ÇáÌÏæá. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáÌÏæá¿";
-        Text[ greek ] = "Ôï StarOffice Calc åêôİëåóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ ğßíáêá. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç óôï ôİëïò ôïõ ğßíáêá;";
-        Text[ korean ] = "StarOffice Calc ´Â ½ÃÆ®ÀÇ ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. ¸¶Áö¸· ±îÁö °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
-        Text[ turkish ] = "StarOffice Calc tablonun başına kadar aradı. Aramaya tablo sonunda devam etmek istiyor musunuz?";
+        Text [ english_us ] = "%PRODUCTNAME Calc has searched to the beginning of the sheet. Do you want to continue at the end?" ;
+        Text [ italian ] = "%PRODUCTNAME Calc ha effettuato la ricerca fino all'inizio della tabella. Volete continuare dalla fine?" ;
+        Text [ spanish ] = "%PRODUCTNAME Calc ha buscado hasta el comienzo de la hoja. ¿Desea continuar la búsqueda por el final?" ;
+        Text [ french ] = "%PRODUCTNAME Calc a atteint le début du classeur. Souhaitez-vous reprendre la recherche à la fin du classeur ?" ;
+        Text [ dutch ] = "%PRODUCTNAME Calc heeft tot aan het begin van het werkblad gezocht. Wilt u het zoeken aan het einde voortzetten?" ;
+        Text [ swedish ] = "%PRODUCTNAME Calc har sökt till början av tabellen.Vill Du att sökningen skall fortsätta vid tabellens slut?" ;
+        Text [ danish ] = "%PRODUCTNAME Calc har søgt til begyndelsen af arket. Vil du fortsætte søgningen fra arkets slutning?" ;
+        Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao princípio da folha. Deseja continuar a procura no fim?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íÊ×¶Ë¡£Òª×Ô¹¤×÷±íÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
+        Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íà÷àëå ëèñòà. Ïğîäîëæèòü ïîèñê â êîíöå ëèñòà?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do pocz¹tku arkusza. Czy chcesz kontynuowaæ wyszukiwanie na koñcu arkusza?";
+        Text[ japanese ] = "%PRODUCTNAME Calc ‚Í•\\‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•\\‚ÌI‚è‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤u§@ªí­ººİ¡C­nÄ~Äò´M§ä¨ì¤u§@ªí§Àºİ¡H";
+        Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì ÈÏÇíÉ ÇáÌÏæá. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáÌÏæá¿";
+        Text[ greek ] = "Ôï %PRODUCTNAME Calc åêôİëåóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ ğßíáêá. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç óôï ôİëïò ôïõ ğßíáêá;";
+        Text[ korean ] = "%PRODUCTNAME Calc ´Â ½ÃÆ®ÀÇ ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. ¸¶Áö¸· ±îÁö °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "%PRODUCTNAME Calc tablonun başına kadar aradı. Aramaya tablo sonunda devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? StarCalc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen? : StarCalc hat bis zum Ende der Tabelle gesucht. M÷chten Sie die Suche am Tabellenanfang fortsetzen? */
-        Text = "StarOffice Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
+        Text = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
         Text [ ENGLISH ] = "StarCalc has searched to the end of the table. Do you want to continue at the beginning?" ;
-        Text [ english_us ] = "StarOffice Calc has searched to the end of the sheet. Do you want to continue at the beginning?" ;
-        Text [ italian ] = "StarOffice Calc ha effettuato la ricerca fino alla fine della tabella. Volete continuare dall'inizio?" ;
-        Text [ spanish ] = "StarOffice Calc ha buscado hasta el final de la hoja. ¿Desea continuar la búsqueda desde el comienzo?" ;
-        Text [ french ] = "StarOffice Calc a atteint la fin du classeur. Souhaitez-vous reprendre la recherche au début du classeur ?" ;
-        Text [ dutch ] = "StarOffice Calc heeft tot aan het einde van het werkblad gezocht. Wilt u het zoeken aan het begin voortzetten?" ;
-        Text [ swedish ] = "StarOffice Calc har sökt till slutet av tabellen.Vill Du att sökningen skall fortsätta i tabellens början?" ;
-        Text [ danish ] = "StarOffice Calc har søgt til slutningen af arket. Vil du fortsætte søgningen fra arkets begyndelse?" ;
-        Text [ portuguese ] = "O StarOffice Calc procurou até ao fim da folha. Deseja continuar a procura no princípio?" ;
-        Text [ portuguese_brazilian ] = "StarOffice Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
-        Text[ chinese_simplified ] = "StarOffice Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íµÄÎ²¶Ë¡£Òª×Ô¹¤×÷±íÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
-        Text[ russian ] = "StarOffice Calc îñóùåñòâèë ïîèñê â êîíöå ëèñòà. Ïğîäîëæèòü ïîèñê â íà÷àëå ëèñòà?";
-        Text[ polish ] = "StarOffice Calc szuka³ do koñca arkusza. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku arkusza?";
-        Text[ japanese ] = "StarOffice Calc ‚Í•\\‚ÌI‚è‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•\\‚Ìn‚ß‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
-        Text[ chinese_traditional ] = "StarOffice Calc ¤w¸g´M§ä¨ì¤u§@ªíªº§Àºİ¡C­nÄ~Äò¦b¤u§@ªí­ººİ´M§ä¡H";
-        Text[ arabic ] = "ÈÍË StarOffice Calc ÍÊì äåÇíÉ ÇáÌÏæá. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáÌÏæá¿";
-        Text[ greek ] = "Ôï StarOffice Calc åêôİëåóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ ğßíáêá. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç óôçí áñ÷Ş ôïõ ğßíáêá;";
-        Text[ korean ] = "StarOffice Calc ´Â ½ÃÆ®ÀÇ ¸¶Áö¸· ºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. Ã³À½ ºÎÅÍ °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
-        Text[ turkish ] = "StarOffice Calc tablonun sonuna kadar aradı. Aramaya tablo başından devam etmek istiyor musunuz?";
+        Text [ english_us ] = "%PRODUCTNAME Calc has searched to the end of the sheet. Do you want to continue at the beginning?" ;
+        Text [ italian ] = "%PRODUCTNAME Calc ha effettuato la ricerca fino alla fine della tabella. Volete continuare dall'inizio?" ;
+        Text [ spanish ] = "%PRODUCTNAME Calc ha buscado hasta el final de la hoja. ¿Desea continuar la búsqueda desde el comienzo?" ;
+        Text [ french ] = "%PRODUCTNAME Calc a atteint la fin du classeur. Souhaitez-vous reprendre la recherche au début du classeur ?" ;
+        Text [ dutch ] = "%PRODUCTNAME Calc heeft tot aan het einde van het werkblad gezocht. Wilt u het zoeken aan het begin voortzetten?" ;
+        Text [ swedish ] = "%PRODUCTNAME Calc har sökt till slutet av tabellen.Vill Du att sökningen skall fortsätta i tabellens början?" ;
+        Text [ danish ] = "%PRODUCTNAME Calc har søgt til slutningen af arket. Vil du fortsætte søgningen fra arkets begyndelse?" ;
+        Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao fim da folha. Deseja continuar a procura no princípio?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íµÄÎ²¶Ë¡£Òª×Ô¹¤×÷±íÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
+        Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â êîíöå ëèñòà. Ïğîäîëæèòü ïîèñê â íà÷àëå ëèñòà?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koñca arkusza. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku arkusza?";
+        Text[ japanese ] = "%PRODUCTNAME Calc ‚Í•\\‚ÌI‚è‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½B•\\‚Ìn‚ß‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤u§@ªíªº§Àºİ¡C­nÄ~Äò¦b¤u§@ªí­ººİ´M§ä¡H";
+        Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì äåÇíÉ ÇáÌÏæá. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáÌÏæá¿";
+        Text[ greek ] = "Ôï %PRODUCTNAME Calc åêôİëåóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ ğßíáêá. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç óôçí áñ÷Ş ôïõ ğßíáêá;";
+        Text[ korean ] = "%PRODUCTNAME Calc ´Â ½ÃÆ®ÀÇ ¸¶Áö¸· ºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. Ã³À½ ºÎÅÍ °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "%PRODUCTNAME Calc tablonun sonuna kadar aradı. Aramaya tablo başından devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_3
@@ -7311,50 +7311,50 @@ Resource RID_GLOBSTR
     };
     String STR_MSSG_SEARCHANDREPLACE_4
     {
-        Text = "StarOffice Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
+        Text = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
         Text [ english ] = "StarCalc has searched to the beginning of the document. Do you want to continue at the end?" ;
-        Text [ portuguese ] = "O StarOffice Calc procurou até ao início do documento. Deseja continuar no final do documento?" ;
-        Text [ english_us ] = "StarOffice Calc has searched to the beginning of the document. Do you want to continue at the end?" ;
-        Text [ portuguese_brazilian ] = "StarOffice Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
-        Text [ swedish ] = "StarOffice Calc har sökt till början på dokumentet. Vill Du att sökningen skall fortsätta i slutet på dokumentet?" ;
-        Text [ danish ] = "StarOffice Calc har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
-        Text [ italian ] = "La ricerca effettuata da StarOffice Calc ha raggiunto l'inizio. Volete proseguire la ricerca dalla fine del documento?" ;
-        Text [ spanish ] = "StarOffice Calc ha buscado hasta el principio del documento.¿Desea continuar la búsqueda por el final del documento?" ;
-        Text [ french ] = "StarOffice Calc a atteint le début du classeur. Souhaitez-vous reprendre la recherche à la fin du classeur ?" ;
-        Text [ dutch ] = "StarOffice Calc heeft gezocht tot aan het begin van het document. Wilt u het zoeken aan het einde van het document voortzetten?" ;
-        Text[ chinese_simplified ] = "StarOffice Calc ÒÑ¾­ËÑÑ°µ½ÎÄµµµÄÊ×¶Ë¡£Òª×ÔÎÄµµÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
-        Text[ russian ] = "StarOffice Calc îñóùåñòâèë ïîèñê â íàïğàâëåíèè ê íà÷àëó äîêóìåíòà. Ïğîäîëæèòü ïîèñê â íàïğàâëåíèè ê êîíöó äîêóìåíòà?";
-        Text[ polish ] = "StarOffice Calc szuka³ do pocz¹tku dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
-        Text[ japanese ] = "StarOffice Calc ‚ÍÄŞ·­ÒİÄ‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÄŞ·­ÒİÄ‚ÌI‚è‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
-        Text[ chinese_traditional ] = "StarOffice Calc ¤w¸g´M§ä¨ì¤å¥ó­ººİ¡C­nÄ~Äò¦b¤å¥ó§Àºİ´M§ä¡H";
-        Text[ arabic ] = "ÈÍË StarOffice Calc ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
-        Text[ greek ] = "Ôï StarOffice Calc ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
-        Text[ korean ] = "StarOffice Calc ´Â¹®¼­ÀÇ ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù.  ¸¶Áö¸·±îÁö °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
-        Text[ turkish ] = "StarOffice Calc belgenin başına kadar aradı. Aramaya belge sonunda devam etmek istiyor musunuz?";
+        Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao início do documento. Deseja continuar no final do documento?" ;
+        Text [ english_us ] = "%PRODUCTNAME Calc has searched to the beginning of the document. Do you want to continue at the end?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
+        Text [ swedish ] = "%PRODUCTNAME Calc har sökt till början på dokumentet. Vill Du att sökningen skall fortsätta i slutet på dokumentet?" ;
+        Text [ danish ] = "%PRODUCTNAME Calc har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
+        Text [ italian ] = "La ricerca effettuata da %PRODUCTNAME Calc ha raggiunto l'inizio. Volete proseguire la ricerca dalla fine del documento?" ;
+        Text [ spanish ] = "%PRODUCTNAME Calc ha buscado hasta el principio del documento.¿Desea continuar la búsqueda por el final del documento?" ;
+        Text [ french ] = "%PRODUCTNAME Calc a atteint le début du classeur. Souhaitez-vous reprendre la recherche à la fin du classeur ?" ;
+        Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het begin van het document. Wilt u het zoeken aan het einde van het document voortzetten?" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½ÎÄµµµÄÊ×¶Ë¡£Òª×ÔÎÄµµÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
+        Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íàïğàâëåíèè ê íà÷àëó äîêóìåíòà. Ïğîäîëæèòü ïîèñê â íàïğàâëåíèè ê êîíöó äîêóìåíòà?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do pocz¹tku dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
+        Text[ japanese ] = "%PRODUCTNAME Calc ‚ÍÄŞ·­ÒİÄ‚Ìn‚ß‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÄŞ·­ÒİÄ‚ÌI‚è‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤å¥ó­ººİ¡C­nÄ~Äò¦b¤å¥ó§Àºİ´M§ä¡H";
+        Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
+        Text[ greek ] = "Ôï %PRODUCTNAME Calc ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
+        Text[ korean ] = "%PRODUCTNAME Calc ´Â¹®¼­ÀÇ ½ÃÀÛºÎºĞÀ» °Ë»öÇß½À´Ï´Ù.  ¸¶Áö¸·±îÁö °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "%PRODUCTNAME Calc belgenin başına kadar aradı. Aramaya belge sonunda devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_5
     {
-        Text = "StarOffice Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
+        Text = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
         Text [ english ] = "StarCalc has searched to the end of the document. Do you want to continue at the beginning?" ;
-        Text [ portuguese ] = "O StarOffice Calc procurou até ao final do documento. Deseja continuar no início?" ;
-        Text [ english_us ] = "StarOffice Calc has searched to the end of the document. Do you want to continue at the beginning?" ;
-        Text [ portuguese_brazilian ] = "StarOffice Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
-        Text [ swedish ] = "StarOffice Calc har sökt till slutet på dokumentet. Vill Du att sökningen skall fortsätta i början på dokumentet?" ;
-        Text [ danish ] = "StarOffice Calc har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
-        Text [ italian ] = "La ricerca effettuata da StarOffice Calc ha raggiunto la fine. Volete proseguire la ricerca dall'inizio del documento?" ;
-        Text [ spanish ] = "StarOffice Calc ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio del documento?" ;
-        Text [ french ] = "StarOffice Calc a atteint la fin du classeur. Souhaitez-vous reprendre la recherche au début du classeur ?" ;
-        Text [ dutch ] = "StarOffice Calc heeft gezocht tot aan het einde van het document. Wilt u het zoeken aan het begin van het document voortzetten?" ;
-        Text[ chinese_simplified ] = "StarOffice Calc ÒÑ¾­ËÑÑ°µ½ÎÄµµµÄÎ²¶Ë¡£Òª×ÔÎÄµµÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
-        Text[ russian ] = "StarOffice Calc îñóùåñòâèë ïîèñê â íàïğàâëåíèè ê êîíöó äîêóìåíòà. Ïğîäîëæèòü ïîèñê â íàïğàâëåíèè ê íà÷àëó äîêóìåíòà?";
-        Text[ polish ] = "StarOffice Calc szuka³ do koñca dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
-        Text[ japanese ] = "StarOffice Calc ‚ÍÄŞ·­ÒİÄ‚ÌI‚è‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÄŞ·­ÒİÄ‚Ìn‚ß‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
-        Text[ chinese_traditional ] = "StarOffice Calc ¤w¸g´M§ä¨ì¤å¥ó§Àºİ¡C­nÄ~Äò¦b¤å¥ó­ººİ´M§ä¡H";
-        Text[ arabic ] = "ÈÍË StarOffice Calc ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
-        Text[ greek ] = "Ôï StarOffice Calc ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
-        Text[ korean ] = "StarOffice Calc ´Â ¹®¼­ÀÇ ¸¶Áö¸· ºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. Ã³À½ ºÎÅÍ °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
-        Text[ turkish ] = "StarOffice Calc belgenin sonuna kadar aradı. Aramaya belge başından devam etmek istiyor musunuz?";
+        Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao final do documento. Deseja continuar no início?" ;
+        Text [ english_us ] = "%PRODUCTNAME Calc has searched to the end of the document. Do you want to continue at the beginning?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
+        Text [ swedish ] = "%PRODUCTNAME Calc har sökt till slutet på dokumentet. Vill Du att sökningen skall fortsätta i början på dokumentet?" ;
+        Text [ danish ] = "%PRODUCTNAME Calc har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
+        Text [ italian ] = "La ricerca effettuata da %PRODUCTNAME Calc ha raggiunto la fine. Volete proseguire la ricerca dall'inizio del documento?" ;
+        Text [ spanish ] = "%PRODUCTNAME Calc ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio del documento?" ;
+        Text [ french ] = "%PRODUCTNAME Calc a atteint la fin du classeur. Souhaitez-vous reprendre la recherche au début du classeur ?" ;
+        Text [ dutch ] = "%PRODUCTNAME Calc heeft gezocht tot aan het einde van het document. Wilt u het zoeken aan het begin van het document voortzetten?" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½ÎÄµµµÄÎ²¶Ë¡£Òª×ÔÎÄµµÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
+        Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íàïğàâëåíèè ê êîíöó äîêóìåíòà. Ïğîäîëæèòü ïîèñê â íàïğàâëåíèè ê íà÷àëó äîêóìåíòà?";
+        Text[ polish ] = "%PRODUCTNAME Calc szuka³ do koñca dokumentu. Czy chcesz kontynuowaæ wyszukiwanie na pocz¹tku dokumentu?";
+        Text[ japanese ] = "%PRODUCTNAME Calc ‚ÍÄŞ·­ÒİÄ‚ÌI‚è‚Ü‚ÅŒŸõ‚µ‚Ü‚µ‚½BÄŞ·­ÒİÄ‚Ìn‚ß‚É–ß‚Á‚ÄŒŸõ‚ğ‘±‚¯‚Ü‚·‚©B";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Calc ¤w¸g´M§ä¨ì¤å¥ó§Àºİ¡C­nÄ~Äò¦b¤å¥ó­ººİ´M§ä¡H";
+        Text[ arabic ] = "ÈÍË %PRODUCTNAME Calc ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
+        Text[ greek ] = "Ôï %PRODUCTNAME Calc ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
+        Text[ korean ] = "%PRODUCTNAME Calc ´Â ¹®¼­ÀÇ ¸¶Áö¸· ºÎºĞÀ» °Ë»öÇß½À´Ï´Ù. Ã³À½ ºÎÅÍ °è¼Ó ÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "%PRODUCTNAME Calc belgenin sonuna kadar aradı. Aramaya belge başından devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
     };
     String STR_CREATENAME_REPLACE
@@ -8718,7 +8718,7 @@ Resource RID_GLOBSTR
         Text[ chinese_traditional ] = "¤w¸g¶W¹L³Ì¦hµL®ÄÀx¦s®æªº¼Æ¥Ø¡C\n¨S¦³¿ï¨ú¥ş³¡µL®ÄªºÀx¦s®æ¡C";
         Text[ arabic ] = "Êã ÊÌÇæÒ ÇáÚÏÏ ÇáÃŞÕì ááÎáÇíÇ ÇáÛíÑ ÕÇáÍÉ.\náã íÊã ÊÍÏíÏ ßá ÇáÎáÇíÇ ÇáÛíÑ ÕÇáÍÉ.";
         Text[ greek ] = "Õğİñâáóç ôïõ ìİãéóôïõ áñéèìïı ìç İãêõñùí êåëéşí. Äåí \nåêôåëİóôçêå ç óŞìáíóç üëùí ôùí ìç İãêõñùí êåëéşí.";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¼¿ÀÇ ÃÖ´ë °¹¼ö°¡ ÃÊ°ú µÇ¾ú½À´Ï´Ù. \nÀ¯È¿ÇÏÁö ¾ÊÀº ¼¿ÀÌ ¸ğµÎ Ç¥±âµÇÁö´Â  ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¼¿ÀÇ ÃÖ´ë °³¼ö°¡ ÃÊ°ú µÇ¾ú½À´Ï´Ù. \nÀ¯È¿ÇÏÁö ¾ÊÀº ¼¿ÀÌ ¸ğµÎ ¸¶Å·µÇÁö´Â  ¾Ê¾Ò½À´Ï´Ù.";
         Text[ turkish ] = "Azami geçersiz hücre sayısı aşıldı.\nGeçersiz hücrelerin tümüü seçilmedi.";
         Text[ language_user1 ] = " ";
     };
