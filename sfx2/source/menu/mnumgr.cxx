@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:16:02 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1547,6 +1547,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         {
             USHORT nId = aPop.GetItemId( n );
             pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
+            pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
         }
     }
 
