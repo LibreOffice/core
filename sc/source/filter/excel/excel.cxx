@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-26 16:06:42 $
+ *  last change: $Author: dr $ $Date: 2002-05-29 09:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,115 +120,137 @@ FltError ScImportExcel( SfxMedium& r, ScDocument* p )
 
 FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
-    DBG_ASSERT( &rMedium != NULL,
-        "--ScImportExcel(): Wer hat mich da falsch gerufen?!!!" );
-
-    FltError                eRet;
-
+    FltError eRet = eERR_OK;
     SvStorage* pStorage = rMedium.GetStorage();
+
+    // OLE2 compound file
     if( pStorage )
-    {// OLE2-Datei
-        enum BiffType   { BT0, BT5, BT8 };
-        SvStorage*          pPivotCacheStorage = NULL;
-        const String        aPvCchStrgNm( String::CreateFromAscii( pPivotCacheStorageName ) );
+    {
+        // *** look for contained streams ***
 
-        BiffType            eBT = BT0;
+        const String aStreamName5( String::CreateFromAscii( pWrkbkNameExcel5 ) );
+        sal_Bool bHasBook = pStorage->IsContained( aStreamName5 ) && pStorage->IsStream( aStreamName5 );
 
-        String              aWrkbkName( String::CreateFromAscii( pWrkbkNameExcel97 ) ); // -> Biff8 hoeherwertiger!
-        const BOOL          bContBiff8 = pStorage->IsContained( aWrkbkName ) && pStorage->IsStream( aWrkbkName );
+        const String aStreamName8( String::CreateFromAscii( pWrkbkNameExcel97 ) );
+        sal_Bool bHasWorkbook = pStorage->IsContained( aStreamName8 ) && pStorage->IsStream( aStreamName8 );
 
-        aWrkbkName.AssignAscii( pWrkbkNameExcel5 );
-        const BOOL          bContBiff5 = pStorage->IsContained( aWrkbkName ) && pStorage->IsStream( aWrkbkName );
+        // *** handle user-defined filter selection ***
 
-        if( !bContBiff8 && !bContBiff5 )
-            return eERR_UNKN_BIFF;
-
+        // comparing the stream names, regardless of the stream contents
         switch( eFormat )
         {
             case EIF_AUTO:
-                if( bContBiff8 )
-                {
-                    eBT = BT8;
-                    aWrkbkName.AssignAscii( pWrkbkNameExcel97 );
-                }
-                else
-                {
-                    eBT = BT5;
-                    DBG_ASSERT( bContBiff5, "*ScImportExcel(): Falscher Zustand" );
-                }
-                break;
+                // nothing to do
+            break;
             case EIF_BIFF5:
-                if( bContBiff5 )
-                    eBT = BT5;
-                else
-                    return eERR_FORMAT;         // Error-Code richtig?
-                break;
+                bHasWorkbook = sal_False;
+            break;
             case EIF_BIFF8:
-                if( bContBiff8 )
-                {
-                    eBT = BT8;
-                    aWrkbkName.AssignAscii( pWrkbkNameExcel97 );
-                    pPivotCacheStorage = pStorage->OpenStorage( aPvCchStrgNm, STREAM_STD_READ );
-                }
-                else
-                    return eERR_FORMAT;         // Error-Code richtig?
-                break;
+                bHasBook = sal_False;
+            break;
             case EIF_BIFF_LE4:
-                return eERR_FORMAT;             // Error-Code richtig?
-                break;
-#ifdef DEBUG
+                eRet = eERR_FORMAT;             //!! correct error code?
+            break;
             default:
-                DBG_ERROR( "*ScImportExcel(): Format vergessen!" );
-#endif
+                eRet = eERR_FORMAT;             //!! correct error code?
+                DBG_ERRORFILE( "ScImportExcel - wrong file format specification" );
         }
 
-        SvStorageStreamRef  xStStream = pStorage->OpenStream( aWrkbkName,
-                                    STREAM_READ | STREAM_SHARE_DENYALL );
+        // *** find BIFF version and stream name ***
 
-        xStStream->SetBufferSize( 32768 );
+        enum { xlBiffDet0, xlBiffDet5, xlBiffDet8 } eBiffDetect = xlBiffDet0;
+        const String* pStreamName = NULL;
 
-        if( eBT == BT8 )
-        { // Tuerk-Test
-            SvStream& r = *xStStream;
-            r.SeekRel( 4 );
-            UINT16  nVersion;
-            r >> nVersion;
-            if( nVersion == 0x0500 )
-                eBT = BT5;      // getuerkt!!!
-            r.Seek( 0 );
+        if( eRet == eERR_OK )
+        {
+            // BIFF8 is first class
+            if( bHasWorkbook )
+            {
+                eBiffDetect = xlBiffDet8;
+                pStreamName = &aStreamName8;
+            }
+            else if( bHasBook )
+            {
+                eBiffDetect = xlBiffDet5;
+                pStreamName = &aStreamName5;
+            }
+            else
+                eRet = eERR_UNKN_BIFF;
         }
 
-        ImportExcel*        pFilter;
+        if( (eRet == eERR_OK) && pStreamName )
+        {
+            SvStorageStreamRef xStream = pStorage->OpenStream( *pStreamName, STREAM_READ | STREAM_SHARE_DENYALL );
+            DBG_ASSERT( xStream.Is(), "ScImportExcel - missing stream" );
+            xStream->SetBufferSize( 32768 );
 
-        if( eBT == BT5 )
-            pFilter = new ImportExcel( *xStStream, pDocument );
+            // *** special handling for wrong BIFF versions in stream ***
+
+            xStream->SeekRel( 4 );
+            sal_uInt16 nVersion;
+            (*xStream) >> nVersion;
+            xStream->Seek( 0 );
+
+            // look for BIFF5/7 stream in "Workbook"
+            if( bHasWorkbook && (nVersion == 0x0500) )
+                eBiffDetect = xlBiffDet5;
+            // look for BIFF8 stream in "Book"
+            else if( bHasBook && (nVersion == 0x0600) )
+                eBiffDetect = xlBiffDet8;
+
+            //!!! move into filter !!!
+            const String aPvCchStrgNm( String::CreateFromAscii( pPivotCacheStorageName ) );
+            SvStorage* pPivotCacheStorage = NULL;
+            if( eBiffDetect == xlBiffDet8 )
+                pPivotCacheStorage = pStorage->OpenStorage( aPvCchStrgNm, STREAM_STD_READ );
+            //!!! move into filter !!!
+
+            // *** and Go! ***
+
+            if( eRet == eERR_OK )
+            {
+                ImportExcel* pFilter = NULL;
+
+                if( eBiffDetect == xlBiffDet5 )
+                    pFilter = new ImportExcel( *xStream, pDocument );
+                else if( eBiffDetect == xlBiffDet8 )
+                    pFilter = new ImportExcel8( pStorage, *xStream, pDocument, pPivotCacheStorage );
+
+                if( pFilter )
+                    eRet = pFilter->Read();
+                else
+                {
+                    DBG_ERRORFILE( "ScImportExcel - not imported, unknown error" );
+                    eRet = eERR_UNKN_BIFF;
+                }
+                delete pFilter;
+            }
+
+            xStream->SetBufferSize( 0 );
+        }
+    }
+
+    // no OLE2 storage - simple stream
+    else if( (eFormat == EIF_AUTO) || (eFormat == EIF_BIFF_LE4) )
+    {
+        SvStream* pStream = rMedium.GetInStream();
+        if( pStream )
+        {
+            pStream->Seek( 0UL );
+            pStream->SetBufferSize( 32768 );
+
+            ImportExcel aFilter( *pStream, pDocument );
+            eRet = aFilter.Read();
+
+            pStream->SetBufferSize( 0 );
+        }
         else
-            pFilter = new ImportExcel8( pStorage, *xStStream, pDocument, pPivotCacheStorage );
-
-        eRet = pFilter->Read();
-
-        xStStream->SetBufferSize( 0 );
-
-        delete pFilter;
+            eRet = eERR_OPEN;
     }
-    else if( eFormat == EIF_AUTO || eFormat == EIF_BIFF_LE4 )
-    {// normale Datei
-        SvStream*           pStream = rMedium.GetInStream();
 
-        if( pStream == NULL )
-            return eERR_OPEN;
-
-        pStream->Seek( 0UL );
-
-        pStream->SetBufferSize( 32768 );
-
-        ImportExcel         aFilter( *pStream, pDocument );
-        eRet = aFilter.Read();
-
-        pStream->SetBufferSize( 0 );
-    }
+    // else invalid input
     else
-        return eERR_FORMAT;                     // Error-Code richtig?
+        eRet = eERR_FORMAT;             //!! correct error code?
 
     return eRet;
 }
