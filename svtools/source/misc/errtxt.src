@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 14:56:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,14 +408,14 @@ Resource RID_ERRCTX
         Text [ danish ] = "$(ERR) under åbning af en rubrik" ;
         Text [ portuguese ] = "$(ERR) ao abrir rubrica" ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Aufklappen einer Rubrik" ;
-        Text[ chinese_simplified ] = "´ò¿ª·ÖÀàÌõÄ¿Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "À©Õ¹·ÖÀàÌõÄ¿Ê±·¢Éú $(ERR)";
         Text[ russian ] = "$(ERR) ïğè ğàñêğûâàíèè ğóáğèêè";
         Text[ polish ] = "$(ERR) przy otwieraniu rubryki";
         Text[ japanese ] = "$(ERR)ÂØ°•\\¦‚ğŠJ‚­Û";
         Text[ chinese_traditional ] = "ÂX®iÅã¥Ü¤@­Ó¤ÀÄæ®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ İÊÍ ÃÍÏ ÇáÃÚãÏÉ";
         Text[ dutch ] = "$(ERR) bij openen van een rubriek";
-        Text[ chinese_simplified ] = "´ò¿ª·ÖÀàÌõÄ¿Ê±·¢Éú $(ERR)";
+        Text[ chinese_simplified ] = "À©Õ¹·ÖÀàÌõÄ¿Ê±·¢Éú $(ERR)";
         Text[ greek ] = "$(ERR) êáôÜ ôï Üíïéãìá ìéáò êáôçãïñßáò";
         Text[ korean ] = "Ç¥Á¦¸¦ ¿­±âÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "Girişi açarken $(ERR)";
@@ -739,14 +739,14 @@ Resource RID_ERRHDL
         Text [ danish ] = "Skrivefejl" ;
         Text [ portuguese ] = "Erro de escrita" ;
         Text [ portuguese_brazilian ] = "Schreibproblem" ;
-        Text[ chinese_simplified ] = "¸²Ğ´´íÎó";
+        Text[ chinese_simplified ] = "Ğ´Èë´íÎó";
         Text[ russian ] = "Ïğîáëåìà çàïèñè";
         Text[ polish ] = "B³¹d zapisu";
         Text[ japanese ] = "‘‚«‚İ´×°";
-        Text[ chinese_traditional ] = "ÂĞ¼g¿ù»~";
+        Text[ chinese_traditional ] = "¼g¤J¿ù»~";
         Text[ arabic ] = "ÎØÃ İí ÇáßÊÇÈÉ";
         Text[ dutch ] = "Probleem bij schrijven";
-        Text[ chinese_simplified ] = "¸²Ğ´´íÎó";
+        Text[ chinese_simplified ] = "Ğ´Èë´íÎó";
         Text[ greek ] = "ÓöÜëìá åããñáöŞò";
         Text[ korean ] = "¾²±â ¿À·ù";
         Text[ turkish ] = "Yazma hatası";
@@ -2989,6 +2989,7 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
 
 
