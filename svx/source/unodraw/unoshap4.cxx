@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 08:22:46 $
+ *  last change: $Author: er $ $Date: 2001-08-28 13:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     {
         // generate a unique name
 
-        aName = ImpGetResStr( STR_ObjOLE2NamePrefix );
-        aName += sal_Unicode(' ');
+        aName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") );
         String aStr;
         sal_Int32 i = 1;
         HACK(Wegen Storage Bug 46033)
