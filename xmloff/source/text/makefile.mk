@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: dvo $ $Date: 2001-03-09 14:54:24 $
+#   last change: $Author: mtg $ $Date: 2001-03-30 14:59:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,83 +76,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        txtdrope.cxx \
-        txtdropi.cxx \
-        txtexppr.cxx \
-        txtflde.cxx \
-        txtfldi.cxx \
-        txtftne.cxx \
-        txtimp.cxx \
-        txtimppr.cxx \
-        txtparae.cxx \
-        txtparai.cxx \
-        txtprhdl.cxx \
-        txtprmap.cxx \
-        txtsecte.cxx \
-        txtstyle.cxx \
-        txtstyli.cxx \
-        txtvfldi.cxx \
-        XMLAutoTextEventExport.cxx \
-        XMLAutoTextEventImport.cxx \
-        XMLAutoTextContainerEventImport.cxx \
-        XMLChangedRegionImportContext.cxx \
-        XMLChangeElementImportContext.cxx \
-        XMLChangeInfoContext.cxx \
-        XMLFootnoteBodyImportContext.cxx \
-        XMLFootnoteConfigurationImportContext.cxx \
-        XMLFootnoteImportContext.cxx \
-        XMLIndexAlphabeticalSourceContext.cxx \
-        XMLIndexBibliographyConfigurationContext.cxx \
-        XMLIndexBibliographyEntryContext.cxx \
-        XMLIndexBibliographySourceContext.cxx \
-        XMLIndexBodyContext.cxx \
-        XMLIndexChapterInfoEntryContext.cxx \
-        XMLIndexIllustrationSourceContext.cxx \
-        XMLIndexMarkExport.cxx \
-        XMLIndexObjectSourceContext.cxx \
-        XMLIndexSimpleEntryContext.cxx \
-        XMLIndexSpanEntryContext.cxx \
-        XMLIndexTabStopEntryContext.cxx \
-        XMLIndexSourceBaseContext.cxx \
-        XMLIndexTableSourceContext.cxx \
-        XMLIndexTOCContext.cxx \
-        XMLIndexTOCSourceContext.cxx \
-        XMLIndexTOCStylesContext.cxx \
-        XMLIndexTemplateContext.cxx \
-        XMLIndexTitleTemplateContext.cxx \
-        XMLIndexUserSourceContext.cxx \
-        XMLLineNumberingExport.cxx \
-        XMLLineNumberingImportContext.cxx \
-        XMLLineNumberingSeparatorImportContext.cxx \
-        XMLPropertyBackpatcher.cxx \
-        XMLRedlineExport.cxx \
-        XMLSectionExport.cxx \
-        XMLSectionFootnoteConfigExport.cxx \
-        XMLSectionFootnoteConfigImport.cxx \
-        XMLSectionImportContext.cxx \
-        XMLSectionSourceDDEImportContext.cxx \
-        XMLSectionSourceImportContext.cxx \
-        XMLTextColumnsContext.cxx \
-        XMLTextColumnsExport.cxx \
-        XMLTextFrameContext.cxx \
-        XMLTextFrameHyperlinkContext.cxx \
-        XMLTextHeaderFooterContext.cxx \
-        XMLTextListAutoStylePool.cxx \
-        XMLTextListBlockContext.cxx \
-        XMLTextListItemContext.cxx \
-        XMLTextMarkImportContext.cxx \
-        XMLTextMasterPageContext.cxx \
-        XMLTextMasterPageExport.cxx \
-        XMLTextMasterStylesContext.cxx \
-        XMLTextNumRuleInfo.cxx \
-        XMLTextPropertySetContext.cxx \
-        XMLTextShapeImportHelper.cxx \
-        XMLTextShapeStyleContext.cxx \
-        XMLTextTableContext.cxx \
-        XMLChangeImportContext.cxx \
-        XMLStringBufferImportContext.cxx \
-        XMLTrackedChangesImportContext.cxx
 
 SLOFILES =	\
         $(SLO)$/txtdrope.obj \
@@ -230,7 +153,8 @@ SLOFILES =	\
         $(SLO)$/XMLTextTableContext.obj \
         $(SLO)$/XMLChangeImportContext.obj \
         $(SLO)$/XMLStringBufferImportContext.obj \
-        $(SLO)$/XMLTrackedChangesImportContext.obj
+        $(SLO)$/XMLTrackedChangesImportContext.obj \
+        $(SLO)$/XMLCalculationSettingsContext.obj
 
 # --- Tagets -------------------------------------------------------
 
