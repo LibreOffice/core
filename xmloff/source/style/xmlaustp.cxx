@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:05:57 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,16 +127,12 @@ namespace
 }
 
 void SvXMLAutoStylePoolP::exportStyleAttributes(
-#if SUPD < 650
         SvXMLAttributeList& rAttrList,
-#endif
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
-        const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
-        , const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLExportPropertyMapper& rPropExp,
+        const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap
-#endif
         ) const
 {
     if ( XML_STYLE_FAMILY_CONTROL_ID == nFamily )
@@ -247,16 +243,12 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void SvXMLAutoStylePoolP::exportStyleContent(
-#if SUPD < 650
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-#endif
         sal_Int32 nFamily,
         const vector< XMLPropertyState >& rProperties,
-        const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
-        , const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLExportPropertyMapper& rPropExp,
+        const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap
-#endif
         ) const
 {
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
@@ -339,13 +331,11 @@ void SvXMLAutoStylePoolP::exportStyleContent(
     }
 }
 
-#if SUPD < 650
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP()
 {
     DBG_ERROR("This constuctor is obsoleted and should not be used!");
     pImpl = NULL;
 }
-#endif
 
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP( SvXMLExport& rExport )
 {
@@ -463,21 +453,16 @@ OUString SvXMLAutoStylePoolP::FindAndRemoveCached( sal_Int32 nFamily ) const
 }
 
 
-void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily
-
-#if SUPD < 650
-    , const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
+    const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap
-#endif
     ) const
 {
     pImpl->exportXML( nFamily,
-#if SUPD < 650
                       GetExport().GetDocHandler(),
                       GetExport().GetMM100UnitConverter(),
                       GetExport().GetNamespaceMap(),
-#endif
                       this);
 }
 

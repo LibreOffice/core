@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,11 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#if SUPD < 650
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
 #endif
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
@@ -252,11 +250,9 @@ public:
     ::rtl::OUString FindAndRemoveCached( sal_Int32 nFamily ) const;
 
     void exportXML( sal_Int32 nFamily,
-#if SUPD < 650
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-#endif
         const SvXMLAutoStylePoolP *pAntiImpl) const;
 
     void ClearEntries();

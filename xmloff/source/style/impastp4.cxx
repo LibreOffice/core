@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:34 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,11 +324,9 @@ OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) cons
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
            sal_Int32 nFamily,
-#if SUPD < 650
         const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-#endif
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     sal_uInt32 nCount = 0;
@@ -424,16 +422,12 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                     sName = pFamily->maStrFamilyName;
 
                 pAntiImpl->exportStyleAttributes(
-#if SUPD < 650
                     GetExport().GetAttrList(),
-#endif
                     nFamily,
                     aExpStyles[i].mpProperties->GetProperties(),
                     *pFamily->mxMapper.get()
-#if SUPD < 650
                         , GetExport().GetMM100UnitConverter(),
                         GetExport().GetNamespaceMap()
-#endif
                     );
 
                 SvXMLElementExport aElem( GetExport(),
@@ -466,16 +460,12 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                     nStart, nEnd, XML_EXPORT_FLAG_IGN_WS );
 
                 pAntiImpl->exportStyleContent(
-#if SUPD < 650
                     GetExport().GetDocHandler(),
-#endif
                     nFamily,
                     aExpStyles[i].mpProperties->GetProperties(),
-                    *pFamily->mxMapper.get()
-#if SUPD < 650
-                    , GetExport().GetMM100UnitConverter(),
+                    *pFamily->mxMapper.get(),
+                    GetExport().GetMM100UnitConverter(),
                     GetExport().GetNamespaceMap()
-#endif
                     );
             }
         }

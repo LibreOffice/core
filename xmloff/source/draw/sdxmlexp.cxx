@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:15 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2166,11 +2166,9 @@ void SdXMLExport::_ExportAutoStyles()
     // export draw-page styles
     GetAutoStylePool()->exportXML(
         XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID
-#if SUPD < 650
         , GetDocHandler(),
         GetMM100UnitConverter(),
         GetNamespaceMap()
-#endif
         );
 
     if( getExportFlags() & EXPORT_STYLES )

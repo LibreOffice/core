@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:45 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,12 +1054,10 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaExtPropMapper(
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
-#if SUPD < 650
 void XMLTextParagraphExport::collectFrames()
 {
     collectFrames( sal_False );
 }
-#endif
 
 void XMLTextParagraphExport::collectFrames( sal_Bool bBoundToFrameOnly )
 {
@@ -3005,7 +3003,6 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
-#if SUPD < 650
     GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                                    GetExport().GetDocHandler(),
                                    GetExport().GetMM100UnitConverter(),
@@ -3030,13 +3027,6 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                   GetExport().GetDocHandler(),
                                   GetExport().GetMM100UnitConverter(),
                                   GetExport().GetNamespaceMap() );
-#else
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH );
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT );
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_FRAME );
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION );
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_RUBY );
-#endif
 
     pListAutoPool->exportXML();
 }

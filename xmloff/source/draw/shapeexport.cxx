@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:16 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,11 +873,9 @@ void XMLShapeExport::exportAutoStyles()
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID
-#if SUPD < 650
             , GetExport().GetDocHandler(),
             GetExport().GetMM100UnitConverter(),
             GetExport().GetNamespaceMap()
-#endif
             );
     }
 
@@ -886,11 +884,9 @@ void XMLShapeExport::exportAutoStyles()
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_PRESENTATION_ID
-#if SUPD < 650
             , GetExport().GetDocHandler(),
             GetExport().GetMM100UnitConverter(),
             GetExport().GetNamespaceMap()
-#endif
             );
     }
 }

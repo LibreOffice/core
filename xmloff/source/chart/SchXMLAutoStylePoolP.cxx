@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2002-01-08 17:13:55 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 12:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,26 +89,17 @@ SchXMLAutoStylePoolP::~SchXMLAutoStylePoolP()
 {}
 
 void SchXMLAutoStylePoolP::exportStyleAttributes(
-#if SUPD < 650
     SvXMLAttributeList& rAttrList,
-#endif
     sal_Int32 nFamily,
     const ::std::vector< XMLPropertyState >& rProperties,
     const SvXMLExportPropertyMapper& rPropExp
-#if SUPD < 650
     , const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap
-#endif
     ) const
 {
     const rtl::OUString sCDATA( GetXMLToken( XML_CDATA ));
-#if SUPD < 650
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties,
                                                 rPropExp, rUnitConverter, rNamespaceMap );
-#else
-    SvXMLAutoStylePoolP::exportStyleAttributes( nFamily,
-                                                rProperties, rPropExp );
-#endif
 
     if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
     {
