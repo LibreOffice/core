@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-29 16:12:40 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:29:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -341,7 +341,7 @@ sub register_javacomponents
 
                     my @regcompoutput = ();
 
-                    $systemcall = "$$regcompfileref -register -s -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " |";
+                    $systemcall = "$$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " 2\>\&1 |";
 
                     open (REG, "$systemcall");
                     while (<REG>) {push(@regcompoutput, $_); }
@@ -352,7 +352,7 @@ sub register_javacomponents
                     my $infoline = "Systemcall: $systemcall\n";
                     push( @installer::globals::logfileinfo, $infoline);
 
-                    for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+                    for ( my $k = 0; $k <= $#regcompoutput; $k++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$k]"); }
 
                     if ($returnvalue)
                     {
@@ -735,7 +735,7 @@ sub create_services_rdb
 
         if ( $error_during_registration )
         {
-            $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "with_error");
+            $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "witherror");
             push(@installer::globals::removedirs, $servicesdir);
         }
         else
