@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 12:49:41 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,20 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <com/sun/star/ui/XImageManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
-#include <drafts/com/sun/star/ui/ImageType.hpp>
+#ifndef _COM_SUN_STAR_UI_IMAGETYPE_HPP_
+#include <com/sun/star/ui/ImageType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 
 #include <tools/urlobj.hxx>
@@ -111,8 +111,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-using namespace ::drafts::com::sun::star::ui;
-using namespace ::drafts::com::sun::star::frame;
+using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::frame;
 
 typedef std::hash_map< ::rtl::OUString,
                        WeakReference< XImageManager >,
@@ -196,12 +196,12 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
         }
     }
 
-    sal_Int16 nImageType( ::drafts::com::sun::star::ui::ImageType::COLOR_NORMAL|
-                            ::drafts::com::sun::star::ui::ImageType::SIZE_DEFAULT );
+    sal_Int16 nImageType( ::com::sun::star::ui::ImageType::COLOR_NORMAL|
+                            ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
     if ( bBig )
-        nImageType |= ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE;
+        nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
     if ( bHiContrast )
-        nImageType |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
+        nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
 
     if ( xDocImgMgr.is() )
     {
@@ -230,7 +230,7 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
         xModuleManager = Reference< XModuleManager >(
                             ::comphelper::getProcessServiceFactory()->createInstance(
                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                    "drafts.com.sun.star.frame.ModuleManager" ))),
+                                    "com.sun.star.frame.ModuleManager" ))),
                             UNO_QUERY );
         m_xModuleManager = xModuleManager;
     }
@@ -253,7 +253,7 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
                     xModuleCfgMgrSupplier = Reference< XModuleUIConfigurationManagerSupplier >(
                                                 ::comphelper::getProcessServiceFactory()->createInstance(
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                        "drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
+                                                        "com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ))),
                                                 UNO_QUERY );
 
                     m_xModuleCfgMgrSupplier = xModuleCfgMgrSupplier;
@@ -264,12 +264,12 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
                 m_aModuleIdToImageMgrMap.insert( ModuleIdToImagegMgr::value_type( aModuleId, xModuleImageManager ));
             }
 
-            sal_Int16 nImageType( ::drafts::com::sun::star::ui::ImageType::COLOR_NORMAL|
-                                  ::drafts::com::sun::star::ui::ImageType::SIZE_DEFAULT );
+            sal_Int16 nImageType( ::com::sun::star::ui::ImageType::COLOR_NORMAL|
+                                  ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
             if ( bBig )
-                nImageType |= ::drafts::com::sun::star::ui::ImageType::SIZE_LARGE;
+                nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
             if ( bHiContrast )
-                nImageType |= ::drafts::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
+                nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
 
             Sequence< Reference< ::com::sun::star::graphic::XGraphic > > aGraphicSeq;
             Sequence< rtl::OUString > aImageCmdSeq( 1 );
