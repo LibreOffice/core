@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipfmtitem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-29 18:13:44 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,12 @@ protected:
 
 public:
     TYPEINFO();
-    SvxClipboardFmtItem( USHORT nId );
+    SvxClipboardFmtItem( USHORT nId = 0 );
     SvxClipboardFmtItem( const SvxClipboardFmtItem& );
     virtual ~SvxClipboardFmtItem();
+
+    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
+    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
 
     void AddClipbrdFormat( ULONG nId, USHORT nPos = USHRT_MAX );
     void AddClipbrdFormat( ULONG nId, const String& rName,
