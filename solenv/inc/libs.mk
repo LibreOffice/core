@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-06 06:57:05 $
+#   last change: $Author: vg $ $Date: 2001-06-15 16:29:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -340,7 +340,7 @@ VCLLIB=$(SVLIB)
 TKLIB=$(LIBPRE) itk.lib
 SVLIBDEPEND=$(L)$/ivcl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
-#FREETYPELIB=freetype.lib
+FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
