@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:38:52 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,12 +153,19 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
-    IsObjectValid();
-    if(!mpTextHelper)
-        CreateTextHelper();
+    uno::Reference<XAccessible> xRet;
+    if (contains(rPoint))
+    {
+         ScUnoGuard aGuard;
+        IsObjectValid();
 
-    return mpTextHelper->GetAt(rPoint);
+        if(!mpTextHelper)
+            CreateTextHelper();
+
+        xRet = mpTextHelper->GetAt(rPoint);
+    }
+
+    return xRet;
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -325,6 +332,8 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
             rData.GetHeaderPosition( aRect );
         else
             rData.GetFooterPosition( aRect );
+
+        aRect.SetPos(Point()); // has the same size and position on screen like the parent and so the pos is (0, 0)
     }
     return aRect;
 }

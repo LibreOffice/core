@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 11:10:26 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,17 +366,20 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessib
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
     uno::Reference<XAccessible> xAcc;
-    if (mpDPFieldWindow)
+    if (contains(rPoint))
     {
-        Point aAbsPoint(VCLPoint(rPoint));
-        Point aControlEdge(GetBoundingBoxOnScreen().TopLeft());
-        Point aRelPoint(aAbsPoint - aControlEdge);
-        sal_Int32 nChildIndex(0);
-        if (mpDPFieldWindow->GetFieldIndex(aRelPoint, nChildIndex))
-            xAcc = getAccessibleChild(nChildIndex);
+        ScUnoGuard aGuard;
+        IsObjectValid();
+        if (mpDPFieldWindow)
+        {
+            Point aAbsPoint(VCLPoint(rPoint));
+            Point aControlEdge(GetBoundingBoxOnScreen().TopLeft());
+            Point aRelPoint(aAbsPoint - aControlEdge);
+            sal_Int32 nChildIndex(0);
+            if (mpDPFieldWindow->GetFieldIndex(aRelPoint, nChildIndex))
+                xAcc = getAccessibleChild(nChildIndex);
+        }
     }
     return xAcc;
 }

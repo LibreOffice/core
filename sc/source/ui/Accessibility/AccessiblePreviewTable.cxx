@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:54 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,35 +483,38 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int32 nChi
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt( const awt::Point& aPoint )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-
-    FillTableInfo();
-
     uno::Reference<XAccessible> xRet;
-    if ( mpTableInfo )
+    if (contains(aPoint))
     {
-        USHORT nCols = mpTableInfo->GetCols();
-        USHORT nRows = mpTableInfo->GetCols();
-        const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
-        const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
+        ScUnoGuard aGuard;
+        IsObjectValid();
 
-        if ( nCols > 0 && nRows > 0 && aPoint.X >= pColInfo[0].nPixelStart && aPoint.Y >= pRowInfo[0].nPixelStart )
+        FillTableInfo();
+
+        if ( mpTableInfo )
         {
-            USHORT nColIndex = 0;
-            while ( nColIndex < nCols && aPoint.X > pColInfo[nColIndex].nPixelEnd )
-                ++nColIndex;
-            USHORT nRowIndex = 0;
-            while ( nRowIndex < nRows && aPoint.Y > pRowInfo[nRowIndex].nPixelEnd )
-                ++nRowIndex;
-            if ( nColIndex < nCols && nRowIndex < nRows )
+            USHORT nCols = mpTableInfo->GetCols();
+            USHORT nRows = mpTableInfo->GetCols();
+            const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
+            const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
+
+            if ( nCols > 0 && nRows > 0 && aPoint.X >= pColInfo[0].nPixelStart && aPoint.Y >= pRowInfo[0].nPixelStart )
             {
-                try
+                USHORT nColIndex = 0;
+                while ( nColIndex < nCols && aPoint.X > pColInfo[nColIndex].nPixelEnd )
+                    ++nColIndex;
+                USHORT nRowIndex = 0;
+                while ( nRowIndex < nRows && aPoint.Y > pRowInfo[nRowIndex].nPixelEnd )
+                    ++nRowIndex;
+                if ( nColIndex < nCols && nRowIndex < nRows )
                 {
-                    xRet = getAccessibleCellAt( nRowIndex, nColIndex );
-                }
-                catch (uno::Exception&)
-                {
+                    try
+                    {
+                        xRet = getAccessibleCellAt( nRowIndex, nColIndex );
+                    }
+                    catch (uno::Exception&)
+                    {
+                    }
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:49:11 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1485,11 +1485,11 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
     uno::Reference<XAccessible> xAccessible = NULL;
-    if (GetBoundingBox().IsInside(VCLPoint(rPoint)))
+    if (contains(rPoint))
     {
+        ScUnoGuard aGuard;
+        IsObjectValid();
         if (mpChildrenShapes)
             xAccessible = mpChildrenShapes->GetAt(rPoint);
         if(!xAccessible.is())

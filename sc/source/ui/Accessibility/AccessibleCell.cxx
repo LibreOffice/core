@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 11:32:40 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,9 +203,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
-    IsObjectValid();
-
     return NULL;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-15 10:04:30 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,14 +520,17 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
     const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
     uno::Reference< XAccessible > xAccessible;
-    if (mpViewShell)
+    if (contains(rPoint))
     {
-        sal_Int16 nX, nY;
-        if (mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY))
-            xAccessible = getAccessibleCellAt(nY, nX);
+        ScUnoGuard aGuard;
+        IsObjectValid();
+        if (mpViewShell)
+        {
+            sal_Int16 nX, nY;
+            if (mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY))
+                xAccessible = getAccessibleCellAt(nY, nX);
+        }
     }
     return xAccessible;
 }

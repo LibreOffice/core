@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:49:11 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1529,58 +1529,61 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleAt( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
-
-    if ( mpViewShell )
+    if (contains(rPoint))
     {
-        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
+        ScUnoGuard aGuard;
+        IsObjectValid();
 
-        if ( rData.HasCellsInRange( Rectangle( rPoint.X, rPoint.Y, rPoint.X, rPoint.Y ) ) )
+        if ( mpViewShell )
         {
-            if ( !mpTable && (aCount.nTables > 0) )
-            {
-                //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-                sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
+            const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+            ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
-                mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                mpTable->acquire();
-                mpTable->Init();
-            }
-            xAccessible = mpTable;
-        }
-        else
-        {
-            xAccessible = GetNotesChilds()->GetAt(rPoint);
-            if (!xAccessible.is())
-                xAccessible = GetShapeChilds()->GetAt(rPoint);
-            if (!xAccessible.is())
+            if ( rData.HasCellsInRange( Rectangle( rPoint.X, rPoint.Y, rPoint.X, rPoint.Y ) ) )
             {
-                if (!mpHeader || !mpFooter)
+                if ( !mpTable && (aCount.nTables > 0) )
                 {
-                    const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-                    ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
+                    //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+                    sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
 
-                    if (!mpHeader)
-                    {
-                        mpHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, aCount.nBackShapes + aCount.nHeaders - 1);
-                        mpHeader->acquire();
-                    }
-                    if (!mpFooter)
-                    {
-                        mpFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters - 1 );
-                        mpFooter->acquire();
-                    }
+                    mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+                    mpTable->acquire();
+                    mpTable->Init();
                 }
+                xAccessible = mpTable;
+            }
+            else
+            {
+                xAccessible = GetNotesChilds()->GetAt(rPoint);
+                if (!xAccessible.is())
+                    xAccessible = GetShapeChilds()->GetAt(rPoint);
+                if (!xAccessible.is())
+                {
+                    if (!mpHeader || !mpFooter)
+                    {
+                        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+                        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
-                Point aPoint(VCLPoint(rPoint));
+                        if (!mpHeader)
+                        {
+                            mpHeader = new ScAccessiblePageHeader( this, mpViewShell, sal_True, aCount.nBackShapes + aCount.nHeaders - 1);
+                            mpHeader->acquire();
+                        }
+                        if (!mpFooter)
+                        {
+                            mpFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters - 1 );
+                            mpFooter->acquire();
+                        }
+                    }
 
-                if (VCLRectangle(mpHeader->getBounds()).IsInside(aPoint))
-                    xAccessible = mpHeader;
-                else if (VCLRectangle(mpFooter->getBounds()).IsInside(aPoint))
-                    xAccessible = mpFooter;
+                    Point aPoint(VCLPoint(rPoint));
+
+                    if (VCLRectangle(mpHeader->getBounds()).IsInside(aPoint))
+                        xAccessible = mpHeader;
+                    else if (VCLRectangle(mpFooter->getBounds()).IsInside(aPoint))
+                        xAccessible = mpFooter;
+                }
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:49:11 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
 #endif
 
 #include <algorithm>
@@ -233,23 +236,26 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAt( const awt::Point& aPoint )
                                 throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-
     uno::Reference<XAccessible> xRet;
 
-    sal_Int32 nCount(getAccessibleChildCount()); // fill the areas
-
-    if (nCount)
+    if (contains(aPoint))
     {
-        // return the first with content, because they have all the same Bounding Box
-        sal_uInt8 i(0);
-        while(!xRet.is() && i < MAX_AREAS)
+        ScUnoGuard aGuard;
+        IsObjectValid();
+
+        sal_Int32 nCount(getAccessibleChildCount()); // fill the areas
+
+        if (nCount)
         {
-            if (maAreas[i])
-                xRet = maAreas[i];
-            else
-                ++i;
+            // return the first with content, because they have all the same Bounding Box
+            sal_uInt8 i(0);
+            while(!xRet.is() && i < MAX_AREAS)
+            {
+                if (maAreas[i])
+                    xRet = maAreas[i];
+                else
+                    ++i;
+            }
         }
     }
 

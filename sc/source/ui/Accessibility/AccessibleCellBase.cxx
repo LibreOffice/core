@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:49:10 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

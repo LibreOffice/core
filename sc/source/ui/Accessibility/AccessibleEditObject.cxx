@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:23:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,12 +166,19 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
-    IsObjectValid();
-    if(!mpTextHelper)
-        CreateTextHelper();
+    uno::Reference<XAccessible> xRet;
+    if (contains(rPoint))
+    {
+         ScUnoGuard aGuard;
+        IsObjectValid();
 
-    return mpTextHelper->GetAt(rPoint);
+        if(!mpTextHelper)
+            CreateTextHelper();
+
+        xRet = mpTextHelper->GetAt(rPoint);
+    }
+
+    return xRet;
 }
 
 Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen(void) const

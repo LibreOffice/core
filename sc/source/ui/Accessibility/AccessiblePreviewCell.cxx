@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 10:41:50 $
+ *  last change: $Author: sab $ $Date: 2002-08-16 09:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,12 +139,19 @@ void SAL_CALL ScAccessiblePreviewCell::disposing()
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAt( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
 {
-     ScUnoGuard aGuard;
-    IsObjectValid();
-    if(!mpTextHelper)
-        CreateTextHelper();
+    uno::Reference<XAccessible> xRet;
+    if (contains(rPoint))
+    {
+         ScUnoGuard aGuard;
+        IsObjectValid();
 
-    return mpTextHelper->GetAt(rPoint);
+        if(!mpTextHelper)
+            CreateTextHelper();
+
+        xRet = mpTextHelper->GetAt(rPoint);
+    }
+
+    return xRet;
 }
 
 void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
