@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:35:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
 
     pLocalOptions->SetObjMode( eType, eMode );
 
-    return NULL;
+    return 0;
 }
 
 /*-----------------11.01.97 14.25-------------------
@@ -358,7 +358,7 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
         pLocalOptions->SetOption( eOption, bChecked );
 
 
-    return NULL;
+    return 0;
 }
 /*-----------------11.01.97 13.13-------------------
 
