@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:24:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,6 +689,8 @@ void TestToolObj::InitTestToolObj()
 
     MAKE_TT_KEYWORD( "GetLinkDestination", SbxCLASS_METHOD, SbxSTRING, ID_GetLinkDestination );
     MAKE_TT_KEYWORD( "GetRegistryValue", SbxCLASS_METHOD, SbxSTRING, ID_GetRegistryValue );
+
+    MAKE_TT_KEYWORD( "KillApp", SbxCLASS_METHOD, SbxNULL, ID_KillApp );
 
     // Load the Remote Commands from list
     if ( !pRCommands )                 // Ist static, wird also nur einmal geladen
@@ -1679,13 +1681,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         }
                     }
                     break;
-//              case ID_Kill:
-//                  if ( !rPar )  // rPar = NULL  <=>  Kein Parameter
-//                  {
-//                  }
-//                  else
-//                      SetError( SbxERR_WRONG_ARGS );
-//                  break;
+                case ID_KillApp:
+                    pCommunicationManager->KillApplication();
+                    break;
                 case ID_SaveIDs:
                     if ( rPar && rPar->Count() >= 2 )  // Genau ein Parameter
                     {
@@ -2838,7 +2836,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.13 $
+    // search $Revision: 1.14 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
