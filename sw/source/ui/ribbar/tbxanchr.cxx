@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:33:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ void  SwTbxAnchor::Click()
         aPopMenu.CheckItem(nActAnchorId);
 
 
-    USHORT nSlotId = aPopMenu.Execute(&GetToolBox(), aRect.BottomLeft());
+    USHORT nSlotId = aPopMenu.Execute(&GetToolBox(), aRect);
     GetToolBox().EndSelection();
 
     if (nSlotId)
