@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 
 //==================================================================
 class FmFieldWin;
-class FmFieldWinListBox
+class SAL_DLLPRIVATE FmFieldWinListBox
                     :public SvTreeListBox
 {
     FmFieldWin* pTabWin;
@@ -126,7 +126,7 @@ protected:
 
 //========================================================================
 class FmFormShell;
-class FmFieldWinData
+class SAL_DLLPRIVATE FmFieldWinData
 {
 public:
     FmFieldWinData();
@@ -134,7 +134,7 @@ public:
 };
 
 //========================================================================
-class FmFieldWin    :public SfxFloatingWindow
+class SAL_DLLPRIVATE FmFieldWin :public SfxFloatingWindow
                     ,public SfxControllerItem
                     ,public ::comphelper::OPropertyChangeListener
                     ,public ::svxform::OStaticDataAccessTools
@@ -182,7 +182,7 @@ protected:
 };
 
 //========================================================================
-class FmFieldWinMgr : public SfxChildWindow
+class SAL_DLLPRIVATE FmFieldWinMgr : public SfxChildWindow
 {
 public:
     FmFieldWinMgr(Window *pParent, sal_uInt16 nId,
