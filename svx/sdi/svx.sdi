@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:08:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3128,7 +3128,7 @@ SvxDrawToolItem InsertDraw SID_INSERT_DRAW
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
+        Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
@@ -3138,7 +3138,7 @@ SvxDrawToolItem InsertDraw SID_INSERT_DRAW
 
     /* config: */
     AccelConfig = FALSE,
-    MenuConfig = TRUE,
+        MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
