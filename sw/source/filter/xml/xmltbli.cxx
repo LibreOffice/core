@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-27 06:16:11 $
+ *  last change: $Author: mib $ $Date: 2000-09-27 07:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1955,23 +1955,27 @@ void SwXMLTableContext::MakeTable()
             bSetHoriOrient = sal_True;
         }
 
+        const SwFmtFrmSize *pSize = 0;
         if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, sal_False,
                                                         &pItem ) )
+            pSize = (const SwFmtFrmSize *)pItem;
+
+        switch( eHoriOrient )
         {
-            const SwFmtFrmSize *pSize = (const SwFmtFrmSize *)pItem;
-            switch( eHoriOrient )
+        case HORI_FULL:
+        case HORI_NONE:
+            // #78246#: For HORI_NONE we would prefere to use the sum
+            // of the relative column widths as reference width.
+            // Unfortunately this works only if this sum interpreted as
+            // twip value is larger than the space that is avaialable.
+            // We don't know that space, so we have to use USHRT_MAX, too.
+            // Even if a size is speczified, it will be ignored!
+            nWidth = USHRT_MAX;
+            break;
+            break;
+        default:
+            if( pSize )
             {
-            case HORI_FULL:
-            case HORI_NONE:
-                // #78246#: For HORI_NONE we would prefere to use the sum
-                // of the relative column widths as reference width.
-                // Unfortunately this works only if this sum interpreted as
-                // twip value is larger than the space that is avaialable.
-                // We don't know that space, so we have to use USHRT_MAX, too.
-                nWidth = USHRT_MAX;
-                break;
-                break;
-            default:
                 if( pSize->GetWidthPercent() )
                 {
                     // The width will be set in _MakeTable
@@ -1990,14 +1994,15 @@ void SwXMLTableContext::MakeTable()
                     }
                     bRelWidth = sal_False;
                 }
-                break;
             }
-        }
-        else
-        {
-            eHoriOrient = HORI_FULL;
-            bSetHoriOrient = sal_True;
-            nWidth = USHRT_MAX;
+            else
+            {
+                eHoriOrient = HORI_LEFT_AND_WIDTH == eHoriOrient
+                                    ? HORI_NONE : HORI_FULL;
+                bSetHoriOrient = sal_True;
+                nWidth = USHRT_MAX;
+            }
+            break;
         }
 
         pFrmFmt->SetAttr( *pAutoItemSet );
@@ -2192,11 +2197,15 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.2 2000-09-27 06:16:11 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltbli.cxx,v 1.3 2000-09-27 07:28:00 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/27 06:16:11  mib
+      #78246#: Calculation of relative column widths now works correctly even if
+               the summ of all column widths is smaller than the page width.
+
       Revision 1.1.1.1  2000/09/18 17:15:00  hr
       initial import
 
