@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilteredContainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:55:36 $
+ *  last change: $Author: vg $ $Date: 2002-08-27 11:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
 
-        mutable sal_Bool m_bConstructed : 1;        // late ctor called
+        mutable sal_Bool m_bConstructed;        // late ctor called
 
         virtual sal_Bool isNameValid(const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
