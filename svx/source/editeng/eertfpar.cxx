@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2001-12-18 11:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,6 @@ EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rA
     SetNewDoc( FALSE );     // damit die Pool-Defaults nicht
                             // ueberschrieben werden...
     aEditMapMode = MapMode( pImpEE->GetRefDevice()->GetMapMode().GetMapUnit() );
-
-#ifdef EDITDEBUG
-    SvFileStream aStream( "d:\\rtf.log", STREAM_WRITE|STREAM_TRUNC );
-    ULONG nP = rIn.Tell();
-    aStream << rIn;
-    rIn.Seek( nP );
-#endif
 }
 
 EditRTFParser::~EditRTFParser()
