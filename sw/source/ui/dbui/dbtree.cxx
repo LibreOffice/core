@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-06 18:36:56 $
+ *  last change: $Author: jp $ $Date: 2001-08-07 13:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _COM_SUN_STAR_SDB_XDATABASEACCESS_HPP_
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -109,6 +112,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include <svx/dbaexchange.hxx>
 #endif
 
 #ifndef _DBMGR_HXX
@@ -639,32 +645,25 @@ void SwDBTreeList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     {
         TransferDataContainer* pContainer = new TransferDataContainer;
         STAR_REFERENCE( datatransfer::XTransferable ) xRef( pContainer );
-
         if( sColumnName.Len() )
         {
-            String aCopyData = sDBName;
-            aCopyData   += char(11);
-            aCopyData   += sTableName;
-            aCopyData   += char(11);
-            aCopyData   += '0';
-            aCopyData   += char(11);
-            aCopyData   += sColumnName;
-
             // Datenbankfeld draggen
-            pContainer->CopyString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE,
-                                        aCopyData );
+            svx::OColumnTransferable aColTransfer(
+                            sDBName, com::sun::star::sdb::CommandType::TABLE,
+                            sTableName, sColumnName,
+                            (CTF_FIELD_DESCRIPTOR |CTF_COLUMN_DESCRIPTOR ));
+            aColTransfer.addDataToContainer( pContainer );
         }
 
         sDBName += '.';
         sDBName += sTableName;
-        if(sColumnName.Len())
+        if( sColumnName.Len() )
         {
             sDBName += '.';
             sDBName += sColumnName;
         }
 
         pContainer->CopyString( FORMAT_STRING, sDBName );
-
         pContainer->StartDrag( this, DND_ACTION_COPY | DND_ACTION_LINK,
                                 Link() );
     }
