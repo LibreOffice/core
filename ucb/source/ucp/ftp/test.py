@@ -12,16 +12,14 @@ def grep(pattern,dirname,names):
 					print filename
 					break
 
-def find(regexp,dirName = "."):
-	os.path.walk(dirName,grep,re.compile(regexp))
-	
 
+def find(pattern,directory = "."):
+	os.path.walk(directory,grep,re.compile(pattern))
+
+	
 if __name__ == "__main__":
 	import sys
-	if len(sys.argv) == 3:
-		directory = sys.argv[2]
-	else:
-		directory = "."
-
-	dir(sys)
-	os.path.walk(directory,grep,re.compile(sys.argv[1]))
+	if len(sys.argv) == 2:
+		find(sys.argv[1])
+	elif len(sys.argv) == 2:
+		find(sys.argv[2],sys.argv[1])

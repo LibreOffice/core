@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-17 16:28:20 $
+ *  last change: $Author: abi $ $Date: 2002-10-21 13:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
 #include <com/sun/star/ucb/InteractiveNetworkResolveNameException.hpp>
+#include <com/sun/star/ucb/MissingPropertiesException.hpp>
+#include <com/sun/star/ucb/MissingInputStreamException.hpp>
+#include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 
@@ -296,7 +299,9 @@ enum ACTION { NOACTION,
               THROWAUTHENTICATIONREQUEST,
               THROWACCESSDENIED,
               THROWINTERACTIVECONNECT,
-              THROWRESOLVENAME };
+              THROWRESOLVENAME,
+              THROWQUOTE,
+              THROWGENERAL };
 
 
 // virtual
@@ -407,7 +412,15 @@ Any SAL_CALL FTPContent::execute(
                 ucbhelper::cancelCommandExecution(
                     aRet,
                     Environment);
+            } else if(action == THROWQUOTE) {
+
+            } else if(action == THROWGENERAL) {
+                ucbhelper::cancelCommandExecution(
+                    IOErrorCode_GENERAL,
+                    Sequence<Any>(0),
+                    Environment);
             }
+
 
             if(aCommand.Name.compareToAscii("getPropertyValues") == 0) {
                 Sequence<Property> Properties;
@@ -445,7 +458,7 @@ Any SAL_CALL FTPContent::execute(
                     aRet <<= IllegalArgumentException();
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
-                insert(aInsertArgument);
+                insert(aInsertArgument,Environment);
             }
             else if(aCommand.Name.compareToAscii( "open" ) == 0) {
                 OpenCommandArgument2 aOpenCommand;
@@ -522,8 +535,11 @@ Any SAL_CALL FTPContent::execute(
                 action = THROWAUTHENTICATIONREQUEST;
             else if(e.code() == CURLE_FTP_ACCESS_DENIED)
                 action = THROWACCESSDENIED;
+            else if(e.code() == CURLE_FTP_QUOTE_ERROR)
+                action = THROWQUOTE;
             else
-                break;
+                // nothing known about the course of the error
+                action = THROWGENERAL;
         }
 
     return aRet;
@@ -641,21 +657,53 @@ sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
 }
 
 
-void FTPContent::insert(const InsertCommandArgument& aInsertCommand)
+void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
+                        const Reference<XCommandEnvironment>& Env)
 {
-    if(!m_bInserted || (m_aInfo.Type == FTP_FILE && m_bTitleSet)) {
-        InsertData data(aInsertCommand.Data);
-        m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),&data);
-        osl::MutexGuard aGuard(m_aMutex);
-        m_bInserted = false;
-    } else if(m_bInserted && m_aInfo.Type == FTP_FOLDER && m_bTitleSet ) {
-        // todo
-        //      create a folder
-        osl::MutexGuard aGuard(m_aMutex);
-        m_bInserted = false;
-    } else {
+    osl::MutexGuard aGuard(m_aMutex);
 
+    if(m_bInserted && !m_bTitleSet) {
+        MissingPropertiesException excep;
+        excep.Properties.realloc(1);
+        excep.Properties[0] = rtl::OUString::createFromAscii("Title");
+        Any aAny; aAny <<= excep;
+        ucbhelper::cancelCommandExecution(aAny,Env);
     }
+
+    if(m_bInserted &&
+       m_aInfo.Type == FTP_FILE &&
+       !aInsertCommand.Data.is())
+    {
+        MissingInputStreamException excep;
+        Any aAny; aAny <<= excep;
+        ucbhelper::cancelCommandExecution(aAny,Env);
+    }
+
+    try {
+        if(m_aInfo.Type == FTP_FILE) {
+            InsertData data(aInsertCommand.Data);
+            m_aFTPURL.insert(bool(aInsertCommand.ReplaceExisting),
+                             &data);
+        } else if(m_aInfo.Type == FTP_FOLDER)
+            m_aFTPURL.mkdir(bool(aInsertCommand.ReplaceExisting));
+    } catch(const curl_exception& e) {
+        if(e.code() == FILE_EXIST_DURING_INSERT) {
+            Any aAny;
+            NameClashException excep;
+            excep.Name = m_aFTPURL.child();
+            ucbhelper::cancelCommandExecution(aAny,Env);
+        } else if(e.code() == FOLDER_EXIST_DURING_INSERT) {
+            Any aAny;
+            NameClashException excep;
+            excep.Name = m_aFTPURL.child();
+            ucbhelper::cancelCommandExecution(aAny,Env);
+        } else
+            throw;
+    }
+
+    // May not be reached, because both mkdir and insert can throw curl-
+    // exceptions
+    m_bInserted = false;
 }
 
 

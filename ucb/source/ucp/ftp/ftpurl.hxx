@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-17 16:28:23 $
+ *  last change: $Author: abi $ $Date: 2002-10-21 13:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,8 @@ namespace ftp {
     class FTPHandleProvider;
 
 
-
-    enum FTPErrorCode {
-        FTPCouldNotDetermineSystem = CURL_LAST + 1
-    };
+    enum FTPErrors { FILE_EXIST_DURING_INSERT = CURL_LAST +1,
+                     FOLDER_EXIST_DURING_INSERT };
 
 
     class malformed_exception { };
@@ -151,9 +149,11 @@ namespace ftp {
         /** returns the parent url.
          */
 
-        rtl::OUString parent() const;
+        rtl::OUString parent(bool internal = false) const;
 
         void child(const rtl::OUString& title);
+
+        rtl::OUString child(void) const;
 
         std::vector<FTPDirentry> list(sal_Int16 nMode) const
             throw(curl_exception);
@@ -167,6 +167,8 @@ namespace ftp {
         void insert(bool ReplaceExisting,void* stream) const
             throw(curl_exception);
 
+        void mkdir(bool ReplaceExisting) const
+            throw(curl_exception);
 
     private:
 

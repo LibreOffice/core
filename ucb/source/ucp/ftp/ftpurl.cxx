@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-17 16:28:22 $
+ *  last change: $Author: abi $ $Date: 2002-10-21 13:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ rtl::OUString FTPURL::ident(bool withslash,bool internal) const
 }
 
 
-rtl::OUString FTPURL::parent() const
+rtl::OUString FTPURL::parent(bool internal) const
 {
     rtl::OUStringBuffer bff;
 
@@ -328,7 +328,7 @@ rtl::OUString FTPURL::parent() const
                         aPassword,
                         aAccount);
 
-        if(m_bShowPassword && aPassword.getLength())
+        if((internal || m_bShowPassword) && aPassword.getLength())
             bff.append(sal_Unicode(':'))
                 .append(aPassword);
 
@@ -367,6 +367,15 @@ void FTPURL::child(const rtl::OUString& title)
 {
     m_aPathSegmentVec.push_back(title);
 }
+
+
+rtl::OUString FTPURL::child() const
+{
+    return
+        m_aPathSegmentVec.size() ?
+        m_aPathSegmentVec.back() : rtl::OUString();
+}
+
 
 
 /** Listing of a directory.
@@ -544,9 +553,6 @@ std::vector<FTPDirentry> FTPURL::list(
         p1 = p2 + 1;
     }
 
-    if(osKind == int(FTP_UNKNOWN))
-        throw curl_exception(FTPCouldNotDetermineSystem);
-
     return resvec;
 }
 
@@ -677,6 +683,13 @@ extern "C" {
 void FTPURL::insert(bool replaceExisting,void* stream) const
     throw(curl_exception)
 {
+    if(!replaceExisting) {
+        FTPDirentry aDirentry(direntry());
+        if(aDirentry.m_nMode == INETCOREFTP_FILEMODE_UNKNOWN)
+            throw curl_exception(FILE_EXIST_DURING_INSERT);
+    } // else
+    // overwrite is default in libcurl
+
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
@@ -693,6 +706,50 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     CURLcode err = curl_easy_perform(curl);
     curl_easy_setopt(curl, CURLOPT_UPLOAD,FALSE);
 
+    if(err != CURLE_OK)
+        throw curl_exception(err);
+}
+
+
+
+void FTPURL::mkdir(bool ReplaceExisting) const
+    throw(curl_exception)
+{
+    rtl::OString title;
+    if(m_aPathSegmentVec.size())
+        title = rtl::OString(m_aPathSegmentVec.back().getStr(),
+                            m_aPathSegmentVec.back().getLength(),
+                            RTL_TEXTENCODING_UTF8);
+    else
+        // will give an error
+        title = rtl::OString("/");
+
+    rtl::OString del("del "); del += title;
+    rtl::OString mkd("mkd "); mkd += title;
+
+    struct curl_slist *slist = 0;
+
+    FTPDirentry aDirentry(direntry());
+    if(!ReplaceExisting) {
+        if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
+            throw curl_exception(FOLDER_EXIST_DURING_INSERT);
+    } else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
+        slist = curl_slist_append(slist,del.getStr());
+
+    slist = curl_slist_append(slist,mkd.getStr());
+
+    CURL *curl = m_pFCP->handle();
+    SET_CONTROL_CONTAINER;
+    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+
+    // post request
+    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
+
+    rtl::OUString url(parent(true));
+    SET_URL(url);
+
+    CURLcode err = curl_easy_perform(curl);
+    curl_slist_free_all(slist);
     if(err != CURLE_OK)
         throw curl_exception(err);
 }
