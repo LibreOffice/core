@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORowSet.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:37:37 $
+ *  last change:$Date: 2003-09-08 11:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,19 @@
 
 package mod._dbaccess;
 
+import java.io.PrintWriter;
+import java.util.Vector;
+
+import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.DBTools;
+import util.utils;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.io.XDataInputStream;
-import com.sun.star.io.XTextInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.RowChangeEvent;
@@ -75,22 +84,10 @@ import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XRowUpdate;
-import com.sun.star.sdbcx.XRowLocate;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Vector;
-import lib.Status;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.DBTools;
-import util.utils;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
@@ -221,8 +218,6 @@ public class ORowSet extends TestCase {
         this.log = log ;
         tmpDir = (String) Param.get("TMPURL") ;
             tmpDir = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF());
-/*        origDB = (String) Param.get("DOCPTH") +
-            System.getProperty("file.separator") + "ORowSet.dbf" ;*/
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
@@ -347,7 +342,6 @@ public class ORowSet extends TestCase {
                 uniqueSuffix++ < 50);
         }
 
-        File tmpDir = null;
         XConnection connection = null ;
 
         try {
@@ -403,14 +397,6 @@ public class ORowSet extends TestCase {
             tEnv.addObjRelation("ORowSet.Connection", connection) ;
             this.conn = (XConnection) tEnv.getObjRelation("ORowSet.Connection");
 
-            final XRow xtRow = (XRow) UnoRuntime.queryInterface
-                (XRow.class, oObj) ;
-            final XRowUpdate xtRowUpdate = (XRowUpdate)
-                UnoRuntime.queryInterface(XRowUpdate.class, oObj) ;
-            final XResultSet xtResSet = (XResultSet) UnoRuntime.queryInterface
-                (XResultSet.class, oObj) ;
-            final XResultSetUpdate xtResSetUpdate = (XResultSetUpdate)
-                UnoRuntime.queryInterface(XResultSetUpdate.class, oObj) ;
 
             // Adding obj relation for XRowSetApproveBroadcaster test
             {
@@ -466,15 +452,6 @@ public class ORowSet extends TestCase {
             }
             // Adding relations for XRow as a Vector with all data
             // of current row of RowSet.
-            Object oBinStream = xMSF.createInstance
-                ("com.sun.star.io.DataInputStream") ;
-            XDataInputStream xBinStream = (XDataInputStream)
-                UnoRuntime.queryInterface(XDataInputStream.class, oBinStream) ;
-            Object oCharStream = xMSF.createInstance
-                ("com.sun.star.io.TextInputStream") ;
-            XTextInputStream xCharStream = (XTextInputStream)
-                UnoRuntime.queryInterface(XTextInputStream.class, oCharStream) ;
-            Object obj = xMSF.createInstance("com.sun.star.io.Pipe") ;
 
             Vector rowData = new Vector() ;
 
@@ -496,27 +473,8 @@ public class ORowSet extends TestCase {
             // Adding relation for XParameters ifc test
             Vector params = new Vector() ;
 
-            /*****  statement parameter types and their initial
-                    values must be added here as relation.
-            params.add(new String("SAU99")) ;
-            params.add(new Boolean(false)) ;
-            params.add(new Byte((byte) 123)) ;
-            params.add(new Short((short) 234)) ;
-            params.add(new Integer(12345)) ;
-            params.add(new Long(23456)) ;
-            params.add(new Float(1.234)) ;
-            params.add(new Double(2.345)) ;
-            params.add(new byte[] {1, 2, 3}) ;
-            params.add(new Date(26, 1, 2001)) ;
-            params.add(new Time(1, 25, 14, 12)) ;
-            params.add(new DateTime(1, 25, 14, 12, 26, 1, 2001)) ;
-            */
+
             tEnv.addObjRelation("XParameters.ParamValues", params) ;
-            // Adding relation for XDeleteRows ifc test
-            final XRowLocate rowLoc = (XRowLocate) UnoRuntime.queryInterface
-                (XRowLocate.class, oObj) ;
-            final XResultSet bMarkResSet = (XResultSet)
-                UnoRuntime.queryInterface(XResultSet.class, oObj) ;
 
             // Adding relation for XRowUpdate
             XRow row = (XRow) UnoRuntime.queryInterface (XRow.class, oObj) ;
@@ -603,4 +561,3 @@ public class ORowSet extends TestCase {
     }
 
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OQueryDesign.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:37:27 $
+ *  last change:$Date: 2003-09-08 11:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,28 +63,22 @@ package mod._dbaccess;
 
 //import com.sun.star.awt.XControl;
 //import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-//import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
 import java.io.PrintWriter;
-import lib.StatusException;
+
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DesktopTools;
-import util.SOfficeFactory;
-import util.WriterTools;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
 
 public class OQueryDesign extends TestCase {
 
@@ -177,7 +171,7 @@ public class OQueryDesign extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(5000) ;
+            Thread.sleep(5000) ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }
