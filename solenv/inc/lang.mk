@@ -2,9 +2,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:05 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:42:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ LANG_GUI=$(GUI)
 ###################################################
 
 pol$(LANG_GUI)=-CHARSET_microsoft-cp1250
-slov$(LANG_GUI)=-CHARSET_UTF8
+slovak$(LANG_GUI)=-CHARSET_UTF8
 russ$(LANG_GUI)=-CHARSET_microsoft-cp1251
 czech$(LANG_GUI)=-CHARSET_UTF8
 hung$(LANG_GUI)=-CHARSET_microsoft-cp1250
