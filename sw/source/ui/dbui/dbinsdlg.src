@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ chinese_simplified ] = "¶ÎÂäÑùÊ½(~S)£º";
         TEXT[ russian ] = "Ñòèëü àáçàöà:";
         TEXT[ polish ] = "Styl akapitu:";
-        TEXT[ japanese ] = "’i—½À²Ù:(~S)";
+        TEXT[ japanese ] = "’i—½À²Ù(~S):";
         TEXT[ chinese_traditional ] = "¬q¸¨¼Ë¦¡(~S)";
         TEXT[ arabic ] = "äãØ İŞÑÉ:";
         TEXT[ dutch ] = "~Alinea-opmaakprofiel:";
