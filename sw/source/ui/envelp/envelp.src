@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:44:01 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ String STR_BTN_NEW_DOC
     Text[ dutch ] = "~Nieuw document";
     Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(N)";
+    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
     Text[ turkish ] = "~Yeni belge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nuevo documento";
@@ -174,7 +174,7 @@ String STR_BTN_NEWDOC
     Text[ dutch ] = "~Nieuw doc.";
     Text[ chinese_simplified ] = "ΠΒ½¨ΞΔµµ(~N)";
     Text[ greek ] = "Δημιουργία εγγράφου";
-    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­";
+    Text[ korean ] = "»υ·ΞΏξ Ή®Ό­(~N)";
     Text[ turkish ] = "~Yeni blg.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Nuevo doc.";
@@ -206,6 +206,7 @@ String STR_SENDER_TOKENS
     Text[ catalan ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
     Text[ finnish ] = "YRITYS;CR;ETUNIMI; ;SUKUNIMI;CR;OSOITE;CR;POSTITOIMIPAIKKA; ;OSAVALTIO; ;POSTINUMERO;CR;MAA;CR;";
 };
+
 
 
 
