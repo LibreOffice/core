@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:46:14 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2060,8 +2060,10 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
         for ( USHORT i = 0; i < nCount; ++i )
         {
             String aObjFacURL( *pList->GetObject(i) );
-            String aTitle = SvFileInformationManager::GetDescription( aObjFacURL );
-            pSubMenu->InsertItem( nItemId, aTitle, SvFileInformationManager::GetImage( aObjFacURL ) );
+            String aTitle = SvFileInformationManager::GetDescription(
+                INetURLObject(aObjFacURL) );
+            pSubMenu->InsertItem( nItemId, aTitle,
+                SvFileInformationManager::GetImage(INetURLObject(aObjFacURL)) );
             pSubMenu->SetItemCommand( nItemId++, aObjFacURL );
             DBG_ASSERT( nItemId <= ID_RESET_DEFAULT_TEMPLATE_END, "menu item id overflow" );
         }
