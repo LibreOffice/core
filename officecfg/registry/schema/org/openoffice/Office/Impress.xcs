@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:40:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,16 +68,16 @@
 	<templates>
 		<group oor:name="MasterPageDescriptor">
             <info>
-				<desc xml:lang="en-US">Describes master pages that belong to the list of recently used master pages.</desc>
+				<desc>Describes master pages that belong to the list of recently used master pages.</desc>
             </info>
 			<prop oor:name="URL" oor:type="xs:string">
                 <info>
-	    			<desc xml:lang="en-US">The URL of the template document that contains the master page.</desc>
+	    			<desc>The URL of the template document that contains the master page.</desc>
                 </info>
             </prop>
 			<prop oor:name="Name" oor:type="xs:string">
                 <info>
-	    			<desc xml:lang="en-US">The internal name of the master page.</desc>
+	    			<desc>The internal name of the master page.</desc>
                 </info>
             </prop>
 		</group>
@@ -1210,18 +1210,18 @@
 		</group>
 		<group oor:name="MultiPaneGUI">
             <info>
-                <desc xml:lang="en-US">Options that control the content and appearance of the multi pane GUI.</desc>
-    			<label xml:lang="en-US">Multi Pane GUI Options</label>
+                <desc>Options that control the content and appearance of the multi pane GUI.</desc>
+    			<label>Multi Pane GUI Options</label>
             </info>
 			<group oor:name="ToolPanel">
                 <info>
-                    <desc xml:lang="en-US">Options that control the tool panel.</desc>
-    	    		<label xml:lang="en-US">Tool Panel Options</label>
+                    <desc>Options that control the tool panel.</desc>
+    	    		<label>Tool Panel Options</label>
                 </info>
 				<set oor:name="RecentlyUsedMasterPages" oor:node-type="MasterPageDescriptor">
                     <info>
-                        <desc xml:lang="en-US">List of the URLs of the most recently used master pages.</desc>
-    	        		<label xml:lang="en-US">Recently Used Master Pages</label>
+                        <desc>List of the URLs of the most recently used master pages.</desc>
+    	        		<label>Recently Used Master Pages</label>
                     </info>
                 </set>
 			</group>
