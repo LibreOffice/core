@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:13:00 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ static sal_Int32 fillStructWithInitializer(
             throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
         }
         PyObject *element = PyTuple_GetItem( initializer, i + nIndex );
-        Any a = runtime.pyObject2Any( element );
+        Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
         inv->setValue( pCompType->ppMemberNames[i], a );
     }
     return i+nIndex;
@@ -287,9 +287,20 @@ static PyObject* getComponentContext (PyObject* self, PyObject* args)
             iniFileName.appendAscii( "/" );
             iniFileName.appendAscii( SAL_CONFIGFILE( "pyuno" ) );
             iniFile = iniFileName.makeStringAndClear();
+            osl::DirectoryItem item;
+            if( osl::DirectoryItem::get( iniFile, item ) == item.E_None )
+            {
+                // in case pyuno.ini exists, use this file for bootstrapping
+                PyThreadDetach antiguard;
+                ctx = cppu::defaultBootstrap_InitialComponentContext (iniFile);
+            }
+            else
+            {
+                // defaulting to the standard bootstrapping
+                PyThreadDetach antiguard;
+                ctx = cppu::defaultBootstrap_InitialComponentContext ();
+            }
 
-            PyThreadDetach antiguard;
-            ctx = cppu::defaultBootstrap_InitialComponentContext (iniFile);
         }
 
         if( ! Runtime::isInitialized() )
