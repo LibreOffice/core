@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:11:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,14 +604,14 @@ Window RID_SCDLG_NAVIGATOR
         Text [ danish ] = "aktiv" ;
         Text [ portuguese ] = "activo" ;
         Text [ portuguese_brazilian ] = "aktiv" ;
-        Text[ chinese_simplified ] = "¼¤»îµÄ";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÖĞµÄ";
         Text[ russian ] = "àêòèâíûé";
         Text[ polish ] = "aktywny";
         Text[ japanese ] = "±¸Ã¨ÌŞ";
         Text[ chinese_traditional ] = "¨Ï¥Î¤¤";
         Text[ arabic ] = "äÔØ";
         Text[ dutch ] = "actief";
-        Text[ chinese_simplified ] = "¼¤»îµÄ";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÖĞµÄ";
         Text[ greek ] = "ÅíåñãÜ";
         Text[ korean ] = "È°¼º";
         Text[ turkish ] = "Etkin";
@@ -632,14 +632,14 @@ Window RID_SCDLG_NAVIGATOR
         Text [ danish ] = "inaktiv" ;
         Text [ portuguese ] = "inactivo" ;
         Text [ portuguese_brazilian ] = "inaktiv" ;
-        Text[ chinese_simplified ] = "Ê§»î";
+        Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
         Text[ russian ] = "íåàêòèâíûé";
         Text[ polish ] = "nieaktywny";
         Text[ japanese ] = "”ñ±¸Ã¨ÌŞ";
-        Text[ chinese_traditional ] = "Ãö³¬ªº";
+        Text[ chinese_traditional ] = "¤£¨Ï¥Î";
         Text[ arabic ] = "ÛíÑ äÔØ";
         Text[ dutch ] = "inactief";
-        Text[ chinese_simplified ] = "Ê§»î";
+        Text[ chinese_simplified ] = "²»Ê¹ÓÃ";
         Text[ greek ] = "ìç åíåñãü";
         Text[ korean ] = "ºñ È°¼º";
         Text[ turkish ] = "Etkin değil";
@@ -1211,6 +1211,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
+
 
 
 
