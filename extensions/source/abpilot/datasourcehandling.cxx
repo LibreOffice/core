@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:39:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
 #endif
@@ -116,12 +119,15 @@
 #ifndef EXTENSIONS_ABP_ABPTYPES_HXX
 #include "abptypes.hxx"
 #endif
-
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
 //.........................................................................
 namespace abp
 {
 //.........................................................................
 
+    using namespace ::utl;
     using namespace ::comphelper;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -131,11 +137,32 @@ namespace abp
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::frame;
 
     //=====================================================================
     struct PackageAccessControl { };
 
     //=====================================================================
+    //--------------------------------------------------------------------
+    static const ::rtl::OUString& getDbRegisteredNamesNodeName()
+    {
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/RegisteredNames");
+        return s_sNodeName;
+    }
+
+    //--------------------------------------------------------------------
+    static const ::rtl::OUString& getDbNameNodeName()
+    {
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Name");
+        return s_sNodeName;
+    }
+
+    //--------------------------------------------------------------------
+    static const ::rtl::OUString& getDbLocationNodeName()
+    {
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Location");
+        return s_sNodeName;
+    }
     //---------------------------------------------------------------------
     static Reference< XNameAccess > lcl_getDataSourceContext( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW (( Exception ))
     {
@@ -170,7 +197,7 @@ namespace abp
         DBG_ASSERT( xDynamicContext.is(), "lcl_implCreateAndInsert: missing an interface on the context (XNamingService)!" );
         if (xDynamicContext.is())
         {
-            xDynamicContext->registerObject( _rName, xNewDataSource );
+            //  xDynamicContext->registerObject( _rName, xNewDataSource );
             _rxNewDataSource = xNewDataSource;
         }
     }
@@ -198,7 +225,7 @@ namespace abp
                 );
             }
 
-            aReturn.setDataSource( xNewDataSource, PackageAccessControl() );
+            aReturn.setDataSource( xNewDataSource, _rName,PackageAccessControl() );
         }
         catch(const Exception&)
         {
@@ -206,6 +233,34 @@ namespace abp
         }
 
         return aReturn;
+    }
+    //---------------------------------------------------------------------
+    void lcl_registerDataSource(
+        const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _sName,
+        const ::rtl::OUString& _sURL ) SAL_THROW (( ::com::sun::star::uno::Exception ))
+    {
+        // the config node where all pooling relevant info are stored under
+        OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+            _rxORB, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+
+        if (!aDbRegisteredNamesRoot.isValid())
+            // already asserted by the OConfigurationTreeRoot
+            return;
+
+        OSL_ENSURE(_sName.getLength(),"No Name given!");
+        OSL_ENSURE(_sURL.getLength(),"No URL given!");
+
+        OConfigurationNode aThisDriverSettings;
+        if ( aDbRegisteredNamesRoot.hasByName(_sName) )
+            aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_sName);
+        else
+            aThisDriverSettings = aDbRegisteredNamesRoot.createNode(_sName);
+
+        // set the values
+        aThisDriverSettings.setNodeValue(getDbNameNodeName(), makeAny(_sName));
+        aThisDriverSettings.setNodeValue(getDbLocationNodeName(), makeAny(_sURL));
+
+        aDbRegisteredNamesRoot.commit();
     }
 
     //=====================================================================
@@ -282,7 +337,7 @@ namespace abp
     //---------------------------------------------------------------------
     ODataSource ODataSourceContext::createNewLDAP( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
-        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:ldap" );
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:ldap:" );
     }
 
     //---------------------------------------------------------------------
@@ -398,6 +453,7 @@ namespace abp
         Reference< XPropertySet >               xDataSource;        /// the UNO data source
         ::rtl::Reference< OSharedConnection >   xConnection;        /// the connection
         StringBag                               aTables;            // the cached table names
+        ::rtl::OUString                         sName;
         sal_Bool                                bTablesUpToDate;    // table name cache up-to-date?
 
         ODataSourceImpl( const Reference< XMultiServiceFactory >& _rxORB )
@@ -416,6 +472,7 @@ namespace abp
         ,xDataSource( _rSource.xDataSource )
         ,xConnection( _rSource.xConnection )
         ,aTables( _rSource.aTables )
+        ,sName( _rSource.sName )
         ,bTablesUpToDate( _rSource.bTablesUpToDate )
     {
     }
@@ -471,7 +528,45 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    void ODataSource::setDataSource( const Reference< XPropertySet >& _rxDS, PackageAccessControl )
+    void ODataSource::store() SAL_THROW (( ))
+    {
+        if (!isValid())
+            // nothing to do
+            return;
+        try
+        {
+            Reference<XStorable> xStorable(m_pImpl->xDataSource,UNO_QUERY);
+            OSL_ENSURE( xStorable.is(),"DataSource is no XStorable!" );
+            if ( xStorable.is() )
+            {
+                xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());
+            }
+        }
+        catch(const Exception&)
+        {
+            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+        }
+    }
+    //---------------------------------------------------------------------
+    void ODataSource::registerDataSource( const ::rtl::OUString& _sRegisteredDataSourceName) SAL_THROW (( ))
+    {
+        if (!isValid())
+            // nothing to do
+            return;
+
+        try
+        {
+            // invalidate ourself
+            lcl_registerDataSource(m_pImpl->xORB,_sRegisteredDataSourceName,m_pImpl->sName);
+        }
+        catch(const Exception&)
+        {
+            DBG_ERROR( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void ODataSource::setDataSource( const Reference< XPropertySet >& _rxDS,const ::rtl::OUString& _sName, PackageAccessControl )
     {
         if (m_pImpl->xDataSource.get() == _rxDS.get())
             // nothing to do
@@ -480,6 +575,7 @@ namespace abp
         if ( isConnected() )
             disconnect();
 
+        m_pImpl->sName = _sName;
         m_pImpl->xDataSource = _rxDS;
     }
 
@@ -492,16 +588,6 @@ namespace abp
 
         try
         {
-            //.............................................................
-            // get the data source context
-            Reference< XNamingService > xContext( lcl_getDataSourceContext( m_pImpl->xORB ), UNO_QUERY );
-
-            // get the name of our data source
-            ::rtl::OUString sName = implGetName();
-
-            // really remove the object
-            xContext->revokeObject( sName );
-
             // invalidate ourself
             m_pImpl->xDataSource.clear();
         }
@@ -512,66 +598,22 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString ODataSource::implGetName() const SAL_THROW (( Exception ))
-    {
-        ::rtl::OUString sReturn;
-        if (!isValid())
-        {
-            DBG_ERROR("ODataSource::implGetName: not bound to an UNO object!");
-        }
-        else
-        {
-            m_pImpl->xDataSource->getPropertyValue( ::rtl::OUString::createFromAscii( "Name" ) ) >>= sReturn;
-        }
-        return sReturn;
-    }
-
-    //---------------------------------------------------------------------
     sal_Bool ODataSource::rename( const ::rtl::OUString& _rName ) SAL_THROW (( ))
     {
         if (!isValid())
             // nothing to do
             return sal_False;
 
-        try
-        {
-            //.............................................................
-            // get the data source context
-            Reference< XNamingService > xContext( lcl_getDataSourceContext( m_pImpl->xORB ), UNO_QUERY );
-
-            // get the name of our data source
-            ::rtl::OUString sName = implGetName();
-
-            // remove the object
-            xContext->revokeObject( sName );
-
-            // re-register it under the new name
-            xContext->registerObject( _rName, m_pImpl->xDataSource );
-
-            return sal_True;
-        }
-        catch(const Exception&)
-        {
-            DBG_ERROR( "ODataSource::rename: caught an exception while creating the data source!" );
-        }
-        return sal_False;
+        m_pImpl->sName = _rName;
+        return sal_True;
     }
 
     //---------------------------------------------------------------------
     ::rtl::OUString ODataSource::getName() const SAL_THROW (( ))
     {
-        ::rtl::OUString sReturn;
-        {
-            try
-            {
-                sReturn = implGetName();
-            }
-            catch (const Exception&)
-            {
-                DBG_ERROR("ODataSource::getName: caught an exception while asking for the name!");
-            }
-        }
-        return sReturn;
+        if ( !isValid() )
+            return ::rtl::OUString();
+        return m_pImpl->sName;
     }
 
     //---------------------------------------------------------------------
@@ -724,6 +766,11 @@ namespace abp
     sal_Bool ODataSource::isValid() const SAL_THROW (( ))
     {
         return m_pImpl && m_pImpl->xDataSource.is();
+    }
+    //---------------------------------------------------------------------
+    Reference< XPropertySet > ODataSource::getDataSource() const SAL_THROW (( ))
+    {
+        return m_pImpl ? m_pImpl->xDataSource : Reference< XPropertySet >();
     }
 
 //.........................................................................
