@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:10:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bStoreVisRepl( sal_True )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
+, m_bHasCachedSize( sal_False )
+, m_bHasSizeToSet( sal_False )
+, m_nCachedAspect( 0 )
+, m_bGotStatus( sal_False )
+, m_nStatus( 0 )
+, m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
 {
 }
@@ -120,6 +126,12 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bStoreVisRepl( sal_True )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( bLink )
+, m_bHasCachedSize( sal_False )
+, m_bHasSizeToSet( sal_False )
+, m_nCachedAspect( 0 )
+, m_bGotStatus( sal_False )
+, m_nStatus( 0 )
+, m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
 {
 }
