@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JNI_info_holder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,16 @@
  ************************************************************************/
 package com.sun.star.bridges.jni_uno;
 
+import com.sun.star.lib.util.NativeLibraryLoader;
+
 //==================================================================================================
 public final class JNI_info_holder
 {
+    static {
+        NativeLibraryLoader.loadLibrary(JNI_proxy.class.getClassLoader(),
+                                        "java_uno");
+    }
+
     private static JNI_info_holder s_holder = new JNI_info_holder();
 
     private static long s_jni_info_handle;
