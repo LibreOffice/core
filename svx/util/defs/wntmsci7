@@ -23673,3 +23673,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?DataChanged@SvxCaptionTabPage@@UAEXABVDataChangedEvent@@@Z
 ?FillValueSet@SvxCaptionTabPage@@QAEXXZ
 ?updateShapeKind@SvxShape@@IAEXXZ
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx2314132385@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX643\src\svx\source\fmcomp\gridcell.cxx1986722554@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx300489511@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
