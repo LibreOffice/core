@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:25:38 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:15:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,12 @@ TARGET=jpeg
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(SYSTEM_JPEG)" == "YES"
+all:
+    @echo "An already available installation of libjpeg should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
