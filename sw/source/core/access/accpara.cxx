@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-21 12:50:31 $
+ *  last change: $Author: dvo $ $Date: 2002-03-26 11:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/INDEXOUTOFBOUNDSEXCEPTION.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
 
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -160,6 +163,23 @@
 #include "swtypes.hxx"
 #endif
 
+// for get/setCharacterAttribute(...)
+#ifndef _UNOCRSR_HXX
+#include "unocrsr.hxx"
+#endif
+#ifndef _UNOOBJ_HXX
+#include "unoobj.hxx"
+#endif
+#ifndef _UNOPORT_HXX
+#include "unoport.hxx"
+#endif
+#ifndef _DOC_HXX
+#include "doc.hxx"
+#endif
+#ifndef _CRSSKIP_HXX
+#include "crsskip.hxx"
+#endif
+
 #include <algorithm>
 
 
@@ -170,8 +190,15 @@ using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
 using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::beans::XMultiPropertySet;
 using std::max;
 using std::min;
+
+namespace com { namespace sun { namespace star {
+    namespace text {
+        class XText;
+    }
+} } }
 
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
@@ -700,7 +727,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
 
         default:
             // The specification asks us to return an empty string
-            // if the text type is no valid.
+            // if the text type is invalid.
             GetEmptyBoundary( rBound );
             bRet = sal_True;
             break;
@@ -793,6 +820,45 @@ Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
     return aRet;
 }
 
+Sequence<OUString> getAttributeNames()
+{
+    static Sequence<OUString>* pNames = NULL;
+
+    if( pNames == NULL )
+    {
+        Sequence<OUString>* pSeq = new Sequence<OUString>( 15 );
+        OUString* pStrings = pSeq->getArray();
+
+        // sorted list of strings
+        sal_Int32 i = 0;
+#define STR(x) pStrings[i++] = OUString(RTL_CONSTASCII_USTRINGPARAM(x))
+        STR("CharBackColor");
+        STR("CharColor");
+        STR("CharEscapement");
+        STR("CharHeight");
+        STR("CharPosture");
+        STR("CharStrikeout");
+        STR("CharUnderline");
+        STR("CharWeight");
+        STR("ParaAdjust");
+        STR("ParaBottomMargin");
+        STR("ParaFirstLineIndent");
+        STR("ParaLeftMargin");
+        STR("ParaLineSpacing");
+        STR("ParaRightMargin");
+        STR("ParaTabStops");
+#undef STR
+
+        DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
+        if( i != pSeq->getLength() )
+            pSeq->realloc( i );
+
+        pNames = pSeq;
+    }
+
+    return *pNames;
+}
+
 //
 //=====  XInterface  =======================================================
 //
@@ -868,9 +934,48 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // HACK: dummy implementation
-    Sequence<PropertyValue> aSeq;
-    return aSeq;
+
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    CHECK_FOR_DEFUNC( XAccessibleContext );
+
+    const OUString& rText = GetString();
+
+    if( ! IsValidChar( nIndex, rText.getLength() ) )
+        throw IndexOutOfBoundsException();
+
+    // create UNO cursor
+    SwTxtNode* pTxtNode = const_cast<SwTxtNode*>( GetTxtNode() );
+    SwIndex aIndex( pTxtNode, GetPortionData().GetModelPosition( nIndex ) );
+    SwPosition aStartPos( *pTxtNode, aIndex );
+    SwUnoCrsr* pUnoCursor = pTxtNode->GetDoc()->CreateUnoCrsr( aStartPos );
+    pUnoCursor->SetMark();
+    pUnoCursor->Right(1, CRSR_SKIP_CHARS);
+
+    // create a (dummy) text portion for the sole purpose of calling
+    // getPropertyValues on it
+    Reference<com::sun::star::text::XText> aEmpty;
+    Reference<XMultiPropertySet> xPortion =
+        new SwXTextPortion ( pUnoCursor, aEmpty, PORTION_TEXT);
+    delete pUnoCursor;
+
+    // get values
+    Sequence<OUString> aNames = getAttributeNames();
+    sal_Int32 nLength = aNames.getLength();
+    Sequence<Any> aAnys( nLength );
+    aAnys = xPortion->getPropertyValues( aNames );
+
+    // copy names + anys into return sequence
+    Sequence<PropertyValue> aValues( aNames.getLength() );
+    const OUString* pNames = aNames.getConstArray();
+    const Any* pAnys = aAnys.getConstArray();
+    PropertyValue* pValues = aValues.getArray();
+    for( sal_Int32 i = 0; i < nLength; i++ )
+    {
+        pValues[i].Name = pNames[i];
+        pValues[i].Value = pAnys[i];
+    }
+
+    return aValues;
 }
 
 com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
