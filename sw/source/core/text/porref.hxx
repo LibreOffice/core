@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2002-04-04 12:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual SwLinePortion *Compress();
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
+
+    // Accessibility: pass information about this portion to the PortionHandler
+    virtual void HandlePortion( SwPortionHandler& rPH ) const;
+
     OUTPUT_OPERATOR
 };
 

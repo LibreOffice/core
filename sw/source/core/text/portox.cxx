@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-25 17:12:49 $
+ *  last change: $Author: fme $ $Date: 2002-04-04 12:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _SW_PORTIONHANDLER_HXX
+#include <SwPortionHandler.hxx>
+#endif
 #include "viewopt.hxx"  // SwViewOptions
 
 #include "txtcfg.hxx"
@@ -136,4 +139,13 @@ void SwIsoToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
         rInf.DrawViewOpt( *this, POR_TOX );
 }
 
+/*************************************************************************
+ *              virtual SwIsoToxPortion::HandlePortion()
+ *************************************************************************/
+
+void SwIsoToxPortion::HandlePortion( SwPortionHandler& rPH ) const
+{
+    String aString;
+    rPH.Special( GetLen(), aString, GetWhichPor() );
+}
 
