@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-27 13:36:35 $
+ *  last change: $Author: cp $ $Date: 2001-08-01 17:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,8 +230,8 @@ const _pair _nl_language_list[] = {
     { "EUC-TW",                     RTL_TEXTENCODING_EUC_TW },      /* locale: zh_TW.euctw */
     { "GB18030",                    RTL_TEXTENCODING_GB_18030 },    /* locale: zh_CN.gb18030 */
     { "GB2312",                     RTL_TEXTENCODING_GB_2312 },     /* locale: zh_CN */
-    { "GBK",                        RTL_TEXTENCODING_GBK },         /* locale: zh_CN.GBK */
     { "GB_1988-80",                 RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-57 */
+    { "GBK",                        RTL_TEXTENCODING_GBK },         /* locale: zh_CN.GBK */
     { "GOST_19768-74",              RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-153 */
     { "GREEK-CCITT",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-150 */
     { "GREEK7",                     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-88 */
