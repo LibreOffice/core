@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-03 13:46:52 $
+ *  last change: $Author: os $ $Date: 2001-05-04 10:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,7 +404,6 @@ TabPage RID_SFXPAGE_SAVE
             < "Präsentation" ;     APP_IMPRESS   ; > ;
             < "Zeichnung" ;        APP_DRAW      ; > ;
             < "Formel" ;           APP_MATH      ; > ;
-            < "Diagramm" ;         APP_CHART     ; > ;
         };
         StringList [English] =
         {
@@ -414,198 +413,7 @@ TabPage RID_SFXPAGE_SAVE
             < "Presentation" ;  APP_IMPRESS   ;> ;
             < "Drawing" ;       APP_DRAW      ;> ;
             < "Formula" ;       APP_MATH      ;> ;
-            < "Chart" ;         APP_CHART     ;> ;
         };
-    StringList [ language_user1 ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ english_us ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Spreadsheet" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "Documento de texto" ;         APP_CHART     ; > ;
-        < "Documento HTML" ;         APP_CHART     ; > ;
-        < "Folha de cálculo" ;         APP_CHART     ; > ;
-        < "Apresentação" ;         APP_CHART     ; > ;
-        < "Desenho" ;         APP_CHART     ; > ;
-        < "Fórmula" ;         APP_CHART     ; > ;
-        < "Gráfico" ;         APP_CHART     ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Òåêñòîâûé äîêóìåíò" ;         APP_CHART     ; > ;
-        < "Äîêóìåíò HTML" ;         APP_CHART     ; > ;
-        < "Äîêóìåíò ýëåêòðîííîé òàáëèöû" ;         APP_CHART     ; > ;
-        < "Ïðåçåíòàöèÿ" ;         APP_CHART     ; > ;
-        < "Ðèñóíîê" ;         APP_CHART     ; > ;
-        < "Ôîðìóëà" ;         APP_CHART     ; > ;
-        < "Äèàãðàììà" ;         APP_CHART     ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ dutch ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ french ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ spanish ] =
-    {
-            < "Documento de texto" ;         APP_CHART     ; > ;
-        < "Documento HTML" ;         APP_CHART     ; > ;
-        < "Hoja de cálculo" ;         APP_CHART     ; > ;
-        < "Presentación" ;         APP_CHART     ; > ;
-        < "Dibujo" ;         APP_CHART     ; > ;
-        < "Fórmula" ;         APP_CHART     ; > ;
-        < "Diagrama" ;         APP_CHART     ; > ;
-    };
-    StringList [ italian ] =
-    {
-            < "Documento di testo" ;         APP_CHART     ; > ;
-        < "Documento HTML" ;         APP_CHART     ; > ;
-        < "Foglio elettronico" ;         APP_CHART     ; > ;
-        < "Presentazione" ;         APP_CHART     ; > ;
-        < "Disegno" ;         APP_CHART     ; > ;
-        < "Formula" ;         APP_CHART     ; > ;
-        < "Diagramma" ;         APP_CHART     ; > ;
-    };
-    StringList [ danish ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ swedish ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-dokument" ;         APP_CHART     ; > ;
-        < "Tabelldokument" ;         APP_CHART     ; > ;
-        < "Presentation" ;         APP_CHART     ; > ;
-        < "Teckning" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagram" ;         APP_CHART     ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Dokument tekstowy" ;         APP_CHART     ; > ;
-        < "Dokument HTML" ;         APP_CHART     ; > ;
-        < "Arkusz kalkulacyjny" ;         APP_CHART     ; > ;
-        < "Prezentacja" ;         APP_CHART     ; > ;
-        < "Rysunek" ;         APP_CHART     ; > ;
-        < "Formu³a" ;         APP_CHART     ; > ;
-        < "Wykres" ;         APP_CHART     ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "Textdokument" ;         APP_CHART     ; > ;
-        < "HTML-Dokument" ;         APP_CHART     ; > ;
-        < "Tabellendokument" ;         APP_CHART     ; > ;
-        < "Präsentation" ;         APP_CHART     ; > ;
-        < "Zeichnung" ;         APP_CHART     ; > ;
-        < "Formel" ;         APP_CHART     ; > ;
-        < "Diagramm" ;         APP_CHART     ; > ;
-    };
     };
     ListBox LB_FILTER
     {
