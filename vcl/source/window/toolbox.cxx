@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-16 12:30:23 $
+ *  last change: $Author: ssa $ $Date: 2002-05-28 16:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3042,11 +3042,13 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
     if ( pItem->mnBits & TIB_DROPDOWN )
     {
         Point aArrowPos( nOffX, nOffY );
-        if( bHighlight == 2 )
+        // no shadows until our icons are not redesigned
+        /*if( bHighlight == 2 )
         {
             aArrowPos.X() -= 2;
             aArrowPos.Y() -= 2;
         }
+        */
         aArrowPos.X() += nBtnWidth-6;
 
         Color       aOldLineColor = GetLineColor();
