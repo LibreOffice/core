@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:43:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace dbaui
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         SbaGridControl*         m_pVclControl;  // our grid's VCL representation
+        Window*                 m_pStatus;
 
         DECL_LINK( SplitHdl, void* );
     // attribute access
@@ -123,8 +124,11 @@ namespace dbaui
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
 
-        virtual long PreNotify( NotifyEvent& rNEvt );
+        void    showStatus( String& _rStatus );
+        void    hideStatus();
+
     protected:
+        virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void resizeControl(Rectangle& rRect);
     };
