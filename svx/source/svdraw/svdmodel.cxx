@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:55:39 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2313,9 +2313,10 @@ void SdrModel::AfterRead()
             {
                 BOOL bFound = FALSE;
                 String aName = pInfo->GetObjName();
+                UINT16 a;
 
                 nCnt = GetPageCount();
-                for( UINT16 a = 0; a < nCnt && !bFound; a++ )
+                for( a = 0; a < nCnt && !bFound; a++ )
                 {
                     // Pages
                     SdrObjListIter aIter( *GetPage(a) );
@@ -2689,8 +2690,9 @@ void SdrModel::PrepareStore()
 void SdrModel::PreSave()
 {
     sal_uInt16 nCnt(GetMasterPageCount());
+    sal_uInt16 a;
 
-    for(sal_uInt16 a(0); a < nCnt; a++)
+    for( a = 0; a < nCnt; a++)
     {
         // MasterPages
         const SdrPage& rPage = *GetMasterPage(a);
@@ -2727,8 +2729,9 @@ void SdrModel::PreSave()
 void SdrModel::PostSave()
 {
     sal_uInt16 nCnt(GetMasterPageCount());
+    sal_uInt16 a;
 
-    for(sal_uInt16 a(0); a < nCnt; a++)
+    for( a = 0; a < nCnt; a++)
     {
         // MasterPages
         const SdrPage& rPage = *GetMasterPage(a);
