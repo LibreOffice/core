@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:48:48 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 12:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
     {
         sal_Int32 nType = m_xSetMetaData->getColumnType(i);
-        aIter->setTypeKind(nType);
+
         switch(nType)
         {
         case DataType::CHAR:
@@ -528,12 +528,16 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         }
         if(wasNull())
             aIter->setNull();
+        aIter->setTypeKind(nType);
 
     }
 }
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2000/12/06 09:48:48  oj
+    #80219# check wasNull()
+
     Revision 1.10  2000/12/01 13:04:36  oj
     #80932# update and insert corrected
 
