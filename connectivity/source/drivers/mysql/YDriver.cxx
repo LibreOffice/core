@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,13 @@ namespace connectivity
                     pSupported->Value >>= sRet;
                     break;
                 }
+
+            if ( !sRet.getLength() )
+                sRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"));
             return sRet;
         }
         //--------------------------------------------------------------------
-        ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl)
+        ::rtl::OUString transformUrl(const ::rtl::OUString& _sUrl,const Sequence< PropertyValue >& info)
         {
             ::rtl::OUString sNewUrl = _sUrl.copy(11);
             if ( isOdbcUrl( _sUrl ) )
@@ -171,7 +174,11 @@ namespace connectivity
             else
             {
                 sNewUrl = sNewUrl.copy(5);
-                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:mysql://")) + sNewUrl;
+
+                ::rtl::OUString sTempUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:mysql://"));
+
+                sTempUrl += sNewUrl;
+                sNewUrl = sTempUrl;
             }
             return sNewUrl;
         }
@@ -191,8 +198,12 @@ namespace connectivity
             ::std::vector<PropertyValue> aProps;
             const PropertyValue* pSupported = info.getConstArray();
             const PropertyValue* pEnd = pSupported + info.getLength();
+
+            aProps.reserve(info.getLength() + 5);
             for (;pSupported != pEnd; ++pSupported)
+            {
                 aProps.push_back( *pSupported );
+            }
 
             if ( _bOdbc )
             {
@@ -200,6 +211,14 @@ namespace connectivity
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Silent"))
                                     ,0
                                     ,makeAny(sal_True)
+                                    ,PropertyState_DIRECT_VALUE) );
+            }
+            else
+            {
+                aProps.push_back( PropertyValue(
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
+                                    ,0
+                                    ,makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver")))
                                     ,PropertyState_DIRECT_VALUE) );
             }
             aProps.push_back( PropertyValue(
@@ -224,7 +243,7 @@ namespace connectivity
     Reference< XDriver > ODriverDelegator::loadDriver( const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XDriver > xDriver;
-        ::rtl::OUString sCuttedUrl = transformUrl(url);
+        ::rtl::OUString sCuttedUrl = transformUrl(url,info);
         sal_Bool bIsODBC = isOdbcUrl( url );
         if ( bIsODBC )
         {
@@ -256,7 +275,7 @@ namespace connectivity
             xDriver = loadDriver(url,info);
             if ( xDriver.is() )
             {
-                ::rtl::OUString sCuttedUrl = transformUrl(url);
+                ::rtl::OUString sCuttedUrl = transformUrl(url,info);
                 sal_Bool bIsODBC = isOdbcUrl( url );
                 Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(bIsODBC,info);
 
@@ -296,15 +315,42 @@ namespace connectivity
     //--------------------------------------------------------------------
     Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
-        Sequence< DriverPropertyInfo > aInfo;
-
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
         if ( acceptsURL(url) )
         {
-//          loadDriver(url,info);
-//          if ( m_xDriver.is() )
-//              aInfo = m_xDriver->getPropertyInfo(url, info);
+            sal_Bool bIsODBC = isOdbcUrl( url );
+
+            Sequence< ::rtl::OUString > aBoolean(2);
+            aBoolean[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
+            aBoolean[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+
+
+            aDriverInfo.push_back(DriverPropertyInfo(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet of the database."))
+                    ,sal_False
+                    ,::rtl::OUString()
+                    ,Sequence< ::rtl::OUString >())
+                    );
+            aDriverInfo.push_back(DriverPropertyInfo(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SuppressVersionColumns"))
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Display version columns (when available)."))
+                    ,sal_False
+                    ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"))
+                    ,aBoolean)
+                    );
+            if ( !bIsODBC )
+            {
+                aDriverInfo.push_back(DriverPropertyInfo(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
+                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The JDBC driver class name."))
+                        ,sal_True
+                        ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"))
+                        ,Sequence< ::rtl::OUString >())
+                        );
+            }
         }
-        return aInfo;
+        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
     }
 
     //--------------------------------------------------------------------
