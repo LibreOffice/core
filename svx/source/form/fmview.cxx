@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:19:39 $
+ *  last change: $Author: kz $ $Date: 2003-12-12 09:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,7 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
         // some initial property defaults
         if ( ( nClassId == FormComponentType::SCROLLBAR ) || ( nClassId == FormComponentType::SPINBUTTON ) )
         {
-            const Rectangle& rBoundRect = pObj->GetBoundRect();
+            const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
             sal_Int32 eOrientation = ::com::sun::star::awt::ScrollBarOrientation::HORIZONTAL;
             if ( rBoundRect.GetWidth() < rBoundRect.GetHeight() )
                 eOrientation = ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
