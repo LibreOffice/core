@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:05 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,7 @@
 #ifndef CONFIGMGR_BACKEND_BACKENDACCESS_HXX_
 #include "backendaccess.hxx"
 #endif
-#ifndef CONFIGMGR_BACKENDWRAP_HXX
-#include "backendwrap.hxx"
-#endif
+
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_CANNOTLOADCONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
@@ -245,19 +243,6 @@ rtl::Reference<IMergedDataProvider>
 
     if (xBackendService.is())
         xBackend = new BackendAccess(xBackendService, _xCtx);
-
-    return xBackend;
-}
-// -------------------------------------------------------------------------
-
-rtl::Reference<IMergedDataProvider>
-    BackendFactory::createSessionBackend(IConfigSession * _pSession,
-                                            TypeConverterRef const & _xTCV)
-{
-    rtl::Reference< IMergedDataProvider > xBackend;
-
-    if (_pSession)
-        xBackend = wrapSession(*_pSession,_xTCV);
 
     return xBackend;
 }

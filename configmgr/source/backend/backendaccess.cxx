@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-24 12:59:32 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,13 +123,12 @@ static rtl::OUString findBestLocale(
 }
 //------------------------------------------------------------------------------
 
-static NodeResult merge(
+static void merge(
         const uno::Reference<lang::XMultiServiceFactory>& aFactory,
         MergedComponentData& aData,
         const uno::Sequence<uno::Reference<backenduno::XLayer> >& aLayers,
         sal_Int32 aNbLayers,
-        const rtl::OUString& aLocale,
-        const AbsolutePath& aRootPath)
+        const rtl::OUString& aLocale)
 {
     LayerMergeHandler * pMerger = new LayerMergeHandler(aFactory, aData, OUString());
     uno::Reference<backenduno::XLayerHandler> xLayerMerger(pMerger);
@@ -155,29 +154,36 @@ static NodeResult merge(
             }
         }
     }
-    NodeInstance retCode(aData.extractSchemaTree(), aRootPath) ;
-
-    return NodeResult(retCode) ;
 }
 //------------------------------------------------------------------------------
 
-NodeResult BackendAccess::getNodeData(const NodeRequest& aRequest,
-                                      INodeDataListener *aListener)
+ComponentResult BackendAccess::getNodeData(const ComponentRequest& aRequest,
+                                           INodeDataListener *aListener)
     CFG_UNO_THROW_ALL()
 {
-    rtl::OUString component = aRequest.getPath().getModuleName().toString() ;
+    rtl::OUString component = aRequest.getComponentName().toString() ;
     SchemaBuilder *schemaBuilder = new backend::SchemaBuilder( component ) ;
     uno::Reference<backenduno::XSchemaHandler> schemaHandler = schemaBuilder ;
     uno::Sequence<uno::Reference<backenduno::XLayer> > layers ;
     uno::Reference<backenduno::XSchema> schema ;
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::BackendAccess", "jb99855", "configmgr: BackendAccess::getNodeData()");
-    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(aRequest.getPath().toString()) );
+    RTL_LOGFILE_CONTEXT_TRACE1(aLog, "request path: %s", RTL_LOGFILE_OU2A(aRequest.getComponentName().toString()) );
 
-    getSchemaAndLayers(aRequest, schema, layers) ;
+    AbsolutePath aRequestPath = AbsolutePath::makeModulePath(aRequest.getComponentName(), AbsolutePath::NoValidate());
+    NodeRequest aNodeRequest(aRequestPath, aRequest.getOptions());
+
+    getSchemaAndLayers(aNodeRequest, schema, layers) ;
     schema->readSchema(schemaHandler) ;
-    return merge(mFactory, schemaBuilder->result(), layers, layers.getLength(),
-                 aRequest.getOptions().getLocale(), aRequest.getPath()) ;
+
+    merge(mFactory, schemaBuilder->result(), layers, layers.getLength(),
+                 aNodeRequest.getOptions().getLocale());
+
+    ComponentInstance retCode(schemaBuilder->result().extractSchemaTree(),
+                              schemaBuilder->result().extractTemplatesTree(),
+                              aRequest.getComponentName()) ;
+
+    return ComponentResult(retCode) ;
 }
 //------------------------------------------------------------------------------
 
@@ -217,9 +223,12 @@ NodeResult BackendAccess::getDefaultData(const NodeRequest& aRequest)
 
     getSchemaAndLayers(aRequest, schema, layers) ;
     schema->readSchema(schemaHandler) ;
-    return merge(mFactory, schemaBuilder->result(), layers,
-                 layers.getLength() - 1, aRequest.getOptions().getLocale(),
-                 aRequest.getPath()) ;
+
+    merge(mFactory, schemaBuilder->result(), layers,layers.getLength() - 1,
+          aRequest.getOptions().getLocale());
+
+    NodeInstance retCode(schemaBuilder->result().extractSchemaTree(), aRequest.getPath()) ;
+    return NodeResult(retCode) ;
 }
 //------------------------------------------------------------------------------
 

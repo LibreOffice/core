@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:45:34 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ class BackendAccess : public IMergedDataProvider {
         ~BackendAccess(void) ;
 
         // IMergedDataProvider
-        virtual NodeResult getNodeData(const NodeRequest& aRequest,
-                                       INodeDataListener *aListener = NULL)
+        virtual ComponentResult getNodeData(const ComponentRequest& aRequest,
+                                            INodeDataListener *aListener = NULL)
             CFG_UNO_THROW_ALL() ;
         virtual void removeRequestListener(INodeDataListener *aListener)
             CFG_NOTHROW() {}
