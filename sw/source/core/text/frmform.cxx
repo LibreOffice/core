@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:23:38 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,6 +1845,9 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
     SwTxtFormatInfo aInf( this );
     SwTxtFormatter  aLine( this, &aInf );
 
+    // OD 2004-01-15 #110582#
+    HideAndShowObjects();
+
     _Format( aLine, aInf );
 
     if( aLine.IsOnceMore() )
@@ -1975,9 +1978,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             if( IsLocked() )
                 return;
 
-            // Waehrend wir formatieren, wollen wir nicht gestoert werden.
-            SwTxtFrmLocker aLock(this);
-
 #if OSL_DEBUG_LEVEL > 1
     //MA 25. Jan. 94 Das Flag stimmt sehr haufig beim Eintritt nicht. Das muss
     //             bei naechster Gelegenheit geprueft und gefixt werden.
@@ -1997,10 +1997,19 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                     HideHidden();
                     Shrink( nPrtHeight );
                 }
+                else
+                {
+                    // OD 2004-01-20 #110582# - assure that objects anchored
+                    // at paragraph resp. at/as character inside paragraph
+                    // are hidden.
+                    HideAndShowObjects();
+                }
                 ChgThisLines();
                 return;
             }
 
+            // Waehrend wir formatieren, wollen wir nicht gestoert werden.
+            SwTxtFrmLocker aLock(this);
             SwTxtLineAccess aAccess( this );
             const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
             sal_Bool bSetOfst = sal_False;
