@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:46:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace sdr
         ObjectContact::ObjectContact()
         :   mpObjectAnimator(0L),
             mpEventHandler(0L),
+            mpViewObjectContactRedirector(0L),
             mbDrawHierarchyValid(sal_False)
         {
         }
@@ -356,6 +357,20 @@ namespace sdr
         sal_Bool ObjectContact::IsAsynchronGraphicsLoadingAllowed() const
         {
             return sal_False;
+        }
+
+        // access to ViewObjectContactRedirector
+        ViewObjectContactRedirector* ObjectContact::GetViewObjectContactRedirector() const
+        {
+            return mpViewObjectContactRedirector;
+        }
+
+        void ObjectContact::SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew)
+        {
+            if(mpViewObjectContactRedirector != pNew)
+            {
+                mpViewObjectContactRedirector = pNew;
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr
