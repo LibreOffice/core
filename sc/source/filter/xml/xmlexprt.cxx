@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 12:12:43 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 12:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,6 +1681,8 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
         pRowStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
         pTableStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
+
+    AddPageMasterFamily();
 }
 
 
@@ -2379,6 +2381,7 @@ void ScXMLExport::_ExportAutoStyles()
     rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
     GetChartExport()->setTableAddressMapper(xChartExportMapper);
     GetAutoStylePool()->ClearEntries();
+
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
     {
@@ -2712,6 +2715,8 @@ void ScXMLExport::_ExportAutoStyles()
             GetTextParagraphExport()->exportTextAutoStyles();
             GetShapeExport()->exportAutoStyles();
             GetChartExport()->exportAutoStyles();
+
+            exportPageMaster();
         }
     }
 }
