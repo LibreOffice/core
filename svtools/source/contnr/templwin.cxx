@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-23 10:48:33 $
+ *  last change: $Author: pb $ $Date: 2001-08-28 12:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,8 @@ void SvtFrameWindow_Impl::Resize()
     pTextWin->SetSizePixel( aWinSize );
 }
 
-void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate )
+void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview,
+                                    sal_Bool bIsTemplate, sal_Bool bAsTemplate )
 {
     if ( bPreview )
         aCurrentURL = rURL;
@@ -856,7 +857,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                     xDisp->dispatch( aURL, aArgs );
                 }
             }
-            else if ( bIsTemplate || bAsTemplate )
+            else if ( bIsTemplate )
             {
                 Sequence < PropertyValue > aArgs( 1 );
                 aArgs[0].Name = String( RTL_CONSTASCII_USTRINGPARAM("AsTemplate") );
@@ -1383,7 +1384,7 @@ void SvtDocumentTemplateDialog::InitImpl( )
     SelectHdl_Impl( NULL );
     NewFolderHdl_Impl( NULL );
 
-    pImpl->aUpdateTimer.SetTimeout( 100 );
+    pImpl->aUpdateTimer.SetTimeout( 500 );
     pImpl->aUpdateTimer.SetTimeoutHdl( LINK( this, SvtDocumentTemplateDialog, UpdateHdl_Impl ) );
     pImpl->aUpdateTimer.Start();
 }
