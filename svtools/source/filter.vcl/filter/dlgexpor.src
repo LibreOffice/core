@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-15 11:40:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-19 05:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,11 +250,11 @@ ModalDialog DLG_EXPORT_PIX
     StringList [ polish ] =
     {
             < "Orygina³" ; Default ; > ;
-        < "Wartoœæ progowa - 1bit" ; Default ; > ;
+        < "Warto?æ progowa - 1bit" ; Default ; > ;
         < "Rozsiewanie - 1 bit" ; Default ; > ;
-        < "Paleta odcieni szaroœci - 4bity" ; Default ; > ;
+        < "Paleta odcieni szaro?ci - 4bity" ; Default ; > ;
         < "Paleta kolorów - 4bity" ; Default ; > ;
-        < "Paleta odcieni szaroœci - 8bitów" ; Default ; > ;
+        < "Paleta odcieni szaro?ci - 8bitów" ; Default ; > ;
         < "Paleta kolorów - 8bitów" ; Default ; > ;
         < "True Color - 24bity" ; Default ; > ;
     };
@@ -459,10 +459,10 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "~Upplösning" ;
         Text [ danish ] = "Opløsning" ;
         Text [ portuguese ] = "~Resolução" ;
-        Text [ portuguese_brazilian ] = "~Auflösung" ;
+        Text [ portuguese_brazilian ] = "~Aufl?ung" ;
         Text[ chinese_simplified ] = "·Ö±æÂÊ(~R)";
         Text[ russian ] = "Ðàçðåøåíèå";
-        Text[ polish ] = "Rozdzielczoœæ";
+        Text[ polish ] = "Rozdzielczo?æ";
         Text[ japanese ] = "‰ð‘œ“x(~R)";
         Text[ chinese_traditional ] = "¸ÑªR«×(~R)";
         Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
@@ -502,7 +502,7 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "~Storlek" ;
         Text [ danish ] = "Størrelse" ;
         Text [ portuguese ] = "~Tamanho" ;
-        Text [ portuguese_brazilian ] = "~Größe" ;
+        Text [ portuguese_brazilian ] = "~Gr?e" ;
         Text[ chinese_simplified ] = "´óÐ¡(~S)";
         Text[ russian ] = "Ðàçìåð";
         Text[ polish ] = "Rozmiar";
@@ -592,7 +592,7 @@ ModalDialog DLG_EXPORT_PIX
         Text [ swedish ] = "Höjd" ;
         Text [ danish ] = "Højde" ;
         Text [ portuguese ] = "Altura" ;
-        Text [ portuguese_brazilian ] = "Höhe" ;
+        Text [ portuguese_brazilian ] = "H?e" ;
         Text[ chinese_simplified ] = "¸ß¶È";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
@@ -705,7 +705,7 @@ ModalDialog DLG_EXPORT_VEC
         Text [ french ] = "Taille" ;
         Text [ swedish ] = "~Storlek" ;
         Text [ danish ] = "Størrelse" ;
-        Text [ portuguese_brazilian ] = "~Größe" ;
+        Text [ portuguese_brazilian ] = "~Gr?e" ;
         Text [ portuguese ] = "~Tamanho" ;
         Text[ chinese_simplified ] = "´óÐ¡(~S)";
         Text[ russian ] = "Ðàçìåð";
@@ -806,7 +806,7 @@ ModalDialog DLG_EXPORT_VEC
         Text [ dutch ] = "Hoogte" ;
         Text [ swedish ] = "Höjd" ;
         Text [ danish ] = "Højde" ;
-        Text [ portuguese_brazilian ] = "Höhe" ;
+        Text [ portuguese_brazilian ] = "H?e" ;
         Text [ portuguese ] = "Altura" ;
         Text[ chinese_simplified ] = "¸ß¶È";
         Text[ russian ] = "Âûñîòà";
