@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedmod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:14:55 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TYPEINIT1(DlgEdModel,SdrModel);
 
 //----------------------------------------------------------------------------
 
-DlgEdModel::DlgEdModel(SfxItemPool* pPool,SvPersist* pPers) :
+DlgEdModel::DlgEdModel(SfxItemPool* pPool,SfxObjectShell* pPers) :
     SdrModel(pPool,pPers), pObjectShell(0)
 {
     DBG_CTOR(DlgEdModel,0);
@@ -88,14 +88,14 @@ DlgEdModel::DlgEdModel(SfxItemPool* pPool,SvPersist* pPers) :
 //----------------------------------------------------------------------------
 
 DlgEdModel::DlgEdModel(const String& rPath, SfxItemPool* pPool,
-    SvPersist* pPers) : SdrModel(rPath,pPool,pPers), pObjectShell(0)
+    SfxObjectShell* pPers) : SdrModel(rPath,pPool,pPers), pObjectShell(0)
 {
     DBG_CTOR(DlgEdModel,0);
 }
 
 //----------------------------------------------------------------------------
 
-DlgEdModel::DlgEdModel(SfxItemPool* pPool, SvPersist* pPers,
+DlgEdModel::DlgEdModel(SfxItemPool* pPool, SfxObjectShell* pPers,
     FASTBOOL bUseExtColorTable ) :
     SdrModel(pPool,pPers,bUseExtColorTable, LOADREFCOUNTS),pObjectShell(0)
 {
@@ -105,7 +105,7 @@ DlgEdModel::DlgEdModel(SfxItemPool* pPool, SvPersist* pPers,
 //----------------------------------------------------------------------------
 
 DlgEdModel::DlgEdModel(const String& rPath, SfxItemPool* pPool,
-    SvPersist* pPers, FASTBOOL bUseExtColorTable ) :
+    SfxObjectShell* pPers, FASTBOOL bUseExtColorTable ) :
     SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS), pObjectShell(0)
 {
     DBG_CTOR(DlgEdModel,0);
