@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-16 12:29:49 $
+ *  last change: $Author: os $ $Date: 2000-11-17 16:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,7 @@ using namespace ::rtl;
 #define FIELD_PROP_BOOL3            22
 #define FIELD_PROP_PAR4             23
 #define FIELD_PROP_SHORT1           24
+#define FIELD_PROP_DATE_TIME        25
 
 //static SfxItemPropertyMap aSetRefFieldPropMap     [] = {{0,0,0,0}};
 //static SfxItemPropertyMap aInetFieldPropMap       [] = {{0,0,0,0}};
@@ -283,7 +284,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDateTimeFieldPropMap[] =
             {
                 {SW_PROP_NAME(UNO_NAME_ADJUST), FIELD_PROP_SUBTYPE,     &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATETIME),   FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PROPERTY_NONE,    0},
+                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE), FIELD_PROP_DATE_TIME,  &::getCppuType((util::DateTime*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
                 {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
@@ -660,7 +661,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDocInfoDateTimePropMap           [] =
             {
                 {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATETIME),       FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
+                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
                 {SW_PROP_NAME(UNO_NAME_IS_DATE),    FIELD_PROP_BOOL2,   &::getBooleanCppuType()  , PROPERTY_NONE,0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,   0},
@@ -674,7 +675,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aDocInfoEditTimePropMap           [] =
             {
                 {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_DATETIME),       FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
+                {SW_PROP_NAME(UNO_NAME_DATE_TIME_VALUE),        FIELD_PROP_DOUBLE,  &::getCppuType((const Double*)0), PropertyAttribute::READONLY,  0},
                 {SW_PROP_NAME(UNO_NAME_NUMBER_FORMAT),FIELD_PROP_FORMAT,    &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_FIXED),       FIELD_PROP_BOOL1,   &::getBooleanCppuType()  , PROPERTY_NONE,   0},
                 {0,0,0,0}
@@ -1530,8 +1531,9 @@ struct SwFieldProperties_Impl
     sal_Bool        bBool1;
     sal_Bool        bBool2;
     sal_Bool        bBool3;
-    Date        aDate;
-    Double      fDouble;
+    Date            aDate;
+    Double          fDouble;
+    util::DateTime* pDateTime;
 
     SwFieldProperties_Impl():
         nSubType(0),
@@ -1543,8 +1545,12 @@ struct SwFieldProperties_Impl
         fDouble(0.),
         bBool1(sal_False),
         bBool2(sal_False),
-        bBool3(sal_False)
+        bBool3(sal_False),
+        pDateTime(0)
         {}
+    ~SwFieldProperties_Impl()
+        {delete pDateTime;}
+
 };
 
 TYPEINIT1(SwXTextField, SwClient);
@@ -1786,6 +1792,11 @@ void SwXTextField::attachToRange(
                 nSub, m_pProps->nFormat);
                 if(m_pProps->fDouble > 0.)
                     ((SwDateTimeField*)pFld)->SetValue( m_pProps->fDouble );
+                if(m_pProps->pDateTime)
+                {
+                    Any aVal; aVal <<= *m_pProps->pDateTime;
+                    pFld->PutValue(aVal, C2U(UNO_NAME_DATE_TIME_VALUE.pName));
+                }
                 ((SwDateTimeField*)pFld)->SetOffset(m_pProps->nSubType);
             }
             break;
@@ -2420,6 +2431,11 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                 m_pProps->fDouble = *(Double*)aValue.getValue();
             }
             break;
+            case FIELD_PROP_DATE_TIME :
+                if(!m_pProps->pDateTime)
+                    m_pProps->pDateTime = new util::DateTime;
+                aValue >>= (*m_pProps->pDateTime);
+            break;
         }
     }
     else
@@ -2505,6 +2521,10 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
             break;
             case FIELD_PROP_DOUBLE:
                 aRet <<= m_pProps->fDouble;
+            break;
+            case FIELD_PROP_DATE_TIME :
+                if(m_pProps->pDateTime)
+                    aRet <<= (*m_pProps->pDateTime);
             break;
         }
     }
