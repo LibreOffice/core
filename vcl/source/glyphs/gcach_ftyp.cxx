@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.24 $
- *  last change: $Author: hdu $ $Date: 2001-03-30 12:20:12 $
+ *  $Revision: 1.25 $
+ *  last change: $Author: hdu $ $Date: 2001-04-05 08:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,9 +274,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     maFaceFT(NULL)
 {
     const char* pszFontFileName = rFI.aNativeFileName.getStr();
-
     FT_Error rc = FT_New_Face( aLibFT, pszFontFileName, rFI.nFaceNum, &maFaceFT );
-    if( rc != FT_Err_Ok )
+    if( rc != FT_Err_Ok || maFaceFT->num_glyphs == 0 )
         return;
 
     FT_Encoding eEncoding = ft_encoding_unicode;
@@ -351,7 +350,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.mbDevice            = FALSE;
 
     rTo.mnStrikeoutSize     = rTo.mnAscent / 6;
-    rTo.mnStrikeoutOffset   = +rTo.mnAscent / 3;
+    rTo.mnStrikeoutOffset   = +rTo.mnAscent / 2;
 
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     if( pOS2 && (~pOS2->version != 0) )
@@ -530,9 +529,11 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
 bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 {
+    if( GetFontSelData().mbNonAntialiased )
+        return false;
+    // TODO: also use GASP & EBDT tables
     bool bAdviseAA = (mnLoadFlags & FT_LOAD_NO_HINTING) != 0;
     int nHeight = GetFontSelData().mnHeight;
-    // TODO: use GASP & EBDT tables
     bAdviseAA |= (nHeight > 12);
     bAdviseAA |= (nHeight < 8);
     return bAdviseAA;
