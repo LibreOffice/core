@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-28 14:46:44 $
+ *  last change: $Author: dv $ $Date: 2001-03-29 09:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,12 +209,13 @@ DECLARE_LIST( NameList_Impl, NamePair_Impl* );
 class Updater_Impl;
 
 //-----------------------------------------------------------------------------
-class SfxDocTplService_Impl : public SvRefBase
+class SfxDocTplService_Impl
 {
     Reference< XMultiServiceFactory >   mxFactory;
     Reference < XCommandEnvironment >   maCmdEnv;
 
     Reference< XPersist >       mxInfo;
+    ::osl::Mutex                maMutex;
     Sequence< OUString >        maTemplateDirs;
     OUString                    maRootURL;
     NameList_Impl               maNames;
@@ -306,6 +307,8 @@ public:
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::init_Impl()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     if ( !mbLocaleSet )
         getDefaultLocale();
 
@@ -884,6 +887,8 @@ SfxDocTplService_Impl::~SfxDocTplService_Impl()
 //-----------------------------------------------------------------------------
 Locale SfxDocTplService_Impl::getLocale()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     if ( !mbLocaleSet )
         getDefaultLocale();
 
@@ -893,6 +898,8 @@ Locale SfxDocTplService_Impl::getLocale()
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     if ( mbLocaleSet &&
          ( maLocale.Language != rLocale.Language ) &&
          ( maLocale.Country != rLocale.Country ) )
@@ -917,6 +924,8 @@ void SfxDocTplService_Impl::update( sal_Bool bUpdateNow )
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::doUpdate()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     sal_Int32   nCount = maTemplateDirs.getLength();
     OUString*   pDirs = maTemplateDirs.getArray();
     Content     aDirContent;
@@ -932,6 +941,8 @@ void SfxDocTplService_Impl::doUpdate()
 //-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     // Check, wether or not there is a group with this name
     Content         aNewGroup;
     OUString        aNewGroupURL;
@@ -1000,6 +1011,8 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 //-----------------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     // create the group url
     INetURLObject aGroupObj( maRootURL );
     aGroupObj.insertName( rGroupName, false,
@@ -1039,6 +1052,8 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
                                              const OUString& rNewName )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     // create the group url
     Content         aGroup;
     INetURLObject   aGroupObj( maRootURL );
@@ -1103,6 +1118,8 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                                              const OUString& rTemplateName,
                                              const OUString& rSourceURL )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate, aTargetGroup;
@@ -1197,6 +1214,8 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
                                                 const OUString& rTemplateName )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate;
@@ -1244,6 +1263,8 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
                                                 const OUString& rOldName,
                                                 const OUString& rNewName )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
     Content         aGroup, aTemplate;
@@ -1302,6 +1323,22 @@ sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
             Content aTarget;
             if ( Content::create( aTargetURL, maCmdEnv, aTarget ) )
             {
+                // get the original extension and set it again if there is none
+                INetURLObject aTargetObj( aTargetURL );
+                OUString aExtension = aTargetObj.getExtension();
+                aTargetObj.removeSegment();
+                aTargetObj.insertName( rNewName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+                if ( ! aTargetObj.hasExtension() )
+                {
+                    OUString aTitleWithExt;
+                    aTargetObj.setExtension( aExtension );
+                    aTitleWithExt = aTargetObj.getName( INetURLObject::LAST_SEGMENT, true,
+                                                        INetURLObject::DECODE_WITH_CHARSET );
+                    aTitleValue <<= aTitleWithExt;
+                }
+
                 if ( setProperty( aTarget, aTitleProp, aTitleValue ) )
                 {
                     aTargetURL = aTarget.get()->getIdentifier()->getContentIdentifier();
