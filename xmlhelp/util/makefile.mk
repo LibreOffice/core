@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: abi $ $Date: 2001-11-23 13:59:19 $
+#   last change: $Author: svesik $ $Date: 2002-03-11 15:11:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,9 +97,24 @@ SABLOT3RDLIB=sablot.lib
 SHL1TARGET=$(TARGET)$(UCP_VERSION)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
+.IF "$(OS)"!="FREEBSD"
 SHL1VERSIONMAP=exports.map
+.ENDIF
 
 # Add additional libs here.
+.IF "$(OS)"=="FREEBSD" 
+SHL1STDLIBS=                     \
+      $(CPPUHELPERLIB)         \
+      $(CPPULIB)               \
+      $(SALLIB)                \
+      $(VOSLIB)                \
+      $(SABLOT3RDLIB)          \
+      $(EXPATASCII3RDLIB)      \
+      $(UCBHELPERLIB)          \
+      $(BERKELEYLIB)           \
+      $(BERKELEYCPPLIB)        \
+      -lcompat
+.ELSE
 SHL1STDLIBS=                     \
     $(CPPUHELPERLIB)         \
     $(CPPULIB)               \
@@ -110,6 +125,7 @@ SHL1STDLIBS=                     \
     $(UCBHELPERLIB)          \
     $(BERKELEYLIB)           \
     $(BERKELEYCPPLIB)
+.ENDIF
 
 SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \
