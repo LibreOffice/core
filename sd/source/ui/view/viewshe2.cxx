@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:48:30 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "ViewShell.hxx"
+#include "ViewShellHint.hxx"
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -589,6 +590,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     USHORT i, nPageCnt = GetDoc()->GetMasterSdPageCount(ePageKind);
 
+    Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));
+
     for (i = 0; i < nPageCnt; i++)
     {
         /**********************************************************************
@@ -737,6 +740,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     // auf (neue) Seitengroesse zoomen
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
+    Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_END));
 }
 
 /*************************************************************************
