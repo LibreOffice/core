@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 11:40:41 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:42:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ ENABLE_EXCEPTIONS=	TRUE
 SRS1NAME=misc
 SRC1FILES=\
     config.src	\
-    pver.src	\
     iniman.src 	\
     ehdl.src \
     imagemgr.src      \
