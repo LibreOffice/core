@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 12:01:24 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:14:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,13 +238,6 @@ FACTORYTYPES:= 	-T com.sun.star.lang.XSingleComponentFactory \
         -T com.sun.star.container.XContentEnumerationAccess \
         -T com.sun.star.container.XEnumeration
 
-.IF "$(GUI)"=="WNT"
-MY_DLLPOSTFIX=.dll
-MY_DLLPREFIX=
-.ELSE
-MY_DLLPOSTFIX=.so
-MY_DLLPREFIX=lib
-.ENDIF
 TESTCOREFL:=ModuleC;ModuleC.XInterfaceA;ModuleC.XInterfaceB;ModuleA.XInterface1;com.sun.star.reflection.XIdlReflection;com.sun.star.reflection.XIdlField;com.sun.star.reflection.XIdlArray;com.sun.star.reflection.XIdlMethod;com.sun.star.reflection.XIdlClass;com.sun.star.beans.XPropertySet;com.sun.star.lang.XComponent;com.sun.star.container.XHierarchicalNameAccess;com.sun.star.reflection.XIdlField2;com.sun.star.lang.DisposedException
 TESTIADAPTER:=com.sun.star.beans.XIntrospection;com.sun.star.beans.MethodConcept;com.sun.star.beans.XExactName;com.sun.star.lang.XTypeProvider;com.sun.star.uno.XAggregation;com.sun.star.script.XInvocationAdapterFactory;com.sun.star.script.XInvocationAdapterFactory2;com.sun.star.script.XInvocation;com.sun.star.lang.XMultiServiceFactory;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;test.XLanguageBindingTest
 TESTINTROSP:=ModuleA;ModuleA.XIntroTest;com.sun.star.beans.XPropertySet;com.sun.star.container.XIndexAccess;com.sun.star.container.XNameAccess;com.sun.star.beans.PropertyAttribute;com.sun.star.beans.PropertyConcept
@@ -253,16 +246,16 @@ TESTPROXYFAC:=com.sun.star.reflection.XProxyFactory
 TESTSECURITY:=com.sun.star.security.AllPermission;com.sun.star.security.XPolicy;com.sun.star.security.XAccessController;com.sun.star.io.FilePermission;com.sun.star.connection.SocketPermission;com.sun.star.uno.XCurrentContext
 
 $(BIN)$/test1.rdb:
-    +cd $(BIN) && regcomp -register -r test1.rdb -c $(MY_DLLPREFIX)at$(MY_DLLPOSTFIX)
+    +cd $(BIN) && regcomp -register -r test1.rdb -c at
 
 $(BIN)$/test2.rdb:
-    +cd $(BIN) && regcomp -register -r test2.rdb -c $(MY_DLLPREFIX)remotebridge$(MY_DLLPOSTFIX)
+    +cd $(BIN) && regcomp -register -r test2.rdb -c remotebridge.uno$(DLLPOST)
 
 $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
-    +regcomp -register -r $@ -c corefl
+    +regcomp -register -r $@ -c corereflection.uno$(DLLPOST)
     touch $@
 
 $(MISC)$/test_types_generated.flag : $(BIN)$/stoctest.rdb  makefile.mk
