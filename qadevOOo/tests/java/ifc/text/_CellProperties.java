@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CellProperties.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:25 $
+ *  last change:$Date: 2003-02-27 16:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,8 @@ package ifc.text;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.xml.AttributeData;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.text.CellProperties</code>
@@ -162,8 +163,10 @@ public class _CellProperties extends MultiPropertyTest {
         log.println("Testing with custom property tester");
         testProperty("UserDefinedAttributes", new PropertyTester() {
             protected Object getNewValue(String propName, Object oldValue) {
-                XNameContainer NC = (XNameContainer) oldValue;
+                XNameContainer NC = null;
                 try {
+                    NC = (XNameContainer)
+                    AnyConverter.toObject(new Type(XNameContainer.class),oldValue);
                     NC.insertByName("MyAttribute",
                         new AttributeData("","CDATA","Value"));
                 } catch ( com.sun.star.lang.IllegalArgumentException e ) {
