@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:50:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,8 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::CHAR,x.getLength(),(void*)&x);
+    ::rtl::OString aString(::rtl::OUStringToOString(x,getOwnConnection()->getTextEncoding()));
+    setParameter(parameterIndex,DataType::CHAR,aString.getLength(),(void*)&x);
 }
 // -------------------------------------------------------------------------
 
@@ -415,9 +416,17 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,
     checkParameterIndex(parameterIndex);
     sal_Int32 nRealSize = _nSize;
     SQLSMALLINT fSqlType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(_nType));
-    if( fSqlType == SQL_CHAR    || fSqlType == SQL_VARCHAR ||
-        fSqlType == SQL_DECIMAL || fSqlType == SQL_NUMERIC)
-        ++nRealSize;
+    switch(fSqlType)
+    {
+        case SQL_CHAR:
+        case SQL_VARCHAR:
+        case SQL_DECIMAL:
+        case SQL_NUMERIC:
+            ++nRealSize;
+            break;
+        default:
+            break;
+    }
 
     sal_Int8* bindBuf = allocBindBuf(parameterIndex, nRealSize);
 
@@ -579,7 +588,8 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
             {
                 ::rtl::OUString sStr;
                 x >>= sStr;
-                setParameter(parameterIndex,sqlType,sStr.getLength(),&sStr);
+                ::rtl::OString aString(::rtl::OUStringToOString(sStr,getOwnConnection()->getTextEncoding()));
+                setParameter(parameterIndex,sqlType,aString.getLength(),&aString);
             }
             else
                 setNull(parameterIndex,sqlType);
