@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:40:31 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SYSWIN_CXX
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -84,9 +82,6 @@
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
 #endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
-#endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
@@ -109,7 +104,6 @@
 #include <taskpanelist.hxx>
 #endif
 #include <unowrap.hxx>
-
 
 
 using namespace ::com::sun::star::uno;
@@ -250,10 +244,6 @@ BOOL SystemWindow::Close()
     }
 
     Hide();
-
-    // Ist es das Applikationsfenster, dann beende die Applikation
-    if ( Application::GetAppWindow() == (const WorkWindow*)this )
-        GetpApp()->Quit();
 
     return TRUE;
 }
@@ -832,8 +822,6 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             if( pNewWindow )
                 mpTaskPaneList->AddWindow( pNewWindow );
         }
-
-        Application::GenerateAccessEvent( ACCESS_EVENT_MENUBAR );
     }
 }
 
