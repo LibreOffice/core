@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-17 23:52:40 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-18 03:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ void SalFrame::Show( BOOL bVisible )
     {
         RGBColor  rectFillColor = { 65535, 25000, 25000 }; // shade of red
         RGBColor  polyFillColor = { 25000, 25000, 65535 }; // shade of blue
+        RGBColor  linePenColor  = { 25000, 65535, 25000 }; // shade of green
         ULONG     polyVertexCount = 7;
         long      polyVertexXCoors[polyVertexCount];
         long      polyVertexYCoors[polyVertexCount];
@@ -218,9 +219,13 @@ void SalFrame::Show( BOOL bVisible )
 
         VCLVIEW hView = VCLWindow_contentView ( maFrameData.mhWnd );
 
-        // Draw a line on the native content view
+        // Draw a line on the native content view (no color)
 
         VCLGraphics_DrawLine ( hView, 15L, 15L, 150L, 150L );
+
+        // Draw a line on the native content view (color)
+
+        VCLGraphics_DrawColorLine ( hView, 55L, 15L, 190L, 150L, &linePenColor );
 
         // Draw a rectangle on the native content view (no color)
 
@@ -228,7 +233,7 @@ void SalFrame::Show( BOOL bVisible )
 
         // Draw a rectangle on the native content view (color)
 
-        VCLGraphics_DrawColorRect ( hView, 325L, 15L, 100L, 150L, & rectFillColor );
+        VCLGraphics_DrawColorRect ( hView, 325L, 15L, 100L, 150L, &rectFillColor );
 
         // Draw a polygon on the native content view (no color)
 

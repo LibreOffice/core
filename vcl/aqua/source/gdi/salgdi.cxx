@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-17 23:52:40 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-18 03:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,14 +271,14 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
                 if ( hView )
                     {
-                        /*VCLGraphics_DrawColorPolygon
+                        VCLGraphics_DrawColorPolygon
                             (
                                 hView,
                                 nPoints,
                                 pXPtsArray,
                                 pYPtsArray,
                                 NULL
-                            );*/
+                            );
                     } // if
             } // if
     } // SalGraphics::DrawPolygon
