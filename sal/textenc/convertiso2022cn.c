@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertiso2022cn.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-23 09:42:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ sal_Size ImplConvertIso2022CnToUnicode(ImplTextConverterData const * pData,
               m_pCns116431992ToUnicodePlaneOffsets;
     ImplIso2022CnToUnicodeState eState
         = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII;
-    sal_uInt32 nRow;
+    sal_uInt32 nRow = 0;
     sal_Bool bSo = sal_False;
     sal_Bool b116431 = sal_False;
     sal_uInt32 nInfo = 0;
@@ -647,8 +647,9 @@ sal_Size ImplConvertUnicodeToIso2022Cn(ImplTextConverterData const * pData,
         }
         else
         {
-            sal_uInt32 nBytes;
-            ImplUnicodeToIso2022CnDesignator eNewDesignator;
+            sal_uInt32 nBytes = 0;
+            ImplUnicodeToIso2022CnDesignator eNewDesignator =
+                         IMPL_UNICODE_TO_ISO_2022_CN_DESIGNATOR_NONE;
             switch (eSoDesignator)
             {
             case IMPL_UNICODE_TO_ISO_2022_CN_DESIGNATOR_NONE:
