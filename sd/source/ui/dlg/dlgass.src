@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:59:36 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ModalDialog DLG_ASS
         Text[ chinese_simplified ] = "²»ΤΩΟΤΚΎΥβΈφ¶Τ»°Ώς(~D)";
         Text[ chinese_traditional ] = "¤£¦AΕγ¥ά³o­ΣΉοΈά¤θ¶τ(~D)";
         Text[ arabic ] = "ΪΟγ ΕΩεΗΡ γΡΘΪ ΗαΝζΗΡ εΠΗ γΡΙ ΓΞΡμ";
-        Text[ greek ] = "Να μην εμφανιστεί αυτός ο διάλογος ξανά";
+        Text[ greek ] = "Να μην εμφα~νιστεί ξανά αυτός ο διάλογος";
         Text[ korean ] = "ΐΜ ΄λΘ­»σΐΪ ΄υ ΐΜ»σ Η¥½Γ ΎΚ±β(~D)";
         Text[ turkish ] = "Bu diyalog penceresini artύk gφrόntόleme";
         Text[ language_user1 ] = " ";
