@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:43:32 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,7 @@ void Main();
 SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMS;
-
-    // for this to work make sure an <appname>.ini file is available, you can just copy soffice.ini
-    Reference< XComponentContext > xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    xMS = cppu::createRegistryServiceFactory(
-                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
-
-
+    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
     InitVCL( xMS );
     ::Main();
