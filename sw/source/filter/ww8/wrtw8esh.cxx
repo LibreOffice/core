@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 12:15:07 $
+ *  last change: $Author: cmc $ $Date: 2002-08-30 13:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,24 +837,29 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
         for( i = 0; i < aTxtAtrArr.Count(); i++ )
         {
             const EECharAttrib& rHt = aTxtAtrArr[ i ];
-            if( nSwPos >= rHt.nStart && nSwPos < rHt.nEnd &&
-                0 != ( nSlotId = pSrcPool->GetSlotId(
-                                        nWhich = rHt.pAttr->Which() )) &&
-                nWhich != nSlotId &&
-                0 != ( nWhich = pDstPool->GetWhich( nSlotId ) ) &&
-                nWhich != nSlotId &&
-                0 != ( pOut = aWW8AttrFnTab[ nWhich - RES_CHRATR_BEGIN ] ) )
+            if (nSwPos >= rHt.nStart && nSwPos < rHt.nEnd)
             {
-                if (rWrt.CollapseScriptsforWordOk(nScript,nWhich))
+                nWhich = rHt.pAttr->Which();
+                nSlotId = pSrcPool->GetSlotId(nWhich);
+
+                if (nSlotId && nWhich != nSlotId)
                 {
-                    // use always the SW-Which Id !
-                    SfxPoolItem* pI = rHt.pAttr->Clone();
-                    pI->SetWhich( nWhich );
-                    (*pOut)( rWrt, *pI );
-                    delete pI;
+                    if (nWhich && nWhich < RES_UNKNOWNATR_BEGIN &&
+                        (pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN]))
+                    {
+                        if (rWrt.CollapseScriptsforWordOk(nScript,nWhich))
+                        {
+                            // use always the SW-Which Id !
+                            SfxPoolItem* pI = rHt.pAttr->Clone();
+                            pI->SetWhich( nWhich );
+                            (*pOut)( rWrt, *pI );
+                            delete pI;
+                        }
+                    }
                 }
             }
-            else if( nSwPos < rHt.nStart )
+
+            if( nSwPos < rHt.nStart )
                 break;
         }
 
