@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 08:46:51 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,10 +308,12 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     ScXMLDataPilotTableContext* pDataPilotTable;
     ScDPSaveDimension*          pDim;
 
+    rtl::OUString               sSelectedPage;
     sal_Int32                   nUsedHierarchy;
     sal_Int16                   nFunction;
     sal_Int16                   nOrientation;
-    sal_Bool                    bShowEmpty : 1;
+    sal_Bool                    bShowEmpty;
+    sal_Bool                    bSelectedPage;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
