@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-04 08:59:05 $
+ *  last change: $Author: ab $ $Date: 2001-06-25 11:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,146 +65,5 @@
 #ifndef _BASMGR_HXX_
 #include <basic/basmgr.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_XSTARBASICACCESS_HPP_
-#include <com/sun/star/script/XStarBasicAccess.hpp>
-#endif
-
-
-// Basic XML Import/Export
-com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
-    getStarBasicAccess( BasicManager* pMgr );
-
-
-// Data to link to old BasicManager
-class SfxScriptLibraryContainer;
-class SfxDialogLibraryContainer;
-class SfxObjectShell;
-
-struct BasicManagerImpl
-{
-    SfxScriptLibraryContainer* pScriptCont;
-    SfxDialogLibraryContainer* pDialogCont;
-    SfxObjectShell* pDocShell;
-
-    BasicManagerImpl( void )
-        : pScriptCont( NULL )
-        , pDialogCont( NULL )
-        , pDocShell( NULL )
-    {}
-};
-
-
-class SfxBasicManager : public BasicManager
-{
-    friend class LibraryContainer_Impl;
-
-private:
-    BasicLibs*          pLibs;
-    BasicErrorManager*  pErrorMgr;
-
-    String              aName;
-    String              aStorageName;
-    BOOL                bBasMgrModified;
-
-    BasicManagerImpl*   mpImpl;
-
-    void                Init();
-
-protected:
-    BOOL            ImpStoreLibary( StarBASIC* pLib, SvStorage& rStorage ) const;
-    BOOL            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
-    BOOL            ImpLoadLibary( BasicLibInfo* pLibInfo, SvStorage* pCurStorage, BOOL bInfosOnly = FALSE ) const;
-    void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
-    void            ImpMgrNotLoaded(  const String& rStorageName  );
-    BasicLibInfo*   CreateLibInfo();
-    void            LoadBasicManager( SvStorage& rStorage, BOOL bLoadBasics = TRUE );
-    void            LoadOldBasicManager( SvStorage& rStorage );
-    BOOL            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
-    void            ImplGetPassword( USHORT nLib ) const;
-    BOOL            ImplEncryptStream( SvStream& rStream ) const;
-    BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
-    void            CheckModules( StarBASIC* pBasic, BOOL bReference ) const;
-    void            SetFlagToAllLibs( short nFlag, BOOL bSet ) const;
-                    SfxBasicManager();  // Nur zum anpassen von Pfaden bei 'Speichern unter'.
-
-public:
-                    TYPEINFO();
-                    SfxBasicManager( SvStorage& rStorage, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL );
-                    SfxBasicManager( StarBASIC* pStdLib, String* pLibPath = NULL );
-                    ~SfxBasicManager();
-
-    void            SetStorageName( const String& rName )   { aStorageName = rName; }
-    String          GetStorageName() const                  { return aStorageName; }
-    void            SetName( const String& rName )          { aName = rName; }
-    String          GetName() const                         { return aName; }
-
-
-    static BOOL     HasBasicManager( const SvStorage& rStorage );
-    static BOOL     CopyBasicData( SvStorage* pFrom, const String& rSourceURL, SvStorage* pTo);
-    void            Merge(  SvStorage& rFromStorage );
-
-    USHORT          GetLibCount() const;
-    StarBASIC*      GetStdLib() const;
-    StarBASIC*      GetLib( USHORT nLib ) const;
-    StarBASIC*      GetLib( const String& rName ) const;
-    USHORT          GetLibId( const String& rName ) const;
-    USHORT          GetLibId( StarBASIC* pLib ) const;
-    BOOL            HasLib( const String& rName ) const;
-
-    void            Store( SvStorage& rStorage );
-    void            Store( SvStorage& rStorage, BOOL bStoreLibs );
-
-    BOOL            SetLibName( USHORT nLib, const String& rName );
-    String          GetLibName( USHORT nLib );
-
-    void            SetImpl( BasicManagerImpl* pImpl );
-
-    BOOL            SetLibStorageName( USHORT nLib, const String& rName );
-    String          GetLibStorageName( USHORT nLib );
-    String          GetRelLibStorageName( USHORT nLib );
-
-    BOOL            IsLibLoaded( USHORT nLib ) const;
-    BOOL            LoadLib( USHORT nLib );
-    BOOL            UnloadLib( USHORT nLib );
-    BOOL            StoreLib( USHORT nLib ) const;
-    BOOL            RemoveLib( USHORT nLib );
-    BOOL            RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage );
-
-    BOOL            IsReference( USHORT nLib );
-    BOOL            IsExtern( USHORT nLib );
-
-    StarBASIC*      CreateLib( const String& rLibName );
-    // For XML import/export:
-    StarBASIC*      CreateLib( const String& rLibName, const String& Password,
-                               const String& ExternalSourceURL, const String& LinkTargetURL );
-    StarBASIC*      CreateLibForLibContainer( const String& rLibName,
-                        SfxScriptLibraryContainer* pScriptCont );
-    StarBASIC*      AddLib( SvStorage& rStorage, const String& rLibName, BOOL bReference );
-    void            AddLib( StarBASIC* pLib );
-    BOOL            MoveLib( USHORT nLib, USHORT nNewPos );
-
-    BOOL            HasPassword( USHORT nLib ) const;
-    String          GetPassword( USHORT nLib ) const;
-    void            SetPassword( USHORT nLib, const String& rNewPassword );
-
-    // Der BasicManager gibt die Basics auch raus, wenn das Passwort nicht
-    // geprueft wurde, da man auch ohne Passwort mit der Lib arbeiten kann.
-    // Es ist Sache der App, was Sie dem Anwender ohne Passwort nicht gestattet,
-    // also z.B. das Betrachten der Source oder das Anzeigen/Loeschen von Modulen.
-    BOOL            IsPasswordVerified( USHORT nLib ) const;
-    void            SetPasswordVerified( USHORT nLib );
-
-
-    // Modify-Flag wird nur beim Speichern zurueckgesetzt.
-    BOOL            IsModified() const;
-    BOOL            IsBasicModified() const;
-    BOOL            IsManagerModified() const { return bBasMgrModified; }
-
-    BOOL            HasErrors();
-    void            ClearErrors();
-    BasicError*     GetFirstError();
-    BasicError*     GetNextError();
-};
 
 #endif  //_SFX_BASMGR_HXX
