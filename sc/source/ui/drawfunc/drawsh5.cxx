@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-03 15:26:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/dlgname.hxx>
+//CHINA001 #include <svx/dlgname.hxx>
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #include <svx/fmglob.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/fontwork.hxx>
@@ -519,7 +521,11 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         String aTitle(ScResId(SCSTR_RENAMEOBJECT));
                         String aDesc(ScResId(SCSTR_NAME));
 
-                        SvxNameDialog* pDlg = new SvxNameDialog( NULL, aOldName, aDesc );
+                        //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( NULL, aOldName, aDesc );
+                        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( NULL, aOldName, aDesc, ResId(RID_SVXDLG_NAME) );
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                         pDlg->SetEditHelpId( HID_SC_DRAW_RENAME );
                         pDlg->SetText( aTitle );
                         pDlg->SetCheckNameHdl( LINK( this, ScDrawShell, NameObjectHdl ) );
@@ -567,7 +573,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     }
 }
 
-IMPL_LINK( ScDrawShell, NameObjectHdl, SvxNameDialog*, pDialog )
+IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 {
     String aName;
 
