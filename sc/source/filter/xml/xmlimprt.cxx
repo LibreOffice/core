@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 09:20:27 $
+ *  last change: $Author: sab $ $Date: 2002-11-27 17:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2271,25 +2271,28 @@ void SAL_CALL ScXMLImport::endDocument(void)
             if (xViewDataSupplier.is())
             {
                 uno::Reference<container::XIndexAccess> xIndexAccess = xViewDataSupplier->getViewData();
-                uno::Any aAny = xIndexAccess->getByIndex(0);
-                uno::Sequence< beans::PropertyValue > aSeq;
-                if (aAny >>= aSeq)
+                if (xIndexAccess.is() && xIndexAccess->getCount() > 0)
                 {
-                    sal_Int32 nCount (aSeq.getLength());
-                    for (sal_Int32 i = 0; i < nCount; ++i)
+                    uno::Any aAny = xIndexAccess->getByIndex(0);
+                    uno::Sequence< beans::PropertyValue > aSeq;
+                    if (aAny >>= aSeq)
                     {
-                        rtl::OUString sName(aSeq[i].Name);
-                        if (sName.compareToAscii(SC_ACTIVETABLE) == 0)
+                        sal_Int32 nCount (aSeq.getLength());
+                        for (sal_Int32 i = 0; i < nCount; ++i)
                         {
-                            rtl::OUString sName;
-                            if(aSeq[i].Value >>= sName)
+                            rtl::OUString sName(aSeq[i].Name);
+                            if (sName.compareToAscii(SC_ACTIVETABLE) == 0)
                             {
-                                String sTabName(sName);
-                                sal_uInt16 nTab(0);
-                                if (pDoc->GetTable(sTabName, nTab))
+                                rtl::OUString sName;
+                                if(aSeq[i].Value >>= sName)
                                 {
-                                    pDoc->SetVisibleTab(nTab);
-                                    i = nCount;
+                                    String sTabName(sName);
+                                    sal_uInt16 nTab(0);
+                                    if (pDoc->GetTable(sTabName, nTab))
+                                    {
+                                        pDoc->SetVisibleTab(nTab);
+                                        i = nCount;
+                                    }
                                 }
                             }
                         }
