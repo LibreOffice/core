@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2002-05-28 20:34:45 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,17 +1047,17 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ russian ] = "Complex script font";
         Text[ greek ] = "Complex script font";
         Text[ dutch ] = "Complex script font";
-        Text[ french ] = "Complex script font";
-        Text[ spanish ] = "Complex script font";
+        Text[ french ] = "Police pour scripts complexes";
+        Text[ spanish ] = "Tipo de fuente para scripts complejos";
         Text[ finnish ] = "Complex script font";
-        Text[ italian ] = "Complex script font";
+        Text[ italian ] = "Carattere per script complessi";
         Text[ danish ] = "Complex script font";
-        Text[ swedish ] = "Complex script font";
+        Text[ swedish ] = "Teckensnitt fφr komplexa skript";
         Text[ polish ] = "Complex script font";
         Text[ portuguese_brazilian ] = "Complex script font";
-        Text[ japanese ] = "Complex script font";
-        Text[ korean ] = "λ³µν•© λ¬Έμ ν°νΈ";
-        Text[ chinese_simplified ] = "Complex script font";
+        Text[ japanese ] = "ζ··ε¨ζ–‡η« η”¨γƒ•γ‚©γƒ³γƒ";
+        Text[ korean ] = "λ³µν•© λ¬Έμ¥μ© κΈ€κΌ΄";
+        Text[ chinese_simplified ] = "ε¤ζ‚θ―­θ¨€η„ε­—ε‹";
         Text[ chinese_traditional ] = "θ¤‡ι›θªθ¨€η„ε­—ε‹";
         Text[ turkish ] = "Complex script font";
         Text[ arabic ] = "Complex script font";
@@ -1076,13 +1076,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ greek ] = "Γραμματοσε~ιρά";
         Text[ dutch ] = "L~ettertype";
         Text[ french ] = "Police";
-        Text[ spanish ] = "Fuente";
+        Text[ spanish ] = "~Fuente";
         Text[ italian ] = "Tipo di carattere";
         Text[ danish ] = "Font";
         Text[ swedish ] = "Tec~kensnitt";
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "Font";
-        Text[ japanese ] = "οΎο½«οΎοΎ„γ®η¨®ι΅";
+        Text[ japanese ] = "γƒ•γ‚©γƒ³γƒγ®η¨®ι΅";
         Text[ korean ] = "κΈ€κΌ΄";
         Text[ chinese_simplified ] = "ε­—δ½“";
         Text[ chinese_traditional ] = "ε­—ε‹";
@@ -1112,13 +1112,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ greek ] = "Τύπος γρα~φής";
         Text[ dutch ] = "~Schrijfwijze";
         Text[ french ] = "Style";
-        Text[ spanish ] = "Estilo";
+        Text[ spanish ] = "~Estilo";
         Text[ italian ] = "Stile";
         Text[ danish ] = "Type";
-        Text[ swedish ] = "Teckenst~il";
+        Text[ swedish ] = "Tecke~nstil";
         Text[ polish ] = "Styl";
         Text[ portuguese_brazilian ] = "Type";
-        Text[ japanese ] = "ο½½οΎ€ο½²οΎ™(~Y)";
+        Text[ japanese ] = "γ‚Ήγ‚Ώγ‚¤γƒ«(~Y)";
         Text[ korean ] = "μ ν•(~Y)";
         Text[ chinese_simplified ] = "ε­—δ½“ε½Άη¶(~Y)";
         Text[ chinese_traditional ] = "ε­—ε‹ε½Άη‹€(~Y)";
@@ -1196,7 +1196,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
             "Normal" ;
             "Cursiva" ;
             "Negrita" ;
-            "Negrita cursiva" ;
+            "Cursiva negrita" ;
         };
         StringList [ italian ] =
         {
@@ -1235,7 +1235,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
         StringList [ japanese ] =
         {
-            "ζ¨™ζΊ–" ;
+            "ι€εΈΈγ®ε­—δ½“" ;
             "ζ–δ½“" ;
             "ε¤ªε­—" ;
             "ε¤ªε­—ζ–δ½“" ;
@@ -1309,13 +1309,13 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ greek ] = "Μέγεθος";
         Text[ dutch ] = "~Lettergrootte";
         Text[ french ] = "Taille";
-        Text[ spanish ] = "Tamaρo";
+        Text[ spanish ] = "~Tamaρo";
         Text[ italian ] = "~Dimensione";
         Text[ danish ] = "Size";
-        Text[ swedish ] = "Teckens~torlek";
+        Text[ swedish ] = "T~eckenstorlek";
         Text[ polish ] = "Rozmiar";
         Text[ portuguese_brazilian ] = "Size";
-        Text[ japanese ] = "ο½»ο½²ο½½οΎ";
+        Text[ japanese ] = "γ‚µγ‚¤γ‚Ί";
         Text[ korean ] = "ν¬κΈ°";
         Text[ chinese_simplified ] = "ε­—δ½“θ§„ζ Ό";
         Text[ chinese_traditional ] = "ε­—ε‹θ¦ζ Ό";
@@ -1345,10 +1345,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ greek ] = "Γλώσσα";
         Text[ dutch ] = "~Taal";
         Text[ french ] = "Langue";
-        Text[ spanish ] = "Idioma";
+        Text[ spanish ] = "~Idioma";
         Text[ italian ] = "Lingua";
         Text[ danish ] = "Language";
-        Text[ swedish ] = "Sp~rεk";
+        Text[ swedish ] = "Sprεk";
         Text[ polish ] = "Jκzyk";
         Text[ portuguese_brazilian ] = "Language";
         Text[ japanese ] = "θ¨€θª";
@@ -2671,14 +2671,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ russian ] = "Φβες ψπθτςΰ";
         Text[ greek ] = "Χρώμα γραμματοσειράς";
         Text[ dutch ] = "Letter~kleur";
-        Text[ french ] = "~Couleur de police";
-        Text[ spanish ] = "Color de fuente";
+        Text[ french ] = "Couleur de police";
+        Text[ spanish ] = "~Color de fuente";
         Text[ italian ] = "Colore carattere";
         Text[ danish ] = "Font ~Color";
-        Text[ swedish ] = "Teckenfδr~g";
+        Text[ swedish ] = "Tecken~fδrg";
         Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Font ~Color";
-        Text[ japanese ] = "οΎο½«οΎοΎ„γ®θ‰²(~C)";
+        Text[ japanese ] = "γƒ•γ‚©γƒ³γƒγ®θ‰²(~C)";
         Text[ korean ] = "κΈ€κΌ΄ μƒ‰μƒ(~C)";
         Text[ chinese_simplified ] = "ε­—δ½“ιΆθ‰²(~C)";
         Text[ chinese_traditional ] = "ε­—ε‹ι΅θ‰²(~C)";
