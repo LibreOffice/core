@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,37 +113,43 @@ DialogWindow* BasicIDEShell::CreateDlgWin( StarBASIC* pBasic, String aDlgName )
             if ( aDlgName.Len() == 0 )
                 aDlgName = BasicIDE::CreateDialogName( pShell, aLibName );
 
-            Reference< io::XInputStreamProvider > xISP( BasicIDE::FindDialog( pShell, aLibName, aDlgName ) );
-            if ( !xISP.is() )
+            try
             {
-                try
+                Reference< io::XInputStreamProvider > xISP;
+                if ( BasicIDE::HasDialog( pShell, aLibName, aDlgName ) )
                 {
+                    // get dialog
+                    xISP = BasicIDE::GetDialog( pShell, aLibName, aDlgName );
+                }
+                else
+                {
+                    // create dialog
                     xISP = BasicIDE::CreateDialog( pShell, aLibName, aDlgName );
                 }
-                catch ( container::ElementExistException& e )
+
+                if ( xISP.is() )
                 {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
-                catch ( container::NoSuchElementException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
+                    // create dialog model
+                    Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+                    Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+                        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+                    Reference< XInputStream > xInput( xISP->createInputStream() );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel );
+
+                    // new dialog window
+                    pWin = new DialogWindow( &GetViewFrame()->GetWindow(), pBasic, pShell, aLibName, aDlgName, xDialogModel );
+                    nKey = InsertWindowInTable( pWin );
                 }
             }
-
-            if ( xISP.is() )
+            catch ( container::ElementExistException& e )
             {
-                // create dialog model
-                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-                Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
-                    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
-                Reference< XInputStream > xInput( xISP->createInputStream() );
-                ::xmlscript::importDialogModel( xInput, xDialogModel );
-
-                // new dialog window
-                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), pBasic, pShell, aLibName, aDlgName, xDialogModel );
-                nKey = InsertWindowInTable( pWin );
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
             }
         }
     }

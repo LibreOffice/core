@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ void DialogWindow::StoreData()
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel );
                     Any aAny;
                     aAny <<= xISP;
-                    xLib->replaceByName( rtl::OUString( m_aDlgName ), aAny );
+                    xLib->replaceByName( ::rtl::OUString( m_aDlgName ), aAny );
 
                     BasicIDE::MarkDocShellModified( m_pShell );
                     pEditor->ClearModifyFlag();

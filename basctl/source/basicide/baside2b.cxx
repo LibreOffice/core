@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-16 11:03:20 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,7 @@ void EditorWindow::CreateEditEngine()
 #ifdef DEBUG
     BOOL bModified = pModulWindow->GetModule()->IsModified();
 #endif
+
 
     pEditEngine = new ExtTextEngine;
     pEditView = new ExtTextView( pEditEngine, this );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-14 16:04:56 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,13 @@
 #include <moduldlg.hxx>
 #include <basidesh.hxx>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+
+
+//----------------------------------------------------------------------------
+
 SfxMacro* BasicIDE::CreateMacro()
 {
     DBG_ERROR( "BasicIDE::CreateMacro() - war eigentlich nur fuer Macro-Recording!" );
@@ -99,6 +106,8 @@ SfxMacro* BasicIDE::CreateMacro()
 
     return pMacro;
 }
+
+//----------------------------------------------------------------------------
 
 SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly )
 {
@@ -138,12 +147,16 @@ SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly )
     return pMethod;
 }
 
+//----------------------------------------------------------------------------
+
 SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
 {
     if ( rPreferredMacroDesciption.Len() )
         IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
     return BasicIDE::ChooseMacro( bExecute, bChooseOnly );
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::Organize()
 {
@@ -159,7 +172,7 @@ void BasicIDE::Organize()
     delete pDlg;
 }
 
-
+//----------------------------------------------------------------------------
 
 BOOL BasicIDE::IsValidSbxName( const String& rName )
 {
@@ -175,30 +188,185 @@ BOOL BasicIDE::IsValidSbxName( const String& rName )
     return TRUE;
 }
 
-
+//----------------------------------------------------------------------------
 
 SbMethod* BasicIDE::FindMacro( SbModule* pModule, const String& rMacroName )
 {
     return (SbMethod*)pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD );
 }
 
+//----------------------------------------------------------------------------
+
 SbModule* BasicIDE::FindModule( StarBASIC* pBasic, const String& rModName )
 {
     return pBasic->FindModule( rModName );
 }
+
+//----------------------------------------------------------------------------
 
 USHORT BasicIDE::GetBasicDialogCount()
 {
     return IDE_DLL()->GetExtraData()->GetBasicDialogCount();
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::IncBasicDialogCount()
 {
     IDE_DLL()->GetExtraData()->IncBasicDialogCount();
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::DecBasicDialogCount()
 {
     DBG_ASSERT( GetBasicDialogCount(), "DecBasicDialogCount() - Count allready 0!" );
     IDE_DLL()->GetExtraData()->DecBasicDialogCount();
 }
+
+//----------------------------------------------------------------------------
+
+Reference< container::XNameContainer > BasicIDE::GetModuleLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
+    throw(NoSuchElementException)
+{
+    // get library container
+    Reference< script::XLibraryContainer > xLibContainer;
+    if( pShell )
+    {
+        // document
+        xLibContainer = Reference< script::XLibraryContainer >( pShell->GetBasicContainer(), UNO_QUERY );
+    }
+    else
+    {
+        // application
+        xLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
+    }
+
+    // get library
+    Reference< container::XNameContainer > xLib;
+    ::rtl::OUString aOULibName( rLibName );
+    if( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
+    {
+        Any aElement = xLibContainer->getByName( aOULibName );
+        aElement >>= xLib;
+    }
+    else
+    {
+        throw NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetModuleLibrary: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    // load library
+    if( bLoadLibrary && !xLibContainer->isLibraryLoaded( aOULibName ) )
+        xLibContainer->loadLibrary( aOULibName );
+
+    return xLib;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL BasicIDE::HasModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+{
+    BOOL bHasModule = FALSE;
+
+    Reference< container::XNameContainer > xLib;
+    try
+    {
+        // get library
+        xLib = GetModuleLibrary( pShell, rLibName, TRUE );
+
+        // check if library has module
+        ::rtl::OUString aOUModName( rModName );
+        if( xLib.is() && xLib->hasByName( aOUModName ) )
+        {
+            bHasModule = TRUE;
+        }
+    }
+    catch ( container::NoSuchElementException& e )
+    {
+        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aBStr.GetBuffer() );
+    }
+
+    return bHasModule;
+}
+
+//----------------------------------------------------------------------------
+
+::rtl::OUString BasicIDE::GetModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+    throw(NoSuchElementException)
+{
+    // get library
+    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
+
+    // get module
+    ::rtl::OUString aOUModSource;
+    ::rtl::OUString aOUModName( rModName );
+    if( xLib.is() && xLib->hasByName( aOUModName ) )
+    {
+        Any aElement = xLib->getByName( aOUModName );
+        aElement >>= aOUModSource;
+    }
+    else
+    {
+        throw NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetModule: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    return aOUModSource;
+}
+
+//----------------------------------------------------------------------------
+
+/*
+::rtl::OUString BasicIDE::FindModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+    throw(NoSuchElementException)
+{
+    // get library
+    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
+
+    // find module
+    ::rtl::OUString aOUModSource;
+    ::rtl::OUString aOUModName( rModName );
+    if( xLib.is() && xLib->hasByName( aOUModName ) )
+    {
+        Any aElement = xLib->getByName( aOUModName );
+        aElement >>= aOUModSource;
+    }
+    else
+    {
+        throw NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::FindModule: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    return aOUModSource;
+}
+*/
+
+//----------------------------------------------------------------------------
+
+Sequence< ::rtl::OUString > BasicIDE::GetMethodsFromModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+    throw(NoSuchElementException )
+{
+    // get module
+    ::rtl::OUString aSource = GetModule( pShell, rLibName, rModName );
+
+    SbModule aSbModule( rModName );
+    aSbModule.SetSource( String( aSource ) );
+    USHORT nCount = aSbModule.GetMethods()->Count();
+    Sequence< ::rtl::OUString > aSeqMethods( nCount );
+
+    for ( USHORT i = 0; i < nCount; i++ )
+    {
+        SbMethod* pMethod = (SbMethod*)aSbModule.GetMethods()->Get( i );
+        DBG_ASSERT( pMethod, "Method not found! (NULL)" );
+        aSeqMethods.getArray()[ i ] = pMethod->GetName();
+    }
+
+    return aSeqMethods;
+}
+
+//----------------------------------------------------------------------------

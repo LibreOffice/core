@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
     // Pruefen, ob mit dem Namen vorhanden...
     // Nicht im QueryDrop, zu Aufwendig!
     if ( ( pVar && pVar->ISA( SbModule ) && pDestBasic->FindModule( pVar->GetName() ) ) ||
-         ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG && BasicIDE::FindDialog( pDestShell, aDestLibName, aSourceName ).is() ) )
+         ( aSbxItem.GetType() == BASICIDE_TYPE_DIALOG && BasicIDE::HasDialog( pDestShell, aDestLibName, aSourceName ) ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
         return FALSE;
@@ -369,11 +369,12 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
                 }
             }
 
-            // get dialog
-            Reference< io::XInputStreamProvider > xISP( BasicIDE::FindDialog( pSourceShell, aSourceLibName, aSourceName ) );
-            if ( xISP.is() )
+            try
             {
-                try
+                // get dialog
+                Reference< io::XInputStreamProvider > xISP( BasicIDE::GetDialog( pSourceShell, aSourceLibName, aSourceName ) );
+
+                if ( xISP.is() )
                 {
                     // remove dialog from source library
                     BasicIDE::RemoveDialog( pSourceShell, aSourceLibName, aSourceName );
@@ -383,40 +384,41 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
                     BasicIDE::InsertDialog( pDestShell, aDestLibName, aSourceName, xISP );
                     BasicIDE::MarkDocShellModified( pDestShell );
                 }
-                catch ( container::ElementExistException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
-                catch ( container::NoSuchElementException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
+            }
+            catch ( container::ElementExistException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
             }
         }
         else    // copy
         {
-            // get dialog
-            Reference< io::XInputStreamProvider > xISP( BasicIDE::FindDialog( pSourceShell, aSourceLibName, aSourceName ) );
-            if ( xISP.is() )
+            try
             {
-                try
+                // get dialog
+                Reference< io::XInputStreamProvider > xISP( BasicIDE::GetDialog( pSourceShell, aSourceLibName, aSourceName ) );
+
+                if ( xISP.is() )
                 {
                     // insert dialog into target library
                     BasicIDE::InsertDialog( pDestShell, aDestLibName, aSourceName, xISP );
                     BasicIDE::MarkDocShellModified( pDestShell );
                 }
-                catch ( container::ElementExistException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
-                catch ( container::NoSuchElementException& e )
-                {
-                    ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-                    DBG_ERROR( aBStr.GetBuffer() );
-                }
+            }
+            catch ( container::ElementExistException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
             }
         }
     }

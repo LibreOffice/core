@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-20 09:27:37 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ USHORT GetDialogSbxId();
 
 #define LINE_SEP    0x0A
 
+//----------------------------------------------------------------------------
+
 SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
 {
     SfxViewFrame* pCurFrame = SfxViewFrame::Current();
@@ -180,6 +182,8 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
     return pMethod;
 }
 
+//----------------------------------------------------------------------------
+
 Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
     throw(NoSuchElementException)
 {
@@ -198,7 +202,7 @@ Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShel
 
     // get library
     Reference< container::XNameContainer > xLib;
-    rtl::OUString aOULibName( rLibName );
+    ::rtl::OUString aOULibName( rLibName );
     if( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
     {
         Any aElement = xLibContainer->getByName( aOULibName );
@@ -207,7 +211,7 @@ Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShel
     else
     {
         throw NoSuchElementException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetDialogLibrary: NoSuchElementException!") ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetDialogLibrary: NoSuchElementException!") ),
             Reference<XInterface>() );
     }
 
@@ -217,6 +221,8 @@ Reference< container::XNameContainer > BasicIDE::GetDialogLibrary( SfxObjectShel
 
     return xLib;
 }
+
+//----------------------------------------------------------------------------
 
 String BasicIDE::CreateDialogName( SfxObjectShell* pShell, const String& rLibName )
 {
@@ -229,7 +235,7 @@ String BasicIDE::CreateDialogName( SfxObjectShell* pShell, const String& rLibNam
     {
         aDlgName = aDlgStdName;
         aDlgName += String::CreateFromInt32( i );
-        if ( !BasicIDE::FindDialog( pShell, rLibName, aDlgName ).is() )
+        if ( !BasicIDE::HasDialog( pShell, rLibName, aDlgName ) )
             bValid = TRUE;
 
         i++;
@@ -237,6 +243,8 @@ String BasicIDE::CreateDialogName( SfxObjectShell* pShell, const String& rLibNam
 
     return aDlgName;
 }
+
+//----------------------------------------------------------------------------
 
 Reference< io::XInputStreamProvider > BasicIDE::CreateDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
     throw(ElementExistException, NoSuchElementException)
@@ -246,7 +254,7 @@ Reference< io::XInputStreamProvider > BasicIDE::CreateDialog( SfxObjectShell* pS
 
     // create dialog
     Reference< io::XInputStreamProvider > xISP;
-    rtl::OUString aOUDlgName( rDlgName );
+    ::rtl::OUString aOUDlgName( rDlgName );
     if( xLib.is() && !xLib->hasByName( aOUDlgName ) )
     {
         // create new dialog model
@@ -274,18 +282,20 @@ Reference< io::XInputStreamProvider > BasicIDE::CreateDialog( SfxObjectShell* pS
     else
     {
         throw ElementExistException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::CreateDialog: ElementExistException!") ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::CreateDialog: ElementExistException!") ),
             Reference<XInterface>() );
     }
 
     return xISP;
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, const String& rOldName, const String& rNewName )
     throw(ElementExistException, NoSuchElementException)
 {
-    rtl::OUString aOUOldName( rOldName );
-    rtl::OUString aOUNewName( rNewName );
+    ::rtl::OUString aOUOldName( rOldName );
+    ::rtl::OUString aOUNewName( rNewName );
 
     // get library
     Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
@@ -296,7 +306,7 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
         if ( xLib->hasByName( aOUNewName ) )
         {
             throw ElementExistException(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameDialog: ElementExistException!") ),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameDialog: ElementExistException!") ),
                 Reference<XInterface>() );
         }
 
@@ -336,7 +346,7 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
     else
     {
         throw NoSuchElementException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameDialog: NoSuchElementException!") ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameDialog: NoSuchElementException!") ),
             Reference<XInterface>() );
     }
 
@@ -376,6 +386,8 @@ void BasicIDE::RenameDialog( SfxObjectShell* pShell, const String& rLibName, con
     }
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::RemoveDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
     throw(NoSuchElementException)
 {
@@ -383,7 +395,7 @@ void BasicIDE::RemoveDialog( SfxObjectShell* pShell, const String& rLibName, con
     Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
 
     // remove dialog
-    rtl::OUString aOUDlgName( rDlgName );
+    ::rtl::OUString aOUDlgName( rDlgName );
     if( xLib.is() && xLib->hasByName( aOUDlgName ) )
     {
         xLib->removeByName( aOUDlgName );
@@ -391,10 +403,12 @@ void BasicIDE::RemoveDialog( SfxObjectShell* pShell, const String& rLibName, con
     else
     {
         throw NoSuchElementException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RemoveDialog: NoSuchElementException!") ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RemoveDialog: NoSuchElementException!") ),
             Reference<XInterface>() );
     }
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName,
                              const Reference< io::XInputStreamProvider >& xISP )
@@ -404,7 +418,7 @@ void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, con
     Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
 
     // insert dialog into library
-    rtl::OUString aOUDlgName( rDlgName );
+    ::rtl::OUString aOUDlgName( rDlgName );
     if( xLib.is() && !xLib->hasByName( aOUDlgName ) )
     {
         Any aElement;
@@ -414,10 +428,12 @@ void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, con
     else
     {
         throw ElementExistException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::InsertDialog: ElementExistException!") ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::InsertDialog: ElementExistException!") ),
             Reference<XInterface>() );
     }
 }
+
+//----------------------------------------------------------------------------
 
 String BasicIDE::CreateModuleName( StarBASIC* pBasic, const String& rModName )
 {
@@ -442,6 +458,8 @@ String BasicIDE::CreateModuleName( StarBASIC* pBasic, const String& rModName )
     return aModName;
 }
 
+//----------------------------------------------------------------------------
+
 SbModule* BasicIDE::CreateModule( StarBASIC* pBasic, const String& rModName, BOOL bCreateMain )
 {
     if ( pBasic->FindModule( rModName ) )
@@ -461,6 +479,63 @@ SbModule* BasicIDE::CreateModule( StarBASIC* pBasic, const String& rModName, BOO
     return pModule;
 }
 
+//----------------------------------------------------------------------------
+
+BOOL BasicIDE::HasDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+{
+    BOOL bHasDialog = FALSE;
+
+    Reference< container::XNameContainer > xLib;
+    try
+    {
+        // get library
+        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+        // check if library has dialog
+        ::rtl::OUString aOUDlgName( rDlgName );
+        if( xLib.is() && xLib->hasByName( aOUDlgName ) )
+        {
+            bHasDialog = TRUE;
+        }
+    }
+    catch ( container::NoSuchElementException& e )
+    {
+        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aBStr.GetBuffer() );
+    }
+
+    return bHasDialog;
+}
+
+//----------------------------------------------------------------------------
+
+Reference< io::XInputStreamProvider > BasicIDE::GetDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+    throw(NoSuchElementException)
+{
+    // get library
+    Reference< container::XNameContainer > xLib = GetDialogLibrary( pShell, rLibName, TRUE );
+
+    // get dialog
+    Reference< io::XInputStreamProvider > xISP;
+    ::rtl::OUString aOUDlgName( rDlgName );
+    if( xLib.is() && xLib->hasByName( aOUDlgName ) )
+    {
+        Any aElement = xLib->getByName( aOUDlgName );
+        aElement >>= xISP;
+    }
+    else
+    {
+        throw NoSuchElementException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetDialog: NoSuchElementException!") ),
+            Reference<XInterface>() );
+    }
+
+    return xISP;
+}
+
+//----------------------------------------------------------------------------
+
+/*
 Reference< io::XInputStreamProvider > BasicIDE::FindDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
 {
     // get library
@@ -477,7 +552,7 @@ Reference< io::XInputStreamProvider > BasicIDE::FindDialog( SfxObjectShell* pShe
 
     // find dialog
     Reference< io::XInputStreamProvider > xISP;
-    rtl::OUString aOUDlgName( rDlgName );
+    ::rtl::OUString aOUDlgName( rDlgName );
     if( xLib.is() && xLib->hasByName( aOUDlgName ) )
     {
         Any aElement = xLib->getByName( aOUDlgName );
@@ -486,6 +561,9 @@ Reference< io::XInputStreamProvider > BasicIDE::FindDialog( SfxObjectShell* pShe
 
     return xISP;
 }
+*/
+
+//----------------------------------------------------------------------------
 
 StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
 {
@@ -496,6 +574,8 @@ StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
     DBG_ASSERT( !pSbx || pSbx->ISA( StarBASIC ), "Find Basic: Kein Basic!" );
     return (StarBASIC*)pSbx;
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::UpdateModuleInLibrary( SbModule* pMod )
 {
@@ -548,6 +628,8 @@ void BasicIDE::UpdateModuleInLibrary( SbModule* pMod )
 
 }
 
+//----------------------------------------------------------------------------
+
 BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
 {
     BasicManager* pBasicMgr = SFX_APP()->GetBasicManager();
@@ -571,6 +653,8 @@ BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
     }
     return 0;
 }
+
+//----------------------------------------------------------------------------
 
 BasicManager* BasicIDE::FindBasicManager( const String& aBasMgr )
 {
@@ -596,6 +680,8 @@ BasicManager* BasicIDE::FindBasicManager( const String& aBasMgr )
     }
     return 0;
 }
+
+//----------------------------------------------------------------------------
 
 String BasicIDE::FindTitle( BasicManager* pBasicManager, USHORT nSFXTitleType )
 {
@@ -623,6 +709,8 @@ String BasicIDE::FindTitle( BasicManager* pBasicManager, USHORT nSFXTitleType )
     return aTitle;
 }
 
+//----------------------------------------------------------------------------
+
 SfxObjectShell* BasicIDE::FindDocShell( BasicManager* pBasMgr )
 {
     SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
@@ -637,6 +725,8 @@ SfxObjectShell* BasicIDE::FindDocShell( BasicManager* pBasMgr )
     }
     return 0;
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
 {
@@ -664,6 +754,8 @@ void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
             pObjCatalog->UpdateEntries();
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
 {
     // Muss ja nicht aus einem Document kommen...
@@ -683,12 +775,16 @@ void BasicIDE::MarkDocShellModified( SfxObjectShell* pShell )
         pObjCatalog->UpdateEntries();
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::RunMethod( SbMethod* pMethod )
 {
     SbxValues aRes;
     aRes.eType = SbxVOID;
     pMethod->Get( aRes );
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::StopBasic()
 {
@@ -708,6 +804,8 @@ void BasicIDE::StopBasic()
     }
     BasicIDE::BasicStopped();
 }
+
+//----------------------------------------------------------------------------
 
 void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
         BOOL* pbDispatcherLocked, USHORT* pnWaitCount,
@@ -759,6 +857,8 @@ void BasicIDE::BasicStopped( BOOL* pbAppWindowDisabled,
 
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::InvalidateDebuggerSlots()
 {
     SfxBindings& rBindings = BasicIDE::GetBindings();
@@ -780,10 +880,14 @@ void BasicIDE::InvalidateDebuggerSlots()
     rBindings.Update( SID_BASICIDE_STAT_POS );
 }
 
+//----------------------------------------------------------------------------
+
 void BasicIDE::HandleBasicError()
 {
     ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 }
+
+//----------------------------------------------------------------------------
 
 SvStrings* BasicIDE::CreateBasicLibBoxEntries()
 {
@@ -826,6 +930,8 @@ SvStrings* BasicIDE::CreateBasicLibBoxEntries()
     return pStrings;
 }
 
+//----------------------------------------------------------------------------
+
 SfxBindings& BasicIDE::GetBindings()
 {
     BasicIDEDLL* pIDEDLL = IDE_DLL();
@@ -840,4 +946,7 @@ SfxBindings& BasicIDE::GetBindings()
     DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
     return pCurFrame->GetBindings();
 }
+
+//----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-18 08:04:58 $
+ *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,37 +173,77 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
 
 void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarBASIC* pLib )
 {
-    // Erst die Module...
+    // modules
     if ( pLib && ( nMode & BROWSEMODE_MODULES ) )
     {
-        for ( USHORT nMod = 0; nMod < pLib->GetModules()->Count(); nMod++ )
+        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pLib );
+        if ( pBasMgr )
         {
-            SbModule* pModule = (SbModule*)pLib->GetModules()->Get( nMod );
-            DBG_ASSERT( pModule, "Modul nicht erhalten!" );
-            String aName( pModule->GetName() );
-            SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aName, OBJTYPE_MODULE );
-            if ( !pModuleEntry )
-            {
-                USHORT nImgId = IMGID_MODULE;
-                Image aImage( aImages.GetImage( nImgId ) );
-                pModuleEntry = InsertEntry( aName, aImage, aImage, pLibRootEntry, FALSE, LIST_APPEND );
-                pModuleEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
-            }
+            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+            String aLibName = pLib->GetName();
 
-            if ( nMode & BROWSEMODE_SUBS )
+            try
             {
-                Image aImage( aImages.GetImage( IMGID_MACRO ) );
-                for ( USHORT nMethod = 0; nMethod < pModule->GetMethods()->Count(); nMethod++ )
+                // get library
+                Reference< container::XNameContainer > xLib = BasicIDE::GetModuleLibrary( pShell, aLibName );
+
+                if( xLib.is() )
                 {
-                    SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( nMethod );
-                    DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-                    SvLBoxEntry* pEntry = FindEntry( pModuleEntry, pMethod->GetName(), OBJTYPE_METHOD );
-                    if ( !pEntry )
+                    Sequence< ::rtl::OUString > aModNames = xLib->getElementNames();
+                    sal_Int32 nModCount = aModNames.getLength();
+                    const ::rtl::OUString* pModNames = aModNames.getConstArray();
+
+                    // sort module names
+                    ::std::vector<String> aModList(nModCount);
+                    for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+                        aModList[ i ] = pModNames[ i ];
+                    ::std::sort( aModList.begin() , aModList.end() , StringCompareLessThan );
+
+                    Image aModImage( aImages.GetImage( IMGID_MODULE ) );
+                    for ( i = 0 ; i < nModCount ; i++ )
                     {
-                        pEntry = InsertEntry( pMethod->GetName(), aImage, aImage, pModuleEntry, FALSE, LIST_APPEND );
-                        pEntry->SetUserData( new BasicEntry( OBJTYPE_METHOD ) );
+                        String aModName = aModList[ i ];
+                        SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJTYPE_MODULE );
+                        if ( !pModuleEntry )
+                        {
+                            pModuleEntry = InsertEntry( aModName, aModImage, aModImage, pLibRootEntry, FALSE, LIST_APPEND );
+                            pModuleEntry->SetUserData( new BasicEntry( OBJTYPE_MODULE ) );
+                        }
+
+                        // methods
+                        if ( nMode & BROWSEMODE_SUBS )
+                        {
+                            try
+                            {
+                                Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodsFromModule( pShell, aLibName, aModName );
+                                sal_Int32 nCount = aNames.getLength();
+                                const ::rtl::OUString* pNames = aNames.getConstArray();
+
+                                Image aImage( aImages.GetImage( IMGID_MACRO ) );
+                                for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                                {
+                                    String aName = pNames[ j ];
+                                    SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJTYPE_METHOD );
+                                    if ( !pEntry )
+                                    {
+                                        pEntry = InsertEntry( aName, aImage, aImage, pModuleEntry, FALSE, LIST_APPEND );
+                                        pEntry->SetUserData( new BasicEntry( OBJTYPE_METHOD ) );
+                                    }
+                                }
+                            }
+                            catch ( container::NoSuchElementException& e )
+                            {
+                                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                                DBG_ERROR( aBStr.GetBuffer() );
+                            }
+                        }
                     }
                 }
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
             }
         }
     }
@@ -217,40 +257,40 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarB
             SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
             String aLibName = pLib->GetName();
 
-            // get library
-            Reference< container::XNameContainer > xLib;
             try
             {
-                xLib = BasicIDE::GetDialogLibrary( pShell, aLibName );
+                // get library
+                Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( pShell, aLibName );
+
+                if( xLib.is() )
+                {
+                    Sequence< ::rtl::OUString > aDlgNames = xLib->getElementNames();
+                    sal_Int32 nDlgCount = aDlgNames.getLength();
+                    const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+
+                    // sort dialog names
+                    ::std::vector<String> aDlgList(nDlgCount);
+                    for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+                        aDlgList[ i ] = pDlgNames[ i ];
+                    ::std::sort( aDlgList.begin() , aDlgList.end() , StringCompareLessThan );
+
+                    Image aDlgImage( aImages.GetImage( IMGID_OBJECT ) );
+                    for ( i = 0 ; i < nDlgCount ; i++ )
+                    {
+                        String aDlgName = aDlgList[ i ];
+                        SvLBoxEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
+                        if ( !pDialogEntry )
+                        {
+                            pDialogEntry = InsertEntry( aDlgName, aDlgImage, aDlgImage, pLibRootEntry, TRUE, LIST_APPEND );
+                            pDialogEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
+                        }
+                    }
+                }
             }
             catch ( container::NoSuchElementException& e )
             {
                 ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
                 DBG_ERROR( aBStr.GetBuffer() );
-            }
-
-            if( xLib.is() )
-            {
-                Sequence< rtl::OUString > aNames = xLib->getElementNames();
-                sal_Int32 nNameCount = aNames.getLength();
-                const rtl::OUString* pNames = aNames.getConstArray();
-
-                // sort dialog names
-                ::std::vector<String> aNameList(nNameCount);
-                for ( sal_Int32 i = 0 ; i < nNameCount ; i++ )
-                    aNameList[ i ] = pNames[ i ];
-                ::std::sort( aNameList.begin() , aNameList.end() , StringCompareLessThan );
-
-                for ( i = 0 ; i < nNameCount ; i++ )
-                {
-                    String aDlgName = aNameList[ i ];
-                    SvLBoxEntry* pEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
-                    if ( !pEntry )
-                    {
-                        pEntry = InsertEntry( aDlgName, aImages.GetImage( IMGID_OBJECT ), aImages.GetImage( IMGID_OBJECT ), pLibRootEntry, TRUE, LIST_APPEND );
-                        pEntry->SetUserData( new BasicEntry( OBJTYPE_OBJECT ) );
-                    }
-                }
             }
         }
     }
