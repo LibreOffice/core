@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:13:03 $
+ *  last change: $Author: jb $ $Date: 2002-05-10 08:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,50 +265,27 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
     OSL_PRECOND(!m_aValueDesc.isNull,"OValueConverter::convertScalarToAny - check for NULL before calling");
     OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY),"'Any' values must be NULL");
 
-    bool bResult = false;
-
     // check for Binary
     if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_BINARY))
     {
         Sequence<sal_Int8> aBinarySeq = parseBinary(aContent);
         rValue <<= aBinarySeq;
-        bResult = true;
     }
 
-    else if (m_xTypeConverter.is())
+    else
     {
         rValue = toAny(m_xTypeConverter, aContent, toTypeClass(m_aValueDesc.sType));
-        bResult = !! rValue.hasValue();
     }
 
-    if (!bResult)
+    if (!rValue.hasValue())
     {
-        if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_STRING))
-        {
-            OSL_ENSURE(m_xTypeConverter.is(), "Warning: OValueConverter has no TypeConverter");
-            rValue <<= aContent;
-            bResult = true;
-        }
+        OSL_ENSURE(aContent.getLength() == 0, "ValueConverter: Converted non-empty data as NULL ?!");
+        OSL_TRACE("Warning: ValueConverter: Empty data without 'null' attribute treated as NULL !");
 
-        else if (m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY))
-        {
-            rValue.clear();
-            bResult = false;
-        }
-
-        else
-        {
-            OSL_ENSURE(m_xTypeConverter.is(), "ERROR: OValueConverter has no TypeConverter");
-
-            script::CannotConvertException aError;
-            aError.Message = OUString::createFromAscii("No type converter available to translate value \"");
-            aError.Message += aContent;
-            aError.Message += OUString::createFromAscii("\" to type");
-            aError.Message += m_aValueDesc.sType;
-            throw aError;
-        }
+        // m_aValueDesc.isNull = true; // violates const
     }
-    return bResult;
+
+    return !! rValue.hasValue();
 }
 
 // -----------------------------------------------------------------------------

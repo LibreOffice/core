@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:16:24 $
+ *  last change: $Author: jb $ $Date: 2002-05-10 08:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,11 @@ namespace configmgr
     {
         uno::Any aRes;
 
-        if (!xTypeConverter.is())
+        if (uno::TypeClass_STRING == _rTypeClass)
+        {
+            aRes <<= _rValue;
+        }
+        else if (!xTypeConverter.is())
         {
             throw script::CannotConvertException(
                             ::rtl::OUString::createFromAscii("Missing Converter Service!"),
@@ -159,8 +163,7 @@ namespace configmgr
                             script::FailReason::UNKNOWN, 0
                         );
         }
-
-        try
+        else try
         {
             aRes = xTypeConverter->convertToSimpleType(uno::makeAny(_rValue), _rTypeClass);
         }
@@ -174,12 +177,18 @@ namespace configmgr
                 {
                     aRes = xTypeConverter->convertToSimpleType(uno::makeAny(sTrimmed), _rTypeClass);
 
-                    OSL_ENSURE(aRes.hasValue(),"Converted non-empty string to NULL");
+                    OSL_ENSURE(aRes.hasValue(),"Converted non-empty string to NULL\n");
                 }
                 catch (script::CannotConvertException&)
                 {
                     OSL_ASSERT(!aRes.hasValue());
                 }
+                catch (uno::Exception&)
+                {
+                    OSL_ENSURE(false,"Unexpected exception from XTypeConverter::convertToSimpleType()\n");
+                    OSL_ASSERT(!aRes.hasValue());
+                }
+
                 if (!aRes.hasValue()) throw;
             }
         }
@@ -188,6 +197,16 @@ namespace configmgr
             OSL_ENSURE(sal_False, "Illegal argument for typeconverter. Maybe invalid typeclass ?");
             throw script::CannotConvertException(
                             ::rtl::OUString::createFromAscii("Invalid Converter Argument:") + iae.Message,
+                            uno::Reference< uno::XInterface > (),
+                            _rTypeClass,
+                            script::FailReason::UNKNOWN, 0
+                        );
+        }
+        catch (uno::Exception& e)
+        {
+            OSL_ENSURE(false,"Unexpected exception from XTypeConverter::convertToSimpleType()\n");
+            throw script::CannotConvertException(
+                            ::rtl::OUString::createFromAscii("Unexpected TypeConverter Failure:") + e.Message,
                             uno::Reference< uno::XInterface > (),
                             _rTypeClass,
                             script::FailReason::UNKNOWN, 0
