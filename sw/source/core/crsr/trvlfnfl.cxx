@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfnfl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: ama $ $Date: 2002-08-30 10:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
+#ifndef _FTNBOSS_HXX
+#include <ftnboss.hxx>
+#endif
+#ifndef _FTNFRM_HXX
+#include <ftnfrm.hxx>
+#endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
 #endif
@@ -101,6 +107,9 @@
 #endif
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>
 #endif
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
@@ -153,7 +162,49 @@ FASTBOOL SwCursor::GotoFtnTxt()
 
 FASTBOOL SwCrsrShell::GotoFtnTxt()
 {
-    return CallCrsrFN( &SwCursor::GotoFtnTxt );
+    BOOL bRet = CallCrsrFN( &SwCursor::GotoFtnTxt );
+    if( !bRet )
+    {
+        SwTxtNode* pTxtNd = _GetCrsr() ?
+                   _GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode() : NULL;
+        if( pTxtNd )
+        {
+            const SwFrm *pFrm = pTxtNd->GetFrm( &_GetCrsr()->GetSttPos(),
+                                                 _GetCrsr()->Start() );
+            const SwFtnBossFrm* pFtnBoss;
+            sal_Bool bSkip = pFrm && pFrm->IsInFtn();
+            while( pFrm && 0 != ( pFtnBoss = pFrm->FindFtnBossFrm() ) )
+            {
+                if( 0 != ( pFrm = pFtnBoss->FindFtnCont() ) )
+                {
+                    if( bSkip )
+                        bSkip = sal_False;
+                    else
+                    {
+                        const SwCntntFrm* pCnt = static_cast<const SwLayoutFrm*>
+                                                        (pFrm)->ContainsCntnt();
+                        if( pCnt )
+                        {
+                            const SwCntntNode* pNode = pCnt->GetNode();
+                            _GetCrsr()->GetPoint()->nNode = *pNode;
+                            _GetCrsr()->GetPoint()->nContent.Assign(
+                                const_cast<SwCntntNode*>(pNode),
+                                static_cast<const SwTxtFrm*>(pCnt)->GetOfst() );
+                            UpdateCrsr( SwCrsrShell::SCROLLWIN |
+                                SwCrsrShell::CHKRANGE | SwCrsrShell::READONLY );
+                            bRet = sal_True;
+                            break;
+                        }
+                    }
+                }
+                if( pFtnBoss->GetNext() && !pFtnBoss->IsPageFrm() )
+                    pFrm = pFtnBoss->GetNext();
+                else
+                    pFrm = pFtnBoss->GetUpper();
+            }
+        }
+    }
+    return bRet;
 }
 
 
