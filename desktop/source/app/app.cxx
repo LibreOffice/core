@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 08:47:40 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 08:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,26 @@
 
 #include <setup2/installer.hxx>
 #include <svtools/pathoptions.hxx>
+#include <unotools/configmgr.hxx>
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+void ReplaceStringHookProc( UniString& rStr )
+{
+    static String aBrandName;
+    if ( !aBrandName.Len() )
+    {
+        Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+        rtl::OUString aTmp;
+        aRet >>= aTmp;
+        aBrandName = aTmp;
+    }
+
+    rStr.SearchAndReplaceAscii( "%PRODUCTNAME", aBrandName );
+}
 
 Desktop aDesktop;
 
@@ -91,6 +106,7 @@ Desktop::Desktop()
 
 void Desktop::Main()
 {
+    ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
     Installer* pInstaller = new Installer;
