@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:02:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,14 +68,9 @@
 //  User can overwrite these adjustment with his own values! We will do it only if nothing is set.
 //*****************************************************************************************************************
 
-/*ATTENTION
-    "DEBUG" must be checked before "_DEBUG" ... because otherwhise
-    we couldn't differ between product-debug/product-no-debug/non-product-debug/non-product-no-debug ...!!!
- */
-
 //-----------------------------------------------------------------------------------------------------------------
-// => for debug build project ("non product and debug compiled")
-#if defined( DEBUG )
+// => "personal debug code"
+#if OSL_DEBUG_LEVEL > 1
 
     // Enable log mechanism for normal assertion and error handling.
     // Look for user decisions before!
@@ -93,8 +88,8 @@
     #endif
 
 //-----------------------------------------------------------------------------------------------------------------
-// => for debug linked project ("non product")
-#elif defined( _DEBUG )
+// => "non product"
+#elif OSL_DEBUG_LEVEL > 0
 
     // Enable log mechanism for normal assertion and error handling.
     // Look for user decisions before!
@@ -109,7 +104,7 @@
     #endif
 
 //-----------------------------------------------------------------------------------------------------------------
-// => for product version
+// => "product" (OSL_DEBUG_LEVEL == 0)
 #else
 
     #undef  ENABLE_LOGMECHANISM
