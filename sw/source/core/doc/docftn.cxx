@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docftn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:39:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,11 +166,11 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     aPageDescDep( this, 0 ),
     aCharFmtDep( this, 0 ),
     aAnchorCharFmtDep( this, 0 ),
-    aFmt( rInfo.aFmt ),
-    nFtnOffset( rInfo.nFtnOffset ),
     sPrefix( rInfo.sPrefix ),
     sSuffix( rInfo.sSuffix ),
-    bEndNote( TRUE )
+    bEndNote( TRUE ),
+    aFmt( rInfo.aFmt ),
+    nFtnOffset( rInfo.nFtnOffset )
 {
     if( rInfo.GetPageDescDep()->GetRegisteredIn() )
         ((SwModify*)rInfo.GetPageDescDep()->GetRegisteredIn())->Add( &aPageDescDep );
@@ -188,8 +188,8 @@ SwEndNoteInfo::SwEndNoteInfo(SwTxtFmtColl *pFmt) :
     aPageDescDep( this, 0 ),
     aCharFmtDep( this, 0 ),
     aAnchorCharFmtDep( this, 0 ),
-    nFtnOffset( 0 ),
-    bEndNote( TRUE )
+    bEndNote( TRUE ),
+    nFtnOffset( 0 )
 {
     aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);
 }
@@ -310,8 +310,8 @@ SwFtnInfo::SwFtnInfo(const SwFtnInfo& rInfo) :
 
 SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
     SwEndNoteInfo( pFmt ),
-    eNum( FTNNUM_DOC ),
-    ePos( FTNPOS_PAGE )
+    ePos( FTNPOS_PAGE ),
+    eNum( FTNNUM_DOC )
 {
     aFmt.SetNumberingType(SVX_NUM_ARABIC);
     bEndNote = FALSE;
@@ -332,8 +332,6 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             AppendUndo( new SwUndoFtnInfo( rOld ) );
         }
 
-        FASTBOOL bPageNum = rInfo.eNum == FTNNUM_PAGE &&
-                            rOld.eNum != FTNNUM_PAGE;
         FASTBOOL bFtnPos  = rInfo.ePos != rOld.ePos;
         FASTBOOL bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
                             rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
