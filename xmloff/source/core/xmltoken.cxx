@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.88 $
+*  $Revision: 1.89 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 16:03:27 $
+*  last change: $Author: vg $ $Date: 2005-02-22 09:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2863,6 +2863,8 @@ namespace xmloff { namespace token {
         TOKEN( "urn:oasis:names:tc",    XML_URN_OASIS_NAMES_TC ),
         TOKEN( "opendocument",          XML_OPENDOCUMENT),
         TOKEN( "1.0", XML_1_0 ),
+
+        TOKEN( "is-list-header",     XML_IS_LIST_HEADER ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
