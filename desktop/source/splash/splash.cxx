@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:36:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,16 +236,15 @@ void SplashScreen::initBitmap()
             // any language specific information, we have to search for the correct resource
             // file. The bitmap resource is language independent.
             const USHORT nResId = RID_DEFAULTINTRO;
-            LanguageType aLanguageType = LANGUAGE_DONTKNOW;
-            String aMgrName = String::CreateFromAscii( "iso" );
+            String       aMgrName = String::CreateFromAscii( "iso" );
             aMgrName += String::CreateFromInt32(SUPD); // current build version
-            ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+            ResMgr* pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
             if ( !pLabelResMgr )
             {
                 // no "iso" resource -> search for "ooo" resource
                 aMgrName = String::CreateFromAscii( "ooo" );
                 aMgrName += String::CreateFromInt32(SUPD); // current build version
-                pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+                pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
             }
             if ( pLabelResMgr )
             {
