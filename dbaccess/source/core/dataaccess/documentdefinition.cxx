@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:28:11 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 17:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -895,6 +895,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
         if ( xPersist.is() )
         {
             xPersist->storeOwn();
+            notifyDataSourceModified();
         }
     }
     catch(Exception&)
