@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: is $ $Date: 2004-02-10 11:10:55 $
+*  last change: $Author: rt $ $Date: 2004-05-03 13:59:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -144,6 +144,22 @@ STD_RES_FILE( gid_File_Res_San, san )
 #endif
 
 STD_RES_FILE( gid_File_Res_Sch, sch )
+
+//
+// start binfilter #110743#
+// 
+
+STD_RES_FILE( gid_File_Res_Bf_Sch, bf_sch )
+STD_RES_FILE( gid_File_Res_Bf_Svx, bf_svx )
+STD_RES_FILE( gid_File_Res_Bf_Frm, bf_frm )
+STD_RES_FILE( gid_File_Res_Bf_Ofa, bf_ofa )
+STD_RES_FILE( gid_File_Res_Bf_Sd, bf_sd )
+STD_RES_FILE( gid_File_Res_Bf_Sw, bf_sw )
+STD_RES_FILE( gid_File_Res_Bf_Sfx, bf_sfx )
+
+//
+// end binfilter #110743#
+// 
 
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
