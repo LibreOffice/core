@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-16 11:52:52 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,6 +997,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     {
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
             //mit Layout kann der Anker umgesetzt werden, ohne dass sich die Position aendert
             if(pFmt)
             {
