@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPoolFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:10:28 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ import java.io.UnsupportedEncodingException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-
+import java.util.WeakHashMap;
 
 import com.sun.star.uno.UnoRuntime;
 
@@ -97,10 +97,22 @@ public class JavaThreadPoolFactory {
 
     public static ThreadId getThreadId() {
         Thread t = Thread.currentThread();
-        return t instanceof JobQueue.JobDispatcher
-            ? ((JobQueue.JobDispatcher) t).getThreadId()
-            : new ThreadId(UnoRuntime.generateOid(t));
+        if (t instanceof JobQueue.JobDispatcher) {
+            return ((JobQueue.JobDispatcher) t).getThreadId();
+        } else {
+            ThreadId id;
+            synchronized (threadIdMap) {
+                id = (ThreadId) threadIdMap.get(t);
+                if (id == null) {
+                    id = ThreadId.createFresh();
+                    threadIdMap.put(t, id);
+                }
+            }
+            return id;
+        }
     }
+
+    private static final WeakHashMap threadIdMap = new WeakHashMap();
 
     /**
      * For debugging, lists the jobqueues
