@@ -9902,3 +9902,30 @@ SfxVoidItem TableSort FN_TABLE_SORT_DIALOG
     GroupId = GID_TABLE;
 ]
 
+//--------------------------------------------------------------------------
+// #i31958#: toggle design mode for XForms; copied from SID_FM_DESIGN_MODE
+SfxBoolItem SwitchXFormsDesignMode FN_XFORMS_DESIGN_MODE
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CONTROLS;
+]
+
