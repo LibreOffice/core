@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-22 15:29:44 $
+ *  last change: $Author: tbe $ $Date: 2002-07-31 08:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,9 +1085,10 @@ Window* Window::GetLabeledBy() const
             }
             for( USHORT nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
             {
+                USHORT nFoundIndex = 0;
                 pSWindow = ::ImplGetChildWindow( ImplGetFrameWindow(),
                                                  nSearchIndex,
-                                                 nSearchIndex,
+                                                 nFoundIndex,
                                                  FALSE );
                 if( pSWindow && pSWindow->IsVisible() &&
                     ( pSWindow->GetType() == WINDOW_FIXEDTEXT   ||
@@ -1097,6 +1098,8 @@ Window* Window::GetLabeledBy() const
                     pWindow = pSWindow;
                     break;
                 }
+                if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
+                    break;
             }
         }
     }
