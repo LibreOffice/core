@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:45:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,6 @@
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>
-#endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
 #endif
@@ -169,6 +166,8 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
+#include <sfx2/frame.hxx>
+
 using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
@@ -179,6 +178,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     Reader* po = (Reader*) &rOptions;
     po->pStrm = pStrm;
     po->pStg  = pStg;
+    po->xStg  = xStg;
     po->bInsertMode = 0 != pCrsr;
 
     // ist ein Medium angegeben, dann aus diesem die Streams besorgen
@@ -197,9 +197,10 @@ ULONG SwReader::Read( const Reader& rOptions )
     GetDoc();
 
     // am Sw3-Reader noch den pIo-Pointer "loeschen"
+    /*
     if( po == ReadSw3 && pDoc->GetDocShell() &&
         ((Sw3Reader*)po)->GetSw3Io() != pDoc->GetDocShell()->GetIoSystem() )
-            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );
+            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );*/
 
     // waehrend des einlesens kein OLE-Modified rufen
     Link aOLELink( pDoc->GetOle2Link() );
@@ -515,6 +516,10 @@ SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
 {
 }
 
+SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String& rFileName, SwDoc *pDoc)
+    : SwDocFac(pDoc), pStrm(0), pStg(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
+{
+}
 
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc)
     : SwDocFac(pDoc), pStrm(0), pStg(0), pMedium(&rMedium), pCrsr(0),
@@ -633,7 +638,7 @@ SwDoc* Reader::GetTemplateDoc()
                 {
                     SwDocShell *pDocSh =
                         new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
-                    SvEmbeddedObjectRef xDocSh = pDocSh;
+                    SfxObjectShellRef xDocSh = pDocSh;
                     if( pDocSh->DoInitNew( 0 ) )
                     {
                         pTemplate = pDocSh->GetDoc();
@@ -650,20 +655,6 @@ SwDoc* Reader::GetTemplateDoc()
                         pTemplate->AddLink();
                     }
                 }
-            }
-            else
-            {
-                pTemplate = new SwDoc;
-                pTemplate->AddLink();
-
-                // sicher ist sicher
-                pTemplate->SetBrowseMode( bTmplBrowseMode );
-                pTemplate->RemoveAllFmtLanguageDependencies();
-
-                xStor->SetVersion( nVersion );
-
-                Sw3Io aIO( *pTemplate );
-                aIO.LoadStyles( xStor );
             }
         }
 
@@ -733,13 +724,24 @@ int Reader::SetStrmStgPtr()
     {
         if( SW_STORAGE_READER & GetReaderType() )
         {
-            pStg = pMedium->GetStorage();
+            xStg = pMedium->GetStorage();
             return TRUE;
         }
     }
-    else if( SW_STREAM_READER & GetReaderType() )
+    else
     {
         pStrm = pMedium->GetInStream();
+        if ( pStrm && SotStorage::IsStorageFile(pStrm) && (SW_STORAGE_READER & GetReaderType()) )
+        {
+            pStg = new SotStorage( *pStrm );
+            pStrm = NULL;
+        }
+        else if ( !(SW_STREAM_READER & GetReaderType()) )
+        {
+            pStrm = NULL;
+            return FALSE;
+        }
+
         return TRUE;
     }
     return FALSE;
@@ -912,6 +914,11 @@ SwWriter::SwWriter(SvStorage& rStg,SwDoc &rDoc)
 {
 }
 
+SwWriter::SwWriter( const uno::Reference < embed::XStorage >& rStg,SwDoc &rDoc)
+    : pStrm(0), pStg(0), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc), xStg( rStg ), bWriteAll(true)
+{
+}
+
 SwWriter::SwWriter(SfxMedium& rMedium, SwCrsrShell &rShell, BOOL bInWriteAll)
     : pStrm(0), pStg(0), pMedium(&rMedium), pOutPam(0), pShell(&rShell),
     rDoc(*rShell.GetDoc()), bWriteAll(bInWriteAll)
@@ -930,14 +937,14 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
     SwPaM * pPam;
 
     SwDoc *pDoc = 0;
-    SvEmbeddedObjectRef* pRefForDocSh = 0;
+    SfxObjectShellRef* pRefForDocSh = 0;
 
     if ( pShell && !bWriteAll && pShell->IsTableMode() )
     {
         bWriteAll = TRUE;
         pDoc = new SwDoc;
         pDoc->AddLink();
-        pRefForDocSh = new SvEmbeddedObjectRef();
+        pRefForDocSh = new SfxObjectShellRef();
         pDoc->SetRefForDocShell( pRefForDocSh );
 
         // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
@@ -1040,6 +1047,8 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         nError = rxWriter->Write( *pPam, *pStg, pRealFileName );
     else if( pStrm )
         nError = rxWriter->Write( *pPam, *pStrm, pRealFileName );
+    else if( xStg.is() )
+        nError = rxWriter->Write( *pPam, xStg, pRealFileName );
 
     pOutDoc->SetPurgeOLE( bWasPurgeOle );
     if( pESh )
