@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-11 10:54:21 $
+ *  last change: $Author: ama $ $Date: 2000-12-18 09:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,9 +491,12 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         {
                             pCMS->p2Lines = new Sw2LinesPos();
                             pCMS->p2Lines->aLine = SwRect(aCharPos, aCharSize);
+                            SwTwips nTmpWidth = pPor->Width();
+                            if( nSpaceAdd )
+                                nTmpWidth += pPor->CalcSpacing(nSpaceAdd, aInf);
                             pCMS->p2Lines->aPortion =
                                 SwRect( Point( aCharPos.X() + nX, Y() ),
-                                        Size( pPor->Width(), pPor->Height() ) );
+                                        Size( nTmpWidth, pPor->Height() ) );
                         }
 
                         // In a multi-portion we use GetCharRect()-function
@@ -501,11 +504,11 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // of the multi-portion.
                         xub_StrLen nOldStart = nStart;
                         BYTE nOldProp = GetPropFont();
-                        if( ((SwMultiPortion*)pPor)->IsDouble() )
-                            SetPropFont( 50 );
                         nStart = aInf.GetIdx();
                         SwLineLayout* pOldCurr = pCurr;
                         pCurr = &((SwMultiPortion*)pPor)->GetRoot();
+                        if( ((SwMultiPortion*)pPor)->IsDouble() )
+                            SetPropFont( 50 );
                         if( nStart + pCurr->GetLen() <= nOfst )
                             Next();
                         sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
