@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleHeaderView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2004-01-05 19:58:03 $
+ *  last change: $Date: 2004-11-02 12:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ public class SwAccessibleHeaderView extends TestCase {
         oObj = AccessibilityTools.SearchedContext;
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
