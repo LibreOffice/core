@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:27:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,6 +970,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             // 8513: Felder im Blocksatz, ueberspringen
             while( pPor && !pPor->GetLen() && ! bInsideFirstField &&
                    ( pPor->IsFlyPortion() || pPor->IsKernPortion() ||
+                     pPor->IsBlankPortion() || pPor->InTabGrp() ||
                      ( !bEmptyFld && pPor->InFldGrp() ) ) )
             {
                 if ( pPor->InSpaceGrp() && nSpaceAdd )
