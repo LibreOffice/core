@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:47:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2215,10 +2215,10 @@ BOOL ViewShell::IsNewLayout() const
 }
 
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
+    ::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
 {
     using namespace ::com::sun::star::uno;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
     Reference< XAccessible > xAcc;
 
     SwDoc *pDoc = GetDoc();
@@ -2234,11 +2234,11 @@ BOOL ViewShell::IsNewLayout() const
 }
 
 ::com::sun::star::uno::Reference<
-    ::drafts::com::sun::star::accessibility::XAccessible >
+    ::com::sun::star::accessibility::XAccessible >
 ViewShell::CreateAccessiblePreview()
 {
     using ::com::sun::star::uno::Reference;
-    using ::drafts::com::sun::star::accessibility::XAccessible;
+    using ::com::sun::star::accessibility::XAccessible;
 
     DBG_ASSERT( IsPreView(),
                 "Can't create accessible preview for non-preview ViewShell" );
