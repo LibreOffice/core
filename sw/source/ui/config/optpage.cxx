@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 08:57:24 $
+ *  last change: $Author: os $ $Date: 2001-04-17 08:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1347,11 +1347,11 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aFillIndentRB( this, SW_RES( RB_SHDWCRSFILLINDENT )),
     aFillTabRB( this, SW_RES( RB_SHDWCRSFILLTAB )),
     aFillSpaceRB( this, SW_RES( RB_SHDWCRSFILLSPACE )),
-//  aColorGB( this, SW_RES( GB_SHDWCRSCOLOR )),
     aColorFT( this, SW_RES( FT_SHDWCRSCOLOR )),
     aColorLB( this, SW_RES( LB_SHDWCRSCOLOR )),
     aCrsrOptGB   ( this, SW_RES( GB_CRSR_OPT)),
     aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT )),
+
     aUnprintBox   ( this,   SW_RES( GB_NOPRINT  ) ),
     aParaCB       ( this,   SW_RES( CB_PARA      ) ),
     aSHyphCB      ( this,   SW_RES( CB_SHYPH        ) ),
@@ -1403,6 +1403,17 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         aHiddenCB   .Hide();
         aHiddenParaCB.Hide();
         aBreakCB.SetPosPixel(aTabCB.GetPosPixel());
+        aFlagGB         .Hide();
+        aOnOffCB        .Hide();
+        aFillModeFT     .Hide();
+        aFillMarginRB   .Hide();
+        aFillIndentRB   .Hide();
+        aFillTabRB      .Hide();
+        aFillSpaceRB    .Hide();
+        aColorFT        .Hide();
+        aColorLB        .Hide();
+        aCrsrOptGB      .Hide();
+        aCrsrInProtCB   .Hide();
     }
 }
 
