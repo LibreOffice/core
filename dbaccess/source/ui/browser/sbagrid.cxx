@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 11:32:40 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,30 @@
  *
  ************************************************************************/
 
+#ifndef DBACCESS_SBA_GRID_HRC
+#include "sbagrid.hrc"
+#endif
+
+#define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
+#define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY
+#define ITEMID_ORIENTATION      SID_ATTR_ALIGN_ORIENTATION
+#define ITEMID_LINEBREAK        SID_ATTR_ALIGN_LINEBREAK
+#define ITEMID_MARGIN           SID_ATTR_ALIGN_MARGIN
+
+
+#ifndef _EEITEMID_HXX
+#include <svx/eeitemid.hxx>
+#endif
+
 #ifndef _SBA_GRID_HXX
 #include "sbagrid.hxx"
 #endif
-//#ifndef _SBA_SBATTRDLG_HXX
-//#include "dlgattr.hxx"
-//#endif
-//#ifndef _DLGSIZE_HXX
-//#include "dlgsize.hxx"
-//#endif
-//#ifndef _SBA_API_HRC
-//#include "api.hrc"
-//#endif
+#ifndef DBAUI_SBATTRDLG_HXX
+#include "dlgattr.hxx"
+#endif
+#ifndef _DBAUI_DLGSIZE_HXX
+#include "dlgsize.hxx"
+#endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
@@ -102,6 +114,15 @@
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
+#include <com/sun/star/util/Time.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -111,13 +132,13 @@
 #include <svtools/intitem.hxx>
 #endif
 
-//#ifndef _SVX_COLRITEM_HXX //autogen
-//#include <svx/colritem.hxx>
-//#endif
-//
-//#ifndef _SVX_ALGITEM_HXX //autogen
-//#include <svx/algitem.hxx>
-//#endif
+#ifndef _SVX_COLRITEM_HXX //autogen
+#include <svx/colritem.hxx>
+#endif
+
+#ifndef _SVX_ALGITEM_HXX //autogen
+#include <svx/algitem.hxx>
+#endif
 
 #ifndef _SV_MULTISEL_HXX //autogen
 #include <tools/multisel.hxx>
@@ -147,41 +168,41 @@
 #include <vcl/system.hxx>
 #endif
 
-//#ifndef _SVX_FONTITEM_HXX //autogen wg. SvxFontItem
-//#include <svx/fontitem.hxx>
-//#endif
-//
-//#ifndef _SVX_FHGTITEM_HXX //autogen wg. SvxFontHeightItem
-//#include <svx/fhgtitem.hxx>
-//#endif
-//
-//#ifndef _SVX_WGHTITEM_HXX //autogen wg. SvxWeightItem
-//#include <svx/wghtitem.hxx>
-//#endif
+#ifndef _SVX_FONTITEM_HXX //autogen wg. SvxFontItem
+#include <svx/fontitem.hxx>
+#endif
+
+#ifndef _SVX_FHGTITEM_HXX //autogen wg. SvxFontHeightItem
+#include <svx/fhgtitem.hxx>
+#endif
+
+#ifndef _SVX_WGHTITEM_HXX //autogen wg. SvxWeightItem
+#include <svx/wghtitem.hxx>
+#endif
 
 #ifndef SBA_VCARDEXCHANGE_FORMAT
 #define SBA_VCARDEXCHANGE_FORMAT    "+//ISBN 1-887687-00-9::versit::PDI//vCard"
 #endif
 
-//#ifndef _SVX_POSTITEM_HXX //autogen wg. SvxPostureItem
-//#include <svx/postitem.hxx>
-//#endif
-//
-//#ifndef _SVX_SHDDITEM_HXX //autogen wg. SvxShadowedItem
-//#include <svx/shdditem.hxx>
-//#endif
-//
-//#ifndef _SVX_ITEM_HXX //autogen wg. SvxContourItem
-//#include <svx/cntritem.hxx>
-//#endif
-//
-//#ifndef _SVX_CRSDITEM_HXX //autogen wg. SvxCrossedOutItem
-//#include <svx/crsditem.hxx>
-//#endif
-//
-//#ifndef _SVX_UDLNITEM_HXX //autogen wg. SvxUnderlineItem
-//#include <svx/udlnitem.hxx>
-//#endif
+#ifndef _SVX_POSTITEM_HXX //autogen wg. SvxPostureItem
+#include <svx/postitem.hxx>
+#endif
+
+#ifndef _SVX_SHDDITEM_HXX //autogen wg. SvxShadowedItem
+#include <svx/shdditem.hxx>
+#endif
+
+#ifndef _SVX_ITEM_HXX //autogen wg. SvxContourItem
+#include <svx/cntritem.hxx>
+#endif
+
+#ifndef _SVX_CRSDITEM_HXX //autogen wg. SvxCrossedOutItem
+#include <svx/crsditem.hxx>
+#endif
+
+#ifndef _SVX_UDLNITEM_HXX //autogen wg. SvxUnderlineItem
+#include <svx/udlnitem.hxx>
+#endif
 
 #ifndef _SFXRNGITEM_HXX
 #include <svtools/rngitem.hxx>
@@ -210,8 +231,8 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef _CONNECTIVITY_DATECONVERSION_HXX_
-#include <connectivity/DateConversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -224,6 +245,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
 #endif
 #ifndef _SV_CLIP_HXX
 #include <vcl/clip.hxx>
@@ -251,13 +275,14 @@
 #endif
 
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::view;
 using namespace dbaui;
 
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
@@ -312,38 +337,38 @@ sal_uInt32 RegisterFieldExchangeFormatName()
 }
 
 //------------------------------------------------------------------
-String Any2String(const ::com::sun::star::uno::Any& rValue)
+String Any2String(const Any& rValue)
 {
     String  aString;
     if (rValue.hasValue())
     {
         switch (rValue.getValueTypeClass())
         {
-            case ::com::sun::star::uno::TypeClass_BOOLEAN:
-                aString  = (char)::comphelper::getBOOL(rValue);
+            case TypeClass_BOOLEAN:
+                aString.CreateFromInt32((sal_Int32)(char)::comphelper::getBOOL(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_CHAR:
-                aString  = ::comphelper::getINT16(rValue);
+            case TypeClass_CHAR:
+                aString.CreateFromInt32((sal_Int32)::comphelper::getINT16(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_STRING:
+            case TypeClass_STRING:
                 aString  = (const sal_Unicode*)::comphelper::getString(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_BYTE:
-                aString  = (char)::comphelper::getBOOL(rValue);
+            case TypeClass_BYTE:
+                aString.CreateFromInt32((char)::comphelper::getBOOL(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_LONG:
-                aString  = ::comphelper::getINT32(rValue);
+            case TypeClass_LONG:
+                aString.CreateFromInt32(::comphelper::getINT32(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_SHORT:
-                aString = (short)::comphelper::getINT16(rValue);
+            case TypeClass_SHORT:
+                aString.CreateFromInt32((sal_Int32)::comphelper::getINT16(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
-                aString = (short)::comphelper::getINT16(rValue);
+            case TypeClass_UNSIGNED_SHORT:
+                aString.CreateFromInt32((sal_Int32)::comphelper::getINT16(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:
-                aString = (int)::comphelper::getINT32(rValue);
+            case TypeClass_UNSIGNED_LONG:
+                aString.CreateFromInt32((sal_Int32)::comphelper::getINT32(rValue));
                 break;
-            case ::com::sun::star::uno::TypeClass_VOID:
+            case TypeClass_VOID:
             default:
                 ; // leerstring
         }
@@ -352,55 +377,54 @@ String Any2String(const ::com::sun::star::uno::Any& rValue)
 }
 
 //------------------------------------------------------------------
-double Any2Double(const ::com::sun::star::uno::Any& rValue)
+double Any2Double(const Any& rValue)
 {
     double aRet = 0;
     if (rValue.hasValue())
     {
         switch (rValue.getValueTypeClass())
         {
-            case ::com::sun::star::uno::TypeClass_BOOLEAN:
+            case TypeClass_BOOLEAN:
                 aRet = ::comphelper::getBOOL(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_CHAR:
+            case TypeClass_CHAR:
                 aRet = ::comphelper::getBOOL(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_FLOAT:
+            case TypeClass_FLOAT:
                 aRet  = ::comphelper::getFloat(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_DOUBLE:
+            case TypeClass_DOUBLE:
                 aRet  = ::comphelper::getDouble(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_LONG:
+            case TypeClass_LONG:
                 aRet = ::comphelper::getINT32(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_SHORT:
+            case TypeClass_SHORT:
                 aRet = ::comphelper::getINT16(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:
+            case TypeClass_UNSIGNED_SHORT:
                 aRet = ::comphelper::getINT16(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_BYTE:
+            case TypeClass_BYTE:
                 aRet  = ::comphelper::getBOOL(rValue);
                 break;
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:
+            case TypeClass_UNSIGNED_LONG:
                 aRet = ::comphelper::getINT32(rValue);
                 break;
 
-            case ::com::sun::star::uno::TypeClass_VOID:
+            case TypeClass_VOID:
             default:
-                // ripped these three routines somewhere ....
-                if (::comphelper::isA(rValue,(const ::com::sun::star::util::Date*)0))
                 {
-                    aRet =  connectivity::DateConversion::toDouble(*static_cast< const ::com::sun::star::util::Date*>(rValue.getValue()));
-                }
-                else if (::comphelper::isA(rValue,(const ::com::sun::star::util::Time*)0))
-                {
-                    aRet =  connectivity::DateConversion::toDouble(*static_cast< const ::com::sun::star::util::Time*>(rValue.getValue()));
-                }
-                else if (::comphelper::isA(rValue,(const ::com::sun::star::util::DateTime*)0))
-                {
-                    aRet =  connectivity::DateConversion::toDouble(*static_cast< const ::com::sun::star::util::DateTime*>(rValue.getValue()));
+                    // ripped these three routines somewhere ....
+                    ::com::sun::star::util::Date        aDate;
+                    ::com::sun::star::util::DateTime    aDateTime;
+                    ::com::sun::star::util::Time        aTime;
+                    if (rValue >>= aDate)
+                        aRet =  ::dbtools::DBTypeConversion::toDouble(aDate);
+                    else if (rValue >>= aTime)
+                        aRet =  ::dbtools::DBTypeConversion::toDouble(aTime);
+                    else if (rValue >>= aDateTime)
+                        aRet =  dbtools::DBTypeConversion::toDouble(aDateTime);
                 }
                 break;
         }
@@ -413,33 +437,33 @@ double Any2Double(const ::com::sun::star::uno::Any& rValue)
 //=======================================================================================
 
 //------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SbaXGridControl_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+Reference< XInterface > SAL_CALL SbaXGridControl_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory) throw( Exception )
 {
     return *(new SbaXGridControl(_rxFactory));
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SbaXGridControl::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SAL_CALL SbaXGridControl::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.form.SbaXGridControl");
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException )
+Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSupported(1);
+    Sequence< ::rtl::OUString> aSupported(1);
     aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.ExtendedGridControl");
     return aSupported;
 }
 
 //---------------------------------------------------------------------------------------
-SbaXGridControl::SbaXGridControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+SbaXGridControl::SbaXGridControl(const Reference< XMultiServiceFactory >& _rM)
     : FmXGridControl(_rM)
 {
 }
@@ -456,7 +480,7 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
 
     // translate properties into WinBits
     WinBits nStyle = WB_TABSTOP;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(getModel(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPropertySet >  xModelSet(getModel(), UNO_QUERY);
     if (xModelSet.is())
     {
         try
@@ -475,21 +499,21 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Any  SAL_CALL SbaXGridControl::queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
+Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
+    Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
     if(aRet.hasValue())
         return aRet;
     return UnoControl::queryInterface(_rType);
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit > & rToolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & rParentPeer) throw( RuntimeException )
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
     if (0 == m_nPeerCreationLevel)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
                 ++aIter)
@@ -501,14 +525,14 @@ void SAL_CALL SbaXGridControl::createPeer(const ::com::sun::star::uno::Reference
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridControl::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
     if (xDisp.is())
         xDisp->dispatch(aURL, aArgs);
 }
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridControl::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
 {
     SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[aURL];
     if (!pMultiplexer)
@@ -520,13 +544,13 @@ void SAL_CALL SbaXGridControl::addStatusListener(const ::com::sun::star::uno::Re
     pMultiplexer->addInterface(xControl);
     if (mxPeer.is() && pMultiplexer->getLength() == 1)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
         xDisp->addStatusListener(pMultiplexer, aURL);
     }
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
 {
     SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[aURL];
     if (!pMultiplexer)
@@ -537,16 +561,16 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const ::com::sun::star::uno:
 
     if (mxPeer.is() && pMultiplexer->getLength() == 1)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::frame::XDispatch >  xDisp(mxPeer, UNO_QUERY);
         xDisp->removeStatusListener(pMultiplexer, aURL);
     }
     pMultiplexer->removeInterface(xControl);
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridControl::dispose(void) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridControl::dispose(void) throw( RuntimeException )
 {
-    ::com::sun::star::lang::EventObject aEvt;
+    EventObject aEvt;
     aEvt.Source = *this;
 
     for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
@@ -569,7 +593,7 @@ void SAL_CALL SbaXGridControl::dispose(void) throw( ::com::sun::star::uno::Runti
 //=======================================================================================
 
 //---------------------------------------------------------------------------------------
-SbaXGridPeer::SbaXGridPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+SbaXGridPeer::SbaXGridPeer(const Reference< XMultiServiceFactory >& _rM)
 : FmXGridPeer(_rM)
 ,m_aStatusListeners(m_aMutex)
 {
@@ -581,9 +605,9 @@ SbaXGridPeer::~SbaXGridPeer()
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::dispose(void) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridPeer::dispose(void) throw( RuntimeException )
 {
-    ::com::sun::star::lang::EventObject aEvt(*this);
+    EventObject aEvt(*this);
 
     m_aStatusListeners.disposeAndClear(aEvt);
 
@@ -591,7 +615,7 @@ void SAL_CALL SbaXGridPeer::dispose(void) throw( ::com::sun::star::uno::RuntimeE
 }
 
 //---------------------------------------------------------------------------------------
-void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl)
+void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const Reference< ::com::sun::star::frame::XStatusListener > & xControl)
 {
     SbaGridControl* pGrid = (SbaGridControl*) GetWindow();
     if (!pGrid)
@@ -617,16 +641,16 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, 
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Any  SAL_CALL SbaXGridPeer::queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException)
+Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
+    Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
     if(aRet.hasValue())
         return aRet;
     return FmXGridPeer::queryInterface(_rType);
 }
 
 //---------------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException )
+Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     if  (   (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/BrowserAttribs")))
         ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/RowHeight")))
@@ -641,14 +665,14 @@ void SbaXGridPeer::NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, 
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::dispatch(const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridPeer::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException )
 {
     SbaGridControl* pGrid = (SbaGridControl*)GetWindow();
     if (!pGrid)
         return;
 
     sal_Int16 nColId = -1;
-    const ::com::sun::star::beans::PropertyValue* pArgs = aArgs.getConstArray();
+    const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
         if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnViewPos"))
@@ -689,7 +713,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const ::com::sun::star::util::URL& aURL, co
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
     if (!pCont)
@@ -700,7 +724,7 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const ::com::sun::star::uno::Refer
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
     if (!pCont)
@@ -709,28 +733,28 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const ::com::sun::star::uno::Re
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::selectionChanged(const ::com::sun::star::lang::EventObject& aEvent)
+void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent)
 {
     FmXGridPeer::selectionChanged(aEvent);
 
     SbaGridControl* pGrid = (SbaGridControl*) GetWindow();
     if (pGrid)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xColumns = getColumns();
-        ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(aEvent.Source, ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Any aSelection = xSelSupplier->getSelection();
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSelection;
-        if (aSelection.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE)
-            xSelection = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aSelection.getValue(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XIndexContainer >  xColumns = getColumns();
+        Reference< XSelectionSupplier >  xSelSupplier(aEvent.Source, UNO_QUERY);
+        Reference< XPropertySet >  xSelection;
+        xSelSupplier->getSelection() >>= xSelection;
+
         sal_uInt16 nSelectedCol = (sal_uInt16)-1;
         if (xSelection.is())
         {
-            for (sal_uInt16 i = 0; i < xColumns->getCount(); i++)
+            Reference< XPropertySet >  xCol;
+            for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCol(*(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xColumns->getByIndex(i).getValue());
+                xColumns->getByIndex(i) >>= xCol;
                 if (xCol == xSelection)
                 {
-                    nSelectedCol = i;
+                    nSelectedCol = (sal_uInt16)i;
                     break;
                 }
             }
@@ -753,15 +777,15 @@ void SAL_CALL SbaXGridPeer::selectionChanged(const ::com::sun::star::lang::Event
     }
 }
 //---------------------------------------------------------------------------------------
-const ::com::sun::star::uno::Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
+const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
 {
-    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
+    static Sequence< sal_Int8 > * pSeq = 0;
     if( !pSeq )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pSeq )
         {
-            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
+            static Sequence< sal_Int8 > aSeq( 16 );
                 rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0,sal_True );
                 pSeq = &aSeq;
         }
@@ -770,19 +794,19 @@ const ::com::sun::star::uno::Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId
 }
 
 //---------------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SbaXGridPeer::getTypes() throw (::com::sun::star::uno::RuntimeException)
+Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypes = FmXGridPeer::getTypes();
+    Sequence< Type > aTypes = FmXGridPeer::getTypes();
     sal_Int32 nOldLen = aTypes.getLength();
     aTypes.realloc(nOldLen + 1);
-    aTypes.getArray()[nOldLen] = ::getCppuType( reinterpret_cast< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >* >(NULL) );
+    aTypes.getArray()[nOldLen] = ::getCppuType( reinterpret_cast< Reference< ::com::sun::star::frame::XDispatch >* >(NULL) );
 
     return aTypes;
 }
 
 // return implementation specific data
 //------------------------------------------------------------------
-sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 > & rId )
+sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId )
 {
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
@@ -791,29 +815,29 @@ sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const ::com::sun::star::uno::Sequ
 }
 
 //---------------------------------------------------------------------------------------
-SbaXGridPeer* SbaXGridPeer::getImplementation(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIFace)
+SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rxIFace)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(
-        _rxIFace, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XUnoTunnel > xTunnel(
+        _rxIFace, UNO_QUERY);
     if (xTunnel.is())
         return reinterpret_cast<SbaXGridPeer*>(xTunnel->getSomething(getUnoTunnelId()));
     return NULL;
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt)
+void SAL_CALL SbaXGridPeer::propertyChange(const PropertyChangeEvent& evt)
 {
     FmXGridPeer::propertyChange(evt);
 }
 
 //---------------------------------------------------------------------------------------
-void SbaXGridPeer::addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol)
+void SbaXGridPeer::addColumnListeners(const Reference< XPropertySet > & xCol)
 {
     FmXGridPeer::addColumnListeners(xCol);
 }
 
 //---------------------------------------------------------------------------------------
-void SbaXGridPeer::removeColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol)
+void SbaXGridPeer::removeColumnListeners(const Reference< XPropertySet > & xCol)
 {
     FmXGridPeer::removeColumnListeners(xCol);
 }
@@ -838,13 +862,14 @@ SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
 void SbaGridHeader::ImplSelect(sal_uInt16 nId)
 {
     sal_uInt16 nPos = GetModelColumnPos(nId);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xColumns(((SbaGridControl*)GetParent())->GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XIndexAccess >  xColumns(((SbaGridControl*)GetParent())->GetPeer()->getColumns(), UNO_QUERY);
     if (nPos < xColumns->getCount())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xColumn(*(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xColumns->getByIndex(nPos).getValue());
-        ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(xColumns, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XPropertySet >  xColumn;
+        xColumns->getByIndex(nPos) >>= xColumn;
+        Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
         if (xSelSupplier.is())
-            xSelSupplier->select(::com::sun::star::uno::makeAny(xColumn));
+            xSelSupplier->select(makeAny(xColumn));
     }
 }
 
@@ -964,7 +989,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 //==================================================================
 
 //---------------------------------------------------------------------------------------
-SbaGridControl::SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rM,
+SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
                                Window* pParent, FmXGridPeer* _pPeer, WinBits nBits)
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_nLastColId(-1)
@@ -1021,9 +1046,9 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 //------------------------------------------------------------------------------
 SvNumberFormatter* SbaGridControl::GetDatasourceFormatter()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),::com::sun::star::uno::UNO_QUERY)), sal_True,getServiceManager());
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),UNO_QUERY)), sal_True,getServiceManager());
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(xSupplier,::com::sun::star::uno::UNO_QUERY);
+    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
     SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
 
     if (!pSupplierImpl)
@@ -1038,277 +1063,290 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
 {
     // get the (UNO) column model
     sal_uInt16 nModelPos = GetModelColumnPos(nColId);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol;
+    Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != (sal_uInt16)-1))
-        xAffectedCol = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xCols->getByIndex(nModelPos).getValue(), ::com::sun::star::uno::UNO_QUERY);
+        xCols->getByIndex(nModelPos) >>= xAffectedCol;
 
     if (xAffectedCol.is())
     {
-        ::com::sun::star::uno::Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
+        Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
         sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
 
-//      DlgSize aDlgColWidth(NULL, nCurWidth, sal_False);
-//      if (aDlgColWidth.Execute())
-//      {
-//          sal_uInt16 nValue = aDlgColWidth.GetValue();
-//          ::com::sun::star::uno::Any aNewWidth;
-//          if ((sal_uInt16)-1 == nValue)
-//          {   // set to default
-//              ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >  xPropState(xAffectedCol, ::com::sun::star::uno::UNO_QUERY);
-//              if (xPropState.is())
-//              {
-//                  try { aNewWidth = xPropState->getPropertyDefault(PROPERTY_WIDTH); } catch(Exception&) { } ;
-//              }
-//          }
-//          else
-//              aNewWidth <<= nValue;
-//          try {  xAffectedCol->setPropertyValue(PROPERTY_WIDTH, aNewWidth); } catch(Exception&) { } ;
-//      }
+        DlgSize aDlgColWidth(this, nCurWidth, sal_False);
+        if (aDlgColWidth.Execute())
+        {
+            sal_Int32 nValue = aDlgColWidth.GetValue();
+            Any aNewWidth;
+            if (-1 == nValue)
+            {   // set to default
+                Reference< XPropertyState >  xPropState(xAffectedCol, UNO_QUERY);
+                if (xPropState.is())
+                {
+                    try { aNewWidth = xPropState->getPropertyDefault(PROPERTY_WIDTH); } catch(Exception&) { } ;
+                }
+            }
+            else
+                aNewWidth <<= nValue;
+            try {  xAffectedCol->setPropertyValue(PROPERTY_WIDTH, aNewWidth); } catch(Exception&) { } ;
+        }
     }
 }
 
 //------------------------------------------------------------------------------
 void SbaGridControl::SetRowHeight()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPropertySet >  xCols(GetPeer()->getColumns(), UNO_QUERY);
     if (!xCols.is())
         return;
 
-    ::com::sun::star::uno::Any aHeight = xCols->getPropertyValue(PROPERTY_ROW_HEIGHT);
+    Any aHeight = xCols->getPropertyValue(PROPERTY_ROW_HEIGHT);
     sal_Int32 nCurHeight = aHeight.hasValue() ? ::comphelper::getINT32(aHeight) : -1;
 
-    // TODO
-//  DlgSize aDlgRowHeight(NULL, nCurHeight, sal_True);
-//  if (aDlgRowHeight.Execute())
-//  {
-//      sal_uInt16 nValue = aDlgRowHeight.GetValue();
-//      ::com::sun::star::uno::Any aNewHeight;
-//      if ((sal_uInt16)-1 == nValue)
-//      {   // set to default
-//          ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >  xPropState(xCols, ::com::sun::star::uno::UNO_QUERY);
-//          if (xPropState.is())
-//          {
-//              try { aNewHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT); } catch(Exception&) { } ;
-//          }
-//      }
-//      else
-//          aNewHeight <<= nValue;
-//      try {  xCols->setPropertyValue(PROPERTY_ROW_HEIGHT, aNewHeight); } catch(Exception&) { } ;
-//  }
+    DlgSize aDlgRowHeight(this, nCurHeight, sal_True);
+    if (aDlgRowHeight.Execute())
+    {
+        sal_Int32 nValue = aDlgRowHeight.GetValue();
+        Any aNewHeight;
+        if ((sal_Int16)-1 == nValue)
+        {   // set to default
+            Reference< XPropertyState >  xPropState(xCols, UNO_QUERY);
+            if (xPropState.is())
+            {
+                try
+                {
+                    aNewHeight = xPropState->getPropertyDefault(PROPERTY_ROW_HEIGHT);
+                }
+                catch(Exception&)
+                { }
+            }
+        }
+        else
+            aNewHeight <<= nValue;
+        try
+        {
+            xCols->setPropertyValue(PROPERTY_ROW_HEIGHT, aNewHeight);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSHURE(0,"setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
+        }
+    }
 }
 
 //------------------------------------------------------------------------------
 void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
 {
-//  SvNumberFormatter* pFormatter = GetDatasourceFormatter();
-//  if (!pFormatter)
-//      return;
-//
-//  sal_uInt16 nModelPos = GetModelColumnPos(nColId);
-//
-//  // get the (UNO) column model
-//  ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-//  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol;
-//  if (xCols.is() && (nModelPos != (sal_uInt16)-1))
-//      xAffectedCol = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xCols->getByIndex(nModelPos).getValue(), ::com::sun::star::uno::UNO_QUERY);
-//
-//  // get the field the column is bound to
-//  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField = getField(nModelPos);
-//
-//  if (xAffectedCol.is() && xField.is())
-//  {
-//      // the allowed format changes depend of the type of the field ...
-//      XubString sColName = ::comphelper::getString(xField->getPropertyValue(PROPERTY_NAME));
-//
-//      sal_uInt16  nFlags = TP_ATTR_ALIGN;
-//      ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
-//      sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
-//      if (bHasFormat)
-//          nFlags |= TP_ATTR_NUMBER;
-//
-//      // ------------
-//      // UNO->ItemSet
-//      static SfxItemInfo aItemInfos[] =
-//      {
-//          { 0, 0 },
-//          { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
-//          { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
-//          { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE }
-//      };
-//      static sal_uInt16 aAttrMap[] =
-//      {
-//          SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
-//          SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
-//          0
-//      };
-//
-//      SfxPoolItem* pDefaults[] =
-//      {
-//          new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-//          new SfxUInt32Item(SBA_DEF_FMTVALUE),
-//          new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
-//          new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False)
-//      };
-//
-//      SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-//      pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
-//      pPool->FreezeIdRanges();                        // the same
-//
-//      SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
-//      // fill it
-//      SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
-//      ::com::sun::star::uno::Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
-//      if (aAlignment.hasValue())
-//          switch (::comphelper::getINT16(aAlignment))
-//          {
-//              case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-//              case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-//              case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
-//          }
-//      pFormatDescriptor->Put(SvxHorJustifyItem(eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
-//      if (bHasFormat)
-//      {
-//          sal_Int32 nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
-//          // if the col is bound to a text field we have to disallow all non-text formats
-//          sal_Int16 nFieldType = ::comphelper::getINT16(xField->getPropertyValue(PROPERTY_TYPE));
-//          if ((::com::sun::star::data::DatabaseFieldType::CHAR == nFieldType) || (::com::sun::star::data::DatabaseFieldType::VARCHAR == nFieldType) || (::com::sun::star::data::DatabaseFieldType::LONGVARCHAR == nFieldType))
-//          {
-//              pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
-//              if (!pFormatter->IsTextFormat(nFormatKey))
-//                  // text fields can only have text formats
-//                  nFormatKey = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT, Application::GetAppInternational().GetLanguage());
-//          }
-//
-//          pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nFormatKey));
-//      }
-//
-//      {   // want the dialog to be destroyed before our set
-//          SbaSbAttrDlg aDlg(NULL, pFormatDescriptor, pFormatter, nFlags);
-//          if (aDlg.Execute())
-//          {
-//              // ------------
-//              // ItemSet->UNO
-//              // UNO-properties
-//              const SfxItemSet* pSet = aDlg.GetExampleSet();
-//              // (of course we could put the modified items directly into the column, but then the UNO-model
-//              // won't reflect these changes, and why do we have a model, then ?)
-//
-//              // horizontal justify
-//              SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
-//
-//              SvxCellHorJustify   eHorJustify = (SvxCellHorJustify)pHorJustify->GetValue();
-//              ::com::sun::star::uno::Any aTextAlign;
-//              switch (eHorJustify)
-//              {
-//                  case SVX_HOR_JUSTIFY_LEFT:
-//                      aTextAlign <<= ::com::sun::star::awt::TextAlign::LEFT;
-//                      break;
-//                  case SVX_HOR_JUSTIFY_CENTER:
-//                      aTextAlign <<= ::com::sun::star::awt::TextAlign::CENTER;
-//                      break;
-//                  case SVX_HOR_JUSTIFY_RIGHT:
-//                      aTextAlign <<= ::com::sun::star::awt::TextAlign::RIGHT;
-//                      break;
-//              }
-//              xAffectedCol->setPropertyValue(PROPERTY_ALIGN, aTextAlign);
-//
-//              // format key
-//              if (nFlags & TP_ATTR_NUMBER)
-//              {
-//                  SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
-//                  xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, ::com::sun::star::uno::makeAny((sal_Int32)pFormat->GetValue()));
-//              }
-//          }
-//      }
-//
-//      delete pFormatDescriptor;
-//      delete pPool;
-//      for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-//          delete pDefaults[i];
-//  }
+    SvNumberFormatter* pFormatter = GetDatasourceFormatter();
+    if (!pFormatter)
+        return;
+
+    sal_uInt16 nModelPos = GetModelColumnPos(nColId);
+
+    // get the (UNO) column model
+    Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XPropertySet >  xAffectedCol;
+    if (xCols.is() && (nModelPos != (sal_uInt16)-1))
+        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+
+    // get the field the column is bound to
+    Reference< XPropertySet >  xField = getField(nModelPos);
+
+    if (xAffectedCol.is() && xField.is())
+    {
+        // the allowed format changes depend of the type of the field ...
+        XubString sColName = ::comphelper::getString(xField->getPropertyValue(PROPERTY_NAME));
+
+        sal_uInt16  nFlags = TP_ATTR_ALIGN;
+        Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
+        sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
+        if (bHasFormat)
+            nFlags |= TP_ATTR_NUMBER;
+
+        // ------------
+        // UNO->ItemSet
+        static SfxItemInfo aItemInfos[] =
+        {
+            { 0, 0 },
+            { SID_ATTR_NUMBERFORMAT_VALUE,      SFX_ITEM_POOLABLE },
+            { SID_ATTR_ALIGN_HOR_JUSTIFY,       SFX_ITEM_POOLABLE },
+            { SID_ATTR_NUMBERFORMAT_ONE_AREA,   SFX_ITEM_POOLABLE }
+        };
+        static sal_uInt16 aAttrMap[] =
+        {
+            SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY,
+            SID_ATTR_NUMBERFORMAT_ONE_AREA, SID_ATTR_NUMBERFORMAT_ONE_AREA,
+            0
+        };
+
+        SfxPoolItem* pDefaults[] =
+        {
+            new SfxRangeItem(SBA_DEF_RANGEFORMAT, SBA_DEF_FMTVALUE, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+            new SfxUInt32Item(SBA_DEF_FMTVALUE),
+            new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, SBA_ATTR_ALIGN_HOR_JUSTIFY),
+            new SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_False)
+        };
+
+        SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
+        pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
+        pPool->FreezeIdRanges();                        // the same
+
+        SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
+        // fill it
+        SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
+        Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
+        if (aAlignment.hasValue())
+            switch (::comphelper::getINT16(aAlignment))
+            {
+                case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
+                case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
+                case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+                default:
+                    OSL_ENSHURE(0,"Invalid TextAlign!");
+            }
+        pFormatDescriptor->Put(SvxHorJustifyItem(eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
+        if (bHasFormat)
+        {
+            sal_Int32 nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
+            // if the col is bound to a text field we have to disallow all non-text formats
+            sal_Int32 nFieldType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
+            if ((DataType::CHAR == nFieldType) || (DataType::VARCHAR == nFieldType) || (DataType::LONGVARCHAR == nFieldType))
+            {
+                pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
+                if (!pFormatter->IsTextFormat(nFormatKey))
+                    // text fields can only have text formats
+                    nFormatKey = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT, Application::GetAppInternational().GetLanguage());
+            }
+
+            pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nFormatKey));
+        }
+
+        {   // want the dialog to be destroyed before our set
+            SbaSbAttrDlg aDlg(this, pFormatDescriptor, pFormatter, nFlags);
+            if (aDlg.Execute())
+            {
+                // ------------
+                // ItemSet->UNO
+                // UNO-properties
+                const SfxItemSet* pSet = aDlg.GetExampleSet();
+                // (of course we could put the modified items directly into the column, but then the UNO-model
+                // won't reflect these changes, and why do we have a model, then ?)
+
+                // horizontal justify
+                SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
+
+                SvxCellHorJustify   eHorJustify = (SvxCellHorJustify)pHorJustify->GetValue();
+                Any aTextAlign;
+                switch (eHorJustify)
+                {
+                    case SVX_HOR_JUSTIFY_LEFT:
+                        aTextAlign <<= (sal_Int16)::com::sun::star::awt::TextAlign::LEFT;
+                        break;
+                    case SVX_HOR_JUSTIFY_CENTER:
+                        aTextAlign <<= (sal_Int16)::com::sun::star::awt::TextAlign::CENTER;
+                        break;
+                    case SVX_HOR_JUSTIFY_RIGHT:
+                        aTextAlign <<= (sal_Int16)::com::sun::star::awt::TextAlign::RIGHT;
+                        break;
+                }
+                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, aTextAlign);
+
+                // format key
+                if (nFlags & TP_ATTR_NUMBER)
+                {
+                    SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True);
+                    xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny((sal_Int32)pFormat->GetValue()));
+                }
+            }
+        }
+
+        delete pFormatDescriptor;
+        delete pPool;
+        for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+            delete pDefaults[i];
+    }
 }
 
 
 //------------------------------------------------------------------------------
 void SbaGridControl::SetBrowserAttrs()
 {
-//  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xGridModel(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-//  if (!xGridModel.is())
-//      return;
-//
-//  SvNumberFormatter* pFormatter = GetDatasourceFormatter();
-//  if (!pFormatter)
-//      return;
-//
-//  // build an itemset describing the current font
-//  static SfxItemInfo aItemInfos[] =
-//  {
-//      { 0, 0 },
-//      { SID_ATTR_CHAR_FONT,       SFX_ITEM_POOLABLE },
-//      { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
-//      { SID_ATTR_CHAR_COLOR,      SFX_ITEM_POOLABLE },
-//      { SID_ATTR_CHAR_WEIGHT,     SFX_ITEM_POOLABLE },
-//      { SID_ATTR_CHAR_POSTURE,    SFX_ITEM_POOLABLE },
-//      { 0, 0 },
-//      { 0, 0 },
-//      { SID_ATTR_CHAR_STRIKEOUT,  SFX_ITEM_POOLABLE },
-//      { SID_ATTR_CHAR_UNDERLINE,  SFX_ITEM_POOLABLE }
-//  };
-//  static sal_uInt16 aAttrMap[] =
-//  {
-//      SBA_DEF_FONT, SBA_DEF_UNDERLINE,
-//      0
-//  };
-//
-//  Font    aFont = System::GetStandardFont(STDFONT_APP);
-//  aFont.SetSize(Size(aFont.GetSize().Width(), 10));
-//  sal_uInt32  nFontHeight = (sal_uInt32)PixelToLogic(aFont.GetSize(), MAP_TWIP).Height();
-//
-//  SfxPoolItem* pDefaults[] =
-//  {
-//      new SfxRangeItem( SBA_DEF_RANGEFONT, SBA_DEF_FONT, SBA_DEF_UNDERLINE ),
-//      new SvxFontItem(aFont.GetFamily(), aFont.GetName(), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, SBA_DEF_FONT),
-//      new SvxFontHeightItem(nFontHeight, 100, SBA_DEF_FONTHEIGHT ),
-//      new SvxColorItem(aFont.GetColor(), SBA_DEF_FONTCOLOR ),
-//      new SvxWeightItem(WEIGHT_LIGHT, SBA_DEF_FONTWEIGHT),
-//      new SvxPostureItem( ITALIC_NONE, SBA_DEF_POSTURE ),
-//      new SvxShadowedItem( sal_False, SBA_DEF_SHADOWED ),
-//      new SvxContourItem( sal_False, SBA_DEF_CONTOUR ),
-//      new SvxCrossedOutItem( STRIKEOUT_NONE, SBA_DEF_CROSSEDOUT ),
-//      new SvxUnderlineItem( UNDERLINE_NONE, SBA_DEF_UNDERLINE )
-//  };
-//
-//  SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFONT, SBA_DEF_UNDERLINE, aItemInfos, pDefaults);
-//  pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );
-//  pPool->FreezeIdRanges();
-//
-//  SfxItemSet* pFontDescriptor = new SfxItemSet(*pPool, aAttrMap);
-//
-//  // initialize it with the current settings (font/color)
-//  ::com::sun::star::awt::FontDescriptor aCurrentFont;
-//  xGridModel->getPropertyValue(PROPERTY_FONT) >>= aCurrentFont;
-//  BuildItemsFromFont(pFontDescriptor, aCurrentFont);
-//  ::com::sun::star::uno::Any aColor = xGridModel->getPropertyValue(PROPERTY_TEXTCOLOR);
-//  if (aColor.hasValue())
-//      pFontDescriptor->Put(SvxColorItem((Color)::comphelper::getINT32(aColor), SBA_DEF_FONTCOLOR));
-//
-//  {   // want the dialog to be destroyed before our set
-//      SbaSbAttrDlg aDlg(GetParent(), pFontDescriptor, pFormatter, TP_ATTR_CHAR, sal_True);
-//      if (aDlg.Execute())
-//      {
-//          ::com::sun::star::awt::FontDescriptor aNewFont = BuildFontFromItems(aDlg.GetExampleSet(), GetFont());
-//          xGridModel->setPropertyValue(PROPERTY_FONT, ::com::sun::star::uno::Any(&aNewFont, ::getCppuType((const ::com::sun::star::awt::FontDescriptor*)0)));
-//
-//          SFX_ITEMSET_GET(*aDlg.GetOutputItemSet(), pColor, SvxColorItem, SBA_DEF_FONTCOLOR, sal_True);
-//          xGridModel->setPropertyValue(PROPERTY_TEXTCOLOR, ::com::sun::star::uno::makeAny((sal_Int32)pColor->GetValue().GetColor()));
-//      }
-//  }
-//
-//  delete pFontDescriptor;
-//  delete pPool;
-//  for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-//      delete pDefaults[i];
+    Reference< XPropertySet >  xGridModel(GetPeer()->getColumns(), UNO_QUERY);
+    if (!xGridModel.is())
+        return;
+
+    SvNumberFormatter* pFormatter = GetDatasourceFormatter();
+    if (!pFormatter)
+        return;
+
+    // build an itemset describing the current font
+    static SfxItemInfo aItemInfos[] =
+    {
+        { 0, 0 },
+        { SID_ATTR_CHAR_FONT,       SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_COLOR,      SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_WEIGHT,     SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_POSTURE,    SFX_ITEM_POOLABLE },
+        { 0, 0 },
+        { 0, 0 },
+        { SID_ATTR_CHAR_STRIKEOUT,  SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_UNDERLINE,  SFX_ITEM_POOLABLE }
+    };
+    static sal_uInt16 aAttrMap[] =
+    {
+        SBA_DEF_FONT, SBA_DEF_UNDERLINE,
+        0
+    };
+
+    Font aFont = System::GetStandardFont(STDFONT_APP);
+    aFont.SetSize(Size(aFont.GetSize().Width(), 10));
+    sal_uInt32  nFontHeight = (sal_uInt32)PixelToLogic(aFont.GetSize(), MAP_TWIP).Height();
+
+    SfxPoolItem* pDefaults[] =
+    {
+        new SfxRangeItem( SBA_DEF_RANGEFONT, SBA_DEF_FONT, SBA_DEF_UNDERLINE ),
+        new SvxFontItem(aFont.GetFamily(), aFont.GetName(), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, SBA_DEF_FONT),
+        new SvxFontHeightItem(nFontHeight, 100, SBA_DEF_FONTHEIGHT ),
+        new SvxColorItem(aFont.GetColor(), SBA_DEF_FONTCOLOR ),
+        new SvxWeightItem(WEIGHT_LIGHT, SBA_DEF_FONTWEIGHT),
+        new SvxPostureItem( ITALIC_NONE, SBA_DEF_POSTURE ),
+        new SvxShadowedItem( sal_False, SBA_DEF_SHADOWED ),
+        new SvxContourItem( sal_False, SBA_DEF_CONTOUR ),
+        new SvxCrossedOutItem( STRIKEOUT_NONE, SBA_DEF_CROSSEDOUT ),
+        new SvxUnderlineItem( UNDERLINE_NONE, SBA_DEF_UNDERLINE )
+    };
+
+    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFONT, SBA_DEF_UNDERLINE, aItemInfos, pDefaults);
+    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );
+    pPool->FreezeIdRanges();
+
+    SfxItemSet* pFontDescriptor = new SfxItemSet(*pPool, aAttrMap);
+
+    // initialize it with the current settings (font/color)
+    ::com::sun::star::awt::FontDescriptor aCurrentFont;
+    xGridModel->getPropertyValue(PROPERTY_FONT) >>= aCurrentFont;
+    BuildItemsFromFont(pFontDescriptor, aCurrentFont);
+    Any aColor = xGridModel->getPropertyValue(PROPERTY_TEXTCOLOR);
+    if (aColor.hasValue())
+        pFontDescriptor->Put(SvxColorItem((Color)::comphelper::getINT32(aColor), SBA_DEF_FONTCOLOR));
+
+    {   // want the dialog to be destroyed before our set
+        SbaSbAttrDlg aDlg(GetParent(), pFontDescriptor, pFormatter, TP_ATTR_CHAR, sal_True);
+        if (aDlg.Execute())
+        {
+            ::com::sun::star::awt::FontDescriptor aNewFont = BuildFontFromItems(aDlg.GetExampleSet(), GetFont());
+            xGridModel->setPropertyValue(PROPERTY_FONT, makeAny(aNewFont));
+
+            SFX_ITEMSET_GET(*aDlg.GetOutputItemSet(), pColor, SvxColorItem, SBA_DEF_FONTCOLOR, sal_True);
+            xGridModel->setPropertyValue(PROPERTY_TEXTCOLOR, makeAny((sal_Int32)pColor->GetValue().GetColor()));
+        }
+    }
+
+    delete pFontDescriptor;
+    delete pPool;
+    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+        delete pDefaults[i];
 }
 
 //---------------------------------------------------------------------------------------
@@ -1364,17 +1402,18 @@ void SbaGridControl::Select()
 
             try
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xColumns(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(xColumns, ::com::sun::star::uno::UNO_QUERY);
+                Reference< XIndexAccess >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
+                Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
                 if (xSelSupplier.is())
                     if (nSelectedColumn != -1)
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xColumn(*(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xColumns->getByIndex(nSelectedColumn).getValue());
-                        xSelSupplier->select(::com::sun::star::uno::makeAny(xColumn));
+                        Reference< XPropertySet >  xColumn;
+                        xColumns->getByIndex(nSelectedColumn) >>= xColumn;
+                        xSelSupplier->select(makeAny(xColumn));
                     }
                     else
                     {
-                        xSelSupplier->select(::com::sun::star::uno::Any());
+                        xSelSupplier->select(Any());
                     }
             }
             catch(Exception&)
@@ -1435,16 +1474,16 @@ void SbaGridControl::ColChanged()
 
 
 //------------------------------------------------------------------------------
-void SbaGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & rCursor, sal_uInt16 nOpts)
+void SbaGridControl::setDataSource(const Reference< ::com::sun::star::sdbc::XRowSet > & rCursor, sal_uInt16 nOpts)
 {
     FmGridControl::setDataSource(rCursor, nOpts);
 
     // for DnD we need a query composer
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   xFormSet = getDataSource();
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(xFormSet, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPropertySet >   xFormSet = getDataSource();
+    Reference< ::com::sun::star::form::XForm >  xForm(xFormSet, UNO_QUERY);
     if (xForm.is() && xFormSet.is() && ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)))
     {   //  (only if the statement isn't native)
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(::dbtools::getConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (xFormSet,::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XSQLQueryComposerFactory >  xFactory(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (xFormSet,UNO_QUERY)), UNO_QUERY);
         if (xFactory.is())
             m_xComposer = xFactory->createQueryComposer();
     }
@@ -1453,26 +1492,24 @@ void SbaGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
+Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xEmptyReturn;
+    Reference< XPropertySet >  xEmptyReturn;
     try
     {
         // first get the name of the column
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-        if (!xCols.is())
-            return xEmptyReturn;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCol(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xCols->getByIndex(nModelPos).getValue(), ::com::sun::star::uno::UNO_QUERY);
-        if (!xCol.is())
-            return xEmptyReturn;
-
-        ::com::sun::star::uno::Any aBoundField = xCol->getPropertyValue(PROPERTY_BOUNDFIELD);
-        if (aBoundField.hasValue())
-            return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)aBoundField.getValue(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+        if (xCols.is())
+        {
+            Reference< XPropertySet >  xCol;
+            xCols->getByIndex(nModelPos) >>= xCol;
+            if (xCol.is())
+                xCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xEmptyReturn;
+        }
     }
     catch(Exception&)
     {
+        OSL_ENSHURE(0,"SbaGridControl::getField Exception occured!");
     }
 
     return xEmptyReturn;
@@ -1485,18 +1522,18 @@ sal_Bool SbaGridControl::IsReadOnlyDB() const
     sal_Bool bDBIsReadOnly = sal_True;
 
     // the db is the implemented by the parent of the grid control's model ...
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xColumns(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
     if (xColumns.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xDataSource(xColumns->getParent(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xConn(::dbtools::getConnection(xDataSource),::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::sdbc::XRowSet >  xDataSource(xColumns->getParent(), UNO_QUERY);
+        Reference< XChild >  xConn(::dbtools::getConnection(xDataSource),UNO_QUERY);
         if (xConn.is())
         {
             // ... and the RO-flag simply is implemented by a property
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDbProps(xConn->getParent(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< XPropertySet >  xDbProps(xConn->getParent(), UNO_QUERY);
             if (xDbProps.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xDbProps->getPropertySetInfo();
+                Reference< XPropertySetInfo >  xInfo = xDbProps->getPropertySetInfo();
                 if (xInfo->hasPropertyByName(PROPERTY_ISREADONLY))
                     bDBIsReadOnly = ::comphelper::getBOOL(xDbProps->getPropertyValue(PROPERTY_ISREADONLY));
             }
@@ -1605,7 +1642,7 @@ void SbaGridControl::Command(const CommandEvent& rEvt)
 // -----------------------------------------------------------------------
 void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource(getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
     // collect some properties from our data source
     sal_Int32               nDataType;
@@ -1629,12 +1666,12 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 //      // the user did not allow us to create an alias
 //      return;
 
-    XubString sObjectKind = (nDataType == ::com::sun::star::sdb::CommandType::TABLE) ? XubString('0') : XubString('1');
+    XubString sObjectKind = (nDataType == CommandType::TABLE) ? XubString('0') : XubString('1');
 
     // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
     // we are able to fake the drag information we are about to create.
     sal_Bool bTryToParse = sal_False;
-    if (nDataType == ::com::sun::star::sdb::CommandType::COMMAND)
+    if (nDataType == CommandType::COMMAND)
     {
         try
         {
@@ -1687,8 +1724,8 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     try
     {
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol;
+        Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+        Reference< XPropertySet >  xAffectedCol;
         xCols->getByIndex(nModelPos) >>= xAffectedCol;
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
@@ -1714,7 +1751,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 // -----------------------------------------------------------------------
 void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource(getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
     // collect some data source properties
     sal_Int32               nDataType;
@@ -1733,8 +1770,8 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
         return;
     }
 
-    sal_Bool bIsStatement = ::com::sun::star::sdb::CommandType::COMMAND == nDataType;
-    XubString sObjectKind = (::com::sun::star::sdb::CommandType::TABLE == nDataType) ? XubString('1') : XubString('0');
+    sal_Bool bIsStatement = CommandType::COMMAND == nDataType;
+    XubString sObjectKind = (CommandType::TABLE == nDataType) ? XubString('1') : XubString('0');
 
 //  XubString sDBAlias = EnsureDBLink(m_aDbEnv, GetFormDatabase(xDataSource), sal_True /* allow ui */, sal_True /* really need an alias */ );
 //  if (!sDBAlias.Len())
@@ -1775,7 +1812,7 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
     aCopyData   += char(11);
     aCopyData   += sObjectKind;
     aCopyData   += char(11);
-    aCopyData   += (::com::sun::star::sdb::CommandType::QUERY == nDataType) && !bHasFilterOrSort
+    aCopyData   += (CommandType::QUERY == nDataType) && !bHasFilterOrSort
         ? XubString()
         : sCompleteStatement;
         // compatibility says : always add the statement, but don't if it is a "pure" query
@@ -1814,7 +1851,7 @@ void SbaGridControl::DoRowDrag(sal_uInt16 nRowPos)
 // -----------------------------------------------------------------------
 void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource(getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoFieldDrag : invalid data source !");
     // collect some properties from our data source
     sal_Int32               nDataType;
@@ -1833,8 +1870,8 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
     }
 
 
-    sal_Bool bIsStatement = ::com::sun::star::sdb::CommandType::COMMAND == nDataType;
-    XubString sObjectKind = (::com::sun::star::sdb::CommandType::TABLE == nDataType) ? XubString('1') : XubString('0');
+    sal_Bool bIsStatement = CommandType::COMMAND == nDataType;
+    XubString sObjectKind = (CommandType::TABLE == nDataType) ? XubString('1') : XubString('0');
 
 //  XubString sDBAlias = EnsureDBLink(m_aDbEnv, GetFormDatabase(xDataSource), sal_True /* allow ui */, sal_True /* really need an alias */ );
 //  if (!sDBAlias.Len())
@@ -1849,14 +1886,14 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
     aCopyData   += sObjectKind;
     aCopyData   += char(11);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xAffectedCol;
+    Reference< XPropertySet >  xAffectedCol;
     // append the control source of the column
     XubString sField;
     try
     {
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xCols(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-        xAffectedCol = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xCols->getByIndex(nModelPos).getValue();
+        Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
+        xCols->getByIndex(nModelPos) >>= xAffectedCol;
         sField = (const sal_Unicode*)::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
     }
     catch(Exception&)
@@ -1870,24 +1907,24 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 
     // append the field contents formatted as input string
     XubString sInputFormatted;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
+    Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
     if (xInfo->hasPropertyByName(PROPERTY_FORMATKEY))       // no chance if the column model doesn't know a format key
     {
         try
         {
             // the number formatter of the connection
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter = getNumberFormatter();
+            Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter = getNumberFormatter();
             DBG_ASSERT(xFormatter.is(), "SbaGridControl::DoFieldDrag : have no number formatter !");
 
             // the field the affected col is bound to
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridFieldDataSupplier >  xFieldData((::com::sun::star::form::XGridPeer*)GetPeer(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::form::XGridFieldDataSupplier >  xFieldData((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
 #ifdef DBG_UTIL
-            ::com::sun::star::uno::Sequence<sal_Bool> aSupportingAny = xFieldData->queryFieldDataType(::getCppuType((const ::com::sun::star::uno::Any*)0));
+            Sequence<sal_Bool> aSupportingAny = xFieldData->queryFieldDataType(::getCppuType((const Any*)0));
             DBG_ASSERT(aSupportingAny.getConstArray()[nColumnPos],
                 "SbaGridControl::DoFieldDrag : the GridFieldDataSupplier should supply UsrAnys !");
 #endif
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType((const ::com::sun::star::uno::Any*)0));
-            ::com::sun::star::uno::Any aFieldValue = aCellContents.getConstArray()[nColumnPos];
+            Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType((const Any*)0));
+            Any aFieldValue = aCellContents.getConstArray()[nColumnPos];
 
             // the format key of the column (we don't use the one supplied by the bound field because it may be out-of-date :
             // modifying a column format is propagated only to the column's model, not to the database field)
@@ -1895,11 +1932,19 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 
             // check if the key indicates a text format
             sal_Int16 nType = ::com::sun::star::util::NumberFormat::UNDEFINED;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xFormatter->getNumberFormatsSupplier()->getNumberFormats();
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormat = xFormats->getByKey(nKey);
+            Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xFormatter->getNumberFormatsSupplier()->getNumberFormats();
+            Reference< XPropertySet >  xFormat = xFormats->getByKey(nKey);
             if (xFormat.is())
             {
-                try { nType = ::comphelper::getINT16(xFormat->getPropertyValue(PROPERTY_TYPE)); } catch(Exception&) { } ;
+                try
+                {
+
+                    sal_Bool bCheck = xFormat->getPropertyValue(PROPERTY_TYPE) >>= nType;
+                    OSL_ENSHURE(bCheck,"Cann't get the numberformat property TYPE!");
+                }
+                catch(Exception&)
+                {
+                }
             }
 
             // if it is a text format we can ask for the string
@@ -1907,7 +1952,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
                 sInputFormatted = Any2String(aFieldValue);
             else
             {   // else we have to make one distinction more : a currency field always needs an output string
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFieldSet;
+                Reference< XPropertySet >  xFieldSet;
                 ::cppu::extractInterface(xFieldSet, xAffectedCol->getPropertyValue(PROPERTY_BOUNDFIELD));
                 if (xFieldSet.is())
                 {
@@ -1939,11 +1984,11 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
     // and supply - as an additional pure-text format - the cell contents
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XGridFieldDataSupplier >  xFieldData((::com::sun::star::form::XGridPeer*)GetPeer(), ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(::getCppuType((const ::rtl::OUString*)0));
+        Reference< ::com::sun::star::form::XGridFieldDataSupplier >  xFieldData((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
+        Sequence<sal_Bool> aSupportingText = xFieldData->queryFieldDataType(::getCppuType((const ::rtl::OUString*)0));
         if (aSupportingText.getConstArray()[nColumnPos])
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType((const ::rtl::OUString*)0));
+            Sequence< Any> aCellContents = xFieldData->queryFieldData(nRowPos, ::getCppuType((const ::rtl::OUString*)0));
             ::rtl::OUString aText = ::comphelper::getString(aCellContents.getConstArray()[nColumnPos]);
             DragServer::CopyString(aText);
         }
@@ -1966,7 +2011,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_uInt16 nRowPos)
 sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
 {
     // we need a valid connection
-    if (!::dbtools::getConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),::com::sun::star::uno::UNO_QUERY)).is())
+    if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),UNO_QUERY)).is())
         return sal_False;
 
     sal_Bool bAllow = sal_False;
@@ -2022,7 +2067,7 @@ sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
             // (when leaving the modified cell a error may occur - this is deadly while dragging)
             break;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField = getField(GetModelColumnPos(nCol));
+        Reference< XPropertySet >  xField = getField(GetModelColumnPos(nCol));
         if (!xField.is())
             // the column is not valid bound (for instance a binary field)
             break;
@@ -2040,21 +2085,23 @@ sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
 
 
         // assume that text can be dropped into a field if the column has a ::com::sun::star::awt::XTextComponent interface
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xColumnControls((::com::sun::star::form::XGridPeer*)GetPeer(), ::com::sun::star::uno::UNO_QUERY);
-        if (!xColumnControls.is())
-            break;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >  xColControl(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xColumnControls->getByIndex(GetViewColumnPos(nCol)).getValue(), ::com::sun::star::uno::UNO_QUERY);
-        if (!xColControl.is())
-            break;
+        Reference< XIndexAccess >  xColumnControls((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
+        if (xColumnControls.is())
+        {
+            Reference< ::com::sun::star::awt::XTextComponent >  xColControl;
+            xColumnControls->getByIndex(GetViewColumnPos(nCol)) >>= xColControl;
+            if (xColControl.is())
+            {
+                m_bActivatingForDrop = sal_True;
+                GoToRowColumnId(nRow, nCol);
+                m_bActivatingForDrop = sal_False;
 
-        m_bActivatingForDrop = sal_True;
-        GoToRowColumnId(nRow, nCol);
-        m_bActivatingForDrop = sal_False;
+                bAllow = sal_True;
 
-        bAllow = sal_True;
-
-        ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
-        // see below. as we don't have a m_bDraggingOwnText we have to be more restrictive. text can't be moved into a grid control.
+                ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
+                // see below. as we don't have a m_bDraggingOwnText we have to be more restrictive. text can't be moved into a grid control.
+            }
+        }
 
     } while (sal_False);
 
@@ -2065,12 +2112,12 @@ sal_Bool SbaGridControl::QueryDrop(const BrowserDropEvent& rEvt)
 sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
 {
     // we need some properties of our data source
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource = getDataSource();
+    Reference< XPropertySet >  xDataSource = getDataSource();
     if (!xDataSource.is())
         return sal_False;
 
     // we need a valid connection
-    if (!::dbtools::getConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (xDataSource,::com::sun::star::uno::UNO_QUERY)).is())
+    if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (xDataSource,UNO_QUERY)).is())
         return sal_False;
 
     //////////////////////////////////////////////////////////////////////
@@ -2201,7 +2248,7 @@ sal_Bool SbaGridControl::Drop(const BrowserDropEvent& rEvt)
 void SbaGridControl::refresh()
 {
     // aktualisieren
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xLoadable(getDataSource(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::form::XLoadable >  xLoadable(getDataSource(), UNO_QUERY);
     DBG_ASSERT(xLoadable.is(), "SbaGridControl::Drop : invalid data source !");
     if (xLoadable.is())
     {
@@ -2211,14 +2258,14 @@ void SbaGridControl::refresh()
 }
 
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SbaGridControl::getDataSource() const
+Reference< XPropertySet >  SbaGridControl::getDataSource() const
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xReturn;
+    Reference< XPropertySet >  xReturn;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xColumns(GetPeer()->getColumns(), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xDataSource;
+    Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XPropertySet >  xDataSource;
     if (xColumns.is())
-        xReturn = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xColumns->getParent(), ::com::sun::star::uno::UNO_QUERY);
+        xReturn = Reference< XPropertySet > (xColumns->getParent(), UNO_QUERY);
 
     return xReturn;
 }
@@ -2230,70 +2277,70 @@ void SbaGridControl::refresh()
 {
     Font aReturn(rBase);
 
-//  const SfxPoolItem* pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_FONT );
-//  const SvxFontItem* pFontItem = (SvxFontItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_FONTWEIGHT );
-//  const SvxWeightItem* pWeightItem = (SvxWeightItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_FONTHEIGHT );
-//  const SvxFontHeightItem* pFontHeightItem = (SvxFontHeightItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_POSTURE );
-//  const SvxPostureItem* pFontItalicItem = (SvxPostureItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_SHADOWED );
-//  const SvxShadowedItem* pFontShadowItem = (SvxShadowedItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_CONTOUR );
-//  const SvxContourItem* pFontContourItem = (SvxContourItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_UNDERLINE );
-//  const SvxUnderlineItem* pFontUnderlineItem = (SvxUnderlineItem*)pAnyItem;
-//
-//  pAnyItem = &pAttr->Get( SBA_DEF_CROSSEDOUT );
-//  const SvxCrossedOutItem* pFontCrossedOutItem = (SvxCrossedOutItem*)pAnyItem;
-//
-//  // build the returned font
-//  aReturn.SetFamily( pFontItem->GetFamily() );
-//  aReturn.SetName( pFontItem->GetFamilyName() );
-//  aReturn.SetStyleName( pFontItem->GetStyleName() );
-//  aReturn.SetCharSet( pFontItem->GetCharSet() );
-//
-//  aReturn.SetWeight( pWeightItem->GetWeight() );
-//  aReturn.SetItalic( pFontItalicItem->GetPosture() );
-//  aReturn.SetUnderline( pFontUnderlineItem->GetUnderline() );
-//
-//  aReturn.SetShadow( pFontShadowItem->GetValue() );
-//  aReturn.SetOutline( pFontContourItem->GetValue() );
-//  aReturn.SetStrikeout( pFontCrossedOutItem->GetStrikeout() );
-//
-//  sal_uInt32 nHeight = pFontHeightItem->GetHeight();
-//
-//  Size aSize(Size(0, nHeight));
-//  aSize = OutputDevice::LogicToLogic(aSize, MAP_TWIP, MAP_POINT);
-//  aReturn.SetSize(aSize);
-//
-//  // now create a font descriptor
+    const SfxPoolItem* pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_FONT );
+    const SvxFontItem* pFontItem = (SvxFontItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_FONTWEIGHT );
+    const SvxWeightItem* pWeightItem = (SvxWeightItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_FONTHEIGHT );
+    const SvxFontHeightItem* pFontHeightItem = (SvxFontHeightItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_POSTURE );
+    const SvxPostureItem* pFontItalicItem = (SvxPostureItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_SHADOWED );
+    const SvxShadowedItem* pFontShadowItem = (SvxShadowedItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_CONTOUR );
+    const SvxContourItem* pFontContourItem = (SvxContourItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_UNDERLINE );
+    const SvxUnderlineItem* pFontUnderlineItem = (SvxUnderlineItem*)pAnyItem;
+
+    pAnyItem = &pAttr->Get( SBA_DEF_CROSSEDOUT );
+    const SvxCrossedOutItem* pFontCrossedOutItem = (SvxCrossedOutItem*)pAnyItem;
+
+    // build the returned font
+    aReturn.SetFamily( pFontItem->GetFamily() );
+    aReturn.SetName( pFontItem->GetFamilyName() );
+    aReturn.SetStyleName( pFontItem->GetStyleName() );
+    aReturn.SetCharSet( pFontItem->GetCharSet() );
+
+    aReturn.SetWeight( pWeightItem->GetWeight() );
+    aReturn.SetItalic( pFontItalicItem->GetPosture() );
+    aReturn.SetUnderline( pFontUnderlineItem->GetUnderline() );
+
+    aReturn.SetShadow( pFontShadowItem->GetValue() );
+    aReturn.SetOutline( pFontContourItem->GetValue() );
+    aReturn.SetStrikeout( pFontCrossedOutItem->GetStrikeout() );
+
+    sal_uInt32 nHeight = pFontHeightItem->GetHeight();
+
+    Size aSize(Size(0, nHeight));
+    aSize = OutputDevice::LogicToLogic(aSize, MAP_TWIP, MAP_POINT);
+    aReturn.SetSize(aSize);
+
+    // now create a font descriptor
     ::com::sun::star::awt::FontDescriptor aRealReturn;
-//  aRealReturn.Name = aReturn.GetName();
-//  aRealReturn.StyleName = aReturn.GetStyleName();
-//  aRealReturn.Height = aReturn.GetSize().Height();
-//  aRealReturn.Width = aReturn.GetSize().Width();
-//  aRealReturn.Family = aReturn.GetFamily();
-//  aRealReturn.CharSet = aReturn.GetCharSet();
-//  aRealReturn.Pitch = aReturn.GetPitch();
-//  aRealReturn.CharacterWidth = VCLUnoHelper::ConvertFontWidth(aReturn.GetWidthType());
-//  aRealReturn.Weight= VCLUnoHelper::ConvertFontWeight(aReturn.GetWeight());
-//  aRealReturn.Slant = (::com::sun::star::awt::FontSlant)aReturn.GetItalic();
-//  aRealReturn.Underline = aReturn.GetUnderline();
-//  aRealReturn.Strikeout = aReturn.GetStrikeout();
-//  aRealReturn.Orientation = aReturn.GetOrientation();
-//  aRealReturn.Kerning = aReturn.IsKerning();
-//  aRealReturn.WordLineMode = aReturn.IsWordLineMode();
-//  aRealReturn.Type = 0;
+    aRealReturn.Name = aReturn.GetName();
+    aRealReturn.StyleName = aReturn.GetStyleName();
+    aRealReturn.Height = aReturn.GetSize().Height();
+    aRealReturn.Width = aReturn.GetSize().Width();
+    aRealReturn.Family = aReturn.GetFamily();
+    aRealReturn.CharSet = aReturn.GetCharSet();
+    aRealReturn.Pitch = aReturn.GetPitch();
+    aRealReturn.CharacterWidth = VCLUnoHelper::ConvertFontWidth(aReturn.GetWidthType());
+    aRealReturn.Weight= VCLUnoHelper::ConvertFontWeight(aReturn.GetWeight());
+    aRealReturn.Slant = (::com::sun::star::awt::FontSlant)aReturn.GetItalic();
+    aRealReturn.Underline = aReturn.GetUnderline();
+    aRealReturn.Strikeout = aReturn.GetStrikeout();
+    aRealReturn.Orientation = aReturn.GetOrientation();
+    aRealReturn.Kerning = aReturn.IsKerning();
+    aRealReturn.WordLineMode = aReturn.IsWordLineMode();
+    aRealReturn.Type = 0;
     return aRealReturn;
 }
 
@@ -2303,18 +2350,18 @@ void BuildItemsFromFont(SfxItemSet* pAttr, const ::com::sun::star::awt::FontDesc
     // the following items are not aupported by the FontDescriptor structure
 //  pAttr->Put(SvxContourItem(rFont.IsOutline(), SBA_DEF_CONTOUR));
 //  pAttr->Put(SvxShadowedItem(rFont.IsShadow(), SBA_DEF_SHADOWED));
+//
+    pAttr->Put(SvxWeightItem(VCLUnoHelper::ConvertFontWeight(rFont.Weight), SBA_DEF_FONTWEIGHT));
+    pAttr->Put(SvxPostureItem((FontItalic)rFont.Slant, SBA_DEF_POSTURE));
+    pAttr->Put(SvxUnderlineItem((FontUnderline)rFont.Underline, SBA_DEF_UNDERLINE));
+    pAttr->Put(SvxCrossedOutItem((FontStrikeout)rFont.Strikeout, SBA_DEF_CROSSEDOUT));
 
-//  pAttr->Put(SvxWeightItem(VCLUnoHelper::ConvertFontWeight(rFont.Weight), SBA_DEF_FONTWEIGHT));
-//  pAttr->Put(SvxPostureItem((FontItalic)rFont.Slant, SBA_DEF_POSTURE));
-//  pAttr->Put(SvxUnderlineItem((FontUnderline)rFont.Underline, SBA_DEF_UNDERLINE));
-//  pAttr->Put(SvxCrossedOutItem((FontStrikeout)rFont.Strikeout, SBA_DEF_CROSSEDOUT));
-//
-//  Size aSize(0, rFont.Height);
-//  aSize = OutputDevice::LogicToLogic(aSize, MAP_POINT, MAP_TWIP);
-//  pAttr->Put(SvxFontHeightItem(aSize.Height(), 100, SBA_DEF_FONTHEIGHT));
-//
-//  pAttr->Put(SvxFontItem((FontFamily)rFont.Family, rFont.Name, rFont.StyleName,
-//      PITCH_DONTKNOW, (CharSet)rFont.CharSet, SBA_DEF_FONT));
+    Size aSize(0, rFont.Height);
+    aSize = OutputDevice::LogicToLogic(aSize, MAP_POINT, MAP_TWIP);
+    pAttr->Put(SvxFontHeightItem(aSize.Height(), 100, SBA_DEF_FONTHEIGHT));
+
+    pAttr->Put(SvxFontItem((FontFamily)rFont.Family, rFont.Name, rFont.StyleName,
+        PITCH_DONTKNOW, (CharSet)rFont.CharSet, SBA_DEF_FONT));
 }
 // -------------------------------------------------------------------------
 
