@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:08:03 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,16 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
+#endif
+
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -97,6 +107,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
@@ -154,13 +165,20 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
+    if(!aName.getLength())
+        ::dbtools::FunctionSequenceException(*this);
 
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema;
 
-    aSql = aSql + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
-                + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote
+    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sSchema;
+    if(sSchema.getLength())
+        aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
+    else
+        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
+
+    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
                 + ::rtl::OUString::createFromAscii(" (");
 
     // columns
@@ -169,9 +187,13 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     Reference< XPropertySet > xColProp;
 
     Any aTypeName;
-    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+    sal_Int32 nCount = xColumns->getCount();
+    if(!nCount)
+        ::dbtools::FunctionSequenceException(*this);
+
+    for(sal_Int32 i=0;i<nCount;++i)
     {
-        if(xColumns->getByIndex(i) >>= xColProp)
+        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
         {
 
             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
@@ -216,7 +238,6 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
             aSql = aSql + ::rtl::OUString::createFromAscii(",");
         }
     }
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
     // keys
 
@@ -228,14 +249,14 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
         sal_Bool bPKey = sal_False;
         for(sal_Int32 i=0;i<xKeys->getCount();++i)
         {
-            if(xColumns->getByIndex(i) >>= xColProp)
+            if(::cppu::extractInterface(xColProp,xKeys->getByIndex(i)) && xColProp.is())
             {
 
                 sal_Int32 nKeyType      = getINT32(xColProp->getPropertyValue(PROPERTY_TYPE));
 
                 if(nKeyType == KeyType::PRIMARY)
                 {
-                    if(!bPKey)
+                    if(bPKey)
                         throw SQLException();
 
                     bPKey = sal_True;
@@ -247,7 +268,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
                     aSql = aSql + ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
-                        if(xColumns->getByIndex(i) >>= xColProp)
+                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
                             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
                                         +   ::rtl::OUString::createFromAscii(",");
                     }
@@ -264,7 +285,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
                     aSql = aSql + ::rtl::OUString::createFromAscii(" UNIQUE (");
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
-                        if(xColumns->getByIndex(i) >>= xColProp)
+                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
                             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
@@ -292,7 +313,7 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
                     for(sal_Int32 i=0;i<xColumns->getCount();++i)
                     {
-                        if(xColumns->getByIndex(i) >>= xColProp)
+                        if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
                             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
                                         + ::rtl::OUString::createFromAscii(",");
                     }
@@ -320,6 +341,11 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
             }
         }
     }
+
+    if(aSql.lastIndexOf(',') == (aSql.getLength()-1))
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+    else
+        aSql += ::rtl::OUString::createFromAscii(")");
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
@@ -360,15 +386,18 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
 
     for(sal_Int32 i=0;i<xColumns->getCount();++i)
     {
-        xColumns->getByIndex(i) >>= xColProp;
-        ::rtl::OUString aDescription = getString(xColProp->getPropertyValue(PROPERTY_DESCRIPTION));
-        if(aDescription.getLength())
+        ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
+        if(xColProp.is())
         {
-            ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
-                                        + ::rtl::OUString::createFromAscii(" '")
-                                        + aDescription
-                                        + ::rtl::OUString::createFromAscii("'");
-            xStmt->execute(aSql);
+            ::rtl::OUString aDescription = getString(xColProp->getPropertyValue(PROPERTY_DESCRIPTION));
+            if(aDescription.getLength())
+            {
+                ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+                                            + ::rtl::OUString::createFromAscii(" '")
+                                            + aDescription
+                                            + ::rtl::OUString::createFromAscii("'");
+                xStmt->execute(aSql);
+            }
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 08:25:06 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -134,14 +138,17 @@ OAdabasTable::OAdabasTable( OAdabasConnection* _pConnection,
 void OAdabasTable::refreshColumns()
 {
     ::std::vector< ::rtl::OUString> aVector;
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                    m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
-
-    if(xResult.is())
+    if(!isNew())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            aVector.push_back(xRow->getString(4));
+        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
+                                                        m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
+
+        if(xResult.is())
+        {
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            while(xResult->next())
+                aVector.push_back(xRow->getString(4));
+        }
     }
 
     if(m_pColumns)
@@ -180,8 +187,11 @@ void OAdabasTable::refreshKeys()
 {
     ::std::vector< ::rtl::OUString> aVector;
 
-    refreshPrimaryKeys(aVector);
-    refreshForgeinKeys(aVector);
+    if(!isNew())
+    {
+        refreshPrimaryKeys(aVector);
+        refreshForgeinKeys(aVector);
+    }
     if(m_pKeys)
         delete m_pKeys;
     m_pKeys     = new OKeys(this,m_aMutex,aVector);
@@ -190,22 +200,25 @@ void OAdabasTable::refreshKeys()
 void OAdabasTable::refreshIndexes()
 {
     ::std::vector< ::rtl::OUString> aVector;
-    // fill indexes
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getIndexInfo(Any(),
-    m_SchemaName,m_Name,sal_False,sal_False);
-
-    if(xResult.is())
+    if(!isNew())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
-        while(xResult->next())
+        // fill indexes
+        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getIndexInfo(Any(),
+        m_SchemaName,m_Name,sal_False,sal_False);
+
+        if(xResult.is())
         {
-            aName = xRow->getString(5);
-            if(aName.getLength())
-                aName += aDot;
-            aName += xRow->getString(6);
-            if(aName.getLength())
-                aVector.push_back(aName);
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+            while(xResult->next())
+            {
+                aName = xRow->getString(5);
+                if(aName.getLength())
+                    aName += aDot;
+                aName += xRow->getString(6);
+                if(aName.getLength())
+                    aVector.push_back(aName);
+            }
         }
     }
 
@@ -253,7 +266,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
         Reference< XPropertySet > xProp;
     for(sal_Int32 i=0;i<nCount;++i)
     {
-        m_pColumns->getByIndex(i) >>= xProp;
+        ::cppu::extractInterface(xProp,m_pColumns->getByIndex(i));
         aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote
                 + getString(xProp->getPropertyValue(PROPERTY_TYPENAME));
 
@@ -295,7 +308,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
 
     for(i=0;i<nCount;++i)
     {
-        m_pKeys->getByIndex(i) >>= xProp;
+        ::cppu::extractInterface(xProp,m_pKeys->getByIndex(i));
                 Reference< XColumnsSupplier > xKey(xProp,UNO_QUERY);
                 Reference< ::com::sun::star::container::XIndexAccess > xCols(xKey->getColumns(),UNO_QUERY);
         switch(getINT32(xProp->getPropertyValue(PROPERTY_TYPE)))
@@ -307,7 +320,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
                     aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY( ");
                 for(sal_Int32 i=0;i<nCols;++i)
                 {
-                    xCols->getByIndex(i) >>= xProp;
+                    ::cppu::extractInterface(xProp,xCols->getByIndex(i));
                     aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
                     aSql += aComma;
                 }
@@ -321,7 +334,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
                     aSql += ::rtl::OUString::createFromAscii(" UNIQUE( ");
                 for(sal_Int32 i=0;i<nCols;++i)
                 {
-                    xCols->getByIndex(i) >>= xProp;
+                    ::cppu::extractInterface(xProp,xCols->getByIndex(i));
                     aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
                     aSql += aComma;
                 }
@@ -345,7 +358,7 @@ sal_Bool OAdabasTable::create() throw(SQLException, RuntimeException)
 
                     for(sal_Int32 i=0;i<nCols;++i)
                     {
-                        xCols->getByIndex(i) >>= xProp;
+                        ::cppu::extractInterface(xProp,xCols->getByIndex(i));
                         aSql += aQuote + getString(xProp->getPropertyValue(PROPERTY_NAME)) + aQuote;
                         aSql += aComma;
                     }
@@ -498,7 +511,7 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
                 throw DisposedException();
 
         Reference< XPropertySet > xOld;
-    if(m_pColumns->getByIndex(index) >>= xOld)
+    if(::cppu::extractInterface(xOld,m_pColumns->getByIndex(index)) && xOld.is())
         alterColumnByName(getString(xOld->getPropertyValue(PROPERTY_NAME)),descriptor);
 }
 
