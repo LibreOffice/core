@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:10:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ FloatingWindow RID_TBXCONTROLS
         Text[ czech ] = "Ovládací prvky";
         Text[ hebrew ] = "‮כפתורי שליטה‬";
         Text[ hindi ] = "नियंत्रण";
+        Text[ slovak ] = "Ovládacie prvky";
     };
     Text[ chinese_simplified ] = "控制";
     Text[ russian ] = "�������� ����������";
@@ -126,6 +127,7 @@ FloatingWindow RID_TBXCONTROLS
     Text[ czech ] = "Ovládací prvky";
     Text[ hebrew ] = "‮כפתורי שליטה‬";
     Text[ hindi ] = "नियंत्रण";
+    Text[ slovak ] = "Ovládacie prvky";
 };
 ToolBox RID_TOOLBOX
 {
@@ -167,6 +169,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Tlačítko";
             Text[ hebrew ] = "Schaltfläche";
             Text[ hindi ] = "आज्ञा बटन";
+            Text[ slovak ] = "Klávesa";
         };
         ToolBoxItem
         {
@@ -201,6 +204,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Zaškrtávací políčko";
             Text[ hebrew ] = "‮תיבת סימון‬";
             Text[ hindi ] = "चेक बॉक्स";
+            Text[ slovak ] = "Zaškrtávacie políčko";
         };
         ToolBoxItem
         {
@@ -235,6 +239,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Popisek";
             Text[ hebrew ] = "Beschriftungsfeld";
             Text[ hindi ] = "लेबिल";
+            Text[ slovak ] = "Popisné pole";
         };
         ToolBoxItem
         {
@@ -269,6 +274,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Seznam";
             Text[ hebrew ] = "‮תיבת רשימה‬";
             Text[ hindi ] = "सूची बॉक्स";
+            Text[ slovak ] = "Pole zoznamu";
         };
         ToolBoxItem
         {
@@ -303,6 +309,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Vodorovný posuvník";
             Text[ hebrew ] = "Horizontale Bildlaufleiste";
             Text[ hindi ] = "समतल स्क्रॉल पट्टी";
+            Text[ slovak ] = "Vodorovný ukrývací panel";
         };
         ToolBoxItem
         {
@@ -337,6 +344,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Seskupení";
             Text[ hebrew ] = "‮תיבת קבוצה‬";
             Text[ hindi ] = "फ्रेम नियंत्रण";
+            Text[ slovak ] = "Zoskupenie";
         };
         ToolBoxItem
         {
@@ -369,6 +377,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Vodorovná čára";
             Text[ hebrew ] = "‮קו אופקי‬";
             Text[ hindi ] = "Horizontal Line";
+            Text[ slovak ] = "Vodorovná čiara";
         };
         ToolBoxItem
         {
@@ -401,6 +410,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Pole pro datum";
             Text[ hebrew ] = "‮שדה תאריך‬";
             Text[ hindi ] = "Date Field";
+            Text[ slovak ] = "Pole pre dátum";
         };
         ToolBoxItem
         {
@@ -433,6 +443,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Číselné pole";
             Text[ hebrew ] = "Numerisches Feld";
             Text[ hindi ] = "Numeric Field";
+            Text[ slovak ] = "Číselné pole";
         };
         ToolBoxItem
         {
@@ -465,6 +476,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Formátované pole";
             Text[ hebrew ] = "‮שדה מעוצב‬";
             Text[ hindi ] = "Formatted Field";
+            Text[ slovak ] = "Formátované pole";
         };
         ToolBoxItem
         {
@@ -497,6 +509,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Výběr souboru";
             Text[ hebrew ] = "‮בחירת קובץ‬";
             Text[ hindi ] = "File Selection";
+            Text[ slovak ] = "Výber súboru";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -531,6 +544,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Vlastnosti";
             Text[ hebrew ] = "‮מאפינים‬";
             Text[ hindi ] = "Properties";
+            Text[ slovak ] = "Vlastnosti";
         };
         ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
         ToolBoxItem
@@ -564,6 +578,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Ovládací pole obrázku";
             Text[ hebrew ] = "Grafisches Kontrollfeld";
             Text[ hindi ] = "Image Control";
+            Text[ slovak ] = "Ovládacie pole obrázku";
         };
         ToolBoxItem
         {
@@ -598,6 +613,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Tlačítko volby";
             Text[ hebrew ] = "‮כפתור בחירה‬";
             Text[ hindi ] = "विकल्प बटन";
+            Text[ slovak ] = "Tlačidlo nastavení";
         };
         ToolBoxItem
         {
@@ -632,6 +648,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Textové pole";
             Text[ hebrew ] = "‮תיבת טקסט‬";
             Text[ hindi ] = "टेक्स्ट् बॉक्स";
+            Text[ slovak ] = "Textové pole";
         };
         ToolBoxItem
         {
@@ -666,6 +683,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Kombinované pole";
             Text[ hebrew ] = "Kombinationsfeld";
             Text[ hindi ] = "कॉम्बो बॉक्स";
+            Text[ slovak ] = "Combo pole";
         };
         ToolBoxItem
         {
@@ -700,6 +718,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Svislý posuvník";
             Text[ hebrew ] = "‮פס גלילה אנכי‬";
             Text[ hindi ] = "लंबरूप स्क्रॉल पट्टी";
+            Text[ slovak ] = "Zvislý ukrývací panel";
         };
         ToolBoxItem
         {
@@ -732,6 +751,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Panel průběhu";
             Text[ hebrew ] = "Fortschrittsbalken";
             Text[ hindi ] = "Progress Bar";
+            Text[ slovak ] = "Panel priebehu";
         };
         ToolBoxItem
         {
@@ -764,6 +784,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Svislá čára";
             Text[ hebrew ] = "Vertikale Linie";
             Text[ hindi ] = "Vertical Line";
+            Text[ slovak ] = "Zvislá čiara";
         };
         ToolBoxItem
         {
@@ -796,6 +817,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Pole pro čas";
             Text[ hebrew ] = "‮שדה שעה‬";
             Text[ hindi ] = "Time Field";
+            Text[ slovak ] = "Časové pole";
         };
         ToolBoxItem
         {
@@ -828,6 +850,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Měnové pole";
             Text[ hebrew ] = "‮שדה מטבע‬";
             Text[ hindi ] = "Currency Field";
+            Text[ slovak ] = "Menové pole";
         };
         ToolBoxItem
         {
@@ -860,6 +883,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Pole vzorku";
             Text[ hebrew ] = "‮שדה תבנית‬";
             Text[ hindi ] = "Pattern Field";
+            Text[ slovak ] = "Pole vzorky";
         };
         ToolBoxItem
         {
@@ -894,6 +918,7 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Vybrat";
             Text[ hebrew ] = "‮בחירה‬";
             Text[ hindi ] = "Select";
+            Text[ slovak ] = "Vybrať";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -928,9 +953,12 @@ ToolBox RID_TOOLBOX
             Text[ czech ] = "Aktivovat testovací režim";
             Text[ hebrew ] = "Testmodus aktivieren";
             Text[ hindi ] = "जाँच प्रकार संचालित करो";
+            Text[ slovak ] = "Aktivovať testovací režim";
         };
     };
 };
+
+
 
 
 
