@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,15 @@
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
+#ifndef _SV_SALOBJ_HXX
+#include <salobj.hxx>
+#endif
 
 // -----------------
 // - SalObjectData -
 // -----------------
 
-class SalObjectData
+class WinSalObject : public SalObject
 {
 public:
     HWND                    mhWnd;                  // Window handle
@@ -84,9 +87,24 @@ public:
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
     BOOL                    mbFirstClipRect;        // Flag for first cliprect to insert
-    SalObject*              mpNextObject;           // pointer to next object
-    void*                   mpInst;                 // instance handle for callback
-    SALOBJECTPROC           mpProc;                 // callback proc
+    WinSalObject*               mpNextObject;           // pointer to next object
+
+
+    WinSalObject();
+    virtual ~WinSalObject();
+
+    virtual void                    ResetClipRegion();
+    virtual USHORT                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    EndSetClipRegion();
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
+    virtual void                    Show( BOOL bVisible );
+    virtual void                    Enable( BOOL nEnable );
+    virtual void                    GrabFocus();
+    virtual void                    SetBackground();
+    virtual void                    SetBackground( SalColor nSalColor );
+    virtual const SystemEnvData*    GetSystemData() const;
 };
 
 #endif // _SV_SALOBJ_H
