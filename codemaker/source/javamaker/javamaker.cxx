@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javamaker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:20:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,60 @@
 
 using namespace rtl;
 
+sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
+                         TypeManager const & typeMgr,
+                         codemaker::GeneratedTypeSet & generated,
+                         JavaOptions* pOptions,
+                         sal_Bool bFullScope)
+    throw( CannotDumpException )
+{
+    OString typeName = typeMgr.getTypeName(rTypeKey);
+
+    if (!produceType(rTypeKey, bIsExtraType, typeMgr, generated, pOptions))
+    {
+        fprintf(stderr, "%s ERROR: %s\n",
+                pOptions->getProgramName().getStr(),
+                OString("cannot dump Type '" + typeName + "'").getStr());
+        exit(99);
+    }
+
+    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList::const_iterator iter = typeKeys.begin();
+    RegistryKey key, subKey;
+    RegistryKeyArray subKeys;
+
+    while (iter != typeKeys.end())
+    {
+        key = (*iter).first;
+
+        if (!(*iter).second  && !key.openSubKeys(OUString(), subKeys))
+        {
+            for (sal_uInt32 i = 0; i < subKeys.getLength(); i++)
+            {
+                subKey = subKeys.getElement(i);
+                if (bFullScope)
+                {
+                    if (!produceAllTypes(
+                            subKey, (*iter).second,
+                            typeMgr, generated, pOptions, sal_True))
+                        return sal_False;
+                } else
+                {
+                    if (!produceType(subKey, (*iter).second,
+                                     typeMgr, generated, pOptions))
+                        return sal_False;
+                }
+            }
+        }
+
+        ++iter;
+    }
+
+    return sal_True;
+}
+
 sal_Bool produceAllTypes(const OString& typeName,
-                         TypeManager& typeMgr,
+                         TypeManager const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,
                          JavaOptions* pOptions,
                          sal_Bool bFullScope)
@@ -88,32 +140,35 @@ sal_Bool produceAllTypes(const OString& typeName,
         exit(99);
     }
 
-    RegistryKey typeKey = typeMgr.getTypeKey(typeName);
-    RegistryKeyNames subKeys;
+    RegistryKeyList typeKeys = typeMgr.getTypeKeys(typeName);
+    RegistryKeyList::const_iterator iter = typeKeys.begin();
+    RegistryKey key, subKey;
+    RegistryKeyArray subKeys;
 
-    if (typeKey.getKeyNames(OUString(), subKeys))
-        return sal_False;
-
-    OString tmpName;
-    for (sal_uInt32 i=0; i < subKeys.getLength(); i++)
+    while (iter != typeKeys.end())
     {
-        tmpName = OUStringToOString(subKeys.getElement(i), RTL_TEXTENCODING_UTF8);
-
-        if (pOptions->isValid("-B"))
-            tmpName = tmpName.copy(tmpName.indexOf('/', 1) + 1);
-        else
-            tmpName = tmpName.copy(1);
-
-        if (bFullScope)
+        key = (*iter).first;
+        if (!(*iter).second  && !key.openSubKeys(OUString(), subKeys))
         {
-            if (!produceAllTypes(
-                    tmpName, typeMgr, generated, pOptions, sal_True))
-                return sal_False;
-        } else
-        {
-            if (!produceType(tmpName, typeMgr, generated, pOptions))
-                return sal_False;
+            for (sal_uInt32 i = 0; i < subKeys.getLength(); i++)
+            {
+                subKey = subKeys.getElement(i);
+                if (bFullScope)
+                {
+                    if (!produceAllTypes(
+                            subKey, (*iter).second,
+                            typeMgr, generated, pOptions, sal_True))
+                        return sal_False;
+                } else
+                {
+                    if (!produceType(subKey, (*iter).second,
+                                     typeMgr, generated, pOptions))
+                        return sal_False;
+                }
+            }
         }
+
+        ++iter;
     }
 
     return sal_True;
@@ -167,7 +222,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 tmpName = typeName.copy( nPos != -1 ? nPos+1 : 0 );
                 if (tmpName == "*")
                 {
-                    // produce this type and his scope, but the scope is not recursively  generated.
+                    // produce this type and his scope.
                     if (typeName.equals("*"))
                     {
                         tmpName = "/";
@@ -179,8 +234,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                         else
                             tmpName.replace('.', '/');
                     }
+                    // related to task #116780# the scope is recursively
+                    // generated.  bFullScope = true
                     ret = produceAllTypes(
-                        tmpName, typeMgr, generated, &options, sal_False);
+                        tmpName, typeMgr, generated, &options, sal_True);
                 } else
                 {
                     // produce only this type
