@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2001-12-06 14:18:05 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:13:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ PRJNAME=goodies
 TARGET=ipsd
 DEPTARGET=vipsd
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=eeng_pch
-PROJECTPCHSOURCE=eeng_pch
-
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -87,7 +82,7 @@ SLOFILES =	$(SLO)$/ipsd.obj
 
 SHL1TARGET= 	ipd$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	ipsd
-SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(CPPULIB)
+SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB)
 SHL1DEPN=		$(LB)$/ipsd.lib
 SHL1LIBS=		$(SLB)$/ipsd.lib
 
@@ -95,21 +90,11 @@ SHL1LIBS=		$(SLB)$/ipsd.lib
 SHL1OBJS=		$(SLO)$/ipsd.obj
 .ENDIF
 
+SHL1VERSIONMAP=exports.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1BASE=0x1c000000
+
+DEF1NAME=$(SHL1TARGET)
+
+# ==========================================================================
 
 .INCLUDE :	target.mk
-
-# THB: exports list goodies checked for 6.0 Final 6.12.2001
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo -------------------------------------------
-        @echo DEF-File erstellen
-        @echo LIBRARY	  $(DLLNAME)				   >$@
-        @echo DESCRIPTION 'Svx RTF DLL'                >>$@
-        @echo DATA				  READ WRITE NONSHARED >>$@
-        @echo EXPORTS								   >>$@
-        @echo	 GraphicImport						  >>$@
-
-.ENDIF
