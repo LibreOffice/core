@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-03 17:46:38 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1568,8 +1568,8 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
     // ViewFrames, erh"alt er ein ParentDeactivate
     if ( bUI )
     {
-        if ( GetFrame()->GetWorkWindow_Impl() )
-            GetFrame()->GetWorkWindow_Impl()->SaveStatus_Impl();
+//        if ( GetFrame()->GetWorkWindow_Impl() )
+//            GetFrame()->GetWorkWindow_Impl()->SaveStatus_Impl();
 /*
         SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
         if( pMed )
