@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 07:54:55 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,27 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    const sal_Char* OAttributeMetaData::getBindingAttributeName(sal_Int32 _nId)
+    {
+        switch (_nId)
+        {
+            case BA_LINKED_CELL:       return "linked-cell";
+            case BA_LIST_LINKING_TYPE: return "list-linkage-type";
+            case BA_LIST_CELL_RANGE:   return "source-cell-range";
+            default:
+                OSL_ENSURE(sal_False, "OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
+        }
+        return "";
+    }
+
+    //---------------------------------------------------------------------
+    sal_uInt16 OAttributeMetaData::getBindingAttributeNamespace(sal_Int32 _nId)
+    {
+        // nothing special here
+        return XML_NAMESPACE_FORM;
+    }
+
+    //---------------------------------------------------------------------
     const sal_Char* OAttributeMetaData::getSpecialAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -341,6 +362,21 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10.160.1  2003/10/01 09:55:19  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.10.156.1  2003/09/25 14:28:37  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.10.152.2  2003/09/18 14:00:37  fs
+ *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
+ *
+ *  Revision 1.10.152.1  2003/09/17 12:26:51  fs
+ *  #18999# #19367# persistence for cell value and cell range bindings
+ *
+ *  Revision 1.10  2002/10/25 07:54:55  fs
+ *  #104402# +SCA_COLUMN_STYLE_NAME
+ *
  *  Revision 1.9  2001/04/20 16:49:40  fs
  *  tabbing-cycle -> tab-cycle
  *
