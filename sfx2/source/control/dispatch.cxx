@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:56:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,7 +1293,7 @@ const SfxPoolItem* SfxDispatcher::Execute( const SfxExecuteItem& rItem )
     const SfxPoolItem* pRet = Execute(
         rItem.GetSlot(), rItem.GetCallMode(), pPtr, rItem.GetModifier() );
 
-    __DELETE(rItem.Count() + 1) (SfxPoolItem**)pPtr;
+    delete [] (SfxPoolItem**)pPtr;
 
     return pRet;
 }
