@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 16:15:27 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 13:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2058,22 +2058,15 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
-    /* #112584# ensure the data have really been written to the destination
-             file. When working over NFS, write may return another number of
-             bytes written then really arrived at the physical target medium. The
-             alternative would be to open the destimation file with the flag O_SYNC
-             which slows down the overall write performance. */
-    if (fsync(DestFileFD) == -1)
-    {
-        close(SourceFileFD);
-        close(DestFileFD);
-        return errno;
-    }
-
     close(SourceFileFD);
-    close(DestFileFD);
 
-    return 0;
+    // Removed call to 'fsync' again (#112584#) and instead
+    // evaluate the return value of 'close' in order to detect
+    // and report ENOSPC and other erronous conditions on close
+    if (close(DestFileFD) == -1)
+        return errno;
+    else
+        return 0;
 }
 
 /*****************************************
