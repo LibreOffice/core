@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-20 15:01:33 $
+ *  last change: $Author: ama $ $Date: 2001-11-22 11:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,9 +926,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //An der FixSize gibt der umgebende Frame die Groesse vor, die
             //Raender werden einfach abgezogen.
             const long nLeft = rAttrs.CalcLeft( this );
-            (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)()
-                                          - nLeft - rAttrs.CalcRight() );
-            (Prt().*fnRect->fnSetPosX)( nLeft );
+            (this->*fnRect->fnSetXMargins)( nLeft, rAttrs.CalcRight() );
 
             ViewShell *pSh = GetShell();
             SwTwips nWidthArea;
@@ -992,8 +990,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
             SwTwips nLower = rAttrs.GetBottomLine( this );
-            (Prt().*fnRect->fnSetPosY)( bVert ? nLower : nUpper);
-
+            (Prt().*fnRect->fnSetPosY)( (!bVert || bReverse) ? nUpper : nLower);
             nUpper += nLower;
             nUpper -= (Frm().*fnRect->fnGetHeight)() -
                       (Prt().*fnRect->fnGetHeight)();
