@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-04 15:09:08 $
+ *  last change: $Author: mt $ $Date: 2001-12-06 12:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,8 @@ void EditView::MoveParagraphs( long nDiff )
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     ESelection aSel = GetSelection();
     long nDest = aSel.nStartPara + nDiff;
+    if ( nDiff > 0 )
+        nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
     MoveParagraphs( Range( aSel.nStartPara, aSel.nEndPara ), nDest );
 }
