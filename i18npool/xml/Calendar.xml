@@ -15,23 +15,25 @@
         <reference-docu xlink:href="file:///docs/sampledoc.html" xlink:type="simple"/>
         <type>com.sun.star.i18n.KCharacterType</type>
         <type>com.sun.star.i18n.ParseResult</type>
+        <type>com.sun.star.i18n.XCalendar</type>
         <type>com.sun.star.i18n.XCharacterClassification</type>
+        <type>com.sun.star.i18n.XExtendedCalendar</type>
         <type>com.sun.star.lang.Locale</type>
         <type>com.sun.star.lang.XMultiServiceFactory</type>
         <type>com.sun.star.lang.XTypeProvider</type>
+        <type>com.sun.star.uno.Any</type>
         <type>com.sun.star.uno.Exception</type>
+        <type>com.sun.star.uno.genfunc</type>
+        <type>com.sun.star.uno.Reference</type>
         <type>com.sun.star.uno.RuntimeException</type>
+        <type>com.sun.star.uno.Sequence</type>
         <type>com.sun.star.uno.TypeClass</type>
+        <type>com.sun.star.uno.Type</type>
         <type>com.sun.star.uno.XAdapter</type>
         <type>com.sun.star.uno.XAggregation</type>
         <type>com.sun.star.uno.XInterface</type>
         <type>com.sun.star.uno.XReference</type>
         <type>com.sun.star.uno.XWeak</type>
-        <type>com.sun.star.uno.Any</type>
-        <type>com.sun.star.uno.Reference</type>
-        <type>com.sun.star.uno.Sequence</type>
-        <type>com.sun.star.uno.Type</type>
-        <type>com.sun.star.uno.genfunc</type>
     </component-description>
     <project-build-dependency>cppu</project-build-dependency>
     <project-build-dependency>cppuhelper</project-build-dependency>
