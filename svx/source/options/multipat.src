@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 09:59:25 $
+ *  last change: $Author: vg $ $Date: 2001-08-30 20:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~AÒadir...";
-        Text[ finnish ] = "~Lis‰‰";
+        Text[ finnish ] = "~Lis??...";
     };
     PushButton BTN_DEL_MULTIPATH
     {
@@ -329,6 +329,7 @@ String RID_SVXSTR_FILE_GB
     Text[ finnish ] = "Tiedostot";
 };
  // ******************************************************************* EOF
+
 
 
 
