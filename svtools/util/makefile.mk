@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.10 $
+#*  $Revision: 1.11 $
 #*
-#*  last change: $Author: hr $ $Date: 2000-11-14 11:04:54 $
+#*  last change: $Author: jp $ $Date: 2000-11-20 09:31:19 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -149,7 +149,6 @@ LIB8FILES=	\
         $(SLB)$/items1.lib	\
         $(SLB)$/misc1.lib	\
         $(SLB)$/notify.lib	\
-        $(SLB)$/srch.lib	\
         $(SLB)$/svarray.lib \
         $(SLB)$/svhtml1.lib \
         $(SLB)$/svrtf.lib	\
