@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-23 15:01:53 $
+ *  last change: $Author: dvo $ $Date: 2002-10-10 10:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@ public:
     void RedlineToDoc( SwPaM& rPam );
     SwNodeIndex* GetMvSttIdx() const
         { return SwUndoSaveSection::GetMvSttIdx(); }
+
+#ifndef PRODUCT
+    USHORT nRedlineCount;
+#endif
 };
 
 SV_IMPL_PTRARR( SwUndos, SwUndo*)
@@ -925,6 +929,10 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
     default:
         ASSERT( !this, "keine gueltigen Daten!" )
     }
+
+#ifndef PRODUCT
+    nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().Count();
+#endif
 }
 
 SwRedlineSaveData::~SwRedlineSaveData()
@@ -954,6 +962,10 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     rDoc.SetRedlineMode_intern( eOld | REDLINE_DONTCOMBINE_REDLINES );
     rDoc.AppendRedline( pRedl );
     rDoc.SetRedlineMode_intern( eOld );
+
+    // #101656# check redline count against count saved in undo object
+    DBG_ASSERT( nRedlineCount == rDoc.GetRedlineTbl().Count(),
+                "redline count not restored properly" );
 }
 
 BOOL SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
