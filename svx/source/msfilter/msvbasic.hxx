@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-20 15:15:54 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 15:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,10 +54,14 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): cmc@openoffice.org
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #ifndef _MSVBASIC_HXX
 #define _MSVBASIC_HXX
 
@@ -92,61 +96,58 @@
  * cmc
  * */
 
-#define WINDOWLEN 4096
 DECLARE_DYNARRAY(StringArray,String *);
 
 class VBA_Impl
 {
 public:
-        VBA_Impl( SvStorage &rIn, BOOL bCmmntd = TRUE )
-            : xStor(&rIn), pOffsets(0), nOffsets(0), bCommented(bCmmntd),
-            aVBAStrings(0), nLines(0), sComment(String::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM("Rem "))),
-            eCharSet(RTL_TEXTENCODING_MS_1252)
-            {}
-        ~VBA_Impl()
-            {
-            if (nOffsets)
-                delete [] pOffsets;
-            for(ULONG i=0;i<aVBAStrings.GetSize();i++)
-                delete aVBAStrings.Get(i);
-            }
-        //0 for failure, 1 for success
-        BOOL Open( const String &rToplevel, const String &rSublevel);
-        const StringArray & Decompress(UINT16 nIndex, int *pOverflow=0);
-        UINT16 GetNoStreams() const { return nOffsets; }
-        const String &GetStreamName( UINT16 nIndex ) const
-        {
-            DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
-            return pOffsets[ nIndex ].sName;
-        }
-        virtual void Output(int len,const BYTE *data);
+    VBA_Impl(SvStorage &rIn, bool bCmmntd = true)
+        : xStor(&rIn), pOffsets(0), nOffsets(0), bCommented(bCmmntd),
+        aVBAStrings(0), nLines(0), sComment(String::CreateFromAscii(
+            RTL_CONSTASCII_STRINGPARAM("Rem "))),
+        eCharSet(RTL_TEXTENCODING_MS_1252)
+        {}
+    ~VBA_Impl()
+    {
+        if (nOffsets)
+            delete [] pOffsets;
+        for(ULONG i=0;i<aVBAStrings.GetSize();i++)
+            delete aVBAStrings.Get(i);
+    }
+    //0 for failure, 1 for success
+    bool Open( const String &rToplevel, const String &rSublevel);
+    const StringArray & Decompress(sal_uInt16 nIndex, int *pOverflow=0);
+    sal_uInt16 GetNoStreams() const { return nOffsets; }
+    const String &GetStreamName(sal_uInt16 nIndex) const
+    {
+        DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
+        return pOffsets[ nIndex ].sName;
+    }
+    virtual void Output(int len, const sal_uInt8 *data);
 private:
-        struct VBAOffset_Impl
-        {
-            String sName;
-            UINT32 nOffset;
-        };
+    struct VBAOffset_Impl
+    {
+        String sName;
+        sal_uInt32 nOffset;
+    };
 
-        SvStorageRef xVBA;
-        StringArray aVBAStrings;
-        String sComment;
-        SvStorageRef xStor;
-        VBAOffset_Impl *pOffsets;
-        UINT16 nOffsets;
-        BYTE aHistory[ WINDOWLEN ];
-        rtl_TextEncoding eCharSet;
-        BOOL bCommented;
-        int nLines;
+    SvStorageRef xVBA;
+    StringArray aVBAStrings;
+    String sComment;
+    SvStorageRef xStor;
+    VBAOffset_Impl *pOffsets;
+    sal_uInt16 nOffsets;
+    enum Limits {nWINDOWLEN = 4096};
+    sal_uInt8 aHistory[nWINDOWLEN];
+    rtl_TextEncoding eCharSet;
+    bool bCommented;
+    int nLines;
 
-        //0 for failure, anything else for success
-        int ReadVBAProject(const SvStorageRef &rxVBAStorage);
-        int DecompressVBA(int index, SvStorageStreamRef &rxVBAStream);
-        BYTE ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode);
-        BOOL SkipTrickyMac(SvStorageStreamRef &xVBAProject);
+    //0 for failure, anything else for success
+    int ReadVBAProject(const SvStorageRef &rxVBAStorage);
+    int DecompressVBA(int index, SvStorageStreamRef &rxVBAStream);
+    sal_uInt8 ReadPString(SvStorageStreamRef &xVBAProject, bool bIsUnicode);
+    bool SkipTrickyMac(SvStorageStreamRef &xVBAProject);
 };
-
-
-
 
 #endif

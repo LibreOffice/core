@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-21 15:32:17 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 15:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <string.h>     // memset(), ...
 #ifndef UNX
@@ -66,7 +68,7 @@
 #endif
 
 #ifndef _MSVBASIC_HXX
-#include <msvbasic.hxx>
+#include "msvbasic.hxx"
 #endif
 
 /*
@@ -91,21 +93,21 @@ http://www.virusbtn.com/vb2000/Programme/papers/bontchev.pdf
  * */
 #define MACSKIP 20
 
-BOOL VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
+bool VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
 {
-    BOOL bSkipped=TRUE;
+    bool bSkipped = true;
     //For no particularly good reason that I can see this occurs on
     //occasion in macintosh xls documents, it looks like an object id
     xVBAProject->SeekRel(2);
-    UINT32 nIdA;
-    UINT16 nIdB,nIdC;
+    sal_uInt32 nIdA;
+    sal_uInt16 nIdB, nIdC;
     *xVBAProject >> nIdA >> nIdB >> nIdC;
 
-    static const BYTE aKnownChunk[] =
+    static const sal_uInt8 aKnownChunk[] =
     {
         0x85, 0x2E, 0x02, 0x60, 0x8C, 0x4D, 0x0B, 0xB4
     };
-    BYTE aSeq[8];
+    sal_uInt8 aSeq[8];
     xVBAProject->Read( aSeq, sizeof(aSeq) );
     xVBAProject->SeekRel(2);
 
@@ -115,18 +117,19 @@ BOOL VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
        ))
     {
         xVBAProject->SeekRel(-MACSKIP);
-        bSkipped=FALSE;
+        bSkipped = false;
     }
     return bSkipped;
 }
 
 
-BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
+sal_uInt8 VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject,
+    bool bIsUnicode)
 {
-    UINT16 nIdLen, nOut16;
-    BYTE nType = 0, nOut8;
+    sal_uInt16 nIdLen, nOut16;
+    sal_uInt8 nType = 0, nOut8;
 
-    BOOL bSkippedMac = SkipTrickyMac(xVBAProject);
+    bool bSkippedMac = SkipTrickyMac(xVBAProject);
     *xVBAProject >> nIdLen;
 
     if (nIdLen < 6) //Error recovery
@@ -136,7 +139,7 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
             xVBAProject->SeekRel(-MACSKIP);   //Undo Mac skip
     }
     else
-        for(UINT16 i=0; i < nIdLen / (bIsUnicode ? 2 : 1); i++)
+        for(sal_uInt16 i=0; i < nIdLen / (bIsUnicode ? 2 : 1); i++)
         {
             if (bIsUnicode)
                 *xVBAProject >> nOut16;
@@ -150,7 +153,7 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
                 if ((nOut16 == 'G') || (nOut16 == 'H') || (nOut16 == 'C') ||
                     nOut16 == 'D')
                 {
-                    nType = static_cast<BYTE>(nOut16);
+                    nType = static_cast<sal_uInt8>(nOut16);
                 }
                 if ( nType == 0)
                 {
@@ -165,7 +168,7 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
     return nType;
 }
 
-void VBA_Impl::Output( int nLen, const BYTE *pData )
+void VBA_Impl::Output( int nLen, const sal_uInt8*pData )
 {
     /*
     Each StarBasic module is tragically limited to the maximum len of a
@@ -205,8 +208,8 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         return 0;
     }
 
-    static const BYTE aKnownId[] = {0xCC, 0x61};
-    BYTE aId[2];
+    static const sal_uInt8 aKnownId[] = {0xCC, 0x61};
+    sal_uInt8 aId[2];
     xVBAProject->Read( aId, sizeof(aId) );
     if (memcmp( aId, aKnownId, sizeof(aId)))
     {
@@ -214,50 +217,62 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         return 0;
     }
 
-    static const BYTE aOfficeXPLE[]     = {0x73, 0x00, 0x00, 0x01, 0x00, 0xFF};
-    static const BYTE aOffice2000LE[]   = {0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF};
-    static const BYTE aOffice98BE[]     = {0x60, 0x00, 0x00, 0x0E, 0x00, 0xFF};
-    static const BYTE aOffice97LE[]     = {0x5E, 0x00, 0x00, 0x01, 0x00, 0xFF};
-    BYTE aProduct[6];
+    static const sal_uInt8 aOfficeXPLE[] =
+    {
+        0x73, 0x00, 0x00, 0x01, 0x00, 0xFF
+    };
+    static const sal_uInt8 aOffice2000LE[] =
+    {
+        0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF
+    };
+    static const sal_uInt8 aOffice98BE[] =
+    {
+        0x60, 0x00, 0x00, 0x0E, 0x00, 0xFF
+    };
+    static const sal_uInt8 aOffice97LE[] =
+    {
+        0x5E, 0x00, 0x00, 0x01, 0x00, 0xFF
+    };
+    sal_uInt8 aProduct[6];
     xVBAProject->Read( aProduct, sizeof(aProduct) );
 
-    BOOL bIsUnicode;
+    bool bIsUnicode;
     if (!(memcmp(aProduct, aOfficeXPLE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        bIsUnicode=TRUE;
+        bIsUnicode = true;
     }
     else if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        bIsUnicode=TRUE;
+        bIsUnicode = true;
     }
     else if (!(memcmp(aProduct, aOffice98BE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-        bIsUnicode=FALSE;
+        bIsUnicode = false;
         eCharSet = RTL_TEXTENCODING_APPLE_ROMAN;
     }
     else if (!(memcmp(aProduct, aOffice97LE, sizeof(aProduct))))
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        bIsUnicode=TRUE;
+        bIsUnicode = true;
     }
     else
     {
-        DBG_ASSERT(!this,"unrecognized VBA macro version, report cmc");
+        DBG_ASSERT(!this, "unrecognized VBA macro version, report to cmc");
         return 0;
     }
 
-    UINT32 nLidA;  //Language identifiers
-    UINT32 nLidB;
-    UINT16 nUnknownA;
-    UINT16 nLenA;
-    UINT32 nUnknownB;
-    UINT32 nUnknownC;
-    UINT16 nLenB;
-    UINT16 nLenC;
-    UINT16 nLenD;
+    sal_uInt32 nLidA;  //Language identifiers
+    sal_uInt32 nLidB;
+    sal_uInt16 nUnknownA;
+    sal_uInt16 nLenA;
+    sal_uInt32 nUnknownB;
+    sal_uInt32 nUnknownC;
+    sal_uInt16 nLenB;
+    sal_uInt16 nLenC;
+    sal_uInt16 nLenD;
 
     *xVBAProject >> nLidA >> nLidB >> nUnknownA >> nLenA >> nUnknownB;
     *xVBAProject >> nUnknownC >> nLenB >> nLenC >> nLenD;
@@ -283,7 +298,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     */
     while (1)
     {
-        BYTE nType;
+        sal_uInt8 nType;
         nType = ReadPString(xVBAProject,bIsUnicode);
         if (nType == 'C' || nType == 'D')
         {
@@ -301,7 +316,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
     SkipTrickyMac(xVBAProject);
 
-    INT16 nInt16s;
+    sal_Int16 nInt16s;
     *xVBAProject >> nInt16s;
     DBG_ASSERT( nInt16s >= 0, "VBA: Bad no of records in VBA Project, panic!" );
     if (!nInt16s)
@@ -309,7 +324,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
 
     xVBAProject->SeekRel(2*nInt16s);
 
-    INT16 nInt32s;
+    sal_Int16 nInt32s;
     *xVBAProject >> nInt32s;
     DBG_ASSERT( nInt32s >= 0, "VBA: Bad no of records in VBA Project, panic!" );
     if (!nInt32s)
@@ -319,7 +334,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     xVBAProject->SeekRel(2);
     for(int k=0;k<3;k++)
     {
-        UINT16 nLen;
+        sal_uInt16 nLen;
         *xVBAProject >> nLen;
         if (nLen != 0xFFFF)
             xVBAProject->SeekRel(nLen);
@@ -335,7 +350,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     int i, j;
     for( i=0; i < nOffsets; i++)
     {
-        UINT16 nLen;
+        sal_uInt16 nLen;
         *xVBAProject >> nLen;
 
         if (bIsUnicode)
@@ -378,7 +393,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
             return 0;
 
         xVBAProject->SeekRel(6);
-        UINT16 nOctects;
+        sal_uInt16 nOctects;
         *xVBAProject >> nOctects;
         for(j=0;j<nOctects;j++)
             xVBAProject->SeekRel(8);
@@ -390,14 +405,13 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         xVBAProject->SeekRel(2);
     }
 
-    //*pOut << endl;
     return nOffsets;
 }
 
-BOOL VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
+bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
 {
     /* beginning test for vba stuff */
-    BOOL bRet = FALSE;
+    bool bRet = false;
     SvStorageRef xMacros= xStor->OpenStorage( rToplevel,
                                     STREAM_READWRITE | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYALL );
@@ -417,14 +431,14 @@ BOOL VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
         else
         {
             if (ReadVBAProject(xVBA))
-                bRet = TRUE;
+                bRet = true;
         }
     }
     /* end test for vba stuff */
     return bRet;
 }
 
-const StringArray &VBA_Impl::Decompress(UINT16 nIndex, int *pOverflow)
+const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
 {
     DBG_ASSERT( nIndex < nOffsets, "Index out of range" );
     SvStorageStreamRef xVBAStream;
@@ -482,19 +496,15 @@ const StringArray &VBA_Impl::Decompress(UINT16 nIndex, int *pOverflow)
 
 int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
 {
-    BYTE nLeadbyte;
-    UINT16 nToken;
+    sal_uInt8 nLeadbyte;
+    sal_uInt16 nToken;
     unsigned int nPos = 0;
     int nLen, nDistance, nShift, nClean=1;
 
-    //*pOut << "jumping to " << hex << offsets[nIndex].offset << endl;
     xVBAStream->Seek( pOffsets[ nIndex ].nOffset + 3 );
 
     while(xVBAStream->Read(&nLeadbyte,1))
     {
-//      *pOut << "reading 8 data unit block beginning with " << nLeadbyte
-//          << int(nLeadbyte) << " at pos " << xVBAStream->Tell() << " real pos "
-//          << nPos << endl;
         for(int nPosition=0x01;nPosition < 0x100;nPosition=nPosition<<1)
         {
             //we see if the leadbyte has flagged this location as a dataunit
@@ -509,7 +519,7 @@ int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
                 //For some reason the division of the token into the length
                 //field of the data to be inserted, and the distance back into
                 //the history differs depending on how full the history is
-                int nPos2 = nPos%WINDOWLEN;
+                int nPos2 = nPos % nWINDOWLEN;
                 if (nPos2 <= 0x10)
                     nShift = 12;
                 else if (nPos2 <= 0x20)
@@ -534,66 +544,48 @@ int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
                 for(i=0;i<nShift;i++)
                     nLen |= nToken & (1<<i);
 
-                //*pOut << endl << "match lookup token " << int(nToken) << "len " << int(nLen) << endl;
-
                 nLen += 3;
-                //*pOut << endl << "len is " << nLen << "shift is " << nShift << endl;
 
                 nDistance = nToken >> nShift;
-                //*pOut << "distance token shift is " << nDistance << " " << int(nToken) << " " << nShift << "pos is " << nPos << " " << xVBAStream->Tell() << endl;
 
                 //read the len of data from the history, wrapping around the
-                //WINDOWLEN boundary if necessary
-                //data read from the history is also copied into the recent
-                //part of the history as well.
+                //nWINDOWLEN boundary if necessary data read from the history
+                //is also copied into the recent part of the history as well.
                 for (i = 0; i < nLen; i++)
                 {
                     unsigned char c;
-                    //*pOut << endl << (nPos%WINDOWLEN)-nDistance-1 << " " << nPos << " " << nDistance << endl;
-                    c = aHistory[(nPos-nDistance-1)%WINDOWLEN];
-                    aHistory[nPos%WINDOWLEN] = c;
+                    c = aHistory[(nPos-nDistance-1) % nWINDOWLEN];
+                    aHistory[nPos % nWINDOWLEN] = c;
                     nPos++;
-                    //*pOut << "real pos is " << nPos << endl;
-                    //
-                    //temp removed
-                    //*pOut << c ;
                 }
             }
             else
             {
                 // special boundary case code, not guarantueed to be correct
                 // seems to work though, there is something wrong with the
-                // compression scheme (or maybe a feature) where when
-                // the data ends on a WINDOWLEN boundary and the excess
-                // bytes in the 8 dataunit list are discarded, and not
-                // interpreted as tokens or normal data.
-                if ((nPos != 0) && ((nPos%WINDOWLEN) == 0) && (nClean))
+                // compression scheme (or maybe a feature) where when the data
+                // ends on a nWINDOWLEN boundary and the excess bytes in the 8
+                // dataunit list are discarded, and not interpreted as tokens
+                // or normal data.
+                if ((nPos != 0) && ((nPos % nWINDOWLEN) == 0) && (nClean))
                 {
-                    //*pOut << "at boundary position is " << nPosition << " " << xVBAStream->Tell() << " pos is " << nPos << endl;
-                    //if (nPosition != 0x01)
-                    //*pOut << "must restart by eating remainder single byte data units" << endl;
                     xVBAStream->SeekRel(2);
                     nClean=0;
-                    Output(WINDOWLEN,aHistory);
+                    Output(nWINDOWLEN, aHistory);
                     break;
                 }
                 //This is the normal case for when the data unit is not a
                 //token to be looked up, but instead some normal data which
                 //can be output, and placed in the history.
-                if (xVBAStream->Read(&aHistory[nPos%WINDOWLEN],1))
-                {
+                if (xVBAStream->Read(&aHistory[nPos % nWINDOWLEN],1))
                     nPos++;
-                    //temp removed
-                    //*pOut << aHistory[nPos++%WINDOWLEN];
-                }
+
                 if (nClean == 0)
                     nClean=1;
-                //*pOut << "pos is " << nPos << " " << xVBAStream->Tell() << endl;
             }
         }
     }
-    if (nPos%WINDOWLEN)
-        Output(nPos%WINDOWLEN,aHistory);
+    if (nPos % nWINDOWLEN)
+        Output(nPos % nWINDOWLEN,aHistory);
     return(nPos);
 }
-
