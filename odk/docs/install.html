@@ -80,13 +80,16 @@
               <dt><b>JDK (1.4.1_01 or higher)</b>
               <dd>A JDK is necessary for developing Java components or applications. An appropriate Java
                   SDK can be found on <a target="_blank" href="http://java.sun.com/products" title="link to the Java SDK download page (online)">http://java.sun.com/products</a>.
-              <dt><b>C++ compiler</b>
+              <dt><b>C++ compiler</b> <i>(optional)</i>
               <dd>A C++ compiler is necessary for developing C++ components or applications. UNO depends
                   on a compiler dependent language binding so that we use the appropriate compiler where a 
                   language binding exists:<br>
                   Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11<br>
                   Linux, GNU C++ compiler, gcc version 3.0.1<br>
                   Windows, Microsoft C++ Compiler, Microsoft Developer Studio 6.0 (cl, version 12.00.8168) 
+              <dt><b>Microsoft .NET Framework SDK Version 1.0 or higher</b> <i>(optional)</i>
+              <dd>The SDK is required for building CLI applications. That is, programs written in languages, 
+	      such as C# or VB.NET.
               <dt><b>GNU make (3.79.1 or higher)</b>
               <dd>GNU make is used to build the examples of the SDK. GNU make is available from 
                   <a target="_blank" href="http://www.gnu.org" title="link to www.gnu.org (online)">http://www.gnu.org</a>, it can be ftped via 
@@ -133,6 +136,14 @@
                        vcvar32.bat file can be found). The C++ compiler is <b>optional</b> and only 
 					   necessary for building the C++ examples.</td>
                  </tr>
+                 <tr> 
+                   <td widht=35%><b>OO_SDK_CLI_HOME</b></td>
+                   <td widht=65%>path to the C# compiler and VB.NET compiler (under windows this directory
+		   can be found under the system directory, for example c:\WINXP\Microsoft.NET\Framework\v1.0.3705). 
+		   The compilers are <b>optional</b> and only 
+		         necessary for building the CLI examples.</td>
+                 </tr>
+
                  <tr> 
                    <td widht=35%><b>OO_SDK_MAKE_HOME</b></td>
                    <td widht=65%>path to GNU make.</td>
