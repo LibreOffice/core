@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 09:33:55 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 18:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,13 +446,14 @@ void OGridControlModel::fillProperties(
         DECL_PROP1(FONT_WEIGHT,         float,              MAYBEDEFAULT);
         DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
+        DECL_BOOL_PROP1(FONT_WORDLINEMODE,                  MAYBEDEFAULT);
         DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
         DECL_PROP2(RECORDMARKER,        sal_Bool,           BOUND, MAYBEDEFAULT );
         DECL_PROP2(PRINTABLE,           sal_Bool,           BOUND, MAYBEDEFAULT );
         DECL_PROP4(CURSORCOLOR,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID , TRANSIENT);
         DECL_PROP3(ALWAYSSHOWCURSOR,    sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP3(DISPLAYSYNCHRON,     sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
-        DECL_PROP2(HELPURL,             ::rtl::OUString,        BOUND, MAYBEDEFAULT);
+        DECL_PROP2(HELPURL,             ::rtl::OUString,    BOUND, MAYBEDEFAULT);
     END_AGGREGATION_PROPERTY_HELPER();
 }
 
@@ -535,6 +536,9 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
             break;
         case PROPERTY_ID_FONT_STRIKEOUT:
             rValue <<= (sal_Int16)m_aFont.Strikeout;
+            break;
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            rValue = ::cppu::bool2any(m_aFont.WordLineMode);
             break;
         default:
             OControlModel::getFastPropertyValue(rValue, nHandle);
@@ -634,6 +638,9 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
         case PROPERTY_ID_FONT_STRIKEOUT:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, (sal_Int16)m_aFont.Strikeout);
             break;
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, (sal_Bool)m_aFont.WordLineMode);
+            break;
         default:
             bModified = OControlModel::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue);
     }
@@ -717,6 +724,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         case PROPERTY_ID_FONT_STRIKEOUT:
             m_aFont.Strikeout = getINT16(rValue);
             break;
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            m_aFont.WordLineMode = getBOOL(rValue);
+            break;
         case PROPERTY_ID_ROWHEIGHT:
             m_aRowHeight = rValue;
             break;
@@ -742,6 +752,7 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         case PROPERTY_ID_FONT_SLANT:
         case PROPERTY_ID_FONT_UNDERLINE:
         case PROPERTY_ID_FONT_STRIKEOUT:
+        case PROPERTY_ID_FONT_WORDLINEMODE:
             if (m_nFontEvent)
                 Application::RemoveUserEvent(m_nFontEvent);
             m_nFontEvent = Application::PostUserEvent( LINK(this, OGridControlModel, OnFontChanged) );
@@ -848,6 +859,10 @@ PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
             if (!m_aFont.Strikeout)
                 eState = PropertyState_DEFAULT_VALUE;
             break;
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            if (!m_aFont.WordLineMode)
+                eState = PropertyState_DEFAULT_VALUE;
+            break;
         case PROPERTY_ID_ROWHEIGHT:
             if (!m_aRowHeight.hasValue())
                 eState = PropertyState_DEFAULT_VALUE;
@@ -901,6 +916,9 @@ void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         case PROPERTY_ID_FONT_WEIGHT:
             setFastPropertyValue(nHandle, makeAny((float)0));
             break;
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            setFastPropertyValue(nHandle, ::cppu::bool2any(sal_False));
+            break;
         default:
             OControlModel::setPropertyToDefaultByHandle(nHandle);
     }
@@ -933,6 +951,8 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
             return makeAny((float)0);
         case PROPERTY_ID_FONT_WEIGHT:
             return makeAny((float)0);
+        case PROPERTY_ID_FONT_WORDLINEMODE:
+            return ::cppu::bool2any(sal_False);
         default:
             return OControlModel::getPropertyDefaultByHandle(nHandle);
     }
