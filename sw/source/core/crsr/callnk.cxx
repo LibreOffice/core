@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callnk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 13:42:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 
@@ -214,6 +217,17 @@ SwCallLink::~SwCallLink()
                         return;
                     }
                     nStart = 0;
+                }
+            }
+
+            if( pBreakIt->xBreak.is() )
+            {
+                const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
+                if( pBreakIt->xBreak->getScriptType( rTxt, nCntnt )
+                     != pBreakIt->xBreak->getScriptType( rTxt, nAktCntnt ))
+                {
+                    rShell.CallChgLnk();
+                    return;
                 }
             }
         }
