@@ -2,6 +2,7 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
+Public Const SBMAXTEXTSIZE = 50
 
 
 Function SetProgressValue(iValue as Integer)	
@@ -190,9 +191,9 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 &apos;Todo: How do you set currencies?
 		End If
 	ElseIf CurControlType = cTextBox Then	&apos;com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
-		If oLocObject.MaxTextLen = 0 Or oLocObject.MaxTextLen &gt; 30 Then
-			oLocObject.MaxTextLen = 30
-			CurFieldLength = 30
+		If oLocObject.MaxTextLen = 0 Or oLocObject.MaxTextLen &gt; SBMAXTEXTSIZE Then
+			oLocObject.MaxTextLen = SBMAXTEXTSIZE
+			CurFieldLength = SBMAXTEXTSIZE
 		Else
 			oLocObject.MaxTextLen = CurFieldLength
 		End If
