@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 06:05:18 $
+ *  last change: $Author: gt $ $Date: 2004-07-22 06:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMTYARG )
     mpLevelTP->ClosePage();
     mpTrustSrcTP->ClosePage();
 
-//  ExitDialog( RET_OK );
+    EndDialog( RET_OK );
 
     return 0;
 }
@@ -220,7 +220,7 @@ void MacroSecurityLevelTP::ClosePage( void )
 }
 
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, AddCertPBHdl, void*, EMTYARG )
+/*IMPL_LINK( MacroSecurityTrustedSourcesTP, AddCertPBHdl, void*, EMTYARG )
 {
     CertificateChooser  aChooser( this, mpDlg->mxSecurityEnvironment, mpDlg->maCurrentSignatureInformations );
     if( aChooser.Execute() )
@@ -229,14 +229,12 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddCertPBHdl, void*, EMTYARG )
 
         if( xCert.is() )
         {
-//          mpDlg->maCurrentSignatureInformations.push_back( ;
-
             FillCertLB();
         }
     }
 
     return 0;
-}
+}*/
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 {
@@ -312,6 +310,21 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
         // remove from sequence
+        sal_Int32   nSeqIndex = ( sal_Int32 ) maTrustCertLB.GetEntry( nSel )->GetUserData();
+
+        sal_Int32   nCnt = maTrustedAuthors.getLength();
+        DBG_ASSERT( nSeqIndex < nCnt, "MacroSecurityTrustedSourcesTP::RemoveLocPBHdl(): impossible state!?" );
+        cssu::Sequence< SvtSecurityOptions::Certificate >   aNewSeq( nCnt - 1 );
+        for( sal_Int32 nR = 0, nW = 0 ; nR < nCnt ; ++nR )
+        {
+            if( nR != nSeqIndex )
+            {
+                aNewSeq[ nW ] = maTrustedAuthors[ nR ];
+                ++nW;
+            }
+        }
+
+        maTrustedAuthors = aNewSeq;
     }
 
     return 0;
@@ -351,38 +364,17 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
     String          aCN_Id( String::CreateFromAscii( "CN" ) );
     for( sal_uInt32 nEntry = 0 ; nEntry < nCountEntries ; ++nEntry )
     {
-        cssu::Sequence< ::rtl::OUString >&  rEntry = maTrustedAuthors[ nEntry ];
+        cssu::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
+        uno::Reference< css::security::XCertificate >   xCert;
 
-        const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[ nEntry ];
-        uno::Reference< css::security::XCertificate > xCert;
+        // create from RawData
+        xCert = mpDlg->mxSecurityEnvironment->createCertificateFromAscii( rEntry[ 2 ] );
 
         SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
-        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id ), pLBEntry, 1 );
-        maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime ), pLBEntry, 2 );
+        maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName(), aCN_Id ), pLBEntry, 1 );
+        maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotAfter() ), pLBEntry, 2 );
         pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
     }
-//      m_seqSecureURLs[ nItem ] = aOpt.SubstituteVariable( m_seqSecureURLs[ nItem ] );
-
-/*    uno::Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv = mpDlg->maSignatureHelper.GetSecurityEnvironment();
-    uno::Reference< css::security::XCertificate > xCert;
-
-    String  aCN_Id( String::CreateFromAscii( "CN" ) );
-    int     nInfos = mpDlg->maCurrentSignatureInformations.size();
-    for( int n = 0; n < nInfos; ++n )
-    {
-        const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[n];
-        xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-
-        if( xCert.is() )
-        {
-            SvLBoxEntry* pEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
-            maTrustCertLB.SetEntryText( XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id ), pEntry, 1 );
-            maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime ), pEntry, 2 );
-            pEntry->SetUserData( ( void* ) sal_Int32( n ) );        // missuse user data as index
-        }
-    }
-
-    TrustCertLBSelectHdl( NULL );*/
 }
 
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
