@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmds.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:01 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 11:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ CreateHtml::OutputDir() const
 //inline const String &
 //Save::ReposyDir() const
 //    { return sRepositoryDirectory; }
-#endif 0 // KORR_FUTURE
+#endif // 0  - KORR_FUTURE
 
 
 
