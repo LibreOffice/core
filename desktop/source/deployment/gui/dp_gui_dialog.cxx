@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:05:19 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,8 +544,8 @@ DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel )
 }
 
 namespace {
-struct StrAllFiles : public ::rtl::StaticData<OUString, StrAllFiles> {
-    OUString operator () () {
+struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
+    const OUString operator () () {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
         ::std::auto_ptr<ResMgr> svt(
             ResMgr::CreateResMgr( "svt" LIBRARY_SOLARUPD() ) );
@@ -914,16 +914,16 @@ DialogImpl::ThreadedPushButton::~ThreadedPushButton()
 }
 
 namespace {
-struct DeploymentGuiResMgr : public ::rtl::StaticData< ResMgr *,
-                                                       DeploymentGuiResMgr > {
+struct DeploymentGuiResMgr :
+        public rtl::StaticWithInit< ResMgr *, DeploymentGuiResMgr > {
     ResMgr * operator () () {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
         return ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
     }
 };
 
-struct BrandName : public ::rtl::StaticData<OUString, BrandName> {
-    OUString operator () () {
+struct BrandName : public rtl::StaticWithInit<const OUString, BrandName> {
+    const OUString operator () () {
         return extract_throw<OUString>(
             ::utl::ConfigManager::GetDirectConfigProperty(
                 ::utl::ConfigManager::PRODUCTNAME ) );
