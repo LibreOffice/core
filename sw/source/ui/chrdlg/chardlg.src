@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:04:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,10 +350,10 @@ TabPage TP_CHAR_URL
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    GroupBox GB_URL
+    FixedLine FL_URL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 97 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Hyperlink" ;
         Text [ English ] = "Hyperlink" ;
         Text [ english_us ] = "Hyperlink" ;
@@ -585,10 +585,10 @@ TabPage TP_CHAR_URL
         Text[ catalan ] = "~Acontecimientos...";
         Text[ finnish ] = "~Tapahtumat";
     };
-    GroupBox GB_STYLE
+    FixedLine FL_STYLE
     {
         Pos = MAP_APPFONT ( 6 , 104 ) ;
-        Size = MAP_APPFONT ( 248 , 43 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zeichenvorlagen" ;
         Text [ English ] = "Character styles" ;
         Text [ dutch ] = "Tekenopmaakprofielen" ;

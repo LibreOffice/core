@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,10 @@
  ************************************************************************/
 
 /* TabPage Ansicht*/
-#define GB_DISP         1
-#define GB_NOPRINT              2
-#define GB_WINDOW               3
-#define GB_BACK                 4
+#define FL_DISP                 1
+#define FL_NOPRINT              2
+#define FL_WINDOW               3
+#define FL_BACK                 4
 
 #define CB_GRF              1
 #define CB_TBL                  2
@@ -86,11 +86,11 @@
 #define CB_IDX_ENTRY            19
 #define CB_FOOTBACK             20
 #define CB_FLDBACK              21
-#define GB_LINE                 22
+#define FL_LINE                 22
 #define CB_POSTIT               23
 #define CB_BIGHANDLE                  25
 
-#define GB_SETTINGS             26
+#define FL_SETTINGS             26
 #define LB_METRIC               27
 #define FT_METRIC               28
 
@@ -105,7 +105,7 @@
 #define CB_TEST8        32
 #define CB_TEST9        33
 #define CB_TEST10       34
-#define GB_TEST         35
+#define FL_TEST                 35
 
 #define CB_HIDDEN_PARA  36  //Mittendrin, damit die HelpIds zum FPII kompatibel bleiben
 #define CB_SMOOTH_SCROLL 37
@@ -120,10 +120,8 @@
 #define CB_INDEX        44
 
 #define LB_COLOR        50
-#define GB_1            51
 #define WIN_COLOR       52
 #define ED_COLORNAME    53
-#define GB_2            54
 #define BT_EDIT         55
 #define BT_NEW          56
 #define BT_DELETE       57
@@ -141,10 +139,10 @@
 #define CB_SINGLEJOBS      68
 #define CB_CTRLFLD         69
 #define CB_PAPERFROMSETUP  70
-#define GRP_1              71
-#define GRP_2              72
-#define GRP_3              73
-#define GRP_4              74
+#define FL_1              71
+#define FL_2              72
+#define FL_3              73
+#define FL_4              74
 #define FT_FAX             76
 #define CB_BACKGROUND      79
 
@@ -171,7 +169,7 @@
 #define LB_LABEL                        97
 #define FT_IDX                          98
 #define LB_IDX                          99
-#define GB_STDCHR                      100
+#define FL_STDCHR                      100
 #define PB_STANDARD                    101
 #define CB_DOCONLY                     102
 #define ST_SCRIPT_WESTERN              103
@@ -184,10 +182,10 @@
 #define CB_BORDER           104
 #define CB_NUMFORMATTING    105
 #define CB_NUMALIGNMENT     106
-#define GB_TABLE            107
-#define GB_TABLE_INSERT     108
+#define FL_TABLE            107
+#define FL_TABLE_INSERT     108
 #define CB_NUMFMT_FORMATTING    109
-#define GB_MOVE                 110
+#define FL_MOVE                 110
 #define FT_ROWMOVE                  111
 #define MF_ROWMOVE                  112
 #define FT_COLMOVE                  113
@@ -206,7 +204,7 @@
 #define FT_VAR                      126
 
 #define FT_MOVE                     128
-#define GB_COLOR                    130
+#define FL_COLOR                                        130
 #define FT_SGML                     131
 #define LB_SGML                     132
 #define FT_COMMENT                  133
@@ -217,18 +215,18 @@
 #define LB_UNKNOWN                  138
 #define FL_TABLE_SEPARATOR          139
 
-#define GB_SHDWCRSFLAG                 1
+#define FL_SHDWCRSFLAG                             1
 #define CB_SHDWCRSONOFF                2
-#define GB_SHDWCRSMODE                 3
+#define FL_SHDWCRSMODE                 3
 #define FT_SHDWCRSFILLMODE             4
 #define RB_SHDWCRSFILLMARGIN           5
 #define RB_SHDWCRSFILLINDENT           6
 #define RB_SHDWCRSFILLTAB              7
 #define RB_SHDWCRSFILLSPACE            8
-#define GB_SHDWCRSCOLOR                9
+#define FL_SHDWCRSCOLOR                9
 #define FT_SHDWCRSCOLOR               10
 #define LB_SHDWCRSCOLOR               11
 #define CB_ALLOW_IN_PROT              12
-#define GB_CRSR_OPT                   13
+#define FL_CRSR_OPT                   13
 #define FL_SEPARATOR_SHDW               14
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:54:46 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_CONTENT_OPT
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_LINE
+    FixedLine FL_LINE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
@@ -278,7 +278,7 @@ TabPage TP_CONTENT_OPT
         Text[ finnish ] = "Isot oh~jainpisteet";
         Text[ catalan ] = "Large control points";
     };
-    FixedLine GB_WINDOW
+    FixedLine FL_WINDOW
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
@@ -460,7 +460,7 @@ TabPage TP_CONTENT_OPT
         Text[ finnish ] = "~Tasainen vieritys";
         Text[ catalan ] = "Desplazamiento ~suave";
     };
-    FixedLine GB_DISP
+    FixedLine FL_DISP
     {
         Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
@@ -635,7 +635,7 @@ TabPage TP_CONTENT_OPT
         Text[ finnish ] = "~Huomautukset";
         Text[ catalan ] = "~Notas";
     };
-    FixedLine GB_BACK
+    FixedLine FL_BACK
     {
         Pos = MAP_APPFONT ( 130 , 95 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
@@ -778,7 +778,7 @@ TabPage TP_CONTENT_OPT
         Text[ finnish ] = "~Kentät";
         Text[ catalan ] = "~Campos";
     };
-    FixedLine GB_SETTINGS
+    FixedLine FL_SETTINGS
     {
         Pos = MAP_APPFONT ( 130 , 122 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
@@ -855,7 +855,7 @@ TabPage TP_OPTPRINT_PAGE
     HelpID = HID_OPTPRINT_PAGE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GRP_1
+    FixedLine FL_1
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
@@ -1064,7 +1064,7 @@ TabPage TP_OPTPRINT_PAGE
         Pos = MAP_APPFONT ( 85 , 10 ) ;
         Size = MAP_APPFONT ( 4 , 82 ) ;
     };
-    FixedLine GRP_2
+    FixedLine FL_2
     {
         Pos = MAP_APPFONT ( 90 , 3 ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
@@ -1334,7 +1334,7 @@ TabPage TP_OPTPRINT_PAGE
         Pos = MAP_APPFONT ( 169 , 10 ) ;
         Size = MAP_APPFONT ( 4 , 82 ) ;
     };
-    FixedLine GRP_3
+    FixedLine FL_3
     {
         Pos = MAP_APPFONT ( 174 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
@@ -1364,7 +1364,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Notas";
     };
-    FixedLine GRP_4
+    FixedLine FL_4
     {
         Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -1522,7 +1522,7 @@ TabPage TP_STD_FONT
     HelpID = HID_STD_FONT ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_STDCHR
+    FixedLine FL_STDCHR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -1855,7 +1855,7 @@ TabPage TP_OPTTABLE_PAGE
     HelpID = HID_OPTTABLE_PAGE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_TABLE
+    FixedLine FL_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
@@ -2003,7 +2003,7 @@ TabPage TP_OPTTABLE_PAGE
         Pos = MAP_APPFONT ( 126 , 10 ) ;
         Size = MAP_APPFONT ( 4 , 56 ) ;
     };
-    FixedLine GB_TABLE_INSERT
+    FixedLine FL_TABLE_INSERT
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
@@ -2118,7 +2118,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ finnish ] = "Tasaus";
         Text[ catalan ] = "~Alineación";
     };
-    FixedLine GB_MOVE
+    FixedLine FL_MOVE
     {
         Pos = MAP_APPFONT ( 6 , 69 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -2585,7 +2585,7 @@ TabPage TP_OPTSRCVIEW
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_COLOR
+    FixedLine FL_COLOR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -2766,7 +2766,7 @@ TabPage TP_OPTSHDWCRSR
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
      //_----------------------------
-    FixedLine GB_NOPRINT
+    FixedLine FL_NOPRINT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
@@ -3032,7 +3032,7 @@ TabPage TP_OPTSHDWCRSR
         Pos = MAP_APPFONT ( 125 , 10 ) ;
         Size = MAP_APPFONT ( 4 , 97 ) ;
     };
-    FixedLine GB_SHDWCRSFLAG
+    FixedLine FL_SHDWCRSFLAG
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
@@ -3268,7 +3268,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 75 , 80 ) ;
         DropDown = TRUE ;
     };
-    FixedLine GB_CRSR_OPT
+    FixedLine FL_CRSR_OPT
     {
         Pos = MAP_APPFONT ( 130 , 110 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;

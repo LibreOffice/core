@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 09:59:57 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 SwCharURLPage::SwCharURLPage(   Window* pParent,
                                 const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SW_RES( TP_CHAR_URL ), rCoreSet ),
-    aURLGB (        this, SW_RES(GB_URL)),
+    aURLFL (        this, SW_RES(FL_URL)),
     aURLFT(         this, SW_RES(FT_URL        )),
     aURLED(         this, SW_RES(ED_URL        )),
     aTextFT(        this, SW_RES(FT_TEXT          )),
@@ -245,7 +245,7 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     aNameED(        this, SW_RES(ED_NAME)),
     aTargetFrmFT(   this, SW_RES(FT_TARGET     )),
     aTargetFrmLB(   this, SW_RES(LB_TARGET    )),
-    aStyleGB(       this, SW_RES(GB_STYLE      )),
+    aStyleFL(       this, SW_RES(FL_STYLE      )),
     aVisitedFT(     this, SW_RES(FT_VISITED    )),
     aVisitedLB(     this, SW_RES(LB_VISITED    )),
     aNotVisitedFT(  this, SW_RES(FT_NOT_VISITED)),
@@ -267,7 +267,7 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
         USHORT nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)
         {
-            aStyleGB.Hide();
+            aStyleFL.Hide();
             aVisitedFT.Hide();
             aVisitedLB.Hide();
             aNotVisitedFT.Hide();

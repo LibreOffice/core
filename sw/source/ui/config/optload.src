@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:54:46 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage TP_OPTLOAD_PAGE
     HelpID = HID_OPTLOAD_PAGE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    FixedLine GB_UPDATE
+    FixedLine FL_UPDATE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -297,7 +297,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ arabic ] = " ÕœÌÀ «·—”Ê„ «·»Ì«‰Ì…  ·ﬁ«∆Ì«";
         Text[ catalan ] = "Actualizar ~diagramas autom·ticamente";
     };
-    FixedLine GB_CAPTION
+    FixedLine FL_CAPTION
     {
         Pos = MAP_APPFONT ( 6 , 68 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -389,7 +389,7 @@ TabPage TP_OPTLOAD_PAGE
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
     };
-    FixedLine GB_SETTINGS
+    FixedLine FL_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 97 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -498,7 +498,7 @@ TabPage TP_OPTLOAD_PAGE
         First = 50 ;
         Last = 9999 ;
     };
-    FixedLine GB_COMPAT
+    FixedLine FL_COMPAT
     {
         Pos = MAP_APPFONT ( 6 , 126 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -1068,7 +1068,7 @@ TabPage TP_OPTCAPTION_PAGE
         Center = TRUE ;
         Text = "Beispiel" ;
     };
-    FixedLine GRP_SETTINGS
+    FixedLine FL_SETTINGS_2
     {
         Pos = MAP_APPFONT ( 133 , 3 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;

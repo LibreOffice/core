@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 12:05:45 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,20 @@
  *
  ************************************************************************/
 
-#define GB_UPDATE               1
+#define FL_UPDATE               1
 #define RB_ALWAYS               2
 #define RB_REQUEST              3
 #define RB_NEVER                4
 
 #define CB_MERGE_PARA_DIST      6
-#define GB_COMPAT               7
+#define FL_COMPAT               7
 #define CB_AUTO_UPDATE_FIELDS   8
 #define CB_AUTO_UPDATE_CHARTS   9
 #define FT_UPDATE_LINKS         10
 
 #define CB_MERGE_PARA_DIST_PAGESTART 14
-#define GB_SETTINGS     15
+#define FL_SETTINGS_2     14
+#define FL_SETTINGS     15
 #define CB_TAB_ALIGNMENT 16
 
 #define FT_TAB          17
@@ -83,7 +84,7 @@
 #define CB_CAPTION      23
 #define PB_OPTIONS      24
 #define TXT_OPTIONS     25
-#define GB_CAPTION      26
+#define FL_CAPTION      26
 
 #define CLB_OBJECTS         1
 #define STR_TABLE           2
@@ -100,7 +101,6 @@
 #define TXT_POS            11
 #define BOX_POS            12
 #define TXT_SAMPLE         13
-#define GRP_SETTINGS       14
 #define STR_BEGINNING      15
 #define STR_END            16
 #define STR_ABOVE          17

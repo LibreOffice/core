@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 08:15:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
  * --------------------------------------------------*/
 SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_OPTLOAD_PAGE), rSet),
-    aUpdateGB   (this, ResId(GB_UPDATE    )),
+    aUpdateFL   (this, ResId(FL_UPDATE    )),
     aLinkFT     (this, ResId(FT_LINK    )),
     aAlwaysRB   (this, ResId(RB_ALWAYS  )),
     aRequestRB  (this, ResId(RB_REQUEST )),
@@ -138,11 +138,11 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aFieldFT    (this, ResId(FT_FIELD   )),
     aAutoUpdateFields(this, ResId(CB_AUTO_UPDATE_FIELDS )),
     aAutoUpdateCharts(this, ResId(CB_AUTO_UPDATE_CHARTS )),
-    aCaptionGB      (this, ResId(GB_CAPTION         )),
+    aCaptionFL      (this, ResId(FL_CAPTION         )),
     aCaptionCB      (this, ResId(CB_CAPTION         )),
     aCaptionFT      (this, ResId(TXT_OPTIONS        )),
     aCaptionPB      (this, ResId(PB_OPTIONS         )),
-    aSettingsGB   ( this,   SW_RES( GB_SETTINGS   ) ),
+    aSettingsFL   ( this,   SW_RES( FL_SETTINGS   ) ),
     aMetricLB     ( this,   SW_RES( LB_METRIC   ) ),
     aMetricFT     ( this,   SW_RES( FT_METRIC   ) ),
     aTabFT        ( this,   SW_RES( FT_TAB      ) ),
@@ -150,7 +150,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aMergeDistCB(this, ResId(CB_MERGE_PARA_DIST )),
     aMergeDistPageStartCB(this, ResId(CB_MERGE_PARA_DIST_PAGESTART  )),
     aTabAlignment(this, ResId(CB_TAB_ALIGNMENT  )),
-    aCompatGB   (this, ResId(GB_COMPAT  )),
+    aCompatFL   (this, ResId(FL_COMPAT  )),
     pWrtShell   (0),
     nLastTab(0),
     nOldLinkMode(MANUAL),
@@ -334,7 +334,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     aMergeDistCB.Enable(pWrtShell != 0);
     aMergeDistPageStartCB.Enable(pWrtShell != 0);
     aTabAlignment.Enable(pWrtShell != 0);
-    aCompatGB.Enable(pWrtShell != 0);
+    aCompatFL.Enable(pWrtShell != 0);
 
     switch (nOldLinkMode)
     {
@@ -381,20 +381,20 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     //hide some controls in HTML
     if(bHTMLMode)
     {
-        aCaptionGB.Hide();
+        aCaptionFL.Hide();
         aCaptionCB.Hide();
         aCaptionFT.Hide();
         aCaptionPB.Hide();
 
-        long nDiff = aSettingsGB.GetPosPixel().Y() - aCaptionGB.GetPosPixel().Y();
+        long nDiff = aSettingsFL.GetPosPixel().Y() - aCaptionFL.GetPosPixel().Y();
 
         Window* aCntrlArr[] = {
-            &aSettingsGB,
+            &aSettingsFL,
             &aMetricFT,
             &aMetricLB,
             &aTabFT,
             &aTabMF,
-            &aCompatGB,
+            &aCompatFL,
             &aMergeDistCB,
             &aMergeDistPageStartCB,
             0};
@@ -481,7 +481,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     aLbLevel        (this, SW_RES(LB_LEVEL      )),
     aFtDelim        (this, SW_RES(FT_SEPARATOR  )),
     aEdDelim        (this, SW_RES(ED_SEPARATOR  )),
-    aSettingsGroup  (this, SW_RES(GRP_SETTINGS  )),
+    aSettingsGroupFL     (this, SW_RES(FL_SETTINGS_2  )),
 
     sSWTable        (SW_RES(STR_TABLE           )),
     sSWFrame        (SW_RES(STR_FRAME           )),

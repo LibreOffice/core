@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-30 12:05:16 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,14 +213,14 @@
 SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SW_RES( TP_CONTENT_OPT ), rCoreSet ),
-    aLineGB       ( this,   SW_RES( GB_LINE     ) ),
+    aLineFL       ( this,   SW_RES( FL_LINE     ) ),
     aTxtbegCB     ( this,   SW_RES( CB_TXTBEG   ) ),
     aTblbegCB     ( this,   SW_RES( CB_TABBEG   ) ),
     aSectBoundsCB( this,    SW_RES( CB_SECT_BOUNDS ) ),
     aCrossCB      ( this,   SW_RES( CB_CROSS     ) ),
     aSolidHandleCB( this,   SW_RES( CB_HANDLE   ) ),
     aBigHandleCB  ( this,   SW_RES( CB_BIGHANDLE) ),
-    aWindowGB     ( this,   SW_RES( GB_WINDOW   ) ),
+    aWindowFL     ( this,   SW_RES( FL_WINDOW   ) ),
     aHScrollBox   ( this,   SW_RES( CB_HSCROLL   ) ),
     aVScrollBox   ( this,   SW_RES( CB_VSCROLL   ) ),
     aHRulerCBox   ( this,   SW_RES( CB_HRULER   ) ),
@@ -228,18 +228,18 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     aVRulerCBox   ( this,   SW_RES( CB_VRULER    ) ),
     aVMetric      ( this,   SW_RES( LB_VMETRIC    ) ),
     aSmoothCBox   ( this,   SW_RES( CB_SMOOTH_SCROLL    ) ),
-    aDispBox      ( this,   SW_RES( GB_DISP     ) ),
+    aDispFL      ( this,   SW_RES( FL_DISP     ) ),
     aGrfCB        ( this,   SW_RES( CB_GRF          ) ),
     aTblCB        ( this,   SW_RES( CB_TBL      ) ),
     aDrwCB        ( this,   SW_RES( CB_DRWFAST   ) ),
     aFldNameCB    ( this,   SW_RES( CB_FIELD    ) ),
     aPostItCB     ( this,   SW_RES( CB_POSTIT   ) ),
-    aBackBox      ( this,   SW_RES( GB_BACK     ) ),
+    aBackFL      ( this,   SW_RES( FL_BACK     ) ),
     aIdxEntryCB   ( this,   SW_RES( CB_IDX_ENTRY     ) ),
     aIdxBackCB   ( this,    SW_RES( CB_INDEX     ) ),
     aFootBackCB   ( this,   SW_RES( CB_FOOTBACK  ) ),
     aFldBackCB    ( this,   SW_RES( CB_FLDBACK      ) ),
-    aSettingsGB   ( this,   SW_RES( GB_SETTINGS   ) ),
+    aSettingsFL   ( this,   SW_RES( FL_SETTINGS   ) ),
     aMetricLB     ( this,   SW_RES( LB_METRIC   ) ),
     aMetricFT     ( this,   SW_RES( FT_METRIC   ) )
 {
@@ -253,7 +253,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
         aIdxBackCB.Hide();
         aFldBackCB.SetPosPixel(aIdxEntryCB.GetPosPixel());
         aMetricLB.Show();
-        aSettingsGB.Show();
+        aSettingsFL.Show();
         aMetricFT.Show();
     }
 
@@ -435,20 +435,20 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aCtrlFldCB       (this, SW_RES(CB_CTRLFLD)),
     aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),
     aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),
-    aGroup1          (this, SW_RES(GRP_1)),
+    aFL1          (this, SW_RES(FL_1)),
     aSeparatorLFL    (this, SW_RES(FL_SEP_PRT_LEFT )),
     aSeparatorRFL    (this, SW_RES(FL_SEP_PRT_RIGHT)),
     aLeftPageCB      (this, SW_RES(CB_LEFTP)),
     aRightPageCB     (this, SW_RES(CB_RIGHTP)),
     aReverseCB       (this, SW_RES(CB_REVERSE)),
     aProspectCB      (this, SW_RES(CB_PROSPECT)),
-    aGroup2          (this, SW_RES(GRP_2)),
+    aFL2          (this, SW_RES(FL_2)),
     aNoRB            (this, SW_RES(RB_NO)),
     aOnlyRB          (this, SW_RES(RB_ONLY)),
     aEndRB           (this, SW_RES(RB_END)),
     aEndPageRB       (this, SW_RES(RB_PAGEEND)),
-    aGroup3          (this, SW_RES(GRP_3)),
-    aGroup4          (this, SW_RES(GRP_4)),
+    aFL3          (this, SW_RES(FL_3)),
+    aFL4          (this, SW_RES(FL_4)),
     aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),
     aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),
     aFaxFT           (this, SW_RES(FT_FAX)),
@@ -506,7 +506,7 @@ void SwAddPrinterTabPage::SetPreview(BOOL bPrev)
         aLeftPageCB.Disable();
         aRightPageCB.Disable();
         aProspectCB.Disable();
-        aGroup3.Disable();
+        aFL3.Disable();
         aNoRB.Disable();
         aOnlyRB.Disable();
         aEndRB.Disable();
@@ -647,7 +647,7 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     aLabelBox   (this, SW_RES(LB_LABEL   )),
     aIdxLbl     (this, SW_RES(FT_IDX     )),
     aIdxBox     (this, SW_RES(LB_IDX     )),
-    aStdChrFrm  (this, SW_RES(GB_STDCHR  )),
+    aStdChrFL  (this, SW_RES(FL_STDCHR  )),
     aDocOnlyCB  (this, SW_RES(CB_DOCONLY )),
     aStandardPB (this, SW_RES(PB_STANDARD)),
     sScriptWestern(ResId(ST_SCRIPT_WESTERN)),
@@ -804,9 +804,9 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 --------------------------------------------------*/
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 {
-    String sTmp(aStdChrFrm.GetText());
+    String sTmp(aStdChrFL.GetText());
     sTmp.SearchAndReplaceAscii("%1", bCJKMode ? sScriptAsian : sScriptWestern);
-    aStdChrFrm.SetText(sTmp);
+    aStdChrFL.SetText(sTmp);
     const SfxPoolItem* pItem;
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_PRINTER, FALSE, &pItem))
@@ -959,9 +959,9 @@ SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet&
     aNumFmtFormattingCB(this, ResId(CB_NUMFMT_FORMATTING    )),
     aNumAlignmentCB (this, ResId(CB_NUMALIGNMENT    )),
     aSeparatorFL     (this, ResId(FL_TABLE_SEPARATOR)),
-    aTableGB        (this, ResId(GB_TABLE           )),
-    aTableInsertGB  (this, ResId(GB_TABLE_INSERT    )),
-    aMoveGB(        this, ResId(GB_MOVE     )),
+    aTableFL        (this, ResId(FL_TABLE           )),
+    aTableInsertFL  (this, ResId(FL_TABLE_INSERT    )),
+    aMoveFL(        this, ResId(FL_MOVE     )),
     aMoveFT(        this, ResId(FT_MOVE     )),
     aRowMoveFT(     this, ResId(FT_ROWMOVE  )),
     aRowMoveMF(     this, ResId(MF_ROWMOVE  )),
@@ -1134,9 +1134,9 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
     //bestimmte Controls fuer HTML verstecken
     if(bHTMLMode)
     {
-/*        Point aPos(aCaptionGB.GetPosPixel());
-        long nYDiff = aTableGB.GetPosPixel().Y() - aPos.Y();
-        aTableGB.SetPosPixel(aPos);
+/*        Point aPos(aCaptionFL.GetPosPixel());
+        long nYDiff = aTableFL.GetPosPixel().Y() - aPos.Y();
+        aTableFL.SetPosPixel(aPos);
 
         aPos = aHeaderCB.GetPosPixel();
         aPos.Y() -= nYDiff;
@@ -1150,9 +1150,9 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         aPos.Y() -= nYDiff;
         aBorderCB.SetPosPixel(aPos);
 
-        aPos = aTableInsertGB.GetPosPixel();
+        aPos = aTableInsertFL.GetPosPixel();
         aPos.Y() -= nYDiff;
-        aTableInsertGB.SetPosPixel(aPos);
+        aTableInsertFL.SetPosPixel(aPos);
 
         aPos = aNumFormattingCB.GetPosPixel();
         aPos.Y() -= nYDiff;
@@ -1166,7 +1166,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         aPos.Y() -= nYDiff;
         aNumAlignmentCB.SetPosPixel(aPos);
 
-        aCaptionGB.Hide();
+        aCaptionFL.Hide();
         aCaptionCB.Hide();
         aCaptionFT.Hide();
         aCaptionPB.Hide();
@@ -1211,7 +1211,7 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
 SwSourceViewOptionsTabPage::SwSourceViewOptionsTabPage(
                     Window* pParent,   const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_OPTSRCVIEW), rSet),
-    aColorGB(this,      ResId(GB_COLOR  )),
+    aColorFL(this,      ResId(FL_COLOR  )),
     aSGMLFT(this,       ResId(FT_SGML   )),
     aSGMLLB(this,       ResId(LB_SGML   )),
     aCommentFT(this,    ResId(FT_COMMENT)),
@@ -1352,7 +1352,7 @@ void SwSourceViewOptionsTabPage::Reset( const SfxItemSet& rSet )
 SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTSHDWCRSR), rSet),
-    aFlagGB( this, ResId( GB_SHDWCRSFLAG )),
+    aFlagFL( this, ResId( FL_SHDWCRSFLAG )),
     aOnOffCB( this, ResId( CB_SHDWCRSONOFF )),
     aFillModeFT( this, ResId( FT_SHDWCRSFILLMODE )),
     aFillMarginRB( this, ResId( RB_SHDWCRSFILLMARGIN )),
@@ -1361,10 +1361,10 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aFillSpaceRB( this, ResId( RB_SHDWCRSFILLSPACE )),
     aColorFT( this, ResId( FT_SHDWCRSCOLOR )),
     aColorLB( this, ResId( LB_SHDWCRSCOLOR )),
-    aCrsrOptGB   ( this, ResId( GB_CRSR_OPT)),
+    aCrsrOptFL   ( this, ResId( FL_CRSR_OPT)),
     aCrsrInProtCB( this, ResId( CB_ALLOW_IN_PROT )),
     aSeparatorFL(   this, ResId( FL_SEPARATOR_SHDW)),
-    aUnprintBox   ( this,   ResId( GB_NOPRINT  ) ),
+    aUnprintFL   ( this,   ResId( FL_NOPRINT  ) ),
     aParaCB       ( this,   ResId( CB_PARA      ) ),
     aSHyphCB      ( this,   ResId( CB_SHYPH        ) ),
     aSpacesCB     ( this,   ResId( CB_SPACE    ) ),
@@ -1415,7 +1415,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         aHiddenCB   .Hide();
         aHiddenParaCB.Hide();
         aBreakCB.SetPosPixel(aTabCB.GetPosPixel());
-        aFlagGB         .Hide();
+        aFlagFL         .Hide();
         aOnOffCB        .Hide();
         aFillModeFT     .Hide();
         aFillMarginRB   .Hide();
@@ -1424,14 +1424,14 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         aFillSpaceRB    .Hide();
         aColorFT        .Hide();
         aColorLB        .Hide();
-        aCrsrOptGB      .Hide();
+        aCrsrOptFL      .Hide();
         aCrsrInProtCB   .Hide();
         aSeparatorFL.Hide();
-        long nWidth = aFlagGB.GetSizePixel().Width() + aFlagGB.GetPosPixel().X()
-                                                        - aUnprintBox.GetPosPixel().X();
-        Size aSize(aUnprintBox.GetSizePixel());
+        long nWidth = aFlagFL.GetSizePixel().Width() + aFlagFL.GetPosPixel().X()
+                                                        - aUnprintFL.GetPosPixel().X();
+        Size aSize(aUnprintFL.GetSizePixel());
         aSize.Width() = nWidth;
-        aUnprintBox.SetSizePixel(aSize);
+        aUnprintFL.SetSizePixel(aSize);
     }
 }
 
@@ -1725,7 +1725,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_REDLINE_OPT), rSet),
 
-    aInsertGB(          this, SW_RES( GB_TE )),
+    aInsertFL(          this, SW_RES( FL_TE )),
     aInsertFT(          this, SW_RES( FT_CHG_INSERT     )),
     aInsertAttrFT(          this, SW_RES( FT_INS_ATTR     )),
     aInsertLB(          this, SW_RES( LB_INS_ATTR     )),
@@ -1750,7 +1750,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     aMarkColorFT        ( this, SW_RES( FT_LC_COL )),
     aMarkColorLB        ( this, SW_RES( LB_LC_COL )),
     aMarkPreviewWN      ( this, SW_RES( WIN_MARK )),
-    aChangedGB          ( this, SW_RES( GB_LC )),
+    aChangedFL          ( this, SW_RES( FL_LC )),
     sAuthor             ( SW_RES( STR_AUTHOR )),
     sNone               ( SW_RES( STR_NOTHING ))
 
@@ -2304,7 +2304,7 @@ void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
 SwTestTabPage::SwTestTabPage( Window* pParent,
                                       const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, WB_HIDE, rCoreSet),
-    aTestGBox       ( this, WB_GROUP ),
+    aTestFL        ( this, WB_GROUP ),
     aTest1CBox      ( this, 0 ),
     aTest2CBox      ( this, 0 ),
     aTest3CBox      ( this, 0 ),
@@ -2318,7 +2318,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     bAttrModified( FALSE )
 {
     lcl_SetPosSize(*this,       Point(0,0), Size(260 , 135));
-    lcl_SetPosSize(aTestGBox,   Point(6,2), Size(209,8));
+    lcl_SetPosSize(aTestFL,   Point(6,2), Size(209,8));
     lcl_SetPosSize(aTest1CBox  ,    Point(12 , 14), Size(74 , 10));
     lcl_SetPosSize(aTest2CBox  ,    Point(12 , 27), Size(74 , 10));
     lcl_SetPosSize(aTest3CBox  ,    Point(12 , 40), Size(74 , 10));
@@ -2330,7 +2330,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     lcl_SetPosSize(aTest9CBox  ,    Point(116, 53), Size(74 , 10));
     lcl_SetPosSize(aTest10CBox  ,   Point(116, 66), Size(74 , 10));
 
-    aTestGBox.SetText( String(ByteString("Einstellungen nur für Testzwecke" ), RTL_TEXTENCODING_MS_1252));
+    aTestFL.SetText( String(ByteString("Einstellungen nur für Testzwecke" ), RTL_TEXTENCODING_MS_1252));
     aTest1CBox .SetText( C2S("Layout not loading"));
     aTest2CBox .SetText( C2S("dynamic"));
     aTest3CBox .SetText( C2S("No calm"               ));
@@ -2341,7 +2341,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     aTest8CBox .SetText( C2S("No Scroll"             ));
     aTest9CBox .SetText( C2S("DrawingLayerNotLoading"));
     aTest10CBox.SetText( C2S("AutoFormat by Input"   ));
-    aTestGBox.Show();
+    aTestFL.Show();
     aTest1CBox .Show();
     aTest2CBox .Show();
     aTest3CBox .Show();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:03:05 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@ TabPage TP_CONDCOLL
     HelpID = HID_COND_COLL ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    GroupBox    GB_CONDITION
+    FixedLine    FL_CONDITION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 179 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Settings" ;
         Text[ english_us ] = "Options";

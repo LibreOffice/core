@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:43:05 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ Page: Ctor
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
-    aConditionGB( this, ResId( GB_CONDITION )),
+    aConditionFL( this, ResId( FL_CONDITION )),
     aConditionCB( this, ResId( CB_CONDITION ) ),
     aContextFT  ( this, ResId( FT_CONTEXT   ) ),
     aUsedFT     ( this, ResId( FT_USED      ) ),
@@ -522,6 +522,9 @@ const CommandStruct* SwCondCollItem::GetCmds()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/02/09 07:43:05  os
+      TabPage size changed
+
       Revision 1.1.1.1  2000/09/18 17:14:32  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-30 20:06:50 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_REDLINE_OPT
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedLine GB_TE
+    FixedLine FL_TE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -799,7 +799,7 @@ TabPage TP_REDLINE_OPT
         Text[ catalan ] = "Attributes";
         Text[ finnish ] = "M‰‰ritteet";
     };
-    FixedLine GB_LC
+    FixedLine FL_LC
     {
         Pos = MAP_APPFONT ( 6 , 144 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
