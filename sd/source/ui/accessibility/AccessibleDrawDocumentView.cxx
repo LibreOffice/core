@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 16:15:16 $
+ *  last change: $Author: af $ $Date: 2002-05-22 08:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,21 +183,6 @@ void AccessibleDrawDocumentView::Init (void)
         mpChildrenManager->Update ();
         mpChildrenManager->UpdateSelection ();
     }
-
-    // Set SELECTED and FOCUSED states of children.
-
-    // First determine if there is a non-empty selection.  This is necessary
-    // for trying to omit the iteration over all children which creates
-    // every child.
-    uno::Reference<view::XSelectionSupplier> xSel (mxController, uno::UNO_QUERY);
-    uno::Any aSelection = xSel->getSelection();
-    bool bSelectedShapesExist = false;
-    uno::Reference<container::XIndexAccess> xSelectedShapeAccess (aSelection, uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xSelectedShape (aSelection, uno::UNO_QUERY);
-    if (xSelectedShapeAccess.is())
-        bSelectedShapesExist = xSelectedShapeAccess->getCount() > 0;
-    else if (xSelectedShape.is())
-        bSelectedShapesExist = true;
 }
 
 
@@ -463,6 +448,9 @@ void SAL_CALL
     return sDescription;
 }
 
+
+
+
 /** Return selection state of specified child
 */
 sal_Bool
@@ -506,13 +494,9 @@ sal_Bool
 
 
 
-/** Set selection state of specified child.
-    For proper handling of focus we do the following:
-    1. Reset the focused state at all children.  This is necessary because
-       we don't know which child is currently focused.
-    2. Set or reset the selection at shapes.
-    3. Set the focused state at a shape when a) only on one shape b) has
-        been selected.
+/** Select or delselect the specified shapes.  The corresponding accessible
+    shapes are notified over the selection change listeners registered with
+    the XSelectionSupplier of the controller.
 */
 void
     AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
@@ -521,22 +505,9 @@ void
     const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
     AccessibleShape* pAccessibleChild;
-    sal_Int32 i;
-    sal_Int32 nCount;
 
     if( xSel.is() )
     {
-        // 1. Reset the focused state at all children.
-        for (i=0, nCount=getAccessibleChildCount(); i<nCount; ++i)
-        {
-            pAccessibleChild = AccessibleShape::getImplementation (getAccessibleChild(i));
-            if (pAccessibleChild != NULL)
-                pAccessibleChild->ResetState (AccessibleStateType::FOCUSED);
-        }
-
-        // 2. Handle selection of shapes.
-        //    In pAccessibleChild is stored the accessible shape selected
-        //    most recently.
         uno::Any aAny;
 
         if( ACCESSIBLE_SELECTION_CHILD_ALL == nAccessibleChildIndex )
@@ -549,7 +520,7 @@ void
             {
                 uno::Reference< drawing::XShapes > xShapes( new SvxShapeCollection() );
 
-                for( i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                for(sal_Int32 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
                 {
                     AccessibleShape* pAcc = AccessibleShape::getImplementation( getAccessibleChild( i ) );
 
@@ -576,12 +547,6 @@ void
                 getAccessibleChild( nAccessibleChildIndex ));
             pAccessibleChild = pAcc;
 
-            // Set or reset the SELECTED state of the child.
-            if (bSelect)
-                pAcc->SetState (AccessibleStateType::SELECTED);
-            else
-                pAcc->ResetState (AccessibleStateType::SELECTED);
-
             // Add or remove the shape that is made accessible from the
             // selection of the controller.
             if( pAcc )
@@ -596,7 +561,8 @@ void
                     aAny = xSel->getSelection();
                     aAny >>= xShapes;
 
-                    for( i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bFound; ++i )
+                    // Search shape to be selected in current selection.
+                    for(sal_Int32 i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bFound; ++i )
                         if( xShapes->getByIndex( i ) == xShape )
                             bFound = sal_True;
 
@@ -609,17 +575,6 @@ void
                     xSel->select( aAny );
                 }
             }
-        }
-
-        // 3. Set FOCUSED state.
-        //    Use the content of pAccessibleChild if
-        //    bSelected is true and the selection is no multi-selection
-        if (bSelect)
-        {
-            aAny = xSel->getSelection();
-            uno::Reference<container::XIndexAccess> xSelectedShapes (aAny, uno::UNO_QUERY);
-            if ( !xSelectedShapes.is() || xSelectedShapes->getCount() == 1)
-                pAccessibleChild->SetState (AccessibleStateType::FOCUSED);
         }
     }
 }
