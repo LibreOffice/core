@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-12-07 16:07:37 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,19 @@ void FontStyleMenu::Highlight()
 
 // -----------------------------------------------------------------------
 
+BOOL FontStyleMenu::ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount )
+{
+    for ( USHORT i = 0; i < nCount; i++ )
+    {
+        if ( GetItemText( i+FONTSTYLEMENU_FIRSTID ) == rStyleName )
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
 void FontStyleMenu::Fill( const XubString& rName, const FontList* pList )
 {
     USHORT nItemId = GetItemId( 0 );
@@ -222,46 +235,99 @@ void FontStyleMenu::Fill( const XubString& rName, const FontList* pList )
     sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
     if ( hFontInfo )
     {
+        XubString   aStyleText;
         USHORT      nPos = 0;
         USHORT      nId = FONTSTYLEMENU_FIRSTID;
+        FontWeight  eLastWeight = WEIGHT_DONTKNOW;
+        FontItalic  eLastItalic = ITALIC_NONE;
+        FontWidth   eLastWidth = WIDTH_DONTKNOW;
         BOOL        bNormal = FALSE;
         BOOL        bItalic = FALSE;
         BOOL        bBold = FALSE;
         BOOL        bBoldItalic = FALSE;
+        BOOL        bInsert = FALSE;
         FontInfo    aInfo;
         while ( hFontInfo )
         {
             aInfo = pList->GetFontInfo( hFontInfo );
 
-            XubString aStyleText = pList->GetStyleName( aInfo );
-            FontWeight eWeight = aInfo.GetWeight();
-            FontItalic eItalic = aInfo.GetItalic();
-            if ( eWeight <= WEIGHT_NORMAL )
+            FontWeight  eWeight = aInfo.GetWeight();
+            FontItalic  eItalic = aInfo.GetItalic();
+            FontWidth   eWidth = aInfo.GetWidthType();
+            // Only if the attributes are different, we insert the
+            // Font to avoid double Entries in different languages
+            if ( (eWeight != eLastWeight) || (eItalic != eLastItalic) ||
+                 (eWidth != eLastWidth) )
             {
-                bNormal = TRUE;
-                if ( eItalic != ITALIC_NONE )
-                    bItalic = TRUE;
+                if ( bInsert )
+                {
+                    InsertItem( nId, aStyleText,
+                                MIB_RADIOCHECK | MIB_AUTOCHECK, nPos );
+                    nPos++;
+                    nId++;
+                }
+
+                if ( eWeight <= WEIGHT_NORMAL )
+                {
+                    if ( eItalic != ITALIC_NONE )
+                        bItalic = TRUE;
+                    else
+                        bNormal = TRUE;
+                }
+                else
+                {
+                    if ( eItalic != ITALIC_NONE )
+                        bBoldItalic = TRUE;
+                    else
+                        bBold = TRUE;
+                }
+
+                // For wrong StyleNames we replace this with the correct once
+                aStyleText = pList->GetStyleName( aInfo );
+                bInsert = !ImplIsAlreadyInserted( aStyleText, nPos );
+                if ( !bInsert )
+                {
+                    aStyleText = pList->GetStyleName( eWeight, eItalic );
+                    bInsert = !ImplIsAlreadyInserted( aStyleText, nPos );
+                }
+
+                eLastWeight = eWeight;
+                eLastItalic = eItalic;
+                eLastWidth = eWidth;
             }
             else
             {
-                if ( eItalic != ITALIC_NONE )
-                    bBoldItalic = TRUE;
-                else
-                    bBold = TRUE;
+                if ( bInsert )
+                {
+                    // If we have two names for the same attributes
+                    // we prefer the translated standard names
+                    const XubString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
+                    if ( rAttrStyleText != aStyleText )
+                    {
+                        XubString aTempStyleText = pList->GetStyleName( aInfo );
+                        if ( rAttrStyleText == aTempStyleText )
+                            aStyleText = rAttrStyleText;
+                        bInsert = !ImplIsAlreadyInserted( aStyleText, nPos );
+                    }
+                }
             }
-            if ( aStyleText == pList->GetItalicStr() )
+
+            if ( !bItalic && (aStyleText == pList->GetItalicStr()) )
                 bItalic = TRUE;
-            else if ( aStyleText == pList->GetBoldStr() )
+            else if ( !bBold && (aStyleText == pList->GetBoldStr()) )
                 bBold = TRUE;
-            else if ( aStyleText == pList->GetBoldItalicStr() )
+            else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
                 bBoldItalic = TRUE;
 
+            hFontInfo = pList->GetNextFontInfo( hFontInfo );
+        }
+
+        if ( bInsert )
+        {
             InsertItem( nId, aStyleText,
                         MIB_RADIOCHECK | MIB_AUTOCHECK, nPos );
             nPos++;
             nId++;
-
-            hFontInfo = pList->GetNextFontInfo( hFontInfo );
         }
 
         // Bestimmte Styles als Nachbildung
@@ -367,9 +433,6 @@ FontSizeMenu::~FontSizeMenu()
 void FontSizeMenu::Select()
 {
     const USHORT nCurItemId = GetCurItemId();
-    sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
-    FontSizeNames::SetNamePreference( nValue == 0 );
-
     mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
     maSelectHdl.Call( this );
 }
@@ -385,7 +448,6 @@ void FontSizeMenu::Highlight()
     else
     {
         sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
-        FontSizeNames::SetNamePreference( nValue == 0 );
         mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
     }
     maHighlightHdl.Call( this );
@@ -402,52 +464,58 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     if ( mpHeightAry )
         delete mpHeightAry;
 
+    const long* pTempAry;
     const long* pAry = pList->GetSizeAry( rInfo );
-    int n = 0;
-    for(; pAry[n]; ++n );
-    mpHeightAry = new long[ 2*n ];  // double size needed for chinese names
+    USHORT nSizeCount = 0;
+    while ( pAry[nSizeCount] )
+        nSizeCount++;
 
-    USHORT nId = 0;
+    USHORT nPos = 0;
 
     // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames;
-    if( !aFontSizeNames.IsEmpty() )
+    FontSizeNames aFontSizeNames( maIntn.GetLanguage() );
+    mpHeightAry = new long[nSizeCount+aFontSizeNames.Count()];
+    if ( !aFontSizeNames.IsEmpty() )
     {
-        pAry = pList->GetSizeAry( rInfo );
-        if( pAry && (pAry == pList->GetStdSizeAry()) )
+        if ( pAry == pList->GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            for( int i = 0;; ++i )
+            ULONG nCount = aFontSizeNames.Count();
+            for( ULONG i = 0; i < nCount; i++ )
             {
-                const char* szSizeName = aFontSizeNames.GetIndexName( i );
-                if( !szSizeName)
-                    break;
-                long nSize = aFontSizeNames.GetIndexSize( i );
-                mpHeightAry[ nId ] = nSize;
-                const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
-                InsertItem( ++nId, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                String  aSizeName = aFontSizeNames.GetIndexName( i );
+                long    nSize = aFontSizeNames.GetIndexSize( i );
+                mpHeightAry[nPos] = nSize;
+                nPos++; // Id is nPos+1
+                InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
             }
         }
         else
         {
             // for fixed size fonts only selectable font size names
-            for( ; *pAry; ++pAry )
+            pTempAry = pAry;
+            while ( *pTempAry )
             {
-                if( const char* szSizeName = aFontSizeNames.Size2UtfName( *pAry ) )
+                String aSizeName = aFontSizeNames.Size2Name( *pTempAry );
+                if ( aSizeName.Len() )
                 {
-                    mpHeightAry[ nId ] = *pAry;
-                    const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
-                    InsertItem( ++nId, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                    mpHeightAry[nPos] = *pTempAry;
+                    nPos++; // Id is nPos+1
+                    InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
                 }
+                pTempAry++;
             }
         }
     }
 
     // then insert numerical font size values
-    for( pAry = pList->GetSizeAry( rInfo ); *pAry; ++pAry )
+    pTempAry = pAry;
+    while ( *pTempAry )
     {
-        mpHeightAry[ nId ] = *pAry;
-        InsertItem( ++nId, maIntn.GetNum( *pAry ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+        mpHeightAry[nPos] = *pTempAry;
+        nPos++; // Id is nPos+1
+        InsertItem( nPos, maIntn.GetNum( *pTempAry ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+        pTempAry++;
     }
 
     SetCurHeight( mnCurHeight );
@@ -467,7 +535,7 @@ void FontSizeMenu::SetCurHeight( long nHeight )
     {
         USHORT nItemId = GetItemId( i );
 
-        if( mpHeightAry[i] == nHeight )
+        if ( mpHeightAry[i] == nHeight )
         {
             CheckItem( nItemId, TRUE );
             return;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2000-12-07 16:07:37 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,9 +223,7 @@ USHORT ColorListBox::GetEntryPos( const Color& rColor ) const
     {
         ImplColorListData* pData = pColorList->GetObject( --n );
         if ( pData->bColor && ( pData->aColor == rColor ) )
-        {
             return n;
-        }
     }
     return LISTBOX_ENTRY_NOTFOUND;
 }
@@ -261,14 +259,10 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
             ListBox::DrawEntry( rUDEvt, FALSE, TRUE, FALSE );
         }
         else
-        {
             ListBox::DrawEntry( rUDEvt, FALSE, TRUE, TRUE );
-        }
     }
     else
-    {
         ListBox::DrawEntry( rUDEvt, TRUE, TRUE, FALSE );
-    }
 }
 
 // =======================================================================
@@ -857,11 +851,10 @@ void FontStyleBox::LoseFocus()
 
 void FontStyleBox::Modify()
 {
-    CharClass aChrCls( ::comphelper::getProcessServiceFactory(),
-        Application::GetSettings().GetLocale() );
-
-    XubString       aStr = GetText();
-    USHORT          nEntryCount = GetEntryCount();
+    CharClass   aChrCls( ::comphelper::getProcessServiceFactory(),
+                         GetSettings().GetLocale() );
+    XubString   aStr = GetText();
+    USHORT      nEntryCount = GetEntryCount();
 
     if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
     {
@@ -890,84 +883,112 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
     // da sonst aLastStyle ueberschrieben wird
     // Vorherige Position merken und Box loeschen
     XubString aOldText = GetText();
-    USHORT   nPos = GetEntryPos( aOldText );
+    USHORT nPos = GetEntryPos( aOldText );
     Clear();
 
     // Existiert ein Font mit diesem Namen
     sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
     if ( hFontInfo )
     {
-        BOOL        bFound = FALSE;
+        XubString   aStyleText;
+        FontWeight  eLastWeight = WEIGHT_DONTKNOW;
+        FontItalic  eLastItalic = ITALIC_NONE;
+        FontWidth   eLastWidth = WIDTH_DONTKNOW;
         BOOL        bNormal = FALSE;
         BOOL        bItalic = FALSE;
         BOOL        bBold = FALSE;
         BOOL        bBoldItalic = FALSE;
+        BOOL        bInsert = FALSE;
         FontInfo    aInfo;
         while ( hFontInfo )
         {
             aInfo = pList->GetFontInfo( hFontInfo );
 
-            XubString   aStyleText = pList->GetStyleName( aInfo );
             FontWeight  eWeight = aInfo.GetWeight();
             FontItalic  eItalic = aInfo.GetItalic();
-            if ( eWeight <= WEIGHT_NORMAL )
+            FontWidth   eWidth = aInfo.GetWidthType();
+            // Only if the attributes are different, we insert the
+            // Font to avoid double Entries in different languages
+            if ( (eWeight != eLastWeight) || (eItalic != eLastItalic) ||
+                 (eWidth != eLastWidth) )
             {
-                bNormal = TRUE;
-                if ( eItalic != ITALIC_NONE )
-                    bItalic = TRUE;
+                if ( bInsert )
+                    InsertEntry( aStyleText );
+
+                if ( eWeight <= WEIGHT_NORMAL )
+                {
+                    if ( eItalic != ITALIC_NONE )
+                        bItalic = TRUE;
+                    else
+                        bNormal = TRUE;
+                }
+                else
+                {
+                    if ( eItalic != ITALIC_NONE )
+                        bBoldItalic = TRUE;
+                    else
+                        bBold = TRUE;
+                }
+
+                // For wrong StyleNames we replace this with the correct once
+                aStyleText = pList->GetStyleName( aInfo );
+                bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
+                if ( !bInsert )
+                {
+                    aStyleText = pList->GetStyleName( eWeight, eItalic );
+                    bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
+                }
+
+                eLastWeight = eWeight;
+                eLastItalic = eItalic;
+                eLastWidth = eWidth;
             }
             else
             {
-                if ( eItalic != ITALIC_NONE )
-                    bBoldItalic = TRUE;
-                else
-                    bBold = TRUE;
+                if ( bInsert )
+                {
+                    // If we have two names for the same attributes
+                    // we prefer the translated standard names
+                    const XubString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
+                    if ( rAttrStyleText != aStyleText )
+                    {
+                        XubString aTempStyleText = pList->GetStyleName( aInfo );
+                        if ( rAttrStyleText == aTempStyleText )
+                            aStyleText = rAttrStyleText;
+                        bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
+                    }
+                }
             }
-            if ( aStyleText == pList->GetItalicStr() )
-                bItalic = TRUE;
-            else if ( aStyleText == pList->GetBoldStr() )
-                bBold = TRUE;
-            else if ( aStyleText == pList->GetBoldItalicStr() )
-                bBoldItalic = TRUE;
-            if ( !bFound && (aStyleText == aLastStyle) )
-                bFound = TRUE;
 
-            // Falls doch mal doppelte Strings kommen, dann
-            // nach Moeglichkeit abfangen
-            if ( GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND )
-                InsertEntry( aStyleText );
+            if ( !bItalic && (aStyleText == pList->GetItalicStr()) )
+                bItalic = TRUE;
+            else if ( !bBold && (aStyleText == pList->GetBoldStr()) )
+                bBold = TRUE;
+            else if ( !bBoldItalic && (aStyleText == pList->GetBoldItalicStr()) )
+                bBoldItalic = TRUE;
 
             hFontInfo = pList->GetNextFontInfo( hFontInfo );
         }
+
+        if ( bInsert )
+            InsertEntry( aStyleText );
 
         // Bestimmte Styles als Nachbildung
         if ( bNormal )
         {
             if ( !bItalic )
-            {
-                if ( !bFound && (aLastStyle == pList->GetItalicStr()) )
-                    bFound = TRUE;
                 InsertEntry( pList->GetItalicStr() );
-            }
             if ( !bBold )
-            {
-                if ( !bFound && (aLastStyle == pList->GetBoldStr()) )
-                    bFound = TRUE;
                 InsertEntry( pList->GetBoldStr() );
-            }
         }
         if ( !bBoldItalic )
         {
             if ( bNormal || bItalic || bBold )
-            {
-                if ( !bFound && (aLastStyle == pList->GetBoldItalicStr()) )
-                    bFound = TRUE;
                 InsertEntry( pList->GetBoldItalicStr() );
-            }
         }
         if ( aOldText.Len() )
         {
-            if ( bFound )
+            if ( GetEntryPos( aLastStyle ) != LISTBOX_ENTRY_NOTFOUND )
                 ComboBox::SetText( aLastStyle );
             else
             {
@@ -1042,6 +1063,24 @@ void FontSizeBox::ImplInit()
 
 // -----------------------------------------------------------------------
 
+void FontSizeBox::Reformat()
+{
+    if ( !bRelativeMode )
+    {
+        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        long nNewValue = aFontSizeNames.Name2Size( GetText() );
+        if ( nNewValue)
+        {
+            mnLastValue = nNewValue;
+            return;
+        }
+    }
+
+    MetricBox::Reformat();
+}
+
+// -----------------------------------------------------------------------
+
 void FontSizeBox::Modify()
 {
     MetricBox::Modify();
@@ -1092,8 +1131,6 @@ void FontSizeBox::Modify()
 
         if ( bNewMode != bRelative || bPtRelative != bOldPtRelMode )
             SetRelative( bNewMode );
-
-        MetricBox::Modify();
     }
 }
 
@@ -1110,62 +1147,68 @@ void FontSizeBox::Fill( const FontInfo& rInfo, const FontList* pList )
         return;
 
     // query font sizes
+    const long* pTempAry;
     const long* pAry = pList->GetSizeAry( rInfo );
 
-    // for standard sizes we don't need to bother
-    if ( (pAry == pList->GetStdSizeAry()) && GetEntryCount() )
+    if ( pAry == pList->GetStdSizeAry() )
     {
-        if ( bStdSize )
+        // for standard sizes we don't need to bother
+        if ( bStdSize && GetEntryCount() )
             return;
         bStdSize = TRUE;
     }
     else
         bStdSize = FALSE;
 
-    Selection aSelection = GetSelection();
-    XubString  aStr = GetText();
+    Selection   aSelection = GetSelection();
+    XubString   aStr = GetText();
 
     Clear();
+    USHORT nPos = 0;
 
-    int nId = 0;
     // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames;
-    if( !aFontSizeNames.IsEmpty() )
+    FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+    if ( !aFontSizeNames.IsEmpty() )
     {
-        if( pAry == pList->GetStdSizeAry() )
+        if ( pAry == pList->GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            for( int i = 0;; ++i )
+            ULONG nCount = aFontSizeNames.Count();
+            for( ULONG i = 0; i < nCount; i++ )
             {
-                const char* szSizeName = aFontSizeNames.GetIndexName( i );
-                if( !szSizeName)
-                    break;
-                long nSize = aFontSizeNames.GetIndexSize( i );
-                const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
-                ComboBox::InsertEntry( aSizeName, ++nId );
-                ComboBox::SetEntryData( nId, (void*)(-nSize) );         // mark as special
+                String  aSizeName = aFontSizeNames.GetIndexName( i );
+                long    nSize = aFontSizeNames.GetIndexSize( i );
+                ComboBox::InsertEntry( aSizeName, nPos );
+                ComboBox::SetEntryData( nPos, (void*)(-nSize) ); // mark as special
+                nPos++;
             }
         }
         else
         {
             // for fixed size fonts only selectable font size names
-            for( pAry = pList->GetSizeAry( rInfo ); *pAry; ++pAry )
+            pTempAry = pAry;
+            while ( *pTempAry )
             {
-                if( const char* szSizeName = aFontSizeNames.Size2UtfName( *pAry ) )
+                String aSizeName = aFontSizeNames.Size2Name( *pTempAry );
+                if ( aSizeName.Len() )
                 {
-                    const String aSizeName( szSizeName, RTL_TEXTENCODING_UTF8 );
-                    ComboBox::InsertEntry( aSizeName, ++nId );
-                    ComboBox::SetEntryData( nId, (void*)(-(*pAry)) );   // mark as special
+                    ComboBox::InsertEntry( aSizeName, nPos );
+                    ComboBox::SetEntryData( nPos, (void*)(-(*pTempAry)) ); // mark as special
+                    nPos++;
                 }
+                pTempAry++;
             }
         }
     }
 
     // then insert numerical font size values
-    for( pAry = pList->GetSizeAry( rInfo ); *pAry; ++pAry )
+    pTempAry = pAry;
+    while ( *pTempAry )
     {
-        InsertValue( *pAry, FUNIT_NONE, ++nId );
-        ComboBox::SetEntryData( nId, (void*)(+(*pAry)) );   // mark as normal
+        InsertValue( *pTempAry, FUNIT_NONE, nPos );
+        ComboBox::SetEntryData( nPos, (void*)(*pTempAry) );
+        nPos++;
+        pTempAry++;
     }
 
     SetText( aStr );
@@ -1270,18 +1313,48 @@ XubString FontSizeBox::CreateFieldText( long nValue ) const
 
 // -----------------------------------------------------------------------
 
+void FontSizeBox::SetValue( long nNewValue, FieldUnit eInUnit )
+{
+    if ( !bRelative )
+    {
+        long nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
+        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        String aName = aFontSizeNames.Size2Name( nTempValue );
+        if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
+        {
+            mnLastValue = nTempValue;
+            SetText( aName );
+            mnFieldValue = mnLastValue;
+            SetEmptyFieldValueData( FALSE );
+        }
+    }
+
+    MetricBox::SetValue( nNewValue, eInUnit );
+}
+
+// -----------------------------------------------------------------------
+
+void FontSizeBox::SetValue( long nNewValue )
+{
+    SetValue( nNewValue, FUNIT_NONE );
+}
+
+// -----------------------------------------------------------------------
+
 long FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
 {
-    long nComboVal = (long)ComboBox::GetEntryData( nPos );
-    if( nComboVal < 0 )     // marked as special?
+    if ( !bRelative )
     {
-        FontSizeNames::SetNamePreference( true );
-        return -nComboVal;
+        long nComboVal = (long)ComboBox::GetEntryData( nPos );
+        if ( nComboVal < 0 )     // marked as special?
+        {
+            return MetricField::ConvertValue( (long)-nComboVal, mnBaseValue, GetDecimalDigits(),
+                                              meUnit, eOutUnit );
+        }
     }
 
     // do normal font size processing
-    long nRetValue = MetricFormatter::GetValue( eOutUnit );
-    FontSizeNames::SetNamePreference( false );
+    long nRetValue = MetricBox::GetValue( nPos, eOutUnit );
     return nRetValue;
 }
 
@@ -1289,27 +1362,41 @@ long FontSizeBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
 
 long FontSizeBox::GetValue( FieldUnit eOutUnit ) const
 {
-    long nNewValue = 0;
-
-    if( GetField() )
+    if ( !bRelative )
     {
-        FontSizeNames aFontSizeNames;
-        nNewValue = aFontSizeNames.Name2Size( GetField()->GetText() );
+        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        long nValue = aFontSizeNames.Name2Size( GetText() );
+        if ( nValue)
+            return MetricField::ConvertValue( nValue, GetBaseValue(), GetDecimalDigits(), GetUnit(), eOutUnit );
     }
 
-    FontSizeNames::SetNamePreference( (nNewValue != 0) );
-
-    if( !nNewValue)
-        nNewValue = MetricBox::GetValue( eOutUnit );
-
-    return nNewValue;
+    return MetricBox::GetValue( eOutUnit );
 }
 
 // -----------------------------------------------------------------------
 
-void FontSizeBox::SetValue( long nNewValue, FieldUnit eInUnit )
+long FontSizeBox::GetValue() const
 {
-    MetricFormatter::SetValue( nNewValue, eInUnit );
+    // Implementation not inline, because it is a virtual Function
+    return GetValue( FUNIT_NONE );
 }
 
 // -----------------------------------------------------------------------
+
+void FontSizeBox::SetUserValue( long nNewValue, FieldUnit eInUnit )
+{
+    if ( !bRelative )
+    {
+        long nTempValue = MetricField::ConvertValue( nNewValue, GetBaseValue(), GetDecimalDigits(), eInUnit, GetUnit() );
+        FontSizeNames aFontSizeNames( GetSettings().GetInternational().GetLanguage() );
+        String aName = aFontSizeNames.Size2Name( nTempValue );
+        if ( aName.Len() && (GetEntryPos( aName ) != LISTBOX_ENTRY_NOTFOUND) )
+        {
+            mnLastValue = nTempValue;
+            SetText( aName );
+            return;
+        }
+    }
+
+    MetricBox::SetUserValue( nNewValue, eInUnit );
+}
