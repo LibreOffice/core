@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: mba $ $Date: 2001-11-15 15:02:11 $
-#*    $Revision: 1.6 $
+#*    last change       $Author: mba $ $Date: 2001-12-07 12:40:27 $
+#*    $Revision: 1.7 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -320,12 +320,6 @@ interface Application : Module
         SID_CRASH
         [
         ExecMethod = MiscExec_Impl ;
-        ]
-
-        SID_SYNCHRONIZE
-        [
-                StateMethod = MiscState_Impl;
-                ExecMethod = MiscExec_Impl;
         ]
 }
 
