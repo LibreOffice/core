@@ -1,0 +1,15 @@
+#ifndef __org_openoffice_test_ImageShrink_idl__
+#define __org_openoffice_test_ImageShrink_idl__
+#include <org/openoffice/test/XImageShrink.idl>
+#include <com/sun/star/document/XFilter.idl>
+
+module org { module openoffice { module test {
+
+service ImageShrink {
+  interface org::openoffice::test::XImageShrink;
+  interface com::sun::star::document::XFilter;
+};
+
+}; }; };
+
+#endif
