@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:24:29 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -34610,7 +34610,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "Die Matrix der erwarteten Daten." ;
             Text [ italian ] = "è l'intervallo di dati contenente la proporzione del prodotto dei totali di riga e di colonna per il totale complessivo." ;
             Text [ portuguese_brazilian ] = "Die Matrix der erwarteten Daten." ;
-            Text [ portuguese ] = "é o intervalo de dados que contém a proporção entre o produto dos totais das linhas e das colunas em relação à soma total." ;
+            Text [ portuguese ] = "É a matriz dos dados necessários." ;
             Text [ finnish ] = "Die Matrix der erwarteten Daten." ;
             Text [ danish ] = "Matrixen med de forventede værdier." ;
             Text [ french ] = "La plage des données prévues." ;
