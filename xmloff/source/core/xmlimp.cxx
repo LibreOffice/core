@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 17:02:32 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,6 +753,27 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
 
     if( !sRet.getLength() )
         sRet = INetURLObject::RelToAbs( rURL );
+
+    return sRet;
+}
+
+::rtl::OUString SvXMLImport::ResolveEmbeddedObjectURL(
+                                    const ::rtl::OUString& rURL,
+                                    const ::rtl::OUString& rClassId )
+{
+    ::rtl::OUString sRet;
+
+    if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) &&
+         xEmbeddedResolver.is() )
+    {
+        OUString sURL( rURL );
+        if( rClassId.getLength() )
+        {
+            sURL += OUString( '!' );
+            sURL += rClassId;
+        }
+        sRet = xEmbeddedResolver->resolveEmbeddedObjectURL( sURL );
+    }
 
     return sRet;
 }

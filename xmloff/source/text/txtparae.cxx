@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-25 11:33:41 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1920,11 +1920,10 @@ void XMLTextParagraphExport::_exportTextEmbedded(
                                                 : sXML_object_ole;
 
     // xlink:href
-    OUString sStreamName, sClassId;
-    getTextEmbeddedObjectProperties( rPropSet, sStreamName, sClassId );
+    OUString sURL, sClassId;
+    getTextEmbeddedObjectProperties( rPropSet, sURL, sClassId );
+    sURL = GetExport().AddEmbeddedObject( sURL );
 
-    OUString sURL( GetExport().GetObjectsPath() );
-    sURL += sStreamName;
     GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
                                    sXML_simple );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:27:59 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 11:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ void SvXMLExport::_InitCtor()
     sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
     sObjectsPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#./" ) );
     sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
+    sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 }
 
 SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass ) :
@@ -885,6 +886,20 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
     }
     else
         sRet = INetURLObject::AbsToRel( sRet );
+
+    return sRet;
+}
+
+OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
+{
+    OUString sRet;
+    if( 0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
+                sEmbeddedObjectProtocol.getLength() ) &&
+        xEmbeddedResolver.is() )
+    {
+        sRet =
+            xEmbeddedResolver->resolveEmbeddedObjectURL( rEmbeddedObjectURL );
+    }
 
     return sRet;
 }
