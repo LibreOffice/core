@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:09:11 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,15 +415,11 @@ void SAL_CALL ODatabaseSource::storeToURL( const ::rtl::OUString& sURL, const Se
 // XModifyBroadcaster
 void SAL_CALL ODatabaseSource::addModifyListener( const Reference< XModifyListener >& _xListener ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        return;
     m_aModifyListeners.addInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::removeModifyListener( const Reference< XModifyListener >& _xListener ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     m_aModifyListeners.removeInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
@@ -468,19 +464,9 @@ void SAL_CALL ODatabaseSource::close( sal_Bool bDeliverOwnership ) throw (::com:
     if (OComponentHelper::rBHelper.bDisposed)
         throw DisposedException();
 
-    lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    ::cppu::OInterfaceIteratorHelper pIterator(m_aCloseListener);
-    while (pIterator.hasMoreElements())
-    {
-        try
-        {
-            ((com::sun::star::util::XCloseListener*)pIterator.next())->queryClosing( aSource, bDeliverOwnership );
-        }
-        catch( RuntimeException& )
-        {
-            pIterator.remove();
-        }
-    }
+    ResettableMutexGuard _rGuard(m_aMutex);
+    lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
+    NOTIFY_LISTERNERS1(m_aCloseListener,com::sun::star::util::XCloseListener,queryClosing,bDeliverOwnership);
 
     ::std::vector< Reference< XController> > aCopy = m_aControllers;
     ::std::vector< Reference< XController> >::iterator aIter = aCopy.begin();
@@ -496,32 +482,18 @@ void SAL_CALL ODatabaseSource::close( sal_Bool bDeliverOwnership ) throw (::com:
     }
     m_aControllers.clear();
     dispose();
-
-    ::cppu::OInterfaceIteratorHelper pCloseIterator(m_aCloseListener);
-    while (pCloseIterator.hasMoreElements())
     {
-        try
-        {
-            ((com::sun::star::util::XCloseListener*)pCloseIterator.next())->notifyClosing( aSource );
-        }
-        catch( RuntimeException& )
-        {
-            pCloseIterator.remove();
-        }
+        NOTIFY_LISTERNERS(m_aCloseListener,com::sun::star::util::XCloseListener,notifyClosing);
     }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::addCloseListener( const Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    if ( Listener.is() && !OComponentHelper::rBHelper.bDisposed )
-        m_aCloseListener.addInterface(Listener);
+    m_aCloseListener.addInterface(Listener);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::removeCloseListener( const Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    if ( Listener.is() && !OComponentHelper::rBHelper.bDisposed )
         m_aCloseListener.removeInterface(Listener);
 }
 // -----------------------------------------------------------------------------
@@ -986,15 +958,11 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::addFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    if (OComponentHelper::rBHelper.bDisposed)
-        return;
     m_aFlushListeners.addInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     m_aFlushListeners.removeInterface(_xListener);
 }
 // -----------------------------------------------------------------------------
