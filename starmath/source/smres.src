@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:43:39 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2406,7 +2406,7 @@ ModalDialog RID_ALIGNDIALOG
         Text[ chinese_simplified ] = "Ë®Æ½·½Ïò";
         Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "Poziomo";
-        Text[ japanese ] = "…•½‚É”z—ñ";
+        Text[ japanese ] = "¶‰E‚É”z—ñ";
         Text[ chinese_traditional ] = "¤ô¥­¤è¦V";
         Text[ arabic ] = "ÃİŞí";
         Text[ greek ] = "Ïñéæüíôéá";
@@ -3413,24 +3413,24 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message = "Der \"StarMath\" Font ist nicht installiert !\nOhne diesen Font kann StarMath nicht korrekt arbeiten...\nInstallieren Sie den Font und starten Sie StarMath erneut." ;
     Message [ ENGLISH ] = "The Font \"StarMath\" is not installed!\nWithout this Font StarMath is not working correct...\nPlease install this Font and restart StarMath." ;
     Message [ norwegian ] = "The Font \"StarMath\" is not installed!\nWithout this Font StarMath is not working correct...\nPlease install this Font and restart StarMath." ;
-    Message [ italian ] = "Il carattere \"StarMath\" non è installato.\nSenza questo carattere StarOffice Math non funzionerà in modo corretto.\nInstallate questo carattere e riavviate StarOffice Math." ;
-    Message [ portuguese_brazilian ] = "A Fonte \"StarOffice Math\" não está instalada!\nSem esta Fonte o StarOffice Math não está operando corretamente...\nPor favor instale esta Fonte e reinicieStarOffice Math." ;
-    Message [ portuguese ] = "O tipo de letra \"StarMath\" não está instalado!\nSem este tipo de letra o StarOffice Math não operará correctamente...\nInstale este tipo de letra e reinicie a aplicação." ;
+    Message [ italian ] = "Il carattere \"StarMath\" non è installato.\nSenza questo carattere %PRODUCTNAME Math non funzionerà in modo corretto.\nInstallate questo carattere e riavviate %PRODUCTNAME Math." ;
+    Message [ portuguese_brazilian ] = "A Fonte \"%PRODUCTNAME Math\" não está instalada!\nSem esta Fonte o %PRODUCTNAME Math não está operando corretamente...\nPor favor instale esta Fonte e reinicie%PRODUCTNAME Math." ;
+    Message [ portuguese ] = "O tipo de letra \"StarMath\" não está instalado!\nSem este tipo de letra o %PRODUCTNAME Math não operará correctamente...\nInstale este tipo de letra e reinicie a aplicação." ;
     Message [ finnish ] = "Fonttia \"StarMath\" ei ole asennettu!\nStarMath ei toimikunnolla ilman sitä...\nAsenna tämä fontti ja käynnistä StarMath uudelleen." ;
-    Message [ danish ] = "Skrifttypen \"StarMath\" er ikke installeret!\nUden denne skrifttype kan StarOffice Math ikke arbejde korrekt...\nInstaller venligst skrifttypen og genstart StarOffice Math." ;
-    Message [ french ] = "La police \"StarMath\" n'est pas installée !\nSans cette police, StarOffice Math ne fonctionne pas correctement...\nInstallez la police et redémarrez StarOffice Math." ;
-    Message [ swedish ] = "Teckensnittet \"StarMath\" är inte installerat!\nUtan detta teckensnitt kan StarOffice Math inte arbeta korrekt....\nInstallera teckensnittet och starta om StarOffice Math." ;
-    Message [ dutch ] = "Het lettertype \"StarMath\" is niet geïnstalleerd!\nZonder dit lettertype werkt StarOffice Math niet correct...\nInstalleer dit lettertype en start StarOffice Math opnieuw." ;
+    Message [ danish ] = "Skrifttypen \"StarMath\" er ikke installeret!\nUden denne skrifttype kan %PRODUCTNAME Math ikke arbejde korrekt...\nInstaller venligst skrifttypen og genstart %PRODUCTNAME Math." ;
+    Message [ french ] = "La police \"StarMath\" n'est pas installée !\nSans cette police, %PRODUCTNAME Math ne fonctionne pas correctement...\nInstallez la police et redémarrez %PRODUCTNAME Math." ;
+    Message [ swedish ] = "Teckensnittet \"StarMath\" är inte installerat!\nUtan detta teckensnitt kan %PRODUCTNAME Math inte arbeta korrekt....\nInstallera teckensnittet och starta om %PRODUCTNAME Math." ;
+    Message [ dutch ] = "Het lettertype \"StarMath\" is niet geïnstalleerd!\nZonder dit lettertype werkt %PRODUCTNAME Math niet correct...\nInstalleer dit lettertype en start %PRODUCTNAME Math opnieuw." ;
     Message [ spanish ] = "¡La fuente \"StarMath\" no está instalada!\nSin esta fuente StarMath no funcionará correctamente...\nInstale la fuente y reinicie StarMath." ;
-    Message [ english_us ] = "The \"StarMath\" font has not been installed.\nWithout this font StarOffice Math cannot function correctly.\nPlease install this font and restart StarOffice Math." ;
-    Message[ chinese_simplified ] = "Ã»ÓĞ°²×°¡°StarMath¡± ×ÖÌå£¡\nÃ»ÓĞÕâ¸ö×ÖÌå StarOffice Math ÎŞ·¨Õı³£ÔË×÷¡£\nÇëÔÚ°²×°Õâ¸ö×ÖÌåºóÖØĞÂÆô¶¯ StarOffice Math ¡£";
-    Message[ russian ] = "Øğèôò \"StarMath\" íå èíñòàëëèğîâàí !\nÁåç ıòîãî øğèôòà StarOffice Math ìîæåò íåïğàâèëüíî ğàáîòàòü...\nÈíñòàëëèğóéòå øğèôò è ïåğåçàïóñòèòå StarOffice Math.";
-    Message[ polish ] = "Czcionka \"StarMath\" nie jest zainstalowana!\nBez tej czcionki StarOffice Math nie mo¿e poprawnie pracowaæ...\nZainstaluj tê czcionkê i uruchom StarOffice Math ponownie.";
-    Message[ japanese ] = "\"StarMath\" Ì«İÄ‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ¡\n‚±‚ÌÌ«İÄ‚È‚µ‚Å‚Í StarOffice Math ‚ª‚¤‚Ü‚­‹@”\\‚µ‚Ü‚¹‚ñ...\n‚Ü‚¸Ì«İÄ‚ğ²İ½Ä°Ù‚µ‚Ä StarOffice Math ‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢B";
+    Message [ english_us ] = "The \"StarMath\" font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
+    Message[ chinese_simplified ] = "Ã»ÓĞ°²×°¡°StarMath¡± ×ÖÌå£¡\nÃ»ÓĞÕâ¸ö×ÖÌå %PRODUCTNAME Math ÎŞ·¨Õı³£ÔË×÷¡£\nÇëÔÚ°²×°Õâ¸ö×ÖÌåºóÖØĞÂÆô¶¯ %PRODUCTNAME Math ¡£";
+    Message[ russian ] = "Øğèôò \"StarMath\" íå èíñòàëëèğîâàí !\nÁåç ıòîãî øğèôòà %PRODUCTNAME Math ìîæåò íåïğàâèëüíî ğàáîòàòü...\nÈíñòàëëèğóéòå øğèôò è ïåğåçàïóñòèòå %PRODUCTNAME Math.";
+    Message[ polish ] = "Czcionka \"StarMath\" nie jest zainstalowana!\nBez tej czcionki %PRODUCTNAME Math nie mo¿e poprawnie pracowaæ...\nZainstaluj tê czcionkê i uruchom %PRODUCTNAME Math ponownie.";
+    Message[ japanese ] = "\"StarMath\" Ì«İÄ‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ¡\n‚±‚ÌÌ«İÄ‚È‚µ‚Å‚Í %PRODUCTNAME Math ‚ª‚¤‚Ü‚­‹@”\\‚µ‚Ü‚¹‚ñ...\n‚Ü‚¸Ì«İÄ‚ğ²İ½Ä°Ù‚µ‚Ä %PRODUCTNAME Math ‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢B";
     Message[ chinese_traditional ] = "¨S¦³¦w¸Ë StarMath ¦r«¬\n¦ÓµLªk¥¿±`¹B§@¡I\n½Ğ±z¦w¸Ë StarMath ¦r«¬¡AµM¦Z¦A­«·s¶}±Ò StaMath¡C";
-    Message[ arabic ] = "ÇáÎØ \"StarMath\" ÛíÑ ãõËÈøóÊ!\nÈÏæä åĞÇ ÇáÎØ áÇ íÓÊØíÚ StarOffice Math ÇáÚãá ÈÔßá ÕÍíÍ...\nÇáÑÌÇÁ ÊËÈíÊ åĞÇ ÇáÎØ¡ Ëã ÈÏÁ StarOffice Math ãÌÏÏÇğ.";
-    Message[ greek ] = "Äåí İãéíå ç åãêáôÜóôáóç ôçò ãñáììáôïóåéñÜò \"StarMath\".\n×ùñßò áõôŞ ôç ãñáììáôïóåéñÜ ôï StarOffice Math äåí èá åêôåëåóôåß óùóôÜ.\nĞáñáêáëş íá ãßíåé ğñşôá ç åãêáôÜóôáóç áõôŞò ôçò ãñáììáôïóåéñÜò êáé óôç óõíİ÷åéá ç åğáíåêêßíçóç ôïõ StarOffice Math.";
-    Message[ korean ] = "\"StarOffice Math\" ±Û²ÃÀÌ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù!\nÀÌ ±Û²ÃÀÌ ¾øÀ¸¸é StarOffice Math°¡ Á¦´ë·Î ÀÛ¾÷À» ÇÒ ¼ö ¾ø½À´Ï´Ù...\n±Û²ÃÀ» ¼³Ä¡ÇÏ°í StarOffice Math¸¦ »õ·Î ½ÃÀÛÇÏ½Ê½Ã¿À.";
+    Message[ arabic ] = "ÇáÎØ \"StarMath\" ÛíÑ ãõËÈøóÊ!\nÈÏæä åĞÇ ÇáÎØ áÇ íÓÊØíÚ %PRODUCTNAME Math ÇáÚãá ÈÔßá ÕÍíÍ...\nÇáÑÌÇÁ ÊËÈíÊ åĞÇ ÇáÎØ¡ Ëã ÈÏÁ %PRODUCTNAME Math ãÌÏÏÇğ.";
+    Message[ greek ] = "Äåí İãéíå ç åãêáôÜóôáóç ôçò ãñáììáôïóåéñÜò \"StarMath\".\n×ùñßò áõôŞ ôç ãñáììáôïóåéñÜ ôï %PRODUCTNAME Math äåí èá åêôåëåóôåß óùóôÜ.\nĞáñáêáëş íá ãßíåé ğñşôá ç åãêáôÜóôáóç áõôŞò ôçò ãñáììáôïóåéñÜò êáé óôç óõíİ÷åéá ç åğáíåêêßíçóç ôïõ %PRODUCTNAME Math.";
+    Message[ korean ] = "\"%PRODUCTNAME Math\" ±Û²ÃÀÌ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù!\nÀÌ ±Û²ÃÀÌ ¾øÀ¸¸é %PRODUCTNAME Math°¡ Á¦´ë·Î ÀÛ¾÷À» ÇÒ ¼ö ¾ø½À´Ï´Ù...\n±Û²ÃÀ» ¼³Ä¡ÇÏ°í %PRODUCTNAME Math¸¦ »õ·Î ½ÃÀÛÇÏ½Ê½Ã¿À.";
     Message[ turkish ] = "\"StarMath\" yazıtipi yüklenmedi!\nBu yazıtipi olmadan StarMath programı doğru bir biçimde çalışmaz...\nYazıtipini yükleyin ve StarMath programını yeniden başlatın.";
     Message[ language_user1 ] = " ";
 };
@@ -4121,7 +4121,7 @@ Menu RID_FONTMENU
             Text[ chinese_traditional ] = "¼Æ¦r";
             Text[ arabic ] = "ÃÑŞÇã";
             Text[ greek ] = "Áñéèìïß";
-            Text[ korean ] = "¹øÈ£";
+            Text[ korean ] = "¼ö";
             Text[ turkish ] = "Sayılar";
         };
         MenuItem
@@ -8038,7 +8038,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_LRANGLEX ;
                 Text = "spitze Klammern" ;
                 Text [ ENGLISH ] = "???" ;
-                Text [ english_us ] = "Pointed Brackets" ;
+                Text [ english_us ] = "Angle Brackets" ;
                 Text [ portuguese_brazilian ] = "spitze Klammern" ;
                 Text [ swedish ] = "Vinkelparenteser" ;
                 Text [ danish ] = "vinkelparenteser" ;
@@ -8176,7 +8176,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_SLRDBRACKETX ;
                 Text = "eckige Klammern (skalierbar)" ;
                 Text [ ENGLISH ] = "Double square brackets (scaleable)" ;
-                Text[ english_us ] = "Square Brackets (Scalable)";
+                Text[ english_us ] = "Double Square Brackets (Scalable)";
                 Text[ portuguese ] = "Parênteses rectos (ajustáveis)";
                 Text[ russian ] = "êâàäğàòíûå ñêîáêè (èçì.)";
                 Text[ greek ] = "áãêıëåò (êëéìáêşìåíåò)";
@@ -8284,7 +8284,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_SLRANGLEX ;
                 Text = "spitze Klammern (skalierbar)" ;
                 Text [ ENGLISH ] = "???" ;
-                Text [ english_us ] = "Pointed Brackets (Scalable)" ;
+                Text [ english_us ] = "Angle Brackets (Scalable)" ;
                 Text [ portuguese_brazilian ] = "spitze Klammern (skalierbar)" ;
                 Text [ swedish ] = "Vinkelparenteser (skalbara)" ;
                 Text [ danish ] = "vinkelparenteser (skalerbare)" ;
@@ -9829,76 +9829,76 @@ String RID_DOCUMENTSTR
 
 String STR_MATH_DOCUMENT_FULLTYPE_50
 {
-    Text = "StarOffice 5.0 Formel" ;
+    Text = "%PRODUCTNAME 5.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 5.0 Formula" ;
-    Text [ english_us ] = "StarOffice 5.0 Formula" ;
-    Text [ swedish ] = "StarOffice 5.0 Formel" ;
-    Text [ danish ] = "StarOffice 5.0 formel" ;
-    Text [ italian ] = "Formula StarOffice 5.0" ;
-    Text [ spanish ] = "Fórmula StarOffice 5.0" ;
-    Text [ french ] = "StarOffice 5.0 Formule" ;
-    Text [ dutch ] = "StarOffice 5.0 Formule" ;
-    Text [ portuguese_brazilian ] = "StarOffice 5.0 Formel" ;
-    Text [ portuguese ] = "Fórmula StarOffice 5.0" ;
-    Text[ chinese_simplified ] = "StarOffice 5.0 ¹«Ê½";
-    Text[ russian ] = "Ôîğìóëà StarOffice 5.0";
-    Text[ polish ] = "Formu³a StarOffice 5.0";
-    Text[ japanese ] = "StarOffice 5.0 ”®";
-    Text[ chinese_traditional ] = "StarOffice 5.0 ¤½¦¡";
-    Text[ arabic ] = "StarOffice 5.0 ÕíÛÉ";
-    Text[ greek ] = "Ôığïò (StarOffice 5.0)";
-    Text[ korean ] = "StarOffice 5.0 ¼ö½Ä";
-    Text[ turkish ] = "StarOffice 5.0 - Formül";
+    Text [ english_us ] = "%PRODUCTNAME 5.0 Formula" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 Formel" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0 formel" ;
+    Text [ italian ] = "Formula %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "Fórmula %PRODUCTNAME 5.0" ;
+    Text [ french ] = "%PRODUCTNAME 5.0 Formule" ;
+    Text [ dutch ] = "%PRODUCTNAME 5.0 Formule" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Formel" ;
+    Text [ portuguese ] = "Fórmula %PRODUCTNAME 5.0" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ¹«Ê½";
+    Text[ russian ] = "Ôîğìóëà %PRODUCTNAME 5.0";
+    Text[ polish ] = "Formu³a %PRODUCTNAME 5.0";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 ”®";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤½¦¡";
+    Text[ arabic ] = "%PRODUCTNAME 5.0 ÕíÛÉ";
+    Text[ greek ] = "Ôığïò (%PRODUCTNAME 5.0)";
+    Text[ korean ] = "%PRODUCTNAME 5.0 ¼ö½Ä";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 - Formül";
     Text[ language_user1 ] = " ";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_40
 {
-    Text = "StarOffice 4.0 Formel" ;
+    Text = "%PRODUCTNAME 4.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 4.0 Formula" ;
-    Text [ english_us ] = "StarOffice 4.0 Formula" ;
-    Text [ swedish ] = "StarOffice 4.0 Formel" ;
-    Text [ danish ] = "StarOffice 4.0 formel" ;
-    Text [ italian ] = "Formula StarOffice 4.0" ;
-    Text [ spanish ] = "Fórmula StarOffice 4.0" ;
-    Text [ french ] = "StarOffice 4.0 Formule" ;
-    Text [ dutch ] = "StarOffice 4.0 Formule" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 Formel" ;
-    Text [ portuguese ] = "Fórmula StarOffice 4.0" ;
-    Text[ chinese_simplified ] = "StarOffice 4.0 ¹«Ê½";
-    Text[ russian ] = "Ôîğìóëà StarOffice 4.0";
-    Text[ polish ] = "Formu³a StarOffice 4.0";
-    Text[ japanese ] = "StarOffice 4.0 ”®";
-    Text[ chinese_traditional ] = "StarOffice 4.0 ¤½¦¡";
-    Text[ arabic ] = "StarOffice 4.0 ÕíÛÉ";
-    Text[ greek ] = "Ôığïò (StarOffice 4.0)";
-    Text[ korean ] = "StarOffice 4.0 ¼ö½Ä";
-    Text[ turkish ] = "StarOffice 4.0 - Formül";
+    Text [ english_us ] = "%PRODUCTNAME 4.0 Formula" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0 Formel" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0 formel" ;
+    Text [ italian ] = "Formula %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "Fórmula %PRODUCTNAME 4.0" ;
+    Text [ french ] = "%PRODUCTNAME 4.0 Formule" ;
+    Text [ dutch ] = "%PRODUCTNAME 4.0 Formule" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Formel" ;
+    Text [ portuguese ] = "Fórmula %PRODUCTNAME 4.0" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ¹«Ê½";
+    Text[ russian ] = "Ôîğìóëà %PRODUCTNAME 4.0";
+    Text[ polish ] = "Formu³a %PRODUCTNAME 4.0";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 ”®";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ¤½¦¡";
+    Text[ arabic ] = "%PRODUCTNAME 4.0 ÕíÛÉ";
+    Text[ greek ] = "Ôığïò (%PRODUCTNAME 4.0)";
+    Text[ korean ] = "%PRODUCTNAME 4.0 ¼ö½Ä";
+    Text[ turkish ] = "%PRODUCTNAME 4.0 - Formül";
     Text[ language_user1 ] = " ";
 };
 
 String STR_MATH_DOCUMENT_FULLTYPE_31
 {
-    Text = "StarOffice 3.0 Formel" ;
+    Text = "%PRODUCTNAME 3.0 Formel" ;
     Text [ ENGLISH ] = "StarOffice 3.0 Formula" ;
-    Text [ english_us ] = "StarOffice 3.0 Formula" ;
-    Text [ swedish ] = "StarOffice 3.0 Formel" ;
-    Text [ danish ] = "StarOffice 3.0 formel" ;
-    Text [ italian ] = "Formula StarOffice 3.0" ;
-    Text [ spanish ] = "Fórmula StarOffice 3.0" ;
-    Text [ french ] = "StarOffice 3.0 Formule" ;
-    Text [ dutch ] = "StarOffice 3.0 Formule" ;
-    Text [ portuguese_brazilian ] = "StarOffice 3.0 Formel" ;
-    Text [ portuguese ] = "Fórmula StarOffice 3.0" ;
-    Text[ chinese_simplified ] = "StarOffice 3.0 ¹«Ê½";
-    Text[ russian ] = "Ôîğìóëà StarOffice 3.0";
-    Text[ polish ] = "Formu³a StarOffice 3.0";
-    Text[ japanese ] = "StarOffice 3.0 ”®";
-    Text[ chinese_traditional ] = "StarOffice 3.0 ¤½¦¡";
-    Text[ arabic ] = "StarOffice 3.0 ÕíÛÉ";
-    Text[ greek ] = "StarOffice 3.0 - Ôığïò";
-    Text[ korean ] = "StarOffice 3.0 ¼ö½Ä";
-    Text[ turkish ] = "StarOffice 3.0 - Formül";
+    Text [ english_us ] = "%PRODUCTNAME 3.0 Formula" ;
+    Text [ swedish ] = "%PRODUCTNAME 3.0 Formel" ;
+    Text [ danish ] = "%PRODUCTNAME 3.0 formel" ;
+    Text [ italian ] = "Formula %PRODUCTNAME 3.0" ;
+    Text [ spanish ] = "Fórmula %PRODUCTNAME 3.0" ;
+    Text [ french ] = "%PRODUCTNAME 3.0 Formule" ;
+    Text [ dutch ] = "%PRODUCTNAME 3.0 Formule" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Formel" ;
+    Text [ portuguese ] = "Fórmula %PRODUCTNAME 3.0" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 ¹«Ê½";
+    Text[ russian ] = "Ôîğìóëà %PRODUCTNAME 3.0";
+    Text[ polish ] = "Formu³a %PRODUCTNAME 3.0";
+    Text[ japanese ] = "%PRODUCTNAME 3.0 ”®";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 ¤½¦¡";
+    Text[ arabic ] = "%PRODUCTNAME 3.0 ÕíÛÉ";
+    Text[ greek ] = "%PRODUCTNAME 3.0 - Ôığïò";
+    Text[ korean ] = "%PRODUCTNAME 3.0 ¼ö½Ä";
+    Text[ turkish ] = "%PRODUCTNAME 3.0 - Formül";
     Text[ language_user1 ] = " ";
 };
 
@@ -10323,7 +10323,7 @@ String RID_ERR_COLOREXPECTED
     Text[ chinese_traditional ] = "´Á«İÃC¦â";
     Text[ arabic ] = "ãØáæÈ áæä";
     Text[ greek ] = "Áğáéôåßôáé ÷ñşìá";
-    Text[ korean ] = "»ö ÇÊ¿äÇÔ";
+    Text[ korean ] = "»ö»ó,  ÇÊ¿äÇÑ";
     Text[ turkish ] = "Renk gerekli";
     Text[ language_user1 ] = " ";
 };
