@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_SheetLinksEnumeration.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-11-18 16:30:33 $
+ *  last change:$Date: 2004-01-05 19:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public class ScIndexEnumeration_SheetLinksEnumeration extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface(XComponent.class, xSheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
