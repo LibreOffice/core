@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 17:58:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 #include <string.h>
 
