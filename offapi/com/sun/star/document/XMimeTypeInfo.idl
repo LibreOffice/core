@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMimeTypeInfo.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module document {
 
 /** provides information regarding which MIME types are supported by a filter.
  */
-interface XMimeTypeInfo: com::sun::star::uno::XInterface
+published interface XMimeTypeInfo: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
