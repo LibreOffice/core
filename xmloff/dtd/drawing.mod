@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.52 2001-05-21 10:18:49 mib Exp $
+	$Id: drawing.mod,v 1.53 2001-05-23 11:53:10 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -215,7 +215,7 @@
 <!ATTLIST draw:control %text-anchor;>
 <!ATTLIST draw:control draw:layer %layerName; #IMPLIED>
 
-<!ELEMENT draw:g (%shapes;)* >
+<!ELEMENT draw:g ( office:events?, (%shapes;)* ) >
 <!ATTLIST draw:g %draw-transform; >
 <!ATTLIST draw:g %draw-style-name; >
 <!ATTLIST draw:g %zindex;>
@@ -480,7 +480,11 @@
 <!ATTLIST presentation:dim draw:shape-id %shapeId; #REQUIRED>
 <!ATTLIST presentation:dim draw:color %color; #REQUIRED>
 
-<!ELEMENT presentation:animations (presentation:show-shape|presentation:show-text|presentation:hide-shape|presentation:hide-text|presentation:dim)*>
+<!ELEMENT presentation:play EMPTY>
+<!ATTLIST presentation:play draw:shape-id %shapeId; #REQUIRED>
+<!ATTLIST presentation:play presentation:speed %presentationSpeeds; "medium">
+
+<!ELEMENT presentation:animations (presentation:show-shape|presentation:show-text|presentation:hide-shape|presentation:hide-text|presentation:dim|presentation:play)*>
 
 <!ELEMENT presentation:show EMPTY>
 <!ATTLIST presentation:show presentation:name %styleName; #REQUIRED>

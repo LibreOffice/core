@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:35:56 $
+ *  last change: $Author: cl $ $Date: 2001-05-23 11:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,8 @@ enum XMLActionKind
 {
     XMLE_SHOW,
     XMLE_HIDE,
-    XMLE_DIM
+    XMLE_DIM,
+    XMLE_PLAY
 };
 
 struct XMLEffectHint
@@ -370,6 +371,7 @@ public:
     OUString msSoundOn;
     OUString msSpeed;
     OUString msTextEffect;
+    OUString msIsAnimation;
     OUString msAnimPath;
 
     AnimExpImpl()
@@ -383,7 +385,8 @@ public:
         msSoundOn( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ),
         msSpeed( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ),
         msTextEffect( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ),
-        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) )
+        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) ),
+        msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) )
     {}
 };
 
@@ -427,77 +430,94 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
 
             xProps->getPropertyValue( mpImpl->msPresOrder ) >>= aEffect.mnPresId;
             xProps->getPropertyValue( mpImpl->msSpeed ) >>= aEffect.meSpeed;
-            xProps->getPropertyValue( mpImpl->msEffect ) >>= eEffect;
-            if( eEffect != AnimationEffect_NONE )
-            {
-                sal_Bool bIn = sal_True;
-                SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
 
-                aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
+
+            sal_Bool bIsAnimation;
+            xProps->getPropertyValue( mpImpl->msIsAnimation ) >>= bIsAnimation;
+            if( bIsAnimation )
+            {
+                aEffect.meKind = XMLE_PLAY;
 
                 mpImpl->mxShapeExp->createShapeId( xShape );
                 aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
 
-                if( eEffect == AnimationEffect_PATH )
+                mpImpl->maEffects.push_back( aEffect );
+            }
+            else
+            {
+
+                xProps->getPropertyValue( mpImpl->msEffect ) >>= eEffect;
+                if( eEffect != AnimationEffect_NONE )
                 {
-                    Reference< XShape > xPath;
-                    xProps->getPropertyValue( mpImpl->msAnimPath ) >>= xPath;
-                    if( xPath.is() )
+                    sal_Bool bIn = sal_True;
+                    SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
+
+                    aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
+
+                    mpImpl->mxShapeExp->createShapeId( xShape );
+                    aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+
+                    if( eEffect == AnimationEffect_PATH )
                     {
-                        mpImpl->mxShapeExp->createShapeId( xPath );
-                        aEffect.mnPathShapeId = mpImpl->mxShapeExp->getShapeId( xPath );
+                        Reference< XShape > xPath;
+                        xProps->getPropertyValue( mpImpl->msAnimPath ) >>= xPath;
+                        if( xPath.is() )
+                        {
+                            mpImpl->mxShapeExp->createShapeId( xPath );
+                            aEffect.mnPathShapeId = mpImpl->mxShapeExp->getShapeId( xPath );
+                        }
                     }
+                    mpImpl->maEffects.push_back( aEffect );
+
+                    aEffect.mnPathShapeId = -1;
+                    aEffect.maSoundURL = aEmptyStr;
                 }
-                mpImpl->maEffects.push_back( aEffect );
 
-                aEffect.mnPathShapeId = -1;
-                aEffect.maSoundURL = aEmptyStr;
-            }
-
-            xProps->getPropertyValue( mpImpl->msTextEffect ) >>= eEffect;
-            if( eEffect != AnimationEffect_NONE )
-            {
-                sal_Bool bIn = sal_True;
-                SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
-                aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
-                aEffect.mbTextEffect = sal_True;
-
-                if( aEffect.mnShapeId == -1 )
+                xProps->getPropertyValue( mpImpl->msTextEffect ) >>= eEffect;
+                if( eEffect != AnimationEffect_NONE )
                 {
-                    mpImpl->mxShapeExp->createShapeId( xShape );
-                    aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                    sal_Bool bIn = sal_True;
+                    SdXMLImplSetEffect( eEffect, aEffect.meEffect, aEffect.meDirection, aEffect.mnStartScale, bIn );
+                    aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
+                    aEffect.mbTextEffect = sal_True;
+
+                    if( aEffect.mnShapeId == -1 )
+                    {
+                        mpImpl->mxShapeExp->createShapeId( xShape );
+                        aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                    }
+
+                    mpImpl->maEffects.push_back( aEffect );
+                    aEffect.mbTextEffect = sal_False;
+                    aEffect.maSoundURL = aEmptyStr;
                 }
 
-                mpImpl->maEffects.push_back( aEffect );
-                aEffect.mbTextEffect = sal_False;
-                aEffect.maSoundURL = aEmptyStr;
-            }
-
-            sal_Bool bDimPrev;
-            sal_Bool bDimHide;
-            xProps->getPropertyValue( mpImpl->msDimPrev ) >>= bDimPrev;
-            xProps->getPropertyValue( mpImpl->msDimHide ) >>= bDimHide;
-            if( bDimPrev || bDimHide )
-            {
-                aEffect.meKind = bDimPrev ? XMLE_DIM : XMLE_HIDE;
-                aEffect.meEffect = EK_none;
-                aEffect.meDirection = ED_none;
-                aEffect.meSpeed = AnimationSpeed_MEDIUM;
-                if( bDimPrev )
+                sal_Bool bDimPrev;
+                sal_Bool bDimHide;
+                xProps->getPropertyValue( mpImpl->msDimPrev ) >>= bDimPrev;
+                xProps->getPropertyValue( mpImpl->msDimHide ) >>= bDimHide;
+                if( bDimPrev || bDimHide )
                 {
-                    sal_Int32 nColor;
-                    xProps->getPropertyValue( mpImpl->msDimColor ) >>= nColor;
-                    aEffect.maDimColor.SetColor( nColor );
-                }
+                    aEffect.meKind = bDimPrev ? XMLE_DIM : XMLE_HIDE;
+                    aEffect.meEffect = EK_none;
+                    aEffect.meDirection = ED_none;
+                    aEffect.meSpeed = AnimationSpeed_MEDIUM;
+                    if( bDimPrev )
+                    {
+                        sal_Int32 nColor;
+                        xProps->getPropertyValue( mpImpl->msDimColor ) >>= nColor;
+                        aEffect.maDimColor.SetColor( nColor );
+                    }
 
-                if( aEffect.mnShapeId == -1 )
-                {
-                    mpImpl->mxShapeExp->createShapeId( xShape );
-                    aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
-                }
+                    if( aEffect.mnShapeId == -1 )
+                    {
+                        mpImpl->mxShapeExp->createShapeId( xShape );
+                        aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                    }
 
-                mpImpl->maEffects.push_back( aEffect );
-                aEffect.maSoundURL = aEmptyStr;
+                    mpImpl->maEffects.push_back( aEffect );
+                    aEffect.maSoundURL = aEmptyStr;
+                }
             }
         }
     }
@@ -536,6 +556,16 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_color, sTmp.makeStringAndClear() );
 
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_dim, sal_True, sal_True );
+            }
+            else if( rEffect.meKind == XMLE_PLAY )
+            {
+                if( rEffect.meSpeed != AnimationSpeed_MEDIUM )
+                {
+                    SvXMLUnitConverter::convertEnum( sTmp, rEffect.meSpeed, aXML_AnimationSpeed_EnumMap );
+                    rExport.AddAttribute( XML_NAMESPACE_PRESENTATION, sXML_speed, sTmp.makeStringAndClear() );
+                }
+
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, sXML_play, sal_True, sal_True );
             }
             else
             {

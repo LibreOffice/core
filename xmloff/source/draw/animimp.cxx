@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-23 08:56:35 $
+ *  last change: $Author: cl $ $Date: 2001-05-23 11:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,7 @@ public:
     OUString msTextEffect;
     OUString msPresShapeService;
     OUString msAnimPath;
+    OUString msIsAnimation;
 
     AnimImpImpl()
     :   mnPresOrder( 0 ),
@@ -366,7 +367,8 @@ public:
         msSpeed( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ),
         msTextEffect( RTL_CONSTASCII_USTRINGPARAM( "TextEffect" ) ),
         msPresShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.shape" ) ),
-        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) )
+        msAnimPath( RTL_CONSTASCII_USTRINGPARAM( "AnimationPath" ) ),
+        msIsAnimation( RTL_CONSTASCII_USTRINGPARAM( "IsAnimation" ) )
     {}
 };
 
@@ -376,7 +378,8 @@ enum XMLActionKind
 {
     XMLE_SHOW,
     XMLE_HIDE,
-    XMLE_DIM
+    XMLE_DIM,
+    XMLE_PLAY
 };
 
 class XMLAnimationsEffectContext : public SvXMLImportContext
@@ -494,6 +497,10 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,  s
     {
         meKind = XMLE_DIM;
     }
+    else if( rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_play ) ) )
+    {
+        meKind = XMLE_PLAY;
+    }
     else
     {
         // unknown action, overread
@@ -605,11 +612,19 @@ void XMLAnimationsEffectContext::EndElement()
             {
                 if( meKind == XMLE_DIM )
                 {
-                    aAny = bool2any( sal_True );
+                    aAny <<= (sal_Bool)sal_True;
                     xSet->setPropertyValue( mpImpl->msDimPrev, aAny );
 
                     aAny <<= (sal_Int32)maDimColor.GetColor();
                     xSet->setPropertyValue( mpImpl->msDimColor, aAny );
+                }
+                else if( meKind == XMLE_PLAY )
+                {
+                    aAny <<= (sal_Bool)sal_True;
+                    xSet->setPropertyValue( mpImpl->msIsAnimation, aAny );
+
+                    aAny <<= meSpeed;
+                    xSet->setPropertyValue( mpImpl->msSpeed, aAny );
                 }
                 else
                 {
