@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:01:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
 #endif
+#ifndef _SVX_FMSERVS_HXX
+#include "fmservs.hxx"
+#endif
 #ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
 #endif
@@ -129,8 +132,20 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
+#include <com/sun/star/form/FormButtonType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
 #include <com/sun/star/form/XReset.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_SUBMISSION_XSUBMISSIONSUPPLIER_HPP_
+#include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
@@ -198,6 +213,9 @@
 #endif
 #ifndef _SVDPAGV_HXX
 #include "svdpagv.hxx"
+#endif
+#ifndef _SVX_XMLEXCHG_HXX_
+#include "xmlexchg.hxx"
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include "dataaccessdescriptor.hxx"
@@ -1533,7 +1551,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 }
 
 // -----------------------------------------------------------------------------
-SdrObject* FmXFormView::implCreateXFormsControl()
+SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc )
 {
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
@@ -1549,7 +1567,7 @@ SdrObject* FmXFormView::implCreateXFormsControl()
         // determine the table/query field which we should create a control for
         Reference< XPropertySet >   xField;
         Reference< XNumberFormats > xNumberFormats;
-        ::rtl::OUString sLabelPostfix;
+        ::rtl::OUString sLabelPostfix = _rDesc.szName;
 
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
@@ -1581,62 +1599,91 @@ SdrObject* FmXFormView::implCreateXFormsControl()
             return NULL;
 
         //////////////////////////////////////////////////////////////////////
-        // Anhand des FormatKeys wird festgestellt, welches Feld benoetigt wird
+        // The service name decides which control should be created
         sal_uInt16 nOBJID = OBJ_FM_EDIT;
-        sal_Bool bDateNTimeField = sal_False;
-        FmFormObj* pLabel;
-        FmFormObj* pControl;
-        createControlLabelPair(_pOutDev, 0, xField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
-        if (!pLabel || !pControl)
-        {
-            delete pLabel;
-            delete pControl;
-            return NULL;
-        }
+        if(::rtl::OUString(_rDesc.szServiceName).equals((::rtl::OUString)FM_SUN_COMPONENT_NUMERICFIELD))
+            nOBJID = OBJ_FM_NUMERICFIELD;
+        if(::rtl::OUString(_rDesc.szServiceName).equals((::rtl::OUString)FM_SUN_COMPONENT_CHECKBOX))
+            nOBJID = OBJ_FM_CHECKBOX;
+        if(::rtl::OUString(_rDesc.szServiceName).equals((::rtl::OUString)FM_COMPONENT_COMMANDBUTTON))
+            nOBJID = OBJ_FM_BUTTON;
 
-        //////////////////////////////////////////////////////////////////////
-        // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
-        // Dieses erledigt die Page fuer uns bzw. die PageImpl
-        Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
-        Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
-        if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+        typedef ::com::sun::star::form::submission::XSubmission XSubmission_t;
+        Reference< XSubmission_t > xSubmission(_rDesc.xPropSet, UNO_QUERY);
 
-        xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
-        if (xContainer.is())
-            xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
-        implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
+        // xform control or submission button?
+        if(!(xSubmission.is())) {
 
-        //////////////////////////////////////////////////////////////////////
-        // Objekte gruppieren
-        SdrObjGroup* pGroup  = new SdrObjGroup();
-        SdrObjList* pObjList = pGroup->GetSubList();
-        pObjList->InsertObject(pLabel);
-        pObjList->InsertObject(pControl);
-
-
-        if (bDateNTimeField)
-        {   // wir haben bis jetzt nur ein Datums-Feld eingefuegt, brauchen aber noch ein extra Feld fuer
-            // die Zeit-Komponente
-            pLabel = pControl = NULL;
-            createControlLabelPair(_pOutDev, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(1, ';'),
-                pLabel, pControl);
-
-            if (pLabel && pControl)
-            {
-                pObjList->InsertObject(pLabel);
-                pObjList->InsertObject(pControl);
-            }
-            else
-            {
+            FmFormObj* pLabel;
+            FmFormObj* pControl;
+            createControlLabelPair(_pOutDev, 0, xField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
+            if (!pLabel || !pControl) {
                 delete pLabel;
                 delete pControl;
+                return NULL;
             }
-        }
 
-        return pGroup; // und fertig
+            //////////////////////////////////////////////////////////////////////
+            // Now build the connection between the control and the data item.
+            using namespace ::com::sun::star::uno;
+            typedef ::com::sun::star::awt::XControlModel XControlModel_t;
+            typedef ::com::sun::star::form::binding::XBindableValue XBindableValue_t;
+            typedef com::sun::star::form::binding::XValueBinding XValueBinding_t;
+            typedef com::sun::star::beans::XPropertySet XPropertySet_t;
+            Reference< XValueBinding_t > xValueBinding(_rDesc.xPropSet,UNO_QUERY);
+            Reference< XBindableValue_t > xBindableValue(pControl->GetUnoControlModel(),UNO_QUERY);
+            xBindableValue->setValueBinding(xValueBinding);
+
+            //////////////////////////////////////////////////////////////////////
+            // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
+            // Dieses erledigt die Page fuer uns bzw. die PageImpl
+            Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
+            Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
+            if (xContainer.is())
+                xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+
+            xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
+            xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
+            if (xContainer.is())
+                xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+            implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
+
+            //////////////////////////////////////////////////////////////////////
+            // Objekte gruppieren
+            SdrObjGroup* pGroup  = new SdrObjGroup();
+            SdrObjList* pObjList = pGroup->GetSubList();
+            pObjList->InsertObject(pLabel);
+            pObjList->InsertObject(pControl);
+
+            return pGroup;
+        }
+        else {
+
+            // create a button control
+            const MapMode eTargetMode(_pOutDev->GetMapMode());
+            const MapMode eSourceMode(MAP_100TH_MM);
+            const sal_uInt16 nObjID = OBJ_FM_BUTTON;
+            ::Size controlSize(4000, 500);
+            FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL ));
+            controlSize.Width() = sal_Int32(Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX());
+            controlSize.Height() = sal_Int32(Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY());
+            ::Point controlPos(_pOutDev->LogicToLogic(Point(controlSize.Width(),0),eSourceMode,eTargetMode));
+            ::Rectangle controlRect(controlPos,_pOutDev->LogicToLogic(controlSize, eSourceMode, eTargetMode));
+            pControl->SetLogicRect(controlRect);
+
+            // set the button label
+            Reference< XPropertySet > xControlSet(pControl->GetUnoControlModel(), UNO_QUERY);
+            xControlSet->setPropertyValue(FM_PROP_LABEL, makeAny(::rtl::OUString(_rDesc.szName)));
+
+            // connect the submission with the submission supplier (aka the button)
+            xControlSet->setPropertyValue( FM_PROP_BUTTON_TYPE,
+                                           makeAny( FormButtonType_SUBMIT ) );
+            typedef ::com::sun::star::form::submission::XSubmissionSupplier XSubmissionSupplier_t;
+            Reference< XSubmissionSupplier_t > xSubmissionSupplier(pControl->GetUnoControlModel(), UNO_QUERY);
+            xSubmissionSupplier->setSubmission(xSubmission);
+
+            return pControl;
+        }
     }
     catch(const Exception&)
     {
@@ -1785,7 +1832,8 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
         if (_nObjID == OBJ_FM_CHECKBOX)
         {
             sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
-            _rxField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable;
+            if( _rxField.is() )
+                _rxField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable;
             xControlSet->setPropertyValue( FM_PROP_TRISTATE, makeAny( sal_Bool( ColumnValue::NULLABLE == nNullable ) ) );
         }
     }
