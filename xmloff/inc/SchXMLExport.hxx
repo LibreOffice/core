@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-04 12:30:53 $
+ *  last change: $Author: bm $ $Date: 2001-09-14 11:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@ public:
     void SetProgress( sal_Int32 nPercentage );
 
     UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return maExportHelper.GetPropertySetMapper(); }
+
+    // XServiceInfo ( : SvXMLExport )
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
 #endif  // SCH_XMLEXPORT_HXX_

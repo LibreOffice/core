@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
+ *  last change: $Author: bm $ $Date: 2001-09-14 11:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,4 +654,26 @@ OUString SAL_CALL SchXMLImport_Meta_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL SchXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SchXMLImport( IMPORT_META );
+}
+
+
+// XServiceInfo
+OUString SAL_CALL SchXMLImport::getImplementationName() throw( uno::RuntimeException )
+{
+    switch( getImportFlags())
+    {
+        case IMPORT_ALL:
+            return SchXMLImport_getImplementationName();
+        case IMPORT_STYLES:
+            return SchXMLImport_Styles_getImplementationName();
+        case ( IMPORT_CONTENT | IMPORT_AUTOSTYLES | IMPORT_FONTDECLS ):
+            return SchXMLImport_Content_getImplementationName();
+        case IMPORT_META:
+            return SchXMLImport_Meta_getImplementationName();
+
+        case IMPORT_SETTINGS:
+        // there is no settings component in chart
+        default:
+            return OUString::createFromAscii( "SchXMLImport" );
+    }
 }

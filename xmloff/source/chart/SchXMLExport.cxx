@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-27 13:59:50 $
+ *  last change: $Author: bm $ $Date: 2001-09-14 11:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2208,4 +2208,26 @@ OUString SAL_CALL SchXMLExport_Meta_getImplementationName() throw()
 uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SchXMLExport( EXPORT_META );
+}
+
+
+// XServiceInfo
+OUString SAL_CALL SchXMLExport::getImplementationName() throw( uno::RuntimeException )
+{
+    switch( getExportFlags())
+    {
+        case EXPORT_ALL:
+            return SchXMLExport_getImplementationName();
+        case EXPORT_STYLES:
+            return SchXMLExport_Styles_getImplementationName();
+        case ( EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_FONTDECLS ):
+            return SchXMLExport_Content_getImplementationName();
+        case EXPORT_META:
+            return SchXMLExport_Meta_getImplementationName();
+
+        case EXPORT_SETTINGS:
+        // there is no settings component in chart
+        default:
+            return OUString::createFromAscii( "SchXMLExport" );
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 10:31:04 $
+ *  last change: $Author: bm $ $Date: 2001-09-14 11:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,6 +1027,52 @@ void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttribu
     {
         GetProgressBarHelper()->SetReference(nCount);
         GetProgressBarHelper()->SetValue(0);
+    }
+}
+
+
+// XServiceInfo
+OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeException )
+{
+    if( IsDraw())
+    {
+        // Draw
+
+        switch( getImportFlags())
+        {
+            case IMPORT_ALL:
+                return SdDrawXMLImport_getImplementationName();
+            case (IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES):
+                return SdDrawXMLImport_Style_getImplementationName();
+            case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
+                return SdDrawXMLImport_Content_getImplementationName();
+            case IMPORT_META:
+                return SdDrawXMLImport_Meta_getImplementationName();
+            case IMPORT_SETTINGS:
+                return SdDrawXMLImport_Settings_getImplementationName();
+            default:
+                return OUString::createFromAscii( "SdXMLImport.Draw" );
+        }
+    }
+    else
+    {
+        // Impress
+
+        switch( getImportFlags())
+        {
+            case IMPORT_ALL:
+                return SdImpressXMLImport_getImplementationName();
+            case (IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES):
+                return SdImpressXMLImport_Style_getImplementationName();
+            case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
+                return SdImpressXMLImport_Content_getImplementationName();
+            case IMPORT_META:
+                return SdImpressXMLImport_Meta_getImplementationName();
+            case IMPORT_SETTINGS:
+                return SdImpressXMLImport_Settings_getImplementationName();
+            default:
+                return OUString::createFromAscii( "SdXMLImport.Impress" );
+        }
     }
 }
 
