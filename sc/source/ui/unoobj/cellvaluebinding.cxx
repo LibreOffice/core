@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellvaluebinding.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:08:34 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace calc
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
-    using namespace ::drafts::com::sun::star::form;
+    using namespace ::com::sun::star::form::binding;
 
     //=====================================================================
     //= OCellValueBinding
@@ -565,10 +565,10 @@ namespace calc
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
         Sequence< ::rtl::OUString > aServices( m_bListPos ? 3 : 2 );
-        aServices[ 0 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.table.CellValueBinding" ) );
-        aServices[ 1 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.form.ValueBinding" ) );
+        aServices[ 0 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.CellValueBinding" ) );
+        aServices[ 1 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.binding.ValueBinding" ) );
         if ( m_bListPos )
-            aServices[ 2 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.table.ListPositionCellBinding" ) );
+            aServices[ 2 ] =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.table.ListPositionCellBinding" ) );
         return aServices;
     }
 
