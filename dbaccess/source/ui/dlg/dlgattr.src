@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-17 08:23:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,10 @@ TabDialog DLG_ATTR
         Text = "~Zurück" ;
         Text [ ENGLISH ] = "Undo" ;
         Text [ norwegian ] = "Undo" ;
-        Text [ italian ] = "Indietro" ;
+        Text [ italian ] = "~Indietro" ;
         Text [ portuguese_brazilian ] = "Desfazer" ;
         Text [ portuguese ] = "~Anterior" ;
-        Text [ finnish ] = "~Zurück" ;
+        Text [ finnish ] = "~Zur?ck" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "~Précédent" ;
         Text [ swedish ] = "~Tillbaka" ;
@@ -189,7 +189,7 @@ TabDialog DLG_ATTR
         Text[ arabic ] = "ÊäÓíÞ";
         Text[ greek ] = "ÌïñöÞ";
         Text[ korean ] = "¼­½Ä";
-        Text[ turkish ] = "Format";
+        Text[ turkish ] = "Renk formatý";
         Text[ catalan ] = "Formato";
     };
     String TP_ATTR_ALIGN
@@ -214,7 +214,7 @@ TabDialog DLG_ATTR
         Text[ chinese_traditional ] = "¹ï»ô";
         Text[ arabic ] = "ãÍÇÐÇÉ";
         Text[ greek ] = "Óôïß÷éóç";
-        Text[ korean ] = "¸ÂÃã";
+        Text[ korean ] = "¹è¿­";
         Text[ turkish ] = "Hizalama";
         Text[ catalan ] = "Alineación";
     };
