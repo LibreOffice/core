@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:22:08 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,10 @@ class GenericToolbarController : public svt::ToolboxController
          DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
 
     private:
-        ToolBar*    m_pToolbar;
-        sal_uInt16  m_nID;
+        ToolBar*        m_pToolbar;
+        sal_uInt16      m_nID;
+        sal_Bool        m_bEnumCommand;
+        rtl::OUString   m_aEnumCommand;
 };
 
 }
