@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-24 13:53:42 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 10:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2391,6 +2391,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                         break;
                         case 0x0005:
                         {
+                            PRINT();
                             UINT16 nLen;
                             rIn >> nLen;
                             nLeft -= 2;
@@ -2432,6 +2433,7 @@ void Biff8RecDumper::RecDump( const UINT16 nR, const UINT16 nL, BOOL bSubStream 
                         break;
                         case 0x0005:
                         {
+                            PRINT();
                             UINT16 nLen;
                             rIn >> nLen;
                             nLeft -= 2;
