@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cd $ $Date: 2002-06-03 10:59:48 $
+ *  last change: $Author: mba $ $Date: 2002-06-04 07:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,6 +1037,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG(rReq, pHyperLinkUsedItem, SfxBoolItem, SID_BROWSE, FALSE);
     if ( pHyperLinkUsedItem )
         bHyperlinkUsed = pHyperLinkUsedItem->GetValue();
+
+    // no "official" item, so remove it from ItemSet before using UNO-API
+    rReq.RemoveItem( SID_BROWSE );
 
     SFX_REQUEST_ARG( rReq, pFileName, SfxStringItem, SID_FILE_NAME, FALSE );
     String aFileName = pFileName->GetValue();
