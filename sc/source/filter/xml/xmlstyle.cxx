@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:26:15 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,12 @@
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
 #endif
+#ifndef _XMLOFF_CONTEXTID_HXX_
+#include <xmloff/contextid.hxx>
+#endif
+#ifndef _XMLOFF_TEXTPRMAP_HXX_
+#include <xmloff/txtprmap.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -148,7 +154,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTH ),
     MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALTLBR ),
     MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTH ),
-    MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_TEXT_ALIGN_SOURCE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_REPEAT_CONTENT, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYREPEAT|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
@@ -161,8 +167,8 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "Orientation", XML_NAMESPACE_STYLE, XML_DIRECTION, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_ORIENTATION, 0 ),
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_ALLPADDING ),
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING_BOTTOM, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_BOTTOMPADDING ),
-    MAP( "ParaIndent", XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE16, 0 ),
-    MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BOOL, 0 ),
+    MAP( "ParaIndent", XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_MEASURE16, 0 ),
+    MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TEXT|XML_TYPE_BOOL, 0 ),
     MAP( "ParaLeftMargin", XML_NAMESPACE_FO, XML_PADDING_LEFT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_LEFTPADDING ),
     MAP( "ParaRightMargin", XML_NAMESPACE_FO, XML_PADDING_RIGHT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_RIGHTPADDING ),
     MAP( "ParaTopMargin", XML_NAMESPACE_FO, XML_PADDING_TOP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_TOPPADDING ),
@@ -178,7 +184,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "UserDefinedAttributes", XML_NAMESPACE_TEXT, XML_XMLNS, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
-    MAP( "WritingMode", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+//    MAP( "WritingMode", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
     { 0L }
 };
 
@@ -232,6 +238,11 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pBorder_Left = NULL;
     XMLPropertyState* pBorder_Right = NULL;
     XMLPropertyState* pBorder_Top = NULL;
+    XMLPropertyState* pSWBorder = NULL;
+    XMLPropertyState* pSWBorder_Bottom = NULL;
+    XMLPropertyState* pSWBorder_Left = NULL;
+    XMLPropertyState* pSWBorder_Right = NULL;
+    XMLPropertyState* pSWBorder_Top = NULL;
     XMLPropertyState* pDiagonalTLBR = NULL;
     XMLPropertyState* pDiagonalBLTR = NULL;
 
@@ -240,8 +251,15 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pRightBorderWidthState = NULL;
     XMLPropertyState* pTopBorderWidthState = NULL;
     XMLPropertyState* pBottomBorderWidthState = NULL;
+    XMLPropertyState* pSWAllBorderWidthState = NULL;
+    XMLPropertyState* pSWLeftBorderWidthState = NULL;
+    XMLPropertyState* pSWRightBorderWidthState = NULL;
+    XMLPropertyState* pSWTopBorderWidthState = NULL;
+    XMLPropertyState* pSWBottomBorderWidthState = NULL;
     XMLPropertyState* pDiagonalTLBRWidthState = NULL;
     XMLPropertyState* pDiagonalBLTRWidthState = NULL;
+
+    XMLPropertyState* pParaAdjust = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -267,10 +285,21 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertie; break;
                 case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertie; break;
                 case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertie; break;
+                case CTF_ALLBORDER:             pSWBorder = propertie; break;
+                case CTF_LEFTBORDER:            pSWBorder_Left = propertie; break;
+                case CTF_RIGHTBORDER:           pSWBorder_Right = propertie; break;
+                case CTF_BOTTOMBORDER:          pSWBorder_Bottom = propertie; break;
+                case CTF_TOPBORDER:             pSWBorder_Top = propertie; break;
+                case CTF_ALLBORDERWIDTH:        pSWAllBorderWidthState = propertie; break;
+                case CTF_LEFTBORDERWIDTH:       pSWLeftBorderWidthState = propertie; break;
+                case CTF_RIGHTBORDERWIDTH:      pSWRightBorderWidthState = propertie; break;
+                case CTF_TOPBORDERWIDTH:        pSWTopBorderWidthState = propertie; break;
+                case CTF_BOTTOMBORDERWIDTH:     pSWBottomBorderWidthState = propertie; break;
                 case CTF_SC_DIAGONALTLBR:       pDiagonalTLBR = propertie; break;
                 case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertie; break;
                 case CTF_SC_DIAGONALBLTR:       pDiagonalBLTR = propertie; break;
                 case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
+                case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertie; break;
             }
         }
     }
@@ -376,6 +405,63 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
             pAllBorderWidthState->maValue.clear();
         }
     }
+
+    if (pParaAdjust)
+    {
+        pParaAdjust->mnIndex = -1;
+        pParaAdjust->maValue.clear();
+    }
+    if (pSWBorder)
+    {
+        pSWBorder->mnIndex = -1;
+        pSWBorder->maValue.clear();
+    }
+    if (pSWBorder_Left)
+    {
+        pSWBorder_Left->mnIndex = -1;
+        pSWBorder_Left->maValue.clear();
+    }
+    if (pSWBorder_Right)
+    {
+        pSWBorder_Right->mnIndex = -1;
+        pSWBorder_Right->maValue.clear();
+    }
+    if (pSWBorder_Bottom)
+    {
+        pSWBorder_Bottom->mnIndex = -1;
+        pSWBorder_Bottom->maValue.clear();
+    }
+    if (pSWBorder_Top)
+    {
+        pSWBorder_Top->mnIndex = -1;
+        pSWBorder_Top->maValue.clear();
+    }
+    if (pSWAllBorderWidthState)
+    {
+        pSWAllBorderWidthState->mnIndex = -1;
+        pSWAllBorderWidthState->maValue.clear();
+    }
+    if (pSWLeftBorderWidthState)
+    {
+        pSWLeftBorderWidthState->mnIndex = -1;
+        pSWLeftBorderWidthState->maValue.clear();
+    }
+    if (pSWRightBorderWidthState)
+    {
+        pSWRightBorderWidthState->mnIndex = -1;
+        pSWRightBorderWidthState->maValue.clear();
+    }
+    if (pSWTopBorderWidthState)
+    {
+        pSWTopBorderWidthState->mnIndex = -1;
+        pSWTopBorderWidthState->maValue.clear();
+    }
+    if (pSWBottomBorderWidthState)
+    {
+        pSWBottomBorderWidthState->mnIndex = -1;
+        pSWBottomBorderWidthState->maValue.clear();
+    }
+
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
 }
 
@@ -1204,11 +1290,11 @@ sal_Bool XmlScPropHdl_HoriJustifyRepeat::importXML(
 {
     sal_Bool bRetval(sal_False);
 
-    if (IsXMLToken(rStrImpValue, XML_NONE))
+    if (IsXMLToken(rStrImpValue, XML_FALSE))
     {
         bRetval = sal_True;
     }
-    else if (IsXMLToken(rStrImpValue, XML_FILL))
+    else if (IsXMLToken(rStrImpValue, XML_TRUE))
     {
         table::CellHoriJustify nValue = table::CellHoriJustify_REPEAT;
         rValue <<= nValue;
@@ -1230,12 +1316,12 @@ sal_Bool XmlScPropHdl_HoriJustifyRepeat::exportXML(
     {
         if (nVal == table::CellHoriJustify_REPEAT)
         {
-            rStrExpValue = GetXMLToken(XML_FILL);
+            rStrExpValue = GetXMLToken(XML_TRUE);
             bRetval = sal_True;
         }
         else
         {
-            rStrExpValue = GetXMLToken(XML_NONE);
+            rStrExpValue = GetXMLToken(XML_FALSE);
             bRetval = sal_True;
         }
     }
