@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:38:50 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Hledat";
         Text[ hebrew ] = "‮חיפוש‬";
         Text[ hindi ] = "~खोज";
+        Text[ slovak ] = "~Hľadať";
     };
     PushButton BTN_LANGUAGE
     {
@@ -161,6 +162,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Jazyk...";
         Text[ hebrew ] = "‮שפה...‬";
         Text[ hindi ] = "~भाषा...";
+        Text[ slovak ] = "~Jazyk...";
     };
     HelpButton BTN_THES_HELP
     {
@@ -200,6 +202,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Slovo";
         Text[ hebrew ] = "‮מילה‬";
         Text[ hindi ] = "~शब्द";
+        Text[ slovak ] = "~Slovo";
     };
     ListBox LB_WORD
     {
@@ -240,6 +243,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Význam ";
         Text[ hebrew ] = "‮משמעות‬";
         Text[ hindi ] = "~अर्थ ";
+        Text[ slovak ] = "Význa~m ";
     };
     ListBox LB_MEAN
     {
@@ -281,6 +285,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Synonymum";
         Text[ hebrew ] = "‮מילה נרדפת‬";
         Text[ hindi ] = "पर्या~य शब्द";
+        Text[ slovak ] = "Sy~nonymum";
     };
     ListBox LB_SYNON
     {
@@ -322,6 +327,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Nahradit";
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "प्रतिस्था~पन";
+        Text[ slovak ] = "Nah~radiť";
     };
     Edit ED_REPL
     {
@@ -362,6 +368,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Variace";
         Text[ hebrew ] = "‮ניסוחים חלפיים‬";
         Text[ hindi ] = "रूपान्तर";
+        Text[ slovak ] = "Iné voľby";
     };
     String STR_ERR_WORDNOTFOUND
     {
@@ -393,6 +400,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ czech ] = "Výraz není obsažen ve slovníku synonym";
         Text[ hebrew ] = "‮מילה לא נמצאת בתזאורוס‬";
         Text[ hindi ] = "विश्वकोश में शब्द नहीं मिला";
+        Text[ slovak ] = "Výraz sa nenachádza v slovníku synoným";
     };
     Text[ chinese_simplified ] = "同义词词典";
     Text[ russian ] = "��������";
@@ -409,6 +417,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     Text[ czech ] = "Slovník synonym";
     Text[ hebrew ] = "‮תזאורוס‬";
     Text[ hindi ] = "विश्वकोश";
+    Text[ slovak ] = "Slovník synoným";
 };
  // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
 ModalDialog RID_SVXDLG_THES_LANGUAGE
@@ -469,6 +478,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮בחירה‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     OKButton BTN_LANG_OK
     {
@@ -502,8 +512,11 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ czech ] = "Vybrat jazyk";
     Text[ hebrew ] = "‮בחירת שפה‬";
     Text[ hindi ] = "भाषा चुनो";
+    Text[ slovak ] = "Vybrať jazyk";
 };
  // ********************************************************************** EOF
+
+
 
 
 
