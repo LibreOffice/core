@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListItem.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:57:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleComponent
     @see com::sun::star::accessibility::XAccessibleText
 
-    @since #103639#
+    @since OOo 1.1.2
 */
 published service AccessibleListItem
 {
