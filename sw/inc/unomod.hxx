@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:42:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,11 @@ class SwXModule : public cppu::WeakImplHelper4
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *     pxViewSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *     pxPrintSettings;
 
+protected:
+    virtual ~SwXModule();
 public:
     SwXModule();
-    virtual ~SwXModule();
+
 
     //XViewSettings
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  SAL_CALL getViewSettings(void)
@@ -170,10 +172,12 @@ protected:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _postGetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
-public:
-    SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = NULL );
+
     virtual ~SwXPrintSettings()
         throw();
+public:
+    SwXPrintSettings( SwXPrintSettingsType eType, SwDoc * pDoc = NULL );
+
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void)
@@ -208,10 +212,12 @@ protected:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _postGetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
-public:
-    SwXViewSettings(sal_Bool bWeb, SwView*  pView);
+
     virtual ~SwXViewSettings()
         throw();
+public:
+    SwXViewSettings(sal_Bool bWeb, SwView*  pView);
+
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
