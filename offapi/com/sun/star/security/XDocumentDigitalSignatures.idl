@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDocumentDigitalSignatures.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:52:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #define __com_sun_star_security_XDocumentDigitalSignatures_idl_
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/XStream.idl>
 #include <com/sun/star/embed/XStorage.idl>
 #include <com/sun/star/security/DocumentSignaturesInformation.idl>
 #include <com/sun/star/security/XCertificate.idl>
@@ -87,53 +89,87 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      * Sign the content of the document including text and pictures.
        Macros will not be signed.
      */
-    boolean SignDocumentContent( [in] ::com::sun::star::embed::XStorage Storage );
+    boolean signDocumentContent( [in] ::com::sun::star::embed::XStorage xStorage,
+                                 [in] ::com::sun::star::io::XStream xSignStream);
 
     /**
      * Check for digital signatures and their status.
        Only document content will be checked.
      */
-    sequence< com::sun::star::security::DocumentSignaturesInformation > VerifyDocumentContentSignatures( [in] ::com::sun::star::embed::XStorage Storage );
+    sequence< com::sun::star::security::DocumentSignaturesInformation > verifyDocumentContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
 
     /**
      * Show the digital signatures of the document content
      */
-    void ShowDocumentContentSignatures( [in] ::com::sun::star::embed::XStorage Storage );
+    void showDocumentContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
+
+    /**
+     * allows to get the default stream name for storing of the signature of
+       the document content.
+     */
+    string getDocumentContentSignatureDefaultStreamName();
 
     /**
      * Sign the content of the Scripting including macros and basic dialogs
        Rest of document content will not be signed.
      */
-    boolean SignScriptingContent( [in] ::com::sun::star::embed::XStorage Storage );
+    boolean signScriptingContent( [in] ::com::sun::star::embed::XStorage xStorage,
+                                  [in] ::com::sun::star::io::XStream xSignStream);
 
     /**
      * Check for digital signatures and their status.
        Only Scripting content will be checked.
      */
-    sequence< com::sun::star::security::DocumentSignaturesInformation > VerifyScriptingContentSignatures( [in] ::com::sun::star::embed::XStorage Storage );
+    sequence< com::sun::star::security::DocumentSignaturesInformation > verifyScriptingContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
 
     /**
      * Show the digital signatures of the scripting content
      */
-    void  ShowScriptingContentSignatures( [in] ::com::sun::star::embed::XStorage Storage );
+    void showScriptingContentSignatures(
+                                [in] ::com::sun::star::embed::XStorage xStorage,
+                                [in] ::com::sun::star::io::XInputStream xSignInStream );
+
+    /**
+     * allows to get the default stream name for storing of the signature of
+       the scripting content.
+     */
+    string getScriptingContentSignatureDefaultStreamName();
 
     /**
      * Sign the full Package, which means everything in the storage excecpt the content of META-INF
      */
-    boolean SignPackage( [in] ::com::sun::star::embed::XStorage Storage );
+    boolean signPackage( [in] ::com::sun::star::embed::XStorage Storage,
+                         [in] ::com::sun::star::io::XStream xSignStream);
 
     /**
      * Check for digital signatures and their status.
        Only Package content will be checked.
      */
-    sequence< com::sun::star::security::DocumentSignaturesInformation > VerifyPackageSignatures( [in] ::com::sun::star::embed::XStorage Storage );
+    sequence< com::sun::star::security::DocumentSignaturesInformation > verifyPackageSignatures(
+                        [in] ::com::sun::star::embed::XStorage Storage,
+                        [in] ::com::sun::star::io::XInputStream xSignInStream );
 
     /**
      * Show the digital signatures of the package
      */
-    void ShowPackageSignatures( [in] ::com::sun::star::embed::XStorage Storage );
+    void showPackageSignatures(
+                        [in] ::com::sun::star::embed::XStorage xStorage,
+                        [in] ::com::sun::star::io::XInputStream xSignInStream );
 
-    void ShowCertificate( [in] com::sun::star::security::XCertificate Certificate );
+    /**
+     * allows to get the default stream name for storing of the signature of
+       the package.
+     */
+    string getPackageSignatureDefaultStreamName();
+
+
+    void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
 
 
        /**
