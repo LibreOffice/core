@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-10 10:59:04 $
+ *  last change: $Author: tra $ $Date: 2001-06-15 15:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include "WinImplHelper.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
 #include <systools/win32/user9x.h>
 
 //------------------------------------------------------------
@@ -82,6 +86,11 @@
 //------------------------------------------------------------
 
 using rtl::OUString;
+using ::com::sun::star::lang::IllegalArgumentException;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Sequence;
 
 //------------------------------------------------------------
 // determine if we are running under Win2000
@@ -113,76 +122,267 @@ sal_Bool SAL_CALL IsWin2000( )
 //
 //------------------------------------------------------------
 
-OUString SAL_CALL getCurrentComboboxItem( HWND hwndCbo )
+void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 {
-    LRESULT currentIndex = SendMessageW( hwndCbo, CB_GETCURSEL, 0, 0 );
+    LRESULT rc = SendMessageW(
+        hwnd, CB_ADDSTRING, 0, reinterpret_cast< LPARAM >(aString.getStr( )) );
 
-    OUString aItem;
+    OSL_ASSERT( (CB_ERR != rc) && (CB_ERRSPACE != rc) );
+}
 
-    if ( CB_ERR != currentIndex )
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    OUString aString;
+
+    LRESULT lItem =
+        SendMessageW( hwnd, CB_GETLBTEXTLEN, aPosition, 0 );
+
+    if ( (CB_ERR != lItem) && (lItem > 0) )
     {
-        LRESULT lenItem =
-            SendMessageW( hwndCbo, CB_GETLBTEXTLEN, ( WPARAM ) currentIndex, 0 );
+        // message returns the len of a combobox item
+        // without trailing '\0' that's why += 1
+        lItem++;
 
-        if ( (CB_ERR != lenItem) && (lenItem > 0) )
+        CAutoUnicodeBuffer aBuff( lItem );
+
+        LRESULT lRet =
+            SendMessageW(
+                hwnd, CB_GETLBTEXT, aPosition,
+                reinterpret_cast<LPARAM>(&aBuff) );
+
+        OSL_ASSERT( lRet != CB_ERR );
+
+        if ( CB_ERR != lRet )
+            aString = OUString( aBuff, lRet );
+    }
+
+    return aString;
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    throw( IllegalArgumentException )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    if ( !aItem.hasValue( ) ||
+         aItem.getValueType( ) != getCppuType((OUString*)0) )
+         throw IllegalArgumentException(
+            OUString::createFromAscii( "invalid value type or any has no value" ),
+            rXInterface,
+            aArgPos );
+
+    OUString cbItem;
+    aItem >>= cbItem;
+
+    ListboxAddString( hwnd, cbItem );
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    throw( IllegalArgumentException )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    if ( !aItemList.hasValue( ) ||
+         aItemList.getValueType( ) != getCppuType((Sequence<OUString>*)0) )
+         throw IllegalArgumentException(
+            OUString::createFromAscii( "invalid value type or any has no value" ),
+            rXInterface,
+            aArgPos );
+
+    Sequence< OUString > aStringList;
+    aItemList >>= aStringList;
+
+    sal_Int32 nItemCount = aStringList.getLength( );
+    for( sal_Int32 i = 0; i < nItemCount; i++ )
+    {
+        ListboxAddString( hwnd, aStringList[i] );
+    }
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    throw( IllegalArgumentException )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    if ( !aPosition.hasValue( ) ||
+         aPosition.getValueType( ) != getCppuType((sal_Int32*)0) )
+         throw IllegalArgumentException(
+            OUString::createFromAscii( "invalid value type or any has no value" ),
+            rXInterface,
+            aArgPos );
+
+    sal_Int32 nPos;
+    aPosition >>= nPos;
+
+    LRESULT lRet = SendMessage( hwnd, CB_DELETESTRING, nPos, 0 );
+
+    // if the return value is CB_ERR the given
+    // index was not correct
+    if ( CB_ERR == lRet )
+        throw IllegalArgumentException(
+            OUString::createFromAscii( "inavlid item position" ),
+            rXInterface,
+            aArgPos );
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any& /*unused*/, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    throw( IllegalArgumentException )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    LRESULT lRet = 0;
+
+    do
+    {
+        // the return value on success is the number
+        // of remaining elements in the listbox
+        lRet = SendMessageW( hwnd, CB_DELETESTRING, 0, 0 );
+    }
+    while ( (lRet != CB_ERR) && (lRet > 0) );
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    throw( IllegalArgumentException )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+     if ( !aPosition.hasValue( ) ||
+         aPosition.getValueType( ) != getCppuType((sal_Int32*)0) )
+         throw IllegalArgumentException(
+            OUString::createFromAscii( "invalid value type or any has no value" ),
+            rXInterface,
+            aArgPos );
+
+    sal_Int32 nPos;
+    aPosition >>= nPos;
+
+    if ( nPos < -1 )
+        throw IllegalArgumentException(
+            OUString::createFromAscii("invalid index"),
+            rXInterface,
+            aArgPos );
+
+    LRESULT lRet = SendMessageW( hwnd, CB_SETCURSEL, nPos, 0 );
+
+    if ( (CB_ERR == lRet) && (-1 != nPos) )
+        throw IllegalArgumentException(
+            OUString::createFromAscii("invalid index"),
+            rXInterface,
+            aArgPos );
+}
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+Any SAL_CALL ListboxGetItems( HWND hwnd )
+{
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    LRESULT nItemCount = SendMessageW( hwnd, CB_GETCOUNT, 0, 0 );
+
+    Sequence< OUString > aItemList;
+
+    if ( CB_ERR != nItemCount )
+    {
+        aItemList.realloc( nItemCount );
+
+        for ( sal_Int32 i = 0; i < nItemCount; i++ )
         {
-            // message returns the len of a combobox item
-            // without trailing '\0' that's why + 1
-            lenItem++;
-
-            CAutoUnicodeBuffer aBuff( lenItem );
-
-            LRESULT lRet =
-                SendMessageW(
-                    hwndCbo,
-                    CB_GETLBTEXT,
-                    ( WPARAM ) currentIndex,
-                    ( LPARAM ) &aBuff );
-            OSL_ASSERT( lRet == ( lenItem - 1 ) );
-
-            aItem = OUString( aBuff, lenItem );
+            aItemList[i] = ListboxGetString( hwnd, i );
         }
     }
 
-    return aItem;
+    Any aAny;
+    aAny <<= aItemList;
+
+    return aAny;
 }
 
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
 
-sal_Bool SAL_CALL addComboboxItem( HWND hwndCbo, const rtl::OUString& aItem )
+Any SAL_CALL ListboxGetSelectedItem( HWND hwnd )
 {
-    LRESULT rc = SendMessageW(
-        hwndCbo, CB_ADDSTRING, 0, reinterpret_cast< LPARAM >(aItem.getStr( )) );
-    return ( (CB_ERR != rc) && (CB_ERRSPACE != rc) );
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    LRESULT idxItem = SendMessageW( hwnd, CB_GETCURSEL, 0, 0 );
+
+    Any aAny;
+    aAny <<= ListboxGetString( hwnd, idxItem );
+
+    return aAny;
 }
 
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
 
-sal_Bool SAL_CALL getCheckboxState( HWND hwndCbx )
+Any SAL_CALL CheckboxGetState( HWND hwnd )
 {
-    LRESULT cbxState = SendMessageW( hwndCbx, BM_GETCHECK, 0, 0 );
-    return ( cbxState == BST_CHECKED ) ? sal_True : sal_False;
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    LRESULT lChkState = SendMessageW( hwnd, BM_GETCHECK, 0, 0 );
+    sal_Bool bChkState = (lChkState == BST_CHECKED) ? sal_True : sal_False;
+    Any aAny;
+    aAny.setValue( &bChkState, getCppuType((sal_Bool*)0) );
+    return aAny;
 }
 
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
 
-void SAL_CALL setCheckboxState( HWND hwndCbx, sal_Bool bCheckState )
+void SAL_CALL CheckboxSetState(
+    HWND hwnd, const ::com::sun::star::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
+    throw( IllegalArgumentException )
 {
+    OSL_ASSERT( IsWindow( hwnd ) );
+
+    if ( !aState.hasValue( ) ||
+         aState.getValueType( ) != getCppuType((sal_Bool*)0) )
+         throw IllegalArgumentException(
+            OUString::createFromAscii( "invalid value type or any has no value" ),
+            rXInterface,
+            aArgPos );
+
+    sal_Bool bCheckState = *reinterpret_cast< const sal_Bool* >( aState.getValue( ) );
     WPARAM wParam = bCheckState ? BST_CHECKED : BST_UNCHECKED;
-    SendMessageW( hwndCbx, BM_SETCHECK, wParam, 0 );
+    SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );
 }
 
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
 
-sal_uInt32 _wcslenex( const sal_Unicode* pStr )
+sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr )
 {
     if ( !pStr )
         return 0;
