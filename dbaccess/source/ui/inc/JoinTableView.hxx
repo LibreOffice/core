@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 07:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
@@ -129,6 +132,7 @@ namespace dbaui
 
     class OJoinTableView :  public Window
                             ,public IDragTransferableListener
+                            ,public DropTargetHelper
     {
     public:
         DECLARE_STL_USTRINGACCESS_MAP(OTableWindow*,OTableWindowMap);

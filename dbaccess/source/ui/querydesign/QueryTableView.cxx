@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:57:16 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,6 @@ OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
 {
     DBG_CTOR(OQueryTableView,NULL);
     SetHelpId(HID_CTL_QRYDGNTAB);
-#ifndef TF_SVDATA
-    EnableDrop();
-#endif // TF_SVDATA
 }
 
 //------------------------------------------------------------------------

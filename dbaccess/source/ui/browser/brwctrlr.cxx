@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 13:05:09 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 07:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,6 @@
 #endif
 #ifndef _FMSEARCH_HXX
 #include <svx/fmsearch.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
 #endif
 #ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
 #include <vcl/toolbox.hxx>
@@ -1454,11 +1449,17 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
                     {
                         case ID_BROWSER_CUT:    aReturn.bEnabled = m_bFrameUiActive && bHasLen && !bIsReadOnly; break;
                         case SID_COPY   :       aReturn.bEnabled = m_bFrameUiActive && bHasLen; break;
-                        case ID_BROWSER_PASTE:  aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly
-#ifndef TF_SVDATA
-                                                    && Clipboard::HasFormat(FORMAT_STRING)
-#endif
-                                                    ; break;
+                        case ID_BROWSER_PASTE:
+                            {
+                                aReturn.bEnabled = m_bFrameUiActive && !bIsReadOnly;
+                                if(aReturn.bEnabled)
+                                {
+                                    TransferableDataHelper aTrans = TransferableDataHelper::CreateFromSystemClipboard(getBrowserView());
+                                    aReturn.bEnabled = aReturn.bEnabled &&
+                                                    IsFormatSupported(aTrans.GetDataFlavorExVector(),FORMAT_STRING);
+                                }
+                                break;
+                            }
                     }
                 }
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:23:31 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,11 +112,6 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX
-#include <vcl/drag.hxx>
-#endif
 #endif
 #ifndef __SGI_STL_ROPE
 #include <rope>
@@ -287,9 +282,6 @@ void OSelectionBrowseBox::Init()
     //xxx richtige Zeilenhoehe fuer EditEng ???
     long nLSize = GetDataWindow().GetTextHeight() + 4;
     SetDataRowHeight(nLSize);
-#ifndef TF_SVDATA
-    EnableDrop();
-#endif // TF_SVDATA
     SetTitleLines(1);
     // Anzahl der sichtbaren Zeilen ermitteln
     for(long i=0;i<BROW_ROW_CNT;i++)

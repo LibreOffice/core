@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,6 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_CLIP_HXX
-#include <vcl/clip.hxx>
-#endif
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 12:23:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,6 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX
-#include <vcl/drag.hxx>
-#endif
-#endif // TF_SVDATA
 #ifndef _URLBMK_HXX
 #include <svtools/urlbmk.hxx>
 #endif
@@ -212,6 +207,7 @@ DBG_NAME(OJoinTableView);
 //------------------------------------------------------------------------------
 OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView ) :
      Window( pParent,WB_BORDER )
+    ,DropTargetHelper(this)
     ,m_pView( pView )
     ,m_pDragWin( NULL )
     ,m_pSizingWin( NULL )
