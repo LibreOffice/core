@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_struct.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-29 10:20:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,14 @@ namespace idl
 
 Struct::Struct( const String &      i_sName,
                 Ce_id               i_nOwner,
-                Type_id             i_nBase )
+                Type_id             i_nBase,
+                const String &      i_sTemplateParameter,
+                Type_id             i_nTemplateParameterType )
     :   sName(i_sName),
         nOwner(i_nOwner),
         nBase(i_nBase),
+        sTemplateParameter(i_sTemplateParameter),
+        nTemplateParameterType(i_nTemplateParameterType),
         aElements()
 {
 }
@@ -193,4 +197,3 @@ xref::Get_AsDataTypes( Dyn_CeIterator &    o_result,
 
 }   //  namespace   idl
 }   //  namespace   ary
-
