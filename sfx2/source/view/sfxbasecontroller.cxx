@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:04:01 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 18:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,11 +869,27 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 SfxShell *pShell=0;
                 USHORT nIdx;
 
+                rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
+                sal_Bool      bMasterCommand( aMasterCommand.getLength() > 0 );
+
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
-                const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
+
+                const SfxSlot* pSlot( 0 );
+                if ( bMasterCommand )
+                    pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
+                else
+                    pSlot = rSlotPool.GetUnoSlot( aURL.Path );
                 if ( pSlot && ( !pAct->GetFrame()->IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
-                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL ) );
+                {
+                    SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch(
+                                                            pAct->GetBindings(),
+                                                            pAct->GetDispatcher(),
+                                                            pSlot->GetSlotId(),
+                                                            aURL );
+                    pDispatch->SetMasterUnoCommand( bMasterCommand );
+                    return REFERENCE< XDISPATCH >( pDispatch );
+                }
                 else
                 {
                     // try to find parent SfxViewFrame
@@ -904,9 +920,22 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                         if ( pParentFrame )
                         {
                             SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pParentFrame );
-                            const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
+                            const SfxSlot* pSlot( 0 );
+                            if ( bMasterCommand )
+                                pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
+                            else
+                                pSlot = rSlotPool.GetUnoSlot( aURL.Path );
+
                             if ( pSlot )
-                                return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pParentFrame->GetBindings(), pParentFrame->GetDispatcher(), pSlot->GetSlotId(), aURL) );
+                            {
+                                SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch(
+                                                                        pParentFrame->GetBindings(),
+                                                                        pParentFrame->GetDispatcher(),
+                                                                        pSlot->GetSlotId(),
+                                                                        aURL );
+                                pDispatch->SetMasterUnoCommand( bMasterCommand );
+                                return REFERENCE< XDISPATCH >( pDispatch );
+                            }
                         }
                     }
                 }
