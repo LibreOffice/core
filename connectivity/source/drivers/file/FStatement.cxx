@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 07:19:14 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 10:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,8 +297,11 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
             if(xTabs.begin() == xTabs.end())
             {
                 if(!aErr.getLength())
-                    aErr = ::rtl::OUString::createFromAscii("Unknown table!");
-                throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+                {
+                    aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement:\n");
+                    aErr += sql;
+                }
+                throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
             }
 
             OResultSet* pResult = createResultSet();
@@ -306,10 +309,22 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
             xRS = pResult;
         }
         else
+        {
+            const OSQLTables& xTabs = m_aSQLIterator.getTables();
+            if(xTabs.begin() == xTabs.end())
+            {
+                if(!aErr.getLength())
+                {
+                    aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement: !");
+                    aErr += sql;
+                }
+                throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+            }
             throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
+        }
     }
     else
-        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+        throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
 
     // Execute the statement.  If execute returns true, a result
     // set exists.
