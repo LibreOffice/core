@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 13:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,43 +1414,26 @@ const SfxPoolItem* ImplCheckFillFloatTransparenceItem( const SfxPoolItem* pNewIt
         return pNewItem;
 
     XFillFloatTransparenceItem* pFillFloatTransparenceItem = (XFillFloatTransparenceItem*)pNewItem;
+    String aUniqueName(pFillFloatTransparenceItem->GetName());
 
-    String aUniqueName( pFillFloatTransparenceItem->GetName() );
-
-    // 1. if we have no name check if we have the same dash
-    // inside the dash table if so, use that name
-    if( aUniqueName.Len() == 0 )
-    {
-        XGradientList* pGradientList = pModel->GetGradientList();
-        if( pGradientList )
-        {
-            const long nCount = pGradientList->Count();
-            for( long nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                XGradientEntry* pEntry = pGradientList->Get(nIndex);
-                if( pEntry->GetGradient() == pFillFloatTransparenceItem->GetValue() )
-                    return new XFillFloatTransparenceItem( pEntry->GetName(), pEntry->GetGradient() );
-            }
-        }
-    }
-    // 2. if we have a name check if there is already an item with the
-    // same name in the documents pool with a different line end or start
-    else
+    // 1. if we have a name check if there is already an item with the
+    // same name in the documents pool with a different FillFloatTransparence
+    if(aUniqueName.Len())
     {
         const SfxItemPool& rPool = pModel->GetItemPool();
-
-        const USHORT nCount = rPool.GetItemCount( XATTR_FILLFLOATTRANSPARENCE );
+        const sal_uInt16 nCount(rPool.GetItemCount(XATTR_FILLFLOATTRANSPARENCE));
         const XFillFloatTransparenceItem *pItem;
 
-        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
+        for(sal_uInt16 nSurrogate(0); nSurrogate < nCount; nSurrogate++)
         {
-            pItem = (XFillFloatTransparenceItem*)rPool.GetItem( XATTR_FILLFLOATTRANSPARENCE, nSurrogate );
+            pItem = (XFillFloatTransparenceItem*)rPool.GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
 
-            if( pItem && ( pItem->GetName() == pFillFloatTransparenceItem->GetName() ) )
+            if(pItem && (pItem->GetName() == pFillFloatTransparenceItem->GetName()))
             {
-                // if there is already an item with the same name and the same bitmap
-                // its ok to set it
-                if( pItem->GetValue() == pFillFloatTransparenceItem->GetValue() )
+                // if there is already an item with the same name and the same gradient
+                // and the same activation its ok to set it
+                if(pItem->IsEnabled() == pFillFloatTransparenceItem->IsEnabled() &&
+                    pItem->GetValue() == pFillFloatTransparenceItem->GetValue())
                     break;
 
                 // same name but different end, we need a new name for this item
@@ -1459,39 +1442,43 @@ const SfxPoolItem* ImplCheckFillFloatTransparenceItem( const SfxPoolItem* pNewIt
             }
         }
     }
-    // 3. if we have no name yet, find existing item with same conent or
+
+    // 2. if we have no name yet, find existing item with same conent or
     // create a unique name
-    if( aUniqueName.Len() == 0 )
+    if(!aUniqueName.Len())
     {
         const SfxItemPool& rPool = pModel->GetItemPool();
-        sal_Int32 nUserIndex = 1;
-        const String aUser( RTL_CONSTASCII_STRINGPARAM( "trans" ) );
-
-        const USHORT nCount = rPool.GetItemCount( XATTR_FILLFLOATTRANSPARENCE );
+        sal_Int32 nUserIndex(1L);
+        const String aUser(RTL_CONSTASCII_STRINGPARAM("trans"));
+        const sal_uInt16 nCount(rPool.GetItemCount(XATTR_FILLFLOATTRANSPARENCE));
         const XFillFloatTransparenceItem *pItem;
-        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-        {
-            pItem = (XFillFloatTransparenceItem*)rPool.GetItem( XATTR_FILLFLOATTRANSPARENCE, nSurrogate );
 
-            if( pItem && pItem->GetName().Len() )
+        for(sal_uInt16 nSurrogate(0); nSurrogate < nCount; nSurrogate++)
+        {
+            pItem = (XFillFloatTransparenceItem*)rPool.GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
+
+            if(pItem && pItem->GetName().Len())
             {
-                if( pItem->GetValue() == pFillFloatTransparenceItem->GetValue() )
+                if(pItem->IsEnabled() == pFillFloatTransparenceItem->IsEnabled() &&
+                    pItem->GetValue() == pFillFloatTransparenceItem->GetValue())
                 {
                     return pItem->Clone();
                 }
-                if( pItem->GetName().CompareTo( aUser, aUser.Len() ) == 0 )
+
+                if(!pItem->GetName().CompareTo(aUser, aUser.Len()))
                 {
-                    sal_Int32 nThisIndex = pItem->GetName().Copy( aUser.Len() ).ToInt32();
-                    if( nThisIndex >= nUserIndex )
+                    sal_Int32 nThisIndex(pItem->GetName().Copy(aUser.Len()).ToInt32());
+                    if(nThisIndex >= nUserIndex)
                         nUserIndex = nThisIndex + 1;
                 }
             }
         }
 
         aUniqueName = aUser;
-        aUniqueName += String::CreateFromInt32( nUserIndex );
+        aUniqueName += String::CreateFromInt32(nUserIndex);
 
-        return new XFillFloatTransparenceItem( aUniqueName, pFillFloatTransparenceItem->GetValue() );
+        return new XFillFloatTransparenceItem(aUniqueName,
+            pFillFloatTransparenceItem->GetValue(), pFillFloatTransparenceItem->IsEnabled());
     }
 
     return pNewItem;
@@ -1609,7 +1596,20 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
             pItem = ImplCheckFillGradientItem( pItem, pModel );
             break;
         case XATTR_FILLFLOATTRANSPARENCE:
-            pItem = ImplCheckFillFloatTransparenceItem( pItem, pModel );
+            if(((XFillFloatTransparenceItem*)pItem)->IsEnabled())
+            {
+                // normal checks
+                pItem = ImplCheckFillFloatTransparenceItem( pItem, pModel );
+            }
+            else
+            {
+                // clear this item, it's for disabling
+                if(mpObjectItemSet)
+                    mpObjectItemSet->ClearItem(nWhich);
+
+                // do not set it at all
+                pItem = 0L;
+            }
             break;
         case XATTR_FILLHATCH:
             pItem = ImplCheckFillHatchItem( pItem, pModel );
@@ -1617,10 +1617,17 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
         }
 
         // set item
-        ((SdrAttrObj*)this)->ImpForceItemSet();
-        mpObjectItemSet->Put(*pItem);
-        if( pItem != pNewItem )
+        if(pItem)
+        {
+            ((SdrAttrObj*)this)->ImpForceItemSet();
+            mpObjectItemSet->Put(*pItem);
+        }
+
+        // delete item if it was a generated one
+        if(pItem && pItem != pNewItem)
+        {
             delete (SfxPoolItem*)pItem;
+        }
     }
     else
     {
