@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 15:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,16 +154,16 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams )
         delete pProcess;
 
         xub_StrLen i, nCount = aAppParams.GetQuotedTokenCount( CUniString("\"\"" ), ' ' );
-        NAMESPACE_RTL(OUString) *pParamList = new NAMESPACE_RTL(OUString)[nCount];
+        ::rtl::OUString *pParamList = new ::rtl::OUString[nCount];
         for ( i = 0 ; i < nCount ; i++ )
         {
-            NAMESPACE_RTL(OUString) aTemp = NAMESPACE_RTL(OUString)(aAppParams.GetQuotedToken( i, CUniString("\"\"" ), ' ' ));
+            ::rtl::OUString aTemp = ::rtl::OUString(aAppParams.GetQuotedToken( i, CUniString("\"\"" ), ' ' ));
             if ( aTemp.getLength() )
                 pParamList[i] = aTemp;
         }
         pArgumentList = new NAMESPACE_VOS(OArgumentList)( pParamList, nCount );
-        NAMESPACE_RTL(OUString) aNormalizedAppPath;
-        osl::FileBase::normalizePath( NAMESPACE_RTL(OUString)(aAppPath), aNormalizedAppPath );
+        ::rtl::OUString aNormalizedAppPath;
+        osl::FileBase::normalizePath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
         pProcess = new NAMESPACE_VOS(OProcess)( aNormalizedAppPath );
         bHasBeenStarted = FALSE;
     }

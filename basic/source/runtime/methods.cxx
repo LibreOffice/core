@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-08 13:54:27 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 15:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2945,21 +2945,21 @@ RTLFUNC(Shell)
         // #72471 Parameter aufbereiten
         std::list<String>::const_iterator iter = aTokenList.begin();
         const String& rStr = *iter;
-        NAMESPACE_RTL(OUString) aOUStrProg( rStr.GetBuffer(), rStr.Len() );
+        ::rtl::OUString aOUStrProg( rStr.GetBuffer(), rStr.Len() );
         iter++;
 
         USHORT nParamCount = aTokenList.size() - 1;
-        NAMESPACE_RTL(OUString)* pArgumentList = NULL;
+        ::rtl::OUString* pArgumentList = NULL;
         //const char** pParamList = NULL;
         if( nParamCount )
         {
-            pArgumentList = new NAMESPACE_RTL(OUString)[ nParamCount ];
+            pArgumentList = new ::rtl::OUString[ nParamCount ];
             //pParamList = new const char*[ nParamCount ];
             USHORT iList = 0;
             while( iter != aTokenList.end() )
             {
                 const String& rParamStr = (*iter);
-                pArgumentList[iList++] = NAMESPACE_RTL(OUString)( rParamStr.GetBuffer(), rParamStr.Len() );
+                pArgumentList[iList++] = ::rtl::OUString( rParamStr.GetBuffer(), rParamStr.Len() );
                 //pParamList[iList++] = (*iter).GetStr();
                 iter++;
             }
