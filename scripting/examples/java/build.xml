@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 14:53:53 $
+#   last change: $Author: vg $ $Date: 2004-12-23 11:47:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,135 +61,128 @@
 #
 #*************************************************************************
 -->
-<project name="Scipting Framework Installer" default="buildexamples" basedir=".">
-
+<project name="Scripting Framework Java Examples" default="all" basedir=".">
   <!-- =================== Environmental Properties ======================= -->
 
   <property name="prj" value="../.."/>
-  <property file="${prj}/java/build.env"/>
-  <property name="build.compiler"   value="classic"/>
-  <property name="optimize"   value="on"/>
-  <property name="debug"   value="on"/>
-  <property name="installerclasses" value="${out}/class/sframeworkinstall"/>
-  <property name="jardir" value="${out}/class"/>
-  <property name="bindir" value="${out}/bin"/>
-  <property name="sfversion" value="0.3"/>
-  <property name="installerjarname" value="SFrameworkInstall.jar"/>
   <property environment="env"/>
+  <property name="outdir" value="${out}/class/examples/java"/>
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
     <pathelement location="${solar.jar}/unoil.jar"/>
-    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>  -->
     <pathelement location="${solar.jar}/jurt.jar"/>
-    <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
-    <pathelement location="${solar.jar}/java_uno.jar"/>
-    <pathelement location="${solar.jar}/ridl.jar"/>
-  </path>
-  <path id="scriptexampleclasspath">
-    <pathelement location="${solar.jar}/unoil.jar"/>
-    <!-- pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/ -->
-    <pathelement location="${solar.jar}/jurt.jar"/>
-    <pathelement location="${solar.jar}/jut.jar"/>
-    <pathelement location="${solar.jar}/juh.jar"/>
-    <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${out}/class/ScriptFramework.jar"/>
   </path>
 
-  <path id="debuggerclasspath">
-    <pathelement location="${out}/class/ScriptFramework.jar"/>
-    <pathelement location="${solar.jar}/ridl.jar"/>
-    <pathelement location="${solar.jar}/unoil.jar"/>
-    <pathelement location="${out}/class/js.jar"/>
-    <pathelement location="${solar.jar}/bsh.jar"/>
-  </path>
+  <!-- ===================== HelloWorld example =========================== -->
+  <target name="HelloWorld">
 
-  <!-- ===================== Build the examples ========================= -->
-  <target name="buildexamples">
+    <mkdir dir="${outdir}/HelloWorld"/>
 
-    <mkdir dir="${out}/class/examples/java/selector"/>
-    <javac srcdir="${prj}/examples/java/selector"
-           destdir="${out}/class/examples/java/selector"
-              includes="*.java"
-           classpathref="scriptexampleclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+    <javac srcdir="HelloWorld" destdir="${outdir}/HelloWorld"
+           includes="**\*.java" classpathref="idlclasspath"
+           debug="${debug}" optimize="${optimize}" deprecation="on"/>
 
-    <copy todir="${out}/class/examples/java/selector">
-        <fileset dir="${prj}/examples/java/selector">
+    <copy file="HelloWorld/HelloWorld.java" todir="${outdir}/HelloWorld"/>
+    <copy file="HelloWorld/parcel-descriptor.xml" todir="${outdir}/HelloWorld"/>
+
+    <jar jarfile="${outdir}/HelloWorld/HelloWorld.jar"
+         basedir="${outdir}/HelloWorld"
+         includes="**\*.class"
+         excludes="${outdir}/HelloWorld/HelloWorld.jar">
+    </jar>
+
+    <delete file="${outdir}/HelloWorld/HelloWorld.class"/>
+
+  </target>
+
+  <!-- ===================== Highlight example ========================== -->
+  <target name="Highlight">
+
+    <mkdir dir="${outdir}/Highlight"/>
+
+    <javac srcdir="Highlight" destdir="${outdir}/Highlight"
+           includes="**\*.java" classpathref="idlclasspath"
+           debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <copy file="Highlight/HighlightText.java" todir="${outdir}/Highlight"/>
+    <copy file="Highlight/parcel-descriptor.xml" todir="${outdir}/Highlight"/>
+
+    <jar jarfile="${outdir}/Highlight/Highlight.jar"
+         basedir="${outdir}/Highlight"
+         includes="**\*.class"
+         excludes="${outdir}/Highlight/Highlight.jar">
+    </jar>
+
+    <delete file="${outdir}/Highlight/HighlightText.class"/>
+
+  </target>
+
+  <!-- ===================== MemoryUsage example ========================== -->
+  <target name="MemoryUsage">
+
+    <property name="scriptsdir"
+              value="${outdir}/MemoryUsage/Scripts/java/MemoryUsage"/>
+
+    <mkdir dir="${outdir}/MemoryUsage"/>
+    <mkdir dir="${scriptsdir}"/>
+
+    <javac srcdir="MemoryUsage" destdir="${scriptsdir}"
+           includes="**\*.java" classpathref="idlclasspath"
+           debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <copy file="MemoryUsage/MemoryUsage.ods"
+          todir="${outdir}/MemoryUsage"/>
+    <copy file="MemoryUsage/MemoryUsage.java" todir="${outdir}/MemoryUsage"/>
+    <copy file="MemoryUsage/parcel-descriptor.xml" todir="${scriptsdir}"/>
+
+    <jar jarfile="${scriptsdir}/MemoryUsage.jar"
+         basedir="${scriptsdir}"
+         includes="**/*.class"
+         excludes="${scriptsdir}/MemoryUsage.jar">
+    </jar>
+
+    <delete file="${scriptsdir}/MemoryUsage.class"/>
+
+    <zip destfile="${outdir}/MemoryUsage/MemoryUsage.ods"
+         basedir="${outdir}/MemoryUsage" includes="Scripts/java/MemoryUsage/*"
+         update="yes" filesonly="true"/>
+
+    <delete dir="${outdir}/MemoryUsage/Scripts"/>
+
+  </target>
+
+  <!-- ===================== selector example ========================== -->
+  <target name="selector">
+
+    <mkdir dir="${outdir}/selector"/>
+
+    <javac srcdir="selector" destdir="${outdir}/selector"
+              includes="**\*.java" classpathref="idlclasspath"
+           debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <copy todir="${outdir}/selector">
+        <fileset dir="selector">
             <include name="**/*.java"/>
             <include name="*.xml"/>
             <include name="*.gif"/>
         </fileset>
     </copy>
 
-    <jar jarfile="${out}/class/examples/java/selector/selector.jar"
-        basedir="${out}/class/examples/java/selector" includes="*.class,*.gif">
-        <manifest>
-            <attribute name="Built-By" value="Sun Microsystems"/>
-            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
-        </manifest>
+    <jar jarfile="${outdir}/selector/selector.jar"
+         basedir="${outdir}/selector" includes="*.class,*.gif">
     </jar>
 
     <delete>
-        <fileset dir="${out}/class/examples/java/selector" includes="*.class,*.gif"/>
+        <fileset dir="${outdir}/selector" includes="*.class,*.gif"/>
     </delete>
 
-    <mkdir dir="${out}/class/examples/java/Highlight"/>
-    <javac srcdir="${prj}/examples/java/Highlight/"
-           destdir="${out}/class/examples/java/Highlight/"
-              includes="**/Highlight*.java" classpathref="idlclasspath"
-             debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy todir="${out}/class/examples/java/Highlight/">
-        <fileset dir="${prj}/examples/java/Highlight/">
-            <include name="**/*.*"/>
-        </fileset>
-    </copy>
-    <jar jarfile="${out}/class/examples/java/Highlight/Highlight.jar"
-         basedir="${out}/class/examples/java/Highlight"
-         includes="**/*.java,**/*.class,**/*.xml"
-         excludes="${out}/class/examples/java/Highlight/Highlight.jar">
-         <manifest>
-            <attribute name="Built-By" value="Sun Microsystems"/>
-            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
-         </manifest>
-    </jar>
-
-    <mkdir dir="${out}/class/examples/java/MemoryUsage"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/MemoryUsage/"
-              includes="**/MemoryUsage.java" classpathref="idlclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
-    <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/java/MemoryUsage/parcel-descriptor.xml"/>
-    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
-    <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
-
-    <mkdir dir="${out}/class/examples/java/HelloWorld"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/HelloWorld/"
-              includes="**/HelloWorld.java" classpathref="idlclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy file="${prj}/examples/java/HelloWorld.java" todir="${out}/class/examples/java/HelloWorld/"/>
-    <copy file="${prj}/examples/java/HelloWorldParcel.xml" tofile="${out}/class/examples/java/HelloWorld/parcel-descriptor.xml"/>
-    <jar jarfile="${out}/class/examples/java/HelloWorld/HelloWorld.jar"
-        basedir="${out}/class/examples/java/HelloWorld"
-        includes="**/*.java,**/*.class,**/*.xml"
-        excludes="${out}/class/examples/java/HelloWorld/HelloWorld.jar">
-        <manifest>
-            <attribute name="Built-By" value="Sun Microsystems"/>
-            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
-        </manifest>
-    </jar>
-  </target>
-
-  <!-- ====================== Clean Generated Files ===================== -->
-  <target name="clean">
-    <delete dir="${scriptingclasses}"/>
-    <delete dir="${storageclasses}"/>
-    <delete dir="${jardir}/${scriptingjarname}"/>
   </target>
 
   <!-- ========================= All In One Build ======================= -->
-  <target name="all" depends="clean,buildexamples"/>
+  <target name="all" depends="HelloWorld,Highlight,MemoryUsage,selector"/>
 
 </project>
