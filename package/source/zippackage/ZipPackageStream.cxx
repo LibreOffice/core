@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 10:29:31 $
+ *  last change: $Author: mtg $ $Date: 2001-06-22 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,18 +236,12 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             else
                 bToBeCompressed = sal_False;
         }
-        // I said: Always compress encrypted documents!
-        if (!bToBeCompressed && bToBeEncrypted)
-            bToBeCompressed = sal_True;
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Size") ) )
         aValue >>= aEntry.nSize;
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
     {
         aValue >>= bToBeEncrypted;
-        // Always compress encrypted documents
-        if ( bToBeEncrypted )
-            bToBeCompressed = sal_True;
     }
 #if SUPD>617
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
