@@ -1,9 +1,10 @@
 #include "sockethelper.hxx"
+#include <cppunit/simpleheader.hxx>
 
 //------------------------------------------------------------------------
 // Ip version definition
 //------------------------------------------------------------------------
-#define IP_VER     4                   /// currently only IPv4 is considered.
+#define IP_VER     4               /// currently only IPv4 is considered.
 
 //------------------------------------------------------------------------
 // helper functions
@@ -39,7 +40,7 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
 {
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "oustring2char %s\n", aString.getStr( ) );
+    t_print("oustring2char %s\n", aString.getStr( ) );
     sal_Char * sStr = aString.getStr( );
     return (char *)sStr;
 }*/
@@ -48,11 +49,11 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
 */
 void printUString( const ::rtl::OUString & str, const char* msg)
 {
-    printf( "#%s #printUString_u# ", msg );
+    t_print("#%s #printUString_u# ", msg );
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     //char * sStr = aString.getStr( );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 /** get the local host name.
@@ -79,7 +80,8 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     struct hostent *hptr;
     hptr = gethostbyname( "localhost" );
     OSL_ENSURE( hptr != NULL, "#In getHostname function, error on gethostbyname()" );
-    aUString = ::rtl::OUString::createFromAscii( (const sal_Char *) hptr->h_name );
+    rtl::OString sHostname(hptr->h_name);
+    aUString = ::rtl::OStringToOUString(sHostname, RTL_TEXTENCODING_ASCII_US);
 #else
     char hostname[255];
     int nRes = gethostname(hostname, 255);
@@ -90,11 +92,13 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     hptr = gethostbyname( hostname);
     if ( hptr != NULL )
     {
-        strcpy( hostname, hptr->h_name );
+    strcpy( hostname, hptr->h_name );
     }
 
-    printf("# hostname is %s \n", hostname );
-    aUString = ::rtl::OUString::createFromAscii( (const sal_Char *) hostname );
+    t_print("hostname is %s \n", hostname );
+    rtl::OString sHostname( hostname );
+    aUString = ::rtl::OStringToOUString( sHostname, RTL_TEXTENCODING_ASCII_US );
+    volatile sal_Int32 nLen = aUString.getLength();
 #endif
     return aUString;
 }
@@ -114,7 +118,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
         //if there are more than one IPs on the same machine, we select one
         for (; *addrptr; addrptr++)
         {
-            printf("#Local IP Address: %s\n", inet_ntoa(**addrptr));
+            t_print("#Local IP Address: %s\n", inet_ntoa(**addrptr));
             aUString = ::rtl::OUString::createFromAscii( (sal_Char *) (inet_ntoa(**addrptr)) );
         }
     }
@@ -128,7 +132,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     char hostname[255];
     gethostname(hostname, 255);
 
-        return getIPbyName( hostname );
+    return getIPbyName( hostname );
 }
 
 /** construct error message
@@ -152,38 +156,39 @@ void printUString( const ::rtl::OUString & str, const char* msg)
 void thread_sleep( sal_Int32 _nSec )
 {
     /// print statement in thread process must use fflush() to force display.
-    printf( "# wait %d seconds. ", _nSec );
-    fflush(stdout);
+    // printf("wait %d seconds. ", _nSec );
+    // fflush(stdout);
 
-#ifdef WNT                               //Windows
+#ifdef WNT               //Windows
     Sleep( _nSec * 100 );
 #endif
 #if ( defined UNX ) || ( defined OS2 )   //Unix
     usleep(_nSec * 100000);
 #endif
-    printf( "# done\n" );
+    // t_print("# done\n" );
 }
 
 /** print Boolean value.
 */
 void printBool( sal_Bool bOk )
 {
-    printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "YES!\n" ): printf( "NO!\n" );
+    t_print("printBool " );
+    ( sal_True == bOk ) ? t_print("YES!" ): t_print("NO!");
+    t_print("\n");
 }
 
 /** print content of a ByteSequence.
 */
 void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen )
 {
-     printf( "#ByteSequence is: " );
+    t_print("ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
         if ( bsByteSeq[i] < 0 )
-            printf("%d ",  256 + bsByteSeq[i] );
+            t_print("%d ",  256 + bsByteSeq[i] );
         else
-            printf("%d ",  bsByteSeq[i] );
+            t_print("%d ",  bsByteSeq[i] );
     }
-    printf( " .\n" );
+    t_print(" .\n" );
 }
 
 /** convert an IP which is stored as a UString format to a ByteSequence array for later use.
@@ -217,19 +222,28 @@ void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen
 */
 void printSocketResult( oslSocketResult eResult )
 {
-    printf( "#printSocketResult# " );
+    t_print("printSocketResult: " );
     if (!eResult)
     switch (eResult)
     {
         case osl_Socket_Ok:
-            printf( "client connected\n");
+            t_print("client connected\n");
             break;
         case osl_Socket_Error:
-            printf("got an error ... exiting\r\n\r\n" );
+            t_print("got an error ... exiting\r\n\r\n" );
             break;
         case osl_Socket_TimedOut:
-            printf( "timeout\n");
+            t_print("timeout\n");
             break;
+        case osl_Socket_Interrupted:
+            t_print("interrupted\n");
+            break;
+        case osl_Socket_InProgress:
+            t_print("in progress\n");
+            break;
+    default:
+        t_print("unknown result\n");
+        break;
     }
 }
 
@@ -242,9 +256,115 @@ sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq
     return sal_False;
 }
 
+/** if the IP or hostname is availble( alive )
+*/
+/*sal_Bool ifAvailable( const char *  stringAddrOrHostName )
+{
+    sal_Bool result;
+    int  p[2];
+    sal_Char buffer[2000];
+    char stringhost[20];
+    strcpy(stringhost, stringAddrOrHostName );
 
+    result = sal_False;
+    if (pipe (p) == 0)
+    {
+    pid_t pid;
+    int nStatus;
+    pid = fork();
+    if (pid == 0)
+    {
+#if ( defined LINUX )
+        char *argv[] =
+        {
+            "/bin/ping",
+            "-c", "3",
+            "-W", "3",
+            stringhost,
+            NULL
+        };
+#endif
+#if ( defined SOLARIS )
+        char *argv[] =
+            {
+                "/usr/sbin/ping",
+                stringhost,
+                "3",
+                NULL
+            };
+#endif
+        close (p[0]);
+        dup2  (p[1], 1);
+        close (p[1]);
+#if ( defined LINUX )
+        execv ("/bin/ping", argv);
+#endif
+#if ( defined SOLARIS )
+        execv ("/usr/sbin/ping", argv);
+#endif
+        // arriving here means exec failed
+        _exit(-1);
+    }
+    else if (pid > 0)
+    {
+        sal_Int32 k = 0, n = 2000;
+        close (p[1]);
+        if ((k = read (p[0], buffer, n - 1)) > 0)
+        {
+            buffer[k] = 0;
+            if (buffer[k - 1] == '\n')
+            buffer[k - 1] = 0;
+#if ( defined LINUX )
+            char strOK[] = "bytes from";
+#endif
+#if ( defined SOLARIS )
+            char strOK[] = "is alive";
+#endif
+            if (strstr( buffer, strOK ) != NULL )
+                result = sal_True;
+            t_print("buffer is %s\n", buffer );
+        }
+        close (p[0]);
+        waitpid (pid, &nStatus, 0);
+    }
+    else
+    {
+        close (p[0]);
+        close (p[1]);
+    }
 
+    }
+    return result;
+}*/
 
+sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName )
+{
+    ::osl::ConnectorSocket aSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+    ::osl::SocketAddr aSocketAddr( strAddrOrHostName, 7 );
 
+    if (! aSocketAddr.is())
+    {
+        aSocket.close();
+        return sal_False;
+    }
 
+    aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True;
 
+    TimeValue *pTimeout;
+    pTimeout  = ( TimeValue* )malloc( sizeof( TimeValue ) );
+    pTimeout->Seconds = 3;
+    pTimeout->Nanosec = 0;
+
+    oslSocketResult aResult = aSocket.connect( aSocketAddr, pTimeout );
+    free( pTimeout );
+    aSocket.close();
+    if  ( aResult != osl_Socket_Ok )
+    {
+        t_print("Error: ");
+        printSocketResult(aResult);
+        t_print("\n");
+
+        return sal_False;
+    }
+    return sal_True;
+}
