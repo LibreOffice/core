@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2001-12-14 11:43:04 $
+ *  last change: $Author: thb $ $Date: 2001-12-17 14:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include <sot/formats.hxx>
 #endif
 
+#include <set>
 
 #include "glob.hrc"
 #include "drawdoc.hxx"
@@ -628,26 +629,28 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         USHORT nActualInsertPos = nInsertPos;
 
         List aNameList;
+        std::set<USHORT> aRenameSet;
+        USHORT nBMSdPage;
 
-        for (USHORT nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
+        for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
             SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
-            String* pName = new String(pBMPage->GetName());
+            String  pName( pBMPage->GetName() );
             BOOL    bIsMasterPage;
 
             if (bLink)
             {
                 // Es werden sich die Namen aller Seiten gemerkt
-                aNameList.Insert(pName, nBMSdPage);
+                aNameList.Insert(new String(pName), nBMSdPage);
             }
 
-            if( GetPageByName(*(pName), bIsMasterPage ) != SDRPAGE_NOTFOUND)
+            // #95677# Have to check for duplicate names here, too
+            // #67905# don't change name if source and dest model are the same!
+            if( pBookmarkDoc != this &&
+                GetPageByName(pName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
             {
-                // Seitenname schon vorhanden -> Defaultname
-                // fuer Standard & Notizseite
-                pBMPage->SetName(String());
-                SdPage* pBMNotesPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_NOTES);
-                pBMNotesPage->SetName(String());
+                // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
+                aRenameSet.insert(nBMSdPage);
             }
         }
 
@@ -660,20 +663,31 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
               TRUE,              // Undo-Aktion erzeugen
               bCopy);            // Seiten kopieren (oder mergen)
 
-        if (bLink)
+        for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
-            for (USHORT nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
+            SdPage* pPage       = (SdPage*) GetPage(nActualInsertPos);
+            SdPage* pNotesPage  = (SdPage*) GetPage(nActualInsertPos+1);
+            String* pName       = (String*) aNameList.GetObject(nBMSdPage);
+
+            // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
+            if( aRenameSet.find(nBMSdPage) != aRenameSet.end() )
+            {
+                // Seitenname schon vorhanden -> Defaultname
+                // fuer Standard & Notizseite
+                pPage->SetName(String());
+                pNotesPage->SetName(String());
+            }
+
+            if (bLink)
             {
                 // Nun werden die Link-Namen zusammengestellt
-                SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
-                SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
-                String* pName = (String*) aNameList.GetObject(nBMSdPage);
                 pPage->SetFileName(aBookmarkName);
                 pPage->SetBookmarkName(*(pName));
-                pPage->SetModel(this);
                 delete pName;
-                nActualInsertPos += 2;
+                pPage->SetModel(this);
             }
+
+            nActualInsertPos += 2;
         }
     }
     else
@@ -715,13 +729,18 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 /**************************************************************
                 * Es muss eine StandardSeite sein
                 **************************************************************/
-                if (GetPageByName(aPgName, bIsMasterPage) != SDRPAGE_NOTFOUND)
+                sal_Bool bMustRename = sal_False;
+
+                // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
+                // #67905# don't change name if source and dest model are the same!
+                // #96029# avoid renaming if replacing the same page
+                USHORT nPageSameName = GetPageByName(aPgName, bIsMasterPage);
+                if( pBookmarkDoc != this &&
+                    nPageSameName != SDRPAGE_NOTFOUND &&
+                    ( !bReplace ||
+                      nPageSameName != nActualInsertPos ) )
                 {
-                    // Seitenname schon vorhanden -> Defaultname
-                    // fuer Standard & Notizseite
-                    pBMPage->SetName(String());
-                    SdPage* pBMNotesPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage+1);
-                    pBMNotesPage->SetName(String());
+                    bMustRename = sal_True;
                 }
 
                 Merge(*pBookmarkDoc,
@@ -733,11 +752,14 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                       TRUE,              // Undo-Aktion erzeugen
                       bCopy);            // Seiten kopieren (oder mergen)
 
-                if( pBookmarkDoc == this )
+                if( bMustRename )
                 {
-                    pBMPage->SetName(aPgName);
-                    SdPage* pBMNotesPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage+1);
-                    pBMNotesPage->SetName(aPgName);
+                    // Seitenname schon vorhanden -> Defaultname
+                    // fuer Standard & Notizseite
+                    SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
+                    pPage->SetName(String());
+                    SdPage* pNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
+                    pNotesPage->SetName(String());
                 }
 
                 if (bLink)
