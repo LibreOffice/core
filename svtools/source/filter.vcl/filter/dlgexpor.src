@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:11:03 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,6 +983,7 @@ ModalDialog DLG_EXPORT_VEC
         TabStop = TRUE ;
     };
 };
+
 
 
 
