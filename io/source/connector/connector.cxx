@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-21 15:24:04 $
+ *  last change: $Author: vg $ $Date: 2002-09-05 16:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
+
+#ifdef MACOSX
+ClassData2 WeakImplHelper2< ::com::sun::star::connection::XConnection, ::com::sun::star::connection::XConnectionBroadcaster >::s_aCD(1);
+ClassData2 WeakImplHelper2<com::sun::star::connection::XConnector, com::sun::star::lang::XServiceInfo>::s_aCD(1);
+ClassData1 WeakImplHelper1<com::sun::star::connection::XConnection>::s_aCD(1);
+#endif
 
 namespace stoc_connector
 {

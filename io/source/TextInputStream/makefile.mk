@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-29 16:44:02 $
+#   last change: $Author: vg $ $Date: 2002-09-05 16:11:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ UNOTYPES=	com.sun.star.io.XTextInputStream \
         com.sun.star.lang.XTypeProvider \
         com.sun.star.lang.XServiceInfo \
         com.sun.star.registry.XRegistryKey \
+        com.sun.star.reflection.XInterfaceMemberTypeDescription \
         com.sun.star.uno.XAggregation \
         com.sun.star.uno.XWeak	\
         com.sun.star.uno.XComponentContext

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:19 $
+ *  last change: $Author: vg $ $Date: 2002-09-05 16:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #include <rtl/bootstrap.hxx>
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/component_context.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -109,6 +111,12 @@ static Sequence< OUString > const & s_get_service_names()
 
 typedef ::cppu::WeakComponentImplHelper3<
     util::XMacroExpander, lang::XServiceInfo, lang::XInitialization > t_uno_impl;
+
+#if defined(MACOSX)
+// Initialize static template data here to break circular reference to libstatic
+
+cppu::ClassData3 cppu::WeakComponentImplHelper3< com::sun::star::util::XMacroExpander, com::sun::star::lang::XServiceInfo, com::sun::star::lang::XInitialization >::s_aCD(1);
+#endif
 
 struct mutex_holder
 {

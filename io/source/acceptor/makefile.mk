@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
+#   last change: $Author: vg $ $Date: 2002-09-05 16:09:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,10 @@ SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) 
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS+= -lconnectr
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=		i$(TARGET)
