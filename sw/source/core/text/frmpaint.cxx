@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:45:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,9 @@
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>   // SwTabFrm (Redlining)
 #endif
-
-#include "scrrect.hxx"
+#ifndef _SCRRECT_HXX
+#include <scrrect.hxx>
+#endif
 
 
 // steht im number.cxx
