@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:29:00 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 09:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,7 @@ void OStorage_Impl::Commit()
             {
                 // the element must be just copied to the new temporary package folder
                 uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
-                xNewPackageFolder->insertByName( (*pElementIter)->m_aOriginalName, aPackageElement );
+                xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
             }
             else if ( (*pElementIter)->m_aName.compareTo( (*pElementIter)->m_aOriginalName ) )
             {
