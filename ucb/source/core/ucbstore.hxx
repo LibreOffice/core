@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+ *  last change: $Author: kso $ $Date: 2000-10-25 06:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -106,12 +106,6 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
-
-namespace store
-{
-    class OStoreFile;
-    class OStoreStream;
-}
 
 //=========================================================================
 
@@ -181,15 +175,12 @@ private:
 
     void renamePropertySet( const rtl::OUString& rOldKey,
                             const rtl::OUString& rNewKey );
-protected:
+
+public:
     PropertySetRegistry(
         const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-        UcbStore& rCreator,
-        const rtl::OUString& rURL,
-        const store::OStoreFile& rStoreFile );
-
-public:
+        UcbStore& rCreator );
     virtual ~PropertySetRegistry();
 
     // XInterface
@@ -232,20 +223,16 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
     // Non-interface methods
-    static PropertySetRegistry* create(
-                const com::sun::star::uno::Reference<
-                    com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-                UcbStore& rCreator,
-                const rtl::OUString& rURL );
-    osl::Mutex&          getRegistryMutex() const;
-    store::OStoreFile&   getStoreFile() const;
-    const rtl::OUString& getURL() const;
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    getRootConfigReadAccess();
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    getConfigWriteAccess( const rtl::OUString& rPath );
+
 };
 
 //=========================================================================
 
 struct PersistentPropertySet_Impl;
-class PropertyInfoList_Impl;
 
 class PersistentPropertySet :
                 public cppu::OWeakObject,
@@ -263,30 +250,17 @@ class PersistentPropertySet :
     PersistentPropertySet_Impl* m_pImpl;
 
 private:
-    sal_Bool load();
-    sal_Bool store();
-
     void notifyPropertyChangeEvent(
         const com::sun::star::beans::PropertyChangeEvent& rEvent ) const;
     void notifyPropertySetInfoChange(
         const com::sun::star::beans::PropertySetInfoChangeEvent& evt ) const;
 
-protected:
-    PersistentPropertySet(
-        const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-        PropertySetRegistry& rCreator,
-        const rtl::OUString& rKey,
-        const store::OStoreStream& rStream );
-    PersistentPropertySet(
-        const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-        PropertySetRegistry& rCreator,
-        const rtl::OUString& rKey,
-        const store::OStoreStream& rStream,
-        const PropertyInfoList_Impl& rValues );
-
 public:
+    PersistentPropertySet(
+        const com::sun::star::uno::Reference<
+                com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
+        PropertySetRegistry& rCreator,
+        const rtl::OUString& rKey );
     virtual ~PersistentPropertySet();
 
     // XInterface
@@ -414,14 +388,11 @@ public:
                com::sun::star::lang::WrappedTargetException,
                com::sun::star::uno::RuntimeException );
 
-    // Non-interface methods
-    static PersistentPropertySet* create(
-            const com::sun::star::uno::Reference<
-                    com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
-            PropertySetRegistry& rCreator,
-            const rtl::OUString& rKey,
-            sal_Bool bCreate );
-    const PropertyInfoList_Impl& getProperties();
+    // Non-interface methods.
+    PropertySetRegistry& getPropertySetRegistry();
+    const rtl::OUString&
+    getFullKey( const com::sun::star::uno::Reference<
+                            com::sun::star::uno::XInterface >& xEscaper );
 };
 
 #endif /* !_UCBSTORE_HXX */
