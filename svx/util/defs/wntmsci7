@@ -24058,3 +24058,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ??0GallerySplitter@@QAE@PAVWindow@@ABVResId@@@Z
 ??1GallerySplitter@@UAE@XZ
 ?DataChanged@GallerySplitter@@MAEXABVDataChangedEvent@@@Z
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx1178721868@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx2345428128@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
