@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:51:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -128,36 +127,39 @@ ItemContainer::ItemContainer( const ConstItemContainer& rConstItemContainer, con
 ItemContainer::ItemContainer( const Reference< XIndexAccess >& rSourceContainer, const ShareableMutex& rMutex ) : ::cppu::OWeakObject()
     ,   m_aShareMutex( rMutex )
 {
-    sal_Int32 nCount = rSourceContainer->getCount();
-    try
+    if ( rSourceContainer.is() )
     {
-        for ( sal_Int32 i = 0; i < nCount; i++ )
+        sal_Int32 nCount = rSourceContainer->getCount();
+        try
         {
-            Sequence< PropertyValue > aPropSeq;
-            Any a = rSourceContainer->getByIndex( i );
-            if ( a >>= aPropSeq )
+            for ( sal_Int32 i = 0; i < nCount; i++ )
             {
-                sal_Int32 nContainerIndex = -1;
-                Reference< XIndexAccess > xIndexAccess;
-                for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
+                Sequence< PropertyValue > aPropSeq;
+                Any a = rSourceContainer->getByIndex( i );
+                if ( a >>= aPropSeq )
                 {
-                    if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                    sal_Int32 nContainerIndex = -1;
+                    Reference< XIndexAccess > xIndexAccess;
+                    for ( sal_Int32 j = 0; j < aPropSeq.getLength(); j++ )
                     {
-                        aPropSeq[j].Value >>= xIndexAccess;
-                        nContainerIndex = j;
-                        break;
+                        if ( aPropSeq[j].Name.equalsAscii( "ItemDescriptorContainer" ))
+                        {
+                            aPropSeq[j].Value >>= xIndexAccess;
+                            nContainerIndex = j;
+                            break;
+                        }
                     }
+
+                    if ( xIndexAccess.is() && nContainerIndex >= 0 )
+                        aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
+
+                    m_aItemVector.push_back( aPropSeq );
                 }
-
-                if ( xIndexAccess.is() && nContainerIndex >= 0 )
-                    aPropSeq[nContainerIndex].Value <<= deepCopyContainer( xIndexAccess, rMutex );
-
-                m_aItemVector.push_back( aPropSeq );
             }
         }
-    }
-    catch ( IndexOutOfBoundsException& )
-    {
+        catch ( IndexOutOfBoundsException& )
+        {
+        }
     }
 }
 
