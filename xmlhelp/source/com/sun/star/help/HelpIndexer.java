@@ -199,7 +199,7 @@ public class HelpIndexer {
             System.out.println( "Indexing..." );
               Enumeration enum = _hashDocInfo.elements();
             int cut = 0;
-             while( enum.hasMoreElements() && cut < 1000000000 )
+             while( enum.hasMoreElements() && cut < 100 )
              {
                   try
                 {
@@ -214,12 +214,23 @@ public class HelpIndexer {
                       }
                       cut++;
 
-                      // System.out.println( url );
                        _urlHandler.setMode( null );
                       byte[] embResolved = getSourceDocument( url );
+//                  System.out.println( new String( embResolved ) );
                      InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
                       in.setEncoding( "UTF8" );
-                       Document docResolved = XmlDocument.createXmlDocument( in,false );
+                    Document docResolved = null;
+                    try
+                    {
+                        docResolved = XmlDocument.createXmlDocument( in,false );
+                    }
+                    catch( Exception e )
+                    {
+                        if( docResolved == null )
+                            System.err.println( "Nullpointer" );
+                        System.err.println( e.getMessage() );
+                    }
+
                      String id = info.getId();
                       if( id == null )
                            System.out.println( "Found tag without valid id" );
@@ -237,17 +248,31 @@ public class HelpIndexer {
                             _hashHelptext.put( tag.get_id(),text );
                            }
                     }
-
                      _urlHandler.setMode( embResolved );
+
+                    int idx = url.indexOf( '?' );
+                    if( idx != -1 )
+                         url = url.substring( 0,idx );
+
+                    System.out.println( url );
                       builder.indexDocument( new URL( url ),"" );
                 }
                 catch( Exception e )
                 {
+                    System.err.println( e.getMessage() );
                 }
              }
-              builder.close();
-               dumpHelptext();
-            _keywords.dump();
+
+            try
+            {
+                dumpHelptext();
+                _keywords.dump();
+                builder.close();
+            }
+            catch( Exception e )
+            {
+                System.err.println( e.getMessage() );
+            }
 /*
             // Now the database may be indexed, the keywords and helptexts are extracted
               System.out.println( "Indexing..." );
@@ -543,8 +568,9 @@ public class HelpIndexer {
               if( test.getNodeName().equals( "help:key-word" ) )
             {
                 String keyword = (( Element ) test).getAttribute( "value" );
-                // System.out.println( "found keyword: " + keyword );
-                _keywords.insert( keyword,id );
+                String getJump = (( Element ) test).getAttribute( "tag" );
+                if( ! keyword.equals("") && !id.equals("") )
+                    _keywords.insert( keyword,id + "#" + getJump );
              }
           }
     }
@@ -655,6 +681,7 @@ public class HelpIndexer {
             catch( SAXException e )
             {
                 System.err.println( "<!-- Syntactic error in stylesheet -->" );
+                System.err.println( e.getMessage() );
                    System.exit( 1 );
             }
             catch( java.io.IOException e )
