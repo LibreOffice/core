@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_resource.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:57:48 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #define RID_STR_SYNTAXERROR                     ( RID_FRM_STRINGS_START + 16 )
 #define RID_STR_INCOMPATIBLE_TYPES              ( RID_FRM_STRINGS_START + 17 )
 #define RID_STR_INVALID_VALIDATOR               ( RID_FRM_STRINGS_START + 18 )
+#define RID_STR_LABEL_RECORD                    ( RID_FRM_STRINGS_START + 19 )
+#define RID_STR_LABEL_OF                        ( RID_FRM_STRINGS_START + 20 )
 
 #endif // _FRM_RESOURCE_HRC_
 
