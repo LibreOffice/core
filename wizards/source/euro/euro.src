@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:18:51 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,10 +265,10 @@ Text[ english_us ] = "C~ontinue>>";
     Text[ swedish ] = "~N�sta>>";
     Text[ polish ] = "~Dalej>>";
     Text[ portuguese_brazilian ] = "C~ontinue>>";
-    Text[ japanese ] = "次へ (~O) >>";
-    Text[ korean ] = "다음(~O) >>";
-    Text[ chinese_simplified ] = "继续(~O) >>";
-    Text[ chinese_traditional ] = "繼續 (~O) >>";
+    Text[ japanese ] = "次へ  (~O) >>";
+    Text[ korean ] = "다음  (~O) >>";
+    Text[ chinese_simplified ] = "继续 (~O) >>";
+    Text[ chinese_traditional ] = "繼續  (~O) >>";
     Text[ turkish ] = "~�leri>>";
     Text[ arabic ] = "~������>>";
     Text[ finnish ] = "&Jatka >>";
@@ -293,10 +293,10 @@ Text[ english_us ] = "C~lose";
     Text[ swedish ] = "~St�ng";
     Text[ polish ] = "Zamknij";
     Text[ portuguese_brazilian ] = "C~lose";
-    Text[ japanese ] = "閉じる";
-    Text[ korean ] = "닫기(L)";
-    Text[ chinese_simplified ] = "关闭";
-    Text[ chinese_traditional ] = "關閉(~C)";
+    Text[ japanese ] = "閉じる(~L)";
+    Text[ korean ] = "닫기(~L)";
+    Text[ chinese_simplified ] = "关闭(~L)";
+    Text[ chinese_traditional ] = "關閉(~L)";
     Text[ turkish ] = "C~lose";
     Text[ arabic ] = "C~lose";
     Text[ catalan ] = "C~lose";
@@ -981,10 +981,10 @@ Text[ english_us ] = "~Finish";
     Text[ swedish ] = "~F�rdig";
     Text[ polish ] = "Gotowe!";
     Text[ portuguese_brazilian ] = "Ready";
-    Text[ japanese ] = "完了";
-    Text[ korean ] = "완료!";
-    Text[ chinese_simplified ] = "完成";
-    Text[ chinese_traditional ] = "完成";
+    Text[ japanese ] = "完了(~F)";
+    Text[ korean ] = "완료!(~F)";
+    Text[ chinese_simplified ] = "完成(~F)";
+    Text[ chinese_traditional ] = "完成(~F)";
     Text[ arabic ] = "...��!";
     Text[ turkish ] = "Bitti!";
     Text[ finnish ] = "valmis";
@@ -1597,7 +1597,7 @@ String MESSAGES + 23
     Text[ french ] = "Interrompre la conversion � ce stade ?";
     Text[ spanish ] = "�Desea realmente interrumpir ahora el proceso de conversi�n?";
     Text[ finnish ] = "Do you really want to terminate conversion at this point?";
-    Text[ italian ] = "Do you really want to terminate conversion at this point?";
+    Text[ italian ] = "Volete davvero annullare la conversione in questo punto?";
     Text[ danish ] = "Do you really want to terminate conversion at this point?";
     Text[ swedish ] = "Vill du verkligen avbryta konverteringen nu?";
     Text[ polish ] = "Na pewno przerwa� konwersj� w tym miejscu?";
@@ -1623,7 +1623,7 @@ String MESSAGES + 24
     Text[ french ] = "Annuler l'AutoPilote";
     Text[ spanish ] = "Cancelar AutoPiloto";
     Text[ finnish ] = "Cancel AutoPilot";
-    Text[ italian ] = "Cancel AutoPilot";
+    Text[ italian ] = "Annulla Pilota automatico";
     Text[ danish ] = "Cancel AutoPilot";
     Text[ swedish ] = "Avbryt AutoPiloten";
     Text[ polish ] = "Anuluj AutoPilota";
@@ -2132,6 +2132,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protecci�n de hoja";
 };
+
 
 
 
