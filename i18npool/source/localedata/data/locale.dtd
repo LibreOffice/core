@@ -75,8 +75,8 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
         to always edit the full century the long year YYYY code must be used.
         Furthermore, the format has to be of an editable type, of course, which
         means parseable. Therefore it should only contain DD, MM, YYYY and date
-        separators, and the YMD order must be the same as in the date format
-        marked as medium default.
+        separators, and the YMD default order is determined from the order
+        encountered in this format.
         TODO: Future versions should make use of an edit="true" attribute
         instead of relying on this special requirement.
 
