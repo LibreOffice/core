@@ -7,8 +7,8 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Open Office Master Document</value>
-            <value xml:lang="de">Open Office Globaldokument</value>
+            <value xml:lang="en-US">OpenDocument Master Document</value>
+            <value xml:lang="de">OpenDocument Globaldokument</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED</value></prop>
     </node>
