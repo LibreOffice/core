@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,20 @@
 #include <tools/list.hxx>
 #endif
 
-typedef USHORT Token;
+typedef USHORT TokenId;
+
+struct TokenInfo
+{
+    ByteString aName;
+    TokenId nId;
+
+    TokenInfo():nId( 0 ){;}
+explicit    TokenInfo( TokenId pnId ):nId( pnId ){;}
+explicit    TokenInfo( TokenId pnId, ByteString paStr ):nId( pnId ), aName( paStr ){;}
+    BOOL operator == ( const TokenInfo& rInfo ) const
+    { return nId == rInfo.nId  && aName.Equals( rInfo.aName ); }
+};
+
 
 #define TAG_GROUPMASK               0xF000
 #define TAG_GROUPSHIFT              12
@@ -146,9 +159,13 @@ typedef USHORT Token;
 #define TAG_VERSIONEND              ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x080 )
 #define TAG_ENDGRAPHIC              ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x100 )
 
+#define TAG_GROUP_MISC              0x9
+#define TAG_COMMONSTART             ( TAG_GROUP_MISC << TAG_GROUPSHIFT | 0x001 )
+#define TAG_COMMONEND               ( TAG_GROUP_MISC << TAG_GROUPSHIFT | 0x002 )
+
 #define TAG_UNKNOWN_TAG             ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x800 )
 
-DECLARE_LIST( TokenListImpl, Token* );
+DECLARE_LIST( TokenListImpl, TokenInfo* );
 
 class TokenList : private TokenListImpl
 {
@@ -170,25 +187,25 @@ public:
                 delete TokenListImpl::GetObject( i );
             TokenListImpl::Clear();
         }
-    void        Insert( Token p, ULONG nIndex )
-        { TokenListImpl::Insert( new Token(p), nIndex ); }
-    Token       Remove( ULONG nIndex )
+    void        Insert( TokenInfo p, ULONG nIndex )
+        { TokenListImpl::Insert( new TokenInfo(p), nIndex ); }
+    TokenInfo       Remove( ULONG nIndex )
         {
-            Token aT = GetObject( nIndex );
+            TokenInfo aT = GetObject( nIndex );
             delete TokenListImpl::GetObject( nIndex );
             TokenListImpl::Remove( nIndex );
             return aT;
         }
-    Token       Remove( Token p ){ return Remove( GetPos( p ) ); }
-//    Token     GetCurObject() const { return *TokenListImpl::GetCurObject(); }
-    Token       GetObject( ULONG nIndex ) const
+    TokenInfo       Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
+//    TokenInfo     GetCurObject() const { return *TokenListImpl::GetCurObject(); }
+    TokenInfo       GetObject( ULONG nIndex ) const
         {
             if ( TokenListImpl::GetObject(nIndex) )
                 return *TokenListImpl::GetObject(nIndex);
             else
-                return 0;
+                return TokenInfo();
         }
-    ULONG       GetPos( const Token p ) const
+    ULONG       GetPos( const TokenInfo p ) const
         {
             for ( ULONG i = 0 ; i < Count() ; i++ )
                 if ( p == GetObject( i ) )
@@ -211,17 +228,19 @@ private:
     USHORT nPos;
     ByteString aSource;
     ByteString aLastToken;
-    static ByteString aLastUnknownToken;
+//  static ByteString aLastUnknownToken;
     TokenList aTokenList;
+
+    TokenInfo aNextTag;     // to store closetag in case of combined tags like <br/>
 
     ByteString GetNextTokenString();
 
 public:
     SimpleParser();
     void Parse( ByteString PaSource );
-    Token GetNextToken();
+    TokenInfo GetNextToken();
     ByteString GetTokenText();
-    static ByteString GetLexem( Token aToken );
+    static ByteString GetLexem( TokenInfo const &aToken );
     USHORT GetScanningPosition(){ return nPos; }
     TokenList GetTokenList(){ return aTokenList; }
 };
@@ -251,7 +270,8 @@ DECLARE_LIST( ParserMessageList, ParserMessage* );
 
 class TokenParser
 {
-    BOOL match( const Token &aCurrentToken, const Token &aExpectedToken );
+    BOOL match( const TokenInfo &aCurrentToken, const TokenId &aExpectedToken );
+    BOOL match( const TokenInfo &aCurrentToken, const TokenInfo &aExpectedToken );
     void ParseError( USHORT nErrNr, const ByteString &aErrMsg );
     void Paragraph();
     void PfCase();
@@ -265,13 +285,13 @@ class TokenParser
     void Error( const ByteString &aMsg );
 
     SimpleParser aParser;
-    Token nTag;
+    TokenInfo aTag;
 
-    Token nPfCaseOptions;
-    Token nAppCaseOptions;
+    TokenId nPfCaseOptions;
+    TokenId nAppCaseOptions;
     BOOL bPfCaseActive ,bAppCaseActive;
 
-    Token nActiveRefTypes;
+    TokenId nActiveRefTypes;
 
     ParserMessageList aErrorList;
 
@@ -289,8 +309,9 @@ private:
     TokenParser aReferenceParser;
     TokenParser aTesteeParser;
     ParserMessageList aCompareWarningList;
-    void CheckMandatoryTag( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList, Token aToken );
+    void CheckMandatoryTag( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList, TokenInfo aToken );
     void CheckTags( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList );
+    BOOL IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens );
 public:
     BOOL ReferenceOK( const ByteString &aReference );
     BOOL TesteeOK( const ByteString &aTestee );
