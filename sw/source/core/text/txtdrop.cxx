@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-24 06:29:43 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 06:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
         SwFontSave aSave( rInf, pTmpFont );
 
         SwTxtPortion::Paint( rInf );
-        delete pTmpFnt;
+        delete pTmpFont;
     }
 }
 
