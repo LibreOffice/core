@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:26:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,9 @@
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
 #endif
-
+#ifndef _SFX_INTERNO_HXX
+#include <sfx2/interno.hxx>
+#endif
 
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
@@ -4959,11 +4961,11 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                         pMed->SetFilter( pFilter );
                         SvStorageRef xStor = new SvStorage( aEmptyStr);
 
-                        SfxObjectShellLock xDoc( pFact->CreateObject(
-                                        SFX_CREATE_MODE_EMBEDDED ));
-                        if( xDoc.Is() )
+                        SfxObjectShellRef xObjShell( pFact->CreateObject( SFX_CREATE_MODE_EMBEDDED ) );
+                        if ( xObjShell.Is() )
                         {
-                            xIPObj = &xDoc;
+                            xObjShell->OwnerLock( sal_True );
+                            xIPObj = xObjShell->GetInPlaceObject();
                             String aDstStgName( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "MSO_OLE_Obj" )));
 
@@ -4972,9 +4974,7 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             SvStorageRef xObjStor( rDestStorage.OpenUCBStorage(
                                                     aDstStgName,
                                     STREAM_READWRITE| STREAM_SHARE_DENYALL));
-
-                            xDoc->DoLoad( pMed );
-
+                            xObjShell->DoLoad( pMed );
                             // JP 26.10.2001: Bug 93374 / 91928 the writer
                             // objects need the correct visarea needs the
                             // correct visarea, but this is not true for
@@ -4984,19 +4984,16 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             if( sStarName.EqualsAscii( "swriter" )
                                 || sStarName.EqualsAscii( "scalc" ) )
                             {
-                                Size aSz(lcl_GetPrefSize(rGrf,
-                                    MapMode(xIPObj->GetMapUnit())));
+                                Size aSz(lcl_GetPrefSize(rGrf, MapMode( xIPObj->GetMapUnit())));
                                 // don't modify the object
                                 xIPObj->EnableSetModified( FALSE );
-                                xIPObj->SetVisArea( Rectangle(
-                                    xIPObj->GetVisArea().TopLeft(), aSz ) );
+                                xIPObj->SetVisArea( Rectangle( xIPObj->GetVisArea().TopLeft(), aSz ));
                                 xIPObj->EnableSetModified( TRUE );
                             }
-
-                            xDoc->DoSaveAs( xObjStor );
-                            xDoc->DoSaveCompleted( xObjStor );
+                            xObjShell->DoSaveAs( xObjStor );
+                            xObjShell->DoSaveCompleted( xObjStor );
+                            xObjShell->RemoveOwnerLock();
                             pMed = 0;
-
                         }
                     }
                     delete pMed;
