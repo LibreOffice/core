@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:47:20 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,12 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/abstdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <hash_map>
 
@@ -110,12 +112,20 @@ private:
     USHORT          nMode;
     ImageList m_aImagesNormal;
     ImageList m_aImagesHighContrast;
+    Image m_hdImage;
+    Image m_hdImage_hc;
+    ::rtl::OUString m_sMyMacros;
+    ::rtl::OUString m_sProdMacros;
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >
         getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& root, ::rtl::OUString& language );
     void delUserData( SvLBoxEntry* pEntry );
 
     void setEntryBitmap(SvLBoxEntry * pEntry, USHORT nBitmap);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+    ::rtl::OUString SFTreeListBox::xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    ::rtl::OUString SFTreeListBox::parseLocationName( const ::rtl::OUString& location );
 protected:
     void                    ExpandTree( SvLBoxEntry* pRootEntry );
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
@@ -142,7 +152,12 @@ public:
     SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
                               SvLBoxEntry * pParent,
                               bool bChildrenOnDemand,
-                              std::auto_ptr< SFEntry > aUserData);
+                              std::auto_ptr< SFEntry > aUserData,
+                              ::rtl::OUString factoryURL );
+    SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
+                              SvLBoxEntry * pParent,
+                              bool bChildrenOnDemand,
+                              std::auto_ptr< SFEntry > aUserData );
     void deleteTree( SvLBoxEntry * pEntry );
     void deleteAllTree( );
 };
@@ -238,6 +253,24 @@ public:
     virtual short   Execute();
 
     //DECL_LINK( ActivatePageHdl, TabControl * );
+};
+
+class SvxScriptErrorDialog : public VclAbstractDialog
+{
+private:
+
+    ::rtl::OUString m_sMessage;
+
+    DECL_LINK( ShowDialog, ::rtl::OUString* );
+
+public:
+
+    SvxScriptErrorDialog(
+        Window* parent, ::com::sun::star::uno::Any aException );
+
+    ~SvxScriptErrorDialog();
+
+    USHORT          Execute();
 };
 
 #endif // _SCRIPTDLG_HXX
