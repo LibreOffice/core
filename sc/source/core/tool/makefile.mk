@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2000-09-29 14:56:34 $
+#   last change: $Author: nn $ $Date: 2000-11-02 19:09:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,6 +125,7 @@ CXXFILES = \
         viewopti.cxx \
         inputopt.cxx \
         filtopt.cxx \
+        optutil.cxx \
         zforauto.cxx \
         hints.cxx \
         prnsave.cxx \
@@ -179,6 +180,7 @@ SLOFILES =  \
         $(SLO)$/viewopti.obj \
         $(SLO)$/inputopt.obj \
         $(SLO)$/filtopt.obj \
+        $(SLO)$/optutil.obj \
         $(SLO)$/zforauto.obj \
         $(SLO)$/hints.obj \
         $(SLO)$/prnsave.obj \
