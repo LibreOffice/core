@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 11:14:53 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,6 +1195,10 @@ void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
+
+    if(m_aBookmark.hasValue())
+        m_pCache->moveToBookmark(m_aBookmark);
+
     m_pCache->cancelRowUpdates();
     ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
 
