@@ -1,0 +1,13 @@
+    <node oor:name="Rich Text Format" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_Rich_Text_Format</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>RTF</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Rich Text Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN PREFERRED</value></prop>
+    </node>
