@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2000-11-19 00:34:22 $
+ *  last change: $Author: jp $ $Date: 2001-02-06 09:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,213 +79,326 @@
 
 //=============================================================================
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the type of character iteration
+*/
 constants CharacterIteratorMode
 {
-    // Iteration mode can be either character or cell based
-
-    // DocMerge: empty anyway
+    /// skip characters
     const short SKIPCHARACTER           = 0;
 
-    // DocMerge: empty anyway
+    /// skip cells
     const short SKIPCELL                = 1;
 
-    // DocMerge: empty anyway
+    /// skip control characters
     const short SKIPCONTROLCHARACTER    = 2;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the type of LineBreak
+*/
 constants BreakType
 {
-    // DocMerge: empty anyway
+    /// linebreak is a word break
     const short WORDBOUNDARY            = 1;
 
-    // DocMerge: empty anyway
+    /// linebreak is a result of hyphenation
     const short HYPHENATION             = 2;
 
-    // DocMerge: empty anyway
+    /// linebreak - hanging punctuation recognized
     const short HANGINGPUNCTUATION      = 3;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the type scipts
+*/
 constants ScriptType
 {
-    // DocMerge: empty anyway
+    /// latin characters (english, .. )
     const short LATIN                   = 1;
 
-    // DocMerge: empty anyway
+    /// asian characters (japanese, .. )
     const short ASIAN                   = 2;
 
-    // DocMerge: empty anyway
+    /// complex characters (arabic, ..)
     const short COMPLEX                 = 3;
 
-    // DocMerge: empty anyway
+    /// undefined characters (punctuation, .. )
     const short WEAK                    = 4;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the type of words
+*/
 constants WordType
 {
-    // DocMerge: empty anyway
+    /** any "words" - words in the meaning of same character types,
+         collection auf alphanumeric characters or collection of non
+         alphanumeric characters.
+    */
     const short ANY_WORD                 = 0;
 
-    // DocMerge: empty anyway
+    /** any "words" - words in the meaning of same character types,
+         collection auf alphanumeric characters or collection of non
+         alphanumeric characters except blanks.
+    */
     const short ANYWORD_IGNOREWHITESPACES= 1;
 
-    // DocMerge: empty anyway
+    /** "words" - in the meaning of a collection auf alphanumeric characters.
+    */
     const short DICTIONARY_WORD          = 2;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the type character, that starts a charblock
+*/
 constants CharType
 {
-    // DocMerge: empty anyway
+    /// all alpha characters allowed
     const short ANY_CHAR                 = 0;
 
-    // DocMerge: empty anyway
+    /// only lower alpha characters allowed
     const short LOWER_CASE_CHAR          = 1;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the options for the LineBreak
+*/
 struct LineBreakUserOptions
 {
-    // DocMerge: empty anyway
+    /// these characters are not allowed at the begining of a line
     string forbiddenBeginCharacters;
 
-    // DocMerge: empty anyway
+    /// these characters are not allowed at the end of a line
     string forbiddenEndCharacters;
 
-    // DocMerge: empty anyway
+    /// act on the forbidden characters or not
     boolean applyForbiddenRules;
 
-    // DocMerge: empty anyway
+    /// punctuation characters are allowed at the end of the line
     boolean allowPunctuationOutsideMargin;
 
-    // DocMerge: empty anyway
+    /// allow Hyphenate English
     boolean allowHyphenateEnglish;
 
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the hyphenation options for LineBreak
+*/
 struct LineBreakHyphenationOptions
 {
-    // DocMerge: empty anyway
+    /// reference to the specific hyphenator - can be zero.
     ::com::sun::star::linguistic2::XHyphenator rHyphenator;
 
-    // DocMerge: empty anyway
+    /// start position the hyphenation (?)
     long  hyphenIndex;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the result of a LineBreak
+*/
 struct LineBreakResults
 {
-    // DocMerge: empty anyway
+    /// type of line break, see <type>BreakType</type>
     short breakType;
 
-    // DocMerge: empty anyway
+    /// position of the calculated line break
     long  breakIndex;
 
-    // DocMerge: empty anyway
+    /// return value of the hyphenator
     ::com::sun::star::linguistic2::XHyphenatedWord rHyphenatedWord;
 };
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** specify the start-/end-position of a word
+*/
 struct Boundary
 {
-    // DocMerge: empty anyway
-    long startPos ; // Inclusive
+    /// start position of a word (dont forget - inclusive)
+    long startPos ;
 
-    // DocMerge: empty anyway
-    long endPos   ; // exclusive
+    /// end position of a word (dont forget - exclusive)
+    long endPos;
 };
 
 
-// DocMerge: empty anyway
+//--------------------------------------------------------------------------
+/** contains the base routines for iterate in Unicode string. Iterates over
+    Characters, Words, Sentences and Linebreaks.
+    <P>It exist also specific breakiterator for asian languages
+    <P>
+    <P>Assumption - StartPos is inclusive and EndPos is exclusive.
+*/
 [ uik(779C6834-2510-40b7-8480B56E-D912E71C), ident( "XBreakIterator", 1.0 ) ]
 interface XBreakIterator: com::sun::star::uno::XInterface
 {
-
-
-// Assumption - StartPos is inclusive and EndPos is exclusive.
-
-    // Traverses nCount characters in Text from nStartPos. Iteration mode can be cell based or
-    // character based.A cell is made of more than one character.
-
-    // DocMerge: empty anyway
-    [const] long    nextCharacters( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale rLocale,
-                                    [in] short nCharacterIteratorMode, [in] long nCount, [out] long nDone );
-
-    // DocMerge: empty anyway
-    [const] long    previousCharacters( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale,
-                                        [in] short nCharacterIteratorMode, [in] long nCount, [out] long nDone );
-
-    /*
-        traverses nCount words forward and returns word boundary both start and end position of the word. To process
-        control +right Use pos  = nextWords (text, pos, locale, ANYWORD_IGNOREWHITESPACES, 1, &nDone);pos.startPos should have
-        cursor position.
+    //--------------------------------------------------------------------------
+       /** Traverses specfied number of characters in Text from the
+        StartPos to the right. <type>CharacterIteratorMode</type> can be cell
+        based or character based. A cell is made of more than one character.
     */
-    // DocMerge: empty anyway
-    [const] Boundary    nextWord( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+    [const] long nextCharacters( [in] string Text, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale rLocale,
+                     [in] short nCharacterIteratorMode,
+                     [in] long nCount, [out] long nDone );
 
-    // DocMerge: empty anyway
-    [const] Boundary    previousWord( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
-
-    /* identifies StartPos and EndPos of current word. If nPos is the boundary of a word, it is
-    startPos of one word and endPos of previous word.In this situation, the outcome of the algorithm can be indeterminate.
-    In this sitution, bPreferForward flag  is used,if bPreferForward == 0, nPos is considered end of word and looks for beginning of word on left
-    otherwise nPos is considered beginning of next word and looks right for end of the word.
+    //--------------------------------------------------------------------------
+       /** Traverses specfied number of characters in Text from the
+        StartPos to the left. <type>CharacterIteratorMode</type> can be cell
+        based or character based. A cell is made of more than one character.
     */
-    // DocMerge: empty anyway
-    [const] Boundary getWordBoundary( [in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType, [in] boolean bPreferForward);
+    [const] long previousCharacters( [in] string Text, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale nLocale,
+                     [in] short nCharacterIteratorMode,
+                     [in] long nCount, [out] long nDone );
 
-    // DocMerge: empty anyway
-    [const] short   getWordType  ([in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale);
+    //--------------------------------------------------------------------------
+       /** Traverses one word in Text from the StartPos to the right.
+        The <type>WordType</type> specify the type of travelling.
+        @returns the <type>Boundary</type> of the found word.
+        Normaly used for the CTRL-Right.
+    */
+    [const] Boundary nextWord( [in] string Text, [in] long nStartPos,
+                   [in] ::com::sun::star::lang::Locale nLocale,
+                   [in] short WordType);
 
-    // DocMerge: empty anyway
-    [const] boolean isBeginWord  ([in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+    //--------------------------------------------------------------------------
+       /** Traverses one word in Text from the StartPos to the left.
+        The <type>WordType</type> specify the type of travelling.
+        @returns the <type>Boundary</type> of the found word.
+        Normaly used for the CTRL-Right.
+    */
+    [const] Boundary previousWord( [in] string Text, [in] long nStartPos,
+                       [in] ::com::sun::star::lang::Locale nLocale,
+                       [in] short WordType);
 
-    // DocMerge: empty anyway
-    [const] boolean isEndWord    ([in] string Text, [in] long nPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short WordType);
+    //--------------------------------------------------------------------------
+    /** identifies StartPos and EndPos of current word. If nPos is the boundary of
+        a word, it is startPos of one word and endPos of previous word. In this
+        situation, the outcome of the algorithm can be indeterminate.
+        In this sitution, bPreferForward flag is used, if bPreferForward == 0,
+        nPos is considered end of word and looks for beginning of word on left
+        otherwise nPos is considered beginning of next word and looks right for
+        end of the word.
+    */
+    [const] Boundary getWordBoundary( [in] string Text, [in] long nPos,
+                      [in] ::com::sun::star::lang::Locale nLocale,
+                      [in] short WordType,
+                      [in] boolean bPreferForward );
 
-    // DocMerge: empty anyway
-    [const] long    beginOfSentence( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale );
+    //--------------------------------------------------------------------------
+    /** @returns the kind of word that starts at the specified position.
+    */
+    [const] short getWordType( [in] string Text, [in] long nPos,
+                   [in] ::com::sun::star::lang::Locale nLocale);
 
-    // DocMerge: empty anyway
-    [const] long    endOfSentence( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale );
+    //--------------------------------------------------------------------------
+    /** @returns true if at the specified position starts a word
+    */
+    [const] boolean isBeginWord( [in] string Text, [in] long nPos,
+                     [in] ::com::sun::star::lang::Locale nLocale,
+                     [in] short WordType);
+
+    //--------------------------------------------------------------------------
+    /** @returns true if at the specified position ends a word
+    */
+    [const] boolean isEndWord( [in] string Text, [in] long nPos,
+                   [in] ::com::sun::star::lang::Locale nLocale,
+                   [in] short WordType);
+
+    //--------------------------------------------------------------------------
+       /** Traverses in Text from the StartPos to the start of a sentence.
+        @returns the position where the sentence starts
+    */
+    [const] long beginOfSentence( [in] string Text, [in] long nStartPos,
+                      [in] ::com::sun::star::lang::Locale nLocale );
+
+    //--------------------------------------------------------------------------
+       /** Traverses in Text from the StartPos to the end of a sentence.
+        @returns the position where the sentence ends
+    */
+    [const] long endOfSentence( [in] string Text, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale nLocale );
 
 
-    // DocMerge: empty anyway
-    [const] LineBreakResults getLineBreak( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] long nMinBreakPos,
-                                  [in] LineBreakHyphenationOptions hOptions, [in]LineBreakUserOptions bOptions );
+    //--------------------------------------------------------------------------
+       /** calculate the linebreak position in the Text from the specified StartPos.
+        <type>LineBreakHyphenationOptions</type> defines if the hyphenator is to use.
+        The <type>LineBreakUserOptions</type> defines, how to handle hanging
+        punctuations, the forbidden chraracter at the start/end of a line.
+
+        @returns <type>LineBreakResults</type>, which contains the break position
+        of the word and which kind of break it is.
+    */
+    [const] LineBreakResults getLineBreak( [in] string Text, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale nLocale,
+                    [in] long nMinBreakPos,
+                                    [in] LineBreakHyphenationOptions hOptions,
+                    [in] LineBreakUserOptions bOptions );
 
 
-    // DocMerge: empty anyway
-    [const] long    beginOfScript( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+    //--------------------------------------------------------------------------
+    /** @returns the position where the specified skipt starts.
+    */
+    [const] long beginOfScript( [in] string Text, [in] long nStartPos,
+                    [in] short ScriptType );
 
-    // DocMerge: empty anyway
-    [const] long    endOfScript( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+    //--------------------------------------------------------------------------
+    /** @returns the position where the specified skipt ends.
+    */
+    [const] long endOfScript( [in] string Text, [in] long nStartPos,
+                  [in] short ScriptType );
 
-    // DocMerge: empty anyway
-    [const] long    nextScript( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+    //--------------------------------------------------------------------------
+    /** @returns the position where the next specified skipt starts.
+    */
+    [const] long nextScript( [in] string Text, [in] long nStartPos,
+                 [in] short ScriptType );
 
-    // DocMerge: empty anyway
-    [const] long    previousScript ( [in] string Text, [in] long nStartPos, [in] short ScriptType );
+    //--------------------------------------------------------------------------
+    /** @returns the position where the previous specified skipt starts.
+    */
+    [const] long previousScript ( [in] string Text, [in] long nStartPos,
+                      [in] short ScriptType );
 
-    // DocMerge: empty anyway
+    //--------------------------------------------------------------------------
+    /** @returns the scipts type of the current position.
+    */
     [const] short   getScriptType  ([in] string Text, [in] long nPos);
 
 
-    // DocMerge: empty anyway
-    [const] long    beginOfCharBlock( [in] string Text, [in] long nStartPos,[in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+    //--------------------------------------------------------------------------
+       /** Traverses in Text from the StartPos to the begin of the specified character type.
+        @returns the position where the character type starts
+    */
+    [const] long beginOfCharBlock( [in] string Text, [in] long nStartPos,
+                       [in] ::com::sun::star::lang::Locale nLocale,
+                       [in] short CharType );
 
-    // DocMerge: empty anyway
-    [const] long    endOfCharBlock( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+    //--------------------------------------------------------------------------
+       /** Traverses in Text from the StartPos to the end of the specified character type.
+        @returns the position where the character type ends
+    */
+    [const] long endOfCharBlock( [in] string Text, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale nLocale,
+                     [in] short CharType );
 
-    // DocMerge: empty anyway
-    [const] long    nextCharBlock( [in] string Text, [in] long nStartPos,[in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+    //--------------------------------------------------------------------------
+       /** Traverses in Text from the StartPos to the next start of the specified character type.
+        @returns the position where the next character type starts
+    */
+    [const] long nextCharBlock( [in] string Text, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale nLocale,
+                    [in] short CharType );
 
-    // DocMerge: empty anyway
-    [const] long    previousCharBlock ( [in] string Text, [in] long nStartPos, [in] ::com::sun::star::lang::Locale nLocale, [in] short CharType );
+    //--------------------------------------------------------------------------
+       /** Traverses in Text from the StartPos to the previous start of the specified character type.
+        @returns the position where the previous character type starts
+    */
+    [const] long previousCharBlock ( [in] string Text, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale nLocale,
+                     [in] short CharType );
 };
 
 
@@ -296,6 +409,9 @@ interface XBreakIterator: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2000/11/19 00:34:22  bustamam
+    move Collation, breakiterator, transliteration to i18n
+
     Revision 1.2  2000/10/25 13:26:03  tl
     linguistic => linguistic2
 
