@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-25 15:12:09 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 15:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.16 2002-10-25 15:12:09 pl Exp $
+/* $Id: sft.c,v 1.17 2002-11-13 15:32:52 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1816,13 +1816,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
     int UPEm = ttf->unitsPerEm;
 
     const char *h01 = "%%!PS-AdobeFont-%d.%d-%d.%d\n";
-    const char *h02 = "%%%%Creator: %s %s %s\n";
-    const char *h03 = "%%%%Title: %s\n";
-    const char *h04 = "%%%%CreationDate: %s\n";
-    const char *h05 = "%%%%Pages: 0\n";
-    const char *h06 = "%%%%EndComments\n";
-    const char *h07 = "%%%%BeginResource: font %s\n";
-    const char *h08 = "%%%%EndResource\n";
+    const char *h02 = "%% Creator: %s %s %s\n";
     const char *h09 = "%% Original font name: %s\n";
 
     const char *h10 =
@@ -1875,11 +1869,6 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
 
     fprintf(outf, h01, GetInt16(table, 0, 1), GetUInt16(table, 2, 1), GetInt16(table, 4, 1), GetUInt16(table, 6, 1));
     fprintf(outf, h02, modname, modver, modextra);
-    fprintf(outf, h03, fname);
-    fprintf(outf, h04, " ");
-    fprintf(outf, h05);
-    fprintf(outf, h06);
-    fprintf(outf, h07, fname);
     fprintf(outf, h09, ttf->psname);
 
     fprintf(outf, h10);
@@ -1961,7 +1950,6 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
     fprintf(outf, h40);
     fprintf(outf, h41, fname);
 
-    fprintf(outf, h08);
     return SF_OK;
 }
 #endif

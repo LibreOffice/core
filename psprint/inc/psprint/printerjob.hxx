@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 15:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ private:            // private methods
                                      const rtl::OUString& rExtension);
     void            InitPaperSize (const JobData& rJobSetup);
 
+    bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
     bool            writeSetup( osl::File* pFile, const JobData& );
     bool            writePageSetup( osl::File* pFile, const JobData& );
     bool            writeProlog (osl::File* pFile);

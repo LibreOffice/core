@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 15:17:24 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 15:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,12 +634,19 @@ PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);
 
-    // write page header according to Document Structuring Conventions (DSC)
+    /* #i7262# write setup only befor first page
+     *  don't do this in StartJob since the jobsetup there may be
+     *  different.
+     */
+    bool bSuccess =  true;
+    if( 1 == maPageList.size() )
+        bSuccess = writeSetup  ( pPageHeader, rJobSetup );
 
+    // write page header according to Document Structuring Conventions (DSC)
     WritePS (pPageHeader, "%%Page: ");
     WritePS (pPageHeader, aPageNo);
     WritePS (pPageHeader, " ");
-    WritePS (pPageHeader, aPageNo);
+    WritePS (pPageHeader, aPageNo+1); // sequential page number must start with 1
     WritePS (pPageHeader, "\n");
 
     sal_Char  pBBox [256];
@@ -657,7 +664,6 @@ PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
 
     WritePS (pPageHeader, pBBox);
 
-    bool bSuccess =  writeSetup  ( pPageHeader, rJobSetup );
     if (bSuccess)
         bSuccess = writePageSetup ( pPageHeader, rJobSetup );
     if(bSuccess)
@@ -708,17 +714,83 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
     if( ! pKey || ! pValue )
         return true;
 
-    String aFeature( RTL_CONSTASCII_USTRINGPARAM( "%%BeginFeature: *" ) );
+    String aFeature( RTL_CONSTASCII_USTRINGPARAM( "[{\n%%BeginFeature: *" ) );
     aFeature += pKey->getKey();
     aFeature += ' ';
     aFeature += pValue->m_aOption;
     aFeature += '\n';
     aFeature += pValue->m_aValue;
-    aFeature.AppendAscii( "\n%%EndFeature\n" );
+    aFeature.AppendAscii( "\n%%EndFeature\n} stopped cleartomark\n" );
     ByteString aPSFeature( aFeature, RTL_TEXTENCODING_ASCII_US );
     sal_uInt64 nWritten = 0;
     return pFile->write( aPSFeature.GetBuffer(), aPSFeature.Len(), nWritten )
         || nWritten != aPSFeature.Len() ? false : true;
+}
+
+bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup )
+{
+    bool bSuccess = true;
+    int i;
+
+    // emit features ordered to OrderDependency
+    // ignore features that are set to default
+    const PPDContext& rContext = rJob.m_aContext;
+    // sanity check
+    if( rJob.m_pParser == rJob.m_aContext.getParser() &&
+        rJob.m_pParser &&
+        ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == NULL )
+        )
+    {
+        int nKeys = rJob.m_aContext.countValuesModified();
+        ::std::vector< const PPDKey* > aKeys( nKeys );
+        for(  i = 0; i < nKeys; i++ )
+            aKeys[i] = rJob.m_aContext.getModifiedKey( i );
+        ::std::sort( aKeys.begin(), aKeys.end(), less_ppd_key() );
+
+        for( i = 0; i < nKeys && bSuccess; i++ )
+        {
+            const PPDKey* pKey = aKeys[i];
+            bool bEmit = false;
+            if( bDocumentSetup )
+            {
+                if( pKey->getSetupType()    == PPDKey::DocumentSetup )
+                    bEmit = true;
+            }
+            else
+            {
+                if( pKey->getSetupType()    == PPDKey::PageSetup        ||
+                    pKey->getSetupType()    == PPDKey::AnySetup )
+                    bEmit = true;
+            }
+            if( bEmit )
+            {
+                const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
+                if(pValue
+                   && pValue->m_eType == eInvocation
+                   && pValue->m_aValue.Len()
+                   && ( m_aLastJobData.m_pParser == NULL
+                        || m_aLastJobData.m_aContext.getValue( pKey ) != pValue )
+                   )
+                {
+                    // try to avoid PS level 2 feature commands if level is set to 1
+                    if( GetPostscriptLevel( &rJob ) == 1 )
+                    {
+                        bool bHavePS2 =
+                            ( pValue->m_aValue.SearchAscii( "<<" ) != STRING_NOTFOUND )
+                            ||
+                            ( pValue->m_aValue.SearchAscii( ">>" ) != STRING_NOTFOUND );
+                        if( bHavePS2 )
+                            continue;
+                    }
+                    bSuccess = writeFeature( pFile, pKey, pValue );
+                }
+            }
+        }
+    }
+    else
+        bSuccess = false;
+
+    return bSuccess;
 }
 
 bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
@@ -726,18 +798,8 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
     bool bSuccess = true;
 
     WritePS (pFile, "%%BeginPageSetup\n%\n");
-    if( rJob.m_nCopies != m_aLastJobData.m_nCopies )
-    {
-        ByteString aLine( "/#copies " );
-        aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
-        aLine +=  " def\n";
-        sal_uInt64 nWritten = 0;
-        bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
-            || nWritten != aLine.Len() ? false : true;
 
-        if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
-            WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
-    }
+    bSuccess = writeFeatureList( pFile, rJob, false );
 
     sal_Char  pTranslate [128];
     sal_Int32 nChar = 0;
@@ -867,59 +929,20 @@ bool PrinterJob::writeProlog (osl::File* pFile)
 
 bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
 {
-    bool bSuccess = true;
-    int i;
-
     WritePS (pFile, "%%BeginSetup\n%\n");
+    ByteString aLine( "/#copies " );
+    aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
+    aLine +=  " def\n";
+    sal_uInt64 nWritten = 0;
+    bool bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
+        || nWritten != aLine.Len() ? false : true;
 
-    // emit features ordered to OrderDependency
-    // ignore features that are set to default
-    const PPDContext& rContext = rJob.m_aContext;
-    // sanity check
-    if( rJob.m_pParser == rJob.m_aContext.getParser() &&
-        rJob.m_pParser &&
-        ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == NULL )
-        )
-    {
-        int nKeys = rJob.m_aContext.countValuesModified();
-        ::std::vector< const PPDKey* > aKeys( nKeys );
-        for(  i = 0; i < nKeys; i++ )
-            aKeys[i] = rJob.m_aContext.getModifiedKey( i );
-        ::std::sort( aKeys.begin(), aKeys.end(), less_ppd_key() );
+    if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
+        WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
 
-        for( i = 0; i < nKeys && bSuccess; i++ )
-        {
-            const PPDKey* pKey = aKeys[i];
-            if( pKey->getSetupType()    == PPDKey::DocumentSetup    ||
-                pKey->getSetupType()    == PPDKey::PageSetup        ||
-                pKey->getSetupType()    == PPDKey::AnySetup )
-            {
-                const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
-                if(pValue
-                   && pValue->m_eType == eInvocation
-                   && pValue->m_aValue.Len()
-                   && ( m_aLastJobData.m_pParser == NULL
-                        || m_aLastJobData.m_aContext.getValue( pKey ) != pValue )
-                   )
-                {
-                    if( GetPostscriptLevel( &rJob ) == 1 )
-                    {
-                        bool bHavePS2 =
-                            ( pValue->m_aValue.SearchAscii( "<<" ) != STRING_NOTFOUND )
-                            ||
-                            ( pValue->m_aValue.SearchAscii( ">>" ) != STRING_NOTFOUND );
-                        if( bHavePS2 )
-                            continue;
-                    }
-                    bSuccess = writeFeature( pFile, pKey, pValue );
-                }
-            }
-        }
-    }
-    else
-        bSuccess = false;
+    bool bFeatureSuccess = writeFeatureList( pFile, rJob, true );
 
     WritePS (pFile, "%%EndSetup\n");
 
-    return bSuccess;
+    return bSuccess && bFeatureSuccess;
 }

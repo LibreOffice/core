@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-28 16:52:26 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 15:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,13 +852,16 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
         MapString (pTTFont, pUChars, (*aCharSet).size(), pTTGlyphMapping, mbVertical);
 
         // create the current subset
+        rtl::OString aCharSetName = GetCharSetName(nCharSetID);
+        fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aCharSetName.getStr() );
         if( bAsType42 )
-            CreateT42FromTTGlyphs (pTTFont, pTmpFile, GetCharSetName(nCharSetID),
+            CreateT42FromTTGlyphs (pTTFont, pTmpFile, aCharSetName.getStr(),
                                    pTTGlyphMapping, pEncoding, (*aCharSet).size() );
         else
-            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, GetCharSetName(nCharSetID),
+            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, aCharSetName.getStr(),
                                    pTTGlyphMapping, pEncoding, (*aCharSet).size(),
                                    0 /* 0 = horizontal, 1 = vertical */ );
+        fprintf( pTmpFile, "%%%%EndResource\n" );
     }
 
     // loop thru all the font glyph subsets
@@ -882,13 +885,16 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
         }
 
         // create the current subset
+        rtl::OString aGlyphSetName = GetGlyphSetName(nGlyphSetID);
+        fprintf( pTmpFile, "%%%%BeginResource: font %s\n", aGlyphSetName.getStr() );
         if( bAsType42 )
-            CreateT42FromTTGlyphs (pTTFont, pTmpFile, GetGlyphSetName(nGlyphSetID),
+            CreateT42FromTTGlyphs (pTTFont, pTmpFile, aGlyphSetName.getStr(),
                                    pTTGlyphMapping, pEncoding, (*aGlyphSet).size() );
         else
-            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, GetGlyphSetName(nGlyphSetID),
+            CreateT3FromTTGlyphs  (pTTFont, pTmpFile, aGlyphSetName.getStr(),
                                    pTTGlyphMapping, pEncoding, (*aGlyphSet).size(),
                                    0 /* 0 = horizontal, 1 = vertical */ );
+        fprintf( pTmpFile, "%%%%EndResource\n" );
     }
 
     // copy the file into the page header
