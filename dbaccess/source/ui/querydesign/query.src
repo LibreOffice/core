@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:25:50 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,13 +887,13 @@ ErrorBox ERR_QRY_NOSELECT
     Message [ dutch ] = "De selectie ontbreekt!" ;
     Message [ spanish ] = "Falta una selección" ;
     Message [ english_us ] = "Nothing has been selected!" ;
-    Message[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÑ¡Ôñ£¡";
+    Message[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÑ¡ÖĞ£¡";
     Message[ russian ] = "Íåîáõîäèìî âûäåëåíèå!";
     Message[ polish ] = "Nale¿y coœ wybraæ!";
     Message[ japanese ] = "‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¯Ê¤Ö¤@­Ó¿ï¾Ü¡I";
     Message[ dutch ] = "De selectie ontbreekt!";
-    Message[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÑ¡Ôñ£¡";
+    Message[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÑ¡ÖĞ£¡";
     Message[ greek ] = "Äåí İãéíå åğéëïãŞ!";
     Message[ korean ] = "¼±ÅÃ ºÎÁ·";
     Message[ arabic ] = "áã íÊã Úãá ÊÍÏíÏ";
@@ -2417,7 +2417,7 @@ String STR_DATASOURCE_DELETED
     Text[ french ] = "Impossible d'enregistrer les données : la source de données correspondante a été supprimée.";
     Text[ spanish ] = "Se ha eliminado la fuente de datos. No se pueden guardar datos correspondientes a ella.";
     Text[ finnish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ italian ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
+    Text[ italian ] = "La sorgente dati è stata eliminata. Impossibile salvare i dati corrispondenti.";
     Text[ danish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ swedish ] = "Den tillhörande datakällan har raderats. Det går inte spara några data som hör till datakällan.";
     Text[ polish ] = "Przynale¿ne Ÿród³o danych zosta³o usuniête. Zapisanie dotycz¹cych go danych nie jest mo¿liwe.";
@@ -2425,11 +2425,12 @@ String STR_DATASOURCE_DELETED
     Text[ japanese ] = "]‘®‚·‚éÃŞ°À¿°½‚ªíœ‚³‚ê‚Ä‚¢‚Ü‚·B‚±‚ê‚ÉŠÖ˜A‚·‚éÃŞ°À‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ chinese_simplified ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
-    Text[ chinese_traditional ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
+    Text[ chinese_traditional ] = "³o­Ó¸ê®Æ·½¤w¸g³Q§R°£¡C¦]¦¹µLªkÀx¦s¥ô¦ó¸ê®Æ¡C";
     Text[ turkish ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ arabic ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ catalan ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
 };
+
 
 
 
