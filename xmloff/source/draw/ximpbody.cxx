@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:12:05 $
+ *  last change: $Author: cl $ $Date: 2000-12-11 08:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,12 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
     return pContext;
 }
 
+void SdXMLDrawPageContext::EndElement()
+{
+    SdXMLGroupShapeContext::EndElement();
+    GetImport().GetShapeImport()->restoreConnections();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
@@ -408,5 +414,3 @@ SvXMLImportContext *SdXMLBodyContext::CreateChildContext(
 
     return pContext;
 }
-
-

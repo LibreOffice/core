@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:27:34 $
+ *  last change: $Author: cl $ $Date: 2000-12-11 08:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ SvXMLImportContext *SdXMLNotesContext::CreateChildContext( USHORT nPrefix,
 void SdXMLNotesContext::EndElement()
 {
     SdXMLGroupShapeContext::EndElement();
+    GetImport().GetShapeImport()->restoreConnections();
 }
 
 

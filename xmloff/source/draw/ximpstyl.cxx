@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:28:05 $
+ *  last change: $Author: cl $ $Date: 2000-12-11 08:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,6 +760,7 @@ void SdXMLMasterPageContext::EndElement()
     }
 
     SdXMLGroupShapeContext::EndElement();
+    GetImport().GetShapeImport()->restoreConnections();
 }
 
 //////////////////////////////////////////////////////////////////////////////
