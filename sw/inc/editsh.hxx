@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-20 09:21:22 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
+#endif
+#ifndef _SWDBDATA_HXX
+#include <swdbdata.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -381,9 +384,9 @@ public:
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
     // Datenbankinfo
-    String GetDBName() const;
-    const String& GetDBDesc() const;
-    void ChgDBName(const String& rNewName);
+    SwDBData GetDBData() const;
+    const SwDBData& GetDBDesc() const;
+    void ChgDBData(const SwDBData& SwDBData);
     void ChangeDBFields( const SvStringsDtor& rOldNames,
                          const String& rNewName );
     void GetAllUsedDB( SvStringsDtor& rDBNameList,

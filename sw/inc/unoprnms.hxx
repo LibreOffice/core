@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:46:04 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_COUNT_EMPTY_LINES                
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RESTART_AT_EACH_PAGE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_BASE_NAME                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_TABLE_NAME              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_COMMAND_TYPE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_COLUMN_NAME             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_DATA_BASE_FORMAT          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATE                         ;

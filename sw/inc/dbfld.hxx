@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #define _DBFLD_HXX
 
 #include "fldbas.hxx"
+#ifndef _SWDBDATA_HXX
+#include <swdbdata.hxx>
+#endif
 
 class SwDoc;
 class SwTxtFld;
@@ -73,12 +76,14 @@ class SwFrm;
 
 class SwDBFieldType : public SwValueFieldType
 {
-    String aName;       // Syntax: Datenbankname.Feldname
-    long   nRefCnt;
+    SwDBData    aDBData;        //
+    String      sName;          // only used in ::GetName() !
+    String      sColumn;
+    long        nRefCnt;
 
 public:
 
-    SwDBFieldType(SwDoc* pDocPtr, const String& Name, const String& rSymDBName);
+    SwDBFieldType(SwDoc* pDocPtr, const String& rColumnName, const SwDBData& rDBData);
 
     virtual const String& GetName() const;
     virtual SwFieldType*  Copy() const;
@@ -87,8 +92,8 @@ public:
     void            ReleaseRef();
     inline long     GetRefCount() { return nRefCnt; }
 
-    String          GetColumnName();
-    String          GetDBName();
+    const String&   GetColumnName() const {return sColumn;}
+    const SwDBData& GetDBData() const {return aDBData;}
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
@@ -150,7 +155,7 @@ public:
     virtual const String& GetPar1() const;
 
     // DBName
-    inline String       GetDBName() const { return ((SwDBFieldType*)GetTyp())->GetDBName(); }
+    inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
 };
@@ -172,25 +177,25 @@ inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
 
 class SwDBNameInfField : public SwField
 {
-    String  sDBName;
+    SwDBData    aDBData;
 
 protected:
-    const String&   GetDBName() const {return sDBName;}
-    String&         GetDBName() {return sDBName;}
+    const SwDBData& GetDBData() const {return aDBData;}
+    SwDBData&       GetDBData() {return aDBData;}
 
-    SwDBNameInfField(SwFieldType* pTyp, const String& rDBName, ULONG nFmt = 0);
+    SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, ULONG nFmt = 0);
 
 public:
     // DBName
-    inline const String&    GetRealDBName() { return sDBName; }
+    inline const SwDBData&  GetRealDBData() { return aDBData; }
 
-    String                  GetDBName(SwDoc* pDoc);
-    inline void             SetDBName(const String& rDBName) { sDBName = rDBName; }
+    SwDBData                GetDBData(SwDoc* pDoc);
+    inline void             SetDBData(const SwDBData& rDBData) { aDBData = rDBData; }
 
     // Name oder Inhalt
     virtual String          GetCntnt(BOOL bName = FALSE) const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
+    virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
 };
 
 
@@ -218,7 +223,7 @@ class SwDBNextSetField : public SwDBNameInfField
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
-                      const String& rCond, const String& rDummy, const String& rDBName);
+                      const String& rCond, const String& rDummy, const SwDBData& rDBData);
 
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
@@ -266,7 +271,7 @@ class SwDBNumSetField : public SwDBNameInfField
     BOOL    bCondValid;
 
 public:
-    SwDBNumSetField(SwDBNumSetFieldType*, const String& rCond, const String& rDBNum, const String& rDBName);
+    SwDBNumSetField(SwDBNumSetFieldType*, const String& rCond, const String& rDBNum, const SwDBData& rDBData);
 
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
@@ -315,7 +320,7 @@ public:
 class SwDBNameField : public SwDBNameInfField
 {
 public:
-    SwDBNameField(SwDBNameFieldType*, const String& rDBName, ULONG nFmt = 0);
+    SwDBNameField(SwDBNameFieldType*, const SwDBData& rDBData, ULONG nFmt = 0);
 
     virtual String   Expand() const;
     virtual SwField* Copy() const;
@@ -344,7 +349,7 @@ class SwDBSetNumberField : public SwDBNameInfField
     long    nNumber;
 
 public:
-    SwDBSetNumberField(SwDBSetNumberFieldType*, const String& rDBName, ULONG nFmt = 0);
+    SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, ULONG nFmt = 0);
 
     virtual String  Expand() const;
     virtual         SwField* Copy() const;

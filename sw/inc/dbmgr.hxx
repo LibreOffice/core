@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 16:16:48 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ class ListBox;
 class Button;
 class SvNumberFormatter;
 class SwMailMergeDlg;
-
+struct SwDBData;
 // -----------------------------------------------------------------------
 
 enum DBMgrOptions
@@ -322,7 +322,7 @@ public:
     BOOL            ShowInBeamer(const String& rDBName, const String& rTableName,
                                                 BYTE nType, const String& rStatement);
 
-    const String&   GetAddressDBName();
+    const SwDBData& GetAddressDBName();
 
     static String GetDBField(
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xColumnProp,

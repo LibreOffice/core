@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-08 14:31:37 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
+#endif
+#ifndef _SWDBDATA_HXX
+#include <swdbdata.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
@@ -281,7 +284,7 @@ class SwDoc
     AutoTimer   aIdleTimer;             // der eigene IdleTimer
     Timer       aChartTimer;            // der Timer fuers Update aller Charts
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
-    String      aDBName;                // logischer Datenbankname
+    SwDBData    aDBData;                // database descriptor
     String      sSectionPasswd;         // Passwort fuer geschuetzte Bereiche
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
@@ -885,10 +888,10 @@ public:
     void GetAllUsedDB( SvStringsDtor& rDBNameList,
                        const SvStringsDtor* pAllDBNames = 0 );
 
-    void ChgDBName( const String& rNewName );
-    String GetDBName();
-    const String& GetDBDesc();
-    const String& _GetDBDesc() const { return aDBName; }
+    void ChgDBData( const SwDBData& rNewData );
+    SwDBData GetDBData();
+    const SwDBData& GetDBDesc();
+    const SwDBData& _GetDBDesc() const { return aDBData; }
 
 
         // Kopieren eines Bereiches im oder in ein anderes Dokument !

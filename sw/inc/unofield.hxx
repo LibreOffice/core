@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-07 09:57:22 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
     double                      fParam1;    // Value / -
     sal_Int8                    nParam1;    // ChapterNumberingLevel
     sal_Bool                    bParam1;    // IsExpression
+    sal_Int16                   nParam2;
 
 public:
 // automatisch auskommentiert - [getImplementation] - Wird von OWeakObject nicht weiter unterstützt!
