@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:53:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,11 +1707,11 @@ ScAreaLink* lcl_FindAreaLink( SvxLinkManager* pLinkManager, const String& rDoc,
                             const String& rFlt, const String& rOpt,
                             const String& rSrc, const ScRange& rDest )
 {
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = pLinkManager->GetLinks().Count();
     for (USHORT i=0; i<nCount; i++)
     {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
             if ( ((ScAreaLink*)pBase)->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
                 return (ScAreaLink*)pBase;
