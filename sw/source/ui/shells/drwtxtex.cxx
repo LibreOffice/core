@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
+ *  last change: $Author: os $ $Date: 2002-09-10 13:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
     const SfxItemSet *pNewAttrs = rReq.GetArgs();
-
+    sal_uInt16 nEEWhich = 0;
     switch (nSlot)
     {
     case SID_ATTR_CHAR_FONT:
@@ -276,9 +276,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
-    case SID_ATTR_CHAR_COLOR:
-        aNewAttr.Put( pNewAttrs->Get(nWhich), EE_CHAR_COLOR );
-        break;
+    case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
 
         case SID_ATTR_CHAR_UNDERLINE:
         {
@@ -287,28 +285,20 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         }
         break;
 
-        case SID_ATTR_CHAR_CONTOUR:
-            aNewAttr.Put((const SvxContourItem&)pNewAttrs->Get(nWhich), EE_CHAR_OUTLINE);
-            break;
-        case SID_ATTR_CHAR_SHADOWED:
-            aNewAttr.Put((const SvxShadowedItem&)pNewAttrs->Get(nWhich), EE_CHAR_SHADOW);
-            break;
-        case SID_ATTR_CHAR_STRIKEOUT:
-            aNewAttr.Put((const SvxCrossedOutItem&)pNewAttrs->Get(nWhich), EE_CHAR_STRIKEOUT);
-            break;
-
-        case SID_ATTR_PARA_ADJUST_LEFT:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_LEFT, EE_PARA_JUST));
-            break;
-        case SID_ATTR_PARA_ADJUST_CENTER:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST));
-            break;
-        case SID_ATTR_PARA_ADJUST_RIGHT:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_RIGHT, EE_PARA_JUST));
-            break;
-        case SID_ATTR_PARA_ADJUST_BLOCK:
-            aNewAttr.Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST));
-            break;
+        case SID_ATTR_CHAR_CONTOUR:     nEEWhich = EE_CHAR_OUTLINE; break;
+        case SID_ATTR_CHAR_SHADOWED:    nEEWhich = EE_CHAR_SHADOW; break;
+        case SID_ATTR_CHAR_STRIKEOUT:   nEEWhich = EE_CHAR_STRIKEOUT; break;
+        case SID_ATTR_CHAR_WORDLINEMODE: nEEWhich = EE_CHAR_WLM; break;
+        case SID_ATTR_CHAR_RELIEF      : nEEWhich = EE_CHAR_RELIEF;  break;
+        case SID_ATTR_CHAR_LANGUAGE    : nEEWhich = EE_CHAR_LANGUAGE;break;
+        case SID_ATTR_CHAR_KERNING     : nEEWhich = EE_CHAR_KERNING; break;
+        case SID_ATTR_CHAR_SCALEWIDTH:   nEEWhich = EE_CHAR_FONTWIDTH; break;
+        case SID_ATTR_CHAR_AUTOKERN  :   nEEWhich = EE_CHAR_PAIRKERNING; break;
+        case SID_ATTR_CHAR_ESCAPEMENT:   nEEWhich = EE_CHAR_ESCAPEMENT; break;
+        case SID_ATTR_PARA_ADJUST_LEFT:  nEEWhich = EE_PARA_JUST; break;
+        case SID_ATTR_PARA_ADJUST_CENTER: nEEWhich = SVX_ADJUST_CENTER, EE_PARA_JUST; break;
+        case SID_ATTR_PARA_ADJUST_RIGHT: nEEWhich = SVX_ADJUST_RIGHT;break;
+        case SID_ATTR_PARA_ADJUST_BLOCK: nEEWhich = EE_PARA_JUST; break;
 
         case SID_ATTR_PARA_LINESPACE_10:
         {
@@ -521,6 +511,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             ASSERT(!this, falscher Dispatcher);
             return;
     }
+    if(nEEWhich)
+        aNewAttr.Put(pNewAttrs->Get(nWhich), nEEWhich);
+
     SetAttrToMarked(aNewAttr);
 
     GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
@@ -676,9 +669,9 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     USHORT nScriptType = pOLV->GetSelectedScriptType();
-
     while(nWhich)
     {
+        sal_uInt16 nEEWhich = 0;
         USHORT nSlotId = GetPool().GetSlotId( nWhich );
         switch( nSlotId )
         {
@@ -699,33 +692,32 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
                     rSet.InvalidateItem( nWhich );
             }
             break;
-
-
-
-        case SID_ATTR_CHAR_COLOR:
-            rSet.Put(aEditAttr.Get(EE_CHAR_COLOR, sal_True), nWhich);
-            break;
-        case SID_ATTR_CHAR_UNDERLINE:
-            rSet.Put(aEditAttr.Get(EE_CHAR_UNDERLINE, sal_True), nWhich);
-            break;
-        case SID_ATTR_CHAR_CONTOUR:
-            rSet.Put(aEditAttr.Get(EE_CHAR_OUTLINE, sal_True), nWhich);
-            break;
-        case SID_ATTR_CHAR_SHADOWED:
-            rSet.Put(aEditAttr.Get(EE_CHAR_SHADOW, sal_True), nWhich);
-            break;
-        case SID_ATTR_CHAR_STRIKEOUT:
-            rSet.Put(aEditAttr.Get(EE_CHAR_STRIKEOUT, sal_True), nWhich);
-            break;
-        case SID_AUTOSPELL_MARKOFF:
-        case SID_AUTOSPELL_CHECK:
-            const SfxPoolItem* pState = SW_MOD()->GetSlotState(nWhich);
-            if (pState)
-                rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
-            else
-                rSet.DisableItem( nWhich );
-        break;
+            case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
+            case SID_ATTR_CHAR_UNDERLINE: nEEWhich = EE_CHAR_UNDERLINE;break;
+            case SID_ATTR_CHAR_CONTOUR: nEEWhich = EE_CHAR_OUTLINE; break;
+            case SID_ATTR_CHAR_SHADOWED:  nEEWhich = EE_CHAR_SHADOW;break;
+            case SID_ATTR_CHAR_STRIKEOUT: nEEWhich = EE_CHAR_STRIKEOUT;break;
+            case SID_AUTOSPELL_MARKOFF:
+            case SID_AUTOSPELL_CHECK:
+            {
+                const SfxPoolItem* pState = SW_MOD()->GetSlotState(nWhich);
+                if (pState)
+                    rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
+                else
+                    rSet.DisableItem( nWhich );
+                break;
+            }
+            case SID_ATTR_CHAR_WORDLINEMODE: nEEWhich = EE_CHAR_WLM; break;
+            case SID_ATTR_CHAR_RELIEF      : nEEWhich = EE_CHAR_RELIEF;  break;
+            case SID_ATTR_CHAR_LANGUAGE    : nEEWhich = EE_CHAR_LANGUAGE;break;
+            case SID_ATTR_CHAR_KERNING     : nEEWhich = EE_CHAR_KERNING; break;
+            case SID_ATTR_CHAR_SCALEWIDTH:   nEEWhich = EE_CHAR_FONTWIDTH;break;
+            case SID_ATTR_CHAR_AUTOKERN  :   nEEWhich = EE_CHAR_PAIRKERNING; break;
+            case SID_ATTR_CHAR_ESCAPEMENT:   nEEWhich = EE_CHAR_ESCAPEMENT; break;
         }
+        if(nEEWhich)
+            rSet.Put(aEditAttr.Get(nEEWhich, sal_True), nWhich);
+
         nWhich = aIter.NextWhich();
     }
 }
@@ -733,9 +725,6 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
-
 void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
 {
     if (!IsTextEdit())  // Sonst Absturz!

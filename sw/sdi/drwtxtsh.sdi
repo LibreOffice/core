@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:06:50 $
+ *  last change: $Author: os $ $Date: 2002-09-10 13:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,8 +485,48 @@ interface TextDrawFont : Object
         StateMethod = GetDrawTxtCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_RELIEF
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_LANGUAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_KERNING // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_AUTOKERN // // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_ESCAPEMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
-
+    SID_ATTR_CHAR_SCALEWIDTH // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 }
 
 
