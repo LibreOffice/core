@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexIter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 13:23:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,11 @@
 #ifndef _CONNECTIVITY_DBASE_INDEXITER_HXX_
 #include "dbase/DIndexIter.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#endif
 
+using namespace ::com::sun::star::sdb;
 using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
@@ -137,7 +141,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     // auf die die Bedingung <= zutrifft
     // dieses findet beim Insert besondere Beachtung
     //  ONDXIndex* m_pIndex = GetNDXIndex();
-    OOp_COMPARE aTempOp(SQL_PRED_GREATER);
+    OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
     USHORT i = 0;
 
     if (pPage->IsLeaf())
@@ -180,7 +184,7 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
 {
     ONDXKey* pKey = NULL;
     //  ONDXIndex* m_pIndex = GetNDXIndex();
-    OSQLPredicateType ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
+    sal_Int32 ePredicateType = PTR_CAST(file::OOp_COMPARE,m_pOperator)->getPredicateType();
 
     if (bFirst)
     {
@@ -188,9 +192,9 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
         ONDXPage* pPage = m_aRoot;
         switch (ePredicateType)
         {
-            case SQL_PRED_NOTEQUAL:
-            case SQL_PRED_LESS:
-            case SQL_PRED_LESSOREQUAL:
+            case SQLFilterOperator::NOT_EQUAL:
+            case SQLFilterOperator::LESS:
+            case SQLFilterOperator::LESS_EQUAL:
                 while (pPage && !pPage->IsLeaf())
                     pPage = pPage->GetChild(m_pIndex);
 
@@ -201,20 +205,20 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
 
         switch (ePredicateType)
         {
-            case SQL_PRED_NOTEQUAL:
+            case SQLFilterOperator::NOT_EQUAL:
                 while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand));
                 break;
-            case SQL_PRED_LESS:
+            case SQLFilterOperator::LESS:
                 while ((pKey = GetNextKey()) && pKey->getValue().isNull());
                 break;
-            case SQL_PRED_LESSOREQUAL:
+            case SQLFilterOperator::LESS_EQUAL:
                 while (pKey = GetNextKey());
                 break;
-            case SQL_PRED_GREATEROREQUAL:
-            case SQL_PRED_EQUAL:
+            case SQLFilterOperator::GREATER_EQUAL:
+            case SQLFilterOperator::EQUAL:
                 pKey = GetFirstKey(m_aRoot,*m_pOperand);
                 break;
-            case SQL_PRED_GREATER:
+            case SQLFilterOperator::GREATER:
                 if (!(pKey = GetFirstKey(m_aRoot,*m_pOperand)))
                     while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand));
         }
@@ -223,21 +227,21 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
     {
         switch (ePredicateType)
         {
-            case SQL_PRED_NOTEQUAL:
+            case SQLFilterOperator::NOT_EQUAL:
                 while ((pKey = GetNextKey()) && !m_pOperator->operate(pKey,m_pOperand))
                     ;
                 break;
-            case SQL_PRED_LESS:
-            case SQL_PRED_LESSOREQUAL:
-            case SQL_PRED_EQUAL:
+            case SQLFilterOperator::LESS:
+            case SQLFilterOperator::LESS_EQUAL:
+            case SQLFilterOperator::EQUAL:
                 if (!(pKey = GetNextKey()) || !m_pOperator->operate(pKey,m_pOperand))
                 {
                     pKey = NULL;
                     m_aCurLeaf = NULL;
                 }
                 break;
-            case SQL_PRED_GREATEROREQUAL:
-            case SQL_PRED_GREATER:
+            case SQLFilterOperator::GREATER_EQUAL:
+            case SQLFilterOperator::GREATER:
                 pKey = GetNextKey();
         }
     }
