@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:50:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,18 +98,19 @@ SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 {
     bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
-#ifdef VERTICAL_LAYOUT
+    // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
+    Point aRelPos;
     if( pAnch && pAnch->IsVertical() )
         aRelPos.X() = pAnch->IsReverse() ? nRel : -nRel;
     else
-#endif
-    aRelPos.Y() = nRel;
+        aRelPos.Y() = nRel;
+    SetCurrRelPos( aRelPos );
 }
 
 SwFlyInCntFrm::~SwFlyInCntFrm()
 {
     //und Tschuess.
-    if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchor() )
+    if ( !GetFmt()->GetDoc()->IsInDtor() && GetAnchorFrm() )
     {
         SwRect aTmp( AddSpacesToFrm() );
         SwFlyInCntFrm::NotifyBackground( FindPageFrm(), aTmp, PREP_FLY_LEAVE );
@@ -124,36 +125,21 @@ SwFlyInCntFrm::~SwFlyInCntFrm()
 |*  Letzte Aenderung    MA 06. Aug. 95
 |*
 |*************************************************************************/
-void SwFlyInCntFrm::SetRefPoint( const Point& rPoint, const Point& rRelAttr,
-    const Point& rRelPos )
+void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
+                                 const Point& rRelAttr,
+                                 const Point& rRelPos )
 {
-    ASSERT( rPoint != aRef || rRelAttr != aRelPos, "SetRefPoint: no change" );
+    // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
+    ASSERT( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
     SwFlyNotify *pNotify = NULL;
     // No notify at a locked fly frame, if a fly frame is locked, there's
     // already a SwFlyNotify object on the stack (MakeAll).
     if( !IsLocked() )
         pNotify = new SwFlyNotify( this );
     aRef = rPoint;
-    aRelPos = rRelAttr;
-#ifdef VERTICAL_LAYOUT
-    SWRECTFN( GetAnchor() )
+    SetCurrRelPos( rRelAttr );
+    SWRECTFN( GetAnchorFrm() )
     (Frm().*fnRect->fnSetPos)( rPoint + rRelPos );
-#else
-    Frm().Pos( rPoint + rRelPos );
-#endif
-/*
-    //Kein InvalidatePos hier, denn das wuerde dem Cntnt ein Prepare
-    //senden - dieser hat uns aber gerade gerufen.
-    //Da der Frm aber durchaus sein Position wechseln kann, muss hier
-    //der von ihm abdeckte Window-Bereich invalidiert werden damit keine
-    //Reste stehenbleiben.
-    //Fix: Nicht fuer PreView-Shells, dort ist es nicht notwendig und
-    //fuehrt zu fiesen Problemen (Der Absatz wird nur formatiert weil
-    //er gepaintet wird und der Cache uebergelaufen ist, beim Paint durch
-    //das Invalidate wird der Absatz formatiert weil...)
-    if ( Frm().HasArea() && GetShell()->ISA(SwCrsrShell) )
-        GetShell()->InvalidateWindows( Frm() );
-*/
     if( pNotify )
     {
         InvalidatePage();
@@ -208,8 +194,8 @@ void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         bCallPrepare = TRUE;
     }
 
-    if ( bCallPrepare && GetAnchor() )
-        GetAnchor()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
+    if ( bCallPrepare && GetAnchorFrm() )
+        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
 }
 /*************************************************************************
 |*
@@ -245,35 +231,30 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 |*  Letzte Aenderung    MA 12. Apr. 96
 |*
 |*************************************************************************/
-void SwFlyInCntFrm::MakeFlyPos()
+// OD 2004-03-23 #i26791#
+//void SwFlyInCntFrm::MakeFlyPos()
+void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
-        if ( !GetAnchor()->IsTxtFrm() || !((SwTxtFrm*)GetAnchor())->IsLocked() )
-            ::DeepCalc( GetAnchor() );
-        if( GetAnchor()->IsTxtFrm() )
-            ((SwTxtFrm*)GetAnchor())->GetFormatted();
+        if ( !GetAnchorFrm()->IsTxtFrm() || !((SwTxtFrm*)GetAnchorFrm())->IsLocked() )
+            ::DeepCalc( GetAnchorFrm() );
+        if( GetAnchorFrm()->IsTxtFrm() )
+            ((SwTxtFrm*)GetAnchorFrm())->GetFormatted();
         bValidPos = TRUE;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
         //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.
-#ifdef VERTICAL_LAYOUT
-        SWRECTFN( GetAnchor() )
+        SWRECTFN( GetAnchorFrm() )
         SwTwips nOld = rVert.GetPos();
-        SwTwips nAct = bVert ? -aRelPos.X() : aRelPos.Y();
+        SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
         if( bRev )
             nAct = -nAct;
         if( nAct != nOld )
         {
             SwFmtVertOrient aVert( rVert );
             aVert.SetPos( nAct );
-#else
-        if ( rVert.GetPos() != aRelPos.Y() )
-        {
-            SwFmtVertOrient aVert( rVert );
-            aVert.SetPos( aRelPos.Y() );
-#endif
             pFmt->LockModify();
             pFmt->SetAttr( aVert );
             pFmt->UnlockModify();
@@ -293,9 +274,9 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
                                        PrepareHint eHint)
 {
     if ( eHint == PREP_FLY_ATTR_CHG )
-        GetAnchor()->Prepare( PREP_FLY_ATTR_CHG );
+        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG );
     else
-        GetAnchor()->Prepare( eHint, (void*)&rRect );
+        AnchorFrm()->Prepare( eHint, (void*)&rRect );
 }
 
 /*************************************************************************
@@ -306,10 +287,10 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 |*  Letzte Aenderung    MA 04. Dec. 92
 |*
 |*************************************************************************/
-const Point &SwFlyInCntFrm::GetRelPos() const
+const Point SwFlyInCntFrm::GetRelPos() const
 {
     Calc();
-    return GetCurRelPos();
+    return GetCurrRelPos();
 }
 
 /*************************************************************************
@@ -344,7 +325,7 @@ void SwFlyInCntFrm::MakeAll()
         return;
     }
 
-    if ( !GetAnchor() || IsLocked() || IsColLocked() || !FindPageFrm() )
+    if ( !GetAnchorFrm() || IsLocked() || IsColLocked() || !FindPageFrm() )
         return;
 
     Lock(); //Der Vorhang faellt
@@ -385,16 +366,17 @@ void SwFlyInCntFrm::MakeAll()
             Format( &rAttrs );
 
         if ( !bValidPos )
-            MakeFlyPos();
+        {
+            // OD 2004-03-23 #i26791#
+            //MakeFlyPos();
+            MakeObjPos();
+        }
 
 /* #111909# objects anchored as characters may exceed right margin!
         if ( bValidPos && bValidSize )
         {
-            SwFrm *pFrm = GetAnchor();
-            if (
-//MA 03. Apr. 96 fix(26652), Das trifft uns bestimmt nocheinmal
-//          !pFrm->IsMoveable() &&
-                 Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&
+            SwFrm* pFrm = AnchorFrm();
+            if ( Frm().Left() == (pFrm->Frm().Left()+pFrm->Prt().Left()) &&
                  Frm().Width() > pFrm->Prt().Width() )
             {
                 Frm().Width( pFrm->Prt().Width() );
@@ -406,4 +388,3 @@ void SwFlyInCntFrm::MakeAll()
     }
     Unlock();
 }
-
