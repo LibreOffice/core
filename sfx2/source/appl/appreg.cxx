@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:44:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ void SfxApplication::Registrations_Impl()
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow();
 //  SfxToolboxCustomWindow::RegisterChildWindow();
-    SfxMailChildWinWrapper_Impl::RegisterChildWindow();
-    SfxMailChildWinWrapper_Impl::RegisterChildWindow();
+//  SfxMailChildWinWrapper_Impl::RegisterChildWindow();
+//  SfxMailChildWinWrapper_Impl::RegisterChildWindow();
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
 
