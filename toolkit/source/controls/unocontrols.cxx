@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 09:03:15 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 13:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3944,6 +3944,7 @@ UnoControlProgressBarModel::UnoControlProgressBarModel()
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FILLCOLOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
@@ -4073,6 +4074,7 @@ UnoControlScrollBarModel::UnoControlScrollBarModel()
     ImplRegisterProperty( BASEPROPERTY_BLOCKINCREMENT );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_LINEINCREMENT );
