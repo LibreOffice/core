@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:28:00 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@ struct DIBInfoHeader
                         nHeight( 0UL ),
                         nPlanes( 0 ),
                         nBitCount( 0 ),
-                        nCompression( 0UL ),
-                        nSizeImage( 0UL ),
+                        nCompression( 0 ),
+                        nSizeImage( 0 ),
                         nXPelsPerMeter( 0UL ),
                         nYPelsPerMeter( 0UL ),
                         nColsUsed( 0UL ),
@@ -701,7 +701,7 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
     DIBInfoHeader   aHeader;
     ULONG           nImageSizePos;
     ULONG           nEndPos;
-    ULONG           nCompression = 0UL;
+    ULONG           nCompression = 0;
     BOOL            bRet = FALSE;
 
     aHeader.nSize = DIBINFOHEADERSIZE;
