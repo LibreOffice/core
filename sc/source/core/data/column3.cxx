@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:39:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,8 +783,23 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             {
                 pNew = rColumn.CloneCell( i, nInsFlag, pDocument, ScAddress(nCol,(SCROW)nDestRow,nTab) );
 
-                if ( pNew && pNew->GetNotePtr() && (nInsFlag & IDF_NOTE) == 0 )
-                    pNew->DeleteNote();
+                if ( pNew && pNew->GetNotePtr())
+                {
+                    if((nInsFlag & IDF_NOTE) == 0 )
+                        pNew->DeleteNote();
+                    else
+                    {
+                        // Set the cell note rectangle dimensions to default position
+                        // following the paste.
+                        ScPostIt aCellNote(pDocument);
+                        if(pNew->GetNote(aCellNote))
+                        {
+                            Rectangle aRect = aCellNote.DefaultRectangle(ScAddress(nCol,nDestRow,nTab));
+                            aCellNote.SetRectangle(aRect);
+                            pNew->SetNote(aCellNote);
+                        }
+                    }
+                }
             }
 
             if (pNew)
@@ -1617,7 +1632,7 @@ void ScColumn::SetValue( SCROW nRow, const double& rVal)
 
 void ScColumn::SetNote( SCROW nRow, const ScPostIt& rNote)
 {
-    BOOL bEmpty = !rNote.GetText().Len();
+    BOOL bEmpty = rNote.IsEmpty();
 
     SCSIZE nIndex;
     if (Search(nRow, nIndex))
