@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:43:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,11 @@ namespace sdr
             // INPUT_PAINT and INPUT_TIMER removed again since this leads to
             // problems under Linux and Solaris when painting slow objects
             // (e.g. bitmaps)
-            if(Application::AnyInput(INPUT_KEYBOARD|INPUT_OTHER))
+
+            // #114335#
+            // INPUT_OTHER removed too, leads to problems with added controls
+            // from the form layer.
+            if(Application::AnyInput(INPUT_KEYBOARD))
             {
                 mbContinuePaint = sal_False;
             }
