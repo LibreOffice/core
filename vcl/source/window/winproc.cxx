@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-18 11:56:01 $
+ *  last change: $Author: ssa $ $Date: 2002-11-25 11:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,10 +1149,29 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
         {
             USHORT nCode = aKeyCode.GetCode();
 
+            // #101999# is focus in or below toolbox
+            BOOL bToolboxFocus=FALSE;
+            if( (nCode == KEY_F1) && aKeyCode.IsShift() )
+            {
+                Window *pWin = pWindow->mpFrameData->mpFocusWin;
+                while( pWin )
+                {
+                    if( pWin->mbToolBox )
+                    {
+                        bToolboxFocus = TRUE;
+                        break;
+                    }
+                    else
+                        pWin = pWin->GetParent();
+                }
+            }
+
             // ContextMenu
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift()) )
                 nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, FALSE );
-            else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) )
+            else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) ||
+                // #101999# no active help when focus in toolbox, simulate BallonHelp instead
+                ( (nCode == KEY_F1) && aKeyCode.IsShift() && bToolboxFocus ) )
             {
                 // TipHelp via Keyboard (Shift-F2 or Ctrl-F1)
                 // simulate mouseposition at center of window
