@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 08:56:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,11 @@
 File gid_File_Lib_Placeware
     Name = LIBSHORTNAME(placeware);
     PACKED_UNO_LIB_FILE_BODY;
+End
+
+File gid_File_Lib_Animcore
+	Name = SPECIAL_NAME(animcore);
+	PACKED_UNO_LIB_FILE_BODY;
 End
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu
@@ -155,4 +160,34 @@ File gid_File_Oo_Office_Ui_Impresswindowstate_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ImpressWindowState.xcu";
+End
+
+// configuration files for custom animation effects
+
+File gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
+    Name = "effects.xml";
+End
+
+File gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
+    Name = "transitions.xml";
+End
+
+File gid_File_Oo_Office_Ui_Effects_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/Effects.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Effects_Xcu
+	TXT_FILE_BODY;
+	Styles = (PACKED);
+	Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+	Name = "/registry/data/org/openoffice/Office/UI/Effects.xcu";
 End
