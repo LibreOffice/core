@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-06-30 15:57:01 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:56:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=fldui
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -75,24 +73,8 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        changedb.cxx \
-        DropDownFieldDialog.cxx\
-        flddb.cxx \
-        flddinf.cxx \
-        flddok.cxx \
-        fldedt.cxx \
-        fldfunc.cxx \
-        fldmgr.cxx \
-        fldpage.cxx \
-        fldref.cxx \
-        fldtdlg.cxx \
-        fldvar.cxx \
-        javaedit.cxx \
-        inpdlg.cxx \
-        xfldui.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         changedb.src \
         DropDownFieldDialog.src\
         flddb.src \
