@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:46:21 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
 
 // INCLUDE -------------------------------------------------------------------
 
