@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ TabPage RID_SFXPAGE_SPELL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "´óĞ´µ¥´Ê(~C)";
         Text[ russian ] = "Ñëîâà èç ïğîïèñíûõ áóêâ";
-        Text[ polish ] = "S³owa napisane du¿ymi literami";
+        Text[ polish ] = "S³owa napisane wielkimi literami";
         Text[ japanese ] = "‚·‚×‚Ä‘å•¶š‚Ì’PŒê(~C)";
         Text[ chinese_traditional ] = "¤j¼g¦r(~C)";
         Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
@@ -234,7 +234,7 @@ TabPage RID_SFXPAGE_SPELL
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´(~C) ";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ ";
-        Text[ polish ] = "Ma³e i du¿e litery  ";
+        Text[ polish ] = "Wielkie i ma³e litery ";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C) ";
         Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ ";
