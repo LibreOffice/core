@@ -1,6 +1,11 @@
 mkdir: %_DEST%\inc%_EXT%\salhelper
 
 ..\inc\salhelper\dynload.hxx %_DEST%\inc%_EXT%\salhelper\dynload.hxx
+..\inc\salhelper\future.hxx %_DEST%\inc%_EXT%\salhelper\future.hxx
+..\inc\salhelper\futurequeue.hxx %_DEST%\inc%_EXT%\salhelper\futurequeue.hxx
+..\inc\salhelper\monitor.hxx %_DEST%\inc%_EXT%\salhelper\monitor.hxx
+..\inc\salhelper\queue.hxx %_DEST%\inc%_EXT%\salhelper\queue.hxx
+..\inc\salhelper\refobj.hxx %_DEST%\inc%_EXT%\salhelper\refobj.hxx
 				
 
 ..\%__SRC%\bin\salhelper*.dll %_DEST%\bin%_EXT%\salhelper*.dll
@@ -10,4 +15,3 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\%__SRC%\lib\libsalhelper*.dylib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\salhelper*.lib %_DEST%\lib%_EXT%\*
-..\%__SRC%\misc\salhelper*.pdb %_DEST%\misc%_EXT%\*
