@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:26:58 $
+ *  last change: $Author: hr $ $Date: 2005-04-04 15:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 190 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Assign Macro";
+        Text [ de ] = "Zuweisen";
         Text [ en-US ] = "Assign Macro";
     };
     PushButton PB_DELETE
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 190 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Remove Macro";
+        Text [ de ] = "Entfernen";
         Text [ en-US ] = "Remove Macro";
     };
 };
