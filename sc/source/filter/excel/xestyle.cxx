@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:37:19 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,11 +238,10 @@ const sal_Int32 EXC_PAL_MAXDIST             = 0x7FFFFFFF;
 
 XclExpPalette::XclExpPalette( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_PALETTE ),
-    XclDefaultPalette( rRoot.GetBiff() ),
+    XclDefaultPalette( rRoot ),
     XclExpRoot( rRoot ),
     mnLastIx( 0 )
 {
-    SetDefaultColors( GetBiff() );
     SetRecSize( GetColorCount() * 4 + 2 );
 
     // initialize maPalette with default colors
@@ -1089,7 +1088,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
         case xlBiff3:   // attributes new in BIFF3
         {
             // text wrap
-            mbWrapped = bForceWrapped || GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_LINEBREAK, BOOL );
+            mbWrapped = bForceWrapped || GETITEMBOOL( rItemSet, ATTR_LINEBREAK );
             bUsed |= bForceWrapped | ScfTools::CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
         }
 
