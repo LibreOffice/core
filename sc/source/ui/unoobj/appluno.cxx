@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-28 18:18:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 08:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,12 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
                 return aSeq;
             }
         }
+
+        throw lang::IllegalArgumentException();         // not found
     }
+    else
+        throw uno::RuntimeException();                  // should not happen
+
     return uno::Sequence<beans::PropertyValue>(0);
 }
 
@@ -703,7 +708,12 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
                 return aAny;
             }
         }
+
+        throw container::NoSuchElementException();      // not found
     }
+    else
+        throw uno::RuntimeException();                  // should not happen
+
     return uno::Any();
 }
 
@@ -725,18 +735,26 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
 {
     ScUnoGuard aGuard;
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
-    if ( pFuncList && nIndex >= 0 && nIndex < pFuncList->GetCount() )
+    if ( pFuncList )
     {
-        const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-        if ( pDesc )
+        if ( nIndex >= 0 && nIndex < pFuncList->GetCount() )
         {
-            uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
-            lcl_FillSequence( aSeq, *pDesc );
-            uno::Any aAny;
-            aAny <<= aSeq;
-            return aAny;
+            const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
+            if ( pDesc )
+            {
+                uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
+                lcl_FillSequence( aSeq, *pDesc );
+                uno::Any aAny;
+                aAny <<= aSeq;
+                return aAny;
+            }
         }
+
+        throw lang::IndexOutOfBoundsException();        // illegal index
     }
+    else
+        throw uno::RuntimeException();                  // should not happen
+
     return uno::Any();
 }
 
