@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CwsConfig.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-05 09:24:44 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:11:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,6 @@ package CwsConfig;
 use strict;
 
 use Carp;
-use Config::Tiny;
 use URI::Escape;
 
 ##### ctor ####
@@ -379,6 +378,37 @@ sub get_config_file
     return $self->{_CONFIG_FILE};
 }
 
+sub read_config
+{
+    my $self = shift;
+    my $fname = shift;
+    my $fhandle;
+    my $section = '';
+    my %config;
+
+    open ($fhandle, $fname) || croak("ERROR: Can't open '$fname': $!");
+    while ( <$fhandle> ) {
+        tr/\r\n//d;  # win32 pain
+        s/\#.*//;    # kill comments
+        /^\s*$/ && next;
+
+        if (/\[\s*(\S+)\s*\]/) {
+            $section = $1;
+            if (!defined $config{$section}) {
+                $config{$section} = {};
+            }
+        }
+        defined $config{$section} || croak("ERROR: unknown / no section '$section'\n");
+        if ( m/(\w[\w\d]*)=(.*)\s*/ ) {
+            $config{$section}->{$1} = $2;
+    #       print "Set '$1' to '$2'\n";
+        }
+    }
+    close ($fhandle) || croak("ERROR: Failed to close: $!");
+
+    $self->{_CONFIG_FILE} = \%config;
+}
+
 sub parse_config_file
 {
     my $self = shift;
@@ -386,20 +416,16 @@ sub parse_config_file
     my $config_file;
     # check for config files
     if ( -e "$ENV{HOME}/.cwsrc" ) {
-        $config_file = Config::Tiny->read("$ENV{HOME}/.cwsrc");
+    $self->read_config("$ENV{HOME}/.cwsrc");
         $self->{_GLOBAL} = 0;
     }
     elsif ( -e "$ENV{COMMON_ENV_TOOLS}/cwsrc" ) {
-        $config_file = Config::Tiny->read("$ENV{COMMON_ENV_TOOLS}/cwsrc");
+        $self->read_config("$ENV{COMMON_ENV_TOOLS}/cwsrc");
         $self->{_GLOBAL} = 1;
     }
     else {
         croak("ERROR: can't find CWS config file '\$HOME/.cwsrc'.\n");
     }
-
-    croak("ERROR: can't read CWS config file '\$HOME/.cwsrc'.\n") if !defined($config_file);
-
-    $self->{_CONFIG_FILE}=$config_file;
 }
 
 1; # needed by "use" or "require"
