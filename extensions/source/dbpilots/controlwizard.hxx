@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
@@ -202,6 +205,11 @@ namespace dbp
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
+        /** returns the com.sun.star.sdb.InteractionHandler
+            @param  _pWindow    The window will be used when an error message has to be shown.
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > getInteractionHandler(Window* _pWindow) const;
+
     protected:
         // initialize the derivees settings (which have to be derived from OControlWizardSettings)
         // with some common data extracted from the control model
@@ -210,6 +218,9 @@ namespace dbp
         void commitControlSettings(OControlWizardSettings* _pSettings);
 
         sal_Bool needDatasourceSelection();
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                                        getFormConnection() const;
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId) = 0;
 
