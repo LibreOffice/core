@@ -78,7 +78,7 @@ Dim Index as Integer
 		Case SBMICROSOFTMODE
 			Index = Application(CurOffice,SBAPPLKEY)
 			If GetGUIType = 1 Then &apos; Windows
-			    sPath = QueryValue(HKEY_CURRENT_USER, sKeyName(Index), sValueName(Index))
+			    sPath = QueryValue(HKEY_LOCAL_MACHINE, sKeyName(Index), sValueName(Index))
 			Else
 				sPath = &quot;&quot;
 			End If
@@ -105,11 +105,10 @@ Dim sTemplateValueName as String
 	Select Case WizardMode
 		Case SBMICROSOFTMODE
 			If GetGUIType = 1 Then &apos; Windows
-
 				&apos; Template directory of Office 97
 				sTemplateKeyName = &quot;Software\Microsoft\Office\8.0\Common\FileNew\LocalTemplates&quot;
 				sTemplateValueName = &quot;&quot;
-				sLocTemplatePath = QueryValue(HKEY_CURRENT_USER, sTemplateKeyName, sTemplateValueName)
+				sLocTemplatePath = QueryValue(HKEY_LOCAL_MACHINE, sTemplateKeyName, sTemplateValueName)
 
 				If sLocTemplatePath = &quot;&quot; Then
 					&apos; Retrieve the template directory of Office 2000
