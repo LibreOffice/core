@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:38:04 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -94,5 +93,3 @@ public:
 extern "C" int memory_write(
     void *buffer,size_t size,size_t nmemb,void *stream);
 
-extern "C" int  no_func(
-    void  *client,  char  *prompt, char*buffer, int buflen );
