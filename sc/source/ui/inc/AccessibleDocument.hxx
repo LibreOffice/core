@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:46:02 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,26 @@
 #include "viewdata.hxx"
 #endif
 
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
+#include <svx/AccessibleShapeTreeInfo.hxx>
+#endif
+
 class ScTabViewShell;
 class ScAccessibleSpreadsheet;
 class SdrPage;
+
+namespace accessibility
+{
+    class AccessibleShape;
+}
+
+struct ScAccessibleShapeData
+{
+    ScAccessibleShapeData() : pAccShape(NULL), nIndex(-1) {}
+    ScAccessibleShapeData(sal_Int32 nTempIndex) : pAccShape(NULL), nIndex(nTempIndex) {}
+    accessibility::AccessibleShape* pAccShape;
+    sal_Int32           nIndex; // Index in drawpage.
+};
 
 /** @descr
         This base class provides an implementation of the
@@ -173,6 +190,8 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos      meSplitPos;
     ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
+    std::vector<ScAccessibleShapeData> maShapes;
+    accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
 
     sal_uInt16 getVisibleTable();
 
@@ -183,6 +202,9 @@ private:
     void FreeAccessibleSpreadsheet();
 
     SdrPage* GetDrawPage();
+    sal_Int32 GetShapesCount();
+    com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible >
+            GetShape(sal_Int32 nIndex);
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<

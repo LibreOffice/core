@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 06:48:04 $
+ *  last change: $Author: sab $ $Date: 2002-03-22 16:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
 #endif
+#ifndef SC_SHAPEUNO_HXX
+#include "shapeuno.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -103,6 +106,9 @@
 #endif
 #ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
+#endif
+#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
+#include <svx/ShapeTypeHandler.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -189,12 +195,9 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             CommitChange(aEvent); // there is a new child - event
         }
-        else if (rRef.GetId() == SFX_HINT_DYING)
-        {
-            // it seems the Broadcaster is dying, since the view is dying
-            dispose();
-        }
     }
+
+    ScAccessibleDocumentBase::Notify(rBC, rHint);
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -244,19 +247,7 @@ sal_Int32 SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    sal_Int32 nShapes (0);
-    SdrPage* pDrawPage = GetDrawPage();
-    if (pDrawPage)
-    {
-        sal_uInt32 nObjCount(pDrawPage->GetObjCount());
-        for (sal_uInt32 i = 0; i < nObjCount; ++i)
-        {
-            SdrObject* pObj = pDrawPage->GetObj(i);
-            if (pObj && (pObj->GetLayer() != SC_LAYER_INTERN))
-                ++nShapes;
-        }
-    }
-    return nShapes + 1;
+    return GetShapesCount() + 1;
 }
 
     /// Return the specified child or NULL if index is invalid.
@@ -441,6 +432,55 @@ SdrPage* ScAccessibleDocument::GetDrawPage()
     return pDrawPage;
 }
 
+sal_Int32 ScAccessibleDocument::GetShapesCount()
+{
+    SdrPage* pDrawPage = GetDrawPage();
+    if (pDrawPage && maShapes.empty())
+    {
+        sal_Int32 nObjCount(pDrawPage->GetObjCount());
+        maShapes.reserve(nObjCount);
+        for (sal_Int32 i = 0; i < nObjCount; ++i)
+        {
+            SdrObject* pObj = pDrawPage->GetObj(i);
+            if (pObj && (pObj->GetLayer() != SC_LAYER_INTERN))
+            {
+                ScAccessibleShapeData aShape;
+                aShape.nIndex = i;
+                maShapes.push_back(aShape);
+            }
+        }
+    }
+    return maShapes.size();
+}
+
+uno::Reference< XAccessible > ScAccessibleDocument::GetShape(sal_Int32 nIndex)
+{
+    if (maShapes.empty())
+        GetShapesCount(); // fill list with filtered shapes (no internal shapes)
+
+    if (static_cast<sal_uInt32>(nIndex) >= maShapes.size())
+        throw lang::IndexOutOfBoundsException();
+
+    if (!maShapes[nIndex].pAccShape)
+    {
+        SdrPage* pDrawPage = GetDrawPage();
+        if (pDrawPage)
+        {
+            SdrObject* pObj = pDrawPage->GetObj(nIndex);
+            if (pObj)
+            {
+                uno::Reference< drawing::XShape > xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                new ScShapeObj(xShape);
+                accessibility::ShapeTypeHandler& rShapeHandler = accessibility::ShapeTypeHandler::Instance();
+                maShapes[nIndex].pAccShape = rShapeHandler.CreateAccessibleObject(
+                    xShape, this, maShapeTreeInfo);
+            }
+        }
+    }
+
+    return maShapes[nIndex].pAccShape;
+}
+
 sal_Bool ScAccessibleDocument::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
@@ -451,6 +491,6 @@ sal_Bool ScAccessibleDocument::IsDefunc(
 sal_Bool ScAccessibleDocument::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    // what is with document protection?
+    // what is with document protection or readonly documents?
     return sal_True;
 }
