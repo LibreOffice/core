@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pluby $ $Date: 2001-02-28 03:15:14 $
+ *  last change: $Author: pluby $ $Date: 2001-03-05 02:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,22 @@ void DeInitSalData()
 
 void InitSalMain()
 {
+    extern char **environ;
+    char **pEnviron;
+
+    // Get full executable path. We cna't use __progname as that only holds
+    // the name of the executable and not the path. The full executable path
+    // is listed after the first NULL in *environ.
+    pEnviron = environ;
+    while ( *pEnviron++ )
+        ;
+
     // Need to include the absolute path for this executable in the PATH
     // and STAR_RESOURCEPATH environment variables so that the resource manager
     // can find resource files and in the DYLD_LIBRARY_PATH environment
     // variable so that the dynamic library loader can find shared libraries
-    extern const char *__progname;
     ByteString aPath( getenv( "PATH" ) );
-    ByteString aCmdPath( __progname );
+    ByteString aCmdPath( *pEnviron );
     // Get absolute path of command's directory
     if ( aCmdPath.Len() ) {
         DirEntry aCmdDirEntry( aCmdPath );
