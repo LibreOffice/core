@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basegfxfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:40:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@ namespace cppcanvas
         /** Create an uninitialized bitmap with the given size
          */
         BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
+
+        /** Create an uninitialized alpha bitmap with the given size
+         */
+        BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize ) const;
 
         /** Create a text portion with the given content string
          */
