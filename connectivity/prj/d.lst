@@ -4,6 +4,17 @@
 ..\%__SRC%\lib\libconnectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib%_EXT%\idbt*
+..\source\cpool\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\manager\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\adabas\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\ado\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\file\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\flat\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\dbase\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\jdbc\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\odbc\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\mozab\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
