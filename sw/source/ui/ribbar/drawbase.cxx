@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:03:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,9 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
     SdrView *pSdrView = pSh->GetDrawView();
 
-    pSdrView->SetOrtho(rMEvt.IsShift());
+    // #i33136#
+    // pSdrView->SetOrtho(rMEvt.IsShift());
+    pSdrView->SetOrtho(doConstructOrthogonal() ? !rMEvt.IsShift() : rMEvt.IsShift());
     pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
     if (rMEvt.IsMod2())
@@ -335,7 +337,9 @@ BOOL SwDrawBase::MouseMove(const MouseEvent& rMEvt)
 
     if (IsCreateObj() && !pWin->IsDrawSelMode() && pSdrView->IsCreateObj())
     {
-        pSdrView->SetOrtho(rMEvt.IsShift());
+        // #i33136#
+        // pSdrView->SetOrtho(rMEvt.IsShift());
+        pSdrView->SetOrtho(doConstructOrthogonal() ? !rMEvt.IsShift() : rMEvt.IsShift());
         pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
         pSh->MoveCreate(aPnt);
@@ -781,3 +785,10 @@ Point  SwDrawBase::GetDefaultCenterPos()
     return aStartPos;
 }
 
+// #i33136#
+bool SwDrawBase::doConstructOrthogonal() const
+{
+    return false;
+}
+
+// eof
