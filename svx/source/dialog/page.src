@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:44:46 $
+ *  last change: $Author: pb $ $Date: 2001-07-05 13:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,9 +1131,10 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 135 , 10 ) ;
-        Text = "Objekt ~an Seitenformat anpassen" ;
-        Text [ ENGLISH ] = "Fit ob~ject to page format" ;
-        Text[ english_us ] = "~Fit object to page format";
+        Text[ language_user1 ] = "pb: changed from 'Seitenformat' to 'Papierformat'";
+        Text = "Objekt ~an Papierformat anpassen" ;
+        Text [ ENGLISH ] = "Fit ob~ject to paper format" ;
+        Text[ english_us ] = "~Fit object to paper format";
         Text[ portuguese ] = "~Ajustar objecto ao formato da pбgina";
         Text[ russian ] = "—огласовать объект с форматом страницы";
         Text[ greek ] = "–спубсмпгё уе мЁгеипт";
