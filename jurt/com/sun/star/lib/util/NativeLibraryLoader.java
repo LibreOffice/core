@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 15:51:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,8 @@ public final class NativeLibraryLoader {
                 String enc;
                 try {
                     enc = (String) urlEncoderEncode.invoke(
-                        null, new Object[] { Character.toString(c), "UTF-8" });
+                        null,
+                        new Object[] { new Character(c).toString(), "UTF-8" });
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException("This cannot happen: " + e);
                 } catch (InvocationTargetException e) {
