@@ -4122,7 +4122,14 @@ SfxVoidItem InsertEnvelope FN_ENVELOP
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertField FN_INSERT_FIELD
-
+(
+SfxUInt16Item Type FN_PARAM_FIELD_TYPE,
+SfxUInt16Item SubType FN_PARAM_FIELD_SUBTYPE,
+SfxStringItem Name FN_INSERT_FIELD,
+SfxStringItem Content FN_PARAM_FIELD_CONTENT,
+SfxUInt32Item Format FN_PARAM_FIELD_FORMAT
+SfxStringItem Separator FN_PARAM_3;
+)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4138,7 +4145,6 @@ SfxBoolItem InsertField FN_INSERT_FIELD
     Synchron;
 
     ImageRotation = TRUE;
-    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -4852,7 +4858,7 @@ SfxVoidItem InsertPara FN_INSERT_BREAK
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertReferenzField FN_INSERT_REF_FIELD
+SfxVoidItem InsertReferenceField FN_INSERT_REF_FIELD
 ()
 [
     /* flags: */
@@ -9556,5 +9562,43 @@ SfxBoolItem SelectTextMode FN_READONLY_SELECTION_MODE
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
+]
+//--------------------------------------------------------------------------
+SfxBoolItem InsertDBField FN_INSERT_DBFIELD
+(
+SfxUInt16Item Type FN_PARAM_FIELD_TYPE,
+SfxStringItem DBName FN_INSERT_DBFIELD,
+SfxStringItem Command FN_PARAM_1,
+SfxStringItem ColumnName FN_PARAM_2,
+SfxInt32Item CommandType FN_PARAM_3,
+SfxStringItem Content FN_PARAM_FIELD_CONTENT,
+SfxUInt32Item Format FN_PARAM_FIELD_FORMAT)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Synchron;
+
+    /* plugin: */
+    Container = FALSE,
+
+    /* api: */
+    Export = TRUE,
+    Hidden = FALSE,
+    IsCollection = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
 ]
 

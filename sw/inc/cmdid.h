@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-08-06 14:36:51 $
+ *  last change: $Author: os $ $Date: 2002-08-07 09:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_CHANGE_DBFIELD       (FN_INSERT + 9 )  /* Datenbankfeld aendern */
 
 #define FN_INSERT_CAPTION       (FN_INSERT + 10)    /* Beschriftung */
+#define FN_INSERT_DBFIELD       (FN_INSERT + 11)    /* Insert database field - for recording */
 #define FN_INSERT_FOOTNOTE_DLG  (FN_INSERT + 12)    /* Dialog Fussnote */
 
 #define FN_INSERT_REF_FIELD     (FN_INSERT + 13)  /* Refernzfeld einfuegen */
@@ -1099,7 +1100,11 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PARAM_TABLE_SPACE            (FN_PARAM+51)
 #define FN_PARAM_TABLE_COLUMNS          (FN_PARAM+52)
 
-#define FN_PARAM_GRF_CONNECT            (FN_PARAM+54)
+#define FN_PARAM_GRF_CONNECT            (FN_PARAM+53)
+#define FN_PARAM_FIELD_TYPE             (FN_PARAM+54)
+//already defined in svxids.hrc: #define FN_PARAM_FIELD_CONTENT           (FN_PARAM+55)
+#define FN_PARAM_FIELD_SUBTYPE          (FN_PARAM+56)
+#define FN_PARAM_FIELD_FORMAT           (FN_PARAM+57)
 
 
 #define FN_PARAM_EVENT                  (FN_PARAM+68)

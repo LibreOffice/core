@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:49:58 $
+ *  last change: $Author: os $ $Date: 2002-08-07 09:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -220,12 +223,49 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                             const String& rPar2, ULONG nFormatId, sal_Unicode cSeparator)
 {
     BOOL bRet = FALSE;
-    SwWrtShell *pSh = ::GetActiveView()->GetWrtShellPtr();
+    SwView* pView = GetActiveView();
+    SwWrtShell *pSh = pView->GetWrtShellPtr();
 
     if (!IsFldEdit())   // Neues Feld einfuegen
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator );
         bRet = aMgr.InsertFld( aData );
+
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                pView->GetViewFrame()->GetBindings().GetRecorder();
+        if ( xRecorder.is() )
+        {
+            BOOL bRecordDB = TYP_DBFLD == nTypeId ||
+                            TYP_DBSETNUMBERFLD == nTypeId ||
+                            TYP_DBNUMSETFLD == nTypeId ||
+                            TYP_DBNEXTSETFLD == nTypeId ||
+                            TYP_DBNAMEFLD == nTypeId ;
+
+            SfxRequest aReq( pView->GetViewFrame(),
+                    bRecordDB ?  FN_INSERT_DBFIELD : FN_INSERT_FIELD );
+            if(bRecordDB)
+            {
+                aReq.AppendItem(SfxStringItem
+                        (FN_INSERT_DBFIELD,rPar1.GetToken(0, DB_DELIM)));
+                aReq.AppendItem(SfxStringItem
+                        (FN_PARAM_1,rPar1.GetToken(1, DB_DELIM)));
+                aReq.AppendItem(SfxInt32Item
+                        (FN_PARAM_3,rPar1.GetToken(1, DB_DELIM).ToInt32()));
+                aReq.AppendItem(SfxStringItem
+                        (FN_PARAM_2,rPar1.GetToken(3, DB_DELIM)));
+            }
+            else
+            {
+                aReq.AppendItem(SfxStringItem(FN_INSERT_FIELD, rPar1));
+                aReq.AppendItem(SfxStringItem
+                        (FN_PARAM_3,String(cSeparator)));
+                aReq.AppendItem(SfxUInt16Item(FN_PARAM_FIELD_SUBTYPE, nSubType));
+            }
+            aReq.AppendItem(SfxUInt16Item(FN_PARAM_FIELD_TYPE   , nTypeId));
+            aReq.AppendItem(SfxStringItem(FN_PARAM_FIELD_CONTENT, rPar2));
+            aReq.AppendItem(SfxUInt32Item(FN_PARAM_FIELD_FORMAT , nFormatId));
+            aReq.Done();
+        }
 
     }
     else    // Feld aendern

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 16:14:50 $
+ *  last change: $Author: os $ $Date: 2002-08-07 09:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,15 +304,95 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         SwFldMgr aFldMgr(GetShellPtr());
         switch(nSlot)
         {
+            case FN_INSERT_DBFIELD:
+            {
+                BOOL bRes = FALSE;
+                if( pItem )
+                {
+                    ULONG  nFormat = 0;
+                    USHORT nType = 0;
+                    String aPar1 = ((SfxStringItem *)pItem)->GetValue();
+                    String aPar2;
+                    sal_Int32 nCommand = 0;
+
+                    if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
+                                                                FALSE, &pItem ))
+                        nType = ((SfxUInt16Item *)pItem)->GetValue();
+                    aPar1 += DB_DELIM;
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_1, FALSE, &pItem ))
+                    {
+                        aPar1 += ((SfxStringItem *)pItem)->GetValue();
+                    }
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_3, FALSE, &pItem ))
+                        nCommand = ((SfxInt32Item*)pItem)->GetValue();
+                    aPar1 += DB_DELIM;
+                    aPar1 += String::CreateFromInt32(nCommand);
+                    aPar1 += DB_DELIM;
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_2, FALSE, &pItem ))
+                    {
+                        aPar1 += ((SfxStringItem *)pItem)->GetValue();
+                    }
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_FIELD_CONTENT, FALSE, &pItem ))
+                        aPar2 = ((SfxStringItem *)pItem)->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_FIELD_FORMAT, FALSE, &pItem ))
+                        nFormat = ((SfxUInt32Item *)pItem)->GetValue();
+                    DBG_WARNING("Command is not yet used")
+                    sal_Unicode cSeparator = ' ';
+                    SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
+                    bRes = aFldMgr.InsertFld(aData);
+                }
+                rReq.SetReturnValue(SfxBoolItem( nSlot, bRes ));
+            }
+            break;
             case FN_INSERT_FIELD_CTRL:
             case FN_INSERT_FIELD:
             {
                 BOOL bRes = FALSE;
-                SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
-                bRes = pVFrame->GetChildWindow( nSlot ) != 0;
-                Invalidate(rReq.GetSlot());
-                Invalidate(FN_INSERT_FIELD_CTRL);
+                if( pItem && nSlot != FN_INSERT_FIELD_CTRL)
+                {
+                    ULONG  nFormat = 0;
+                    USHORT nType = 0;
+                    USHORT nSubType = 0;
+                    String aPar1 = ((SfxStringItem *)pItem)->GetValue();
+                    String aPar2;
+                    sal_Unicode cSeparator = ' ';
+
+                    if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
+                                                                FALSE, &pItem ))
+                        nType = ((SfxUInt16Item *)pItem)->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
+                                                                FALSE, &pItem ))
+                        nSubType = ((SfxUInt16Item *)pItem)->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_FIELD_CONTENT, FALSE, &pItem ))
+                        aPar2 = ((SfxStringItem *)pItem)->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_FIELD_FORMAT, FALSE, &pItem ))
+                        nFormat = ((SfxUInt32Item *)pItem)->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                                        FN_PARAM_3, FALSE, &pItem ))
+                    {
+                        String sTmp = ((SfxStringItem *)pItem)->GetValue();
+                        if(sTmp.Len())
+                            cSeparator = sTmp.GetChar(0);
+                    }
+                    SwInsertFld_Data aData(nType, nSubType, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
+                    bRes = aFldMgr.InsertFld( aData );
+                }
+                else
+                {
+                    SfxViewFrame* pVFrame = GetView().GetViewFrame();
+                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);
+                    bRes = pVFrame->GetChildWindow( nSlot ) != 0;
+                    Invalidate(rReq.GetSlot());
+                    Invalidate(FN_INSERT_FIELD_CTRL);
+                    rReq.Ignore();
+                }
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRes ));
             }
             break;
@@ -328,6 +408,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
                 if (pWrp)
                     pWrp->ShowPage();
+                rReq.Ignore();
             }
             break;
 
