@@ -865,14 +865,16 @@ if test -z "$FLEX"; then
    AC_MSG_WARN([no flex found in \$PATH, install flex]) >> warn
 fi
 dnl ***************************************
-dnl testing bash tools path
+dnl testing bash tools path on Windows
 dnl ***************************************
-AC_PATH_PROG(CYGWIN, bash)
-CYGWIN=`dirname $CYGWIN`
-
+if test "$_os" = "WINNT"; then
+	AC_PATH_PROG(CYGWIN, bash)
+	CYGWIN=`dirname $CYGWIN`
+fi
 dnl ***************************************
 dnl testing ml.exe assembler path
 dnl ***************************************
+if test "$_os" = "WINNT"; then
 if test ! -x "$with_asm_home/ml.exe"; then
    AC_PATH_PROG(ML_EXE, ml.exe)
    if test -z "$ML_EXE"; then
@@ -881,7 +883,9 @@ if test ! -x "$with_asm_home/ml.exe"; then
       with_asm_home="ASM_IN_PATH"
    fi
 fi
- 
+else
+	with_asm_home="NO_ASM_HOME"
+fi
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
