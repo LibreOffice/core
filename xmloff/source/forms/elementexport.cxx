@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ namespace xmloff
             break;
             case COMBOBOX:
             {   // a combox box description has sub elements: the items
-                DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString >);
+                DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
 
                 // get the item list
                 Sequence< ::rtl::OUString > aListItems;
@@ -464,11 +464,11 @@ namespace xmloff
                 CCA_LABEL, CCA_TITLE
             };
             // the names of all properties which are expected to be of type string
-            static const sal_Char* pStringPropertyNames[] =
+            static ::rtl::OUString aStringPropertyNames[] =
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
-            OSL_ENSURE( sizeof(pStringPropertyNames)/sizeof(pStringPropertyNames[0]) ==
+            OSL_ENSURE( sizeof(aStringPropertyNames)/sizeof(aStringPropertyNames[0]) ==
                         sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
                         "OControlExport::exportCommonControlAttributes: somebody tampered with the maps (1)!");
 
@@ -478,7 +478,7 @@ namespace xmloff
                     exportStringPropertyAttribute(
                         getCommonControlAttributeNamespace(nStringPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
-                        pStringPropertyNames[i]
+                        aStringPropertyNames[i]
                         );
                 #ifdef DBG_UTIL
                     //  reset the bit for later checking
@@ -494,9 +494,9 @@ namespace xmloff
             {   // attribute flags
                 CCA_CURRENT_SELECTED, CCA_DISABLED, CCA_DROPDOWN, CCA_PRINTABLE, CCA_READONLY, CCA_SELECTED, CCA_TAB_STOP
             };
-            static const sal_Char* pBooleanPropertyNames[] =
+            static const ::rtl::OUString* pBooleanPropertyNames[] =
             {   // property names
-                PROPERTY_STATE, PROPERTY_ENABLED, PROPERTY_DROPDOWN, PROPERTY_PRINTABLE, PROPERTY_READONLY, PROPERTY_DEFAULT_STATE, PROPERTY_TABSTOP
+                &PROPERTY_STATE, &PROPERTY_ENABLED, &PROPERTY_DROPDOWN, &PROPERTY_PRINTABLE, &PROPERTY_READONLY, &PROPERTY_DEFAULT_STATE, &PROPERTY_TABSTOP
             };
             static sal_Bool nBooleanPropertyAttrFlags[] =
             {   // attribute defaults
@@ -515,7 +515,7 @@ namespace xmloff
                     exportBooleanPropertyAttribute(
                         getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
-                        pBooleanPropertyNames[i],
+                        *(pBooleanPropertyNames[i]),
                         nBooleanPropertyAttrFlags[i]);
         #ifdef DBG_UTIL
                     //  reset the bit for later checking
@@ -532,9 +532,9 @@ namespace xmloff
             {   // attribute flags
                 CCA_MAX_LENGTH, CCA_SIZE, CCA_TAB_INDEX
             };
-            static const sal_Char* pIntegerPropertyNames[] =
+            static const ::rtl::OUString* pIntegerPropertyNames[] =
             {   // property names
-                PROPERTY_MAXTEXTLENGTH, PROPERTY_LINECOUNT, PROPERTY_TABINDEX
+                &PROPERTY_MAXTEXTLENGTH, &PROPERTY_LINECOUNT, &PROPERTY_TABINDEX
             };
             static const sal_Int16 nIntegerPropertyAttrDefaults[] =
             {   // attribute defaults
@@ -553,7 +553,7 @@ namespace xmloff
                     exportInt16PropertyAttribute(
                         getCommonControlAttributeNamespace(nIntegerPropertyAttributeIds[i]),
                         getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
-                        pIntegerPropertyNames[i],
+                        *(pIntegerPropertyNames[i]),
                         nIntegerPropertyAttrDefaults[i]);
         #ifdef DBG_UTIL
                     //  reset the bit for later checking
@@ -766,9 +766,9 @@ namespace xmloff
             {   // attribute flags
                 SCA_VALIDATION, SCA_MULTI_LINE, SCA_AUTOMATIC_COMPLETION, SCA_MULTIPLE, SCA_DEFAULT_BUTTON, SCA_IS_TRISTATE
             };
-            static const sal_Char* pBooleanPropertyNames[] =
+            static const ::rtl::OUString* pBooleanPropertyNames[] =
             {   // property names
-                PROPERTY_STRICTFORMAT, PROPERTY_MULTILINE, PROPERTY_AUTOCOMPLETE, PROPERTY_MULTISELECTION, PROPERTY_DEFAULTBUTTON, PROPERTY_TRISTATE
+                &PROPERTY_STRICTFORMAT, &PROPERTY_MULTILINE, &PROPERTY_AUTOCOMPLETE, &PROPERTY_MULTISELECTION, &PROPERTY_DEFAULTBUTTON, &PROPERTY_TRISTATE
             };
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
         #ifdef DBG_UTIL
@@ -782,7 +782,7 @@ namespace xmloff
                     exportBooleanPropertyAttribute(
                         getSpecialAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         getSpecialAttributeName(nBooleanPropertyAttributeIds[i]),
-                        pBooleanPropertyNames[i],
+                        *(pBooleanPropertyNames[i]),
                         BOOLATTR_DEFAULT_FALSE  // all of the attributes are defaulted to "false"
                     );
             #ifdef DBG_UTIL
@@ -829,7 +829,7 @@ namespace xmloff
         {
             if (SCA_ECHO_CHAR & m_nIncludeSpecial)
             {
-                DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_ECHO_CHAR, sal_Int16);
+                DBG_CHECK_PROPERTY( PROPERTY_ECHO_CHAR, sal_Int16 );
                 sal_Int16 nValue(0);
                 m_xProps->getPropertyValue(PROPERTY_ECHO_CHAR) >>= nValue;
                 if (nValue)
@@ -848,6 +848,7 @@ namespace xmloff
             }
         }
 
+        // ----------------------------------
         if ((SCA_MIN_VALUE | SCA_MAX_VALUE) & m_nIncludeSpecial)
         {
             // need to export the min value and the max value as attributes
@@ -895,7 +896,7 @@ namespace xmloff
     void OControlExport::exportListSourceAsAttribute()
     {
         // DA_LIST_SOURCE needs some special handling
-        DBG_CHECK_PROPERTY_NO_TYPE((const sal_Char*)PROPERTY_LISTSOURCE);
+        DBG_CHECK_PROPERTY_NO_TYPE( PROPERTY_LISTSOURCE );
 
         ::rtl::OUString sListSource;
         Any aListSource = m_xProps->getPropertyValue(PROPERTY_LISTSOURCE);
@@ -933,10 +934,10 @@ namespace xmloff
     {
         // the string lists
         Sequence< ::rtl::OUString > aItems, aValues;
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString >);
+        DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
         m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aItems;
 
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_LISTSOURCE, Sequence< ::rtl::OUString >);
+        DBG_CHECK_PROPERTY( PROPERTY_LISTSOURCE, Sequence< ::rtl::OUString > );
         if ( 0 == ( m_nIncludeDatabase & DA_LIST_SOURCE ) )
             m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aValues;
         // if we exported the list source as attribute, we do not repeat it as sub elements
@@ -1093,7 +1094,7 @@ namespace xmloff
     {
         // get the class id to decide which kind of element we need in the XML stream
         m_nClassId = FormComponentType::CONTROL;
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_CLASSID, sal_Int16);
+        DBG_CHECK_PROPERTY( PROPERTY_CLASSID, sal_Int16 );
         m_xProps->getPropertyValue(PROPERTY_CLASSID) >>= m_nClassId;
         switch (m_nClassId)
         {
@@ -1345,7 +1346,7 @@ namespace xmloff
     void OColumnExport::exportServiceNameAttribute()
     {
         // the attribute "service name" (which has a slightly different meaning for columns
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_COLUMNSERVICENAME, ::rtl::OUString);
+        DBG_CHECK_PROPERTY( PROPERTY_COLUMNSERVICENAME, ::rtl::OUString );
         ::rtl::OUString sColumnServiceName;
         m_xProps->getPropertyValue(PROPERTY_COLUMNSERVICENAME) >>= sColumnServiceName;
         // the service name is a full qualified one (i.e. com.sun.star.form.TextField), but the
@@ -1377,6 +1378,17 @@ namespace xmloff
             getCommonControlAttributeNamespace(CCA_LABEL),
             getCommonControlAttributeName(CCA_LABEL),
             PROPERTY_LABEL);
+
+        // the style attribute
+        ::rtl::OUString sStyleName = m_rContext.getObjectStyleName( m_xProps );
+        if ( sStyleName.getLength() )
+        {
+            AddAttribute(
+                getSpecialAttributeNamespace( SCA_COLUMN_STYLE_NAME ),
+                getSpecialAttributeName( SCA_COLUMN_STYLE_NAME ),
+                sStyleName
+            );
+        }
     }
 
     //---------------------------------------------------------------------
@@ -1436,13 +1448,13 @@ namespace xmloff
             {
                 faName, /*faAction,*/ faCommand, faDatasource, faFilter, faOrder
             };
-            static const sal_Char* pStringPropertyNames[] =
+            static ::rtl::OUString aStringPropertyNames[] =
             {
                 PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_DATASOURCENAME, PROPERTY_FILTER, PROPERTY_ORDER
             };
             sal_Int32 nIdCount = sizeof(eStringPropertyIds) / sizeof(eStringPropertyIds[0]);
         #ifdef DBG_UTIL
-            sal_Int32 nNameCount = sizeof(pStringPropertyNames) / sizeof(pStringPropertyNames[0]);
+            sal_Int32 nNameCount = sizeof(aStringPropertyNames) / sizeof(aStringPropertyNames[0]);
             OSL_ENSURE((nIdCount == nNameCount),
                 "OFormExport::exportAttributes: somebody tampered with the maps (1)!");
         #endif
@@ -1450,7 +1462,7 @@ namespace xmloff
                 exportStringPropertyAttribute(
                     getFormAttributeNamespace(eStringPropertyIds[i]),
                     getFormAttributeName(eStringPropertyIds[i]),
-                    pStringPropertyNames[i]);
+                    aStringPropertyNames[i]);
         }
 
         // ----------------------
@@ -1460,9 +1472,9 @@ namespace xmloff
             {
                 faAllowDeletes, faAllowInserts, faAllowUpdates, faApplyFilter, faEscapeProcessing, faIgnoreResult
             };
-            static const sal_Char* pBooleanPropertyNames[] =
+            static const ::rtl::OUString* pBooleanPropertyNames[] =
             {
-                PROPERTY_ALLOWDELETES, PROPERTY_ALLOWINSERTS, PROPERTY_ALLOWUPDATES, PROPERTY_APPLYFILTER, PROPERTY_ESCAPEPROCESSING, PROPERTY_IGNORERESULT
+                &PROPERTY_ALLOWDELETES, &PROPERTY_ALLOWINSERTS, &PROPERTY_ALLOWUPDATES, &PROPERTY_APPLYFILTER, &PROPERTY_ESCAPEPROCESSING, &PROPERTY_IGNORERESULT
             };
             static sal_Int8 nBooleanPropertyAttrFlags[] =
             {
@@ -1479,7 +1491,7 @@ namespace xmloff
                 exportBooleanPropertyAttribute(
                     getFormAttributeNamespace(eBooleanPropertyIds[i]),
                     getFormAttributeName(eBooleanPropertyIds[i]),
-                    pBooleanPropertyNames[i],
+                    *(pBooleanPropertyNames[i]),
                     nBooleanPropertyAttrFlags[i]
                 );
         }
@@ -1553,6 +1565,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2002/08/22 07:36:10  oj
+ *  #99721# now save image url relative
+ *
  *  Revision 1.21  2001/11/02 11:45:36  fs
  *  #94196# do not export the only ListSource element in case of a non-valuelist-ListBox
  *
