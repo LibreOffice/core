@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:39:07 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class NameBuffer;
 class StringHashEntry
 {
 private:
-    friend NameBuffer;
+    friend class NameBuffer;
     String          aString;
     UINT32          nHash;
 
