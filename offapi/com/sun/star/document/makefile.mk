@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: as $ $Date: 2000-11-23 14:16:23 $
+#   last change: $Author: os $ $Date: 2001-01-11 13:33:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,33 +73,34 @@ PACKAGE=com$/sun$/star$/document
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    DocumentInfo.idl\
-    LinkTarget.idl\
-    LinkTargets.idl\
-    OfficeDocument.idl\
-    StandaloneDocumentInfo.idl\
-    XActionLockable.idl\
     DocumentEvent.idl\
     DocumentEventType.idl\
+    DocumentInfo.idl\
+    ExportFilter.idl\
+    FilterFactory.idl\
+    ImportFilter.idl\
+    LinkTarget.idl\
+    LinkTargets.idl\
+    MediaDescriptor.idl\
+    OfficeDocument.idl\
+    StandaloneDocumentInfo.idl\
+    TypeDetection.idl\
+    XActionLockable.idl\
     XDocumentEventBroadcaster.idl\
     XDocumentEventListener.idl\
     XDocumentInfo.idl\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
     XEmbeddedObjectSupplier.idl\
+    XEventSupplier.idl\
     XExporter.idl\
+    XExtendedFilterDetection.idl\
+    XFilter.idl\
     XImporter.idl\
     XLinkTargetSupplier.idl\
+    XRedlinesSupplier.idl \
     XStandaloneDocumentInfo.idl\
-    XEventSupplier.idl\
-    XFilter.idl\
-    XTypeDetection.idl\
-    TypeDetection.idl\
-    ImportFilter.idl\
-    ExportFilter.idl\
-    FilterFactory.idl\
-    MediaDescriptor.idl\
-    XExtendedFilterDetection.idl
+    XTypeDetection.idl
 
 # ------------------------------------------------------------------
 
