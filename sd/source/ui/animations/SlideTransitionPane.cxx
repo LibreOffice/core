@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:18:59 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "drawdoc.hxx"
 #include "filedlg.hxx"
 #include "strings.hrc"
+#include "DrawController.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -343,12 +344,11 @@ sal_uInt16 lcl_getTransitionEffectIndex(
     const ::sd::impl::TransitionEffect & rTransition )
 {
     // first entry: "<none>"
-    sal_uInt16 nResultIndex = 0; // LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16 nResultIndex = LISTBOX_ENTRY_NOTFOUND;
 
     if( pDoc )
     {
-        // first entry in list is "none", so start with 1
-        sal_uInt16 nCurrentIndex = 1;
+        sal_uInt16 nCurrentIndex = 0;
         const ::sd::TransitionPresetList & rPresetList = ::sd::TransitionPreset::getTransitionPresetList();
         ::sd::TransitionPresetList::const_iterator aIt( rPresetList.begin());
         const ::sd::TransitionPresetList::const_iterator aEndIt( rPresetList.end());
@@ -543,12 +543,19 @@ SlideTransitionPane::SlideTransitionPane(
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter( rPresetList.begin() );
     const TransitionPresetList::const_iterator aEnd( rPresetList.end() );
+    ::std::size_t nIndex = 0;
+    ::std::size_t nUIIndex = 0;
     while( aIter != aEnd )
     {
         TransitionPresetPtr pPreset = (*aIter++);
         const OUString aUIName( pPreset->getUIName() );
-        if( aUIName.getLength() )
-            maLB_SLIDE_TRANSITIONS.InsertEntry( pPreset->getUIName() );
+         if( aUIName.getLength() )
+        {
+            maLB_SLIDE_TRANSITIONS.InsertEntry( aUIName );
+            m_aPresetIndexes[ nIndex ] = nUIIndex;
+            ++nUIIndex;
+        }
+        ++nIndex;
     }
 
     // set defaults
@@ -836,7 +843,26 @@ void SlideTransitionPane::updateControls()
     if( aEffect.mbEffectAmbiguous )
         maLB_SLIDE_TRANSITIONS.SetNoSelection();
     else
-        maLB_SLIDE_TRANSITIONS.SelectEntryPos( lcl_getTransitionEffectIndex( mpDrawDoc, aEffect ));
+    {
+        // ToDo: That 0 is "no transition" is documented nowhere except in the
+        // CTOR of sdpage
+        if( aEffect.mnType == 0 )
+            maLB_SLIDE_TRANSITIONS.SelectEntryPos( 0 );
+        else
+        {
+            sal_uInt16 nEntry = lcl_getTransitionEffectIndex( mpDrawDoc, aEffect );
+            if( nEntry == LISTBOX_ENTRY_NOTFOUND )
+                maLB_SLIDE_TRANSITIONS.SetNoSelection();
+            else
+            {
+                // first entry in list is "none", so add 1 after translation
+                if( m_aPresetIndexes.find( nEntry ) != m_aPresetIndexes.end())
+                    maLB_SLIDE_TRANSITIONS.SelectEntryPos( m_aPresetIndexes[ nEntry ] + 1 );
+                else
+                    maLB_SLIDE_TRANSITIONS.SetNoSelection();
+            }
+        }
+    }
 
     if( aEffect.mbDurationAmbiguous )
         maLB_SPEED.SetNoSelection();
@@ -867,7 +893,6 @@ void SlideTransitionPane::updateControls()
             else
             {
                 maCurrentSoundFile.Erase();
-                DBG_ERROR( "didn't find current sound in sound list" );
             }
         }
         else
@@ -1164,9 +1189,16 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            mxView = Reference<drawing::XDrawView>::query( mxModel->getCurrentController() );
-            onSelectionChanged();
-            onChangeCurrentPage();
+            // At this moment the controller may not yet been set at model
+            // or ViewShellBase.  Take it from the view shell passed with
+            // the event.
+            if (mrBase.GetMainViewShell() != NULL)
+            {
+                mxView = Reference<drawing::XDrawView>::query(
+                    static_cast<drawing::XDrawView*>(mrBase.GetMainViewShell()->GetController()));
+                onSelectionChanged();
+                onChangeCurrentPage();
+            }
             break;
     }
     return 0;
