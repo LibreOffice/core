@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:55:16 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,11 @@ throw ( RuntimeException )
     if ( xDispatch.is() && xURLTransformer.is() )
     {
         com::sun::star::util::URL aTargetURL;
-        Sequence<PropertyValue>   aArgs;
+        Sequence<PropertyValue>   aArgs( 1 );
+
+        // Add key modifier to argument list
+        aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "KeyModifier" ));
+        aArgs[0].Value <<= KeyModifier;
 
         aTargetURL.Complete = aCommandURL;
         xURLTransformer->parseStrict( aTargetURL );
