@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-11 07:23:16 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 09:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,6 +1286,7 @@ void OKeySet::setExternParameters(const connectivity::ORowVector< ORowSetValue >
 // -----------------------------------------------------------------------------
 void OKeySet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>& _xRow,ORowSetValue& _rValue)
 {
+    sal_Bool bReadData = sal_True;
     switch(_nType)
     {
     case DataType::CHAR:
@@ -1339,8 +1340,11 @@ void OKeySet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>&
         _rValue = makeAny(_xRow->getBinaryStream(_nPos));
         _rValue.setTypeKind(DataType::BLOB);
         break;
+    default:
+        bReadData = sal_False;
+        break;
     }
-    if(_xRow->wasNull())
+    if ( bReadData && _xRow->wasNull() )
         _rValue.setNull();
     _rValue.setTypeKind(_nType);
 }
@@ -1391,6 +1395,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.39  2002/10/11 07:23:16  oj
+    #i6529# use real table name instead of alias for update,delete and insert statements
+
     Revision 1.38  2002/10/08 12:46:28  oj
     #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 09:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,6 +565,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
     {
         sal_Int32 nType = m_xSetMetaData->getColumnType(i);
+        sal_Bool bReadData = sal_True;
 
         switch(nType)
         {
@@ -611,10 +612,17 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         case DataType::INTEGER:
             (*aIter) = getInt(i);
             break;
+        case DataType::CLOB:
+            (*aIter) = makeAny(getCharacterStream(i));
+            break;
+        case DataType::BLOB:
+            (*aIter) = makeAny(getBinaryStream(i));
+            break;
         default:
+            bReadData = sal_False;
             OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
         }
-        if(wasNull())
+        if ( bReadData && wasNull() )
             aIter->setNull();
         if(nType != aIter->getTypeKind())
         {
