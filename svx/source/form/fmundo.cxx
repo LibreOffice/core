@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 13:31:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ DECLARE_STL_STDKEY_MAP(Reference< ::com::sun::star::beans::XPropertySet >, Prope
 
 //------------------------------------------------------------------------------
 
-XubString static_STR_UNDO_PROPERTY;
+String static_STR_UNDO_PROPERTY;
 //------------------------------------------------------------------------------
 DBG_NAME(FmXUndoEnvironment);
 //------------------------------------------------------------------------------
@@ -482,92 +482,124 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
 {
     if (!IsLocked())
     {
-        // kein Undo fuer transiente und readonly properties
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(evt.Source, UNO_QUERY);
-        if (xSet.is())
+        if (!xSet.is())
+            return;
+
+        // if it's a "default value" property of a control model, set the according "value" property
+        static const sal_Char* pDefaultValueProperties[] = {
+            FM_PROP_DEFAULT_TEXT, FM_PROP_DEFAULTCHECKED, FM_PROP_DEFAULT_DATE, FM_PROP_DEFAULT_TIME,
+            FM_PROP_DEFAULT_VALUE, FM_PROP_DEFAULT_SELECT_SEQ, FM_PROP_EFFECTIVE_DEFAULT
+        };
+        const ::rtl::OUString aValueProperties[] = {
+            FM_PROP_TEXT, FM_PROP_STATE, FM_PROP_DATE, FM_PROP_TIME,
+            FM_PROP_VALUE, FM_PROP_SELECT_SEQ, FM_PROP_EFFECTIVE_VALUE
+        };
+        sal_Int32 nDefaultValueProps = sizeof(pDefaultValueProperties)/sizeof(pDefaultValueProperties[0]);
+        OSL_ENSURE(sizeof(aValueProperties)/sizeof(aValueProperties[0]) == nDefaultValueProps,
+            "FmXUndoEnvironment::propertyChange: inconsistence!");
+        for (sal_Int32 i=0; i<nDefaultValueProps; ++i)
         {
-            if (!m_pPropertySetCache)
-                m_pPropertySetCache = new PropertySetInfoCache;
-            PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
-
-            // let's see if we know something about the set
-            PropertySetInfoCacheIterator aSetPos = pCache->find(xSet);
-            if (aSetPos == pCache->end())
+            if (0 == evt.PropertyName.compareToAscii(pDefaultValueProperties[i]))
             {
-                PropertySetInfo aNewEntry;
-                if (!::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xSet))
-                {
-                    aNewEntry.bHasEmptyControlSource = sal_False;
-                }
-                else
-                {
-                    try
-                    {
-                        Any aCurrentControlSource = xSet->getPropertyValue(FM_PROP_CONTROLSOURCE);
-                        aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || (::comphelper::getString(aCurrentControlSource).getLength() == 0);
-                    }
-                    catch(Exception&)
-                    {
-                    }
-                }
-                (*pCache)[xSet] = aNewEntry;
-                aSetPos = pCache->find(xSet);
-                DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
-            }
-            else
-            {   // is it the DataField property ?
-                if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
-                {
-                    aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
-                }
-            }
-
-            // now we have access to the cached info about the set
-            // let's see what we know about the property
-            PropertySetInfo::AllProperties& rPropInfos = aSetPos->second.aProps;
-            PropertySetInfo::AllPropertiesIterator aPropertyPos = rPropInfos.find(evt.PropertyName);
-            if (aPropertyPos == rPropInfos.end())
-            {   // nothing 'til now ... have to change this ....
-                PropertyInfo aNewEntry;
-
-                // the attributes
-                INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
-                aNewEntry.bIsTransientOrReadOnly = ((nAttributes & ::com::sun::star::beans::PropertyAttribute::READONLY) != 0) || ((nAttributes & ::com::sun::star::beans::PropertyAttribute::TRANSIENT) != 0);
-
-                // check if it is the special "DataFieldProperty"
-                aNewEntry.bIsControlSourceProperty = sal_False;
                 try
                 {
-                    if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
-                    {
-                        Any aControlSourceProperty = xSet->getPropertyValue(FM_PROP_CONTROLSOURCEPROPERTY);
-                        ::rtl::OUString sControlSourceProperty;
-                        aControlSourceProperty >>= sControlSourceProperty;
+                    xSet->setPropertyValue(aValueProperties[i], evt.NewValue);
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(sal_False, "FmXUndoEnvironment::propertyChange: could not adjust the value property!");
+                }
+            }
+        }
 
-                        aNewEntry.bIsControlSourceProperty = (sControlSourceProperty.equals(evt.PropertyName));
-                    }
+        // no Undo for transient and readonly props. But unfortunately "transient" is not only that the
+        // "persistent" flag is not set for the property in question, instead is is somewhat more complex
+        // (depending on whether or not the affected control model is intended to be bound, i.e. has a non-empty
+        // ControlSource property)
+
+        // kein Undo fuer transiente und readonly properties
+        if (!m_pPropertySetCache)
+            m_pPropertySetCache = new PropertySetInfoCache;
+        PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
+
+        // let's see if we know something about the set
+        PropertySetInfoCacheIterator aSetPos = pCache->find(xSet);
+        if (aSetPos == pCache->end())
+        {
+            PropertySetInfo aNewEntry;
+            if (!::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xSet))
+            {
+                aNewEntry.bHasEmptyControlSource = sal_False;
+            }
+            else
+            {
+                try
+                {
+                    Any aCurrentControlSource = xSet->getPropertyValue(FM_PROP_CONTROLSOURCE);
+                    aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || (::comphelper::getString(aCurrentControlSource).getLength() == 0);
                 }
                 catch(Exception&)
                 {
                 }
+            }
+            (*pCache)[xSet] = aNewEntry;
+            aSetPos = pCache->find(xSet);
+            DBG_ASSERT(aSetPos != pCache->end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        }
+        else
+        {   // is it the DataField property ?
+            if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
+            {
+                aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
+            }
+        }
 
-                // insert the new entry
-                rPropInfos[evt.PropertyName] = aNewEntry;
-                aPropertyPos = rPropInfos.find(evt.PropertyName);
-                DBG_ASSERT(aPropertyPos != rPropInfos.end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        // now we have access to the cached info about the set
+        // let's see what we know about the property
+        PropertySetInfo::AllProperties& rPropInfos = aSetPos->second.aProps;
+        PropertySetInfo::AllPropertiesIterator aPropertyPos = rPropInfos.find(evt.PropertyName);
+        if (aPropertyPos == rPropInfos.end())
+        {   // nothing 'til now ... have to change this ....
+            PropertyInfo aNewEntry;
+
+            // the attributes
+            INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
+            aNewEntry.bIsTransientOrReadOnly = ((nAttributes & ::com::sun::star::beans::PropertyAttribute::READONLY) != 0) || ((nAttributes & ::com::sun::star::beans::PropertyAttribute::TRANSIENT) != 0);
+
+            // check if it is the special "DataFieldProperty"
+            aNewEntry.bIsControlSourceProperty = sal_False;
+            try
+            {
+                if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
+                {
+                    Any aControlSourceProperty = xSet->getPropertyValue(FM_PROP_CONTROLSOURCEPROPERTY);
+                    ::rtl::OUString sControlSourceProperty;
+                    aControlSourceProperty >>= sControlSourceProperty;
+
+                    aNewEntry.bIsControlSourceProperty = (sControlSourceProperty.equals(evt.PropertyName));
+                }
+            }
+            catch(Exception&)
+            {
             }
 
-            // now we have access to the cached info about the property affected
-            // and are able to decide wether or not we need an undo action
+            // insert the new entry
+            rPropInfos[evt.PropertyName] = aNewEntry;
+            aPropertyPos = rPropInfos.find(evt.PropertyName);
+            DBG_ASSERT(aPropertyPos != rPropInfos.end(), "FmXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        }
 
-            if (!aPropertyPos->second.bIsTransientOrReadOnly)
-            {   // normally we would generate an undo action for all non-readonly and non-transient properties, but ...
+        // now we have access to the cached info about the property affected
+        // and are able to decide wether or not we need an undo action
 
-                // check if it is a special control property which is required for data field connectivity, these
-                // special properties may be handled as though they were transient ...
-                if (!aPropertyPos->second.bIsControlSourceProperty || aSetPos->second.bHasEmptyControlSource)
-                    rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
-            }
+        if (!aPropertyPos->second.bIsTransientOrReadOnly)
+        {   // normally we would generate an undo action for all non-readonly and non-transient properties, but ...
+
+            // check if it is a special control property which is required for data field connectivity, these
+            // special properties may be handled as though they were transient ...
+            if (!aPropertyPos->second.bIsControlSourceProperty || aSetPos->second.bHasEmptyControlSource)
+                rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
         }
     }
     else
@@ -899,10 +931,10 @@ void FmUndoPropertyAction::Redo()
 }
 
 //------------------------------------------------------------------------------
-XubString FmUndoPropertyAction::GetComment() const
+String FmUndoPropertyAction::GetComment() const
 {
-    XubString aStr(static_STR_UNDO_PROPERTY);
-    sal_uInt16 nId = FmPropertyInfoService::getPropertyId(aPropertyName);
+    String aStr(static_STR_UNDO_PROPERTY);
+    sal_uInt16 nId = (sal_uInt16)FmPropertyInfoService::getPropertyId(aPropertyName);
     if (nId)
         aStr.SearchAndReplace('#', FmPropertyInfoService::getPropertyTranslation(nId));
     else
@@ -1133,7 +1165,7 @@ void FmUndoModelReplaceAction::Undo()
 }
 
 //------------------------------------------------------------------------------
-XubString FmUndoModelReplaceAction::GetComment() const
+String FmUndoModelReplaceAction::GetComment() const
 {
     return SVX_RES(RID_STR_UNDO_MODEL_REPLACE);
 }
