@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-04-26 10:40:37 $
+#   last change: $Author: oj $ $Date: 2002-07-19 10:09:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ IDLFILES=\
     XSQLOutput.idl \
     XStatement.idl \
     XStruct.idl \
+    XGeneratedResultSet.idl \
     XWarningsSupplier.idl
 
 # ------------------------------------------------------------------

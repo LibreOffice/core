@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: oj $ $Date: 2002-07-19 10:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ interface XWarningsSupplier;
 interface XMultipleResults;
 interface XResultSetMetaDataSupplier;
 interface XCloseable;
+interface XGeneratedResultSet;
 
 
 // DocMerge from idl: service com::sun::star::sdbc::PreparedStatement
@@ -136,6 +137,10 @@ service PreparedStatement
      */
     [optional] interface com::sun::star::util::XCancellable;
 
+    /** could be used to retrieve a result set which gives access to automatically generated values after an insert statement.
+             The implementation is optional.
+     */
+    [optional] interface com::sun::star::sdbc::XGeneratedResultSet;
 
     // DocMerge from xml: service com::sun::star::sdbc::PreparedStatement: interface com::sun::star::sdbc::XPreparedStatement
     /** is the interface for executing SQL prepared commands.
@@ -264,6 +269,9 @@ service PreparedStatement
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.6  2001/02/20 13:30:07  fs
     #82875# removed XClearParameters - this interface is obsolete, the functionality is covered by XParameters
 
