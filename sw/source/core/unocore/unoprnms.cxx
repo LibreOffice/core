@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:32:49 $
+ *  last change: $Author: dvo $ $Date: 2002-02-04 17:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0612 MACRO_LIBRARY */                {MAP_CHAR_LEN("MacroLibrary")},
 /* 0613 CELL_NAME */                    {MAP_CHAR_LEN("CellName")},
 /* 0614 PARA_USER_DEFINED_ATTRIBUTES */ {MAP_CHAR_LEN("ParaUserDefinedAttributes")},
-/* 0615 UNO_NAME_MERGE_LAST_PARA */     {MAP_CHAR_LEN("MergeLastPara")}
+/* 0615 UNO_NAME_MERGE_LAST_PARA */     {MAP_CHAR_LEN("MergeLastPara")},
+/* 0616 UNO_NAME_WRITING_MODE */        {MAP_CHAR_LEN("WritingMode")}
 };
 
 #ifndef PRODUCT
