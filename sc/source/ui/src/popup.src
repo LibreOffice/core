@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:43:13 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ Menu RID_POPUP_CELLS
             Text[ chinese_traditional ] = "Åã¥Ü³Æµù(~S)";
             Text[ arabic ] = "ÅÙåÇÑ ÇáãáÇÍÙÉ";
             Text[ greek ] = "ÅìöÜ~íéóç óçìåßùóçò";
-            Text[ korean ] = "¸Ş¸ğº¸±â(~S)";
+            Text[ korean ] = "¸Ş¸ğ  ³ªÅ¸³»±â";
             Text[ turkish ] = "Notu görüntüle";
             Text[ language_user1 ] = " ";
         };
