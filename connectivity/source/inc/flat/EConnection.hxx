@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 14:15:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ namespace connectivity
         class OFlatConnection : public file::OConnection
         {
         private:
-            sal_Bool    m_bFixedLength;         // row of fixed length
             sal_Bool    m_bHeaderLine;          // column names in first row
             sal_Unicode m_cFieldDelimiter;      // look at the name
             sal_Unicode m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
@@ -87,7 +86,6 @@ namespace connectivity
             virtual void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             // own methods
-            inline sal_Bool     isFixedLength()         const { return m_bFixedLength;      }
             inline sal_Bool     isHeaderLine()          const { return m_bHeaderLine;       }
             inline sal_Unicode  getFieldDelimiter()     const { return m_cFieldDelimiter;   }
             inline sal_Unicode  getStringDelimiter()    const { return m_cStringDelimiter;  }
