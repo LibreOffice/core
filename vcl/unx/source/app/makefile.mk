@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 15:15:43 $
+#   last change: $Author: kz $ $Date: 2003-11-18 14:40:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,10 +81,6 @@ dummy:
 
 .ELSE		# "$(GUIBASE)"!="unx"
 
-.IF "$(remote)"==""
-OBJFILES=\
-            $(OBJ)$/salmain.obj
-
 SLOFILES=\
             $(SLO)$/i18n_cb.obj			\
             $(SLO)$/i18n_ic.obj			\
@@ -93,7 +89,6 @@ SLOFILES=\
             $(SLO)$/i18n_wrp.obj		\
             $(SLO)$/i18n_status.obj		\
             $(SLO)$/i18n_keysym.obj		\
-            $(SLO)$/salmain.obj			\
             $(SLO)$/saldata.obj			\
             $(SLO)$/saltimer.obj		\
             $(SLO)$/saldisp.obj			\
@@ -109,7 +104,7 @@ SLOFILES=\
             $(SLO)$/sm.obj				\
             $(SLO)$/stacktrace.obj		\
             $(SLO)$/keysymnames.obj		\
-            $(SLO)$/wmadaptor.obj
+            $(SLO)$/wmadaptor.obj		\
 
 .IF "$(WITH_LIBSN)"=="YES"
 CDEFS+=-DHAVE_LIBSN
@@ -122,16 +117,6 @@ SLOFILES+=$(SLO)$/getfpsols.obj
 .ENDIF			# "$(COM)"!="GCC"
 .ELIF "$(OS)$(CPU)" == "SOLARISI"
 SLOFILES+=$(SLO)$/getfpsoli.obj
-.ENDIF
-
-.ELSE
-SLOFILES=\
-            $(SLO)$/salmain.obj
-.ENDIF
-
-.IF "$(remote)"!=""
-EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
-        $(OBJ)$/salmain.obj
 .ENDIF
 
 .ENDIF		# "$(GUIBASE)"!="unx"
