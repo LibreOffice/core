@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:18:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #pragma hdrstop
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
 #endif
@@ -238,7 +241,7 @@ static BYTE __FAR_DATA aPal8[ 256 * 4 ] =
 
 inline long SwapLong( long n )
 {
-#ifndef __LITTLEENDIAN
+#ifndef OSL_LITENDIAN
     return SWAPLONG( n );
 #else
     return n;
@@ -247,7 +250,7 @@ inline long SwapLong( long n )
 
 inline short SwapShort( short n )
 {
-#ifndef __LITTLEENDIAN
+#ifndef OSL_LITENDIAN
     return SWAPSHORT( n );
 #else
     return n;
