@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:59:13 $
+ *  last change: $Author: os $ $Date: 2001-12-03 10:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,12 +486,12 @@ void SvtSecurityOptions_Impl::SetWarningEnabled( sal_Bool bSet )
 
 sal_Bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
 {
-    return m_bWarning;
+    return m_bConfirmation;
 }
 
 void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
 {
-    m_bWarning =  bSet;
+    m_bConfirmation =  bSet;
     SetModified();
 }
 
