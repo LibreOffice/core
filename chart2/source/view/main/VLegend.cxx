@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-20 14:18:18 $
+ *  last change: $Author: bm $ $Date: 2003-10-21 08:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,9 @@ void SAL_CALL VLegend::init(
 // static
 bool VLegend::isVisible( const uno::Reference< chart2::XLegend > & xLegend )
 {
+    if( ! xLegend.is())
+        return sal_False;
+
     sal_Bool bShow = sal_False;
     try
     {
