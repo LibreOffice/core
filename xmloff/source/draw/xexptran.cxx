@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 15:15:53 $
+ *  last change: $Author: aw $ $Date: 2000-12-13 11:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-// parsing help functions, no class
+// parsing help functions for simple chars
 void Imp_SkipSpaces(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
 {
     while(rPos < nLen
@@ -115,63 +115,51 @@ void Imp_SkipSpacesAndClosingBraces(const UniString& rStr, xub_StrLen& rPos, con
         rPos++;
 }
 
-sal_Bool Imp_IsOnNumberChar(const UniString& rStr, const xub_StrLen nPos,
-    BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// parsing help functions for integer numbers
+
+sal_Bool Imp_IsOnNumberChar(const UniString& rStr, const xub_StrLen nPos, BOOL bSignAllowed = TRUE)
 {
     sal_Unicode aChar(rStr.GetChar(nPos));
 
     if((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
-        || (bSignIsNumber && (sal_Unicode('-') == aChar || sal_Unicode('+') == aChar))
-        || (bPointIsNumber && sal_Unicode('.') == aChar)
+        || (bSignAllowed && sal_Unicode('+') == aChar)
+        || (bSignAllowed && sal_Unicode('-') == aChar)
     )
         return TRUE;
     return FALSE;
 }
 
-void Imp_SkipNumber(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen,
-    BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
+void Imp_SkipNumber(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
 {
-    sal_Bool bFirstSign(TRUE);
+    BOOL bSignAllowed(TRUE);
 
-    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignIsNumber && bFirstSign, bPointIsNumber))
+    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignAllowed))
     {
+        bSignAllowed = FALSE;
         rPos++;
-        bFirstSign = FALSE;
     }
 }
 
-double Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen,
-    const SvXMLUnitConverter& rConv, double fRetval,
-    BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
+void Imp_SkipNumberAndSpacesAndCommas(const UniString& rStr, xub_StrLen& rPos,
+    const xub_StrLen nLen)
 {
-    UniString aNumberStr;
-    sal_Bool bFirstSign(TRUE);
-
-    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignIsNumber && bFirstSign, TRUE))
-    {
-        aNumberStr.Append(rStr.GetChar(rPos++));
-        bFirstSign = FALSE;
-    }
-
-    if(aNumberStr.Len())
-    {
-        rConv.convertNumber(fRetval, aNumberStr);
-    }
-
-    return fRetval;
+    Imp_SkipNumber(rStr, rPos, nLen);
+    Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
 }
 
 sal_Int32 Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen,
-    const SvXMLUnitConverter& rConv, sal_Int32 nRetval,
-    BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
+    const SvXMLUnitConverter& rConv, sal_Int32 nRetval)
 {
     UniString aNumberStr;
-    sal_Bool bFirstSign(TRUE);
+    BOOL bCharValid(TRUE);
+    BOOL bSignAllowed(TRUE);
 
-    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignIsNumber && bFirstSign, FALSE))
+    while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignAllowed))
     {
+        bSignAllowed = FALSE;
         aNumberStr.Append(rStr.GetChar(rPos++));
-        bFirstSign = FALSE;
     }
 
     if(aNumberStr.Len())
@@ -180,17 +168,65 @@ sal_Int32 Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_S
     return nRetval;
 }
 
-void Imp_PutNumberChar(UniString& rStr, const SvXMLUnitConverter& rConv, double fValue)
-{
-    OUStringBuffer sStringBuffer;
-    rConv.convertNumber(sStringBuffer, fValue);
-    rStr += UniString(sStringBuffer.makeStringAndClear());
-}
-
 void Imp_PutNumberChar(UniString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
 {
     OUStringBuffer sStringBuffer;
     rConv.convertNumber(sStringBuffer, nValue);
+    rStr += UniString(sStringBuffer.makeStringAndClear());
+}
+
+void Imp_PutNumberCharWithSpace(UniString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
+{
+    const xub_StrLen aLen(rStr.Len());
+    if(aLen)
+        if(Imp_IsOnNumberChar(rStr, aLen - 1, FALSE) && nValue >= 0)
+            rStr += sal_Unicode(' ');
+    Imp_PutNumberChar(rStr, rConv, nValue);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// parsing help functions for double numbers
+
+sal_Bool Imp_IsOnDoubleChar(const UniString& rStr, const xub_StrLen nPos)
+{
+    sal_Unicode aChar(rStr.GetChar(nPos));
+
+    if((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
+        || sal_Unicode('+') == aChar
+        || sal_Unicode('-') == aChar
+        || sal_Unicode('.') == aChar
+        || sal_Unicode('e') == aChar
+        || sal_Unicode('E') == aChar
+    )
+        return TRUE;
+    return FALSE;
+}
+
+void Imp_SkipDouble(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+{
+    while(rPos < nLen && Imp_IsOnDoubleChar(rStr, rPos))
+        rPos++;
+}
+
+double Imp_GetDoubleChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen,
+    const SvXMLUnitConverter& rConv, double fRetval)
+{
+    UniString aNumberStr;
+
+    while(rPos < nLen && Imp_IsOnDoubleChar(rStr, rPos))
+        aNumberStr.Append(rStr.GetChar(rPos++));
+
+    if(aNumberStr.Len())
+        rConv.convertNumber(fRetval, aNumberStr);
+
+    return fRetval;
+}
+
+void Imp_PutDoubleChar(UniString& rStr, const SvXMLUnitConverter& rConv, double fValue)
+{
+    OUStringBuffer sStringBuffer;
+    rConv.convertNumber(sStringBuffer, fValue);
     rStr += UniString(sStringBuffer.makeStringAndClear());
 }
 
@@ -332,7 +368,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
             case IMP_SDXMLEXP_TRANSOBJ2D_ROTATE :
             {
                 aNewString += UniString::CreateFromAscii("rotate (");
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate);
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate);
                 aNewString += sal_Unicode(')');
                 break;
             }
@@ -401,7 +437,7 @@ SdXMLImExTransform2D::SdXMLImExTransform2D(const OUString& rNew, const SvXMLUnit
 
                     nPos += 6;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetNumberChar(aStr, nPos, nLen, rConv, fValue, TRUE, TRUE);
+                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
                         maList.Insert(new ImpSdXMLExpTransObj2DRotate(fValue), LIST_APPEND);
 
@@ -613,43 +649,43 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X   :
             {
                 aNewString += UniString::CreateFromAscii("rotatex (");
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateX*)pObj)->mfRotateX);
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateX*)pObj)->mfRotateX);
                 aNewString += sal_Unicode(')');
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Y   :
             {
                 aNewString += UniString::CreateFromAscii("rotatey (");
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateY*)pObj)->mfRotateY);
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateY*)pObj)->mfRotateY);
                 aNewString += sal_Unicode(')');
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Z   :
             {
                 aNewString += UniString::CreateFromAscii("rotatez (");
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateZ*)pObj)->mfRotateZ);
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateZ*)pObj)->mfRotateZ);
                 aNewString += sal_Unicode(')');
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_SCALE      :
             {
                 aNewString += UniString::CreateFromAscii("scale (");
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.X());
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.X());
                 aNewString += sal_Unicode(' ');
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.Y());
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.Y());
                 aNewString += sal_Unicode(' ');
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.Z());
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.Z());
                 aNewString += sal_Unicode(')');
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE  :
             {
                 aNewString += UniString::CreateFromAscii("translate (");
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.X());
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.X());
                 aNewString += sal_Unicode(' ');
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.Y());
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.Y());
                 aNewString += sal_Unicode(' ');
-                Imp_PutNumberChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.Z());
+                Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.Z());
                 aNewString += sal_Unicode(')');
                 break;
             }
@@ -660,7 +696,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
                 {
                     for(sal_uInt16 b(0); b < 3; b++)
                     {
-                        Imp_PutNumberChar(aNewString, rConv,
+                        Imp_PutDoubleChar(aNewString, rConv,
                             ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[a][b]);
                         if(a != 2 || b != 2)
                             aNewString += sal_Unicode(' ');
@@ -709,7 +745,7 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
 
                     nPos += 7;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetNumberChar(aStr, nPos, nLen, rConv, fValue, TRUE, TRUE);
+                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
                         maList.Insert(new ImpSdXMLExpTransObj3DRotateX(fValue), LIST_APPEND);
 
@@ -722,7 +758,7 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
 
                     nPos += 7;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetNumberChar(aStr, nPos, nLen, rConv, fValue, TRUE, TRUE);
+                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
                         maList.Insert(new ImpSdXMLExpTransObj3DRotateY(fValue), LIST_APPEND);
 
@@ -735,7 +771,7 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
 
                     nPos += 7;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    fValue = Imp_GetNumberChar(aStr, nPos, nLen, rConv, fValue, TRUE, TRUE);
+                    fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
                     if(fValue != 0.0)
                         maList.Insert(new ImpSdXMLExpTransObj3DRotateZ(fValue), LIST_APPEND);
 
@@ -748,11 +784,11 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
 
                     nPos += 5;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    aValue.X() = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue.X(), TRUE, TRUE);
+                    aValue.X() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.X());
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.Y() = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue.Y(), TRUE, TRUE);
+                    aValue.Y() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.Y());
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.Z() = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue.Z(), TRUE, TRUE);
+                    aValue.Z() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.Z());
 
                     if(aValue.X() != 1.0 || aValue.Y() != 1.0 || aValue.Z() != 1.0)
                         maList.Insert(new ImpSdXMLExpTransObj3DScale(aValue), LIST_APPEND);
@@ -766,11 +802,11 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
 
                     nPos += 9;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
-                    aValue.X() = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue.X(), TRUE, TRUE);
+                    aValue.X() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.X());
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.Y() = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue.Y(), TRUE, TRUE);
+                    aValue.Y() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.Y());
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
-                    aValue.Z() = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue.Z(), TRUE, TRUE);
+                    aValue.Z() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.Z());
 
                     if(aValue.X() != 0.0 || aValue.Y() != 0.0 || aValue.Z() != 0.0)
                         maList.Insert(new ImpSdXMLExpTransObj3DTranslate(aValue), LIST_APPEND);
@@ -789,7 +825,7 @@ SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnit
                     {
                         for(sal_uInt16 b(0); b < 3; b++)
                         {
-                            aValue[a][b] = Imp_GetNumberChar(aStr, nPos, nLen, rConv, aValue[a][b], TRUE, TRUE);
+                            aValue[a][b] = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue[a][b]);
                             Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
                         }
                     }
@@ -910,25 +946,25 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
         Imp_SkipSpaces(aStr, nPos, nLen);
 
         // get mX
-        mnX = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnX, TRUE, TRUE);
+        mnX = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnX);
 
         // skip spaces and commas
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
         // get mY
-        mnY = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnY, TRUE, TRUE);
+        mnY = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnY);
 
         // skip spaces and commas
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
         // get mW
-        mnW = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnW, TRUE, TRUE);
+        mnW = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnW);
 
         // skip spaces and commas
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
         // get mH
-        mnH = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnH, TRUE, TRUE);
+        mnH = Imp_GetNumberChar(aStr, nPos, nLen, rConv, mnH);
     }
 }
 
@@ -1034,13 +1070,13 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
     while(nPos < nLen)
     {
         // skip number
-        Imp_SkipNumber(aStr, nPos, nLen, TRUE, TRUE);
+        Imp_SkipNumber(aStr, nPos, nLen);
 
         // skip spaces and commas
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
         // get mY
-        Imp_SkipNumber(aStr, nPos, nLen, TRUE, TRUE);
+        Imp_SkipNumber(aStr, nPos, nLen);
 
         // skip spaces and commas
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
@@ -1073,13 +1109,13 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
             sal_Int32 nY(0L);
 
             // get mX
-            nX = Imp_GetNumberChar(aStr, nPos, nLen, rConv, nX, TRUE, TRUE);
+            nX = Imp_GetNumberChar(aStr, nPos, nLen, rConv, nX);
 
             // skip spaces and commas
             Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
             // get mY
-            nY = Imp_GetNumberChar(aStr, nPos, nLen, rConv, nY, TRUE, TRUE);
+            nY = Imp_GetNumberChar(aStr, nPos, nLen, rConv, nY);
 
             // skip spaces and commas
             Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
@@ -1160,24 +1196,6 @@ void Imp_PrepareCoorExport(sal_Int32& nX, sal_Int32& nY,
         nX += mrViewBox.GetX();
         nY += mrViewBox.GetY();
     }
-}
-
-void Imp_PutNumberCharWithSpace(UniString& rStr, const SvXMLUnitConverter& rConv, double fValue)
-{
-    const xub_StrLen aLen(rStr.Len());
-    if(aLen)
-        if(Imp_IsOnNumberChar(rStr, aLen - 1, FALSE, TRUE) && fValue >= 0.0)
-            rStr += sal_Unicode(' ');
-    Imp_PutNumberChar(rStr, rConv, fValue);
-}
-
-void Imp_PutNumberCharWithSpace(UniString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
-{
-    const xub_StrLen aLen(rStr.Len());
-    if(aLen)
-        if(Imp_IsOnNumberChar(rStr, aLen - 1, FALSE, TRUE) && nValue >= 0)
-            rStr += sal_Unicode(' ');
-    Imp_PutNumberChar(rStr, rConv, nValue);
 }
 
 void SdXMLImExSvgDElement::AddPolygon(
@@ -1483,19 +1501,11 @@ void SdXMLImExSvgDElement::AddPolygon(
     msString = OUString(aNewString);
 }
 
-void Imp_SkipNumberAndSpacesAndCommas(const UniString& rStr, xub_StrLen& rPos,
-    const xub_StrLen nLen, BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
-{
-    Imp_SkipNumber(rStr, rPos, nLen, bSignIsNumber, bPointIsNumber);
-    Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
-}
-
 sal_Int32 Imp_ImportNumberAndSpaces(
     sal_Int32 nRetval, const UniString& rStr, xub_StrLen& rPos,
-    const xub_StrLen nLen, const SvXMLUnitConverter& rConv,
-    BOOL bSignIsNumber = TRUE, BOOL bPointIsNumber = FALSE)
+    const xub_StrLen nLen, const SvXMLUnitConverter& rConv)
 {
-    nRetval = Imp_GetNumberChar(rStr, rPos, nLen, rConv, nRetval, bSignIsNumber, bPointIsNumber);
+    nRetval = Imp_GetNumberChar(rStr, rPos, nLen, rConv, nRetval);
     Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
     return nRetval;
 }
@@ -1625,8 +1635,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         }
     }
 
-    if(bQuadraticBeziers || bEllipticalArc)
-        DBG_ERROR("XMLIMP: non-interpreted tags in svg:d element!");
+    DBG_ASSERT(!(bQuadraticBeziers || bEllipticalArc), "XMLIMP: non-interpreted tags in svg:d element!");
 
     if(nNumPolys)
     {
@@ -1677,11 +1686,11 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'l' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
                         nPointCount++;
                     }
                     break;
@@ -1692,10 +1701,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'v' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
                         nPointCount++;
                     }
                     break;
@@ -1704,13 +1713,13 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 's' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
                         nPointCount += 3;
                     }
                     break;
@@ -1719,15 +1728,15 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'c' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
-                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen, TRUE, TRUE);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
+                        Imp_SkipNumberAndSpacesAndCommas(aStr, nPos, nLen);
                         nPointCount += 3;
                     }
                     break;
@@ -1796,11 +1805,11 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     nInnerIndex = 0L;
 
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -1826,11 +1835,11 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'L' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -1856,10 +1865,10 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'H' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
                         sal_Int32 nY(mnLastY);
 
                         if(bRelative)
@@ -1882,11 +1891,11 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'V' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX(mnLastX);
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                             nY += mnLastY;
@@ -1908,15 +1917,15 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'S' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
                         sal_Int32 nX1;
                         sal_Int32 nY1;
-                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
+                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
@@ -1972,15 +1981,15 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                 case 'C' :
                 {
                     nPos++;
-                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos, TRUE, TRUE))
+                    while(nPos < nLen && Imp_IsOnNumberChar(aStr, nPos))
                     {
                         Imp_SkipSpaces(aStr, nPos, nLen);
-                        sal_Int32 nX1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
-                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv, TRUE, TRUE));
+                        sal_Int32 nX1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY1(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY2(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nX(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
+                        sal_Int32 nY(Imp_ImportNumberAndSpaces(0L, aStr, nPos, nLen, rConv));
 
                         if(bRelative)
                         {
