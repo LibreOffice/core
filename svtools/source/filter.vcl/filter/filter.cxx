@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-10 15:55:18 $
+ *  last change: $Author: hro $ $Date: 2001-05-16 13:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
 #endif
-
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <pathoptions.hxx>
 #endif
@@ -915,12 +914,15 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 static String ImpCreateFullFilterPath( const String& rPath, const String& rFilterName )
 {
 #ifdef TF_FILEURL
-    ::rtl::OUString aDest, aSystemPath;
-    if ( ::osl::FileBase::getFileURLFromSystemPath( rPath, aDest ) != ::osl::FileBase::E_None )
-        aDest = rPath;  // maybe rPath had already been a FileUrl
-    aDest += ::rtl::OUString( sal_Unicode( '/' ) );
-    aDest += ::rtl::OUString( rFilterName );
-    ::osl::FileBase::getSystemPathFromFileURL( aDest, aSystemPath );
+    ::rtl::OUString aPathURL;
+
+    ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
+    aPathURL += ::rtl::OUString( sal_Unicode( '/' ) );
+
+    ::rtl::OUString aSystemPath;
+    ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
+    aSystemPath += ::rtl::OUString( rFilterName );
+
     return String( aSystemPath );
 #else
     ::rtl::OUString aDest, aNormalizedPath;
@@ -1066,8 +1068,7 @@ static ImpFilterLibCache aCache;
 // - GraphicFilter -
 // -----------------
 
-GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
-    bUseConfig  ( bConfig )
+GraphicFilter::GraphicFilter()
 {
     ImplInit();
 }
@@ -1088,12 +1089,10 @@ GraphicFilter::~GraphicFilter()
 
 void GraphicFilter::ImplInit()
 {
-
     SvtPathOptions aPathOpt;
     aFilterPath = aPathOpt.GetFilterPath();
-
     pErrorEx = new FilterErrorEx;
-    pConfig = new FilterConfigCache( bUseConfig );
+    pConfig = new FilterConfigCache();
     nPercent = 0;
     bAbort = sal_False;
 
