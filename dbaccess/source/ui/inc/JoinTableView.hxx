@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 08:09:11 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ namespace dbaui
         // window override
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void GetFocus();
+        virtual void KeyInput( const KeyEvent& rEvt );
 
         // own methods
         ScrollBar* GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
@@ -246,7 +247,6 @@ namespace dbaui
         virtual void Tracking( const TrackingEvent& rTEvt );
         virtual void Paint( const Rectangle& rRect );
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
-        virtual void KeyInput( const KeyEvent& rEvt );
         virtual void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
 

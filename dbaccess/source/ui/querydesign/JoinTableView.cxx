@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 08:09:10 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,8 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 // -----------------------------------------------------------------------------
 OScrollWindowHelper::~OScrollWindowHelper()
 {
-    delete m_pCornerWindow;
+    DELETEZ(m_pCornerWindow);
+    m_pTableView = NULL;
     DBG_DTOR(OScrollWindowHelper,NULL);
 }
 
@@ -1315,7 +1316,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
         break;
         case EVENT_KEYINPUT:
         {
-            if (!m_aTableMap.size())
+            if (m_aTableMap.empty())
                 // no tab wins -> no conns -> no traveling
                 break;
 
@@ -1353,8 +1354,29 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                             }
 
                             if (!pNextConn)
+                            {
                                 // no conn for any reason -> select the next or previous tab win
-                                pNextWin = m_aTableMap.rbegin()->second;
+                                if(bForward)
+                                {
+                                    if ((aIter->second == m_aTableMap.rbegin()->second))
+                                        pNextWin = m_aTableMap.begin()->second;
+                                    else
+                                    {
+                                        ++aIter;
+                                        pNextWin = aIter->second;
+                                    }
+                                }
+                                else
+                                {
+                                    if (aIter == m_aTableMap.begin())
+                                        pNextWin = m_aTableMap.rbegin()->second;
+                                    else
+                                    {
+                                        --aIter;
+                                        pNextWin = aIter->second;
+                                    }
+                                }
+                            }
                         }
                         else
                         {   // no active tab win -> travel the connections
@@ -1405,10 +1427,10 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                         }
                         else if (pNextConn)
                         {
-                            SelectConn(pNextConn);
                             GrabFocus();
                                 // neccessary : a conn may be selected even if a tab win has the focus, in this case
                                 // the next travel would select the same conn again if we would not reset te focus ...
+                            SelectConn(pNextConn);
                         }
                     }
                     break;
@@ -1561,7 +1583,7 @@ void OJoinTableView::lookForUiActivities()
 // -----------------------------------------------------------------------------
 void OJoinTableView::GetFocus()
 {
-    GrabTabWinFocus();
+    //  GrabTabWinFocus();
 }
 // -----------------------------------------------------------------------------
 

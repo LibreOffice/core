@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,7 +992,9 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
                 SetDefaultTabWinPosSize(pTabWin);
 
             // Fenster zeigen und in Liste eintragen
-            (*GetTabWinMap())[static_cast< OQueryTableWindowData*>(pData)->GetAliasName()] = pTabWin;
+            ::rtl::OUString sName = static_cast< OQueryTableWindowData*>(pData)->GetAliasName();
+            OSL_ENSURE(GetTabWinMap()->find(sName) == GetTabWinMap()->end(),"Alias name already in list!");
+            GetTabWinMap()->insert(OTableWindowMap::value_type(sName,pTabWin));
             pTabWin->Show();
 
             pTabWin->Update();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 08:09:10 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController
 // -----------------------------------------------------------------------------
 OJoinDesignView::~OJoinDesignView()
 {
-    delete m_pAddTabDlg;
-    delete m_pTableView;
-    delete m_pScrollWindow;
+    DELETEZ( m_pAddTabDlg );
+    DELETEZ( m_pTableView );
+    DELETEZ( m_pScrollWindow );
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::Construct()
@@ -204,6 +204,12 @@ void OJoinDesignView::GetFocus()
 {
     if ( m_pTableView && m_pTableView->IsVisible() )
         m_pTableView->GetFocus();
+}
+// -----------------------------------------------------------------------------
+void OJoinDesignView::KeyInput( const KeyEvent& rEvt )
+{
+    if ( m_pTableView && m_pTableView->IsVisible() )
+        m_pTableView->KeyInput( rEvt );
 }
 // -----------------------------------------------------------------------------
 

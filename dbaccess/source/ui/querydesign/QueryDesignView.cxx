@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,12 +522,12 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
     try
     {
         Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-        ::rtl::OUString aCatalog,aSchema,aTable,aComposedName;
+        ::rtl::OUString aCatalog,aSchema,aTable,sComposedName;
         ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable);
-        ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_True);
+        ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,sComposedName,sal_True);
 
         ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-        ::rtl::OUString aTableListStr(aComposedName);
+        ::rtl::OUString aTableListStr(sComposedName);
         aTableListStr += ::rtl::OUString(' ');
         aTableListStr += ::dbtools::quoteName(aQuote, ConvertAlias(pEntryTab->GetAliasName())).getStr();
         return aTableListStr;
@@ -633,7 +633,7 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
         {
             if(pEntryField->GetField().toChar() == '*')
                 bAsterix = sal_True;
-            nVis++;
+            ++nVis;
         }
     }
     if(nVis == 1)
@@ -658,7 +658,7 @@ extern ::rtl::OUString ConvertAlias(const ::rtl::OUString& rName);
                 aTmpStr = ::rtl::OUString();
                 ::rtl::OUString rAlias = pEntryField->GetAlias();
                 ::rtl::OUString rFieldAlias = pEntryField->GetFieldAlias();
-                if(bAlias && rAlias.getLength() || bAsterix)
+                if((bAlias || bAsterix) && rAlias.getLength())
                 {
                     aTmpStr += ::dbtools::quoteName(aQuote,ConvertAlias(rAlias));
                     aTmpStr += ::rtl::OUString('.');
@@ -890,13 +890,14 @@ sal_Bool OQueryDesignView::checkStatement()
 //------------------------------------------------------------------------------
 ::rtl::OUString OQueryDesignView::getStatement()
 {
+    OQueryController* pController = static_cast<OQueryController*>(getController());
     // used for fields which aren't any longer in the statement
-    OTableFields& rUnUsedFields = static_cast<OQueryController*>(getController())->getUnUsedFields();
+    OTableFields& rUnUsedFields = pController->getUnUsedFields();
     OTableFields().swap( rUnUsedFields );
 
     // create the select columns
     sal_uInt32 nFieldcount = 0;
-    OTableFields& rFieldList = static_cast<OQueryController*>(getController())->getTableFieldDesc();
+    OTableFields& rFieldList = pController->getTableFieldDesc();
     OTableFields::iterator aIter = rFieldList.begin();
     for(;aIter != rFieldList.end();++aIter)
     {
@@ -964,7 +965,16 @@ sal_Bool OQueryDesignView::checkStatement()
         aSqlCmd += aCriteriaListStr;
     }
     // ----------------- GroupBy aufbauen und Anh"angen ------------
-    aSqlCmd += GenerateGroupBy(rFieldList,nTabcount > 1);
+    Reference<XConnection> xConnection = pController->getConnection();
+    Reference<XDatabaseMetaData> xMeta;
+    if(xConnection.is())
+        xMeta = xConnection->getMetaData();
+    sal_Bool bUseAlias = nTabcount > 1;
+    if(xMeta.is())
+    {
+        bUseAlias = bUseAlias || !xMeta->supportsGroupByUnrelated();
+    }
+    aSqlCmd += GenerateGroupBy(rFieldList,bUseAlias);
     // ----------------- having Anh"angen ------------
     if(aHavingStr.getLength())
     {
@@ -2062,7 +2072,7 @@ void OQueryDesignView::InitFromParseNode()
 
                     if(!nMax || nMax >= (sal_Int32)aMap.size()) // Anzahl der Tabellen im Select-Statement "uberpr"ufen
                     {
-                        ::rtl::OUString aComposedName;
+                        ::rtl::OUString sComposedName;
                         ::rtl::OUString aQualifierName;
                         ::rtl::OUString sAlias;
 
@@ -2070,21 +2080,26 @@ void OQueryDesignView::InitFromParseNode()
                         for(;aIter != aMap.end();++aIter)
                         {
                             OSQLTable xTable = aIter->second;
-                            ::dbaui::composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),aComposedName,sal_False);
+                            ::dbaui::composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),sComposedName,sal_False);
+                            sAlias = aIter->first;
+                            if(aKeyComp(sComposedName,aIter->first))
+                            {
+                                ::rtl::OUString sCatalog,sSchema,sTable;
+                                ::dbtools::qualifiedNameComponents(xMetaData,sComposedName,sCatalog,sSchema,sTable);
+                                sAlias = sTable;
+                            }
 
-                            OQueryTableWindow* pExistentWin = static_cast<OQueryTableView*>(m_pTableView)->FindTable(aIter->first);
+                            OQueryTableWindow* pExistentWin = static_cast<OQueryTableView*>(m_pTableView)->FindTable(sAlias);
                             if (!pExistentWin)
                             {
-                                m_pTableView->AddTabWin(aComposedName, aIter->first,sal_False);// don't create data here
+                                m_pTableView->AddTabWin(sComposedName, sAlias,sal_False);// don't create data here
                             }
                             else
                             {
                                 // es existiert schon ein Fenster mit dem selben Alias ...
-                                ::rtl::OUString aFullWinName();
-
-                                if (!aKeyComp(pExistentWin->GetData()->GetComposedName(),aComposedName))
+                                if (!aKeyComp(pExistentWin->GetData()->GetComposedName(),sComposedName))
                                     // ... aber anderem Tabellennamen -> neues Fenster
-                                    m_pTableView->AddTabWin(aComposedName, aIter->first);
+                                    m_pTableView->AddTabWin(sComposedName, sAlias);
                             }
                         }
 
@@ -2093,7 +2108,8 @@ void OQueryDesignView::InitFromParseNode()
                         OJoinTableView::OTableWindowMap::iterator aIterTableMap = pTableMap->begin();
                         for(;aIterTableMap != pTableMap->end();++aIterTableMap)
                         {
-                            if(aMap.find(aIterTableMap->first) == aMap.end())
+                            if(aMap.find(aIterTableMap->second->GetComposedName())  == aMap.end() &&
+                               aMap.find(aIterTableMap->first)                      == aMap.end())
                                 m_pTableView->RemoveTabWin(aIterTableMap->second);
                         }
 
@@ -2387,9 +2403,11 @@ void OQueryDesignView::GetGroupCriteria(const ::connectivity::OSQLParseNode* pSe
             ::connectivity::OSQLParseNode* pColumnRef = pGroupBy->getChild( i );
             if(SQL_ISRULE(pColumnRef,column_ref))
             {
-                FillDragInfo(pColumnRef,aDragInfo);
-                aDragInfo->SetGroupBy(sal_True);
-                m_pSelectionBox->AddGroupBy(aDragInfo);
+                if(FillDragInfo(pColumnRef,aDragInfo))
+                {
+                    aDragInfo->SetGroupBy(sal_True);
+                    m_pSelectionBox->AddGroupBy(aDragInfo);
+                }
             }
         }
     }
