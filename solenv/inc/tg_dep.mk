@@ -69,12 +69,14 @@ ALLDPC: \
     @+-if exist $(MISC)$/genjava.mk $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
 .ENDIF
     +$(TOUCH) $(MISC)$/$(TARGET).dpc
+.IF "$(SVXLIGHT)"!=""
 #.IF "$(SVXLIGHTSLOFILES)"!=""
 #	@+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTSLOFILES) $(i:d:^"\n")sxl_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
 #.ENDIF
 .IF "$(SVXLIGHTOBJFILES)"!=""
     @+$(TYPE) $(mktmp $(foreach,i,$(SVXLIGHTOBJFILES) $(i:d:^"\n")sxl_$(i:f) : $(i:d:s/obj/slo/)$(i:b).obj )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
+.ENDIF			# "$(SVXLIGHT)"!=""
 .IF "$($(SECOND_BUILD)_SLOFILES)"!=""
     @+$(TYPE) $(mktmp $(foreach,i,$($(SECOND_BUILD)_SLOFILES) $(i:d:^"\n")$(SECOND_BUILD)_$(i:f) : $i )) >> $(MISC)$/$(TARGET).dpc
 .ENDIF
