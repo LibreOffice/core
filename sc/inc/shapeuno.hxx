@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 11:35:20 $
+ *  last change: $Author: sab $ $Date: 2002-09-05 10:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class ScShapeObj : public ::cppu::OWeakObject,
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
+    com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
 
     SdrObject* GetSdrObject() const throw();
 

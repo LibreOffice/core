@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-08 09:45:18 $
+ *  last change: $Author: sab $ $Date: 2002-09-05 10:29:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,17 @@
 #include "unonames.hxx"
 #include "unoguard.hxx"
 
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
+
+DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *,  ScShapeImplementationIdMap );
+
+static ScShapeImplementationIdMap aImplementationIdMap;
 
 const SfxItemPropertyMap* lcl_GetShapeMap()
 {
@@ -110,6 +118,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 //------------------------------------------------------------------------
 
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape )
+    : pImplementationId(NULL)
 {
     comphelper::increment( m_refCount );
 
@@ -525,9 +534,44 @@ uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes() throw(uno::RuntimeExcep
 uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
                                                     throw(uno::RuntimeException)
 {
-    //! an id must be generated for each unique implementation id of the aggregated object
+    ScUnoGuard aGuard;
+    // do we need to compute the implementation id for this instance?
+    if( !pImplementationId && mxShapeAgg.is())
+    {
+        uno::Reference< drawing::XShape > xAggShape;
+        mxShapeAgg->queryAggregation( ::getCppuType((uno::Reference< drawing::XShape >*)0) ) >>= xAggShape;
 
-    return uno::Sequence<sal_Int8>(0);      // no id available
+        if( xAggShape.is() )
+        {
+            const rtl::OUString aShapeType( xAggShape->getShapeType() );
+            // did we already compute an implementation id for the agregated shape type?
+            ScShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
+            if( aIter == aImplementationIdMap.end() )
+            {
+                // we need to create a new implementation id for this
+                // note: this memory is not free'd until application exists
+                //       but since we have a fixed set of shapetypes and the
+                //       memory will be reused this is ok.
+                pImplementationId = new uno::Sequence< sal_Int8 >( 16 );
+                rtl_createUuid( (sal_uInt8 *) pImplementationId->getArray(), 0, sal_True );
+                aImplementationIdMap[ aShapeType ] = pImplementationId;
+            }
+            else
+            {
+                // use the already computed implementation id
+                pImplementationId = (*aIter).second;
+            }
+        }
+    }
+    if( NULL == pImplementationId )
+    {
+        DBG_ERROR( "Could not create an implementation id for a ScXShape!" );
+        return uno::Sequence< sal_Int8 > ();
+    }
+    else
+    {
+        return *pImplementationId;
+    }
 }
 
 SdrObject* ScShapeObj::GetSdrObject() const throw()
