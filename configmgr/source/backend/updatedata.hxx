@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,9 @@
 #define INCLUDED_MAP
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
     class XLayerHandler;
 } } } } }
-}
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -104,7 +102,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         using rtl::OUString;
         namespace uno = ::com::sun::star::uno;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
         class ElementUpdate;
         class NodeUpdate;
