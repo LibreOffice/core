@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-19 14:51:33 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ E3dCompoundObject* FuConst3dObj::ImpCreateBasic3DShape()
 
             // Dies ist ein offenes Objekt, muss daher defaultmaessig
             // doppelseitig behandelt werden
-            p3DObj->SetItem(Svx3DDoubleSidedItem(TRUE));
+            p3DObj->SetMergedItem(Svx3DDoubleSidedItem(TRUE));
             break;
         }
 
@@ -284,7 +284,7 @@ E3dCompoundObject* FuConst3dObj::ImpCreateBasic3DShape()
             p3DObj = new E3dLatheObj(
                 pView->Get3DDefaultAttributes(),
                 aXPoly);
-            p3DObj->SetItem(Svx3DHorizontalSegmentsItem(4));
+            p3DObj->SetMergedItem(Svx3DHorizontalSegmentsItem(4));
             break;
         }
     }
@@ -378,7 +378,7 @@ void FuConst3dObj::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *p
     pScene->FitSnapRectToBoundVol();
 
     SfxItemSet aAttr (pViewShell->GetPool());
-    pScene->SetItemSetAndBroadcast(aAttr);
+    pScene->SetMergedItemSetAndBroadcast(aAttr);
 }
 
 BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
@@ -417,7 +417,7 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             // LineStyle rausnehmen
             aAttr.Put(XLineStyleItem (XLINE_NONE));
 
-            pObj->SetItemSet(aAttr);
+            pObj->SetMergedItemSet(aAttr);
         }
     }
 
@@ -547,7 +547,7 @@ SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectang
     SfxItemSet aAttr(pDoc->GetPool());
     SetStyleSheet(aAttr, p3DObj);
     aAttr.Put(XLineStyleItem (XLINE_NONE));
-    p3DObj->SetItemSet(aAttr);
+    p3DObj->SetMergedItemSet(aAttr);
 
     // make object interactive at once
     pScene->SetRectsDirty();
