@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-23 15:50:07 $
+ *  last change: $Author: ssa $ $Date: 2001-10-18 12:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,9 @@ void DeInitVCL()
     {
         try
         {
-            CHECK_FOR_RVPSYNC_NORMAL()
+            // #93174 DO NOT SYNC HERE -
+            // the client's sync object might already be destructed by the ORmRemoteClientFactory destructor
+            // CHECK_FOR_RVPSYNC_NORMAL()
 
             delete pSVData->mpRVPNormalSync;
             delete pSVData->mpRVPSoundSync;
