@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:07:33 $
+ *  last change: $Author: os $ $Date: 2002-06-04 08:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1103,6 +1103,36 @@
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
+        </node>
+        <node oor:name="BASICIdentifier">
+            <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+            </prop>
+        </node>
+        <node oor:name="BASICComment">
+            <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+            </prop>
+        </node>
+        <node oor:name="BASICNumber">
+            <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+            </prop>
+        </node>
+        <node oor:name="BASICString">
+            <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+            </prop>
+        </node>
+        <node oor:name="BASICOperator">
+            <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+            </prop>
+        </node>
+        <node oor:name="BASICKeyword">
+            <prop oor:name="Color" oor:type="xs:int">
+            <value xsi:nil="true"/>
+            </prop>
         </node>
       </node>
     </node>

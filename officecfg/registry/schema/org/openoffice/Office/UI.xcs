@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: os $ $Date: 2002-06-04 08:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,36 @@
         </prop>
       </group>
       <group oor:name="DrawFill">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="BASICIdentifier">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="BASICComment">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="BASICNumber">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="BASICString">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="BASICOperator">
+        <prop oor:name="Color" oor:type="xs:int">
+          <value xsi:nil="true"/>
+        </prop>
+      </group>
+      <group oor:name="BASICKeyword">
         <prop oor:name="Color" oor:type="xs:int">
           <value xsi:nil="true"/>
         </prop>
