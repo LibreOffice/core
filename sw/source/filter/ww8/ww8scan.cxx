@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-20 11:19:29 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 14:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3387,78 +3387,6 @@ void WW8PLCFMan::SeekPos( long nNewCp )
 }
 
 
-void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
-{
-     rSave.nPLCFxPos    = GetIdx();
-    rSave.nPLCFxPos2   = GetIdx2();
-    rSave.nPLCFxMemOfs = 0;
-}
-
-void WW8PLCFx::Restore( const WW8PLCFxSave1& rSave )
-{
-    SetIdx(  rSave.nPLCFxPos  );
-    SetIdx2( rSave.nPLCFxPos2 );
-}
-
-
-
-ULONG WW8PLCFx_Cp_FKP::GetIdx2() const
-{
-    return GetPCDIdx();
-}
-
-void WW8PLCFx_Cp_FKP::SetIdx2( ULONG nIdx )
-{
-    SetPCDIdx( nIdx );
-}
-
-
-void WW8PLCFx_Cp_FKP::Save( WW8PLCFxSave1& rSave ) const
-{
-    WW8PLCFx::Save( rSave );
-
-    rSave.nAttrStart = nAttrStart;
-    rSave.nAttrEnd   = nAttrEnd;
-    rSave.bLineEnd   = bLineEnd;
-}
-
-void WW8PLCFx_Cp_FKP::Restore( const WW8PLCFxSave1& rSave )
-{
-    WW8PLCFx::Restore( rSave );
-
-    nAttrStart = rSave.nAttrStart;
-    nAttrEnd   = rSave.nAttrEnd;
-    bLineEnd   = rSave.bLineEnd;
-}
-
-
-void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
-{
-    if( pPLCFx )
-    {
-        pPLCFx->Save( rSave );
-        if( pPLCFx->IsSprm() )
-        {
-            WW8PLCFxDesc aD;
-            pPLCFx->GetSprms( &aD );
-            rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
-        }
-    }
-}
-
-void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
-{
-    if( pPLCFx )
-    {
-        pPLCFx->Restore( rSave );
-        if( pPLCFx->IsSprm() )
-        {
-            WW8PLCFxDesc aD;
-            pPLCFx->GetSprms( &aD );
-            pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
-        }
-    }
-}
 /*
 void WW8PLCFMan::Save1PLCFx( WW8PLCFxDesc* p, WW8PLCFxSave1* pSave ) const
 {
@@ -3776,6 +3704,79 @@ BYTE* WW8PLCFMan::HasCharSprm( USHORT nId ) const
 }
 
 #endif // !DUMP
+
+void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
+{
+     rSave.nPLCFxPos    = GetIdx();
+    rSave.nPLCFxPos2   = GetIdx2();
+    rSave.nPLCFxMemOfs = 0;
+}
+
+void WW8PLCFx::Restore( const WW8PLCFxSave1& rSave )
+{
+    SetIdx(  rSave.nPLCFxPos  );
+    SetIdx2( rSave.nPLCFxPos2 );
+}
+
+
+
+ULONG WW8PLCFx_Cp_FKP::GetIdx2() const
+{
+    return GetPCDIdx();
+}
+
+void WW8PLCFx_Cp_FKP::SetIdx2( ULONG nIdx )
+{
+    SetPCDIdx( nIdx );
+}
+
+
+void WW8PLCFx_Cp_FKP::Save( WW8PLCFxSave1& rSave ) const
+{
+    WW8PLCFx::Save( rSave );
+
+    rSave.nAttrStart = nAttrStart;
+    rSave.nAttrEnd   = nAttrEnd;
+    rSave.bLineEnd   = bLineEnd;
+}
+
+void WW8PLCFx_Cp_FKP::Restore( const WW8PLCFxSave1& rSave )
+{
+    WW8PLCFx::Restore( rSave );
+
+    nAttrStart = rSave.nAttrStart;
+    nAttrEnd   = rSave.nAttrEnd;
+    bLineEnd   = rSave.bLineEnd;
+}
+
+
+void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
+{
+    if( pPLCFx )
+    {
+        pPLCFx->Save( rSave );
+        if( pPLCFx->IsSprm() )
+        {
+            WW8PLCFxDesc aD;
+            pPLCFx->GetSprms( &aD );
+            rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
+        }
+    }
+}
+
+void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
+{
+    if( pPLCFx )
+    {
+        pPLCFx->Restore( rSave );
+        if( pPLCFx->IsSprm() )
+        {
+            WW8PLCFxDesc aD;
+            pPLCFx->GetSprms( &aD );
+            pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
+        }
+    }
+}
 
 //-----------------------------------------
 
@@ -5995,11 +5996,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.2 2000-10-20 11:19:29 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.3 2000-10-24 14:26:55 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 11:19:29  khz
+      #78761# don't reset nStartFc when calling WW8PLCFx_Fc_FKP::NewFkp()
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 
