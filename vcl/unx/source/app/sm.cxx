@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-11 13:36:15 $
+ *  last change: $Author: pl $ $Date: 2002-10-14 14:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ public:
 
     static void activate();
     static void deactivate();
+    static void lock();
+    static void unlock();
 };
 
 
@@ -261,6 +263,8 @@ void SessionManagerClient::open()
     {
         char aErrBuf[1024];
         ICEConnectionObserver::activate();
+        ICEConnectionObserver::lock();
+
         char* pClientID = NULL;
         const ByteString& rPrevId( getPreviousSessionID() );
 
@@ -296,6 +300,7 @@ void SessionManagerClient::open()
         aClientID = ByteString( pClientID );
         free( pClientID );
         pClientID = NULL;
+        ICEConnectionObserver::unlock();
     }
 #ifdef DEBUG
     else
@@ -356,6 +361,16 @@ const ByteString& SessionManagerClient::getPreviousSessionID()
     return aPrevId;
 }
 
+void ICEConnectionObserver::lock()
+{
+    osl_acquireMutex( ICEMutex );
+}
+
+void ICEConnectionObserver::unlock()
+{
+    osl_releaseMutex( ICEMutex );
+}
+
 void ICEConnectionObserver::activate()
 {
     if( ! bIsWatching )
@@ -400,9 +415,10 @@ void ICEConnectionWorker( void* pData )
 #ifdef DEBUG
             fprintf( stderr, "IceProcessMessages\n" );
 #endif
+            Bool bReply;
             for( int i = 0; i < ICEConnectionObserver::nConnections; i++ )
                 if( ICEConnectionObserver::pFilehandles[i].revents & POLLIN )
-                    IceProcessMessages( ICEConnectionObserver::pConnections[i], NULL, NULL );
+                    IceProcessMessages( ICEConnectionObserver::pConnections[i], NULL, &bReply );
         }
         osl_releaseMutex( ICEConnectionObserver::ICEMutex );
         osl_yieldThread();
@@ -462,6 +478,7 @@ void ICEConnectionObserver::ICEWatchProc(
     fprintf( stderr, "ICE connection on %d %s\n",
              IceConnectionNumber( connection ),
              opening ? "inserted" : "removed" );
+    fprintf( stderr, "Display connection is %d\n", ConnectionNumber( GetSalData()->GetDefDisp()->GetDisplay() ) );
 #endif
 #endif
 }
