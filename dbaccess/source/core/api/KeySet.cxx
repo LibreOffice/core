@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:30:40 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         aSql += sSetValues;
     }
     else
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_VALUE_CHANGED),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_VALUE_CHANGED),m_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
 
     if(sKeyCondition.getLength() || sIndexCondition.getLength())
     {
@@ -506,7 +506,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         aSql += aCondition;
     }
     else
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_CONDITION_FOR_PK),m_xConnection,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_CONDITION_FOR_PK),m_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
 
 
     // now create end execute the prepared statement
@@ -524,7 +524,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         if((*_rInsertRow)[nPos].isModified())
         {
             (*_rInsertRow)[nPos].setSigned((*_rOrginalRow)[nPos].isSigned());
-            setParameter(i++,xParameter,(*_rInsertRow)[nPos],aIter->second.second);
+            setParameter(i++,xParameter,(*_rInsertRow)[nPos],aIter->second.second.first);
         }
     }
     // and then the values of the where condition
@@ -532,7 +532,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     j = 0;
     for(;aIter != (*m_pKeyColumnNames).end();++aIter,++i,++j)
     {
-        setParameter(i,xParameter,(*_rOrginalRow)[aIter->second.first],aIter->second.second);
+        setParameter(i,xParameter,(*_rOrginalRow)[aIter->second.first],aIter->second.second.first);
     }
 
     // now we have to set the index values
@@ -567,13 +567,14 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     aSql += m_aComposedTableName;
     aSql += ::rtl::OUString::createFromAscii(" ( ");
     // set values and column names
-    ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
+    ::rtl::OUString aValues(RTL_CONSTASCII_USTRINGPARAM(" VALUES ( "));
+    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
     ::rtl::OUString aQuote = getIdentifierQuoteString();
-    static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
 
     OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
     sal_Int32 j = 1;
+    sal_Bool bModified = sal_False;
     for(;aIter != m_pColumnNames->end();++aIter,++j)
     {
         if((*_rInsertRow)[aIter->second.first].isModified())
@@ -581,8 +582,11 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             aSql += ::dbtools::quoteName( aQuote,aIter->first);
             aSql += aComma;
             aValues += aPara;
+            bModified = sal_True;
         }
     }
+    if ( !bModified )
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_VALUE_CHANGED),m_xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000")),1000,Any());
 
     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
     aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
@@ -604,7 +608,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             else
             {
                 (*_rInsertRow)[nPos].setSigned(m_aSignedFlags[nPos-1]);
-                setParameter(i++,xParameter,(*_rInsertRow)[nPos],aPosIter->second.second);
+                setParameter(i++,xParameter,(*_rInsertRow)[nPos],aPosIter->second.second.first);
             }
         }
     }
@@ -613,6 +617,13 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     sal_Bool bAutoValuesFetched = sal_False;
     if ( m_bInserted )
     {
+        // first insert the default values into the insertrow
+        OColumnNamePos::const_iterator aIter = m_pColumnNames->begin();
+        for(;aIter != m_pColumnNames->end();++aIter)
+        {
+            if ( !(*_rInsertRow)[aIter->second.first].isModified() )
+                (*_rInsertRow)[aIter->second.first] = aIter->second.second.second;
+        }
         try
         {
             Reference< XGeneratedResultSet > xGRes(xPrep, UNO_QUERY);
@@ -634,7 +645,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 #endif
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if(aFind != m_pKeyColumnNames->end())
-                            fetchValue(i,aFind->second.second,xRow,(*_rInsertRow)[aFind->second.first]);
+                            fetchValue(i,aFind->second.second.first,xRow,(*_rInsertRow)[aFind->second.first]);
                     }
                     bAutoValuesFetched = sal_True;
                 }
@@ -648,7 +659,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 
     ::comphelper::disposeComponent(xPrep);
 
-    if ( !bAutoValuesFetched )
+    if ( !bAutoValuesFetched && m_bInserted )
     {
         // first check if all key column values were set
         ::rtl::OUString sQuote = getIdentifierQuoteString();
@@ -681,12 +692,13 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                 if(xRow.is() && xRes->next())
                 {
                     aAutoIter = m_aAutoColumns.begin();
-                    for (sal_Int32 i=1;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter,++i)
+                    ::std::vector< ::rtl::OUString >::iterator aAutoEnd = m_aAutoColumns.end();
+                    for (sal_Int32 i=1;aAutoIter != aAutoEnd; ++aAutoIter,++i)
                     {
                         // we will only fetch values which are keycolumns
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if(aFind != m_pKeyColumnNames->end())
-                            fetchValue(i,aFind->second.second,xRow,(*_rInsertRow)[aFind->second.first]);
+                            fetchValue(i,aFind->second.second.first,xRow,(*_rInsertRow)[aFind->second.first]);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
@@ -791,7 +803,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     i = 1;
     for(;aIter != (*m_pKeyColumnNames).end();++aIter,++i)
     {
-        setParameter(i,xParameter,(*_rDeleteRow)[aIter->second.first],aIter->second.second);
+        setParameter(i,xParameter,(*_rDeleteRow)[aIter->second.first],aIter->second.second.first);
     }
 
     // now we have to set the index values
@@ -1051,7 +1063,7 @@ sal_Bool OKeySet::fetchRow()
         for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
         {
             const TPositionTypePair& rPair = aPosIter->second;
-            fetchValue(rPair.first,rPair.second,m_xDriverRow,*aIter);
+            fetchValue(rPair.first,rPair.second.first,m_xDriverRow,*aIter);
         }
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,0))).first;
     }
@@ -1273,7 +1285,11 @@ namespace dbaccess
                 {
                     sal_Int32 nType;
                     xColumnProp->getPropertyValue(PROPERTY_TYPE)    >>= nType;
-                    _rColumnNames[sRealName] = TPositionTypePair(nPos,nType);
+                    ::rtl::OUString sColumnDefault;
+                    if ( xColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
+                        xColumnProp->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sColumnDefault;
+
+                    _rColumnNames[sRealName] = TPositionTypePair(nPos,TTypeDefaultValuePair(nType,sColumnDefault));
                     break;
                 }
             }
