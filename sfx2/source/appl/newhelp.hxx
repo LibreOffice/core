@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:05:02 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 12:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ private:
     Link                aKeywordLink;
 
     String              sFactory;
+    String              sSharedFactory;
     String              sKeyword;
 
     long                nMinWidth;
