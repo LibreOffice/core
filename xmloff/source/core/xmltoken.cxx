@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-13 15:25:56 $
+ *  last change: $Author: bm $ $Date: 2001-08-27 13:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2069,6 +2069,7 @@ namespace xmloff { namespace token {
         TOKEN( "application" ),                // XML_APPLICATION
 
         TOKEN( "symbol-image" ),               // XML_SYMBOL_IMAGE
+        TOKEN( "text-overlap" ),               // XML_TEXT_OVERLAP
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
