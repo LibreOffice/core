@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:58:41 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,10 @@ void XMLPropertiesTContext_Impl::StartElement(
         double fIntervalMajor = 0.0;
         sal_Int32 nIntervalMinorDivisor = 0;
 
+        // #i25616#
+        OUString aOpacityValueRemember;
+        OUString aImageOpacityValueRemember;
+
         sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
@@ -404,6 +408,19 @@ void XMLPropertiesTContext_Impl::StartElement(
                     SvXMLUnitConverter::convertNumber( nIntervalMinorDivisor, rAttrValue );
                     bIntervalMinorFound = true;
                     break;
+
+                // #i25616#
+                case XML_OPTACTION_OPACITY:
+                    aOpacityValueRemember = rAttrValue;
+                    GetTransformer().NegPercent(aOpacityValueRemember);
+                    break;
+
+                // #i25616#
+                case XML_OPTACTION_IMAGE_OPACITY:
+                    aImageOpacityValueRemember = rAttrValue;
+                    GetTransformer().NegPercent(aImageOpacityValueRemember);
+                    break;
+
                 default:
                     OSL_ENSURE( !this, "unknown action" );
                     break;
@@ -441,6 +458,17 @@ void XMLPropertiesTContext_Impl::StartElement(
                     XML_NAMESPACE_CHART,
                     GetXMLToken( XML_INTERVAL_MINOR )),
                 aBuf.makeStringAndClear());
+        }
+
+        // #i25616#
+        if(aOpacityValueRemember.getLength() || aImageOpacityValueRemember.getLength())
+        {
+            pAttrList->AddAttribute(
+                    GetTransformer().GetNamespaceMap().GetQNameByKey(
+                        XML_NAMESPACE_DRAW,
+                        GetXMLToken( XML_TRANSPARENCY ) ),
+                    aImageOpacityValueRemember.getLength()
+                    ? aImageOpacityValueRemember : aOpacityValueRemember );
         }
     }
     else

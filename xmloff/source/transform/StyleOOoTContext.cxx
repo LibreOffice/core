@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:59:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,20 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_PTACTION_INTERVAL_MINOR:
             SvXMLUnitConverter::convertDouble( fIntervalMinor, rAttrValue );
             pIntervalMinorDivisorContext = pContext;
+            break;
+
+        // #i25616#
+        case XML_PTACTION_TRANSPARENCY :
+            {
+                OUString aAttrValue( rAttrValue );
+                GetTransformer().NegPercent(aAttrValue);
+                pContext->AddAttribute( XML_NAMESPACE_DRAW,
+                                        XML_OPACITY,
+                                        aAttrValue );
+                pContext->AddAttribute( XML_NAMESPACE_DRAW,
+                                        XML_IMAGE_OPACITY,
+                                        aAttrValue );
+            }
             break;
 
         default:

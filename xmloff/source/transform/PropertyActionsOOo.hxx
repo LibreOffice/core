@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:58:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@ enum XMLPropOOOTransformerAction
     XML_PTACTION_INTERVAL_MAJOR,
     XML_PTACTION_INTERVAL_MINOR,
     XML_ATACTION_COPY_DUPLICATE,
+
+    // #i25616#
+    XML_PTACTION_TRANSPARENCY,
+
     XML_PTACTION_END=XML_TACTION_END
 };
 
