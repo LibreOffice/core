@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoaprms.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:24 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ void SdAnimationPrmsUndoAction::Undo()
     }
     // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
     // auf Stand zu bringen (Animations-Reihenfolge)
-    pObject->SendRepaintBroadcast( TRUE );
+    pObject->SetChanged();
+    pObject->BroadcastObjectChange();
 }
 
 /*************************************************************************
@@ -211,7 +212,8 @@ void SdAnimationPrmsUndoAction::Redo()
 
     // Damit ein ModelHasChanged() ausgeloest wird, um das Effekte-Window
     // auf Stand zu bringen (Animations-Reihenfolge)
-    pObject->SendRepaintBroadcast( TRUE );
+    pObject->SetChanged();
+    pObject->BroadcastObjectChange();
 }
 
 /*************************************************************************
