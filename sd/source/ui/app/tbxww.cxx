@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-21 10:11:14 $
+ *  last change: $Author: dl $ $Date: 2001-06-07 08:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,14 +354,12 @@ void SdTbxControl::StateChanged( USHORT nSId,
 
                     if( nSId != SID_ZOOM_TOOLBOX &&
                         nSId != SID_DRAWTBX_INSERT &&
-                        nSId != SID_POSITION )
+                        nSId != SID_POSITION &&
+                        nSId != SID_OBJECT_ALIGN )
                     {
                         if( nSId != SID_OBJECT_CHOOSE_MODE &&
                             rTbx.IsItemChecked( SID_OBJECT_CHOOSE_MODE ) )
                             rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, FALSE );
-                        if( nSId != SID_OBJECT_ALIGN &&
-                            rTbx.IsItemChecked( SID_OBJECT_ALIGN ) )
-                            rTbx.CheckItem( SID_OBJECT_ALIGN, FALSE );
                         if( nSId != SID_DRAWTBX_TEXT &&
                             rTbx.IsItemChecked( SID_DRAWTBX_TEXT ) )
                              rTbx.CheckItem( SID_DRAWTBX_TEXT, FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-30 11:13:26 $
+ *  last change: $Author: dl $ $Date: 2001-06-07 08:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,12 +249,11 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if( nId != SID_ZOOM_TOOLBOX &&
             nSId != SID_DRAWTBX_INSERT &&
-            nSId != SID_POSITION )
+            nSId != SID_POSITION &&
+            nSId != SID_OBJECT_ALIGN )
         {
             if( nId != SID_OBJECT_CHOOSE_MODE )
                 rSet.Put( TbxImageItem( SID_OBJECT_CHOOSE_MODE, 0 ) );
-            if( nId != SID_OBJECT_ALIGN )
-                rSet.Put( TbxImageItem( SID_OBJECT_ALIGN, 0 ) );
             if( nId != SID_DRAWTBX_TEXT )
                 rSet.Put( TbxImageItem( SID_DRAWTBX_TEXT, 0 ) );
             if( nId != SID_DRAWTBX_RECTANGLES )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-13 12:39:56 $
+ *  last change: $Author: dl $ $Date: 2001-06-07 08:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,6 +904,9 @@ void SdDrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
 
         nId = GetArrayId( SID_POSITION ) + 1;
         rSet.Put( TbxImageItem( SID_POSITION, pSlotArray[nId] ) );
+
+        nId = GetArrayId( SID_OBJECT_ALIGN ) + 1;
+        rSet.Put( TbxImageItem( SID_OBJECT_ALIGN, pSlotArray[nId] ) );
     }
     else
     {
