@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:08:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssxc::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     nIdOfSignatureElementCollector =
-        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_PRI_AFTERMODIFY, sal_True );
+        m_xSAXEventKeeper->addSecurityElementCollector( cssxc::sax::ElementMarkPriority_AFTERMODIFY, sal_True );
 
     m_xSAXEventKeeper->setSecurityId(nIdOfSignatureElementCollector, nSecurityId);
 
@@ -242,7 +242,7 @@ void XSecController::collectToSign( sal_Int32 securityId, const rtl::OUString& r
      */
     {
         sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
-            cssxc::sax::ElementMarkPriority_PRI_AFTERMODIFY, sal_False);
+            cssxc::sax::ElementMarkPriority_AFTERMODIFY, sal_False);
 
         int index = findSignatureInfor( securityId );
 
