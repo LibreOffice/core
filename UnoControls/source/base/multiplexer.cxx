@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multiplexer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:43:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,15 +338,14 @@ void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw
             if( aIt.hasMoreElements() )
             {
                 XFocusListener * pListener = (XFocusListener *)aIt.next();
-                TRY
+                try
                 {
                     pListener->focusGained( aEvt );
                 }
-                CATCH( RuntimeException, e )
+                catch( RuntimeException, e )
                 {
                     // ignore all usr system exceptions from the listener
                 }
-                END_CATCH;
             }
         }
     }
