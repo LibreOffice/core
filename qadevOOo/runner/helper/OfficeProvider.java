@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-06-11 16:24:48 $
+ *  last change:$Date: 2003-07-01 14:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,12 +209,8 @@ public class OfficeProvider implements AppProvider {
         boolean alreadyConnected = (msf != null);
         if (alreadyConnected) {
             ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
-            if (ph == null) {
-                if(closeIfPossible)
-                    return disposeOffice(msf);
-            }
-            else {
-                ph.kill();
+            if (ph != null) {
+                disposeOffice(msf);
                 // dispose watcher in case it's still running.
                 int timeOut = param.getInt("TimeOut");
                 if (timeOut==0) {
@@ -225,6 +221,10 @@ public class OfficeProvider implements AppProvider {
                     }
                 }
                 return true;
+            }
+            else {
+                if(closeIfPossible)
+                    return disposeOffice(msf);
             }
         }
         else {
