@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:47:23 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1915,7 +1915,7 @@ String STR_ObjNameSingulTEXT
     Text[ polish ] = "Ramka tekstu";
     Text[ japanese ] = "Ã·½Ä˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑ äÕ";
+    Text[ arabic ] = "ßÇÏÑ äÕ";
     Text[ dutch ] = "Tekstkader";
     Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
@@ -1943,7 +1943,7 @@ String STR_ObjNamePluralTEXT
     Text[ polish ] = "Ramka tekstu";
     Text[ japanese ] = "Ã·½Ä˜g";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑÇÊ äÕ";
+    Text[ arabic ] = "ßæÇÏÑ äÕ";
     Text[ dutch ] = "Tekstkader";
     Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
     Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
@@ -1969,7 +1969,7 @@ String STR_ObjNameSingulTEXTLNK
     Text[ polish ] = "Po³¹czona ramka tekstu";
     Text[ japanese ] = "Øİ¸‚³‚ê‚½Ã·½Ä˜g";
     Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑ ÇáäÕ ÇáãÑÊÈØ";
+    Text[ arabic ] = "ßÇÏÑ ÇáäÕ ÇáãÑÊÈØ";
     Text[ dutch ] = "Gekoppeld tekstkader";
     Text[ chinese_simplified ] = "Á´½ÓµÄÎÄ±¾¿ò";
     Text[ greek ] = "óõíäåäåìİíï ğëáßóéï êåéìİíïõ";
@@ -1995,7 +1995,7 @@ String STR_ObjNamePluralTEXTLNK
     Text[ polish ] = "Po³¹czona ramka tekstu";
     Text[ japanese ] = "Øİ¸‚³‚ê‚½Ã·½Ä˜g";
     Text[ chinese_traditional ] = "³sµ²ªº¤å¦r¤è¶ô";
-    Text[ arabic ] = "ÅØÇÑÇÊ ÇáäÕ ÇáãÑÊÈØÉ";
+    Text[ arabic ] = "ßæÇÏÑ ÇáäÕ ÇáãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde tekstkaders";
     Text[ chinese_simplified ] = "Á¬½ÓµÄÎÄ±¾¿ò";
     Text[ greek ] = "óõíäåäåìİíá ğëáßóéá êåéìİíïõ";
@@ -3004,7 +3004,7 @@ String STR_ObjNameSingulFrame
     Text[ polish ] = "Frame";
     Text[ japanese ] = "ÌÚ°Ñ";
     Text[ chinese_traditional ] = "®Ø";
-    Text[ arabic ] = "Frame";
+    Text[ arabic ] = "ÅØÇÑ";
     Text[ dutch ] = "Frame";
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
     Text[ greek ] = "Ğëáßóéï";
@@ -3027,10 +3027,10 @@ String STR_ObjNamePluralFrame
     Text [ dutch ] = "Frames" ;
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
     Text[ russian ] = "Êàäğû";
-    Text[ polish ] = "Ramki";
+    Text[ polish ] = "Frames";
     Text[ japanese ] = "ÌÚ°Ñ";
     Text[ chinese_traditional ] = "®Ø";
-    Text[ arabic ] = "Frames";
+    Text[ arabic ] = "ÅØÇÑÇÊ";
     Text[ dutch ] = "Frames";
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
     Text[ greek ] = "Ğëáßóéá";
@@ -3056,7 +3056,7 @@ String STR_ObjFrameNamePrefix
     Text[ polish ] = "Frame";
     Text[ japanese ] = "ÌÚ°Ñ";
     Text[ chinese_traditional ] = "®Ø";
-    Text[ arabic ] = "Frame";
+    Text[ arabic ] = "ÅØÇÑ";
     Text[ dutch ] = "Frame";
     Text[ chinese_simplified ] = "¿ò¶ÔÏó";
     Text[ greek ] = "Ğëáßóéï";
@@ -8955,7 +8955,7 @@ String STR_ItemNam_TEXT_LEFTDIST
     Text[ polish ] = "Lewy odstêp ramek";
     Text[ japanese ] = "¶˜gü‚Ü‚Å‚ÌŠÔŠu";
     Text[ chinese_traditional ] = "¥ª®Ø¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíÓÑ ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíÓÑ ááßÇÏÑ";
     Text[ dutch ] = "Linker kaderafstand";
     Text[ chinese_simplified ] = "×ó¿ò¼ä¸ô";
     Text[ greek ] = "Áğüóôáóç ğëáéóßïõ áñéóôåñÜ";
@@ -8981,7 +8981,7 @@ String STR_ItemNam_TEXT_RIGHTDIST
     Text[ polish ] = "Prawy odstêp ramek";
     Text[ japanese ] = "‰E˜gü‚Ü‚Å‚ÌŠÔŠu";
     Text[ chinese_traditional ] = "¥k®Ø¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíãä ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíãä ááßÇÏÑ";
     Text[ dutch ] = "Rechter kaderafstand";
     Text[ chinese_simplified ] = "ÓÒ¿ò¼ä¸ô";
     Text[ greek ] = "ÄåîéÜ áğüóôáóç ğëáéóßïõ";
@@ -9007,7 +9007,7 @@ String STR_ItemNam_TEXT_UPPERDIST
     Text[ polish ] = "Górny odstêp ramek";
     Text[ japanese ] = "ã˜gü‚Ü‚Å‚ÌŠÔŠu";
     Text[ chinese_traditional ] = "¤W®Ø¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÚáæí ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÚáæí ááßÇÏÑ";
     Text[ dutch ] = "Kaderafstand boven";
     Text[ chinese_simplified ] = "ÉÏ¿ò¼ä¸ô";
     Text[ greek ] = "¢íù áğüóôáóç ğëáéóßïõ";
@@ -9033,7 +9033,7 @@ String STR_ItemNam_TEXT_LOWERDIST
     Text[ polish ] = "Dolny odstêp ramek";
     Text[ japanese ] = "‰º˜gü‚Ü‚Å‚ÌŠÔŠu";
     Text[ chinese_traditional ] = "¤U®Ø¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÓİáí ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÓİáí ááßÇÏÑ";
     Text[ dutch ] = "Kaderafstand beneden";
     Text[ chinese_simplified ] = "ÏÂ¿ò¼ä¸ô";
     Text[ greek ] = "Áğüóôáóç ğëáéóßïõ êÜôù";
@@ -9061,7 +9061,7 @@ String STR_ItemNam_TEXT_AUTOGROWHEIGHT
     Text[ polish ] = "Autodopasowanie wysokoœci ramki";
     Text[ japanese ] = "©“®“I‚É˜g‚Ì‚‚³‚É“K‡";
     Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã®Ø°ª«×";
-    Text[ arabic ] = "ãáÇÁãÉ ÇÑÊİÇÚ ÇáÅØÇÑ ÊáŞÇÆíÇğ";
+    Text[ arabic ] = "ãáÇÁãÉ ÇÑÊİÇÚ ÇáßÇÏÑ ÊáŞÇÆíÇğ";
     Text[ dutch ] = "Automatische aanpassing van kaderhoogte";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿ò¸ß¶È";
     Text[ greek ] = "Áõôüìáôç ğñïóáñìïãŞ ôïõ ıøïõò ôïõ ğëáéóßïõ";
@@ -9089,7 +9089,7 @@ String STR_ItemNam_TEXT_MINFRAMEHEIGHT
     Text[ polish ] = "Minimalna wysokoœæ ramki";
     Text[ japanese ] = "Å¬ŒÀ‚Ì˜g‚Ì‚‚³";
     Text[ chinese_traditional ] = "³Ì¤p®Ø°ª";
-    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃÏäì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃÏäì ááßÇÏÑ";
     Text[ dutch ] = "Minimale kaderhoogte";
     Text[ chinese_simplified ] = "×îĞ¡¿ò¸ß";
     Text[ greek ] = "ÅëÜ÷éóôï ıøïò ğëáéóßïõ";
@@ -9117,7 +9117,7 @@ String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
     Text[ polish ] = "Maksymalna wysokoœæ ramki";
     Text[ japanese ] = "Å‘åŒÀ‚Ì˜g‚Ì‚‚³";
     Text[ chinese_traditional ] = "³Ì¤j®Ø°ª";
-    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááßÇÏÑ";
     Text[ dutch ] = "Maximale kaderhoogte";
     Text[ chinese_simplified ] = "×î´ó¿ò¸ß";
     Text[ greek ] = "Ìİãéóôï ıøïò ğëáéóßïõ";
@@ -9143,7 +9143,7 @@ String STR_ItemNam_TEXT_AUTOGROWWIDTH
     Text[ polish ] = "Autodopasowanie wysokoœci ramki";
     Text[ japanese ] = "©“®“I‚É˜g‚Ì•‚É“K‡";
     Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã®Ø¼e«×";
-    Text[ arabic ] = "ãáÇÁãÉ ÚÑÖ ÇáÅØÇÑ ÊáŞÇÆíÇğ";
+    Text[ arabic ] = "ãáÇÁãÉ ÚÑÖ ÇáßÇÏÑ ÊáŞÇÆíÇğ";
     Text[ dutch ] = "Automatische aanpassing van kaderbreedte";
     Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿ò¿í¶È";
     Text[ greek ] = "Áõôüìáôç ğñïóáñìïãŞ ôïõ ğëÜôïõò ôïõ ğëáéóßïõ";
@@ -9169,7 +9169,7 @@ String STR_ItemNam_TEXT_MINFRAMEWIDTH
     Text[ polish ] = "Minimalna szerokoœæ ramki";
     Text[ japanese ] = "Å¬ŒÀ‚Ì˜g‚Ì•";
     Text[ chinese_traditional ] = "³Ì¤p®Ø¼e";
-    Text[ arabic ] = "ÇáÚÑÖ ÇáÃÏäì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÚÑÖ ÇáÃÏäì ááßÇÆä";
     Text[ dutch ] = "Minimale kaderbreedte";
     Text[ chinese_simplified ] = "×îĞ¡¿ò¿í";
     Text[ greek ] = "ÅëÜ÷éóôï ğëÜôïò ğëáéóßïõ";
@@ -9195,7 +9195,7 @@ String STR_ItemNam_TEXT_MAXFRAMEWIDTH
     Text[ polish ] = "Maksymalna szerokoœæ ramki";
     Text[ japanese ] = "Å‘åŒÀ‚Ì˜g‚Ì•";
     Text[ chinese_traditional ] = "³Ì¤j®Ø¼e";
-    Text[ arabic ] = "ÇáÚÑÖ ÇáÃŞÕì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÚÑÖ ÇáÃŞÕì ááßÇÏÑ";
     Text[ dutch ] = "Maximale kaderbreedte";
     Text[ chinese_simplified ] = "×î´ó¿ò¿í";
     Text[ greek ] = "Ìİãéóôï ğëÜôïò ğëáéóßïõ";
@@ -9273,7 +9273,7 @@ String STR_ItemNam_TEXT_FITTOSIZE
     Text[ polish ] = "Tekst do ramki";
     Text[ japanese ] = "Ã·½Ä‚ğ˜g‚É‡‚í‚·";
     Text[ chinese_traditional ] = "¤å¦r©M®Ø¹ï»ô";
-    Text[ arabic ] = "ãáÇÁãÉ ÇáäÕ ááÅØÇÑ";
+    Text[ arabic ] = "ãáÇÁãÉ ÇáäÕ ááßÇÏÑ";
     Text[ dutch ] = "Tekst-aan-kader";
     Text[ chinese_simplified ] = "ÎÄ×ÖºÍ¿ò¶ÔÆë";
     Text[ greek ] = "ĞñïóáñìïãŞ êåéìİíïõ óå ğëáßóéï";
@@ -9403,7 +9403,7 @@ String STR_ItemNam_GRAFGAMMA
     Text[ english ] = "Gamma";
     Text[ english_us ] = "Gamma";
     Text[ portuguese ] = "Gamma";
-    Text[ greek ] = "ã";
+    Text[ greek ] = "ÃÜììá";
     Text[ dutch ] = "Gamma";
     Text[ french ] = "Gamma";
     Text[ spanish ] = "Gamma";
@@ -12507,7 +12507,7 @@ String SIP_SA_TEXT_MINFRAMEHEIGHT
     Text[ japanese ] = "Å’á‚Ì˜g‚Ì‚‚³";
     Text[ chinese_simplified ] = "×îĞ¡µÄ¿ò¸ß¶È";
     Text[ chinese_traditional ] = "³Ì¤pªº®Ø°ª";
-    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃÏäì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃÏäì ááßÇÏÑ";
     Text[ dutch ] = "Minimale kaderhoogte";
     Text[ chinese_simplified ] = "×îĞ¡µÄ¿ò¸ß¶È";
     Text[ greek ] = "ÅëÜ÷éóôï ıøïò ğëáéóßïõ";
@@ -12559,7 +12559,7 @@ String SIP_SA_TEXT_FITTOSIZE
     Text[ japanese ] = "Ã·½Ä‚ğ˜g‚É‡‚í‚¹‚é";
     Text[ chinese_simplified ] = "ÎÄ×ÖºÍ¿ò¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¹ï»ô®Ø";
-    Text[ arabic ] = "ãáÇÁãÉ ÇáäÕ ááÅØÇÑ";
+    Text[ arabic ] = "ãáÇÁãÉ ÇáäÕ ááßÇÏÑ";
     Text[ dutch ] = "Tekst aanpassen aan kader";
     Text[ chinese_simplified ] = "ÎÄ×ÖºÍ¿ò¶ÔÆë";
     Text[ greek ] = "ĞñïóáñìïãŞ êåéìİíïõ ùò ğñïò ğëáßóéï";
@@ -12586,7 +12586,7 @@ String SIP_SA_TEXT_LEFTDIST
     Text[ japanese ] = "Ã·½Ä˜g‚Ì¶‘¤ŠÔŠu";
     Text[ chinese_simplified ] = "×ó±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¥ª¤å¦r¤è®Ø¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíÓÑ áÅØÇÑ ÇáäÕ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíÓÑ áßÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Afstand tekst-kader, links";
     Text[ chinese_simplified ] = "×ó±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ greek ] = "Áğüóôáóç áñéóôåñïı ğëáéóßïõ êåéìİíïõ";
@@ -12613,7 +12613,7 @@ String SIP_SA_TEXT_RIGHTDIST
     Text[ japanese ] = "Ã·½Ä˜g‚Ì‰E‘¤ŠÔŠu";
     Text[ chinese_simplified ] = "ÓÒ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¥k¤å¦r¤è¶ô¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíãä áÅØÇÑ ÇáäÕ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÃíãä áßÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Afstand tekst-kader, rechts";
     Text[ chinese_simplified ] = "ÓÒ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ greek ] = "ÄåîéÜ áğüóôáóç ğëáéóßïõ êåéìİíïõ";
@@ -12639,7 +12639,7 @@ String SIP_SA_TEXT_UPPERDIST
     Text[ japanese ] = "Ã·½Ä˜g‚Ìã•”ŠÔŠu";
     Text[ chinese_simplified ] = "ÉÏ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¤W¤å¦r¤è¶ô¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÚáæí áÅØÇÑ ÇáäÕ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÚáæí áßÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Afstand tekst-kader, boven";
     Text[ chinese_simplified ] = "ÉÏ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ greek ] = "¢íù ğåñéèşñéï ğëáéóßïõ êåéìİíïõ";
@@ -12665,7 +12665,7 @@ String SIP_SA_TEXT_LOWERDIST
     Text[ japanese ] = "Ã·½Ä˜g‚Ì‰º•”ŠÔŠu";
     Text[ chinese_simplified ] = "ÏÂ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ chinese_traditional ] = "¤U¤å¦r¤è¶ô¶¡¹j";
-    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÓİáí áÅØÇÑ ÇáäÕ";
+    Text[ arabic ] = "ÇáÊÈÇÚÏ ÇáÓİáí áßÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Afstand tekst-kader, beneden";
     Text[ chinese_simplified ] = "ÏÂ±ßÎÄ×Ö¿ò¼ä¸ô";
     Text[ greek ] = "Áğüóôáóç êÜôù ğëáéóßïõ êåéìİíïõ";
@@ -12719,7 +12719,7 @@ String SIP_SA_TEXT_MAXFRAMEHEIGHT
     Text[ japanese ] = "Å‚‚Ì˜g‚Ì‚‚³";
     Text[ chinese_simplified ] = "×î´óµÄ¿ò¸ß¶È";
     Text[ chinese_traditional ] = "³Ì¤jªº®Ø°ª";
-    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááßÇÆä";
     Text[ dutch ] = "Maximale kaderhoogte";
     Text[ chinese_simplified ] = "×î´óµÄ¿ò¸ß¶È";
     Text[ greek ] = "Ìİãéóôï ıøïò ğëáéóßïõ";
@@ -12745,7 +12745,7 @@ String SIP_SA_TEXT_MINFRAMEWIDTH
     Text[ japanese ] = "Å’á‚Ì˜g•";
     Text[ chinese_simplified ] = "×îĞ¡µÄ¿ò¿í¶È";
     Text[ chinese_traditional ] = "³Ì¤pªº®Ø°ª";
-    Text[ arabic ] = "ÇáÚÑÖ ÇáÃÏäì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÚÑÖ ÇáÃÏäì ááßÇÏÑ";
     Text[ dutch ] = "Minimale kaderbreedte";
     Text[ chinese_simplified ] = "×îĞ¡µÄ¿ò¿í¶È";
     Text[ greek ] = "ÅëÜ÷éóôï ğëÜôïò ğëáéóßïõ";
@@ -12771,7 +12771,7 @@ String SIP_SA_TEXT_MAXFRAMEWIDTH
     Text[ japanese ] = "Å‚‚Ì˜g•";
     Text[ chinese_simplified ] = "×î´óµÄ¿ò¿í¶È";
     Text[ chinese_traditional ] = "³Ì¤pªº®Ø¼e";
-    Text[ arabic ] = "ÇáÚÑÖ ÇáÃŞÕì ááÅØÇÑ";
+    Text[ arabic ] = "ÇáÚÑÖ ÇáÃŞÕì ááßÇÏÑ";
     Text[ dutch ] = "Maximale kaderbreedte";
     Text[ chinese_simplified ] = "×î´óµÄ¿ò¿í¶È";
     Text[ greek ] = "Ìİãéóôï ğëÜôïò ğëáéóßïõ";
@@ -13049,10 +13049,10 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ portuguese ] = "Ajuste de formas automáticas";
     Text[ russian ] = "Âûğàâíèâàíèå àâòîôîğì";
     Text[ greek ] = "Ñıèìéóç Áõôïìïñöşí";
-    Text[ dutch ] = "SvDraw Autoshape Adjustment";
+    Text[ dutch ] = "AutoVormen justeren";
     Text[ french ] = "Cadrage des formes automatiques";
     Text[ spanish ] = "Ajuste de autoformas";
-    Text[ italian ] = "SvDraw Autoshape Adjustment";
+    Text[ italian ] = "Regolazione autoshape";
     Text[ danish ] = "SvDraw Autoshape Adjustment";
     Text[ swedish ] = "Justering AutoForm";
     Text[ polish ] = "Justowanie form automatycznych";
@@ -16396,7 +16396,7 @@ String SIP_SA_GRAFGAMMA
     Text[ english ] = "Gamma";
     Text[ english_us ] = "Gamma";
     Text[ portuguese ] = "Gamma";
-    Text[ greek ] = "ã";
+    Text[ greek ] = "ÃÜììá";
     Text[ dutch ] = "Gamma";
     Text[ french ] = "Gamma";
     Text[ spanish ] = "Gamma";
@@ -16494,7 +16494,7 @@ String SIP_SA_GRAFCROP
     Text[ dutch ] = "Knippen";
     Text[ french ] = "Rogner";
     Text[ spanish ] = "Cortar";
-    Text[ italian ] = "Crop";
+    Text[ italian ] = "Taglia";
     Text[ danish ] = "Beskær";
     Text[ swedish ] = "Beskär";
     Text[ polish ] = "Przytnij";
