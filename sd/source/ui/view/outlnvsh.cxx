@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: af $ $Date: 2002-11-19 15:49:43 $
+ *  last change: $Author: af $ $Date: 2002-11-28 13:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1532,16 +1532,30 @@ void SdOutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
 
 void SdOutlineViewShell::Execute(SfxRequest& rReq)
 {
+    bool bForwardCall = true;
+
     switch(rReq.GetSlot())
     {
         case SID_SAVEDOC:
         case SID_SAVEASDOC:
-        {
             PrepareClose();
-        }
+            break;
+
+        case SID_SEARCH_ITEM:
+            // Forward this request to the the common (old) code of the
+            // document shell.
+            pDocSh->Execute (rReq);
+            bForwardCall = false;
+            break;
+
+        default:
+            OSL_TRACE ("SdOutlineViewShell::Execute(): can not handle slot %d", rReq.GetSlot());
+            break;
+
     }
 
-    ((SdDrawDocShell*)GetViewFrame()->GetObjectShell())->ExecuteSlot( rReq );
+    if (bForwardCall)
+        ((SdDrawDocShell*)GetViewFrame()->GetObjectShell())->ExecuteSlot( rReq );
 }
 
 /*************************************************************************
