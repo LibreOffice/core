@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-12 10:55:25 $
+ *  last change: $Author: pb $ $Date: 2002-10-01 12:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,6 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _LIST_
-#include <list>
-#endif
-
-#ifndef  _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-
 #ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
@@ -96,12 +88,6 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERLISTENER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
@@ -179,8 +165,6 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
@@ -204,7 +188,7 @@
 #include "docfac.hxx"
 #endif
 #ifndef _SFX_FCONTNR_HXX
-#include "fcontnr.hxx"
+//#include "fcontnr.hxx"
 #endif
 #ifndef _SFX_OPENFLAG_HXX
 #include "openflag.hxx"
@@ -231,8 +215,8 @@
 #ifndef SFX2_REQUEST_HXX
 #include "request.hxx"
 #endif
-#ifndef _VECTOR_
-#include <vector>
+#ifndef _SFX_FILEDLGIMPL_HXX
+#include "filedlgimpl.hxx"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -259,128 +243,6 @@ namespace sfx2
 String EncodeSpaces_Impl( const String& rSource );
 String DecodeSpaces_Impl( const String& rSource );
 
-
-// ------------------------------------------------------------------------
-class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
-{
-    friend class FileDialogHelper;
-
-    Reference < XFilePicker >   mxFileDlg;
-    Reference < XNameAccess >   mxFilterCFG;
-
-    SfxFilterMatcher       *mpMatcher;
-    GraphicFilter          *mpGraphicFilter;
-
-    OUString                maPath;
-    OUString                maCurFilter;
-    OUString                maSelectFilter;
-    Timer                   maPreViewTimer;
-    Graphic                 maGraphic;
-    FileDialogHelper*       mpParent;
-
-    const short             m_nDialogType;
-
-    SfxFilterFlags          m_nMustFlags;
-    SfxFilterFlags          m_nDontFlags;
-
-    ErrCode                 mnError;
-    sal_Bool                mbHasPassword           : 1;
-    sal_Bool                mbIsPwdEnabled          : 1;
-    sal_Bool                m_bHaveFilterOptions    : 1;
-    sal_Bool                mbHasVersions           : 1;
-    sal_Bool                mbHasAutoExt            : 1;
-    sal_Bool                mbHasLink               : 1;
-    sal_Bool                mbHasPreview            : 1;
-    sal_Bool                mbShowPreview           : 1;
-    sal_Bool                mbIsSaveDlg             : 1;
-    sal_Bool                mbExport                : 1;
-
-    sal_Bool                mbDeleteMatcher         : 1;
-    sal_Bool                mbInsert                : 1;
-    sal_Bool                mbSystemPicker          : 1;
-    sal_Bool                mbPwdCheckBoxState      : 1;
-
-private:
-    void                    addFilters( sal_uInt32 nFlags,
-                                        const SfxObjectFactory& rFactory,
-                                        SfxFilterFlags nMust,
-                                        SfxFilterFlags nDont );
-    void                    addFilter( const OUString& rFilterName,
-                                       const OUString& rExtension );
-    void                    addGraphicFilter();
-    void                    enablePasswordBox( sal_Bool bInit );
-    void                    updateFilterOptionsBox();
-    void                    updateSelectionBox();
-    void                    updateVersions();
-    void                    updatePreviewState( sal_Bool _bUpdatePreviewWindow = sal_True );
-    void                    dispose();
-
-    void                    loadConfig();
-    void                    saveConfig();
-
-    const SfxFilter*        getCurentSfxFilter();
-    sal_Bool                updateExtendedControl( sal_Int16 _nExtendedControlId, sal_Bool _bEnable );
-
-    ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
-    void                    setDefaultValues();
-
-    void                    preExecute();
-    void                    postExecute( sal_Int16 _nResult );
-    sal_Int16               implDoExecute();
-
-    void                    correctVirtualDialogType();
-
-    void                    setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
-    void                    setDialogHelpId( const sal_Int32 _nHelpId );
-
-    sal_Bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
-
-    sal_Bool                isInOpenMode() const;
-    String                  getCurrentFilterUIName() const;
-
-    DECL_LINK( TimeOutHdl_Impl, Timer* );
-    DECL_LINK( HandleEvent, FileDialogHelper* );
-    DECL_LINK( InitControls, void* );
-
-public:
-    // XFilePickerListener methods
-    virtual void SAL_CALL       fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual void SAL_CALL       directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual OUString SAL_CALL   helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual void SAL_CALL       controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException );
-    virtual void SAL_CALL       dialogSizeChanged() throw ( RuntimeException );
-
-    // XEventListener methods
-    virtual void SAL_CALL       disposing( const EventObject& Source ) throw ( RuntimeException );
-
-    // handle XFilePickerListener events
-    void                    handleFileSelectionChanged( const FilePickerEvent& aEvent );
-    void                    handleDirectoryChanged( const FilePickerEvent& aEvent );
-    OUString                handleHelpRequested( const FilePickerEvent& aEvent );
-    void                    handleControlStateChanged( const FilePickerEvent& aEvent );
-    void                    handleDialogSizeChanged();
-
-    // Own methods
-                            FileDialogHelper_Impl( FileDialogHelper* pParent,
-                                                   const short nDialogType,
-                                                   sal_uInt32 nFlags );
-                           ~FileDialogHelper_Impl();
-
-    ErrCode                 execute( SvStringsDtor*& rpURLList,
-                                     SfxItemSet *&   rpSet,
-                                     String&         rFilter );
-    ErrCode                 execute();
-
-    void                    setPath( const OUString& rPath );
-    void                    setFilter( const OUString& rFilter );
-
-    OUString                getPath() const;
-    OUString                getFilter() const;
-    void                    getRealFilter( String& _rFilter ) const;
-
-    ErrCode                 getGraphic( Graphic& rGraphic ) const;
-    void                    createMatcher( const SfxObjectFactory& rFactory );
-};
 
 // ------------------------------------------------------------------------
 // -----------      FileDialogHelper_Impl       ---------------------------
@@ -569,14 +431,8 @@ String FileDialogHelper_Impl::getCurrentFilterUIName() const
     {
         aFilterName = xFltMgr->getCurrentFilter();
 
-        if ( aFilterName.Len() )
-        {
-            // when we show the filter ui names, we added the extensions
-            // now we have to cut the extensions to find the filter
-            static const String sOpenExtension( DEFINE_CONST_UNICODE( " (*." ) );
-            static const String sSaveExtension( DEFINE_CONST_UNICODE( " (." ) );
-            aFilterName.Erase( aFilterName.Search( isInOpenMode() ? sOpenExtension : sSaveExtension ) );
-        }
+        if ( aFilterName.Len() && isShowFilterExtensionEnabled() )
+            aFilterName = getFilterName( aFilterName );
     }
 
     return aFilterName;
@@ -1694,11 +1550,11 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     // append the filters
     ::rtl::OUString sFirstFilter;
     if ( WB_OPEN == ( nFlags & WB_OPEN ) )
-        ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter );
+        ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter, *this );
     else if ( mbExport )
-        ::sfx2::appendExportFilters( aIter, xFltMgr, sFirstFilter );
+        ::sfx2::appendExportFilters( aIter, xFltMgr, sFirstFilter, *this );
     else
-        ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter );
+        ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter, *this );
 
     // set our initial selected filter (if we do not already have one)
     if ( maSelectFilter.getLength() )
@@ -1773,7 +1629,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     try
     {
         OUString aAllFilterName = String( SfxResId( STR_SFX_IMPORT_ALL ) );
-        aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode );
+        aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
 
         xFltMgr->appendFilter( aAllFilterName, aExtensions );
         maSelectFilter = aAllFilterName;
@@ -1802,7 +1658,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
                 aExtensions += sWildcard;
             }
         }
-        aName = ::sfx2::addExtension( aName, aExtensions, bIsInOpenMode );
+        aName = ::sfx2::addExtension( aName, aExtensions, bIsInOpenMode, *this );
         try
         {
             xFltMgr->appendFilter( aName, aExtensions );
@@ -2055,6 +1911,46 @@ void FileDialogHelper_Impl::setDefaultValues()
     }
 }
 
+sal_Bool FileDialogHelper_Impl::isShowFilterExtensionEnabled() const
+{
+    return !maFilters.empty();
+}
+
+void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
+                                           const OUString& rFilterWithExtension )
+{
+    maFilters.push_back( FilterPair( rFilter, rFilterWithExtension ) );
+
+}
+
+OUString FileDialogHelper_Impl::getFilterName( const OUString& rFilterWithExtension ) const
+{
+    OUString sRet;
+    for( ::std::vector< FilterPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    {
+        if ( (*pIter).Second == rFilterWithExtension )
+        {
+            sRet = (*pIter).First;
+            break;
+        }
+    }
+    return sRet;
+}
+
+OUString FileDialogHelper_Impl::getFilterWithExtension( const OUString& rFilter ) const
+{
+    OUString sRet;
+    for( ::std::vector< FilterPair >::const_iterator pIter = maFilters.begin(); pIter != maFilters.end(); ++pIter )
+    {
+        if ( (*pIter).First == rFilter )
+        {
+            sRet = (*pIter).Second;
+            break;
+        }
+    }
+    return sRet;
+}
+
 // ------------------------------------------------------------------------
 // -----------          FileDialogHelper        ---------------------------
 // ------------------------------------------------------------------------
@@ -2229,7 +2125,10 @@ void FileDialogHelper::AddFilter( const String& rFilterName,
 // ------------------------------------------------------------------------
 void FileDialogHelper::SetCurrentFilter( const String& rFilter )
 {
-    mpImp->setFilter( rFilter );
+    String sFilter( rFilter );
+    if ( mpImp->isShowFilterExtensionEnabled() )
+        sFilter = mpImp->getFilterWithExtension( rFilter );
+    mpImp->setFilter( sFilter );
 }
 
 // ------------------------------------------------------------------------
