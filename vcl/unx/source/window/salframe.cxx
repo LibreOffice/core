@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-06 11:14:34 $
+ *  last change: $Author: pl $ $Date: 2001-12-06 19:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,14 +503,13 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
             nDecoFlags |= WMAdaptor::decoration_Title;
     }
 
-    pDisplay_->getWMAdaptor()->
-        setFrameTypeAndDecoration(
-                                  pFrame_,
-                                  (mpParent && hPresentationWindow == None) ?
-                                  WMAdaptor::windowType_ModelessDialogue
-                                  : WMAdaptor::windowType_Normal,
-                                  nDecoFlags,
-                                  hPresentationWindow ? NULL : mpParent );
+    GetDisplay()->getWMAdaptor()->
+        setFrameTypeAndDecoration( pFrame_,
+                                   (mpParent && hPresentationWindow == None) ?
+                                   WMAdaptor::windowType_ModelessDialogue
+                                   : WMAdaptor::windowType_Normal,
+                                   nDecoFlags,
+                                   hPresentationWindow ? NULL : mpParent );
 
     if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
         pDisplay_->getWMAdaptor()->maximizeFrame( pFrame_, true, true );
@@ -989,6 +988,7 @@ void SalFrame::ToTop( USHORT nFlags )
     if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
         && ! ( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
         && maFrameData.nShowState_ != SHOWSTATE_HIDDEN
+        && maFrameData.nShowState_ != SHOWSTATE_UNKNOWN
         )
     {
         if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
@@ -2612,7 +2612,8 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         return 1;
     }
 
-    if( SHOWSTATE_UNKNOWN == nShowState_ )
+    // check size hints in first time SalFrame::Show
+    if( SHOWSTATE_UNKNOWN == nShowState_ && bMapped_ )
     {
         nShowState_ = SHOWSTATE_NORMAL;
 
