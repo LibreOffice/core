@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-11 08:57:05 $
+ *  last change: $Author: oj $ $Date: 2002-11-28 10:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
@@ -103,6 +106,8 @@ namespace connectivity
 
         typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
+        DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,TJDBCDrivers);
+
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
 
@@ -110,13 +115,14 @@ namespace connectivity
         class ODriverDelegator : public ::comphelper::OBaseMutex
                                 ,public ODriverDelegator_BASE
         {
+            TJDBCDrivers                                                        m_aJdbcDrivers; // all jdbc drivers
             TWeakPairVector                                                     m_aConnections; //  vector containing a list
                                                                                                 //  of all the Connection objects
                                                                                                 //  for this Driver
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xODBCDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xJDBCDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
-            sal_Bool m_bUseOdbc;
+            ::rtl::OUString     m_sOldDriverClass;
+            sal_Bool            m_bUseOdbc;
 
             /** load the driver we want to delegate.
                 The <member>m_xODBCDriver</member> or <member>m_xDBCDriver</member> may be <NULL/> if the driver could not be loaded.
