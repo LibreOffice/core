@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:47:04 $
+ *  last change: $Author: cl $ $Date: 2000-11-13 14:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
 
     if( pMap->nWID == EE_FEATURE_FIELD )
     {
-        if ( pAttribs->GetItemState( EE_FEATURE_FIELD, sal_False )  & SFX_ITEM_SET )
+        if ( pAttribs->GetItemState( EE_FEATURE_FIELD, sal_False ) == SFX_ITEM_SET )
         {
             SvxFieldItem* pItem = (SvxFieldItem*)pAttribs->GetItem( EE_FEATURE_FIELD );
             const SvxFieldData* pData = pItem->GetField();
@@ -581,7 +581,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
     }
     else if( pMap->nWID == WID_PORTIONTYPE )
     {
-        if ( pAttribs->GetItemState( EE_FEATURE_FIELD, sal_False )  & SFX_ITEM_SET )
+        if ( pAttribs->GetItemState( EE_FEATURE_FIELD, sal_False ) == SFX_ITEM_SET )
         {
             OUString aType( RTL_CONSTASCII_USTRINGPARAM("TextField") );
             aAny <<= aType;
