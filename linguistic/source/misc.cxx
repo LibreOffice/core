@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:01:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 #include "misc.hxx"
 #include "defs.hxx"
@@ -129,6 +132,23 @@ osl::Mutex &    GetLinguMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang )
+{
+    static LocaleDataWrapper aLclDtaWrp(
+                getProcessServiceFactory(),
+                CreateLocale( Application::GetSettings().GetUILanguage() ) );
+
+    const Locale &rLcl = aLclDtaWrp.getLoadedLocale();
+    Locale aLcl( CreateLocale( nLang ) );
+    if (aLcl.Language != rLcl.Language ||
+        aLcl.Country  != rLcl.Country  ||
+        aLcl.Variant  != rLcl.Variant)
+        aLclDtaWrp.setLocale( aLcl );
+    return aLclDtaWrp;
 }
 
 ///////////////////////////////////////////////////////////////////////////
