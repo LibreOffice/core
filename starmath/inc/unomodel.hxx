@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:25 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 22:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class SmModel : public SmModelBaseClass,
 public:
     SmModel( SfxObjectShell *pObjSh = 0 );
     virtual ~SmModel();
+    const SfxItemPropertyMap * getPropertyMap() const { return _pMap;}
 
     //XInterface
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
