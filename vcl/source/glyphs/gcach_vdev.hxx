@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-10 17:21:28 $
+ *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ friend GlyphCache;
     virtual int                 GetGlyphIndex( sal_Unicode ) const;
     virtual void                SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphData& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& ) const;
+    virtual ULONG               GetKernPairs( ImplKernPairData** ) const = 0;
 
     static long                 FetchFontList( ImplDevFontList* );
     static void                 ClearFontList();

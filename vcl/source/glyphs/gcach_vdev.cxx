@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-10 17:21:28 $
+ *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,27 @@ void VirtDevServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphDa
 
 // -----------------------------------------------------------------------
 
+ULONG VirtDevServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
+{
+    ppKernPairs = NULL;
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 bool VirtDevServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& rPolyPoly ) const
 {
-    // TODO...
-    return false;
+    Font aFont;
+    aFont.SetName       ( GetFontSelData().maName );
+    aFont.SetStyleName  ( GetFontSelData().maStyleName );
+    aFont.SetHeight     ( GetFontSelData().mnHeight );
+    aFont.SetWidth      ( GetFontSelData().mnWidth );
+    aFont.SetOrientation( GetFontSelData().mnOrientation );
+
+    VirtualDevice vdev( 1 );
+    vdev.SetFont( aFont );
+
+    return vdev.GetGlyphOutline( nGlyphIndex, rPolyPoly, bOptimize);
 }
 
 // =======================================================================

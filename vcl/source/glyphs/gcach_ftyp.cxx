@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-10 17:21:28 $
+ *  last change: $Author: hdu $ $Date: 2000-11-16 13:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,13 @@
 
 #include <rtl/ustring>      // used only for string=>hashvalue
 #include <osl/file.hxx>
+#include <poly.hxx>
 
 #ifndef NO_FREETYPE_FONTS
 
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
+#include "freetype/ftoutln.h"
 #include "freetype/tttables.h"
 #include "freetype/tttags.h"
 
@@ -139,7 +141,7 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
         FT_Error rcFT = FT_New_Face( aLibFT, pszFontFileName, 0, &aFaceFT );
         if( (rcFT == FT_Err_Ok) && (aFaceFT != NULL) )
         {
-            if( !(aFaceFT->face_flags & FT_FACE_FLAG_SFNT) )    // ignore non-TT fonts for now
+            if( !FT_IS_SFNT( aFaceFT ) )    // ignore non-TT fonts for now
                 continue;
 
             FtFontInfo* const pFontInfo = new FtFontInfo;
@@ -166,7 +168,7 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
             rData.meCharSet     = (i >= 0) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE;
             rData.meScript      = SCRIPT_DONTKNOW;
 
-            rData.mePitch       = (aFaceFT->face_flags & FT_FACE_FLAG_FIXED_WIDTH) ? PITCH_FIXED : PITCH_VARIABLE;
+            rData.mePitch       = FT_IS_FIXED_WIDTH( aFaceFT ) ? PITCH_FIXED : PITCH_VARIABLE;
             rData.meWidthType   = WIDTH_DONTKNOW;
             rData.meWeight      = (aFaceFT->style_flags & FT_STYLE_FLAG_BOLD) ? WEIGHT_BOLD : WEIGHT_NORMAL;
             rData.meItalic      = (aFaceFT->style_flags & FT_STYLE_FLAG_ITALIC) ? ITALIC_NORMAL : ITALIC_NONE;
@@ -240,9 +242,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
 
     if( rFSD.mnOrientation != 0 )
     {
-        const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
-        const FT_Fixed nCos = (FT_Fixed)( 0x10000 * cos( dRad ) + 0.5 );
-        const FT_Fixed nSin = (FT_Fixed)( 0x10000 * sin( dRad ) + 0.5 );
         FT_Matrix aMatrix;
         aMatrix.xx = +nCos;
         aMatrix.yy = +nCos;
@@ -426,11 +425,197 @@ void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphD
 }
 
 // -----------------------------------------------------------------------
+// kerning helper functions
+// -----------------------------------------------------------------------
+
+ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
+{
+    ULONG nKernCount = 0;
+    if( !FT_HAS_KERNING( maFaceFT ) )
+        ppKernPairs = NULL;
+    else
+    {
+        // TODO...
+    }
+    return nKernCount;
+}
+
+// -----------------------------------------------------------------------
+// outline helper functions
+// -----------------------------------------------------------------------
+
+extern "C"
+{
+    int FT_move_to( FT_Vector* p0, void* vpPolyArgs );
+    int FT_line_to( FT_Vector* p1, void* vpPolyArgs );
+    int FT_conic_to( FT_Vector* p1, FT_Vector* p2, void* vpPolyArgs );
+    int FT_cubic_to( FT_Vector* p1, FT_Vector* p2, FT_Vector* p3, void* vpPolyArgs );
+};  // end extern "C"
+
+class PolyArgs
+{
+public:
+                PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints, long nHeight );
+                ~PolyArgs();
+
+    void        AddPoint( long nX, long nY, PolyFlags);
+    void        ClosePolygon();
+
+    long        GetPosX() const { return maPosition.x;}
+    long        GetPosY() const { return maPosition.y;}
+
+private:
+    PolyPolygon& mrPolyPoly;
+
+    Point*      mpPointAry;
+    BYTE*       mpFlagAry;
+
+    FT_Vector   maPosition;
+    USHORT      mnMaxPoints;
+    USHORT      mnPoints;
+    USHORT      mnPoly;
+    long        mnHeight;
+    bool        bHasOffline;
+};
+
+// -----------------------------------------------------------------------
+
+PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints, long nHeight )
+:   mrPolyPoly(rPolyPoly),
+    mnMaxPoints(nMaxPoints),
+    mnPoints(0),
+    mnPoly(0),
+    mnHeight(nHeight),
+    bHasOffline(false)
+{
+    mpPointAry  = new Point [ mnMaxPoints ];
+    mpFlagAry   = new BYTE  [ mnMaxPoints ];
+
+    mrPolyPoly.Clear();
+}
+
+// -----------------------------------------------------------------------
+
+PolyArgs::~PolyArgs()
+{
+    delete[] mpFlagAry;
+    delete[] mpPointAry;
+}
+
+// -----------------------------------------------------------------------
+
+void PolyArgs::AddPoint( long nX, long nY, PolyFlags aFlag )
+{
+    DBG_ASSERT( (mnPoints < mnMaxPoints), "FTGlyphOutline: AddPoint overflow!" );
+
+    maPosition.x = nX;
+    maPosition.y = nY;
+    mpPointAry[ mnPoints ] = Point( (nX + 32) >> 6, mnHeight - ((nY + 32) >> 6) );
+    mpFlagAry[ mnPoints++ ]= aFlag;
+    bHasOffline |= (aFlag != POLY_NORMAL);
+}
+
+// -----------------------------------------------------------------------
+
+void PolyArgs::ClosePolygon()
+{
+    if( !mnPoly++ )
+        return;
+
+    // freetype seems to always close the polygon with an ON_CURVE point
+    // PolyPoly wants to close the polygon itself => remove last point
+    DBG_ASSERT( (mnPoints >= 2), "FTGlyphOutline: PolyFinishNum failed!" );
+    --mnPoints;
+    DBG_ASSERT( (mpPointAry[0]==mpPointAry[mnPoints]), "FTGlyphOutline: PolyFinishEq failed!" );
+    DBG_ASSERT( (mpFlagAry[0]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFE failed!" );
+    DBG_ASSERT( (mpFlagAry[mnPoints]==POLY_NORMAL), "FTGlyphOutline: PolyFinishFS failed!" );
+
+    Polygon aPoly( mnPoints, mpPointAry, (bHasOffline ? mpFlagAry : NULL) );
+    mrPolyPoly.Insert( aPoly );
+
+    mnPoints = 0;
+    bHasOffline = false;
+}
+
+// -----------------------------------------------------------------------
+
+static int FT_move_to( FT_Vector* const p0, void* vpPolyArgs )
+{
+    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+
+    // move_to implies a new polygon => finish old polygon first
+    rA.ClosePolygon();
+
+    rA.AddPoint( p0->x, p0->y, POLY_NORMAL );
+    return 0;
+}
+
+static int FT_line_to( FT_Vector* const p1, void* vpPolyArgs )
+{
+    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+    rA.AddPoint( p1->x, p1->y , POLY_NORMAL );
+    return 0;
+}
+
+static int FT_conic_to( FT_Vector* const p1, FT_Vector* const p2, void* vpPolyArgs )
+{
+    PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
+
+    // VCL's Polygon only provides cubic beziers
+    const long nX1 = (2 * rA.GetPosX() + 4 * p1->x + 3) / 6;
+    const long nY1 = (2 * rA.GetPosY() + 4 * p1->y + 3) / 6;
+    rA.AddPoint( nX1, nY1, POLY_CONTROL );
+
+    const long nX2 = (2 * p2->x + 4 * p1->x + 3) / 6;
+    const long nY2 = (2 * p2->y + 4 * p1->y + 3) / 6;
+    rA.AddPoint( nX2, nY2, POLY_CONTROL );
+
+    rA.AddPoint( p2->x, p2->y, POLY_NORMAL );
+    return 0;
+}
+
+static int FT_cubic_to( FT_Vector* const p1, FT_Vector* const p2, FT_Vector* const p3, void* vpPolyArgs )
+{
+    PolyArgs* const pA = reinterpret_cast<PolyArgs*>(vpPolyArgs);
+    pA->AddPoint( p1->x, p1->y, POLY_CONTROL );
+    pA->AddPoint( p2->x, p2->y, POLY_CONTROL );
+    pA->AddPoint( p3->x, p3->y, POLY_NORMAL );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
 
 bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, bool bOptimize, PolyPolygon& rPolyPoly ) const
 {
-    // TODO...
-    return false;
+    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP );
+
+    FT_Glyph aGlyphFT;
+    rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+
+    if( aGlyphFT->format != ft_glyph_format_outline )
+        return false;
+
+    FT_Outline& rOutline = reinterpret_cast<FT_OutlineGlyphRec*>( aGlyphFT ) -> outline;
+    const long nMaxPoints = rOutline.n_points * 2;
+    const long nHeight = GetFontSelData().mnHeight;
+    PolyArgs aPolyArg( rPolyPoly, nMaxPoints, nHeight );
+
+    FT_Outline_Funcs aFuncs;
+    aFuncs.move_to  = &FT_move_to;
+    aFuncs.line_to  = &FT_line_to;
+    aFuncs.conic_to = &FT_conic_to;
+    aFuncs.cubic_to = &FT_cubic_to;
+    aFuncs.shift    = 0;
+    aFuncs.delta    = 0;
+    rc = FT_Outline_Decompose( &rOutline, &aFuncs, (void*)&aPolyArg );
+    aPolyArg.ClosePolygon();    // close last polygon
+
+    FT_Done_Glyph( aGlyphFT );
+
+    if( bOptimize)
+        rPolyPoly.Optimize( /*POLY_OPTIMIZE_NO_SAME |*/ POLY_OPTIMIZE_REDUCE | POLY_OPTIMIZE_EDGES );
+
+    return true;
 }
 
 // =======================================================================
