@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-01 14:43:04 $
+ *  last change: $Author: ama $ $Date: 2001-02-02 09:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,7 +1222,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         if( rMulti.HasRotation() )
         {
             pTmpFnt->SetVertical( rMulti.GetFontRotation() );
-            nMaxWidth = GetTxtFrm()->GetUpper()->Prt().Height();
+            nMaxWidth = USHRT_MAX;
         }
         if( rMulti.IsDouble() )
         {
@@ -1285,6 +1285,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         FormatReset( aInf );
         aInf.X( nTmpX );
         aInf.Width( KSHORT(nActWidth) );
+        aInf.RealWidth( KSHORT(nActWidth) );
         if( pFirstRest )
         {
             ASSERT( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest exspected");
