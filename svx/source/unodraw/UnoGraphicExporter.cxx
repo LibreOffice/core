@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:15:04 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,6 +947,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
             sdr::contact::DisplayInfo aDisplayInfo;
             aDisplayInfo.SetProcessedPage( mpCurrentPage );
             aDisplayInfo.SetMasterPagePainting( pPage->IsMasterPage() );
+            if( mpCurrentPage && pPage->IsMasterPage() )
+                aDisplayInfo.SetProcessLayers( mpCurrentPage->TRG_GetMasterPageVisibleLayers() );
 
             aIter = aShapes.begin();
             while( aIter != aEnd )
@@ -957,8 +959,10 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 sdr::contact::ObjectContactOfPagePainter aObjectContact( pPage, false );
                 sdr::contact::ViewObjectContact aOriginal( aObjectContact, aViewContact);
 
-                if( (pObj->GetPage() == 0) || pObj->GetPage()->checkVisibility(aOriginal, aDisplayInfo, false) )
-                    pObj->SingleObjectPainter(aXOut,aInfoRec); // #110094#-17
+                if( aDisplayInfo.GetProcessLayers().IsSet(pObj->SdrObject::GetLayer()) )
+                    if( (pObj->GetPage() == 0) || pObj->GetPage()->checkVisibility(aOriginal, aDisplayInfo, false) )
+                        pObj->SingleObjectPainter(aXOut,aInfoRec); // #110094#-17
+
 
                 aOriginal.PrepareDelete();
             }
