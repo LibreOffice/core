@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:39:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,14 +1595,18 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
 
 class ImplRenderPaintProc : public ::sdr::contact::ViewObjectContactRedirector
 {
-    const SdrLayerAdmin& rLayerAdmin;
-    SdrPageView* pSdrPageView;
+    const SdrLayerAdmin&    rLayerAdmin;
+    SdrPageView*            pSdrPageView;
+    vcl::PDFExtOutDevData*  pPDFExtOutDevData;
+
+    sal_Bool ImplBegStructureTag( SdrObject& rObject );
+    void ImplEndStructureTag();
 
 public:
     sal_Bool IsVisible  ( const SdrObject* pObj ) const;
     sal_Bool IsPrintable( const SdrObject* pObj ) const;
 
-    ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView );
+    ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData );
     virtual ~ImplRenderPaintProc();
 
     // all default implementations just call the same methods at the original. To do something
@@ -1610,10 +1614,11 @@ public:
     virtual void PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo);
 };
 
-ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView )
+ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView* pView, vcl::PDFExtOutDevData* pData )
 :   ViewObjectContactRedirector(),
-    rLayerAdmin     ( rLA ),
-    pSdrPageView    ( pView )
+    rLayerAdmin         ( rLA ),
+    pSdrPageView        ( pView ),
+    pPDFExtOutDevData   ( pData )
 {
 }
 
@@ -1670,7 +1675,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
 
 void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
-    const rtl::OUString sGroup   ( RTL_CONSTASCII_USTRINGPARAM( "IsPresentationObject" ) );
+    const rtl::OUString sGroup   ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
     const rtl::OUString sOnClick ( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
     const rtl::OUString sBookmark( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
 
@@ -1792,12 +1797,44 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
     }
 }
 
+sal_Bool ImplRenderPaintProc::ImplBegStructureTag( SdrObject& rObject )
+{
+    vcl::PDFWriter::StructElement eElement = vcl::PDFWriter::NonStructElement;
+    if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
+    {
+        sal_uInt32 nInventor   = rObject.GetObjInventor();
+        sal_uInt16 nIdentifier = rObject.GetObjIdentifier();
+        sal_Bool   bIsTextObj  = rObject.ISA( SdrTextObj );
+
+        if ( nInventor == SdrInventor )
+        {
+            if ( nIdentifier == OBJ_GRUP )
+                eElement = vcl::PDFWriter::Section;
+            else if ( nIdentifier == OBJ_TITLETEXT )
+                eElement = vcl::PDFWriter::Heading;
+            else if ( nIdentifier == OBJ_OUTLINETEXT )
+                eElement = vcl::PDFWriter::Division;
+            else if ( !bIsTextObj || !((SdrTextObj&)rObject).HasText() )
+                eElement = vcl::PDFWriter::Figure;
+        }
+    }
+    sal_Bool bRet = eElement != vcl::PDFWriter::NonStructElement;
+    if ( bRet )
+        pPDFExtOutDevData->BeginStructureElement( eElement );
+    return bRet;
+}
+
+void ImplRenderPaintProc::ImplEndStructureTag()
+{
+    if ( pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportTaggedPDF() )
+        pPDFExtOutDevData->EndStructureElement();
+}
+
 // all default implementations just call the same methods at the original. To do something
 // different, overload the method and at least do what the method does.
 void ImplRenderPaintProc::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
 {
     SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-
     if(pObject)
     {
         if(pObject->GetPage())
@@ -1806,7 +1843,10 @@ void ImplRenderPaintProc::PaintObject(::sdr::contact::ViewObjectContact& rOrigin
             {
                 if(IsVisible(pObject) && IsPrintable(pObject))
                 {
+                    sal_Bool bStructureUsed = ImplBegStructureTag( *pObject );
                     rOriginal.PaintObject(rDisplayInfo);
+                    if ( bStructureUsed )
+                        ImplEndStructureTag();
                 }
             }
         }
@@ -1894,11 +1934,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 ::sd::ViewShell* pOldViewSh = pDocShell->GetViewShell();
                 ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : NULL;
 
-                if  ( pOldSdView )
+                if ( pOldSdView )
                     pOldSdView->EndTextEdit();
 
                 ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
-                    pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL );
+                    pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL, pPDFExtOutDevData );
 
                 pView->SetHlplVisible( sal_False );
                 pView->SetGridVisible( sal_False );
@@ -2060,6 +2100,26 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     }
                                 }
                             }
+
+                            Size        aPageSize( pDoc->GetSdPage( 0, PK_STANDARD )->GetSize() );
+                            Point aPoint( 0, 0 );
+                            Rectangle   aPageRect( aPoint, aPageSize );
+
+                            // resolving links
+                            std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
+                            std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIBeg = rBookmarks.begin();
+                            std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIEnd = rBookmarks.end();
+                            while ( aIBeg != aIEnd )
+                            {
+                                sal_Int32 nPage = ImplPDFGetBookmarkPage( aIBeg->aBookmark, *pDoc );
+                                if ( nPage != -1 )
+                                    pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::FitRectangle ) );
+                                else
+                                    pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aIBeg->aBookmark );
+                                aIBeg++;
+                            }
+                            rBookmarks.clear();
+
                         }
                         catch( uno::Exception& )
                         {
@@ -2101,7 +2161,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 }
                             }
                         }
-
                         pView->DrawAllMarked( *pOut, aOrigin );
                     }
                 }
