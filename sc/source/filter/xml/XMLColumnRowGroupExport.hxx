@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 15:50:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ struct ScMyColumnRowGroup
 {
     sal_Int32   nField;
     sal_Int16   nLevel;
-    sal_Bool    bDisplay : 1;
+    sal_Bool    bDisplay;
 
     ScMyColumnRowGroup();
     sal_Bool operator< (const ScMyColumnRowGroup& rGroup) const;
