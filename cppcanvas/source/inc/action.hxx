@@ -2,9 +2,9 @@
  *
  *  $RCSfile: action.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:59:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
+namespace basegfx
+{
+    class B2DHomMatrix;
+}
 
 /* Definition of Action interface */
 
@@ -84,8 +88,11 @@ namespace cppcanvas
             virtual ~Action() {}
 
             /** Render this action to the associated canvas
+
+                @param rTransformation
+                Transformation matrix to apply before rendering
              */
-            virtual bool render() const = 0;
+            virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const = 0;
         };
 
         typedef ::boost::shared_ptr< Action > ActionSharedPtr;
