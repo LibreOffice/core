@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2002-01-15 13:06:46 $
+#   last change: $Author: hr $ $Date: 2002-01-23 12:44:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.19 $ ';
+$id_str = ' $Revision: 1.20 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -224,10 +224,23 @@ sub do_linklib {
         $lib_major = "$lib_base.$2";
 
         if ( $opt_check ) {
-            print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n";
-            print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_base\n";
+            if ( $opt_delete ) {
+                print "REMOVE: $to_dir/$lib_major\n";
+                print "REMOVE: $to_dir/$lib_base\n";
+            }
+            else {
+                print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_major\n";
+                print "LINKLIB: $to_dir/$lib -> $to_dir/$lib_base\n";
+            }
         }
         else {
+            if ( $opt_delete ) {
+                print "REMOVE: $to_dir/$lib_major\n";
+                print "REMOVE: $to_dir/$lib_base\n";
+                unlink "$to_dir/$lib_major";
+                unlink "$to_dir/$lib_base";
+                return ;
+            }
             my $symlib;
             my @symlibs = ("$to_dir/$lib_major", "$to_dir/$lib_base");
             # remove old symlinks
@@ -275,6 +288,7 @@ sub parse_options {
         $arg =~ /^-minor$/  and $opt_minor  = 1 and next;
         $arg =~ /^-check$/  and $opt_check  = 1 and next;
         $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
+        $arg =~ /^-delete$/ and $opt_delete = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /-/ );
         if ( $arg =~ /-/ || $#ARGV > -1 ) {
             usage();
@@ -282,11 +296,13 @@ sub parse_options {
         }
         $dest = $arg;
     }
-    # $dest and $opt_zip are mutually exclusive
-    if ( $dest and $opt_zip ) {
+    # $dest and $opt_zip or $opt_delete are mutually exclusive
+    if ( $dest and ($opt_zip || $opt_delete) ) {
         usage();
         exit(1);
     }
+    # $opt_delete implies $opt_force
+    $opt_force = 1 if $opt_delete;
 }
 
 sub init_globals {
@@ -505,32 +521,44 @@ sub copy_if_newer {
     print "testing $from, $to\n" if $is_debug;
     return 0 unless ($from_stat_ref = is_newer($from, $to, $touch));
 
-    if ( $touch ) {
-        print "TOUCH: $from -> $to\n";
+    if ( $opt_delete ) {
+        print "REMOVE: $to\n";
     }
     else {
-        print "COPY: $from -> $to\n";
+        if ( $touch ) {
+            print "TOUCH: $from -> $to\n";
+        }
+        else {
+            print "COPY: $from -> $to\n";
+        }
     }
-
     if ( $opt_check ) {
         return 1;
     }
     else {
-        my $rc = copy($from, $to);
-        if ( $rc) {
-            utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
-            fix_file_permissions($$from_stat_ref[2], $to);
-            # handle special packaging of *.dylib files for Mac OS X
-            if ( $^O eq 'darwin' )
-            {
-                system("create-bundle", $to) if ( $to =~ /\.dylib/ );
-                system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
-            }
-            push_on_ziplist($to) if $opt_zip;
-            return 1;
+        if ( $opt_delete ) {
+            my $rc = unlink($to);
+            return 1 if $rc;
+            return 0;
         }
         else {
-            print_error("can't copy $from: $!",0);
+            my $rc = copy($from, $to);
+            if ( $rc) {
+                utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
+                fix_file_permissions($$from_stat_ref[2], $to);
+                # handle special packaging of *.dylib files for Mac OS X
+                if ( $^O eq 'darwin' )
+                {
+                    system("create-bundle", $to) if ( $to =~ /\.dylib/ );
+                    system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                }
+                push_on_ziplist($to) if $opt_zip;
+                return 1;
+            }
+            else {
+                print_error("can't copy $from: $!",0);
+                return 0;
+            }
         }
     }
 }
@@ -669,9 +697,20 @@ sub hedabu_if_newer {
     my ($from_stat_ref, $header);
 
     if ( $from_stat_ref = is_newer($from, $to) ) {
-        print "HEDABU: $from -> $to\n";
+        if ( $opt_delete ) {
+            print "REMOVE: $to\n";
+        }
+        else {
+            print "HEDABU: $from -> $to\n";
+        }
 
         return 1 if $opt_check;
+
+        if ( $opt_delete ) {
+            my $rc = unlink($to);
+            return 1 if $rc;
+            return 0;
+        }
 
         my $save = $/;
         undef $/;
@@ -757,16 +796,22 @@ sub print_error {
 
 sub print_stats {
     print "Statistics:\n";
-    print "Files copied: $files_copied\n";
+    if ( $opt_delete ) {
+        print "Files removed $files_copied\n";
+    }
+    else {
+        print "Files copied: $files_copied\n";
+    }
     print "Files unchanged/not matching: $files_unchanged\n";
 }
 
 sub usage {
-    print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [-zip] [destination-path]\n";
+    print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [-zip] [-delete] [destination-path]\n";
     print STDERR "Options:\n  -force\tcopy even if not newer\n";
     print STDERR "  -minor\tdeliver into minor\n";
     print STDERR "  -check\tjust print what would happen, no actual copying of files\n";
     print STDERR "  -zip  \tcreate additional zip files of delivered content\n";
+    print STDERR "  -delete\tdelete files, use with care\n";
     print STDERR "The option -zip and a destination-path are mutually exclusive\n";
 }
 
