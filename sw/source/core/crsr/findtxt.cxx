@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-02 11:01:59 $
+ *  last change: $Author: fme $ $Date: 2002-08-05 07:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     BOOL bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
                       !rSearchOpt.searchString.compareToAscii( "$" );
 
+    LanguageType eLastLang = 0;
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
         if( pNode->IsTxtNode() )
@@ -291,7 +292,6 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             }
 
             xub_StrLen nStringEnd = nEnde;
-            xub_StrLen nLngPos;
             while ( bSrchForward && nStart < nStringEnd ||
                     ! bSrchForward && nStart > nStringEnd )
             {
@@ -302,11 +302,21 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 {
                     nEnde = pScriptIter->GetScriptChgPos();
                     nCurrScript = pScriptIter->GetCurrScript();
-                    nLngPos = bSrchForward ? nStart : nEnde;
-                    LanguageType eActLang = ((SwTxtNode*)pNode)->GetLang( nLngPos );
-                    const ::com::sun::star::lang::Locale aLocale(
-                            pBreakIt->GetLocale( eActLang ) );
-                    rSTxt.SetLocale( rSearchOpt, aLocale );
+                    if ( nSearchScript == nCurrScript )
+                    {
+                        const LanguageType eCurrLang =
+                                ((SwTxtNode*)pNode)->GetLang( bSrchForward ?
+                                                              nStart :
+                                                              nEnde );
+
+                        if ( eCurrLang != eLastLang )
+                        {
+                            const ::com::sun::star::lang::Locale aLocale(
+                                    pBreakIt->GetLocale( eCurrLang ) );
+                            rSTxt.SetLocale( rSearchOpt, aLocale );
+                            eLastLang = eCurrLang;
+                        }
+                    }
                     pScriptIter->Next();
                 }
 
