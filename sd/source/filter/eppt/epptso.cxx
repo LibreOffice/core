@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-13 09:34:55 $
+ *  last change: $Author: sj $ $Date: 2000-10-27 12:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
+#include <com/sun/star/drawing/XControlShape.hpp>
 #endif
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
@@ -4450,8 +4453,76 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             }
             else if ( mType == "drawing.Control" )
             {
-                continue;
-            }
+                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape  >
+                    aXControlShape( mXShape, ::com::sun::star::uno::UNO_QUERY );
+                if ( !aXControlShape.is() )
+                    continue;
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
+                    aXControlModel( aXControlShape->getControl() );
+                if ( !aXControlModel.is() )
+                    continue;
+                *mpExEmbed  << (sal_uInt32)( 0xf | ( EPP_ExControl << 16 ) )
+                            << (sal_uInt32)0;               // Size of this container
+
+                sal_uInt32 nSize, nOldPos = mpExEmbed->Tell();
+
+                sal_uInt32 nPageId = nPageNumber;
+                if ( ePageType == MASTER )
+                    nPageId |= 0x80000000;
+                else
+                    nPageId += 0x100;
+                *mpExEmbed  << (sal_uInt32)( EPP_ExControlAtom << 16 )
+                            << (sal_uInt32)4
+                            << nPageId;
+                PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, String(), mpExEmbed->Tell() );
+                pEntry->xControlModel = aXControlModel;
+                maExOleObj.Insert( pEntry );
+
+                mnExEmbed++;
+
+                *mpExEmbed  << (sal_uInt32)( 1 | ( EPP_ExOleObjAtom << 16 ) )
+                            << (sal_uInt32)24
+                            << (sal_uInt32)1
+                            << (sal_uInt32)2
+                            << (sal_uInt32)mnExEmbed
+                            << (sal_uInt32)0
+                            << (sal_uInt32)0    // index to the persist table
+                            << (sal_uInt32)0x0012de00;
+
+//              ImplWriteCString( *mpExEmbed, String( RTL_CONSTASCII_USTRINGPARAM( "Kontrollkästchen" ) ), 1 );
+//              ImplWriteCString( *mpExEmbed, String( RTL_CONSTASCII_USTRINGPARAM( "Forms.CheckBox.1" ) ), 2 );
+//              ImplWriteCString( *mpExEmbed, String( RTL_CONSTASCII_USTRINGPARAM( "Microsoft Forms 2.0 CheckBox" ) ), 3 );
+
+                nSize = mpExEmbed->Tell() - nOldPos;
+                mpExEmbed->Seek( nOldPos - 4 );
+                *mpExEmbed << nSize;
+                mpExEmbed->Seek( STREAM_SEEK_TO_END );
+                nOlePictureId = mnExEmbed;
+
+                mp_EscherEx->OpenContainer( _Escher_SpContainer );
+                sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
+                ADD_SHAPE( _Escher_ShpInst_HostControl, nSpFlags );
+                mp_EscherEx->BeginCount();
+                if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), FALSE, TRUE ) )
+                    mp_EscherEx->AddOpt( _Escher_Prop_LockAgainstGrouping, 0x800080 );
+                mp_EscherEx->AddOpt( _Escher_Prop_pictureId, mnExEmbed );
+                mp_EscherEx->AddOpt( _Escher_Prop_pictureActive, 0x10000 );
+/*
+                sal_uInt32 i, nBufSize;
+                ByteString aString( "CheckBox1" );
+                nBufSize = ( aString.Len() + 1 ) << 1;
+                sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
+                sal_uInt8* pTmp = pBuf;
+                for ( i = 0; i < aString.Len(); i++ )
+                {
+                    *pTmp++ = aString.GetChar( i );
+                    *pTmp++ = 0;
+                }
+                *pTmp++ = 0;
+                *pTmp = 0;
+                mp_EscherEx->AddOpt( _Escher_Prop_wzName, TRUE, nBufSize, pBuf, nBufSize );
+*/
+           }
             else if ( mType == "drawing.Connector" )
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > aShapeA, aShapeB;
@@ -5004,7 +5075,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                                                 << (sal_uInt32)0
                                                 << (sal_uInt32)0x30000001;
 
-                                    maExOleObj.Insert( new PPTExOleObjEntry( aString, mpExEmbed->Tell() ) );
+                                    maExOleObj.Insert( new PPTExOleObjEntry( NORMAL_OLE_OBJECT, aString, mpExEmbed->Tell() ) );
 
                                     mnExEmbed++;
 

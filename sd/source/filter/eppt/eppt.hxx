@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2000-10-27 12:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
+#include <com/sun/star/awt/XControlModel.hpp>
 #endif
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -508,13 +511,23 @@ public:
                             n_EscherId  ( nId ) {}
 };
 
+
+enum PPTExOleObjEntryType
+{
+    NORMAL_OLE_OBJECT, OCX_CONTROL
+};
+
 struct PPTExOleObjEntry
 {
-    String  aObject;
-    sal_uInt32  nOfsA;          // offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
-    sal_uInt32  nOfsB;          // offset to the EPP_ExOleObjStg
+    String                  aObject;
+    PPTExOleObjEntryType    eType;
+    sal_uInt32              nOfsA;          // offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
+    sal_uInt32              nOfsB;          // offset to the EPP_ExOleObjStg
 
-    PPTExOleObjEntry( String& rStr, sal_uInt32 nOfs ) :
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    xControlModel;
+
+    PPTExOleObjEntry( PPTExOleObjEntryType eT, String& rStr, sal_uInt32 nOfs ) :
+        eType   ( eT ),
         nOfsA   ( nOfs ),
         aObject ( rStr ) {};
 };

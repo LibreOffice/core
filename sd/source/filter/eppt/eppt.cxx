@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2000-10-27 12:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
@@ -1789,34 +1792,68 @@ void PPTWriter::ImplWriteOLE()
         pPtr = (PPTExOleObjEntry*)maExOleObj.Next() )
     {
         pPtr->nOfsB = mpStrm->Tell();
-        mp_EscherEx->BeginAtom();
-        *mpStrm << (sal_uInt32)0xa60000;    // 0x0004b600;      // Id ????
-        SvStorageRef xSrcStor = mXSource->OpenStorage( pPtr->aObject, STREAM_READWRITE | STREAM_SHARE_DENYALL );
-        if ( xSrcStor.Is() )
+        switch ( pPtr->eType )
         {
-            SvInPlaceObjectRef  xInplaceObj( ((SvFactory*)SvInPlaceObject::
-                                    ClassFactory())->CreateAndLoad( xSrcStor ) );
-
-            if( xInplaceObj.Is() )
+            case NORMAL_OLE_OBJECT :
             {
-                SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
-                xTempStorage->SetVersion( SOFFICE_FILEFORMAT_31 );
-                xInplaceObj->DoSaveAs( &xTempStorage );
-                xInplaceObj->DoSaveCompleted();
-                SvMemoryStream* pStrm = xTempStorage->CreateMemoryStream();
-                xInplaceObj.Clear();
-                if ( pStrm )
+                mp_EscherEx->BeginAtom();
+                *mpStrm << (sal_uInt32)0xa60000;    // 0x0004b600;      // Id ????
+                SvStorageRef xSrcStor = mXSource->OpenStorage( pPtr->aObject, STREAM_READWRITE | STREAM_SHARE_DENYALL );
+                if ( xSrcStor.Is() )
                 {
-                    pStrm->Seek( 0 );
-                    ZCodec aZCodec( 0x8000, 0x8000 );
-                    aZCodec.BeginCompression();
-                    aZCodec.Compress( *pStrm, *mpStrm );
-                    aZCodec.EndCompression();
-                    delete pStrm;
+                    SvInPlaceObjectRef  xInplaceObj( ((SvFactory*)SvInPlaceObject::
+                                            ClassFactory())->CreateAndLoad( xSrcStor ) );
+
+                    if( xInplaceObj.Is() )
+                    {
+                        SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), TRUE ) );
+                        xTempStorage->SetVersion( SOFFICE_FILEFORMAT_31 );
+                        xInplaceObj->DoSaveAs( &xTempStorage );
+                        xInplaceObj->DoSaveCompleted();
+                        SvMemoryStream* pStrm = xTempStorage->CreateMemoryStream();
+                        xInplaceObj.Clear();
+                        if ( pStrm )
+                        {
+                            pStrm->Seek( 0 );
+                            ZCodec aZCodec( 0x8000, 0x8000 );
+                            aZCodec.BeginCompression();
+                            aZCodec.Compress( *pStrm, *mpStrm );
+                            aZCodec.EndCompression();
+                            delete pStrm;
+                        }
+                    }
+                }
+                mp_EscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
+            }
+            break;
+
+            case OCX_CONTROL :
+            {
+                if ( pPtr->xControlModel.is() )
+                {
+                    String aName;
+                    ::com::sun::star::awt::Size aSize;
+                    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
+                    sal_Bool bOk = SvxMSConvertOCXControls::WriteOCXStream( xDest, pPtr->xControlModel, aSize, aName );
+                    if ( bOk )
+                    {
+                        mp_EscherEx->BeginAtom();
+                        *mpStrm << (sal_uInt32)0x00000a00;  // i think this is the clipboard id ?
+                        SvMemoryStream* pStrm = xDest->CreateMemoryStream();
+                        if ( pStrm )
+                        {
+                            pStrm->Seek( 0 );
+                            ZCodec aZCodec( 0x8000, 0x8000 );
+                            aZCodec.BeginCompression();
+                            aZCodec.Compress( *pStrm, *mpStrm );
+                            aZCodec.EndCompression();
+                            delete pStrm;
+                        }
+                        mp_EscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
+                    }
                 }
             }
         }
-        mp_EscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
     }
 }
 
