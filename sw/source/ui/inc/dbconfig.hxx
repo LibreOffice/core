@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconfig.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,20 @@
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 struct SwDBData;
-class SwDBConfig : public utl::ConfigItem
+
+class SW_DLLPUBLIC SwDBConfig : public utl::ConfigItem
 {
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    SW_DLLPRIVATE const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+
     SwDBData*       pAdrImpl;
     SwDBData*       pBibImpl;
+
 public:
     SwDBConfig();
     virtual ~SwDBConfig();
