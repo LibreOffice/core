@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-22 21:17:30 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 14:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Calcula el número de semanas en un periodo determinado.";
             Text[ finnish ] = "Determines the number of weeks in a specific period.";
             Text[ italian ] = "Restituisce il numero di settimane di un determinato periodo.";
-            Text[ danish ] = "Determines the number of weeks in a specific period.";
+            Text[ danish ] = "Beregner antal uger i en bestemt tidsperiode.";
             Text[ swedish ] = "Beräknar antalet veckor i en specifik period.";
             Text[ polish ] = "Zwraca iloœæ tygodni w pewnym okresie czasu.";
             Text[ portuguese_brazilian ] = "Determines the number of weeks in a specific period.";
@@ -107,7 +107,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha inicial";
             Text[ finnish ] = "Start date";
             Text[ italian ] = "Data iniziale";
-            Text[ danish ] = "Start date";
+            Text[ danish ] = "Startdato";
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz¹tkowa";
             Text[ portuguese_brazilian ] = "Start date";
@@ -117,7 +117,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "start_date";
             Text[ turkish ] = "Start date";
             Text[ arabic ] = "Start date";
-            Text[ catalan ] = "Start date";
+            Text[ catalan ] = "data inicial";
         };
         String 3 // description of parameter 1  DiffWeeks
         {
@@ -133,7 +133,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Primer día del periodo";
             Text[ finnish ] = "First day of the period.";
             Text[ italian ] = "Primo giorno del periodo.";
-            Text[ danish ] = "First day of the period.";
+            Text[ danish ] = "Første dag i tidsperioden.";
             Text[ swedish ] = "Första dagen i perioden.";
             Text[ polish ] = "Liczba okreœlaj¹ca datê pocz¹tkow¹.";
             Text[ portuguese_brazilian ] = "First day of the period.";
@@ -159,7 +159,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha final";
             Text[ finnish ] = "End date";
             Text[ italian ] = "Data finale";
-            Text[ danish ] = "End date";
+            Text[ danish ] = "Slutdato";
             Text[ swedish ] = "Slutdatum";
             Text[ polish ] = "Data koñcowa";
             Text[ portuguese_brazilian ] = "End date";
@@ -169,7 +169,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "end_date";
             Text[ turkish ] = "End date";
             Text[ arabic ] = "End date";
-            Text[ catalan ] = "End date";
+            Text[ catalan ] = "data final";
         };
         String 5 // description of parameter 2  DiffWeeks
         {
@@ -185,7 +185,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Último día del periodo.";
             Text[ finnish ] = "Last day of the period.";
             Text[ italian ] = "Ultimo giorno del periodo.";
-            Text[ danish ] = "Last day of the period.";
+            Text[ danish ] = "Sidste dag i tidsperioden.";
             Text[ swedish ] = "Sista dagen i perioden.";
             Text[ polish ] = "Liczba okreœlaj¹ca datê koñcow¹.";
             Text[ portuguese_brazilian ] = "Last day of the period.";
@@ -211,7 +211,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Mode";
             Text[ italian ] = "Tipo";
-            Text[ danish ] = "Mode";
+            Text[ danish ] = "Type";
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Typ";
             Text[ portuguese_brazilian ] = "Mode";
@@ -237,7 +237,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo de calculación: Tipo=0 significa el número de semanas y Tipo=1 el número de semanas del calendario.";
             Text[ finnish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
             Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di settimane nell'intervallo, tipo=1 indica la settimana.";
-            Text[ danish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
+            Text[ danish ] = "Beregningstype: Type=0 for ugeantal i intervallet, type=1 for kalenderuger.";
             Text[ swedish ] = "Typ av beräkning: typ=0 för veckoantal i intervallet, typ=1 för kalenderveckor.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczbê tygodni, Typ=1 - tygodnie kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar weeks.";
@@ -267,7 +267,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Calcula el número de meses en un periodo determinado.";
             Text[ finnish ] = "Determines the number of months in a specific period.";
             Text[ italian ] = "Restituisce il numero di mesi in un determinato periodo.";
-            Text[ danish ] = "Determines the number of months in a specific period.";
+            Text[ danish ] = "Beregner antal måneder i en bestemt tidsperiode.";
             Text[ swedish ] = "Beräknar antalet månader i en specifik period.";
             Text[ polish ] = "Zwraca iloœæ miesiêcy w pewnym okresie czasu.";
             Text[ portuguese_brazilian ] = "Determines the number of months in a specific period.";
@@ -293,7 +293,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha inicial";
             Text[ finnish ] = "Start date";
             Text[ italian ] = "Data iniziale";
-            Text[ danish ] = "Start date";
+            Text[ danish ] = "Startdato";
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz¹tkowa";
             Text[ portuguese_brazilian ] = "Start date";
@@ -303,7 +303,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "start_date";
             Text[ turkish ] = "Start date";
             Text[ arabic ] = "Start date";
-            Text[ catalan ] = "Start date";
+            Text[ catalan ] = "data inicial";
         };
         String 3 // description of parameter 1  DiffMonths
         {
@@ -319,7 +319,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Primer día del periodo.";
             Text[ finnish ] = "First day of the period.";
             Text[ italian ] = "Primo giorno del periodo.";
-            Text[ danish ] = "First day of the period.";
+            Text[ danish ] = "Første dag i tidsperioden.";
             Text[ swedish ] = "Första dagen i perioden.";
             Text[ polish ] = "Liczba okreœlaj¹ca datê pocz¹tkow¹.";
             Text[ portuguese_brazilian ] = "First day of the period.";
@@ -345,7 +345,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha final";
             Text[ finnish ] = "End date";
             Text[ italian ] = "Data finale";
-            Text[ danish ] = "End date";
+            Text[ danish ] = "Slutdato";
             Text[ swedish ] = "Slutdatum";
             Text[ polish ] = "Data koñcowa";
             Text[ portuguese_brazilian ] = "End date";
@@ -355,7 +355,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "end_date";
             Text[ turkish ] = "End date";
             Text[ arabic ] = "End date";
-            Text[ catalan ] = "End date";
+            Text[ catalan ] = "data final";
         };
         String 5 // description of parameter 2  DiffMonths
         {
@@ -371,7 +371,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Último día del periodo.";
             Text[ finnish ] = "Last day of the period.";
             Text[ italian ] = "Ultimo giorno del periodo";
-            Text[ danish ] = "Last day of the period.";
+            Text[ danish ] = "Sidste dag i tidsperioden.";
             Text[ swedish ] = "Sista dagen i perioden.";
             Text[ polish ] = "Liczba okreœlaj¹ca datê koñcow¹.";
             Text[ portuguese_brazilian ] = "Last day of the period.";
@@ -397,7 +397,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Mode";
             Text[ italian ] = "Tipo";
-            Text[ danish ] = "Mode";
+            Text[ danish ] = "Type";
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Typ";
             Text[ portuguese_brazilian ] = "Mode";
@@ -423,7 +423,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo de calculación: Tipo=0 para el número de meses, Tipo=1 para el mes del calendario.";
             Text[ finnish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
             Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di mesi dell'intervallo, tipo=1 indica il mese.";
-            Text[ danish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
+            Text[ danish ] = "Beregningstype: Type=0 for månedsantal i intervallet, type=1 for kalendermåneder.";
             Text[ swedish ] = "Typ av beräkning: typ=0 för månadsantal i intervallet, typ=1 för kalendermånader.";
             Text[ polish ] = "Rodzaj obliczania: Typ=0 oznacza liczbê miesiêcy, Typ=1 - miesi¹ce kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar months.";
@@ -453,7 +453,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Calcula el número de años en un determinado periodo.";
             Text[ finnish ] = "Determines the number of years in a specific period.";
             Text[ italian ] = "Restituisce il numero di anni in un determinato periodo.";
-            Text[ danish ] = "Determines the number of years in a specific period.";
+            Text[ danish ] = "Beregner antal år i en bestemt tidsperiode.";
             Text[ swedish ] = "Beräknar antalet år i en specifik period.";
             Text[ polish ] = "Zwraca iloœæ lat w pewnym okresie czasu.";
             Text[ portuguese_brazilian ] = "Determines the number of years in a specific period.";
@@ -479,7 +479,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha inicial";
             Text[ finnish ] = "Start date";
             Text[ italian ] = "Data iniziale";
-            Text[ danish ] = "Start date";
+            Text[ danish ] = "Startdato";
             Text[ swedish ] = "Startdatum";
             Text[ polish ] = "Data pocz¹tkowa";
             Text[ portuguese_brazilian ] = "Start date";
@@ -489,7 +489,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "start_date";
             Text[ turkish ] = "Start date";
             Text[ arabic ] = "Start date";
-            Text[ catalan ] = "Start date";
+            Text[ catalan ] = "data inicial";
         };
         String 3 // description of parameter 1  DiffYears
         {
@@ -505,7 +505,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Primer día del periodo.";
             Text[ finnish ] = "First day of the period.";
             Text[ italian ] = "Primo giorno del periodo.";
-            Text[ danish ] = "First day of the period.";
+            Text[ danish ] = "Første dag i tidsperioden.";
             Text[ swedish ] = "Första dagen i perioden.";
             Text[ polish ] = "Liczba okreœlaj¹ca datê pocz¹tkow¹.";
             Text[ portuguese_brazilian ] = "First day of the period.";
@@ -531,7 +531,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha final";
             Text[ finnish ] = "End date";
             Text[ italian ] = "Data finale";
-            Text[ danish ] = "End date";
+            Text[ danish ] = "Slutdato";
             Text[ swedish ] = "Slutdatum";
             Text[ polish ] = "Data koñcowa";
             Text[ portuguese_brazilian ] = "End date";
@@ -541,7 +541,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "end_date";
             Text[ turkish ] = "End date";
             Text[ arabic ] = "End date";
-            Text[ catalan ] = "End date";
+            Text[ catalan ] = "data final";
         };
         String 5 // description of parameter 2  DiffYears
         {
@@ -557,7 +557,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Último día del periodo.";
             Text[ finnish ] = "Last day of the period.";
             Text[ italian ] = "Ultimo giorno del periodo.";
-            Text[ danish ] = "Last day of the period.";
+            Text[ danish ] = "Sidste dag i tidsperioden.";
             Text[ swedish ] = "Sista dagen i perioden.";
             Text[ polish ] = "Liczba okreœlaj¹ca datê koñcow¹.";
             Text[ portuguese_brazilian ] = "Last day of the period.";
@@ -583,7 +583,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo";
             Text[ finnish ] = "Mode";
             Text[ italian ] = "Tipo";
-            Text[ danish ] = "Mode";
+            Text[ danish ] = "Type";
             Text[ swedish ] = "Typ";
             Text[ polish ] = "Typ";
             Text[ portuguese_brazilian ] = "Mode";
@@ -609,7 +609,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Tipo de calculación: Tipo=0 significa el número de año, Tipo=1 los años del calendario.";
             Text[ finnish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
             Text[ italian ] = "Tipo di calcolo: Tipo=0 indica il numero di anni dell'intervallo, tipo=1 indica l'anno solare.";
-            Text[ danish ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
+            Text[ danish ] = "Beregningstype: Type=0 for årsantal i intervallet, type=1 for kalenderår.";
             Text[ swedish ] = "Typ av beräkning: typ=0 för årsantal i intervallet, typ=1 för kalenderår.";
             Text[ polish ] = "Rodzaj obliczania : Typ=0 oznacza liczbê lat, Typ=1 - lata kalendarzowe.";
             Text[ portuguese_brazilian ] = "Type of calculation: Mode=0 means the time interval, mode=1 means calendar years.";
@@ -639,7 +639,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Devuelve 1 (VERDADERO) si la fecha indicada es año bisiesto, de lo contrario 0 (FALSO).";
             Text[ finnish ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
             Text[ italian ] = "Restituisce 1 (VERO) se la data indicata cade in un anno bisestile oppure 0 (FALSO).";
-            Text[ danish ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
+            Text[ danish ] = "Returnerer 1 (SANDT), hvis den angivne dato ligger i et skudår, ellers 0 (FALSK).";
             Text[ swedish ] = "Returnerar 1 (SANT) om det angivna datumet ligger i ett skottår, annars 0 (FALSKT).";
             Text[ polish ] = "Zwraca 1 (PRAWDA), je¿eli podana data przypada na rok przestêpny. W innym wypadku zwraca 0 (FA£SZ).";
             Text[ portuguese_brazilian ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
@@ -665,7 +665,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
             Text[ italian ] = "Data ";
-            Text[ danish ] = "Date";
+            Text[ danish ] = "Dato";
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
@@ -675,7 +675,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "date";
             Text[ turkish ] = "Date";
             Text[ arabic ] = "Date";
-            Text[ catalan ] = "Date";
+            Text[ catalan ] = "Data de compra";
         };
         String 3 // description of parameter 1  IsLeapYear
         {
@@ -691,7 +691,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Cualquier día en un año deseado.";
             Text[ finnish ] = "Any day in the desired year.";
             Text[ italian ] = "Un giorno qualsiasi nell'anno indicato.";
-            Text[ danish ] = "Any day in the desired year.";
+            Text[ danish ] = "En vilkårlig dag i det ønskede år.";
             Text[ swedish ] = "En valfri dag på det önskade året.";
             Text[ polish ] = "Dowolny dzieñ ¿¹danego roku.";
             Text[ portuguese_brazilian ] = "Any day in the desired year.";
@@ -721,7 +721,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Devuelve la cantidad de días del mes en el que figure la fecha indicada.";
             Text[ finnish ] = "Returns the number of days of the month in relation to the date entered.";
             Text[ italian ] = "Restituisce il numero di giorni del mese in riferimento alla data indicata.";
-            Text[ danish ] = "Returns the number of days of the month in relation to the date entered.";
+            Text[ danish ] = "Returnerer antal dage i den måned, hvori den angivne dato ligger.";
             Text[ swedish ] = "Returnerar antalet dagar i månaden som ingår i det angivna datumet.";
             Text[ polish ] = "Zwraca liczbê dni miesi¹ca, na który przypada podana data.";
             Text[ portuguese_brazilian ] = "Returns the number of days of the month in relation to the date entered.";
@@ -747,7 +747,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
             Text[ italian ] = "Data";
-            Text[ danish ] = "Date";
+            Text[ danish ] = "Dato";
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
@@ -757,7 +757,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "date";
             Text[ turkish ] = "Date";
             Text[ arabic ] = "Date";
-            Text[ catalan ] = "Date";
+            Text[ catalan ] = "Data de compra";
         };
         String 3 // description of parameter 1  DaysInMonth
         {
@@ -773,7 +773,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Cualquier día en un mes deseado.";
             Text[ finnish ] = "Any day in the desired month.";
             Text[ italian ] = "Un giorno qualsiasi del mese indicato.";
-            Text[ danish ] = "Any day in the desired month.";
+            Text[ danish ] = "En vilkårlig dag i den ønskede måned.";
             Text[ swedish ] = "En valfri dag i den önskade månaden.";
             Text[ polish ] = "Dowolny dzieñ ¿¹danego miesi¹ca.";
             Text[ portuguese_brazilian ] = "Any day in the desired month.";
@@ -803,7 +803,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Devuelve la cantidad de días del año en el que figure la fecha indicada.";
             Text[ finnish ] = "Returns the number of days of the year in relation to the date entered.";
             Text[ italian ] = "Restituisce il numero di giorni dell'anno in riferimento alla data indicata.";
-            Text[ danish ] = "Returns the number of days of the year in relation to the date entered.";
+            Text[ danish ] = "Returnerer antal dage i det år, hvori den angivne dato ligger.";
             Text[ swedish ] = "Returnerar antalet dagar på året som ingår i det angivna datumet.";
             Text[ polish ] = "Zwraca liczbê dni w roku, na który przypada podana data.";
             Text[ portuguese_brazilian ] = "Returns the number of days of the year in relation to the date entered.";
@@ -829,7 +829,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
             Text[ italian ] = "Data";
-            Text[ danish ] = "Date";
+            Text[ danish ] = "Dato";
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
@@ -839,7 +839,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "date";
             Text[ turkish ] = "Date";
             Text[ arabic ] = "Date";
-            Text[ catalan ] = "Date";
+            Text[ catalan ] = "Data de compra";
         };
         String 3 // description of parameter 1  DaysInYear
         {
@@ -855,7 +855,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Cualquier día en un año deseado.";
             Text[ finnish ] = "Any day in the desired year.";
             Text[ italian ] = "Un giorno qualsiasi dell'anno indicato.";
-            Text[ danish ] = "Any day in the desired year.";
+            Text[ danish ] = "En vilkårlig dag i det ønskede år.";
             Text[ swedish ] = "En valfri dag på det önskade året.";
             Text[ polish ] = "Dowolny dzieñ ¿¹danego roku.";
             Text[ portuguese_brazilian ] = "Any day in the desired year.";
@@ -885,7 +885,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Devuelve el número de semanas del año en el que figure la fecha indicada.";
             Text[ finnish ] = "Returns the number of weeks of the year in relation to the date entered.";
             Text[ italian ] = "Restituisce il numero di settimane dell'anno in riferimento alla data indicata.";
-            Text[ danish ] = "Returns the number of weeks of the year in relation to the date entered.";
+            Text[ danish ] = "Returnerer antal uger i det år, hvori den angivne dato ligger.";
             Text[ swedish ] = "Returnerar antalet veckor på året som ingår i det angivna datumet.";
             Text[ polish ] = "Zwraca liczbê tygodni w roku, na który przypada podana data.";
             Text[ portuguese_brazilian ] = "Returns the number of weeks of the year in relation to the date entered.";
@@ -911,7 +911,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Fecha";
             Text[ finnish ] = "Date";
             Text[ italian ] = "Data";
-            Text[ danish ] = "Date";
+            Text[ danish ] = "Dato";
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Data";
             Text[ portuguese_brazilian ] = "Date";
@@ -921,7 +921,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "date";
             Text[ turkish ] = "Date";
             Text[ arabic ] = "Date";
-            Text[ catalan ] = "Date";
+            Text[ catalan ] = "Data de compra";
         };
         String 3 // description of parameter 1  WeeksInYear
         {
@@ -937,7 +937,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Cualquier día en un año deseado.";
             Text[ finnish ] = "Any day in the desired year.";
             Text[ italian ] = "Un giorno qualsiasi dell'anno indicato.";
-            Text[ danish ] = "Any day in the desired year.";
+            Text[ danish ] = "En vilkårlig dag i det ønskede år.";
             Text[ swedish ] = "En valfri dag på det önskade året.";
             Text[ polish ] = "Dowolny dzieñ ¿¹danego roku.";
             Text[ portuguese_brazilian ] = "Any day in the desired year.";
@@ -967,7 +967,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Codifica y descodifica un texto con la ayuda del algoritmo ROT13.";
             Text[ finnish ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
             Text[ italian ] = "Codifica o decodifica un testo tramite l'algoritmo ROT13.";
-            Text[ danish ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
+            Text[ danish ] = "Krypterer eller dekrypterer en tekst ved hjælp af ROT13-algoritmen.";
             Text[ swedish ] = "Krypterar text eller omvandlar krypterad text till klartext med hjälp av ROT13-algoritmen.";
             Text[ polish ] = "Szyfruje i deszyfruje teksty za pomoc¹ algorytmu ROT13.";
             Text[ portuguese_brazilian ] = "Encrypts or decrypts a text using the ROT13 algorithm.";
@@ -1019,7 +1019,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
             Text[ spanish ] = "Texto codificado o a codificar.";
             Text[ finnish ] = "Text to be encrypted or encrypted text.";
             Text[ italian ] = "Testo da codificare o decodificare.";
-            Text[ danish ] = "Text to be encrypted or encrypted text.";
+            Text[ danish ] = "Tekst, som skal krypteres, eller som er krypteret.";
             Text[ swedish ] = "Text som ska krypteras eller text som är krypterad.";
             Text[ polish ] = "Tekst szyfruj¹cy lub który ma zostaæ zaszyfrowany.";
             Text[ portuguese_brazilian ] = "Text to be encrypted or encrypted text.";
@@ -1051,7 +1051,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "SEMANAS";
         Text[ finnish ] = "WEEKS";
         Text[ italian ] = "SETTIMANE";
-        Text[ danish ] = "WEEKS";
+        Text[ danish ] = "UGER";
         Text[ swedish ] = "ANTALVECKOR";
         Text[ polish ] = "TYGODNIE";
         Text[ portuguese_brazilian ] = "WEEKS";
@@ -1061,7 +1061,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "WEEKS";
         Text[ turkish ] = "WEEKS";
         Text[ arabic ] = "WEEKS";
-        Text[ catalan ] = "WEEKS";
+        Text[ catalan ] = "Setmanes";
     };
     String DATE_FUNCNAME_DiffMonths
     {
@@ -1077,7 +1077,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "MESES";
         Text[ finnish ] = "MONTHS";
         Text[ italian ] = "MESI";
-        Text[ danish ] = "MONTHS";
+        Text[ danish ] = "MÅNEDER";
         Text[ swedish ] = "ANTALMÅNADER";
         Text[ polish ] = "MIESI¥CE";
         Text[ portuguese_brazilian ] = "MONTHS";
@@ -1087,7 +1087,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "MONTHS";
         Text[ turkish ] = "MONTHS";
         Text[ arabic ] = "MONTHS";
-        Text[ catalan ] = "MONTHS";
+        Text[ catalan ] = "mesos";
     };
     String DATE_FUNCNAME_DiffYears
     {
@@ -1103,7 +1103,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "AÑOS";
         Text[ finnish ] = "YEARS";
         Text[ italian ] = "ANNI";
-        Text[ danish ] = "YEARS";
+        Text[ danish ] = "ÅR";
         Text[ swedish ] = "ANTALÅR";
         Text[ polish ] = "LATA";
         Text[ portuguese_brazilian ] = "YEARS";
@@ -1113,7 +1113,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "YEARS";
         Text[ turkish ] = "YEARS";
         Text[ arabic ] = "YEARS";
-        Text[ catalan ] = "YEARS";
+        Text[ catalan ] = "Anys";
     };
     String DATE_FUNCNAME_IsLeapYear
     {
@@ -1129,7 +1129,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "ESAÑOBISIESTO";
         Text[ finnish ] = "ISLEAPYEAR";
         Text[ italian ] = "ANNO.BISESTILE";
-        Text[ danish ] = "ISLEAPYEAR";
+        Text[ danish ] = "ERSKUDÅR";
         Text[ swedish ] = "ÄRSKOTTÅR";
         Text[ polish ] = "ROKPRZESTÊPNY";
         Text[ portuguese_brazilian ] = "ISLEAPYEAR";
@@ -1139,7 +1139,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "ISLEAPYEAR";
         Text[ turkish ] = "ISLEAPYEAR";
         Text[ arabic ] = "ISLEAPYEAR";
-        Text[ catalan ] = "ISLEAPYEAR";
+        Text[ catalan ] = "IsLeapYear";
     };
     String DATE_FUNCNAME_DaysInMonth
     {
@@ -1155,7 +1155,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "DÍASENMES";
         Text[ finnish ] = "DAYSINMONTH";
         Text[ italian ] = "GIORNI.MESE";
-        Text[ danish ] = "DAYSINMONTH";
+        Text[ danish ] = "DAGEMÅNED";
         Text[ swedish ] = "DAGARIMÅNADEN";
         Text[ polish ] = "DNIWMIESI¥CU";
         Text[ portuguese_brazilian ] = "DAYSINMONTH";
@@ -1165,7 +1165,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "DAYSINMONTH";
         Text[ turkish ] = "DAYSINMONTH";
         Text[ arabic ] = "DAYSINMONTH";
-        Text[ catalan ] = "DAYSINMONTH";
+        Text[ catalan ] = "DaysInMonth";
     };
     String DATE_FUNCNAME_DaysInYear
     {
@@ -1181,7 +1181,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "DÍASENAÑO";
         Text[ finnish ] = "DAYSINYEAR";
         Text[ italian ] = "GIORNI.ANNO";
-        Text[ danish ] = "DAYSINYEAR";
+        Text[ danish ] = "DAGEÅR";
         Text[ swedish ] = "DAGARPÅÅRET";
         Text[ polish ] = "DNIWROKU";
         Text[ portuguese_brazilian ] = "DAYSINYEAR";
@@ -1191,7 +1191,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "DAYSINYEAR";
         Text[ turkish ] = "DAYSINYEAR";
         Text[ arabic ] = "DAYSINYEAR";
-        Text[ catalan ] = "DAYSINYEAR";
+        Text[ catalan ] = "DaysInYear";
     };
     String DATE_FUNCNAME_WeeksInYear
     {
@@ -1207,7 +1207,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ spanish ] = "SEMANASENAÑO";
         Text[ finnish ] = "WEEKSINYEAR";
         Text[ italian ] = "SETTIMANE.ANNO";
-        Text[ danish ] = "WEEKSINYEAR";
+        Text[ danish ] = "UGERÅR";
         Text[ swedish ] = "VECKORPERÅR";
         Text[ polish ] = "TYGODNIEWROKU";
         Text[ portuguese_brazilian ] = "WEEKSINYEAR";
@@ -1217,7 +1217,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ chinese_traditional ] = "WEEKSINYEAR";
         Text[ turkish ] = "WEEKSINYEAR";
         Text[ arabic ] = "WEEKSINYEAR";
-        Text[ catalan ] = "WEEKSINYEAR";
+        Text[ catalan ] = "WeeksInYear";
     };
     String DATE_FUNCNAME_Rot13
     {
