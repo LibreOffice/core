@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-17 09:21:03 $
+ *  last change: $Author: mba $ $Date: 2002-03-18 13:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
+#include <sot/storinfo.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -550,32 +551,47 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             xPer->DoSaveCompleted( 0 );
         }
 
+        BOOL bCorrupted = FALSE;
         if ( xStor.Is() )
         {
-            BOOL bHasMacros = FALSE;
-            if ( xStor->IsOLEStorage() )
-                bHasMacros = BasicManager::HasBasicWithModules( *xStor );
+            SvStorageInfoList aList;
+            xStor->FillInfoList( &aList );
+            if ( !aList.Count() && !xStor->IsOLEStorage() )
+            {
+                SetError( ERRCODE_IO_WRONGFORMAT );
+                bCorrupted = TRUE;
+            }
             else
-                bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
+            {
+                BOOL bHasMacros = FALSE;
+                if ( xStor->IsOLEStorage() )
+                    bHasMacros = BasicManager::HasBasicWithModules( *xStor );
+                else
+                    bHasMacros = xStor->IsStorage( String::CreateFromAscii("Basic") );
 
-            if ( bHasMacros )
-                AdjustMacroMode( String() );
+                if ( bHasMacros )
+                    AdjustMacroMode( String() );
+            }
         }
 
         // Load
-        const String aOldURL( INetURLObject::GetBaseURL() );
-        if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
-        pImp->nLoadedFlags = 0;
-        bOk = xStor.Is() && LoadOwnFormat( *pMed );
-        INetURLObject::SetBaseURL( aOldURL );
-
-        if ( bOk )
+        //if ( !GetError() )
+        // Because of Hotfix: as few changes as possible!
+        if ( !bCorrupted )
         {
-            GetDocInfo().Load(xStor);
-            bHasName = sal_True;
+            const String aOldURL( INetURLObject::GetBaseURL() );
+            if( aBaseURL.Len() ) INetURLObject::SetBaseURL( aBaseURL );
+            pImp->nLoadedFlags = 0;
+            bOk = xStor.Is() && LoadOwnFormat( *pMed );
+            INetURLObject::SetBaseURL( aOldURL );
+            if ( bOk )
+            {
+                GetDocInfo().Load(xStor);
+                bHasName = sal_True;
+            }
+            else
+                SetError( ERRCODE_ABORT );
         }
-        else
-            SetError( ERRCODE_ABORT );
     }
     else if ( InitNew(0) )
     {
