@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEncryptionProtectedSource.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:25:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,25 +65,42 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-//=============================================================================
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/**
+//============================================================================
+/** This interface allows to set a password for an object.
  */
 interface XEncryptionProtectedSource: com::sun::star::uno::XInterface
 {
-    /** Set an encryption key for source.
+    // -----------------------------------------------------------------------
+    /** sets a password for the object.
 
-    @param aKey
-        the encryption key
+    @param sPassword
+        the new password
+
+    @throws ::com::sun::star::io::IOException
+        in case password could not be set
      */
-    void setEncryptionKey( [in] sequence< byte > aKey );
+    void setEncryptionPassword( [in] string sPassword )
+        raises( ::com::sun::star::io::IOException );
 
+    // -----------------------------------------------------------------------
+    /** removes encryption from the object.
+
+    @throws ::com::sun::star::io::IOException
+        in case encryption could not be removed
+     */
+    void removeEncryption()
+        raises( ::com::sun::star::io::IOException );
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
