@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ inline void __defaultConstructArray(
         {
             rtl_uString** ppElement = (rtl_uString **)pMem + i;
             *ppElement = 0;
-            RTL_USTRING_NEW( ppElement);
+            rtl_uString_new( ppElement);
         }
         break;
     case typelib_TypeClass_TYPE:
@@ -228,7 +228,7 @@ inline void __defaultConstructData(
         break;
     case typelib_TypeClass_STRING:
         *(rtl_uString **)pMem = 0;
-        RTL_USTRING_NEW( (rtl_uString **)pMem );
+        rtl_uString_new( (rtl_uString **)pMem );
         break;
     case typelib_TypeClass_TYPE:
         *(typelib_TypeDescriptionReference **)pMem = __getVoidType();

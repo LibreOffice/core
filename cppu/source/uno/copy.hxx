@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ inline void __copyConstructAny(
             case typelib_TypeClass_STRING:
                 pDestAny->pData = ::rtl_allocateMemory( sizeof(rtl_uString *) );
                 *(rtl_uString **)pDestAny->pData = 0;
-                RTL_USTRING_NEW( (rtl_uString **)pDestAny->pData );
+                rtl_uString_new( (rtl_uString **)pDestAny->pData );
                 break;
             case typelib_TypeClass_TYPE:
                 pDestAny->pData = ::rtl_allocateMemory( sizeof(typelib_TypeDescriptionReference *) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ static inline void __defaultConstructElements(
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             pElements[nPos] = 0;
-            RTL_USTRING_NEW( &pElements[nPos] );
+            rtl_uString_new( &pElements[nPos] );
         }
         break;
     }
