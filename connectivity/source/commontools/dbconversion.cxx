@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 13:37:07 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 12:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,11 @@ sal_Int64 DBTypeConversion::toINT64(const DateTime& rVal)
     sal_Int32 nTime = (sal_Int32)(nHundredthSeconds + (nSeconds*100) + (nMinutes*10000) + (nHours*1000000));
     sal_Int32 nDate = ((sal_Int32)(rVal.Day%100)) + (((sal_Int32)(rVal.Month%100))*100) + (((sal_Int32) rVal.Year%10000)*10000);
     sal_Int64 nRet;
-    sal_setInt64(&nRet,nDate,nTime);
+
+    nRet = (sal_Int64) nTime;
+    nRet <<= 32;
+    nRet += nDate;
+
     return nRet;
 }
 
@@ -791,6 +795,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/21 13:37:07  jl
+ *  OSL_ENSHURE replaced by OSL_ENSURE
+ *
  *  Revision 1.11  2001/03/15 08:45:56  fs
  *  cppuhelper/extract -> comphelper/extract
  *

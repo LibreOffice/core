@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:11:34 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 12:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,11 @@ sal_Int64 DateConversion::toINT64(const DateTime& rVal)
     sal_Int32 nTime = (sal_Int32)(nHundredthSeconds + (nSeconds*100) + (nMinutes*10000) + (nHours*1000000));
     sal_Int32 nDate = ((sal_Int32)(rVal.Day%100)) + (((sal_Int32)(rVal.Month%100))*100) + (((sal_Int32) rVal.Year%10000)*10000);
     sal_Int64 nRet;
-    sal_setInt64(&nRet,nDate,nTime);
+
+    nRet = (sal_Int64) nTime;
+    nRet <<= 32;
+    nRet += nDate;
+
     return nRet;
 }
 //------------------------------------------------------------------------------
