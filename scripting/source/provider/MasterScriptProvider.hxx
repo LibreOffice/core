@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-10-29 15:00:53 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 14:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
 #include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
 
-#include "ScriptingContext.hxx"
+#include "InvocationCtxProperties.hxx"
 #include "ProviderCache.hxx"
 namespace func_provider
 {
@@ -130,17 +129,15 @@ public:
     css::uno::Sequence< css::uno::Reference< dcsss::provider::XScriptProvider > > SAL_CALL
         getAllProviders() throw ( css::uno::RuntimeException );
 private:
-    void addStorageAsListener() throw( css::uno::RuntimeException );
     bool  isValid();
     const css::uno::Sequence< ::rtl::OUString >& getProviderNames();
     ::rtl::OUString  getLanguageFromURI(const ::rtl::OUString& scriptURI );
-
+    ProviderCache* providerCache();
     /* to obtain other services if needed */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     css::uno::Reference< css::frame::XModel > m_xModel;
-    css::uno::Reference < ::drafts::com::sun::star::script::framework::storage::XScriptStorageManager > m_xScriptStorageMgr;
-
+    css::uno::Sequence< css::uno::Any > m_sAargs;
     // This component supports XInitialization, it can be created
     // using createInstanceXXX() or createInstanceWithArgumentsXXX using
     // the service Mangager.
