@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-16 10:00:53 $
+ *  last change: $Author: obo $ $Date: 2001-11-20 10:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         long nY         = rData.GetY();
         long nWidth     = rData.GetWidth();
         long nHeight    = rData.GetHeight();
+#ifndef REMOTE_APPSERVER
         const SalFrame::Geometry& rGeom = pWindow->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
@@ -567,6 +568,9 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nY = 0;
         if( nY + nHeight > rGeom.nHeight )
             nY = rGeom.nHeight - nHeight;
+#else
+    /* FIXME: what to do here in REMOTE_APPSERVER case ? */
+#endif
         SetPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );
 
