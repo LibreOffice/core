@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:06:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 
 #include <svx/acorrcfg.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
