@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:18:59 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4470,6 +4470,12 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Package Manager...</value>
                     <value xml:lang="en-US">~Package Manager...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:Signature" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Digitale Signaturen...</value>
+                    <value xml:lang="en-US">Digital Signatures...</value>
                 </prop>
             </node>
             <node oor:name=".uno:CommonAlignLeft" oor:op="replace">
