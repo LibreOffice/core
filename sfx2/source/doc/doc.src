@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:15:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,7 +944,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE
     Message[ czech ] = "Chyba při přejmenování šablony.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת שינוי שם התבנית.‬";
     Message[ hindi ] = "नमूने को पुनः नाम देने का समय गलती ।";
-    Message[ slovak ] = "Chyba pri premenovaní­ šablóny.";
+    Message[ slovak ] = "Chyba pri premenovaní šablóny.";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
 {
@@ -980,7 +980,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message[ czech ] = "Chyba při přejmenování kategorie šablon.";
     Message[ hebrew ] = "‮ארעה שגיאה בעת שינוי שם הסיווג של התבנית.‬";
     Message[ hindi ] = "नमूना वर्ग को पुनः नाम देने का समय गलती ।";
-    Message[ slovak ] = "Chyba pri premenovaní­ kategórie šablóny.";
+    Message[ slovak ] = "Chyba pri premenovaní kategórie šablóny.";
 };
 ErrorBox MSG_ERROR_EMPTY_NAME
 {
@@ -2867,6 +2867,12 @@ String STR_LABEL_FILEFORMAT
 };
 
 // ******************************************************************* EOF
+
+
+
+
+
+
 
 
 
