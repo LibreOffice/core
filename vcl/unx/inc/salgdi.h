@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:26:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,10 +265,10 @@ public:
     virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData* );
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
-    virtual ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+    virtual ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual ImplFontData*   AddTempDevFont( const String& rFileURL, const String& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
     virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
                                               ImplFontData* pFont,
                                               sal_Int32* pGlyphIDs,
