@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:30:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2671,7 +2671,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         // TODO: implement dynamic lists or improve static lists
         #define FALLBACKFONT_NAMELIST \
             "Arial Unicode MS;Andale Sans UI;Cyberbit;StarSymbol;Lucida TypeWriter;"  \
-            "FZMingTi;SunDotum;"                                           \
+            "FZMingTi;SunBatang;SunDotum;"                                           \
             "HGMinchoLightJ;MSungLightSC;MSungLightTC;HYMyeongJoLight K;" \
             "Lucida Sans;Tahoma;"                       \
             "Shree;Mangal;Raavi;Shruti;Tunga;Latha;"    \
@@ -5049,7 +5049,7 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
 #endif
 
     if( eTextLanguage == LANGUAGE_SYSTEM )
-        eTextLanguage = Application::GetSettings().GetUILanguage();
+        eTextLanguage = GetSystemLanguage();
 
     meTextLanguage = eTextLanguage;
 }
