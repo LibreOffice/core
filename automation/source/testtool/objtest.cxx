@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:52:32 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include <com/sun/star/devtools/XInformationClient.hpp>
 using namespace com::sun::star::devtools;
 */
+
+#include "sysdir_win.hxx"
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -514,7 +516,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     String aST;
     GETSET( aST, "ServerTimeout", ByteString::CreateFromInt64(Time(0,0,45).GetTime()) );     // 45 Sekunden Initial
-    pImpl->aServerTimeout = Time(long(aST.ToInt64()));
+    pImpl->aServerTimeout = Time(ULONG(aST.ToInt64()));
 
     String aSOSE;
     aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
@@ -643,6 +645,7 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "RemoteCommandDelay", SbxCLASS_METHOD, SbxNULL, ID_RemoteCommandDelay );
 
        MAKE_TT_KEYWORD( "GetApplicationPath", SbxCLASS_METHOD, SbxSTRING, ID_GetApplicationPath );
+       MAKE_TT_KEYWORD( "GetCommonApplicationPath", SbxCLASS_METHOD, SbxSTRING, ID_GetCommonApplicationPath );
        MAKE_TT_KEYWORD( "MakeIniFileName", SbxCLASS_METHOD, SbxSTRING, ID_MakeIniFileName );
 
 /// active constants returning error and warning count
@@ -2175,7 +2178,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             BeginBlock();
                         if ( !IsError() )
                             In->GenCmdSlot ( (USHORT)((SbxTransportMethod*)pVar)->nValue, rPar );
-                        pVar->PutULong( ((SbxTransportMethod*)pVar)->nValue );
+                        pVar->PutInteger( (USHORT)((SbxTransportMethod*)pVar)->nValue );
                         if ( SingleCommandBlock )
                             EndBlock();
                     }
@@ -2409,6 +2412,35 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         OUString aPath;
                         osl::FileBase::getSystemPathFromFileURL( aUrl, aPath );
                         pVar->PutString( String( aPath ) );
+                    }
+                    else
+                        SetError( SbxERR_WRONG_ARGS );
+                    break;
+                case ID_GetCommonApplicationPath:
+                    if ( !rPar )
+                    {
+#ifdef WNT
+                        ////////  adapted this from setup2\win\source\system\winos.cxx
+                        String aSysPath;
+                        aSysPath = _SHGetSpecialFolder_COMMON_APPDATA();
+                        if ( aSysPath.Len() )
+                        {
+                            pVar->PutString( aSysPath );
+                        }
+                        else    // default to ID_GetApplicationPath (same as in setup)
+                        {
+                            OUString aUrl = Config::GetDefDirectory();
+                            OUString aPath;
+                            osl::FileBase::getSystemPathFromFileURL( aUrl, aPath );
+                            pVar->PutString( String( aPath ) );
+                        }
+#else
+#if UNX
+                        pVar->PutString( CUniString( "/etc" ) );
+#else
+#error not implemented
+#endif
+#endif
                     }
                     else
                         SetError( SbxERR_WRONG_ARGS );
@@ -2703,7 +2735,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.8 $
+    // search $Revision: 1.9 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
