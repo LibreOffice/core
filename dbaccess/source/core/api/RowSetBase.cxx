@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 12:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,9 +263,8 @@ ORowSetValue ORowSetBase::getValue(sal_Int32 columnIndex)
         aRet = (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     else
     {
-#ifdef DBG_UTIL
         if(m_aCurrentRow)
-            OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+            OSL_ENSURE((m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
         else
         {
             positionCache();
@@ -274,7 +273,6 @@ ORowSetValue ORowSetBase::getValue(sal_Int32 columnIndex)
             OSL_ENSURE(m_aCurrentRow,"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
             return getValue(columnIndex);
         }
-#endif
     }
 
     return aRet;
@@ -349,12 +347,16 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
         return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
     else
     {
-#ifdef DBG_UTIL
         if(m_aCurrentRow)
-            OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+            OSL_ENSURE((m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
         else
-            OSL_ENSURE(0,"ORowSetBase::getValue: we don't stand on a valid row! Row i null.");
-#endif
+        {
+            positionCache();
+            m_aCurrentRow   = m_pCache->m_aMatrixIter;
+
+            OSL_ENSURE(m_aCurrentRow,"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
+            return getBinaryStream(columnIndex);
+        }
     }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 10:04:29 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 12:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,23 +227,31 @@ OSelectionBrowseBox::~OSelectionBrowseBox()
 void OSelectionBrowseBox::initialize()
 {
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-    if(xConnection.is())
+    try
     {
-        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-        // Diese Funktionen stehen nur unter CORE zur Verfügung
-        if(xMetaData->supportsCoreSQLGrammar())
+        if(xConnection.is())
         {
-            xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
-            for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
+
+            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+            // Diese Funktionen stehen nur unter CORE zur Verfügung
+            if(xMetaData->supportsCoreSQLGrammar())
+            {
+                xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
+                for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
+                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
+            }
+            else // sonst nur COUNT(*)
+            {
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
+            }
+            m_bOrderByUnRelated = xMetaData->supportsOrderByUnrelated();
+            m_bGroupByUnRelated = xMetaData->supportsGroupByUnrelated();
         }
-        else // sonst nur COUNT(*)
-        {
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
-            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
-        }
-        m_bOrderByUnRelated = xMetaData->supportsOrderByUnrelated();
-        m_bGroupByUnRelated = xMetaData->supportsGroupByUnrelated();
+    }
+    catch(const SQLException&)
+    {
+        OSL_ENSURE(0,"Catched Exception when asking for database metadata options!");
     }
 
     Init();
