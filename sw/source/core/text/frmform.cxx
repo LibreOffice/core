@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:49:09 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,6 +1224,8 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
        )
     {
         AdjustFrm( -Frm().SSize().Height(), bHasToFit );
+        Prt().Pos().Y() = 0;
+        Prt().Height( Frm().Height() );
         if ( FollowFormatAllowed() )
         {
             bForcedNoIntrinsicFollowCalc = sal_True;
