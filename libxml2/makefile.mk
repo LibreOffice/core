@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 11:06:38 $
+#   last change: $Author: rt $ $Date: 2004-07-26 14:01:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,11 @@ LIBXML2VERSION=2.5.11
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+
+ADDITIONAL_FILES= \
+    makefile.mk \
+    xml2.map \
+    config.h 
 
 # This is only for UNX environment now
 
