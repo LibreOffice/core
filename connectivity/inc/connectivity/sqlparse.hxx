@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
                                     m_xFormatter;   // current number formatter
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
+        sal_Int32                   m_nDateFormatKey;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification> m_xCharClass;
         static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>       s_xLocaleData;
@@ -193,6 +194,7 @@ namespace connectivity
 
         // convert a string into double trim it to scale of _nscale and than transform it back to string
         ::rtl::OUString stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale);
+        sal_Int16 buildDate(const ::rtl::OUString& _sValue,sal_Int32 _nType,OSQLParseNode*& pAppend,OSQLParseNode* pLiteral,OSQLParseNode*& pCompare);
 
         static ::osl::Mutex& getMutex();
 
