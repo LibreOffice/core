@@ -180,13 +180,13 @@ End Function
 Sub SwapExtent()
 	DialogModel.chkRecursive.Enabled = DialogModel.optWholeDir.State = 1
 	If DialogModel.optWholeDir.State = 1 Then
-		DialogModel.lblSource.Label = sSOURCEDIR     &apos;&quot;Quellverzeichnis:&quot;
+		DialogModel.lblSource.Label = sSOURCEDIR     
 		If Not IsNull(SubstFile) Then
 			SubstFile = DialogModel.txtSource.Text
 			DialogModel.txtSource.Text = SubstDir
 		End If
 	Else
-		DialogModel.LblSource.Label = sSOURCEFILE   &apos;&quot;Quelldatei:&quot;
+		DialogModel.LblSource.Label = sSOURCEFILE
 		If Not IsNull(SubstDir) Then
 			SubstDir = DialogModel.txtSource.Text
 			DialogModel.txtSource.Text = SubstFile
@@ -211,7 +211,7 @@ Dim TextBoxText as String
 		DialogModel.lblRetrieval.Label = sPrgsRETRIEVAL
 		DialogModel.lblCurProgress.Label = sPrgsCONVERTING
 		If DialogModel.optWholeDir.State = 1 Then
-			TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; ConvertFromUrl(Source) &amp; chr(13) &apos;&amp; &quot; &quot;
+			TextBoxText = sSOURCEDIR &amp; &quot; &quot; &amp; ConvertFromUrl(Source) &amp; chr(13)
 			If DialogModel.chkRecursive.State = 1 Then
 				TextBoxText = TextBoxText &amp; DeleteStr(sInclusiveSubDir,&quot;~&quot;) &amp; chr(13)
 			End If

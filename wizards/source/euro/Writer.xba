@@ -10,14 +10,12 @@ Dim oPara as Object
 Dim i as integer
 Dim sCellNames()
 Dim oCell as Object
-&apos;	oDocument = StarDesktop.ActiveFrame.Controller.Model
-&apos;	oFormats = oDocument.NumberFormats
 	oParagraphs = oDocument.Text.CreateEnumeration
 	While oParagraphs.HasMoreElements
 		oPara = oParagraphs.NextElement
 		If NOT oPara.supportsService(&quot;com.sun.star.text.Paragraph&quot;) Then
-			&apos; Note: Da Zellen gesplittet oder zusammengefügt werden können
-			&apos; kann man die Zellen nicht über ihre Indizes ansprechen.
+			&apos; Note: As cells might be splitted or merged
+			&apos; you cannot refer to them via their indices
 			sCellNames = oPara.CellNames
 			For i = 0 To Ubound(sCellNames)
 				If sCellNames(i) &lt;&gt; &quot;&quot; Then

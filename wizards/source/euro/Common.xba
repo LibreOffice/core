@@ -95,10 +95,8 @@ Dim sOldCurrSymbol as String
 		aSimpleStr = &quot;0 [$&quot; &amp; sEuroSign &amp; aFormat.CurrencyExtension &amp; &quot;]&quot;
 	End If
 
-	&apos; Numberformat mit dem neuen Symbol als Basis für generateFormat
 	nSimpleKey = Numberformat(oFormats, aSimpleStr, oLocale)
-	&apos; Typ und Währungssymbol des Numberformats heraussuchen
-	&apos; neues Währungsformat mit passenden Einstellungen setzen
+	&apos; set new Currency format with according settings
 	nFormatDecimals = 2
 	nFormatLeading = aFormat.LeadingZeros
 	bFormatNegRed = aFormat.NegativeRed
@@ -128,9 +126,6 @@ Dim c as String
 End Function
 
 
-&apos; Funktion findet den Formattyp einer Vorlage, Zelle oder eines Bereiches heraus und schreibt das Ergebnis
-&apos; in die globale Variable nFormatType; Ist ein WÃ¤hrungssymbol gesetzt, wird dieses in den globalen String
-&apos; sFormatCurrency geschrieben.
 Function CheckFormatType( FormatObject as object)
 Dim i as Integer
 Dim LocCurrIndex as Integer
@@ -143,7 +138,6 @@ Dim oFormatofObject() as Object
 	On Local Error GoTo NOKEY
 	oFormatofObject = oFormats.getByKey(FormatObject.NumberFormat)
 	On Local Error GoTo 0			
-	&apos; Typ und Währungssymbol des Numberformats heraussuchen
   	If NOT INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY Then
 		CheckFormatType = False
 		Exit Function

@@ -98,7 +98,7 @@ Dim MaxIndex as Integer
 End Sub
 
 
-&apos; Prozedur that is called by an event
+&apos; Procedure that is called by an event
 Sub RetrieveEnableValue()
 Dim EnableValue as Boolean
 	EnableValue = Not DialogModel.lstSelection.Enabled
@@ -196,7 +196,7 @@ Dim s as Integer
 End Sub
 
 
-&apos; Alles was selektiert wurde wird deselektiert
+&apos; Everything previously selected will be deselected
 Sub EmptySelection()
 Dim RangeName as String
 Dim i as Integer

@@ -9,11 +9,11 @@ Dim MaxIndex as Integer
 	MaxIndex = -1
 	EnableStep1DialogControls(False, False, False)
 	EmptySelection()
-	DialogModel.lblSelection.Label = sCURRRANGES  	&apos;&quot;Währungsbereiche:&quot;
+	DialogModel.lblSelection.Label = sCURRRANGES
 	EmptyListbox(DialogModel.lstSelection)
 	oDocument.CurrentController.Select(oSelRanges)
 	If (DialogModel.optSheetRanges.State = 1) AND (DialogModel.chkComplete.State &lt;&gt; 1) Then
-		&apos; Ist das Sheet Grundlage für die Bearbeitung?
+		&apos; Conversion on a sheet?
 		SetStatusLineText(sStsRELRANGES)
 		osheet = oDocument.CurrentController.GetActiveSheet
 		oRanges = osheet.CellFormatRanges.createEnumeration()
@@ -36,7 +36,7 @@ Dim MaxIndex as integer
 Dim sStatustext as String
 	MaxIndex = -1
 	If Not bRangeListDefined Then
-		&apos; Die Ranges sind noch nicht definiert
+		&apos; Cellranges are not yet defined
 		oSheets = oDocument.Sheets
 		For i = 0 To oSheets.Count-1
 			oSheet = oSheets.GetbyIndex(i)
@@ -53,7 +53,7 @@ Dim sStatustext as String
 	Else
 		If Not bAutoPilot Then
 			SetStatusLineText(sStsRELRANGES)
-			&apos; Die Ranges sind schon definiert
+			&apos; cellranges already defined
 			For i = 0 To Ubound(RangeList())
 				If RangeList(i) &lt;&gt; &quot;&quot; Then
 					AddSingleItemToListBox(DialogModel.lstSelection, RangeList(i))
@@ -100,7 +100,7 @@ Dim MaxIndex as Integer
 End Function
 
 
-&apos; Fügt einen Bereich zur selektierten Kollektion hinzu
+&apos; adds a section to the collection
 Sub SelectRange()
 Dim i as Integer
 Dim RangeName as String
@@ -129,7 +129,7 @@ End Sub
 
 
 Sub ConvertThehardWay(ListboxList(), SwitchFormat as Boolean, bRemove as Boolean)
-Dim i as Integer &apos; r, a
+Dim i as Integer
 Dim AddCells as Long
 Dim OldStatusValue as Single
 Dim RangeName as String
@@ -140,7 +140,7 @@ Dim oSelListbox as Object
 	Lastindex = Ubound(ListboxList())
 	If TotCellCount &gt; 0 Then
 		OldStatusValue = StatusValue
-		&apos; Harte Formatierung
+		&apos; hard format
 		For i = 0 To LastIndex
 			RangeName = ListboxList(i)
 			oRange = RetrieveRangeoutofRangeName(RangeName)
@@ -153,11 +153,11 @@ Dim oSelListbox as Object
 			End If
 			If SwitchFormat Then
 				If oRange.getPropertyState(&quot;NumberFormat&quot;) &lt;&gt; 1 Then
-					&apos; Range Ist hart formatiert
-					SwitchNumberFormat(oRange, oFormats, sEuroSign)&apos; &quot;€&quot;)
+					&apos; Range is hard formatted
+					SwitchNumberFormat(oRange, oFormats, sEuroSign))
 				End If
 			Else
-				SwitchNumberFormat(oRange, oFormats, sEuroSign) &apos;&quot;€&quot;
+				SwitchNumberFormat(oRange, oFormats, sEuroSign)
 			End If
 			AddCells = CountRangeCells(oRange)
 			CurCellCount = AddCells
@@ -198,10 +198,7 @@ Dim oFormatofObject() as Object
 	On Local Error GoTo NOKEY
 	oFormatofObject() = oFormats.getByKey(FormatObject.NumberFormat)
 	On Local Error GoTo 0			
-
-	&apos; Typ und Währungssymbol des Numberformats heraussuchen
-	&apos; Todo: Überprüfe, ob diese beiden Zeilen nicht eleganter gehen
-	 CheckIfRangeIsCurrency = INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY
+	CheckIfRangeIsCurrency = INT(oFormatofObject.Type) AND com.sun.star.util.NumberFormat.CURRENCY
 	Exit Function
 NOKEY:
 	CheckIfRangeisCurrency = False

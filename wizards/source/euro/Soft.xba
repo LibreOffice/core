@@ -9,7 +9,7 @@ Sub CreateStyleEnumeration()
 	EmptyListbox(DialogModel.lstSelection)
 	CurSheetName = oDocument.CurrentController.GetActiveSheet.Name
 	MakeStyleEnumeration(False)
-	DialogModel.lblSelection.Label = sTEMPLATES				&apos; &quot;Vorlagen:&quot;
+	DialogModel.lblSelection.Label = sTEMPLATES
 End Sub
 
 
@@ -120,7 +120,7 @@ Dim CellCountString as String
 End Sub				
 
 
-&apos; löscht eine Stilvorlage aus der Kollektion, die die Ranges selektiert
+&apos; deletes a styletemplate from the Collection that selects the ranges
 Sub DeselectStyle(DeSelStyleName as String, n as Integer)
 Dim i as Integer
 Dim RangeName as String
@@ -156,21 +156,21 @@ Dim oAddressRanges as Object
 End Function
 
 
-&apos; Erzeugt eine Sheetobjekt aus einem entsprechenden Bereichsnamen
+&apos; creates a sheet object from an according sectionname
 Function RetrieveSheetoutofRangeName(TableText as String)			
 Dim DescriptionList() as String
 Dim SheetName as String
 Dim MaxIndex as integer
-	&apos; Herausfinden, in welchem Sheet sich der Range befindet
+	&apos; find out in which sheet the range is
 	DescriptionList() = ArrayOutofString(TableText,&quot;.&quot;,MaxIndex)
 	SheetName = DescriptionList(0)
 	SheetName = DeleteStr(SheetName,&quot;&apos;&quot;)
-	&apos; Und den ViewCursor auf dieses Sheet setzen
+	&apos; set the viewcursor on this sheet
 	RetrieveSheetoutofRangeName = oSheets.GetbyName(SheetName)
 End Function
 
 
-&apos; Erzeugt eine Rangeobjekt aus einem entsprechenden Bereichsnamen
+&apos; creates a rangeobject from an according rangename
 Function RetrieveRangeoutofRangeName(TableText as String) 
 	oSheet = RetrieveSheetoutofRangeName(TableText)
 	oRange = oSheet.GetCellRangebyName(TableText)
@@ -202,7 +202,7 @@ Dim MaxIndex as Integer
 			RangeName = StyleRangeList(s)
 			oRange = RetrieveRangeoutofRangeName(RangeName)
 			If oRange.getPropertyState(&quot;NumberFormat&quot;) = 1 Then
-				&apos; Range Ist hart formatiert
+				&apos; Range is hard formatted
 				ConvertCellCurrencies(oRange)
 				CurCellCount = CountRangeCells(oRange)
 			End If
@@ -216,7 +216,6 @@ Dim MaxIndex as Integer
 			End If
 		Next s
 		SwitchNumberFormat(ostyle, oFormats, sEuroSign)
-&apos;		oStatusline.SetValue(100)
 		StyleRangeAssignmentList(n) = &quot;&quot;
 		l = GetItemPos(oSelListBox.Model, CurStyleName)
 		oSelListbox.RemoveItems(l,1)			

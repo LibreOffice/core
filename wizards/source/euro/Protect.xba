@@ -68,13 +68,13 @@ Dim PWIsCorrect as Boolean
 Dim QueryText as String
 	oDocument.CurrentController.SetActiveSheet(oListSheet)
 	QueryText = ReplaceString(sMsgPWPROTECT,&quot;&apos;&quot; &amp; ListSheetName &amp; &quot;&apos;&quot;, &quot;%1TableName%1&quot;)
-	&apos;&quot;Geben Sie das Kennwort zum Entschützen der Tabelle &apos;&quot; &amp; ListSheetName &amp; &quot; ein:&apos;&quot;
+	&apos;&quot;Please insert the password to unprotect the sheet &apos;&quot; &amp; ListSheetName&apos;&quot;
 	Do
 		ExecutePasswordDialog(QueryText)
 		If bCancelProtection Then
 			bCancelProtection = False
 			Msgbox (sMsgSHEETSNOPROTECT, 64, sMsgDLGTITLE)
-			UnprotectSheetWithDialog() = False   &apos;&quot;Tabelle wird nicht entschützt!&quot;
+			UnprotectSheetWithDialog() = False
 			exit Function
 		End If
 		oListSheet.Unprotect(Password)
@@ -87,7 +87,7 @@ Dim QueryText as String
 			PWIsCorrect = True
 		End If
 	Loop Until PWIsCorrect
-	UnprotectSheetWithDialog() = True   &apos;&quot;Tabelle wird nicht entschützt!&quot;	
+	UnprotectSheetWithDialog() = True
 End Function
 
 
