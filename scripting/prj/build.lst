@@ -1,4 +1,4 @@
-tc	scripting	:	bridges rdbmaker vcl basic sfx2 NULL
+tc	scripting	:	bridges rdbmaker vcl basic sfx2 rhino beanshell NULL
 tc	scripting									usr1	-	all	tc_mkout NULL
 tc	scripting\source\storage				nmake	-	all	tc_scriptingstorage NULL
 tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider tc_scriptingstorage NULL
