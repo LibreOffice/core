@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:10:41 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ PORTUGUESE ] = "~Subdivisão" ;
         Text[ chinese_simplified ] = "Ïßµã¼ä¸ô(~U)";
         Text[ russian ] = "Ðàçäåëåíèå";
-        Text[ polish ] = "Podpodzia³";
+        Text[ polish ] = "Podzia³";
         Text[ japanese ] = "“_‚ÌŠÔŠu(~U)";
         Text[ chinese_traditional ] = "½uÂI¶¡¹j(~U)";
         Text[ arabic ] = "ÇáÊÞÓíã ÇáÝÑÚí";
@@ -633,7 +633,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ chinese_traditional ] = "¦ì¹Ï¯À";
         CustomUnitText[ arabic ] = "ÈßÓá";
         CustomUnitText[ greek ] = "Pixel";
-        CustomUnitText[ korean ] = "ÇÈ¼¿";
+        CustomUnitText[ korean ] = " ÇÈ¼¿";
         CustomUnitText[ turkish ] = "Piksel";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "Píxel";
@@ -803,7 +803,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ chinese_traditional ] = "«×";
         CustomUnitText[ arabic ] = "ÏÑÌÉ";
         CustomUnitText[ greek ] = "Ìïßñåò";
-        CustomUnitText[ korean ] = "µµ";
+        CustomUnitText[ korean ] = " µµ";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ finnish ] = " asteet";
@@ -871,11 +871,12 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ chinese_traditional ] = "«×";
         CustomUnitText[ arabic ] = "ÏÑÌÉ";
         CustomUnitText[ greek ] = "Ìïßñåò";
-        CustomUnitText[ korean ] = "µµ";
+        CustomUnitText[ korean ] = " µµ";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ finnish ] = " asteet";
         CustomUnitText[ catalan ] = "grados";
     };
 };
+
 
