@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:21:19 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ chinese_simplified ] = "÷ֲֵכ׀עֱ׀ׁ¡ֿמ";
     Text[ russian ] = "ֿאנאלוענû ןמנÿהךמגמדמ םמלונא";
     Text[ polish ] = "Opcje sekwencji";
-    Text[ japanese ] = "ˆך˜A”װ†‚ּµּß¼®Ý";
+    Text[ japanese ] = "˜A”װµּß¼®Ý";
     Text[ chinese_traditional ] = "½s¸¹§ַ¦C¿ן¶µ";
     Text[ arabic ] = "־םַַׁÊ ַבÊׁÞםד ַבדÊ׃ב׃ב";
     Text[ greek ] = "ֵניכןדÝע ך‎ךכןץ בסיטל‏ם";
