@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2005-02-02 13:52:58 $
+#   last change: $Author: vg $ $Date: 2005-03-23 14:11:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,8 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/moduleidentifier.obj                    \
                     $(SLO)$/shareablemutex.obj                      \
                     $(SLO)$/vclstatusindicator.obj                  \
-                    $(SLO)$/wakeupthread.obj
+                    $(SLO)$/wakeupthread.obj                        \
+                    $(SLO)$/configimporter.obj
 
 # --- Targets ------------------------------------------------------
 
