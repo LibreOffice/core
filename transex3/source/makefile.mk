@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
+#   last change: $Author: nf $ $Date: 2001-06-05 07:54:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,7 @@ OBJFILES=   			\
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
 APP1OBJS=   $(OBJ)$/src_yy.obj $(OBJ)$/utf8conv.obj
-APP1STDLIBS+=$(STATIC_LIBS) $(BTSTRPLIB)
+APP1STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 
@@ -141,12 +141,12 @@ APP8STDLIBS=$(STATIC_LIBS)
 #APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj
 #APP9STDLIBS=$(STATIC_LIBS)
 
-# encoding converter for text files
+# localizer for l10n framework
 APP9TARGET= localize
 APP9STACK=  16000
-APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj
-APP9STDLIBS+=$(STATIC_LIBS) $(BTSTRPLIB)
-APP9LIBS+=	$(LB)$/$(TARGET).lib
+APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
+APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
+#APP9LIBS+=	$(LB)$/$(TARGET).lib
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 

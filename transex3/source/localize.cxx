@@ -3,9 +3,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-05 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,10 +683,10 @@ BOOL CheckLanguages( ByteString &rLanguages )
     for ( USHORT i = 0; i < rLanguages.GetTokenCount( ',' ); i++ ) {
         ByteString sCur = rLanguages.GetToken( i, ',' );
         ByteString sLang = sCur.GetToken( 0, '=' );
-        USHORT nLang = ( USHORT ) sLang.ToInt32();
+        USHORT nLang = ( USHORT ) sLang.ToInt32();
 
         ByteString sFallback = sCur.GetToken( 1, '=' );
-        USHORT nFallback = ( USHORT ) sFallback.ToInt32();
+        USHORT nFallback = ( USHORT ) sFallback.ToInt32();
 
         if ( Export::GetLangIndex( nLang ) == 0xFFFF ) {
             fprintf( stderr, "ERROR: Unknown language %s\n",
