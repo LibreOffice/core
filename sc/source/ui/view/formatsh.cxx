@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:12:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,22 +665,29 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         nRetMask = ( NULL != pStyleSheet );
                         if ( pStyleSheet && !pScMod->GetIsWaterCan() )
                         {
-                            String aOldName = pDoc->GetPageStyle( nCurTab );
-                            if ( aOldName != aStyleName )
+                            ScUndoApplyPageStyle* pUndoAction = 0;
+                            for( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
                             {
-                                pDoc->SetPageStyle( nCurTab, aStyleName );
-                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(), nCurTab ).UpdatePages();
+                                if( rMark.GetTableSelect( nTab ) )
+                                {
+                                    String aOldName = pDoc->GetPageStyle( nTab );
+                                    if ( aOldName != aStyleName )
+                                    {
+                                        pDoc->SetPageStyle( nTab, aStyleName );
+                                        ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(), nTab ).UpdatePages();
+                                        if( !pUndoAction )
+                                            pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
+                                        pUndoAction->AddSheetAction( nTab, aOldName );
+                                    }
+                                }
+                            }
+                            if( pUndoAction )
+                            {
+                                pDocSh->GetUndoManager()->AddUndoAction( pUndoAction );
                                 pDocSh->SetDocumentModified();
                                 rBindings.Invalidate( SID_STYLE_FAMILY4 );
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
-
-                                if (bUndo)
-                                {
-                                    pDocSh->GetUndoManager()->AddUndoAction(
-                                            new ScUndoApplyPageStyle( pDocSh,
-                                                nCurTab, aOldName, aStyleName ) );
-                                }
                             }
                             rReq.Done();
                         }
