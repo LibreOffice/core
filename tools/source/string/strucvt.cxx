@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:27:41 $
+ *  last change: $Author: kz $ $Date: 2001-03-20 10:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ UniString::UniString( const char* pByteStr, xub_StrLen nLen,
 
 // =======================================================================
 
-UniString::UniString( const NAMESPACE_RTL(OUString)& rStr )
+UniString::UniString( const rtl::OUString& rStr )
 {
     DBG_CTOR( UniString, DbgCheckUniString );
 
@@ -155,7 +155,7 @@ UniString::UniString( const NAMESPACE_RTL(OUString)& rStr )
 
 // -----------------------------------------------------------------------
 
-NAMESPACE_RTL(OUString)::OUString( const UniString& rStr )
+rtl::OUString::OUString( const UniString& rStr )
 {
     pData = (rtl_uString*)rStr.mpData;
     rtl_uString_acquire( pData );
@@ -163,7 +163,7 @@ NAMESPACE_RTL(OUString)::OUString( const UniString& rStr )
 
 // -----------------------------------------------------------------------
 
-UniString& UniString::Assign( const NAMESPACE_RTL(OUString)& rStr )
+UniString& UniString::Assign( const rtl::OUString& rStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
 

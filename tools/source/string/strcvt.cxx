@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:27:30 $
+ *  last change: $Author: kz $ $Date: 2001-03-20 10:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBu
 
 // =======================================================================
 
-ByteString::ByteString( const NAMESPACE_RTL(OString)& rStr )
+ByteString::ByteString( const rtl::OString& rStr )
 {
     DBG_CTOR( ByteString, DbgCheckByteString );
 
@@ -613,7 +613,7 @@ ByteString::ByteString( const NAMESPACE_RTL(OString)& rStr )
 
 // -----------------------------------------------------------------------
 
-NAMESPACE_RTL(OString)::OString( const ByteString& rStr )
+rtl::OString::OString( const ByteString& rStr )
 {
     pData = (rtl_String*)rStr.mpData;
     rtl_string_acquire( pData );
@@ -621,7 +621,7 @@ NAMESPACE_RTL(OString)::OString( const ByteString& rStr )
 
 // -----------------------------------------------------------------------
 
-ByteString& ByteString::Assign( const NAMESPACE_RTL(OString)& rStr )
+ByteString& ByteString::Assign( const rtl::OString& rStr )
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
