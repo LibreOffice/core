@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:05:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,10 @@
 #define HID_SC_DPLAY_SELECT     ( HID_SC_OTHER_START + 8 )
 
 #define HID_SC_DRAW_RENAME      ( HID_SC_OTHER_START + 9 )
+
+#define HID_SC_DPDATAFIELD      ( HID_SC_OTHER_START + 10 )
+#define HID_SC_DPSUBT_OPT       ( HID_SC_OTHER_START + 11 )
+#define HID_SC_DPSUBT_HIDE      ( HID_SC_OTHER_START + 12 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
@@ -1282,6 +1286,8 @@
 // #101160# Replace cell contents warning
 #define STR_REPLCELLSWARN           (STR_START + 91)
 
+#define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
+
 // Items
 
 #define SCSTR_HOR_JUSTIFY_LEFT      (STR_START + 100)
@@ -1583,6 +1589,8 @@
 #define RID_SCDLG_DAPIDATA              (SC_DIALOGS_START + 131)
 
 #define RID_SCDLG_LINKAREA              (SC_DIALOGS_START + 132)
+#define RID_SCDLG_DPDATAFIELD           (SC_DIALOGS_START + 133)
+#define RID_SCDLG_DPSUBTOTAL_OPT        (SC_DIALOGS_START + 134)
 
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
 
