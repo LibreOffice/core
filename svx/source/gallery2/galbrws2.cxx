@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-20 09:52:54 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 14:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
     const BOOL bValidURL = ( aURL.GetProtocol() != INET_PROT_NOT_VALID );
 
-    pAddMenu->EnableItem( MN_ADD, bValidURL );
+    pAddMenu->EnableItem( MN_ADD, bValidURL && SGA_OBJ_SOUND != eObjKind );
     pAddMenu->EnableItem( MN_ADD_LINK, bValidURL && SGA_OBJ_SVDRAW != eObjKind );
 
     EnableItem( MN_ADDMENU, pAddMenu->IsItemEnabled( MN_ADD ) || pAddMenu->IsItemEnabled( MN_ADD_LINK ) );
@@ -266,7 +266,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
     EnableItem( MN_PASTECLIPBOARD, FALSE );
 #endif
 
-    if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) )
+    if( !maBackgroundPopup.GetItemCount() || ( eObjKind == SGA_OBJ_SVDRAW ) || ( eObjKind == SGA_OBJ_SOUND ) )
         pAddMenu->EnableItem( MN_BACKGROUND, FALSE );
     else
     {
@@ -290,9 +290,12 @@ void GalleryThemePopup::StateChanged( USHORT nSID, SfxItemState eState, const Sf
 {
     if( ( nSID == SID_GALLERY_ENABLE_ADDCOPY ) && pItem && ( eState != SFX_ITEM_DISABLED ) )
     {
-        SfxBoolItem* pBoolItem = PTR_CAST( SfxBoolItem, pItem );
+        SfxBoolItem*        pBoolItem = PTR_CAST( SfxBoolItem, pItem );
+        const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
+
         DBG_ASSERT( pBoolItem || pBoolItem == 0, "SfxBoolItem erwartet!");
-        GetPopupMenu( MN_ADDMENU )->EnableItem( MN_ADD, pBoolItem->GetValue() );
+
+        GetPopupMenu( MN_ADDMENU )->EnableItem( MN_ADD, pBoolItem->GetValue() && ( eObjKind != SGA_OBJ_SOUND ) );
     }
 }
 
