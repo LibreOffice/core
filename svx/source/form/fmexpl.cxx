@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 13:46:02 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1711,8 +1711,9 @@ FmExplorer::FmExplorer( const ::com::sun::star::uno::Reference< ::com::sun::star
     Image m_aCollapsedNodeImg = m_ilNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE );
     Image m_aExpandedNodeImg = m_ilNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE );
     SetNodeBitmaps( m_aCollapsedNodeImg, m_aExpandedNodeImg );
-
+#ifndef TF_SVDATA
     EnableDrop();
+#endif //TF_SVDATA
     SetDragDropMode(0xFFFF);
     EnableInplaceEditing( sal_True );
     SetSelectionMode(MULTIPLE_SELECTION);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-08 16:25:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,10 +142,6 @@
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
-#endif
-
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX

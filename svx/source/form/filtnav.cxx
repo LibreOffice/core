@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 15:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-07-05 10:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,7 +1271,10 @@ FmFilterNavigator::FmFilterNavigator( Window* pParent )
     EnableInplaceEditing( sal_True );
     SetSelectionMode(MULTIPLE_SELECTION);
 
+#ifndef TF_SVDATA
     EnableDrop();
+#endif // TF_SVDATA
+
     SetDragDropMode(0xFFFF);
 
     m_aSelectTimer.SetTimeoutHdl(LINK(this, FmFilterNavigator, OnSelect));
