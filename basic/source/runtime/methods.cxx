@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-30 13:57:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,14 +1337,39 @@ RTLFUNC(Str)
     else
     {
         String aStr;
-        rPar.Get( 1 )->Format( aStr );
-        // Numbers start with a space
-        if( rPar.Get( 1 )->IsNumericRTL() )
-        {
-            aStr.Insert( ' ', 0 );
+        SbxVariableRef pArg = rPar.Get( 1 );
+        pArg->Format( aStr );
 
+        // Numbers start with a space
+        if( pArg->IsNumericRTL() )
+        {
             // Kommas durch Punkte ersetzen, damit es symmetrisch zu Val ist!
             aStr.SearchAndReplace( ',', '.' );
+
+            SbiInstance* pInst = pINST;
+            bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+            if( bCompatibility )
+            {
+                xub_StrLen nLen = aStr.Len();
+
+                const sal_Unicode* pBuf = aStr.GetBuffer();
+
+                bool bNeg = ( pBuf[0] == '-' );
+                USHORT iZeroSearch = 0;
+                if( bNeg )
+                    iZeroSearch++;
+
+                USHORT iNext = iZeroSearch + 1;
+                if( pBuf[iZeroSearch] == '0' && nLen > iNext && pBuf[iNext] == '.' )
+                {
+                    aStr.Erase( iZeroSearch, 1 );
+                    pBuf = aStr.GetBuffer();
+                }
+                if( !bNeg )
+                    aStr.Insert( ' ', 0 );
+            }
+            else
+                aStr.Insert( ' ', 0 );
         }
         rPar.Get(0)->PutString( aStr );
     }
@@ -1724,26 +1749,6 @@ RTLFUNC(Day)
     }
 }
 
-RTLFUNC(Weekday)
-{
-    if ( rPar.Count() < 2 )
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    else
-    {
-        Date aRefDate( 1,1,1900 );
-        long nDays = (long) rPar.Get(1)->GetDate();
-        nDays -= 2; // normieren: 1.1.1900 => 0
-        aRefDate += nDays;
-        DayOfWeek aDay = aRefDate.GetDayOfWeek();
-        INT16 nDay;
-        if ( aDay != SUNDAY )
-            nDay = (INT16)aDay + 2;
-        else
-            nDay = 1;   // 1==Sonntag
-        rPar.Get(0)->PutInteger( nDay );
-    }
-}
-
 RTLFUNC(Year)
 {
     if ( rPar.Count() < 2 )
@@ -1755,6 +1760,17 @@ RTLFUNC(Year)
     }
 }
 
+INT16 implGetHour( double dDate )
+{
+    if( dDate < 0.0 )
+        dDate *= -1.0;
+    double nFrac = dDate - floor( dDate );
+    nFrac *= 86400.0;
+    INT32 nSeconds = (INT32)(nFrac + 0.5);
+    INT16 nHour = (INT16)(nSeconds / 3600);
+    return nHour;
+}
+
 RTLFUNC(Hour)
 {
     if ( rPar.Count() < 2 )
@@ -1762,16 +1778,22 @@ RTLFUNC(Hour)
     else
     {
         double nArg = rPar.Get(1)->GetDate();
-        if ( nArg < 0.0 )
-            nArg *= -1.0;
-        double nFrac = nArg - floor( nArg );
-        nFrac *= 86400.0;
-        INT32 nSeconds = (INT32)nFrac;
-        INT16 nHour = (INT16)(nSeconds / 3600);
+        INT16 nHour = implGetHour( nArg );
         rPar.Get(0)->PutInteger( nHour );
     }
 }
 
+INT16 implGetMinute( double dDate )
+{
+    if( dDate < 0.0 )
+        dDate *= -1.0;
+    double nFrac = dDate - floor( dDate );
+    nFrac *= 86400.0;
+    INT32 nSeconds = (INT32)(nFrac + 0.5);
+    INT16 nTemp = (INT16)(nSeconds % 3600);
+    INT16 nMin = nTemp / 60;
+    return nMin;
+}
 
 RTLFUNC(Minute)
 {
@@ -1780,13 +1802,7 @@ RTLFUNC(Minute)
     else
     {
         double nArg = rPar.Get(1)->GetDate();
-        if ( nArg < 0.0 )
-            nArg *= -1.0;
-        double nFrac = nArg - floor( nArg );
-        nFrac *= 86400.0;
-        INT32 nSeconds = (INT32)nFrac;
-        INT16 nTemp = (INT16)(nSeconds % 3600);
-        INT16 nMin = nTemp / 60;
+        INT16 nMin = implGetMinute( nArg );
         rPar.Get(0)->PutInteger( nMin );
     }
 }
@@ -1802,6 +1818,22 @@ RTLFUNC(Month)
     }
 }
 
+INT16 implGetSecond( double dDate )
+{
+    if( dDate < 0.0 )
+        dDate *= -1.0;
+    double nFrac = dDate - floor( dDate );
+    nFrac *= 86400.0;
+    INT32 nSeconds = (INT32)(nFrac + 0.5);
+    INT16 nTemp = (INT16)(nSeconds / 3600);
+    nSeconds -= nTemp * 3600;
+    nTemp = (INT16)(nSeconds / 60);
+    nSeconds -= nTemp * 60;
+
+    INT16 nRet = (INT16)nSeconds;
+    return nRet;
+}
+
 RTLFUNC(Second)
 {
     if ( rPar.Count() < 2 )
@@ -1809,16 +1841,8 @@ RTLFUNC(Second)
     else
     {
         double nArg = rPar.Get(1)->GetDate();
-        if ( nArg < 0.0 )
-            nArg *= -1.0;
-        double nFrac = nArg - floor( nArg );
-        nFrac *= 86400.0;
-        INT32 nSeconds = (INT32)nFrac;
-        INT16 nTemp = (INT16)(nSeconds / 3600);
-        nSeconds -= nTemp * 3600;
-        nTemp = (INT16)(nSeconds / 60);
-        nSeconds -= nTemp * 60;
-        rPar.Get(0)->PutInteger( (INT16)nSeconds );
+        INT16 nSecond = implGetSecond( nArg );
+        rPar.Get(0)->PutInteger( nSecond );
     }
 }
 
@@ -3681,7 +3705,7 @@ RTLFUNC(MsgBox)
     {
         WB_OK,              // MB_OK
         WB_OK_CANCEL,       // MB_OKCANCEL
-        WB_RETRY_CANCEL,    // MB_ABORTRETRYIGNORE
+        WB_ABORT_RETRY_IGNORE,    // MB_ABORTRETRYIGNORE
         WB_YES_NO_CANCEL,   // MB_YESNOCANCEL
         WB_YES_NO,          // MB_YESNO
         WB_RETRY_CANCEL     // MB_RETRYCANCEL
@@ -3697,7 +3721,7 @@ RTLFUNC(MsgBox)
 
 
     USHORT nArgCount = (USHORT)rPar.Count();
-    if( nArgCount < 2 || nArgCount > 4 )
+    if( nArgCount < 2 || nArgCount > 6 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
@@ -3717,18 +3741,27 @@ RTLFUNC(MsgBox)
     nWinDefBits = (WB_DEF_OK | WB_DEF_RETRY | WB_DEF_YES);
     if( nType & 256 )
     {
-        if( nStyle == 5 || nStyle == 2)
+        if( nStyle == 5 )
             nWinDefBits = WB_DEF_CANCEL;
+        else if( nStyle == 2 )
+            nWinDefBits = WB_DEF_RETRY;
         else
             nWinDefBits = (WB_DEF_CANCEL | WB_DEF_RETRY | WB_DEF_NO);
     }
-    if( nType & 512 )
+    else if( nType & 512 )
+    {
+        if( nStyle == 2)
+            nWinDefBits = WB_DEF_IGNORE;
+        else
+            nWinDefBits = WB_DEF_CANCEL;
+    }
+    else if( nStyle == 2)
         nWinDefBits = WB_DEF_CANCEL;
     nWinBits |= nWinDefBits;
 
     String aMsg = rPar.Get(1)->GetString();
     String aTitle;
-    if( nArgCount == 4 )
+    if( nArgCount >= 4 )
         aTitle = rPar.Get(3)->GetString();
     else
         aTitle = GetpApp()->GetAppName();
@@ -3757,7 +3790,18 @@ RTLFUNC(MsgBox)
     USHORT nRet = (USHORT)pBox->Execute();
     if( nRet == TRUE )
         nRet = 1;
-    rPar.Get(0)->PutInteger( nButtonMap[ nRet ] );
+
+    INT16 nMappedRet;
+    if( nStyle == 2 )
+    {
+        nMappedRet = nRet;
+        if( nMappedRet == 0 )
+            nMappedRet = 3; // Abort
+    }
+    else
+        nMappedRet = nButtonMap[ nRet ];
+
+    rPar.Get(0)->PutInteger( nMappedRet );
     delete pBox;
 }
 
