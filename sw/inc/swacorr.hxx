@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2000-10-18 11:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ protected:
 public:
     TYPEINFO();
 
-    SwAutoCorrect( const String& rAutocorrFile );
     SwAutoCorrect( const SvxAutoCorrect& rACorr );
     virtual ~SwAutoCorrect();
 };

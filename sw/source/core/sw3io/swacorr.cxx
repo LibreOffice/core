@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:23 $
+ *  last change: $Author: jp $ $Date: 2000-10-18 11:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,21 @@
 #include <tools/urlobj.hxx>
 #endif
 
-#include "swacorr.hxx"
-#include "swblocks.hxx"
-#include "swerror.h"
-#include "docsh.hxx"
-#include "editsh.hxx"
+#ifndef _SWACORR_HXX
+#include <swacorr.hxx>
+#endif
+#ifndef _SWBLOCKS_HXX
+#include <swblocks.hxx>
+#endif
+#ifndef _SWERROR_H
+#include <swerror.h>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
+#endif
 
 
 
@@ -123,13 +133,6 @@ BOOL SwAutoCorrect::PutText( SvStorage& rStg, const String& rShort,
     return !IsError( nRet );
 }
 
-
-SwAutoCorrect::SwAutoCorrect( const String& rAutocorrFile )
-    : SvxAutoCorrect( rAutocorrFile )
-{
-    SwEditShell::SetAutoFmtFlags(&GetSwFlags());
-    // Konvertierung ??
-}
 
 SwAutoCorrect::SwAutoCorrect( const SvxAutoCorrect& rACorr )
     : SvxAutoCorrect( rACorr )
