@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-19 15:17:56 $
+ *  last change: $Author: ama $ $Date: 2001-02-13 08:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,9 @@ class SwSubFont : public SvxFont
     USHORT      nFntIndex;      // Index im Fontcache
     USHORT      nOrgHeight;     // Hoehe inkl. Escapement/Proportion
     USHORT      nOrgAscent;     // Ascent inkl. Escapement/Proportion
-
+    USHORT      nPropWidth;     // proportional width
     inline SwSubFont() : aSize(0,0)
-        { pMagic = NULL; nFntIndex = 0; nOrgHeight = nOrgAscent = 0; }
+    { pMagic = NULL; nFntIndex = nOrgHeight = nOrgAscent = 0; nPropWidth =100; }
 
     USHORT CalcEscAscent( const USHORT nOldAscent ) const;
     USHORT CalcEscHeight( const USHORT nOldHeight,
@@ -182,6 +182,10 @@ class SwSubFont : public SvxFont
     inline void SetLanguage( LanguageType eNewLang );
     inline short CheckKerning()
     {   return GetFixKerning() >= 0 ? GetFixKerning() : _CheckKerning( ); }
+    inline void SetPropWidth( const USHORT nNew )
+        { pMagic = 0; nPropWidth = nNew; }
+public:
+    USHORT GetPropWidth() const { return nPropWidth; }
 };
 
 #define SW_LATIN 0
@@ -277,6 +281,8 @@ public:
     inline void SetEscapement( const short nNewEsc );
     inline void SetProportion( const BYTE nNewPropr );
 
+    inline void SetPropWidth( const USHORT nNew );
+
     inline void SetFamily( const FontFamily eFamily, const BYTE nWhich );
     inline void SetName( const XubString& rName, const BYTE nWhich );
     inline void SetStyleName( const XubString& rStyleName, const BYTE nWhich );
@@ -350,6 +356,7 @@ public:
     FontWeight GetWeight() const { return aSub[nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
+    USHORT GetPropWidth() { return aSub[nActual].GetPropWidth(); }
 
     inline const XubString& GetName( const BYTE nWhich ) const
         { return aSub[nWhich].GetName(); }
@@ -447,19 +454,19 @@ public:
         { bFntChg = bOrgChg = TRUE; }
 };
 
-// gekapselte SV-Font-Methode
-inline void SwSubFont::SetColor( const Color& rColor )
-{
-    pMagic = 0;
-    Font::SetColor( rColor );
-}
-
 inline void SwFont::SetColor( const Color& rColor )
 {
     bFntChg = TRUE;
     aSub[0].SetColor( rColor );
     aSub[1].SetColor( rColor );
     aSub[2].SetColor( rColor );
+}
+
+// gekapselte SV-Font-Methode
+inline void SwSubFont::SetColor( const Color& rColor )
+{
+    pMagic = 0;
+    Font::SetColor( rColor );
 }
 
 
@@ -708,6 +715,17 @@ inline void SwFont::SetEmphasisMark( const FontEmphasisMark eValue )
     aSub[0].SetEmphasisMark( eValue );
     aSub[1].SetEmphasisMark( eValue );
     aSub[2].SetEmphasisMark( eValue );
+}
+
+inline void SwFont::SetPropWidth( const USHORT nNew )
+{
+    if( nNew != aSub[0].GetPropWidth() )
+    {
+        bFntChg = TRUE;
+        aSub[0].SetPropWidth( nNew );
+        aSub[1].SetPropWidth( nNew );
+        aSub[2].SetPropWidth( nNew );
+    }
 }
 
 // ueberladene Font-Methode

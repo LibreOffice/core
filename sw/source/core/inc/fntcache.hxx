@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: ama $ $Date: 2001-02-13 08:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ class FontMetric;
 class SwFntObj;
 class SwDrawTextInfo;   // DrawText
 class ViewShell;
+class SwSubFont;
 
 /*************************************************************************
  *                      class SwFntCache
@@ -120,14 +121,16 @@ class SwFntObj : public SwCacheObj
     friend void _InitCore();
     friend void _FinitCore();
 
-    Font *pScrFont;
-    Printer *pPrinter;
     Font aFont;
+    Font *pScrFont;
+    Font *pPrtFont;
+    Printer *pPrinter;
     USHORT nLeading;
     USHORT nScrAscent;
     USHORT nPrtAscent;
     USHORT nScrHeight;
     USHORT nPrtHeight;
+    USHORT nPropWidth;
     USHORT nZoom;
     BOOL bSymbol : 1;
     BOOL bPaintBlank : 1;
@@ -136,11 +139,13 @@ class SwFntObj : public SwCacheObj
     static long nPixWidth;
     static MapMode *pPixMap;
     static OutputDevice *pPixOut;
+    void InitPrtFont( Printer *pPrt );
+    void _InitPrtFont( OutputDevice *pOut );
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
 
-    SwFntObj( const Font &rFont, const void* pOwner,
+    SwFntObj( const SwSubFont &rFont, const void* pOwner,
               ViewShell *pSh );
 
     virtual ~SwFntObj();
@@ -159,9 +164,10 @@ public:
     void   CreateScrFont( ViewShell *pSh, const OutputDevice *pOut );
 
            void     SetDevFont( ViewShell *pSh, OutputDevice *pOut );
-    inline Printer *GetPrt() { return pPrinter; }
-    inline USHORT   GetZoom() { return nZoom; }
-    inline BOOL     IsSymbol() { return bSymbol; }
+    inline Printer *GetPrt() const { return pPrinter; }
+    inline USHORT   GetZoom() const { return nZoom; }
+    inline USHORT   GetPropWidth() const { return nPropWidth; }
+    inline BOOL     IsSymbol() const { return bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
     Size  GetTextSize( ViewShell *pSh,
@@ -170,6 +176,11 @@ public:
     xub_StrLen GetCrsrOfst( const OutputDevice *pOut, const XubString &rTxt,
              const USHORT nOfst, const xub_StrLen nIdx, const xub_StrLen nLen,
              short nKern = 0, short nSpaceAdd = 0 );
+
+    void CheckPrtFont( Printer* pPrt )
+        { if( nPropWidth != 100 && pPrinter != pPrt ) InitPrtFont( pPrt );  }
+    void CheckScrPrtFont( OutputDevice* pOut )
+        { if( nPropWidth != 100 && pPrtFont == &aFont ) _InitPrtFont( pOut ); }
 };
 
 /*************************************************************************

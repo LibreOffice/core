@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-15 14:02:57 $
+ *  last change: $Author: ama $ $Date: 2001-02-13 08:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
             aSub[SW_LATIN].Font::SetPitch( rFont.GetPitch() );
             aSub[SW_LATIN].Font::SetCharSet( rFont.GetCharSet() );
             aSub[SW_LATIN].SvxFont::SetPropr( 100 );
+            aSub[SW_LATIN].SetPropWidth( 100 );
             aSub[SW_LATIN].aSize = aSub[SW_LATIN].Font::GetSize();
             Size aTmpSize = aSub[SW_LATIN].aSize;
             aTmpSize.Height() = pAttrSet->GetSize().GetHeight();
@@ -288,6 +289,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
             aSub[SW_CJK].Font::SetPitch( rFont.GetPitch() );
             aSub[SW_CJK].Font::SetCharSet( rFont.GetCharSet() );
             aSub[SW_CJK].SvxFont::SetPropr( 100 );
+            aSub[SW_CJK].SetPropWidth( 100 );
             aSub[SW_CJK].aSize = aSub[SW_CJK].Font::GetSize();
             Size aTmpSize = aSub[SW_CJK].aSize;
             aTmpSize.Height() = pAttrSet->GetCJKSize().GetHeight();
@@ -304,6 +306,7 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
             aSub[SW_CTL].Font::SetPitch( rFont.GetPitch() );
             aSub[SW_CTL].Font::SetCharSet( rFont.GetCharSet() );
             aSub[SW_CTL].SvxFont::SetPropr( 100 );
+            aSub[SW_CTL].SetPropWidth( 100 );
             aSub[SW_CTL].aSize = aSub[SW_CTL].Font::GetSize();
             Size aTmpSize = aSub[SW_CTL].aSize;
             aTmpSize.Height() = pAttrSet->GetCTLSize().GetHeight();
@@ -321,6 +324,11 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
         SetAlign( ALIGN_BASELINE );
         SetOutline( pAttrSet->GetContour().GetValue() );
         SetShadow( pAttrSet->GetShadowed().GetValue() );
+#ifdef TEST_PROPWIDTH
+        //SetPropWidth( pAttrSet->GetPropWidth() );
+        if( pAttrSet->GetShadowed().GetValue() )
+            SetPropWidth(50);
+#endif
         SetAutoKern( pAttrSet->GetAutoKern().GetValue() );
         SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
         const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
@@ -472,6 +480,16 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
             TRUE, &pItem ))
             SetShadow( ((SvxShadowedItem*)pItem)->GetValue() );
+#ifdef TEST_PROPWIDTH
+/*
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_PROPWIDTH,
+            TRUE, &pItem ))
+            SetPropWidth( ((SvxPropWidthItem*)pItem)->getValue() );
+ */
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_SHADOWED,
+            TRUE, &pItem ))
+            SetPropWidth(((SvxShadowedItem*)pItem)->GetValue() ? 50 : 100 );
+#endif
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_AUTOKERN,
             TRUE, &pItem ))
             SetAutoKern( ((SvxAutoKernItem*)pItem)->GetValue() );
@@ -603,6 +621,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     SetAlign( ALIGN_BASELINE );
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
+#ifdef TEST_PROPWIDTH
+//  SetPropWidth( pAttrSet->GetPropWidth().GetValue() )
+    if( pAttrSet->GetShadowed().GetValue() )
+        SetPropWidth(50);
+#endif
     SetAutoKern( pAttrSet->GetAutoKern().GetValue() );
     SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
     const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
@@ -626,6 +649,7 @@ SwSubFont& SwSubFont::operator=( const SwSubFont &rFont )
     nFntIndex = rFont.nFntIndex;
     nOrgHeight = rFont.nOrgHeight;
     nOrgAscent = rFont.nOrgAscent;
+    nPropWidth = rFont.nPropWidth;
     aSize = rFont.aSize;
     return *this;
 }
