@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:07:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
+#ifndef SC_DRWLAYER_HXX
+#include "drwlayer.hxx"
+#endif
 
 class ScDocShell;
 class ScAnnotationObj;
@@ -211,6 +214,7 @@ public:
 
     BOOL                    AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
 
+    ScDrawLayer*                            MakeDrawLayer();
     void                    BeforeXMLLoading();
     void                    AfterXMLLoading(sal_Bool bRet);
 
