@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:09:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
 
 void SwXMLBodyContext_Impl::EndElement()
 {
-    GetImport().GetTextImport()->RedlineAdjustStartNodeCursor( sal_False );
+    /* #108146# Code moved to SwXMLOmport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles();
 }
 
