@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-19 12:07:49 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 14:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,12 +198,6 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
                         case HELPTIPS :
                             bHelpTips = bTmp;
                             break;
-/*!                        case AUTOSTART :
-                            bHelpAgentAutoStartMode = bTmp;
-                            break;
-                        case WELCOMESCREEN :
-                            bWelcomeScreen = bTmp;
-                            break;*/
                         default:
                             DBG_ERRORFILE( "Wrong Member!" );
                             break;
@@ -249,12 +243,12 @@ void SvtHelpOptions_Impl::Commit()
             case HELPTIPS :
                 pValues[nProp] <<= bHelpTips;
                 break;
-/*!            case AUTOSTART :
-                pValues[nProp] <<= bHelpAgentAutoStartMode;
+
+            case LOCALE:
+            case SYSTEM:
+                // readonly property -> do nothing
                 break;
-            case WELCOMESCREEN :
-                pValues[nProp] <<= bWelcomeScreen;
-                break;*/
+
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
