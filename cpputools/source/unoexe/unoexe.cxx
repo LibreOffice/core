@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-12 18:57:50 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 13:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -213,11 +214,12 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
 template< class T >
 void createInstance(
     Reference< T > & rxOut,
-    const Reference< XMultiServiceFactory > & xMgr,
+    const Reference< XComponentContext > & xContext,
     const OUString & rServiceName )
     throw (Exception)
 {
-    Reference< XInterface > x( xMgr->createInstance( rServiceName ), UNO_QUERY );
+    Reference< XMultiComponentFactory > xMgr( xContext->getServiceManager() );
+    Reference< XInterface > x( xMgr->createInstanceWithContext( rServiceName, xContext ) );
 
     if (! x.is())
     {
@@ -230,31 +232,32 @@ void createInstance(
                 Reference< XSet > xSet( xMgr, UNO_QUERY );
                 if (xSet.is())
                 {
+                    Reference< XMultiServiceFactory > xSF( xMgr, UNO_QUERY );
                     // acceptor
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.Acceptor") ),
-                        xMgr, Reference< XRegistryKey >() ) ) );
+                        xSF, Reference< XRegistryKey >() ) ) );
                     // connector
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("connectr") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.Connector") ),
-                        xMgr, Reference< XRegistryKey >() ) ) );
+                        xSF, Reference< XRegistryKey >() ) ) );
                     // iiop bridge
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.Bridge.various") ),
-                        xMgr, Reference< XRegistryKey >() ) ) );
+                        xSF, Reference< XRegistryKey >() ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.BridgeFactory") ),
-                        xMgr, Reference< XRegistryKey >() ) ) );
+                        xSF, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;
             }
         }
-        x = xMgr->createInstance( rServiceName );
+        x = xMgr->createInstanceWithContext( rServiceName, xContext );
     }
 
     if (! x.is())
@@ -281,38 +284,42 @@ void createInstance(
 }
 //--------------------------------------------------------------------------------------------------
 static Reference< XSimpleRegistry > nestRegistries(
-    const Reference< XMultiServiceFactory > & xMgr,
     const Reference< XSimpleRegistry > & xReadWrite,
     const Reference< XSimpleRegistry > & xReadOnly )
     throw (Exception)
 {
-    Reference< XSimpleRegistry > xReg;
-    createInstance(
-        xReg, xMgr,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.NestedRegistry") ) );
+    Reference< XSimpleRegistry > xReg( createNestedRegistry() );
+    if (! xReg.is())
+    {
+        throw RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no nested registry service!" ) ),
+            Reference< XInterface >() );
+    }
 
     Reference< XInitialization > xInit( xReg, UNO_QUERY );
     if (! xInit.is())
         throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("nested registry does not export interface \"com.sun.star.lang.XInitialization\"!" ) ), Reference< XInterface >() );
 
     Sequence< Any > aArgs( 2 );
-    aArgs[0] = makeAny( xReadWrite );
-    aArgs[1] = makeAny( xReadOnly );
+    aArgs[0] <<= xReadWrite;
+    aArgs[1] <<= xReadOnly;
     xInit->initialize( aArgs );
 
     return xReg;
 }
 //--------------------------------------------------------------------------------------------------
 static Reference< XSimpleRegistry > openRegistry(
-    const Reference< XMultiServiceFactory > & xMgr,
     const OUString & rURL,
     sal_Bool bReadOnly, sal_Bool bCreate )
     throw (Exception)
 {
-    Reference< XSimpleRegistry > xNewReg;
-    createInstance(
-        xNewReg, xMgr,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry") ) );
+    Reference< XSimpleRegistry > xNewReg( createSimpleRegistry() );
+    if (! xNewReg.is())
+    {
+        throw RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no simple registry service!" ) ),
+            Reference< XInterface >() );
+    }
 
     try
     {
@@ -325,6 +332,7 @@ static Reference< XSimpleRegistry > openRegistry(
     catch (Exception &)
     {
     }
+
     out( "\n> warning: cannot open registry \"" );
     out( rURL );
     if (bReadOnly)
@@ -335,7 +343,7 @@ static Reference< XSimpleRegistry > openRegistry(
 }
 //--------------------------------------------------------------------------------------------------
 static Reference< XInterface > loadComponent(
-    const Reference< XMultiServiceFactory > & xMgr,
+    const Reference< XComponentContext > & xContext,
     const OUString & rImplName, const OUString & rLocation )
     throw (Exception)
 {
@@ -352,15 +360,13 @@ static Reference< XInterface > loadComponent(
             aExt.compareToAscii( "so" ) == 0)
         {
             createInstance(
-                xLoader, xMgr,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") ) );
+                xLoader, xContext, OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary") ) );
         }
         else if (aExt.compareToAscii( "jar" ) == 0 ||
                  aExt.compareToAscii( "class" ) == 0)
         {
             createInstance(
-                xLoader, xMgr,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java") ) );
+                xLoader, xContext, OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Java") ) );
         }
         else
         {
@@ -374,10 +380,27 @@ static Reference< XInterface > loadComponent(
         Reference< XInterface > xInstance;
 
         // activate
-        Reference< XSingleServiceFactory > xFactory( xLoader->activate(
-            rImplName, OUString(), rLocation, Reference< XRegistryKey >() ), UNO_QUERY );
+        Reference< XInterface > xFactory( xLoader->activate(
+            rImplName, OUString(), rLocation, Reference< XRegistryKey >() ) );
         if (xFactory.is())
-            xInstance = xFactory->createInstance();
+        {
+            Reference< XSingleComponentFactory > xCFac( xFactory, UNO_QUERY );
+            if (xCFac.is())
+            {
+                xInstance = xCFac->createInstanceWithContext( xContext );
+            }
+            else
+            {
+                Reference< XSingleServiceFactory > xSFac( xFactory, UNO_QUERY );
+                if (xSFac.is())
+                {
+                    out( "\n> warning: ignroing context for implementation \"" );
+                    out( rImplName );
+                    out( "\"!" );
+                    xInstance = xSFac->createInstance();
+                }
+            }
+        }
 
         if (! xInstance.is())
         {
@@ -412,7 +435,7 @@ static Reference< XInterface > loadComponent(
 class OInstanceProvider
     : public WeakImplHelper1< XInstanceProvider >
 {
-    Reference< XMultiServiceFactory > _xMgr;
+    Reference< XComponentContext > _xContext;
 
     Mutex                             _aSingleInstanceMutex;
     Reference< XInterface >           _xSingleInstance;
@@ -428,11 +451,11 @@ class OInstanceProvider
     inline Reference< XInterface > createInstance() throw (Exception);
 
 public:
-    OInstanceProvider( const Reference< XMultiServiceFactory > & xMgr,
+    OInstanceProvider( const Reference< XComponentContext > & xContext,
                        const OUString & rImplName, const OUString & rLocation,
                        const OUString & rServiceName, const Sequence< Any > & rInitParams,
                        sal_Bool bSingleInstance, const OUString & rInstanceName )
-        : _xMgr( xMgr )
+        : _xContext( xContext )
         , _bSingleInstance( bSingleInstance )
         , _aImplName( rImplName )
         , _aLocation( rLocation )
@@ -451,9 +474,9 @@ inline Reference< XInterface > OInstanceProvider::createInstance()
 {
     Reference< XInterface > xRet;
     if (_aImplName.getLength()) // manually via loader
-        xRet = loadComponent( _xMgr, _aImplName, _aLocation );
+        xRet = loadComponent( _xContext, _aImplName, _aLocation );
     else // via service manager
-        unoexe::createInstance( xRet, _xMgr, _aServiceName );
+        unoexe::createInstance( xRet, _xContext, _aServiceName );
 
     // opt XInit
     Reference< XInitialization > xInit( xRet, UNO_QUERY );
@@ -549,7 +572,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
     }
 
     sal_Int32 nRet = 0;
-    Reference< XMultiServiceFactory > xMgr;
+    Reference< XComponentContext > xContext;
     Reference< XSimpleRegistry > xRegistry;
 
     try
@@ -644,10 +667,6 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
         //#### create registry #####################################################################
 
-          xMgr = createServiceFactory();
-        if (! xMgr.is())
-            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("cannot boot strap service manager!" ) ), Reference< XInterface >() );
-
         // ReadOnly registries
         for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
         {
@@ -656,9 +675,9 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
             out( OUStringToOString( aReadOnlyRegistries[ nReg ], RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
             Reference< XSimpleRegistry > xNewReg(
-                openRegistry( xMgr, aReadOnlyRegistries[ nReg ], sal_True, sal_False ) );
+                openRegistry( aReadOnlyRegistries[ nReg ], sal_True, sal_False ) );
             if (xNewReg.is())
-                xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
+                xRegistry = (xRegistry.is() ? nestRegistries( xNewReg, xRegistry ) : xNewReg);
         }
         if (aReadWriteRegistry.getLength())
         {
@@ -668,25 +687,17 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 #endif
             // ReadWrite registry
             Reference< XSimpleRegistry > xNewReg(
-                openRegistry( xMgr, aReadWriteRegistry, sal_False, sal_True ) );
+                openRegistry( aReadWriteRegistry, sal_False, sal_True ) );
             if (xNewReg.is())
-                xRegistry = (xRegistry.is() ? nestRegistries( xMgr, xNewReg, xRegistry ) : xNewReg);
+                xRegistry = (xRegistry.is() ? nestRegistries( xNewReg, xRegistry ) : xNewReg);
         }
 
-        // init service manager with registry
-        if (xRegistry.is())
-        {
-            Reference< XInitialization > xInit( xMgr, UNO_QUERY );
-            if (! xInit.is())
-                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("service manager does not export interface \"com.sun.star.lang.XInitialization\"!" ) ), Reference< XInterface >() );
-
-            Any aReg( makeAny( xRegistry ) );
-            xInit->initialize( Sequence< Any >( &aReg, 1 ) );
-        }
-        else
+        if (! xRegistry.is())
         {
             out( "\n> warning: no registry given!" );
         }
+
+        Reference< XComponentContext > xContext( bootstrap_InitialComponentContext( xRegistry ) );
 
         //#### accept, instanciate, etc. ###########################################################
 
@@ -702,7 +713,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
             Reference< XAcceptor > xAcceptor;
             createInstance(
-                xAcceptor, xMgr,
+                xAcceptor, xContext,
                 OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor") ) );
 
             // init params
@@ -716,7 +727,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
             // instance provider
             Reference< XInstanceProvider > xInstanceProvider( new OInstanceProvider(
-                xMgr, aImplName, aLocation, aServiceName, aInitParams,
+                xContext, aImplName, aLocation, aServiceName, aInitParams,
                 bSingleInstance, aInstanceName ) );
 
             for (;;)
@@ -730,7 +741,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
 
                 Reference< XBridgeFactory > xBridgeFactory;
                 createInstance(
-                    xBridgeFactory, xMgr,
+                    xBridgeFactory, xContext,
                     OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.BridgeFactory") ) );
 
                 // bridge
@@ -752,9 +763,9 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
         {
             Reference< XInterface > xInstance;
             if (aImplName.getLength()) // manually via loader
-                xInstance = loadComponent( xMgr, aImplName, aLocation );
+                xInstance = loadComponent( xContext, aImplName, aLocation );
             else // via service manager
-                createInstance( xInstance, xMgr, aServiceName );
+                createInstance( xInstance, xContext, aServiceName );
 
             // execution
             Reference< XMain > xMain( xInstance, UNO_QUERY );
@@ -780,12 +791,10 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
     }
 
     // cleanup
-    if (xMgr.is())
-    {
-        Reference< XComponent > xComp( xMgr, UNO_QUERY );
-        if (xComp.is())
-            xComp->dispose();
-    }
+    Reference< XComponent > xComp( xContext, UNO_QUERY );
+    if (xComp.is())
+        xComp->dispose();
+
     if (xRegistry.is())
     {
         xRegistry->close();

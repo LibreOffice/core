@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-04 14:05:43 $
+#   last change: $Author: dbo $ $Date: 2001-05-10 13:05:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,13 +85,17 @@ UNOTYPES= \
      com.sun.star.uno.TypeClass \
      com.sun.star.uno.XAggregation \
      com.sun.star.uno.XWeak \
+     com.sun.star.uno.XComponentContext \
      com.sun.star.lang.XTypeProvider \
     com.sun.star.lang.XMain \
      com.sun.star.lang.XInitialization \
      com.sun.star.lang.XComponent \
      com.sun.star.lang.XSingleServiceFactory \
+     com.sun.star.lang.XSingleComponentFactory \
      com.sun.star.lang.XMultiServiceFactory \
+     com.sun.star.lang.XMultiComponentFactory \
      com.sun.star.container.XSet \
+     com.sun.star.container.XHierarchicalNameAccess \
     com.sun.star.loader.XImplementationLoader \
     com.sun.star.registry.XSimpleRegistry \
     com.sun.star.registry.XRegistryKey \
