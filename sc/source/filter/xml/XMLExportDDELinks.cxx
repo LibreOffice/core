@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:53:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,11 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
         pMatrix = rExport.GetDocument()->GetDdeLinkResultMatrix( static_cast<USHORT>(nPos) );
     if (pMatrix)
     {
-        USHORT nuCol, nuRow;
+        SCSIZE nuCol;
+        SCSIZE nuRow;
         pMatrix->GetDimensions( nuCol, nuRow );
-        sal_Int32 nRowCount = nuRow;
-        sal_Int32 nColCount = nuCol;
+        sal_Int32 nRowCount = static_cast<sal_Int32>(nuRow);
+        sal_Int32 nColCount = static_cast<sal_Int32>(nuCol);
         SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
         rtl::OUStringBuffer sBuffer;
         if (nColCount > 1)
@@ -187,7 +188,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             for(sal_Int32 nColumn = 0; nColumn < nColCount; nColumn++)
             {
                 BOOL bIsString = FALSE;
-                const MatValue* pMatVal = pMatrix->Get( static_cast<USHORT>(nColumn), static_cast<USHORT>(nRow), bIsString );
+                const MatValue* pMatVal = pMatrix->Get( static_cast<SCSIZE>(nColumn), static_cast<SCSIZE>(nRow), bIsString );
 
                 if (nColumn == 0)
                 {
