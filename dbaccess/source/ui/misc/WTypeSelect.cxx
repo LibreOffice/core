@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:08:11 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 10:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ using namespace ::com::sun::star::sdbc;
 //========================================================================
 OWizTypeSelectControl::~OWizTypeSelectControl()
 {
+    delete pActFieldDescr;
 }
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::ActivateAggregate( EControlType eType )
@@ -200,6 +201,17 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
     return ((OWizTypeSelect*)GetParent())->m_pParent->m_xConnection;
 }
+// -----------------------------------------------------------------------------
+sal_Bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
+{
+    return ((OWizTypeSelect*)GetParent())->m_bAutoIncrementEnabled;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OWizTypeSelectControl::getAutoIncrementValue() const
+{
+    return ((OWizTypeSelect*)GetParent())->m_sAutoIncrementValue;
+}
+// -----------------------------------------------------------------------------
 
 //========================================================================
 DBG_NAME(OWizTypeSelect);
@@ -215,6 +227,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
                ,m_etAuto( this, ModuleRes( ET_AUTO ) )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
                ,m_pParserStream(_pStream)
+               ,m_bAutoIncrementEnabled(sal_False)
 {
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
@@ -236,9 +249,11 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
         Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
         m_lbColumnNames.SetPKey(xMetaData->supportsCoreSQLGrammar());
 
+        ::dbaui::fillAutoIncrementValue(m_pParent->m_xConnection,m_bAutoIncrementEnabled,m_sAutoIncrementValue);
     }
     catch(const Exception&)
     {
+        OSL_ENSURE(0,"supportsCoreSQLGrammar OR fillAutoIncrementValue failed!");
     }
 
     FreeResource();
