@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:41:06 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,35 +124,6 @@ Menu MN_READONLY_POPUP
             Text[ turkish ] = "Yeni bir pencerede aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Abrir en nueva ~ventana";
-        };
-        MenuItem
-        {
-            Identifier = MN_READONLY_DOWNLOAD ;
-            HelpID = HID_MN_READONLY_DOWNLOAD ;
-            Text = "~Download..." ;
-            Text [ English ] = "~Download..." ;
-            Text [ english_us ] = "Download..." ;
-            Text [ italian ] = "Download..." ;
-            Text [ spanish ] = "~Descargar..." ;
-            Text [ french ] = "~Téléchargement..." ;
-            Text [ dutch ] = "~Download..." ;
-            Text [ swedish ] = "La~dda ned..." ;
-            Text [ danish ] = "~Overfør..." ;
-            Text [ portuguese ] = "Do~wnload..." ;
-            Text [ portuguese_brazilian ] = "~Download..." ;
-            Text[ chinese_simplified ] = "ÏÂÔØ(~D)...";
-            Text[ russian ] = "Çàãğóçêà...";
-            Text[ polish ] = "Pobieranie...";
-            Text[ japanese ] = "ÀŞ³İÛ°ÄŞ...";
-            Text[ chinese_traditional ] = "¤U¸ü(~D)...";
-            Text[ arabic ] = "ÊäÒíá...";
-            Text[ dutch ] = "~Download...";
-            Text[ chinese_simplified ] = "ÏÂÔØ(~D)...";
-            Text[ greek ] = "~ËŞøç áñ÷åßùí...";
-            Text[ korean ] = "´Ù¿î·Îµå...";
-            Text[ turkish ] = "İndir...";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Descargar...";
         };
         MenuItem
         {
@@ -359,68 +330,6 @@ Menu MN_READONLY_POPUP
             Text[ catalan ] = "~Avanzar";
         };
         SEPARATOR
-        MenuItem
-        {
-            Identifier = MN_READONLY_CREATELINK ;
-            HelpID = SID_CREATELINK ;
-            /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung ~hinzufügen : Bookmark ~hinzufügen */
-            /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung ~hinzufügen : Bookmark ~hinzufügen */
-            Text = "Verknüpfung ~hinzufügen" ;
-            Text [ English ] = "~Add Link" ;
-            Text [ dutch ] = "Koppeling ~toevoegen" ;
-            Text [ english_us ] = "~Add Link" ;
-            Text [ swedish ] = "Lägg till ~länk" ;
-            Text [ danish ] = "Tilføj kæde" ;
-            Text [ italian ] = "Aggiungi collegamento" ;
-            Text [ spanish ] = "Añadir ~vínculo" ;
-            Text [ french ] = "Ajouter un l~ien" ;
-            Text [ portuguese ] = "Adicionar ~ligação" ;
-            Text [ portuguese_brazilian ] = "Verknüpfung ~hinzufügen" ;
-            Text[ chinese_simplified ] = "ĞÂÔöÁ´½Ó(~A)";
-            Text[ russian ] = "Äîáàâèòü ññûëêó";
-            Text[ polish ] = "Dodaj ³¹cze";
-            Text[ japanese ] = "Øİ¸‚Ì’Ç‰Á(~A)";
-            Text[ chinese_traditional ] = "·s¼W±¶®|(~A)";
-            Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ";
-            Text[ dutch ] = "Koppeling ~toevoegen";
-            Text[ chinese_simplified ] = "ĞÂÔöÁ´½Ó(~A)";
-            Text[ greek ] = "ĞñïóèŞê~ç óıíäåóçò";
-            Text[ korean ] = "¿¬°á Ãß°¡(~A)";
-            Text[ turkish ] = "Bağlantı ekle";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Añadir ~vínculo";
-        };
-        MenuItem
-        {
-            Identifier = MN_READONLY_CREATEGRAPHIKLINK ;
-            HelpID = HID_MN_READONLY_CREATEGRAPHIKLINK ;
-            /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfung auf Grafik hinzufügen : B~ookmark auf Grafik hinzufügen */
-            /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfung auf Grafik hinzufügen : B~ookmark auf Grafik hinzufügen */
-            Text = "~Verknüpfung auf Grafik hinzufügen" ;
-            Text [ English ] = "Add ~Link to Image" ;
-            Text [ dutch ] = "~Koppeling aan afbeelding toevoegen" ;
-            Text [ english_us ] = "~Add Link to Picture" ;
-            Text [ swedish ] = "~Lägga till länk på grafik" ;
-            Text [ danish ] = "Tilføj kæde til grafik" ;
-            Text [ italian ] = "Aggiungi collegamento al grafico" ;
-            Text [ spanish ] = "Añadir ~vínculo a imagen" ;
-            Text [ french ] = "Ajouter un l~ien à l'image" ;
-            Text [ portuguese ] = "Adicionar ~ligação à imagem" ;
-            Text [ portuguese_brazilian ] = "~Verknüpfung auf Grafik hinzufügen" ;
-            Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎµÄÁ´½Ó(~A)";
-            Text[ russian ] = "Äîáàâèòü ññûëêó íà ğèñóíîê";
-            Text[ polish ] = "Dodaj ³¹cze do grafiki";
-            Text[ japanese ] = "}‚ÉØİ¸‚ğ’Ç‰Á‚·‚é(~A)";
-            Text[ chinese_traditional ] = "·s¼W¹Ï§Îªº±¶®|(~A)";
-            Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ áÕæÑÉ";
-            Text[ dutch ] = "~Koppeling aan afbeelding toevoegen";
-            Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎµÄÁ´½Ó(~A)";
-            Text[ greek ] = "ĞñïóèŞêç óıíäåóçò óå ãñá~öéêü";
-            Text[ korean ] = "±×·¡ÇÈ¿¡ ¿¬°á Ãß°¡(~A)";
-            Text[ turkish ] = "Bağlantıyı grafiğe ekle";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Añadir ~vínculo a imagen";
-        };
         MenuItem
         {
             Identifier = MN_READONLY_SAVEGRAPHIC ;

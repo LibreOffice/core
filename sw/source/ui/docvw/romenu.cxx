@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 20:20:02 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
@@ -100,6 +97,9 @@
 #endif
 #ifndef _INETIMG_HXX //autogen
 #include <svtools/inetimg.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -124,6 +124,9 @@
 #endif
 
 
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
@@ -278,10 +281,6 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
 
     SfxViewFrame * pVFrame = rV.GetViewFrame();
     SfxDispatcher &rDis = *pVFrame->GetDispatcher();
-    const SfxPoolItem *pTmp;
-    EnableItem( MN_READONLY_CREATEGRAPHIKLINK, bLink &&
-                SFX_ITEM_AVAILABLE == rDis.QueryState( SID_CREATELINK, pTmp ));
-
     const SwPageDesc &rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
     pItem = &rDesc.GetMaster().GetBackground();
     BOOL bEnableBackGallery = FALSE,
@@ -324,7 +323,6 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_BROWSE_STOP,     SID_BROWSE_STOP,    rDis );
     Check( MN_READONLY_BROWSE_BACKWARD, SID_BROWSE_BACKWARD,rDis );
     Check( MN_READONLY_BROWSE_FORWARD,  SID_BROWSE_FORWARD, rDis );
-    Check( MN_READONLY_CREATELINK,      SID_CREATELINK,     rDis );
 #ifdef WNT
     Check( MN_READONLY_PLUGINOFF,       SID_PLUGINS_ACTIVE, rDis );
 #endif
@@ -341,40 +339,11 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     {
         EnableItem( MN_READONLY_OPENURL, FALSE );
         EnableItem( MN_READONLY_OPENURLNEW, FALSE );
-        EnableItem( MN_READONLY_CREATELINK, FALSE );
-        EnableItem( MN_READONLY_DOWNLOAD, FALSE );
         EnableItem( MN_READONLY_COPYLINK, FALSE );
     }
 
     RemoveDisabledEntries( TRUE, TRUE );
-
-#if 0
-    //Jetzt noch das unnuetze Geraffel entfernen.
-    MenuItemType eLast = MENUITEM_DONTKNOW;
-    for ( int i = 0; i < GetItemCount(); ++i )
-    {
-        if ( MENUITEM_SEPARATOR == GetItemType( i ) )
-        {
-            if ( i == 0 || eLast == MENUITEM_SEPARATOR )
-                RemoveItem( i-- );
-        }
-        else if ( !IsItemEnabled( GetItemId( i ) ) )
-            RemoveItem( i-- );
-        eLast = i >= 0 ? GetItemType(i) : MENUITEM_DONTKNOW;
-    }
-#endif
 }
-
-struct _CastINetImage : INetImage
-{
-    void Copy()
-        {
-            String sData( CopyExchange() );
-            if( sData.Len() )
-                Clipboard::CopyData( sData.GetBuffer(), sData.Len() / 2,
-                                        SOT_FORMATSTR_ID_INET_IMAGE );
-        }
-};
 
 void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
 {
@@ -411,6 +380,8 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
         return;
     }
 
+    TransferDataContainer* pClipCntnr = 0;
+
     USHORT nExecId = USHRT_MAX;
     USHORT nFilter = USHRT_MAX;
     switch( nId )
@@ -427,26 +398,6 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
         case MN_READONLY_BROWSE_BACKWARD:   nExecId = SID_BROWSE_BACKWARD;break;
         case MN_READONLY_BROWSE_FORWARD:    nExecId = SID_BROWSE_FORWARD; break;
         case MN_READONLY_SOURCEVIEW:        nExecId = SID_SOURCEVIEW;     break;
-        case MN_READONLY_CREATELINK:
-            {
-                SfxStringItem aName( SID_BOOKMARK_TITLE, sDescription );
-                SfxStringItem aURL( SID_BOOKMARK_URL, sURL );
-                rDis.Execute( SID_CREATELINK, SFX_CALLMODE_ASYNCHRON,
-                              &aName, &aURL, 0L);
-            }
-            break;
-        case MN_READONLY_CREATEGRAPHIKLINK:
-            {
-                SfxStringItem aURL ( SID_BOOKMARK_URL, sGrfName );
-                INetURLObject aTmp;
-                aTmp.SetSmartURL( sGrfName );
-                SfxStringItem aName( SID_BOOKMARK_TITLE, aTmp.GetName() );
-                rDis.Execute( SID_CREATELINK, SFX_CALLMODE_ASYNCHRON,
-                              &aName, &aURL, 0L);
-            }
-        case MN_READONLY_DOWNLOAD:          nFilter =
-                                                URLLOAD_NEWVIEW |
-                                                URLLOAD_DOWNLOADFILTER;   break;
         case MN_READONLY_SAVEGRAPHIC:
         case MN_READONLY_SAVEBACKGROUND:
             {
@@ -454,15 +405,18 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
                 break;
             }
         case MN_READONLY_COPYLINK:
-            Clipboard::Clear();
-            Clipboard::CopyString( sURL );
+            pClipCntnr = new TransferDataContainer;
+            pClipCntnr->CopyString( sURL );
             break;
 
         case MN_READONLY_COPYGRAPHIC:
-            Clipboard::Clear();
-            aGraphic.Copy();
-            if( pImageMap )     pImageMap->Copy();
-            if( pTargetURL )    ((_CastINetImage*)pTargetURL)->Copy();
+            pClipCntnr = new TransferDataContainer;
+            pClipCntnr->CopyGraphic( aGraphic );
+
+            if( pImageMap )
+                pClipCntnr->CopyImageMap( *pImageMap );
+            if( pTargetURL )
+                pClipCntnr->CopyINetImage( *pTargetURL );
             break;
 
         case MN_READONLY_LOADGRAPHIC:
@@ -488,10 +442,17 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
 
         default: /* do nothing */;
     }
-    if ( nExecId != USHRT_MAX )
+    if( USHRT_MAX != nExecId )
         rDis.GetBindings()->Execute( nExecId );
-    if ( nFilter != USHRT_MAX )
+    if( USHRT_MAX != nFilter )
         ::LoadURL( sURL, &rSh, nFilter, &sTargetFrameName);
+
+    if( pClipCntnr )
+    {
+        STAR_REFERENCE( datatransfer::XTransferable ) xRef( pClipCntnr );
+        if( pClipCntnr->HasAnyData() )
+            pClipCntnr->CopyToClipboard();
+    }
 }
                                              //nicht const, weil GetLink() noch
                                              //nicht const. kann bei naechster
@@ -635,6 +596,9 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/03/07 20:20:02  sj
+      api changes, GraphicFilter now using Configuration Management
+
       Revision 1.3  2000/10/17 15:16:11  os
       Change: SfxMedium Ctor
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:51:33 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,28 +470,11 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
 //  SfxBoolItem aSilent( SID_SILENT, TRUE );
     SfxBoolItem aReadOnly( SID_BROWSING, TRUE );
 
-    const SfxFilter* pLoadFltr;
-    switch( nFilter & ~URLLOAD_NEWVIEW )
-    {
-    case URLLOAD_CHOOSEFILTER:
-        pLoadFltr = SfxExecutableFilterContainer::GetChooserFilter();
-        break;
-    case URLLOAD_DOWNLOADFILTER:
-        pLoadFltr = SfxExecutableFilterContainer::GetDownloadFilter();
-        break;
-    default:
-        pLoadFltr = 0;
-        break;
-    }
-
-    SfxStringItem aFilter( SID_FILTER_NAME,
-                            pLoadFltr ? pLoadFltr->GetName(): aEmptyStr );
-
     if( nFilter & URLLOAD_NEWVIEW )
         aTargetFrameName.SetValue( String::CreateFromAscii("_blank") );
 
     const SfxPoolItem* aArr[] = {
-                &aName, &aFilter,
+                &aName,
                 &aNewView, /*&aSilent,*/ &aReadOnly,
                 &aReferer,
                 &aView, &aTargetFrameName,

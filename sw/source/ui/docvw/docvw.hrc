@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: jp $ $Date: 2001-05-08 19:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #define MN_READONLY_BROWSE_STOP         (RC_DOCVW_BEGIN + 5)
 #define MN_READONLY_BROWSE_BACKWARD     (RC_DOCVW_BEGIN + 6)
 #define MN_READONLY_BROWSE_FORWARD      (RC_DOCVW_BEGIN + 7)
-#define MN_READONLY_CREATELINK          (RC_DOCVW_BEGIN + 8)
-#define MN_READONLY_CREATEGRAPHIKLINK   (RC_DOCVW_BEGIN + 9)
-#define MN_READONLY_DOWNLOAD            (RC_DOCVW_BEGIN + 10)
 #define MN_READONLY_SAVEGRAPHIC         (RC_DOCVW_BEGIN + 11)
 #define MN_READONLY_SAVEBACKGROUND      (RC_DOCVW_BEGIN + 12)
 #define MN_READONLY_COPYLINK            (RC_DOCVW_BEGIN + 13)
