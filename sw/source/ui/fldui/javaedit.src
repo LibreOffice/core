@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:37:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ chinese_traditional ] = "§Â¶r(~T)";
         Text[ arabic ] = "‰’";
         Text[ greek ] = " ÂﬂÏÂÌÔ";
-        Text[ korean ] = "≈ÿΩ∫∆Æ";
+        Text[ korean ] = "≈ÿΩ∫∆Æ(~T)";
         Text[ turkish ] = "~Metin";
         Text[ language_user1 ] = " ";
     };
