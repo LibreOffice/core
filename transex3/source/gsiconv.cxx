@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsiconv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-03 16:07:40 $
+ *  last change: $Author: nf $ $Date: 2002-04-18 13:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,112 @@
 // local includes
 #include "utf8conv.hxx"
 
+#define GSI_FILE_UNKNOWN        0x0000
+#define GSI_FILE_OLDSTYLE       0x0001
+#define GSI_FILE_L10NFRAMEWORK  0x0002
+
+/*****************************************************************************/
+USHORT GetGSIFileType( SvStream &rStream )
+/*****************************************************************************/
+{
+    USHORT nFileType = GSI_FILE_UNKNOWN;
+
+    ULONG nPos( rStream.Tell());
+    rStream.Seek( STREAM_SEEK_TO_BEGIN );
+
+    ByteString sLine;
+    while( !rStream.IsEof() && !sLine.Len())
+        rStream.ReadLine( sLine );
+
+    if( sLine.Len()) {
+        if( sLine.Search( "($$)" ) != STRING_NOTFOUND )
+            nFileType = GSI_FILE_OLDSTYLE;
+        else
+            nFileType = GSI_FILE_L10NFRAMEWORK;
+    }
+
+    rStream.Seek( nPos );
+
+    return nFileType;
+}
+
+/*****************************************************************************/
+ByteString GetGSILineId( const ByteString &rLine, USHORT nFileType )
+/*****************************************************************************/
+{
+    ByteString sId;
+    switch ( nFileType ) {
+        case GSI_FILE_OLDSTYLE:
+            sId = rLine;
+            sId.SearchAndReplaceAll( "($$)", "\t" );
+            sId = sId.GetToken( 0, '\t' );
+          break;
+
+        case GSI_FILE_L10NFRAMEWORK:
+            sId = rLine.GetToken( 0, '\t' );
+            sId += "\t";
+            sId += rLine.GetToken( 1, '\t' );
+            sId += "\t";
+            sId += rLine.GetToken( 4, '\t' );
+            sId += "\t";
+            sId += rLine.GetToken( 5, '\t' );
+          break;
+    }
+    return sId;
+}
+
+/*****************************************************************************/
+ByteString GetGSILineLangId( const ByteString &rLine, USHORT nFileType )
+/*****************************************************************************/
+{
+    ByteString sLangId;
+    switch ( nFileType ) {
+        case GSI_FILE_OLDSTYLE:
+            sLangId = rLine;
+            sLangId.SearchAndReplaceAll( "($$)", "\t" );
+            sLangId = sLangId.GetToken( 2, '\t' );
+          break;
+
+        case GSI_FILE_L10NFRAMEWORK:
+            sLangId = rLine.GetToken( 9, '\t' );
+          break;
+    }
+    return sLangId;
+}
+
+/*****************************************************************************/
+void ConvertGSILine( BOOL bToUTF8, ByteString &rLine,
+        rtl_TextEncoding nEncoding, USHORT nFileType )
+/*****************************************************************************/
+{
+    switch ( nFileType ) {
+        case GSI_FILE_OLDSTYLE:
+            if ( bToUTF8 )
+                rLine = UTF8Converter::ConvertToUTF8( rLine, nEncoding );
+            else
+                rLine = UTF8Converter::ConvertFromUTF8( rLine, nEncoding );
+        break;
+
+        case GSI_FILE_L10NFRAMEWORK: {
+            ByteString sConverted;
+            for ( USHORT i = 0; i < rLine.GetTokenCount( '\t' ); i++ ) {
+                ByteString sToken = rLine.GetToken( i, '\t' );
+                if (( i > 9 ) && ( i < 14 )) {
+                    if( bToUTF8 )
+                        sToken = UTF8Converter::ConvertToUTF8( sToken, nEncoding );
+                    else
+                        sToken = UTF8Converter::ConvertFromUTF8( sToken, nEncoding );
+                }
+                if ( i )
+                    sConverted += "\t";
+                sConverted += sToken;
+            }
+            rLine = sConverted;
+        }
+        break;
+    }
+}
+
 /*****************************************************************************/
 void Help()
 /*****************************************************************************/
@@ -119,7 +225,7 @@ void Help()
     fprintf( stdout, "          90 => TURKISH\n" );
     fprintf( stdout, "          96 => ARABIC\n" );
     fprintf( stdout, "          97 => HEBREW\n" );
-       fprintf( stdout, "\n" );
+    fprintf( stdout, "\n" );
 }
 
 /*****************************************************************************/
@@ -156,7 +262,9 @@ int _cdecl main( int argc, char *argv[] )
                 exit ( 3 );
             }
 
-            ULONG nMaxLines = ByteString( argv[ 2 ] ).ToInt64();
+            USHORT nFileType( GetGSIFileType( aGSI ));
+
+            ULONG nMaxLines = (ULONG) ByteString( argv[ 2 ] ).ToInt64();
             if ( !nMaxLines ) {
                 fprintf( stderr, "\nERROR: Linecount must be at least 1!\n\n" );
                 exit ( 3 );
@@ -182,9 +290,7 @@ int _cdecl main( int argc, char *argv[] )
             while ( !aGSI.IsEof()) {
 
                 aGSI.ReadLine( sGSILine );
-                ByteString sId( sGSILine );
-                sId.SearchAndReplaceAll( "($$)", "\t" );
-                sId = sId.GetToken( 0, '\t' );
+                ByteString sId( GetGSILineId( sGSILine, nFileType ));
 
                 nLine++;
 
@@ -251,6 +357,7 @@ int _cdecl main( int argc, char *argv[] )
             else if ( sCharset == "MS_1255" )   nEncoding = RTL_TEXTENCODING_MS_1255;
             else if ( sCharset == "MS_1256" )   nEncoding = RTL_TEXTENCODING_MS_1256;
             else if ( sCharset == "MS_1257" )   nEncoding = RTL_TEXTENCODING_MS_1257;
+            else if ( sCharset == "UTF8" )      nEncoding = RTL_TEXTENCODING_UTF8;
 
             else {
                 Help();
@@ -269,20 +376,15 @@ int _cdecl main( int argc, char *argv[] )
                 fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", ByteString( argv[ 3 ] ).GetBuffer());
                 exit ( 3 );
             }
+            USHORT nFileType( GetGSIFileType( aGSI ));
 
             ByteString sGSILine;
             while ( !aGSI.IsEof()) {
 
                 aGSI.ReadLine( sGSILine );
-                ByteString sLangId( sGSILine );
-                sLangId.SearchAndReplaceAll( "($$)", "\t" );
-                sLangId = sLangId.GetToken( 2, '\t' );
-                if ( sLangId == sCurLangId ) {
-                    if ( ByteString( argv[ 1 ] ) == "-t" )
-                        sGSILine = UTF8Converter::ConvertToUTF8( sGSILine, nEncoding );
-                    else
-                        sGSILine = UTF8Converter::ConvertFromUTF8( sGSILine, nEncoding );
-                }
+                ByteString sLangId( GetGSILineLangId( sGSILine, nFileType ));
+                if ( sLangId == sCurLangId )
+                    ConvertGSILine(( ByteString( argv[ 1 ] ) == "-t" ), sGSILine, nEncoding, nFileType );
 
                 fprintf( stdout, "%s\n", sGSILine.GetBuffer());
             }
