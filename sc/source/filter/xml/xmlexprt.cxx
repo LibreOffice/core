@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:39:56 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 06:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,8 +398,6 @@ ScXMLExport::~ScXMLExport()
         delete pValidationsContainer;
     if (pDetectiveObjContainer)
         delete pDetectiveObjContainer;
-    if (pCellsItr)
-        delete pCellsItr;
     if (pChangeTrackingExportHelper)
         delete pChangeTrackingExportHelper;
 }
