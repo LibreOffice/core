@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 13:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ SwDoc::SwDoc() :
     pUnoCallBack(new SwUnoCallBack(0)),
     pForbiddenCharsTbl( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
-    nLatin_CJK( 0 ), nLatin_CTL( 0 ), nCJK_CTL( 0 ),
+    eChrCmprType( CHARCOMPRESS_NONE ),
     n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0 ), n8Dummy2( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
     nFldUpdMode( AUTOUPD_GLOBALSETTING )
@@ -329,6 +329,7 @@ SwDoc::SwDoc() :
     bIsRedlineMove =
     bInsOnlyTxtGlssry =
     bContains_MSVBasic =
+    bKernAsianPunctuation =
 #ifndef PRODUCT
     bXMLExport =
 #endif

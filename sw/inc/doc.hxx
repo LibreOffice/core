@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: jp $ $Date: 2001-03-28 13:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
+#endif
+#ifndef _CHCMPRSE_HXX
+#include <chcmprse.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
@@ -373,22 +376,20 @@ class SwDoc
                                                 // characters of this document
     // -------------------------------------------------------------------
     // sonstige
-    sal_uInt16  nUndoPos;               // akt. Undo-InsertPosition (fuers Redo!)
-    sal_uInt16  nUndoSavePos;           // Position im Undo-Array, ab der das Doc
+    sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
+    sal_uInt16  nUndoSavePos;       // Position im Undo-Array, ab der das Doc
                                     // nicht als modifiziert gilt
-    sal_uInt16  nUndoCnt;               // Anzahl von Undo Aktionen
-    sal_uInt16  nUndoSttEnd;            // != 0 -> innerhalb einer Klammerung
+    sal_uInt16  nUndoCnt;           // Anzahl von Undo Aktionen
+    sal_uInt16  nUndoSttEnd;        // != 0 -> innerhalb einer Klammerung
 
     sal_uInt16 nAutoFmtRedlnCommentNo;  // SeqNo fuers UI-seitige zusammenfassen
                                     // von AutoFmt-Redlines. Wird vom SwAutoFmt
                                     // verwaltet!
-    sal_uInt16  nLinkUpdMode;           // UpdateMode fuer Links
-    sal_uInt16  nFldUpdMode;            // Mode fuer Felder/Charts automatisch aktualisieren
-    sal_uInt16  nLatin_CJK;         // distance between Latin- and CJK-script
-    sal_uInt16  nLatin_CTL;         // distance between Latin- and CTL-script
-    sal_uInt16  nCJK_CTL;           // distance between CJK- and CTL-script
+    sal_uInt16  nLinkUpdMode;       // UpdateMode fuer Links
+    sal_uInt16  nFldUpdMode;        // Mode fuer Felder/Charts automatisch aktualisieren
 
     SwRedlineMode eRedlineMode;     // aktueller Redline Modus
+    SwCharCompressType eChrCmprType;    // for ASIAN: compress punctuation/kana
 
     sal_Int8    nLinkCt;            // wieviele kennen das Dokument
     sal_Int8    nLockExpFld;        // Wenn != 0 hat UpdateExpFlds() keine Wirkung
@@ -434,6 +435,7 @@ class SwDoc
     sal_Bool    bInsOnlyTxtGlssry : 1;  // True: insert 'only text' glossary into doc
     sal_Bool    bContains_MSVBasic : 1; // True: MS-VBasic exist is in our storage
     sal_Bool    bPurgeOLE : 1;          // TRUE: Purge OLE-Objects
+    sal_Bool    bKernAsianPunctuation;  // TRUE: kerning also for ASIAN punctuation
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
@@ -605,6 +607,10 @@ public:
 
     sal_Bool IsPurgeOLE() const             { return bPurgeOLE; }
     void SetPurgeOLE( sal_Bool bFlag )      { bPurgeOLE = bFlag; }
+
+    sal_Bool IsKernAsianPunctuation() const         { return bKernAsianPunctuation; }
+    void SetKernAsianPunctuation( sal_Bool bFlag )  { bKernAsianPunctuation = bFlag; }
+
 #ifndef PRODUCT
     sal_Bool InXMLExport() const            { return bXMLExport; }
     void SetXMLExport( sal_Bool bFlag )     { bXMLExport = bFlag; }
@@ -634,9 +640,8 @@ public:
     // nur fuer den Writer, weil dieser das richtige Enum schreiben muss!
     sal_uInt16 _GetLinkUpdMode() const                  { return nLinkUpdMode; }
 
-    sal_uInt16  GetLatin_CJK() const { return nLatin_CJK; }
-    sal_uInt16  GetLatin_CTL() const { return nLatin_CTL; }
-    sal_uInt16  GetCJK_CTL() const { return nCJK_CTL; }
+    SwCharCompressType GetCharCompressType() const      { return eChrCmprType; }
+    void SetCharCompressType( SwCharCompressType n )    { eChrCmprType = n; }
 
     inline sal_Bool IsInDtor() const { return bDtor; }
 
