@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-23 17:15:21 $
+ *  last change: $Author: os $ $Date: 2001-07-27 08:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,40 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->SetGlobalDoc();       // Globaldokument
 
+
+/*
+        //JP 12.07.95: so einfach waere es fuer die neu Mimik
+        pDoc->SetDefault( SvxTabStopItem( 1,
+                    GetStar Writer App()->GetUsrPref()->GetDefTabDist(),
+                    SVX_TAB_ADJUST_DEFAULT,
+                    RES_PARATR_TABSTOP));
+*/
+        if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
+        {
+            // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
+            SvEmbeddedObject* pObj = this;
+            SwTransferable::InitOle( pObj, *pDoc );
+        }
+        // set forbidden characters if necessary
+        SvxAsianConfig aAsian;
+        Sequence<Locale> aLocales =  aAsian.GetStartEndCharLocales();
+        if(aLocales.getLength())
+        {
+            const Locale* pLocales = aLocales.getConstArray();
+            for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
+            {
+                ForbiddenCharacters aForbidden;
+                aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
+                LanguageType  eLang = SvxLocaleToLanguage(pLocales[i]);
+                pDoc->SetForbiddenCharacters( eLang, aForbidden);
+            }
+        }
+        pDoc->SetKernAsianPunctuation(!aAsian.IsKerningWesternTextOnly());
+        pDoc->SetCharCompressType((SwCharCompressType)aAsian.GetCharDistanceCompression());
+        pDoc->SetPrintData(*SW_MOD()->GetPrtOptions(bWeb));
+
+        SubInitNew();
+
         // fuer alle
 
         SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
@@ -294,6 +328,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         {
             USHORT nFontWhich = i ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
             USHORT nFontId = i ? FONT_STANDARD_CJK : FONT_STANDARD;
+            SvxFontItem* pFontItem = 0;
             if(!pStdFont->IsFontDefault(nFontId))
             {
                 sEntry = pStdFont->GetFontFor(nFontId);
@@ -305,16 +340,28 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
                                         ::gsl_getSystemTextEncoding() );
                     bDelete = sal_True;
                 }
-                pDoc->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
-                SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-                pColl->ResetAttr(nFontWhich);
+                pFontItem = new SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
+                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich);
                 if(bDelete)
                 {
                     delete (SfxFont*) pFnt;
                     bDelete = sal_False;
                 }
             }
+            else
+            {
+                const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault(i ?  RES_CHRATR_CJK_LANGUAGE : RES_CHRATR_LANGUAGE );
+                Font aLangDefFont = OutputDevice::GetDefaultFont(
+                    i ? DEFAULTFONT_CJK_TEXT : DEFAULTFONT_LATIN_TEXT,
+                    rLang.GetLanguage(),
+                    DEFAULTFONT_FLAGS_ONLYONE );
+                pFontItem = new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
+                                    aEmptyStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich);
+            }
+            pDoc->SetDefault(*pFontItem);
+            SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+            pColl->ResetAttr(nFontWhich);
+            delete pFontItem;
         }
         USHORT aFontIdPoolId[] =
         {
@@ -353,39 +400,6 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
                 }
             }
         }
-
-/*
-        //JP 12.07.95: so einfach waere es fuer die neu Mimik
-        pDoc->SetDefault( SvxTabStopItem( 1,
-                    GetStar Writer App()->GetUsrPref()->GetDefTabDist(),
-                    SVX_TAB_ADJUST_DEFAULT,
-                    RES_PARATR_TABSTOP));
-*/
-        if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
-        {
-            // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
-            SvEmbeddedObject* pObj = this;
-            SwTransferable::InitOle( pObj, *pDoc );
-        }
-        // set forbidden characters if necessary
-        SvxAsianConfig aAsian;
-        Sequence<Locale> aLocales =  aAsian.GetStartEndCharLocales();
-        if(aLocales.getLength())
-        {
-            const Locale* pLocales = aLocales.getConstArray();
-            for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
-            {
-                ForbiddenCharacters aForbidden;
-                aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
-                LanguageType  eLang = SvxLocaleToLanguage(pLocales[i]);
-                pDoc->SetForbiddenCharacters( eLang, aForbidden);
-            }
-        }
-        pDoc->SetKernAsianPunctuation(!aAsian.IsKerningWesternTextOnly());
-        pDoc->SetCharCompressType((SwCharCompressType)aAsian.GetCharDistanceCompression());
-        pDoc->SetPrintData(*SW_MOD()->GetPrtOptions(bWeb));
-
-        SubInitNew();
     }
     return bRet;
 }
@@ -824,9 +838,6 @@ void SwDocShell::SubInitNew()
     UpdateFontList();
     InitDraw();
 
-//  const SwModuleOptions& rModCfg = *SW_MOD()->GetModuleConfig();
-//  pDoc->SetLinkUpdMode( rModCfg.GetLinkMode() );
-//  pDoc->SetFldUpdateFlags( rModCfg.GetFldUpdateFlags() );
     pDoc->SetLinkUpdMode( GLOBALSETTING );
     pDoc->SetFldUpdateFlags( AUTOUPD_GLOBALSETTING );
 
