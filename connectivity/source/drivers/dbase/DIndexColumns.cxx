@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexColumns.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 
-Reference< XNamed > ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
     const ODbaseTable* pTable = m_pIndex->getTable();
 
@@ -98,9 +98,9 @@ Reference< XNamed > ODbaseIndexColumns::createObject(const ::rtl::OUString& _rNa
         xCol = *aIter;
 
     if(!xCol.is())
-        return Reference< XNamed >();
+        return sdbcx::ObjectType();
 
-    Reference< XNamed > xRet = new sdbcx::OIndexColumn(sal_True,_rName
+    sdbcx::ObjectType xRet = new sdbcx::OIndexColumn(sal_True,_rName
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                                     ,::rtl::OUString()
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
@@ -126,15 +126,11 @@ Reference< XPropertySet > ODbaseIndexColumns::createEmptyObject()
     return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-Reference< XNamed > ODbaseIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType ODbaseIndexColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    sdbcx::OIndexColumn* pColumn = new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
-    Reference<XPropertySet> xProp = pColumn;
+    Reference<XPropertySet> xProp = new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
     ::comphelper::copyProperties(_xDescriptor,xProp);
-    Reference< XNamed > xName(xProp,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName;
+    return xProp;
 }
 // -------------------------------------------------------------------------
 void ODbaseIndexColumns::appendObject( const Reference< XPropertySet >& descriptor )
