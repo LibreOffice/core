@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nn $ $Date: 2000-10-23 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,10 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aLocalDbCol     ( *(pDoc->GetDBCollection()) ),
         bRefInputMode   ( FALSE )
 {
+    // WB_NOLABEL can't be set in resource...
+    aFTSource.SetStyle( aFTSource.GetStyle() | WB_NOLABEL );
+    aFTOperations.SetStyle( aFTOperations.GetStyle() | WB_NOLABEL );
+
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     aStrSource      = aFTSource.GetText();
     aStrOperations  = aFTOperations.GetText();
@@ -781,6 +785,9 @@ IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
 /*----------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:54  hr
+    initial import
+
     Revision 1.54  2000/09/17 14:08:56  willem.vandorp
     OpenOffice header added.
 
