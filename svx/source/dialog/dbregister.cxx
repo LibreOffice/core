@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:14:39 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
     WinBits nBits = WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP;
     pPathBox = new ::svx::OptHeaderTabListBox( &aPathCtrl, nBits );
-    //  aPathCtrl.SetFocusControl( pPathBox );
+    aPathCtrl.SetFocusControl( pPathBox );
     pPathBox->SetWindowBits( nBits );
     pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
     pPathBox->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, PathSelect_Impl ) );
@@ -208,7 +208,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
     // #110603# do not grab focus to a destroyed window !!!
-    //  aPathCtrl.SetFocusControl( NULL );
+    aPathCtrl.SetFocusControl( NULL );
 
     pHeaderBar->Hide();
     for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
@@ -448,8 +448,8 @@ String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
         const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
         if ( pFilter )
         {
-            xFilterManager->appendFilter( pFilter->GetFilterName(),pFilter->GetDefaultExtension());
-            xFilterManager->setCurrentFilter(pFilter->GetFilterName());
+            xFilterManager->appendFilter( pFilter->GetUIName(),pFilter->GetDefaultExtension());
+            xFilterManager->setCurrentFilter(pFilter->GetUIName());
         }
 
         INetURLObject aURL( _sLocation, INET_PROT_FILE );
