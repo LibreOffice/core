@@ -6,6 +6,7 @@ ul	unoil\com\sun\star\util					nmake	-	all	ul_cssutil NULL
 ul	unoil\com\sun\star\frame				nmake	-	all	ul_frame ul_awt ul_cssutil NULL
 ul	unoil\com\sun\star\drawing				nmake	-	all	ul_drawing ul_awt NULL
 ul	unoil\com\sun\star\chart				nmake	-	all	ul_chart ul_drawing ul_frame NULL
+ul	unoil\com\sun\star\configuration		nmake	-	all	ul_configuration ul_cssutil NULL
 ul	unoil\com\sun\star\datatransfer			nmake	-	all	ul_dattrans NULL
 ul	unoil\com\sun\star\datatransfer\clipboard			nmake	-	all	ul_dattrans_clip ul_dattrans NULL
 ul	unoil\com\sun\star\datatransfer\dnd		nmake	-	all	ul_dattrans_dnd ul_dattrans NULL
