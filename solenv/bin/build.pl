@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-15 14:01:31 $
+#   last change: $Author: vg $ $Date: 2001-06-15 15:35:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.19 $ ';
+$id_str = ' $Revision: 1.20 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -99,6 +99,7 @@ $CurrentPrj = "";
 $StandDir = GetStandDir();
 $QuantityToBuild = GetQuantityToBuild();
 $build_from = "";
+$is_from_built = 0;
 $BuildAllParents = HowToBuild();
 $ENV{mk_tmp} = "1";
 
@@ -191,7 +192,7 @@ sub BuildAll {
 #
 sub MakeDir {
     my ($DirToBuild, $BuildDir, $error);
-    $DirToBuild = $_[0];
+    $DirToBuild = shift;
     $BuildDir = CorrectPath($StandDir.$PathHash{$DirToBuild});
     if ($ENV{GUI} eq "UNX") {
         use Cwd 'chdir';
@@ -215,7 +216,7 @@ sub MakeDir {
 #
 sub GetParentsString {
     my ($PrjDir);
-    $PrjDir = $_[0];
+    $PrjDir = shift;
     if (!open (PrjBuildFile, $PrjDir."/prj/build.lst")) {
         return "";
     };
@@ -254,7 +255,7 @@ sub HowToBuild {
 #
 sub BuildPrj {
     my ($dummy, $PrjToBuild);
-    $PrjToBuild = $_[0];
+    $PrjToBuild = shift;
     if ($ENV{GUI} eq "UNX") {
         use Cwd 'chdir';
     };
@@ -309,7 +310,7 @@ sub BuildPrj {
 # to system-dependent
 #
 sub CorrectPath {
-    $_ = $_[0];
+    $_ = shift;
     if ($ENV{GUI} eq "UNX") {
         s/\\/\//g;
     } elsif (   ($ENV{GUI} eq "WNT") ||
@@ -362,7 +363,7 @@ sub GetQuantityToBuild {
 #
 sub IsRootDir {
     my ($Dir);
-    $Dir = $_[0];
+    $Dir = shift;
     if (        (($ENV{GUI} eq "UNX") ||
                  ($ENV{GUI} eq "MACOSX")) &&
                 ($Dir eq "\/")) {
@@ -429,6 +430,7 @@ sub remove_extra_prjs {
         delete $$DepsHash{$Prj};
     };
     $$DepsHash{$build_from} = ();
+    $is_from_built = 1;
 };
 
 
@@ -437,7 +439,7 @@ sub remove_extra_prjs {
 #
 sub PickPrjToBuild {
     my ($Prj, $DepsHash);
-    $DepsHash = $_[0];
+    $DepsHash = shift;
     $Prj = FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
     #print "$Prj\n";
@@ -450,7 +452,7 @@ sub PickPrjToBuild {
 #
 sub CheckPlatform {
     my ($Platform);
-    $Platform = $_[0];
+    $Platform = shift;
     if ($Platform eq "all") {
         return 1;
     } elsif (($ENV{GUI} eq "WNT") &&
@@ -475,8 +477,8 @@ sub CheckPlatform {
 #
 sub RemoveFromDependencies {
     my ($ExclPrj, $i, $Prj, $Dependencies);
-    $ExclPrj = $_[0];
-    $Dependencies = $_[1];
+    $ExclPrj = shift;
+    $Dependencies = shift;
     foreach $Prj (keys %$Dependencies) {
         PrjDepsLoop:
         foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
@@ -496,7 +498,7 @@ sub RemoveFromDependencies {
 #
 sub FindIndepPrj {
     my ($Prj, @Prjs, @PrjDeps, $Dependencies, $i);
-    $Dependencies = $_[0];
+    $Dependencies = shift;
     @Prjs = keys %$Dependencies;
     if ($#Prjs != -1) {
         PrjLoop:
@@ -510,7 +512,7 @@ sub FindIndepPrj {
             };
         };
         # If there are only dependent projects in hash - generate error
-        if ($build_from) {
+        if ($build_from && !($is_from_built)) {
             return "";
         };
         print "\nError: projects";
@@ -538,7 +540,7 @@ sub FindIndepPrj {
 #
 sub IsHashNative {
     my ($Prj);
-    $Prj = $_[0];
+    $Prj = shift;
     if ($Prj =~ /^HASH\(0x[\d | a | b | c | d | e | f]{6,}\)/) {
         return 1;
     } else {
@@ -553,7 +555,7 @@ sub IsHashNative {
 sub GetDependenciesArray {
     my ($DepString, @Dependencies, $ParentPrj);
     @Dependencies = ();
-    $DepString = $_[0];
+    $DepString = shift;
     while (!($DepString =~ /^NULL/)) {
         $DepString =~ /(\S+)(\s+)/;
         $ParentPrj = $1;
@@ -582,7 +584,7 @@ sub GetDependenciesArray {
 #
 sub GetDirectoryList {
     my ($Path);
-    $Path = $_[0];
+    $Path = shift;
     opendir(CurrentDirList, $Path);
     @DirectoryList = readdir(CurrentDirList);
     closedir(CurrentDirList);
