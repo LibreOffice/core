@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-08 15:40:18 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:56:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,12 +135,13 @@ SHL1STDLIBS=\
     $(GOODIESLIB)		
 
 .IF "$(GUI)"=="UNX"
-SHL1STDLIBS+=$(SVTOOLLIB)
+SHL1STDLIBS+=$(SVTOOLLIB) -ldl
 .ENDIF
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1VERSIONMAP=exports.map
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
