@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 22:08:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-29 12:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,13 +320,13 @@ struct SvtFactory2ExtensionMapping_Impl
 
 static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
 {
-    { "swriter",                "oot" },
+    { "swriter",                "odt" },
     { "swriter/web",            "html" },
-    { "swriter/GlobalDocument", "oom" },
-    { "scalc",                  "oos" },
-    { "simpress",               "oop" },
-    { "sdraw",                  "ood" },
-    { "smath",                  "oof" },
+    { "swriter/GlobalDocument", "odm" },
+    { "scalc",                  "ods" },
+    { "simpress",               "odp" },
+    { "sdraw",                  "odg" },
+    { "smath",                  "odf" },
     { NULL, NULL }
 };
 
