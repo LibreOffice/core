@@ -54,8 +54,7 @@ namespace treeview {
     class TVDom;
     class TVChildTarget;
 
-
-    class TVRead
+    class TVBase
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
           public com::sun::star::container::XNameAccess,
@@ -67,11 +66,7 @@ namespace treeview {
 
     public:
 
-        TVRead();
-
-        TVRead( const ConfigData& configData,TVDom* tvDom = 0 );
-
-        ~TVRead();
+        virtual ~TVBase() { }
 
         // XInterface
         virtual com::sun::star::uno::Any SAL_CALL
@@ -101,6 +96,7 @@ namespace treeview {
         getElementType(  )
             throw( com::sun::star::uno::RuntimeException )
         {
+            // hae
             return com::sun::star::uno::Type();
         }
 
@@ -110,36 +106,6 @@ namespace treeview {
         {
             return true;
         }
-
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        getByName( const rtl::OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::lang::WrappedTargetException,
-                   com::sun::star::uno::RuntimeException);
-
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
-        getElementNames( )
-            throw( com::sun::star::uno::RuntimeException );
-
-        virtual sal_Bool SAL_CALL
-        hasByName( const rtl::OUString& aName )
-            throw( com::sun::star::uno::RuntimeException );
-
-
-
-        // XHierarchicalNameAccess
-
-        virtual com::sun::star::uno::Any SAL_CALL
-        getByHierarchicalName( const rtl::OUString& aName )
-            throw( com::sun::star::container::NoSuchElementException,
-                   com::sun::star::uno::RuntimeException );
-
-        virtual sal_Bool SAL_CALL
-        hasByHierarchicalName( const rtl::OUString& aName )
-            throw( com::sun::star::uno::RuntimeException );
-
-
 
         // XChangesNotifier
 
@@ -180,6 +146,47 @@ namespace treeview {
         {
         }
 
+    }; // end class TVBase
+
+
+    class TVRead
+        : public TVBase
+    {
+        friend class TVChildTarget;
+
+    public:
+
+        TVRead();
+
+        TVRead( const ConfigData& configData,TVDom* tvDom = 0 );
+
+        ~TVRead();
+
+        virtual com::sun::star::uno::Any SAL_CALL
+        getByName( const rtl::OUString& aName )
+            throw( com::sun::star::container::NoSuchElementException,
+                   com::sun::star::lang::WrappedTargetException,
+                   com::sun::star::uno::RuntimeException);
+
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        getElementNames( )
+            throw( com::sun::star::uno::RuntimeException );
+
+        virtual sal_Bool SAL_CALL
+        hasByName( const rtl::OUString& aName )
+            throw( com::sun::star::uno::RuntimeException );
+
+
+        // XHierarchicalNameAccess
+
+        virtual com::sun::star::uno::Any SAL_CALL
+        getByHierarchicalName( const rtl::OUString& aName )
+            throw( com::sun::star::container::NoSuchElementException,
+                   com::sun::star::uno::RuntimeException );
+
+        virtual sal_Bool SAL_CALL
+        hasByHierarchicalName( const rtl::OUString& aName )
+            throw( com::sun::star::uno::RuntimeException );
 
     private:
 
@@ -191,7 +198,7 @@ namespace treeview {
 
 
     class TVChildTarget
-        : public TVRead
+        : public TVBase
     {
     public:
 
@@ -216,7 +223,6 @@ namespace treeview {
             throw( com::sun::star::uno::RuntimeException );
 
 
-
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
@@ -232,8 +238,8 @@ namespace treeview {
     private:
         std::vector< rtl::Reference< TVRead > >   Elements;
 
-        ConfigData
-        init( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+        ConfigData init(
+            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
     };
 
 }

@@ -149,6 +149,65 @@ using namespace com::sun::star::container;
 
 
 
+
+//////////////////////////////////////////////////////////////////////////
+// XInterface
+//////////////////////////////////////////////////////////////////////////
+
+
+void SAL_CALL
+TVBase::acquire(
+    void )
+    throw( RuntimeException )
+{
+  OWeakObject::acquire();
+}
+
+
+void SAL_CALL
+TVBase::release(
+              void )
+  throw( RuntimeException )
+{
+  OWeakObject::release();
+}
+
+
+Any SAL_CALL
+TVBase::queryInterface(
+    const Type& rType )
+    throw( RuntimeException )
+{
+    Any aRet = cppu::queryInterface( rType,
+                                     SAL_STATIC_CAST( XTypeProvider*, this ),
+                                     SAL_STATIC_CAST( XNameAccess*, this ),
+                                     SAL_STATIC_CAST( XHierarchicalNameAccess*, this ),
+                                     SAL_STATIC_CAST( XChangesNotifier*, this ),
+                                     SAL_STATIC_CAST( XComponent*, this ) );
+
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// XTypeProvider methods.
+
+XTYPEPROVIDER_IMPL_5( TVBase,
+                         XTypeProvider,
+                      XNameAccess,
+                      XHierarchicalNameAccess,
+                      XChangesNotifier,
+                      XComponent );
+
+
+
+
+
+
+// TVRead
+
+
 TVRead::TVRead()
 {
 }
@@ -179,56 +238,6 @@ TVRead::~TVRead()
 }
 
 
-
-//////////////////////////////////////////////////////////////////////////
-// XInterface
-//////////////////////////////////////////////////////////////////////////
-
-
-void SAL_CALL
-TVRead::acquire(
-    void )
-    throw( RuntimeException )
-{
-  OWeakObject::acquire();
-}
-
-
-void SAL_CALL
-TVRead::release(
-              void )
-  throw( RuntimeException )
-{
-  OWeakObject::release();
-}
-
-
-Any SAL_CALL
-TVRead::queryInterface(
-    const Type& rType )
-    throw( RuntimeException )
-{
-    Any aRet = cppu::queryInterface( rType,
-                                     SAL_STATIC_CAST( XTypeProvider*, this ),
-                                     SAL_STATIC_CAST( XNameAccess*, this ),
-                                     SAL_STATIC_CAST( XHierarchicalNameAccess*, this ),
-                                     SAL_STATIC_CAST( XChangesNotifier*, this ),
-                                     SAL_STATIC_CAST( XComponent*, this ) );
-
-    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-}
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// XTypeProvider methods.
-
-XTYPEPROVIDER_IMPL_5( TVRead,
-                         XTypeProvider,
-                      XNameAccess,
-                      XHierarchicalNameAccess,
-                      XChangesNotifier,
-                      XComponent );
 
 
 
