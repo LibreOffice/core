@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:34:00 $
+ *  last change: $Author: pb $ $Date: 2001-02-27 13:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,8 +1277,8 @@ String RID_STR_FILTCONFIG
 };
 String RID_STR_FILTBASIC
 {
-    Text = "StarBasic Bibliotheken" ;
-    Text [ ENGLISH ] = "StarBasic Libraries" ;
+    Text = "%PRODUCTNAME Basic Bibliotheken" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME Basic Libraries" ;
     Text [ dutch ] = "%PRODUCTNAME Basic Bibliotheken" ;
     Text [ english_us ] = "%PRODUCTNAME Basic Libraries" ;
     Text [ italian ] = "Biblioteche di %PRODUCTNAME Basic" ;
@@ -1297,7 +1297,7 @@ String RID_STR_FILTBASIC
     Text[ dutch ] = "%PRODUCTNAME Basic Bibliotheken";
     Text[ chinese_simplified ] = "%PRODUCTNAME Basic ø‚";
     Text[ greek ] = "¬È‚ÎÈÔËﬁÍÂÚ %PRODUCTNAME Basic";
-    Text[ korean ] = "StarBasic ∂Û¿Ã∫Í∑Ø∏Æ";
+    Text[ korean ] = "%PRODUCTNAME Basic ∂Û¿Ã∫Í∑Ø∏Æ";
     Text[ turkish ] = "%PRODUCTNAME Basic kitapl˝klar˝";
     Text[ language_user1 ] = " ";
 };
