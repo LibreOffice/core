@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:44:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4432,7 +4432,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         // page frame of anchor frame, if table frame isn't
                         // a follow table and table frame isn't in its
                         // rebuild of last line.
-                        SwTabFrm* pTabFrm = pLay->FindTabFrm();
+                        const SwTabFrm* pTabFrm = pLay->FindTabFrm();
                         // --> OD 2004-11-23 #115759#
                         // - save: check, if table frame is found.
                         if ( pTabFrm &&
@@ -4474,8 +4474,9 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                     else
                     {
                         // --> OD 2004-11-05 #i26945#
-                        SwTabFrm* pTabFrm = pLay->FindTabFrm();
-                        if ( !( pTabFrm->IsFollow() &&
+                        const SwTabFrm* pTabFrm = pLay->FindTabFrm();
+                        if ( pTabFrm &&
+                             !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
                              !pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
                                                             == FLY_IN_CNTNT )
