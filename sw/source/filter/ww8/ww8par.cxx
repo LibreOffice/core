@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:00:20 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 12:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2399,15 +2399,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
 {
     ULONG nErrRet = 0;
 
-    if (bNew)
-    {
-        //Needed to unlock last node so that we can delete it without
-        //giving writer a fit. Necessary for deleting the para after
-        //a section. i.e. see section cleanup at the end of this method
-        rPaM.GetBound( TRUE ).nContent.Assign( 0, 0 );
-        rPaM.GetBound( FALSE ).nContent.Assign( 0, 0 );
-    }
-
     if( bNew && pStg && !pGloss)
         ReadDocInfo();
 
@@ -2939,9 +2930,12 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
     {
         if (bNew)
         {
-            //See the setup at the beginning of this method for the necessary
-            //node unlocking that makes deleting the final para a safe
-            //operation
+            //Needed to unlock last node so that we can delete it without
+            //giving writer a fit. Necessary for deleting the para after a
+            //section.
+            rPaM.GetBound( TRUE ).nContent.Assign( 0, 0 );
+            rPaM.GetBound( FALSE ).nContent.Assign( 0, 0 );
+
             pPaM->SetMark();
             pPaM->GetPoint()->nNode = *pAfterSection;
             pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
