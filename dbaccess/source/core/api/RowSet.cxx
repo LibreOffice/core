@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:00 $
+ *  last change: $Author: oj $ $Date: 2000-12-14 13:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,11 +673,15 @@ void ORowSet::freeResources()
 void SAL_CALL ORowSet::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
     // close rowset because the connection is going to be deleted (someone told me :-)
-    close();
+    Reference<XConnection> xCon(Source.Source,UNO_QUERY);
+    if(m_xActiveConnection == xCon)
     {
-        MutexGuard aGuard( m_aMutex );
-        m_xActiveConnection = NULL;
-        m_aActiveConnection = Any();
+        close();
+        {
+            MutexGuard aGuard( m_aMutex );
+            m_xActiveConnection = NULL;
+            m_aActiveConnection = Any();
+        }
     }
 }
 // -------------------------------------------------------------------------
