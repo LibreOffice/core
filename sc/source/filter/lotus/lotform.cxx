@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:03:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include "root.hxx"
 #include "ftools.hxx"
 #include "tool.h"
+#include <math.h>
 
 extern WKTYP                eTyp;
 
@@ -82,7 +83,7 @@ static const sal_Char*      GetAddInName( const UINT8 nIndex );
 
 static DefTokenId           lcl_KnownAddIn( const ByteString& sTest );
 
-
+//extern double decipher_Number123( UINT32 nValue );
 
 
 void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
@@ -264,12 +265,13 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
             nCol |= 0xFF00;
         else
             nCol &= 0x00FF;
-        rSRD.nRelCol = ( INT16 ) nCol;
+        // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCsCOL
+        rSRD.nRelCol = static_cast< SCsCOL >( static_cast< sal_Int16 >( nCol ) );
         }
     else
     {
         rSRD.SetColRel( FALSE );
-        rSRD.nCol = nCol & 0x00FF;
+        rSRD.nCol = static_cast< SCsCOL >( nCol & 0x00FF );
     }
 
     // Row-Bemachung
@@ -322,9 +324,10 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
         }
 
     if( rSRD.IsRowRel() )
-        rSRD.nRelRow = static_cast<SCROW>(nRow);
+        // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCsROW
+        rSRD.nRelRow = static_cast< SCsROW >( static_cast< sal_Int16 >( nRow ) );
     else
-        rSRD.nRow = static_cast<SCROW>(nRow);
+        rSRD.nRow = static_cast< SCsROW >( nRow );
 
     if( rSRD.IsRowRel() || rSRD.IsColRel() )
         rSRD.CalcAbsIfRel( aEingPos );
@@ -340,16 +343,16 @@ void LotusToSc::ReadSRD( SingleRefData& rSRD, BYTE nRelBit )
     Read( nTab );
     Read( nCol );
 
-    BOOL b3D = ( static_cast<SCTAB>(nTab) != aEingPos.Tab() );
+    BOOL b3D = ( static_cast< SCTAB >( nTab ) != aEingPos.Tab() );
 
     rSRD.SetColRel( ( nRelBit & 0x01 ) != 0 );
-    rSRD.nCol = static_cast<SCCOL>(nCol);
+    rSRD.nCol = static_cast< SCsCOL >( nCol );
 
     rSRD.SetRowRel( ( nRelBit & 0x02 ) != 0 );
-    rSRD.nRow = static_cast<SCROW>(nRow);
+    rSRD.nRow = static_cast< SCsROW >( nRow );
 
     rSRD.SetTabRel( ( ( nRelBit & 0x04) != 0 ) || !b3D );
-    rSRD.nTab = static_cast<SCTAB>(nTab);
+    rSRD.nTab = static_cast< SCsTAB >( nTab );
 
     rSRD.SetFlag3D( b3D );
 
@@ -394,11 +397,12 @@ void LotusToSc::Reset( ScAddress aEingPos )
     }
 
 
-LotusToSc::LotusToSc( SvStream &rStream, CharSet e ) :
+LotusToSc::LotusToSc( SvStream &rStream, CharSet e, BOOL b ) :
     LotusConverterBase( rStream, 128 )
     {
     eSrcChar = e;
     bWK3 = FALSE;
+    bWK123 = b;
     }
 
 
@@ -434,9 +438,14 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
     FuncType2*          pIndexToToken;
 
     if( bWK3 )
-    {   // fuer > WK3
-        pIndexToType = IndexToTypeWK3;
-        pIndexToToken = IndexToTokenWK3;
+    {   // for > WK3
+        pIndexToType = IndexToTypeWK123;
+        pIndexToToken = IndexToTokenWK123;
+    }
+    else if( bWK123 )
+    {
+        pIndexToType = IndexToTypeWK123;
+        pIndexToToken = IndexToTokenWK123;
     }
     else
     {
@@ -471,7 +480,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
         switch( eType )
         {
             case FT_Return:
-                if( bWK3 )
+                if( bWK3 || bWK123 )
                     nBytesLeft = 0; // wird ab WK3 nicht benutzt
 
                 rRest = nBytesLeft;
@@ -482,7 +491,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
             case FT_FuncFix2:   DoFunc( eOc, 2, pExtName ); break;
             case FT_FuncFix3:   DoFunc( eOc, 3, pExtName ); break;
             case FT_FuncFix4:   DoFunc( eOc, 4, pExtName ); break;
-            case FT_FuncVar:
+                case FT_FuncVar:
                 Read( nAnz );
                 DoFunc( eOc, nAnz, pExtName );
                 break;
@@ -647,16 +656,31 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
             }
                 break;
             case FT_Const10Float:
-                aStack << aPool.Store( ScfTools::ReadLongDouble( aIn ) );
-                break;
+                    if ( bWK123 )
+                    {
+                            double fValue;
+                            Read( fValue );
+                            aStack << aPool.Store( fValue );
+                    }
+                    else aStack << aPool.Store( ScfTools::ReadLongDouble( aIn ) );
+                    break;
             case FT_Snum:
+                    if ( bWK123 )
                 {
-                INT16 nVal;
-                Read( nVal );
-                aStack << aPool.Store( SnumToDouble( nVal ) );
+                         UINT32   nValue;
+
+                         Read( nValue );
+                     double  fValue = Snum32ToDouble( nValue );
+                     aStack << aPool.Store( fValue );
+                }
+                else
+                {
+                        INT16 nVal;
+                        Read( nVal );
+                        aStack << aPool.Store( SnumToDouble( nVal ) );
                 }
                 break;
-            default:
+                default:
                 DBG_ERROR( "*LotusToSc::Convert(): unbekannter enum!" );
         }
     }
@@ -1206,16 +1230,16 @@ DefTokenId LotusToSc::IndexToToken( BYTE nIndex )
 }
 
 
-FUNC_TYPE LotusToSc::IndexToTypeWK3( BYTE nIndex )
+FUNC_TYPE LotusToSc::IndexToTypeWK123( BYTE nIndex )
 {
     static const FUNC_TYPE pType[ 256 ] =
     {                       // Code Bezeichnung
-        FT_Const10Float,    //    0 8-Byte-IEEE-Float
+        FT_Const10Float,    //    0 8-Byte-IEEE-Long-Number
         FT_Cref,            //    1 Cell Reference
         FT_Rref,            //    2 Area Reference
         FT_Return,          //    3 return
         FT_Braces,          //    4 Klammer
-        FT_Snum,            //    5 2-Byte-Short-Num
+        FT_Snum,            //    5 Short-Number
         FT_ConstString,     //    6 ASCII-String
         FT_Nrref,           //    7 Named range reference
         FT_Absnref,         //    8 Absolut named range
@@ -1471,16 +1495,16 @@ FUNC_TYPE LotusToSc::IndexToTypeWK3( BYTE nIndex )
 }
 
 
-DefTokenId LotusToSc::IndexToTokenWK3( BYTE nIndex )
+DefTokenId LotusToSc::IndexToTokenWK123( BYTE nIndex )
 {
     static const DefTokenId pToken[ 256 ] =
     {                       // Code Bezeichnung
-        ocPush,             //    0 8-Byte-IEEE-Float
+        ocPush,             //    0 8-Byte-IEEE-Long-Numbers
         ocPush,             //    1 Variable
         ocPush,             //    2 Bereich
         ocPush,             //    3 return
         ocPush,             //    4 Klammer
-        ocPush,             //    5 2-Byte-Integer
+        ocPush,             //    5 Numbers
         ocPush,             //    6 ASCII-String
         ocPush,             //    7 Named range reference
         ocPush,             //    8 Absolut named range
