@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2001-03-07 19:11:18 $
+ *  last change: $Author: er $ $Date: 2001-04-06 18:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,14 +1054,64 @@ BOOL SvNumberFormatter::IsCompatible(short eOldType,
     }
 }
 
+
+ULONG SvNumberFormatter::ImpGetDefaultFormat( short nType )
+{
+//! TODO: cache every default format similar to ImpGetDefaultCurrencyFormat().
+//! Should be a table bearing all touched locales, DefaultCurrency included.
+//! The current performance is very poor.
+    ULONG CLOffset = ImpGetCLOffset( ActLnge );
+    ULONG nDefaultFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+    if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {   // look for a defined standard
+        ULONG nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
+        ULONG nKey;
+        aFTable.Seek( CLOffset );
+        while ( (nKey = aFTable.GetCurKey()) >= CLOffset && nKey < nStopKey )
+        {
+            const SvNumberformat* pEntry =
+                (const SvNumberformat*) aFTable.GetCurObject();
+            if ( pEntry->IsStandard() && ((pEntry->GetType() & nType) == nType) )
+            {
+                nDefaultFormat = nKey;
+                break;  // while
+            }
+            aFTable.Next();
+        }
+    }
+
+    if ( nDefaultFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {   // none found, use old fixed standards
+        switch( nType )
+        {
+            case NUMBERFORMAT_DATE      :
+                nDefaultFormat = CLOffset + ZF_STANDARD_DATE;
+            break;
+            case NUMBERFORMAT_TIME      :
+                nDefaultFormat = CLOffset + ZF_STANDARD_TIME+1;
+            break;
+            case NUMBERFORMAT_DATETIME  :
+                nDefaultFormat = CLOffset + ZF_STANDARD_DATETIME;
+            break;
+            case NUMBERFORMAT_PERCENT   :
+                nDefaultFormat = CLOffset + ZF_STANDARD_PERCENT+1;
+            break;
+            case NUMBERFORMAT_SCIENTIFIC:
+                nDefaultFormat = CLOffset + ZF_STANDARD_SCIENTIFIC;
+            break;
+            default:
+                nDefaultFormat = CLOffset + ZF_STANDARD;
+        }
+    }
+    return nDefaultFormat;
+}
+
+
 ULONG SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge )
 {
     ULONG CLOffset = ImpGenerateCL(eLnge);
     switch(eType)
     {
-        case NUMBERFORMAT_DATE      : return CLOffset + ZF_STANDARD_DATE;
-        case NUMBERFORMAT_TIME      : return CLOffset + ZF_STANDARD_TIME+1;
-        case NUMBERFORMAT_DATETIME  : return CLOffset + ZF_STANDARD_DATETIME;
         case NUMBERFORMAT_CURRENCY  :
         {
             if ( eLnge == LANGUAGE_SYSTEM )
@@ -1069,8 +1119,13 @@ ULONG SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge )
             else
                 return ImpGetDefaultCurrencyFormat();
         }
-        case NUMBERFORMAT_PERCENT   : return CLOffset + ZF_STANDARD_PERCENT+1;
-        case NUMBERFORMAT_SCIENTIFIC: return CLOffset + ZF_STANDARD_SCIENTIFIC;
+        case NUMBERFORMAT_DATE      :
+        case NUMBERFORMAT_TIME      :
+        case NUMBERFORMAT_DATETIME  :
+        case NUMBERFORMAT_PERCENT   :
+        case NUMBERFORMAT_SCIENTIFIC:
+            return ImpGetDefaultFormat( eType );
+
         case NUMBERFORMAT_FRACTION  : return CLOffset + ZF_STANDARD_FRACTION;
         case NUMBERFORMAT_LOGICAL   : return CLOffset + ZF_STANDARD_LOGICAL;
         case NUMBERFORMAT_TEXT      : return CLOffset + ZF_STANDARD_TEXT;
