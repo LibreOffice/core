@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-16 14:14:38 $
+ *  last change: $Author: vg $ $Date: 2001-02-16 16:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,7 @@ DrawVerticalTextItem( Display *pDisplay, Drawable nDrawable, GC nGC,
 #ifdef USE_BUILTIN_RASTERIZER
 #ifdef USE_XRENDER
 
-static void DrawServerAAFontString( const ServerFont* pServerFont,
+static void DrawServerAAFontString( ServerFont* pServerFont,
     Display *pDisplay, Drawable nDrawable,
     GC nGC, int nX, int nY, const sal_Unicode *pStr, int nLength )
 {
@@ -875,7 +875,7 @@ static void DrawServerAAFontString( const ServerFont* pServerFont,
 
 #endif
 
-static void DrawServerFontString( const ServerFont* pServerFont,
+static void DrawServerFontString( ServerFont* pServerFont,
     Display *pDisplay, Drawable nDrawable,
     GC nGC, int nX, int nY, const sal_Unicode *pStr, int nLength )
 {
@@ -898,7 +898,7 @@ static void DrawServerFontString( const ServerFont* pServerFont,
     {
         const int nGlyphIndex = pServerFont->GetGlyphIndex( pStr[i] );
 
-        Pixmap const aStipple = aX11GlyphPeer.GetPixmap( *pServerFont, nGlyphIndex );
+        Pixmap aStipple = aX11GlyphPeer.GetPixmap( *pServerFont, nGlyphIndex );
 
         const GlyphMetric& rGM  = pServerFont->GetGlyphMetric( nGlyphIndex );
         const int nDestX        = aPos.X() + rGM.GetOffset().X();
