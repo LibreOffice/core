@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-21 08:51:32 $
+#   last change: $Author: vg $ $Date: 2003-12-17 20:09:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,6 +136,11 @@ LIB1TARGET = \
 
 LIB1OBJFILES = \
     $(SLO1FILES)
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
+NOOPTFILES= \
+             $(SLO)$/cellsuno.obj
+.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
