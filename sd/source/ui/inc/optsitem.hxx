@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-28 12:02:46 $
+ *  last change: $Author: aw $ $Date: 2002-02-15 17:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,10 @@ private:
 
     ULONG   nPreviewQuality;                // !!!Misc/Preview (double=>integer)!!!
 
+    // #97016#
+    ULONG   nDefaultObjectSizeWidth;
+    ULONG   nDefaultObjectSizeHeight;
+
     BOOL    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
     BOOL    bMarkedHitMovesAlways   : 1;    // Misc/ObjectMoveable
     BOOL    bMoveOnlyDragging       : 1;    // Currently, not in use !!!
@@ -354,6 +358,9 @@ public:
     BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
     // #90356#
     BOOL    IsShowUndoDeleteWarning() const { Init(); return (BOOL) bShowUndoDeleteWarning; }
+    // #97016#
+    ULONG   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
+    ULONG   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
 
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }
@@ -373,6 +380,9 @@ public:
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
     // #90356#
     void    SetShowUndoDeleteWarning( BOOL bOn = TRUE ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
+    // #97016#
+    void    SetDefaultObjectSizeWidth( ULONG nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
+    void    SetDefaultObjectSizeHeight( ULONG nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
 };
 
 // -----------------------------------------------------------------------------
