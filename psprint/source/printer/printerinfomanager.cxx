@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-13 12:28:12 $
+ *  last change: $Author: pl $ $Date: 2001-06-14 11:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,6 +885,29 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
 
 // -----------------------------------------------------------------
 
+struct SystemCommandParameters
+{
+    const char*     pQueueCommand;
+    const char*     pPrintCommand;
+    const char*     pForeToken;
+    const char*     pAftToken;
+    int                 nForeTokenCount;
+};
+
+static const struct SystemCommandParameters aParms[] =
+{
+#ifdef LINUX
+    { "/usr/sbin/lpc status", "lpr -P (PRINTER)", "", ":", 0 },
+    { "lpc status", "lpr -P (PRINTER)", "", ":", 0 },
+    { "lpstat -s", "lp -d (PRINTER)", "system for ", ": ", 1 }
+#else
+    { "lpstat -s", "lp -d (PRINTER)", "system for ", ": ", 1 },
+    { "/usr/sbin/lpc status", "lpr -P (PRINTER)", "", ":", 0 },
+    { "lpc status", "lpr -P (PRINTER)", "", ":", 0 }
+#endif
+};
+
+
 const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
 {
     if( m_aSystemPrintQueues.begin() == m_aSystemPrintQueues.end() )
@@ -897,43 +920,17 @@ const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
         ::std::list< ByteString > aLines;
         rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
 
-        for( i = 0; i < 3 && ! bSuccess; i++ )
+        for( i = 0; i < sizeof(aParms)/sizeof(aParms[0]) && ! bSuccess; i++ )
         {
             aLines.clear();
-            switch( i )
-            {
-                case 0:
-                    // check for lpstat
-#if defined DEBUG || defined DBG_UTIL
-                    fprintf( stderr, "trying lpstat -s ... " );
+            aPrtQueueCmd            = aParms[i].pQueueCommand;
+            m_aSystemPrintCommand   = OUString::createFromAscii( aParms[i].pPrintCommand );
+            aForeToken              = aParms[i].pForeToken;
+            aAftToken               = aParms[i].pAftToken;
+            nForeTokenCount         = aParms[i].nForeTokenCount;
+#if defined DEBUG
+            fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
 #endif
-                    aPrtQueueCmd    = "lpstat -s";
-                    m_aSystemPrintCommand = OUString::createFromAscii( "lp -d (PRINTER)" );
-                    aForeToken      = "system for ";
-                    aAftToken       = ": ";
-                    nForeTokenCount = 1;
-                    break;
-                case 1:
-#if defined DEBUG || defined DBG_UTIL
-                    fprintf( stderr, "trying /usr/sbin/lpc status ... " );
-#endif
-                    aPrtQueueCmd    = "/usr/sbin/lpc status";
-                    m_aSystemPrintCommand = OUString::createFromAscii( "lpr -P (PRINTER)" );
-                    aForeToken      = "";
-                    aAftToken       = ":";
-                    nForeTokenCount = 0;
-                    break;
-                case 2:
-#if defined DEBUG || defined DBG_UTIL
-                    fprintf( stderr, "trying lpc status ... " );
-#endif
-                    aPrtQueueCmd    = "lpc status";
-                    m_aSystemPrintCommand = OUString::createFromAscii( "lpr -P (PRINTER)" );
-                    aForeToken      = "";
-                    aAftToken       = ":";
-                    nForeTokenCount = 0;
-                    break;
-            }
             if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
             {
                 while( fgets( pBuffer, 1024, pPipe ) )
@@ -941,7 +938,7 @@ const ::std::list< OUString >& PrinterInfoManager::getSystemPrintQueues()
                 if( ! pclose( pPipe ) )
                     bSuccess = TRUE;
             }
-#if defined DEBUG || defined DBG_UTIL
+#if defined DEBUG
             fprintf( stderr, "%s\n", bSuccess ? "success" : "failed" );
 #endif
         }
