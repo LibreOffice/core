@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 10:45:55 $
+#   last change: $Author: nf $ $Date: 2001-04-30 14:40:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,15 +89,13 @@ OBJFILES=                       \
     $(OBJ)$/cppdep.obj      \
     $(OBJ)$/command.obj     \
     $(OBJ)$/prj.obj         \
-    $(OBJ)$/dlvclass.obj    \
     $(OBJ)$/errdumm.obj     \
     $(OBJ)$/errhdl.obj      \
-    $(OBJ)$/hedabu.obj      \
     $(OBJ)$/inimgr.obj      \
     $(OBJ)$/revision.obj    \
     $(OBJ)$/shellprp.obj 	\
-    $(OBJ)$/minormk.obj 	\
-    $(OBJ)$/fattr.obj
+    $(OBJ)$/fattr.obj 		\
+    $(OBJ)$/minormk.obj 	
 
 SLOFILES=                   \
     $(SLO)$/sstring.obj     \
@@ -105,15 +103,13 @@ SLOFILES=                   \
     $(SLO)$/cppdep.obj      \
     $(SLO)$/command.obj     \
     $(SLO)$/prj.obj         \
-    $(SLO)$/dlvclass.obj    \
     $(SLO)$/errdumm.obj     \
     $(SLO)$/errhdl.obj      \
-    $(SLO)$/hedabu.obj      \
     $(SLO)$/inimgr.obj      \
     $(SLO)$/revision.obj    \
     $(SLO)$/shellprp.obj 	\
-    $(SLO)$/minormk.obj 	\
-    $(SLO)$/fattr.obj
+    $(SLO)$/fattr.obj 		\
+    $(SLO)$/minormk.obj 	
 
 LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
@@ -141,28 +137,22 @@ APP2STDLIBS=$(STATIC_LIBS)
 APP2LIBS=       $(LB)$/bootstrp.lib
 APP2DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP3TARGET=rscdep
-APP3OBJS=   $(OBJ)$/rscdep.obj
+APP3TARGET=mkcreate
+APP3OBJS=   $(OBJ)$/mkcrexe.obj $(OBJ)$/mkcreate.obj
 APP3STDLIBS=$(STATIC_LIBS)
 APP3LIBS=       $(LB)$/bootstrp.lib
 APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP4TARGET=mkcreate
-APP4OBJS=   $(OBJ)$/mkcrexe.obj $(OBJ)$/mkcreate.obj
+APP4TARGET=     setsolar
+APP4OBJS=   $(OBJ)$/setsolar.obj $(OBJ)$/envset.obj $(OBJ)$/vermap.obj
 APP4STDLIBS=$(STATIC_LIBS)
 APP4LIBS=       $(LB)$/bootstrp.lib
 APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
-APP5TARGET=     setsolar
-APP5OBJS=   $(OBJ)$/setsolar.obj $(OBJ)$/envset.obj $(OBJ)$/vermap.obj
-APP5STDLIBS=$(STATIC_LIBS)
-APP5LIBS=       $(LB)$/bootstrp.lib
-APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-APP6TARGET= zipdep
-APP6OBJS=	$(OBJ)$/zipdep.obj
-APP6LIBS=	$(LB)$/bootstrp.lib
-APP6STDLIBS=$(STATIC_LIBS) 
+APP5TARGET= zipdep
+APP5OBJS=	$(OBJ)$/zipdep.obj
+APP5LIBS=	$(LB)$/bootstrp.lib
+APP5STDLIBS=$(STATIC_LIBS) 
 
 
 DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) 
