@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:36 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,7 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic,
                         if ( bStatus )
                         {
                             AnimationBitmap aAnimationBitmap( aBitmap, Point( 0, 0 ), aBitmap.GetSizePixel(),
-                                                              ANIMATION_TIMEOUT_ON_CLICK, DISPOSE_FULL );
+                                                              ANIMATION_TIMEOUT_ON_CLICK, DISPOSE_BACK );
 
                             aAnimation.Insert( aAnimationBitmap );
                         }
