@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 15:44:04 $
+ *  last change: $Author: jb $ $Date: 2002-10-16 07:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,7 @@ namespace configmgr
 ////////////////////////////////////////////////////////////////////////////////
     //==========================================================================
     extern bool isLocalizedValueSet(SubtreeChange const& _aSubtree);
+    extern bool isValueSet(SubtreeChange const& _aSubtree);
 
     //==========================================================================
     //= inlines

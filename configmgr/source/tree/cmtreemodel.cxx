@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:10:28 $
+ *  last change: $Author: jb $ $Date: 2002-10-16 07:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,22 @@ bool isLocalizedValueSet(SubtreeChange const& _aSubtree)
     return true;
 }
 
+// -----------------------------------------------------------------------------
+
+bool isValueSet(ISubtree const& _aSubtree)
+{
+    if ( !_aSubtree.isSetNode())    return false;
+    if ( !_aSubtree.getElementTemplateModule().equals(TEMPLATE_MODULE_NATIVE_VALUE) )   return false;
+    return true;
+}
+// -----------------------------------------------------------------------------
+
+bool isValueSet(SubtreeChange const& _aSubtree)
+{
+    if ( !_aSubtree.isSetNodeChange())  return false;
+    if ( !_aSubtree.getElementTemplateModule().equals(TEMPLATE_MODULE_NATIVE_VALUE) )   return false;
+    return true;
+}
 //==========================================================================
 
 //==========================================================================
