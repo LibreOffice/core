@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwRewriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-26 10:01:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,14 +96,6 @@ void SwRewriter::AddRule(const String & rWhat, const String & rWith)
         mRules.push_back(aRule);
 }
 
-void SwRewriter::AddRewriter(const SwRewriter & rRewriter)
-{
-    vector<SwRewriteRule>::const_iterator aIt;
-
-    for (aIt = rRewriter.mRules.begin(); aIt != rRewriter.mRules.end(); aIt++)
-        AddRule(aIt->first, aIt->second);
-}
-
 String SwRewriter::Apply(const String & rStr) const
 {
     String aResult = rStr;
@@ -111,17 +103,6 @@ String SwRewriter::Apply(const String & rStr) const
 
     for (aIt = mRules.begin(); aIt != mRules.end(); aIt++)
         aResult.SearchAndReplaceAll(aIt->first, aIt->second);
-
-    return aResult;
-}
-
-vector<String> SwRewriter::Apply(const vector<String> & rStrs) const
-{
-    vector<String> aResult;
-    vector<String>::const_iterator aIt;
-
-    for (aIt = rStrs.begin(); aIt != rStrs.end(); aIt++)
-        aResult.push_back(Apply(*aIt));
 
     return aResult;
 }
