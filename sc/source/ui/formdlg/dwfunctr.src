@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:06:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,6 +579,22 @@ DockingWindow FID_FUNCTION_BOX
         < "टेक्स्ट्" ; Default ; > ;
         < "में जोड़ो" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Naposledy použité" ; Default ; > ;
+        < "Všetky" ; Default ; > ;
+        < "Databázové" ; Default ; > ;
+        < "Dátum&Čas" ; Default ; > ;
+        < "Finančné" ; Default ; > ;
+        < "Informačné" ; Default ; > ;
+        < "Logické" ; Default ; > ;
+        < "Matematické" ; Default ; > ;
+        < "Funkcie polí" ; Default ; > ;
+        < "Štatistické" ; Default ; > ;
+        < "Funkcie zošita" ; Default ; > ;
+        < "Textové" ; Default ; > ;
+        < "Ďalšie" ; Default ; > ;
+    };
     };
     ListBox DDLB_FUNC
     {
@@ -654,6 +670,7 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ czech ] = "Vložit funkci do listu s výpočty";
         QuickHelpText[ hebrew ] = "Funktion in Rechenblatt einfügen";
         QuickHelpText[ hindi ] = "फंक्शन् को गणना करने के शीट् में जोड़ो";
+        QuickHelpText[ slovak ] = "Vložiť funkciu do kalkulačného zošitu";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Fun��es" ;
@@ -682,8 +699,11 @@ DockingWindow FID_FUNCTION_BOX
     Text[ czech ] = "Funkce";
     Text[ hebrew ] = "‮פונקציות‬";
     Text[ hindi ] = "फंक्शन्स";
+    Text[ slovak ] = "Funkcie";
 };
  // ********************************************************************** EOF
+
+
 
 
 
