@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 10:23:33 $
+ *  last change: $Author: oj $ $Date: 2001-11-08 09:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,10 +296,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, bSilent);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
     {
-        OTools::ThrowException(this,nSQLRETURN,m_aConnectionHandle,SQL_HANDLE_DBC,*this);
-    }
-    else if(SQL_SUCCESS_WITH_INFO == nSQLRETURN) // this driver does not support odbc3
-    {
+        OTools::ThrowException(this,nSQLRETURN,m_aConnectionHandle,SQL_HANDLE_DBC,*this,sal_False);
     }
     return nSQLRETURN;
 }
