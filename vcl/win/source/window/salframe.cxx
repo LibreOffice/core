@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-18 16:35:23 $
+ *  last change: $Author: ssa $ $Date: 2002-09-23 07:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,12 +350,14 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             if ( nSalFrameStyle & SAL_FRAME_STYLE_DEFAULT )
                 nExSysStyle |= WS_EX_APPWINDOW;
         }
-        if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLWINDOW &&
+        if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLWINDOW
             // #100656# toolwindows lead to bad alt-tab behaviour, if they have the focus
             // you must press it twice to leave the application
             // so toolwindows are only used for non sizeable windows
             // which are typically small, so a small caption makes sense
-            !(nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE) )
+
+            // #103578# looked too bad - above changes reverted
+            /* && !(nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE) */ )
         {
             pFrame->maFrameData.mbNoIcon = TRUE;
             nExSysStyle |= WS_EX_TOOLWINDOW;
