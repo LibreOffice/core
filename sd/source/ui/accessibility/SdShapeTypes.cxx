@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:02:20 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,8 @@
 namespace accessibility {
 
 AccessibleShape*
-    CreateSdAccessibleShape (const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
+    CreateSdAccessibleShape (
+        const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         ShapeTypeId nId)
 {
@@ -86,18 +84,18 @@ AccessibleShape*
         case PRESENTATION_PAGE:
         case PRESENTATION_NOTES:
         case PRESENTATION_HANDOUT:
-            return new AccessiblePresentationShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessiblePresentationShape (rShapeInfo, rShapeTreeInfo);
 
         case PRESENTATION_GRAPHIC_OBJECT:
-            return new AccessiblePresentationGraphicShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessiblePresentationGraphicShape (rShapeInfo, rShapeTreeInfo);
 
         case PRESENTATION_OLE:
         case PRESENTATION_CHART:
         case PRESENTATION_TABLE:
-            return new AccessiblePresentationOLEShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessiblePresentationOLEShape (rShapeInfo, rShapeTreeInfo);
 
         default:
-            return new AccessibleShape (rxShape, rxParent, rShapeTreeInfo);
+            return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
     }
 }
 

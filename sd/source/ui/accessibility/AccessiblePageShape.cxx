@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 17:02:20 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include "AccessiblePageShape.hxx"
 #endif
 
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include <svx/AccessibleShapeInfo.hxx>
+#endif
+
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
@@ -102,7 +106,7 @@ AccessiblePageShape::AccessiblePageShape (
     const uno::Reference<XAccessible>& rxParent,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     long nIndex)
-    : AccessibleShape (NULL, rxParent, rShapeTreeInfo, nIndex),
+    : AccessibleShape (AccessibleShapeInfo (NULL, rxParent, nIndex), rShapeTreeInfo),
       mxPage (rxPage)
 {
     // The main part of the initialization is done in the init method which
