@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:46:36 $
+ *  last change: $Author: sj $ $Date: 2001-05-18 11:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,8 +606,8 @@ ModalDialog DLG_EXPORT_EPS
     };
     StringList [ finnish ] =
     {
-             < "Glyph Outlines immer exportieren" ; > ; ;
-        < "Glyph Outlines niemals exportieren" ; > ; ;
+             < "Glyph Outlines immer exportieren" ; > ;
+        < "Glyph Outlines niemals exportieren" ; > ;
     };
     };
 
