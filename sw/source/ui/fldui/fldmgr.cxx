@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:23:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1582,7 +1582,7 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     ASSERT(pCurFld, "kein Feld an der CursorPos");
 
     bool bDelete = false;
-    SwField * pTmpFld;
+    SwField *pTmpFld;       // mb: fixed memory leak
     if (NULL != _pTmpFld)
     {
         pTmpFld = _pTmpFld;
@@ -1713,10 +1713,9 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         pType->UpdateFlds();
         pSh->SetModified();
     }
-    else
-    {
+    else {
+        // mb: #32157
         pSh->SwEditShell::UpdateFlds(*pTmpFld);
-        //#i36559# the pCurFld member has been deleted - now update it
         GetCurFld();
     }
 
