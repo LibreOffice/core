@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:06:23 $
+ *  last change: $Author: mh $ $Date: 2001-10-18 13:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <algorithm>
 
 #ifndef _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
 #include "elementimport.hxx"
@@ -1278,6 +1280,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/07/10 17:06:23  mtg
+ *  updated namespace handling
+ *
  *  Revision 1.23  2001/06/25 13:32:38  fs
  *  #88691# TargetURL property value must be saved relative to own document
  *
