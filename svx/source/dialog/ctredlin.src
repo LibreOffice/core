@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-30 21:22:42 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 10:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-10-30 21:22:42 $
- // $Revision: 1.27 $
+ //     $Date: 2001-11-07 10:08:34 $
+ // $Revision: 1.28 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -286,7 +286,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
             < "ζ—©ζ–Ό" ; Default ; > ;
         < "εΎ" ; Default ; > ;
-        < "η­‰εζ–Ό" ; Default ; > ;
+        < "η­‰εδΊ" ; Default ; > ;
         < "δΈη­‰ζ–Ό" ; Default ; > ;
         < "δΈ­ι–“ζ–Ό" ; Default ; > ;
         < "ε¨ε„²ε­εΎ" ; Default ; > ;
@@ -419,7 +419,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ chinese_traditional ] = "θ¨­ε®ζ—¥ζ/ζ™‚ι–“";
         QuickHelpText[ arabic ] = "ΦΘΨ ΗαΚΗΡνΞ/ΗαζήΚ";
         QuickHelpText[ greek ] = "Εισαγωγή ημερομηνίας/ώρας";
-        QuickHelpText[ korean ] = "λ‚ μ§/μ‹κ°„ μ„¤μ •!";
+        QuickHelpText[ korean ] = "λ‚ μ§/μ‹κ°„ μ„¤μ •";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
@@ -520,7 +520,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ chinese_traditional ] = "θ¨­ε®ζ—¥ζ/ζ™‚ι–“";
         QuickHelpText[ arabic ] = "ΦΘΨ ΗαΚΗΡνΞ/ΗαζήΚ";
         QuickHelpText[ greek ] = "Εισαγωγή ημερομηνίας/ώρας";
-        QuickHelpText[ korean ] = "λ‚ μ§/μ‹κ°„ μ„¤μ •!";
+        QuickHelpText[ korean ] = "λ‚ μ§/μ‹κ°„ μ„¤μ •";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
@@ -686,7 +686,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ greek ] = "...";
         Text[ korean ] = "...";
         QuickHelpText[ greek ] = "Set Reference";
-        QuickHelpText[ korean ] = "μ°Έμ΅° μ„¤μ •!";
+        QuickHelpText[ korean ] = "μ°Έμ΅° μ„¤μ •";
         Text[ turkish ] = "...";
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
@@ -1053,6 +1053,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ finnish ] = "Huomautus";
     };
 };
+
 
 
 
