@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:09:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ czech ] = "Zdroj databáze kontaktů";
         Text[ hebrew ] = "‮מקור נתונים עבור ספר כתובות‬";
         Text[ hindi ] = "Address Book Source";
+        Text[ slovak ] = "Zdroj knihy adries";
     };
     FixedText FT_DATASOURCE
     {
@@ -165,6 +166,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ czech ] = "Zdroj dat";
         Text[ hebrew ] = "‮מקור הנתונים‬";
         Text[ hindi ] = "डॉटा मूल";
+        Text[ slovak ] = "Zdroj dát";
     };
     ComboBox CB_DATASOURCE
     {
@@ -207,6 +209,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ czech ] = "Administrovat";
         Text[ hebrew ] = "‮ניהול...‬";
         Text[ hindi ] = "~Administrate...";
+        Text[ slovak ] = "~Administrovať";
     };
     FixedText FT_TABLE
     {
@@ -241,6 +244,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ czech ] = "Tabulka";
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
+        Text[ slovak ] = "Tabuľka";
     };
     ComboBox CB_TABLE
     {
@@ -282,6 +286,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ czech ] = "Přiřazení polí";
         Text[ hebrew ] = "‮השמת ערכים לשדות‬";
         Text[ hindi ] = "Field assignment";
+        Text[ slovak ] = "Priradenie polí­";
     };
     Window CT_BORDER
     {
@@ -400,6 +405,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "<nic>";
             Text[ hebrew ] = "‮<אין>‬";
             Text[ hindi ] = "<कोई नहीं>";
+            Text[ slovak ] = "<nič>";
         };
 
     String STR_FIELD_COMPANY
@@ -430,6 +436,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Společnost";
             Text[ hebrew ] = "‮חברה‬";
             Text[ hindi ] = "Company";
+            Text[ slovak ] = "Spoločnosť";
         };
     String STR_FIELD_DEPARTMENT
     {
@@ -459,6 +466,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Oddělení";
             Text[ hebrew ] = "‮מחלקה‬";
             Text[ hindi ] = "विभाग";
+            Text[ slovak ] = "Oddelenie";
         };
     String STR_FIELD_FIRSTNAME
     {
@@ -488,6 +496,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Jméno";
             Text[ hebrew ] = "‮שם פרטי‬";
             Text[ hindi ] = "पहिला नाम";
+            Text[ slovak ] = "Meno";
         };
     String STR_FIELD_LASTNAME
     {
@@ -517,6 +526,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Příjmení";
             Text[ hebrew ] = "‮שם משפחה‬";
             Text[ hindi ] = "अंतिम नाम";
+            Text[ slovak ] = "Priezvisko";
         };
     String STR_FIELD_STREET
     {
@@ -546,6 +556,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Ulice";
             Text[ hebrew ] = "‮רחוב‬";
             Text[ hindi ] = "सड़क";
+            Text[ slovak ] = "Ulica";
         };
     String STR_FIELD_COUNTRY
     {
@@ -575,6 +586,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Země";
             Text[ hebrew ] = "‮ארץ‬";
             Text[ hindi ] = "देश";
+            Text[ slovak ] = "Krajina";
         };
     String STR_FIELD_ZIPCODE
     {
@@ -604,6 +616,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "PSČ";
             Text[ hebrew ] = "‮מיקוד‬";
             Text[ hindi ] = "ZIP Code";
+            Text[ slovak ] = "PSČ";
         };
     String STR_FIELD_CITY
     {
@@ -633,6 +646,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Obec";
             Text[ hebrew ] = "‮עיר‬";
             Text[ hindi ] = "नगर";
+            Text[ slovak ] = "Obec";
         };
     String STR_FIELD_TITLE
     {
@@ -662,6 +676,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Titul";
             Text[ hebrew ] = "‮תואר‬";
             Text[ hindi ] = "शीर्षक";
+            Text[ slovak ] = "Titul";
         };
     String STR_FIELD_POSITION
     {
@@ -691,6 +706,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Umístění";
             Text[ hebrew ] = "‮משרה‬";
             Text[ hindi ] = "स्थान";
+            Text[ slovak ] = "Umiestnenie";
         };
     String STR_FIELD_ADDRFORM
     {
@@ -720,6 +736,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Adr. formulář";
             Text[ hebrew ] = "‮פרטי כתובת‬";
             Text[ hindi ] = "Addr. Form";
+            Text[ slovak ] = "Adr. Formulár";
         };
     String STR_FIELD_INITIALS
     {
@@ -749,6 +766,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Iniciály";
             Text[ hebrew ] = "‮ראשי תיבות‬";
             Text[ hindi ] = "इनीश्यल्स";
+            Text[ slovak ] = "Iniciálky";
         };
     String STR_FIELD_SALUTATION
     {
@@ -778,6 +796,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Oslovení";
             Text[ hebrew ] = "‮ברכה בסיום מכתב‬";
             Text[ hindi ] = "Complimentary close";
+            Text[ slovak ] = "Oslovenie";
         };
     String STR_FIELD_HOMETEL
     {
@@ -807,6 +826,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Tel: domů";
             Text[ hebrew ] = "‮טלפון בבית‬";
             Text[ hindi ] = "Tel: Home";
+            Text[ slovak ] = "Tel: domov";
         };
     String STR_FIELD_WORKTEL
     {
@@ -836,6 +856,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Tel: do práce";
             Text[ hebrew ] = "‮טלפון בעבודה‬";
             Text[ hindi ] = "Tel: Work";
+            Text[ slovak ] = "Tel: do práce";
         };
     String STR_FIELD_FAX
     {
@@ -865,6 +886,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Fax";
             Text[ hebrew ] = "‮פקס‬";
             Text[ hindi ] = "FAX";
+            Text[ slovak ] = "Fax";
         };
     String STR_FIELD_EMAIL
     {
@@ -894,6 +916,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "E-mail";
             Text[ hebrew ] = "‮דואר א'‬";
             Text[ hindi ] = "इ-मेइल";
+            Text[ slovak ] = "Email";
         };
     String STR_FIELD_URL
     {
@@ -923,6 +946,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "URL";
             Text[ hebrew ] = "URL";
             Text[ hindi ] = "URL";
+            Text[ slovak ] = "URL";
         };
     String STR_FIELD_NOTE
     {
@@ -936,7 +960,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Notes";
     Text[ spanish ] = "Nota";
     Text[ italian ] = "Note";
-    Text[ danish ] = "Note";
+    Text[ danish ] = "Tip";
     Text[ swedish ] = "Anteckning";
     Text[ polish ] = "Notatka";
     Text[ portuguese_brazilian ] = "Anota��es";
@@ -952,6 +976,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Poznámka";
             Text[ hebrew ] = "‮הערה‬";
             Text[ hindi ] = "संक्षिप्त लेख";
+            Text[ slovak ] = "Poznámka";
         };
     String STR_FIELD_USER1
     {
@@ -981,6 +1006,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Uživatelem definovaný 1";
             Text[ hebrew ] = "‮שדה נוסף 1‬";
             Text[ hindi ] = "उपभोक्ता 1";
+            Text[ slovak ] = "Užívateľ 1";
         };
     String STR_FIELD_USER2
     {
@@ -1010,6 +1036,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Uživatelem definovaný 2";
             Text[ hebrew ] = "‮שדה נוסף 2‬";
             Text[ hindi ] = "उपभोक्ता 2";
+            Text[ slovak ] = "Užívateľ 2";
         };
     String STR_FIELD_USER3
     {
@@ -1039,6 +1066,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Uživatelem definovaný 3";
             Text[ hebrew ] = "‮שדה נוסף 3‬";
             Text[ hindi ] = "उपभोक्ता 3";
+            Text[ slovak ] = "Užívateľ 3";
         };
     String STR_FIELD_USER4
     {
@@ -1068,6 +1096,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Uživatelem definovaný 4";
             Text[ hebrew ] = "‮שדה נוסף 4‬";
             Text[ hindi ] = "उपभोक्ता 4";
+            Text[ slovak ] = "Užívateľ 4";
         };
 
     String STR_FIELD_ID
@@ -1098,6 +1127,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "ID";
             Text[ hebrew ] = "‮מ\"ז‬";
             Text[ hindi ] = "ID";
+            Text[ slovak ] = "ID";
         };
     String STR_FIELD_STATE
     {
@@ -1128,6 +1158,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Stát";
             Text[ hebrew ] = "‮מחוז‬";
             Text[ hindi ] = "राज्य";
+            Text[ slovak ] = "Štát";
         };
     String STR_FIELD_OFFICETEL
     {
@@ -1157,6 +1188,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Tel: do práce";
             Text[ hebrew ] = "‮טלפון במשרד‬";
             Text[ hindi ] = "दूरभाष: दफ्तर";
+            Text[ slovak ] = "Tel: kancelária";
         };
     String STR_FIELD_PAGER
     {
@@ -1186,6 +1218,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Pager";
             Text[ hebrew ] = "‮איתורית‬";
             Text[ hindi ] = "पेजर";
+            Text[ slovak ] = "Pager";
         };
     String STR_FIELD_MOBILE
     {
@@ -1215,6 +1248,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Mobil";
             Text[ hebrew ] = "‮טל' נייד‬";
             Text[ hindi ] = "मोबइल";
+            Text[ slovak ] = "Mobil";
         };
     String STR_FIELD_TELOTHER
     {
@@ -1244,6 +1278,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Tel: jiný";
             Text[ hebrew ] = "‮טלפון אחר‬";
             Text[ hindi ] = "दूरभाष: अन्य";
+            Text[ slovak ] = "Tel: iný";
         };
     String STR_FIELD_CALENDAR
     {
@@ -1273,6 +1308,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Kalendář";
             Text[ hebrew ] = "‮לוח שנה‬";
             Text[ hindi ] = "केलंड़र";
+            Text[ slovak ] = "Kalendár";
         };
     String STR_FIELD_INVITE
     {
@@ -1302,8 +1338,11 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ czech ] = "Pozvat";
             Text[ hebrew ] = "‮הזמנה‬";
             Text[ hindi ] = "अमंत्रित करो";
+            Text[ slovak ] = "Pozvať";
         };
 };
+
+
 
 
 
