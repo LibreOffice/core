@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:33:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ nsIAbCard * getUpdatedCard( nsIAbCard*  card)
  }
 
 #define ENSURE_MOZAB_PROFILE_NOT_LOOKED(directory)  \
-    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked())   \
+    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(NULL))   \
     {   \
         m_aErrorString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("You can't make any changes to mozilla address book when mozilla is running."));  \
         return sal_False;   \
