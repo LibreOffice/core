@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-27 07:58:33 $
+ *  last change: $Author: pl $ $Date: 2001-08-14 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,7 +469,7 @@ PrinterJob::StartJob (
     m_aLastJobData.m_pParser = NULL;
     m_aLastJobData.m_aContext.setParser( NULL );
 
-    writeSetup( mpJobHeader, rSetupData );
+//    writeSetup( mpJobHeader, rSetupData );
 
     return sal_True;
 }
@@ -632,8 +632,12 @@ PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
 
     WritePS (pPageHeader, pBBox);
 
-    writeSetup     ( pPageHeader, rJobSetup );
-    writePageSetup ( pPageHeader, rJobSetup );
+    bool bSuccess =  writeSetup  ( pPageHeader, rJobSetup );
+    if (bSuccess)
+        bSuccess = writePageSetup ( pPageHeader, rJobSetup );
+    if(bSuccess)
+        m_aLastJobData = rJobSetup;
+
 
     return NULL;
 }
@@ -697,15 +701,18 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob )
     bool bSuccess = true;
 
     WritePS (pFile, "%%BeginPageSetup\n%\n");
-    ByteString aLine( "/#copies " );
-    aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
-    aLine +=  " def\n";
-    sal_uInt64 nWritten = 0;
-    bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
-        || nWritten != aLine.Len() ? false : true;
+    if( rJob.m_nCopies != m_aLastJobData.m_nCopies )
+    {
+        ByteString aLine( "/#copies " );
+        aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
+        aLine +=  " def\n";
+        sal_uInt64 nWritten = 0;
+        bSuccess = pFile->write( aLine.GetBuffer(), aLine.Len(), nWritten )
+            || nWritten != aLine.Len() ? false : true;
 
-    if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
-        WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
+        if( bSuccess && GetPostscriptLevel( &rJob ) >= 2 )
+            WritePS (pFile, "<< /NumCopies null /Policies << /NumCopies 1 >> >> setpagedevice\n" );
+    }
 
     sal_Char  pTranslate [128];
     sal_Int32 nChar = 0;
@@ -889,9 +896,6 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
         bSuccess = false;
 
     WritePS (pFile, "%%EndSetup\n");
-
-    if( bSuccess )
-        m_aLastJobData = rJob;
 
     return bSuccess;
 }
