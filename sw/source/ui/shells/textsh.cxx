@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-18 13:33:36 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,17 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_FRAME_INTERACT_NOCOL:
     case FN_INSERT_FRAME_INTERACT:
     {
-        if(rReq.GetModifier() == KEY_MOD1)
+        USHORT nCols = 1;
+        BOOL bModifier1 = rReq.GetModifier() == KEY_MOD1;
+        if(pArgs)
+        {
+            if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&
+                pArgs->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem) == SFX_ITEM_SET)
+                nCols = ((SfxUInt16Item *)pItem)->GetValue();
+            if(pArgs->GetItemState(SID_MODIFIER, FALSE, &pItem) == SFX_ITEM_SET)
+                bModifier1 |= KEY_MOD1 == ((SfxUInt16Item *)pItem)->GetValue();
+        }
+        if(bModifier1 )
         {
             SwEditWin& rEdtWin = GetView().GetEditWin();
             Size aWinSize = rEdtWin.GetSizePixel();
@@ -611,15 +621,17 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(16 * MM50, 8 * MM50);
             GetShell().StartAllAction();
             SwFlyFrmAttrMgr aMgr( TRUE, GetShellPtr(), FRMMGR_TYPE_TEXT );
+            if(nCols > 1)
+            {
+                SwFmtCol aCol;
+                aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
+                aMgr.SetCol( aCol );
+            }
             aMgr.InsertFlyFrm(FLY_AT_CNTNT, aStartPos, aSize);
             GetShell().EndAllAction();
         }
         else
         {
-            USHORT nCols = 1;
-            if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&
-                pArgs &&pArgs->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem) == SFX_ITEM_SET)
-                nCols = ((SfxUInt16Item *)pItem)->GetValue();
             GetView().InsFrmMode(nCols);
         }
         rReq.Ignore();
@@ -1219,6 +1231,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.21  2002/10/18 13:33:36  gt
+    #90974# SwTextShell::ExecInsert(): set context @ SvxPluginFileDlg for SID_INSERT_SOUND & SID_INSERT_VIDEO
+
     Revision 1.20  2002/09/11 12:40:19  os
     #101516# set correct default border distance
 
