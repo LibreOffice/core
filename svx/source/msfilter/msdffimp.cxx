@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:20:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,29 +382,29 @@ using namespace vos;
 #ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEGLUEPOINTTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTPATHMODE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #endif
 #ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -417,7 +417,7 @@ using namespace vos;
 #endif
 
 using namespace ::com::sun::star    ;
-using namespace ::drafts::com::sun::star::drawing;
+using namespace ::com::sun::star::drawing;
 using namespace uno                 ;
 using namespace beans               ;
 using namespace drawing             ;
@@ -1393,7 +1393,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
 
                                     sal_uInt32 i, nPt = nC;
-                                    com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+                                    com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
                                     if ( pAny )
                                     {
@@ -1453,17 +1453,17 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
                                     if ( pAny )
                                     {
-                                        com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+                                        com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                         *pAny >>= aCoordinates;
                                         if ( nPt < (sal_uInt32)aCoordinates.getLength() )
                                         {
                                             nId = 4;
-                                            drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
+                                            com::sun::star::drawing::EnhancedCustomShapeParameterPair& rPara = aCoordinates[ nPt ];
                                             sal_Int32 nX, nY;
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
                                                 const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
-                                                com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+                                                com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
                                                 pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
                                                 if ( pAny )
                                                     *pAny >>= aGluePoints;
@@ -2779,7 +2779,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/Coordinates
         if ( IsProperty( DFF_Prop_pVertices ) )
         {
-            com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
 
             sal_uInt16 i;
             sal_uInt16 nNumElemVert = 0;
@@ -2820,7 +2820,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/Segments
         if ( IsProperty( DFF_Prop_pSegmentInfo ) )
         {
-            com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
 
             sal_uInt16 i, nTmp;
             sal_uInt16 nNumElemSeg = 0;
@@ -2957,7 +2957,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( nElemSize == 16 )
             {
                 sal_Int32 nLeft, nTop, nRight, nBottom;
-                com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
+                com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
                 for ( i = 0; i < nNumElem; i++ )
                 {
                     rIn >> nLeft
@@ -2979,7 +2979,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         //Path/GluePoints
         if ( IsProperty( DFF_Prop_connectorPoints ) )
         {
-            com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+            com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
 
             sal_uInt16 i;
             sal_uInt16 nNumElemVert = 0;
@@ -3101,7 +3101,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     sal_Int32 nAdjustmentValues = ( i - DFF_Prop_adjustValue ) + 1;
     if ( nAdjustmentValues )
     {
-        uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
+        uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
         while( --nAdjustmentValues >= 0 )
         {
             sal_Int32 nValue = 0;
