@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:26 $
+ *  last change: $Author: vg $ $Date: 2001-10-11 15:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,7 +1193,10 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     ::osl::MutexGuard aGuard( m_rMutex );
     checkCache();
 
-    return (m_pCache && m_pCache->m_bInserted) ? (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex] : getValue(columnIndex);
+    if (m_pCache && m_pCache->m_bInserted)
+        return  (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex];
+    else
+        return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORowSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
