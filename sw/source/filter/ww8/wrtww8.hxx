@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:44:02 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,6 @@ class SvxBrushItem;
 #define WWFL_ULSPACE_LIKE_SWG   0x00000001
 #define WWFL_NO_GRAF            0x00000080
 #define WWFL_NO_OLE             0x00020000
-#define WWFL_KA_DEBUG           0x08000000
 
 #define GRF_MAGIC_1 0x12    // 3 magic Bytes fuer PicLocFc-Attribute
 #define GRF_MAGIC_2 0x34
