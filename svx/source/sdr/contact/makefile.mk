@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-28 14:07:24 $
+#   last change: $Author: rt $ $Date: 2004-07-12 15:59:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,23 +72,25 @@ TARGET=contact
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-        $(SLO)$/displayinfo.obj						\
-        $(SLO)$/viewcontact.obj						\
-        $(SLO)$/viewcontactofsdrobj.obj				\
-        $(SLO)$/viewcontactofvirtobj.obj			\
-        $(SLO)$/viewcontactoftextobj.obj			\
-        $(SLO)$/viewcontactofsdrpage.obj			\
-        $(SLO)$/viewcontactofmasterpage.obj			\
-        $(SLO)$/viewcontactofgroup.obj				\
-        $(SLO)$/viewcontactofe3dscene.obj			\
-        $(SLO)$/viewcontactofpageobj.obj			\
-        $(SLO)$/viewcontactofgraphic.obj			\
-        $(SLO)$/objectcontact.obj					\
-        $(SLO)$/objectcontactofobjlistpainter.obj	\
-        $(SLO)$/objectcontactofpageview.obj			\
-        $(SLO)$/viewobjectcontact.obj				\
-        $(SLO)$/vocbitmapbuffer.obj					\
-        $(SLO)$/viewobjectcontactlist.obj			\
+        $(SLO)$/displayinfo.obj							\
+        $(SLO)$/viewcontact.obj							\
+        $(SLO)$/viewcontactofsdrobj.obj					\
+        $(SLO)$/viewcontactofvirtobj.obj				\
+        $(SLO)$/viewcontactoftextobj.obj				\
+        $(SLO)$/viewcontactofsdrpage.obj				\
+        $(SLO)$/viewcontactofmasterpage.obj				\
+        $(SLO)$/viewcontactofmasterpagedescriptor.obj	\
+        $(SLO)$/viewcontactofgroup.obj					\
+        $(SLO)$/viewcontactofe3dscene.obj				\
+        $(SLO)$/viewcontactofpageobj.obj				\
+        $(SLO)$/viewcontactofgraphic.obj				\
+        $(SLO)$/objectcontact.obj						\
+        $(SLO)$/objectcontactofobjlistpainter.obj		\
+        $(SLO)$/objectcontactofpageview.obj				\
+        $(SLO)$/viewobjectcontact.obj					\
+        $(SLO)$/vocbitmapbuffer.obj						\
+        $(SLO)$/viewobjectcontactlist.obj				\
+        $(SLO)$/viewobjectcontactredirector.obj			\
         $(SLO)$/viewcontactofsdrobjcustomshape.obj
 
 .INCLUDE :  target.mk
