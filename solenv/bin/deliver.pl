@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: vg $ $Date: 2004-05-13 11:05:13 $
+#   last change: $Author: vg $ $Date: 2004-05-19 12:14:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,12 +72,13 @@ use File::Basename;
 use File::Copy;
 use File::DosGlob 'glob';
 use File::Path;
+use File::Spec;
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.60 $ ';
+$id_str = ' $Revision: 1.61 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -130,14 +131,8 @@ $opt_zip            = 0;            # create an additional zip file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
 
-$gcdynstr   = '';
-$strip = '';
-if ($^O eq 'linux') {
-    $gcdynstr   = 'elf-gc-dynstr';
-    $strip      = 'strip';
-};
-$strip      = '/usr/ccs/bin/strip' if ( $^O eq 'solaris' );
-$strip      = 'strip' if ( $^O eq "darwin" );
+$strip = 'strip' if ($^O ne 'MSWin32');
+
 $upd           = $ENV{'UPD'};
 ($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
 
@@ -736,7 +731,7 @@ sub copy_if_newer
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
     my $rc = '';
-    if (($gui eq 'unx') && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
+    if ((defined $strip) && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
         $rc = strip_target($from, $temp_file);
     } else {
         $rc = copy($from, $temp_file);
