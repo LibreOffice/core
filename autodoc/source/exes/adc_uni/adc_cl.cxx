@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 11:19:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ CommandLine::~CommandLine()
 int
 CommandLine::Run() const
 {
-    Cout() << "\nAutodoc version 2.2.2"
+    Cout() << "\nAutodoc version 2.2.5"
            << "\n---------------------"
            << "\n" << Endl();
 
@@ -396,6 +396,31 @@ CommandLine::do_Init( int                 argc,
             do_clCreateHtml(it,itEnd);
         else if (*it == command::C_opt_SinceFile)
             do_clSinceFile(it,itEnd);
+        else if (*it == command::C_opt_ExternNamespace)
+        {
+            sExternNamespace = *(++it);
+            ++it;
+            if ( strncmp(sExternNamespace.c_str(), "::", 2) != 0)
+            {
+                 throw command::X_CommandLine(
+                        "-extnsp needs an absolute qualified namespace, starting with \"::\"."
+                        );
+            }
+        }
+        else if (*it == command::C_opt_ExternRoot)
+        {
+            ++it;
+            StreamLock sl(1000);
+            if ( csv::compare(*it, 0, "http://", 7) != 0 )
+            {
+                sl() << "http://" << *it;
+            }
+            if ( *(sl().end()-1) != '/')
+                sl() << '/';
+            sExternRoot = sl().c_str();
+
+            ++it;
+        }
 //        else if (*it == command::C_opt_CreateXml)
 //            do_clCreateXml(it,itEnd);
 //        else if (command::C_opt_Load)
