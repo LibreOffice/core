@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-27 06:44:21 $
+#   last change: $Author: hr $ $Date: 2004-08-02 15:27:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,8 @@ LIBTARGET=NO
 TARGET=shared
 LIB1TARGET=$(SLB)$/dbashared.lib
 LIB2TARGET=$(SLB)$/dbushared.lib
+LIB3TARGET=$(SLB)$/fltshared.lib
+LIB4TARGET=$(SLB)$/cfgshared.lib
 
 #ENABLE_EXCEPTIONS=TRUE
 
@@ -77,18 +79,20 @@ LIB2TARGET=$(SLB)$/dbushared.lib
 # --- Types -------------------------------------
 
 # --- Files -------------------------------------
-
-SLOFILES=	\
-        $(SLO)$/dba_reghelper.obj	\
-        $(SLO)$/dbu_reghelper.obj	\
-        $(SLO)$/dbastrings.obj	\
-        $(SLO)$/dbustrings.obj	\
-        $(SLO)$/apitools.obj
-
 EXCEPTIONSFILES=	\
         $(SLO)$/apitools.obj	\
         $(SLO)$/dba_reghelper.obj	\
-        $(SLO)$/dbu_reghelper.obj
+        $(SLO)$/dbu_reghelper.obj	\
+        $(SLO)$/cfg_reghelper.obj	\
+        $(SLO)$/flt_reghelper.obj
+        
+SLOFILES=	\
+        $(EXCEPTIONSFILES)			\
+        $(SLO)$/cfgstrings.obj		\
+        $(SLO)$/xmlstrings.obj		\
+        $(SLO)$/dbastrings.obj		\
+        $(SLO)$/dbustrings.obj
+
 
 LIB1OBJFILES=	\
         $(SLO)$/dba_reghelper.obj	\
@@ -98,6 +102,16 @@ LIB1OBJFILES=	\
 LIB2OBJFILES=	\
         $(SLO)$/dbu_reghelper.obj	\
         $(SLO)$/dbustrings.obj	\
+        $(SLO)$/apitools.obj
+        
+LIB3OBJFILES=	\
+        $(SLO)$/flt_reghelper.obj	\
+        $(SLO)$/xmlstrings.obj	\
+        $(SLO)$/apitools.obj
+        
+LIB4OBJFILES=	\
+        $(SLO)$/cfg_reghelper.obj	\
+        $(SLO)$/cfgstrings.obj	\
         $(SLO)$/apitools.obj
 
 # --- Targets ----------------------------------
