@@ -7624,3 +7624,6 @@ _TI4?AVout_of_range@_STL@@
 ?s_pType_com_sun_star_uno_XComponentContext@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2230918162@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx818530696@@YAXABVSbxVariableRef@@PAX@Z
+??1?$Reference@VXViewSettingsSupplier@view@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXViewSettingsSupplier@view@star@sun@com@@@uno@star@sun@com@@CAPAVXViewSettingsSupplier@view@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_view_XViewSettingsSupplier@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXViewSettingsSupplier@view@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
