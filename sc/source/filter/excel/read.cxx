@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:55:18 $
+ *  last change: $Author: gt $ $Date: 2001-06-29 12:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1238,6 +1238,8 @@ FltError ImportExcel8::Read( void )
                         case 0x0204:    Label();                break;  // LABEL        [  34    ]
                         case 0x0205:    Boolerr34();            break;  // BOOLERR      [  34    ]
                         case 0x0236:    TableOp();              break;  // TABLE
+                        case 0x0021:    Array25();              break;  // ARRAY        [ 2  5   ]
+                        case 0x0221:    Array34();              break;  // ARRAY        [  34    ]
                         default:
                             bFound = FALSE;
                     }
@@ -1392,7 +1394,6 @@ FltError ImportExcel8::Read( void )
                         case 0x1B:  Horizontalpagebreaks(); break;
                         case 0x1D:  Selection(); break;     // SELECTION    [ 2345   ]
                         case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345   ]
-                        case 0x21:  Array25(); break;       // ARRAY        [ 2  5   ]
                         case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5   ]
                         case 0x41:  Pane(); break;          // PANE         [ 2345   ]
                         case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
@@ -1408,7 +1409,6 @@ FltError ImportExcel8::Read( void )
                         case 0x01BA: Codename( FALSE ); break;
                         case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345   ]
                         case 0x0208: Row34(); break;        // ROW          [  34    ]
-                        case 0x0221: Array34(); break;      // ARRAY        [  34    ]
                         case 0x0223: Externname25(); break; // EXTERNNAME   [  34    ]
                         case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                         case 0x023E: Window2_5(); break;    // WINDOW       [    5]
