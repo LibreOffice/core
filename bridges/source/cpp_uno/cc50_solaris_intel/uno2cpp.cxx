@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:47:41 $
+ *  last change: $Author: svesik $ $Date: 2001-02-06 22:20:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <alloca.h>
-#include <stl/map>
+#include <map>
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
