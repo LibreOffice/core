@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawing.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:34:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #ifndef _DRAWING_H_
 #define _DRAWING_H_
 
-/* NAME $Id: drawing.h,v 1.1 2003-10-15 14:34:48 dvo Exp $
+/* NAME $Id: drawing.h,v 1.2 2005-02-16 18:14:13 vg Exp $
  *
  * NOTES
  *
@@ -785,7 +785,7 @@ HWPDOTextBoxFunc(int type, HWPDrawingObject * hdo,
 int cmd, void *argp, int argv)
 {
 // TRACE("textbox");
-    hunit sx, sy, xs, ys;
+//    hunit sx, sy, xs, ys;
 
     switch (cmd)
     {
@@ -818,7 +818,7 @@ int cmd, void *argp, int argv)
 }
 
 
-// HWPDrawObject ¸â¹ö ÇÔ¼ö
+/* HWPDrawObject ¸â¹ö ÇÔ¼ö */
 
 HWPDrawingObject::HWPDrawingObject()
 {

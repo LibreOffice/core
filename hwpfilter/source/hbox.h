@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hbox.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:35:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hbox.h,v 1.1 2003-10-15 14:35:19 dvo Exp $ */
+/* $Id: hbox.h,v 1.2 2005-02-16 18:14:57 vg Exp $ */
 
 #ifndef _HBOX_H_
 #define _HBOX_H_
@@ -136,9 +136,9 @@ struct SkipBlock: public HBox
 struct DateCode;
 struct FieldCode : public HBox
 {
-    uchar type[2];                                // 2/0 - 계산식, 3/0-문서요약, 3/1-개인정보, 3/2-만든날짜, 4/0-누름틀
+    uchar type[2];                    /* 2/0 - 계산식, 3/0-문서요약, 3/1-개인정보, 3/2-만든날짜, 4/0-누름틀 */
     char *reserved1;
-    unsigned short location_info;                 // 0 - 끝코드, 1 - 시작코드
+    unsigned short location_info;     /* 0 - 끝코드, 1 - 시작코드 */
     char *reserved2;
     hchar *str1;
     hchar *str2;
@@ -313,7 +313,7 @@ struct FBoxStyle
 /**
  * Kind of wrap
  */
-    unsigned char txtflow;                        // 그림피함. 0-2(자리차지,투명,어울림)
+    unsigned char txtflow;                        /* 그림피함. 0-2(자리차지,투명,어울림) */
 /**
  * Horizontal alignment
  */
@@ -331,12 +331,12 @@ struct FBoxStyle
 /**
  * Index of floating object
  */
-    short     boxnum;                             // 스타오피스에서 스타일 이름으로 사용될 숫자
+    short     boxnum;                             /* 스타오피스에서 스타일 이름으로 사용될 숫자 */
 /**
  * Type of floating object : line, txtbox, image, table, equalizer and button
  */
     unsigned char boxtype;                        // (L)ine, t(X)tbox, Picture - (G)
-    short     cap_len; // 캡션의 길이
+    short     cap_len; /* 캡션의 길이 */
 
     void *cell;
 
@@ -362,8 +362,9 @@ struct FBox: public HBox
     char      xpos_type, ypos_type;
     unsigned char smart_linesp;
 
-// 이 자료는 tbox나 pic에서는 파일에 기록하지 않고 실행시만 있으며,
-// line에서는 파일에 기록한다.
+/*  이 자료는 tbox나 pic에서는 파일에 기록하지 않고 실행시만 있으며,
+    line에서는 파일에 기록한다.
+ */
     short     boundsy, boundey;
     unsigned char boundx, draw;
 
@@ -586,7 +587,7 @@ struct Table
      TxtBox *box;
 };
 
-// picture (11) 그림, OLE그림, 삽입그림, 그리기
+/* picture (11) 그림, OLE그림, 삽입그림, 그리기 */
 enum
 {
     PICTYPE_FILE, PICTYPE_OLE, PICTYPE_EMBED,
@@ -665,7 +666,7 @@ struct Picture: public FBox
  * follow_block_size is the size information of the Drawing object of hwp.
  * It's value is greater than 0 if the pictype is PICTYPE_DRAW.
  */
-    ulong     follow_block_size;                  // 추가정보 길이.
+    ulong     follow_block_size;                  /* 추가정보 길이. */
     short     dummy1;                             // to not change structure size */
     short     dummy2;                             // to not change structure size */
     uchar     reserved1;
@@ -695,7 +696,7 @@ struct Picture: public FBox
 /**
  * It's for the Drawing object
  */
-    unsigned char *follow;                        // 그림종류가 drawing일때, 추가정보.
+    unsigned char *follow;                        /* 그림종류가 drawing일때, 추가정보. */
 
     bool ishyper;
 
@@ -871,7 +872,7 @@ struct ShowPageNum: public HBox
     virtual int Read(HWPFile &hwpf);
 };
 
-// 홀수쪽시작 (21)
+/* 홀수쪽시작 (21) */
 #define HIDE_HD         1                         /* bit 0 */
 #define HIDE_FT         2                         /* bit 1 */
 #define HIDE_PGNUM      4                         /* bit 2 */
@@ -1041,7 +1042,7 @@ class Outline: public HBox
 /**
  * decoration charactor for the level type
  */
-        hchar     deco[MAX_OUTLINE_LEVEL][2];     // 사용자 정의시 앞뒤 문자
+        hchar     deco[MAX_OUTLINE_LEVEL][2];     /* 사용자 정의시 앞뒤 문자 */
         hchar     dummy;
 
         Outline();
@@ -1050,7 +1051,7 @@ class Outline: public HBox
         hchar *GetUnicode(hchar *, int slen = 255);
 };
 
-// 묶음 빈칸(30)
+/* 묶음 빈칸(30) */
 /**
  * The Special space to be treated non-space when a string is
  * cut at the end of line
@@ -1065,7 +1066,7 @@ struct KeepSpace: public HBox
     virtual int Read(HWPFile &hwpf);
 };
 
-// 고정폭 빈칸(31)
+/* 고정폭 빈칸(31) */
 /**
  * @short Space with always same width not relation with fonts.
  */
