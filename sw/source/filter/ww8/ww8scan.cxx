@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:44:49 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,8 +175,10 @@ public:
                 if (!bBroken)
                 {
                     sError = rtl::OUString::createFromAscii(
-                        "WW8: Duplicate in list, almost certainly don't want that!\n"
-                        "(You will not see this message again unless you restart)\n"
+                        "WW8: Duplicate in list, almost certainly don't "
+                        "want that!\n"
+                        "(You will not see this message again unless you "
+                        "restart)\n"
                         "Extra entries are...\n");
                     bBroken=true;
                 }
@@ -198,7 +200,7 @@ public:
                 ++pIter;
         }
         if (bBroken)
-            DbgError(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+           DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
 #endif
     }
 
@@ -296,6 +298,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
         { 73, 3, L_FIX}, // "sprmCChse" chp.fChsDiff and chp.chse
         { 74, 0, L_VAR}, // "sprmCSymbol" chp.fSpec, chp.chSym and chp.ftcSym
         { 75, 1, L_FIX}, // "sprmCFOle2" chp.fOle2 1 or 0   bit
+        { 77, 0, L_VAR}, // unknown
         { 79, 0, L_VAR}, // unknown
         { 80, 2, L_FIX}, // "sprmCIstd" chp.istd istd, see stylesheet definition
         { 81, 0, L_VAR}, // "sprmCIstdPermute" chp.istd permutation vector
@@ -1197,7 +1200,7 @@ WW8_CP WW8PLCFx_PCD::AktPieceStartFc2Cp( WW8_FC nStartPos )
     void* pData;
     if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
-         ASSERT( !this, "AktPieceStartFc2Cp() - Fehler" );
+        ASSERT( !this, "AktPieceStartFc2Cp() - Fehler" );
         return LONG_MAX;
     }
     bool bIsUnicode = false;
@@ -2257,6 +2260,7 @@ void WW8PLCF::ReadPLCF( SvStream* pSt, long nFilePos, long nPLCF )
 
 void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN, long ncpN )
 {
+    ASSERT(!this, "Not a bug, but I (cmc) want to see this .doc as an example");
     ASSERT( nIMax < (long)ncpN, "Pcl.Fkp: Warum ist PLCF zu gross ?" );
     nIMax = ncpN;
     long nSiz = 6 * nIMax + 4;
@@ -2443,22 +2447,22 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
 
 WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
     long _nFilePos, long nItemSiz, ePLCFT ePl, WW8_FC nStartFc)
-    : nItemSize(nItemSiz), nFilePos(_nFilePos),  nIdx(0), ePLCF(ePl),
+    : nItemSize(nItemSiz), nFilePos(_nFilePos),  mnIdx(0), ePLCF(ePl),
     maSprmParser(nFibVer)
 {
     long nOldPos = pSt->Tell();
 
     pSt->Seek(nFilePos);
     pSt->Read(maRawData, 512);
-    nIMax = maRawData[511];
+    mnIMax = maRawData[511];
 
     sal_uInt8 *pStart = maRawData;
     // Pointer to Offset-Location in maRawData
-    sal_uInt8* pOfs = maRawData + (nIMax + 1) * 4;
+    sal_uInt8* pOfs = maRawData + (mnIMax + 1) * 4;
 
-    for (nIdx = 0; nIdx < nIMax; ++nIdx)
+    for (mnIdx = 0; mnIdx < mnIMax; ++mnIdx)
     {
-        USHORT nOfs = (*(pOfs + nIdx * nItemSize)) * 2;
+        unsigned int nOfs = (*(pOfs + mnIdx * nItemSize)) * 2;
         Entry aEntry(Get_Long(pStart));
 
         if (nOfs)
@@ -2517,7 +2521,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
     //for them to arive unsorted
     std::sort(maEntries.begin(), maEntries.end());
 
-    nIdx = 0;
+    mnIdx = 0;
 
     if (nStartFc >= 0)
         SeekPos(nStartFc);
@@ -2576,66 +2580,71 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::SeekPos(WW8_FC nFc)
 {
     if (nFc < maEntries[0].mnFC)
     {
-        nIdx = 0;
+        mnIdx = 0;
         return false;       // Nicht gefunden: nPos unterhalb kleinstem Eintrag
     }
+
     // Search from beginning?
-    if( (1 > nIdx) || (nFc < maEntries[nIdx-1].mnFC) )
-        nIdx = 1;
+    if ((1 > mnIdx) || (nFc < maEntries[mnIdx-1].mnFC))
+        mnIdx = 1;
 
-    long nI   = nIdx ? nIdx : 1;
-    long nEnd = nIMax;
+    sal_uInt8 nI   = mnIdx ? mnIdx : 1;
+    sal_uInt8 nEnd = mnIMax;
 
-    for(int n = (1==nIdx ? 1 : 2); n; --n )
+    for(sal_uInt8 n = (1==mnIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)
         {                               // Suchen mit um 1 erhoehtem Index
             if (nFc < maEntries[nI].mnFC)
             {                           // Position gefunden
-                nIdx = nI - 1;          // nI - 1 ist der richtige Index
+                mnIdx = nI - 1;          // nI - 1 ist der richtige Index
                 return true;            // ... und fertig
             }
         }
-        nI   = 1;
-        nEnd = nIdx-1;
+        nI = 1;
+        nEnd = mnIdx-1;
     }
-    nIdx = nIMax;               // Nicht gefunden, groesser als alle Eintraege
+    mnIdx = mnIMax;               // Nicht gefunden, groesser als alle Eintraege
     return false;
 }
 
-BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get( WW8_FC& rStart, WW8_FC& rEnd, long& rLen )
+BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::Get(WW8_FC& rStart, WW8_FC& rEnd, long& rLen)
     const
 {
     rLen = 0;
 
-    if( nIdx >= nIMax )
+    if (mnIdx >= mnIMax)
     {
         rStart = LONG_MAX;
         return 0;
     }
 
-    rStart = maEntries[nIdx].mnFC;
-    rEnd   = maEntries[nIdx + 1].mnFC;
+    rStart = maEntries[mnIdx].mnFC;
+    rEnd   = maEntries[mnIdx + 1].mnFC;
 
     BYTE* pSprms = GetLenAndIStdAndSprms( rLen );
     return pSprms;
 }
 
-void WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx( ULONG nI )
+bool WW8PLCFx_Fc_FKP::WW8Fkp::SetIdx(sal_uInt8 nI)
 {
-    if( nI < nIMax)
-        nIdx = (short)nI;
+    if (nI < mnIMax)
+    {
+        mnIdx = nI;
+        return true;
+    }
+    return false;
 }
 
 BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(long& rLen) const
 {
-    rLen = maEntries[nIdx].mnLen;
-    return maEntries[nIdx].mpData;
+    rLen = maEntries[mnIdx].mnLen;
+    return maEntries[mnIdx].mpData;
 }
 
 const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
 {
-    if( nIdx >= nIMax )
+    if (mnIdx >= mnIMax)
         return 0;
 
     long nLen;
@@ -2648,7 +2657,7 @@ const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
 bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
     std::vector<const BYTE *> &rResult)
 {
-    if (nIdx >= nIMax)
+    if (mnIdx >= mnIMax)
        return false;
 
     long nLen;
@@ -2820,8 +2829,11 @@ void WW8PLCFx_Fc_FKP::SetIdx( ULONG nIdx )
     {                                   //Es gab einen Fkp
         //Lese PLCF um 1 Pos zurueck, um die Adresse des Fkp wiederzubekommen
         pPLCF->SetIdx( ( nIdx >> 8 ) - 1 );
-        if ( NewFkp() )                     // und lese Fkp wieder ein
-            pFkp->SetIdx( nIdx & 0xff );    // Dann stelle Fkp-Pos wieder ein
+        if (NewFkp())                       // und lese Fkp wieder ein
+        {
+            sal_uInt8 nFkpIdx = static_cast<sal_uInt8>(nIdx & 0xff);
+            pFkp->SetIdx(nFkpIdx);          // Dann stelle Fkp-Pos wieder ein
+        }
     }
 }
 
@@ -4801,7 +4813,7 @@ bool WW8PLCFMan::HasCharSprm(USHORT nId,
 
 void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
 {
-     rSave.nPLCFxPos    = GetIdx();
+    rSave.nPLCFxPos    = GetIdx();
     rSave.nPLCFxPos2   = GetIdx2();
     rSave.nPLCFxMemOfs = 0;
     rSave.nStartFC     = GetStartFc();
@@ -5293,7 +5305,7 @@ WW8Fib::WW8Fib(BYTE nVer)
         nProduct = 0xc02d;
     }
 
-    lid = lidFE = 0x407;
+    lid = lidFE = 0x409;
 }
 
 bool WW8Fib::Write(SvStream& rStrm)
@@ -5818,6 +5830,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     if( rFib.lcbSttbfffn <= 2 )
     {
         ASSERT( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
+        pFontA = 0;
+        nMax = 0;
         return;
     }
 
@@ -6053,20 +6067,20 @@ void WW8PLCF_HdFt::UpdateIndex( BYTE grpfIhdt )
 
 WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
 {
-    BYTE* pDataPtr = new BYTE[ 600 ];
+    memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
+    fDontUseHTMLAutoSpacing = true; //default
+    const int nMaxDopSize = 0x268;
+    BYTE* pDataPtr = new BYTE[ nMaxDopSize ];
     BYTE* pData = pDataPtr;
 
-    UINT32 nRead = 600 < nSize ? 600 : nSize;
+    UINT32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
     rSt.Seek( nPos );
-    if( 2 > nSize || nRead != rSt.Read( pData, nRead ))
-    {
-        memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
+    if (2 > nSize || nRead != rSt.Read(pData, nRead))
         nDopError = ERR_SWG_READ_ERROR;     // Error melden
-    }
     else
     {
-        if( 600 > nRead )
-            memset( pData + nRead, 0, 600 - nRead );
+        if (nMaxDopSize > nRead)
+            memset( pData + nRead, 0, nMaxDopSize - nRead );
 
         // dann mal die Daten auswerten
         UINT32 a32Bit;
@@ -6229,7 +6243,7 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
             hpsZoonFontPag = Get_Short( pData );
             dywDispPag = Get_Short( pData );
 
-            if (nRead >= 512)
+            if (nRead >= 516)
             {
                 //500 -> 508, Appear to be repeated here in 2000+
                 pData += 8;
@@ -6237,6 +6251,12 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
                 SetCompatabilityOptions(a32Bit);
                 a32Bit = Get_Long( pData );
                 fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
+            }
+            if (nRead >= 600)
+            {
+                pData += 82;
+                a16Bit = Get_Short(pData);
+                fUseBackGroundInAllmodes = (a16Bit & 0x0080) >> 7;
             }
         }
     }
@@ -6343,12 +6363,13 @@ UINT32 WW8Dop::GetCompatabilityOptions() const
 
 bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
 {
-    INT32 nLen = 8 == rFib.nVersion ? 0x220 : 84;
+    const int nMaxDopLen = 600;
+    INT32 nLen = 8 == rFib.nVersion ? nMaxDopLen : 84;
     rFib.fcDop =  rStrm.Tell();
     rFib.lcbDop = nLen;
 
-    BYTE aData[ 0x220 ];
-    memset( aData, 0, 0x220 );
+    BYTE aData[ nMaxDopLen ];
+    memset( aData, 0, nMaxDopLen );
     BYTE* pData = aData;
 
     // dann mal die Daten auswerten
@@ -6523,6 +6544,9 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         if (fDontUseHTMLAutoSpacing)
             a32Bit |= 0x0004;
         Set_UInt32(pData, a32Bit);
+        pData += 82;
+        a16Bit = 0x80;
+        Set_UInt16(pData, a16Bit);
     }
     rStrm.Write( aData, nLen );
     return 0 == rStrm.GetError();
