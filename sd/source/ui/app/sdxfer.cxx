@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-29 08:27:08 $
+ *  last change: $Author: ka $ $Date: 2001-08-29 12:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,4 +637,15 @@ void SdTransferable::UpdatePageView()
         if( pPage )
             ( (SdrMarkView*) pSdViewIntern )->MarkAll( (SdrPageView*) pSdViewIntern->ShowPage( pPage, Point() ) );
     }
+}
+
+// -----------------------------------------------------------------------------
+
+SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >& rxData ) throw()
+{
+    Reference< ::com::sun::star::lang::XUnoTunnel > xUnoTunnel( rxData, UNO_QUERY );
+
+    return( xUnoTunnel.is() ?
+            ( (SdTransferable*)(void*) xUnoTunnel->getSomething( SdTransferable::getUnoTunnelId() ) ) :
+            NULL );
 }

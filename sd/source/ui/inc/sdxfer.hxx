@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-29 08:25:36 $
+ *  last change: $Author: ka $ $Date: 2001-08-29 12:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,10 @@ public:
     BOOL                            IsInternalMove() const { return bInternalMove; }
 
     BOOL                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( pSourceDoc == pDoc ); }
+
+public:
+
+    static SdTransferable*          getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 };
 
 #endif // _SD_SDXFER_HXX
