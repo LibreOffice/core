@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleSelection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-17 15:13:45 $
+ *  last change:$Date: 2003-03-18 14:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,12 +161,20 @@ public class _XAccessibleSelection extends MultiMethodTest {
             res &= true;
         }
 
-        if (childCount > 0) {
+        log.println("ChildCount: "+childCount);
+        int usedChilds = childCount;
+
+        if (childCount > 500) {
+            log.println("Restricting to 500");
+            usedChilds = 500;
+        }
+
+        if (usedChilds > 0) {
             try {
-                for (int i=0;i<childCount;i++) {
+                for (int i=0;i<usedChilds;i++) {
                     log.println("Trying to select child with index " + (i));
                     if (isSelectable(tEnv.getTestObject(),i)) {
-                        oObj.selectAccessibleChild(childCount - 1);
+                        oObj.selectAccessibleChild(i);
                         log.println("OK");
                     } else log.println("Child isn't selectable");
                 }
