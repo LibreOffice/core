@@ -1,0 +1,259 @@
+// so_activex.cpp : Implementation of DLL Exports.
+
+
+// Note: Proxy/Stub Information
+//      To build a separate proxy/stub DLL,
+//      run nmake -f so_activexps.mk in the project directory.
+
+#include "stdio.h"
+#include "stdafx2.h"
+#include "resource.h"
+#include <initguid.h>
+#include "so_activex.h"
+
+#include "so_activex_i.c"
+#include "SOActiveX.h"
+
+
+CComModule _Module;
+
+BEGIN_OBJECT_MAP(ObjectMap)
+OBJECT_ENTRY(CLSID_SOActiveX, CSOActiveX)
+END_OBJECT_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// DLL Entry Point
+
+extern "C"
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+{
+    if (dwReason == DLL_PROCESS_ATTACH)
+    {
+        _Module.Init(ObjectMap, hInstance, &LIBID_SO_ACTIVEXLib);
+        DisableThreadLibraryCalls(hInstance);
+    }
+    else if (dwReason == DLL_PROCESS_DETACH)
+        _Module.Term();
+    return TRUE;    // ok
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Used to determine whether the DLL can be unloaded by OLE
+
+STDAPI DllCanUnloadNow(void)
+{
+    return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Returns a class factory to create an object of the requested type
+
+STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
+{
+    return _Module.GetClassObject(rclsid, riid, ppv);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// DllRegisterServer - Adds entries to the system registry
+
+#define SUPPORTED_EXT_NUM 17
+const char* aFileExt[] = { ".sds", ".sda", ".sdd", ".sdc", ".vor", ".sdw", ".rvp",
+                           ".sxw", ".sxc", ".sxi", ".sxd", ".sxs",
+                           ".stw", ".stc", ".sti", ".std", ".sts" };
+const char* aMimeType[] = { "application/vnd.stardivision.chart",
+                          "application/vnd.stardivision.draw",
+                          "application/vnd.stardivision.impress",
+                          "application/vnd.stardivision.calc",
+                          "application/vnd.sun.office.template",
+                          "application/vnd.staroffice.writer",
+                          "application/vnd.sun.rvp",
+
+                          "application/vnd.sun.xml.writer",
+                          "application/vnd.sun.xml.calc",
+                          "application/vnd.sun.xml.impress",
+                          "application/vnd.sun.xml.draw",
+                          "application/vnd.sun.xml.chart",
+
+                          "application/vnd.sun.xml.writer.template",
+                          "application/vnd.sun.xml.calc.template",
+                          "application/vnd.sun.xml.impress.template",
+                          "application/vnd.sun.xml.draw.template",
+                          "application/vnd.sun.xml.chart.template" };
+
+const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
+const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
+const char* aLocalPrefix = "Software\\Classes\\";
+
+BOOL createKey( HKEY hkey,
+                const char* aKeyToCreate,
+                const char* aValue = NULL,
+                const char* aChildName = NULL,
+                const char* aChildValue = NULL )
+{
+    HKEY hkey1;
+
+    return ( ERROR_SUCCESS == RegCreateKey( hkey, aKeyToCreate, &hkey1 )
+           && ( !aValue || ERROR_SUCCESS == RegSetValueEx( hkey1,
+                                                              "",
+                                                           0,
+                                                           REG_SZ,
+                                                           (const BYTE*)aValue,
+                                                           strlen( aValue ) ) )
+           && ( !aChildName || ERROR_SUCCESS == RegSetValueEx( hkey1,
+                                                                  aChildName,
+                                                               0,
+                                                               REG_SZ,
+                                                               (const BYTE*)aChildValue,
+                                                               strlen( aChildValue ) ) )
+           && ERROR_SUCCESS == RegCloseKey( hkey1 ) );
+
+}
+
+STDAPI DllRegisterServer(void)
+{
+    BOOL aResult = SUCCEEDED( _Module.RegisterServer(TRUE) );
+
+    HKEY        hkey = NULL;
+    HKEY        hkey1 = NULL;
+    HKEY        hkey2 = NULL;
+    HKEY        hkey3 = NULL;
+    HKEY        hkey4 = NULL;
+    char        aSubKey[513];
+    int         ind;
+    BOOL        localEnv = FALSE;
+    const char* aPrefix = "";
+
+
+    if( !aResult )
+    {
+        aPrefix  = aLocalPrefix;
+        localEnv = TRUE;
+
+        // get iervp.dll path
+        char aActiveXPath[1019];
+        char aActiveXPath101[1024];
+
+
+        HMODULE aCurModule = GetModuleHandleA( "iervp.dll" );
+        if( aCurModule && GetModuleFileNameA( aCurModule, aActiveXPath, 1019 ) )
+        {
+            sprintf( aActiveXPath101, "%s, 101", aActiveXPath );
+
+            if( aActiveXPath )
+            {
+                wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
+                aResult =
+                    ( ERROR_SUCCESS == RegCreateKey( HKEY_CURRENT_USER, aSubKey, &hkey )
+                          && ERROR_SUCCESS == RegSetValueEx( hkey, "", 0, REG_SZ, (const BYTE*)"SOActiveX Class", 17 )
+                        && createKey( hkey, "Control" )
+                        && createKey( hkey, "EnableFullPage" )
+                        && createKey( hkey, "InprocServer32", aActiveXPath, "ThreadingModel", "Apartment" )
+                        && createKey( hkey, "MiscStatus", "0" )
+                        && createKey( hkey, "MiscStatus\\1", "131473" )
+                        && createKey( hkey, "ProgID", "so_activex.SOActiveX.1" )
+                        && createKey( hkey, "Programmable" )
+                        && createKey( hkey, "ToolboxBitmap32", aActiveXPath101 )
+                        && createKey( hkey, "TypeLib", aTypeLib )
+                        && createKey( hkey, "Version", "1.0" )
+                        && createKey( hkey, "VersionIndependentProgID", "so_activex.SOActiveX" )
+                    && ERROR_SUCCESS == RegCloseKey( hkey )
+                      && ERROR_SUCCESS == RegCreateKey( HKEY_CURRENT_USER, aLocalPrefix, &hkey )
+                        && createKey( hkey, "so_activex.SOActiveX", "SOActiveX Class" )
+                          && ERROR_SUCCESS == RegCreateKey( hkey, "so_activex.SOActiveX", &hkey1 )
+                            && createKey( hkey1, "CLSID", aClassID )
+                            && createKey( hkey1, "CurVer", "so_activex.SOActiveX.1" )
+                          && ERROR_SUCCESS == RegCloseKey( hkey1 )
+                        && createKey( hkey, "so_activex.SOActiveX.1", "SOActiveX Class" )
+                          && ERROR_SUCCESS == RegCreateKey( hkey, "so_activex.SOActiveX.1", &hkey1 )
+                            && createKey( hkey1, "CLSID", aClassID )
+                          && ERROR_SUCCESS == RegCloseKey( hkey1 )
+                      && ERROR_SUCCESS == RegCloseKey( hkey ) );
+            }
+        }
+    }
+
+    for( ind = 0; ind < SUPPORTED_EXT_NUM && aResult; ind++ )
+    {
+        wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s", aPrefix, aMimeType[ind] );
+        if ( ERROR_SUCCESS != RegCreateKey(localEnv ? HKEY_CURRENT_USER : HKEY_CLASSES_ROOT, aSubKey, &hkey)
+          || ERROR_SUCCESS != RegSetValueEx(hkey, "Extension", 0, REG_SZ,
+             (const BYTE *)aFileExt[ind], strlen( aFileExt[ind] ) )
+          || ERROR_SUCCESS != RegSetValueEx(hkey, "CLSID", 0, REG_SZ,
+             (const BYTE *)aClassID, strlen(aClassID)) )
+                aResult = FALSE;
+
+        if( hkey )
+            RegCloseKey(hkey);
+
+        wsprintf( aSubKey, "%s%s", aPrefix, aFileExt[ind] );
+        if ( ERROR_SUCCESS != RegCreateKey(localEnv ? HKEY_CURRENT_USER : HKEY_CLASSES_ROOT, aSubKey, &hkey)
+          || ERROR_SUCCESS != RegSetValueEx(hkey, "Content Type", 0, REG_SZ,
+             (const BYTE *)aMimeType[ind], strlen( aMimeType[ind] ) ) )
+                aResult = FALSE;
+
+        if( hkey )
+            RegCloseKey(hkey);
+    }
+
+
+    wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
+    if ( aResult && ERROR_SUCCESS == RegOpenKey(localEnv ? HKEY_CURRENT_USER : HKEY_CLASSES_ROOT, aSubKey, &hkey) )
+    {
+        for( ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
+        {
+            wsprintf( aSubKey, "EnableFullPage\\%s", aFileExt[ind] );
+            if ( ERROR_SUCCESS != RegCreateKey( hkey, aSubKey, &hkey1 ) )
+                aResult = FALSE;
+
+            if ( hkey1 )
+                RegCloseKey(hkey1);
+         }
+    }
+    else
+        aResult = FALSE;
+
+    if ( hkey )
+        RegCloseKey(hkey);
+
+    return aResult;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// DllUnregisterServer - Removes entries from the system registry
+
+STDAPI DllUnregisterServer(void)
+{
+    HRESULT aResult = _Module.UnregisterServer(TRUE);
+
+    HKEY        hkey = NULL;
+    BOOL        fErr = FALSE;
+    char        aSubKey[513];
+    HKEY        aIter[2] = { HKEY_CLASSES_ROOT, HKEY_CURRENT_USER };
+    const char* aPrefix = "";
+
+    for( int keyInd = 0; keyInd < 2; keyInd++, aPrefix=aLocalPrefix )
+    {
+          for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
+        {
+            wsprintf( aSubKey, "%sMIME\\DataBase\\Content Type\\%s\\CLSID", aPrefix, aMimeType[ind] );
+            if( ERROR_SUCCESS != SHDeleteKey( HKEY_CLASSES_ROOT, aSubKey ) )
+                fErr = TRUE;
+        }
+
+        wsprintf( aSubKey, "%sCLSID\\%s", aPrefix, aClassID );
+        if( ERROR_SUCCESS != SHDeleteKey( HKEY_CLASSES_ROOT, aSubKey ) )
+            fErr = TRUE;
+
+        wsprintf( aSubKey, "%sso_activex.SOActiveX", aPrefix, aClassID );
+        if( ERROR_SUCCESS != SHDeleteKey( HKEY_CLASSES_ROOT, aSubKey ) )
+            fErr = TRUE;
+
+        wsprintf( aSubKey, "%sso_activex.SOActiveX.1", aPrefix, aClassID );
+        if( ERROR_SUCCESS != SHDeleteKey( HKEY_CLASSES_ROOT, aSubKey ) )
+            fErr = TRUE;
+
+    }
+
+    return aResult;
+}
+
