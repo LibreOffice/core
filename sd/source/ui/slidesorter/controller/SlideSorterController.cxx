@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-01 08:36:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
+#include "view/SlsFontProvider.hxx"
 #include "cache/SlsPageCache.hxx"
 // other
 #include "drawdoc.hxx"
@@ -159,6 +160,7 @@ SlideSorterController::SlideSorterController (
       maSelectionBeforeSwitch(),
       mnCurrentPageBeforeSwitch(0),
       mpEditModeChangeMasterPage(NULL),
+      maTotalWindowArea(),
       mbIsMakeSelectionVisiblePending(false)
 {
     OSL_ASSERT(pFrame!=NULL);
@@ -506,7 +508,11 @@ void SlideSorterController::PostModelChange (void)
 
         pWindow->SetViewOrigin (Point (0,0));
         pWindow->SetViewSize (mrView.GetModelArea().GetSize());
-        GetScrollBarManager().UpdateScrollBars (true);
+
+        // The visibility of the scroll bars may have to be changed.  Then
+        // the size of the view has to change, too.  Let Rearrange() handle
+        // that.
+        Rearrange();
     }
 
     mpPageSelector->HandleModelChange ();
@@ -519,19 +525,27 @@ void SlideSorterController::PostModelChange (void)
 
 void SlideSorterController::HandleModelChange (void)
 {
-    if (mnModelChangeLockCount == 0)
+    // Ignore this call when the document is not in a valid state, i.e. has
+    // not the same number of regular and notes pages.
+    bool bIsDocumentValid = (GetModel().GetDocument()->GetPageCount() % 2 == 1);
+
+
+    if (bIsDocumentValid)
     {
-        PreModelChange();
-        PostModelChange();
-    }
-    else
-        // Call PreModelChange when not already done.
-        if ( ! mbPostModelChangePending)
+        if (mnModelChangeLockCount == 0)
         {
             PreModelChange();
-            // The PostModelChange() call will be made when the model change
-            // is unlocked again.
+            PostModelChange();
         }
+        else
+            // Call PreModelChange when not already done.
+            if ( ! mbPostModelChangePending)
+            {
+                PreModelChange();
+                // The PostModelChange() call will be made when the model change
+                // is unlocked again.
+            }
+    }
 }
 
 
@@ -580,17 +594,16 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
         else if (pWindow == rShell.GetActiveWindow())
         {
-            switch (pEvent->GetId())
-            {
-                case VCLEVENT_WINDOW_SHOW:
-                case VCLEVENT_WINDOW_RESIZE:
-                    //                    SelectionHasChanged(true);
-                    break;
-            }
+        }
+        else if (pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED)
+        {
+            // When the system font has changed a layout has to be done.
+            mrView.Resize();
+            FontProvider::Instance().Invalidate();
         }
         else
         {
-            DBG_ASSERT(FALSE, "SlideSorter: received event from unknown window");
+            //            DBG_ASSERT(FALSE, "SlideSorter: received event from unknown window");
         }
     }
 
@@ -1016,27 +1029,46 @@ void SlideSorterController::MakeRectangleVisible (const Rectangle& rBox)
 
 Rectangle SlideSorterController::Resize (const Rectangle& rAvailableSpace)
 {
-    Rectangle aWindowArea;
-    Rectangle aAvailableSpace (rAvailableSpace);
+    Rectangle aContentArea (rAvailableSpace);
+
+    if (maTotalWindowArea != rAvailableSpace)
+    {
+        maTotalWindowArea = rAvailableSpace;
+        aContentArea = Rearrange();
+    }
+
+    return aContentArea;
+}
+
+
+
+
+Rectangle  SlideSorterController::Rearrange (void)
+{
+    Rectangle aNewContentArea (maTotalWindowArea);
 
     ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
     if (pWindow != NULL)
     {
         // Place the scroll bars.
-        aWindowArea = GetScrollBarManager().PlaceScrollBars (rAvailableSpace);
+        aNewContentArea = GetScrollBarManager().PlaceScrollBars(maTotalWindowArea);
 
-        // The browser window gets the remaining space.
-        pWindow->SetPosSizePixel (
-            aWindowArea.TopLeft(),
-            aWindowArea.GetSize());
-        mrView.Resize();
+        Rectangle aCurrentContentArea (
+            pWindow->GetPosPixel(),
+            pWindow->GetOutputSizePixel());
+        if (aNewContentArea != aCurrentContentArea)
+        {
+            // The browser window gets the remaining space.
+            pWindow->SetPosSizePixel (aNewContentArea.TopLeft(), aNewContentArea.GetSize());
+            mrView.Resize();
+        }
 
         // Adapt the scroll bars to the new zoom factor of the browser
         // window and the arrangement of the page objects.
-        GetScrollBarManager().UpdateScrollBars ();
+        GetScrollBarManager().UpdateScrollBars();
     }
 
-    return aWindowArea;
+    return aNewContentArea;
 }
 
 
