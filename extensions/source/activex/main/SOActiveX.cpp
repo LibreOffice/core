@@ -513,11 +513,12 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
 
 HRESULT CSOActiveX::LoadURLToFrame( )
 {
-    CComVariant aArgNames[2] = { L"ReadOnly", L"ViewOnly" };
-    CComVariant aArgVals[2];
+    CComVariant aArgNames[3] = { L"ReadOnly", L"ViewOnly", L"AsTemplate" };
+    CComVariant aArgVals[3];
     aArgVals[0].vt = VT_BOOL; aArgVals[0].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
     aArgVals[1].vt = VT_BOOL; aArgVals[1].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
-    HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, 2 );
+    aArgVals[2].vt = VT_BOOL; aArgVals[2].boolVal = VARIANT_FALSE;
+    HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, 3 );
     if( !SUCCEEDED( hr ) ) return hr;
 
     CComVariant aBarName( L"MenuBarVisible" );
