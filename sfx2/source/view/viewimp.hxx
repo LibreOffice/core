@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 15:59:24 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #endif
 #include "viewsh.hxx"
 
+#include <osl/mutex.hxx>
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
+
 // forward ---------------------------------------------------------------
 
 class SfxFrameSetDescriptor;
@@ -96,6 +101,8 @@ SV_DECL_PTRARR( SfxOffDispArr_Impl, SfxOffDispPtr_Impl, 4, 4 );
 
 struct SfxViewShell_Impl
 {
+    ::osl::Mutex               aMutex;
+    ::cppu::OInterfaceContainerHelper aInterceptorContainer;
     BOOL                        bControllerSet;
     SfxShellArr_Impl            aArr;
     ModelessDialogPtrArr_Impl   aDialogArr;
@@ -119,6 +126,10 @@ struct SfxViewShell_Impl
     SfxAcceleratorManager*      pAccel;
     USHORT                      nFamily;
     SfxBaseController*          pController;
+
+                                SfxViewShell_Impl()
+                                  : aInterceptorContainer( aMutex )
+                                {}
 };
 
 

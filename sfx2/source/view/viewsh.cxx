@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 11:14:16 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include <svtools/javaoptions.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
+#include <framework/actiontriggerhelper.hxx>
 
 #pragma hdrstop
 
@@ -1839,3 +1840,72 @@ void SfxViewShell::RemoveModelessDialog( USHORT nSlotId )
     }
 }
 
+void SfxViewShell::AddContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+{
+    pImp->aInterceptorContainer.addInterface( xInterceptor );
+}
+
+void SfxViewShell::RemoveContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTMENUINTERCEPTOR >& xInterceptor )
+{
+    pImp->aInterceptorContainer.removeInterface( xInterceptor );
+}
+
+::cppu::OInterfaceContainerHelper& SfxViewShell::GetContextMenuInterceptors() const
+{
+    return pImp->aInterceptorContainer;
+}
+
+BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent )
+{
+    rpOut = NULL;
+    BOOL bModified = FALSE;
+
+    // create container from menu
+    aEvent.ActionTriggerContainer = ::framework::ActionTriggerHelper::CreateActionTriggerContainerFromMenu( &rIn );
+
+    // get selection from controller
+    aEvent.Selection = ::com::sun::star::uno::Reference < ::com::sun::star::view::XSelectionSupplier > ( GetController(), ::com::sun::star::uno::UNO_QUERY );
+
+    // call interceptors
+    ::cppu::OInterfaceIteratorHelper aIt( pImp->aInterceptorContainer );
+    while( aIt.hasMoreElements() )
+    {
+        ::com::sun::star::ui::ContextMenuInterceptorAction eAction =
+            ((::com::sun::star::ui::XContextMenuInterceptor*)aIt.next())->notifyContextMenuExecute( aEvent );
+        switch ( eAction )
+        {
+            case ::com::sun::star::ui::ContextMenuInterceptorAction_CANCELLED :
+                // interceptor does not want execution
+                return FALSE;
+                break;
+            case ::com::sun::star::ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED :
+                // interceptor wants his modified menu to be executed
+                bModified = TRUE;
+                break;
+            case ::com::sun::star::ui::ContextMenuInterceptorAction_CONTINUE_MODIFIED :
+                // interceptor has modified menu, but allows for calling other interceptors
+                bModified = TRUE;
+                continue;
+                break;
+            case ::com::sun::star::ui::ContextMenuInterceptorAction_IGNORED :
+                // interceptor is indifferent
+                continue;
+                break;
+            default:
+                DBG_ERROR("Wrong return value of ContextMenuInterceptor!");
+                continue;
+                break;
+        }
+
+        break;
+    }
+
+    if ( bModified )
+    {
+        // container was modified, create a new window out of it
+        rpOut = new PopupMenu;
+        ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer( rpOut, aEvent.ActionTriggerContainer );
+    }
+
+    return TRUE;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:48:17 $
+ *  last change: $Author: mba $ $Date: 2001-12-07 14:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                                static_cast< XCONTROLLER*        > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
                                             static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ,
-  //                                          static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
+                                            static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
                                                static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
 
     // If searched interface supported by this class ...
@@ -482,7 +482,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
-//                                                    ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
+                                                    ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER  >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
             // ... and set his address to static pointer!
