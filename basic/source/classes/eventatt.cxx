@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 09:11:11 $
+ *  last change: $Author: ab $ $Date: 2001-06-13 10:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,51 +524,36 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     if( !xMSF.is() )
         return;
 
-    // We need at least 2 parameters
-    if ( rPar.Count() < 3 )
+    // We need at least 1 parameter
+    if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Get library
+    // Get dialog
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
     if( !(pObj && pObj->ISA(SbUnoObject)) )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
-    TypeClass eType = aAny.getValueType().getTypeClass();
+    Any aAnyISP = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+    TypeClass eType = aAnyISP.getValueType().getTypeClass();
+
     if( eType != TypeClass_INTERFACE )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Get XNameAccess from any
-    Reference< XNameAccess > xNameAccess;
-    aAny >>= xNameAccess;
-    if( !xNameAccess.is() )
-    {
-        StarBASIC::Error( SbERR_BAD_ARGUMENT );
-        return;
-    }
-
-    // Get dialog name
-    String aDialogName = rPar.Get( 2 )->GetString();
-
     // Create new uno dialog
     Reference< XNameContainer > xDialogModel( xMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
             UNO_QUERY );
 
-    // Get dialog data
-    if( !xNameAccess->hasByName( aDialogName ) )
-        return;
-    Any aElement = xNameAccess->getByName( aDialogName );
     Reference< XInputStreamProvider > xISP;
-    aElement >>= xISP;
+    aAnyISP >>= xISP;
     if( !xISP.is() )
         return;
 
