@@ -41,6 +41,7 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean	\
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean/SimpleBean	\
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean/OfficeWriterBean	\
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent   \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet   \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector   \
     $(DESTDIRBASICEXAMPLES)		 	\
@@ -61,7 +62,6 @@ CPP_OFFICECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclient.cxx 		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclientsample.xml	\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/README           		\
-    $(DESTDIRCPPEXAMPLES)$/officeclient$/makefile.mk      		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp
 
@@ -85,20 +85,17 @@ CPP_GENERICXMLFILTER= \
 
 JAVA_DRAW= \
     $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
-    $(DESTDIRJAVAEXAMPLES)$/draw$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/Makefile	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/draw$/README
 
 JAVA_CALC= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/SCalc.java		   	\
     $(DESTDIRJAVAEXAMPLES)$/calc$/EuroAdaption.java		\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/README
 
 JAVA_CALC_CHARTTYPECHANGE= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.java		   	\
-    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/Makefile	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/README
 
@@ -110,14 +107,12 @@ JAVA_WRITER= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/BookmarkInsertion.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/HardFormatting.java 	\
     $(DESTDIRJAVAEXAMPLES)$/writer$/StyleCreation.java  	\
-    $(DESTDIRJAVAEXAMPLES)$/writer$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/writer$/Makefile			\
     $(DESTDIRJAVAEXAMPLES)$/writer$/README
 
 JAVA_CAR= \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Car.java \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/Car$/makefile.mk \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Manifest \
     $(DESTDIRJAVAEXAMPLES)$/Car$/Test.java \
     $(DESTDIRJAVAEXAMPLES)$/Car$/XAccelerationControl.idl \
@@ -128,7 +123,6 @@ JAVA_CALCADDINS= \
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.html		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/makefile.mk			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Manifest			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/README			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl
@@ -136,7 +130,6 @@ JAVA_CALCADDINS= \
 JAVA_DEMOCOMP= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/makefile.mk		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/manifest		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/README		\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
@@ -147,37 +140,31 @@ JAVA_CONVERTERSERVLET= \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.java	\
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/makefile.mk      \
     $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/README
 
 JAVA_DOCUMENTCONVERTER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/DocumentConverter.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/makefile.mk      \
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/README
 
 JAVA_DOCUMENTLOADER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/DocumentLoader.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/makefile.mk     \
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader$/README
 
 JAVA_DOCUMENTPRINTER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/DocumentPrinter.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/Makefile		\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/makefile.mk    \
     $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter$/README
 
 JAVA_DOCUMENTSAVER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/DocumentSaver.java	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/Makefile			\
-    $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/makefile.mk      \
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver$/README
 
 JAVA_GRAPHICSINSERTER= \
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/GraphicsInserter.java	\
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/Makefile	\
-    $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/makefile.mk	\
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/OpenOfficeLogo.gif	\
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter$/README
 
@@ -188,7 +175,6 @@ JAVA_INSPECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InspectorThumbnail.jpg \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/InstanceInspector.java \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/Inspector$/makefile.mk \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Manifest \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/Test.java \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl \
@@ -197,7 +183,6 @@ JAVA_INSPECTOR= \
 JAVA_NOTESACCESS= \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/NotesAccess.java \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/makefile.mk \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Stocks.nsf \
     $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/README
 
@@ -207,13 +192,11 @@ JAVA_TODO= \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.sxc  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.xml  \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/XToDo.idl  \
-    $(DESTDIRJAVAEXAMPLES)$/ToDo$/makefile.mk \
     $(DESTDIRJAVAEXAMPLES)$/ToDo$/Manifest
 
 JAVA_WRITERSELECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/WriterSelector.java \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/Makefile \
-    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/makefile.mk \
     $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/README
 
 JAVA_OFFICEBEAN_SIMPLEBEAN= \
@@ -240,6 +223,16 @@ JAVA_OFFICEBEAN_HELPERBEANS= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono32.jpg \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/OfficeIconMono16.jpg \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/BasicOfficeBean.java
+
+JAVA_MINIMALCOMPONENT= \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/BuildMinimalComponent.xml \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.idl \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.java\
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/MinimalComponent.xml \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/TestMinimalComponent.java\
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/README   \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/Manifest \
+    $(DESTDIRJAVAEXAMPLES)$/MinimalComponent$/Makefile
 
 JAVA_PROPERTYSET= \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropTest.java \
@@ -304,6 +297,7 @@ EXAMPLESLIST= \
     $(JAVA_OFFICEBEAN_SIMPLEBEAN)  \
     $(JAVA_OFFICEBEAN_OFFICEWRITERBEAN)  \
     $(JAVA_OFFICEBEAN_HELPERBEANS)  \
+    $(JAVA_MINIMALCOMPONENT) \
     $(JAVA_PROPERTYSET)  \
     $(BASIC_EXAMPLES)              \
     $(OLE_EXAMPLES)                \
