@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:59:21 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ private:
     RadioButton                         maRbLosslessCompression;
     RadioButton                         maRbJPEGCompression;
     FixedText                           maFtQuality;
-    NumericField                        maNfQuality;
+    MetricField                         maNfQuality;
     CheckBox                            maCbReduceImageResolution;
     FixedText                           maFtReduceImageResolution;
     ComboBox                            maCoReduceImageResolution;
