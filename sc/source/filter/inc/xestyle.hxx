@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:45:54 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,6 @@ public:
     /** Returns always false to never find this font while searching the font list. */
     virtual bool        Equals( const XclExpFontData& rFontData, sal_uInt32 nHash ) const;
 
-private:
     /** Skips writing this record. */
     virtual void        Save( XclExpStream& rStrm );
 };
@@ -379,16 +378,27 @@ public:
         @return  The resulting Excel font index. */
     sal_uInt16          Insert( const SvxFont& rFont, bool bAppFont = false );
     /** Inserts the font contained in the passed item set into the buffer, if not present.
+        @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const SfxItemSet& rItemSet, bool bAppFont = false );
+    sal_uInt16          Insert( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bAppFont = false );
     /** Inserts the font contained in rPattern into the buffer if not present.
+        @param nScript  The script type of the font properties to be used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const ScPatternAttr& rPattern, bool bAppFont = false );
+    sal_uInt16          Insert( const ScPatternAttr& rPattern, sal_Int16 nScript, bool bAppFont = false );
 
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
+
+    /** Returns the script type of the first font item found in the item set and its parents. */
+    static sal_Int16    GetFirstUsedScript( const SfxItemSet& rItemSet );
+
+    /** Returns a VCL font object filled from the passed item set. */
+    static Font         GetFontFromItemSet( const SfxItemSet& rItemSet, sal_Int16 nScript );
+    /** Returns true, if at least one font related item is set in the passed item set.
+        @param bDeep  true = Searches in parent item sets too. */
+    static bool         CheckItems( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep );
 
 private:
     /** Initializes the default fonts for the current BIFF version. */
@@ -602,6 +612,7 @@ public:
     explicit            XclExpXF(
                             const XclExpRoot& rRoot,
                             const ScPatternAttr& rPattern,
+                            sal_Int16 nScript,
                             ULONG nScForceNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
                             sal_uInt16 nForceXclFont = EXC_FONT_NOTFOUND,
                             bool bForceLineBreak = false );
@@ -650,6 +661,7 @@ private:
         @param bDefStyle  true = This is the "Default"/"Normal" style - needs special handling. */
     void                Init(
                             const SfxItemSet& rItemSet,
+                            sal_Int16 nScript,
                             ULONG nForceScNumFmt,
                             sal_uInt16 nForceXclFont,
                             bool bForceLineBreak,
@@ -749,7 +761,7 @@ public:
 
     /** Finds or creates a cell XF record for the passed item set.
         @return  A unique XF record ID. */
-    sal_uInt32          Insert( const ScPatternAttr* pPattern );
+    sal_uInt32          Insert( const ScPatternAttr* pPattern, sal_Int16 nScript );
     /** Finds or creates a cell XF record for the passed item set.
         @param nForceXclFont  The font to be exported. If not equal to EXC_FONT_NOTFOUND,
             this font index will be used unconditionally and the cell font will be ignored.
@@ -757,7 +769,7 @@ public:
             This is required for cells that contain multi-line text.
         @return  A unique XF record ID. */
     sal_uInt32          InsertWithFont(
-                            const ScPatternAttr* pPattern,
+                            const ScPatternAttr* pPattern, sal_Int16 nScript,
                             sal_uInt16 nForceXclFont,
                             bool bForceLineBreak );
     /** Finds or creates a cell XF record for the passed item set, with custom number format.
@@ -766,7 +778,7 @@ public:
             result type. This format will always overwrite the cell's number format.
         @return  A unique XF record ID. */
     sal_uInt32          InsertWithNumFmt(
-                            const ScPatternAttr* pPattern,
+                            const ScPatternAttr* pPattern, sal_Int16 nScript,
                             ULONG nForceScNumFmt );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  A unique XF record ID. */
@@ -803,7 +815,8 @@ private:
 
     /** Tries to find the XF record containing the passed format or inserts a new record.
         @return  The XF record ID. */
-    sal_uInt32          InsertCellXF( const ScPatternAttr* pPattern, ULONG nForceScNumFmt,
+    sal_uInt32          InsertCellXF( const ScPatternAttr* pPattern, sal_Int16 nScript,
+                            ULONG nForceScNumFmt,
                             sal_uInt16 nForceXclFont, bool bForceLineBreak );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  The XF record ID. */
