@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:55:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,10 +215,10 @@ void OInterfaceIteratorHelper::remove() SAL_THROW( () )
 
 
 OInterfaceContainerHelper::OInterfaceContainerHelper( Mutex & rMutex_ ) SAL_THROW( () )
-    : rMutex( rMutex_ )
+    : pData( 0 )
+    , rMutex( rMutex_ )
     , bInUse( sal_False )
     , bIsList( sal_False )
-    , pData( 0 )
 {
 }
 
@@ -442,7 +442,8 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
     t_type2ptr::size_type nSize;
 
     ::osl::MutexGuard aGuard( rMutex );
-    if( nSize = pMap->size() )
+    nSize = pMap->size();
+    if( nSize )
     {
         ::com::sun::star::uno::Sequence< Type > aInterfaceTypes( nSize );
         Type * pArray = aInterfaceTypes.getArray();
@@ -518,7 +519,8 @@ void OMultiTypeInterfaceContainerHelper::disposeAndClear( const EventObject & rE
     {
         ::osl::MutexGuard aGuard( rMutex );
         t_type2ptr * pMap = (t_type2ptr *)m_pMap;
-        if( nSize = pMap->size() )
+        nSize = pMap->size();
+        if( nSize )
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
@@ -598,7 +600,8 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
     t_long2ptr::size_type nSize;
 
     ::osl::MutexGuard aGuard( rMutex );
-    if( nSize = pMap->size() )
+    nSize = pMap->size();
+    if( nSize )
     {
         ::com::sun::star::uno::Sequence< sal_Int32 > aInterfaceTypes( nSize );
         sal_Int32 * pArray = aInterfaceTypes.getArray();
@@ -674,7 +677,8 @@ void OMultiTypeInterfaceContainerHelperInt32::disposeAndClear( const EventObject
     {
         ::osl::MutexGuard aGuard( rMutex );
         t_long2ptr * pMap = (t_long2ptr *)m_pMap;
-        if( nSize = pMap->size() )
+        nSize = pMap->size();
+        if( nSize )
         {
             typedef OInterfaceContainerHelper* ppp;
             ppListenerContainers = new ppp[nSize];
