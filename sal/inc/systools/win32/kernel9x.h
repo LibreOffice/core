@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-06-26 16:46:20 $
+ *  last change: $Author: tra $ $Date: 2001-07-17 07:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,14 @@ extern "C" {
 
 #ifdef GetDriveTypeW
 #undef GetDriveTypeW
+#endif
+
+#ifdef GetCurrentDirectoryW
+#undef GetCurrentDirectoryW
+#endif
+
+#ifdef SetCurrentDirectoryW
+#undef SetCurrentDirectoryW
 #endif
 
 //------------------------------------------------------------------------
@@ -317,6 +325,15 @@ KERNEL9X_API UINT ( WINAPI * lpfnGetDriveTypeW )(
     LPCWSTR lpRootPathName  // root directory
 );
 
+KERNEL9X_API DWORD ( WINAPI * lpfnGetCurrentDirectoryW )(
+    DWORD  nBufferLength,   // size of directory buffer
+    LPWSTR lpBuffer         // directory buffer
+);
+
+KERNEL9X_API BOOL ( WINAPI * lpfnSetCurrentDirectoryW )(
+    LPCWSTR lpPathName  // new directory name
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -344,6 +361,9 @@ KERNEL9X_API UINT ( WINAPI * lpfnGetDriveTypeW )(
 #define CreateProcessAsUserW        lpfnCreateProcessAsUserW
 #define GetEnvironmentVariableW     lpfnGetEnvironmentVariableW
 #define GetDriveTypeW               lpfnGetDriveTypeW
+
+#define GetCurrentDirectoryW        lpfnGetCurrentDirectoryW
+#define SetCurrentDirectoryW        lpfnSetCurrentDirectoryW
 
 #ifdef __cplusplus
 }
