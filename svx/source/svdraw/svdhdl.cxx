@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-22 15:09:30 $
+ *  last change: $Author: aw $ $Date: 2002-02-26 14:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,35 +557,113 @@ void SdrHdl::CreateB2dIAObject()
     }
 }
 
+BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
+{
+    BitmapMarkerKind eRetval(eKnd);
+
+    switch(eKnd)
+    {
+        case Rect_7x7:          eRetval = Rect_9x9;         break;
+        case Rect_9x9:          eRetval = Rect_11x11;       break;
+        case Rect_11x11:        eRetval = Rect_13x13;       break;
+        //case Rect_13x13:      eRetval = ; break;
+
+        case Circ_7x7:          eRetval = Circ_9x9;         break;
+        case Circ_9x9:          eRetval = Circ_11x11;       break;
+        //case Circ_11x11:      eRetval = ; break;
+
+        case Elli_7x9:          eRetval = Elli_9x11;        break;
+        //case Elli_9x11:           eRetval = ; break;
+
+        case Elli_9x7:          eRetval = Elli_11x9;        break;
+        //case Elli_11x9:           eRetval = ; break;
+
+        case RectPlus_7x7:      eRetval = RectPlus_9x9;     break;
+        case RectPlus_9x9:      eRetval = RectPlus_11x11;   break;
+        //case RectPlus_11x11:  eRetval = ; break;
+
+        //case Crosshair:           eRetval = ; break;
+        //case Glue:                eRetval = ; break;
+        //case Anchor:          eRetval = ; break;
+    }
+
+    return eRetval;
+}
+
 B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker)
 {
+    B2dIAObject* pRetval = 0L;
+    BOOL bIsFineHdl(pHdlList->IsFineHdl());
+
     // support bigger sizes
     if(pHdlList->GetHdlSize() > 3)
     {
-        switch(eKindOfMarker)
-        {
-            case Rect_7x7: eKindOfMarker = Rect_9x9; break;
-            case Rect_9x9: eKindOfMarker = Rect_11x11; break;
-            case Rect_11x11: eKindOfMarker = Rect_13x13; break;
-            case Circ_7x7: eKindOfMarker = Circ_9x9; break;
-            case Circ_9x9: eKindOfMarker = Circ_11x11; break;
-            case Elli_7x9: eKindOfMarker = Elli_9x11; break;
-            case Elli_9x7: eKindOfMarker = Elli_11x9; break;
-            case RectPlus_7x7: eKindOfMarker = RectPlus_9x9; break;
-            case RectPlus_9x9: eKindOfMarker = RectPlus_11x11; break;
-        }
+        eKindOfMarker = GetNextBigger(eKindOfMarker);
     }
 
-    BitmapEx& rBmpEx = pHdlList->IsFineHdl()
-        ? pModernSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex)
-        : pSimpleSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex);
+    // #97016# II This handle has the focus, visualize it
+    if(IsFocusHdl() && pHdlList && pHdlList->GetFocusHdl() == this)
+    {
+        // create animated handle
+        BitmapMarkerKind eNextBigger = GetNextBigger(eKindOfMarker);
 
-    if(eKindOfMarker != Anchor)
-        return new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
-            (UINT16)(rBmpEx.GetSizePixel().Width() - 1) >> 1,
-            (UINT16)(rBmpEx.GetSizePixel().Height() - 1) >> 1);
+        if(eNextBigger == eKindOfMarker)
+        {
+            // this may happen for the not supported getting-bigger types.
+            // Choose an alternative here
+            switch(eKindOfMarker)
+            {
+                case Rect_13x13:        eNextBigger = Rect_11x11;   break;
+                case Circ_11x11:        eNextBigger = Elli_11x9;    break;
+                case Elli_9x11:         eNextBigger = Elli_11x9;    break;
+                case Elli_11x9:         eNextBigger = Elli_9x11;    break;
+                case RectPlus_11x11:    eNextBigger = Rect_13x13;   break;
+
+                case Crosshair:
+                    eNextBigger = Glue;
+                    break;
+
+                case Glue:
+                    eNextBigger = Crosshair;
+                    break;
+
+                case Anchor:
+                    // here, use the bIsFineHdl state
+                    bIsFineHdl = !bIsFineHdl;
+                    break;
+            }
+        }
+
+        // create animated hdl
+        BitmapEx& rBmpEx1 = bIsFineHdl
+            ? pModernSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex)
+            : pSimpleSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex);
+        BitmapEx& rBmpEx2 = bIsFineHdl
+            ? pModernSet->GetBitmapEx(eNextBigger, (UINT16)eColIndex)
+            : pSimpleSet->GetBitmapEx(eNextBigger, (UINT16)eColIndex);
+
+        pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
+            (UINT16)(rBmpEx1.GetSizePixel().Width() - 1) >> 1,
+            (UINT16)(rBmpEx1.GetSizePixel().Height() - 1) >> 1,
+            (UINT16)(rBmpEx2.GetSizePixel().Width() - 1) >> 1,
+            (UINT16)(rBmpEx2.GetSizePixel().Height() - 1) >> 1);
+    }
     else
-        return new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx);
+    {
+        // create normal handle
+        BitmapEx& rBmpEx = bIsFineHdl
+            ? pModernSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex)
+            : pSimpleSet->GetBitmapEx(eKindOfMarker, (UINT16)eColIndex);
+
+        if(eKindOfMarker != Anchor)
+            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
+                (UINT16)(rBmpEx.GetSizePixel().Width() - 1) >> 1,
+                (UINT16)(rBmpEx.GetSizePixel().Height() - 1) >> 1);
+        else
+            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx);
+    }
+
+    return pRetval;
 }
 
 BOOL SdrHdl::IsHit(const Point& rPnt, const OutputDevice& rOut) const
@@ -657,6 +735,55 @@ Pointer SdrHdl::GetPointer() const
         }
     }
     return Pointer(ePtr);
+}
+
+// #97016# II
+BOOL SdrHdl::IsFocusHdl() const
+{
+    switch(eKind)
+    {
+        case HDL_UPLFT:     // Oben links
+        case HDL_UPPER:     // Oben
+        case HDL_UPRGT:     // Oben rechts
+        case HDL_LEFT:      // Links
+        case HDL_RIGHT:     // Rechts
+        case HDL_LWLFT:     // Unten links
+        case HDL_LOWER:     // Unten
+        case HDL_LWRGT:     // Unten rechts
+        {
+            // if it's a activated TextEdit, it's moved to extended points
+            if(pHdlList && pHdlList->IsMoveOutside())
+                return FALSE;
+            else
+                return TRUE;
+
+            break;
+        }
+
+        case HDL_MOVE:      // Handle zum Verschieben des Objekts
+        case HDL_POLY:      // Punktselektion an Polygon oder Bezierkurve
+        case HDL_BWGT:      // Gewicht an einer Bezierkurve
+        case HDL_CIRC:      // Winkel an Kreissegmenten, Eckenradius am Rect
+        case HDL_REF1:      // Referenzpunkt 1, z.B. Rotationsmitte
+        case HDL_REF2:      // Referenzpunkt 2, z.B. Endpunkt der Spiegelachse
+        //case HDL_MIRX:        // Die Spiegelachse selbst
+        case HDL_GLUE:      // GluePoint
+        //case HDL_ANCHOR:      // anchor symbol (SD, SW)
+        //case HDL_TRNS:        // interactive transparence
+        //case HDL_GRAD:        // interactive gradient
+        //case HDL_COLR:        // interactive color
+        case HDL_USER:
+        {
+            return TRUE;
+            break;
+        }
+
+        default:
+        {
+            return FALSE;
+            break;
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1282,10 +1409,168 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// #97016# II
+
+class ImplHdlListData
+{
+public:
+    sal_uInt32                  mnFocusIndex;
+    SdrMarkView*                pView;
+
+    ImplHdlListData(SdrMarkView* pV): mnFocusIndex(CONTAINER_ENTRY_NOTFOUND), pView(pV) {}
+};
+
+SdrMarkView* SdrHdlList::GetView() const
+{
+    return pImpl->pView;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// #97016# II
+
+void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
+{
+    if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && pImpl->mnFocusIndex >= GetHdlCount())
+        pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+
+    sal_uInt32 nNewHdlNum(pImpl->mnFocusIndex);
+    sal_uInt32 nDeathCounter(aList.Count());
+
+    do {
+        if(bForward)
+        {
+            if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND)
+            {
+                if(pImpl->mnFocusIndex == aList.Count() - 1)
+                    nNewHdlNum = CONTAINER_ENTRY_NOTFOUND;
+                else
+                    nNewHdlNum++;
+            }
+            else
+            {
+                nNewHdlNum = 0;
+            }
+        }
+        else
+        {
+            if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND)
+            {
+                if(pImpl->mnFocusIndex == 0)
+                    nNewHdlNum = CONTAINER_ENTRY_NOTFOUND;
+                else
+                    nNewHdlNum--;
+            }
+            else
+            {
+                nNewHdlNum = aList.Count() - 1;
+            }
+        }
+
+        if(nDeathCounter)
+            nDeathCounter--;
+
+    } while(
+        nDeathCounter &&
+        nNewHdlNum != pImpl->mnFocusIndex
+        && nNewHdlNum != CONTAINER_ENTRY_NOTFOUND
+        && GetHdl(nNewHdlNum) != 0L
+        && !GetHdl(nNewHdlNum)->IsFocusHdl());
+
+    if(pImpl->mnFocusIndex != nNewHdlNum)
+    {
+        SdrHdl* pOld = GetHdl(pImpl->mnFocusIndex);
+        pImpl->mnFocusIndex = nNewHdlNum;
+        sal_Bool bRefresh(sal_False);
+
+        if(pOld)
+        {
+            pOld->Touch();
+            bRefresh = sal_True;
+        }
+
+        SdrHdl* pNew = GetHdl(pImpl->mnFocusIndex);
+
+        if(pNew)
+        {
+            pNew->Touch();
+            bRefresh = sal_True;
+        }
+
+        if(bRefresh)
+        {
+            if(pImpl->pView)
+                pImpl->pView->RefreshAllIAOManagers();
+        }
+    }
+}
+
+SdrHdl* SdrHdlList::GetFocusHdl() const
+{
+    if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && pImpl->mnFocusIndex < GetHdlCount())
+        return GetHdl(pImpl->mnFocusIndex);
+    else
+        return 0L;
+}
+
+void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
+{
+    if(pNew)
+    {
+        SdrHdl* pActual = GetFocusHdl();
+
+        if(!pActual || pActual != pNew)
+        {
+            sal_uInt32 nNewHdlNum = GetHdlNum(pNew);
+
+            if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
+            {
+                sal_Bool bRefresh(sal_False);
+                pImpl->mnFocusIndex = nNewHdlNum;
+
+                if(pActual)
+                {
+                    pActual->Touch();
+                    bRefresh = sal_True;
+                }
+
+                if(pNew)
+                {
+                    pNew->Touch();
+                    bRefresh = sal_True;
+                }
+
+                if(bRefresh)
+                {
+                    if(pImpl->pView)
+                        pImpl->pView->RefreshAllIAOManagers();
+                }
+            }
+        }
+    }
+}
+
+void SdrHdlList::ResetFocusHdl()
+{
+    SdrHdl* pHdl = GetFocusHdl();
+
+    pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
+
+    if(pHdl)
+    {
+        pHdl->Touch();
+
+        if(pImpl->pView)
+            pImpl->pView->RefreshAllIAOManagers();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
 :   aList(1024,32,32),
-    pView(pV)
+    pImpl(new ImplHdlListData(pV))
+    //#97016# II
+    //pView(pV)
 {
     nHdlSize = 3;
     bRotateShear = FALSE;
@@ -1297,6 +1582,8 @@ SdrHdlList::SdrHdlList(SdrMarkView* pV)
 SdrHdlList::~SdrHdlList()
 {
     Clear();
+    //#97016# II
+    delete pImpl;
 }
 
 void SdrHdlList::SetHdlSize(USHORT nSiz)
@@ -1360,6 +1647,7 @@ void SdrHdlList::SetFineHdl(BOOL bOn)
 SdrHdl* SdrHdlList::RemoveHdl(ULONG nNum)
 {
     SdrHdl* pRetval = (SdrHdl*)aList.Remove(nNum);
+
     return pRetval;
 }
 
@@ -1373,8 +1661,8 @@ void SdrHdlList::Clear()
     aList.Clear();
 
     // immediately remove from display
-    if(pView)
-        pView->RefreshAllIAOManagers();
+    if(pImpl->pView)
+        pImpl->pView->RefreshAllIAOManagers();
 
     bRotateShear=FALSE;
     bDistortShear=FALSE;
@@ -1382,8 +1670,37 @@ void SdrHdlList::Clear()
 
 void SdrHdlList::Sort()
 {
+    // #97016# II: remember current focused handle
+    SdrHdl* pPrev = GetFocusHdl();
+
     ImpSdrHdlListSorter aSort(aList);
     aSort.DoSort();
+
+    // #97016# II: get now and compare
+    SdrHdl* pNow = GetFocusHdl();
+
+    if(pPrev != pNow)
+    {
+        sal_Bool bRefresh(sal_False);
+
+        if(pPrev)
+        {
+            pPrev->Touch();
+            bRefresh = sal_True;
+        }
+
+        if(pNow)
+        {
+            pNow->Touch();
+            bRefresh = sal_True;
+        }
+
+        if(bRefresh)
+        {
+            if(pImpl->pView)
+                pImpl->pView->RefreshAllIAOManagers();
+        }
+    }
 }
 
 ULONG SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
