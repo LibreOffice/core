@@ -2,9 +2,9 @@
  *
  *  $RCSfile: classfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-08-26 10:53:44 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 10:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _CLASSFACTORY_HXX_
-#define _CLASSFACTORY_HXX_
+#ifndef CLASSFACTORY_HXX_INCLUDED
+#define CLASSFACTORY_HXX_INCLUDED
 
 #include <objidl.h>
 
