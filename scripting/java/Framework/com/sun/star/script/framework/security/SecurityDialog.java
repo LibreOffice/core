@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-08-27 14:09:10 $
+ *  last change: $Author: toconnor $ $Date: 2003-09-10 10:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.XComponentContext;
 
-import com.sun.star.scripting.runtime.java.LogUtils;
+import com.sun.star.script.framework.log.LogUtils;
 
 public class SecurityDialog extends WeakBase implements XComponent, XServiceInfo, XDialog,
 XInitialization {
