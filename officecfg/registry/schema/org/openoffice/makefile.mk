@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 14:54:31 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:44:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,10 @@
 PRJ=..$/..$/..$/..
 
 PRJNAME=officecfg
-TARGET=schema
+TARGET=schema_ooffice
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Targets ------------------------------------------------------
 
@@ -79,5 +80,4 @@ XCSFILES= \
     VCL.xcs
 
 .INCLUDE :  target.mk
-.INCLUDE :  $(PRJ)$/registry$/schema$/localtarget.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
