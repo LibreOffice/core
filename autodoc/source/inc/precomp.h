@@ -2,9 +2,9 @@
  *
  *  $RCSfile: precomp.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #define CSV_NO_ASSERTIONS
 #endif
 
-#ifdef NP_LOCALBUILD
+#ifdef WNT
 #pragma warning( disable : 4786 )
 #endif
 
