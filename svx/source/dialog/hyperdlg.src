@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 21:49:49 $
+ *  last change: $Author: rt $ $Date: 2001-10-11 21:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,7 +903,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ dutch ] = "Gegevensbron...";
         QuickHelpText[ french ] = "Sources de données...";
         QuickHelpText[ spanish ] = "Fuentes de datos...";
-        QuickHelpText[ italian ] = "Rubrica";
+        QuickHelpText[ italian ] = "Sorgente dati";
         QuickHelpText[ danish ] = "Adressekartotek";
         QuickHelpText[ swedish ] = "Datakällor...";
         QuickHelpText[ polish ] = "ród³a danych...";
@@ -911,7 +911,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½...";
         QuickHelpText[ korean ] = "ì£¼ì†Œë¡";
         QuickHelpText[ chinese_simplified ] = "é€šè®¯ç°¿";
-        QuickHelpText[ chinese_traditional ] = "é€šè¨ŠéŒ„";
+        QuickHelpText[ chinese_traditional ] = "é€šè¨ŠéŒ„...";
         QuickHelpText[ turkish ] = "Adressbuch";
         QuickHelpText[ arabic ] = "ÏİÊÑ ÇáÚäÇæíä";
         QuickHelpText[ catalan ] = "Libreta de direcciones";
@@ -2764,6 +2764,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
