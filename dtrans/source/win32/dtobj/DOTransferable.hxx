@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-07 11:09:47 $
+ *  last change: $Author: jl $ $Date: 2001-08-15 06:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public:
     //------------------------------------------------------------------------
     // XSystemTransferable
     //------------------------------------------------------------------------
-    virtual ::com::sun::star::uno::Any SAL_CALL getData(  ) throw
+    virtual ::com::sun::star::uno::Any SAL_CALL getData( const com::sun::star::uno::Sequence<sal_Int8>& aProcessId  ) throw
     (::com::sun::star::uno::RuntimeException);
 
 

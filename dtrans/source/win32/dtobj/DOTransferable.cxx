@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-07 11:09:47 $
+ *  last change: $Author: jl $ $Date: 2001-08-15 06:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+
+#ifndef _RTL_PROCESS_H_
+#include <rtl/process.h>
 #endif
 
 #ifndef _DOWRAPPERTRANSFERABLE_HXX_
@@ -620,15 +624,22 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
     return bRet;
 }
 
-::com::sun::star::uno::Any SAL_CALL CDOTransferable::getData(  )
+::com::sun::star::uno::Any SAL_CALL CDOTransferable::getData( const Sequence< sal_Int8>& aProcessId  )
         throw (::com::sun::star::uno::RuntimeException)
 {
     Any retVal;
-    if( m_rDataObject)
+
+    sal_uInt8 * arProcCaller= (sal_uInt8*)(sal_Int8*) aProcessId.getConstArray();
+    sal_uInt8 arId[16];
+    rtl_getGlobalProcessId(arId);
+    if( ! memcmp( arId, arProcCaller,16))
     {
-        IDataObject * pObj= static_cast<IDataObject*>( m_rDataObject) ;
-        pObj->AddRef();
-        retVal.setValue( & pObj, getCppuType( (sal_uInt32*)0));
+        if( m_rDataObject)
+        {
+            IDataObject * pObj= static_cast<IDataObject*>( m_rDataObject) ;
+            pObj->AddRef();
+            retVal.setValue( & pObj, getCppuType( (sal_uInt32*)0));
+        }
     }
     return retVal;
 }
