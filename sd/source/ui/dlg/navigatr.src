@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 14:08:25 $
+ *  last change: $Author: ka $ $Date: 2002-05-22 09:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ Window FLT_NAVIGATOR
     Size = MAP_APPFONT ( 12 + BUTTON_WIDTH * BUTTON_COUNT , 105 ) ;
     Text = "Navigator" ;
     SVLook = TRUE ;
+    DialogControl = TRUE;
     Control TLB_OBJECTS
     {
         HelpId = HID_SD_NAVIGATOR_TLB ;
@@ -85,6 +86,7 @@ Window FLT_NAVIGATOR
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( 6 + BUTTON_WIDTH , 15 ) ;
+        TabStop = TRUE ;
         ItemList =
         {
             ToolBoxItem
