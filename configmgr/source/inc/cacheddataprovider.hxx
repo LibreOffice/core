@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheddataprovider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:50:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ namespace configmgr
                 The exact exception being thrown may depend on the underlying backend.
         */
         virtual void flushPendingUpdates()
-            CFG_NOTHROW() = 0;
+            CFG_UNO_THROW_ALL() = 0;
 
         /** locates a template in the cache.
 
