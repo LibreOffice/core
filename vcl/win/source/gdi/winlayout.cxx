@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:29:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ private:
     int*            mpCharWidths;   // map rel char pos to char width
     int*            mpChars2Glyphs; // map rel char pos to abs glyph pos
     int*            mpGlyphs2Chars; // map abs glyph pos to abs char pos
+    bool*           mpGlyphRTLFlags;// BiDi status for glyphs: true=>RTL
     mutable long    mnWidth;
     bool            mbDisableGlyphs;
 
@@ -211,6 +212,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet
     mpCharWidths( NULL ),
     mpChars2Glyphs( NULL ),
     mpGlyphs2Chars( NULL ),
+    mpGlyphRTLFlags( NULL ),
     mnWidth( 0 ),
     mnNotdefWidth( -1 ),
     mnCharSet( nCharSet ),
@@ -224,6 +226,7 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet
 
 SimpleWinLayout::~SimpleWinLayout()
 {
+    delete[] mpGlyphRTLFlags;
     delete[] mpGlyphs2Chars;
     delete[] mpChars2Glyphs;
     if( mpCharWidths != mpGlyphAdvances )
@@ -240,6 +243,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     // prepare layout
     // TODO: fix case when reusing object
     mbDisableGlyphs |= ((rArgs.mnFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) != 0);
+    mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
 
     // TODO: use a cached value for bDisableGlyphs from upper layers font info
     if( !mbDisableGlyphs )
@@ -287,10 +291,16 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         rArgs.ResetPos();
         for( bool bRTL; rArgs.GetNextRun( &i, &j, &bRTL ) && !bRTL; )
             mnGlyphCount += j - i;
+        // if there are RTL runs we need room to remember the RTL status
+        if( bRTL )
+        {
+            mpGlyphRTLFlags = new bool[ mnCharCount ];
+            for( i = 0; i < mnCharCount; ++i )
+                mpGlyphRTLFlags[i] = false;
+        }
     }
 
     const sal_Unicode* pBidiStr;
-    mnCharCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     if( mnGlyphCount == mnCharCount )
         pBidiStr = rArgs.mpStr + rArgs.mnMinCharPos;
     else
@@ -315,6 +325,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                     sal_Unicode cChar = rArgs.mpStr[ --j ];
                     pStr[ mnGlyphCount ] = ::GetMirroredChar( cChar );
                     mpChars2Glyphs[ j - rArgs.mnMinCharPos ] = mnGlyphCount;
+                    mpGlyphRTLFlags[ mnGlyphCount ] = true;
                     mpGlyphs2Chars[ mnGlyphCount++ ] = j;
                 } while( i < j );
             }
@@ -481,7 +492,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 
         // request fallback
-        bool bRTL = false;  // TODO: get from run
+        bool bRTL = mpGlyphRTLFlags ? mpGlyphRTLFlags[i] : false;
         int nCharPos = mpGlyphs2Chars ? mpGlyphs2Chars[i]: i + rArgs.mnMinCharPos;
         rArgs.NeedFallback( nCharPos, bRTL );
 
@@ -848,13 +859,12 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
             pCaretXArray[ i ] = -1;
 
         // assign glyph positions to character positions
-        int nLeftIdx = 0;
         for( i = 0; i < mnGlyphCount; ++i )
         {
             int nCurrIdx = mpGlyphs2Chars[ i ] - mnMinCharPos;
             long nXRight = nXPos + mpCharWidths[ nCurrIdx ];
             nCurrIdx *= 2;
-            if( nLeftIdx <= nCurrIdx )
+            if( !(mpGlyphRTLFlags && mpGlyphRTLFlags[i]) )
             {
                 // normal positions for LTR case
                 pCaretXArray[ nCurrIdx ]   = nXPos;
@@ -866,7 +876,6 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
                 pCaretXArray[ nCurrIdx ]   = nXRight;
                 pCaretXArray[ nCurrIdx+1 ] = nXPos;
             }
-            nLeftIdx = nCurrIdx;
             nXPos += mpGlyphAdvances[ i ];
         }
     }
