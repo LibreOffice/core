@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:22:00 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,6 +1115,14 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             {
+                /*
+
+                 search for filter cant work correctly ...
+                 Because it's not clear, which export filter for which office module
+                 must be searched. On the other side it can be very expensive doing so.
+                 The best solution would be: on installation time we should know if pdf feature
+                 was installed or not!!! (e.g. by writing a bool inside cfg)
+
                 SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
                 if ( pFilterContainer )
                 {
@@ -1125,6 +1133,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 }
 
                 rSet.DisableItem( nWhich );
+                */
                 break;
             }
 
