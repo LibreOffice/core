@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:03:10 $
+ *  last change: $Author: sb $ $Date: 2002-07-10 09:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -51,7 +51,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -61,7 +61,12 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema oor:name="Inet" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!--Responsible: SB -->
+  <info>
+    <desc xml:lang="en-US">Contains Internet-related configurations (proxies, search engines, etc.).</desc>
+  </info>
   <templates>
+    <!--Responsible: OS / TV-->
     <group oor:name="SearchEngine">
       <info>
         <desc xml:lang="en-US">Specifies the search type, i.e. nexus or exact search.</desc>
@@ -186,6 +191,9 @@
     </group>
   </templates>
   <component>
+    <info>
+      <desc xml:lang="en-US">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+    </info>
     <group oor:name="Settings">
       <prop oor:name="ooInetDNSServer" oor:type="xs:string">
         <!-- OldPath: Inet/DNS -->
@@ -193,7 +201,7 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools - Options - Internet - Protocol -->
         <info>
-          <desc xml:lang="en-US">Specifies the IP address of the DNS server. If the string is empty, the DNS will be specified automatically.</desc>
+          <desc xml:lang="en-US">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
         </info>
       </prop>
       <prop oor:name="ooInetNoProxy" oor:type="xs:string">
@@ -202,7 +210,7 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Enumeration of the names of the servers that do not require any Proxy servers.</desc>
+          <desc xml:lang="en-US">Enumerates the names of servers that do not require any proxies.</desc>
         </info>
       </prop>
       <prop oor:name="ooInetProxyType" oor:type="xs:int">
@@ -211,22 +219,22 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Specifies the type of the Proxy selection.</desc>
+          <desc xml:lang="en-US">Specifies the type of proxy selection.</desc>
         </info>
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">None</desc>
+              <desc xml:lang="en-US">Specifies that no proxies are used.</desc>
             </info>
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc xml:lang="en-US">Automatic</desc>
+              <desc xml:lang="en-US">Specifies automatic proxy configuration.</desc>
             </info>
           </enumeration>
           <enumeration oor:value="2">
             <info>
-              <desc xml:lang="en-US">Manual</desc>
+              <desc xml:lang="en-US">Specifies manual proxy configuration.</desc>
             </info>
           </enumeration>
         </constraints>
@@ -237,7 +245,7 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Name of the FTP Proxy server</desc>
+          <desc xml:lang="en-US">Specifies the name of the FTP proxy server.</desc>
         </info>
       </prop>
       <prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
@@ -246,11 +254,19 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Port of the FTP Proxy server</desc>
+          <desc xml:lang="en-US">Specifies the port of the FTP proxy server.</desc>
         </info>
         <constraints>
-          <minInclusive oor:value="0"/>
-          <maxInclusive oor:value="65535"/>
+          <minInclusive oor:value="0">
+            <info>
+              <desc xml:lang="en-US">Specifies the minimum allowed port number."</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc xml:lang="en-US">Specifies the maximum allowed port number."</desc>
+            </info>
+          </maxInclusive>
         </constraints>
       </prop>
       <prop oor:name="ooInetHTTPProxyName" oor:type="xs:string">
@@ -259,7 +275,7 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Name of the HTTP Proxy server</desc>
+          <desc xml:lang="en-US">Specifies the name of the HTTP proxy server.</desc>
         </info>
       </prop>
       <prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
@@ -268,11 +284,19 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Port of the HTTP Proxy server</desc>
+          <desc xml:lang="en-US">Specifies the port of the HTTP proxy server.</desc>
         </info>
         <constraints>
-          <minInclusive oor:value="0"/>
-          <maxInclusive oor:value="65535"/>
+          <minInclusive oor:value="0">
+            <info>
+              <desc xml:lang="en-US">Specifies the minimum allowed port number."</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc xml:lang="en-US">Specifies the maximum allowed port number."</desc>
+            </info>
+          </maxInclusive>
         </constraints>
       </prop>
       <prop oor:name="ooInetSOCKSProxyName" oor:type="xs:string">
@@ -281,7 +305,7 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Name of the Socks Proxy server</desc>
+          <desc xml:lang="en-US">Specifies the name of the Socks proxy server.</desc>
         </info>
       </prop>
       <prop oor:name="ooInetSOCKSProxyPort" oor:type="xs:int">
@@ -290,13 +314,24 @@
         <!-- Responsible: SB/MHU -->
         <!-- UIHints: Tools  Options  Internet  Proxy -->
         <info>
-          <desc xml:lang="en-US">Port of the Socks Proxy server</desc>
+          <desc xml:lang="en-US">Specifies the port of the Socks proxy server.</desc>
         </info>
         <constraints>
-          <minInclusive oor:value="0"/>
-          <maxInclusive oor:value="65535"/>
+          <minInclusive oor:value="0">
+            <info>
+              <desc xml:lang="en-US">Specifies the minimum allowed port number."</desc>
+            </info>
+          </minInclusive>
+          <maxInclusive oor:value="65535">
+            <info>
+              <desc xml:lang="en-US">Specifies the maximum allowed port number."</desc>
+            </info>
+          </maxInclusive>
         </constraints>
       </prop>
+      <info>
+        <desc xml:lang="en-US">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+      </info>
     </group>
     <set oor:name="SearchEngines" oor:node-type="SearchEngine">
       <!--Responsible: OS / TV-->
