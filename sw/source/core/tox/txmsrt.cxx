@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:32:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,12 +752,13 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
 */
         pSrc->GetExpandTxt( rNd, &rInsPos, nStt,
                 nEndIndex == STRING_LEN ? STRING_LEN : nEndIndex - nStt,
-                FALSE, FALSE );
+                FALSE, FALSE, TRUE );
     }
     else
     {
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
+        sTmp.SearchAndReplaceAll('\t', ' ');
         rNd.Insert( sTmp, rInsPos );
     }
 }
