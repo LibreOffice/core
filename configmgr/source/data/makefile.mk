@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: jb $ $Date: 2002-02-11 14:58:31 $
+#   last change: $Author: jb $ $Date: 2002-02-11 14:55:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,96 +60,33 @@
 #
 #*************************************************************************
 
-PRJ=..
+PRJ=..$/..
+PRJINC=$(PRJ)$/source
 PRJNAME=configmgr
-TARGET=cfgmgr
+TARGET=data
 
 ENABLE_EXCEPTIONS=TRUE
 
+# --- Settings ----------------------------------
+
 .INCLUDE : settings.mk
-.INCLUDE :  $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)$/version.mk
 
+# --- Files -------------------------------------
 
-# --- Library -----------------------------------
+SLOFILES=	\
+        $(SLO)$/simpleheap.obj	\
+        $(SLO)$/heap.obj	\
+        $(SLO)$/segmentheap.obj	\
+        $(SLO)$/sequence.obj	\
+        $(SLO)$/anydata.obj	\
+        $(SLO)$/sequence.obj	\
+        $(SLO)$/types.obj	\
+        $(SLO)$/accessor.obj		\
+        $(SLO)$/updateaccessor.obj		\
 
-SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
 .IF "$(OS)"=="MACOSX"
-#SHL1VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
-.ELSE
-SHL1VERSIONMAP= $(TARGET).map
-.ENDIF
-SHL1OBJS=$(SLOFILES)
-SHL1STDLIBS=\
-    $(COMPHELPERLIB)			\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SALHELPERLIB)				\
-    $(SALLIB)					\
-    $(CPPRTLLIB)
-
-#	$(UNOTOOLSLIB)				\
-#	$(ZLIB3RDLIB) \
-
-SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
-SHL1LIBS=	$(SLB)$/registry.lib	\
-            $(SLB)$/treecache.lib	\
-            $(SLB)$/session.lib		\
-            $(SLB)$/misc.lib		\
-            $(SLB)$/xml.lib			\
-            $(SLB)$/treemgr.lib		\
-            $(SLB)$/api2.lib		\
-            $(SLB)$/api.lib			\
-            $(SLB)$/data.lib		\
-            $(SLB)$/cm.lib
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
-
-# --- Library -----------------------------------
-.IF "$(SVXLIGHT)" != ""
-
-SHL2TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)l
-.IF "$(OS)"=="MACOSX"
-#SHL2VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
-.ELSE
-SHL2VERSIONMAP= $(TARGET)l.map
-.ENDIF
-SHL2OBJS=$(SLOFILES)
-SHL2STDLIBS=\
-    $(COMPHELPERLIB)			\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SALHELPERLIB)				\
-    $(SALLIB)					\
-    $(CPPRTLLIB)
-
-#	$(UNOTOOLSLIB)				\
-
-SHL2DEPN=
-SHL2IMPLIB=	i$(SHL2TARGET)
-SHL2LIBS=	$(SLB)$/registry.lib	\
-            $(SLB)$/treecache.lib	\
-            $(SLB)$/sxl_session.lib	\
-            $(SLB)$/misc.lib		\
-            $(SLB)$/xml.lib			\
-            $(SLB)$/treemgr.lib		\
-            $(SLB)$/api2.lib		\
-            $(SLB)$/api.lib			\
-            $(SLB)$/data.lib		\
-            $(SLB)$/cm.lib
-
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-
-DEF2NAME=	$(SHL2TARGET)
-DEF2EXPORTFILE=	exports.dxp
-
+SYMBOLPREFIX=$(CFGMGR_TARGET)$(CFGMGR_MAJOR)
 .ENDIF
 
 # --- Targets ----------------------------------
