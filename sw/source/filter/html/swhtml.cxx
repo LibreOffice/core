@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:17:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ int HTMLReader::SetStrmStgPtr()
 }
 
     // Aufruf fuer die allg. Reader-Schnittstelle
-ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
+ULONG HTMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String & rName )
 {
     if( !pStrm )
     {
@@ -408,7 +408,7 @@ ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
     rDoc.AddLink();
     ULONG nRet = 0;
     SvParserRef xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
-                                            rName, !bInsertMode, pMedium,
+                                            rName, rBaseURL, !bInsertMode, pMedium,
                                             IsReadUTF8(),
                                             bIgnoreHTMLComments );
 
@@ -435,12 +435,15 @@ ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
 /*  */
 
 SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                            const String& rPath, int bReadNewDoc,
+                            const String& rPath,
+                            const String& rBaseURL,
+                            int bReadNewDoc,
                             SfxMedium* pMed, BOOL bReadUTF8,
                             sal_Bool bNoHTMLComments )
     : SfxHTMLParser( rIn, bReadNewDoc, pMed ),
     SwClient( 0 ),
     aPathToFile( rPath ),
+    sBaseURL( rBaseURL ),
     pDoc( pD ),
     pTable(0), pFormImpl( 0 ), pMarquee( 0 ),
     pField( 0 ),
@@ -514,7 +517,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bOldIsHTMLMode = pDoc->IsHTMLMode();
     pDoc->SetHTMLMode( TRUE );
 
-    pCSS1Parser = new SwCSS1Parser( pDoc, aFontHeights, IsNewDoc() );
+    pCSS1Parser = new SwCSS1Parser( pDoc, aFontHeights, sBaseURL, IsNewDoc() );
     pCSS1Parser->SetIgnoreFontFamily( pHtmlOptions->IsIgnoreFontFamily() );
 
     if( bReadUTF8 )
@@ -530,7 +533,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
             SetEncodingByHTTPHeader( pHeaderAttrs );
     }
     pCSS1Parser->SetDfltEncoding( gsl_getSystemTextEncoding() );
-    sBaseURL = INetURLObject::GetBaseURL();
 
     // Timer nur bei ganz normalen Dokumenten aufsetzen!
     SwDocShell* pDocSh = pDoc->GetDocShell();
@@ -761,8 +763,6 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
     BOOL bWasUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
-    GetSaveAndSetOwnBaseURL();
-
     // Wenn der Import abgebrochen wird, kein Continue mehr rufen.
     // Falls ein Pending-Stack existiert aber durch einen Aufruf
     // von NextToken dafuer sorgen, dass der Pending-Stack noch
@@ -780,8 +780,6 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
     {
         HTMLParser::Continue( pPendStack ? pPendStack->nToken : nToken );
     }
-
-    SetSaveBaseURL();
 
     // Laufbalken wieder abschalten
     EndProgress( pDoc->GetDocShell() );
@@ -1076,16 +1074,12 @@ void SwHTMLParser::DocumentDetected()
 
         CallEndAction( TRUE, TRUE );
 
-        SetSaveBaseURL();
-
 #if 0
         ViewShell *pTmpVSh = 0;
         pDoc->GetEditShell( &pTmpVSh );
         ASSERT( pTmpVSh==0,
                 "Dok-ViewShell existiert schon vor DocDetected" );
 #endif
-
-        GetSaveAndSetOwnBaseURL();
 
         pDoc->DoUndo( FALSE );
         // Durch das DocumentDetected wurde im allgemeinen eine
@@ -1426,7 +1420,6 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 {
                 case HTML_O_HREF:
                     sBaseURL = pOption->GetString();
-                    INetURLObject::SetBaseURL( sBaseURL );
                     break;
                 case HTML_O_TARGET:
                     if( IsNewDoc() )
@@ -2112,7 +2105,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
 
     case HTML_AREA:
         if( pImageMap )
-            ParseAreaOptions( pImageMap, SFX_EVENT_MOUSEOVER_OBJECT,
+            ParseAreaOptions( pImageMap, sBaseURL, SFX_EVENT_MOUSEOVER_OBJECT,
                                          SFX_EVENT_MOUSEOUT_OBJECT );
         break;
 
@@ -2521,9 +2514,7 @@ void SwHTMLParser::Show()
     ASSERT( SVPAR_WORKING==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
     ViewShell *pOldVSh = CallEndAction();
 
-    SetSaveBaseURL();
     GetpApp()->Reschedule();
-    GetSaveAndSetOwnBaseURL();
 
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         || 1 == pDoc->GetLinkCnt() )
@@ -2553,17 +2544,14 @@ void SwHTMLParser::ShowStatline()
     ASSERT( SVPAR_WORKING==eState, "ShowStatLine nicht im Working-State - Das kann ins Auge gehen" );
 
     // Laufbalkenanzeige
-    SetSaveBaseURL();
     if( !GetMedium() || !GetMedium()->IsRemote() )
     {
         ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
-        GetSaveAndSetOwnBaseURL();
         CheckActionViewShell();
     }
     else
     {
         GetpApp()->Reschedule();
-        GetSaveAndSetOwnBaseURL();
 
         if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
             || 1 == pDoc->GetLinkCnt() )
