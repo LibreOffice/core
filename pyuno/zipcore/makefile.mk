@@ -5,40 +5,18 @@ PRJ=..
 .INCLUDE : pyversion.mk
 
 PYDIRNAME=python-core-$(PYVERSION)
-PACKSUFFIX=.zip
 DESTROOT=$(BIN)$/python-core-$(PYVERSION)
+PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
 
-.IF "$(GUI)"=="WNT"
-INISUFFIX=.ini
-BATCHSUFFIX=.bat
-ENVSUFFIX=.bat
-EXESUFFIX=.exe
-DOLLAR_SIGN=$$
-.ELSE
-DOLLAR_SIGN=\$$
-BATCHSUFFIX=.sh
-ENVSUFFIX=.tcsh
-INISUFFIX=rc
-.ENDIF
-PYTHONBINARY=$(BIN)$/$(PYDIRNAME)$/bin$/python$(EXESUFFIX)
-
-FINDDIRS=$(subst,/,$/ $(shell +cd $(SOLARLIBDIR)$/python && $(FIND) . -type d))
-FINDLIBFILES=$(subst,/,$/ $(shell +cd $(SOLARLIBDIR)$/python && $(FIND) . -type f))
-
-PYRUNTIME_DIRS=\
-    $(BIN)$/$(PYDIRNAME) 	\
-    $(BIN)$/$(PYDIRNAME)$/bin 	\
-    $(BIN)$/$(PYDIRNAME)$/lib 	\
-    $(foreach,i,$(FINDDIRS) $(BIN)$/$(PYDIRNAME)$/lib$/$(i))
-
+FINDLIBFILES_TMP:=$(subst,/,$/ \
+    $(shell +$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v .pyc ))
+FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
 FILES=\
     $(PYTHONBINARY)	\
-    $(foreach,i,$(FINDLIBFILES) $(BIN)$/$(PYDIRNAME)$/lib$/$(i)) 
-
+    $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) 
 
 target: \
-    dirs \
     $(BIN)$/python-core-$(PYVERSION).zip \
     $(BIN)$/python.sh
 
@@ -50,23 +28,21 @@ $(BIN)$/python.sh : python.sh
 .ENDIF
 
 $(BIN)$/python-core-$(PYVERSION).zip : $(FILES)
-    -+cd $(BIN) && find . -name '*.pyc' | xargs rm -f  
 .IF "$(GUI)" == "UNX"
     cd $(BIN) && find . -name '*.so' | xargs strip 
 .ENDIF
     -rm -f $@
     +cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
 
-dirs .PHONY:
-    -+$(MKDIR) $(PYRUNTIME_DIRS) 
-
-$(BIN)$/$(PYDIRNAME)$/lib$/% : $(SOLARLIBDIR)$/python$/%
+$(DESTROOT)$/lib$/% : $(SOLARLIBDIR)$/python$/%
+    -+$(MKDIRHIER) $(@:d) 
     -rm -f $@
-    cat $? > $@
+    cat $< > $@
 
-$(BIN)$/$(PYDIRNAME)$/bin$/python$(EXESUFFIX) : $(SOLARBINDIR)$/python$(EXESUFFIX)
+$(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
+    -+$(MKDIRHIER) $(@:d)
     -rm -f $@
-    cat $? > $@
+    cat $< > $@
 .IF "$(GUI)"== "UNX"
     chmod +x $@
 .ENDIF
