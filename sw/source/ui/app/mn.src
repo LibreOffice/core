@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:31:50 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ String MN_DRAW_POPUPMENU
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ğèñóíîê";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÑÓæã";
     Text[ greek ] = "Ãñáöéêü";
@@ -343,7 +343,7 @@ String MN_DRWTXT_POPUPMENU
     Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó ÎÄ×Ö";
     Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò Òåêñò";
-    Text[ polish ] = "Tekst w obiekcie rysunkowym";
+    Text[ polish ] = "Tekst w obiekcie graficznym";
     Text[ japanese ] = "}Œ`µÌŞ¼Şª¸Ä@Ã·½Ä";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó ¤å¦r";
     Text[ arabic ] = "äÕ ßÇÆä ÑÓæãí";
@@ -385,7 +385,7 @@ String MN_GRF_POPUPMENU
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ğèñóíîê";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÑÓæã";
     Text[ greek ] = "Ãñáöéêü";
@@ -469,7 +469,7 @@ String MN_PPREVIEW_POPUPMENU
     Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
     Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó ÎÄ×Ö";
     Text[ russian ] = "Òåêñò ãğàôè÷åñêîãî îáúåêòà";
-    Text[ polish ] = "Tekst w obiekcie rysunkowym";
+    Text[ polish ] = "Tekst w obiekcie graficznym";
     Text[ japanese ] = "}Œ`µÌŞ¼Şª¸ÄÃ·½Ä";
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó ¤å¦r";
     Text[ arabic ] = "äÕ ßÇÆä ÑÓæãí";
