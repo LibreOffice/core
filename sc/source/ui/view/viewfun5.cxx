@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 15:17:55 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,12 +431,12 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             bRet = TRUE;
         }
     }
-    else if ( nFormatId == SOT_FORMATSTR_ID_BIFF_5 )
+    else if ( (nFormatId == SOT_FORMATSTR_ID_BIFF_5) || (nFormatId == SOT_FORMATSTR_ID_BIFF_8) )
     {
         //  do excel import into a clipboard document
 
         SotStorageStreamRef xStm;
-        if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_BIFF_5, xStm ) )
+        if( aDataHelper.GetSotStorageStream( nFormatId, xStm ) )
         {
             SvStorageRef pStor = new SvStorage( *xStm );
 #if 0

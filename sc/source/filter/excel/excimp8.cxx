@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 11:11:18 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,6 +941,38 @@ void ImportExcel8::Labelsst( void )
 }
 
 
+void ImportExcel8::Rstring( void )
+{
+    UINT16                      nRow, nCol, nXF;
+
+    aIn >> nRow >> nCol >> nXF;
+
+    if( nRow <= MAXROW && nCol <= MAXCOL )
+    {
+        // DR: It would be too simple to store a simple rich-string here.
+        // No, it is an unformatted Unicode string with separate formatting
+        // information. So we have to collect the data manually...
+        String aText;
+        sal_uInt16 nRunCount;
+        aIn.AppendUniString( aText );
+        aIn >> nRunCount;
+        ShStrTabFormEntry aHelpObj( aText, aIn, nRunCount );
+
+        ScBaseCell* pCell = CreateCellFromShStrTabEntry( &aHelpObj, nXF );
+        if( pCell )
+            pD->PutCell( nCol, nRow, nTab, pCell, ( BOOL ) TRUE );
+
+        pColRowBuff->Used( nCol, nRow );
+
+        pCellStyleBuffer->SetXF( nCol, nRow, nXF );
+    }
+    else
+        bTabTruncated = TRUE;
+
+    pLastFormCell = NULL;
+}
+
+
 void ImportExcel8::Label( void )
 {
     UINT16  nRow, nCol, nXF;
@@ -1491,13 +1523,17 @@ void ImportExcel8::PostDocLoad( void )
     }
 
     // read doc info
-    SfxDocumentInfo     aNewDocInfo;
-    SfxDocumentInfo&    rOldDocInfo = pD->GetDocumentShell()->GetDocInfo();
+    // no docshell while pasting from clipboard
+    if( pD->GetDocumentShell() )
+    {
+        SfxDocumentInfo     aNewDocInfo;
+        SfxDocumentInfo&    rOldDocInfo = pD->GetDocumentShell()->GetDocInfo();
 
-    aNewDocInfo.LoadPropertySet( pExcRoot->pRootStorage );
+        aNewDocInfo.LoadPropertySet( pExcRoot->pRootStorage );
 
-    rOldDocInfo = aNewDocInfo;
-    pD->GetDocumentShell()->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
+        rOldDocInfo = aNewDocInfo;
+        pD->GetDocumentShell()->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
+    }
 
     // building pivot tables
     aPivotTabList.Apply();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 11:10:31 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ class ImportExcel8 : public ImportExcel
         ScBaseCell*             CreateCellFromShStrTabEntry( const ShStrTabEntry*,
                                                                 const UINT16 nXF );
         void                    Labelsst( void );               // 0xFD
+        void                    Rstring( void );                // 0xD6
         void                    SXVdex( void );                 // 0x0100
         void                    Labelranges();                  // 0x015F
         void                    Label( void );                  // 0x0204

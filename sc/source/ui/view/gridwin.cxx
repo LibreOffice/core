@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-18 14:09:52 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2882,6 +2882,8 @@ ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xT
         nFormatId = SOT_FORMATSTR_ID_SBA_DATAEXCHANGE;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
         nFormatId = SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE;
+    else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_BIFF_8 ) )
+        nFormatId = SOT_FORMATSTR_ID_BIFF_8;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_BIFF_5 ) )
         nFormatId = SOT_FORMATSTR_ID_BIFF_5;
     else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) )

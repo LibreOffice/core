@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:56:51 $
+ *  last change: $Author: dr $ $Date: 2002-11-04 15:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,9 @@ void ScViewFunc::PasteFromSystem()
 
 //      if (pClipObj.Is())
         {
-            ULONG nBiff = SotExchange::RegisterFormatName(
+            ULONG nBiff8 = SotExchange::RegisterFormatName(
+                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff8")));
+            ULONG nBiff5 = SotExchange::RegisterFormatName(
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
 
                 //  als erstes SvDraw-Model, dann Grafik
@@ -482,8 +484,10 @@ void ScViewFunc::PasteFromSystem()
             else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
                 PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
             // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
-            else if (aDataHelper.HasFormat(nBiff))      // before xxx_OLE formats
-                PasteFromSystem(nBiff);
+            else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
+                PasteFromSystem(nBiff8);
+            else if (aDataHelper.HasFormat(nBiff5))
+                PasteFromSystem(nBiff5);
             else if (aDataHelper.HasFormat(FORMAT_RTF))
                 PasteFromSystem(FORMAT_RTF);
             else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
