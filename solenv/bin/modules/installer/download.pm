@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-01 09:45:07 $
+#   last change: $Author: obo $ $Date: 2005-03-15 12:58:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -343,9 +343,11 @@ sub put_windows_productname_into_template
 
 sub put_banner_bmp_into_template
 {
-    my ($templatefile, $includepatharrayref) = @_;
+    my ($templatefile, $includepatharrayref, $allvariables) = @_;
 
-    my $filename = "downloadbanner.bmp";
+    # my $filename = "downloadbanner.bmp";
+    if ( ! $allvariables->{'DOWNLOADBANNER'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBANNER not defined in product definition!", "put_banner_bmp_into_template"); }
+    my $filename = $allvariables->{'DOWNLOADBANNER'};
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
@@ -360,9 +362,11 @@ sub put_banner_bmp_into_template
 
 sub put_welcome_bmp_into_template
 {
-    my ($templatefile, $includepatharrayref) = @_;
+    my ($templatefile, $includepatharrayref, $allvariables) = @_;
 
-    my $filename = "downloadbitmap.bmp";
+    # my $filename = "downloadbitmap.bmp";
+    if ( ! $allvariables->{'DOWNLOADBITMAP'} ) { installer::exiter::exit_program("ERROR: DOWNLOADBITMAP not defined in product definition!", "put_welcome_bmp_into_template"); }
+    my $filename = $allvariables->{'DOWNLOADBITMAP'};
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
@@ -996,8 +1000,8 @@ sub create_download_sets
 
         # add product name into script template
         put_windows_productname_into_template($templatefile, $allvariableshashref);
-        put_banner_bmp_into_template($templatefile, $includepatharrayref);
-        put_welcome_bmp_into_template($templatefile, $includepatharrayref);
+        put_banner_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
+        put_welcome_bmp_into_template($templatefile, $includepatharrayref, $allvariableshashref);
         put_setup_ico_into_template($templatefile, $includepatharrayref);
         put_publisher_into_template($templatefile);
         put_website_into_template($templatefile);
