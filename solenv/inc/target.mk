@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.150 $
+#   $Revision: 1.151 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 13:00:11 $
+#   last change: $Author: obo $ $Date: 2005-03-18 10:13:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2039,7 +2039,7 @@ COMPVTMP:=$(mktmp iii)
 .ELSE           # "$(CCNUMVER)"!=""
     @+-$(RM) $@ >& $(NULLDEV)
 .ENDIF          # "$(CCNUMVER)"!=""
-    
+
 .ENDIF			# "$(COMPVERMK)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 
@@ -2053,7 +2053,7 @@ COMPVTMP:=$(mktmp iii)
     @echo JAVAVER:=$(JAVAVER) > $@
     @echo JAVANUMVER:=$(JAVANUMVER) >> $@
     @echo JAVALOCATION:=$(JAVA_HOME) >> $@
-    
+
 .ENDIF			# "$(JAVAVERMK)"!=""
 
 # on recursive call there seems to be one blank in TARGETDEP
@@ -2103,7 +2103,7 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
         @echo ------------------------------
         @echo Making: $@
-        @+if exist $@ rm $@
+        @+$(IFEXIST) $@ $(THEN) $(RM) $@
         +$(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
         @+$(RENAME) $@.$(ROUT).tmp $@
 .ENDIF	    
@@ -2440,26 +2440,26 @@ do_copy_mk .IGNORE .SILENT :
     @+-$(COPY) /u $(SOLARENV)$/inc$/startup$/os2$/*.mk $(OS2_SOLENV_INC)$/startup$/os2 >& $(NULLDEV)
 
 killbin:
-.IF "$(OS)$(USE_SHELL)"=="WNT4nt"
-    @+if exist $(BIN)\$(SHL1TARGET).dll @del $(BIN)\$(SHL1TARGET).dll
-    @+if exist $(BIN)\$(SHL2TARGET).dll @del $(BIN)\$(SHL2TARGET).dll
-    @+if exist $(BIN)\$(SHL3TARGET).dll @del $(BIN)\$(SHL3TARGET).dll
-    @+if exist $(BIN)\$(SHL4TARGET).dll @del $(BIN)\$(SHL4TARGET).dll
-    @+if exist $(BIN)\$(SHL5TARGET).dll @del $(BIN)\$(SHL5TARGET).dll
-    @+if exist $(BIN)\$(SHL6TARGET).dll @del $(BIN)\$(SHL6TARGET).dll
-    @+if exist $(BIN)\$(SHL7TARGET).dll @del $(BIN)\$(SHL7TARGET).dll
-    @+if exist $(BIN)\$(SHL8TARGET).dll @del $(BIN)\$(SHL8TARGET).dll
-    @+if exist $(BIN)\$(SHL9TARGET).dll @del $(BIN)\$(SHL9TARGET).dll
-    @+if exist $(BIN)\$(APP1TARGET)$(EXECPOST) @del $(BIN)\$(APP1TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP2TARGET)$(EXECPOST) @del $(BIN)\$(APP2TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP3TARGET)$(EXECPOST) @del $(BIN)\$(APP3TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP4TARGET)$(EXECPOST) @del $(BIN)\$(APP4TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP5TARGET)$(EXECPOST) @del $(BIN)\$(APP5TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP6TARGET)$(EXECPOST) @del $(BIN)\$(APP6TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP7TARGET)$(EXECPOST) @del $(BIN)\$(APP7TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP8TARGET)$(EXECPOST) @del $(BIN)\$(APP8TARGET)$(EXECPOST)
-    @+if exist $(BIN)\$(APP9TARGET)$(EXECPOST) @del $(BIN)\$(APP9TARGET)$(EXECPOST)
-    
+.IF "$(GUI)"=="WNT"
+    @+$(IFEXIST) $(BIN)\$(SHL1TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL1TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL2TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL2TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL3TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL3TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL4TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL4TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL5TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL5TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL6TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL6TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL7TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL7TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL8TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL8TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(SHL9TARGET).dll $(THEN) $(RM) $(BIN)\$(SHL9TARGET).dll
+    @+$(IFEXIST) $(BIN)\$(APP1TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP1TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP2TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP2TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP3TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP3TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP4TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP4TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP5TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP5TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP6TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP6TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP7TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP7TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP8TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP8TARGET)$(EXECPOST)
+    @+$(IFEXIST) $(BIN)\$(APP9TARGET)$(EXECPOST) $(THEN) $(RM) $(BIN)\$(APP9TARGET)$(EXECPOST)
+
 .ELSE			# "$(GUI)"=="WNT"
 .IF "$(SHL1TARGET)"!=""
     @+-$(RM) $(LB)/$(DLLPRE)$(SHL1TARGET)$(DLLPOST)
@@ -2600,10 +2600,10 @@ clean_misc :
 
 clean_all :
 .IF "$(OUT)"!=""
-.IF "$(GUI)"=="UNX"
+.IF "$(USE_SHELL)"!="4nt"
     +test -f $(PRJ)$/prj/build.lst && rm -rf $(OUT)
 .ELSE			# "$(GUI)"=="UNX"
-    +if exist $(PRJ)$/prj/build.lst del /sxyz $(OUT)
+    +$(IFEXIST) $(PRJ)$/prj/build.lst $(THEN) del /sxyz $(OUT)
 .ENDIF			# "$(GUI)"=="UNX"
     @+echo local output tree is gone!
 .ELSE			# "$(OUT)"!=""
@@ -2677,20 +2677,11 @@ $(MISC)$/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARG
 
 VERSIONTMP:=$(mktmp iii)
 $(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+echo "#define" _BUILD \"$(BUILD)\"	> $(VERSIONTMP)
-    @+echo "#define" _UPD \"$(UPD)\"		>> $(VERSIONTMP)
-    @+echo "#define" _LAST_MINOR \"$(LAST_MINOR)\"	>> $(VERSIONTMP)
-    @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(VERSIONTMP)
-    @+echo "#define" _INPATH \"$(INPATH)\"	>> $(VERSIONTMP)
-.ELSE
-    @+echo #define _BUILD "$(BUILD)"	> $(VERSIONTMP)
-    @+echo #define _UPD "$(UPD)"		>> $(VERSIONTMP)
-    @+echo #define _LAST_MINOR "$(LAST_MINOR)"	>> $(VERSIONTMP)
-    @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(VERSIONTMP)
-    @+echo #define _RSCREVISION "$(RSCREVISION)">> $(VERSIONTMP)
-    @+echo #define _INPATH "$(INPATH)"	>> $(VERSIONTMP)
-.ENDIF
+    @+echo $(EMQ)#define _BUILD $(EMQ)"$(BUILD)$(EMQ)" > $(VERSIONTMP)
+    @+echo $(EMQ)#define _UPD $(EMQ)"$(UPD)$(EMQ)"                 >> $(VERSIONTMP)
+    @+echo $(EMQ)#define _LAST_MINOR $(EMQ)"$(LAST_MINOR)$(EMQ)"   >> $(VERSIONTMP)
+    @+echo $(EMQ)#define _RSCREVISION $(EMQ)"$(USQ)$(RSCREVISION)$(USQ)$(EMQ)" >> $(VERSIONTMP)
+    @+echo $(EMQ)#define _INPATH $(EMQ)"$(INPATH)$(EMQ)"           >> $(VERSIONTMP)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(RENAME) $(VERSIONTMP) $@
 
@@ -2718,19 +2709,19 @@ $(MISC)$/$(PRJNAME).hid : \
         $(PRJHIDOTHERTARGET) $(HIDSRSPARTICLE)
     @echo Making $@ :
     @echo ---------------
-    @+if exist $@ del $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     @$(TOUCH) $@
-#    @+if exist $(SRS)\*.hid dir $(SRS)\*.hid
-#    @+if exist $(SRS)\*.hid type $(SRS)\*.hid >> $@
-#   @+if exist $(MISC)\*.lst $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
-#    @+if exist $(MISC)\*.* $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
+#    @+$(IFEXIST) $(SRS)$/*.hid $(THEN) dir $(SRS)$/*.hid
+#    @+$(IFEXIST) $(SRS)$/*.hid $(THEN) type $(SRS)$/*.hid >> $@
+#    @+$(IFEXIST) $(MISC)$/*.lst $(THEN) $(ENV_TOOLS)$/slothid.bat $(MISC)$/*.lst $@ $(INPATH)
+#    @+$(IFEXIST) $(MISC)$/*.* $(THEN) $(ENV_TOOLS)$/slothid.bat $(MISC)$/*.lst $@ $(INPATH)
     @echo not made anymore
 
 #new hid.lst trigger with GEN_HID2=TRUE
 $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
-    @+if exist $@ $(RM) $@
+    @+$(IFEXIST) $@ $(THEN) $(RM) $@
     @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010> $@.$(ROUT).tmp
     $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
     @+$(RENAME) $@.$(ROUT).tmp $@
