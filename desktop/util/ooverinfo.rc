@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ooverinfo.rc,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 09:04:52 $
+#   last change: $Author: hr $ $Date: 2004-11-26 22:36:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,21 +180,42 @@ VS_VERSION_INFO rcdata
 };
 
 
-2 ICON "icons\\ooo_writer.ico"
-3 ICON "icons\\ooo_writer.ico"
-4 ICON "icons\\ooo_calc.ico"
-5 ICON "icons\\ooo_calc.ico"
-6 ICON "icons\\ooo_draw.ico"
-7 ICON "icons\\ooo_draw.ico"
-8 ICON "icons\\ooo_impress.ico"
-9 ICON "icons\\ooo_impress.ico"
-10 ICON "icons\\ooo_impress.ico"
-11 ICON "icons\\ooo_office.ico"
-12 ICON "icons\\ooo_html.ico"
-13 ICON "icons\\ooo_office.ico"
-14 ICON "icons\\ooo_base.ico"
-15 ICON "icons\\ooo_math.ico"
-16 ICON "icons\\ooo_template.ico"
-17 ICON "icons\\ooo_office.ico"
-18 ICON "icons\\ooo_office.ico"
-19 ICON "icons\\ooo_open.ico"
+2 ICON "icons\\ooo-writer-doc.ico"
+3 ICON "icons\\ooo-writer-tem.ico"
+4 ICON "icons\\ooo-calc-doc.ico"
+5 ICON "icons\\ooo-calc-tem.ico"
+6 ICON "icons\\ooo-draw-doc.ico"
+7 ICON "icons\\ooo-draw-tem.ico"
+8 ICON "icons\\ooo-impress-doc.ico"
+9 ICON "icons\\ooo-impress-tem.ico"
+10 ICON "icons\\ooo-impress-doc.ico"
+11 ICON "icons\\ooo-master-doc.ico"
+12 ICON "icons\\ooo-web-doc.ico"
+13 ICON "icons\\ooo-chart-doc.ico"
+14 ICON "icons\\ooo-base-doc.ico"
+15 ICON "icons\\ooo-math-doc.ico"
+16 ICON "icons\\ooo-empty-tem.ico"
+17 ICON "icons\\ooo-macro-doc.ico"
+18 ICON "icons\\ooo-configuration.ico"
+19 ICON "icons\\ooo-open.ico"
+20 ICON "icons\\ooo-image-doc.ico"
+21 ICON "icons\\ooo-writer-app.ico"
+22 ICON "icons\\ooo-calc-app.ico"
+23 ICON "icons\\ooo-draw-app.ico"
+24 ICON "icons\\ooo-impress-app.ico"
+25 ICON "icons\\ooo-math-app.ico"
+26 ICON "icons\\ooo-base-app.ico"
+27 ICON "icons\\ooo-empty-doc.ico"
+28 ICON "icons\\ooo11-writer-doc.ico"
+29 ICON "icons\\ooo11-writer-tem.ico"
+30 ICON "icons\\ooo11-calc-doc.ico"
+31 ICON "icons\\ooo11-calc-tem.ico"
+32 ICON "icons\\ooo11-draw-doc.ico"
+33 ICON "icons\\ooo11-draw-tem.ico"
+34 ICON "icons\\ooo11-impress-doc.ico"
+35 ICON "icons\\ooo11-impress-tem.ico"
+36 ICON "icons\\ooo11-master-doc.ico"
+37 ICON "icons\\ooo11-chart-doc.ico"
+38 ICON "icons\\ooo11-base-doc.ico"
+39 ICON "icons\\ooo11-math-doc.ico"
+
