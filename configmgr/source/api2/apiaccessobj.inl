@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.inl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 17:29:04 $
+ *  last change: $Author: jb $ $Date: 2000-11-30 13:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,23 @@ namespace configmgr
 
 //-----------------------------------------------------------------------------
 // Inner Elements
+//-----------------------------------------------------------------------------
+
+template <class NodeClass>
+OInnerElement<NodeClass>::OInnerElement(UnoInterface*   pUnoThis,ApiTreeImpl& rTree, NodeRef const& aNode)
+: m_pUnoThis(pUnoThis)
+, m_rTree(rTree)
+, m_aNode(aNode)
+{
+    m_rTree.setNodeInstance(aNode,pUnoThis);
+    m_rTree.getUnoInstance()->acquire();
+}
+
+template <class NodeClass>
+OInnerElement<NodeClass>::~OInnerElement()
+{
+    m_rTree.getUnoInstance()->release();
+}
 //-----------------------------------------------------------------------------
 
 template <class NodeClass>
