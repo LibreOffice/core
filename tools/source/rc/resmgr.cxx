@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nf $ $Date: 2002-09-20 07:50:25 $
+ *  last change: $Author: nf $ $Date: 2002-11-18 11:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,6 +1207,8 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
                 return "82";
             case LANGUAGE_THAI:
                 return "66";
+            case LANGUAGE_HINDI:
+                return "91";
 
             case LANGUAGE_ARABIC:
             case LANGUAGE_ARABIC_IRAQ:
