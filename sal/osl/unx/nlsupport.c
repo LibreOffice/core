@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obr $ $Date: 2002-01-16 12:23:43 $
+ *  last change: $Author: mh $ $Date: 2002-04-09 10:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD)
 #include <pthread.h>
 #include <locale.h>
 #include <langinfo.h>
@@ -242,7 +242,7 @@ static rtl_Locale * _parse_locale( const char * locale )
     return NULL;
 }
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -316,7 +316,7 @@ const _pair _nl_language_list[] = {
    { "sjis",        RTL_TEXTENCODING_SHIFT_JIS  }, /* Japan */
 };
 
-#elif defined(LINUX)
+#elif defined(LINUX) || defined(NETBSD)
 
 const _pair _nl_language_list[] = {
     { "ANSI_X3.110-1983",           RTL_TEXTENCODING_DONTKNOW   },  /* ISO-IR-99 NAPLPS */
@@ -497,7 +497,7 @@ const _pair _nl_language_list[] = {
     { "WIN-SAMI-2",                 RTL_TEXTENCODING_DONTKNOW }     /* WS2 */
 };
 
-#endif /* ifdef LINUX */
+#endif /* ifdef LINUX || NETBSD */
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -536,7 +536,11 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     }
 
     /* get the charset as indicated by the LC_CTYPE locale */
+#if defined(NETBSD) && !defined(CODESET)
+    codeset = NULL;
+#else
     codeset = nl_langinfo( CODESET );
+#endif
 
     if ( codeset != NULL )
     {
@@ -615,7 +619,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     return ret;
 }
 
-#elif defined(MACOSX) /* ifdef LINUX || SOLARIS */
+#elif defined(MACOSX) /* ifdef LINUX || SOLARIS || NETBSD */
 
 /*
  * FIXME: the MacOS X implemetation is missing
@@ -648,7 +652,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     return 0;
 }
 
-#else /* ifdef LINUX || SOLARIS || MACOSX */
+#else /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -884,6 +888,6 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
     return 0;
 }
 
-#endif /* ifdef LINUX || SOLARIS || MACOSX*/
+#endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
 
 
