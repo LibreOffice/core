@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2002-09-19 07:43:12 $
+ *  last change: $Author: obr $ $Date: 2002-09-19 10:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ public class AccessBridge {
             }
 
             catch(ClassNotFoundException e) {
-                // This is quite normal on systems that aren't used by disabled persons.
+                // Forward this exception to UNO to indicate that the service will not work correctly.
+                throw new com.sun.star.uno.RuntimeException("Security exception caught: " + e.getMessage());
             }
 
             // Redirect output to log file on Windows for stdout / stderr are not visible
@@ -222,7 +223,7 @@ public class AccessBridge {
         // Registers the native frame at the Windows access bridge
         protected void registerAccessibleNativeFrameImpl(Integer handle, WindowFake w) {
             // register this frame to the access bridge
-            Object[] args = { w, handle};
+            Object[] args = { w, handle };
 
             try {
                 registerVirtualFrame.invoke(null, args);
