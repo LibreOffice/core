@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
+ *  last change: $Author: pl $ $Date: 2001-09-13 16:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #endif
 #ifndef _PAD_HELPER_HXX_
 #include <helper.hxx>
-#endif
-#ifndef _SVT_FILEDLG_HXX
-#include <filedlg.hxx>
 #endif
 
 #ifndef _PAD_PRTSETUP_HXX_
@@ -447,10 +444,9 @@ IMPL_LINK( RTSCommandPage, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == & m_aPdfDirectoryButton )
     {
-        PathDialog aDialog( this );
-        aDialog.SetPath( m_aPdfDirectoryEdit.GetText() );
-        if( aDialog.Execute() )
-            m_aPdfDirectoryEdit.SetText( aDialog.GetPath() );
+        String aPath( m_aPdfDirectoryEdit.GetText() );
+        if( chooseDirectory( this, aPath ) )
+            m_aPdfDirectoryEdit.SetText( aPath );
     }
     else if( pButton == &m_aRemovePB )
     {
