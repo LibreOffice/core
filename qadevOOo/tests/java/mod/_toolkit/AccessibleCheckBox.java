@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCheckBox.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-03-27 11:59:51 $
+ *  last change: $Date: 2003-03-31 10:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@ public class AccessibleCheckBox extends TestCase {
                     UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
+
+        tEnv.addObjRelation("EditOnly",
+                    "This method isn't supported in this component");
 
         return tEnv;
 

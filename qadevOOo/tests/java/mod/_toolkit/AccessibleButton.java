@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:33 $
+ *  last change: $Date: 2003-03-31 10:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@ public class AccessibleButton extends lib.TestCase {
                     UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
+
+        tEnv.addObjRelation("EditOnly",
+                    "This method isn't supported in this component");
 
         return tEnv;
 
