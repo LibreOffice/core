@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-10-12 08:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,11 +209,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     // negative(!)) leading
     if (aFM.GetLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
     {
-#if SUPD >= 593
         OutputDevice    *pWindow = Application::GetDefaultDevice();
-#else
-        Window  *pWindow = Application::GetAppWindow();
-#endif
 
         pWindow->Push(PUSH_MAPMODE | PUSH_FONT);
 
