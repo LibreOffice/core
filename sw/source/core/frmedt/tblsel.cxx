@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:46:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,32 +334,38 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
     {
         const SwTable& rTbl = pTblNd->GetTable();
         const SwTableLines& rLines = rTbl.GetTabLines();
-        const SwTableLine* pLine = rTbl.GetTblBox(  rCrsr.GetNode(
-                    FALSE )->StartOfSectionIndex() )->GetUpper();
+
+#if OSL_DEBUG_LEVEL > 1
+        SwNode* pTmpNode = rCrsr.GetNode( FALSE );
+        ULONG nTmpStart = pTmpNode->StartOfSectionIndex();
+#endif
+        const SwTableLine* pLine =
+            rTbl.GetTblBox( rCrsr.GetNode( FALSE )->StartOfSectionIndex() )->GetUpper();
         USHORT nSttPos = rLines.GetPos( pLine );
         ASSERT( USHRT_MAX != nSttPos, "Wo ist meine Zeile in der Tabelle?" );
-
-        pLine = rTbl.GetTblBox( rCrsr.GetNode( TRUE )->StartOfSectionIndex() )
-                                ->GetUpper();
+        pLine = rTbl.GetTblBox( rCrsr.GetNode( TRUE )->StartOfSectionIndex() )->GetUpper();
         USHORT nEndPos = rLines.GetPos( pLine );
         ASSERT( USHRT_MAX != nEndPos, "Wo ist meine Zeile in der Tabelle?" );
-
-        if( nEndPos < nSttPos )     // vertauschen
+        // pb: #i20193# if tableintable then nSttPos == nEndPos == USHRT_MAX
+        if ( nSttPos != USHRT_MAX && nEndPos != USHRT_MAX )
         {
-            USHORT nTmp = nSttPos; nSttPos = nEndPos; nEndPos = nTmp;
-        }
-
-        int bChkProtected = TBLSEARCH_PROTECT & eSearchType;
-        for( ; nSttPos <= nEndPos; ++nSttPos )
-        {
-            pLine = rLines[ nSttPos ];
-            for( USHORT n = pLine->GetTabBoxes().Count(); n ; )
+            if( nEndPos < nSttPos )     // vertauschen
             {
-                SwTableBox* pBox = pLine->GetTabBoxes()[ --n ];
-                // Zellenschutzt beachten ??
-                if( !bChkProtected ||
-                    !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
-                    rBoxes.Insert( pBox );
+                USHORT nTmp = nSttPos; nSttPos = nEndPos; nEndPos = nTmp;
+            }
+
+            int bChkProtected = TBLSEARCH_PROTECT & eSearchType;
+            for( ; nSttPos <= nEndPos; ++nSttPos )
+            {
+                pLine = rLines[ nSttPos ];
+                for( USHORT n = pLine->GetTabBoxes().Count(); n ; )
+                {
+                    SwTableBox* pBox = pLine->GetTabBoxes()[ --n ];
+                    // Zellenschutzt beachten ??
+                    if( !bChkProtected ||
+                        !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
+                        rBoxes.Insert( pBox );
+                }
             }
         }
     }
