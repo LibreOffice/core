@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:23:58 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,8 +805,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
     if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, TRUE, &pItem ) ||
         MINFLY > ((SwFmtFrmSize*)pItem)->GetWidth() )
     {
-        SwFmtFrmSize aSz( (SwFmtFrmSize&) (pItem ? *pItem
-                                    : rFlySet.Get( RES_FRM_SIZE, TRUE )) );
+        SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, TRUE));
+        if (pItem)
+            aSz = (SwFmtFrmSize&)(*pItem);
 
         SwTwips nWidth;
         // dann die Breite des Flys selbst bestimmen. Ist eine Tabelle
