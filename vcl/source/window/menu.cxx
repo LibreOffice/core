@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-26 08:59:53 $
+ *  last change: $Author: ssa $ $Date: 2002-09-10 11:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2586,6 +2586,10 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         else
             nMenuFlags &= ~MENU_FLAG_HIDEDISABLEDENTRIES;
     }
+    else
+        // #102790# context menues shall never show disabled entries
+        nMenuFlags |= MENU_FLAG_HIDEDISABLEDENTRIES;
+
 
     USHORT nVisibleEntries = ImplGetVisibleItemCount();
     if ( !nVisibleEntries )
