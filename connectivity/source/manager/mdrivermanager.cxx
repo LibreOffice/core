@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 07:59:59 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 11:42:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,11 +201,11 @@ OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& 
             }
         }
     }
-    initializeDriverPreferences();
+    initializeDriverPrecedence();
 }
 
 //--------------------------------------------------------------------------
-void OSDBCDriverManager::initializeDriverPreferences()
+void OSDBCDriverManager::initializeDriverPrecedence()
 {
     if (!m_aDriversBS.size())
         // nothing to do
@@ -219,7 +219,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
         const ::rtl::OUString sDriverManagerConfigLocation =
             ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/DriverManager");
         const ::rtl::OUString sDriverPreferenceLocation =
-            ::rtl::OUString::createFromAscii("DriverPreferences");
+            ::rtl::OUString::createFromAscii("DriverPrecedence");
         const ::rtl::OUString sNodePathArgumentName =
             ::rtl::OUString::createFromAscii("nodepath");
         const ::rtl::OUString sNodeAccessServiceName =
@@ -229,7 +229,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
         Reference< XMultiServiceFactory > xConfigurationProvider(
             m_xServiceFactory->createInstance(sConfigurationProviderServiceName),
             UNO_QUERY);
-        OSL_ENSURE(xConfigurationProvider.is(), "OSDBCDriverManager::initializeDriverPreferences: could not instantiate the configuration provider!");
+        OSL_ENSURE(xConfigurationProvider.is(), "OSDBCDriverManager::initializeDriverPrecedence: could not instantiate the configuration provider!");
         if (xConfigurationProvider.is())
         {
             // one argument for creating the node access: the path to the configuration node
@@ -239,7 +239,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
             // create the node access
             Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
 
-            OSL_ENSURE(xDriverManagerNode.is(), "OSDBCDriverManager::initializeDriverPreferences: could not open my configuration node!");
+            OSL_ENSURE(xDriverManagerNode.is(), "OSDBCDriverManager::initializeDriverPrecedence: could not open my configuration node!");
             if (xDriverManagerNode.is())
             {
                 // obtain the preference list
@@ -249,7 +249,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
                 sal_Bool bSuccess =
 #endif
                 aPreferences >>= aDriverOrder;
-                OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "OSDBCDriverManager::initializeDriverPreferences: invalid value for the preferences node (no string sequence but not NULL)!");
+                OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "OSDBCDriverManager::initializeDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
 
                 if (!aDriverOrder.getLength())
                     // nothing to do
@@ -266,7 +266,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
                     )
                 {
                     Reference< XServiceInfo > xDriverSI(*aDriverLoop, UNO_QUERY);
-                    OSL_ENSURE(xDriverSI.is(), "OSDBCDriverManager::initializeDriverPreferences: encountered a driver without service info!");
+                    OSL_ENSURE(xDriverSI.is(), "OSDBCDriverManager::initializeDriverPrecedence: encountered a driver without service info!");
                     if (xDriverSI.is())
                         aDriverImplNames[xDriverSI->getImplementationName()] = sal_Int32(aDriverLoop - m_aDriversBS.begin());
                 }
@@ -310,7 +310,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
                     }
                 }
 
-                OSL_ENSURE(m_aDriversBS.size() == aSortedDrivers.size(), "OSDBCDriverManager::initializeDriverPreferences: inconsistence!");
+                OSL_ENSURE(m_aDriversBS.size() == aSortedDrivers.size(), "OSDBCDriverManager::initializeDriverPrecedence: inconsistence!");
 
                 // now we have it ...
                 m_aDriversBS = aSortedDrivers;
@@ -319,7 +319,7 @@ void OSDBCDriverManager::initializeDriverPreferences()
     }
     catch (Exception&)
     {
-        OSL_ENSURE(sal_False, "OSDBCDriverManager::initializeDriverPreferences: caught an exception while sorting the drivers!");
+        OSL_ENSURE(sal_False, "OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
     }
 }
 
