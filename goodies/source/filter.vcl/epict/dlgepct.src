@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.1.1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "Å©±â";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tamaño";
     };
     FixedText FT_SIZEX
     {
@@ -168,6 +169,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho";
     };
     FixedText FT_SIZEY
     {
@@ -196,6 +198,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura";
     };
     OKButton BTN_OK
     {
@@ -244,6 +247,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "¿À¸®Áö³Î(~O)";
         Text[ turkish ] = "Aslý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Original";
     };
     RadioButton RB_SIZE
     {
@@ -273,6 +277,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "Å©±â(~S)";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tamaño";
     };
     GroupBox GRP_MODE
     {
@@ -301,6 +306,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Modo";
     };
     Text[ chinese_simplified ] = "PICT Ñ¡Ïî";
     Text[ russian ] = "Ïàðàìåòðû PICT";
@@ -314,4 +320,5 @@ ModalDialog DLG_EXPORT_EPCT
     Text[ korean ] = "PICT ¿É¼Ç";
     Text[ turkish ] = "PICT seçenekleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones PICT";
 };
