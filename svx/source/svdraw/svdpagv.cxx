@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:44:36 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_FORM_XIMAGEPRODUCERSUPPLIER_HPP_
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODECHANGEBROADCASTER_HPP_
+#include <com/sun/star/util/XModeChangeBroadcaster.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
@@ -134,6 +137,7 @@ using namespace ::com::sun::star;
 
 TYPEINIT1(SdrPageView, SfxListener);
 
+
 // Klasse muﬂ als listener fungieren, um den Zustand, ob ein Object sichtbar ist oder nicht
 // festzuhalten
 //------------------------------------------------------------------------------
@@ -146,22 +150,13 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
                  ,pParent(_pParent)
                  ,mnPaintLevel( 0 )
 {
-    uno::Reference< awt::XWindow> xWindow(xControl, uno::UNO_QUERY);
-    if (xWindow.is())
-    {
-        xWindow->addWindowListener((awt::XWindowListener*)this);
+    DBG_ASSERT( xControl.is(), "SdrUnoControlRec::SdrUnoControlRec: invalid control, this will crash!" );
 
-        StartListening();
+    switchControlListening( true );
 
-        // Am Property fuer das DefaultControl lauschen um das Control eventuell auszutauschen
-        uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-        if (xSet.is())
-        {
-            uno::Reference< beans::XPropertySetInfo > xPropInfo( xSet->getPropertySetInfo() );
-            if (xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("DefaultControl")))
-                xSet->addPropertyChangeListener( rtl::OUString::createFromAscii("DefaultControl"), this);
-        }
-    }
+    // adjust the initial visibility according to the visibility of the layer
+    // 2003-06-03 - #110592# - fs@openoffice.org
+    adjustControlVisibility( true );
 }
 
 //------------------------------------------------------------------------------
@@ -170,22 +165,88 @@ SdrUnoControlRec::~SdrUnoControlRec() throw()
 }
 
 //------------------------------------------------------------------------------
+void SdrUnoControlRec::adjustControlVisibility( bool _bForce )
+{
+    uno::Reference< awt::XWindow > xControlWindow( xControl, uno::UNO_QUERY );
+    if ( xControlWindow.is() && !xControl->isDesignMode() )
+        {
+        // the layer of our object
+        SdrLayerID nObjectLayer = pObj->GetLayer();
+        // the SdrPageView we're living in
+        SdrPageView& rView = pParent->rPageView;
+        // is the layer we're residing in visible in this view?
+        bool bIsObjectLayerVisible = rView.GetVisibleLayers().IsSet( nObjectLayer );
+
+        if ( _bForce || ( bIsObjectLayerVisible != bVisible ) )
+            xControlWindow->setVisible( bIsObjectLayerVisible );
+    }
+
+}
+
+//------------------------------------------------------------------------------
+void SdrUnoControlRec::switchControlListening( bool _bStart )
+{
+    uno::Reference< awt::XWindow> xWindow( xControl, uno::UNO_QUERY );
+    if ( xWindow.is() )
+    {
+        // listen for visibility changes
+        if ( _bStart )
+            xWindow->addWindowListener( this );
+        else
+            xWindow->removeWindowListener( this );
+
+        if ( !bVisible )
+            switchDesignModeListening( _bStart );
+
+        // Am Property fuer das DefaultControl lauschen um das Control eventuell auszutauschen
+        switchPropertyListening( _bStart, false );
+
+        // listen for design mode changes
+        uno::Reference< util::XModeChangeBroadcaster > xDesignModeChanges( xControl, uno::UNO_QUERY );
+        if ( xDesignModeChanges.is() )
+            if ( _bStart )
+                xDesignModeChanges->addModeChangeListener( this );
+            else
+                xDesignModeChanges->removeModeChangeListener( this );
+    }
+}
+
+//------------------------------------------------------------------------------
+void SdrUnoControlRec::switchPropertyListening( bool _bStart, bool _bListenForAll )
+{
+    DBG_ASSERT( xControl.is(), "SdrUnoControlRec::switchPropertyListening: no control!" );
+    if ( xControl.is() )
+    {
+        uno::Reference< beans::XPropertySet > xSet( xControl->getModel(), uno::UNO_QUERY );
+        if ( xSet.is() )
+        {
+            ::rtl::OUString sPropertyToListenFor;
+
+            if ( !_bListenForAll )
+        {
+                // listen for the DefaultControl property only, if available
+                ::rtl::OUString sDefaultControlPropertyName( RTL_CONSTASCII_USTRINGPARAM( "DefaultControl" ) );
+            uno::Reference< beans::XPropertySetInfo > xPropInfo( xSet->getPropertySetInfo() );
+                if ( xPropInfo.is() && xPropInfo->hasPropertyByName( sDefaultControlPropertyName ) )
+                    sPropertyToListenFor = sDefaultControlPropertyName;
+            }
+
+            if ( _bStart )
+                xSet->addPropertyChangeListener( sPropertyToListenFor, this );
+            else
+                xSet->removePropertyChangeListener( sPropertyToListenFor, this );
+        }
+        }
+}
+
+//------------------------------------------------------------------------------
 void SAL_CALL SdrUnoControlRec::disposing( const ::com::sun::star::lang::EventObject& Source )
     throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< awt::XControl > xSource( Source.Source, uno::UNO_QUERY);
     if (xSource.is())
-    {
-        if (!IsVisible())
-            StopListening();
-
-        uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-        if (xSet.is())
-        {
-            uno::Reference< beans::XPropertySetInfo > xPropInfo( xSet->getPropertySetInfo() );
-            if (xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("DefaultControl")))
-                xSet->removePropertyChangeListener( rtl::OUString::createFromAscii("DefaultControl"), this);
-        }
+    {   // it's the control we're responsible for
+        switchControlListening( false );
 
         if (pParent)
         {
@@ -221,7 +282,7 @@ void SAL_CALL SdrUnoControlRec::windowShown( const ::com::sun::star::lang::Event
     if ( !mnPaintLevel )
     {
         if (!IsVisible())
-            StopListening();
+            switchDesignModeListening( false );
     }
 
     bVisible = TRUE;
@@ -240,7 +301,7 @@ void SAL_CALL SdrUnoControlRec::windowHidden( const ::com::sun::star::lang::Even
     if ( !mnPaintLevel )
     {
         if (!bDisposed)
-            StartListening();
+            switchDesignModeListening( true );
     }
 }
 
@@ -302,24 +363,19 @@ void SAL_CALL SdrUnoControlRec::setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sa
 }
 
 //------------------------------------------------------------------------------
+void SAL_CALL SdrUnoControlRec::modeChanged( const util::ModeChangeEvent& _rSource ) throw (uno::RuntimeException)
+{
+    // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
+    // 2003-06-03 - #110592# - fs@openoffice.org
+    adjustControlVisibility( false );
+}
+
+//------------------------------------------------------------------------------
 void SdrUnoControlRec::Clear(BOOL bDispose)
 {
     if (xControl.is())
     {
-        if (!IsVisible())
-            StopListening();
-
-        uno::Reference< awt::XWindow > xOldWindow(xControl, uno::UNO_QUERY);
-        if (xOldWindow.is())
-            xOldWindow->removeWindowListener((awt::XWindowListener*)this);
-
-        uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-        if (xSet.is())
-        {
-            uno::Reference< beans::XPropertySetInfo > xPropInfo = xSet->getPropertySetInfo();
-            if (xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("DefaultControl")))
-                xSet->removePropertyChangeListener( rtl::OUString::createFromAscii("DefaultControl"), this);
-        }
+        switchControlListening( false );
 
         if (bDispose)
             xControl->dispose();
@@ -373,72 +429,35 @@ void SdrUnoControlRec::ReplaceControl(uno::Reference< awt::XControl > _xControl)
         xControl = _xControl;
 
         // und wieder alle Listener anmelden
-        {
-            xWindow->addWindowListener((awt::XWindowListener*)this);
-
-            uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-            if (xSet.is())
-            {
-                uno::Reference< beans::XPropertySetInfo > xPropInfo = xSet->getPropertySetInfo();
-                if (xPropInfo.is() && xPropInfo->hasPropertyByName( rtl::OUString::createFromAscii("DefaultControl")))
-                    xSet->addPropertyChangeListener(rtl::OUString::createFromAscii("DefaultControl"), this);
-            }
-
-            // wieder lauschen falls noetig
-            if (!bVisible)
-                StartListening();
-        }
+        switchControlListening( true );
     }
 }
 
 //------------------------------------------------------------------------------
-void SdrUnoControlRec::StartListening()
+
+void SdrUnoControlRec::switchDesignModeListening( bool _bStart )
 {
-    if (!IsListening())
+    if ( (bool)IsListening() != _bStart )
     {
-        bIsListening = TRUE;
+        bIsListening = _bStart;
 
         if (xControl.is())
         {
-            uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-            if (xSet.is())
-                xSet->addPropertyChangeListener(String(), this);
+            switchPropertyListening( _bStart, true );
 
-            uno::Reference< form::XImageProducerSupplier > xImg(xSet, uno::UNO_QUERY);
+            uno::Reference< form::XImageProducerSupplier > xImg( xControl->getModel(), uno::UNO_QUERY );
             if (xImg.is())
             {
                 uno::Reference< awt::XImageProducer > xProducer = xImg->getImageProducer();
                 if (xProducer.is())
-                    xProducer->addConsumer(this);
-            }
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-void SdrUnoControlRec::StopListening()
-{
-    if (IsListening())
-    {
-        bIsListening = FALSE;
-
-        if (xControl.is())
-        {
-            uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-            if (xSet.is())
-                xSet->removePropertyChangeListener(String(), this);
-
-            uno::Reference< form::XImageProducerSupplier > xImg(xSet, uno::UNO_QUERY);
-            if (xImg.is())
-            {
-                uno::Reference< awt::XImageProducer > xProducer = xImg->getImageProducer();
-                if (xProducer.is())
+                    if ( _bStart )
+                        xProducer->addConsumer(this);
+                    else
                     xProducer->removeConsumer(this);
             }
         }
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 SV_IMPL_OP_PTRARR_SORT( SdrUnoControlAccessArr, SdrUnoControlAccessPtr )
@@ -550,9 +569,10 @@ USHORT SdrPageViewWinList::Find(OutputDevice* pOut) const
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-SdrPageViewWinRec::SdrPageViewWinRec(SdrView& rNewView, OutputDevice* pOut)
-:   rView(rNewView),
-    pOutDev(pOut)
+SdrPageViewWinRec::SdrPageViewWinRec(SdrPageView& rNewPageView, OutputDevice* pOut)
+    :rView( rNewPageView.GetView() )
+    ,pOutDev( pOut )
+    ,aControlList( rNewPageView )
 {
 }
 
@@ -718,7 +738,7 @@ SdrPageViewWinRec* SdrPageView::ImpMakePageViewWinRec(OutputDevice* pOut)
 {
     // MIB 3.7.08: Das WinRec muss sofort in die Liste eingetragen werden,
     // weil sich das InsertControlContainer darauf verlaesst
-    SdrPageViewWinRec* pRec = new SdrPageViewWinRec(rView, pOut);
+    SdrPageViewWinRec* pRec = new SdrPageViewWinRec( *this, pOut );
     pWinList->Insert(pRec);
 
     ULONG nObjAnz=pPage!=NULL?pPage->GetObjCount():0;
@@ -1911,6 +1931,8 @@ void SdrPageView::SetLayer(const XubString& rName, SetOfByte& rBS, FASTBOOL bJa)
     SdrLayerID nID=pPage->GetLayerAdmin().GetLayerID(rName,TRUE);
     if (nID!=SDRLAYER_NOTFOUND) {
         rBS.Set(nID,bJa);
+        if (&rBS == &aLayerVisi)
+            LayerVisibilityChanged(nID, bJa);
     }
 }
 
@@ -1943,8 +1965,28 @@ void SdrPageView::SetAllLayers(SetOfByte& rB, FASTBOOL bJa)
     } else {
         rB.ClearAll();
     }
+    // TODO: LayerVisibilityChanged to be called when necessary
 }
 
+
+void SdrPageView::LayerVisibilityChanged( const SdrLayerID _nLayerId, bool _bNewVisibility )
+{
+    // adjust the visibility of UNO controls, if necessary
+    const SdrPageViewWinList& rWinList = GetWinList();
+    const USHORT nWinCount = rWinList.GetCount();
+    for ( USHORT i=0; i<nWinCount; ++i )
+    {
+        const SdrPageViewWinRec& rWinData = rWinList[i];
+        const SdrUnoControlList& rWinControls = rWinData.GetControlList();
+        const USHORT nControlCount = rWinControls.GetCount();
+        for ( USHORT j=0; j<nControlCount; ++j )
+        {
+            SdrUnoControlRec& rControlData = const_cast< SdrUnoControlRec& >( rWinControls[j] );
+                // I prefer the const_cast over using the various friend relationships
+            rControlData.adjustControlVisibility( false );
+        }
+    }
+}
 
 void SdrPageView::ShowLayerSet(const XubString& rName, FASTBOOL bShow)
 {
@@ -1954,9 +1996,11 @@ void SdrPageView::ShowLayerSet(const XubString& rName, FASTBOOL bShow)
         for (USHORT i=0; i<255; i++) {
             if (pSet->IsMember(BYTE(i))) {
                 aLayerVisi.Set(BYTE(i),bShow);
+                LayerVisibilityChanged(static_cast<SdrLayerID>(i), bShow);
             } else {
                 if (bShow && pSet->IsExcluded(BYTE(i))) {
                     aLayerVisi.Clear(BYTE(i));
+                    LayerVisibilityChanged(static_cast<SdrLayerID>(i), FALSE);
                 }
             }
         }
