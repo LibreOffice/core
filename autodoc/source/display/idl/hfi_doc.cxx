@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_doc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:32:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@ HF_IdlDocu::~HF_IdlDocu()
 {
 }
 
+// KORR
+//   Should not be used any longer.
+//   Use Produce_byCesOwnDocu() or Produce_byDocu4Reference()
+//   instead.
 void
 HF_IdlDocu::Produce_byData( const client &  i_ce,
                             const ce_info * i_doc ) const
@@ -94,28 +98,38 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
     if (i_pDocu == 0)
         return;
 
-    Xml::Element *
-            pDescrDefinition = 0;
     bool bShort = NOT i_pDocu->Short().IsEmpty();
     bool bDescr = NOT i_pDocu->Description().IsEmpty();
 
-    if ( i_pDocu->IsDeprecated() )
-    {
-        rOut.Produce_Term("[ DEPRECATED ]");
 
-        if (NOT i_pDocu->DeprecatedText().IsEmpty())
+    if ( i_pDocu->IsDeprecated()
+         OR i_ce.SightLevel() == ary::idl::sl_File AND NOT i_pDocu->IsPublished()
+         OR i_pDocu->IsOptional() )
+    {   // any usage restriction
+        rOut.Produce_Term("Usage Restrictions");
+
+        if ( i_pDocu->IsDeprecated() )
+            rOut.Produce_Definition() >> *new Html::Italic << "deprecated";
+        if ( i_ce.SightLevel() == ary::idl::sl_File AND NOT i_pDocu->IsPublished() )
+            rOut.Produce_Definition() >> *new Html::Italic << "not published";
+        if ( i_pDocu->IsOptional() )
+            rOut.Produce_Definition() >> *new Html::Italic << "optional";
+
+        if ( i_pDocu->IsDeprecated() AND
+             // KORR
+             // Workaround, because DocuTex2::IsEmpty() does not
+             //   calculate whitespace tokens only as empty.
+             i_pDocu->DeprecatedText().Tokens().size() > 1 )
         {
+            rOut.Produce_Term("Deprecation Info");
+
             HF_IdlDocuTextDisplay
                 aDescription( Env(), 0, i_ce);
             aDescription.Out().Enter( rOut.Produce_Definition() );
             i_pDocu->DeprecatedText().DisplayAt( aDescription );
             aDescription.Out().Leave();
         }
-    }
-    if ( i_pDocu->IsOptional() )
-    {
-        rOut.Produce_Term("[ OPTIONAL ]");
-    }
+    }   // end if (<any usage restriction>)
 
     if ( bShort OR bDescr )
     {
@@ -145,6 +159,97 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
         {
             HF_IdlTag
                     aTag(Env(),  i_ce);
+            Xml::Element &
+                rTerm = rOut.Produce_Term();
+            aTag.Produce_byData( rTerm,
+                                 rOut.Produce_Definition(),
+                                 *(*iter) );
+        }
+    }   // end for
+}
+
+void
+HF_IdlDocu::Produce_byCesOwnDocu( const client & i_ce ) const
+{
+    const ce_info * i_pDocu = i_ce.Docu();
+    if (i_pDocu != 0)
+        Produce_byDocuAndScope(*i_pDocu, &i_ce, i_ce);
+}
+
+void
+HF_IdlDocu::Produce_byDocu4Reference( const ce_info &     i_rDocuForReference,
+                                      const client &      i_rScopeGivingCe ) const
+{
+    Produce_byDocuAndScope(i_rDocuForReference, 0, i_rScopeGivingCe);
+}
+
+void
+HF_IdlDocu::Produce_byDocuAndScope( const ce_info &     i_rDocu,
+                                    const client *      i_pClient,
+                                    const client &      i_rScopeGivingCe ) const
+{
+    bool bShort = NOT i_rDocu.Short().IsEmpty();
+    bool bDescr = NOT i_rDocu.Description().IsEmpty();
+
+    if ( i_rDocu.IsDeprecated()
+         OR (i_pClient != 0 ? i_pClient->SightLevel() == ary::idl::sl_File : false)
+            AND NOT i_rDocu.IsPublished()
+         OR i_rDocu.IsOptional() )
+    {   // any usage restriction
+        rOut.Produce_Term("Usage Restrictions");
+
+        if ( i_rDocu.IsDeprecated() )
+            rOut.Produce_Definition() >> *new Html::Italic << "deprecated";
+        if ( (i_pClient != 0 ? i_pClient->SightLevel() == ary::idl::sl_File : false)
+             AND NOT i_rDocu.IsPublished() )
+            rOut.Produce_Definition() >> *new Html::Italic << "not published";
+        if ( i_rDocu.IsOptional() )
+            rOut.Produce_Definition() >> *new Html::Italic << "optional";
+
+        if ( i_rDocu.IsDeprecated() AND
+             // KORR
+             // Workaround, because DocuTex2::IsEmpty() does not
+             //   calculate whitespace tokens only as empty.
+             i_rDocu.DeprecatedText().Tokens().size() > 1 )
+        {
+            rOut.Produce_Term("Deprecation Info");
+
+            HF_IdlDocuTextDisplay
+                aDescription( Env(), 0, i_rScopeGivingCe);
+            aDescription.Out().Enter( rOut.Produce_Definition() );
+            i_rDocu.DeprecatedText().DisplayAt( aDescription );
+            aDescription.Out().Leave();
+        }
+    }   // end if (<any usage restriction>)
+
+    if ( bShort OR bDescr )
+    {
+        rOut.Produce_Term("Description");
+        HF_IdlDocuTextDisplay
+                aDescription( Env(), 0, i_rScopeGivingCe);
+        if (bShort)
+        {
+            aDescription.Out().Enter( rOut.Produce_Definition() );
+            i_rDocu.Short().DisplayAt( aDescription );
+            aDescription.Out().Leave();
+        }
+        if (bDescr)
+        {
+            aDescription.Out().Enter( rOut.Produce_Definition() );
+            i_rDocu.Description().DisplayAt( aDescription );
+            aDescription.Out().Leave();
+        }
+    }
+
+    for ( std::vector< ary::info::AtTag2* >::const_iterator
+                iter = i_rDocu.Tags().begin();
+          iter != i_rDocu.Tags().end();
+          ++iter )
+    {
+        if ( strlen( (*iter)->Title() ) > 0 )
+        {
+            HF_IdlTag
+                    aTag(Env(), i_rScopeGivingCe);
             Xml::Element &
                 rTerm = rOut.Produce_Term();
             aTag.Produce_byData( rTerm,
