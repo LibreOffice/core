@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
+ *  last change: $Author: os $ $Date: 2002-05-14 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,13 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
                     case  2: bPrintControl      = *(sal_Bool*)pValues[nProp].getValue() ;  break;
                     case  3: bPrintPageBackground= *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  4: bPrintBlackFont        = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  5: pValues[nProp] >>=  nPrintPostIts       ;  break;
+                    case  5:
+                    {
+                        sal_Int32 nTmp;
+                        pValues[nProp] >>=  nTmp;
+                        nPrintPostIts = (sal_Int16)nTmp;
+                    }
+                    break;
                     case  6: bPrintReverse      = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  7: bPrintProspect      = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  8: bPrintSingleJobs   = *(sal_Bool*)pValues[nProp].getValue();  break;
@@ -191,7 +197,7 @@ void    SwPrintOptions::Commit()
             case  2: bVal = bPrintControl        ; pValues[nProp].setValue(&bVal, rType);  break;
             case  3: bVal = bPrintPageBackground; pValues[nProp].setValue(&bVal, rType);  break;
             case  4: bVal = bPrintBlackFont     ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  5: pValues[nProp] <<=  nPrintPostIts       ; break;
+            case  5: pValues[nProp] <<=  (sal_Int32)nPrintPostIts       ; break;
             case  6: bVal = bPrintReverse       ; pValues[nProp].setValue(&bVal, rType);  break;
             case  7: bVal = bPrintProspect      ; pValues[nProp].setValue(&bVal, rType);  break;
             case  8: bVal = bPrintSingleJobs     ; pValues[nProp].setValue(&bVal, rType);  break;

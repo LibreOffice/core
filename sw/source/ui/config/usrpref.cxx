@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
+ *  last change: $Author: os $ $Date: 2002-05-14 13:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,9 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
         "NonprintingCharacter/ParagraphEnd",        //  7
         "NonprintingCharacter/OptionalHyphen",      //  8
         "NonprintingCharacter/Space",               //  9
-        "NonprintingCharacter/ProtectedSpace",      // 10 //not in Writer/Web
-        "NonprintingCharacter/Break",               // 11
-            "NonprintingCharacter/Tab",             // 12
+        "NonprintingCharacter/Break",               // 10
+        "NonprintingCharacter/ProtectedSpace",      // 11
+            "NonprintingCharacter/Tab",             // 12 //not in Writer/Web
             "NonprintingCharacter/HiddenText",      // 13
             "NonprintingCharacter/HiddenParagraph", // 14
             "Update/Link",                          // 15
@@ -163,7 +163,7 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 
 
     };
-    const int nCount = bWeb ? 10 : 18;
+    const int nCount = bWeb ? 12 : 18;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -214,8 +214,8 @@ void SwContentViewConfig::Commit()
             case  7: bVal = rParent.IsParagraph(); break;// "NonprintingCharacter/ParagraphEnd",
             case  8: bVal = rParent.IsSoftHyph(); break;// "NonprintingCharacter/OptionalHyphen",
             case  9: bVal = rParent.IsBlank();  break;// "NonprintingCharacter/Space",
-            case 10: bVal = rParent.IsHardBlank(); break;// "NonprintingCharacter/ProtectedSpace",
-            case 11: bVal = rParent.IsLineBreak();break;// "NonprintingCharacter/Break",
+            case 10: bVal = rParent.IsLineBreak();break;// "NonprintingCharacter/Break",
+            case 11: bVal = rParent.IsHardBlank(); break;// "NonprintingCharacter/ProtectedSpace",
             case 12: bVal = rParent.IsTab();        break;// "NonprintingCharacter/Tab",
             case 13: bVal = rParent.IsHidden(); break;// "NonprintingCharacter/HiddenText",
             case 14: bVal = rParent.IsShowHiddenPara(); break;// "NonprintingCharacter/HiddenParagraph",
@@ -256,8 +256,8 @@ void SwContentViewConfig::Load()
                     case  7: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
                     case  8: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",
                     case  9: rParent.SetBlank(bSet);    break;// "NonprintingCharacter/Space",
-                    case 10: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
-                    case 11: rParent.SetLineBreak(bSet);break;// "NonprintingCharacter/Break",
+                    case 10: rParent.SetLineBreak(bSet);break;// "NonprintingCharacter/Break",
+                    case 11: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
                     case 12: rParent.SetTab(bSet);      break;// "NonprintingCharacter/Tab",
                     case 13: rParent.SetHidden(bSet);   break;// "NonprintingCharacter/HiddenText",
                     case 14: rParent.SetShowHiddenPara(bSet); break;// "NonprintingCharacter/HiddenParagraph",
