@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:08 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ inline sal_Bool OReaderThread::getMemberTypeDescription(
         typelib_typedescription_complete( (typelib_TypeDescription **) &pInterfaceType );
     }
 
-    if ( nMethodId < 0 || nMethodId >= pInterfaceType->nMapFunctionIndexToMemberIndex )
+    if ( nMethodId >= pInterfaceType->nMapFunctionIndexToMemberIndex )
     {
         OUStringBuffer sMessage;
         sMessage.appendAscii( "vtable out of range for type " );
@@ -529,7 +529,7 @@ void OReaderThread::run()
                     disposeEnvironment();
                     break;
                 }
-                if( m_pBridgeImpl->m_lastInType.getTypeClass() != typelib_TypeClass_INTERFACE )
+                if( m_pBridgeImpl->m_lastInType.getTypeClass() != TypeClass_INTERFACE )
                 {
                     OUStringBuffer sMessage;
                     sMessage.appendAscii( "interface type is not of typeclass interface (" );
