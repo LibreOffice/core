@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-22 15:55:02 $
+ *  last change: $Author: obr $ $Date: 2001-03-30 14:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ sal_Int32 SAL_CALL rtl_str_trim( sal_Char * str )
  *
  *  rtl_string_XXX Functions
  *
-/*************************************************************************
+ ************************************************************************/
 
 
 /*************************************************************************
