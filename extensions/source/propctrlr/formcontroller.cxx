@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 12:23:34 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,82 +200,8 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 
-// for the font handling
-#define ITEMID_FONT             SID_ATTR_CHAR_FONT
-#define ITEMID_POSTURE          SID_ATTR_CHAR_POSTURE
-#define ITEMID_WEIGHT           SID_ATTR_CHAR_WEIGHT
-#define ITEMID_SHADOWED         SID_ATTR_CHAR_SHADOWED
-#define ITEMID_WORDLINEMODE     SID_ATTR_CHAR_WORDLINEMODE
-#define ITEMID_CONTOUR          SID_ATTR_CHAR_CONTOUR
-#define ITEMID_CROSSEDOUT       SID_ATTR_CHAR_STRIKEOUT
-#define ITEMID_UNDERLINE        SID_ATTR_CHAR_UNDERLINE
-#define ITEMID_FONTHEIGHT       SID_ATTR_CHAR_FONTHEIGHT
-#define ITEMID_PROPSIZE         SID_ATTR_CHAR_PROPSIZE
-#define ITEMID_COLOR            SID_ATTR_CHAR_COLOR
-#define ITEMID_KERNING          SID_ATTR_CHAR_KERNING
-#define ITEMID_CASEMAP          SID_ATTR_CHAR_CASEMAP
-#define ITEMID_LANGUAGE         SID_ATTR_CHAR_LANGUAGE
-#define ITEMID_ESCAPEMENT       SID_ATTR_CHAR_ESCAPEMENT
-#define ITEMID_FONTLIST         SID_ATTR_CHAR_FONTLIST
-#define ITEMID_AUTOKERN         SID_ATTR_CHAR_AUTOKERN
-#define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
-#define ITEMID_BLINK            SID_ATTR_FLASH
-#define ITEMID_BRUSH            SID_ATTR_BRUSH
-#define ITEMID_CHARRELIEF       SID_ATTR_CHAR_RELIEF
-#define ITEMID_EMPHASISMARK     SID_ATTR_CHAR_EMPHASISMARK
-#ifndef _SVX_CHARRELIEFITEM_HXX
-#include <svx/charreliefitem.hxx>
-#endif
-#ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
-#endif
-#ifndef _SVX_FONTITEM_HXX
-#include <svx/fontitem.hxx>
-#endif
-#ifndef _SVX_FHGTITEM_HXX
-#include <svx/fhgtitem.hxx>
-#endif
-#ifndef _SVX_POSTITEM_HXX
-#include <svx/postitem.hxx>
-#endif
-#ifndef _SVX_WGHTITEM_HXX
-#include <svx/wghtitem.hxx>
-#endif
-#ifndef _SVX_UDLNITEM_HXX
-#include <svx/udlnitem.hxx>
-#endif
-#ifndef _SVX_CRSDITEM_HXX
-#include <svx/crsditem.hxx>
-#endif
-#ifndef _SVX_COLRITEM_HXX
-#include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_FLSTITEM_HXX
-#include <svx/flstitem.hxx>
-#endif
-#ifndef _SVX_LANGITEM_HXX
-#include <svx/langitem.hxx>
-#endif
-#ifndef _SVX_WRLMITEM_HXX
-#include <svx/wrlmitem.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX
-#include <vcl/system.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
-#include <com/sun/star/awt/FontWeight.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
-#include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP_
-#include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
-#include <com/sun/star/awt/FontStrikeout.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -1221,346 +1147,28 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OPropertyBrowserController::implGetCheckFontProperty(const ::rtl::OUString& _rPropName, Any& _rValue)
-    {
-        _rValue = m_xPropValueAccess->getPropertyValue(_rPropName);
-        if (m_xPropStateAccess.is())
-            return PropertyState_DEFAULT_VALUE == m_xPropStateAccess->getPropertyState(_rPropName);
-
-        return sal_False;
-    }
-
-    //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::implGetStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault)
-    {
-        Any aValue;
-        if (implGetCheckFontProperty(_rPropName, aValue))
-            return _rDefault;
-
-        return ::comphelper::getString(aValue);
-    }
-
-    //------------------------------------------------------------------------
-    sal_Int16 OPropertyBrowserController::implGetInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault)
-    {
-        Any aValue;
-        if (implGetCheckFontProperty(_rPropName, aValue))
-            return _nDefault;
-
-        sal_Int32 nValue(_nDefault);
-        ::cppu::enum2int(nValue, aValue);
-        return (sal_Int16)nValue;
-    }
-
-    //------------------------------------------------------------------------
-    sal_Int32 OPropertyBrowserController::implGetInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault)
-    {
-        Any aValue;
-        if (implGetCheckFontProperty(_rPropName, aValue))
-            return _nDefault;
-
-        sal_Int32 nValue(_nDefault);
-        ::cppu::enum2int(nValue, aValue);
-        return nValue;
-    }
-
-    //------------------------------------------------------------------------
-    float OPropertyBrowserController::implGetFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault)
-    {
-        Any aValue;
-        if (implGetCheckFontProperty(_rPropName, aValue))
-            return _nDefault;
-
-        return ::comphelper::getFloat(aValue);
-    }
-
-    //------------------------------------------------------------------------
-    void OPropertyBrowserController::implInvalidateItem(const ::rtl::OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
-    {
-        if (_bForceInvalidation || (PropertyState_AMBIGUOUS_VALUE == m_xPropStateAccess->getPropertyState(_rPropName)))
-            _rSet.InvalidateItem(_nItemId);
-    }
-
-    //------------------------------------------------------------------------
-    static sal_uInt16 pPropFontRanges[] =
-    {
-        SID_ATTR_CHAR, SID_ATTR_CHAR_FONTLIST,
-        SID_ATTR_CHAR_EMPHASISMARK, SID_ATTR_CHAR_EMPHASISMARK,
-        SID_ATTR_CHAR_RELIEF, SID_ATTR_CHAR_RELIEF,
-        0
-    };
-
-    //------------------------------------------------------------------------
     void OPropertyBrowserController::ChangeFontProperty( const ::rtl::OUString& rName )
     {
-        SfxItemSet aCoreSet( SFX_APP()->GetPool(), pPropFontRanges);
+        // create an item set for use with the dialog
+        SfxItemSet* pSet = NULL;
+        SfxItemPool* pPool = NULL;
+        SfxPoolItem** pDefaults = NULL;
+        ControlCharacterDialog::createItemSet(pSet, pPool, pDefaults);
+        ControlCharacterDialog::translatePropertiesToItems(m_xPropValueAccess, pSet);
 
-        try
-        {
-            // some items, which may be in default state, have to be filled with non-void information
-            Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
-            ::com::sun::star::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
-
-            // get the current properties
-            ::rtl::OUString aFontName       = implGetStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
-            ::rtl::OUString aFontStyleName  = implGetStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
-            sal_Int16   nFontFamily         = implGetInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
-            sal_Int16   nFontCharset        = implGetInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
-            float   nFontHeight             = implGetFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
-            float   nFontWeight             = implGetFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
-            sal_Int16 nFontSlant            = implGetInt16FontProperty(PROPERTY_FONT_SLANT, aDefaultFont.Slant);
-            sal_Int16 nFontUnderline        = implGetInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
-            sal_Int16 nFontStrikeout        = implGetInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
-
-            sal_Int32 nTextLineColor        = implGetInt32FontProperty(PROPERTY_TEXTLINECOLOR, COL_AUTO);
-            sal_Int16 nFontRelief           = implGetInt16FontProperty(PROPERTY_FONT_RELIEF, aDefaultVCLFont.GetRelief());
-            sal_Int16 nFontEmphasisMark     = implGetInt16FontProperty(PROPERTY_FONT_EMPHASIS_MARK, aDefaultVCLFont.GetEmphasisMark());
-
-            Any aValue;
-            sal_Bool bWordLineMode          = implGetCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
-            sal_Int32 nColor32              = implGetInt32FontProperty(PROPERTY_TEXTCOLOR, 0);
-
-            // build SfxItems with the values
-            SvxFontItem aFontItem((FontFamily)nFontFamily, aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, SID_ATTR_CHAR_FONT);
-
-            nFontHeight = (float)OutputDevice::LogicToLogic(Size(0, (sal_Int32)nFontHeight), MAP_POINT, MAP_TWIP).Height();
-            SvxFontHeightItem aSvxFontHeightItem((sal_uInt32)nFontHeight,100,SID_ATTR_CHAR_FONTHEIGHT);
-
-            FontWeight      eWeight=VCLUnoHelper::ConvertFontWeight(nFontWeight);
-            FontItalic      eItalic=(FontItalic)nFontSlant;
-            FontUnderline   eUnderline=(FontUnderline)nFontUnderline;
-            FontStrikeout   eStrikeout=(FontStrikeout)nFontStrikeout;
-
-            SvxPostureItem      aPostureItem(eItalic,SID_ATTR_CHAR_POSTURE);
-            SvxWeightItem       aWeightItem(eWeight,SID_ATTR_CHAR_WEIGHT);
-
-            SvxCrossedOutItem   aCrossedOutItem(eStrikeout,SID_ATTR_CHAR_STRIKEOUT );
-            SvxWordLineModeItem aWordLineModeItem(bWordLineMode, SID_ATTR_CHAR_WORDLINEMODE);
-
-            SvxUnderlineItem    aUnderlineItem(eUnderline,SID_ATTR_CHAR_UNDERLINE);
-            aUnderlineItem.SetColor(Color(nTextLineColor));
-
-            SvxColorItem aSvxColorItem(nColor32,SID_ATTR_CHAR_COLOR);
-            SvxLanguageItem aLanguageItem(Application::GetAppInternational().GetLanguage(), SID_ATTR_CHAR_LANGUAGE);
-
-            // the 2 CJK props
-            SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief);
-            SvxEmphasisMarkItem aEmphasisMarkitem((FontEmphasisMark)nFontEmphasisMark);
-
-            aCoreSet.Put(aFontItem, SID_ATTR_CHAR_FONT);
-            aCoreSet.Put(aSvxFontHeightItem,SID_ATTR_CHAR_FONTHEIGHT);
-            aCoreSet.Put(aWeightItem, SID_ATTR_CHAR_WEIGHT );
-            aCoreSet.Put(aPostureItem, SID_ATTR_CHAR_POSTURE);
-            aCoreSet.Put(aUnderlineItem,SID_ATTR_CHAR_UNDERLINE );
-            aCoreSet.Put(aCrossedOutItem,SID_ATTR_CHAR_STRIKEOUT );
-            aCoreSet.Put(aSvxColorItem, SID_ATTR_CHAR_COLOR);
-            aCoreSet.Put(aLanguageItem, SID_ATTR_CHAR_LANGUAGE);
-            aCoreSet.Put(aWordLineModeItem, SID_ATTR_CHAR_WORDLINEMODE);
-
-            aCoreSet.Put(aFontReliefItem, SID_ATTR_CHAR_RELIEF);
-            aCoreSet.Put(aEmphasisMarkitem, SID_ATTR_CHAR_EMPHASISMARK);
-
-            if (m_xPropStateAccess.is())
-            {
-                implInvalidateItem(PROPERTY_FONT_NAME, SID_ATTR_CHAR_FONT, aCoreSet);
-                implInvalidateItem(PROPERTY_FONT_HEIGHT, SID_ATTR_CHAR_FONTHEIGHT, aCoreSet);
-                implInvalidateItem(PROPERTY_FONT_WEIGHT, SID_ATTR_CHAR_WEIGHT, aCoreSet, ::com::sun::star::awt::FontWeight::DONTKNOW == nFontWeight);
-                implInvalidateItem(PROPERTY_FONT_SLANT, SID_ATTR_CHAR_POSTURE, aCoreSet, ::com::sun::star::awt::FontSlant_DONTKNOW == nFontSlant);
-                implInvalidateItem(PROPERTY_FONT_UNDERLINE, SID_ATTR_CHAR_UNDERLINE, aCoreSet, ::com::sun::star::awt::FontUnderline::DONTKNOW == nFontUnderline);
-                implInvalidateItem(PROPERTY_FONT_STRIKEOUT, SID_ATTR_CHAR_STRIKEOUT, aCoreSet, ::com::sun::star::awt::FontStrikeout::DONTKNOW == nFontStrikeout);
-                implInvalidateItem(PROPERTY_TEXTCOLOR, SID_ATTR_CHAR_COLOR , aCoreSet);
-                implInvalidateItem(PROPERTY_WORDLINEMODE, SID_ATTR_CHAR_WORDLINEMODE, aCoreSet);
-                implInvalidateItem(PROPERTY_FONT_RELIEF, SID_ATTR_CHAR_RELIEF, aCoreSet);
-                implInvalidateItem(PROPERTY_FONT_EMPHASIS_MARK, SID_ATTR_CHAR_EMPHASISMARK, aCoreSet);
-            }
-        }
-        catch (Exception&)
-        {
-            DBG_ERROR("OPropertyBrowserController::ChangeFontProperty : caught an exception (1) !")
-            return;
-        }
-
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_FONT);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_FONTHEIGHT);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_LANGUAGE);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_POSTURE);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_WEIGHT);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CJK_RUBY);
-
-        aCoreSet.DisableItem(SID_ATTR_CHAR_WORDLINEMODE);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CASEMAP);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_CONTOUR);
-        aCoreSet.DisableItem(SID_ATTR_CHAR_SHADOWED);
-
-        FontList aFontList(Application::GetDefaultDevice());
-        SvxFontListItem aFontListItem( &aFontList, SID_ATTR_CHAR_FONTLIST );
-        aCoreSet.Put(aFontListItem, SID_ATTR_CHAR_FONTLIST);
-
-        ControlCharacterDialog aDlg(GetpApp()->GetAppWindow(), aCoreSet);
-
-        try
-        {
-            if ( RET_OK == aDlg.Execute() )
+        {   // do this in an own block. The dialog needs to be destroyed before we call
+            // destroyItemSet
+            ControlCharacterDialog aDlg(GetpApp()->GetAppWindow(), *pSet);
+            if (RET_OK == aDlg.Execute())
             {
                 const SfxItemSet* pOut = aDlg.GetOutputItemSet();
-
-                if (pOut != NULL)
-                {
-                    // --------------------------
-                    // font name
-                    SfxItemState eState = pOut->GetItemState( SID_ATTR_CHAR_FONT );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxFontItem& rFontItem =
-                            static_cast<const SvxFontItem&>(pOut->Get(SID_ATTR_CHAR_FONT));
-
-                        getPropertyBox()->SetPropertyValue( String::CreateFromAscii("Font"), rFontItem.GetFamilyName());
-
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_NAME     , makeAny(::rtl::OUString(rFontItem.GetFamilyName())));
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_STYLENAME, makeAny(::rtl::OUString(rFontItem.GetStyleName())));
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_FAMILY   , makeAny((sal_Int16)rFontItem.GetFamily()));
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
-                    }
-
-                    // --------------------------
-                    // font height
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_FONTHEIGHT );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxFontHeightItem& rSvxFontHeightItem =
-                            static_cast<const SvxFontHeightItem&>(pOut->Get(SID_ATTR_CHAR_FONTHEIGHT));
-
-                        float nHeight = (float)OutputDevice::LogicToLogic(Size(0, rSvxFontHeightItem.GetHeight()), MAP_TWIP, MAP_POINT).Height();
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_HEIGHT,makeAny(nHeight));
-
-                    }
-
-                    // --------------------------
-                    // font weight
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_WEIGHT );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxWeightItem& rWeightItem =
-                            static_cast<const SvxWeightItem&>(pOut->Get(SID_ATTR_CHAR_WEIGHT));
-
-                        float nWeight = VCLUnoHelper::ConvertFontWeight( rWeightItem.GetWeight());
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_WEIGHT,makeAny(nWeight));
-                    }
-
-                    // --------------------------
-                    // font slant
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_POSTURE );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxPostureItem& rPostureItem =
-                            static_cast<const SvxPostureItem&>(pOut->Get(SID_ATTR_CHAR_POSTURE));
-
-                        ::com::sun::star::awt::FontSlant eSlant = (::com::sun::star::awt::FontSlant)rPostureItem.GetPosture();
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
-                    }
-
-                    // --------------------------
-                    // font underline
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_UNDERLINE );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxUnderlineItem& rUnderlineItem =
-                            static_cast<const SvxUnderlineItem&>(pOut->Get(SID_ATTR_CHAR_UNDERLINE));
-
-                        sal_Int16 nUnderline = rUnderlineItem.GetUnderline();
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
-
-                        // the text line color is transported in this item, too
-                        sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
-
-                        Any aUnoColor;
-                        if (COL_AUTO != nColor)
-                            aUnoColor <<= (sal_Int32)nColor;
-
-                        m_xPropValueAccess->setPropertyValue(PROPERTY_TEXTLINECOLOR, aUnoColor);
-                    }
-
-                    // --------------------------
-                    // font strikeout
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_STRIKEOUT );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxCrossedOutItem& rCrossedOutItem =
-                            static_cast<const SvxCrossedOutItem&>(pOut->Get(SID_ATTR_CHAR_STRIKEOUT));
-
-                        sal_Int16 nStrikeout = rCrossedOutItem.GetStrikeout();
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_FONT_STRIKEOUT,makeAny(nStrikeout));
-                    }
-
-
-                    // --------------------------
-                    // font wordline mode
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_WORDLINEMODE );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxWordLineModeItem& rWordLineModeItem =
-                            static_cast<const SvxWordLineModeItem&>(pOut->Get(SID_ATTR_CHAR_WORDLINEMODE));
-
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_WORDLINEMODE, ::cppu::bool2any(rWordLineModeItem.GetValue()));
-                    }
-
-
-                    // --------------------------
-                    // text color
-                    eState = pOut->GetItemState( SID_ATTR_CHAR_COLOR );
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxColorItem& rColorItem =
-                            static_cast<const SvxColorItem&>(pOut->Get(SID_ATTR_CHAR_COLOR));
-
-                        sal_Int32 nColor = rColorItem.GetValue().GetColor();
-
-                        Any aUnoColor;
-                        if (COL_AUTO != nColor)
-                            aUnoColor <<= (sal_Int32)nColor;
-
-                        m_xPropValueAccess->setPropertyValue( PROPERTY_TEXTCOLOR, aUnoColor );
-                    }
-
-                    // --------------------------
-                    // font relief
-                    eState = pOut->GetItemState(SID_ATTR_CHAR_RELIEF);
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxCharReliefItem& rReliefItem =
-                            static_cast<const SvxCharReliefItem&>(pOut->Get(SID_ATTR_CHAR_RELIEF));
-
-                        m_xPropValueAccess->setPropertyValue(PROPERTY_FONT_RELIEF, makeAny((sal_Int16)rReliefItem.GetValue()));
-                    }
-
-                    // --------------------------
-                    // font emphasis mark
-                    eState = pOut->GetItemState(SID_ATTR_CHAR_EMPHASISMARK);
-
-                    if ( eState == SFX_ITEM_SET )
-                    {
-                        const SvxEmphasisMarkItem& rEmphMarkItem =
-                            static_cast<const SvxEmphasisMarkItem&>(pOut->Get(SID_ATTR_CHAR_EMPHASISMARK));
-
-                        m_xPropValueAccess->setPropertyValue(PROPERTY_FONT_EMPHASIS_MARK, makeAny((sal_Int16)rEmphMarkItem.GetEmphasisMark()));
-                    }
-                }
+                String sNewFontName = ControlCharacterDialog::translatePropertiesToItems(pOut, m_xPropValueAccess);
+                if (0 != sNewFontName.Len())
+                    getPropertyBox()->SetPropertyValue( String::CreateFromAscii("Font"), sNewFontName);
             }
         }
-        catch (Exception&)
-        {
-            DBG_ERROR("OPropertyBrowserController::ChangeFontProperty : caught an exception (2) !")
-            return;
-        }
+
+        ControlCharacterDialog::destroyItemSet(pSet, pPool, pDefaults);
     }
 
     //------------------------------------------------------------------------
@@ -2911,6 +2519,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2001/06/08 12:23:34  fs
+ *  #86096# corrected setting the FontSlant
+ *
  *  Revision 1.32  2001/06/08 11:07:39  fs
  *  #86096# corrected extracting sal_Int16/sal_Int32 values
  *
