@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-02 16:38:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:50:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,8 @@ sal_Bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void* p
 
 SvxColorValueSet::SvxColorValueSet( Window* pParent, WinBits nWinStyle ) :
     ValueSet( pParent, nWinStyle ),
-    DragSourceHelper( this )
+    DragSourceHelper( this ),
+    bLeft (TRUE)
 {
 }
 
@@ -163,7 +164,8 @@ SvxColorValueSet::SvxColorValueSet( Window* pParent, WinBits nWinStyle ) :
 
 SvxColorValueSet::SvxColorValueSet( Window* pParent, const ResId& rResId ) :
     ValueSet( pParent, rResId ),
-    DragSourceHelper( this )
+    DragSourceHelper( this ),
+    bLeft (TRUE)
 {
 }
 
@@ -504,7 +506,7 @@ IMPL_LINK( SvxColorDockingWindow, SelectHdl, void *, EMPTYARG )
     Color  aColor( aColorSet.GetItemColor( nPos ) );
     String aStr( aColorSet.GetItemText( nPos ) );
 
-    if ( aColorSet.IsLeftButton() )
+    if (aColorSet.IsLeftButton())
     {
         if ( nLeftSlot == SID_ATTR_FILL_COLOR )
         {
