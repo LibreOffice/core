@@ -8,7 +8,7 @@ Public sSODocumentCheckbox(4) As String
 Public sSOHelperdocuments(1) As String
 Public sTemplateCheckbox(SBMAXAPPLCOUNT-1) As String
 Public sDocumentCheckbox(SBMAXAPPLCOUNT-1) As String
-Public sTemplateGroupName(SBMAXAPPLCOUNT-1) As String
+Public sTemplateGroupName As String
 Public sSearchInSubDir as String
 Public sPathErrorTemplates(SBMAXAPPLCOUNT-1) As String
 Public sPathErrorDocument(SBMAXAPPLCOUNT-1) As String
@@ -71,9 +71,7 @@ Sub LoadLanguage()
 	
 		sSummaryHeader = GetResText(1031)
 
-		sTemplateGroupName(0) = GetResText(1036)
-		sTemplateGroupName(1) = GetResText(1037)
-		sTemplateGroupName(2) = GetResText(1038)
+		sTemplateGroupName = GetResText(1036)
 
 		sProgressMoreDocs = GetResText(1041)
 		sProgressMoreTemplates = GetResText(1042)

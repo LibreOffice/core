@@ -37,7 +37,7 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.Execute()
+	ImportDialogArea.Visible = True &apos;Execute()
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
@@ -66,7 +66,8 @@ Dim iCurStep as Integer
 		Case 1
 			FillStep_InputPaths(0, True)
 		Case 2
-			If SaveStep_InputPath Then
+			If CheckInputPaths Then
+				SaveStep_InputPath
 				If CurOffice &lt; ApplCount - 1 Then
 					CurOffice = CurOffice + 1
 					TakeOverPathSettings()
@@ -84,6 +85,7 @@ Dim iCurStep as Integer
 					Call ConvertAllDocuments(XMLFilterName())
 			End Select
 		Case 4
+			CancelButton()
 	End Select
 	ImportDialog.cbGoOn.DefaultButton = True
 	RepaintHeaderPreview()	
@@ -108,14 +110,13 @@ Dim iCurStep as Integer
 &apos;Todo: muessen auch beim Zuruecksteppen wirklich die Importpfade auf ihre Gueltigkeit hin Ueberprueft werden?
 			FillStep_InputPaths(Applcount-1, False)
 		Case 2
-			If SaveStep_InputPath Then
-				If CurOffice &gt; 0 Then
-					CurOffice = CurOffice - 1
-					FillStep_InputPaths(CurOffice, False)
-				Else
-					FillStep_Welcome()
-					bDoKeepApplValues = True
-				End If
+			SaveStep_InputPath
+			If CurOffice &gt; 0 Then
+				CurOffice = CurOffice - 1
+				FillStep_InputPaths(CurOffice, False)
+			Else
+				FillStep_Welcome()
+				bDoKeepApplValues = True
 			End If
 	End Select
 	ImportDialog.cbGoOn.DefaultButton = True
@@ -126,13 +127,13 @@ RTError:
 End Sub
 
 
-Sub CancelButton
+Sub CancelButton()
 	If bCallCancelMsg Then
 		&apos; Conversion is already running
 		ImportDialog.cbCancel.Enabled = False
 		bCancelTask = True
 	Else
-		ImportDialogArea.EndExecute
+		ImportDialogArea.Visible = False &apos;EndExecute
 		ImportDialogArea.Dispose()
 		End
 	End If
@@ -141,7 +142,7 @@ End Sub
 
 Sub CancelTask()
 	If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
-		ImportDialogArea.EndExecute
+		ImportDialogArea.Visible = False &apos;EndExecute
 		ImportDialogArea.Dispose
 		End
 	Else
@@ -177,7 +178,7 @@ Sub HelperDialog()
 End Sub
 
 
-Sub DisorEnableCheckboxes(oEvent as Object)
+Sub ToggleCheckboxes(oEvent as Object)
 Dim bMSEnable as Boolean
 	bMSEnable = oEvent.Source.Model.Tag = &quot;MS&quot;
 	With ImportDialog
@@ -191,11 +192,11 @@ Dim bMSEnable as Boolean
 		.WelcomeTextLabel2.Enabled = bMSEnable
 	End With
 	bDoKeepApplValues = False
-	DisOrEnableNextButton()
+	ToggleNextButton()
 End Sub
 
 
-Sub DisOrEnableNextButton()
+Sub ToggleNextButton()
 Dim iCurStep as Integer
 Dim bDoEnable as Boolean
 Dim i as Integer
@@ -212,9 +213,9 @@ Dim i as Integer
 			bDoKeepApplValues = False
 		Case 2
 			bDoEnable = CheckControlPath(ImportDialog.TemplateImportPath, True)
-			bDoEnable = CheckControlPath(ImportDialog.TemplateExportPath, bDoEnable)
+&apos;			bDoEnable = CheckControlPath(ImportDialog.TemplateExportPath, bDoEnable)
 			bDoEnable = CheckControlPath(ImportDialog.DocumentImportPath, bDoEnable)
-			bDoEnable = CheckControlPath(ImportDialog.DocumentExportPath, bDoenable)
+&apos;			bDoEnable = CheckControlPath(ImportDialog.DocumentExportPath, bDoenable)
 	End Select
 	ImportDialog.cbGoOn.Enabled = bDoEnable
 End Sub
@@ -222,14 +223,16 @@ End Sub
 
 Sub TakeOverPathSettings()					
 &apos;Takes over the Pathsettings from the first selected application to the next applications
-	Applications(CurOffice,SBDOCSOURCE) = Applications(0,SBDOCSOURCE)
-	Applications(CurOffice,SBDOCTARGET) = Applications(0,SBDOCTARGET)
-	If WizardMode = SBXMLMODE AND Applications(CurOffice,SBAPPLKEY) = 3 Then	&apos; Helper Applications
-		Applications(CurOffice,SBTEMPLSOURCE) = Applications(CurOffice,SBDOCSOURCE)
-		Applications(CurOffice,SBTEMPLTARGET) = Applications(CurOffice,SBDOCTARGET)											
-	Else
-		Applications(CurOffice,SBTEMPLSOURCE) = Applications(0,SBTEMPLSOURCE)
-		Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)					
+	If Applications(CurOffice,SBDOCSOURCE) = &quot;&quot; Then
+		Applications(CurOffice,SBDOCSOURCE) = Applications(0,SBDOCSOURCE)
+		Applications(CurOffice,SBDOCTARGET) = Applications(0,SBDOCTARGET)
+		If WizardMode = SBXMLMODE AND Applications(CurOffice,SBAPPLKEY) = 3 Then
+			Applications(CurOffice,SBTEMPLSOURCE) = Applications(CurOffice,SBDOCSOURCE)
+			Applications(CurOffice,SBTEMPLTARGET) = Applications(CurOffice,SBDOCTARGET)											
+		Else
+			Applications(CurOffice,SBTEMPLSOURCE) = Applications(0,SBTEMPLSOURCE)
+			Applications(CurOffice,SBTEMPLTARGET) = Applications(0,SBTEMPLTARGET)					
+		End If
 	End If
-End Sub					
+End Sub
 </script:module>

@@ -48,7 +48,7 @@ Dim sLocExtension as String
 		sFileContent() = GetMimeTypeList(sFilterName(FilterIndex))
 		NewList() = ReadDirectories(sSourceDir, bRecursive, bCheckRealType, False, sFileContent(), sLocExtension)
 		If Ubound(NewList()) &gt; -1 Then
-			AddListtoList(FilesList(), NewList(), ApplIndex)
+			AddListtoFilesList(FilesList(), NewList(), ApplIndex)
 			ImportDialog.LabelRetrieval.Label = sProgressPage_2 &amp;  &quot;  &quot; &amp; ReplaceString(sProgressPage_5, Str(Ubound(FilesList()) + 1) &amp; &quot; &quot;, &quot;%1&quot;)
 		End If
 	End If
@@ -200,10 +200,12 @@ Dim MaxFileIndex as Integer
 &apos;				Wend
 			End If
 		Next i
-		ImportDialog.cbCancel.Label = sCloseButton
-		Msgbox sReady, 64, sTitle
-		bCallCancelMsg = False
 	End If
+	ImportDialog.cbCancel.Label = sCloseButton
+	ImportDialog.cbGoOn.Label = sReady
+	ImportDialog.cbGoOn.Enabled = True
+	bCallCancelMsg = False
+
 &apos;	oLogDocument.Dispose()
 &apos;	ImportDialogArea.endExecute
 &apos;	ImportDialogArea.Dispose	
@@ -215,9 +217,13 @@ RTError:
 End Sub
 
 
-Sub AddListtoList(FirstList(), SecList(), ApplIndex as Integer)
+Sub AddListtoFilesList(FirstList(), SecList(), ApplIndex as Integer)
 Dim FirstStart as Integer, FirstEnd as Integer, i as Integer, s as Integer
-	FirstStart = Ubound(FirstList(),1)
+	If FirstList(0,0) = &quot;&quot; Then
+		FirstStart = Ubound(FirstList(),1)
+	Else
+		FirstStart = Ubound(FirstList(),1) + 1
+	End If
 	FirstEnd = FirstStart + Ubound(SecList(),1)
 	ReDim Preserve FirstList(FirstEnd,2)
 	s = 0
@@ -233,7 +239,7 @@ End Sub
 Function GetTargetTemplatePath(Index as Integer)
 	Select Case WizardMode
 		Case SBMICROSOFTMODE
-			GetTargetTemplatePath() = SOTemplatePath &amp; &quot;/&quot; &amp; sTemplateGroupName(Index)
+			GetTargetTemplatePath() = SOTemplatePath &amp; &quot;/&quot; &amp; sTemplateGroupName
 		Case SBXMLMODE
 			If Index = 3 Then
 				&apos; Helper Application
