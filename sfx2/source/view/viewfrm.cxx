@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 11:16:39 $
+ *  last change: $Author: mba $ $Date: 2002-05-21 07:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3444,6 +3444,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 xSet->setPropertyValue(sProperty,aProp);
                 AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
                 xRecorder = NULL;
+                GetBindings().SetRecorder_Impl( xRecorder );
             }
             else
             {
@@ -3464,6 +3465,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 xRecorder->startRecording(xFrame);
                 aProp <<= xSupplier;
                 xSet->setPropertyValue(sProperty,aProp);
+                GetBindings().SetRecorder_Impl( xRecorder );
             }
 
             rReq.Done();
