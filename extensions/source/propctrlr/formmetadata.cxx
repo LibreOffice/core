@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:42:03 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 08:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace pcr
         sal_Bool        bMultiSelectable;
 
         OPropertyInfoImpl(
-                        const String&               rName,
+                        const ::rtl::OUString&      rName,
                         sal_Int32                   _nId,
                         sal_Bool                    bMSel,
                         const String&               aTranslation,
@@ -101,7 +101,7 @@ namespace pcr
     };
 
     //------------------------------------------------------------------------
-    OPropertyInfoImpl::OPropertyInfoImpl(const String& _rName, sal_Int32 _nId, sal_Bool bMSel,
+    OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId, sal_Bool bMSel,
                                    const String& aString, sal_uInt16 nP, sal_uInt32 nHid)
        :sName(_rName)
        ,nId(_nId)
@@ -489,6 +489,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/02 12:42:03  tbe
+ *  added scrollbar properties
+ *
  *  Revision 1.9  2001/04/26 09:15:46  tbe
  *  added progressbar properties
  *
