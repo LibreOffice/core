@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2002-09-26 10:01:42 $
+ *  last change: $Author: af $ $Date: 2002-11-14 15:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SVDOOLE2_HXX //autogen
 #include <svx/svdoole2.hxx>
+#endif
+#ifndef _SD_CUSSHOW_HXX
+#include "cusshow.hxx"
 #endif
 
 #include "strmname.h"
@@ -318,6 +321,9 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
              && !(pPage->GetPageKind()==PK_HANDOUT)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
             BOOL bPageExluded = pPage->IsExcluded();
+
+            bool bPageBelongsToShow = PageBelongsToCurrentShow (pPage);
+            bPageExluded |= !bPageBelongsToShow;
 
             pEntry = InsertEntry( pPage->GetName(),
                                     bPageExluded ? aImgPageExcl : aImgPage,
@@ -1014,3 +1020,34 @@ IMPL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*, EMPTYARG)
 }
 
 
+bool SdPageObjsTLB::PageBelongsToCurrentShow (const SdPage* pPage) const
+{
+    // Return <TRUE/> as default when there is no custom show or when none
+    // is used.  The page does then belong to the standard show.
+    bool bBelongsToShow = true;
+
+    if (pDoc->IsCustomShow())
+    {
+        // Get the current custom show.
+        SdCustomShow* pCustomShow = NULL;
+        List* pShowList = const_cast<SdDrawDocument*>(pDoc)->GetCustomShowList();
+        if (pShowList != NULL)
+        {
+            ULONG nCurrentShowIndex = pShowList->GetCurPos();
+            void* pObject = pShowList->GetObject(nCurrentShowIndex);
+            pCustomShow = static_cast<SdCustomShow*>(pObject);
+        }
+
+        // Check whether the given page is part of that custom show.
+        if (pCustomShow != NULL)
+        {
+            bBelongsToShow = false;
+            ULONG nPageCount = pCustomShow->Count();
+            for (USHORT i=0; i<nPageCount && !bBelongsToShow; i++)
+                if (pPage == static_cast<SdPage*>(pCustomShow->GetObject (i)))
+                    bBelongsToShow = true;
+        }
+    }
+
+    return bBelongsToShow;
+}
