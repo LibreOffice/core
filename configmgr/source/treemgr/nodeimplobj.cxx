@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:19:58 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ ValueMemberNode DeferredGroupNodeImpl::makeValueMember(data::Accessor const& _aA
 
 bool DeferredGroupNodeImpl::hasChanges() const
 {
-    for (MemberChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); it)
+    for (MemberChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); ++it)
     {
         if (!it->second.is())
         {
@@ -1089,7 +1089,7 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToAddedElement(data::Accessor
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
         // We have another element replacing ours - what do we do ?
-        if (Element* pOriginal = getStoredElement(aName))
+        if (hasStoredElement(aName))
         {
             OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
 
@@ -1127,7 +1127,7 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToRemovedElement(data::Access
     m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
-        if (Element* pOriginal = getStoredElement(aName))
+        if (hasStoredElement(aName))
         {
             // take away the original
             this->removeElement(aName);
