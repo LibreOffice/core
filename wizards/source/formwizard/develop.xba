@@ -363,6 +363,18 @@ Dim nBaseWidth as Long
 End Sub
 
 
+
+Function GetCorrWidth(StartIndex as Integer, EndIndex as Integer, nDist as Long, Widthfactor as Integer) as Integer
+Dim ShapeCount as Integer
+	If WidthFactor &gt; 0 Then
+		ShapeCount = EndIndex-StartIndex + 1
+	Else
+		ShapeCount = iReduceWidth
+	End If
+	GetCorrWidth() = (nDist)/ShapeCount
+End Function
+
+
 Sub AdjustLineWidth(StartIndex as Integer, EndIndex as Integer, nDist as Long, Widthfactor as Integer)
 Dim i as Integer
 Dim oLocDBShape as Object
@@ -371,13 +383,7 @@ Dim CorrWidth as Integer
 Dim bAdjustPos as Boolean
 Dim iLocTCPosX as Long
 Dim iLocDBPosX as Long
-Dim ShapeCount as Integer
-	If WidthFactor &gt; 0 Then
-		ShapeCount = EndIndex-StartIndex + 1
-	Else
-		ShapeCount = iReduceWidth
-	End If
-	CorrWidth = (nDist)/ShapeCount  
+	CorrWidth =	GetCorrWidth(StartIndex, EndIndex, nDist, Widthfactor)
 	bAdjustPos = False
 	iLocTCPosX = cXOffset
 	For i = StartIndex To EndIndex
@@ -395,7 +401,11 @@ Dim ShapeCount as Integer
 			bAdjustPos = True
 		End If
 		If CDbl(FieldMetaValues(i,1)) &gt; 20 or WidthFactor &gt; 0 Then
-			oLocDBShape.Size = GetSize(oLocDBShape.Size.Width + WidthFactor * CorrWidth, oLocDBShape.Size.Height)
+			If (CurArrangement = cTopJustified) And (oLocTCShape.Size.Width &gt; oLocDBShape.Size.Width) Then
+				oLocDBShape.Size = GetSize(oLocTCShape.Size.Width + WidthFactor * CorrWidth, oLocDBShape.Size.Height)
+			Else
+				oLocDBShape.Size = GetSize(oLocDBShape.Size.Width + WidthFactor * CorrWidth, oLocDBShape.Size.Height)
+			End If
 		End If
 		iLocTCPosX = oLocDBShape.Position.X + oLocDBShape.Size.Width + cHoriDistance
 		If CurArrangement = cTopJustified Then
