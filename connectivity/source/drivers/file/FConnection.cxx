@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 17:08:08 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 10:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_bClosed(sal_False)
                          ,m_xMetaData(NULL)
                          ,m_bShowDeleted(sal_False)
+                         ,m_bCaseSensitiveExtension( sal_True )
 {
     ModuleContext::AddRef();
 }
@@ -157,6 +158,20 @@ OConnection::~OConnection()
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool OConnection::matchesExtension( const String& _rExt ) const
+{
+    if ( isCaseSensitveExtension() )
+        return ( getExtension() == _rExt );
+
+    String sMyExtension( getExtension() );
+    sMyExtension.ToLowerAscii();
+    String sExt( _rExt );
+    sExt.ToLowerAscii();
+
+    return sMyExtension == sExt;
 }
 
 //-----------------------------------------------------------------------------
