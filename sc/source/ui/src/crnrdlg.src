@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Text[ chinese_simplified ] = "ÓÃÓÚÊı¾İÇøÓò";
         Text[ russian ] = "Äëÿ äèàïàçîíà äàííûõ";
         Text[ polish ] = "dla zakresu danych";
-        Text[ japanese ] = "ÃŞ°À”ÍˆÍ—p";
+        Text[ japanese ] = "ÃŞ°À”ÍˆÍ";
         Text[ chinese_traditional ] = "¥Î©ó¸ê®Æ°Ï°ì";
         Text[ arabic ] = "áäØÇŞ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ãéá ğåñéï÷Ş äåäïìİíùí";
