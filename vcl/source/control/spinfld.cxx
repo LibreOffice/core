@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 07:42:08 $
+ *  last change: $Author: mt $ $Date: 2001-06-06 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,11 +731,7 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
 
 void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
 {
-    if ( GetSubEdit() )
-    {
-        GetSubEdit()->Draw( pDev, rPos, rSize, nFlags );
-        return;
-    }
+    Edit::Draw( pDev, rPos, rSize, nFlags );
 
     WinBits nStyle = GetStyle();
     if ( !(nFlags & WINDOW_DRAW_NOCONTROLS ) && ( nStyle & (WB_SPIN|WB_DROPDOWN) ) )
