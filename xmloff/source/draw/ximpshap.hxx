@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:11:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,8 +566,9 @@ public:
 class SdXMLPluginShapeContext : public SdXMLShapeContext
 {
 private:
-    rtl::OUString maMimeType;
-    rtl::OUString maHref;
+    rtl::OUString   maMimeType;
+    rtl::OUString   maHref;
+    bool            mbMedia;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
 
