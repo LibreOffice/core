@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-04 11:38:51 $
+ *  last change: $Author: aw $ $Date: 2001-09-27 10:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,8 +1018,9 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 |*
 \************************************************************************/
 
+// #91457# removed link and replaced with Imp method
 #ifndef SVX_LIGHT
-IMPL_LINK(SdDrawDocument, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
+void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
     delete pOnlineSearchItem;
     pOnlineSearchItem = NULL;
@@ -1030,6 +1031,14 @@ IMPL_LINK(SdDrawDocument, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
         // #91457# restart when add to dictionary takes place, too.
         || nCommand == SPELLCMD_ADDTODICTIONARY)
     {
+        if(pObj && pOutl && pObj->ISA(SdrTextObj))
+        {
+            BOOL bModified(IsChanged());
+            ((SdrTextObj*)pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
+            SetChanged(bModified);
+            pObj->SendRepaintBroadcast();
+        }
+
         pOnlineSearchItem = new SvxSearchItem();
         pOnlineSearchItem->SetSearchString(pInfo->aWord);
         StartOnlineSpelling();
@@ -1038,11 +1047,8 @@ IMPL_LINK(SdDrawDocument, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     {
         SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELLING, SFX_CALLMODE_ASYNCHRON );
     }
-
-    return(0);
 }
 #endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
