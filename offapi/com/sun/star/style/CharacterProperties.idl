@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:11:14 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,6 @@ service CharacterProperties
         characters.
 
         <p>Negative values lower the character.
-
-        @optional
      */
     [optional, property] short CharEscapement;
 
@@ -175,8 +173,6 @@ service CharacterProperties
 
         <p>Automatic <em>kerning</em> applies a spacing in between certain
         pairs of characters to make the text look better.</p>
-
-        @optional
      */
     [optional, property] boolean CharAutoKerning;
 
@@ -184,8 +180,6 @@ service CharacterProperties
 
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharBackColor
     /** optional property which contains the text background color.
-
-        @optional
      */
     [optional, property] long CharBackColor;
 
@@ -202,8 +196,6 @@ service CharacterProperties
     /** optional property which contains the value of the case-mapping of the
         text for formatting and displaying.
 
-        @optional
-
         @see CaseMap
      */
     [optional, property] short CharCaseMap;
@@ -212,8 +204,6 @@ service CharacterProperties
 
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharCrossedOut
     /** This property is <TRUE/> if the character(s) is(are) crossed out.
-
-        @optional
      */
     [optional, property] boolean CharCrossedOut;
 
@@ -221,8 +211,6 @@ service CharacterProperties
 
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFlash
     /** If this optional property is <TRUE/>, then the characters are flashing.
-
-        @optional
      */
     [optional, property] boolean CharFlash;
 
@@ -235,8 +223,6 @@ service CharacterProperties
     //-------------------------------------------------------------------------
     /** If this property is <TRUE/>, the underline and strike-through
         properties are not applied to white spaces.
-
-        @optional
      */
     [optional, property] boolean CharWordMode;
 
@@ -244,8 +230,6 @@ service CharacterProperties
 
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharKerning
     /** optional property which contains the value of the kerning of the characters.
-
-        @optional
      */
     [optional, property] short CharKerning;
 
@@ -263,8 +247,6 @@ service CharacterProperties
 
         <p> A line break is applied before the range of characters if
         the layout makes a break necessary within the range.</p>
-
-        @optional
      */
     [optional, property] boolean CharKeepTogether;
 
@@ -276,8 +258,6 @@ service CharacterProperties
         <p> A line break is applied behind the range of characters if
         the layout makes a break necessary within the range. That means that
         the text may go through the border.</p>
-
-        @optional
      */
     [optional, property] boolean CharNoLineBreak;
 
@@ -286,8 +266,6 @@ service CharacterProperties
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharShadowed
     /** specifies if the characters are formatted and
         displayed with a shadow effect.
-
-        @optional
      */
     [optional, property] boolean CharShadowed;
 
@@ -296,7 +274,7 @@ service CharacterProperties
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharFontType
     /** optional property which specifies the fundamental technology of the font.
 
-        @optional@see com::sun::star::awt::FontType
+        @see com::sun::star::awt::FontType
      */
     [optional, property] short CharFontType;
 
@@ -310,56 +288,45 @@ service CharacterProperties
     //-------------------------------------------------------------------------
     /** specifies if the characters are formatted and
         displayed with a contour effect.
-
-        @optional
      */
     [optional, property] boolean CharContoured;
     //-------------------------------------------------------------------------
     /** determins whether text is formatted in two lines.
      <p>It is linked to the properties CharCombinePrefix and CharCombineSuffix.</p>
-        @optional
      */
     [optional, property] boolean CharCombineIsOn;
     //-------------------------------------------------------------------------
     /** contains the prefix (usually parenthesis) before text that is formatted in two lines.
      <p>It is linked to the properties CharCombineIsOn and CharCombineSuffix.</p>
-        @optional
      */
     [optional, property] string CharCombinePrefix;
     //-------------------------------------------------------------------------
     /** contains the suffix (usually parenthesis) after text that is formatted in two lines.
      <p>It is linked to the properties CharCombineIsOn and CharCombinePrefix.</p>
-        @optional
      */
     [optional, property] string CharCombineSuffix;
     //-------------------------------------------------------------------------
     /** contains the font emphasis value as <type scope="com::sun::star::text">FontEmphasis</type>.
-        @optional
      */
     [optional, property] short CharEmphasize;
     //-------------------------------------------------------------------------
     /** contains the relief value as <type scope="com::sun::star::text">FontRelief</type>.
-        @optional
      */
     [optional, property] short CharRelief;
     //-------------------------------------------------------------------------
     /** contains the text that is set as ruby.
-        @optional
      */
     [optional, property] string RubyText;
     //-------------------------------------------------------------------------
     /** determins the adjustment of the ruby text as <type scope="com::sun::star::text">RubyAdjust</type>.
-        @optional
      */
     [optional, property] short RubyAdjust;
     //-------------------------------------------------------------------------
     /** contains the name of the character style that is applied to RubyText.
-        @optional
      */
     [optional, property] string RubyCharStyleName;
     //-------------------------------------------------------------------------
     /** determins whether the ruby text is printed above/left or below/right of the text.
-        @optional
      */
     [optional, property] boolean RubyIsAbove;
 
@@ -367,13 +334,11 @@ service CharacterProperties
     /** determins the rotation of a character in degree.
          <p>Depending on the implementation only certain values may be allowed.
         </p>
-        @optional
      */
     [optional, property] short CharRotation;
     //-------------------------------------------------------------------------
     /** determins whether the text formatting tries to fit rotated text into the
          surrounded line height.
-        @optional
      */
     [optional, property] boolean CharRotationIsFitToLine;
     //-------------------------------------------------------------------------
@@ -381,7 +346,6 @@ service CharacterProperties
 
         <p>This is used for superscript/subscript
 
-        @optional
 
         @see CharacterProperties::CharEscapement
      */
