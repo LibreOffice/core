@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-22 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,6 +867,9 @@ void ControlImportContext::importDefaults(
 
     importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                           OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ),
+                          xAttributes );
+    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("helptext") ),
                           xAttributes );
 }
 //__________________________________________________________________________________________________

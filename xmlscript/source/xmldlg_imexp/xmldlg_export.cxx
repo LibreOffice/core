@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
+ *  last change: $Author: dbo $ $Date: 2001-03-22 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,8 @@ void ElementDescriptor::readDefaults()
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":helptext") ) );
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEvents()
@@ -1070,6 +1072,8 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":page") ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tag") ) );
+        pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":helptext") ) );
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aWindowName, xWindow );
 

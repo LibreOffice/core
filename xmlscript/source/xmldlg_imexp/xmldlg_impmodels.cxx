@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
+ *  last change: $Author: dbo $ $Date: 2001-03-22 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1573,6 +1573,16 @@ void WindowElement::endElement()
             OUString( RTL_CONSTASCII_USTRINGPARAM("Tag") ),
             makeAny( aValue ) );
     }
+
+    aValue = _xAttributes->getValueByUidName(
+        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("helptext") ) );
+    if (aValue.getLength())
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("HelpText") ),
+            makeAny( aValue ) );
+    }
 }
+
 
 };

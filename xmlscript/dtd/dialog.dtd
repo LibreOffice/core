@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.9 2001-03-15 09:22:02 dbo Exp $
+	$Id: dialog.dtd,v 1.10 2001-03-22 15:43:06 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -68,6 +68,7 @@
 			       dlg:printable %boolean; #IMPLIED
 			       dlg:page %numeric; #IMPLIED
 			       dlg:tag CDATA #IMPLIED
+			       dlg:helptext CDATA #IMPLIED
 			       ">
 
 <!ENTITY % control "(dlg:bulletinboard|

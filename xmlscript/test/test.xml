@@ -19,7 +19,7 @@
 
         <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50" width="50" height="50" style-id="bla" xmlns:ns="http://openoffice.org/2000/dialog"/>
 
-        <checkbox id="check1" value="checked" left="50" top="150" width="100" height="20" checked="true"/>
+        <checkbox id="check1" helptext="helphelphelp!!!" value="checked" left="50" top="150" width="100" height="20" checked="true"/>
         <checkbox id="check2" value="dontknow" left="50" top="170" width="100" height="20" tristate="true"/>
         <checkbox id="check3" value="tristate_checked" left="50" top="190" width="100" height="20" checked="true" tristate="true"/>
 
