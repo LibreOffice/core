@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-26 11:58:34 $
+ *  last change: $Author: vg $ $Date: 2002-08-27 15:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1927,8 +1927,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
         rFlySet.Put( aShadow );
     }
-
-    SvxBrushItem aBrushItem(Color(COL_WHITE));
+    Color Temp(COL_WHITE);
+    SvxBrushItem aBrushItem(Temp);
     bool bBrushItemOk = false;
 
     // Hintergrund: SvxBrushItem
