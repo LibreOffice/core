@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 16:38:07 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 15:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,10 @@ inline XInterface * Reference< interface_type >::__query(
     {
         const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
         Any aRet( pInterface->queryInterface( rType ) );
-        if (aRet.hasValue())
+        if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
         {
-            XInterface * pRet = * reinterpret_cast< XInterface * const * >( aRet.getValue() );
-            pRet->acquire();
+            XInterface * pRet = * reinterpret_cast< XInterface ** >( aRet.pData );
+            * reinterpret_cast< XInterface ** >( aRet.pData ) = 0;
             return pRet;
         }
     }

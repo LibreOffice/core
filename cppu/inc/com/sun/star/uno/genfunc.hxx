@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:16:24 $
+ *  last change: $Author: dbo $ $Date: 2001-02-28 15:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@ inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescription
 #endif
             Any aRet( reinterpret_cast< XInterface * >( pCppI )->queryInterface(
                 * reinterpret_cast< const Type * >( &pType ) ) );
-            if (aRet.hasValue())
+            if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
             {
-                XInterface * pRet = * reinterpret_cast< XInterface * const * >( aRet.getValue() );
-                pRet->acquire();
+                XInterface * pRet = * reinterpret_cast< XInterface ** >( aRet.pData );
+                * reinterpret_cast< XInterface ** >( aRet.pData ) = 0;
                 return pRet;
             }
 #ifndef EXCEPTIONS_OFF
