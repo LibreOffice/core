@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,7 +994,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     sal_Int32 nColumns = 0;
     while (aItr != pFormatRanges->end() && nColumns < nTotalColumns)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         table::CellRangeAddress aTempRangeAddress = (*aItr).aRangeAddress;
 #endif
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
