@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 22:09:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "³¹¤É¯Å";
                 Text[ arabic ] = "İÕá áÃÚáì";
                 Text[ greek ] = "Ğñïâéâáóìüò êåöáëáßïõ";
-                Text[ korean ] = "Àå£¬³ô°Ô";
+                Text[ korean ] = "Àå ½Â°İ";
                 Text[ turkish ] = "Bölümü yukarı al";
                 Text[ catalan ] = "Un capítulo hacia arriba";
             };
@@ -368,7 +368,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "³¹­°¯Å";
                 Text[ arabic ] = "İÕá áÃÓİá";
                 Text[ greek ] = "Õğïâéâáóìüò êåöáëáßïõ";
-                Text[ korean ] = "Àå£¬³·°Ô";
+                Text[ korean ] = "Àå ³·Ãß±â";
                 Text[ turkish ] = "Bölümü aşağı çek";
                 Text[ catalan ] = "Un capítulo hacia abajo";
             };
@@ -425,7 +425,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "¤Á´«¤º®eÀËµø";
                 Text[ arabic ] = "ÊÈÏíá ØÑíŞÉ ÚÑÖ ÇáãÍÊæíÇÊ";
                 Text[ greek ] = "ĞñïâïëŞ ğåñéå÷ïìİíùí Íáé/¼÷é";
-                Text[ korean ] = "³»¿ëº¸±â¡¡ÀüÈ¯";
+                Text[ korean ] = "³»¿ëº¸±â ÀüÈ¯";
                 Text[ turkish ] = "İçerik görünümünü değiştir";
                 Text[ catalan ] = "Conmutar visualización del contenido";
                 Text[ finnish ] = "Sisältönäkymä";
@@ -585,7 +585,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_traditional ] = "Åã¥Üªº¤jºõ¯Å";
                 Text[ arabic ] = "ãÓÊæíÇÊ ÇáÚäÇæíä ÇáÙÇåÑÉ";
                 Text[ greek ] = "Åìöáíéæüìåíá åğßğåäá åğéêåöáëßäùí";
-                Text[ korean ] = "³ªÅ¸³ª´Â¡¡Ç¥Á¦ ¼öÁØ";
+                Text[ korean ] = "³ªÅ¸³ª´Â Ç¥Á¦ ¼öÁØ";
                 Text[ turkish ] = "Görüntülenen başlık düzeyleri";
                 Text[ catalan ] = "Niveles de encabezados mostrados";
                 Text[ finnish ] = "Otsikkotasojen näyttö";
@@ -932,7 +932,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¤jºõ¯Å";
         Text[ arabic ] = "ãÓÊæíÇÊ ÇáÊŞÓíã";
         Text[ greek ] = "Åğßğåäá äéÜñèñùóçò";
-        Text[ korean ] = "´Ù´Ü°è¡¡´Ü°è";
+        Text[ korean ] = "´Ù´Ü°è";
         Text[ turkish ] = "Anahat düzeyleri";
         Text[ catalan ] = "Niveles del esquema";
         Text[ finnish ] = "Jäsennystaso";
@@ -943,7 +943,7 @@ Window DLG_NAVIGATION_PI
         Text [ English ] = "Drag mode" ;
         Text [ dutch ] = "Dragmodus" ;
         Text [ english_us ] = "Drag Mode" ;
-        Text [ italian ] = "Modo trascina" ;
+        Text [ italian ] = "Modo drag" ;
         Text [ spanish ] = "Modo Arrastrar" ;
         Text [ french ] = "Mode Glisser" ;
         Text [ swedish ] = "Draläge" ;
@@ -1006,7 +1006,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "Âñòàâèòü êàê ññûëêó";
         Text[ polish ] = "Wstaw jako ³¹cze";
         Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä‘}“ü";
-        Text[ chinese_traditional ] = "·í§@³sµ²´¡¤J";
+        Text[ chinese_traditional ] = "·í§@±¶®|´¡¤J";
         Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ";
         Text[ greek ] = "ÅéóáãùãŞ ùò óıíäåóç";
         Text[ korean ] = "¿¬°á·Î »ğÀÔ";
@@ -1032,7 +1032,7 @@ Window DLG_NAVIGATION_PI
         Text[ russian ] = "Âñòàâèòü êàê êîïèş";
         Text[ polish ] = "Wstaw jako kopiê";
         Text[ japanese ] = "ºËß°‚Æ‚µ‚Ä‘}“ü";
-        Text[ chinese_traditional ] = "·í§@´_¥ó´¡¤J";
+        Text[ chinese_traditional ] = "·í§@½Æ»s¥ó´¡¤J";
         Text[ arabic ] = "ÅÏÑÇÌ ßäÓÎÉ";
         Text[ greek ] = "ÅéóáãùãŞ ùò áíôßãñáöï";
         Text[ korean ] = "º¹»ç·Î »ğÀÔ";
@@ -1284,7 +1284,7 @@ Window DLG_NAVIGATION_PI
         Text[ swedish ] = "~Förteckning";
         Text[ polish ] = "Indeks";
         Text[ portuguese_brazilian ] = "?n~ice";
-        Text[ japanese ] = "–ÚŸ‚Æõˆø";
+        Text[ japanese ] = "–ÚŸ‚Æõˆø(~I)";
         Text[ korean ] = "»öÀÎ(~I)";
         Text[ chinese_simplified ] = "Ä¿Â¼(~I)";
         Text[ chinese_traditional ] = "¯Á¤Ş(~I)";
@@ -1618,7 +1618,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¨S¦³§ä¨ìÀÉ®×¡G ";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì Çáãáİ: ";
         Text[ greek ] = "Äåí âñİèçêå ôï áñ÷åßï: ";
-        Text[ korean ] = "ÆÄÀÏÀ»¡¡Ã£Áö¡¡¸øÇß½À´Ï´Ù: ";
+        Text[ korean ] = "ÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù: ";
         Text[ turkish ] = "Dosya bulunamadı: ";
         Text[ catalan ] = "Archivo no encontrado: ";
         Text[ finnish ] = "Tiedostoa ei löytynyt: ";
@@ -1705,6 +1705,7 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
 
