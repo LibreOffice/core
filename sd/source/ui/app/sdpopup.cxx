@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpopup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:37:46 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,14 @@
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
-#ifndef _SVX_ADRITEM_HXX
-#include <svx/adritem.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 
 #include "strings.hrc"
@@ -371,7 +371,8 @@ SvxFieldData* SdFieldPopup::GetField()
             pAuthorField->GetType() != eType )
         {
             // #91225# Get current state of address, not the old one
-            pNewField = new SvxAuthorField( SvxAddressItem() );
+            SvtUserOptions aUserOptions;
+            pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
             ( (SvxAuthorField*) pNewField )->SetFormat( eFormat );
         }
