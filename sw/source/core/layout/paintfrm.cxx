@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-29 15:55:43 $
+ *  last change: $Author: ama $ $Date: 2001-12-07 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,10 @@ void SwCalcPixStatics( OutputDevice *pOut )
 {
     Size aSz( pOut->PixelToLogic( Size( 1,1 )) );
     nPixelSzW = aSz.Width(), nPixelSzH = aSz.Height();
+    if( !nPixelSzW )
+        nPixelSzW = 1;
+    if( !nPixelSzH )
+        nPixelSzH = 1;
     nHalfPixelSzW = nPixelSzW / 2 + 1;
     nHalfPixelSzH = nPixelSzH / 2 + 1;
     nMinDistPixelW = nPixelSzW * 2 + 1;
