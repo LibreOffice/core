@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:27:55 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 16:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -115,8 +118,9 @@
     {                                   \
         THROW_SQL(nRetCode);            \
     }                                   \
-    catch(...)                          \
+    catch(SQLException&)                \
     {                                   \
+        OSL_ENSHURE(0,"Exception in odbc catched"); \
     }
 #endif
 
@@ -169,6 +173,7 @@ void OStatement_BASE2::disposing()
 
     disposeResultSet();
 
+    OSL_ENSHURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
     if (N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS) ||
         N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND) ||
         N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE))
@@ -206,6 +211,10 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (OStatement_BASE::rBHelper.bDisposed)
+        throw DisposedException();
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     OTools::ThrowException(N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
@@ -238,6 +247,7 @@ void OStatement_Base::reset() throw (SQLException)
     if (m_xResultSet.get().is())
     {
         clearMyResultSet();
+        OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
         THROW_SQL(N3SQLFreeStmt(m_aStatementHandle, SQL_CLOSE));
     }
 }
@@ -269,7 +279,7 @@ sal_Int32 OStatement_Base::getRowCount () throw( SQLException)
     try {
         THROW_SQL(N3SQLRowCount(m_aStatementHandle,&numRows));
     }
-    catch (...)
+    catch (SQLException&)
     {
     }
     return numRows;
@@ -299,6 +309,7 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
 
     if (index > 0)
     {
+        OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
         try
         {
             SQLINTEGER nLock = SQL_CONCUR_LOCK;
@@ -340,11 +351,12 @@ sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
         throw DisposedException();
 
     sal_Int16   numCols = 0;
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
 
     try {
         THROW_SQL(N3SQLNumResultCols(m_aStatementHandle,&numCols));
     }
-    catch (...)
+    catch (SQLException&)
     {
     }
     return numCols;
@@ -357,9 +369,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    ::rtl::OString aSql(::rtl::OUStringToOString(sql,
-                        osl_getThreadTextEncoding()
-        ));
+    ::rtl::OString aSql(::rtl::OUStringToOString(sql,osl_getThreadTextEncoding()));
 
     sal_Bool hasResultSet = sal_False;
     SQLWarning aWarning;
@@ -374,6 +384,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     lockIfNecessary (sql);
 
     // Call SQLExecDirect
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
 
     try {
         THROW_SQL(N3SQLExecDirect(m_aStatementHandle, (SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength()));
@@ -429,6 +440,7 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
 
     if (numCols > 0)
     {
+        OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
         pRs = new OResultSet(m_aStatementHandle,this);
 
         // Save a copy of our last result set
@@ -452,11 +464,11 @@ sal_Int32 OStatement_Base::getStmtOption (short fOption) const throw( SQLExcepti
     // Reset last warning message
 
     //  clearWarnings();
-
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     try {
         N3SQLGetStmtAttr(m_aStatementHandle, fOption,&result,SQL_IS_INTEGER,NULL);
     }
-    catch (...)
+    catch (SQLException&)
     {
     }
     return result;
@@ -490,6 +502,9 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 
 Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (OStatement_BASE::rBHelper.bDisposed)
+        throw DisposedException();
     return (Reference< XConnection >)m_pConnection;
 }
 // -------------------------------------------------------------------------
@@ -528,6 +543,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
         aBatchSql += ";";
     }
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     THROW_SQL(N3SQLExecDirect(m_aStatementHandle, (SDB_ODBC_CHAR*)aBatchSql.getStr(),aBatchSql.getLength()));
 
     Sequence< sal_Int32 > aRet(nLen);
@@ -616,6 +632,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
     clearWarnings ();
 
     // Call SQLMoreResults
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
 
     try {
         hasResultSet = N3SQLMoreResults(m_aStatementHandle) == SQL_SUCCESS;
@@ -686,30 +703,64 @@ sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeExcepti
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getResultSetConcurrency() const throw(SQLException, RuntimeException)
 {
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CONCURRENCY,&nValue,SQL_IS_UINTEGER,0);
+    if(nValue == SQL_CONCUR_READ_ONLY)
+        nValue = ResultSetConcurrency::READ_ONLY;
+    else
+        nValue = ResultSetConcurrency::UPDATABLE;
     return nValue;
 }
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getResultSetType() const throw(SQLException, RuntimeException)
 {
-    sal_uInt32 nValue=0;
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    sal_uInt32 nValue = SQL_CURSOR_FORWARD_ONLY;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SENSITIVITY,&nValue,SQL_IS_UINTEGER,0);
     nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
+    switch(nValue)
+    {
+        case SQL_CURSOR_FORWARD_ONLY:
+            nValue = ResultSetType::FORWARD_ONLY;
+            break;
+        case SQL_CURSOR_KEYSET_DRIVEN:
+        case SQL_CURSOR_STATIC:
+            nValue = ResultSetType::SCROLL_INSENSITIVE;
+            break;
+        case SQL_CURSOR_DYNAMIC:
+            nValue = ResultSetType::SCROLL_SENSITIVE;
+            break;
+    }
+
     return nValue;
 }
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getFetchDirection() const throw(SQLException, RuntimeException)
 {
-    sal_uInt32 nValue;
-    SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nValue,SQL_IS_UINTEGER,0);
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    sal_uInt32 nValue = 0;
+    SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SCROLLABLE,&nValue,SQL_IS_UINTEGER,0);
+
+    switch(nValue)
+    {
+        case SQL_SCROLLABLE:
+            nValue = FetchDirection::REVERSE;
+            break;
+        default:
+            nValue = FetchDirection::FORWARD;
+            break;
+    }
+
     return nValue;
 }
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getFetchSize() const throw(SQLException, RuntimeException)
 {
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue;
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,&nValue,SQL_IS_UINTEGER,0);
+
     return nValue;
 }
 //------------------------------------------------------------------------------
@@ -720,9 +771,11 @@ sal_Int32 OStatement_Base::getMaxFieldSize() const throw(SQLException, RuntimeEx
 //------------------------------------------------------------------------------
 ::rtl::OUString OStatement_Base::getCursorName() const throw(SQLException, RuntimeException)
 {
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
     SQLRETURN nRetCode = N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
+
     return ::rtl::OUString::createFromAscii((const char*)pName);
 }
 //------------------------------------------------------------------------------
@@ -732,6 +785,7 @@ void OStatement_Base::setQueryTimeOut(sal_Int32 seconds) throw(SQLException, Run
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_QUERY_TIMEOUT,(SQLPOINTER)seconds,SQL_IS_UINTEGER);
 #ifdef DEBUG
     DEBUG_THROW
@@ -744,6 +798,7 @@ void OStatement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeExc
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_MAX_ROWS, (SQLPOINTER)_par0,SQL_IS_UINTEGER);
 #ifdef DEBUG
     DEBUG_THROW
@@ -763,6 +818,7 @@ void OStatement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLExceptio
     else
         nSet = SQL_CONCUR_VALUES;
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CONCURRENCY,(SQLPOINTER)nSet,SQL_IS_UINTEGER));
 
 }
@@ -773,6 +829,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, Runt
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_ROW_BIND_TYPE,(SQLPOINTER)SQL_BIND_BY_COLUMN,SQL_IS_UINTEGER);
 
     SQLUINTEGER nSet;
@@ -800,6 +857,9 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, Runt
     if(nRetCode = N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_SENSITIVITY,(SQLPOINTER)nSet,SQL_IS_UINTEGER) != SQL_SUCCESS)
     {
     }
+#ifdef DEBUG
+    DEBUG_THROW
+#endif
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -808,7 +868,23 @@ void OStatement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, Run
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    sal_Int32 nCursType = 0;
+    SQLRETURN nRetCode  = SQL_SUCCESS;
+    if(_par0 == FetchDirection::FORWARD)
+    {
+        nCursType = SQL_NONSCROLLABLE;
+        nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SCROLLABLE,(SQLPOINTER)nCursType,SQL_IS_UINTEGER);
+    }
+    else if(_par0 == FetchDirection::REVERSE)
+    {
+        nCursType = SQL_SCROLLABLE;
+        nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_SCROLLABLE,(SQLPOINTER)nCursType,SQL_IS_UINTEGER);
+    }
+#ifdef DEBUG
+    DEBUG_THROW
+#endif
+
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -816,6 +892,8 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeE
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
+
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
 
     SQLRETURN nRetCode = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
 
@@ -838,6 +916,7 @@ void OStatement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, Runti
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     THROW_SQL(N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_MAX_LENGTH,(SQLPOINTER)_par0,SQL_IS_UINTEGER));
 }
 //------------------------------------------------------------------------------
@@ -847,9 +926,8 @@ void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLExcep
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    ::rtl::OString aName(::rtl::OUStringToOString(_par0,
-                        osl_getThreadTextEncoding()
-        ));
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
+    ::rtl::OString aName(::rtl::OUStringToOString(_par0,osl_getThreadTextEncoding()));
     THROW_SQL(N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),aName.getLength()));
 }
 // -------------------------------------------------------------------------
@@ -858,6 +936,7 @@ sal_Bool OStatement_Base::isUsingBookmarks() const throw(SQLException, RuntimeEx
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = SQL_UB_OFF;
     SQLRETURN nRet = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
     //  THROW_SQL(nRet);
@@ -870,6 +949,7 @@ void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark) throw(SQLExcepti
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
+    OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
     sal_uInt32 nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;
     SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,(SQLPOINTER)nValue,SQL_IS_UINTEGER);
     THROW_SQL(nRet);

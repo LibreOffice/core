@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 16:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,29 @@ namespace connectivity
     {
 
         class OBoundParam;
+        typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
+                                        ::com::sun::star::sdbc::XParameters,
+                                        ::com::sun::star::sdbc::XPreparedBatchExecution,
+                                        ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                        ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
         class OPreparedStatement :  public  OStatement_BASE2,
-                                    public  ::com::sun::star::sdbc::XPreparedStatement,
-                                    public  ::com::sun::star::sdbc::XParameters,
-                                    public  ::com::sun::star::sdbc::XPreparedBatchExecution,
-                                    public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                    public  ::com::sun::star::lang::XServiceInfo
-
+                                    public  OPreparedStatement_BASE
         {
         protected:
+            struct Parameter
+            {
+                ::com::sun::star::uno::Any  aValue;
+                sal_Int32                   nDataType;
+
+                Parameter(const ::com::sun::star::uno::Any& rValue,
+                          sal_Int32                         rDataType) : aValue(rValue),nDataType(rDataType)
+                {
+                }
+
+            };
+
+            ::std::vector< Parameter>                   m_aParameters;
             //====================================================================
             // Data attributes
             //====================================================================
@@ -107,17 +120,19 @@ namespace connectivity
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
 
-            int numParams;      // Number of parameter markers
-                            //  for the prepared statement
+            int             numParams;      // Number of parameter markers
+                                            //  for the prepared statement
 
-            OBoundParam* boundParams;
+            OBoundParam*    boundParams;
                             // Array of bound parameter
                             //  objects.  Each parameter
                             //  marker will have a
                             //  corresponding object to
                             //  hold bind information, and
                             //  resulting data.
+            ::rtl::OUString                                                                 m_sSqlStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
+            sal_Bool                                                                        m_bPrepared;
 
             void FreeParams();
                         void putParamData (sal_Int32 index) throw(::com::sun::star::sdbc::SQLException);
@@ -133,6 +148,13 @@ namespace connectivity
 
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
+            sal_Bool isPrepared() const { return m_bPrepared;}
+            void prepareStatement();
+
+        protected:
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
+                                                                   const ::com::sun::star::uno::Any& rValue)
+                                                                        throw (::com::sun::star::uno::Exception);
         public:
             DECLARE_CTY_DEFAULTS(OStatement_BASE2);
             DECLARE_SERVICE_INFO();
@@ -140,9 +162,9 @@ namespace connectivity
             OPreparedStatement( OConnection* _pConnection,const ::std::vector<OTypeInfo>& _TypeInfo,const ::rtl::OUString& sql);
 
             //XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XPreparedStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
