@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicMacroTools.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-10-06 12:42:02 $
+ *  last change:$Date: 2003-11-18 16:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@ public class BasicMacroTools {
     private final XURLTransformer mParser;
     private final XNameAccess mLCxNA; //LibraryContainer::XNameAccess
     private final XLibraryContainer mLCxLC; //LibraryContainer::XLibraryContainer
-    private final XNameContainer mLCxNC; // LibraryContainer::XNameContainer
 
     /*
      *While initializing the Basic Libraries will be appendend to the Document
@@ -118,8 +117,6 @@ public class BasicMacroTools {
             mLCxLC = (XLibraryContainer) UnoRuntime.queryInterface(
                              XLibraryContainer.class, DocLibCont);
 
-            mLCxNC = (XNameContainer) UnoRuntime.queryInterface(
-                             XNameContainer.class, DocLibCont);
         } catch (Exception e) {
             throw new Exception("could not initialize BasicMacros " +
                                 e.toString());
@@ -153,8 +150,6 @@ public class BasicMacroTools {
             mLCxLC = (XLibraryContainer) UnoRuntime.queryInterface(
                              XLibraryContainer.class, ASLC);
 
-            mLCxNC = (XNameContainer) UnoRuntime.queryInterface(
-                             XNameContainer.class, ASLC);
         } catch (Exception e) {
             throw new Exception("could not initialize BasicMacros " +
                                 e.toString());
