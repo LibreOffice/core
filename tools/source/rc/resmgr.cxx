@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 14:00:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,6 +1173,9 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_ENGLISH_AUS:
             case LANGUAGE_ENGLISH_NZ:
                 return "61";
+            case LANGUAGE_ESTONIAN:
+                return "77";
+
 
             case LANGUAGE_FINNISH:
                 return "35";
@@ -1233,6 +1236,8 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
                 return "48";
             case LANGUAGE_CZECH:
                 return "42";
+            case LANGUAGE_SLOVENIAN:
+                return "50";
             case LANGUAGE_HUNGARIAN:
                 return "36";
             case LANGUAGE_RUSSIAN:
@@ -1385,11 +1390,13 @@ ResMgr* ResMgr::SearchCreateResMgr(
         LANGUAGE_DUTCH_BELGIAN,
         LANGUAGE_DANISH,
         LANGUAGE_CATALAN,
+        LANGUAGE_ESTONIAN,
         LANGUAGE_CHINESE_SIMPLIFIED,
         LANGUAGE_CHINESE_TRADITIONAL,
         LANGUAGE_JAPANESE,
         LANGUAGE_HUNGARIAN,
         LANGUAGE_CZECH,
+        LANGUAGE_SLOVENIAN,
         LANGUAGE_SLOVAK,
         LANGUAGE_RUSSIAN,
         LANGUAGE_ARABIC,
