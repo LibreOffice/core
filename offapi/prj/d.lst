@@ -42,6 +42,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\component
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\formula
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\frame
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\frame\status
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\graphic
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\i18n
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\image
@@ -115,6 +116,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\ui
 ..\com\sun\star\form\control\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form\control
 ..\com\sun\star\formula\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\formula
 ..\com\sun\star\frame\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\frame
+..\com\sun\star\frame\status\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\frame\status
 ..\com\sun\star\graphic\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\graphic
 ..\com\sun\star\i18n\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\i18n
 ..\com\sun\star\image\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\image
