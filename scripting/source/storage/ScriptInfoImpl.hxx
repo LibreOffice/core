@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptInfoImpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dsherwin $ $Date: 2002-10-17 14:42:28 $
+ *  last change: $Author: dsherwin $ $Date: 2002-10-17 14:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,18 +62,19 @@
 #ifndef _SCRIPTING_STORAGE_SCRIPTINFOIMPL_HXX_
 #define _SCRIPTING_STORAGE_SCRIPTINFOIMPL_HXX_
 
-#include <pair>
 #include <vector>
 #include <map>
-#include <multimap>
 
 #include <cppu/macros.hxx>
 #include <rtl/ustring.hxx>
 
+
 typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > str_pair;
-typedef ::std::map< ::rtl::OUString, str_pair, oustrcmp > strpair_map;
+typedef ::std::map< ::rtl::OUString, str_pair,
+    ::std::equal_to< ::rtl::OUString > > strpair_map;
 typedef ::std::vector< str_pair > langdepprops_vec;
-typedef ::std::map< ::rtl::OUString, strpair_map, oustrcmp > filesets_map;
+typedef ::std::map< ::rtl::OUString, strpair_map,
+    ::std::equal_to< ::rtl::OUString > > filesets_map;
 
 namespace scripting_impl
 {
@@ -81,7 +82,7 @@ namespace scripting_impl
 struct ScriptInfoImpl
 {
 
-    inline ScriptInfoImpl::ScriptImplInfo() SAL_THROW( () )
+    inline ScriptInfoImpl::ScriptInfoImpl() SAL_THROW( () )
        : language()
        , locales()
        , functionname()
@@ -115,13 +116,6 @@ struct ScriptInfoImpl
 
 };
 
-struct oustrcmp
-{
-    bool operator() ( ::rtl::OUString * str1, ::rtl::OUString str2 ) const
-    {
-        return str1.equals( str2 );
-    }
-};
 
 } // namespace scripting_impl
 
