@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:21:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             if( nInv == SdrInventor &&
                 ( nId == OBJ_POLY || nId == OBJ_PLIN || !aInfoRec.bCanConvToPoly ) &&
-                !pView->IsVectorizeAllowed() )
+                !GetView()->IsVectorizeAllowed() )
             {
                 rSet.DisableItem( SID_CHANGEPOLYGON );
             }
@@ -282,7 +282,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 BOOL bDisable = TRUE;
                 SfxItemSet aAttrSet( GetDoc()->GetPool() );
-                pView->GetAttributes( aAttrSet );
+                GetView()->GetAttributes( aAttrSet );
 
                 if( aAttrSet.GetItemState( SDRATTR_EDGELINE1DELTA ) >= SFX_ITEM_AVAILABLE &&
                     aAttrSet.GetItemState( SDRATTR_EDGELINE2DELTA ) >= SFX_ITEM_AVAILABLE &&
