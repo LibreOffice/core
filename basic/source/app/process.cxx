@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:47:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,5 +264,11 @@ BOOL Process::WasGPF()
 #else
     return bWasGPF;
 #endif
+}
+
+BOOL Process::Terminate()
+{
+    if ( ImplIsRunning() )
+        return pProcess->terminate() == vos::OProcess::E_None;
 }
 
