@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,6 @@
 #include <vcl/button.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _IMAGEBTN_HXX //autogen
 #include <vcl/imagebtn.hxx>
 #endif
@@ -113,7 +109,7 @@ private:
     PushButton          aUrlPB;
     Edit                aUrlED;
     MultiLineEdit       aEditED;
-    GroupBox            aPostItGB;
+    FixedLine           aPostItFL;
 
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _SV_FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
@@ -128,17 +124,17 @@ class SwLineNumberingPage : public SfxTabPage
     FixedText       aNumIntervalFT;
     NumericField    aNumIntervalNF;
     FixedText       aNumRowsFT;
-    GroupBox        aDisplayGB;
+    FixedLine        aDisplayFL;
     FixedText       aDivisorFT;
     Edit            aDivisorED;
     FixedText       aDivIntervalFT;
     NumericField    aDivIntervalNF;
     FixedText       aDivRowsFT;
-    GroupBox        aDivisorGB;
+    FixedLine        aDivisorFL;
     CheckBox        aCountEmptyLinesCB;
     CheckBox        aCountFrameLinesCB;
     CheckBox        aRestartEachPageCB;
-    GroupBox        aCountGB;
+    FixedLine        aCountFL;
 
     SwWrtShell*     pSh;
 

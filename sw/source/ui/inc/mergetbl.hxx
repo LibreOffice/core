@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+
+#ifndef _FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
+
 #ifndef _SVX_STDDLG_HXX //autogen
 #include <svx/stddlg.hxx>
 #endif
@@ -77,7 +79,7 @@ class SwMergeTblDlg : public SvxStandardDialog
     OKButton        aOKPB;
     CancelButton    aCancelPB;
     HelpButton      aHelpPB;
-    GroupBox        aMergeGB;
+    FixedLine        aMergeFL;
     RadioButton     aMergePrevRB;
     RadioButton     aMergeNextRB;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-30 15:48:09 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _SV_EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -111,7 +108,7 @@ class SwRenameXNamedDlg : public ModalDialog
 {
     FixedText       aNewNameFT;
     NoSpaceEdit     aNewNameED;
-    GroupBox        aNameGB;
+    FixedLine       aNameFL;
     OKButton        aOk;
     CancelButton    aCancel;
     HelpButton      aHelp;

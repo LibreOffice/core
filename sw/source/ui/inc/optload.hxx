@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 12:05:46 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ class SwWrtShell;
 class SwLoadOptPage : public SfxTabPage
 {
 private:
-    FixedLine   aUpdateGB;
+    FixedLine   aUpdateFL;
     FixedText   aLinkFT;
     RadioButton aAlwaysRB;
     RadioButton aRequestRB;
@@ -114,18 +114,18 @@ private:
     CheckBox    aAutoUpdateFields;
     CheckBox    aAutoUpdateCharts;
 
-    FixedLine   aCaptionGB;
+    FixedLine   aCaptionFL;
     CheckBox    aCaptionCB;
     FixedText   aCaptionFT;
     PushButton  aCaptionPB;
 
-    FixedLine   aSettingsGB;
+    FixedLine   aSettingsFL;
     FixedText   aMetricFT;
     ListBox     aMetricLB;
     FixedText   aTabFT;
     MetricField aTabMF;
 
-    FixedLine   aCompatGB;
+    FixedLine   aCompatFL;
     CheckBox    aMergeDistCB;
     CheckBox    aMergeDistPageStartCB;
     CheckBox    aTabAlignment;
@@ -196,7 +196,7 @@ private:
     ListBox         aLbLevel;
     FixedText       aFtDelim;
     Edit            aEdDelim;
-    FixedLine       aSettingsGroup;
+    FixedLine       aSettingsGroupFL;
 
     String          sSWTable;
     String          sSWFrame;

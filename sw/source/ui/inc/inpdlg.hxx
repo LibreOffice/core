@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,9 @@
 #include <svtools/svmedit.hxx>
 #endif
 #endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -105,7 +103,7 @@ class SwFldInputDlg: public SvxStandardDialog
     Edit                aLabelED;
 
     MultiLineEdit       aEditED;
-    GroupBox            aEditGB;
+    FixedLine           aEditFL;
 
     OKButton            aOKBT;
     CancelButton        aCancelBT;

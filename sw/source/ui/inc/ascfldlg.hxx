@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-22 10:41:57 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _ASCFLDLG_HXX
 #define _ASCFLDLG_HXX
 
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
-#endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
@@ -89,7 +86,7 @@ class SwDocShell;
 
 class SwAsciiFilterDlg : public SfxModalDialog
 {
-    GroupBox            aGB;
+    FixedLine           aFL;
     FixedText           aCharSetFT;
     SvxTextEncodingBox  aCharSetLB;
     FixedText           aFontFT;

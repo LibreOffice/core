@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:41:22 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,6 @@
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
@@ -110,7 +105,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     NumericField    aFromNF;
     FixedText       aBisFT;
     NumericField    aToNF;
-    GroupBox        aRecordGB;
+    FixedLine       aRecordFL;
 
     RadioButton     aPrinterRB;
     RadioButton     aMailingRB;
@@ -138,7 +133,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     CheckBox        aFormatHtmlCB;
     CheckBox        aFormatRtfCB;
     CheckBox        aFormatSwCB;
-    GroupBox        aDestGB;
+    FixedLine       aDestFL;
 
     OKButton        aOkBTN;
     CancelButton    aCancelBTN;

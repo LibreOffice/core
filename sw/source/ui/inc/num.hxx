@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:58:34 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -147,10 +144,10 @@ class SwBmpNumValueSet;
 --------------------------------------------------*/
 class SwNumPositionTabPage : public SfxTabPage
 {
-    GroupBox        aLevelGB;
+    FixedLine       aLevelFL;
     MultiListBox    aLevelLB;
 
-    GroupBox            aPositionGB;
+    FixedLine            aPositionFL;
     FixedText           aDistBorderFT;
     MetricField         aDistBorderMF;
     CheckBox            aRelativeCB;
@@ -162,7 +159,6 @@ class SwNumPositionTabPage : public SfxTabPage
     ListBox             aAlignLB;
     PushButton          aStandardPB;
 
-    GroupBox            aPreviewGB;
     NumberingPreview    aPreviewWIN;
 
     SwNumRule*          pActNum;

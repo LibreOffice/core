@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -87,7 +83,7 @@
 --------------------------------------------------*/
 class SwInsertAbstractDlg  : public SfxModalDialog
 {
-    GroupBox        aGB;
+    FixedLine       aFL;
     FixedText       aLevelFT;
     NumericField    aLevelNF;
     FixedText       aParaFT;

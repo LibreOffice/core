@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -215,7 +212,7 @@ public:
 class SwGrfExtPage: public SfxTabPage
 {
     // Spiegeln
-    GroupBox        aMirrorFrm;
+    FixedLine       aMirrorFL;
     CheckBox        aMirrorVertBox;
     CheckBox        aMirrorHorzBox;
     RadioButton     aAllPagesRB;
@@ -223,7 +220,7 @@ class SwGrfExtPage: public SfxTabPage
     RadioButton     aRightPagesRB;
     BmpWindow       aBmpWin;
 
-    GroupBox        aConnectGB;
+    FixedLine       aConnectFL;
     FixedText       aConnectFT;
     Edit            aConnectED;
     PushButton      aBrowseBT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 07:22:32 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ class SwWrtShell;
 class SwContentOptPage : public SfxTabPage
 {
     //visual aids
-    FixedLine   aLineGB;
+    FixedLine   aLineFL;
     CheckBox    aTxtbegCB;
     CheckBox    aTblbegCB;
     CheckBox    aSectBoundsCB;
@@ -114,7 +114,7 @@ class SwContentOptPage : public SfxTabPage
     CheckBox    aBigHandleCB;
 
     //view
-    FixedLine   aWindowGB;
+    FixedLine   aWindowFL;
     CheckBox    aHScrollBox;
     CheckBox    aVScrollBox;
     CheckBox    aHRulerCBox;
@@ -124,20 +124,20 @@ class SwContentOptPage : public SfxTabPage
     CheckBox    aSmoothCBox;
 
     //display
-    FixedLine   aDispBox;
+    FixedLine   aDispFL;
     CheckBox    aGrfCB;
     CheckBox    aTblCB;
     CheckBox    aDrwCB;
     CheckBox    aFldNameCB;
     CheckBox    aPostItCB;
     //highlighting
-    FixedLine   aBackBox;
+    FixedLine   aBackFL;
     CheckBox    aIdxEntryCB;
     CheckBox    aIdxBackCB;
     CheckBox    aFootBackCB;
     CheckBox    aFldBackCB;
 
-    FixedLine   aSettingsGB;
+    FixedLine   aSettingsFL;
     FixedText   aMetricFT;
     ListBox     aMetricLB;
 
@@ -161,7 +161,7 @@ public:
 
 class SwAddPrinterTabPage : public SfxTabPage
 {
-    FixedLine       aGroup1;
+    FixedLine       aFL1;
     CheckBox        aGrfCB;
     CheckBox        aTabCB;
     CheckBox        aDrawCB;
@@ -171,7 +171,7 @@ class SwAddPrinterTabPage : public SfxTabPage
 
     FixedLine       aSeparatorLFL;
 
-    FixedLine       aGroup2;
+    FixedLine       aFL2;
     CheckBox        aLeftPageCB;
     CheckBox        aRightPageCB;
     CheckBox        aReverseCB;
@@ -183,8 +183,8 @@ class SwAddPrinterTabPage : public SfxTabPage
     RadioButton     aOnlyRB;
     RadioButton     aEndRB;
     RadioButton     aEndPageRB;
-    FixedLine        aGroup3;
-    FixedLine        aGroup4;
+    FixedLine        aFL3;
+    FixedLine        aFL4;
     CheckBox        aSingleJobsCB;
     CheckBox        aPaperFromSetupCB;
     FixedText       aFaxFT;
@@ -221,7 +221,7 @@ public:
 
 class SwStdFontTabPage : public SfxTabPage
 {
-    FixedLine       aStdChrFrm  ;
+    FixedLine       aStdChrFL  ;
     FixedText       aStandardLbl;
     ComboBox        aStandardBox;
     FixedText       aTitleLbl   ;
@@ -280,7 +280,7 @@ public:
 
 class SwTableOptionsTabPage : public SfxTabPage
 {
-    FixedLine   aTableGB;
+    FixedLine   aTableFL;
     CheckBox    aHeaderCB;
     CheckBox    aRepeatHeaderCB;
     CheckBox    aDontSplitCB;
@@ -288,12 +288,12 @@ class SwTableOptionsTabPage : public SfxTabPage
 
     FixedLine   aSeparatorFL;
 
-    FixedLine   aTableInsertGB;
+    FixedLine   aTableInsertFL;
     CheckBox    aNumFormattingCB;
     CheckBox    aNumFmtFormattingCB;
     CheckBox    aNumAlignmentCB;
 
-    FixedLine   aMoveGB;
+    FixedLine   aMoveFL;
     FixedText   aMoveFT;
     FixedText   aRowMoveFT;
     MetricField aRowMoveMF;
@@ -341,7 +341,7 @@ public:
 --------------------------------------------------*/
 class SwSourceViewOptionsTabPage : public SfxTabPage
 {
-    FixedLine        aColorGB;
+    FixedLine        aColorFL;
     FixedText       aSGMLFT;
     ColorListBox    aSGMLLB;
     FixedText       aCommentFT;
@@ -372,7 +372,7 @@ public:
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
-    FixedLine   aUnprintBox;
+    FixedLine   aUnprintFL;
     CheckBox    aParaCB;
     CheckBox    aSHyphCB;
     CheckBox    aSpacesCB;
@@ -384,7 +384,7 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
 
     FixedLine   aSeparatorFL;
 
-    FixedLine       aFlagGB;
+    FixedLine       aFlagFL;
     CheckBox        aOnOffCB;
 
     FixedText       aFillModeFT;
@@ -396,7 +396,7 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     FixedText       aColorFT;
     ColorListBox    aColorLB;
 
-    FixedLine       aCrsrOptGB;
+    FixedLine       aCrsrOptFL;
     CheckBox        aCrsrInProtCB;
 
     SwShdwCrsrOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
@@ -444,7 +444,7 @@ public:
 
 class SwRedlineOptionsTabPage : public SfxTabPage
 {
-    FixedLine           aInsertGB;
+    FixedLine           aInsertFL;
 
     FixedText           aInsertFT;
     FixedText           aInsertAttrFT;
@@ -467,7 +467,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     ColorListBox        aChangedColorLB;
     SvxFontPrevWindow   aChangedPreviewWN;
 
-    FixedLine           aChangedGB;
+    FixedLine           aChangedFL;
 
     FixedText           aMarkPosFT;
     ListBox             aMarkPosLB;
@@ -514,7 +514,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
 private:
-    FixedLine aTestGBox;
+    FixedLine aTestFL;
     CheckBox aTest1CBox;
     CheckBox aTest2CBox;
     CheckBox aTest3CBox;

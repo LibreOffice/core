@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 #include <svtools/stdctrl.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -154,7 +150,7 @@ class SwOutlineTabDialog : public SfxTabDialog
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
     ListBox         aLevelLB;
-    GroupBox        aLevelGB;
+    FixedLine       aLevelFL;
 
     FixedText       aCollLbl;
     ListBox         aCollBox;
@@ -171,8 +167,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     Edit            aSuffixED;
     FixedText       aStartLbl;
     NumericField    aStartEdit;
-    GroupBox        aNumberGrp;
-    GroupBox        aPreviewGB;
+    FixedLine        aNumberFL;
     NumberingPreview aPreviewWIN;
 
     String              aNoFmtName;

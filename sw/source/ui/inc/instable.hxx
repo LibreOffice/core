@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _FIELD_HXX //autogen
 #include <vcl/field.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -89,7 +86,7 @@ class SwTableAutoFmt;
 class SwInsTableDlg : public SfxModalDialog
 {
     TableNameEdit   aNameEdit;
-    GroupBox        aNameFrm;
+    FixedText       aNameFT;
     FixedText       aColLbl;
     NumericField    aColEdit;
     FixedText       aRowLbl;
@@ -99,9 +96,9 @@ class SwInsTableDlg : public SfxModalDialog
     CheckBox        aRepeatHeaderCB;
     CheckBox        aDontSplitCB;
     CheckBox        aBorderCB;
-    GroupBox        aOptionsGB;
+    FixedLine       aOptionsFL;
 
-    GroupBox        aFrm;
+    FixedLine       aFL;
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;

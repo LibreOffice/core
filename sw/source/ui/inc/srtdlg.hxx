@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-24 18:09:30 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class SwSortDlg : public SvxStandardDialog
     FixedText           aTypLbl;
     FixedText           aDirLbl;
 
-    FixedLine           aDirGrp;
+    FixedLine           aDirFL;
 
     CheckBox            aKeyCB1;
     NumericField        aColEdt1;
@@ -109,11 +109,11 @@ class SwSortDlg : public SvxStandardDialog
     RadioButton         aSortUp3RB;
     RadioButton         aSortDn3RB;
 
-    FixedLine           aSortGrp;
+    FixedLine           aSortFL;
     RadioButton         aColumnRB;
     RadioButton         aRowRB;
 
-    FixedLine           aDelimGrp;
+    FixedLine           aDelimFL;
     RadioButton         aDelimTabRB;
     RadioButton         aDelimFreeRB;
     Edit                aDelimEdt;

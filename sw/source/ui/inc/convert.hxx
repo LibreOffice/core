@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _SW_CONVERT_HXX
 #define _SW_CONVERT_HXX
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
@@ -86,13 +86,13 @@ class SwConvertTableDlg: public SfxModalDialog
     RadioButton     aOtherBtn;
     Edit            aOtherEd;
     CheckBox        aKeepColumn;
-    GroupBox        aDelimFrm;
+    FixedLine       aDelimFL;
 
     CheckBox        aHeaderCB;
     CheckBox        aRepeatHeaderCB;
     CheckBox        aDontSplitCB;
     CheckBox        aBorderCB;
-    GroupBox        aOptionsGB;
+    FixedLine       aOptionsFL;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;

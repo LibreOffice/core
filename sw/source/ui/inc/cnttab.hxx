@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
+ *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #endif
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 
 #ifndef _SFXTABDLG_HXX //autogen
@@ -498,7 +495,7 @@ class SwTOXEntryTabPage : public SfxTabPage
 
     Point           aRelToStylePos;
     Point           aRelToStyleIdxPos;
-    Size            aLevelGBSize;
+    Size            aLevelFLSize;
 
     CurTOXType      aLastTOXType;
     BOOL            bInLevelHdl;
