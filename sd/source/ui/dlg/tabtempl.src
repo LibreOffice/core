@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:47:56 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ TabDialog TAB_TEMPLATE
                 Text[ italian ] = "Trasparenza";
                 Text[ danish ] = "Transparens";
                 Text[ swedish ] = "Transparens";
-                Text[ polish ] = "Przezroczysto?æ";
+                Text[ polish ] = "Przezroczystoœæ";
                 Text[ portuguese_brazilian ] = "Transparence";
                 Text[ japanese ] = "“§‰ß«";
                 Text[ korean ] = "Åõ¸í";
@@ -242,10 +242,10 @@ TabDialog TAB_TEMPLATE
                 Text [ finnish ] = "Merkin tehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
-                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ swedish ] = "Teckeneffekt" ;
                 Text [ dutch ] = "Schrifteffecten" ;
                 Text [ spanish ] = "Efectos de fuente" ;
-                Text [ english_us ] = "Font Effects" ;
+                Text [ english_us ] = "Font Effect" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
                 Text[ russian ] = "İôôåêòû øğèôòà";
