@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 08:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace abp
         FixedText       m_aHint;
         FixedLine       m_aTypeSep;
         RadioButton     m_aMORK;
+        RadioButton     m_aEvolution;
         RadioButton     m_aLDAP;
         RadioButton     m_aOutlook;
         RadioButton     m_aOE;
