@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:03:00 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -129,15 +132,12 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <sot/storinfo.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <svtools/moduleoptions.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::ucb;
-using namespace ::rtl;
+#ifndef css
+namespace css = ::com::sun::star;
+#endif
 
 #include "app.hxx"
 #include "request.hxx"
@@ -154,7 +154,7 @@ using namespace ::rtl;
 #include "docfilt.hxx"
 #include "brokenpackageint.hxx"
 
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : pMatcher( 0 )
     , pLoader( 0 )
     , bLoadDone( sal_False )
@@ -167,8 +167,20 @@ SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
     delete pMatcher;
 }
 
-sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs, const REFERENCE< XFrame >& rFrame ) throw( RuntimeException )
+sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::beans::PropertyValue >& rArgs  ,
+                                             const css::uno::Reference< css::frame::XFrame >&       rFrame )
+    throw( css::uno::RuntimeException )
 {
+    static ::rtl::OUString PROP_URL                = ::rtl::OUString::createFromAscii("URL"               );
+    static ::rtl::OUString PROP_FILENAME           = ::rtl::OUString::createFromAscii("FileName"          );
+    static ::rtl::OUString PROP_TYPENAME           = ::rtl::OUString::createFromAscii("TypeName"          );
+    static ::rtl::OUString PROP_FILTERNAME         = ::rtl::OUString::createFromAscii("FilterName"        );
+    static ::rtl::OUString PROP_MODEL              = ::rtl::OUString::createFromAscii("Model"             );
+    static ::rtl::OUString PROP_DOCUMENTSERVICE    = ::rtl::OUString::createFromAscii("DocumentService"   );
+    static ::rtl::OUString PROP_READONLY           = ::rtl::OUString::createFromAscii("ReadOnly"          );
+    static ::rtl::OUString PROP_ASTEMPLATE         = ::rtl::OUString::createFromAscii("AsTemplate"        );
+    static ::rtl::OUString PROP_INTERACTIONHANDLER = ::rtl::OUString::createFromAscii("InteractionHandler");
+
     // this methods assumes that the filter is detected before, usually by calling the detect() method below
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
@@ -177,94 +189,98 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     if ( !rFrame.is() )
         return sal_False;
 
-    String rURL;
-    String aTypeName;
-    String aServiceName;
-    sal_uInt32 nPropertyCount = rArgs.getLength();
-    sal_Bool bReadOnlyTest = sal_False;
-    ::com::sun::star::uno::Reference< XInteractionHandler > xInteraction;
-    ::com::sun::star::uno::Reference < XModel > xModel;
-    for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
-    {
-        if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
-        {
-            ::rtl::OUString sTemp;
-            rArgs[nProperty].Value >>= sTemp;
-            rURL = sTemp;
-        }
-        else if( !rURL.Len() && rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
-        {
-            ::rtl::OUString sTemp;
-            rArgs[nProperty].Value >>= sTemp;
-            rURL = sTemp;
-        }
-        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
-        {
-            // the name of the file type detected so far (or provided by the client code)
-            ::rtl::OUString sTemp;
-            rArgs[nProperty].Value >>= sTemp;
-            aTypeName = sTemp;
-        }
-        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
-        {
-            // the name of the desired filter, usually to prevent us from using the default
-            // filter for the detected type
-            ::rtl::OUString sTemp;
-            rArgs[nProperty].Value >>= sTemp;
-            aFilterName = sTemp;
-        }
-        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentServiceName")) )
-        {
-            // the name of the desired filter, usually to prevent us from using the default
-            // filter for the detected type
-            ::rtl::OUString sTemp;
-            rArgs[nProperty].Value >>= sTemp;
-            aServiceName = sTemp;
-        }
-        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Model")) )
-            rArgs[nProperty].Value >>= xModel;
-        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
-            rArgs[nProperty].Value >>= bReadOnlyTest;
-        else if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
-            rArgs[nProperty].Value >>= xInteraction;
-    }
+    ::comphelper::SequenceAsHashMap lDescriptor(rArgs);
+    String                                                rURL          = lDescriptor.getUnpackedValueOrDefault(PROP_URL               , ::rtl::OUString()                                      );
+    String                                                aTypeName     = lDescriptor.getUnpackedValueOrDefault(PROP_TYPENAME          , ::rtl::OUString()                                      );
+                                                          aFilterName   = lDescriptor.getUnpackedValueOrDefault(PROP_FILTERNAME        , ::rtl::OUString()                                      );
+    String                                                aServiceName  = lDescriptor.getUnpackedValueOrDefault(PROP_DOCUMENTSERVICE   , ::rtl::OUString()                                      );
+    sal_Bool                                              bReadOnlyTest = lDescriptor.getUnpackedValueOrDefault(PROP_READONLY          , sal_False                                              );
+    css::uno::Reference< css::task::XInteractionHandler > xInteraction  = lDescriptor.getUnpackedValueOrDefault(PROP_INTERACTIONHANDLER, css::uno::Reference< css::task::XInteractionHandler >());
+    css::uno::Reference< css::frame::XModel >             xModel        = lDescriptor.getUnpackedValueOrDefault(PROP_MODEL             , css::uno::Reference< css::frame::XModel >()            );
 
-    const SfxFilter*  pFilter  = NULL;
-    SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+    const SfxFilter* pFilter = NULL;
+    const SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
 
     /* special mode: use already loaded model ...
         In such case no filter name will be selected and no URL will be given!
         Such informations are not neccessary. We have to create a new view only
         and call setComponent() at the corresponding frame. */
-    if (!aFilterName.Len() && !xModel.is())
+    if( !xModel.is() )
     {
-        // try to find a filter with SFX filter detection using the typename
-        SfxFilterFlags    nMust    = SFX_FILTER_IMPORT;
-        SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED;
-        if ( aTypeName.Len() )
-            pFilter = rMatcher.GetFilter4EA( aTypeName, nMust, nDont );
-        if ( !pFilter )
-        {
-            if ( xInteraction.is() )
-            {
-                ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect( rURL );
-                ::com::sun::star::uno::Reference< XInteractionRequest > xRequest ( pRequest );
-                xInteraction->handle( xRequest );
-                if( !pRequest->isAbort() )
-                {
-                    aFilterName = pRequest->getFilter();
-                    pFilter = rMatcher.GetFilter4FilterName( aFilterName );
-                }
-            }
 
-            if ( pFilter )
-                aTypeName = pFilter->GetTypeName();
-            else
-                return sal_False;
+        // get filter by its name directly ...
+        if( aFilterName.Len() )
+            pFilter = rMatcher.GetFilter4FilterName( aFilterName );
+
+        // or search the preferred filter for the detected type ...
+        if( !pFilter && aTypeName.Len() )
+            pFilter = rMatcher.GetFilter4EA(aTypeName);
+
+        // or use given document service for detection too!
+        if (!pFilter && aServiceName.Len())
+        {
+            ::comphelper::SequenceAsHashMap lQuery;
+
+            if (aServiceName.Len())
+                lQuery[::rtl::OUString::createFromAscii("DocumentService")] <<= ::rtl::OUString(aServiceName);
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery > xQuery         ( xServiceManager->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+            SfxFilterFlags nMust = SFX_FILTER_IMPORT;
+            SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED;
+
+            ::com::sun::star::uno::Reference < com::sun::star::container::XEnumeration > xEnum = xQuery->createSubSetEnumerationByProperties(lQuery.getAsConstNamedValueList());
+            while ( xEnum->hasMoreElements() )
+            {
+                ::comphelper::SequenceAsHashMap aType( xEnum->nextElement() );
+                aFilterName = aType.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
+                if (!aFilterName.Len())
+                    continue;
+                pFilter = rMatcher.GetFilter4FilterName(aFilterName);
+                if (!pFilter)
+                    continue;
+                SfxFilterFlags nFlags = pFilter->GetFilterFlags();
+                if (
+                    ((nFlags & nMust) == nMust) &&
+                    (!(nFlags & nDont ))
+                   )
+                {
+                    break;
+                }
+                pFilter = 0; //! in case we reach end of enumeration we must have a valid value ...
+            }
         }
-        else
-            // use filter names without prefix
-            aFilterName = pFilter->GetFilterName();
+
+        // or use interaction to ask user for right filter.
+        if ( !pFilter && xInteraction.is() && rURL.Len() )
+        {
+            ::framework::RequestFilterSelect*                     pRequest = new ::framework::RequestFilterSelect( rURL );
+            css::uno::Reference< css::task::XInteractionRequest > xRequest ( pRequest );
+            xInteraction->handle( xRequest );
+            if( !pRequest->isAbort() )
+            {
+                aFilterName = pRequest->getFilter();
+                pFilter     = rMatcher.GetFilter4FilterName( aFilterName );
+            }
+        }
+
+        if( !pFilter )
+            return sal_False;
+
+        aTypeName = pFilter->GetTypeName();
+        // use filter names without prefix
+        aFilterName = pFilter->GetFilterName();
+
+        // If detected filter indicates using of an own template format
+        // add property "AsTemplate" to descriptor. But supress this step
+        // if such property already exists.
+        if( pFilter->IsOwnTemplateFormat())
+        {
+            ::comphelper::SequenceAsHashMap::iterator pIt = lDescriptor.find(PROP_ASTEMPLATE);
+            if (pIt == lDescriptor.end())
+                lDescriptor[PROP_ASTEMPLATE] <<= sal_True;
+        }
     }
 
     xFrame = rFrame;
@@ -272,8 +288,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     // Achtung: beim Abräumen der Objekte kann die SfxApp destruiert werden, vorher noch Deinitialize_Impl rufen
     SfxApplication* pApp = SFX_APP();
 
+    // Attention! Because lDescriptor is a copy of rArgs
+    // and was might by changed (e.g. for AsTemplate)
+    // move all changes there back!
     SfxAllItemSet aSet( pApp->GetPool() );
-    TransformParameters( SID_OPENDOC, rArgs, aSet );
+    TransformParameters( SID_OPENDOC, lDescriptor.getAsConstPropertyValueList(), aSet );
 
     SFX_ITEMSET_ARG( &aSet, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
     if ( !pRefererItem )
@@ -342,8 +361,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 SfxObjectShell* pDoc = pFrame->GetCurrentDocument();
                 if ( !pDoc )
                 {
-                    REFERENCE< XFrame > aXFrame;
-                    pFrame->SetFrameInterface_Impl( aXFrame );
+                    css::uno::Reference< css::frame::XFrame > axFrame;
+                    pFrame->SetFrameInterface_Impl( axFrame );
                     pFrame->DoClose();
                 }
 
@@ -386,15 +405,15 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 {
                     if ( !pFrame->GetCurrentDocument() )
                     {
-                        REFERENCE< XFrame > aXFrame;
-                        pFrame->SetFrameInterface_Impl( aXFrame );
+                        css::uno::Reference< css::frame::XFrame > axFrame;
+                        pFrame->SetFrameInterface_Impl( axFrame );
                         pFrame->DoClose();
                     }
 
                     bLoadState = sal_False;
                 }
 
-                xFrame = REFERENCE< XFrame >();
+                xFrame.clear();
                 return bLoadState;
             }
     }
@@ -425,14 +444,14 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     if ( pLoader->GetError() == ERRCODE_IO_BROKENPACKAGE && xInteraction.is() )
     {
-        OUString aDocName = INetURLObject(rURL).getName( INetURLObject::LAST_SEGMENT, true,
+        ::rtl::OUString aDocName = INetURLObject(rURL).getName( INetURLObject::LAST_SEGMENT, true,
                                                   INetURLObject::DECODE_WITH_CHARSET );
 
         SFX_ITEMSET_ARG( &aSet, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
         if ( !pRepairItem || !pRepairItem->GetValue() )
         {
             RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
-            ::com::sun::star::uno::Reference< XInteractionRequest > xRequest ( pRequest );
+            css::uno::Reference< css::task::XInteractionRequest > xRequest ( pRequest );
             xInteraction->handle( xRequest );
             if( pRequest->isApproved() )
             {
@@ -455,7 +474,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 if ( pLoader->GetError() == ERRCODE_IO_BROKENPACKAGE )
                 {
                        NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-                       xRequest = ::com::sun::star::uno::Reference< XInteractionRequest >( pNotifyRequest );
+                    xRequest = css::uno::Reference< css::task::XInteractionRequest >( pNotifyRequest );
                        xInteraction->handle( xRequest );
                 }
             }
@@ -463,7 +482,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         else
         {
             NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-            ::com::sun::star::uno::Reference< XInteractionRequest > xRequest ( pNotifyRequest );
+            css::uno::Reference< css::task::XInteractionRequest > xRequest ( pNotifyRequest );
                xInteraction->handle( xRequest );
         }
     }
@@ -474,14 +493,14 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         if ( pFrame && !pFrame->GetCurrentDocument() )
         {
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            REFERENCE< XFrame > aXFrame;
-            pFrame->SetFrameInterface_Impl( aXFrame );
+            css::uno::Reference< css::frame::XFrame > axFrame;
+            pFrame->SetFrameInterface_Impl( axFrame );
             pFrame->DoClose();
         }
     }
 
-    xFrame = REFERENCE< XFrame >();
-    xListener = REFERENCE< XLoadEventListener >();
+    xFrame.clear();
+    xListener.clear();
 
     if ( pLoader )
     {
