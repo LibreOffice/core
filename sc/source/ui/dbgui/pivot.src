@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:50:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "Column";
         Text[ slovak ] = "Stĺpec";
+        Text[ hungarian ] = "Oszlop";
+        Text[ slovenian ] = "Stolpec";
     };
     Control WND_COL
     {
@@ -170,6 +172,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Zeile";
         Text[ hindi ] = "Row";
         Text[ slovak ] = "Riadok";
+        Text[ hungarian ] = "Sor";
+        Text[ slovenian ] = "Vrstica";
     };
     Control WND_ROW
     {
@@ -208,6 +212,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Daten";
         Text[ hindi ] = "Data";
         Text[ slovak ] = "Dáta";
+        Text[ hungarian ] = "Adatok";
+        Text[ slovenian ] = "Podatki";
     };
     Control WND_DATA
     {
@@ -230,12 +236,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ portuguese ] = "Selection area";
         Text[ russian ] = "Selection area";
         Text[ greek ] = "Selection area";
-        Text[ dutch ] = "Selection area";
+        Text[ dutch ] = "Selectiegebied";
         Text[ french ] = "Zone de s�lection";
         Text[ spanish ] = "�rea de selecci�n";
         Text[ finnish ] = "Selection area";
         Text[ italian ] = "Area di selezione";
-        Text[ danish ] = "Selection area";
+        Text[ danish ] = "Markeringsomr�de";
         Text[ swedish ] = "Markeringsomr�de";
         Text[ polish ] = "Selection area";
         Text[ portuguese_brazilian ] = "�rea de sele��o";
@@ -251,6 +257,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Auswahlbereich";
         Text[ hindi ] = "Selection area";
         Text[ slovak ] = "Oblasť výberu";
+        Text[ hungarian ] = "Kijelölési terület";
+        Text[ slovenian ] = "Področje izbora";
     };
     ScrollBar WND_HSCROLL
     {
@@ -271,7 +279,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "Arraste os campos da direita para a �rea desejada usando o mouse." ;
         Text [ portuguese ] = "Com o rato arraste os campos da direita para as �reas desejadas." ;
         Text [ finnish ] = "Ved� oikealla olevat kent�t haluamaasi kohtaan." ;
-        Text [ danish ] = "Tr�k felterne p� h�jre side til de �nskede omr�der ved hj�lp af musen." ;
+        Text [ danish ] = "Tr�k felterne fra h�jre til den �nskede position." ;
         Text [ french ] = "Faites glisser les champs de droite vers leur plage de destination � l'aide de la souris." ;
         Text [ swedish ] = "Dra f�lten p� den h�gra sidan till �nskade omr�den med musen." ;
         Text [ dutch ] = "Sleep de velden aan de rechterzijde met de muis naar het gewenste bereik." ;
@@ -293,6 +301,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gewünschten Bereiche.";
         Text[ hindi ] = "क्षेत्रों को दाहिनी ओर से खींचकर इष्ट स्थान में रखो ।";
         Text[ slovak ] = "Presuňte polia z pravej strany na vybranú pozíciu.";
+        Text[ hungarian ] = "Húzza a jobb oldali mezőket a kívánt helyre!";
+        Text[ slovenian ] = "Povlecite polja z desne na želeno mesto.";
     };
     FixedLine FL_LAYOUT
     {
@@ -325,6 +335,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "‮פריסה‬";
         Text[ hindi ] = "अभिन्यास";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Elrendezés";
+        Text[ slovenian ] = "Postavitev";
     };
     OKButton BTN_OK
     {
@@ -377,6 +389,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "Remove";
         Text[ slovak ] = "Odstrániť";
+        Text[ hungarian ] = "Eltávolítás";
+        Text[ slovenian ] = "Odstrani";
     };
     PushButton BTN_OPTIONS
     {
@@ -389,12 +403,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ portuguese ] = "Options...";
         Text[ russian ] = "Options...";
         Text[ greek ] = "Options...";
-        Text[ dutch ] = "Options...";
+        Text[ dutch ] = "Opties...";
         Text[ french ] = "Options...";
         Text[ spanish ] = "Opciones...";
         Text[ finnish ] = "Options...";
         Text[ italian ] = "Opzioni...";
-        Text[ danish ] = "Options...";
+        Text[ danish ] = "Indstillinger...";
         Text[ swedish ] = "Alternativ...";
         Text[ polish ] = "Options...";
         Text[ portuguese_brazilian ] = "Op��es...";
@@ -410,6 +424,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "Options...";
         Text[ slovak ] = "Voľby...";
+        Text[ hungarian ] = "Beállítások...";
+        Text[ slovenian ] = "Možnosti...";
     };
     MoreButton BTN_MORE
     {
@@ -464,6 +480,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Ergebnis";
         Text[ hindi ] = "नतीजा";
         Text[ slovak ] = "Výsledok";
+        Text[ hungarian ] = "Eredmény";
+        Text[ slovenian ] = "Rezultat";
     };
     FixedText FT_OUTAREA
     {
@@ -477,7 +495,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "Resultados em" ;
         Text [ portuguese ] = "~Resultado em" ;
         Text [ finnish ] = "Tulokset" ;
-        Text [ danish ] = "~Output fra" ;
+        Text [ danish ] = "Resultater til" ;
         Text [ french ] = "Destination" ;
         Text [ swedish ] = "Utd~ata fr�n" ;
         Text [ dutch ] = "~Weergave vanaf" ;
@@ -499,6 +517,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "~Ausgabe ab";
         Text[ hindi ] = "में नतीजा";
         Text[ slovak ] = "Výsledky do";
+        Text[ hungarian ] = "Eredménye";
+        Text[ slovenian ] = "Razultati v";
     };
     ListBox LB_OUTAREA
     {
@@ -551,6 +571,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -565,7 +587,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "~Ignorar linhas vazias" ;
         Text [ portuguese ] = "~Ignorar linhas vazias" ;
         Text [ finnish ] = "~Ohita tyhj�t rivit" ;
-        Text [ danish ] = "Ignorer tomme r�kker" ;
+        Text [ danish ] = "Ignor~er tomme r�kker" ;
         Text [ french ] = "~Ignorer les lignes vides" ;
         Text [ swedish ] = "~Ignorera tomma rader" ;
         Text [ dutch ] = "~Lege rijen negeren" ;
@@ -587,6 +609,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Leerzeilen ~ignorieren";
         Text[ hindi ] = "~खाली पंक्तियों को उपेक्षा करो";
         Text[ slovak ] = "Ignorovať prázdn~e riadky";
+        Text[ hungarian ] = "Ü~res sorok mellőzése";
+        Text[ slovenian ] = "Prezri ~prazne vrstice";
     };
     CheckBox BTN_DETECTCAT
     {
@@ -601,7 +625,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "~Identificar categorias" ;
         Text [ portuguese ] = "~Indicar categorias" ;
         Text [ finnish ] = "~Tunnista luokat" ;
-        Text [ danish ] = "Identificer kategorier" ;
+        Text [ danish ] = "~Identificer kategorier" ;
         Text [ french ] = "~Identifier les cat�gories" ;
         Text [ swedish ] = "Identifiera ~kategorier" ;
         Text [ dutch ] = "~Categorie�n opsporen" ;
@@ -623,6 +647,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "~Kategorieerkennung";
         Text[ hindi ] = "वर्गों की ~पहचान";
         Text[ slovak ] = "~Identifikovať kategórie";
+        Text[ hungarian ] = "Kategóriák ~azonosítása";
+        Text[ slovenian ] = "~Ugotovi kategorije";
     };
     CheckBox BTN_TOTALCOL
     {
@@ -635,7 +661,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Total columns" ;
         Text [ portuguese ] = "Soma total - ~colunas" ;
         Text [ swedish ] = "Totalresultat kolumner" ;
-        Text [ danish ] = "Total kolonner" ;
+        Text [ danish ] = "Antal kolonner i alt" ;
         Text [ italian ] = "Risultato complessivo colonne" ;
         Text [ spanish ] = "Columnas de totales" ;
         Text [ french ] = "Total - colonnes" ;
@@ -658,6 +684,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Gesamtergebnis-Spalten";
         Text[ hindi ] = "~स्तंभों की कुल संख्या";
         Text[ slovak ] = "Súčty stĺpcov";
+        Text[ hungarian ] = "Összes oszlop";
+        Text[ slovenian ] = "Skupaj stolpcev";
     };
     CheckBox BTN_TOTALROW
     {
@@ -670,7 +698,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "~Total rows" ;
         Text [ portuguese ] = "Soma ~total - linhas" ;
         Text [ swedish ] = "Totalresultat ~rader" ;
-        Text [ danish ] = "Total r�kker" ;
+        Text [ danish ] = "~Antal r�kker i alt" ;
         Text [ italian ] = "Risultato c~omplessivo righe" ;
         Text [ spanish ] = "~Filas de totales" ;
         Text [ french ] = "Total - ~lignes" ;
@@ -693,6 +721,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "~Gesamtergebnis-Zeilen";
         Text[ hindi ] = "पंक्तियों की ~कुल संख्या";
         Text[ slovak ] = "Súč~ty riadkov";
+        Text[ hungarian ] = "~Összes sor";
+        Text[ slovenian ] = "~Skupaj vrstic";
     };
     String PIVOTSTR_SUM
     {
@@ -725,6 +755,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "‮סכום -‬";
         Text[ hindi ] = "जोड - ";
         Text[ slovak ] = "Celkom - ";
+        Text[ hungarian ] = "Sum - ";
+        Text[ slovenian ] = "Vsota -";
     };
     String PIVOTSTR_COUNT
     {
@@ -757,6 +789,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Anzahl -";
         Text[ hindi ] = "गिनती - ";
         Text[ slovak ] = "Počet - ";
+        Text[ hungarian ] = "Count -";
+        Text[ slovenian ] = "Seštevek -";
     };
     String PIVOTSTR_AVG
     {
@@ -789,6 +823,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Mittelwert -";
         Text[ hindi ] = "माध्य - ";
         Text[ slovak ] = "Stredne - ";
+        Text[ hungarian ] = "Mean -";
+        Text[ slovenian ] = "Srednja vrednost -";
     };
     String PIVOTSTR_MAX
     {
@@ -821,6 +857,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Max - ";
         Text[ hindi ] = "अधिकतम - ";
         Text[ slovak ] = "Max - ";
+        Text[ hungarian ] = "Max -";
+        Text[ slovenian ] = "Maksimum -";
     };
     String PIVOTSTR_MIN
     {
@@ -853,6 +891,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Min - ";
         Text[ hindi ] = "न्यूनतम - ";
         Text[ slovak ] = "Min - ";
+        Text[ hungarian ] = "Min -";
+        Text[ slovenian ] = "Minimum -";
     };
     String PIVOTSTR_PROD
     {
@@ -885,6 +925,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Produkt -";
         Text[ hindi ] = "गुणन - ";
         Text[ slovak ] = "Produkt - ";
+        Text[ hungarian ] = "Product -";
+        Text[ slovenian ] = "Produkt -";
     };
     String PIVOTSTR_COUNT2
     {
@@ -917,6 +959,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Anzahl -";
         Text[ hindi ] = "गिनती - ";
         Text[ slovak ] = "Počet - ";
+        Text[ hungarian ] = "Count -";
+        Text[ slovenian ] = "Seštevek -";
     };
     String PIVOTSTR_DEV
     {
@@ -927,7 +971,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "DesvPad - " ;
         Text [ portuguese ] = "DesvP - " ;
         Text [ finnish ] = "KESKIHAJONTA - " ;
-        Text [ danish ] = "Stdafv - " ;
+        Text [ danish ] = "Stdafv (stikpr�ve) - " ;
         Text [ french ] = "Ecartype -   " ;
         Text [ swedish ] = "StdAv - " ;
         Text [ dutch ] = "StAfw -" ;
@@ -949,6 +993,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "StAbw -";
         Text[ hindi ] = "StDev - ";
         Text[ slovak ] = "ŠtandOch - ";
+        Text[ hungarian ] = "StDev -";
+        Text[ slovenian ] = "StOdkl -";
     };
     String PIVOTSTR_DEV2
     {
@@ -959,7 +1005,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "DesvPadP - " ;
         Text [ portuguese ] = "DesvPadP - " ;
         Text [ finnish ] = "KESKIHAJONTAP - " ;
-        Text [ danish ] = "StdafvP - " ;
+        Text [ danish ] = "StdafvP (population) - " ;
         Text [ french ] = "EcarTypeP -    " ;
         Text [ swedish ] = "StdAvP - " ;
         Text [ dutch ] = "StAfwP -" ;
@@ -981,6 +1027,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "StAbwN -";
         Text[ hindi ] = "StDevP - ";
         Text[ slovak ] = "ŠtandOchP - ";
+        Text[ hungarian ] = "StDevP -";
+        Text[ slovenian ] = "StOdklP -";
     };
     String PIVOTSTR_VAR
     {
@@ -991,7 +1039,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "Var -" ;
         Text [ portuguese ] = "Vari�ncia - " ;
         Text [ finnish ] = "Var - " ;
-        Text [ danish ] = "Varians - " ;
+        Text [ danish ] = "Varians (stikpr�ve) - " ;
         Text [ french ] = "Var - " ;
         Text [ swedish ] = "Varians -  " ;
         Text [ dutch ] = "Variantie -" ;
@@ -1013,6 +1061,8 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Varianz -";
         Text[ hindi ] = "Var - ";
         Text[ slovak ] = "Var - ";
+        Text[ hungarian ] = "Var -";
+        Text[ slovenian ] = "Var -";
     };
     String PIVOTSTR_VAR2
     {
@@ -1023,7 +1073,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ portuguese_brazilian ] = "VarP-" ;
         Text [ portuguese ] = "Vari�ncias - " ;
         Text [ finnish ] = "VarP - " ;
-        Text [ danish ] = "VariansP - " ;
+        Text [ danish ] = "VariansP (population) - " ;
         Text [ french ] = "VarP - " ;
         Text [ swedish ] = "VariansP - " ;
         Text [ dutch ] = "Varianties -" ;
@@ -1045,13 +1095,18 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ hebrew ] = "Varianzen -";
         Text[ hindi ] = "VarP - ";
         Text[ slovak ] = "VarP - ";
+        Text[ hungarian ] = "VarP -";
+        Text[ slovenian ] = "VarP -";
     };
     Text[ thai ] = "ข้อมูลนำร่อง";
     Text[ czech ] = "Kontingenční tabulka";
     Text[ hebrew ] = "Datenpilot";
     Text[ hindi ] = "ड़ॉटापैलट्";
     Text[ slovak ] = "Sprievodca dátami";
+    Text[ hungarian ] = "Adattündér";
+    Text[ slovenian ] = "DataPilot";
 };
+
 
 
 
