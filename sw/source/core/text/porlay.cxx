@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:43:43 $
+ *  last change: $Author: fme $ $Date: 2002-04-18 08:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,7 +975,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                         // check if next character is Reh, Yeh or Alef Maksura
                         xub_Unicode cNextCh = rWord.GetChar( nIdx + 1 );
 
-                        if ( 0x631 == cNextCh || 0x64a == cNextCh ||
+                        if ( 0x631 == cNextCh || 0x64A == cNextCh ||
                              0x649 == cNextCh )
                         {
                             // check if character is connectable to previous character,
@@ -986,7 +986,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 
                     // 6. Priority:
                     // other connecting possibilities
-                    if ( nIdx && nIdx + 1 == rWord.Len() )
+                    if ( nIdx && nIdx + 1 == rWord.Len() &&
+                         0x60C <= cCh && 0x6FE >= cCh )
                     {
                         ASSERT( 0 != cPrevCh, "No previous character" )
 
