@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:42:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ enum SbiToken {
     NUMBER=FIRSTEXTRA, FIXSTRING, SYMBOL, _CDECL_, BYVAL, BYREF,
     OUTPUT, RANDOM, APPEND, BINARY, ACCESS,
     LOCK, READ, PRESERVE, BASE, ANY, LIB, _OPTIONAL_,
-    EXPLICIT, COMPATIBLE, CLASSMODULE,
+    EXPLICIT, COMPATIBLE, CLASSMODULE, PARAMARRAY,
 
     // Ab hier kommen JavaScript-Tokens (gleiches enum, damit gleicher Typ)
     FIRSTJAVA,
