@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-10 16:06:15 $
+ *  last change: $Author: vg $ $Date: 2001-09-11 12:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------
@@ -438,7 +438,7 @@ FmXGridControl::~FmXGridControl()
 //------------------------------------------------------------------
 ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return form::OImplementationIds::getImplementationId(getTypes());
+    return ::form::OImplementationIds::getImplementationId(getTypes());
 }
 
 // ::com::sun::star::lang::XServiceInfo
@@ -781,7 +781,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn)
         }
 
         mbDesignMode = bOn;
-        Reference< XVclWindowPeer >  xVclWindowPeer(mxPeer, UNO_QUERY);
+        Reference< awt::XVclWindowPeer >  xVclWindowPeer(mxPeer, UNO_QUERY);
         if (xVclWindowPeer.is())
             xVclWindowPeer->setDesignMode(bOn);
     }
@@ -1017,7 +1017,7 @@ void FmXGridPeer::SelectionListenerImpl::selectionChanged()
 //------------------------------------------------------------------
 ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return form::OImplementationIds::getImplementationId(getTypes());
+    return ::form::OImplementationIds::getImplementationId(getTypes());
 }
 
 //------------------------------------------------------------------
