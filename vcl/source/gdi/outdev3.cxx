@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-23 15:43:29 $
+ *  last change: $Author: hdu $ $Date: 2002-08-26 16:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5623,22 +5623,21 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
     xub_StrLen nRetVal = STRING_LEN;
     if( pSalLayout )
     {
-        // convert widths into layout units
+        // convert logical widths into layout units
+        // NOTE: be very careful to avoid rounding errors for nCharExtra case
+        // problem with rounding errors especially for small nCharExtras
+        // TODO: remove when layout units have subpixel granularity
         long nWidthFactor = pSalLayout->GetUnitsPerPixel();
-        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
+        long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
+        nTextWidth *= nWidthFactor * nSubPixelFactor;
+        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
         long nCharExtra2 = 0;
         if( nCharExtra != 0 )
-            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra * nWidthFactor );
-
-        nRetVal = pSalLayout->GetTextBreak( nTextWidth2, nCharExtra2 );
-        // recalculate for nCharExtra case to avoid rounding errors
-        // TODO: remove when layout units have subpixel granularity
-        if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
         {
-            nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
-            nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
-            nRetVal = pSalLayout->GetTextBreak( nTextWidth2, 0 );
+            nCharExtra *= nWidthFactor * nSubPixelFactor;
+            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra );
         }
+        nRetVal = pSalLayout->GetTextBreak( nTextWidth2, nCharExtra2, nSubPixelFactor );
 
         pSalLayout->Release();
     }
@@ -5670,26 +5669,32 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
     rExtraCharPos = nRetVal;
     if( pSalLayout )
     {
-        // convert widths into layout units
+        // convert logical widths into layout units
+        // NOTE: be very careful to avoid rounding errors for nCharExtra case
+        // problem with rounding errors especially for small nCharExtras
+        // TODO: remove when layout units have subpixel granularity
         long nWidthFactor = pSalLayout->GetUnitsPerPixel();
-        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
+        long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
+        nTextWidth *= nWidthFactor * nSubPixelFactor;
+        nExtraWidth *= nSubPixelFactor;
+        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
         long nCharExtra2 = 0;
         if( nCharExtra != 0 )
-            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra * nWidthFactor );
+        {
+            nCharExtra *= nWidthFactor * nSubPixelFactor;
+            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra );
+        }
 
-        nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, nCharExtra2 );
-        // recalculate for nCharExtra case to avoid rounding errors
-        // TODO: remove when layout units have subpixel granularity
+        nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, nCharExtra2, nSubPixelFactor );
         if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
         {
             nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
-            nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
-            nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, 0 );
+            nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
         }
 
         // calculate rExtraCharPos
         if( nCharExtra2 != 0 )
-            rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth2 + nCharExtra2, 0 );
+            rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth2 + nCharExtra2, 0, nSubPixelFactor );
         if( rExtraCharPos == STRING_LEN )
             rExtraCharPos = nRetVal;
 
