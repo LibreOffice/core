@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:15:19 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 #define STR_LOAD_DOC                            RID_APP_START+799
 #define STR_SAVE_DOC                            RID_APP_START+800
 #define STR_PREVIEWVIEWSHELL                    RID_APP_START+801
-
 #define RID_SD_ERRHDL                           RID_APP_START+802
 #define STR_VIEWSHELLBASE                       RID_APP_START+803
+#define STR_3DOBJECTBARSHELL                    RID_APP_START+804
+#define STR_FONTWORKOBJECTBARSHELL              RID_APP_START+805
