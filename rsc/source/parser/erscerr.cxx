@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:59:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,8 +282,8 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-SrsDefault   Only write one language to srs file.\n" );
             StdLstOut( "\nwhen creating multiple .res files in one pass, please give these\n" );
             StdLstOut( "options in consecutive blocks:\n" );
-            StdLstOut( "-lg<language> -CHARSET_... -fs<filename> [-lip<path> [-lip<path>] ]\n" );
-            StdLstOut( "a new block begins when any of the first three options is used again.\n" );
+            StdLstOut( "-lg<language> -fs<filename> [-lip<path> [-lip<path>] ]\n" );
+            StdLstOut( "a new block begins when either -lg or -fs is used again.\n" );
             break;
 
         case ERR_UNKNOWNSW:
