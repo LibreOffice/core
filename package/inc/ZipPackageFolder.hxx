@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:20:28 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 class ZipFile;
 class ZipPackage;
 class ZipOutputStream;
+struct ZipEntry;
 
 class ZipPackageFolder : public ZipPackageEntry,
                          public ::cppu::OWeakObject,
@@ -96,13 +97,20 @@ class ZipPackageFolder : public ZipPackageEntry,
                          public ::com::sun::star::container::XEnumerationAccess
 {
 protected:
-    TunnelHash aContents;
+    ContentHash maContents;
+    bool mbHasReleased;
 public:
+    bool HasReleased ( ) { return mbHasReleased; }
 
     ZipPackageFolder ();
     virtual ~ZipPackageFolder();
 
-    static void copyZipEntry( com::sun::star::packages::zip::ZipEntry &rDest, const com::sun::star::packages::zip::ZipEntry &rSource);
+    void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
+        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    ContentInfo & doGetByName( const ::rtl::OUString& aName )
+        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
@@ -151,7 +159,7 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
-    static ::com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
+    static ::com::sun::star::uno::Sequence < sal_Int8 >& getUnoTunnelImplementationId( void )
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
