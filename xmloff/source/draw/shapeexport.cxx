@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: cl $ $Date: 2001-11-22 13:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if( xPropSet.is() && bObjSupportsText )
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
-        if(xText.is())
+        if(xText.is() && xText->getString().getLength())
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
