@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: fs $ $Date: 2001-09-07 10:04:20 $
+#   last change: $Author: obo $ $Date: 2001-09-18 13:07:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ EXCEPTIONSFILES=	\
         $(SLO)$/indexcollection.obj			\
         $(SLO)$/UITools.obj					\
         $(SLO)$/WCPage.obj					\
+        $(SLO)$/WCopyTable.obj				\
         $(SLO)$/TokenWriter.obj				\
         $(SLO)$/HtmlReader.obj				\
         $(SLO)$/RtfReader.obj				\
