@@ -2,9 +2,9 @@
  *
  *  $RCSfile: monst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 19:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ Gegner::Gegner(Fighter* pFig, Bombe* pBom, ResMgr* pRes) :
 
     aOutSize = pBitMonst1->GetSizePixel();
 
-    nRandWert = 200;
+    SetRandWert( 100 );
 }
 
 Gegner::~Gegner()
@@ -298,10 +298,10 @@ void Gegner::DrawGegner(OutputDevice* pDev,Point* pStart)
                     pDev->DrawImage(Point(pStart->X()+GegnerX(i),
                             pStart->Y()+GegnerY(i)),*pBitMonst5b);
                     DecDelay(i);
+                    pBombe->InsertBombe(Point(GegnerX(i),
+                                            GegnerY(i)+aOutSize.Height()/2));
                     if(!GetDelay(i))
                     {
-                        pBombe->InsertBombe(Point(GegnerX(i)+aOutSize.Width()/2,
-                                                GegnerY(i)+aOutSize.Height()));
                         SetDelay(i);
                         SetMode(i,MOVE4);
                     }
@@ -314,7 +314,10 @@ void Gegner::DrawGegner(OutputDevice* pDev,Point* pStart)
                     if(!GetDelay(i))
                     {
                         SetDelay(i);
-                        SetMode(i,MOVE5);
+                        if ( rand() % 5 < 2 )
+                            SetMode(i,MOVE3);
+                        else
+                            SetMode(i,MOVE5);
                     }
                 }
                 if(GegMode(i) == MOVE5)
@@ -323,7 +326,15 @@ void Gegner::DrawGegner(OutputDevice* pDev,Point* pStart)
                             pStart->Y()+GegnerY(i)),*pBitMonst5);
                     DecDelay(i);
                     if(!GetDelay(i))
-                        SetMode(i,HIDE);
+                    {
+                        if ( rand() % 5 < 2 )
+                        {
+                            SetMode(i,MOVE1);
+                            SetDelay(i);
+                        }
+                        else
+                            SetMode(i,HIDE);
+                    }
                 }
                 break;
 
@@ -338,18 +349,28 @@ void Gegner::DrawGegner(OutputDevice* pDev,Point* pStart)
             if(GegnerX(i) < pFighter->GetHalf() &&
                         GegnerX(i)+aOutSize.Width() > pFighter->GetHalf())
                     pBombe->InsertBombe(Point(pFighter->GetPoint().X(),
-                                            GegnerY(i)+aOutSize.Height()));
+                                            GegnerY(i)+aOutSize.Height()/2));
         }
         else
         {
             int ran = rand();
 
-            if(ran < nRandWert)
+            int nScaledLimit;
+            // NOTE: the two expressions are the same in floatingpoint but not in integer
+            if ( RAND_MAX < 32767 )
+                nScaledLimit = GetRandWert() / (32767 / RAND_MAX);
+            else
+                nScaledLimit = GetRandWert() * (RAND_MAX / 32767);
+
+            if(GegType(i) != GEGNER5)
             {
-                if(GegType(i) != GEGNER5)
-                    pBombe->InsertBombe(Point(GegnerX(i)+aOutSize.Width()/2,
-                                            GegnerY(i)+aOutSize.Height()));
-                else if(GegMode(i) == HIDE)
+                if(ran < nScaledLimit )
+                    pBombe->InsertBombe(Point(GegnerX(i),
+                                            GegnerY(i)+aOutSize.Height()/2));
+            }
+            else if(GegMode(i) == HIDE)
+            {
+                if(ran < (nScaledLimit *3) /2)
                 {
                     SetMode(i,MOVE1);
                     SetDelay(i);
