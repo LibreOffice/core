@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:24:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,14 +572,14 @@ ResMgr* GetIsoResMgr_Impl()
         ByteString aResMgrName( "iso" );
         aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
         pIsoResMgr = ResMgr::CreateResMgr(
-            aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
         if ( !pIsoResMgr )
         {
             // no "iso" resource -> search for "ooo" resource
             aResMgrName = ByteString( "ooo" );
             aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
             pIsoResMgr = ResMgr::CreateResMgr(
-                aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+                aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
         }
     }
 
