@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.19 2003-03-26 14:24:04 hr Exp $
+/* $Id: sft.c,v 1.20 2003-04-11 17:18:21 vg Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1122,7 +1122,10 @@ static void GetNames(TrueTypeFont *t)
         t->psname = nameExtract(table, r, 1, NULL);
     } else if ((r = findname(table, n, 1, 0, 0, 6)) != -1) {
         t->psname = nameExtract(table, r, 0, NULL);
-    } else {
+    } else if ((r = findname(table, n, 3, 0, 0x0409, 6)) != -1) {
+        // some symbol fonts like Marlett have a 3,0 name!
+        t->psname = nameExtract(table, r, 1, NULL);
+    } else if ( t->fname ) {
         char* pReverse = t->fname + strlen(t->fname);
         /* take only last token of filename */
         while(pReverse != t->fname && *pReverse != '/') pReverse--;
@@ -1135,6 +1138,8 @@ static void GetNames(TrueTypeFont *t)
                 break;
             }
         }
+    } else {
+        t->psname = strdup( "Unknown" );
     }
 
     /* Font family and subfamily names: preferred Apple */
@@ -1145,6 +1150,8 @@ static void GetNames(TrueTypeFont *t)
     } else if ((r = findname(table, n, 1, 0, 0, 1)) != -1) {
         t->family = nameExtract(table, r, 0, NULL);
     } else if ((r = findname(table, n, 3, 1, 0x0411, 1)) != -1) {
+        t->family = nameExtract(table, r, 1, &t->ufamily);
+    } else if ((r = findname(table, n, 3, 0, 0x0409, 1)) != -1) {
         t->family = nameExtract(table, r, 1, &t->ufamily);
     } else {
         t->family = strdup(t->psname);
@@ -2046,7 +2053,6 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
         gID[i] = glyfAdd(glyf, GetTTRawGlyphData(ttf, glyphArray[i]), ttf);
     }
 
-
     /**                       cmap                          **/
     cmap = TrueTypeTableNew_cmap();
 
@@ -2468,7 +2474,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->ufamily = ttf->ufamily;
     info->subfamily = ttf->subfamily;
     info->psname = ttf->psname;
-    info->symbolEncoded = ttf->cmapType == CMAP_MS_Symbol ? 1 : 0;
+    info->symbolEncoded = (ttf->cmapType == CMAP_MS_Symbol);
 
     table = getTable(ttf, O_OS2);
     if (table) {
@@ -2496,7 +2502,6 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
         memcpy(info->panose, table + 32, 10);
         info->typeFlags = GetUInt16( table, 8, 1 );
     }
-
 
     table = getTable(ttf, O_post);
     if (table) {
@@ -2624,6 +2629,9 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
         } else {
             rec[i].sptr = 0;
         }
+        // some fonts have 3.0 names => fix them to 3.1
+        if( (rec[i].platformID == 3) && (rec[i].encodingID == 0) )
+            rec[i].encodingID = 1;
     }
 
     *nr = rec;
