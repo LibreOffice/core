@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 09:42:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx>
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE12_HXX_
 #include <cppuhelper/implbase12.hxx>
@@ -146,27 +146,6 @@
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
-#include <com/sun/star/view/XPrintable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
@@ -176,17 +155,21 @@
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
 #endif
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#endif
+#include <boost/shared_ptr.hpp>
+#ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
+#include "ModelImpl.hxx"
 #endif
 
 //........................................................................
@@ -196,8 +179,6 @@ namespace dbaccess
 
 class OSharedConnectionManager;
 class OChildCommitListen_Impl;
-typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection > OWeakConnection;
-typedef std::vector< OWeakConnection > OWeakConnectionArray;
 
 //============================================================
 //= ODatabaseSource
@@ -205,7 +186,7 @@ typedef std::vector< OWeakConnection > OWeakConnectionArray;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::ImplHelper9 <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::ImplHelper10    <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::sdbc::XDataSource
                             ,   ::com::sun::star::sdb::XBookmarksSupplier
                             ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
@@ -214,22 +195,8 @@ typedef ::cppu::ImplHelper9 <   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::sdbc::XIsolatedConnection
                             ,   ::com::sun::star::sdbcx::XTablesSupplier
                             ,   ::com::sun::star::util::XFlushable
+                            ,   ::com::sun::star::sdb::XDocumentDataSource
                             >   ODatabaseSource_Base;
-
-
-typedef ::cppu::ImplHelper12<   ::com::sun::star::frame::XModel
-                            ,   ::com::sun::star::util::XModifiable
-                            ,   ::com::sun::star::frame::XStorable
-                            ,   ::com::sun::star::view::XPrintable
-                            ,   ::com::sun::star::sdb::XFormDocumentsSupplier
-                            ,   ::com::sun::star::sdb::XReportDocumentsSupplier
-                            ,   ::com::sun::star::util::XCloseable
-                            ,   ::com::sun::star::ui::XUIConfigurationManagerSupplier
-                            ,   ::com::sun::star::document::XDocumentSubStorageSupplier
-                            ,   ::com::sun::star::embed::XTransactionListener
-                            ,   ::com::sun::star::document::XEventBroadcaster
-                            ,   ::com::sun::star::document::XEventListener
-                            >   ODatabaseSource_OfficeDocument;
 
 
 class ODatabaseSource   :public ::comphelper::OBaseMutex
@@ -237,7 +204,6 @@ class ODatabaseSource   :public ::comphelper::OBaseMutex
                     ,public ::cppu::OPropertySetHelper
                     ,public ::comphelper::OPropertyArrayUsageHelper < ODatabaseSource >
                     ,public ODatabaseSource_Base
-                    ,public ODatabaseSource_OfficeDocument
 {
     friend class ODatabaseContext;
     friend class OConnection;
@@ -246,143 +212,21 @@ class ODatabaseSource   :public ::comphelper::OBaseMutex
         ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
 protected:
-    DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
+    ::rtl::Reference<ODatabaseModelImpl>    m_pImpl;
+    OBookmarkContainer                      m_aBookmarks;
+    ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
 
-    enum
-    {
-        E_FORM   = 0,
-        E_REPORT = 1,
-        E_QUERY  = 2,
-        E_TABLE  = 3
-    };
-    OWeakConnectionArray        m_aConnections;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
-
-    OBookmarkContainer              m_aBookmarks;
-    ::std::vector<TContentPtr>      m_aContainer;
-    TStorages                       m_aStorages;
-    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController> > m_aControllers;
-
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
-
-    ::rtl::OUString                                     m_sFileURL;
-// <properties>
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
-                                                        m_xNumberFormatsSupplier;
-    ::rtl::OUString                                     m_sConnectURL;
-    ::rtl::OUString                                     m_sName;        // transient, our creator has to tell us the title
-    ::rtl::OUString                                     m_sUser;
-    ::rtl::OUString                                     m_aPassword;    // transient !
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
-                                                        m_aLayoutInformation;
-    sal_Int32                                           m_nLoginTimeout;
-    sal_Bool                                            m_bReadOnly : 1;
-    sal_Bool                                            m_bPasswordRequired : 1;
-    sal_Bool                                            m_bSuppressVersionColumns : 1;
-    sal_Bool                                            m_bModified : 1;
-    sal_Bool                                            m_bDocumentReadOnly : 1;
-    sal_Bool                                            m_bDisposingSubStorages;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                                                        m_aInfo;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                                                        m_aArgs;
-// </properties>
-
-    ::cppu::OInterfaceContainerHelper                   m_aModifyListeners;
-    ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
-    ::cppu::OInterfaceContainerHelper                   m_aFlushListeners;
-    ::cppu::OInterfaceContainerHelper                   m_aDocEventListeners;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>                   m_xSharedConnectionManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>                     m_xCurrentController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                       m_xStorage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>            m_xUIConfigurationManager;
-
-    ODatabaseContext*                                   m_pDBContext;
-    OSharedConnectionManager*                           m_pSharedConnectionManager;
-    OChildCommitListen_Impl*                            m_pChildCommitListen;
-    sal_uInt16                                          m_nControllerLockCount;
-
-
-    /// write a single XML stream into the package
-    sal_Bool WriteThroughComponent(
-        /// the component we export
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent> & xComponent,
-        const sal_Char* pStreamName,        /// the stream name
-        const sal_Char* pServiceName,       /// service name of the component
-        /// the argument (XInitialization)
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments,
-        /// output descriptor
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rMediaDesc,
-        sal_Bool bPlainStream );            /// neither compress nor encrypt
-
-    /// write a single output stream
-    /// (to be called either directly or by WriteThroughComponent(...))
-    sal_Bool WriteThroughComponent(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::io::XOutputStream> & xOutputStream,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent> & xComponent,
-        const sal_Char* pServiceName,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::uno::Any> & rArguments,
-        const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rMediaDesc );
-    void writeStorage(const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments);
-
-    void lateInit();
     void setMeAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xName);
 
-    /** stores the model
-        @param  sURL
-            The URL
-        @param  lArguments
-            The media descriptor
-    */
-    void store(const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments );
-    /** stores the embedded storage ("database")
-        @return <TRUE/> if the storage could be commited, otherwise <FALSE/>
-    */
-    sal_Bool commitEmbeddedStorage();
-
-    /** dispose all frames for registered controllers
-    */
-    void disposeControllerFrames();
-
-    /** notifies the global event broadcaster
-        @param  _sEventName
-            On of
-            OnNew      => new document
-            OnLoad      => load document
-            OnUnload   => close document
-            OnSaveDone   => "Save" ended
-            OnSaveAsDone   => "SaveAs" ended
-            OnModifyChanged   => modified/unmodified
-    */
-    void notifyEvent(const ::rtl::OUString& _sEventName);
 protected:
-    ODatabaseSource(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
-        ,ODatabaseContext* _pDBContext = NULL
-        );
     virtual ~ODatabaseSource();
 public:
-    ODatabaseSource(
-        ::cppu::OWeakObject& _rParent
-        ,const ::rtl::OUString& _rRegistrationName
-        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
-        ,ODatabaseContext* _pDBContext = NULL
-        );
+    ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
 
+    // XContainerListener
+    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::sdbcx::XTablesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -451,92 +295,16 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-// ::com::sun::star::lang::XComponent
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::frame::XModel
-    virtual sal_Bool SAL_CALL attachResource( const ::rtl::OUString& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::rtl::OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getArgs(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL lockControllers(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL unlockControllers(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual sal_Bool SAL_CALL hasControllersLocked(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL getCurrentController(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getCurrentSelection(  ) throw (::com::sun::star::uno::RuntimeException) ;
-
-// ::com::sun::star::frame::XStorable
-    virtual sal_Bool SAL_CALL hasLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::rtl::OUString SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual sal_Bool SAL_CALL isReadonly(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL store(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL storeAsURL( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL storeToURL( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
-
-// ::com::sun::star::util::XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::util::XModifiable
-    virtual sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException) ;
-
-// ::com::sun::star::document::XEventBroadcaster
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::document::XEventListener
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::view::XPrintable
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aPrinter ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL print( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
-
-// XFormDocumentsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getFormDocuments(  ) throw (::com::sun::star::uno::RuntimeException);
-
-// XReportDocumentsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getReportDocuments(  ) throw (::com::sun::star::uno::RuntimeException);
-
-// XContainerListener
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-
-// XCloseable
-    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
-
-// XUIConfigurationManagerSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (::com::sun::star::uno::RuntimeException);
-
-// XDocumentSubStorageSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-
 // XFlushable
     virtual void SAL_CALL flush(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
 
-// XTransactionListener
-    virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    // XDocumentDataSource
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() throw (::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName, sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
 protected:
 // helper
-    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
-            getNumberFormatsSupplier();
-
     /** open a connection for the current settings. this is the simple connection we get from the driver
         manager, so it can be used as a master for a "high level" sdb connection.
     */
@@ -550,19 +318,12 @@ protected:
 
 
 // other stuff
-    void    flushDocuments();
     void    flushTables();
-
-    // disposes all elements in m_aStorages, and clears it
-    void    disposeStorages() SAL_THROW(());
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     void clearConnections();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage();
-    void commitStorages();
 };
 
 //........................................................................
