@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     ,m_bHead(TRUE)
     ,m_bDontAskAgain(sal_False)
     ,m_bIsAutoIncrement(sal_False)
-    ,m_aDestColumns(_rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() == sal_True)
+    ,m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() == sal_True)
     ,m_xFactory(_rM)
     ,m_pTypeInfo(NULL)
     ,m_bFoundTable(sal_False)
@@ -285,7 +285,8 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     if(xTablesSup.is())
         m_xTables = xTablesSup->getTables();
 
-    Reference<XResultSet> xSet = m_xConnection->getMetaData()->getTypeInfo();
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+    Reference<XResultSet> xSet = xMeta.is() ? xMeta->getTypeInfo() : Reference<XResultSet>();
     if(xSet.is())
     {
         Reference<XRow> xRow(xSet,UNO_QUERY);
