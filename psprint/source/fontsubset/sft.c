@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-19 11:11:40 $
+ *  last change: $Author: hdu $ $Date: 2002-09-23 08:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.13 2002-09-19 11:11:40 hdu Exp $
+/* $Id: sft.c,v 1.14 2002-09-23 08:01:52 hdu Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1586,7 +1586,6 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     sal_uInt8 *table, *offset;
     sal_uInt32 length, tag;
     sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
-    int ttc_extract_offset = 0;     /* some OS only provide TTC extracts */
 #ifndef WIN32
     struct stat st;
 #endif
@@ -1660,29 +1659,12 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     fprintf(stderr, "tdoffset: %d\n", tdoffset);
 #endif
 
-    if( facenum == ~0 ) {
-        /* need to get offset when only extracts of TTC file available */
-        /* TODO: find better method than searching head table's magic */
-        for (i=0; i<(int)t->ntables; i++) {
-            tag = GetUInt32(t->ptr + 12, 16 * i, 1);
-            if( tag == T_head ) {
-                unsigned char *p;
-                offset = t->ptr + GetUInt32(t->ptr + 12, 16 * i + 8, 1);
-                for( p = offset + 12; p > t->ptr; --p )
-                    if( p[0]==0x5F && p[1]==0x0F && p[2]==0x3C && p[3]==0xF5 )
-                        break;
-                if( p <= t->ptr )
-                    return SF_TTFORMAT;
-                ttc_extract_offset = p - (offset + 12);
-                break;
-            }
-        }
-    }
-
     /* magic number */
     t->tag = TTFontClassTag;
 
     t->ntables = GetUInt16(t->ptr + tdoffset, 4, 1);
+    if( t->ntables >= 128 )
+        return SF_TTFORMAT;
 
     t->tables = calloc(NUM_TAGS, sizeof(void *));
     assert(t->tables != 0);
@@ -1697,7 +1679,6 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
         tag = GetUInt32(t->ptr + tdoffset + 12, 16 * i, 1);
         offset = t->ptr + GetUInt32(t->ptr + tdoffset + 12, 16 * i + 8, 1);
         length = GetUInt32(t->ptr + tdoffset + 12, 16 * i + 12, 1);
-        offset += ttc_extract_offset;
 
         if (tag == T_maxp) { t->tables[O_maxp] = offset; t->tlens[O_maxp] = length; continue; }
         if (tag == T_glyf) { t->tables[O_glyf] = offset; t->tlens[O_glyf] = length; continue; }
@@ -1718,6 +1699,23 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
         if (tag == T_gsub) { t->tables[O_gsub] = offset; t->tlens[O_gsub] = length; continue; }
     }
 
+    if( facenum == ~0 ) {   /* fixup offsets when only TTC extracts were provided */
+        /* TODO: find better method than searching head table's magic */
+        unsigned char *pHead = t->tables[O_head], *p = NULL;
+        if( !pHead )
+            return SF_TTFORMAT;
+        for( p = pHead + 12; p > t->ptr; --p ) {
+            if( p[0]==0x5F && p[1]==0x0F && p[2]==0x3C && p[3]==0xF5 ) {
+                int nDelta = p - (pHead + 12), j;
+                for( j=0; j<NUM_TAGS; ++j )
+                    if( t->tables[j] )
+                        *(char*)&t->tables[j] += nDelta;
+                break;
+            }
+        }
+        if( p <= t->ptr )
+            return SF_TTFORMAT;
+    }
 
     /* At this point TrueTypeFont is constructed, now need to verify the font format
        and read the basic font properties */
