@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-24 16:45:07 $
+#   last change: $Author: mt $ $Date: 2001-11-29 17:14:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,8 @@
 #
 #
 #*************************************************************************
+
+# tk.dxp should contain all c functions that have to be exported. MT 2001/11/29
 
 PRJ=..
 
