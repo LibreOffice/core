@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:27:36 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-#include <so3/ipobj.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 
@@ -373,6 +372,8 @@
 #ifdef WNT
 #pragma optimize ( "", off )
 #endif
+
+using namespace com::sun::star;
 
 //==================================================================
 
@@ -397,10 +398,10 @@ USHORT DoUpdateCharts( ScAddress aPos, ScDocument* pDoc,
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
             {
-                SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if (aIPObj.Is())
+                uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                if (xObj.is())
                 {
-                    const SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
+                    const SchMemChart* pChartData = SchDLL::GetChartData(xObj);
                     if ( pChartData )
                     {
                         ScChartArray aArray( pDoc, *pChartData );
@@ -411,9 +412,10 @@ USHORT DoUpdateCharts( ScAddress aPos, ScDocument* pDoc,
                                 SchMemChart* pMemChart = aArray.CreateMemChart();
                                 ScChartArray::CopySettings( *pMemChart, *pChartData );
 
-                                SchDLL::Update( aIPObj, pMemChart, pActiveWin );
+                                SchDLL::Update( xObj, pMemChart, pActiveWin );
                                 delete pMemChart;
                                 ++nFound;
+                                ((SdrOle2Obj*)pObject)->GetNewReplacement();
 
                                 // redraw only
                                 pObject->ActionChanged();
