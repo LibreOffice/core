@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:18:26 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 18:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,21 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL_
 #include <com/sun/star/i18n/UnicodeType.hdl>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
@@ -267,6 +282,68 @@ LanguageType SvxAutoCorrDoc::GetLanguage( xub_StrLen , BOOL ) const
     return LANGUAGE_SYSTEM;
 }
 
+static ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory >& GetProcessFact()
+{
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+                                    ::comphelper::getProcessServiceFactory();
+    return xMSF;
+}
+
+static USHORT GetAppLang()
+{
+    static USHORT nLang = USHRT_MAX;
+    if( USHRT_MAX == nLang )
+    {
+        if( LANGUAGE_SYSTEM == ( nLang =
+            Application::GetAppInternational().GetLanguage()))
+            nLang = System::GetLanguage();
+    }
+    return nLang;
+}
+static ::com::sun::star::lang::Locale& GetAppLocale()
+{
+    static ::com::sun::star::lang::Locale aAppLocale(
+                                            SvxCreateLocale( GetAppLang() ) );
+    return aAppLocale;
+}
+
+static CollatorWrapper& GetCollatorWrapper()
+{
+    static int bIsInit = 0;
+    static CollatorWrapper aCollWrp( GetProcessFact() );
+    if( !bIsInit )
+    {
+        aCollWrp.loadDefaultCollator( GetAppLocale(), 0 );
+        bIsInit = 1;
+    }
+    return aCollWrp;
+}
+static CollatorWrapper& GetIgnoreCollatorWrapper()
+{
+    static int bIsInit = 0;
+    static CollatorWrapper aCollWrp( GetProcessFact() );
+    if( !bIsInit )
+    {
+        aCollWrp.loadDefaultCollator( GetAppLocale(), ::com::sun::star::i18n::
+                            CollatorOptions::CollatorOptions_IGNORE_CASE );
+        bIsInit = 1;
+    }
+    return aCollWrp;
+}
+static LocaleDataWrapper& GetLocaleDataWrapper( USHORT nLang )
+{
+    static LocaleDataWrapper aLclDtWrp( GetProcessFact(), GetAppLocale() );
+    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( nLang ));
+    const ::com::sun::star::lang::Locale& rLcl = aLclDtWrp.getLoadedLocale();
+    if( aLcl.Language != rLcl.Language ||
+        aLcl.Country != rLcl.Country ||
+        aLcl.Variant != rLcl.Variant )
+        aLclDtWrp.setLocale( aLcl );
+    return aLclDtWrp;
+}
+
 
 void SvxAutocorrWordList::DeleteAndDestroy( USHORT nP, USHORT nL )
 {
@@ -285,21 +362,21 @@ BOOL SvxAutocorrWordList::Seek_Entry( const SvxAutocorrWordPtr aE, USHORT* pP ) 
     register USHORT nO  = SvxAutocorrWordList_SAR::Count(),
             nM,
             nU = 0;
-    const International& rInter = Application::GetAppInternational();
     if( nO > 0 )
     {
+        CollatorWrapper& rColl = ::GetCollatorWrapper();
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            StringCompare eCmp = rInter.Compare( aE->GetShort(),
+            long nCmp = rColl.compareString( aE->GetShort(),
                         (*((SvxAutocorrWordPtr*)pData + nM))->GetShort() );
-            if( COMPARE_EQUAL == eCmp )
+            if( 0 == nCmp )
             {
                 if( pP ) *pP = nM;
                 return TRUE;
             }
-            else if( COMPARE_GREATER == eCmp )
+            else if( 0 < nCmp )
                 nU = nM + 1;
             else if( nM == 0 )
             {
@@ -344,7 +421,7 @@ long SvxAutoCorrect::GetDefaultFlags()
                     | ChgQuotes
                     | SaveWordCplSttLst
                     | SaveWordWrdSttLst;
-    LanguageType eLang = Application::GetAppInternational().GetLanguage();
+    LanguageType eLang = GetAppLang();
     if( LANGUAGE_SYSTEM == eLang )
         eLang = System::GetLanguage();
     switch( eLang )
@@ -685,42 +762,8 @@ BOOL SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
                                     LanguageType eLang )
 {
-#ifdef SKIP_QUOTES
-    // 1. Schritt: alle NICHT alphanumerischen Zeichen am Anfang entfernen
-    //              und alle festgelegten Zeichen am Ende (laut Netscape!)
-    String sQuotes;
-    if( !GetEndDoubleQuote() || !GetEndSingleQuote() )
-    {
-        // dann ueber die Language das richtige Zeichen heraussuchen
-        if( LANGUAGE_NONE != eLang )
-        {
-            const International& rInter = Application::GetAppInternational();
-            International* pIntl = (International*)&rInter;
-
-            if( eLang != pIntl->GetLanguage() && LANGUAGE_SYSTEM != eLang )
-                pIntl = new International( eLang );
-
-            sQuotes = GetEndDoubleQuote()
-                        ? GetEndDoubleQuote()
-                        : pIntl->GetDoubleQuotationMarkEndChar();
-
-            sQuotes += GetEndSingleQuote()
-                        ? GetEndSingleQuote()
-                        : pIntl->GetDoubleQuotationMarkEndChar();
-
-            if( pIntl != &rInter )
-                delete pIntl;
-        }
-    }
-    else
-        ( sQuotes = GetEndDoubleQuote() ) += GetEndSingleQuote();
-
-    String sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
-                                GetCharClass( eLang ), &sQuotes ));
-#else
     String sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
                                                 GetCharClass( eLang ) ));
-#endif
     BOOL bRet = 0 != sURL.Len();
     if( bRet )          // also Attribut setzen:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
@@ -1058,21 +1101,15 @@ sal_Unicode SvxAutoCorrect::_GetQuote( sal_Unicode cInsChar, BOOL bSttQuote,
             cRet = cInsChar;
         else
         {
-            International* pIntl = (International*)&Application::GetAppInternational();
-
-            if( eLang != pIntl->GetLanguage() && LANGUAGE_SYSTEM != eLang )
-                pIntl = new International( eLang );
-
-            cRet = bSttQuote
-                ? ( '\"' == cInsChar
-                    ? pIntl->GetDoubleQuotationMarkStartChar()
-                    : pIntl->GetQuotationMarkStartChar() )
-                : ( '\"' == cInsChar
-                    ? pIntl->GetDoubleQuotationMarkEndChar()
-                    : pIntl->GetQuotationMarkEndChar() );
-
-            if( pIntl != &Application::GetAppInternational() )
-                delete pIntl;
+            LocaleDataWrapper& rLcl = GetLocaleDataWrapper( eLang );
+            String sRet( bSttQuote
+                            ? ( '\"' == cInsChar
+                                ? rLcl.getDoubleQuotationMarkStart()
+                                : rLcl.getQuotationMarkStart() )
+                            : ( '\"' == cInsChar
+                                ? rLcl.getDoubleQuotationMarkEnd()
+                                : rLcl.getQuotationMarkEnd() ));
+            cRet = sRet.Len() ? sRet.GetChar( 0 ) : cInsChar;
         }
     }
     return cRet;
@@ -1101,7 +1138,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     if( '\"' == cInsChar )
     {
         if( LANGUAGE_SYSTEM == eLang )
-            eLang = Application::GetAppInternational().GetLanguage();
+            eLang = GetAppLang();
         switch( eLang )
         {
         case LANGUAGE_FRENCH:
@@ -1139,7 +1176,7 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     if( '\"' == cInsChar )
     {
         if( LANGUAGE_SYSTEM == eLang )
-            eLang = Application::GetAppInternational().GetLanguage();
+            eLang = GetAppLang();
         switch( eLang )
         {
         case LANGUAGE_FRENCH:
@@ -1603,7 +1640,7 @@ const SvxAutocorrWord* lcl_SearchWordsInList(
                 xub_StrLen& rStt, xub_StrLen nEndPos, SvxAutoCorrDoc& rDoc )
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();
-    const International& rInter = Application::GetAppInternational();
+    CollatorWrapper& rColl = GetIgnoreCollatorWrapper();
     for( xub_StrLen nPos = 0; nPos < pAutoCorrWordList->Count(); ++nPos )
     {
         const SvxAutocorrWord* pFnd = (*pAutoCorrWordList)[ nPos ];
@@ -1616,8 +1653,7 @@ const SvxAutocorrWord* lcl_SearchWordsInList(
                     IsWordDelim( rTxt.GetChar(nCalcStt - 1 ) ))) )
             {
                 String sWord( rTxt.GetBuffer() + nCalcStt, rChk.Len() );
-                if( COMPARE_EQUAL == rInter.Compare( rChk, sWord,
-                                        INTN_COMPARE_IGNORECASE ) )
+                if( 0 == rColl.compareString( rChk, sWord ))
                 {
                     rStt = nCalcStt;
                     return pFnd;
@@ -2196,7 +2232,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                 if( nOld != nNew )
                     xStrm->Seek( nOld );
 
-                const International& rInter = Application::GetAppInternational();
+                CollatorWrapper& rColl = GetIgnoreCollatorWrapper();
 
                 // dann lese mal alle Ersetzungen:
                 while( TRUE )
@@ -2206,8 +2242,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                     if( xStrm->IsEof() ||  SVSTREAM_OK != xStrm->GetError() )
                         break;
 
-                    BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare(
-                                    sShort, sLong, INTN_COMPARE_IGNORECASE );
+                    BOOL bOnlyTxt = 0 != rColl.compareString( sShort, sLong );
                     if( !bOnlyTxt )
                     {
                         String sLongSave( sLong );
