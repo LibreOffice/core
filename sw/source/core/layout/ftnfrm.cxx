@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:17:18 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2668,7 +2668,7 @@ SwTwips SwFtnBossFrm::GetVarSpace() const
     // die ganze Seite/Spalte ein.
 
     const SwPageFrm* pPg = FindPageFrm();
-    ASSERT( pPg, "Footnote lost page" );
+    ASSERT( pPg || IsInSct(), "Footnote lost page" );
 
     const SwFrm *pBody = FindBodyCont();
     SwTwips nRet;
