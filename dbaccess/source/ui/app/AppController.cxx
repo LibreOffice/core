@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:40:03 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,7 +1558,7 @@ namespace
 sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(getFrame());
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(getFrame());
 
     if ( xLayoutManager.is() )
     {
