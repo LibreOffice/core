@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:45:33 $
+#   last change: $Author: rt $ $Date: 2004-04-02 14:18:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -242,8 +242,9 @@ LIB1FILES       = \
             $(LIBPRE) $(SLB)$/unoedit.lib   \
             $(LIBPRE) $(SLB)$/unodraw.lib	\
             $(LIBPRE) $(SLB)$/gal.lib		\
-            $(LIBPRE) $(SLB)$/accessibility.lib
-
+            $(LIBPRE) $(SLB)$/accessibility.lib	\
+            $(LIBPRE) $(SLB)$/customshapes.lib\
+            $(LIBPRE) $(SLB)$/toolbars.lib
 
 .IF "$(BIG_SVX)"==""
 LIB2TARGET      =$(SLB)$/dl.lib
@@ -274,7 +275,8 @@ SRSFILELIST=\
                 $(SRS)$/engine3d.srs \
                 $(SRS)$/unodraw.srs \
                 $(SRS)$/svxlink.srs \
-                $(SRS)$/accessibility.srs
+                $(SRS)$/accessibility.srs \
+                $(SRS)$/toolbars.srs
 
 .IF "$(GUI)" != "MAC"
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
