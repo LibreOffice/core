@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-12 15:24:14 $
+ *  last change: $Author: af $ $Date: 2002-11-04 14:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,191 @@ public:
 
     friend SvStream&    operator<<(SvStream& rOut, SdDrawDocument& rDoc);
     friend SvStream&    operator>>(SvStream& rIn, SdDrawDocument& rDoc);
+
+
+    /** This method acts as a simplified front end for the more complex
+        <member>CreatePage()</member> method.
+        @param nPageNum
+            The page number as passed to the <member>GetSdPage()</member>
+            method from which to use certain properties for the new pages.
+            These include the auto layout.
+        @return
+            Returns an index of the inserted pages that can be used with the
+            <member>GetSdPage()</member> method.
+    */
+    USHORT CreatePage (USHORT nPageNum);
+
+    /** Create and insert a set of two new pages: a standard (draw) page and
+        the associated notes page.  The new pages are inserted direclty
+        after the specified page set.
+        @param pCurrentPage
+            This page is used to retrieve the layout for the page to
+            create.
+        @param ePageKind
+            This specifies whether <argument>pCurrentPage</argument> is a
+            standard (draw) page or a notes page.
+        @param sStandardPageName
+            Name of the standard page.  An empty string leads to using an
+            automatically created name.
+        @param sNotesPageName
+            Name of the standard page.  An empty string leads to using an
+            automatically created name.
+        @param eStandardLayout
+            Layout to use for the new standard page.  Note that this layout
+            is not used when the given <argument>pCurrentPage</argument> is
+            not a standard page.  In this case the layout is taken from the
+            standard page associated with <argument>pCurrentPage</argument>.
+        @param eNotesLayout
+            Layout to use for the new notes page.  Note that this layout
+            is not used when the given <argument>pCurrentPage</argument> is
+            not a notes page.  In this case the layout is taken from the
+            notes page associated with <argument>pCurrentPage</argument>.
+        @param bIsPageBack
+            This flag indicates whether to show the background shape.
+        @param bIsPageObj
+            This flag indicates whether to show the shapes on the master page.
+
+        @return
+            Returns an index of the inserted pages that can be used with the
+            <member>GetSdPage()</member> method.
+    */
+    USHORT CreatePage (
+        SdPage* pCurrentPage,
+        PageKind ePageKind,
+        const String& sStandardPageName,
+        const String& sNotesPageName,
+        AutoLayout eStandardLayout,
+        AutoLayout eNotesLayout,
+        BOOL bIsPageBack,
+        BOOL bIsPageObj);
+
+    /** This method acts as a simplified front end for the more complex
+        <member>DuplicatePage()</member> method.
+        @param nPageNum
+            The page number as passed to the <member>GetSdPage()</member>
+            method for which the standard page and the notes page are to be
+            copied.
+        @return
+            Returns an index of the inserted pages that can be used with the
+            <member>GetSdPage()</member> method.
+    */
+    USHORT DuplicatePage (USHORT nPageNum);
+
+    /** Create and insert a set of two new pages that are copies of the
+        given <argument>pCurrentPage</argument> and its associated notes
+        resp. standard page.  The copies are inserted directly after the
+        specified page set.
+        @param pCurrentPage
+            This page and its associated notes/standard page is copied.
+        @param ePageKind
+            This specifies whether <argument>pCurrentPage</argument> is a
+            standard (draw) page or a notes page.
+        @param sStandardPageName
+            Name of the standard page.  An empty string leads to using an
+            automatically created name.
+        @param sNotesPageName
+            Name of the standard page.  An empty string leads to using an
+            automatically created name.
+        @param eStandardLayout
+            Layout to use for the new standard page.  Note that this layout
+            is not used when the given <argument>pCurrentPage</argument> is
+            not a standard page.  In this case the layout is taken from the
+            standard page associated with <argument>pCurrentPage</argument>.
+        @param eNotesLayout
+            Layout to use for the new notes page.  Note that this layout
+            is not used when the given <argument>pCurrentPage</argument> is
+            not a notes page.  In this case the layout is taken from the
+            notes page associated with <argument>pCurrentPage</argument>.
+        @param bIsPageBack
+            This flag indicates whether to show the background shape.
+        @param bIsPageObj
+            This flag indicates whether to show the shapes on the master page.
+
+        @return
+            Returns an index of the inserted pages that can be used with the
+            <member>GetSdPage()</member> method.
+    */
+    USHORT DuplicatePage (
+        SdPage* pCurrentPage,
+        PageKind ePageKind,
+        const String& sStandardPageName,
+        const String& sNotesPageName,
+        AutoLayout eStandardLayout,
+        AutoLayout eNotesLayout,
+        BOOL bIsPageBack,
+        BOOL bIsPageObj);
+
+private:
+    /** Insert a given set of standard and notes page after the given <argument>pCurrentPage</argument>.
+        @param pCurrentPage
+            This page and its associated notes/standard page is copied.
+        @param ePageKind
+            This specifies whether <argument>pCurrentPage</argument> is a
+            standard (draw) page or a notes page.
+        @param sStandardPageName
+            Name of the standard page.  An empty string leads to using an
+            automatically created name.
+        @param sNotesPageName
+            Name of the standard page.  An empty string leads to using an
+            automatically created name.
+        @param eStandardLayout
+            Layout to use for the new standard page.  Note that this layout
+            is not used when the given <argument>pCurrentPage</argument> is
+            not a standard page.  In this case the layout is taken from the
+            standard page associated with <argument>pCurrentPage</argument>.
+        @param eNotesLayout
+            Layout to use for the new notes page.  Note that this layout
+            is not used when the given <argument>pCurrentPage</argument> is
+            not a notes page.  In this case the layout is taken from the
+            notes page associated with <argument>pCurrentPage</argument>.
+        @param bIsPageBack
+            This flag indicates whether to show the background shape.
+        @param bIsPageObj
+            This flag indicates whether to show the shapes on the master page.
+        @param pStandardPage
+            The standard page to insert.
+        @param pNotesPage
+            The notes page to insert.
+
+        @return
+            Returns an index of the inserted pages that can be used with the
+            <member>GetSdPage()</member> method.
+    */
+    USHORT InsertPageSet (
+        SdPage* pCurrentPage,
+        PageKind ePageKind,
+        const String& sStandardPageName,
+        const String& sNotesPageName,
+        AutoLayout eStandardLayout,
+        AutoLayout eNotesLayout,
+        BOOL bIsPageBack,
+        BOOL bIsPageObj,
+
+        SdPage* pStandardPage,
+        SdPage* pNotesPage);
+
+    /** Set up a newly created page and insert it into the list of pages.
+        @param pPreviousPage
+            A page to take the size and border geometry from.
+        @param pPage
+            This is the page to set up and insert.
+        @param sPageName
+            The name of the new page.
+        @param nInsertionPoint
+            Index of the page before which the new page will be inserted.
+        @param bIsPageBack
+            This flag indicates whether to show the background shape.
+        @param bIsPageObj
+            This flag indicates whether to show the shapes on the master
+            page.
+    */
+    void SetupNewPage (
+        SdPage* pPreviousPage,
+        SdPage* pPage,
+        const String& sPageName,
+        USHORT nInsertionPoint,
+        BOOL bIsPageBack,
+        BOOL bIsPageObj);
 };
 
 #endif // _DRAWDOC_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-08 14:02:54 $
+ *  last change: $Author: af $ $Date: 2002-11-04 14:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1527,5 +1527,282 @@ void SdDrawDocument::CheckMasterPages()
             DBG_ERROR( "master pages where in a wrong order" );
             RecalcPageNums( sal_True);
         }
+    }
+}
+
+
+
+
+USHORT SdDrawDocument::CreatePage (USHORT nPageNum)
+{
+    PageKind ePageKind = PK_STANDARD;
+
+    // Get current page.
+    SdPage* pActualPage = GetSdPage(nPageNum, ePageKind);
+
+    // Get background flags.
+    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
+    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+    SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
+
+    // Get layout from current page.
+    AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
+
+    return CreatePage (
+        pActualPage, ePageKind,
+        // No names for the new slides.
+        String(), String(),
+        eAutoLayout, eAutoLayout,
+        aVisibleLayers.IsSet(aBckgrnd),
+        aVisibleLayers.IsSet(aBckgrndObj));
+}
+
+
+
+
+USHORT SdDrawDocument::CreatePage (
+    SdPage* pActualPage,
+    PageKind ePageKind,
+    const String& sStandardPageName,
+    const String& sNotesPageName,
+    AutoLayout eStandardLayout,
+    AutoLayout eNotesLayout,
+    BOOL bIsPageBack,
+    BOOL bIsPageObj)
+{
+    SdPage* pPreviousStandardPage;
+    SdPage* pPreviousNotesPage;
+    SdPage* pStandardPage;
+    SdPage* pNotesPage;
+    USHORT nPgNum;
+
+    // From the given page determine the standard page and notes page of which
+    // to take the layout and the position where to insert the new pages.
+    if (ePageKind == PK_NOTES)
+    {
+        pPreviousNotesPage = pActualPage;
+        USHORT nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
+        pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
+        eStandardLayout = pPreviousStandardPage->GetAutoLayout();
+    }
+    else
+    {
+        pPreviousStandardPage = pActualPage;
+        USHORT nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
+        pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
+        eNotesLayout = pPreviousNotesPage->GetAutoLayout();
+    }
+
+    // Create new standard page and set it up.
+    pStandardPage = (SdPage*) AllocPage(FALSE);
+    // Use master page of current page.
+    nPgNum = pPreviousStandardPage->GetMasterPageNum(0);
+    pStandardPage->InsertMasterPage(nPgNum);
+    // User layout of current standard page.
+    pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
+    pStandardPage->SetAutoLayout(eStandardLayout, TRUE);
+
+    // Create new notes page and set it up.
+    pNotesPage = (SdPage*) AllocPage(FALSE);
+    // Use master page of current page.
+    nPgNum = pPreviousNotesPage->GetMasterPageNum(0);
+    pNotesPage->InsertMasterPage(nPgNum);
+    // Use layout of current notes page.
+    pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
+    pNotesPage->SetAutoLayout(eNotesLayout, TRUE);
+
+    return InsertPageSet (
+        pActualPage, ePageKind,
+        sStandardPageName,
+        sNotesPageName,
+        eStandardLayout,
+        eNotesLayout,
+        bIsPageBack,
+        bIsPageObj,
+
+        pStandardPage,
+        pNotesPage);
+}
+
+
+
+
+USHORT SdDrawDocument::DuplicatePage (USHORT nPageNum)
+{
+    PageKind ePageKind = PK_STANDARD;
+
+    // Get current page.
+    SdPage* pActualPage = GetSdPage(nPageNum, ePageKind);
+
+    // Get background flags.
+    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
+    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+    SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
+
+    // Get layout from current page.
+    AutoLayout eAutoLayout = pActualPage->GetAutoLayout();
+
+    return DuplicatePage (
+        pActualPage, ePageKind,
+        // No names for the new slides.
+        String(), String(),
+        eAutoLayout, eAutoLayout,
+        aVisibleLayers.IsSet(aBckgrnd),
+        aVisibleLayers.IsSet(aBckgrndObj));
+}
+
+
+
+
+USHORT SdDrawDocument::DuplicatePage (
+    SdPage* pActualPage,
+    PageKind ePageKind,
+    const String& sStandardPageName,
+    const String& sNotesPageName,
+    AutoLayout eStandardLayout,
+    AutoLayout eNotesLayout,
+    BOOL bIsPageBack,
+    BOOL bIsPageObj)
+{
+    SdPage* pPreviousStandardPage;
+    SdPage* pPreviousNotesPage;
+    SdPage* pStandardPage;
+    SdPage* pNotesPage;
+
+    // From the given page determine the standard page and the notes page
+    // of which to make copies.
+    if (ePageKind == PK_NOTES)
+    {
+        pPreviousNotesPage = pActualPage;
+        USHORT nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
+        pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
+    }
+    else
+    {
+        pPreviousStandardPage = pActualPage;
+        USHORT nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
+        pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
+    }
+
+    // Create duplicates of a standard page and the associated notes page.
+    pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
+    pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
+
+    return InsertPageSet (
+        pActualPage, ePageKind,
+        sStandardPageName,
+        sNotesPageName,
+        eStandardLayout,
+        eNotesLayout,
+        bIsPageBack,
+        bIsPageObj,
+
+        pStandardPage,
+        pNotesPage);
+}
+
+
+
+
+USHORT SdDrawDocument::InsertPageSet (
+    SdPage* pActualPage,
+    PageKind ePageKind,
+    const String& sStandardPageName,
+    const String& sNotesPageName,
+    AutoLayout eStandardLayout,
+    AutoLayout eNotesLayout,
+    BOOL bIsPageBack,
+    BOOL bIsPageObj,
+
+    SdPage* pStandardPage,
+    SdPage* pNotesPage)
+{
+    SdPage* pPreviousStandardPage;
+    SdPage* pPreviousNotesPage;
+    USHORT nStandardPageNum;
+    USHORT nNotesPageNum;
+    String aStandardPageName = sStandardPageName;
+    String aNotesPageName = sNotesPageName;
+
+    // Gather some information about the standard page and the notes page
+    // that are to be inserted.  This makes sure that there is allways one
+    // standard page followed by one notes page.
+    if (ePageKind == PK_NOTES)
+    {
+        pPreviousNotesPage = pActualPage;
+        nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
+        pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
+        nStandardPageNum = nNotesPageNum - 1;
+        eStandardLayout = pPreviousStandardPage->GetAutoLayout();
+    }
+    else
+    {
+        pPreviousStandardPage = pActualPage;
+        nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
+        pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
+        nNotesPageNum = nStandardPageNum + 1;
+        aNotesPageName = aStandardPageName;
+        eNotesLayout = pPreviousNotesPage->GetAutoLayout();
+    }
+
+
+    // Set up and insert the standard page.
+    SetupNewPage (
+        pPreviousStandardPage,
+        pStandardPage,
+        aStandardPageName,
+        nStandardPageNum,
+        bIsPageBack,
+        bIsPageObj);
+
+    // Set up and insert the notes page.
+    pNotesPage->SetPageKind(PK_NOTES);
+    SetupNewPage (
+        pPreviousNotesPage,
+        pNotesPage,
+        aNotesPageName,
+        nNotesPageNum,
+        bIsPageBack,
+        bIsPageObj);
+
+    // Return an index that allows the caller to access the newly inserted
+    // pages by using GetSdPage().
+    return pStandardPage->GetPageNum() / 2;
+}
+
+
+
+
+void SdDrawDocument::SetupNewPage (
+    SdPage* pPreviousPage,
+    SdPage* pPage,
+    const String& sPageName,
+    USHORT nInsertionPoint,
+    BOOL bIsPageBack,
+    BOOL bIsPageObj)
+{
+    if (pPreviousPage != NULL)
+    {
+        pPage->SetSize( pPreviousPage->GetSize() );
+        pPage->SetBorder( pPreviousPage->GetLftBorder(),
+            pPreviousPage->GetUppBorder(),
+            pPreviousPage->GetRgtBorder(),
+            pPreviousPage->GetLwrBorder() );
+    }
+    pPage->SetName(sPageName);
+
+    InsertPage(pPage, nInsertionPoint);
+
+    if (pPreviousPage != NULL)
+    {
+        SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
+        BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+        BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+        SetOfByte aVisibleLayers = pPreviousPage->GetMasterPageVisibleLayers(0);
+        aVisibleLayers.Set(aBckgrnd, bIsPageBack);
+        aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
+        pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
     }
 }
