@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:16:54 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,13 +244,13 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ french ] = "Ins�rer";
         Text[ spanish ] = "In~sertar";
         Text[ finnish ] = "L~iit�";
-        Text[ italian ] = "~Incolla";
+        Text[ italian ] = "~Inserisci";
         Text[ danish ] = "~Paste";
         Text[ swedish ] = "~Infoga";
         Text[ polish ] = "Wklej";
-        Text[ japanese ] = "挿入";
-        Text[ korean ] = "삽입";
-        Text[ chinese_simplified ] = "插入";
+        Text[ japanese ] = "挿入(~I)";
+        Text[ korean ] = "삽입(~I)";
+        Text[ chinese_simplified ] = "插入(~I)";
         Text[ chinese_traditional ] = "插入(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ arabic ] = "���";
@@ -377,6 +377,7 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ slovak ] = "Poznámka";
 };
  // ********************************************************************** EOF
+
 
 
 
