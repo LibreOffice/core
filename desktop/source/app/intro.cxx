@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 15:37:38 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,19 @@
 
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/bootstrap.hxx>
 #include <vos/process.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfx.hrc>
+#include <rtl/logfile.hxx>
 
 
 // -----------------------------------------------------------------------
 
 void IntroWindow_Impl::Init()
 {
-    Size aSize = aIntroBmp.GetSizePixel();
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::IntroWindow_Impl::Init" );
+
+    Size aSize = m_aIntroBmp.GetSizePixel();
     SetOutputSizePixel( aSize );
     Size  aScreenSize( GetDesktopRectPixel().GetSize() );
     Size  aWinSize( GetSizePixel() );
@@ -92,48 +94,15 @@ void IntroWindow_Impl::Init()
 
 // -----------------------------------------------------------------------
 
-IntroWindow_Impl::IntroWindow_Impl( const ResId& aBitmapResId ) :
+IntroWindow_Impl::IntroWindow_Impl( const Bitmap& aIntroBitmap ) :
     WorkWindow( NULL, (WinBits)0 ),
-    aIntroBmp()
+    m_aIntroBmp( aIntroBitmap )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::IntroWindow_Impl::IntroWindowImpl" );
+
     Hide();
 
-    String          aBmpFileName;
-    ::rtl::OUString aProductKey;
-    ::rtl::OUString aIniPath;
-    ::rtl::OUString aLogo;
-
-    // load bitmap depends on productname ("StarOffice", "StarSuite",...)
-    ::utl::BootstrapRetVal nRetVal = ::utl::bootstrap_getProductKeyAndLogo( aProductKey, aLogo, aIniPath );
-    sal_Bool        bLogo   = (sal_Bool)aLogo.toInt32();
-    if ( nRetVal == ::utl::BOOTSTRAP_OK && bLogo )
-    {
-        xub_StrLen nIndex = 0;
-
-        aBmpFileName = aProductKey;
-        aBmpFileName = aBmpFileName.GetToken( 0, (sal_Unicode)' ', nIndex );
-        aBmpFileName += String( DEFINE_CONST_UNICODE("_intro.bmp") );
-
-        ::rtl::OUString aExecutePath;
-        ::vos::OStartupInfo().getExecutableFile( aExecutePath );
-        sal_uInt32  lastIndex = aExecutePath.lastIndexOf('/');
-        if ( lastIndex > 0 )
-            aExecutePath = aExecutePath.copy( 0, lastIndex+1 );
-
-        INetURLObject aObj( aExecutePath, INET_PROT_FILE );
-        aObj.insertName( aBmpFileName );
-        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-        if ( !aStrm.GetError() )
-        {
-            aStrm >> aIntroBmp;
-        }
-        else
-        {
-            aIntroBmp = Bitmap( aBitmapResId );
-        }
-
-        Init();
-    }
+    Init();
 }
 
 // -----------------------------------------------------------------------
@@ -147,7 +116,7 @@ IntroWindow_Impl::~IntroWindow_Impl()
 
 void IntroWindow_Impl::Paint( const Rectangle& )
 {
-    DrawBitmap( Point(), aIntroBmp );
+    DrawBitmap( Point(), m_aIntroBmp );
     Flush();
 }
 

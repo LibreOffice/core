@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intro.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 15:38:02 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,12 @@
 class IntroWindow_Impl : public WorkWindow
 {
 private:
-    Bitmap          aIntroBmp;
+    Bitmap          m_aIntroBmp;
 
     void            Init();
 
 public:
-    IntroWindow_Impl( const ResId& aBitmapResId );
+    IntroWindow_Impl( const Bitmap& aInfoBitmap );
     ~IntroWindow_Impl();
 
     virtual void    Paint( const Rectangle& );

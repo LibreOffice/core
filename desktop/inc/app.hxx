@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-19 12:33:30 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,12 @@ class Desktop : public Application //public SfxApplicationClass
         static ResMgr*      GetDesktopResManager();
 
     private:
-        void                OpenStartupScreen( const char* );
+        void                OpenStartupScreen();
         void                CloseStartupScreen();
 
         sal_Bool            m_bMinimized;
         sal_Bool            m_bInvisible;
         USHORT              m_nAppEvents;
-        ResMgr*             m_pLabelResMgr;
         IntroWindow_Impl*   m_pIntro;
 
         static ResMgr*      pResMgr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-23 15:31:34 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@
 #include <vcl/bitmap.hxx>
 #include <sfx2/sfx.hrc>
 #include <ucbhelper/contentbroker.hxx>
+#include <unotools/bootstrap.hxx>
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
 #define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -205,7 +206,7 @@ CommandLineArgs* GetCommandLineArgs()
 
 void PreloadConfigTrees()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "PreloadConfigTrees()" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (dg) ::PreloadConfigTrees" );
 
     // these tree are preloaded to get a faster startup for the office
     Sequence <rtl::OUString> aPreloadPathList(6);
@@ -277,12 +278,15 @@ BOOL SVMain()
 }
 */
 
-Desktop::Desktop() : m_pLabelResMgr( 0 ), m_pIntro( 0 )
+Desktop::Desktop() : m_pIntro( 0 )
 {
+    RTL_LOGFILE_TRACE( "desktop (cd) ::Desktop::Desktop" );
 }
 
 void Desktop::Init()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::Init" );
+
     Reference < XMultiServiceFactory > rSMgr = createApplicationServiceManager();
     if( ! rSMgr.is() )
         exit(0);
@@ -291,7 +295,7 @@ void Desktop::Init()
     if ( !Application::IsRemoteServer() )
     {
         // start ipc thread only for non-remote offices
-        RTL_LOGFILE_CONTEXT( aLog, "OfficeIPCThread::EnableOfficeIPCThread" );
+        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::OfficeIPCThread::EnableOfficeIPCThread" );
         if( !OfficeIPCThread::EnableOfficeIPCThread( ) )
             exit( 0 );
         pSignalHandler = new SalMainPipeExchangeSignalHandler;
@@ -493,12 +497,12 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::Main()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "Desktop::Main()" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::Main" );
 
     CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 
     // ----  Startup screen ----
-    OpenStartupScreen( "iso" );
+    OpenStartupScreen();
 
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
@@ -537,20 +541,21 @@ void Desktop::Main()
 
     //  The only step that should be done if terminate flag was specified
     //  Typically called by the plugin only
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start Installer::InitializeInstallation()" );
-    Installer* pInstaller = new Installer;
-    pInstaller->InitializeInstallation( Application::GetAppFileName() );
-    delete pInstaller;
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end Installer::InitializeInstallation()" );
+    {
+        RTL_LOGFILE_CONTEXT( aLog, "setup2 (ok) ::Installer::InitializeInstallation" );
+        Installer* pInstaller = new Installer;
+        pInstaller->InitializeInstallation( Application::GetAppFileName() );
+        delete pInstaller;
+    }
 
     if( !bTerminate )
     {
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create SvtPathOptions/SvtCJKOptions" );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtCJKOptions" );
         SvtPathOptions* pPathOptions = new SvtPathOptions;
         SvtCJKOptions* pCJKOPptions = new SvtCJKOptions(sal_True);
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create SvtPathOptions/SvtCJKOptions" );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtCJKOptions" );
         registerServices( xSMgr );
 
         OUString        aDescription;
@@ -562,13 +567,13 @@ void Desktop::Main()
             pCmdLineArgs->GetPortalConnectString( aDescription );
         aSeq[0] <<= aDescription;
 
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ createInstance com.sun.star.office.OfficeWrapper" );
         Reference < XComponent > xWrapper( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE(
                                                 "com.sun.star.office.OfficeWrapper" ), aSeq ),
                                         UNO_QUERY );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} createInstance com.sun.star.office.OfficeWrapper" );
 
-        // code from SfxApplicationClass::Main copied!!
         {
-            RTL_LOGFILE_CONTEXT( aLog, "SfxApplicationClass::Main()" );
             Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
             Reference< XConnectionBroker >  xServiceManagerBroker;
@@ -579,15 +584,24 @@ void Desktop::Main()
             // the shutdown icon sits in the systray and allows the user to keep
             // the office instance running for quicker restart
             // this will only be activated if -quickstart was specified on cmdline
-            sal_Bool bQuickstart = pCmdLineArgs->IsQuickstart();
-            Sequence< Any > aSeq( 1 );
-            aSeq[0] <<= bQuickstart;
-            Reference < XComponent > xQuickstart( xSMgr->createInstanceWithArguments(
-                                                    DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" ), aSeq ),
-                                                  UNO_QUERY );
+            Reference < XComponent > xQuickstart;
+            try
+            {
+                // Try to instanciate quickstart service. This service is not mandatory, so
+                // do nothing if service is not available.
+                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.office.Quickstart" );
+                xQuickstart = Reference< XComponent >( xSMgr->createInstance( DEFINE_CONST_UNICODE(
+                                                                    "com.sun.star.office.Quickstart" )),
+                                                       UNO_QUERY );
+            }
+            catch( ::com::sun::star::uno::Exception& )
+            {
+            }
 
             if ( pCmdLineArgs->IsPlugin() )
             {
+                RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (cd) create PluginAcceptThread" );
+
                 OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
                 OUString    aUserIdent;
                 OSecurity   aSecurity;
@@ -608,6 +622,7 @@ void Desktop::Main()
             if ( !Application::IsRemoteServer() )
             {
                 // Create TypeDetection service to have filter informations for quickstart feature
+                RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) createInstance com.sun.star.document.TypeDetection" );
                 Reference< XTypeDetection > xTypeDetection( xSMgr->createInstance(
                                                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),
                                                             UNO_QUERY );
@@ -627,11 +642,11 @@ void Desktop::Main()
             Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
             // Acquire solar mutex just before we enter our message loop
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "call Application::Execute()" );
             if ( nAcquireCount )
                 Application::AcquireSolarMutex( nAcquireCount );
 
             // call Application::Execute to process messages in vcl message loop
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
             Execute();
 
             // remove temp directory
@@ -679,6 +694,8 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenClients_Impl" );
+
     OpenClients();
     CloseStartupScreen();
 
@@ -832,6 +849,8 @@ void Desktop::OpenClients()
 
 void Desktop::OpenDefault()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenDefault" );
+
     String aName;
     if ( !aName.Len() )
     {
@@ -997,7 +1016,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         {
             // If the office was started the second time its command line arguments are sent through a pipe
             // connection to the first office. We want to reuse the quickstart option for the first office.
-            // NOTICE: The quickstart service must be initialized inside the "main thread"!!!
+            // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
+            // application events to do this (they are executed inside main thread)!!!
             sal_Bool bQuickstart( sal_True );
             Sequence< Any > aSeq( 1 );
             aSeq[0] <<= bQuickstart;
@@ -1011,42 +1031,82 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     }
 }
 
-void Desktop::OpenStartupScreen( const char* pLabelPrefix )
+void Desktop::OpenStartupScreen()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "Desktop::OpenStartupScreen()" );
+     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::Desktop::OpenStartupScreen" );
 
-    if ( pLabelPrefix && !Application::IsRemoteServer() )
+    ::rtl::OUString     aTmpString;
+    CommandLineArgs*    pCmdLine = GetCommandLineArgs();
+
+    // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
+    if ( !Application::IsRemoteServer() &&
+         !pCmdLine->IsInvisible() &&
+         !pCmdLine->IsQuickstart() &&
+         !pCmdLine->IsMinimized() &&
+         !pCmdLine->IsEmbedding() &&
+         !pCmdLine->GetPrintList( aTmpString ) )
     {
-        // versuchen, die Label-DLL zu erzeugen
-        String aMgrName = String::CreateFromAscii( pLabelPrefix );
-        LanguageType aLanguageReturn;
-        aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
-        m_pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageReturn );
+        String          aBmpFileName;
+        ::rtl::OUString aProductKey;
+        ::rtl::OUString aIniPath;
+        ::rtl::OUString aLogo;
+        Bitmap          aIntroBmp;
 
-        // keine separate Label-DLL vorhanden?
-        if ( !m_pLabelResMgr )
+        // load bitmap depends on productname ("StarOffice", "StarSuite",...)
+        ::utl::BootstrapRetVal nRetVal = ::utl::bootstrap_getProductKeyAndLogo( aProductKey, aLogo, aIniPath );
+        sal_Bool        bLogo   = (sal_Bool)aLogo.toInt32();
+        if ( nRetVal == ::utl::BOOTSTRAP_OK && bLogo )
         {
-            // dann den ResMgr vom Executable verwenden
-            m_pLabelResMgr = new ResMgr;
-        }
+            xub_StrLen nIndex = 0;
 
-        // Intro nur anzeigen, wenn normaler Start (kein Print/Server etc.)
-        OUString aTmpString;
-        CommandLineArgs* pCmdLine = GetCommandLineArgs();
-        if ( !pCmdLine->IsInvisible() && !pCmdLine->IsQuickstart() && !pCmdLine->IsMinimized() &&
-             !pCmdLine->IsEmbedding() && !pCmdLine->GetPrintList( aTmpString ) )
-        {
-            const USHORT nResId = RID_DEFAULTINTRO;
-            ResId aIntroBmpRes( nResId, m_pLabelResMgr );
-            m_pIntro = new IntroWindow_Impl( aIntroBmpRes );
+            aBmpFileName = aProductKey;
+            aBmpFileName = aBmpFileName.GetToken( 0, (sal_Unicode)' ', nIndex );
+            aBmpFileName += String( DEFINE_CONST_UNICODE("_intro.bmp") );
+
+            // retrieve our current installation path
+            ::rtl::OUString aExecutePath;
+            ::vos::OStartupInfo().getExecutableFile( aExecutePath );
+            sal_uInt32  lastIndex = aExecutePath.lastIndexOf('/');
+            if ( lastIndex > 0 )
+                aExecutePath = aExecutePath.copy( 0, lastIndex+1 );
+
+            INetURLObject aObj( aExecutePath, INET_PROT_FILE );
+            aObj.insertName( aBmpFileName );
+            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+            if ( !aStrm.GetError() )
+            {
+                // Default case, we load the intro bitmap from a seperate file
+                // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+                aStrm >> aIntroBmp;
+            }
+            else
+            {
+                // Save case:
+                // Create resource manager for intro bitmap. Due to our problem that don't have
+                // any language specific information, we have to search for the correct resource
+                // file. The resource is language independent.
+                const USHORT nResId = RID_DEFAULTINTRO;
+                LanguageType aLanguageType;
+                String       aMgrName = String::CreateFromAscii( "iso" );
+
+                aMgrName += String::CreateFromInt32(SOLARUPD); // current build version
+                ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
+
+                ResId aIntroBmpRes( nResId, pLabelResMgr );
+                aIntroBmp = Bitmap( aIntroBmpRes );
+                delete pLabelResMgr;
+            }
+
+            m_pIntro = new IntroWindow_Impl( aIntroBmp );
         }
     }
 }
 
 void Desktop::CloseStartupScreen()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "Desktop::CloseStartupScreen()" );
+    // close splash screen and delete window
     delete m_pIntro;
     m_pIntro = 0;
+    RTL_LOGFILE_TRACE( "desktop (cd) ::Desktop::CloseStartupScreen" );
 }
 
