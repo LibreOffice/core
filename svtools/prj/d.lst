@@ -42,6 +42,7 @@ hedabu: ..\inc\agprop.hxx %_DEST%\inc%_EXT%\svtools\agprop.hxx
 hedabu: ..\inc\aeitem.hxx %_DEST%\inc%_EXT%\svtools\aeitem.hxx
 hedabu: ..\inc\adrparse.hxx %_DEST%\inc%_EXT%\svtools\adrparse.hxx
 hedabu: ..\inc\brdcst.hxx %_DEST%\inc%_EXT%\svtools\brdcst.hxx
+hedabu: ..\inc\broadcast.hxx %_DEST%\inc%_EXT%\svtools\broadcast.hxx
 hedabu: ..\inc\brooker.hxx %_DEST%\inc%_EXT%\svtools\brooker.hxx
 hedabu: ..\inc\brwbox.hxx %_DEST%\inc%_EXT%\svtools\brwbox.hxx
 hedabu: ..\inc\calendar.hxx %_DEST%\inc%_EXT%\svtools\calendar.hxx
@@ -88,6 +89,8 @@ hedabu: ..\inc\itemiter.hxx %_DEST%\inc%_EXT%\svtools\itemiter.hxx
 hedabu: ..\inc\itempool.hxx %_DEST%\inc%_EXT%\svtools\itempool.hxx
 hedabu: ..\inc\itemset.hxx %_DEST%\inc%_EXT%\svtools\itemset.hxx
 hedabu: ..\inc\lckbitem.hxx %_DEST%\inc%_EXT%\svtools\lckbitem.hxx
+hedabu: ..\inc\listener.hxx %_DEST%\inc%_EXT%\svtools\listener.hxx
+hedabu: ..\inc\listeneriter.hxx %_DEST%\inc%_EXT%\svtools\listeneriter.hxx
 hedabu: ..\inc\lstner.hxx %_DEST%\inc%_EXT%\svtools\lstner.hxx
 hedabu: ..\inc\macitem.hxx %_DEST%\inc%_EXT%\svtools\macitem.hxx
 hedabu: ..\inc\memberid.hrc %_DEST%\inc%_EXT%\svtools\memberid.hrc

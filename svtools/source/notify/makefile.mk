@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+#   last change: $Author: jp $ $Date: 2000-11-14 18:53:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,11 @@ CXXFILES = \
         lstner.cxx \
         isethint.cxx \
         cancel.cxx \
-        brdcst.cxx
+        brdcst.cxx \
+        listener.cxx \
+        listenerbase.cxx \
+        listeneriter.cxx \
+        broadcast.cxx
 
 SLOFILES =	\
         $(SLO)$/smplhint.obj \
@@ -91,7 +95,11 @@ SLOFILES =	\
         $(SLO)$/lstner.obj \
         $(SLO)$/isethint.obj \
         $(SLO)$/cancel.obj \
-        $(SLO)$/brdcst.obj
+        $(SLO)$/brdcst.obj \
+        $(SLO)$/listener.obj \
+        $(SLO)$/listenerbase.obj \
+        $(SLO)$/listeneriter.obj \
+        $(SLO)$/broadcast.obj
 
 OBJFILES =	\
         $(OBJ)$/smplhint.obj \
@@ -99,7 +107,11 @@ OBJFILES =	\
         $(OBJ)$/lstner.obj \
         $(OBJ)$/isethint.obj \
         $(OBJ)$/cancel.obj \
-        $(OBJ)$/brdcst.obj
+        $(OBJ)$/brdcst.obj \
+        $(OBJ)$/listener.obj \
+        $(OBJ)$/listenerbase.obj \
+        $(OBJ)$/listeneriter.obj \
+        $(OBJ)$/broadcast.obj
 
 .ENDIF
 
