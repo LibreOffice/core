@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 11:34:19 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,10 +180,9 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 
 // -----------------------------------------------------------------------------
-OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) : OGenericUnoController(_rM)
+OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) : OJoinController_BASE(_rM)
     ,m_bEditable(sal_True)
     ,m_bModified(sal_False)
-    ,m_bOwnConnection(sal_False)
     ,m_pAddTabDlg(NULL)
 {
 }
@@ -191,10 +190,17 @@ OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) :
 OJoinController::~OJoinController()
 {
 }
+
+// -----------------------------------------------------------------------------
+void SAL_CALL OJoinController::disposing( const EventObject& _rSource ) throw(RuntimeException)
+{
+    OJoinController_BASE::disposing( _rSource );
+}
+
 // -----------------------------------------------------------------------------
 void OJoinController::disposing()
 {
-    OGenericUnoController::disposing();
+    OJoinController_BASE::disposing();
     m_pView         = NULL;
     m_pAddTabDlg    = NULL;
 
@@ -210,21 +216,6 @@ void OJoinController::disposing()
             delete *aIter;
         m_vTableData.clear();
     }
-
-
-    if(m_bOwnConnection)
-    {
-        // we have to remove ourself before dispoing the connection
-        Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-        if (xComponent.is())
-        {
-            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-            xComponent->removeEventListener(xEvtL);
-        }
-        ::comphelper::disposeComponent(m_xConnection);
-    }
-    m_xConnection = NULL;
-    m_xDataSource = NULL;
 }
 // -----------------------------------------------------------------------------
 SfxUndoManager* OJoinController::getUndoMgr()
@@ -275,29 +266,6 @@ void OJoinController::Load(const Reference< XObjectInputStream>& _rxIn)
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OJoinController::disposing( const EventObject& Source ) throw(RuntimeException)
-{
-    if(m_xConnection.is() && Source.Source == m_xConnection)
-    {
-        // our connection was disposed so we need a new one
-        createNewConnection(sal_True);
-    }
-}
-// -----------------------------------------------------------------------------
-void OJoinController::createNewConnection(sal_Bool _bUI)
-{
-    m_xConnection = NULL;
-    m_bOwnConnection = sal_False;
-
-    if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(QUERY_CONNECTION_LOST)).Execute()))
-    {
-        m_xConnection = connect(m_sDataSourceName);
-        m_bOwnConnection = m_xConnection.is();
-    }
-    else
-        InvalidateAll();
-}
-// -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
 {
     // die Daten zum Fenster
@@ -327,7 +295,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_xConnection.is() && m_bModified;
+            aReturn.bEnabled = isConnected() && m_bModified;
             break;
         case ID_BROWSER_ADDTABLE:
             if(aReturn.bEnabled = static_cast<OJoinDesignView*>(m_pView)->getTableView()->IsAddAllowed())

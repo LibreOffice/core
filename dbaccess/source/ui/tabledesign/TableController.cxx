@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 09:50:01 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,11 +239,11 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
 {
     return *(new OTableController(_rxFactory));
 }
+
 // -----------------------------------------------------------------------------
-OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OGenericUnoController(_rM)
+OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OTableController_BASE(_rM)
     ,m_bEditable(sal_True)
     ,m_bModified(sal_False)
-    ,m_bOwnConnection(sal_False)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_bNew(sal_True)
 {
@@ -279,14 +279,8 @@ void OTableController::stopTableListening()
 // -----------------------------------------------------------------------------
 void OTableController::disposing()
 {
-    OGenericUnoController::disposing();
-
+    OTableController_BASE::disposing();
     m_pView     = NULL;
-
-    stopConnectionListening(m_xConnection);
-    if(m_bOwnConnection)
-        ::comphelper::disposeComponent(m_xConnection);
-    m_xConnection = NULL;
 
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
     for(;aIter != m_vRowList.end();++aIter)
@@ -304,14 +298,14 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = sal_True;
             break;
         case ID_TABLE_DESIGN_NO_CONNECTION:
-            aReturn.aState = ::cppu::bool2any(m_xConnection.is());
+            aReturn.aState = ::cppu::bool2any( isConnected() );
             break;
         case ID_BROWSER_EDITDOC:
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             aReturn.bEnabled = m_bNew || m_bEditable || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = m_xConnection.is();
+            aReturn.bEnabled = isConnected();
             break;
         case ID_BROWSER_SAVEDOC:
             aReturn.bEnabled = m_bModified;
@@ -336,7 +330,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
                 (   (   ((!m_bNew && m_bModified) || m_bModified)
                     ||  Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is()
                     )
-                &&  m_xConnection.is()
+                &&  isConnected()
                 );
                 // for a new table, assume that we can edit indexes
             break;
@@ -353,8 +347,8 @@ void OTableController::Execute(sal_uInt16 _nId)
             return;
             break;
         case ID_TABLE_DESIGN_NO_CONNECTION:
-            if(!m_xConnection.is())
-                createNewConnection(sal_False); // ask the user for a new connection
+            if (!isConnected())
+                reconnect( sal_False );
             break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
@@ -396,9 +390,9 @@ void OTableController::Execute(sal_uInt16 _nId)
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
 {
-    if(!m_xConnection.is())
-        createNewConnection(sal_True); // ask the user for a new connection
-    Reference<XTablesSupplier> xTablesSup(m_xConnection,UNO_QUERY);
+    if (!isConnected())
+        reconnect(sal_True); // ask the user for a new connection
+    Reference<XTablesSupplier> xTablesSup(getConnection(),UNO_QUERY);
 
     if (!xTablesSup.is())
     {
@@ -430,10 +424,10 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             {
                 String aName = String(ModuleRes(STR_TBL_TITLE));
                 aName = aName.GetToken(0,' ');
-                aDefaultName = ::dbaui::createDefaultName(m_xConnection->getMetaData(),xTables,aName);
+                aDefaultName = ::dbaui::createDefaultName(getConnection()->getMetaData(),xTables,aName);
             }
 
-            OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,m_xConnection->getMetaData(),aDefaultName);
+            OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,getConnection()->getMetaData(),aDefaultName);
             if(aDlg.Execute() == RET_OK)
             {
                 m_sName = aDlg.getName();
@@ -507,12 +501,12 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             {
                 // it can be that someone inserted new data for us
                 ::rtl::OUString sComposedName;
-                ::dbaui::composeTableName(m_xConnection->getMetaData(),xTable,sComposedName,sal_False);
+                ::dbaui::composeTableName(getConnection()->getMetaData(),xTable,sComposedName,sal_False);
                 m_sName = sComposedName;
                 assignTable();
             }
             // now check if our datasource has set a tablefilter and if append the new table name to it
-            Reference< XChild> xChild(m_xConnection,UNO_QUERY);
+            Reference< XChild> xChild(getConnection(),UNO_QUERY);
             if(xChild.is())
             {
                 Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
@@ -651,7 +645,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getORB(),m_xConnection.is() ? m_xConnection->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
+    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getORB(),isConnected() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
     if (RET_OK != aDialog.Execute())
         return;
 
@@ -662,7 +656,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
 {
     try
     {
-        OGenericUnoController::initialize(aArguments);
+        OTableController_BASE::initialize(aArguments);
 
         PropertyValue aValue;
         const Any* pBegin   = aArguments.getConstArray();
@@ -672,14 +666,17 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         {
             if((*pBegin >>= aValue) && (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION)))
             {
-                aValue.Value >>= m_xConnection;
-                OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
-                // get notified if connection is in disposing
-                startConnectionListening(m_xConnection);
+                Reference< XConnection > xConn;
+                aValue.Value >>= xConn;
+                OSL_ENSURE( xConn.is(), "OTableController::initialize: invalid connection given!!" );
+                if ( xConn.is() )
+                    initializeConnection( xConn );
             }
             else if (0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
             {
-                aValue.Value >>= m_sDataSourceName;
+                ::rtl::OUString sName;
+                aValue.Value >>= sName;
+                initializeDataSourceName( sName );
             }
             else if (0 == aValue.Name.compareToAscii(PROPERTY_CURRENTTABLE))
             {
@@ -688,12 +685,12 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         }
 
         sal_Bool bFirstTry = sal_False;
-        if (!m_xConnection.is())
+        if (!isConnected())
         {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-            createNewConnection(sal_False);
+            reconnect(sal_False);
             bFirstTry = sal_True;
         }
-        if(!m_xConnection.is()) // so what should otherwise
+        if (!isConnected()) // so what should otherwise
         {
             if(!bFirstTry)
             {
@@ -707,7 +704,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
         assignTable();
         if(!m_xFormatter.is())
         {
-            Reference< XChild> xChild(m_xConnection,UNO_QUERY);
+            Reference< XChild> xChild(getConnection(), UNO_QUERY);
             if(xChild.is())
             {
                 Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
@@ -740,7 +737,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
 sal_Bool OTableController::Construct(Window* pParent)
 {
     m_pView = new OTableDesignView(pParent,m_xMultiServiceFacatory,this);
-    OGenericUnoController::Construct(pParent);
+    OTableController_BASE::Construct(pParent);
     m_pView->Construct(NULL);
     m_pView->Show();
     return sal_True;
@@ -806,36 +803,17 @@ void OTableController::setModified(sal_Bool _bModified)
     InvalidateFeature(SID_INDEXDESIGN);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(RuntimeException)
+void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(RuntimeException)
 {
-    if (m_xConnection.is() && Reference<XConnection>(Source.Source,UNO_QUERY) == m_xConnection)
-    {
-        // our connection was disposed so we need a new one
-        createNewConnection(sal_True);
-        // remove from the table
-        Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
-        if (xComponent.is())
-        {
-            Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-            xComponent->removeEventListener(xEvtL);
-        }
-        stopTableListening();
-        m_xTable    = NULL;
-        assignTable();
-        if(!m_xTable.is())
-        {
-            m_bNew      = sal_True;
-            setModified(sal_True);
-        }
-        InvalidateAll();
-    }
-    else if(Reference<XPropertySet>(Source.Source,UNO_QUERY) == m_xTable)
+    if ( _rSource.Source == m_xTable )
     {   // some deleted our table so we have a new one
         stopTableListening();
         m_xTable    = NULL;
         m_bNew      = sal_True;
         setModified(sal_True);
     }
+    else
+        OTableController_BASE::disposing( _rSource );
 }
 // -----------------------------------------------------------------------------
 void OTableController::Save(const Reference< XObjectOutputStream>& _rxOut)
@@ -848,22 +826,40 @@ void OTableController::Load(const Reference< XObjectInputStream>& _rxIn)
 {
     OStreamSection aSection(_rxIn.get());
 }
-// -----------------------------------------------------------------------------
-void OTableController::createNewConnection(sal_Bool _bUI)
-{
-    stopConnectionListening(m_xConnection);
-    m_xConnection       = NULL;
-    m_bOwnConnection    = sal_False;
 
-    if (!_bUI || (RET_YES == QueryBox(getView(),ModuleRes(TABLE_QUERY_CONNECTION_LOST)).Execute()))
+// -----------------------------------------------------------------------------
+void OTableController::losingConnection( )
+{
+    // let the base class do it's reconnect
+    OTableController_BASE::losingConnection( );
+
+    // remove from the table
+    Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
+    if (xComponent.is())
     {
-        m_xConnection = connect(m_sDataSourceName, sal_True);
-        m_bOwnConnection = m_xConnection.is();
+        Reference<XEventListener> xEvtL( static_cast<::cppu::OWeakObject*>(this), UNO_QUERY);
+        xComponent->removeEventListener(xEvtL);
     }
+    stopTableListening();
+    m_xTable    = NULL;
+    assignTable();
+    if(!m_xTable.is())
+    {
+        m_bNew      = sal_True;
+        setModified(sal_True);
+    }
+    InvalidateAll();
+}
+
+// -----------------------------------------------------------------------------
+void OTableController::reconnect(sal_Bool _bUI)
+{
+    OTableController_BASE::reconnect( _bUI );
+
     ToolBox* pToolBox = getView()->getToolBox();
     if(pToolBox)
     {
-        if(m_xConnection.is())
+        if ( isConnected() )
         {
             pToolBox->RemoveItem(pToolBox->GetItemPos(ID_TABLE_DESIGN_NO_CONNECTION)-1);
             pToolBox->HideItem(ID_TABLE_DESIGN_NO_CONNECTION);
@@ -997,7 +993,7 @@ void OTableController::loadData()
     m_vRowList.clear();
 
     OTableRow* pTabEdRow = NULL;
-    Reference< XDatabaseMetaData> xMetaData = getConnection().is() ? getConnection()->getMetaData() : Reference< XDatabaseMetaData>();
+    Reference< XDatabaseMetaData> xMetaData = getMetaData( );
     //////////////////////////////////////////////////////////////////////
     // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
     if(m_xTable.is() && xMetaData.is())
@@ -1156,7 +1152,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
 {
     sal_Bool bOk = sal_True;
     sal_Bool bFoundPKey = sal_False;
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
+    Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
@@ -1260,7 +1256,7 @@ void OTableController::alterColumns()
     sal_Bool bReload = sal_False; // refresh the data
 
     // contains all columns names which are already handled those which are not in the list will be deleted
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
+    Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
 
     ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->storesMixedCaseQuotedIdentifiers() ? true : false): sal_True);
@@ -1542,7 +1538,7 @@ void OTableController::assignTable()
     if(m_sName.getLength())
     {
         Reference<XNameAccess> xNameAccess;
-        Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
+        Reference<XTablesSupplier> xSup(getConnection(),UNO_QUERY);
         if(xSup.is())
         {
             xNameAccess = xSup->getTables();
@@ -1569,7 +1565,7 @@ void OTableController::assignTable()
             }
         }
         if(m_xTable.is())
-            ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xTable,sComposedName,sal_False);
+            ::dbaui::composeTableName(getConnection()->getMetaData(),m_xTable,sComposedName,sal_False);
         else
             sComposedName = m_sName;
     }
@@ -1583,7 +1579,7 @@ sal_Bool OTableController::isAddAllowed() const
     if(xColsSup.is())
         bAddAllowed = Reference<XAppend>(xColsSup->getColumns(),UNO_QUERY).is();
 
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
+    Reference< XDatabaseMetaData > xMetaData = getMetaData( );
     bAddAllowed = bAddAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn());
 
     return bAddAllowed;
@@ -1596,7 +1592,7 @@ sal_Bool OTableController::isDropAllowed() const
     if(xColsSup.is())
         bDropAllowed = Reference<XDrop>(xColsSup->getColumns(),UNO_QUERY).is();
 
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData >();
+    Reference< XDatabaseMetaData> xMetaData = getMetaData( );
     bDropAllowed = bDropAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithDropColumn());
 
     return bDropAllowed;
@@ -1632,7 +1628,7 @@ void OTableController::reSyncRows()
 ::rtl::OUString OTableController::createUniqueName(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString sName = _rName;
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
+    Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
 
@@ -1664,7 +1660,7 @@ void OTableController::setTitle(const ::rtl::OUString & _rTitle)
         if(_rTitle.getLength())
             sName += _rTitle;
         else
-            sName += m_sDataSourceName;
+            sName += getDataSourceName();
         xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 08:34:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,12 +311,6 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
     FeatureState aReturn;
     aReturn.bEnabled = sal_True;
         // (disabled automatically)
-//  aReturn.bEnabled = m_xConnection.is();
-//  if(!m_xConnection.is()) // so what should otherwise happen
-//  {
-//      aReturn.aState = ::cppu::bool2any(sal_False);
-//      return aReturn;
-//  }
 
     switch (_nId)
     {
@@ -441,7 +435,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                     m_bDesign = !m_bDesign;
                                     m_sStatement = ::rtl::OUString();
                                     pNode->parseNodeToStr(  m_sStatement,
-                                                            m_xConnection->getMetaData(),
+                                                            getMetaData(),
                                                             &getParser()->getContext(),
                                                             sal_True,sal_True);
                                     m_pWindow->getView()->SaveUIConfig();
@@ -531,18 +525,16 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
 
         if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
         {
-            ::cppu::extractInterface(m_xConnection,aValue.Value);
-            // be notified when connection is in disposing
-            Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-            if (xComponent.is())
-            {
-                Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                xComponent->addEventListener(xEvtL);
-            }
+            Reference< XConnection > xConn;
+            aValue.Value >>= xConn;
+            if ( xConn.is() )
+                initializeConnection( xConn );
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
         {
-            aValue.Value >>= m_sDataSourceName;
+            ::rtl::OUString sDataSource;
+            aValue.Value >>= sDataSource;
+            initializeDataSourceName( sDataSource );
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_CURRENTQUERY))
         {
@@ -558,11 +550,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         }
     }
 
-    if (!m_xConnection.is())
-    {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-        createNewConnection(sal_False);
-    }
-    if (!m_xConnection.is())
+    if ( !ensureConnected( sal_False ) )
     {   // we have no connection so what else should we do
         m_bDesign = sal_False;
         if(m_bCreateView)
@@ -575,16 +563,13 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
     }
 
     // we need a datasource
-    if(m_xConnection.is())
+    if(isConnected())
     {
-        Reference<XChild> xChild(m_xConnection,UNO_QUERY);
-        if(xChild.is())
-            m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
         // now we have to check if our database supports views
         if(m_bCreateView)
         {
             static ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
-            Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+            Reference<XDatabaseMetaData> xMeta = getMetaData();
             Reference<XResultSet> xRes = xMeta->getTableTypes();
             sal_Bool bFound = sal_False;
             if(xRes.is())
@@ -613,12 +598,9 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             }
         }
     }
-    else
-    {
-        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
-        OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
-    }
+
+    OSL_ENSURE(getDataSource().is(),"OQueryController::initialize: need a datasource!");
+
     try
     {
         // get command from the query if a query name was supplied
@@ -689,10 +671,10 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         }
         else
             setQueryComposer();
-        if(!m_xFormatter.is() && m_xDataSource.is())
+        if(!m_xFormatter.is() && haveDataSource())
         {
             Reference< XNumberFormatsSupplier> xSupplier;
-            ::cppu::extractInterface(xSupplier,m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
+            ::cppu::extractInterface(xSupplier, getDataSource()->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
             if(xSupplier.is())
             {
                 m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
@@ -731,9 +713,9 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
 // -----------------------------------------------------------------------------
 void OQueryController::setQueryComposer()
 {
-    if(m_xConnection.is())
+    if(isConnected())
     {
-        Reference< XSQLQueryComposerFactory >  xFactory(m_xConnection, UNO_QUERY);
+        Reference< XSQLQueryComposerFactory >  xFactory(getConnection(), UNO_QUERY);
         OSL_ENSURE(xFactory.is(),"Connection doesn't support a querycomposer");
         if (xFactory.is())
         {
@@ -747,9 +729,9 @@ void OQueryController::setQueryComposer()
                 m_xComposer = NULL;
             }
             OSL_ENSURE(m_xComposer.is(),"No querycomposer available!");
-            Reference<XTablesSupplier> xTablesSup(m_xConnection, UNO_QUERY);
+            Reference<XTablesSupplier> xTablesSup(getConnection(), UNO_QUERY);
             deleteIterator();
-            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator(xTablesSup->getTables(),m_xConnection->getMetaData(),NULL,m_pSqlParser);
+            m_pSqlIterator = new ::connectivity::OSQLParseTreeIterator(xTablesSup->getTables(),getMetaData(),NULL,m_pSqlParser);
         }
     }
 }
@@ -776,7 +758,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
     sal_Bool bRet = sal_True;
-    if(m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size())))
+    if(isConnected() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size())))
     {
         QueryBox aQry(getView(), ModuleRes(m_bCreateView ? QUERY_VIEW_DESIGN_SAVEMODIFIED : QUERY_DESIGN_SAVEMODIFIED));
         switch (aQry.Execute())
@@ -836,13 +818,14 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     OJoinController::disposing(Source);
 }
 // -----------------------------------------------------------------------------
-void OQueryController::createNewConnection(sal_Bool _bUI)
+void OQueryController::reconnect(sal_Bool _bUI)
 {
     deleteIterator();
     ::comphelper::disposeComponent(m_xComposer);
 
-    OJoinController::createNewConnection(_bUI);
-    if (m_xConnection.is())
+    OJoinController::reconnect( _bUI );
+
+    if (isConnected())
     {
         // we hide the add table dialog because the tables in it are from the old connection
         if(m_pAddTabDlg)
@@ -923,18 +906,18 @@ Reference<XNameAccess> OQueryController::getElements()  const
     Reference<XNameAccess> xElements;
     if(m_bCreateView)
     {
-        Reference<XViewsSupplier> xConSup(m_xConnection,UNO_QUERY);
+        Reference<XViewsSupplier> xConSup(getConnection(),UNO_QUERY);
         if(xConSup.is())
             xElements = xConSup->getViews();
     }
     else
     {
-        Reference<XQueriesSupplier> xConSup(m_xConnection,UNO_QUERY);
+        Reference<XQueriesSupplier> xConSup(getConnection(),UNO_QUERY);
         if(xConSup.is())
             xElements = xConSup->getQueries();
         else
         {
-            Reference<XQueryDefinitionsSupplier> xSup(m_xDataSource,UNO_QUERY);
+            Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
             if(xSup.is())
                 xElements = xSup->getQueryDefinitions();
         }
@@ -948,7 +931,7 @@ void OQueryController::executeQuery()
     // which can't live without his connection
     ::rtl::OUString sTranslatedStmt = translateStatement();
 
-    if(m_sDataSourceName.getLength() && sTranslatedStmt.getLength())
+    if(getDataSourceName().getLength() && sTranslatedStmt.getLength())
     {
         try
         {
@@ -977,7 +960,7 @@ void OQueryController::executeQuery()
             {
                 Sequence< PropertyValue> aProps(10);
                 aProps[0].Name = PROPERTY_DATASOURCENAME;
-                aProps[0].Value <<= m_sDataSourceName;
+                aProps[0].Value <<= getDataSourceName();
 
                 aProps[1].Name = PROPERTY_COMMANDTYPE;
                 aProps[1].Value <<= CommandType::COMMAND;
@@ -992,7 +975,7 @@ void OQueryController::executeQuery()
                 aProps[4].Value = ::cppu::bool2any(sal_False);
 
                 aProps[5].Name = PROPERTY_ACTIVECONNECTION;
-                aProps[5].Value <<= m_xConnection;
+                aProps[5].Value <<= getConnection();
 
                 aProps[6].Name = PROPERTY_UPDATE_CATALOGNAME;
                 aProps[6].Value <<= m_sUpdateCatalogName;
@@ -1052,8 +1035,8 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
     if(bNew)
     {
         Reference<XDatabaseMetaData> xMetaData;
-        if(m_xConnection.is())
-            xMetaData = m_xConnection->getMetaData();
+        if(isConnected())
+            xMetaData = getMetaData();
         String aDefaultName;
         if(_bSaveAs && !bNew)
             aDefaultName = String(m_sName);
@@ -1061,7 +1044,7 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
         {
             String aName = String(ModuleRes(m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE));
             aName = aName.GetToken(0,' ');
-            if(m_bCreateView && m_xConnection.is())
+            if(m_bCreateView && isConnected())
                 aDefaultName = ::dbaui::createDefaultName(xMetaData,_xElements,aName);
             else
                 aDefaultName = String(::dbtools::createUniqueName(_xElements,aName));
@@ -1088,7 +1071,7 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
 void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 {
     OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-    if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_NAME)),getORB()))
+    if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)),getORB()))
     {
         String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
         String sTitle(ModuleRes(STR_STAT_WARNING));
@@ -1211,11 +1194,11 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                                     xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
                                     xProp->getPropertyValue(PROPERTY_NAME)          >>= sTable;
 
-                                    ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
+                                    ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
                                     m_sName = sComposedName;
                                 }
                                 // now check if our datasource has set a tablefilter and if append the new table name to it
-                                Reference< XChild> xChild(m_xConnection,UNO_QUERY);
+                                Reference< XChild> xChild(getConnection(),UNO_QUERY);
                                 if(xChild.is())
                                 {
                                     Reference< XPropertySet> xDSProp(xChild->getParent(),UNO_QUERY);
@@ -1302,7 +1285,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
             if(pNode)
             {
                 pNode->parseNodeToStr(  sTranslatedStmt,
-                                        m_xConnection->getMetaData());
+                                        getMetaData());
                 delete pNode;
             }
             m_xComposer->setQuery(sTranslatedStmt);

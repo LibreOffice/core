@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:17 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,11 +262,11 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_REALTION_ADD_RELATION:
-            aReturn.bEnabled = m_vTableData.size() > 1 && m_xConnection.is() && m_bEditable;
+            aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && m_bEditable;
             aReturn.aState = ::cppu::bool2any(sal_False);
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_xDataSource.is() && m_bModified;
+            aReturn.bEnabled = haveDataSource() && m_bModified;
             break;
         default:
             aReturn = OJoinController::GetState(_nId);
@@ -282,7 +282,7 @@ void ORelationController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_SAVEDOC:
             {
                 OSL_ENSURE(m_bEditable,"Slot ID_BROWSER_SAVEDOC should not be enabled!");
-                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_NAME)),getORB()))
+                if(!::dbaui::checkDataSourceAvailable(::comphelper::getString(getDataSource()->getPropertyValue(PROPERTY_NAME)),getORB()))
                 {
                     String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
                     String sTitle(ModuleRes(STR_STAT_WARNING));
@@ -296,7 +296,7 @@ void ORelationController::Execute(sal_uInt16 _nId)
                     try
                     {
                         Sequence< sal_Int8 > aOutputSeq;
-                        if(m_xDataSource.is() && m_xDataSource->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
+                        if(haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
                         {
                             Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
                             Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
@@ -307,8 +307,8 @@ void ORelationController::Execute(sal_uInt16 _nId)
                             xOutDataSource->setOutputStream(xMarkOutStream);
                             Save(xOutStream);
 
-                            m_xDataSource->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
-                            Reference<XFlushable> xFlush(m_xDataSource,UNO_QUERY);
+                            getDataSource()->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
+                            Reference<XFlushable> xFlush(getDataSource(),UNO_QUERY);
                             if(xFlush.is())
                                 xFlush->flush();
                             setModified(sal_False);
@@ -369,27 +369,19 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
     {
         if((*pBegin >>= aValue) && (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION)))
         {
-            aValue.Value >>= m_xConnection;
-            OSL_ENSURE(m_xConnection.is(),"We need at least a connection!");
-            // be notified when connection is in disposing
-            Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
-            if (xComponent.is())
-            {
-                Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                xComponent->addEventListener(xEvtL);
-            }
+            Reference< XConnection > xConn;
+            aValue.Value >>= xConn;
+            initializeConnection( xConn );
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
         {
-            aValue.Value >>= m_sDataSourceName;
+            ::rtl::OUString sDataSource;
+            aValue.Value >>= sDataSource;
+            initializeDataSourceName( sDataSource );
         }
     }
 
-    if (!m_xConnection.is())
-    {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
-        createNewConnection(sal_False);
-    }
-    if(!m_xConnection.is()) // so what should otherwise
+    if ( !ensureConnected( sal_False ) )
     {
         m_bEditable             = sal_False;
         m_bRelationsPossible    = sal_False;
@@ -402,7 +394,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
             throw SQLException();
         }
     }
-    else if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
+    else if(!getMetaData()->supportsIntegrityEnhancementFacility())
     {// check if this database supports relations
 
         m_bEditable             = sal_False;
@@ -417,20 +409,9 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         InvalidateAll();
 
     // we need a datasource
-    if(m_xConnection.is())
-    {
-        Reference<XChild> xChild(m_xConnection,UNO_QUERY);
-        if(xChild.is())
-            m_xDataSource = Reference< XPropertySet >(xChild->getParent(),UNO_QUERY);
-    }
-    else
-    {
-        Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        xDatabaseContext->getByName(m_sDataSourceName) >>= m_xDataSource;
-        OSL_ENSURE(m_xDataSource.is(),"We need a datasource!");
-    }
+    OSL_ENSURE(haveDataSource(),"ORelationController::initialize: need a datasource!");
 
-    Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
+    Reference<XTablesSupplier> xSup(getConnection(),UNO_QUERY);
     OSL_ENSURE(xSup.is(),"Connection isn't a XTablesSupplier!");
     if(xSup.is())
         m_xTables = xSup->getTables();
@@ -449,8 +430,8 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
         {
             ::rtl::OUString sName;
-            if(m_sDataSourceName.getLength())
-                sName = m_sDataSourceName + ::rtl::OUString::createFromAscii(": ") ;
+            if (getDataSourceName().getLength())
+                sName = getDataSourceName() + ::rtl::OUString::createFromAscii(": ") ;
             sName += String(ModuleRes(STR_RELATIONDESIGN));
             xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
         }
@@ -479,7 +460,7 @@ sal_Bool SAL_CALL ORelationController::suspend(sal_Bool bSuspend) throw( Runtime
 short ORelationController::saveModified()
 {
     short nSaved = RET_YES;
-    if(m_xDataSource.is() && m_bModified)
+    if(haveDataSource() && m_bModified)
     {
         QueryBox aQry(getView(), ModuleRes(RELATION_DESIGN_SAVEMODIFIED));
         nSaved = aQry.Execute();
@@ -530,7 +511,7 @@ void ORelationController::loadData()
                         ::rtl::OUString sSourceName,sReferencedTable;
                         Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
 
-                        ::dbaui::composeTableName(m_xConnection->getMetaData(),xTableProp,sSourceName,sal_False);
+                        ::dbaui::composeTableName(getMetaData(),xTableProp,sSourceName,sal_False);
                         xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                         //////////////////////////////////////////////////////////////////////
                         // insert windows
@@ -601,7 +582,7 @@ void ORelationController::loadData()
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName)  const
 {
-    ::comphelper::UStringMixEqual bCase(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual bCase(getMetaData()->storesMixedCaseQuotedIdentifiers());
     ::std::vector<OTableWindowData*>::const_iterator aIter = m_vTableData.begin();
     for(;aIter != m_vTableData.end();++aIter)
     {
@@ -626,13 +607,13 @@ void ORelationController::loadLayoutInformation()
 {
     try
     {
-        OSL_ENSURE(m_xDataSource.is(),"We need a datasource from our connection!");
-        if(m_xDataSource.is())
+        OSL_ENSURE(haveDataSource(),"We need a datasource from our connection!");
+        if(haveDataSource())
         {
             Sequence< sal_Int8 > aInputSequence;
-            if(m_xDataSource->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
+            if(getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
             {
-                m_xDataSource->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
+                getDataSource()->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
                 {
                     Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
                     Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
