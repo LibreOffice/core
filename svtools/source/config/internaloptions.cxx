@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-21 16:15:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
+#include <deque>
+
 #include "internaloptions.hxx"
 
 #ifndef _UTL_CONFIGMGR_HXX_
@@ -91,9 +93,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef __SGI_STL_STACK
-#include <stack>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -175,7 +174,7 @@ struct tIMPL_RecoveryEntry
     }
 };
 
-typedef stack< tIMPL_RecoveryEntry > tIMPL_RecoveryStack;
+typedef deque< tIMPL_RecoveryEntry > tIMPL_RecoveryStack;
 
 class SvtInternalOptions_Impl : public ConfigItem
 {
@@ -370,7 +369,7 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
         ++nPosition;
         seqValues[nPosition] >>= aEntry.sTempName   ;
         ++nPosition;
-        m_aRecoveryList.push( aEntry );
+        m_aRecoveryList.push_front( aEntry );
     }
 
     // We don't need any notifications here.
@@ -413,6 +412,7 @@ void SvtInternalOptions_Impl::Commit()
     Sequence< PropertyValue >   seqPropertyValues( 3 )  ;   // Every node in set has 3 sub-nodes!( url, filter, tempname )
 
     // Copy list entries to save-list and write it to configuration.
+    /*
     sal_uInt32 nCount = m_aRecoveryList.size();
     for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
     {
@@ -428,6 +428,23 @@ void SvtInternalOptions_Impl::Commit()
 
         SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
     }
+    */
+    tIMPL_RecoveryStack::iterator iRecovery = m_aRecoveryList.begin();
+    for ( sal_uInt32 nItem=0; iRecovery != m_aRecoveryList.end(); ++nItem, ++iRecovery)
+    {
+        aItem = *iRecovery;
+        sNode = PROPERTYNAME_RECOVERYLIST + PATHDELIMITER + FIXR +
+            OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+        seqPropertyValues[OFFSET_URL        ].Name  =   sNode + PROPERTYNAME_URL        ;
+        seqPropertyValues[OFFSET_FILTER     ].Name  =   sNode + PROPERTYNAME_FILTER     ;
+        seqPropertyValues[OFFSET_TEMPNAME   ].Name  =   sNode + PROPERTYNAME_TEMPNAME   ;
+        seqPropertyValues[OFFSET_URL        ].Value <<= iRecovery->sURL                 ;
+        seqPropertyValues[OFFSET_FILTER     ].Value <<= iRecovery->sFilter              ;
+        seqPropertyValues[OFFSET_TEMPNAME   ].Value <<= iRecovery->sTempName            ;
+        SetSetProperties( PROPERTYNAME_RECOVERYLIST, seqPropertyValues );
+    }
+
+
 }
 
 //*****************************************************************************************************************
@@ -447,7 +464,7 @@ void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        
                                                 const   OUString&   sTempName   )
 {
     tIMPL_RecoveryEntry aEntry( sURL, sFilter, sTempName );
-    m_aRecoveryList.push( aEntry );
+    m_aRecoveryList.push_front( aEntry );
     SetModified();
 }
 
@@ -458,8 +475,8 @@ void SvtInternalOptions_Impl::PopRecoveryItem(  OUString&   sURL        ,
                                                 OUString&   sFilter     ,
                                                 OUString&   sTempName   )
 {
-    tIMPL_RecoveryEntry aEntry = m_aRecoveryList.top();
-    m_aRecoveryList.pop();
+    tIMPL_RecoveryEntry aEntry = m_aRecoveryList.front();
+    m_aRecoveryList.pop_front();
     SetModified();  // Don't forget it - we delete an entry here!
     sURL        = aEntry.sURL       ;
     sFilter     = aEntry.sFilter    ;
