@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 11:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,9 +792,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable(  ) throw(SQLExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    sal_Bool bValue;
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,bValue,*this);
-    return bValue;
+    ::rtl::OUString aValue;
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this,m_pConnection->getTextEncoding());
+    return aValue.toChar() == 'Y';
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles(  ) throw(SQLException, RuntimeException)
