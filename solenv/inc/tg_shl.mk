@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-27 11:43:56 $
+#   last change: $Author: hjs $ $Date: 2001-05-09 10:48:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -212,7 +212,7 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL$(TNR)SONAME=$(SONAME_SWITCH) $(SHL$(TNR)TARGETN:b:b)	
+SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -451,7 +451,6 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -477,7 +476,6 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -488,6 +486,7 @@ $(SHL$(TNR)TARGETN) : \
     +$(COPY) $(LB)$/$(SHL$(TNR)TARGETN:f:b:b) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM

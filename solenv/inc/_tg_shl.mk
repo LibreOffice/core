@@ -112,7 +112,7 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL1SONAME=$(SONAME_SWITCH) $(SHL1TARGETN:b:b)	
+SHL1SONAME=\"$(SONAME_SWITCH)$(SHL1TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -351,7 +351,6 @@ $(SHL1TARGETN) : \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -377,7 +376,6 @@ $(SHL1TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -388,6 +386,7 @@ $(SHL1TARGETN) : \
     +$(COPY) $(LB)$/$(SHL1TARGETN:f:b:b) $(LB)$/$(SHL1TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -560,7 +559,7 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL2SONAME=$(SONAME_SWITCH) $(SHL2TARGETN:b:b)	
+SHL2SONAME=\"$(SONAME_SWITCH)$(SHL2TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -799,7 +798,6 @@ $(SHL2TARGETN) : \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -825,7 +823,6 @@ $(SHL2TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -836,6 +833,7 @@ $(SHL2TARGETN) : \
     +$(COPY) $(LB)$/$(SHL2TARGETN:f:b:b) $(LB)$/$(SHL2TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -1008,7 +1006,7 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL3SONAME=$(SONAME_SWITCH) $(SHL3TARGETN:b:b)	
+SHL3SONAME=\"$(SONAME_SWITCH)$(SHL3TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1247,7 +1245,6 @@ $(SHL3TARGETN) : \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1273,7 +1270,6 @@ $(SHL3TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -1284,6 +1280,7 @@ $(SHL3TARGETN) : \
     +$(COPY) $(LB)$/$(SHL3TARGETN:f:b:b) $(LB)$/$(SHL3TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -1456,7 +1453,7 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL4SONAME=$(SONAME_SWITCH) $(SHL4TARGETN:b:b)	
+SHL4SONAME=\"$(SONAME_SWITCH)$(SHL4TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -1695,7 +1692,6 @@ $(SHL4TARGETN) : \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1721,7 +1717,6 @@ $(SHL4TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -1732,6 +1727,7 @@ $(SHL4TARGETN) : \
     +$(COPY) $(LB)$/$(SHL4TARGETN:f:b:b) $(LB)$/$(SHL4TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -1904,7 +1900,7 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL5SONAME=$(SONAME_SWITCH) $(SHL5TARGETN:b:b)	
+SHL5SONAME=\"$(SONAME_SWITCH)$(SHL5TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2143,7 +2139,6 @@ $(SHL5TARGETN) : \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -2169,7 +2164,6 @@ $(SHL5TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -2180,6 +2174,7 @@ $(SHL5TARGETN) : \
     +$(COPY) $(LB)$/$(SHL5TARGETN:f:b:b) $(LB)$/$(SHL5TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -2352,7 +2347,7 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL6SONAME=$(SONAME_SWITCH) $(SHL6TARGETN:b:b)	
+SHL6SONAME=\"$(SONAME_SWITCH)$(SHL6TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -2591,7 +2586,6 @@ $(SHL6TARGETN) : \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -2617,7 +2611,6 @@ $(SHL6TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -2628,6 +2621,7 @@ $(SHL6TARGETN) : \
     +$(COPY) $(LB)$/$(SHL6TARGETN:f:b:b) $(LB)$/$(SHL6TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -2800,7 +2794,7 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL7SONAME=$(SONAME_SWITCH) $(SHL7TARGETN:b:b)	
+SHL7SONAME=\"$(SONAME_SWITCH)$(SHL7TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3039,7 +3033,6 @@ $(SHL7TARGETN) : \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -3065,7 +3058,6 @@ $(SHL7TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3076,6 +3068,7 @@ $(SHL7TARGETN) : \
     +$(COPY) $(LB)$/$(SHL7TARGETN:f:b:b) $(LB)$/$(SHL7TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -3248,7 +3241,7 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL8SONAME=$(SONAME_SWITCH) $(SHL8TARGETN:b:b)	
+SHL8SONAME=\"$(SONAME_SWITCH)$(SHL8TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3487,7 +3480,6 @@ $(SHL8TARGETN) : \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -3513,7 +3505,6 @@ $(SHL8TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3524,6 +3515,7 @@ $(SHL8TARGETN) : \
     +$(COPY) $(LB)$/$(SHL8TARGETN:f:b:b) $(LB)$/$(SHL8TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -3696,7 +3688,7 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL9SONAME=$(SONAME_SWITCH) $(SHL9TARGETN:b:b)	
+SHL9SONAME=\"$(SONAME_SWITCH)$(SHL9TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -3935,7 +3927,6 @@ $(SHL9TARGETN) : \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -3961,7 +3952,6 @@ $(SHL9TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -3972,6 +3962,7 @@ $(SHL9TARGETN) : \
     +$(COPY) $(LB)$/$(SHL9TARGETN:f:b:b) $(LB)$/$(SHL9TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -4144,7 +4135,7 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 .IF "$(UNIXVERSIONNAMES)"!=""
 .IF "$(OS)"!="MACOSX"
 .IF "$(GUI)"=="UNX"
-SHL10SONAME=$(SONAME_SWITCH) $(SHL10TARGETN:b:b)	
+SHL10SONAME=\"$(SONAME_SWITCH)$(SHL10TARGETN:b:b)\"
 .ENDIF			# "$(GUI)"!="UNX"
 .ENDIF			# "$(OS)"!="MACOSX"
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
@@ -4383,7 +4374,6 @@ $(SHL10TARGETN) : \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    @ls -l $@
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -4409,7 +4399,6 @@ $(SHL10TARGETN) : \
 .IF "$(OS)"=="S390"
     +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
 .ENDIF
-    @ls -l $@
 .IF "$(UPDATER)"=="YES"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
@@ -4420,6 +4409,7 @@ $(SHL10TARGETN) : \
     +$(COPY) $(LB)$/$(SHL10TARGETN:f:b:b) $(LB)$/$(SHL10TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
+    @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
