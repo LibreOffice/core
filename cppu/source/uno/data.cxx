@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace cppu
 void defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pCompType )
+    throw ()
 {
     __defaultConstructStruct( pMem, pCompType );
 }
@@ -85,6 +86,7 @@ void copyConstructStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
+    throw ()
 {
     __copyConstructStruct( pDest, pSource, pTypeDescr, acquire, mapping );
 }
@@ -93,6 +95,7 @@ void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
+    throw ()
 {
     __destructStruct( pValue, pTypeDescr, release );
 }
@@ -101,6 +104,7 @@ sal_Bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    throw ()
 {
     return __equalStruct( pDest, pSource, pTypeDescr, queryInterface, release );
 }
@@ -109,6 +113,7 @@ sal_Bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ()
 {
     return __assignStruct( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
 }
@@ -117,6 +122,7 @@ void copyConstructSequence(
     uno_Sequence ** ppDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_AcquireFunc acquire, uno_Mapping * mapping )
+    throw ()
 {
     __copyConstructSequence( ppDest, pSource, pElementType, acquire, mapping );
 }
@@ -125,6 +131,7 @@ void destructSequence(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,
     uno_ReleaseFunc release )
+    throw ()
 {
     uno_Sequence * pSequence = *ppSequence;
     OSL_ASSERT( pSequence );
@@ -142,6 +149,7 @@ sal_Bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    throw ()
 {
     return __equalSequence( pDest, pSource, pElementType, queryInterface, release );
 }
@@ -151,12 +159,14 @@ extern "C"
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL uno_type_constructData(
     void * pMem, typelib_TypeDescriptionReference * pType )
+    throw ()
 {
     __defaultConstructData( pMem, pType, 0 );
 }
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL uno_constructData(
     void * pMem, typelib_TypeDescription * pTypeDescr )
+    throw ()
 {
     __defaultConstructData( pMem, pTypeDescr->pWeakRef, pTypeDescr );
 }
@@ -164,6 +174,7 @@ SAL_DLLEXPORT void SAL_CALL uno_constructData(
 SAL_DLLEXPORT void SAL_CALL uno_type_destructData(
     void * pValue, typelib_TypeDescriptionReference * pType,
     uno_ReleaseFunc release )
+    throw ()
 {
     __destructData( pValue, pType, 0, release );
 }
@@ -172,6 +183,7 @@ SAL_DLLEXPORT void SAL_CALL uno_destructData(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
+    throw ()
 {
     __destructData( pValue, pTypeDescr->pWeakRef, pTypeDescr, release );
 }
@@ -180,6 +192,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire )
+    throw ()
 {
     __copyConstructData( pDest, pSource, pType, 0, acquire, 0 );
 }
@@ -188,6 +201,7 @@ SAL_DLLEXPORT void SAL_CALL uno_copyData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire )
+    throw ()
 {
     __copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, acquire, 0 );
 }
@@ -196,6 +210,7 @@ SAL_DLLEXPORT void SAL_CALL uno_type_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
     uno_Mapping * mapping )
+    throw ()
 {
     __copyConstructData( pDest, pSource, pType, 0, 0, mapping );
 }
@@ -204,6 +219,7 @@ SAL_DLLEXPORT void SAL_CALL uno_copyAndConvertData(
     void * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
     uno_Mapping * mapping )
+    throw ()
 {
     __copyConstructData( pDest, pSource, pTypeDescr->pWeakRef, pTypeDescr, 0, mapping );
 }
@@ -212,6 +228,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_equalData(
     void * pVal1, typelib_TypeDescriptionReference * pVal1Type,
     void * pVal2, typelib_TypeDescriptionReference * pVal2Type,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    throw ()
 {
     return __equalData( pVal1, pVal1Type, 0,
                         pVal2, pVal2Type, 0,
@@ -222,6 +239,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_equalData(
     void * pVal1, typelib_TypeDescription * pVal1TD,
     void * pVal2, typelib_TypeDescription * pVal2TD,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    throw ()
 {
     return __equalData( pVal1, pVal1TD->pWeakRef, pVal1TD,
                         pVal2, pVal2TD->pWeakRef, pVal2TD,
@@ -232,6 +250,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_type_assignData(
     void * pDest, typelib_TypeDescriptionReference * pDestType,
     void * pSource, typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ()
 {
     return __assignData( pDest, pDestType, 0,
                          pSource, pSourceType, 0,
@@ -242,6 +261,7 @@ SAL_DLLEXPORT sal_Bool SAL_CALL uno_assignData(
     void * pDest, typelib_TypeDescription * pDestTD,
     void * pSource, typelib_TypeDescription * pSourceTD,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ()
 {
     return __assignData( pDest, pDestTD->pWeakRef, pDestTD,
                          pSource, pSourceTD->pWeakRef, pSourceTD,

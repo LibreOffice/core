@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ inline void __destructUnion(
     void * pValue,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
+    throw ()
 {
     typelib_TypeDescriptionReference * pType = __unionGetSetType( pValue, pTypeDescr );
     ::uno_type_destructData(
@@ -88,12 +89,14 @@ inline void __destructUnion(
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    throw ();
 //--------------------------------------------------------------------------------------------------
 inline void __destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
+    throw ()
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -113,11 +116,13 @@ inline void __destructStruct(
 void destructSequence(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,
-    uno_ReleaseFunc release );
+    uno_ReleaseFunc release )
+    throw ();
 //--------------------------------------------------------------------------------------------------
 inline void __destructAny(
     uno_Any * pAny,
     uno_ReleaseFunc release )
+    throw ()
 {
     typelib_TypeDescriptionReference * pType = pAny->pType;
 
@@ -184,6 +189,7 @@ inline sal_Int32 __destructElements(
     void * pElements, typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_ReleaseFunc release )
+    throw ()
 {
     switch (pElementType->eTypeClass)
     {
@@ -325,6 +331,7 @@ inline void __destructSequence(
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
+    throw ()
 {
     if (! ::osl_decrementInterlockedCount( &pSequence->nRefCount ))
     {
@@ -354,6 +361,7 @@ inline void __destructData(
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
+    throw ()
 {
     switch (pType->eTypeClass)
     {

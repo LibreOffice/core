@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadident.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-13 12:21:44 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,49 +75,14 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include "current.hxx"
+
+
 using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
+using namespace ::cppu;
 
-
-static sal_Bool g_bInitialized;
-static oslThreadKey g_key;
-
-namespace cppu_threadpool
-{
-struct IdContainer
-{
-    sal_Sequence *pLocalThreadId;
-    sal_Int32     nRefCountOfCurrentId;
-    sal_Sequence *pCurrentId;
-};
-}
-using namespace cppu_threadpool;
-
-static void SAL_CALL destructIdContainer( void *p )
-{
-    if( p )
-    {
-        IdContainer *pId = (IdContainer * ) p;
-        rtl_byte_sequence_release( pId->pLocalThreadId );
-        rtl_byte_sequence_release( pId->pCurrentId );
-        rtl_freeMemory( p );
-    }
-}
-
-static inline oslThreadKey getKey()
-{
-    if( ! g_bInitialized )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! g_bInitialized )
-        {
-            g_key = osl_createThreadKey( destructIdContainer );
-            g_bInitialized = sal_True;
-        }
-    }
-    return g_key;
-}
 
 static inline void createLocalId( sal_Sequence **ppThreadId )
 {
@@ -130,23 +95,22 @@ static inline void createLocalId( sal_Sequence **ppThreadId )
 
 extern "C" SAL_DLLEXPORT void SAL_CALL
 uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
+    throw ()
 {
-    IdContainer * p = (IdContainer * ) osl_getThreadKeyData( getKey() );
-    if( ! p )
+    IdContainer * p = getIdContainer();
+    if( ! p->bInit )
     {
         // first time, that the thread enters the bridge
         createLocalId( ppThreadId );
 
         // TODO
         // note : this is a leak !
-        IdContainer *p = (IdContainer *) rtl_allocateMemory( sizeof( IdContainer ) );
         p->pLocalThreadId = *ppThreadId;
         p->pCurrentId = *ppThreadId;
         p->nRefCountOfCurrentId = 1;
         rtl_byte_sequence_acquire( p->pLocalThreadId );
         rtl_byte_sequence_acquire( p->pCurrentId );
-
-        OSL_VERIFY( osl_setThreadKeyData( getKey(), p ) );
+        p->bInit = sal_True;
     }
     else
     {
@@ -162,8 +126,9 @@ uno_getIdOfCurrentThread( sal_Sequence **ppThreadId )
 
 
 extern "C" SAL_DLLEXPORT  void SAL_CALL uno_releaseIdFromCurrentThread()
+    throw ()
 {
-    IdContainer *p = (IdContainer * ) osl_getThreadKeyData( getKey() );
+    IdContainer *p = getIdContainer();
     OSL_ASSERT( p );
     OSL_ASSERT( p->nRefCountOfCurrentId );
 
@@ -175,18 +140,17 @@ extern "C" SAL_DLLEXPORT  void SAL_CALL uno_releaseIdFromCurrentThread()
 }
 
 extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId )
+    throw ()
 {
-    IdContainer *p = (IdContainer * ) osl_getThreadKeyData( getKey() );
-    if( ! p )
+    IdContainer *p = getIdContainer();
+    if( ! p->bInit )
     {
-        IdContainer *p = (IdContainer * ) rtl_allocateMemory( sizeof( IdContainer ) );
-
         p->pLocalThreadId = 0;
         createLocalId( &(p->pLocalThreadId) );
         p->nRefCountOfCurrentId = 1;
         p->pCurrentId = pThreadId;
         rtl_byte_sequence_acquire( p->pCurrentId );
-        osl_setThreadKeyData( getKey() , p );
+        p->bInit = sal_True;
     }
     else
     {

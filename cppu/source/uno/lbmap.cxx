@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 10:17:22 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 
 
+namespace cppu
+{
+
 //==================================================================================================
 struct MappingEntry
 {
@@ -119,8 +122,9 @@ struct MappingEntry
     uno_freeMappingFunc freeMapping;
     OUString            aMappingName;
 
-    MappingEntry( uno_Mapping * pMapping_, uno_freeMappingFunc freeMapping_,
-                  const OUString & rMappingName_ )
+    MappingEntry(
+        uno_Mapping * pMapping_, uno_freeMappingFunc freeMapping_,
+        const OUString & rMappingName_ ) throw ()
         : nRef( 1 )
         , pMapping( pMapping_ )
         , freeMapping( freeMapping_ )
@@ -130,13 +134,13 @@ struct MappingEntry
 //--------------------------------------------------------------------------------------------------
 struct FctOUStringHash : public unary_function< const OUString &, size_t >
 {
-    size_t operator()( const OUString & rKey ) const
+    size_t operator()( const OUString & rKey ) const throw ()
         { return (size_t)rKey.hashCode(); }
 };
 //--------------------------------------------------------------------------------------------------
 struct FctPtrHash : public unary_function< uno_Mapping *, size_t >
 {
-    size_t operator()( uno_Mapping * pKey ) const
+    size_t operator()( uno_Mapping * pKey ) const throw ()
         { return (size_t)pKey; }
 };
 
@@ -158,10 +162,10 @@ struct MappingsData
 
     Mutex               aNegativeLibsMutex;
     t_OUStringSet       aNegativeLibs;
-    ~MappingsData();
+    ~MappingsData() throw ();
 };
 //__________________________________________________________________________________________________
-MappingsData::~MappingsData()
+MappingsData::~MappingsData() throw ()
 {
 #ifdef CPPU_ASSERTIONS
     OSL_ENSHURE( aName2Entry.empty() && aMapping2Entry.empty(), "### unrevoked mappings!" );
@@ -185,7 +189,7 @@ MappingsData::~MappingsData()
 #endif
 }
 //--------------------------------------------------------------------------------------------------
-static MappingsData & getMappingsData()
+static MappingsData & getMappingsData() throw ()
 {
     static MappingsData * s_p = 0;
     if (! s_p)
@@ -216,38 +220,47 @@ struct uno_Mediate_Mapping : public uno_Mapping
 
     OUString    aAddPurpose;
 
-    uno_Mediate_Mapping( const Environment & rFrom_, const Environment & rTo_,
-                         const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
-                         const OUString & rAddPurpose );
+    uno_Mediate_Mapping(
+        const Environment & rFrom_, const Environment & rTo_,
+        const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
+        const OUString & rAddPurpose )
+        throw ();
 };
+extern "C"
+{
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL mediate_free( uno_Mapping * pMapping )
+static void SAL_CALL mediate_free( uno_Mapping * pMapping ) throw ()
 {
     delete static_cast< uno_Mediate_Mapping * >( pMapping );
 }
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
+static void SAL_CALL mediate_acquire( uno_Mapping * pMapping ) throw ()
 {
-    if (1 == osl_incrementInterlockedCount( & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
+    if (1 == osl_incrementInterlockedCount(
+        & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
     {
-        uno_registerMapping( &pMapping, mediate_free,
-                             static_cast< uno_Mediate_Mapping * >( pMapping )->aFrom.get(),
-                             static_cast< uno_Mediate_Mapping * >( pMapping )->aTo.get(),
-                             static_cast< uno_Mediate_Mapping * >( pMapping )->aAddPurpose.pData );
+        uno_registerMapping(
+            &pMapping, mediate_free,
+            static_cast< uno_Mediate_Mapping * >( pMapping )->aFrom.get(),
+            static_cast< uno_Mediate_Mapping * >( pMapping )->aTo.get(),
+            static_cast< uno_Mediate_Mapping * >( pMapping )->aAddPurpose.pData );
     }
 }
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL mediate_release( uno_Mapping * pMapping )
+static void SAL_CALL mediate_release( uno_Mapping * pMapping ) throw ()
 {
-    if (! osl_decrementInterlockedCount( & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
+    if (! osl_decrementInterlockedCount(
+        & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
     {
         uno_revokeMapping( pMapping );
     }
 }
 //--------------------------------------------------------------------------------------------------
-static void SAL_CALL mediate_mapInterface( uno_Mapping * pMapping,
-                                           void ** ppOut, void * pInterface,
-                                           typelib_InterfaceTypeDescription * pInterfaceTypeDescr )
+static void SAL_CALL mediate_mapInterface(
+    uno_Mapping * pMapping,
+    void ** ppOut, void * pInterface,
+    typelib_InterfaceTypeDescription * pInterfaceTypeDescr )
+    throw ()
 {
     OSL_ENSHURE( pMapping && ppOut, "### null ptr!" );
     if (pMapping && ppOut)
@@ -265,10 +278,12 @@ static void SAL_CALL mediate_mapInterface( uno_Mapping * pMapping,
         }
     }
 }
+}
 //__________________________________________________________________________________________________
-uno_Mediate_Mapping::uno_Mediate_Mapping( const Environment & rFrom_, const Environment & rTo_,
-                                          const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
-                                          const OUString & rAddPurpose_ )
+uno_Mediate_Mapping::uno_Mediate_Mapping(
+    const Environment & rFrom_, const Environment & rTo_,
+    const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
+    const OUString & rAddPurpose_ ) throw ()
     : nRef( 1 )
     , aFrom( rFrom_ )
     , aTo( rTo_ )
@@ -284,6 +299,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping( const Environment & rFrom_, const Envi
 //==================================================================================================
 static inline OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    throw ()
 {
     OUStringBuffer aKey( 64 );
     aKey.append( rAddPurpose );
@@ -301,6 +317,7 @@ static inline OUString getMappingName(
 //==================================================================================================
 static inline OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    throw ()
 {
     OUStringBuffer aBridgeName( 16 );
     if (rAddPurpose.getLength())
@@ -314,14 +331,14 @@ static inline OUString getBridgeName(
     return aBridgeName.makeStringAndClear();
 }
 //==================================================================================================
-static inline void setNegativeBridge( const OUString & rBridgeName )
+static inline void setNegativeBridge( const OUString & rBridgeName ) throw ()
 {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );
     rData.aNegativeLibs.insert( rBridgeName );
 }
 //==================================================================================================
-static inline oslModule loadModule( const OUString & rBridgeName )
+static inline oslModule loadModule( const OUString & rBridgeName ) throw ()
 {
     sal_Bool bNeg;
     {
@@ -363,6 +380,7 @@ static inline oslModule loadModule( const OUString & rBridgeName )
 //==================================================================================================
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    throw ()
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
@@ -407,6 +425,7 @@ static Mapping loadExternalMapping(
 //==================================================================================================
 static Mapping getDirectMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
+    throw ()
 {
     OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
@@ -436,6 +455,7 @@ static inline Mapping createMediateMapping(
     const Environment & rFrom, const Environment & rTo,
     const Mapping & rFrom2Uno, const Mapping & rUno2To,
     const OUString & rAddPurpose )
+    throw ()
 {
     uno_Mapping * pRet = new uno_Mediate_Mapping(
         rFrom, rTo, rFrom2Uno, rUno2To, rAddPurpose ); // ref count initially 1
@@ -448,6 +468,7 @@ static inline Mapping createMediateMapping(
 //==================================================================================================
 static Mapping getMediateMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
+    throw ()
 {
     Environment aUno;
     Mapping aUno2To;
@@ -506,7 +527,9 @@ static Mapping getMediateMapping(
 
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_getMapping(
-    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
+    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
+    rtl_uString * pAddPurpose )
+    throw ()
 {
     OSL_ENSHURE( ppMapping && pFrom && pTo, "### null ptr!" );
     if (*ppMapping)
@@ -560,7 +583,9 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_getMapping(
 }
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
-    uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo, rtl_uString * pAddPurpose )
+    uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
+    rtl_uString * pAddPurpose )
+    throw ()
 {
     OSL_ENSHURE( ppMapping && pFrom && pTo, "### null ptr!" );
     if (*ppMapping)
@@ -590,6 +615,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_getMappingByName(
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
+    throw ()
 {
     MappingsData & rData = getMappingsData();
     ClearableMutexGuard aGuard( rData.aMappingsMutex );
@@ -626,7 +652,9 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_registerMapping(
     }
 }
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_revokeMapping( uno_Mapping * pMapping )
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_revokeMapping(
+    uno_Mapping * pMapping )
+    throw ()
 {
     MappingsData & rData = getMappingsData();
     ClearableMutexGuard aGuard( rData.aMappingsMutex );
@@ -651,7 +679,9 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_revokeMapping( uno_Mapping * pMapping
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback( uno_getMappingFunc pCallback )
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback(
+    uno_getMappingFunc pCallback )
+    throw ()
 {
     OSL_ENSHURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
@@ -659,10 +689,14 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_registerMappingCallback( uno_getMappi
     rData.aCallbacks.insert( pCallback );
 }
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback( uno_getMappingFunc pCallback )
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_revokeMappingCallback(
+    uno_getMappingFunc pCallback )
+    throw ()
 {
     OSL_ENSHURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.erase( pCallback );
+}
+
 }

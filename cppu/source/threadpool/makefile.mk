@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+#   last change: $Author: dbo $ $Date: 2000-12-21 14:39:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ SLOFILES=\
     $(SLO)$/threadpool.obj\
     $(SLO)$/jobqueue.obj\
     $(SLO)$/thread.obj\
-    $(SLO)$/threadident.obj
+    $(SLO)$/threadident.obj\
+    $(SLO)$/current.obj
 
 #	  $(SLO)$/threadpool.obj \
 #	  $(SLO)$/process.obj	 \

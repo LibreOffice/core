@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,23 +71,23 @@
 using namespace osl;
 using namespace rtl;
 
+extern "C"
+{
+
 //------------------------------------------------------------------------
 sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset,
-    sal_Int32 & rMaxIntegralTypeSize );
+    sal_Int32 & rMaxIntegralTypeSize ) throw ();
 //------------------------------------------------------------------------
 void SAL_CALL typelib_typedescription_newEmpty(
     typelib_TypeDescription ** ppRet,
     typelib_TypeClass eTypeClass,
-    rtl_uString * pTypeName );
+    rtl_uString * pTypeName ) throw ();
 //-----------------------------------------------------------------------------
 void SAL_CALL typelib_typedescriptionreference_getByName(
     typelib_TypeDescriptionReference ** ppRet,
-    rtl_uString * pName );
-
-extern "C"
-{
+    rtl_uString * pName ) throw ();
 
 #ifdef SAL_W32
 #pragma pack(push, 8)
@@ -116,7 +116,7 @@ struct AlignSize_Impl
 // the value of the maximal alignment
 static sal_Int32 nMaxAlignment = (sal_Int32)&((AlignSize_Impl *) 16)->dDouble - 16;
 
-static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
+static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment ) throw ()
 {
     if( nRequestedAlignment > nMaxAlignment )
         nRequestedAlignment = nMaxAlignment;
@@ -126,14 +126,15 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 /**
  * Calculate the new size of the struktur.
  */
-static inline sal_Int32 newAlignedSize( sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )
+static inline sal_Int32 newAlignedSize(
+    sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment ) throw ()
 {
     NeededAlignment = adjustAlignment( NeededAlignment );
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
 //--------------------------------------------------------------------------------------------------
-static Mutex & typelib_getStaticInitMutex()
+static Mutex & typelib_getStaticInitMutex() throw ()
 {
     static Mutex * s_pMutex = 0;
     if (! s_pMutex)
@@ -151,6 +152,7 @@ static Mutex & typelib_getStaticInitMutex()
 //##################################################################################################
 SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
     typelib_TypeClass eTypeClass )
+    throw ()
 {
     static typelib_TypeDescriptionReference * s_aTypes[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -328,6 +330,7 @@ SAL_DLLEXPORT typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_g
 SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
+    throw ()
 {
     if (! *ppRef)
     {
@@ -346,7 +349,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_type_init(
 }
 
 // !for NOT REALLY WEAK TYPES only!
-static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * pTypeName )
+static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * pTypeName ) throw ()
 {
     typelib_TypeDescriptionReference * pRef = 0;
     ::typelib_typedescriptionreference_getByName( &pRef, pTypeName );
@@ -359,7 +362,7 @@ static inline typelib_TypeDescriptionReference * __getTypeByName( rtl_uString * 
 //##################################################################################################
 SAL_DLLEXPORT void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeDescriptionReference * pElementType )
+    typelib_TypeDescriptionReference * pElementType ) throw ()
 {
     if (! *ppRef)
     {
@@ -397,6 +400,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
+    throw ()
 {
     OSL_ENSHURE( typelib_TypeClass_STRUCT == eTypeClass ||
                  typelib_TypeClass_EXCEPTION == eTypeClass, "### unexpected type class!" );
@@ -466,6 +470,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
+    throw ()
 {
     if (! *ppRef)
     {
@@ -517,6 +522,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     sal_Int32 nDefaultValue )
+    throw ()
 {
     if (! *ppRef)
     {
@@ -562,6 +568,7 @@ SAL_DLLEXPORT void SAL_CALL typelib_static_union_type_init(
     sal_Int32 nMembers,
     sal_Int64 * pDiscriminants,
     typelib_TypeDescriptionReference ** pMemberTypes )
+    throw ()
 {
     if (! *ppRef)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,7 @@ using namespace cppu_threadpool;
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putRequest(
     sal_Sequence *pThreadId, void *pThreadSpecificData,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ), sal_Bool bIsOneway )
+    throw ()
 {
     ThreadPool::getInstance()->addJob( pThreadId, bIsOneway, pThreadSpecificData,doRequest );
 }
@@ -428,6 +429,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putRequest(
 
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putReply(
     sal_Sequence *pThreadId, void *pThreadSpecificData )
+    throw ()
 {
     ThreadPool::getInstance()->addJob( pThreadId, sal_False, pThreadSpecificData, 0 );
 }
@@ -435,6 +437,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_putReply(
 
 extern "C" SAL_DLLEXPORT  struct uno_threadpool_Handle * SAL_CALL
 uno_threadpool_createHandle( sal_Int64 nDisposeId )
+    throw ()
 {
     sal_Sequence *pThreadId = 0;
     uno_getIdOfCurrentThread( &pThreadId );
@@ -449,6 +452,7 @@ uno_threadpool_createHandle( sal_Int64 nDisposeId )
 
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_enter(
     struct uno_threadpool_Handle *pHandle , void **ppThreadSpecificData )
+    throw ()
 {
     OSL_ASSERT( ppThreadSpecificData );
 
@@ -462,12 +466,14 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_threadpool_enter(
 
 extern "C" SAL_DLLEXPORT void SAL_CALL
 uno_threadpool_disposeThreads( sal_Int64 nDisposeId )
+    throw ()
 {
     ThreadPool::getInstance()->dispose( nDisposeId );
 }
 
 extern "C" SAL_DLLEXPORT void SAL_CALL
 uno_threadpool_stopDisposeThreads( sal_Int64 nDisposeId )
+    throw ()
 {
     ThreadPool::getInstance()->stopDisposing( nDisposeId );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ inline void * __map(
     void * p,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
-    uno_Mapping * mapping )
+    uno_Mapping * mapping ) throw ()
 {
     void * pRet = 0;
     if (p)
@@ -126,7 +126,7 @@ inline void * __map(
     return pRet;
 }
 //--------------------------------------------------------------------------------------------------
-inline void __acquire( void * p, uno_AcquireFunc acquire )
+inline void __acquire( void * p, uno_AcquireFunc acquire ) throw ()
 {
     if (p)
     {
@@ -137,7 +137,7 @@ inline void __acquire( void * p, uno_AcquireFunc acquire )
     }
 }
 //--------------------------------------------------------------------------------------------------
-inline void __releaseRef( void ** pRef, uno_ReleaseFunc release )
+inline void __releaseRef( void ** pRef, uno_ReleaseFunc release ) throw ()
 {
     if (*pRef)
     {
@@ -154,7 +154,7 @@ inline void __releaseRef( void ** pRef, uno_ReleaseFunc release )
 //--------------------------------------------------------------------------------------------------
 static uno_Sequence * s_pSeq = 0;
 static uno_Sequence s_seq;
-inline uno_Sequence * __getEmptySequence()
+inline uno_Sequence * __getEmptySequence() throw ()
 {
     if (! s_pSeq)
     {
@@ -171,7 +171,7 @@ inline uno_Sequence * __getEmptySequence()
 }
 //--------------------------------------------------------------------------------------------------
 static typelib_TypeDescriptionReference * s_pVoidType = 0;
-inline typelib_TypeDescriptionReference * __getVoidType()
+inline typelib_TypeDescriptionReference * __getVoidType() throw ()
 {
     if (! s_pVoidType)
     {
@@ -201,7 +201,7 @@ inline typelib_TypeDescriptionReference * __getVoidType()
 
 //--------------------------------------------------------------------------------------------------
 static typelib_TypeDescription * s_pQITD = 0;
-inline typelib_TypeDescription * __getQueryInterfaceTypeDescr()
+inline typelib_TypeDescription * __getQueryInterfaceTypeDescr() throw ()
 {
     if (! s_pQITD)
     {
@@ -224,7 +224,7 @@ inline typelib_TypeDescription * __getQueryInterfaceTypeDescr()
 
 //--------------------------------------------------------------------------------------------------
 inline typelib_TypeDescriptionReference * __unionGetSetType(
-    void * pUnion, typelib_TypeDescription * pTD )
+    void * pUnion, typelib_TypeDescription * pTD ) throw ()
 {
     typelib_TypeDescriptionReference * pRet;
 
@@ -248,8 +248,8 @@ inline typelib_TypeDescriptionReference * __unionGetSetType(
 }
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool __type_equals(
-    typelib_TypeDescriptionReference * pType1,
-    typelib_TypeDescriptionReference * pType2 )
+    typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
+    throw ()
 {
     return (pType1 == pType2 ||
             (pType1->eTypeClass == pType2->eTypeClass &&

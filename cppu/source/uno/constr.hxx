@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ namespace cppu
 inline void __defaultConstructUnion(
     void * pMem,
     typelib_TypeDescription * pTypeDescr )
+    throw ()
 {
     ::uno_type_constructData(
         (char *)pMem + ((typelib_UnionTypeDescription *)pTypeDescr)->nValueOffset,
@@ -84,11 +85,13 @@ inline void __defaultConstructUnion(
 //==================================================================================================
 void defaultConstructStruct(
     void * pMem,
-    typelib_CompoundTypeDescription * pCompType );
+    typelib_CompoundTypeDescription * pCompType )
+    throw ();
 //--------------------------------------------------------------------------------------------------
 inline void __defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pTypeDescr )
+    throw ()
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -110,6 +113,7 @@ inline void __defaultConstructData(
     void * pMem,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr )
+    throw ()
 {
     switch (pType->eTypeClass)
     {

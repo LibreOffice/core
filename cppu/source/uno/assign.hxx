@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-09-25 14:47:41 $
+ *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace cppu
 inline void __assignInterface(
     void ** ppDest, void * pSource,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ()
 {
     void * pDest = *ppDest;
     if (pSource)
@@ -102,6 +103,7 @@ inline sal_Bool __queryAndAssignInterface(
     void ** ppDest, void * pSource,
     typelib_TypeDescriptionReference * pDestType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
+    throw ()
 {
     void * pDest = *ppDest;
     if (pSource)
@@ -159,12 +161,14 @@ inline sal_Bool __queryAndAssignInterface(
 sal_Bool assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
-    uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release );
+    uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ();
 //--------------------------------------------------------------------------------------------------
 inline sal_Bool __assignStruct(
     void * pDest, void * pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ()
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -199,6 +203,7 @@ inline sal_Bool __assignData(
     void * pSource,
     typelib_TypeDescriptionReference * pSourceType, typelib_TypeDescription * pSourceTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
+    throw ()
 {
     if (pDest == pSource)
         return sal_True;
