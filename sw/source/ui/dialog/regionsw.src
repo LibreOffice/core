@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:19:02 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 23:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_simplified ] = "Κά±£»¤µΔ(~P)";
         Text[ russian ] = "Ηΰωθωενξ";
         Text[ polish ] = "Chroniony";
-        Text[ japanese ] = "•Ϋμ‚³‚κ‚½(~P)";
+        Text[ japanese ] = "•Ϋμ‚·‚ι(~P)";
         Text[ chinese_traditional ] = "¨ό«OΕ@(~P)";
         Text[ arabic ] = "γΝγν";
         Text[ greek ] = "Προστατευόμενο";
@@ -539,7 +539,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_simplified ] = "ΚΉΣΓΓάΒλ±£»¤µΔΗψΣς(~A)";
         Text[ russian ] = "Ξαλΰρςθ, ηΰωθωεννϋε οΰπξλεμ";
         Text[ polish ] = "Obszary zabezpieczone has³em";
-        Text[ japanese ] = "Κί½ά°Δή•Ϋμ•t‚«‚Μ”ΝΝ(~A)";
+        Text[ japanese ] = "Κί½ά°Δή‚Ι‚ζ‚ι”ΝΝ•Ϋμ (~A)";
         Text[ chinese_traditional ] = "¨Ο¥Ξ±K½X«OΕ@°Ο°μ(~A)";
         Text[ arabic ] = "δΨΗήΗΚ γΝγνΙ ΘίαγΙ ΣΡ";
         Text[ greek ] = "Περιοχές με προστασία κωδικού πρόσβασης";
@@ -997,10 +997,10 @@ TabPage TP_INSERT_SECTION
         Text[ chinese_simplified ] = "Κά±£»¤µΔ(~P)";
         Text[ russian ] = "Ηΰωθωενξ";
         Text[ polish ] = "Chroniony";
-        Text[ japanese ] = "•Ϋμ‚³‚κ‚½(~P)";
+        Text[ japanese ] = "•Ϋμ‚·‚ι(~P)";
         Text[ chinese_traditional ] = "¨ό«OΕ@(~P)";
         Text[ arabic ] = "γΝγν";
-        Text[ language_user1 ] = "(ΔΔ) Προστατευμένο; - - - -";
+        Text[ language_user1 ] = "(ΔΔ) ΠροστατευEϋN; - - - -";
         Text[ greek ] = "Προστατευόμενο";
         Text[ korean ] = "ΊΈΘ£(~P)";
         Text[ turkish ] = "Korumalύ";
