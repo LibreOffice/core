@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:59:14 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
