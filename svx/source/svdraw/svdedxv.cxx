@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-15 08:18:02 $
+ *  last change: $Author: aw $ $Date: 2002-05-22 10:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,11 @@
 
 #ifndef _SVX_ADJITEM_HXX //autogen
 #include "adjitem.hxx"
+#endif
+
+// #98988#
+#ifndef _SVX_COLORCFG_HXX
+#include "colorcfg.hxx"
 #endif
 
 #define SPOTCOUNT   5
@@ -409,122 +414,139 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
 Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
 {
     Color aBackground(COL_WHITE);
-    BOOL bFound=FALSE;
-    SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextEditObj);
-    if (pText!=NULL && pText->IsClosedObj())
+
+    // #98988# test if we are in High contrast mode; if yes, take
+    // application background color
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    if(rStyleSettings.GetHighContrastMode())
     {
-        bFound=GetDraftFillColor(pText->GetItemSet(),aBackground);
+        svx::ColorConfig aColorConfig;
+        svx::ColorConfigValue aColor(aColorConfig.GetColorValue(svx::DOCCOLOR));
+
+        // use document color
+        aBackground = Color(aColor.nColor);
     }
-    if (!bFound && pTextEditPV!=NULL && pTextEditObj!=NULL)
+    else
     {
-        // Ok, dann eben die Page durchsuchen!
-        Point aPvOfs(pTextEditPV->GetOffset());
-        const SdrPage* pPg=pTextEditPV->GetPage();
-
-        Point aSpotPos[SPOTCOUNT];
-        Color aSpotColor[SPOTCOUNT];
-        Rectangle aSnapRect( pTextEditObj->GetSnapRect() );
-        ULONG nHeight( aSnapRect.GetSize().Height() );
-        ULONG nWidth( aSnapRect.GetSize().Width() );
-        ULONG nWidth14  = nWidth / 4;
-        ULONG nHeight14 = nHeight / 4;
-        ULONG nWidth34  = ( 3 * nWidth ) / 4;
-        ULONG nHeight34 = ( 3 * nHeight ) / 4;
-
-        const SetOfByte& rVisiLayers = pTextEditPV->GetVisibleLayers();
-
-        USHORT i;
-        for ( i = 0; i < SPOTCOUNT; i++ )
+        // original non-contrast code here
+        BOOL bFound=FALSE;
+        SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextEditObj);
+        if (pText!=NULL && pText->IsClosedObj())
         {
-            // Es wird anhand von fuenf Spots die Farbe untersucht
-            switch ( i )
+            bFound=GetDraftFillColor(pText->GetItemSet(),aBackground);
+        }
+        if (!bFound && pTextEditPV!=NULL && pTextEditObj!=NULL)
+        {
+            // Ok, dann eben die Page durchsuchen!
+            Point aPvOfs(pTextEditPV->GetOffset());
+            const SdrPage* pPg=pTextEditPV->GetPage();
+
+            Point aSpotPos[SPOTCOUNT];
+            Color aSpotColor[SPOTCOUNT];
+            Rectangle aSnapRect( pTextEditObj->GetSnapRect() );
+            ULONG nHeight( aSnapRect.GetSize().Height() );
+            ULONG nWidth( aSnapRect.GetSize().Width() );
+            ULONG nWidth14  = nWidth / 4;
+            ULONG nHeight14 = nHeight / 4;
+            ULONG nWidth34  = ( 3 * nWidth ) / 4;
+            ULONG nHeight34 = ( 3 * nHeight ) / 4;
+
+            const SetOfByte& rVisiLayers = pTextEditPV->GetVisibleLayers();
+
+            USHORT i;
+            for ( i = 0; i < SPOTCOUNT; i++ )
             {
-                case 0 :
+                // Es wird anhand von fuenf Spots die Farbe untersucht
+                switch ( i )
                 {
-                    // Center-Spot
-                    aSpotPos[i] = aSnapRect.Center();
-                    aSpotPos[i] += aPvOfs;
-                }
-                break;
+                    case 0 :
+                    {
+                        // Center-Spot
+                        aSpotPos[i] = aSnapRect.Center();
+                        aSpotPos[i] += aPvOfs;
+                    }
+                    break;
 
-                case 1 :
-                {
-                    // TopLeft-Spot
-                    aSpotPos[i] = aSnapRect.TopLeft();
-                    aSpotPos[i].X() += nWidth14;
-                    aSpotPos[i].Y() += nHeight14;
-                    aSpotPos[i] += aPvOfs;
-                }
-                break;
+                    case 1 :
+                    {
+                        // TopLeft-Spot
+                        aSpotPos[i] = aSnapRect.TopLeft();
+                        aSpotPos[i].X() += nWidth14;
+                        aSpotPos[i].Y() += nHeight14;
+                        aSpotPos[i] += aPvOfs;
+                    }
+                    break;
 
-                case 2 :
-                {
-                    // TopRight-Spot
-                    aSpotPos[i] = aSnapRect.TopLeft();
-                    aSpotPos[i].X() += nWidth34;
-                    aSpotPos[i].Y() += nHeight14;
-                    aSpotPos[i] += aPvOfs;
-                }
-                break;
+                    case 2 :
+                    {
+                        // TopRight-Spot
+                        aSpotPos[i] = aSnapRect.TopLeft();
+                        aSpotPos[i].X() += nWidth34;
+                        aSpotPos[i].Y() += nHeight14;
+                        aSpotPos[i] += aPvOfs;
+                    }
+                    break;
 
-                case 3 :
-                {
-                    // BottomLeft-Spot
-                    aSpotPos[i] = aSnapRect.TopLeft();
-                    aSpotPos[i].X() += nWidth14;
-                    aSpotPos[i].Y() += nHeight34;
-                    aSpotPos[i] += aPvOfs;
-                }
-                break;
+                    case 3 :
+                    {
+                        // BottomLeft-Spot
+                        aSpotPos[i] = aSnapRect.TopLeft();
+                        aSpotPos[i].X() += nWidth14;
+                        aSpotPos[i].Y() += nHeight34;
+                        aSpotPos[i] += aPvOfs;
+                    }
+                    break;
 
-                case 4 :
-                {
-                    // BottomRight-Spot
-                    aSpotPos[i] = aSnapRect.TopLeft();
-                    aSpotPos[i].X() += nWidth34;
-                    aSpotPos[i].Y() += nHeight34;
-                    aSpotPos[i] += aPvOfs;
-                }
-                break;
+                    case 4 :
+                    {
+                        // BottomRight-Spot
+                        aSpotPos[i] = aSnapRect.TopLeft();
+                        aSpotPos[i].X() += nWidth34;
+                        aSpotPos[i].Y() += nHeight34;
+                        aSpotPos[i] += aPvOfs;
+                    }
+                    break;
 
+                }
+
+                aSpotColor[i] = Color( COL_WHITE );
+                pPg->GetFillColor(aSpotPos[i], rVisiLayers, bLayerSortedRedraw, aSpotColor[i]);
             }
 
-            aSpotColor[i] = Color( COL_WHITE );
-            pPg->GetFillColor(aSpotPos[i], rVisiLayers, bLayerSortedRedraw, aSpotColor[i]);
-        }
+            USHORT aMatch[SPOTCOUNT];
 
-        USHORT aMatch[SPOTCOUNT];
-
-        for ( i = 0; i < SPOTCOUNT; i++ )
-        {
-            // Wurden gleiche Spot-Farben gefuden?
-            aMatch[i] = 0;
-
-            for ( USHORT j = 0; j < SPOTCOUNT; j++ )
+            for ( i = 0; i < SPOTCOUNT; i++ )
             {
-                if( j != i )
+                // Wurden gleiche Spot-Farben gefuden?
+                aMatch[i] = 0;
+
+                for ( USHORT j = 0; j < SPOTCOUNT; j++ )
                 {
-                    if( aSpotColor[i] == aSpotColor[j] )
+                    if( j != i )
                     {
-                        aMatch[i]++;
+                        if( aSpotColor[i] == aSpotColor[j] )
+                        {
+                            aMatch[i]++;
+                        }
                     }
                 }
             }
-        }
 
-        // Das hoechste Gewicht hat der Spot in der Mitte
-        aBackground = aSpotColor[0];
+            // Das hoechste Gewicht hat der Spot in der Mitte
+            aBackground = aSpotColor[0];
 
-        for ( USHORT nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
-        {
-            // Welche Spot-Farbe wurde am haeufigsten gefunden?
-            for ( USHORT i = 0; i < SPOTCOUNT; i++ )
+            for ( USHORT nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
             {
-                if( aMatch[i] == nMatchCount )
+                // Welche Spot-Farbe wurde am haeufigsten gefunden?
+                for ( USHORT i = 0; i < SPOTCOUNT; i++ )
                 {
-                    aBackground = aSpotColor[i];
-                    nMatchCount = 1;   // Abbruch auch der aeusseren for-Schleife
-                    break;
+                    if( aMatch[i] == nMatchCount )
+                    {
+                        aBackground = aSpotColor[i];
+                        nMatchCount = 1;   // Abbruch auch der aeusseren for-Schleife
+                        break;
+                    }
                 }
             }
         }
