@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageStreamContent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 13:24:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,9 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A PCP Stream is a content which represents a file inside a package. It is
-    always contained in a PCP Folder. A PCP Stream has no children.
+/** A PCP Stream is a content which represents a file inside a package.
+
+    <p>It is always contained in a PCP Folder. A PCP Stream has no children.
 
     @see com::sun::star::ucb::PackageContentProvider
     @see com::sun::star::ucb::PackageFolderContent

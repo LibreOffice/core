@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedDynamicResultSetStubFactory.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,32 +82,35 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** helps to get an remote optimized access for a given <type>DynamicResultSet</type>.
+/** creates a <type>CachedDynamicResultSetStub</type> and connects a non-remote
+    optimized <type>DynamicResultSet</type> to a remote optimized
+    <type>CachedDynamicResultSet</type>.
 
-<p>Pay attention to instanciate this helper on serverside where your source
-<type>DynamicResultSet</type> is instabciated.
+    <p>Pay attention to instanciate this helper on serverside where your source
+    <type>DynamicResultSet</type> was instanciated.
 
-<p>The first method can be used to create a stub on serverside.
+    <p>Method <method>createCachedDynamicResultSetStub</method> can be used to
+    create a stub on serverside.
 
-<p>If you have instanciated a <type>CachedDynamicResultSet</type> on client side already,
-use the second <member>connectToCache</member> to connect your given DynamicResultSet
-with this Cache.
+    <p>If you have instanciated a <type>CachedDynamicResultSet</type> on client
+    side already, use method <member>connectToCache</member> to connect your
+    given DynamicResultSet with this Cache.
 
-<p>The needed cache on server side you can create with
-<type>XCachedDynamicResultSetFactory</type>.
+    <p>The needed cache on server side you can create using
+    <type>XCachedDynamicResultSetFactory</type>.
 */
 
 [ uik(D5F56013-5298-11d4-8B1B0010-4BCAF449), ident( "XCachedDynamicResultSetStubFactory", 1.0 ) ]
 interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** provides the creation of a <type>CachedDynamicResultSetStub</type>.
+    /** creates a remote optimizes <type>XDynamicResultSet</type>.
 
-        <p>The returned interface is a implementations of
-        service <type>CachedDynamicResultSetStub</type>.
+        @param Source
+        must be an instance of service <type>DynamicResultSet</type>.
 
-        <p>The <paramter>Source</parameter> has to be an implememntation of
-        service <type>DynamicResultSet</type>.
+        @returns
+        an instance of service <type>CachedDynamicResultSetStub</type>.
     */
 
     com::sun::star::ucb::XDynamicResultSet  createCachedDynamicResultSetStub(
@@ -118,27 +121,26 @@ interface XCachedDynamicResultSetStubFactory: com::sun::star::uno::XInterface
         client side already, use this to connect your given Source on server
         side to the TargetCache.
 
-        <p>The <paramter>Source</parameter> has to be an implememntation of
-        service <type>DynamicResultSet</type>.
+        @param Source
+        is an instance of service <type>DynamicResultSet</type>.
 
-        <p>The <parameter>TargetCache</parameter> has to be an implememntation
-        of service <type>CachedDynamicResultSet</type>.
+        @param TargetCache
+        is an instance of service <type>CachedDynamicResultSet</type>.
 
-        <p>Internal there will be created a <type>CachedDynamicResultSetStub
-        </type> as stub on server side, but you will not get it ( you will not
-        need to get it ).
+        @param SortingInfo
+        can be an empty sequence. Otherwise, Source will be sorted according
+        to the given sorting data.
 
-        <p>The parameters <parameter>SortingInfo</parameter> and
-        </parameter>CompareFactory</parameter> don't need to contain data.
-        If <parameter>SortingInfo</parameter> contains data and your
-        <parameter>Source</parameter> is not fully sorted until now, it will
-        be sorted with the given parameters.
+        @param CompareFactory
+        will be ignored unless SortingInfo is not empty. Then the supplied
+        factory will be used to instanciate objects used to compare the
+        properties that are involved in sorting.
 
-        <p>raises <exception>AlreadyInitializedException</exception>, if
-        <parameter>TargetCache</parameter> was initialized already.
+        @throws ListenerAlreadySetException
+        if <member>Source</member> is already in use.
 
-        <p>raises <exception>ListenerAlreadySetException</exception>, if
-        <parameter>Source</parameter> is already in use.
+        @throws AlreadyInitializedException
+        if <member>TargetCache</member> already has been initialized.
     */
     void connectToCache(
                   [in] com::sun::star::ucb::XDynamicResultSet Source

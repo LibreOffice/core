@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProviderProxy.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,14 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A proxy for a content provider.
+/** is a proxy for a content provider.
 */
 service ContentProviderProxy
 {
     //-------------------------------------------------------------------------
-    /** gives access to the original content provider behind the proxy. The
-        implementation will instantiate the real content provider only on
+    /** gives access to the original content provider behind the proxy.
+
+        <p>The implementation will instantiate the real content provider only on
         demand using its UNO service name. This will load the content providers
         implementation code (dynamic library), if not already done.
      */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedContentResultSetStubFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,22 +74,20 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** provides the creation of a remote optimized <type>XResultSet</type>. The
-returned interface is a implementations of service
-<type>CachedContentResultSetStub</type>.
+/** creates a <type>CachedContentResultSetStub</type>.
 */
 
 [ uik(06A16081-5189-11d4-8B1A0010-4BCAF449), ident( "XCachedContentResultSetStubFactory", 1.0 ) ]
 interface XCachedContentResultSetStubFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** provides the creation of a remote optimized <type>XResultSet</type>.
+    /** creates a remote optimized <type>XResultSet</type>.
 
-        <p>The returned interface is a implementations of
-        service <type>CachedContentResultSetStub</type>.
+        @param xSource
+        must be an instance of service <type>ContentResultSet</type>.
 
-        <p>The <paramter>Source</parameter> has to be an implememntation of
-        service <type>ContentResultSet</type>.
+        @returns
+        an instance of service <type>CachedContentResultSetStub</type>.
     */
     com::sun::star::sdbc::XResultSet    createCachedContentResultSetStub(
                         [in] com::sun::star::sdbc::XResultSet xSource );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAnyCompareFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,18 +78,22 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Provides a methods to create a <type>XAnyCompare</type> for purpose of
-comparision of two anys.
+/** creates an <type>XAnyCompare</type> instance.
 */
 
 [ uik(C95ED4C2-3B9A-11d4-8B150010-4BCAF449), ident( "XAnyCompareFactory", 1.0 ) ]
 interface XAnyCompareFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** provides the creation of a <type>XAnyCompare</type>
-    dependent on internal data and a propertyname.
+    /** creates an <type>XAnyCompare</type> instance.
+
+        @param PropertyName
+        is the name of a property
+
+        @returns
+        a compare interface
     */
-    com::sun::star::ucb::XAnyCompare    createAnyCompareByName(
+    com::sun::star::ucb::XAnyCompare createAnyCompareByName(
                                         [in] string PropertyName );
 };
 

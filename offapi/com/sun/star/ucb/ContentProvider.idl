@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProvider.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 12:31:55 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A <type>ContentProvider</type> provides access to a set of
- *  <type>Content</type>s.
+/** provides access to a set of <type>Content</type>s.
 */
 service ContentProvider
 {
@@ -121,7 +120,7 @@ service ContentProvider
         will be the original provider. Implementing a content provider proxy
         can be useful if the creation of the real content provider object
         shall be deferred for some reason until the first method gets called
-        on it ( i.e. performance ).
+        on it (i.e. performance).
 
         <p><b>It is highly recommended to support this interface.</b>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyContentProvider.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-08 10:53:34 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,13 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The Hierarchy Content Provider (HCP) implements a Content Provider
-    for the Universal Content Broker (UCB). It provides access to a persistent,
-    customizable hierarchy of contents (folders and links).
+/** The Hierarchy Content Provider (HCP) implements a
+    <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
+    (UCB).
 
-    @see com::sun::star::ucb::UniversalContentBroker
-    @see com::sun::star::ucb::ContentProvider
+    <p>It provides access to a persistent, customizable hierarchy of contents
+    (folders and links).
+
     @see com::sun::star::ucb::Content
 */
 service HierarchyContentProvider
@@ -88,40 +89,38 @@ service HierarchyContentProvider
         <b>HCP Contents</b>
         <ol>
         <li>
-        A HCP Link is a content which points to another (UCB) content.
-        It is always contained in HCP Folder. A HCP Link has no children.
-
-        See <type>HierarchyLinkContent</type>
-
+        A HCP Link (<type>HierarchyLinkContent</type>) is a content which
+        points to another (UCB) content. It is always contained in HCP Folder.
+        A HCP Link has no children.
         </li>
         <li>
-        A HCP Folder is a container for other HCP Folders and HCP Links.
-
-        See <type>HierarchyFolderContent</type>
-
+        A HCP Folder (<type>HierarchyFolderContent</type>) is a container for
+        other HCP Folders and HCP Links.
         </li>
         <li>
-        There is at most one instance of a HCP Root Folder at a time.
+        There is at most one instance of a HCP Root Folder
+        ( <type>HierarchyRootFolderContent</type> ) at a time.
         All other HCP contents are children of this folder. The HCP Root
         Folder can contain HCP Folders and HCP Links. It has the URL
         "vnd.sun.star.hier:/".
-
-        See <type>HierarchyRootFolderContent</type>
-
         </li>
         </ol>
 
-        <b>URL Scheme for HCP Contents</b>
+        <p><b>URL Scheme for HCP Contents</b>
 
-        Each HCP content has an identifier corresponding to the following
+        <p>Each HCP content has an identifier corresponding to the following
         scheme:
 
-            vnd.sun.star.hier:/<path>
+        <ul>
+        <li>
+            vnd.sun.star.hier:/&lt;path&gt;, where &lt;path&gt; is a
+            hierarchical path of the form &lt;name&gt;/.../&lt;name&gt; and
+            where &lt;name&gt; is a string encoded according to the URL
+            conventions.
+        </li>
+        </ul>
 
-            where <path> is a hierarchical path of the form <name>/.../<name>
-            where <name> is a string encoded according to the URL conventions.
-
-        Examples:
+        <p>Examples:
 
         <ul>
         <li>

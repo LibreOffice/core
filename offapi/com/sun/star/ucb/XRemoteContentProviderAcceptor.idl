@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderAcceptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,7 @@ interface XRemoteContentProviderAcceptor: com::sun::star::uno::XInterface
         remote content provider.
 
         @param Factory  A factory through which the remote content provider's
-        <type>com.sun.star.ucb.ContentProviderBroker</type> service can be
-        instantiated.
+        <type>UniversalContentBroker</type> service can be instantiated.
 
         @param Templates  A sequence of URL templates the remote content
         provider is willing to handle.

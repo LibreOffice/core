@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-08 08:58:14 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
         the content provider to register.
 
         <p>This may be <NULL/>, in which case a later
-        <method>XContentProvider::queryContent</method> with an
+        <member>XContentProvider::queryContent</metmber> with an
         <type>XContentIdentifier</type> that matches the <var>Scheme</var>
         will simply return <NULL/>. These "dummy" content providers are useful
         in combination with other content providers that are registered on a

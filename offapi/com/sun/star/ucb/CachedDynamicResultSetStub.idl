@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSetStub.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:03:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,19 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** Provides read access to a static or dynamicly changing
+/** provides read access to a static or dynamicallly changing
     <type>ContentResultSet</type>.
 
-    <p>A <type>DynamicResultSet</type> is returned from the open-command with
-    a <type>XCommandProcessor</type> of the service <type>Content</type>.
+    <p>For example, a <type>DynamicResultSet</type> is returned from the
+    open-command executed by an <type>XCommandProcessor</type> of the service
+    <type>Content</type>.
 */
 
 service CachedDynamicResultSetStub
 {
     //-------------------------------------------------------------------------
     /** In Combination with a <type>CachedDynamicResultSet</type> this provides
-        remote optimized read access to a static or dynamicly changing
+        remote optimized read access to a static or dynamically changing
         <type>ContentResultSet</type>.
 
         <p>The <type>XResultSet</type>s given to the listener in the first
@@ -100,11 +101,11 @@ service CachedDynamicResultSetStub
     /** provides the initialization of the <type>CachedDynamicResultSetStub</type>
         with a source object.
 
-        <p>The <var>Source</var> in <member>XSourceInitialization::setSource</member>
-        has to be an interface <type>XDynamicResultSet</type> and an
+        <p>The <var>Source</var> in
+        <member>XSourceInitialization::setSource</member> has to be an
         implementation of service <type>DynamicResultSet</type>
 
-        <p>This interface is required. </p>
+        <p>This interface is required.
      */
     interface com::sun::star::ucb::XSourceInitialization;
 };

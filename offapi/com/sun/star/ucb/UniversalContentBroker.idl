@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UniversalContentBroker.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 12:58:22 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,12 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The <type>UniversalContentBroker</type> is a one-instance service that
-    provides access to a set of <type>Content</type>s via
-    <type>ContentProvider</type>s.
+/** is a one-instance service that provides access to a set of
+    <type>Content</type>s via <type>ContentProvider</type>s.
 
-    <p>If the instance is created with two arguments of type <type>string</type>,
-    these two strings are used to configure the newly instantiated broker; see
-    the description of the required
+    <p>If the instance is created with two arguments of type
+    <type>string</type>, these two strings are used to configure the newly
+    instantiated broker; see the description of the required
     <type scope="com::sun::star::lang">XInitialization</type> interface for
     details.
 
@@ -112,13 +111,14 @@ service UniversalContentBroker
         <p>Those references i.e. may occure if content provider implementations
         hold references to the Broker. The Broker itself always holds its
         providers. If the Broker shall be released,
-        <member>XComponent::dispose</member> must be called at the Broker.
-        The implementation of this method must call
-        <member>XEventListener::disposing</member> on the registered listeners
-        ( the providers holding the Broker must be those listeners ) and
-        release the appropriate object references. At the other hand, the
-        implementation of XEventListener::disposing must release its
-        appropriate references.
+        <member scope="com::sun::star::lang">XComponent::dispose</member>
+        must be called at the Broker. The implementation of this method must
+        call
+        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        on the registered listeners ( the providers holding the Broker must be
+        those listeners ) and release the appropriate object references. At
+        the other hand, the implementation of XEventListener::disposing must
+        release its appropriate references.
 
         <p>This interface is required.
      */
@@ -151,7 +151,7 @@ service UniversalContentBroker
     /** supports the configuration of a newly created broker.
 
         <p>The
-        <method scope="com::sun::star::lang::XInitialization">initialize</method>
+        <member scope="com::sun::star::lang"XInitialization::initialize</member>
         method should be called with two arguments of type
         <type>string</type>. These strings are used as a pair of keys to
         retrieve a set of content provider descriptions from the configuration
@@ -162,15 +162,15 @@ service UniversalContentBroker
         provider services at the broker.
 
         <p>Typical values for the pair of strings would be
-        <code>"Local"</code>/<code>"UniversalContentBroker"</code>, to
-        configure a broker that contains all the relevant content providers.
+        <code>"Local"</code>/<code>"Office"</code>, to configure a broker that
+        contains all the relevant content providers.
 
         <p>This interface is required.
      */
     interface com::sun::star::lang::XInitialization;
 
     //-------------------------------------------------------------------------
-    /** enables the caller to let the Content Broker execute commands.
+    /** enables the caller to execute commands at the broker.
 
         <p>This interface is required.
 
@@ -199,7 +199,8 @@ service UniversalContentBroker
         // The implementation must be able to handle Contents provided
         // by any Content Provider. This is different from the command
         // 'transfer' that can be supported by a Content. That command
-        // typically can only handle Contents provided by one Content Provider.
+        // typically can only handle <type>Content</type>s provided by one
+        // <type>ContentProvider</type>.
 
         void
             globalTransfer

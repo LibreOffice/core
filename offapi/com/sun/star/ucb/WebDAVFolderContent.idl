@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WebDAVFolderContent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-10 13:09:39 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ service WebDAVFolderContent
         <ol>
         <li>
         Let the parent folder create a new content by calling
-        <method>XContentCreator::createNewContent</method> on it. The content
+        <member>XContentCreator::createNewContent</member> on it. The content
         type to use for new folders is
         "application/vnd.sun.star.webdav-collection". To create a new DCP
         Document, use the type "application/http-content".

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCachedDynamicResultSetFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,36 +78,36 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** helps to get an remote optimized access for a given <type>DynamicResultSet
-</type>.
+/** creates a <type>CachedDynamicResultSet</type>.
 
-<p>Pay attention to instanciate this helper on clientside where your want to
-read the data respectively where you have instantiated the listener to the
-<type>XDynamicResultSet</type>.
+    <p>Pay attention to instanciate this helper on clientside where your want
+    to read the data respectively where you have instantiated the listener to
+    the <type>XDynamicResultSet</type>.
 
-<p>The needed stub on server side you can create with
-<type>XCachedDynamicResultSetStubFactory</type>.
+    <p>The needed stub on server side can be created using
+    <type>XCachedDynamicResultSetStubFactory</type>.
 */
 
 [ uik(D5F56011-5298-11d4-8B1B0010-4BCAF449), ident( "XCachedDynamicResultSetFactory", 1.0 ) ]
 interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** provides the creation of a <type>CachedDynamicResultSet</type>.
+    /** creates a remote optimizes <type>XDynamicResultSet</type>.
 
-        <p>The returned interface is a implementations of
-        service <type>CachedDynamicResultSet</type>.
+        @param SourceStub
+        must be an instance of service <type>CachedDynamicResultSetStub</type>.
+        It can be <NULL/>. In this case you can use the interface
+        <type>XSourceInitialization</type> of the returned
+        <type>CachedDynamicResultSet</type> to set the stub later.
 
-        <p><paramter>SourceStub</parameter> has to be an implememntation of
-        service <type>CachedDynamicResultSetStub</type>. It can be NULL also,
-        in this case you can use the interface <type>XSourceInitialization</type>
-        of <type>CachedDynamicResultSet</type> to set the stub afterwards.
+        @param ContentIdentifierMapping
+        is not required, but can be set if it is necessary to change the
+        identity of the contents accessable via the interface
+        <type>XContentAccess</type> of the <type>ContentResultSet</type>
+        (e.g., if merging two sources of the same type).
 
-        <p><parameter>ContentIdentifierMapping</parameter> is not required
-        but can be set if it is necessary to change the identity of the contents
-        accessable via the interface <type>XContentAccess</type> of the
-        <type>ContentResultSet</type> (e.g., if merging two sources of the
-        same type).
+        @returns
+        an instance of service <type>CachedDynamicResultSet</type>.
     */
     com::sun::star::ucb::XDynamicResultSet  createCachedDynamicResultSet(
           [in] com::sun::star::ucb::XDynamicResultSet SourceStub

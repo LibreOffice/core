@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 12:31:54 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,12 @@ service Content
         registered at the content ( the content holds the listeners ) and
         the implementation of the listener interface holds a reference on
         the content. If the content shall be released,
-        <member>XComponent::dispose</member> must be called at the content.
-        The implementation of this method must call
-        <member>XEventListener::disposing</member> on the registered
-        listeners and release the appropriate object references. At the other
-        hand, the implementation of XEventListener::disposing must release
-        its appropriate references.
+        <member scope="com::sun::star::lang">XComponent::dispose</member> must
+        be called at the content. The implementation of this method must call
+        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        on the registered listeners and release the appropriate object
+        references. At the other hand, the implementation of
+        XEventListener::disposing must release its appropriate references.
 
         <p>This interface is required.
      */
@@ -183,23 +183,23 @@ service Content
         //       column instead.
         <type scope="com::sun::star::sdbc">XRow</type>
             getPropertyValues
-                sequence< <type scope="com::sun::star::beans">Property</type> >
+                sequence&lt; <type scope="com::sun::star::beans">Property</type> &gt; aProps
 
         // This command sets property values of the content.
         // Note: The execution will not be aborted, if there are properties
         //       contained, that are unknown to the content!
         void
             setPropertyValues
-                sequence< <type scope="com::sun::star::beans">PropertyValue</type> >
+                sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &lt; aValues
 
         -----------------------------------------------------------------------
         Optional commands:
         -----------------------------------------------------------------------
 
         // For folder objects, this command will return an implementation
-        // of service com::sun::star::ucb::DynamicContentResultSet.
+        // of service <type>DynamicContentResultSet</type>.
         //
-        // The OpenCommandArgument2 members must be filled as follows:
+        // The <type>OpenCommandArgument2</type> members must be filled as follows:
         //
         // Mode         : ALL or FOLDERS or DOCUMENTS. The implementation
         //                of the open command MUST support all these modes!
@@ -214,18 +214,17 @@ service Content
         //                be sorted, otherwise it can be left empty.
         //
         // The exceution must be aborted by the implementation of this command
-        // ( by throwing a CommandAbortedException ), if an unsupported open
-        // mode is requested.
-        //
+        // (by throwing a <type>CommandAbortedException</type>), if an
+        // unsupported mode is requested.
         <type>XDynamicResultSet</type>
             <B>open</B>
                 <type>OpenCommandArgument2</type> aOpenCommandArg
 
-        // For non-folder objects, the OpenCommandArgument2 struct will be
-        // prefilled with a data sink object, which will be filled
+        // For non-folder objects, the <type>OpenCommandArgument2</type> struct
+        // will be prefilled with a data sink object, which will be filled
         // with the content data.
         //
-        // The OpenCommandArgument2 members must be filled as follows:
+        // The <type>OpenCommandArgument2</type> members must be filled as follows:
         //
         // Mode         : DOCUMENT or DOCUMENT_SHARE_DENY_NONE or
         //                DOCUMENT_SHARE_DENY_WRITE. Support for DOCUMENT
@@ -237,9 +236,8 @@ service Content
         // SortingInfo  : empty ( ignored )
         //
         // The exceution must be aborted by the implementation of this command
-        // ( by throwing a CommandAbortedException ), if an unsupported open
-        // mode is requested.
-        //
+        // (by throwing a <type>CommandAbortedException</type>), if an
+        // unsupported mode is requested.
         void
             <B>open</B>
                 <type>OpenCommandArgument2</type> aOpenCommandArg
@@ -248,7 +246,7 @@ service Content
         // when "updating" a POP3-Inbox, the content for that box will get
         // and store all new objects on the appropriate server. The inserted
         // contents will be notified by calling
-        // <member>com::sun::star::ucb::XContent::contentEvent</member>.
+        // <member>XContent::contentEvent</member>.
         void
             <B>update</B>
                 <type>OpenCommandArgument2</type> aOpenCommandArg
@@ -259,7 +257,7 @@ service Content
         // store all new objects and destroy all cached data for objects no
         // longer existing on the server. The inserted/deleted contents will
         // be notified by calling
-        // <member>com::sun::star::ucb::XContent::contentEvent</member>.
+        // <member>XContent::contentEvent</member>.
         void
             <B>synchronize</B>
                 <type>OpenCommandArgument2</type> aOpenCommandArg
@@ -269,15 +267,15 @@ service Content
             <B>close</B>
                 void
 
-        // This command deletes an object. If TRUE is passes as parameter,
-        // the object will be destroyed physically. Otherwise it will will
-        // be put into trash can, if such a service is available and the
-        // object to delete supports the command "undelete".
+        // This command deletes an object. If <TRUE/> is passed as parameter,
+        // the object will be destroyed physically. Otherwise it will be put
+        // into trash can, if such a service is available and the object to
+        // be deleted supports the command "undelete".
         // On successful completion of this command, the deleted content
         // must propagate its deletion by notifying a <type>ContentEvent</type>
-        // - <type>ContentAction::DELETED</type>. Additionally, the contents
+        // - <member>ContentAction::DELETED</member>. Additionally, the contents
         // parent must notify a <type>ContentEvent</type>
-        // - <type>ContentAction::REMOVED</type>
+        // - <member>ContentAction::REMOVED</member>
         void
             <B>delete</B>
                 boolean bDeletePhysically
@@ -291,10 +289,10 @@ service Content
 
         // (1) This command inserts a new content. It commits the process of
         // creating a new content via calling another content's method
-        // <member>com::sun::star::ucb::XContentCreator::createNewContent</member>
+        // <member>XContentCreator::createNewContent</member>
         // The command is not called on the content which created the new
         // content, because the new object already knows where it is to be
-        // inserted (i.e. Calling "createNewContent" with content type for a
+        // inserted (i.e. Calling createNewContent with the content type for a
         // message on a News Group creates a content which internally belongs
         // to the Outbox. Calling "insert" on that message will result in
         // posting the article to the appropriate News Group). Not calling
@@ -303,21 +301,27 @@ service Content
         // "delete" is necessary.
         // On successful completion of this command, the parent of the inserted
         // content must propagate the change by notifying a
-        // <type>ContentEvent</type> - <type>ContentAction::INSERTED</type>.
+        // <type>ContentEvent</type> - <member>ContentAction::INSERTED</member>.
         //
         // (2) Additionally this command can be called at any time to overwrite
         // the data of an existing content.
         void
             <B>insert</B>
-                <type>InsertCommandArgument</type>
+                <type>InsertCommandArgument</type> aInsertCommandArg
 
         // This command searches for subcontents of a content matching the
         // given search criteria. The command will return an implemenation
-        // of service com::sun::star::ucb::DynamicContentResultSet.
-        com::sun::star::ucb::XDynamicResultSet
+        // of service <type>DynamicContentResultSet</type>.
+        <type>XDynamicResultSet</type>
             <B>search</B>
                 <type>SearchCommandArgument</type> aSearchCommandArg
 
+        // <b>Important note:</b> A client that wants to transfer data should
+        // not execute this command, but it should execute the command
+        // "globalTransfer" at the/ <type>UniversalContentBroker</type>
+        // instance. This command is able to transfer all kind of content
+        // supported by that UCB.
+        //
         // This command transfers (copies/moves) an object from one location
         // to another. It must be executed at the folder content representing
         // the destination of the transfer operation. Note that the
@@ -332,11 +336,10 @@ service Content
         // another folder on the same IMAP server should work, because it can
         // be implemeted efficiently. If an implementation is not able to
         // handle a given source URL, it should indicate this by issuing a
-        // <type>com::sun::star::ucb::InteractiveBadTransferURLException</type>
-        // interaction request. Source and target folder may be the same when
-        // doing a move operation.
+        // <type>InteractiveBadTransferURLException</type> interaction request.
+        // Source and target folder may be the same when doing a move operation.
         //
-        // Transfers without the transfer command are done as follows:
+        // Transfers without the transfer command can be done as follows:
         //
         // 1) Create a new content at the target folder
         //    --> targetContent = target.XContentCreator::createNewContent(...)
@@ -349,12 +352,8 @@ service Content
         // 4) For move operations only: destroy the source content
         //    sourceContent.execute( "delete", ... )
         //
-        // This mechanism should work for all transfer operations, but
-        // generally it's less efficient than the transfer command. Therefore,
-        // a client that wants to transfer data should first try to execute
-        // a transfer command at the target folder. If the excution fails,
-        // the client must transfer the content using the
-        // createNew-transferProps-insert sequence described above.
+        // This mechanism should work for all transfer operations, but generally
+        // it's less efficient than the transfer command.
         void
             <B>transfer</B>
                 <type>TransferInfo</type> aTransferInfo
@@ -421,7 +420,7 @@ service Content
         // fields of a MIME-message, or the document info of an
         // office document ). For some standard header fields there
         // are predefined separate properties, like &quot;MessageTo&quot;.
-        sequence< <type>DocumentHeaderField</type> > DocumentHeader
+        sequence&lt; <type>DocumentHeaderField</type> &gt; DocumentHeader
 
         // contains information about the way a folder stores the
         // contents of (remote) documents.
@@ -609,7 +608,8 @@ service Content
 
         <p>This interface must be implemented, if the implementation can
         dynamically change it's property set ( e.g. because it implements
-        the interface <type>XPropertyContainer</type>. )
+        the interface
+        <type scope="com::sun::star::beans">XPropertyContainer</type>. )
 
         <p>It is recommended to implement this interface.
      */
@@ -644,9 +644,9 @@ service Content
     /** provides access to the parent content of this content.
 
         <p>The object returned by the implementation of the method
-        <member>com::sun::star::container::XChild::getParent()</member> must
-        implement the service <type>Content</type>. If the content is a root
-        object, an empty interface may be returned.
+        <member scope="com::sun::star::container">XChild::getParent()</member>
+        must implement the service <type>Content</type>. If the content is a
+        root object, an empty interface may be returned.
 
         <p>This interface must be implemented by a content which is a (logical)
         child of a content.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedContentResultSet.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:51 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module ucb {
 
 service CachedContentResultSet
 {
-    service ContentResultSet;
+    service com::sun::star::ucb::ContentResultSet;
 
     //-------------------------------------------------------------------------
     /** contains the number of result set rows that should be fethched from
@@ -100,12 +100,13 @@ service CachedContentResultSet
     /** contains the direction for fetching rows from an underlying database.
 
     <p>could contain a value of constants group
-    <type>com::sun::star::sdbc::FetchDirection</type>.
+    <type scope="com::sun::star::sdbc">FetchDirection</type>.
 
     <p>The default value is implementation specific.
 
     <p>If you set <var>FetchDirection</var> to UNKNOWN, an implementation
-    specific <type>com::sun::star::sdbc::FetchDirection</type> will be used.
+    specific <type scope="com::sun::star::sdbc">FetchDirection</type> will be
+    used.
     */
     [property] long FetchDirection;
 };

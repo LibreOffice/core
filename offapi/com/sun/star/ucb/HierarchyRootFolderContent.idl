@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyRootFolderContent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-08 10:53:34 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,10 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** A HCP Root Folder is the root container for all other HCP Folders and HCP
-    Links. It always has the URL "vnd.sun.star.hier:/". A HCP Root Folder
-    neither can't be created nor deleted by a UCB client.
+    Links.
+
+    <p>It always has the URL "vnd.sun.star.hier:/". A HCP Root Folder neither
+    can't be created nor deleted by a UCB client.
 
     @see com::sun::star::ucb::HierarchyContentProvider
     @see com::sun::star::ucb::HierarchyFolderContent
@@ -149,6 +151,7 @@ service HierarchyRootFolderContent
         </li>
         <li>
         transfer ( only transfers from one hierarchy folder to another supported )
+        </li>
         </ul>
 
         <b>Supported Properties</b>
@@ -213,7 +216,7 @@ service HierarchyRootFolderContent
         <ol>
         <li>
         Let the parent folder create a new content by calling
-        <method>XContentCreator::createNewContent</method> on it. The content
+        <member>XContentCreator::createNewContent</member> on it. The content
         type to use for new folders is "application/vnd.sun.star.hier-folder".
         To create a new link, use the type "application/vnd.sun.star.hier-link".
         </li>

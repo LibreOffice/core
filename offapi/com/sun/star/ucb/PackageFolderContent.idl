@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageFolderContent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 13:24:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ service PackageFolderContent
         <ol>
         <li>
         Let the parent folder create a new content by calling
-        <method>XContentCreator::createNewContent</method> on it. The content
+        <member>XContentCreator::createNewContent</member> on it. The content
         type to use for new folders is "application/vnd.sun.star.pkg-folder".
         To create a new PCP Stream, use the type
         "application/vnd.sun.star.pkg-stream".
@@ -247,8 +247,9 @@ service PackageFolderContent
         <li>
         Let the new child ( not the parent! ) execute the command "insert".
         This will commit the creation process. For streams, you need to supply
-        the implementation of an <type>com::sun::star::io::XInputStream</type>
-        with the command's parameters, that provides access to the stream data.
+        the implementation of an
+        <type scope="com::sun::star::io">XInputStream</type> with the command's
+        parameters, that provides access to the stream data.
         </li>
         </ol>
 
@@ -259,7 +260,8 @@ service PackageFolderContent
         the URL for the new content ( last part of the path will become the
         title of the new stream ) and to obtain a Content object for that URL
         from the UCB. Then let the content execute the command "insert". The
-        command will fail, if you set the command's parameter "ReplaceExisting"
+        command will fail, if you set the command's parameter
+        <member>InsertCommandArgument::ReplaceExisting"</member>
         to false and there is already a stream with the title given by the
         content's URL.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderDistributor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ module com { module sun { module star { module ucb {
 
 //=============================================================================
 /** Distribute a content broker to variuos
-    <type>com::sun::star::ucb::XRemoteContentProviderAcceptor</type>s.
+    <type>XRemoteContentProviderAcceptor</type>s.
 
     @version 1.0
     @author Stephan Bergmann
-    @see <type>com::sun::star::ucb::XRemoteContentProviderAcceptor</type>
+    @see XRemoteContentProviderAcceptor
 */
 [ uik(F0C3B390-655E-11D4-9FB50050-04526AAD), ident("XRemoteContentProviderDistributor", 1.0) ]
 interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
@@ -97,14 +97,14 @@ interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
     /** Offer the local content broker to a remote content provider acceptor.
 
         <p> The Uno Url is handed to the
-        <type>com.sun.star.bridge.UnoUrlResolver</type> service, which is
-        responsible for raising any of the advertised exceptions. </p>
+        <type scope="com::sun::star::bridge">UnoUrlResolver</type> service,
+        which is responsible for raising any of the advertised exceptions. </p>
 
         @param Url  A Uno Url to address the
-        <type>com::sun::star::ucb::XRemoteContentProviderAcceptor</type>.
+        <type>XRemoteContentProviderAcceptor</type>.
 
         @param Identifier  An identifier handed to the
-        <type>com::sun::star::ucb::XRemoteContentProviderAcceptor</type>.
+        <type>XRemoteContentProviderAcceptor</type>.
 
         @returns success indicator.  Escpecially, if there's already a
         connection to the given Url, the call will fail, no matter whether
@@ -121,7 +121,7 @@ interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
         content provider acceptor.
 
         @param Url  A Uno Url to address the
-        <type>com::sun::star::ucb::XRemoteContentProviderAcceptor</type>.
+        <type>XRemoteContentProviderAcceptor</type>.
 
         @returns success indicator.
     */

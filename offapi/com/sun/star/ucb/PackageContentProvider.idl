@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageContentProvider.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-10 08:51:30 $
+ *  last change: $Author: kso $ $Date: 2001-02-08 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,12 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** The Package Content Provider (PCP) implements a Content Provider
-    for the Universal Content Broker (UCB). It provides access to packages,
-    ( zip / jar archive files ) containing folders and streams.
+/** The Package Content Provider (PCP) implements a <type>ContentProvider</type>
+    for the <type>UniversalContentBroker</type> (UCB).
 
-    @see com::sun::star::ucb::UniversalContentBroker
-    @see com::sun::star::ucb::ContentProvider
+    <p>It provides access to packages ( zip / jar archive files ) containing
+    folders and streams.
+
     @see com::sun::star::ucb::Content
 */
 service PackageContentProvider
@@ -88,23 +88,19 @@ service PackageContentProvider
         <b>PCP Contents</b>
         <ol>
         <li>
-        A PCP Stream is a content which represents a file inside a package.
-        It is always contained in a PCP Folder. A PCP Stream has no children.
-
-        See <type>PackageStreamContent</type>
-
+        A PCP Stream (<type>PackageStreamContent</type>) is a content which
+        represents a file inside a package. It is always contained in a PCP
+        Folder. A PCP Stream has no children.
         </li>
         <li>
-        A PCP Folder is a container for other PCP Folders and PCP Streams.
-
-        See <type>PackageFolderContent</type>
-
+        A PCP Folder (<type>PackageFolderContent</type>) is a container for
+        other PCP Folders and PCP Streams.
         </li>
         </ol>
 
-        <b>URL Scheme for PCP Contents</b>
+        <p><b>URL Scheme for PCP Contents</b>
 
-        Each HCP content has an identifier corresponding to the following
+        <p>Each HCP content has an identifier corresponding to the following
         scheme:
 
         <ul>
@@ -139,7 +135,7 @@ service PackageContentProvider
         </li>
         </ul>
 
-        Examples:
+        <p>Examples:
 
         <ul>
         <li>
