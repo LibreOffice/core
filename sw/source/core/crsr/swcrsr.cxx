@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-14 12:44:42 $
+ *  last change: $Author: ama $ $Date: 2002-02-20 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,9 +1237,11 @@ FASTBOOL SwCursor::GoPrevWord()
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        if( nPtPos )
+            --nPtPos;
         nPtPos = (xub_StrLen)pBreakIt->xBreak->previousWord(
                                 pTxtNd->GetTxt(), nPtPos,
-            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
+            pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
 
         if( 0 <= nPtPos && nPtPos < pTxtNd->GetTxt().Len() )
