@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:23:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ uno::Reference<backend::XLayer> LocalSingleBackend::createSimpleLayer(
     if (!impl_getLayerSubDirectories(aLayerBaseUrl,aLayerUrl,aSubLayerUrl))
         return NULL;
 
-    SimpleLocalFileLayer * pLayer = new SimpleLocalFileLayer(xFactory, aLayerUrl, componentToPath(aComponent));
+    SimpleLocalFileLayer * pLayer = new SimpleLocalFileLayer(xFactory, aLayerUrl, componentToPath(aComponent) + kDataSuffix);
     return pLayer;
 }
 //------------------------------------------------------------------------------
