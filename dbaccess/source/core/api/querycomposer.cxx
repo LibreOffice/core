@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 14:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-//#include <com/sun/star/sdbc/XConnection.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #endif
@@ -172,6 +169,12 @@ namespace dbaccess
         {
             disposing();
         }
+        virtual void SAL_CALL disposing(void)
+        {
+            // it is not allowed to call the parent disposing because we only increment the refcount
+            // and do NOT create our own columns
+            m_aColumns.clear();
+        }
     };
     // -------------------------------------------------------------------------
     Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
@@ -200,7 +203,8 @@ namespace dbaccess
         {}
         virtual void SAL_CALL disposing(void)
         {
-            OPrivateTables_BASE::disposing();
+            // it is not allowed to call the parent disposing because we only increment the refcount
+            // and do NOT create our own tables
             m_aTables.clear();
         }
     };
