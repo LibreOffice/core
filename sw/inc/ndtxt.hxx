@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:32:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ public:
     // Numerierung
     const SwNodeNum* UpdateNum( const SwNodeNum& );
     SwNumRule *GetNumRule() const;
-    const SwNodeNum* GetNum() const             { return pNdNum; }
+    const SwNodeNum* GetNum() const; // #i29363#
     const SwNodeNum* GetOutlineNum() const;
     BOOL MayBeNumbered() const; // #i23730#
     BOOL IsOutlineNum() const;
