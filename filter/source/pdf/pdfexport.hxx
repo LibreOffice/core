@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-10 15:28:59 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 #define PDFEXPORT_HXX
 
 #include "pdffilter.hxx"
+#include <tools/multisel.hxx>
+#include <vcl/pdfwriter.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
+#include <com/sun/star/view/XRenderable.hpp>
+#endif
 
 class SvEmbeddedObject;
 class GDIMetaFile;
@@ -72,6 +78,7 @@ class Gradient;
 class BitmapEx;
 class Point;
 class Size;
+
 namespace vcl { class PDFWriter; }
 
 // -------------
@@ -83,17 +90,36 @@ class PDFExport
 private:
 
     Reference< XComponent > mxSrcDoc;
+    Reference< task::XStatusIndicator > mxStatusIndicator;
 
-    sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, sal_Int32 nCompressMode );
-    sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode );
-    void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly, const Gradient& rGradient, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode );
-    void                    ImplWriteBitmapEx( ::vcl::PDFWriter& rWriter, VirtualDevice& rDummyVDev, sal_Int32 nCompressMode,
-                                                                const Point& rPoint, const Size& rSize, const BitmapEx& rBitmap );
+    sal_Bool                mbUseTaggedPDF;
+    sal_Bool                mbExportNotes;
+    sal_Bool                mbExportNotesPages;
+    sal_Bool                mbUseTransitionEffects;
+
+    sal_Bool                mbUseLosslessCompression;
+    sal_Bool                mbReduceImageResolution;
+    sal_Int32               mnMaxImageResolution;
+    sal_Int32               mnQuality;
+    sal_Int32               mnFormsFormat;
+    sal_Int32               mnProgressValue;
+
+    sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
+                                                const GDIMetaFile& rMtf );
+    sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData* pPDFExtOutDevData,
+                                                const GDIMetaFile& rMtf, VirtualDevice& rDummyVDev );
+    void                    ImplWriteGradient( ::vcl::PDFWriter& rWriter, const PolyPolygon& rPolyPoly,
+                                                const Gradient& rGradient, VirtualDevice& rDummyVDev );
+    void                    ImplWriteBitmapEx( ::vcl::PDFWriter& rWriter, VirtualDevice& rDummyVDev,
+                                                const Point& rPoint, const Size& rSize, const BitmapEx& rBitmap );
 
 public:
 
-                            PDFExport( const Reference< XComponent >& rxSrcDoc );
+                            PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& xStatusIndicator );
                             ~PDFExport();
+
+    sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,
+                                MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions );
 
     sal_Bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
 };
