@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:43:11 $
+ *  last change: $Author: rt $ $Date: 2000-11-24 17:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,6 +924,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ korean ] = "Base point";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Basispunkt";
     };
     CheckBox CBX_SCALE
     {
@@ -1277,14 +1278,14 @@ TabPage RID_SVXPAGE_ANGLE
         Unit = FUNIT_CUSTOM ;
         CustomUnitText = " Grad" ;
         CustomUnitText [ ENGLISH ] = " Degree" ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         SpinSize = 500 ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ italian ] = "Gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ portuguese ] = "Graus" ;
         CustomUnitText[ chinese_simplified ] = "¶È";
@@ -1326,6 +1327,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ korean ] = "Rotation point";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Rotationspunkt";
     };
     Control CTL_ANGLE
     {
@@ -1451,7 +1453,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ japanese ] = "ŒXÎ‚³‚¹‚é";
         Text[ chinese_traditional ] = "¶É±×";
         Text[ arabic ] = "ãÇÆá";
-        Text[ greek ] = "ĞëÜãéá";
+        Text[ greek ] = "ËïîÜ";
         Text[ korean ] = "±â¿ï±â";
         Text[ turkish ] = "Duruş eğimi";
         Text[ language_user1 ] = " ";
@@ -1500,12 +1502,12 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText = " Grad" ;
         CustomUnitText [ ENGLISH ] = " Degree" ;
         SpinSize = 500 ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         CustomUnitText [ italian ] = "gradi" ;
         CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ french ] = " degrés" ;
         CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ portuguese_brazilian ] = "Grad" ;
         CustomUnitText [ portuguese ] = "Graus" ;
@@ -1526,7 +1528,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ japanese ] = "ŒXÎ‚³‚¹‚é/Šp‚Ì”¼Œa‚Ì’·‚³";
     Text[ chinese_traditional ] = "¶É±×/¨¤«×";
     Text[ arabic ] = "ãÇÆá / äÕİ ŞØÑ ÇáÒÇæíÉ";
-    Text[ greek ] = "ĞëÜãéá / Áêôßíá ãùíßáò";
+    Text[ greek ] = "ËïîÜ / Áêôßíá ãùíßáò";
     Text[ korean ] = "±â¿ï±â / ¸ğ¼­¸® °¢µµ";
     Text[ turkish ] = "Duruş eğimi / Köşe çapı";
     Text[ language_user1 ] = " ";
@@ -1663,7 +1665,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ japanese ] = "ŒXÎ‚³‚¹‚é/Šp‚Ì”¼Œa‚Ì’·‚³";
                 Text[ chinese_traditional ] = "¶É±×/¨¤«×";
                 Text[ arabic ] = "ãÇÆá / äÕİ ŞØÑ ÇáÒÇæíÉ";
-                Text[ greek ] = "ĞëÜãéá / Áêôßíá ãùíßáò";
+                Text[ greek ] = "ËïîÜ / Áêôßíá ãùíßáò";
                 Text[ korean ] = "±â¿ï±â / ¸ğ¼­¸® °¢µµ";
                 Text[ turkish ] = "Duruş eğimi / Köşe çapı";
                 Text[ language_user1 ] = " ";
