@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtertracer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:44 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
 #include <com/sun/star/util/SearchResult.hpp>
 #endif
+#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -127,6 +130,7 @@
 #define NMSP_BEANS      com::sun::star::beans
 #define NMSP_LANG       com::sun::star::lang
 #define NMSP_UTIL       com::sun::star::util
+#define NMSP_SAX        com::sun::star::xml::sax
 #define NMSP_LOGGING    NMSP_UTIL::logging
 
 
@@ -154,6 +158,9 @@
     URL             string                          Defines the URL, which is used to create an output stream.
                                                     This property is used only, if there is no valid
                                                     OutputStream property available.
+
+    DocumentHandler com.sun.star.xml.sax.XDocumentHandler   The output can also be written to a DocumentHandler,
+                                                            then the "characters" method of the handler is used.
 
     LogLevel        long                            Defines the LogLevel for the FilterTracer.
                                                     Using logp with a LogLevel that is higher as the LogLevel
@@ -195,10 +202,11 @@ class FilterTracer : public cppu::WeakImplHelper4
     rtl::OUString   msURL;
 
     SvStream*       mpStream;
-    REF( NMSP_IO::XOutputStream )   mxOutputStream;
+    REF( NMSP_IO::XOutputStream )       mxOutputStream;
+    REF( NMSP_SAX::XDocumentHandler)    mxDocumentHandler;
 
-    REF( NMSP_UTIL::XTextSearch )   mxTextSearch;
-    NMSP_UTIL::SearchOptions        maSearchOptions;
+    REF( NMSP_UTIL::XTextSearch )       mxTextSearch;
+    NMSP_UTIL::SearchOptions            maSearchOptions;
 
     sal_Bool                FilterTracer::ImplFilter( const rtl::OUString& rFilter, const rtl::OUString& rString );
 
