@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:29:13 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,13 @@
 #include "cmdlinehelp.hxx"
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
+#include "exithelper.hxx"
 #include "javainteractionhandler.hxx"
 #include "../migration/wizard.hxx"
 
+#ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSDISPATCH_HPP_
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATION_HPP_
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #endif
@@ -85,6 +89,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSystemShellExecute.hpp>
@@ -332,6 +339,7 @@ using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::container;
 
+namespace css = ::com::sun::star;
 
 ResMgr*                    desktop::Desktop::pResMgr = 0;
 sal_Bool                desktop::Desktop::bSuppressOpenDefault = sal_False;
@@ -463,7 +471,7 @@ void FatalErrorExit(OUString const & aMessage)
     aBootstrapFailedBox.SetText( aProductKey );
     aBootstrapFailedBox.Execute();
 
-    _exit( 333 );
+    _exit( ExitHelper::E_FATAL_ERROR );
 }
 
 void FatalError(OUString const & aMessage)
@@ -624,11 +632,11 @@ void Desktop::Init()
     {
         CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 #ifdef UNX
-        //  check whether we need to print cmdline help
-        if ( pCmdLineArgs->IsHelp() ) {
-            displayCmdlineHelp();
-            _exit(0);
-        }
+    //  check whether we need to print cmdline help
+    if ( pCmdLineArgs->IsHelp() ) {
+        displayCmdlineHelp();
+        _exit( ExitHelper::E_NO_ERROR );
+    }
 #endif
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
@@ -640,7 +648,7 @@ void Desktop::Init()
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
             // 2nd office startup should terminate after sending cmdlineargs through pipe
-            _exit( 0 );
+            _exit( ExitHelper::E_SECOND_OFFICE );
         }
         else if ( pCmdLineArgs->IsHelp() )
         {
@@ -1054,6 +1062,84 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
      return;
 }
 
+//-----------------------------------------------
+/** @short  check if recovery must be started or not.
+
+    @param  bCrashed [boolean ... out!]
+            the office crashed last times.
+            But may be there are not recovery data.
+
+    @param  bDataExists [boolean ... out!]
+            there exists some recovery data.
+*/
+void impl_checkRecoveryState(sal_Bool& bCrashed   ,
+                             sal_Bool& bDataExists)
+{
+    static ::rtl::OUString SERVICENAME_RECOVERYCORE = ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery");
+    static ::rtl::OUString PROP_CRASHED             = ::rtl::OUString::createFromAscii("Crashed"                        );
+    static ::rtl::OUString PROP_EXISTSRECOVERY      = ::rtl::OUString::createFromAscii("ExistsRecoveryData"             );
+
+    bCrashed    = sal_False;
+    bDataExists = sal_False;
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    try
+    {
+        css::uno::Reference< css::beans::XPropertySet > xRecovery(
+            xSMGR->createInstance(SERVICENAME_RECOVERYCORE),
+            css::uno::UNO_QUERY_THROW);
+
+        xRecovery->getPropertyValue(PROP_CRASHED       ) >>= bCrashed   ;
+        xRecovery->getPropertyValue(PROP_EXISTSRECOVERY) >>= bDataExists;
+    }
+    catch(const css::uno::Exception&) {}
+}
+
+//-----------------------------------------------
+/*  @short  start the recovery wizard.
+
+    @param  bEmergencySave
+            differs between EMERGENCY_SAVE and RECOVERY
+*/
+sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
+                         sal_Bool bCrashed           ,
+                         sal_Bool bExistsRecoveryData)
+{
+    static ::rtl::OUString SERVICENAME_RECOVERYUI = ::rtl::OUString::createFromAscii("com.sun.star.comp.svx.RecoveryUI"          );
+    static ::rtl::OUString SERVICENAME_URLPARSER  = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer"          );
+    static ::rtl::OUString COMMAND_EMERGENCYSAVE  = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doEmergencySave");
+    static ::rtl::OUString COMMAND_RECOVERY       = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doAutoRecovery" );
+    static ::rtl::OUString COMMAND_CRASHREPORT    = ::rtl::OUString::createFromAscii("vnd.sun.star.autorecovery:/doCrashReport"  );
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+    css::uno::Reference< css::frame::XSynchronousDispatch > xRecoveryUI(
+        xSMGR->createInstance(SERVICENAME_RECOVERYUI),
+        css::uno::UNO_QUERY_THROW);
+
+    css::uno::Reference< css::util::XURLTransformer > xURLParser(
+        xSMGR->createInstance(SERVICENAME_URLPARSER),
+        css::uno::UNO_QUERY_THROW);
+
+    css::util::URL aURL;
+    if (bEmergencySave)
+        aURL.Complete = COMMAND_EMERGENCYSAVE;
+    else
+    {
+        if (bExistsRecoveryData)
+            aURL.Complete = COMMAND_RECOVERY;
+        else
+        if (bCrashed)
+            aURL.Complete = COMMAND_CRASHREPORT;
+    }
+    xURLParser->parseStrict(aURL);
+
+    css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+    sal_Bool bRet = sal_False;
+    aRet >>= bRet;
+    return bRet;
+}
+
 /*
  * Save all open documents so they will be reopened
  * the next time the application ist started
@@ -1066,119 +1152,10 @@ sal_Bool Desktop::_bTasksSaved = sal_False;
 
 sal_Bool Desktop::SaveTasks(sal_Int32 options)
 {
-    if (Desktop::_bTasksSaved) return sal_True;
-
-    sal_Bool bReturn = sal_False;
-    if( Application::IsInExecute() &&
-            (options & DESKTOP_SAVETASKS_MOD ||
-             options & DESKTOP_SAVETASKS_UNMOD) )
-    {
-        // get backup path
-        String aSavePath( SvtPathOptions().GetBackupPath() );
-        SvtInternalOptions aOpt;
-
-        // iterate tasks
-        Reference< ::com::sun::star::frame::XFramesSupplier >
-                xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                UNO_QUERY );
-        Reference< ::com::sun::star::frame::XFrame > xTask;
-        Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-        sal_Int32 nCount = xList->getCount();
-        bReturn = sal_True;
-
-        for( sal_Int32 i=0; i<nCount; ++i )
-        {
-            ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
-            if ( !(aVal>>=xTask) || !xTask.is() ) continue;
-            try
-            {
-                // ask for controller
-                Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
-                if ( xCtrl.is() )
-                {
-                    // ask for model
-                    Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
-                    if (!xModel.is()) continue; //if the component has no model, there is nothing to save
-                    Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
-
-                    // get URL and Name
-                    OUString aOrigURL = xModel->getURL();
-                    OUString aOldName = INetURLObject(aOrigURL).GetMainURL(
-                            INetURLObject::DECODE_WITH_CHARSET);
-
-                    // get the media descriptor and retrieve filter name and password
-                    OUString aOrigPassword, aOrigFilterName, aTitle;
-                    Sequence < PropertyValue > aArgs( xModel->getArgs() );
-                       sal_Int32 nProps = aArgs.getLength();
-                       for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
-                       {
-                           const PropertyValue& rProp = aArgs[nProp];
-                        if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
-                            rProp.Value >>= aOrigFilterName;
-                        if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
-                            rProp.Value >>= aOrigPassword;
-                        if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
-                            rProp.Value >>= aTitle;
-                    }
-
-                    // store modified tasks to backup dir
-                    if ( xModifiable.is() && xModifiable->isModified() && (options & DESKTOP_SAVETASKS_MOD))
-                    {
-                        Reference< ::com::sun::star::frame::XStorable > xStor( xModel, UNO_QUERY );
-                        if ( xStor.is() )
-                        {
-                            OUString aSaveURL;
-                            // save document as tempfile in backup directory
-                            // remember old name or title
-                            if ( aOrigURL.getLength() )
-                            {
-                                ::utl::TempFile aTempFile( &aSavePath );
-                                aSaveURL = aTempFile.GetURL();
-                            }
-                            else
-                            {
-                                // untitled document
-                                String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
-                                ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ),
-                                        &aExt, &aSavePath );
-                                aSaveURL = aTempFile.GetURL();
-                                aOldName = aTitle;
-                            }
-
-                            if ( aOrigPassword.getLength() )
-                            {
-                                // if the document was loaded with a password, it should be
-                                // stored with password
-                                Sequence < PropertyValue > aSaveArgs(1);
-                                aSaveArgs[0].Name = DEFINE_CONST_UNICODE("Password");
-                                aSaveArgs[0].Value <<= aOrigPassword;
-
-                                xStor->storeToURL(aSaveURL, aSaveArgs);
-                            }
-                            else
-                                xStor->storeToURL(aSaveURL, Sequence < PropertyValue >());
-
-                            // remember original name and filter
-                            aOpt.PushRecoveryItem(aOldName, aOrigFilterName, aSaveURL);
-                            bReturn = sal_True;
-                        }
-                    } else if (options & DESKTOP_SAVETASKS_UNMOD) {
-                        // remember saved item
-                        aOpt.PushRecoveryItem(aOldName, aOrigFilterName, aOldName);
-                        bReturn = sal_True;
-                    }
-                }
-            } catch (::com::sun::star::uno::Exception&) {
-                // not much we can do
-                // we continue and try to save other documents
-            }
-        } // for...
-        // store configuration data
-        ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
-    } // if...
-
-    return bReturn;
+    return impl_callRecoveryUI(
+        sal_True , // sal_True => force emergency save
+        sal_False, // 2. and 3. param not used if 1. = true!
+        sal_False);
 }
 
 USHORT Desktop::Exception(USHORT nError)
@@ -1201,15 +1178,24 @@ USHORT Desktop::Exception(USHORT nError)
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents
-    SaveTasks(DESKTOP_SAVETASKS_MOD);
+    sal_Bool bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
+    /* WarningBox was replaced by new crash-recovery wizard UI
     if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
             WarningBox( NULL, DesktopResId(STR_RECOVER_PREPARED) ).Execute();
+    */
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
-    /*
-    Reference < XComponent > xComp( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
-    xComp->dispose();
-    */
+    Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+    if (xCFGFlush.is())
+    {
+        xCFGFlush->flush();
+    }
+    else
+    {
+        Reference < XComponent > xCFGDispose( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
+        if (xCFGDispose.is())
+            xCFGDispose->dispose();
+    }
 
     switch( nError & EXC_MAJORTYPE )
     {
@@ -1243,15 +1229,15 @@ USHORT Desktop::Exception(USHORT nError)
                 if (m_pLockfile != NULL) {
                     m_pLockfile->clean();
                 }
-                _exit( 333 );
+                _exit( ExitHelper::E_LOCKFILE );
             }
 
-            if( bRecovery )
+            if( bRestart )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
                     DELETEZ( pSignalHandler );
-
+/*
                 ::rtl::OUString aProgName, aTmp;
                 ::vos::OStartupInfo aInfo;
                 aInfo.getExecutableFile( aProgName );
@@ -1265,15 +1251,16 @@ USHORT Desktop::Exception(USHORT nError)
                     if ( nError == ::osl::FileBase::E_None )
                          xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
                 }
+*/
                 if (m_pLockfile != NULL) {
                     m_pLockfile->clean();
                 }
-                _exit( 333 );
+                _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }
             else
             {
                 bInException = sal_False;
-                return 0;
+                _exit( ExitHelper::E_CRASH );
             }
 
             break;
@@ -1458,6 +1445,7 @@ void Desktop::Main()
 
         AllSettings aSettings( Application::GetSettings() );
 
+        //LanguageSelection langselect;
         OUString aUILocaleString = LanguageSelection::getLanguageString();
         sal_Int32 nIndex = 0;
         OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
@@ -1497,7 +1485,14 @@ void Desktop::Main()
         SetSplashScreenProgress(50);
 
         // Backing Component
-        if (pCmdLineArgs->IsEmpty() && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
+        sal_Bool bCrashed            = sal_False;
+        sal_Bool bExistsRecoveryData = sal_False;
+        impl_checkRecoveryState(bCrashed, bExistsRecoveryData);
+        if (
+            (pCmdLineArgs->IsEmpty()                                               ) &&
+            (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
+            (!bExistsRecoveryData                                                  )
+           )
         {
             ::desktop::Desktop::bSuppressOpenDefault = sal_True;
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
@@ -1980,161 +1975,29 @@ void Desktop::OpenClients()
         }
     }
 
-    if ( !pArgs->IsServer() && !pArgs->IsNoRestore() && !aInternalOptions.IsRecoveryListEmpty() )
+    if ( !pArgs->IsServer() && !pArgs->IsNoRestore())
     {
-        // crash recovery...
-        sal_Bool bUserCancel = sal_False;
-        ::rtl::OUString sName;
-        ::rtl::OUString sFilter;
-        ::rtl::OUString sTempName;
-
-        Reference< XComponentLoader > xDesktop(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                ::com::sun::star::uno::UNO_QUERY );
-
-        // create the parameter array
-        Sequence < PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
-        // mark it as a user request
-        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
-
-        // handle the recovery list
-        // and ask user for restauration if saved items
-        while(  !aInternalOptions.IsRecoveryListEmpty() && !bUserCancel )
+        sal_Bool bCrashed            = sal_False;
+        sal_Bool bExistsRecoveryData = sal_False;
+        impl_checkRecoveryState(bCrashed, bExistsRecoveryData);
+        if (bCrashed || bExistsRecoveryData)
         {
-            // Read and delete top recovery item from list
-            aInternalOptions.PopRecoveryItem( sName, sFilter, sTempName );
-
-            INetURLObject aURL( sName );
-
-            sal_Bool bIsURL = aURL.GetProtocol() != INET_PROT_NOT_VALID;
-            String sTempFileName( sTempName );
-            String sRealFileName;
-            if ( bIsURL )
-                sRealFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-
-
-            short ret = 0;
-            if ( sName != sTempName)
-            {
-                //this is a crashrecovery file
-                //ask the user whether it is to be recovered
-                String aMsg( DesktopResId( STR_RECOVER_QUERY ) );
-                aMsg.SearchAndReplaceAscii( "$1", sName );
-                MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK,
-                    String( DesktopResId( STR_RECOVER_TITLE ) ), aMsg );
-                ret = aBox.Execute();
-            } else {
-                // this is an existing unmodified file from a saved session
-                ret = RET_YES;
-            }
-
-            switch( ret )
-            {
-                case RET_YES:
-                {
-                    // recover a file
-                    if ( sName != sTempName )
-                    {
-
-                        // only set if file is realy salvaged
-                        aArgs.realloc(3);
-                        aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-                        aArgs[2].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
-
-                        if ( bIsURL )
-                        {
-                            // get the original URL for the recovered document
-                            aArgs[1].Value <<= sal_False;
-                            aArgs[2].Value <<= ::rtl::OUString( sRealFileName );
-                        }
-                        else
-                        {
-                            // this was an untitled document ( open as template )
-                            aArgs[1].Value <<= sal_True;
-                            aArgs[2].Value <<= ::rtl::OUString();
-                        }
-                    }
-
-                    // load the document
-                    try {
-                        Reference < XComponent > xDoc = xDesktop->loadComponentFromURL( sTempFileName, ::rtl::OUString::createFromAscii( "_default" ), 0, aArgs );
-                        if ( !xFirst.is() )
-                            // remember the first successfully recovered file
-                            xFirst = xDoc;
-
-                        if ( xDoc.is() && sFilter.getLength() && bIsURL )
-                        {
-                            // put the real filter name into the documents media descriptor
-                            Reference < XModel > xModel( xDoc, UNO_QUERY );
-                            Sequence < PropertyValue > sArgs = xModel->getArgs();
-                            sal_Int32 nArgs = sArgs.getLength();
-                            sal_Int32 nFilterProp = nArgs;
-                            for ( sal_Int32 n=0; n<nArgs; n++ )
-                            {
-                                PropertyValue& rProp = sArgs[n];
-                                if ( rProp.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
-                                {
-                                    nFilterProp = n;
-                                    break;
-                                }
-                            }
-
-                            if ( nFilterProp == nArgs )
-                            {
-                                // currently no filter set
-                                sArgs.realloc( nArgs+1 );
-                                sArgs[nFilterProp].Name = ::rtl::OUString::createFromAscii("FilterName");
-                            }
-
-                            sArgs[nFilterProp].Value <<= sFilter;
-                            xModel->attachResource( ::rtl::OUString( sRealFileName ), sArgs );
-                        }
-                    }
-                    // if we get an exception while trying to restore a document
-                    // we ignore it and continue with the next item from the list
-                    // when recovery and session mangement are seperated, each mechanism
-                    // should provide meaningful feedback.
-                    catch (::com::sun::star::lang::IllegalArgumentException)
-                    {
-                    }
-                    catch (::com::sun::star::io::IOException)
-                    {
-                    }
-                    catch (::com::sun::star::uno::RuntimeException)
-                    {
-                    }
-
-                    // backup copy will be removed when document is closed
-                    break;
-                }
-
-                case RET_NO:
-                {
-                    // skip this file
-                    if ( sName != sTempName )
-                        ::utl::UCBContentHelper::Kill( sTempFileName );
-                    break;
-                }
-
-                case RET_CANCEL:
-                {
-                    // cancel recovering
-                    if ( sName != sTempName )
-                        ::utl::UCBContentHelper::Kill( sTempFileName );
-                    bUserCancel = sal_True;
-
-                    // delete recovery list and all files
-                    while( aInternalOptions.IsRecoveryListEmpty() == sal_False )
-                    {
-                        aInternalOptions.PopRecoveryItem( sName, sFilter, sTempName );
-                        if ( sName != sTempName )
-                            ::utl::UCBContentHelper::Kill( sTempName );
-                    }
-
-                    break;
-                }
-            }
+            impl_callRecoveryUI(
+                sal_False          , // false => force recovery instead of emergency save
+                bCrashed           ,
+                bExistsRecoveryData);
+            /* TODO we cant be shure, that at least one document could be recovered here successfully
+                So we set bLoaded=TRUE to supress opening of the default document.
+                But we should make it more safe. Otherwhise we have an office without an UI ...
+                ...
+                May be we can check the desktop if some documents are existing there.
+             */
+            Reference< XFramesSupplier > xTasksSupplier(
+                    ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                    ::com::sun::star::uno::UNO_QUERY );
+            Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
+            if ( xList->hasElements() )
+                bLoaded = sal_True;
         }
     }
 
