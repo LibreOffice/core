@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 14:39:10 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ public:
     ScDocument*             GetDocument() const;
     SvEmbeddedObject*       GetEmbeddedObject() const;
     BOOL                    IsEmbedded() const;
+    double                  GetOutputFactor() const;
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
