@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:05:17 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
 
@@ -495,7 +498,16 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
                         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                         xPersist->storeOwn();
 
-                        awt::Size aSz( xObj->getVisualAreaSize( nAspect ) );
+                        awt::Size aSz;
+                        try
+                        {
+                            aSz = xObj->getVisualAreaSize( nAspect );
+                        }
+                        catch( embed::NoVisualAreaSizeException& )
+                        {
+                            // the default size will be set later
+                        }
+
                         Size        aSize( aSz.Width, aSz.Height );
                         Rectangle   aRect;
 
