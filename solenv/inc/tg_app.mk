@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 10:39:52 $
+#   last change: $Author: hr $ $Date: 2003-07-16 18:20:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,7 +125,7 @@ USE_APP$(TNR)DEF=
 .ENDIF
 
 # Link in static data members for template classes
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 # Allow certain executables to not link to libstatic*.dylib. This is only used
 # by build tools that are built in the bootstrap process.
 .IF "$(NOSHAREDSTATICLIB)"==""
@@ -152,7 +152,7 @@ APP$(TNR)LIBSALCPPRT*=$(LIBSALCPPRT)
 $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
     @echo "------------------------------"
     @echo "Updating static data member initializations"
     @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
@@ -168,6 +168,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR))` \
     $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -176,16 +177,20 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+-nm $@ | grep -v ' U ' | $(AWK) '{ print $$NF }' | grep -F -x '__objcInit' > $(MISC)$/$(@:b).strip
     @strip -i -R $(MISC)$/$(@:b).strip -X $@
     @ls -l $@
-# This is a hack as libstatic and libcppuhelper have a circular dependency
-.IF "$(PRJNAME)"=="cppuhelper"
-    @echo "------------------------------"
-    @echo "Rerunning static data member initializations"
-    @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-.ENDIF
+   .IF "$(CVER)"=="C295"
+     # This is a hack as libstatic and libcppuhelper have a circular dependency
+     .IF "$(PRJNAME)"=="cppuhelper"
+         @echo "------------------------------"
+         @echo "Rerunning static data member initializations"
+         @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
+     .ENDIF
+   .ENDIF
 .IF "$(TARGETTYPE)"=="GUI"
     @echo "Making: $@.app"
 .IF "$(STLPORT4)"!=""
+.IF "$(STLPORT4)"!="NO_STLPORT4"
     @-ln -sf "$(STLPORT4)/lib/libstlport_gcc.dylib" "$(SOLARLIBDIR)"
+.ENDIF
 .ENDIF		# "$(STLPORT4)!=""
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
