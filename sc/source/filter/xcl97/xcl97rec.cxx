@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:30:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,7 @@
 
 #include "scitems.hxx"
 
-#include <offmgr/app.hxx>
-#include <offmgr/fltrcfg.hxx>
+#include <svtools/fltrcfg.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #ifndef _SVX_FRMDIRITEM_HXX
@@ -763,7 +762,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
             // set version to "old" version, because it must be
             // saved in MS notation.
             UINT32                  nFl = 0;
-            OfaFilterOptions*       pFltOpts = OFF_APP()->GetFilterOptions();
+            SvtFilterOptions*       pFltOpts = SvtFilterOptions::Get();
             if( pFltOpts )
             {
                 if( pFltOpts->IsMath2MathType() )
