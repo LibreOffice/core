@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 12:36:41 $
+ *  last change: $Author: fs $ $Date: 2001-02-21 08:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,9 @@
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
-
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -918,8 +920,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         SdrMarkList aList;
                         SdrMark aMark(pObj);
                         aList.InsertEntry(aMark);
-                        sal_Int16 nAnchor;
-                        aValue >>= nAnchor;
+                        sal_Int32 nAnchor;
+                        cppu::enum2int( nAnchor, aValue );
                         pFmt->GetDoc()->ChgAnchor( aList, nAnchor,
                                                    sal_False, sal_True );
                     }
