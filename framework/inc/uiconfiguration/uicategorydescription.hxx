@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicategorydescription.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:50:19 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -180,7 +180,7 @@ class UICategoryDescription :  public com::sun::star::lang::XTypeProvider    ,
         ModuleToCategoryFileMap                                                             m_aModuleToCategoryFileMap;
         CategoryHashMap                                                                     m_aCategoryHashMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xGenericCategories;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
 };
 
 } // namespace framework
