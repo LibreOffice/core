@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-21 14:07:13 $
+ *  last change: $Author: thb $ $Date: 2002-10-29 10:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2092,7 +2092,7 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 {
     // calc pseudo window offset (mnOutOffX - mnOutOffOrigX) and add new offset
     mnOutOffX = mnOutOffX - mnOutOffOrigX + rOffset.Width();
-    mnOutOffX = mnOutOffX - mnOutOffOrigX + rOffset.Width();
+    mnOutOffY = mnOutOffY - mnOutOffOrigY + rOffset.Height();
 
     mnOutOffOrigX = rOffset.Width();
     mnOutOffOrigY = rOffset.Height();
