@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:04:35 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,7 +1178,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "INTEGERSNIJPUNT";
         Text[ chinese_simplified ] = "INT";
         Text[ greek ] = "INT";
-        Text[ korean ] = "정수";
+        Text[ korean ] = "INT";
         Text[ turkish ] = "INT";
         Text[ language_user1 ] = " ";
     };
@@ -2585,7 +2585,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "DATUM";
         Text[ chinese_simplified ] = "DATE";
         Text[ greek ] = "DATE";
-        Text[ korean ] = "날짜";
+        Text[ korean ] = "DATE";
         Text[ turkish ] = "DATE";
         Text[ language_user1 ] = " ";
     };
@@ -3706,7 +3706,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "KOLOMMEN";
         Text[ chinese_simplified ] = "COLUMNS";
         Text[ greek ] = "COLUMNS";
-        Text[ korean ] = "열";
+        Text[ korean ] = "COLUMNS";
         Text[ turkish ] = "COLUMNS";
         Text[ language_user1 ] = " ";
     };
