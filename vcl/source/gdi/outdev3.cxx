@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:06:44 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,15 +438,15 @@ static sal_Unicode const aPMingLiU[] = { 0x65B0, 0x7D30, 0x660E, 0x9AD4, 0, 0 };
 static sal_Unicode const aHei[] = { 0x6865, 0, 0 };
 static sal_Unicode const aKai[] = { 0x6B61, 0, 0 };
 static sal_Unicode const aMing[] = { 0x6D69, 0x6E67, 0, 0 };
-static sal_Unicode const aMSGothic[] = { 0xFF2D, 0xFF33, ' ', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-static sal_Unicode const aMSPGothic[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
-static sal_Unicode const aMSMincho[] = { 0xFF2D, 0xFF33, ' ', 0x660E, 0x671D, 0 };
-static sal_Unicode const aMSPMincho[] = { 0xFF2D, 0xFF33, ' ', 0xFF30, 0x660E, 0x671D, 0 };
-static sal_Unicode const aHGMinchoL[] = { 'h', 'g', 0x660E, 0x671D, 'l', 0, 0 };
-static sal_Unicode const aHGGothicB[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
-static sal_Unicode const aHGPMinchoL[] = { 'h', 'g', 'p', 0x660E, 0x671D, 'l', 0 };
-static sal_Unicode const aHGPGothicB[] = { 'h', 'g', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
-static sal_Unicode const aHGMinchoLSun[] = { 'h','g', 0x660E, 0x671D, 'l', 's', 'u', 'n', 0 };
+static sal_Unicode const aMSGothic[] = { 'm','s',       0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+static sal_Unicode const aMSPGothic[] = { 'm','s','p',  0x30B4, 0x30B7, 0x30C3, 0x30AF, 0, 0 };
+static sal_Unicode const aMSMincho[] = { 'm', 's',      0x660E, 0x671D, 0 };
+static sal_Unicode const aMSPMincho[] = { 'm','s','p',  0x660E, 0x671D, 0 };
+static sal_Unicode const aHGMinchoL[] = { 'h','g',      0x660E, 0x671D, 'l', 0, 0 };
+static sal_Unicode const aHGGothicB[] = { 'h','g',      0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
+static sal_Unicode const aHGPMinchoL[] = { 'h','g','p', 0x660E, 0x671D, 'l', 0 };
+static sal_Unicode const aHGPGothicB[] = { 'h','g','p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 0 };
+static sal_Unicode const aHGMinchoLSun[] = { 'h','g',   0x660E, 0x671D, 'l', 's', 'u', 'n', 0 };
 static sal_Unicode const aHGPMinchoLSun[] = { 'h','g','p', 0x660E, 0x671D, 'l', 's', 'u', 'n', 0 };
 static sal_Unicode const aHGGothicBSun[] = { 'h', 'g', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 's', 'u', 'n', 0 };
 static sal_Unicode const aHGPGothicBSun[] = { 'h', 'g', 'p', 0x30B4, 0x30B7, 0x30C3, 0x30AF, 'b', 's', 'u', 'n', 0 };
@@ -661,12 +661,11 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 
 void ImplGetEnglishSearchFontName( String& rName )
 {
-    BOOL        bTranslate = FALSE;
-    xub_StrLen  i;
+    bool        bNeedTranslation = false;
     xub_StrLen  nLen = rName.Len();
 
     // Remove trailing whitespaces
-    i = nLen;
+    xub_StrLen i = nLen;
     while ( i && (rName.GetChar( i-1 ) < 32) )
         i--;
     if ( i != nLen )
@@ -701,7 +700,8 @@ void ImplGetEnglishSearchFontName( String& rName )
         }
     }
 
-    // This function removes all whitespaces, convert to Lowercase-ASCII
+    // remove all whitespaces and converts to lower case ASCII
+    // TODO: better transliteration to ASCII e.g. all digits
     i = 0;
     while ( i < nLen )
     {
@@ -715,13 +715,13 @@ void ImplGetEnglishSearchFontName( String& rName )
                 c -= 0xFF00-0x0020;
                 // Upper to Lower
                 if ( (c >= 'A') && (c <= 'Z') )
-                    c += 0x0020;
+                    c += 'a' - 'A';
                 rName.SetChar( i, c );
             }
             else
             {
                 // Only Fontnames with None-Ascii-Characters must be translated
-                bTranslate = TRUE;
+                bNeedTranslation = true;
             }
         }
         // not lowercase Ascii
@@ -730,7 +730,7 @@ void ImplGetEnglishSearchFontName( String& rName )
             // To Lowercase-Ascii
             if ( (c >= 'A') && (c <= 'Z') )
             {
-                c += 0x0020;
+                c += 'a' - 'A';
                 rName.SetChar( i, c );
             }
             else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
@@ -745,19 +745,23 @@ void ImplGetEnglishSearchFontName( String& rName )
         i++;
     }
 
-    // Translate localized name to English ASCII name
-    // TODO: replace the O(n) search!
-    const ImplLocalizedFontName* pTranslateNames = aImplLocalizedNamesList;
-    while ( bTranslate && pTranslateNames->mpEnglishName )
+    // translate normalized localized name to its normalized English ASCII name
+    if( bNeedTranslation )
     {
-        const sal_Unicode* pLocalizedName = pTranslateNames->mpLocalizedNames;
-        if ( rName.Equals( pLocalizedName ) )
+        typedef std::hash_map<const String, const char*,FontNameHash> FontNameDictionary;
+        static FontNameDictionary aDictionary( sizeof(aImplLocalizedNamesList) / sizeof(*aImplLocalizedNamesList) );
+        // the font name dictionary needs to be intialized once
+        if( aDictionary.empty() )
         {
-            rName.AssignAscii( pTranslateNames->mpEnglishName );
-            break;
+            // TODO: check if all dictionary entries are already normalized?
+            const ImplLocalizedFontName* pList = aImplLocalizedNamesList;
+            for(; pList->mpEnglishName; ++pList )
+                aDictionary[ pList->mpLocalizedNames ] = pList->mpEnglishName;
         }
 
-        pTranslateNames++;
+        FontNameDictionary::const_iterator it = aDictionary.find( rName );
+        if( it != aDictionary.end() )
+            rName.AssignAscii( it->second );
     }
 }
 
@@ -1229,7 +1233,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     }
     fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%d FontName=\"%s\"\n",
          s, eLang, nFlags,
-         OUStringToOString( aFont.GetName(), osl_getThreadTextEncoding() ).getStr()
+         OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
          );
 #endif
 
@@ -3015,18 +3019,19 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         for( xub_StrLen nTokenPos = 0; nTokenPos != STRING_NOTFOUND; )
         {
             String aTokenName = GetNextFontToken( aNameList, nTokenPos );
-            // TODO: use font substitution lists for fallback?
-            //ImplFontSubstitute( aSearchName, nSubstFlags, NULL );
+            // TODO: use font substitution lists for finding fallback fonts?
+            //ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
             ImplDevFontListData* pFallbackFont = pFontList->FindFontFamily( aTokenName );
+            if( !pFallbackFont )
+                continue;
+            if( !pFallbackFont->IsScalable() )
+                continue;
             // TODO: check FontCharset and reject if the charset is already covered
-            if( pFallbackFont && pFallbackFont->IsScalable() )
-            {
-                if( !pFallbackList )
-                    pFallbackList = new ImplDevFontListData*[ MAX_FALLBACK ];
-                pFallbackList[ nMaxLevel ] = pFallbackFont;
-                if( ++nMaxLevel >= MAX_FALLBACK )
-                    break;
-            }
+            if( !pFallbackList )
+                pFallbackList = new ImplDevFontListData*[ MAX_FALLBACK ];
+            pFallbackList[ nMaxLevel ] = pFallbackFont;
+            if( ++nMaxLevel >= MAX_FALLBACK )
+                break;
         }
 
         pFontList->SetFallbacks( pFallbackList, nMaxLevel );
@@ -5130,7 +5135,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
 #if (OSL_DEBUG_LEVEL > 2) || defined (HDU_DEBUG)
     fprintf( stderr, "   OutputDevice::SetFont() FontName=\"%s\"\n",
-         OUStringToOString( aFont.GetName(), osl_getThreadTextEncoding() ).getStr() );
+         OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
     if ( !maFont.IsSameInstance( aFont ) )
@@ -5543,7 +5548,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
 
 #if OSL_DEBUG_LEVEL > 2
     fprintf( stderr, "   OutputDevice::DrawText(\"%s\")\n",
-         OUStringToOString( rStr, osl_getThreadTextEncoding() ).getStr() );
+         OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
     if ( mpMetaFile )
@@ -5597,7 +5602,8 @@ void OutputDevice::DrawText( const Point& rStartPt, const String& rStr,
 
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt );
+
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, NULL, true );
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5654,7 +5660,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry );
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5796,7 +5802,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, nWidth );
+    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, nWidth, NULL, true );
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
@@ -5810,8 +5816,13 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
 // -----------------------------------------------------------------------
 
 SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
-    xub_StrLen nMinIndex, xub_StrLen nLen,
-    const Point& rLogicalPos, long nLogicalWidth, const sal_Int32* pDXArray ) const
+                                     xub_StrLen nMinIndex,
+                                     xub_StrLen nLen,
+                                     const Point& rLogicalPos,
+                                     long nLogicalWidth,
+                                     const sal_Int32* pDXArray,
+                                     bool bFilter
+                                     ) const
 {
     SalLayout* pSalLayout = NULL;
 
@@ -5819,6 +5830,30 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( !mpGraphics )
         if( !ImplGetGraphics() )
             return NULL;
+
+    if( bFilter )
+    {
+        String aStr;
+        xub_StrLen nCutStart, nCutStop, nOrgLen = nLen;
+        bool bFiltered = mpGraphics->filterText( rOrigStr, aStr, nMinIndex, nLen, nCutStart, nCutStop );
+        if( ! nLen )
+            return NULL;
+
+        if( bFiltered && nCutStop != nCutStart && pDXArray )
+        {
+            if( nLen )
+            {
+                sal_Int32* pAry = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
+                if( nCutStart > nMinIndex )
+                    memcpy( pAry, pDXArray, sizeof(sal_Int32)*(nCutStart-nMinIndex) );
+                memcpy( pAry+nCutStart-nMinIndex, pDXArray + nOrgLen - (nCutStop-nMinIndex), nLen - (nCutStop-nMinIndex) );
+                pDXArray = pAry;
+                return ImplLayout( aStr, nMinIndex, nLen, rLogicalPos, nLogicalWidth, pDXArray, false );
+            }
+            pDXArray = NULL;
+        }
+        return ImplLayout( rOrigStr, nMinIndex, nLen, rLogicalPos, nLogicalWidth, pDXArray, false );
+    }
 
     // initialize font if needed
     if( mbNewFont )
