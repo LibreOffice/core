@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
+#   last change: $Author: tra $ $Date: 2001-03-08 12:38:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,8 +124,8 @@ SHL1IMPLIB=i$(SHL1TARGET)
 
 SHL1LIBS=	\
             $(SLB)$/dtobjfact.lib\
-            $(SLB)$/dtutils.lib
-
+            $(SLB)$/dtutils.lib\
+            $(SOLARLIBDIR)$/user9x.lib\
 
 SHL1OBJS=		$(SLOFILES)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
