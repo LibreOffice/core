@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:57:16 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #pragma hdrstop
 
 
-#ifndef _SCHDLL0_HXX //autogen wg. SchModuleDummy
-#include <sch/schdll0.hxx>
-#endif
 #ifndef _OUTLOBJ_HXX //autogen wg. OutlinerParaObject
 #include <svx/outlobj.hxx>
 #endif
@@ -99,6 +96,8 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ERRORFILE
 #include <tools/debug.hxx>
 #endif
+
+#include <sot/exchange.hxx>
 
 #include "global.hxx"
 #include "document.hxx"
@@ -234,7 +233,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const com::sun::star::uno::Referen
             if ( xObj.Is() )
             {
                 SvGlobalName aObjClsId( *xObj->GetSvFactory() );
-                if ( SchModuleDummy::HasID( aObjClsId ) )
+                if ( SotExchange::IsChart( aObjClsId ) )
                 {   // yes, it's a chart diagram
                     rRootData.pObjRecs->Add( new XclObjChart( rRoot, rShape ) );
                     pCurrXclObj = NULL;     // no metafile or whatsoever
