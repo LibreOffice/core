@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-20 15:58:35 $
+ *  last change: $Author: aw $ $Date: 2001-08-30 12:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,12 +1147,25 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                     // - nicht mehr die Methode mit dem PaintRect verwenden
                         if (!bFitKorreg)
                         {
-                            // #82826# for correct preview of outliner views
-                            // rOutliner.Draw(pOutDev,aPaintRect);
-                            if(aPaintRect.Top() > aAnchorRect.Top())
-                                rOutliner.Draw(pOutDev, aPaintRect);
+                            if(IsVerticalWriting())
+                            {
+                                // #91744# for vertical writing the fix #82826#
+                                // needs to be done vertically. I tested the preview,
+                                // the fix for vertical is indeed necessary.
+                                if(aPaintRect.Left() <= aAnchorRect.Left())
+                                    rOutliner.Draw(pOutDev, aPaintRect);
+                                else
+                                    rOutliner.Draw(pOutDev, aAnchorRect);
+                            }
                             else
-                                rOutliner.Draw(pOutDev, aAnchorRect);
+                            {
+                                // #82826# for correct preview of outliner views
+                                // rOutliner.Draw(pOutDev,aPaintRect);
+                                if(aPaintRect.Top() > aAnchorRect.Top())
+                                    rOutliner.Draw(pOutDev, aPaintRect);
+                                else
+                                    rOutliner.Draw(pOutDev, aAnchorRect);
+                            }
                         }
                         else
                         {
