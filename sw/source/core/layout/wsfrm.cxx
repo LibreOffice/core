@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:29:51 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 10:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,11 +203,14 @@ SwFrm::SwFrm( SwModify *pMod ) :
 #ifdef VERTICAL_LAYOUT
 void SwFrm::CheckDirection( BOOL bVert )
 {
-    if( bVert )
-        bDerivedVert = 1;
-    else
-        bDerivedR2L = 1;
-    SetDirFlags( bVert );
+    if( !IsHeaderFrm() && !IsFooterFrm() )
+    {
+        if( bVert )
+            bDerivedVert = 1;
+        else
+            bDerivedR2L = 1;
+        SetDirFlags( bVert );
+    }
 }
 #endif
 /*************************************************************************
@@ -1117,9 +1120,22 @@ SwTwips SwFrm::Grow( SwTwips nDist, const SzPtr pDirection,
 
     if ( nDist )
     {
-        if ( Prt().SSize().*pDirection > 0 &&
-             nDist > (LONG_MAX - Prt().SSize().*pDirection) )
-            nDist = LONG_MAX - Prt().SSize().*pDirection;
+        SzPtr pDir;
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() )
+        {
+            if( pDirection == pHeight )
+                pDir = pWidth;
+            else
+                pDir = pHeight;
+        }
+        else
+#endif
+            pDir = pDirection;
+
+        if ( Prt().SSize().*pDir > 0 &&
+             nDist > (LONG_MAX - Prt().SSize().*pDir) )
+            nDist = LONG_MAX - Prt().SSize().*pDir;
 
         if ( IsFlyFrm() )
             return ((SwFlyFrm*)this)->_Grow( nDist, pDirection, bTst );
@@ -1127,9 +1143,9 @@ SwTwips SwFrm::Grow( SwTwips nDist, const SzPtr pDirection,
             return ((SwSectionFrm*)this)->_Grow( nDist, pDirection, bTst );
         else
         {
-            const SwTwips nReal = GrowFrm( nDist, pDirection, bTst, bInfo );
+            const SwTwips nReal = GrowFrm( nDist, pDir, bTst, bInfo );
             if( !bTst )
-                Prt().SSize().*pDirection += IsCntntFrm() ? nDist : nReal;
+                Prt().SSize().*pDir += IsCntntFrm() ? nDist : nReal;
             return nReal;
         }
     }
@@ -1152,17 +1168,31 @@ SwTwips SwFrm::Shrink( SwTwips nDist, const SzPtr pDirection,
 
     if ( nDist )
     {
+        SzPtr pDir;
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() )
+        {
+            if( pDirection == pHeight )
+                pDir = pWidth;
+            else
+                pDir = pHeight;
+        }
+        else
+#endif
+            pDir = pDirection;
+
+
         if ( IsFlyFrm() )
             return ((SwFlyFrm*)this)->_Shrink( nDist, pDirection, bTst );
         else if( IsSctFrm() )
             return ((SwSectionFrm*)this)->_Shrink( nDist, pDirection, bTst );
         else
         {
-            SwTwips nReal = Frm().SSize().*pDirection;
-            ShrinkFrm( nDist, pDirection, bTst, bInfo );
-            nReal -= Frm().SSize().*pDirection;
+            SwTwips nReal = Frm().SSize().*pDir;
+            ShrinkFrm( nDist, pDir, bTst, bInfo );
+            nReal -= Frm().SSize().*pDir;
             if( !bTst )
-                Prt().SSize().*pDirection -= IsCntntFrm() ? nDist : nReal;
+                Prt().SSize().*pDir -= IsCntntFrm() ? nDist : nReal;
             return nReal;
         }
     }
@@ -1350,7 +1380,11 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
     SwTwips nReal = 0,
             nAdd  = 0;
     SwFrm *pFrm = 0;
+#ifdef VERTICAL_LAYOUT
+    const SzPtr pVar = ( IsVertical() == bVarHeight ) ? pWidth : pHeight;
+#else
     const SzPtr pVar = pVARSIZE;
+#endif
 
     if( IsBodyFrm() )
     {
@@ -1413,18 +1447,26 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
                     nReal = nMax;
             }
             if( !IsFtnContFrm() && nDiff > nReal &&
-                pFrm->GetNext() && pFrm->GetNext()->IsFtnContFrm() )
+                pFrm->GetNext() && pFrm->GetNext()->IsFtnContFrm()
+#ifdef VERTICAL_LAYOUT
+                && ( pFrm->GetNext()->IsVertical() == IsVertical() )
+#endif
+                )
             {
                 //Wenn der Body nicht genuegend her gibt, kann ich noch mal
                 //schauen ob es eine Fussnote gibt, falls ja kann dieser
                 //entsprechend viel gemopst werden.
-                const SwTwips nAddMax = pFrm->GetNext()->Frm().Height();
+                const SwTwips nAddMax = pFrm->GetNext()->Frm().SSize().*pVar;
                 nAdd = nDiff - nReal;
                 if ( nAdd > nAddMax )
                     nAdd = nAddMax;
                 if ( !bTst )
                 {
                     pFrm->GetNext()->Frm().SSize().*pVar -= nAdd;
+#ifdef VERTICAL_LAYOUT
+                    if( IsVertical() )
+                        pFrm->GetNext()->Frm().Pos().X() += nAdd;
+#endif
                     pFrm->GetNext()->InvalidatePrt();
                     if ( pFrm->GetNext()->GetNext() )
                         pFrm->GetNext()->GetNext()->_InvalidatePos();
@@ -1436,6 +1478,10 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
     if ( !bTst && nReal )
     {
         pFrm->Frm().SSize().*pVar -= nReal;
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() )
+            pFrm->Frm().Pos().X() += nReal;
+#endif
         pFrm->InvalidatePrt();
         if ( pFrm->GetNext() )
             pFrm->GetNext()->_InvalidatePos();
@@ -1579,11 +1625,16 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
 SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                              BOOL bTst, BOOL bInfo )
 {
-    ASSERT( pDirection == pHeight, "VarSize eines Cntnt ist Breite !?!" );
+#ifdef VERTICAL_LAYOUT
+    ASSERT( pDirection == ( IsVertical() ? pWidth : pHeight ),
+            "Growing in fixed direction?!" );
+#else
+    ASSERT( pDirection == pHeight , "Growing in fixed direction?!" );
+#endif
 
-    if ( Frm().SSize().Height() > 0 &&
-         nDist > (LONG_MAX - Frm().SSize().Height()) )
-        nDist = LONG_MAX - Frm().SSize().Height();
+    if ( Frm().SSize().*pDirection > 0 &&
+         nDist > (LONG_MAX - Frm().SSize().*pDirection) )
+        nDist = LONG_MAX - Frm().SSize().*pDirection;
 
     //Abkuerzung, damit der Growbetrag fuer den Upper nicht umstaendlich
     //ermittelt werden muss. Die Abfrage korrespondiert mit derjenigen im
@@ -1597,7 +1648,11 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     {
         if ( !bTst )
         {
-            Frm().SSize().Height() += nDist;
+            Frm().SSize().*pDirection += nDist;
+#ifdef VERTICAL_LAYOUT
+            if( IsVertical() )
+                Frm().Pos().X() -= nDist;
+#endif
             if ( GetNext() )
                 GetNext()->InvalidatePos();
         }
@@ -1612,18 +1667,22 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     //Aufzaddierens der Einzelwerte. Alles andere birgt Risiken die jetzt
     //(04. Jan. 94) nicht vertretbar sind. Die Aufwendigsten und
     //Haeufigsten Faelle sind oben abgefangen und somit nicht mehr relevant.
-    nReal = GetUpper()->Prt().Height();
+    nReal = GetUpper()->Prt().SSize().*pDirection;
     SwFrm *pFrm = GetUpper()->Lower();
     while ( pFrm && nReal > 0 )         //MA, #63881# ">0": Genug ist Genug
-    {   nReal -= pFrm->Frm().Height();
+    {   nReal -= pFrm->Frm().SSize().*pDirection;
         pFrm = pFrm->GetNext();
     }
 
     if ( !bTst )
     {
         //Cntnts werden immer auf den gewuenschten Wert gebracht.
-        long nOld = Frm().Height();
-        Frm().SSize().Height() += nDist;
+        long nOld = Frm().SSize().*pDirection;
+        Frm().SSize().*pDirection += nDist;
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() )
+            Frm().Pos().X() -= nDist;
+#endif
         if ( nOld && IsInTab() )
         {
             SwTabFrm *pTab = FindTabFrm();
@@ -1663,19 +1722,42 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
     ASSERT( nDist >= 0, "nDist < 0" );
     ASSERT( nDist <= Frm().SSize().*pDirection,
             "nDist > als aktuelle Grosse." );
-    ASSERT( pDirection == pHeight, "VarSize eines Cntnt ist Breite !?!" );
+#ifdef VERTICAL_LAYOUT
+    ASSERT( pDirection == ( IsVertical() ? pWidth : pHeight ),
+            "Shrinking in fixed direction?!" );
+#else
+    ASSERT( pDirection == pHeight, "Shrinking in fixed direction?!" );
+#endif
 
     if ( !bTst )
     {
+#ifdef VERTICAL_LAYOUT
+        SwTwips nRstHeight;
+        if( GetUpper() )
+        {
+            nRstHeight = IsVertical() ? Frm().Left() -
+                            GetUpper()->Frm().Left() - GetUpper()->Prt().Left()
+                            : GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
+                              + GetUpper()->Prt().SSize().*pDirection
+                              - Frm().Top() - Frm().SSize().*pDirection;
+        }
+        else
+            nRstHeight = 0;
+#else
         SwTwips nRstHeight = GetUpper() ? GetUpper()->Frm().Top()
                             + GetUpper()->Prt().Top()
                             + GetUpper()->Prt().Height()
                             - Frm().Top() - Frm().Height() : 0;
+#endif
         if( nRstHeight < 0 )
             nRstHeight = nDist + nRstHeight;
         else
             nRstHeight = nDist;
-        Frm().SSize().Height() -= nDist;
+        Frm().SSize().*pDirection -= nDist;
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() )
+            Frm().Pos().X() += nDist;
+#endif
         nDist = nRstHeight;
         if ( IsInTab() )
         {
@@ -2005,8 +2087,17 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
             nMin = 0;
     }
 
+#ifdef VERTICAL_LAYOUT
+    BOOL bChgPos = IsVertical() && pDirection == pWidth;
+#endif
     if ( !bTst )
+    {
         Frm().SSize().*pDirection += nDist;
+#ifdef VERTICAL_LAYOUT
+        if( bChgPos )
+            Frm().Pos().X() -= nDist;
+#endif
+    }
 
     //Natuerlich braucht der Upper nur soweit wie wirklich notwendig
     //ge'grow'ed zu werden.
@@ -2065,10 +2156,17 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     {
         if ( (nReal != nDist) &&
              (!IsCellFrm() || (IsCellFrm() && (pDirection == pWidth))) )
+        {
             //Den masslosen Wunsch koennen wir leider nur teilweise erfuellen,
             //Zellen werden bei Veraenderungen der Hoehe direkt von der Row
             //angepasst.
-            Frm().SSize().*pDirection -= (nDist - nReal);
+            nDist -= nReal;
+            Frm().SSize().*pDirection -= nDist;
+#ifdef VERTICAL_LAYOUT
+            if( bChgPos )
+                Frm().Pos().X() += nDist;
+#endif
+        }
 
         if ( nReal )
         {
@@ -2126,9 +2224,17 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
     //bzw. seine PrtArea sein; in diesem Fall wird das Shrink auf den
     //Inhalt beschraenkt bzw. abgelehnt wenn ein Wachtstum notwendig waere.
     SwTwips nMin = 0;
+#ifdef VERTICAL_LAYOUT
+    BOOL bChgPos = IsVertical() && pDirection == pWidth;
+#endif
     if ( Lower() )
     {
+#ifdef VERTICAL_LAYOUT
+        if ( pDirection == ( (Lower()->bVarHeight != Lower()->IsVertical())
+                            ? pHeight : pWidth) )
+#else
         if ( pDirection == (Lower()->bVarHeight ? pHeight : pWidth) )
+#endif
         {   const SwFrm *pFrm = Lower();
             const long nTmp = Prt().SSize().*pDirection; //MA #63881#: Genug ist Genug
             while ( pFrm && nMin < nTmp )
@@ -2145,7 +2251,13 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
 
     SwTwips nRealDist = nReal;
     if ( !bTst )
+    {
         Frm().SSize().*pDirection -= nReal;
+#ifdef VERTICAL_LAYOUT
+        if( bChgPos )
+            Frm().Pos().X() += nReal;
+#endif
+    }
 
     BYTE nAdjust = GetUpper() && GetUpper()->IsFtnBossFrm() ?
                    ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
@@ -2160,7 +2272,13 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
         {   nReal = AdjustNeighbourhood( -nReal, bTst );
             nReal *= -1;
             if ( !bTst && IsBodyFrm() && nReal < nRealDist )
+            {
                 Frm().SSize().*pDirection += nRealDist - nReal;
+#ifdef VERTICAL_LAYOUT
+                if( bChgPos )
+                    Frm().Pos().X() += nRealDist - nReal;
+#endif
+            }
         }
     }
     else if ( (IsCellFrm() && !(pDirection == pHeight)) || IsColumnFrm() || IsColBodyFrm() )
@@ -2171,6 +2289,10 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
         if ( nTmp != nReal )
         {
             Frm().SSize().*pDirection += nReal - nTmp;
+#ifdef VERTICAL_LAYOUT
+            if( bChgPos )
+                Frm().Pos().X() += nReal - nTmp;
+#endif
             nReal = nTmp;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-03 10:39:14 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 10:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,9 +508,21 @@ void SwFrm::MakePos()
         }
 
         pPrv = lcl_Prev( this, FALSE );
+#ifdef VERTICAL_LAYOUT
+        USHORT nMyType = GetType();
+#endif
         if ( !bUseUpper && pPrv )
         {   aFrm.Pos( pPrv->Frm().Pos() );
+#ifdef VERTICAL_LAYOUT
+            if( FRM_NEIGHBOUR & nMyType )
+                aFrm.Pos().X() += pPrv->Frm().Width();
+            else if( IsVertical() && FRM_NOTE_VERT & nMyType )
+                aFrm.Pos().X() -= aFrm.Width();
+            else
+                aFrm.Pos().Y() += pPrv->Frm().Height();
+#else
             aFrm.Pos().*pVARPOS += pPrv->Frm().SSize().*pVARSIZE;
+#endif
         }
         else if ( GetUpper() )
         {
@@ -523,16 +535,34 @@ void SwFrm::MakePos()
             pPrv = lcl_Prev( this, FALSE );
             if ( !bUseUpper && pPrv )
             {   aFrm.Pos( pPrv->Frm().Pos() );
+#ifdef VERTICAL_LAYOUT
+                if( FRM_NEIGHBOUR & nMyType )
+                    aFrm.Pos().X() += pPrv->Frm().Width();
+                else if( IsVertical() && FRM_NOTE_VERT & nMyType )
+                    aFrm.Pos().X() -= aFrm.Width();
+                else
+                    aFrm.Pos().Y() += pPrv->Frm().Height();
+#else
                 aFrm.Pos().*pVARPOS += pPrv->Frm().SSize().*pVARSIZE;
+#endif
             }
             else
             {
                 aFrm.Pos( GetUpper()->Frm().Pos() );
                 aFrm.Pos() += GetUpper()->Prt().Pos();
+#ifdef VERTICAL_LAYOUT
+                if( IsVertical() && FRM_NOTE_VERT & nMyType )
+                    aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
+#endif
             }
         }
         else
             aFrm.Pos().X() = aFrm.Pos().Y() = 0;
+#ifdef VERTICAL_LAYOUT
+        if( IsBodyFrm() && IsVertical() && GetUpper() &&
+            aFrm.Width() < GetUpper()->Prt().Width() )
+            aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
+#endif
         bValidPos = TRUE;
     }
 }
@@ -782,6 +812,10 @@ void SwLayoutFrm::MakeAll()
 |*
 |*************************************************************************/
 
+#define V_WIDTH SSize().*pDir1Sz
+#define V_HEIGHT SSize().*pDir2Sz
+#define V_X Pos().*pDir1Pt
+#define V_Y Pos().*pDir2Pt
 
 BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 {
@@ -791,6 +825,116 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
     {
         bValidPrtArea = TRUE;
 
+#ifdef VERTICAL_LAYOUT
+        PtPtr pDir1Pt, pDir2Pt;
+        SzPtr pDir1Sz, pDir2Sz;
+        const FASTBOOL bVert = IsVertical();
+        if( bVert )
+        {
+            pDir1Pt = pY;
+            pDir2Pt = pX;
+            pDir1Sz = pHeight;
+            pDir2Sz = pWidth;
+        }
+        else
+        {
+            pDir1Pt = pX;
+            pDir2Pt = pY;
+            pDir1Sz = pWidth;
+            pDir2Sz = pHeight;
+        }
+        const FASTBOOL bTxtFrm = IsTxtFrm();
+        SwTwips nUpper = 0;
+        if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
+        {
+            if ( Prt().V_HEIGHT )
+                ((SwTxtFrm*)this)->HideHidden();
+            Prt().V_X = Prt().V_Y = 0;
+            Prt().V_WIDTH = Frm().V_WIDTH;
+            Prt().V_HEIGHT = 0;
+            nUpper = -(Frm().V_HEIGHT);
+        }
+        else
+        {
+            //Vereinfachung: CntntFrms sind immer in der Hoehe Variabel!
+
+            //An der FixSize gibt der umgebende Frame die Groesse vor, die
+            //Raender werden einfach abgezogen.
+            const long nLeft = rAttrs.CalcLeft( this );
+            Prt().V_WIDTH = Frm().V_WIDTH - ( nLeft + rAttrs.CalcRight() );
+            Prt().V_X = nLeft;
+
+            ViewShell *pSh = GetShell();
+            if ( pSh && pSh->VisArea().V_WIDTH &&
+                 GetUpper()->IsPageBodyFrm() &&  // nicht dagegen bei BodyFrms in Columns
+                 pSh->GetDoc()->IsBrowseMode() )
+            {
+                //Nicht ueber die Kante des sichbaren Bereiches hinausragen.
+                //Die Seite kann breiter sein, weil es Objekte mit "ueberbreite"
+                //geben kann (RootFrm::ImplCalcBrowseWidth())
+                long nMinWidth = 0;
+
+                for (USHORT i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
+                {
+                    SdrObject *pObj = (*GetDrawObjs())[i];
+                    SwFrmFmt *pFmt = ::FindFrmFmt( pObj );
+                    const FASTBOOL bFly = pObj->IsWriterFlyFrame();
+                    if ( bFly &&
+                         WEIT_WECH == ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Width()||
+                         pFmt->GetFrmSize().GetWidthPercent() )
+                        continue;
+
+                    if ( FLY_IN_CNTNT == pFmt->GetAnchor().GetAnchorId() )
+                        nMinWidth = Max( nMinWidth,
+                                      bFly ? pFmt->GetFrmSize().GetWidth()
+                                           : pObj->GetBoundRect().GetWidth() );
+                }
+
+                const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
+                long nWidth = pSh->VisArea().V_WIDTH - 2 * aBorder.*pDir1Sz;
+                nWidth -= Prt().V_X;
+                nWidth -= rAttrs.CalcRightLine();
+                nWidth = Max( nMinWidth, nWidth );
+                Prt().V_WIDTH = Min( nWidth, Prt().V_WIDTH );
+            }
+
+            if ( Prt().V_WIDTH <= MINLAY )
+            {
+                //Die PrtArea sollte schon wenigstens MINLAY breit sein, passend
+                //zu den Minimalwerten des UI
+                Prt().V_WIDTH = Min( long(MINLAY), Frm().V_WIDTH );
+                if ( (Prt().V_X + Prt().V_WIDTH) > Frm().V_WIDTH )
+                    Prt().V_X = Frm().V_WIDTH - Prt().V_WIDTH;
+            }
+
+            //Fuer die VarSize gelten folgende Regeln:
+            //1. Der erste einer Kette hat keinen Rand nach oben
+            //2. Nach unten gibt es nie einen Rand
+            //3. Der Rand nach oben ist das Maximum aus dem Abstand des
+            //   Prev nach unten und dem eigenen Abstand nach oben.
+            //Die drei Regeln werden auf die Berechnung der Freiraeume, die von
+            //UL- bzw. LRSpace vorgegeben werden, angewand. Es gibt in alle
+            //Richtungen jedoch ggf. trotzdem einen Abstand; dieser wird durch
+            //Umrandung und/oder Schatten vorgegeben.
+            //4. Der Abstand fuer TextFrms entspricht mindestens dem Durchschuss
+
+            nUpper = CalcUpperSpace( &rAttrs, NULL );
+            Prt().V_Y = nUpper;
+
+            nUpper += rAttrs.GetBottomLine( this );
+            nUpper -= Frm().V_HEIGHT - Prt().V_HEIGHT;
+        }
+        //Wenn Unterschiede zwischen Alter und neuer Groesse,
+        //Grow() oder Shrink() rufen
+        if ( nUpper )
+        {
+            if ( nUpper > 0 )
+                GrowFrm( nUpper, pDir2Sz );
+            else
+                ShrinkFrm( -nUpper, pDir2Sz );
+            bSizeChgd = TRUE;
+        }
+#else
         const FASTBOOL bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
@@ -882,6 +1026,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 ShrinkFrm( -nUpper, pHeight );
             bSizeChgd = TRUE;
         }
+#endif
     }
     return bSizeChgd;
 }
@@ -915,6 +1060,10 @@ void SwCntntFrm::MakeAll()
 
     if ( IsJoinLocked() )
         return;
+
+#ifdef VERTICAL_LAYOUT
+    ASSERT( !((SwTxtFrm*)this)->IsSwapped(), "Calculation of a swapped frame" );
+#endif
 
     StackHack aHack;
 
@@ -1038,8 +1187,15 @@ void SwCntntFrm::MakeAll()
 
         //FixSize einstellen, die VarSize wird von Format() justiert.
         if ( !bValidSize )
+#ifdef VERTICAL_LAYOUT
+            if( IsVertical() )
+            {
+                Frm().Height( GetUpper()->Prt().Height() );
+                bValidPrtArea = 0;
+            }
+            else
+#endif
             Frm().Width( GetUpper()->Prt().Width() );
-
         if ( !bValidPrtArea )
         {
             const long nWidth = Prt().Width();
@@ -1175,8 +1331,16 @@ void SwCntntFrm::MakeAll()
         //Fertig?
         // Achtung, wg. Hoehe==0, ist es besser statt Bottom() Top()+Height() zu nehmen
         // (kommt bei Undersized TxFrms an der Unterkante eines spaltigen Bereichs vor)
+#ifdef VERTICAL_LAYOUT
+        if ( ( IsVertical() &&
+             GetUpper()->Frm().Left() + GetUpper()->Prt().Left() <=
+             Frm().Left() ) || ( !IsVertical() &&
+             GetUpper()->Prt().Top()+GetUpper()->Prt().Height()+GetUpper()->Frm().Top() >=
+             Frm().Top()+Frm().Height() ) )
+#else
         if ( GetUpper()->Prt().Top()+GetUpper()->Prt().Height()+GetUpper()->Frm().Top() >=
              Frm().Top()+Frm().Height() )
+#endif
         {
             if ( bKeep )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:33:57 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 10:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,8 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     {
         if ( pBoss->GetMaxFtnHeight() != LONG_MAX )
         {
-            nDist = Min( nDist, pBoss->GetMaxFtnHeight() - Frm().Height() );
+            nDist = Min( nDist, pBoss->GetMaxFtnHeight()
+                         - Frm().SSize().*pDirection );
             if ( nDist <= 0 )
                 return 0L;
         }
@@ -440,19 +441,19 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                 return 0L;
         }
     }
-    else if ( nDist > GetPrev()->Frm().Height() )
+    else if ( nDist > GetPrev()->Frm().SSize().*pDirection )
         //aber mehr als der Body kann koennen und wollen wir nun auch wieder
         //nicht herausruecken.
-        nDist = GetPrev()->Frm().Height();
+        nDist = GetPrev()->Frm().SSize().*pDirection;
 
     //Nicht mehr verlangen als benoetigt wird.
     long nAvail = 0;
     if ( GetFmt()->GetDoc()->IsBrowseMode() )
     {
-        nAvail = GetUpper()->Prt().Height();
+        nAvail = GetUpper()->Prt().SSize().*pDirection;
         const SwFrm *pAvail = GetUpper()->Lower();
         do
-        {   nAvail -= pAvail->Frm().Height();
+        {   nAvail -= pAvail->Frm().SSize().*pDirection;
             pAvail = pAvail->GetNext();
         } while ( pAvail );
         if ( nAvail > nDist )
@@ -460,7 +461,13 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     }
 
     if ( !bTst )
+    {
         Frm().SSize().*pDirection += nDist;
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() )
+            Frm().Pos().X() -= nDist;
+#endif
+    }
 
     long nGrow = nDist - nAvail,
          nReal = 0;
@@ -485,7 +492,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                     }
                 }
             }
-            nReal += pBoss->Grow( nGrow - nReal, pHeight, bTst );
+            nReal += pBoss->Grow( nGrow - nReal, pDirection, bTst );
             if( ( NA_GROW_ADJUST == nAdjust || NA_ADJUST_GROW == nAdjust )
                   && nReal < nGrow )
                 nReal += AdjustNeighbourhood( nGrow - nReal, bTst );
@@ -497,8 +504,16 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     if ( !bTst )
     {
         if ( nReal != nDist )
+        {
+            nDist -= nReal;
             //Den masslosen Wunsch koennen wir leider nur in Grenzen erfuellen.
-            Frm().SSize().*pDirection -= (nDist - nReal);
+            Frm().SSize().*pDirection -= nDist;
+#ifdef VERTICAL_LAYOUT
+            if( IsVertical() )
+                Frm().Pos().X() += nDist;
+#endif
+        }
+
         //Nachfolger braucht nicht invalidiert werden, denn wir wachsen
         //immer nach oben.
         if( nReal )

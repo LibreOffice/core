@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:34:34 $
+ *  last change: $Author: ama $ $Date: 2001-08-29 10:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ SwHeaderFrm::SwHeaderFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
 {
     nType = FRMC_HEADER;
+#ifdef VERTICAL_LAYOUT
+    SetDerivedVert( FALSE );
+#endif
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
@@ -151,6 +154,9 @@ SwFooterFrm::SwFooterFrm( SwFrmFmt *pFmt ):
     SwLayoutFrm( pFmt )
 {
     nType = FRMC_FOOTER;
+#ifdef VERTICAL_LAYOUT
+    SetDerivedVert( FALSE );
+#endif
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
