@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:00:38 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ namespace connectivity
             ODriver*                    m_pDriver;
         private:
             WpADOConnection*            m_pAdoConnection;
+            sal_Int32                   m_nEngineType;
             sal_Bool                    m_bClosed;
             sal_Bool                    m_bAutocommit;
 
@@ -170,6 +171,8 @@ namespace connectivity
             WpADOConnection* getConnection() { return m_pAdoConnection; }
             void setCatalog(const ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
             const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
+
+            sal_Int32 getEngineType() const { return m_nEngineType; }
         };
     }
 }

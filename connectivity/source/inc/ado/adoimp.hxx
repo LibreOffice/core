@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace connectivity
 
             static void ThrowException(ADOConnection* _pAdoCon,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             static sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
-            static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType);
+            static DataTypeEnum MapJdbc2ADOType(sal_Int32 _nType,sal_Int32 _nJetEngine);
             static sal_Bool isJetEngine(sal_Int32 _nEngineType);
 
             static ObjectTypeEnum   mapObjectType2Ado(sal_Int32 objType);

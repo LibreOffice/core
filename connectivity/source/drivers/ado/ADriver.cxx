@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 09:11:52 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
         ::rtl::OUString sError;
         ::rtl::OUString aSQLState;
         SQLException aException;
-        for (sal_Int32 i = nLen-1; i>=0; i--)
+        aException.ErrorCode = 1000;
+        for (sal_Int32 i = nLen-1; i>=0; --i)
         {
             ADOError *pError = NULL;
             pErrors->get_Item(OLEVariant(i),&pError);

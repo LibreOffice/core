@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:14:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ namespace connectivity
             void setIndexInfoMap();
             void setTablePrivilegesMap();
             void setCrossReferenceMap();
-            void setTypeInfoMap();
+            void setTypeInfoMap(sal_Bool _bJetEngine);
         };
         // -------------------------------------------------------------------------
         inline sal_Int32 ODatabaseMetaDataResultSet::mapColumn (sal_Int32   column)

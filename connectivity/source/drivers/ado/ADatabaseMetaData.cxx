@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
     //  ADOS::ThrowException(*m_pADOConnection,*this);
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(pRecordset);
-    pResult->setTypeInfoMap();
+    pResult->setTypeInfoMap(ADOS::isJetEngine(m_pConnection->getEngineType()));
     Reference< XResultSet > xRef = pResult;
     return xRef;
 }
@@ -416,10 +416,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-
-    sal_Int32 nEngineType = getInt32Property(::rtl::OUString::createFromAscii("Jet OLEDB:Engine Type"));
     Reference< XResultSet > xRef = NULL;
-    if(!ADOS::isJetEngine(nEngineType))
+    if(!ADOS::isJetEngine(m_pConnection->getEngineType()))
     {   // the jet provider doesn't support this method
         // Create elements used in the array
 

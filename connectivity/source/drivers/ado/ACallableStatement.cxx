@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACallableStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
     if(pParam)
     {
-        pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType));
+        pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType,m_pConnection->getEngineType()));
         pParam->put_Direction(adParamOutput);
     }
 }
@@ -205,7 +205,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
     if(pParam)
     {
-        pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType));
+        pParam->put_Type(ADOS::MapJdbc2ADOType(sqlType,m_pConnection->getEngineType()));
         pParam->put_Direction(adParamOutput);
         pParam->put_NumericScale((sal_Int8)scale);
     }

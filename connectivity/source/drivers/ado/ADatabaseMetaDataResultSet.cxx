@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,13 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 // -------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet) : ODatabaseMetaDataResultSet_BASE(m_aMutex)
-                        ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
-                        ,m_aStatement(NULL)
-                        ,m_xMetaData(NULL)
-                        ,m_pRecordSet(_pRecordSet)
-                        ,m_bEOF(sal_False)
+ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet)
+    :ODatabaseMetaDataResultSet_BASE(m_aMutex)
+    ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
+    ,m_aStatement(NULL)
+    ,m_xMetaData(NULL)
+    ,m_pRecordSet(_pRecordSet)
+    ,m_bEOF(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_aColMapping.push_back(-1);
@@ -1146,7 +1147,7 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_xMetaData = pMetaData;
 }
 // -------------------------------------------------------------------------
-void ODatabaseMetaDataResultSet::setTypeInfoMap()
+void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
 {
     sal_Int32 i=1;
     for(;i<19;i++)
@@ -1179,7 +1180,7 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap()
     aMap[adIDispatch]       = ADOS::MapADOType2Jdbc(adIDispatch);
     aMap[adIUnknown]        = ADOS::MapADOType2Jdbc(adIUnknown);
     aMap[adGUID]            = ADOS::MapADOType2Jdbc(adGUID);
-    aMap[adDate]            = ADOS::MapADOType2Jdbc(adDate);
+    aMap[adDate]            = _bJetEngine ? ADOS::MapADOType2Jdbc(adDBTimeStamp) : ADOS::MapADOType2Jdbc(adDate);
     aMap[adDBDate]          = ADOS::MapADOType2Jdbc(adDBDate);
     aMap[adDBTime]          = ADOS::MapADOType2Jdbc(adDBTime);
     aMap[adDBTimeStamp]     = ADOS::MapADOType2Jdbc(adDBTimeStamp);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:13:55 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
                          m_xCatalog(NULL),
                          m_pDriver(_pDriver),
                          m_pAdoConnection(NULL),
-                         m_bAutocommit(sal_True)
+                         m_bAutocommit(sal_True),
+                         m_nEngineType(0)
 {
     ModuleContext::AddRef();
 
@@ -205,12 +206,24 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             pProps->AddRef();
             ADOProperty* pProp = NULL;
             pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Jet OLEDB:ODBC Parsing")),&pProp);
+            {
+                WpADOProperty aProp(pProp);
+                if(pProp)
+                {
+                    aProp.PutValue(OLEVariant(sal_True));
+                    OLEVariant aVar = aProp.GetValue();
+                }
+            }
+            pProp = NULL;
+            pProps->get_Item(OLEVariant(::rtl::OUString::createFromAscii("Jet OLEDB:Engine Type")),&pProp);
             WpADOProperty aProp(pProp);
             if(pProp)
             {
-                aProp.PutValue(OLEVariant(sal_True));
                 OLEVariant aVar = aProp.GetValue();
+                if(!aVar.isNull() && !aVar.isEmpty())
+                    m_nEngineType = aVar;
             }
+
             pProps->Release();
         }
         buildTypeInfo();
