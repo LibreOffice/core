@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccessibility.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:35 $
+ *  last change:$Date: 2003-02-27 13:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,9 +404,13 @@ public class TableWindowAccessibility extends TestCase {
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
+        final XAccessibleComponent acc = (XAccessibleComponent)
+                UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
+
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
+                    acc.grabFocus();
                 }
             });
 
