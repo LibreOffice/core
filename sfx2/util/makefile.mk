@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:43:17 $
+#   last change: $Author: hjs $ $Date: 2002-04-09 16:26:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -213,37 +213,7 @@ ALLTAR : $(SRS)$/hidother.hid
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @+$(TYPE) sfxcommon.flt > $@
-    @echo CntSearchLocationsTabPage>>$@
-    @echo CntSearchDialog>>$@
-.IF "$(GUI)"=="WNT"
-    @echo WEP>>$@
-    @echo ?CreateType@>>$@
-.ENDIF
-.IF "$(COM)"=="MSC"
-    @echo ??_5>>$@
-    @echo ??_7>>$@
-    @echo ??_8>>$@
-    @echo ??_9>>$@
-    @echo ??_C>>$@
-    @echo ??_E>>$@
-    @echo ??_F>>$@
-    @echo ??_G>>$@
-    @echo ??_H>>$@
-    @echo ??_I>>$@
-    @echo ?CreateImpl@>>$@
-    @echo ?GetGlobalClassName@>>$@
-    @echo ?GetSvFactory@>>$@
-    @echo ?LinkStub>>$@
-    @echo ?nClassId@>>$@
-    @echo ?RegisterInterface@>>$@
-    @echo ::UsrException>>$@
-    @echo ::IllegalArg>>$@
-    @echo AVIllegalArg>>$@
-    @echo ::Exception>>$@
-    @echo NoSuchElementException>>$@
-    @echo __CT>>$@
-.ENDIF         # "$(COM)"=="MSC" 
+    @+$(TYPE) sfxwin.flt > $@
 
 $(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
 
