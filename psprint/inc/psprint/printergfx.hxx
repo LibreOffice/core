@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:58:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,10 @@ public:
             meColorspace (eRGB)
     {}
     PrinterColor (sal_uInt32 nRGB) :
-            meColorspace (eRGB),
-            mnBlue  ((nRGB & 0x000000ff)      ),
+            mnRed   ((nRGB & 0x00ff0000) >> 16),
             mnGreen ((nRGB & 0x0000ff00) >>  8),
-            mnRed   ((nRGB & 0x00ff0000) >> 16)
+            mnBlue  ((nRGB & 0x000000ff)      ),
+            meColorspace (eRGB)
     {}
     ~PrinterColor ()
     {}
