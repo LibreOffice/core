@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:23:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <math.h>
 #ifndef _SVX_IMPGRF_HXX
 #include "impgrf.hxx"
@@ -256,6 +255,45 @@ using namespace vos;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+
+
+// ---------------------------------------------------------------------------------------------
+
+EscherExContainer::EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance ) :
+    rStrm   ( rSt )
+{
+    rStrm << (sal_uInt32)( ( 0xf | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) << (sal_uInt32)0;
+    nContPos = rStrm.Tell();
+}
+EscherExContainer::~EscherExContainer()
+{
+    sal_uInt32 nPos = rStrm.Tell();
+    sal_uInt32 nSize= nPos - nContPos;
+    if ( nSize )
+    {
+        rStrm.Seek( nContPos - 4 );
+        rStrm << nSize;
+        rStrm.Seek( nPos );
+    }
+}
+
+EscherExAtom::EscherExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance, const sal_uInt8 nVersion ) :
+    rStrm   ( rSt )
+{
+    rStrm << (sal_uInt32)( ( nVersion | ( nInstance << 4 ) ) | ( nRecType << 16 ) ) << (sal_uInt32)0;
+    nContPos = rStrm.Tell();
+}
+EscherExAtom::~EscherExAtom()
+{
+    sal_uInt32 nPos = rStrm.Tell();
+    sal_uInt32 nSize= nPos - nContPos;
+    if ( nSize )
+    {
+        rStrm.Seek( nContPos - 4 );
+        rStrm << nSize;
+        rStrm.Seek( nPos );
+    }
+}
 
 // ---------------------------------------------------------------------------------------------
 
