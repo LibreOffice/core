@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:09 $
+ *  last change: $Author: hr $ $Date: 2000-12-08 12:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 #ifndef _ZIP_PACKAGE_HXX
 #include "ZipPackage.hxx"
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 
 using namespace rtl;
