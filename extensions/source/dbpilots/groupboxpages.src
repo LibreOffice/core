@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:44:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ czech ] = "Jaké názvy chcete přiřadit jednotlivým volbám?";
         Text[ hebrew ] = "Welche ~Bezeichnungen sollen die Optionsfelder erhalten?";
         Text[ hindi ] = "आप वि~कल्प क्षेत्रों को क्या नाम देना चाहते है?";
+        Text[ slovak ] = "Ktorým me~nám chcete chcete priradiť pole volieb?";
     };
     Edit ET_RADIOLABELS
     {
@@ -159,6 +160,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ czech ] = "Pole voleb";
         Text[ hebrew ] = "~Optionsfelder";
         Text[ hindi ] = "~विकल्प क्षेत्र";
+        Text[ slovak ] = "P~olia možností";
     };
     ListBox LB_RADIOBUTTONS
     {
@@ -192,6 +194,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     Text[ czech ] = "Data";
     Text[ hebrew ] = "Daten";
     Text[ hindi ] = "ड़ॉटा";
+    Text[ slovak ] = "Dáta";
 };
 
 TabPage RID_PAGE_DEFAULTFIELDSELECTION
@@ -239,6 +242,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ czech ] = "Má být jedno pole volby vybrané jako výchozí?";
         Text[ hebrew ] = "Soll ein Optionsfeld standardmäßig ausgewählt sein?";
         Text[ hindi ] = "एक विकल्प क्षेत्र को अनुपस्थिति में चुनना है ?";
+        Text[ slovak ] = "Má byť jedno pole voľby vybrané ako východzie?";
     };
     RadioButton RB_DEFSELECTION_YES
     {
@@ -272,6 +276,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ czech ] = "Ano, následující:";
         Text[ hebrew ] = "~Ja, und zwar folgendes:";
         Text[ hindi ] = "~हाँ, निम्नलिखित:";
+        Text[ slovak ] = "Á~no, nasledujúce:";
     };
     ListBox LB_DEFSELECTIONFIELD
     {
@@ -315,6 +320,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ czech ] = "Ne, žádné pole nebude vybráno.";
         Text[ hebrew ] = "Nein, kein Feld soll ausgewählt sein.";
         Text[ hindi ] = "नहीं, एक क्षेत्र को नहीं चुन सकते है ।";
+        Text[ slovak ] = "Žiadne prislúchajúce pole nebude vybrané.";
     };
     Text[ portuguese ] = "Selec��o do campo padr�o";
     Text[ russian ] = "����� ���� �� ���������";
@@ -339,6 +345,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
     Text[ czech ] = "Výběr výchozího pole";
     Text[ hebrew ] = "Standardfeldauswahl";
     Text[ hindi ] = "अनुपस्थिति क्षेत्र चुनाव";
+    Text[ slovak ] = "Východzie Pole";
 };
 
 TabPage RID_PAGE_OPTIONVALUES
@@ -372,7 +379,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ swedish ] = "Om du v�ljer ett alternativ tilldelas alternativgruppen ett visst v�rde.";
         Text [ polish ] = "Po wybraniu opcji grupie opcji zostanie przypisana okre�lona warto��.";
         Text [ portuguese_brazilian ] = "Ao selecionar uma op��o, ser� atribu�do um determinado valor ao grupo de op��es.";
-        Text [ japanese ] = "オプションを１つ選択すると、オプショングループに明瞭値が割り当てられます。";
+        Text [ japanese ] = "オプションを１つ選択すると、オプショングループに特定の値が割り当てられます。";
         Text [ chinese_simplified ] = "如果设定使用一个选项，这个选项小组就会获得某一个数值。";
         Text [ chinese_traditional ] = "如果選擇了一個選項，選項群組就會採用某一設定好的數值。";
         Text [ arabic ] = "��� ������� ���� �������ʡ ��� ��� ����� ���� ����� ������� ��������.";
@@ -387,6 +394,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text[ czech ] = "Pokud vyberete jednu z voleb, celá skupina získá určitou hodnotu.";
         Text[ hebrew ] = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
         Text[ hindi ] = "जब आप एक विकल्प को चुनते है , तब विकल्प समूह को एक निर्दिष्ट मूल्य दिया जाता है ।";
+        Text[ slovak ] = "Keď si vyberiete voľbu, skupine volieb bude priradená špecifická hodnota.";
     };
     FixedText FT_OPTIONVALUES
     {
@@ -422,6 +430,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text[ czech ] = "Jaké hodnoty chcete přiřadit jednotlivým volbám?";
         Text[ hebrew ] = "Welchen ~Wert möchten Sie jeder Option zuweisen?";
         Text[ hindi ] = "हरेक वि~कल्प को आप कौनसी मूल्य को निर्दिष्ट करना चाहते है?";
+        Text[ slovak ] = "Ktorú ~hodnotu chcete priradiť každej voľbe?";
     };
     Edit ET_OPTIONVALUE
     {
@@ -463,6 +472,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text[ czech ] = "Pole voleb";
         Text[ hebrew ] = "~Optionsfelder";
         Text[ hindi ] = "~विकल्प क्षेत्र";
+        Text[ slovak ] = "P~ole volieb";
     };
     ListBox LB_RADIOBUTTONS
     {
@@ -496,6 +506,7 @@ TabPage RID_PAGE_OPTIONVALUES
     Text[ czech ] = "Hodnoty polí";
     Text[ hebrew ] = "Feldwerte";
     Text[ hindi ] = "क्षेत्र मूल्य";
+    Text[ slovak ] = "Hodnoty polí";
 };
 
 TabPage RID_PAGE_OPTIONS_FINAL
@@ -563,6 +574,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text[ czech ] = "Jaký popisek se má dát k této skupině voleb?";
         Text[ hebrew ] = "Welche ~Beschriftung soll Ihre Optionsgruppe haben?";
         Text[ hindi ] = "आप ~विकल्प समूह को क्या नाम देना चाहते है?";
+        Text[ slovak ] = "Aký ~názov ma byť priradený Vašej skupine volieb?";
     };
     Edit ET_NAMEIT
     {
@@ -605,6 +617,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text[ czech ] = "Toto jsou všechny informace potřebné pro vytvoření pole voleb.";
         Text[ hebrew ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
         Text[ hindi ] = "विकल्प समूह को उत्पन्न करने केलिए इन सब विवरणों का आवश्यकता है ।";
+        Text[ slovak ] = "Toto boli všetky informácie potrebné na vytvorenie skupiny volieb.";
     };
     Text[ catalan ] = "Crea el grup d'opcions";
     Text[ finnish ] = "Luo valintaryhm�";
@@ -612,6 +625,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
     Text[ czech ] = "Vytvořit skupinu voleb";
     Text[ hebrew ] = "Optionsgruppe erstellen";
     Text[ hindi ] = "विकल्प समूह उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť skupinu výberu";
 };
 
 String RID_STR_GROUPWIZ_DBFIELD
@@ -644,11 +658,21 @@ String RID_STR_GROUPWIZ_DBFIELD
     Text[ czech ] = "Buď můžete vybranou hodnotu uložit do pole v databázi a nebo ji použít k nějaké další akci.";
     Text[ hebrew ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
     Text[ hindi ] = "आप विकल्प समूह को लेखासंचय क्षेत्र में संचित कर सकते है अथवा आगामी कार्य में उपयोग कर सकते है । ";
+    Text[ slovak ] = "Môžete uložiť hodnotu zo skupiny volieb do databázového poľa, alebo ju použiť neskôr.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20.26.1  2003/06/12 11:09:55  gh
+ *  final Merge RC
+ *
+ *  Revision 1.20  2003/04/29 17:44:52  hr
+ *  INTEGRATION: CWS mergem8 (1.17.2.1.2.7.6.3.2.1.26); FILE MERGED
+ *  2003/04/29 08:35:40 gh 1.17.2.1.2.7.6.3.2.1.26.3: final merge for Beta2
+ *  2003/04/16 18:59:12 gh 1.17.2.1.2.7.6.3.2.1.26.2: RESYNC: (1.17.2.1.2.7.6.3.2.1-1.19); FILE MERGED
+ *  2003/04/14 14:46:30 gh 1.17.2.1.2.7.6.3.2.1.26.1: merging all languages
+ *
  *  Revision 1.17.2.1.2.7.6.3.2.1.26.3  2003/04/29 08:35:40  gh
  *  final merge for Beta2
  *
@@ -759,6 +783,8 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
+
 
 
 
