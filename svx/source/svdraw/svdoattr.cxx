@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-13 13:37:03 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 12:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,10 @@ void __EXPORT SdrAttrObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
     BOOL bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
     SfxStyleSheetHint *pStyleHint = PTR_CAST(SfxStyleSheetHint, &rHint);
-    BOOL bDying(pStyleHint && SFX_STYLESHEET_INDESTRUCTION == pStyleHint->GetHint());
+    BOOL bDying(pStyleHint
+                && pStyleHint->GetStyleSheet() == GetStyleSheet()
+                && ( SFX_STYLESHEET_INDESTRUCTION == pStyleHint->GetHint() ||
+                     SFX_STYLESHEET_ERASED == pStyleHint->GetHint() ));
 
     if(bDataChg || bDying)
     {
