@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 07:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 #define _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #ifndef __SGI_STL_LIST
 #include <list>
 #endif
@@ -82,9 +85,6 @@ class ScBigRange;
 class ScEditEngineTextObj;
 class ScChangeActionTable;
 class DateTime;
-namespace xmloff { namespace token {
-    enum XMLTokenEnum; }}
-
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 

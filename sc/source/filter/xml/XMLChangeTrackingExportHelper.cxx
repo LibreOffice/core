@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 07:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #include "textuno.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmloff/xmltoken.hxx>
-#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif

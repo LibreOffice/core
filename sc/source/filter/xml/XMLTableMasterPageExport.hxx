@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 07:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT_HXX
 #include <xmloff/XMLTextMasterPageExport.hxx>
 #endif
@@ -79,8 +82,6 @@
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }
 } } }
-namespace xmloff { namespace token {
-    enum XMLTokenEnum; }}
 
 class XMLTableMasterPageExport : public XMLTextMasterPageExport
 {
