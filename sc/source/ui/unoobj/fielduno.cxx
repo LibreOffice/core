@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-15 18:00:19 $
+ *  last change: $Author: nn $ $Date: 2001-02-27 18:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,9 +587,8 @@ void SAL_CALL ScCellFieldObj::attach( const uno::Reference<text::XTextRange>& xT
 uno::Reference<text::XTextRange> SAL_CALL ScCellFieldObj::getAnchor() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (pEditSource)
-        return (SvxUnoTextRangeBase*)new SvxUnoText(
-            pEditSource, ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() );
+    if (pDocShell)
+        return new ScCellObj( pDocShell, aCellPos );
     return NULL;
 }
 
@@ -1177,10 +1176,17 @@ void SAL_CALL ScHeaderFieldObj::attach( const uno::Reference<text::XTextRange>& 
 uno::Reference<text::XTextRange> SAL_CALL ScHeaderFieldObj::getAnchor() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    //! Property-Map fuer Kopf-Fusszeilentext
-    if (pEditSource)
-        return (SvxUnoTextRangeBase*)new SvxUnoText(
-            pEditSource, ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() );
+    if (pContentObj)
+    {
+        uno::Reference<text::XText> xText;
+        if ( nPart == SC_HDFT_LEFT )
+            xText = pContentObj->getLeftText();
+        else if (nPart == SC_HDFT_CENTER)
+            xText = pContentObj->getCenterText();
+        else
+            xText = pContentObj->getRightText();
+        return uno::Reference<text::XTextRange>( xText, uno::UNO_QUERY );
+    }
     return NULL;
 }
 
