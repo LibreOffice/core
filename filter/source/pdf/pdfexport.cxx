@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-20 10:39:47 $
+ *  last change: $Author: pl $ $Date: 2002-09-30 08:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,8 +726,8 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
             {
                 const MetaPushAction* pA = (const MetaPushAction*) pAction;
 
-                rDummyVDev.Push( PUSH_ALL );
-                rWriter.Push();
+                rDummyVDev.Push( pA->GetFlags() );
+                rWriter.Push( pA->GetFlags() );
             }
             break;
 
