@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-27 11:39:50 $
+ *  last change: $Author: od $ $Date: 2002-09-03 08:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1321,23 +1321,31 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                                     aMap.SetOrigin( aTmp );
                                     pPrt->SetMapMode( aMap );
 
+                                    /// OD 30.08.2002 #102450#
+                                    /// determine color of page the table is on
+                                    /// for <PaintLayer> method calls
+                                    const Color aPageBackgrdColor =
+                                            pStPage->GetDrawBackgrdColor();
                                     pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_INIT );
                                     SwTxtFrm::SetMinPrtLine( aNewVis.Pos().Y() );
                                     pFrm->PaintBaBo( aNewVis, pStPage, TRUE );
                                     if ( pShell->Imp()->HasDrawView() )
                                     {
                                         pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_LOCKLINES );
-                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->GetHellId(), aNewVis );
+                                        /// OD 30.08.2002 #102450# - add 3rd parameter
+                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->GetHellId(),
+                                                        aNewVis, &aPageBackgrdColor );
                                         pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_PAINTLINES );
                                         pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_UNLOCKLINES );
                                     }
                                     pFrm->Paint( aNewVis );
                                     if ( pShell->Imp()->HasDrawView() )
                                     {
+                                        /// OD 30.08.2002 #102450# - add 3rd parameter
                                         pShell->Imp()->PaintLayer( pShell->GetDoc()->GetHeavenId(),
+                                                    aNewVis, &aPageBackgrdColor );
+                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->GetControlsId(),
                                                                    aNewVis );
-                                        pShell->Imp()->PaintLayer( pShell->GetDoc()->
-                                                                GetControlsId(), aNewVis );
                                         pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_PAINTLINES );
                                     }
                                     pRoot->HackPrepareLongTblPaint( HACK_TABLEMODE_EXIT );
@@ -1604,6 +1612,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2002/06/27 11:39:50  fme
+      #89703# Controls were printed although disabled in the options
+
       Revision 1.7  2002/05/29 14:27:29  os
       #99649# 'single print job' corrected
 
