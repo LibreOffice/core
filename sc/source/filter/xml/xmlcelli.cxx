@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 08:04:16 $
+ *  last change: $Author: sab $ $Date: 2001-09-12 13:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,13 +251,16 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
                 {
-                    rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
-                    bIsEmpty = sal_False;
+                    if (sValue.getLength())
+                    {
+                        rXMLImport.GetMM100UnitConverter().convertDouble(fValue, sValue);
+                        bIsEmpty = sal_False;
+                    }
                 }
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
                 {
-                    if (rXMLImport.SetNullDateOnUnitConverter())
+                    if (sValue.getLength() && rXMLImport.SetNullDateOnUnitConverter())
                     {
                         rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
                         bIsEmpty = sal_False;
@@ -266,23 +269,32 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
                 {
-                    rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
-                    bIsEmpty = sal_False;
+                    if (sValue.getLength())
+                    {
+                        rXMLImport.GetMM100UnitConverter().convertTime(fValue, sValue);
+                        bIsEmpty = sal_False;
+                    }
                 }
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
                 {
-                    if ( IsXMLToken(sValue, XML_TRUE) )
-                        fValue = 1.0;
-                    else
-                        fValue = 0.0;
-                    bIsEmpty = sal_False;
+                    if (sValue.getLength())
+                    {
+                        if ( IsXMLToken(sValue, XML_TRUE) )
+                            fValue = 1.0;
+                        else
+                            fValue = 0.0;
+                        bIsEmpty = sal_False;
+                    }
                 }
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
                 {
-                    sOUTextValue = sValue;
-                    bIsEmpty = sal_False;
+                    if (sValue.getLength())
+                    {
+                        sOUTextValue = sValue;
+                        bIsEmpty = sal_False;
+                    }
                 }
                 break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA:
@@ -755,6 +767,8 @@ void ScXMLTableRowCellContext::EndElement()
                         if (xTempText.is())
                             sOUText=xTempText->getString();
                     }
+                    if (!sOUTextContent.getLength() && !sOUText.getLength() && !sOUTextValue.getLength())
+                        bIsEmpty = sal_True;
                 }
                 uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
