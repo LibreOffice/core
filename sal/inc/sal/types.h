@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: svesik $ $Date: 2000-12-04 16:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ typedef unsigned long       sal_uInt32;
 #   if (_MSC_VER >= 1000)
 typedef __int64             sal_Int64;
 typedef unsigned __int64    sal_uInt64;
-#   elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (__MWERKS__) || defined(__hpux)
+#   elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (__MWERKS__) || defined(__hpux) || defined (sgi)
 typedef long long           sal_Int64;
 typedef unsigned long long  sal_uInt64;
 #   else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-06 10:59:13 $
+ *  last change: $Author: svesik $ $Date: 2000-12-04 16:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,8 @@ void SAL_CALL rtl_createNamedUuid(
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
 #elif MACOS
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
+#elif IRIX
+#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #else
 #error "System time resolution must be calculated!"
 #endif
