@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<oor:component-schema oor:name="Security" oor:package="org.openoffice.Office" 
+     xsi:schemaLocation="http://openoffice.org/2001/registry component-schema.xsd" 
+     xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+     xmlns:oor="http://openoffice.org/2001/registry" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+     xml:lang='en-US'>
+	<!--Responsible: CD-->
+	<info><desc>Stores security related settings for the Office.</desc></info>
+	<templates>
+		<group oor:name="SecureExtension">
+			<prop oor:name="Extension" oor:type="xs:string">
+				<info><desc>Provides a file extension as a not case sensitive string.</desc></info>
+			</prop>
+			<info><desc>Provides a secure file extensions. Opening this kind of files does not harm any risk.</desc></info>
+		</group>
+	</templates>
+	<component>
+		<set oor:name="SecureExtensions" oor:node-type="SecureExtension">
+			<info><desc>Provides a list of secure file extensions. Opening these kind of files don't harm any risk.</desc></info>
+		</set>
+		<group oor:name="Hyperlinks">
+			<prop oor:name="Open" oor:type="xs:int">
+				<info><desc>Specifies how a hyperlink should be opened ( 0 = Never, 1 = with security checks, 2 = Always open).</desc></info>
+			</prop>
+			<info><desc>Specifies how secure hyperlinks should processed.</desc></info>
+		</group>
+	</component>
+</oor:component-schema>

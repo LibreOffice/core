@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: tpf $ $Date: 2002-08-07 14:58:24 $
+#   last change: $Author: pb $ $Date: 2002-08-13 13:11:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ XCSFILES= \
     org$/openoffice$/Office$/Views.xcs \
     org$/openoffice$/Office$/Writer.xcs \
     org$/openoffice$/Office$/WriterWeb.xcs \
+    org$/openoffice$/Office$/Security.xcs \
     org$/openoffice$/Setup.xcs \
     org$/openoffice$/UserProfile.xcs \
     org$/openoffice$/VCL.xcs \

@@ -52,6 +52,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\xcdformat\org\openoffice\Office\Commands.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Commands.xcd
 ..\%__SRC%\misc\xcdformat\org\openoffice\Office\ProtocolHandler.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\ProtocolHandler.xcd
 ..\%__SRC%\misc\xcdformat\org\openoffice\Office\Substitution.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Substitution.xcd
+..\%__SRC%\misc\xcdformat\org\openoffice\Office\Security.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Office\Security.xcd
 ..\%__SRC%\misc\xcdformat\org\openoffice\Inet.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Inet.xcd
 ..\%__SRC%\misc\xcdformat\org\openoffice\ucb\Store.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\ucb\Store.xcd
 ..\%__SRC%\misc\xcdformat\org\openoffice\Setup.xcd %_DEST%\xml%_EXT%\office\definition\org\openoffice\Setup.xcd
@@ -80,6 +81,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\instance\org\openoffice\Office\WriterWeb.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\WriterWeb.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Commands.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Commands.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\Substitution.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Substitution.xml
+..\%__SRC%\misc\instance\org\openoffice\Office\Security.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\Security.xml
 ..\%__SRC%\misc\instance\org\openoffice\Office\ProtocolHandler.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Office\ProtocolHandler.xml
 ..\%__SRC%\misc\instance\org\openoffice\Inet.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\Inet.xml
 ..\%__SRC%\misc\instance\org\openoffice\ucb\Configuration.xml %_DEST%\xml%_EXT%\office\instance\org\openoffice\ucb\Configuration.xml
@@ -109,6 +111,7 @@ mkdir: %_DEST%\xml%_EXT%\office\ldap
 ..\%__SRC%\misc\template\org\openoffice\Office\WriterWeb.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\WriterWeb.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Commands.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Commands.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\Substitution.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Substitution.xml
+..\%__SRC%\misc\template\org\openoffice\Office\Security.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\Security.xml
 ..\%__SRC%\misc\template\org\openoffice\Office\ProtocolHandler.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Office\ProtocolHandler.xml
 ..\%__SRC%\misc\template\org\openoffice\Inet.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\Inet.xml
 ..\%__SRC%\misc\template\org\openoffice\ucb\Configuration.xml %_DEST%\xml%_EXT%\office\template\org\openoffice\ucb\Configuration.xml
