@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:04:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-29 13:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,16 @@ namespace dbaui
 
     private:
         // dialog controls
-        FixedText           m_aFTHeaderText;        FixedText           m_aFTHelpText;
-        FixedText           m_aFT_DatasourceTypeHeader;        RadioButton         m_aRB_CreateDatabase;        RadioButton         m_aRB_GetExistingDatabase;
+        FixedText           m_aFTHeaderText;
+        FixedText           m_aFTHelpText;
+        FixedText           m_aFT_DatasourceTypeHeader;
+        RadioButton         m_aRB_CreateDatabase;
+        RadioButton         m_aRB_GetExistingDatabase;
         FixedText           m_aTypePreLabel;
         FixedText           m_aDatasourceTypeLabel;
         ListBox             m_aDatasourceType;
-        FixedText           m_aFTDataSourceAppendix;       FixedText           m_aTypePostLabel;
+        FixedText           m_aFTDataSourceAppendix;
+        FixedText           m_aTypePostLabel;
         FixedText           m_aSpecialMessage;
         sal_Bool            m_DBWizardMode;
         String              m_sMySQLEntry;
