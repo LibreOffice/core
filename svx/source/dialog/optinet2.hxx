@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:52:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 10:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,29 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
+//added by jmeng begin
+class MozPluginTabPage : public SfxTabPage
+{
+    FixedLine       aMSWordGB;
+    CheckBox        aWBasicCodeCB;
+
+    BOOL isInstalled(void);
+    BOOL installPlugin(void);
+    BOOL uninstallPlugin(void);
+
+    MozPluginTabPage( Window* pParent, const SfxItemSet& rSet );
+    virtual ~MozPluginTabPage();
+
+public:
+
+    static SfxTabPage*  Create( Window* pParent,
+                                const SfxItemSet& rAttrSet );
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+
+};
+//added by jmeng end
 #endif
 
 /* -----------------------------20.06.01 16:32--------------------------------
