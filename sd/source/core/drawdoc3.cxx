@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-14 13:21:35 $
+ *  last change: $Author: ka $ $Date: 2001-02-21 12:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,12 +165,13 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
         SvStorage* pStorage = rMedium.GetStorage();
 
-        if (!pStorage->IsStream(pStarDrawDoc) &&
-            !pStorage->IsStream(pStarDrawDoc3))
+        if( !pStorage->IsStream( pStarDrawDoc ) &&
+            !pStorage->IsStream( pStarDrawDoc3 ) &&
+            !pStorage->IsStream( pStarDrawXMLContent ) )
         {
             // Es ist nicht unser Storage
-            bOK = FALSE;
             DBG_ASSERT(bOK, "Nicht unser Storage");
+            bOK = FALSE;
         }
         else
         {

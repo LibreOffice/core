@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmname.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: ka $ $Date: 2001-02-21 12:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,5 +77,7 @@ static const String pPreviewName( RTL_CONSTASCII_USTRINGPARAM( "StarDrawTemplate
 static const String pFilterPowerPoint97( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97" ));
 static const String pFilterPowerPoint97Template( RTL_CONSTASCII_USTRINGPARAM( "MS PowerPoint 97 Vorlage" ));
 
-#endif  // _SD_STRMNAME_H
+// XML content stream
+static const String pStarDrawXMLContent( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ));
 
+#endif  // _SD_STRMNAME_H
