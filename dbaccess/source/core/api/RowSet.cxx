@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:10:09 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,9 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         // remember old value for fire
         sal_Bool bOld = m_bNew;
 
-        ORowSetRow aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
+        ORowSetRow aOldValues;
+        if ( !m_aCurrentRow.isNull() )
+            aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
         if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
         {
@@ -1232,7 +1234,9 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
         if(m_aBookmark.hasValue())
             positionCache();
 
-        ORowSetRow aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
+        ORowSetRow aOldValues;
+        if ( !m_bBeforeFirst && !m_bAfterLast && m_pCache->m_aMatrixIter != m_pCache->getEnd() )
+            aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
 
         const sal_Bool bNewState = m_bNew;
         const sal_Bool bModState = m_bModified;
