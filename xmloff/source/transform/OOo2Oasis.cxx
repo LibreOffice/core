@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:04:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -453,7 +456,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, PATH, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CIRCLE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, ELLIPSE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
-    ENTRY1( DRAW, CONNECTOR, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
+    ENTRY1( DRAW, CONNECTOR, XML_ETACTION_PROC_ATTRS, OOO_CONNECTOR_ACTIONS ),
     ENTRY1( DRAW, CAPTION, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTROL, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, PAGE_THUMBNAIL, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
@@ -629,8 +632,8 @@ static XMLTransformerActionInit aStyleActionTable[] =
     ENTRY0( DRAW, DISTANCE, XML_ATACTION_INCH2IN ),
     ENTRY0( DRAW, DOTS1_LENGTH, XML_ATACTION_INCH2IN ),
     ENTRY0( DRAW, DOTS2_LENGTH, XML_ATACTION_INCH2IN ),
-    ENTRY0( SVG, WIDTH, XML_ATACTION_INCH2IN ),
-    ENTRY0( SVG, HEIGHT, XML_ATACTION_INCH2IN ),
+    ENTRY0( SVG, WIDTH, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
+    ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
     ENTRY0( DRAW, START, XML_ATACTION_NEG_PERCENT ),
     ENTRY0( DRAW, END, XML_ATACTION_NEG_PERCENT ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
@@ -753,6 +756,8 @@ static XMLTransformerActionInit aStyleRefActionTable[] =
 };
 
 // OOO_SHAPE_ACTIONS
+// !!ATTENTION!! If you change something here, please also change
+// aConnectorActionTable if apropriate
 static XMLTransformerActionInit aShapeActionTable[] =
 {
     ENTRY0( SVG, X, XML_ATACTION_INCH2IN ),
@@ -766,8 +771,8 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY0( SVG, R, XML_ATACTION_INCH2IN ),
     ENTRY0( SVG, RX, XML_ATACTION_INCH2IN ),
     ENTRY0( SVG, RY, XML_ATACTION_INCH2IN ),
-    ENTRY0( SVG, WIDTH, XML_ATACTION_INCH2IN ),
-    ENTRY0( SVG, HEIGHT, XML_ATACTION_INCH2IN ),
+    ENTRY0( SVG, WIDTH, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
+    ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
     ENTRY0( FO, MIN_WIDTH, XML_ATACTION_INCH2IN ),
     ENTRY0( FO, MIN_HEIGHT, XML_ATACTION_INCH2IN ),
     ENTRY0( FO, MAX_WIDTH, XML_ATACTION_INCH2IN ),
@@ -791,6 +796,29 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
             RENAME_ENTRY( XML_LEFT, XML_START ),
             RENAME_ENTRY( XML_RIGHT, XML_END )),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+static XMLTransformerActionInit aConnectorActionTable[] =
+{
+    ENTRY0( SVG, X1, XML_ATACTION_TWIPS2IN ),
+    ENTRY0( SVG, Y1, XML_ATACTION_TWIPS2IN ),
+    ENTRY0( SVG, X2, XML_ATACTION_TWIPS2IN ),
+    ENTRY0( SVG, Y2, XML_ATACTION_TWIPS2IN ),
+    ENTRY0( SVG, WIDTH, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
+    ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
+    ENTRY0( FO, MIN_WIDTH, XML_ATACTION_INCH2IN ),
+    ENTRY0( FO, MIN_HEIGHT, XML_ATACTION_INCH2IN ),
+    ENTRY0( FO, MAX_WIDTH, XML_ATACTION_INCH2IN ),
+    ENTRY0( FO, MAX_HEIGHT, XML_ATACTION_INCH2IN ),
+    ENTRY0( DRAW, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
+    ENTRY0( DRAW, TEXT_STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
+    ENTRY0( DRAW, END_X, XML_ATACTION_INCH2IN ),
+    ENTRY0( DRAW, END_Y, XML_ATACTION_INCH2IN ),
+    ENTRY0( PRESENTATION, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
+    ENTRY1Q( FORM, ID, XML_ATACTION_RENAME,
+                    XML_NAMESPACE_DRAW, XML_CONTROL ),
+    ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1019,8 +1047,8 @@ static XMLTransformerActionInit aChartActionTable[] =
     ENTRY1( CHART, CLASS, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                      XML_NAMESPACE_CHART ),
     ENTRY0( CHART, ADD_IN_NAME, XML_ATACTION_REMOVE ),
-    ENTRY0( SVG, WIDTH, XML_ATACTION_INCH2IN ),
-    ENTRY0( SVG, HEIGHT, XML_ATACTION_INCH2IN ),
+    ENTRY0( SVG, WIDTH, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
+    ENTRY0( SVG, HEIGHT, XML_ATACTION_SVG_WIDTH_HEIGHT_OOO ),
     ENTRY0( CHART, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
@@ -1525,96 +1553,131 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                 case OOO_STYLE_ACTIONS:
                     m_aActions[OOO_STYLE_ACTIONS] =
                         new XMLTransformerActions( aStyleActionTable );
+                    break;
                 case OOO_FONT_DECL_ACTIONS:
                     m_aActions[OOO_FONT_DECL_ACTIONS] =
                         new XMLTransformerActions( aFontDeclActionTable );
+                    break;
                 case OOO_SHAPE_ACTIONS:
                     m_aActions[OOO_SHAPE_ACTIONS] =
                         new XMLTransformerActions( aShapeActionTable );
+                    break;
+                case OOO_CONNECTOR_ACTIONS:
+                    m_aActions[OOO_CONNECTOR_ACTIONS] =
+                        new XMLTransformerActions( aConnectorActionTable );
+                    break;
                 case OOO_TAB_STOP_ACTIONS:
                     m_aActions[OOO_TAB_STOP_ACTIONS] =
                         new XMLTransformerActions( aTabStopActionTable );
+                    break;
                 case OOO_INDEX_ENTRY_TAB_STOP_ACTIONS:
                     m_aActions[OOO_INDEX_ENTRY_TAB_STOP_ACTIONS] =
                         new XMLTransformerActions( aIndexEntryTabStopActionTable );
+                    break;
                 case OOO_LINENUMBERING_ACTIONS:
                     m_aActions[OOO_LINENUMBERING_ACTIONS] =
                         new XMLTransformerActions( aLineNumberingActionTable );
+                    break;
                 case OOO_FOOTNOTE_SEP_ACTIONS:
                     m_aActions[OOO_FOOTNOTE_SEP_ACTIONS] =
                         new XMLTransformerActions( aFootnoteSepActionTable );
+                    break;
                 case OOO_DROP_CAP_ACTIONS:
                     m_aActions[OOO_DROP_CAP_ACTIONS] =
                         new XMLTransformerActions( aDropCapActionTable );
+                    break;
                 case OOO_COLUMNS_ACTIONS:
                     m_aActions[OOO_COLUMNS_ACTIONS] =
                         new XMLTransformerActions( aColumnsActionTable );
+                    break;
                 case OOO_TEXT_VALUE_TYPE_ACTIONS:
                     m_aActions[OOO_TEXT_VALUE_TYPE_ACTIONS] =
                         new XMLTransformerActions( aTextValueTypeActionTable );
+                    break;
                 case OOO_TABLE_VALUE_TYPE_ACTIONS:
                     m_aActions[OOO_TABLE_VALUE_TYPE_ACTIONS] =
                         new XMLTransformerActions( aTableValueTypeActionTable );
+                    break;
                 case OOO_PARA_ACTIONS:
                     m_aActions[OOO_PARA_ACTIONS] =
                         new XMLTransformerActions( aParaActionTable );
+                    break;
                 case OOO_STYLE_REF_ACTIONS:
                     m_aActions[OOO_STYLE_REF_ACTIONS] =
                         new XMLTransformerActions( aStyleRefActionTable );
+                    break;
                 case OOO_MASTER_PAGE_ACTIONS:
                     m_aActions[OOO_MASTER_PAGE_ACTIONS] =
                         new XMLTransformerActions( aMasterPageActionTable );
+                    break;
                 case OOO_ANNOTATION_ACTIONS:
                     m_aActions[OOO_ANNOTATION_ACTIONS] =
                         new XMLTransformerActions( aAnnotationActionTable );
+                    break;
                 case OOO_CHANGE_INFO_ACTIONS:
                     m_aActions[OOO_CHANGE_INFO_ACTIONS] =
                         new XMLTransformerActions( aChangeInfoActionTable );
+                    break;
                 case OOO_FRAME_ELEM_ACTIONS:
                     m_aActions[OOO_FRAME_ELEM_ACTIONS] =
                         new XMLTransformerActions( aFrameElemActionTable );
+                    break;
                 case OOO_FRAME_ATTR_ACTIONS:
                     m_aActions[OOO_FRAME_ATTR_ACTIONS] =
                         new XMLTransformerActions( aFrameAttrActionTable );
+                    break;
                 case OOO_BACKGROUND_IMAGE_ACTIONS:
                     m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS] =
                         new XMLTransformerActions( aBackgroundImageActionTable );
+                    break;
                 case OOO_DDE_CONNECTION_DECL_ACTIONS:
                     m_aActions[OOO_DDE_CONNECTION_DECL_ACTIONS] =
                         new XMLTransformerActions( aDDEConnectionDeclActionTable );
+                    break;
                 case OOO_EVENT_ACTIONS:
                     m_aActions[OOO_EVENT_ACTIONS] =
                         new XMLTransformerActions( aEventActionTable );
+                    break;
                 case OOO_FORM_CONTROL_ACTIONS:
                     m_aActions[OOO_FORM_CONTROL_ACTIONS] =
                         new XMLTransformerActions( aFormControlActionTable );
+                    break;
                 case OOO_FORM_COLUMN_ACTIONS:
                     m_aActions[OOO_FORM_COLUMN_ACTIONS] =
                         new XMLTransformerActions( aFormColumnActionTable );
+                    break;
                 case OOO_FORM_PROP_ACTIONS:
                     m_aActions[OOO_FORM_PROP_ACTIONS] =
                         new XMLTransformerActions( aFormPropActionTable );
+                    break;
                 case OOO_XLINK_ACTIONS:
                     m_aActions[OOO_XLINK_ACTIONS] =
                         new XMLTransformerActions( aXLinkActionTable );
+                    break;
                 case OOO_CONFIG_ITEM_SET_ACTIONS:
                     m_aActions[OOO_CONFIG_ITEM_SET_ACTIONS] =
                         new XMLTransformerActions( aConfigItemSetActionTable );
+                    break;
                 case OOO_FORMULA_ACTIONS:
                     m_aActions[OOO_FORMULA_ACTIONS] =
                         new XMLTransformerActions( aFormulaActionTable );
-            case OOO_ERROR_MACRO_ACTIONS:
+                    break;
+                case OOO_ERROR_MACRO_ACTIONS:
                     m_aActions[OOO_ERROR_MACRO_ACTIONS] =
                         new XMLTransformerActions( aErrorMacroActionTable );
+                    break;
                 case OOO_DDE_CONV_MODE_ACTIONS:
                     m_aActions[OOO_DDE_CONV_MODE_ACTIONS] =
                         new XMLTransformerActions( aDDEConvModeActionTable );
+                    break;
                 case OOO_CHART_ACTIONS:
                     m_aActions[OOO_CHART_ACTIONS] =
                         new XMLTransformerActions( aChartActionTable );
+                    break;
                 case OOO_SCRIPT_ACTIONS:
                     m_aActions[OOO_SCRIPT_ACTIONS] =
                         new XMLTransformerActions( aScriptActionTable );
+                    break;
             }
         }
         pActions = m_aActions[n];
@@ -1737,6 +1800,8 @@ void SAL_CALL OOo2OasisTransformer::setTargetDocument(
         Sequence<Any> aArgs( 0 );
         Initialize( aArgs );
     }
+
+    mxModel.set( xDoc, UNO_QUERY );
 
     Reference< XImporter > xImp( GetDocHandler(), UNO_QUERY );
     OSL_ENSURE( xImp.is(), "doc handler is not an importer" );
