@@ -23478,3 +23478,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ??1?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?__query@?$Reference@VXSeekable@io@star@sun@com@@@uno@star@sun@com@@CAPAVXSeekable@io@345@PAVXInterface@2345@@Z
 ?s_pType_com_sun_star_io_XSeekable@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSeekable@io@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?SetPosAndSize@?%O:\SRX643\src\svx\source\fmcomp\gridctrl.cxx3073512394@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX643\src\svx\source\fmcomp\gridcell.cxx2904226825@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX643\src\svx\source\fmcomp\fmgridcl.cxx1980714393@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
