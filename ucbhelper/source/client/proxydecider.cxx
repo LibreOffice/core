@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxydecider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-28 16:05:22 $
+ *  last change: $Author: kso $ $Date: 2002-11-05 08:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
+#endif
 #ifndef _OSL_SOCKET_HXX_
 #include <osl/socket.hxx>
-#endif
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
