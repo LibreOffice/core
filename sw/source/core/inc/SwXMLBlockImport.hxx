@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:17:57 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ public:
     {
         return rBlockList;
     }
-    ~SwXMLBlockListImport ( void );
+    virtual ~SwXMLBlockListImport ( void )
+        throw();
 };
 
 class SwXMLTextBlockImport : public SvXMLImport
@@ -108,7 +109,8 @@ public:
     {
         return rBlockList;
     }
-    ~SwXMLTextBlockImport ( void );
+    virtual ~SwXMLTextBlockImport ( void )
+        throw();
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 };

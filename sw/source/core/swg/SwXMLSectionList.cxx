@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLSectionList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-11 11:32:23 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ SwXMLSectionList::SwXMLSectionList ( SvStrings & rNewSectionList)
 }
 
 SwXMLSectionList::~SwXMLSectionList ( void )
+    throw()
 {
 }
 

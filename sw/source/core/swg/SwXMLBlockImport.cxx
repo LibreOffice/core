@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-11 11:31:15 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ SwXMLBlockListImport::SwXMLBlockListImport ( SwXMLTextBlocks &rBlocks )
 }
 
 SwXMLBlockListImport::~SwXMLBlockListImport ( void )
+    throw ()
 {
 }
 
@@ -119,6 +120,7 @@ SwXMLTextBlockImport::SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks, String & 
 }
 
 SwXMLTextBlockImport::~SwXMLTextBlockImport ( void )
+    throw()
 {
 }
 
