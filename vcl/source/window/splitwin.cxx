@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:16:03 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2008,6 +2008,9 @@ void SplitWindow::ImplDrawFadeIn( BOOL bInPaint )
             bLeft   = FALSE;
         else if ( meAlign == WINDOWALIGN_RIGHT )
             bLeft   = TRUE;
+        else
+            bLeft   = TRUE;
+
         ImplGetSplitArrowImage( mbHorz, bLeft, mbFadeInPressed, aImage );
 
         if ( !bInPaint )
@@ -2045,6 +2048,9 @@ void SplitWindow::ImplDrawFadeOut( BOOL bInPaint )
             bLeft   = TRUE;
         else if ( meAlign == WINDOWALIGN_RIGHT )
             bLeft   = FALSE;
+        else
+            bLeft   = TRUE;
+
         ImplGetSplitArrowImage( mbHorz, bLeft, mbFadeOutPressed, aImage );
 
         if ( !bInPaint )
