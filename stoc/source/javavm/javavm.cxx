@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 11:37:39 $
+ *  last change: $Author: jbu $ $Date: 2001-05-21 15:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,20 +440,21 @@ namespace stoc_javavm {
 
         OUString rcPath = key_InstallPath->getStringValue();
 
-        // normalize the path
-        OUString norm_rcPath;
-        File::normalizePath(rcPath, norm_rcPath);
-        norm_rcPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/config/" INI_FILE));
-
         Reference<XInterface> xIniManager(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.config.INIManager"))));
         if(!xIniManager.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get: com.sun.star.config.INIManager")), Reference<XInterface>());
 
         Reference<XSimpleRegistry> xIniManager_simple(xIniManager, UNO_QUERY);
         if(!xIniManager_simple.is()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get: com.sun.star.config.INIManager")), Reference<XInterface>());
 
-        OUString tmpJavarc;
-        File::getFileURLFromNormalizedPath(norm_rcPath, tmpJavarc);
-        xIniManager_simple->open(tmpJavarc, sal_True, sal_False);
+        // normalize the path
+        OUString urlrcPath;
+        if( osl_File_E_None != File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
+        {
+            urlrcPath = rcPath;
+        }
+        urlrcPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/config/" INI_FILE));
+
+        xIniManager_simple->open(urlrcPath, sal_True, sal_False);
 
         Reference<XRegistryKey> xJavaSection = xIniManager_simple->getRootKey()->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("Java")));
         if(!xJavaSection.is() || !xJavaSection->isValid())
