@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:32:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 10:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,24 +306,6 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             // Clear the selection because the selectec object may be removed as
             // a result of the ssignment of the layout.
             mrViewShell.GetDrawView()->UnmarkAll();
-
-            SfxChildWindow* pPreviewChildWindow =
-                mrViewShell.GetViewFrame()->GetChildWindow(
-                    PreviewChildWindow::GetChildWindowId() );
-            PreviewWindow* pPreviewWin = NULL;
-
-            // notify preview slide show are changes are to be done
-            /*
-                if( pPreviewChildWindow!=NULL
-                && (pPreviewWin = static_cast<PreviewWindow*>(
-                pPreviewChildWindow->GetWindow()))!= NULL)
-                {
-                FuSlideShow* pShow = pPreviewWin->GetSlideShow();
-
-if( pShow )
-pShow->InitPageModify();
-}
-            */
 
             if (!bHandoutMode)
             {
