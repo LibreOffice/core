@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:04:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 using rtl::OUString;
 #define CAU(X) RTL_CONSTASCII_USTRINGPARAM(X)
 #define C2O(X) OUString(CAU(X))
+#define COMMENT(X) OUString()
 
 namespace sw
 {
@@ -118,31 +119,61 @@ namespace sw
             switch (eProblem)
             {
                 case ePrinterMetrics:
-                    mpTrace->Trace(sID, C2O("PrinterMetrics"));
+                    mpTrace->Trace(sID, COMMENT("PrinterMetrics"));
                     break;
                 case eExtraLeading:
-                    mpTrace->Trace(sID, C2O("Extra Leading"));
+                    mpTrace->Trace(sID, COMMENT("Extra Leading"));
                     break;
                 case eTabStopDistance:
-                    mpTrace->Trace(sID, C2O("Minimum Tab Distance"));
+                    mpTrace->Trace(sID, COMMENT("Minimum Tab Distance"));
                     break;
                 case eDontUseHTMLAutoSpacing:
-                    mpTrace->Trace(sID, C2O("HTML AutoSpacing"));
+                    mpTrace->Trace(sID, COMMENT("HTML AutoSpacing"));
                     break;
                 case eAutoWidthFrame:
-                    mpTrace->Trace(sID, C2O("AutoWidth"));
+                    mpTrace->Trace(sID, COMMENT("AutoWidth"));
                     break;
                 case eRowCanSplit:
-                    mpTrace->Trace(sID, C2O("Splitable Row"));
+                    mpTrace->Trace(sID, COMMENT("Splitable Row"));
+                    break;
+                case eSpacingBetweenCells:
+                    mpTrace->Trace(sID, COMMENT("Spacing Between Cells"));
                     break;
                 case eTabInNumbering:
-                    mpTrace->Trace(sID, C2O("Tab In Numbering"));
+                    mpTrace->Trace(sID, COMMENT("Tab In Numbering"));
                     break;
                 case eNegativeVertPlacement:
-                    mpTrace->Trace(sID, C2O("Negative Vertical Placement"));
+                    mpTrace->Trace(sID,
+                        COMMENT("Negative Vertical Placement"));
+                    break;
+                case eAutoColorBg:
+                    mpTrace->Trace(sID,
+                        COMMENT("Bad Background for Autocolour"));
+                    break;
+                case eTooWideAsChar:
+                    mpTrace->Trace(sID,
+                        COMMENT("Inline wider than TextArea"));
+                    break;
+                case eAnimatedText:
+                    mpTrace->Trace(sID,
+                        COMMENT("Animated Text"));
+                    break;
+                case eDontAddSpaceForEqualStyles:
+                    mpTrace->Trace(sID,
+                        COMMENT("Don't Add Space between Equal Style"));
+                    break;
+                case eBorderDistOutside:
+                    mpTrace->Trace(sID,
+                        COMMENT("Word draws the border outside"));
+                    break;
+                case eContainsVisualBasic:
+                    mpTrace->Trace(sID, COMMENT("Contains VBA"));
+                    break;
+                case eContainsWordBasic:
+                    mpTrace->Trace(sID, COMMENT("Contains Word Basic"));
                     break;
                 default:
-                    mpTrace->Trace(sID, C2O("UNKNOWN"));
+                    mpTrace->Trace(sID, COMMENT("UNKNOWN"));
                     break;
             }
         }
@@ -152,6 +183,7 @@ namespace sw
             rtl::OUString sContext;
             switch (eContext)
             {
+                case eMacros:
                 case eDocumentProperties:
                     sContext = C2O("Global");
                     break;
@@ -178,6 +210,9 @@ namespace sw
             {
                 case eDocumentProperties:
                     sDetails = C2O("Document Properties");
+                    break;
+                case eMacros:
+                    sDetails = C2O("Macros");
                     break;
                 case eMainText:
                     sDetails = C2O("MainDocument");
