@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:52:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,15 +228,15 @@ DockingWindow FID_FUNCTION_BOX
             < "Alle" ; Default ; > ;
             < "Database" ; Default ; > ;
             < "Dato og klokkesl�t" ; Default ; > ;
-            < "Finans" ; Default ; > ;
+            < "Finansiel" ; Default ; > ;
             < "Information" ; Default ; > ;
             < "Logisk" ; Default ; > ;
-            < "Matematik" ; Default ; > ;
+            < "Matematisk" ; Default ; > ;
             < "Matrix" ; Default ; > ;
-            < "Statistik" ; Default ; > ;
+            < "Statistisk" ; Default ; > ;
             < "Regneark" ; Default ; > ;
             < "Tekst" ; Default ; > ;
-            < "Add-In" ; Default ; > ;
+            < "AddIn" ; Default ; > ;
              //         < "Brugerdefineret"; Default; >;
         };
         StringList [ french ] =
@@ -595,6 +595,38 @@ DockingWindow FID_FUNCTION_BOX
         < "Textové" ; Default ; > ;
         < "Ďalšie" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Utoljára használt" ; Default ; > ;
+        < "Összes" ; Default ; > ;
+        < "Adatbázis" ; Default ; > ;
+        < "Dátum és idő" ; Default ; > ;
+        < "Pénzügyi" ; Default ; > ;
+        < "Információ" ; Default ; > ;
+        < "Logikai" ; Default ; > ;
+        < "Matematikai" ; Default ; > ;
+        < "Tömb" ; Default ; > ;
+        < "Statisztikai" ; Default ; > ;
+        < "Munkafüzet" ; Default ; > ;
+        < "Szöveg" ; Default ; > ;
+        < "Kiegészítő" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Nazadnje uporabljeno" ; Default ; > ;
+        < "Vse" ; Default ; > ;
+        < "Zbirka podatkov" ; Default ; > ;
+        < "Datum in čas" ; Default ; > ;
+        < "Finance" ; Default ; > ;
+        < "Informacije" ; Default ; > ;
+        < "Logika" ; Default ; > ;
+        < "Matematika" ; Default ; > ;
+        < "Matrika" ; Default ; > ;
+        < "Statistika" ; Default ; > ;
+        < "Preglednica" ; Default ; > ;
+        < "Besedilo" ; Default ; > ;
+        < "Dodatek" ; Default ; > ;
+    };
     };
     ListBox DDLB_FUNC
     {
@@ -671,6 +703,8 @@ DockingWindow FID_FUNCTION_BOX
         QuickHelpText[ hebrew ] = "Funktion in Rechenblatt einfügen";
         QuickHelpText[ hindi ] = "फंक्शन् को गणना करने के शीट् में जोड़ो";
         QuickHelpText[ slovak ] = "Vložiť funkciu do kalkulačného zošitu";
+        QuickHelpText[ hungarian ] = "Függvény beszúrása a számítási munkafüzetbe";
+        QuickHelpText[ slovenian ] = "Vstavi funkcijo v list";
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Fun��es" ;
@@ -700,8 +734,11 @@ DockingWindow FID_FUNCTION_BOX
     Text[ hebrew ] = "‮פונקציות‬";
     Text[ hindi ] = "फंक्शन्स";
     Text[ slovak ] = "Funkcie";
+    Text[ hungarian ] = "Függvények";
+    Text[ slovenian ] = "Funkcije";
 };
  // ********************************************************************** EOF
+
 
 
 
