@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: sb $ $Date: 2002-12-06 10:51:54 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:10:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,16 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET=javaloader
+TARGET = javaloader.uno
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = javaloader
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ SHL1STDLIBS=\
         $(SALLIB) \
         $(JVMACCESSLIB)
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = javaloader.map
 SHL1DEPN=		
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS= 		$(SLB)$/$(TARGET).lib 
