@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 10:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,10 +292,37 @@ static BOOL SwWw6ReadMacPICTStream( Graphic& rGraph, SvStorageRef& rSrc1 )
     return SwWW8ImplReader::GetPictGrafFromStream( rGraph, *pStp );
 }
 
+SwFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
+    const SfxItemSet &rFlySet)
+{
+    if( !pOleMap)
+        pOleMap = new WW8OleMaps;
 
+    SvInPlaceObjectRef xIPRef(rObject.GetObjRef());
+    WW8OleMap *pMap = new WW8OleMap(nObjLocFc, &xIPRef);
+    const WW8OleMap *pEntry = pMap;
 
-SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
-                                     const SfxItemSet* pFlySet )
+    USHORT nPos;
+    if ( pOleMap->Seek_Entry(pMap, &nPos) )
+    {
+        pEntry = pOleMap->GetObject( nPos );
+        delete pMap;
+    }
+    else if( 0 == pOleMap->Insert( pMap) )
+        delete pMap;
+
+    SwFrmFmt *pFmt = rDoc.Insert(*pPaM, pEntry->pWriterRef, &rFlySet);
+
+    //JP 10.4.2001: Bug 85614 - don't remove in DTOR the object
+    //from  our persist
+    SvInPlaceObjectRef xEmpty;
+    rObject.SetObjRef(xEmpty);
+
+    return pFmt;
+}
+
+SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
+    const SfxItemSet* pFlySet)
 {
     SwFrmFmt* pFmt = 0;
     if( !(nIniFlags & WW8FL_NO_OLE ))
@@ -342,37 +369,14 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
         {
             if( pRet->ISA( SdrOle2Obj ))
             {
-#ifdef NO_OLE_SIZE_OPTIMIZE
-                pFmt = rDoc.Insert( *pPaM, &((SdrOle2Obj*)pRet)->GetObjRef(),
-                    pFlySet );
-#else
-                if( !pOleMap)
-                    pOleMap = new WW8OleMaps;
-
-                WW8OleMap *pMap = new WW8OleMap( nObjLocFc,
-                    &((SdrOle2Obj*)pRet)->GetObjRef());
-                const WW8OleMap *pEntry = pMap;
-
-                USHORT nPos;
-                if ( pOleMap->Seek_Entry(pMap, &nPos) )
-                {
-                    pEntry = pOleMap->GetObject( nPos );
-                    delete pMap;
-                }
-                else if( 0 == pOleMap->Insert( pMap) )
-                    delete pMap;
-
-                pFmt = rDoc.Insert( *pPaM, pEntry->pWriterRef, pFlySet );
-#endif
-                //JP 10.4.2001: Bug 85614 - don't remove in DTOR the
-                //              object from our persist
-                SvInPlaceObjectRef xEmpty;
-                ((SdrOle2Obj*)pRet)->SetObjRef( xEmpty );
+                pFmt = InsertOle(*((SdrOle2Obj*)pRet),*pFlySet);
                 delete pRet;        // das brauchen wir nicht mehr
             }
             else
+            {
                 // any OCX Control
                 pFmt = FindFrmFmt( pRet );
+            }
         }
         else if( GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
                  GRAPHIC_BITMAP == aGraph.GetType() )

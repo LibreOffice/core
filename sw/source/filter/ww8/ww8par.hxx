@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-16 13:18:18 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 10:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -939,6 +939,7 @@ friend class WW8FormulaControl;
         const Graphic* pGrf=0, const SfxItemSet* pFlySet=0 );
 
     SwFrmFmt* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0 );
+    SwFrmFmt* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet);
 
     BOOL ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
         SwWw8ControlType nWhich);
