@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 10:36:14 $
+ *  last change: $Author: mt $ $Date: 2001-10-09 12:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,8 +370,16 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
             nStart = nStart ? (nStart--) : mpImplLB->GetEntryList()->GetEntryCount()-1;
         }
         BOOL bLazy = mbMatchCase ? FALSE : TRUE;
-        USHORT nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, bLazy );
+        // 1. Try match full from current position
+        USHORT nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, FALSE );
         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+            // 2. Match full, but from start
+            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, FALSE );
+        if ( ( nPos == LISTBOX_ENTRY_NOTFOUND ) && bLazy )
+            // 3. Try match lazy from current position
+            nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, nStart, bForward, TRUE );
+        if ( ( nPos == LISTBOX_ENTRY_NOTFOUND ) && bLazy )
+            // 4. Try match lazy, but from start
             nPos = mpImplLB->GetEntryList()->FindMatchingEntry( aStartText, bForward ? 0 : (mpImplLB->GetEntryList()->GetEntryCount()-1), bForward, bLazy );
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
