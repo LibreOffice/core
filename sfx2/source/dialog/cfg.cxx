@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 13:41:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 #include <svtools/pathoptions.hxx>
 #include <so3/svstor.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "cfg.hxx"
 
@@ -1594,8 +1596,8 @@ SfxTabPage *CreateEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 SfxConfigDialog::SfxConfigDialog( Window * pParent, const SfxItemSet* pSet, SfxViewFrame* pFrame )
     : SfxTabDialog( pFrame, pParent, SfxResId( DLG_CONFIG ), pSet )
-    , pViewFrame( pFrame )
     , pMacroInfo( 0 )
+    , pViewFrame( pFrame )
     , nObjectBar( 0 )
 {
     FreeResource();
@@ -1645,7 +1647,6 @@ SfxStatusBarConfigPage::SfxStatusBarConfigPage( Window *pParent, const SfxItemSe
 
     while (aGroupName.Len() != 0)
     {
-        USHORT n=0;
         for (const SfxSlot *pSlot = SFX_SLOTPOOL().FirstSlot(); pSlot;
                             pSlot = SFX_SLOTPOOL().NextSlot())
         {
@@ -1923,8 +1924,8 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
 SfxStatusBarConfigListBox::SfxStatusBarConfigListBox( Window* pParent, const ResId& rResId)
  : SvTreeListBox(pParent, rResId)
  , bModified(FALSE)
- , pCurEntry(0)
  , bDefault(TRUE)
+ , pCurEntry(0)
 {
 
     pButton = new SvLBoxButtonData( this );
