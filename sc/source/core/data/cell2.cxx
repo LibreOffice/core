@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:39:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ ScEditCell::ScEditCell( const EditTextObject* pObject, ScDocument* pDocP,
 }
 
 ScEditCell::ScEditCell( const ScEditCell& rEditCell, ScDocument* pDocP )  :
-        ScBaseCell( CELLTYPE_EDIT ),
+        ScBaseCell( rEditCell, pDocP),
         pString( NULL ),
         pDoc( pDocP )
 {
