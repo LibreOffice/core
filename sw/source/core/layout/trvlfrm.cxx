@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-14 09:52:23 $
+ *  last change: $Author: ama $ $Date: 2001-03-02 11:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _FMTSRND_HXX //autogen
 #include <fmtsrnd.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 
 #ifndef _PAGEFRM_HXX //autogen
@@ -1557,6 +1560,70 @@ USHORT SwFrm::GetPhyPageNum() const
     return pPage ? pPage->GetPhyPageNum() : 0;
 }
 
+/*-----------------26.02.01 11:25-------------------
+ * SwFrm::WannaRightPage()
+ * decides if the page want to be a rightpage or not.
+ * If the first content of the page has a page descriptor,
+ * we take the follow of the page descriptor of the last not empty page.
+ * If this descriptor allows only right(left) pages and the page
+ * isn't an empty page then it wanna be such right(left) page.
+ * If the descriptor allows right and left pages, we look for a number offset
+ * in the first content. If there is one, odd number results right pages,
+ * even number results left pages.
+ * If there is no number offset, we take the physical page number instead,
+ * but a previous empty page don't count.
+ * --------------------------------------------------*/
+
+BOOL SwFrm::WannaRightPage() const
+{
+    const SwPageFrm *pPage = FindPageFrm();
+    if ( !pPage || !pPage->GetUpper() )
+        return TRUE;
+
+    const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
+    SwPageDesc *pDesc = 0;
+    USHORT nPgNum = 0;
+    if ( pFlow )
+    {
+        if ( pFlow->IsInTab() )
+            pFlow = pFlow->FindTabFrm();
+        const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
+        pDesc = (SwPageDesc*)rPgDesc.GetPageDesc();
+        nPgNum = rPgDesc.GetNumOffset();
+    }
+    if ( !pDesc )
+    {
+        SwPageFrm *pPrv = (SwPageFrm*)pPage->GetPrev();
+        if( pPrv && pPrv->IsEmptyPage() )
+            pPrv = (SwPageFrm*)pPrv->GetPrev();
+        if( pPrv )
+            pDesc = pPrv->GetPageDesc()->GetFollow();
+        else
+        {
+            const SwDoc* pDoc = pPage->GetFmt()->GetDoc();
+            pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
+        }
+    }
+    ASSERT( pDesc, "No pagedescriptor" );
+    BOOL bOdd;
+    if( nPgNum )
+        bOdd = nPgNum % 2 ? TRUE : FALSE;
+    else
+    {
+        bOdd = pPage->OnRightPage();
+        if( pPage->GetPrev() && ((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() )
+            bOdd = !bOdd;
+    }
+    if( !pPage->IsEmptyPage() )
+    {
+        if( !pDesc->GetRightFmt() )
+            bOdd = FALSE;
+        else if( !pDesc->GetLeftFmt() )
+            bOdd = TRUE;
+    }
+    return bOdd;
+}
+
 /*************************************************************************
 |*
 |*    SwFrm::GetVirtPageNum()
@@ -1599,9 +1666,8 @@ USHORT SwFrm::GetVirtPageNum() const
             pMod->GetInfo( aInfo );
             if ( aInfo.GetPage() )
             {
-                if ( !pVirtPage ||
-                      (pVirtPage &&
-                       aInfo.GetPage()->GetPhyPageNum() > pVirtPage->GetPhyPageNum()))
+                if( !pVirtPage || ( pVirtPage && aInfo.GetPage()->
+                    GetPhyPageNum() > pVirtPage->GetPhyPageNum() ) )
                 {
                     pVirtPage = aInfo.GetPage();
                     pFrm = aInfo.GetFrm();
@@ -1609,8 +1675,9 @@ USHORT SwFrm::GetVirtPageNum() const
             }
         }
     }
-    if ( pVirtPage )
-        return nPhyPage - pFrm->GetPhyPageNum() + pFrm->GetAttrSet()->GetPageDesc().GetNumOffset();
+    if ( pFrm )
+        return nPhyPage - pFrm->GetPhyPageNum() +
+               pFrm->GetAttrSet()->GetPageDesc().GetNumOffset();
     return nPhyPage;
 }
 
