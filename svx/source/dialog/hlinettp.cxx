@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-22 09:52:02 $
+ *  last change: $Author: sj $ $Date: 2001-10-01 14:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@ static INetProtocol ImplGetProtocol( const String& aStrURL, String& aStrScheme )
             aStrScheme = String( RTL_CONSTASCII_STRINGPARAM( sFTPScheme ) );
         }
     }
+    else
+        aStrScheme = INetURLObject::GetScheme( aProtocol );
     return aProtocol;
 }
 
