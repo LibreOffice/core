@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 08:50:24 $
+ *  last change: $Author: gt $ $Date: 2002-07-25 09:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #define RID_MAIN_ME_DBSOURCE        (RID_BIB_MENU +10)
 #define RID_MAIN_DELETE_RECORD      (RID_BIB_MENU +11)
 #define RID_MAIN_INSERT_RECORD      (RID_BIB_MENU +12)
+#define MN_TEMPLATES                (RID_BIB_MENU +13)      // to make makro ITEM_FILE_DOCTEMPLATE happy...
 
 #define RID_POPUP_ME_VIEW           (RID_BIB_MENU +50)
 
