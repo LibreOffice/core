@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-05 07:16:26 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,54 +64,106 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
+#include <com/sun/star/frame/XTasksSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
+#include <com/sun/star/view/XPrintable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
-#endif
+#include <vector>
 
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::view;
+
+String GetURL_Impl( const String& rName );
 
 namespace desktop
 {
 
+struct DispatchHolder
+{
+    DispatchHolder( const URL& rURL, Reference< XDispatch >& rDispatch ) :
+        aURL( rURL ), xDispatch( rDispatch ) {}
+
+    URL aURL;
+    Reference< XDispatch > xDispatch;
+};
+
+Mutex* DispatchWatcher::pWatcherMutex = NULL;
+
+Mutex& DispatchWatcher::GetMutex()
+{
+    if ( !pWatcherMutex )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pWatcherMutex )
+            pWatcherMutex = new osl::Mutex();
+    }
+
+    return *pWatcherMutex;
+}
+
 // Create or get the dispatch watcher implementation
-Reference< XStatusListener > DispatchWatcher::GetDispatchWatcher()
+DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 {
     static DispatchWatcher* pDispatchWatcher = NULL;
 
     if ( !pDispatchWatcher )
     {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        ::osl::MutexGuard aGuard( GetMutex() );
+
         if ( !pDispatchWatcher )
-            pDispatchWatcher = new DispatchWatcher( ::comphelper::getProcessServiceFactory() );
+            pDispatchWatcher = new DispatchWatcher();
     }
 
     return pDispatchWatcher;
 }
 
 
-DispatchWatcher::DispatchWatcher( const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager ) :
-    m_xServiceManager( rServiceManager )
+DispatchWatcher::DispatchWatcher()
+    : m_nRequestCount(1)
 {
 }
 
@@ -121,25 +173,224 @@ DispatchWatcher::~DispatchWatcher()
 }
 
 
+void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequestsList )
+{
+    Reference< XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                                            UNO_QUERY );
+
+    sal_uInt32                      index = 0;
+    DispatchList::const_iterator    p;
+    std::vector< DispatchHolder >   aDispatches;
+
+    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
+    {
+        String                  aPrinterName;
+        const DispatchRequest&  aDispatchRequest = *p;
+
+        // create parameter array
+        sal_Int32 nCount = ( aDispatchRequest.aRequestType == REQUEST_PRINT ) ? 5 : 1;
+        Sequence < PropertyValue > aArgs( nCount );
+        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
+
+        if ( aDispatchRequest.aRequestType == REQUEST_PRINT )
+        {
+            aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
+            aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
+            aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
+        }
+
+        // mark request as user interaction from outside
+        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
+
+        String aName( aDispatchRequest.aURL );
+
+        // is the parameter a printername ?
+        if( aName.Len()>1 && *aName.GetBuffer()=='@' )
+        {
+            aPrinterName = aName.Copy(1);
+            continue;
+        }
+
+        aName = GetURL_Impl(aName);
+
+        if ( aDispatchRequest.aRequestType == REQUEST_PRINT )
+        {
+            // documents opened for printing are opened readonly because they must be opened as a new document and this
+            // document could be open already
+            aArgs[1].Value <<= sal_True;
+
+            // always open a new document for printing, because it must be disposed afterwards
+            aArgs[2].Value <<= sal_True;
+
+            // printing is done in a hidden view
+            aArgs[3].Value <<= sal_True;
+
+            // load document for printing without user interaction
+            aArgs[4].Value <<= sal_True;
+        }
+
+        // load the document ... if they are loadable!
+        // Otherwise try to dispatch it ...
+        Reference < XPrintable > xDoc;
+        if(
+            ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
+            ( aName.CompareToAscii( "slot:" , 5 ) == COMPARE_EQUAL )  ||
+            ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
+          )
+        {
+            // Attention: URL must be parsed full. Otherwise some detections on it will fail!
+            // It doesnt matter, if parser isn't available. Because; We try loading of URL then ...
+            URL             aURL ;
+            aURL.Complete = aName;
+
+            Reference < XDispatch >         xDispatcher ;
+            Reference < XDispatchProvider > xProvider   ( xDesktop, UNO_QUERY );
+            Reference < XURLTransformer >   xParser     ( ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), ::com::sun::star::uno::UNO_QUERY );
+
+            if( xParser.is() == sal_True )
+                xParser->parseStrict( aURL );
+
+            if( xProvider.is() == sal_True )
+                xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+
+            if( xDispatcher.is() == sal_True )
+            {
+                {
+                    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+                    // Remember request so we can find it in statusChanged!
+                    m_aRequestContainer.insert( DispatchWatcherHashMap::value_type( aURL.Complete, (sal_Int32)1 ) );
+                    m_nRequestCount++;
+                }
+
+                // Use local vector to store dispatcher because we have to fill our request container before
+                // we can dispatch. Otherwise it would be possible that statusChanged is called before we dispatched all requests!!
+                aDispatches.push_back( DispatchHolder( aURL, xDispatcher ));
+            }
+        }
+        else
+        {
+            // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
+            xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+            if ( aDispatchRequest.aRequestType == REQUEST_OPEN )
+            {
+                // request is completed
+                OfficeIPCThread::RequestsCompleted( 1 );
+            }
+            else if ( aDispatchRequest.aRequestType == REQUEST_PRINT )
+            {
+                if ( xDoc.is() )
+                {
+                    if ( aPrinterName.Len() )
+                    {
+                        // create the printer
+                        Sequence < PropertyValue > aPrinterArgs( 1 );
+                        aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                        aPrinterArgs[0].Value <<= ::rtl::OUString( aPrinterName );
+                        xDoc->setPrinter( aPrinterArgs );
+                    }
+
+                    // print ( also without user interaction )
+                    Sequence < PropertyValue > aPrinterArgs( 1 );
+                    aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Wait");
+                    aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
+                    xDoc->print( aPrinterArgs );
+                }
+                else
+                {
+                    // place error message here ...
+                }
+
+                // remove the document
+                Reference < XComponent > xComp( xDoc, UNO_QUERY );
+                if ( xComp.is() )
+                    xComp->dispose();
+
+                // request is completed
+                OfficeIPCThread::RequestsCompleted( 1 );
+            }
+        }
+    }
+
+    if ( aDispatches.size() > 0 )
+    {
+        // Execute all asynchronous dispatches now after we placed them into our request container!
+        Sequence < PropertyValue > aArgs( 1 );
+        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
+        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
+
+        for ( sal_uInt32 n = 0; n < aDispatches.size(); n++ )
+        {
+            Reference< XDispatch > xDispatch = aDispatches[n].xDispatch;
+            Reference < XNotifyingDispatch > xDisp( xDispatch, UNO_QUERY );
+            if ( xDisp.is() )
+                xDisp->dispatchWithNotification( aDispatches[n].aURL, aArgs, this );
+            else
+            {
+                ::osl::ClearableMutexGuard aGuard( GetMutex() );
+                m_nRequestCount--;
+                aGuard.clear();
+                xDispatch->dispatch( aDispatches[n].aURL, aArgs );
+            }
+        }
+    }
+
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
+    m_nRequestCount--;
+
+    // No more asynchronous requests?
+    // The requests are removed from the request container after they called back to this
+    // implementation via statusChanged!!
+    if ( !m_nRequestCount /*m_aRequestContainer.empty()*/ )
+    {
+        // We have to check if we have an open task otherwise we have to shutdown the office.
+        Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+        aGuard.clear();
+
+        Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
+
+        if ( !xList->hasMoreElements() )
+        {
+            // We don't have any task open so we have to shutdown ourself!!
+            Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
+            if ( xDesktop.is() )
+                xDesktop->terminate();
+        }
+    }
+}
+
+
 void SAL_CALL DispatchWatcher::disposing( const ::com::sun::star::lang::EventObject& )
 throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
 
-void SAL_CALL DispatchWatcher::statusChanged( const com::sun::star::frame::FeatureStateEvent& rEvent )
-throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException )
 {
-    if ( !rEvent.IsEnabled )
+    osl::ClearableMutexGuard aGuard( GetMutex() );
+    sal_Int16 nCount = --m_nRequestCount;
+    aGuard.clear();
+    OfficeIPCThread::RequestsCompleted( 1 );
+/*
+    // Find request in our hash map and remove it as a pending request
+    DispatchWatcherHashMap::iterator pDispatchEntry = m_aRequestContainer.find( rEvent.FeatureURL.Complete ) ;
+    if ( pDispatchEntry != m_aRequestContainer.end() )
     {
-        // There was an error dispatching slot:5500 which means start office template&document wizard.
-        // We have to be sure that there is a task open so the user can use the office. If we
-        // don't have a task open we have to shutdown the office otherwise the user cannot
-        // use his/her office installation until office gets killed!!!
-        Reference< XTasksSupplier > xTasksSupplier( m_xServiceManager->createInstance(
+        m_aRequestContainer.erase( pDispatchEntry );
+        aGuard.clear();
+        OfficeIPCThread::RequestsCompleted( 1 );
+    }
+    else
+        aGuard.clear();
+*/
+    if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
+    {
+        // We have to check if we have an open task otherwise we have to shutdown the office.
+        Reference< XTasksSupplier > xTasksSupplier( ::comphelper::getProcessServiceFactory()->createInstance(
                                                     OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                                                 UNO_QUERY );
-
         Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
 
         if ( !xList->hasMoreElements() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-07 11:25:00 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
     virtual TSignalAction SAL_CALL signal(TSignalInfo *pInfo);
 };
 
+class DispatchWatcher;
 class OfficeIPCThread : public vos::OThread
 {
   private:
@@ -108,6 +109,8 @@ class OfficeIPCThread : public vos::OThread
     rtl::OUString               maPipeIdent;
     sal_Bool                    mbBlockRequests;
     int                         mnPendingRequests;
+    DispatchWatcher*            mpDispatchWatcher;
+    sal_Bool                    mbShutdownInProgress;
 
     static ::osl::Mutex&        GetMutex();
 
@@ -132,6 +135,7 @@ class OfficeIPCThread : public vos::OThread
     static void                 BlockAllRequests();
     static sal_Bool             AreRequestsPending();
     static void                 RequestsCompleted( int n = 1 );
+    static void                 ExecuteCmdLineRequests( const ::rtl::OUString& aOpenList, const ::rtl::OUString& aPrintList );
 
     // return FALSE if second office
     static Status               EnableOfficeIPCThread();

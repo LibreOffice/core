@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-21 14:57:13 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -276,6 +279,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::container;
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
 
@@ -1376,7 +1380,6 @@ void Desktop::Main()
 
             Reference< XConnectionBroker >  xServiceManagerBroker;
             Reference< XConnectionBroker >  xPalmPilotManagerBroker;
-            Reference< XStatusListener >    xDispatchWatcherStatusListener;
 
             InitTestToolLib();
 
@@ -1442,9 +1445,6 @@ void Desktop::Main()
                                                             UNO_QUERY );
                 if ( xDesktop.is() )
                     xDesktop->addTerminateListener( new OfficeIPCThreadController );
-
-                // Create dispatch watcher service to control dispatches of "dangerous" slot: URLs
-                xDispatchWatcherStatusListener = DispatchWatcher::GetDispatchWatcher();
             }
 
             // Release solar mutex just before we wait for our client to connect
@@ -1680,30 +1680,19 @@ void Desktop::OpenClients()
         }
     }
 
-    // check for open parameters
-    String aEmptyStr;
-    ::rtl::OUString aOpenList;
-    if ( pArgs->GetOpenList( aOpenList ) )
+    if ( !pArgs->IsServer() )
     {
-        bLoaded = TRUE;
-        ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
-                                        APPEVENT_OPEN_STRING,
-                                        aOpenList );
-        HandleAppEvent( *pAppEvt );
-        delete pAppEvt;
-    }
+        ::rtl::OUString aOpenList;
+        ::rtl::OUString aPrintList;
 
+        pArgs->GetOpenList( aOpenList );
+        pArgs->GetPrintList( aPrintList );
 
-    // check for print parameters
-    ::rtl::OUString aPrintList;
-    if ( pArgs->GetPrintList( aPrintList ) )
-    {
-        bLoaded = TRUE;
-        ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
-                                        APPEVENT_PRINT_STRING,
-                                        aPrintList );
-        HandleAppEvent( *pAppEvt );
-        delete pAppEvt;
+        if ( aOpenList.getLength() > 0 || aPrintList.getLength() > 0 )
+        {
+            bLoaded = sal_True;
+            OfficeIPCThread::ExecuteCmdLineRequests( aOpenList, aPrintList );
+        }
     }
 
     // no default document if a document was loaded by recovery or by command line or if soffice is used as server
@@ -1865,18 +1854,34 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
                 if( xDispatcher.is() == sal_True )
                 {
-                    // Special case: Start template wizard!
-                    // We have to be listener to catch errors during dispatching this slot-URL.
+                    // We have to be listener to catch errors during dispatching URLs.
                     // Otherwise it would be possible to have an office running without an open
                     // window!!
-                    if ( aName.CompareToAscii( "slot:5500" ) == COMPARE_EQUAL )
-                        xDispatcher->addStatusListener( DispatchWatcher::GetDispatchWatcher(), aURL );
-                    xDispatcher->dispatch( aURL, aArgs );
+                    Reference < XNotifyingDispatch > xDisp( xDispatcher, UNO_QUERY );
+                    if ( xDisp.is() )
+                        xDisp->dispatchWithNotification( aURL, aArgs, DispatchWatcher::GetDispatchWatcher() );
+                    else
+                        xDispatcher->dispatch( aURL, aArgs );
                 }
             }
             else
             {
                 xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+                if ( !xDoc.is() )
+                {
+                    // error case
+                    Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+                    Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
+
+                    if ( !xList->hasMoreElements() )
+                    {
+                        // We don't have any task open so we have to shutdown ourself!!
+                        Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
+                        if ( xDesktop.is() )
+                            xDesktop->terminate();
+                        return;
+                    }
+                }
             }
 
             if ( rAppEvent.IsPrintEvent() )

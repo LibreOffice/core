@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-09 15:03:34 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "app.hxx"
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
+#include "dispatchwatcher.hxx"
 #include <stdio.h>
 
 #ifndef _VOS_PROCESS_HXX_
@@ -107,7 +108,23 @@ void HandleAppEvent( const ApplicationEvent& rAppEvent );
 IMPL_STATIC_LINK( ImplForeignAppEventClass, CallEvent, void*, pEvent )
 {
     // Application events are processed by the Desktop::HandleAppEvent implementation.
-    Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
+    ApplicationEvent* pAppEvent = (ApplicationEvent*)pEvent;
+
+    if ( pAppEvent->GetEvent().CompareTo( "OPENPRINTCMDLINE" ) == COMPARE_EQUAL )
+    {
+        // Special application event to execute OPEN and PRINT requests from the command line
+        ::rtl::OUString aOpenList( pAppEvent->GetSenderAppName() );
+        ::rtl::OUString aPrintList( pAppEvent->GetData() );
+
+        OfficeIPCThread* pIPCThread = OfficeIPCThread::GetOfficeIPCThread();
+        if ( pIPCThread )
+            pIPCThread->ExecuteCmdLineRequests( aOpenList, aPrintList );
+    }
+    else
+    {
+        Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
+    }
+
     delete (ApplicationEvent*)pEvent;
     return 0;
 }
@@ -313,35 +330,51 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
 void OfficeIPCThread::DisableOfficeIPCThread()
 {
-    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
+    osl::ClearableMutexGuard aMutex( GetMutex() );
 
-    if( pGlobalOfficeIPCThread )
+    if( pGlobalOfficeIPCThread && !( pGlobalOfficeIPCThread->mbShutdownInProgress ))
     {
+        pGlobalOfficeIPCThread->mbShutdownInProgress = sal_True;
+
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
         OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
         Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
-        Pipe.close();
+
         // close the pipe so that the streampipe on the other
         // side produces EOF
-        aGuard.clear();
+        Pipe.close();
 
-        // exit gracefully
+        // release mutex to avoid deadlocks
+        aMutex.clear();
+
+        // exit gracefully and join
         pGlobalOfficeIPCThread->join();
-        delete pGlobalOfficeIPCThread;
-        pGlobalOfficeIPCThread = 0;
+
+        {
+            // acquire mutex again to delete and reset global pointer threadsafe!
+            osl::MutexGuard aGuard( GetMutex() );
+            delete pGlobalOfficeIPCThread;
+            pGlobalOfficeIPCThread = 0;
+        }
     }
 }
 
 OfficeIPCThread::OfficeIPCThread() :
     mbBlockRequests( sal_False ),
-    mnPendingRequests( 0 )
+    mnPendingRequests( 0 ),
+    mpDispatchWatcher( 0 ),
+    mbShutdownInProgress( sal_False )
 {
 }
 
 OfficeIPCThread::~OfficeIPCThread()
 {
+    ::osl::ClearableMutexGuard  aGuard( GetMutex() );
+
+    if ( mpDispatchWatcher )
+        mpDispatchWatcher->release();
     maPipe.close();
     maStreamPipe.close();
     pGlobalOfficeIPCThread = 0;
@@ -355,7 +388,7 @@ void SAL_CALL OfficeIPCThread::run()
             nError = maPipe.accept( maStreamPipe );
 
         {
-            osl::MutexGuard aMutexGuard( GetMutex() );
+            osl::ClearableMutexGuard aGuard( GetMutex() );
 
             if( nError == OStreamPipe::E_None )
             {
@@ -397,29 +430,13 @@ void SAL_CALL OfficeIPCThread::run()
                 aCmdLineArgs.GetOpenList( aOpenList );
                 aCmdLineArgs.GetPrintList( aPrintList );
 
-                if( aOpenList.getLength() )
+                // send requests to dispatch watcher
+                if ( aOpenList.getLength() > 0 || aPrintList.getLength() > 0 )
                 {
-                    // open file(s)
-
                     ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aEmpty, aEmpty,
-                                              APPEVENT_OPEN_STRING, aOpenList );
+                        new ApplicationEvent( aOpenList, aEmpty, "OPENPRINTCMDLINE", aPrintList );
+
                     ImplPostForeignAppEvent( pAppEvent );
-
-                    // We are sending a open request to the office. We have to increase our pending request counter!
-                    ++mnPendingRequests;
-                }
-
-                if ( aPrintList.getLength() )
-                {
-                    // print file(s)
-                    ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aEmpty, aEmpty,
-                                              APPEVENT_PRINT_STRING, aPrintList );
-                    ImplPostForeignAppEvent( pAppEvent );
-
-                    // We are sending a print request to the office. We have to increase our pending request counter!
-                    ++mnPendingRequests;
                 }
 
                 if (( aArguments.CompareTo( SHOW_SEQUENCE, SHOW_LENGTH ) == COMPARE_EQUAL ) ||
@@ -443,6 +460,52 @@ void SAL_CALL OfficeIPCThread::run()
                 sleep( tval );
             }
         }
+    }
+}
+
+void OfficeIPCThread::ExecuteCmdLineRequests( const ::rtl::OUString& aOpenList, const ::rtl::OUString& aPrintList )
+{
+    DispatchWatcher::DispatchList aDispatchList;
+
+    if ( aOpenList.getLength() > 0 )
+    {
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken = aOpenList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            if ( aToken.getLength() > 0 )
+                aDispatchList.push_back(
+                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_OPEN, aToken ));
+        }
+        while ( nIndex >= 0 );
+    }
+
+    if ( aPrintList.getLength() > 0 )
+    {
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken = aPrintList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            if ( aToken.getLength() > 0 )
+                aDispatchList.push_back(
+                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_PRINT, aToken ));
+        }
+        while ( nIndex >= 0 );
+    }
+
+    osl::ClearableMutexGuard aGuard( GetMutex() );
+
+    if ( pGlobalOfficeIPCThread )
+    {
+        pGlobalOfficeIPCThread->mnPendingRequests += aDispatchList.size();
+        if ( !pGlobalOfficeIPCThread->mpDispatchWatcher )
+        {
+            pGlobalOfficeIPCThread->mpDispatchWatcher = DispatchWatcher::GetDispatchWatcher();
+            pGlobalOfficeIPCThread->mpDispatchWatcher->acquire();
+        }
+
+        aGuard.clear();
+        pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
     }
 }
 

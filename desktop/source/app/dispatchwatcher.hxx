@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-05 07:16:26 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,45 +66,91 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
+
+#include "officeipcthread.hxx"
+#include <hash_map>
+#include <vector>
 
 namespace desktop
 {
 
 /*
-    Simple implementation class for  checking "dangerous" command URL (slot:5500), that
-    can result in a running office without UI.
-    This class checks the dispatching of these "dangerous" command URLs. When there is
-    a problem the implementation looks for an open task if there is none the office
-    will be shutdown to prevent a running office without UI
+    Class for controlls dispatching of command URL through office command line. There
+    are "dangerous" command URLs, that can result in a running office without UI. To prevent
+    this situation the implementation surveile all dispatches and looks for an open task if
+    there is arose a problem. If there is none the office will be shutdown to prevent a
+    running office without UI.
 */
 
-class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+struct OUStringHashCode
+{
+    size_t operator()( const ::rtl::OUString& sString ) const
+    {
+        return sString.hashCode();
+    }
+};
+
+class DispatchWatcherHashMap : public ::std::hash_map< ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
 {
     public:
-        DispatchWatcher( const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+        inline void free()
+        {
+            DispatchWatcherHashMap().swap( *this );
+        }
+};
+
+class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchResultListener >
+{
+    public:
+        enum RequestType
+        {
+            REQUEST_OPEN,
+            REQUEST_PRINT
+        };
+
+        struct DispatchRequest
+        {
+            DispatchRequest( RequestType aType, const ::rtl::OUString& aFile ) :
+                aRequestType( aType ), aURL( aFile ) {}
+
+            RequestType     aRequestType;
+            rtl::OUString   aURL;
+        };
+
+        typedef std::vector< DispatchRequest > DispatchList;
+
         virtual ~DispatchWatcher();
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
             throw(::com::sun::star::uno::RuntimeException);
 
-        // XStatusListener
-        void SAL_CALL statusChanged( const com::sun::star::frame::FeatureStateEvent& Event )
-            throw(::com::sun::star::uno::RuntimeException);
+        // XDispachResultListener
+        virtual void SAL_CALL dispatchFinished( const com::sun::star::frame::DispatchResultEvent& aEvent ) throw( com::sun::star::uno::RuntimeException );
 
-        // Access function to get a dispatcher watcher reference. There must be a global reference
-        // holder that destroys the reference after leaving the application message loop.
-        static com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > GetDispatchWatcher();
+        // Access function to get a dispatcher watcher reference. There must be a global reference holder
+        static DispatchWatcher* GetDispatchWatcher();
+
+        // execute new dispatch request
+        void executeDispatchRequests( const DispatchList& aDispatches );
 
     private:
-        com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        DispatchWatcher();
+
+        static ::osl::Mutex&        GetMutex();
+
+        DispatchWatcherHashMap      m_aRequestContainer;
+
+        static ::osl::Mutex*        pWatcherMutex;
+
+        sal_Int16                   m_nRequestCount;
 };
 
 }
