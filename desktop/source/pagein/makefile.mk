@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-07 10:47:49 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:48:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 
 # depends on libc only.
-STDLIB=""
+STDLIB=
 .IF "$(COMNAME)" == "sunpro5"
 STDLIB+=-library=no%Crun
 .ENDIF # sunpro5
