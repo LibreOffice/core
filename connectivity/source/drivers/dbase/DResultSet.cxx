@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:08 $
+ *  last change: $Author: oj $ $Date: 2001-07-04 14:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,9 @@ sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark,
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
+    Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark),sal_False);
 
-    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark)+rows,sal_True);
+    return relative(rows);
 }
 
 // -------------------------------------------------------------------------
