@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:21:37 $
+#   last change: $Author: kz $ $Date: 2004-01-28 14:29:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,10 +82,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/dispatchprovider.obj				\
-                    $(SLO)$/basedispatcher.obj					\
-                    $(SLO)$/blankdispatcher.obj					\
-                    $(SLO)$/createdispatcher.obj				\
-                    $(SLO)$/selfdispatcher.obj					\
+                    $(SLO)$/loaddispatcher.obj                  \
                     $(SLO)$/menudispatcher.obj					\
                     $(SLO)$/helpagentdispatcher.obj				\
                     $(SLO)$/mailtodispatcher.obj				\
@@ -93,6 +90,11 @@ SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/interaction.obj						\
                     $(SLO)$/servicehandler.obj                  \
                     $(SLO)$/closedispatcher.obj
+
+#                    $(SLO)$/basedispatcher.obj                  \
+#                    $(SLO)$/blankdispatcher.obj                 \
+#                    $(SLO)$/createdispatcher.obj                \
+#                    $(SLO)$/selfdispatcher.obj                  \
 
 # --- Targets ------------------------------------------------------
 
