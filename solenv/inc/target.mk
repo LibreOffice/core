@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-17 19:01:15 $
+#   last change: $Author: hjs $ $Date: 2001-10-18 12:58:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,9 +85,9 @@ SOLARINC+=$(DB2INC)
 SOLARINC+=$(DAOINC)
 .ENDIF "$(LOCAL_SOLENV)"!=""
 .IF "$(PRJINC)"!=""
-INCLUDE:=-I$(INCPRE) -I. -I$(INCLOCAL) -I$(INCLOCPRJ) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCLOCPRJ) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE:=-I. -I$(INCPRE) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 .EXPORT : LIB
 # --- Compiler -----------------------------------------------------
