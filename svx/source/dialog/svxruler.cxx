@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 09:33:12 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 12:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,8 +423,9 @@ SvxRuler::SvxRuler
     if((nFlags & SVXRULER_SUPPORT_BORDERS) ==  SVXRULER_SUPPORT_BORDERS)
     {
         pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL, *this, rBindings);
-        pCtrlItem[i++] = new SvxRulerItem(SID_RULER_TEXT_RIGHT_TO_LEFT, *this, rBindings);
     }
+
+    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_TEXT_RIGHT_TO_LEFT, *this, rBindings);
 
     if((nFlags & SVXRULER_SUPPORT_OBJECT) == SVXRULER_SUPPORT_OBJECT)
     {
