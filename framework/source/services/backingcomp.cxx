@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:17:27 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,11 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // establish listening for key accelerators
     m_xWindow->addKeyListener(css::uno::Reference< css::awt::XKeyListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY));
 
+    // set help ID for our canvas
     pWindow->SetHelpId(HID_BACKINGWINDOW);
+
+    // mark our frame as "in backing mode"!
+    xPropSet->setPropertyValue(DECLARE_ASCII("IsBackingMode"), css::uno::makeAny(sal_True));
 
     aWriteLock.unlock();
     /* } SAFE */
