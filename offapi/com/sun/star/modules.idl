@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modules.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:49:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 11:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #define __com_sun_star_modules_idl__
 
 module com { module sun { module star {
+
+/// security and authenticates interfaces
+module auth {};
 
 /// Java AWT-like user interface toolkit interface specifications for UNO.
 module awt {};
@@ -129,6 +132,9 @@ module i18n {};
 
 /// Interfaces to control installations.
 module installation {};
+
+/// lightweight directory access protocol (LDAP)
+module ldap {};
 
 /// Spell checker, hyphenation and thesaurus interfaces.
 module linguistic2 {};
