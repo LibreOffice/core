@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:43:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 
 #pragma hdrstop
 
+#include <sfx2/objface.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
