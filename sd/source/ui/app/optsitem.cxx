@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-07 10:14:38 $
+ *  last change: $Author: ka $ $Date: 2000-12-11 15:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _SFX_HRC //autogen
 #include <sfx2/sfx.hrc>
+#endif
+#ifndef _SV_SALBTYPE_HRC //autogen
+#include <vcl/salbtype.hxx>
 #endif
 
 #include "app.hxx"
@@ -616,7 +619,7 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[6].hasValue() ) SetBigHandles( *(sal_Bool*) pValues[ 6 ].getValue() );
     if( pValues[7].hasValue() ) SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
     if( pValues[8].hasValue() ) SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
-    if( pValues[9].hasValue() ) SetPreviewQuality( *(sal_Int32*) pValues[ 9 ].getValue() );
+    if( pValues[9].hasValue() ) SetPreviewQuality( FRound( *(double*) pValues[ 9 ].getValue() ) );
     if( pValues[10].hasValue() ) SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
     if( pValues[11].hasValue() ) SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
 
@@ -643,7 +646,7 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 6 ] <<= IsBigHandles();
     pValues[ 7 ] <<= IsDoubleClickTextEdit();
     pValues[ 8 ] <<= IsClickChangeRotation();
-    pValues[ 9 ] <<= (sal_Int32) GetPreviewQuality();
+    pValues[ 9 ] <<= (double) GetPreviewQuality();
     pValues[ 10 ] <<= IsSolidDragging();
     pValues[ 11 ] <<= IsSolidMarkHdl();
 
@@ -1128,8 +1131,8 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
     static const char* aPropNames[] =
     {
         "Resolution/XAxis/Metric",
-        "Subdivision/XAxis",
         "Resolution/YAxis/Metric",
+        "Subdivision/XAxis",
         "Subdivision/YAxis",
         "SnapGrid/XAxis/Metric",
         "SnapGrid/YAxis/Metric",
@@ -1148,9 +1151,20 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 BOOL SdOptionsGrid::ReadData( const Any* pValues )
 {
     if( pValues[0].hasValue() ) SetFldDrawX( *(sal_Int32*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetFldDivisionX( *(sal_Int32*) pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetFldDrawY( *(sal_Int32*) pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetFldDivisionY( *(sal_Int32*) pValues[ 3 ].getValue() );
+    if( pValues[1].hasValue() ) SetFldDrawY( *(sal_Int32*) pValues[ 1 ].getValue() );
+
+    if( pValues[2].hasValue() )
+    {
+        const UINT32 nDivX = FRound( *(double*) pValues[ 2 ].getValue() );
+        SetFldDivisionX( SvxOptionsGrid::GetFldDrawX() / ( nDivX + 1 ) );
+    }
+
+    if( pValues[3].hasValue() )
+    {
+        const UINT32 nDivY = FRound( *(double*) pValues[ 3 ].getValue() );
+        SetFldDivisionY( SvxOptionsGrid::GetFldDrawY() / ( nDivY + 1 ) );
+    }
+
     if( pValues[4].hasValue() ) SetFldSnapX( *(sal_Int32*) pValues[ 4 ].getValue() );
     if( pValues[5].hasValue() ) SetFldSnapY( *(sal_Int32*) pValues[ 5 ].getValue() );
     if( pValues[6].hasValue() ) SetUseGridSnap( *(sal_Bool*) pValues[ 6 ].getValue() );
@@ -1166,9 +1180,9 @@ BOOL SdOptionsGrid::ReadData( const Any* pValues )
 BOOL SdOptionsGrid::WriteData( Any* pValues ) const
 {
     pValues[ 0 ] <<= (sal_Int32) GetFldDrawX();
-    pValues[ 1 ] <<= (sal_Int32) GetFldDivisionX();
-    pValues[ 2 ] <<= (sal_Int32) GetFldDrawY();
-    pValues[ 3 ] <<= (sal_Int32) GetFldDivisionY();
+    pValues[ 1 ] <<= (sal_Int32) GetFldDrawY();
+    pValues[ 2 ] <<= ( GetFldDivisionX() ? ( (double) GetFldDrawX() / GetFldDivisionX() - 1.0 ) : (double) 0 );
+    pValues[ 3 ] <<= ( GetFldDivisionY() ? ( (double) GetFldDrawY() / GetFldDivisionY() - 1.0 ) : (double) 0 );
     pValues[ 4 ] <<= (sal_Int32) GetFldSnapX();
     pValues[ 5 ] <<= (sal_Int32) GetFldSnapY();
     pValues[ 6 ] <<= IsUseGridSnap();
