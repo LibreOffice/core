@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:59:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3323,7 +3323,7 @@ bool PrintFontManager::checkImportPossible() const
     // find a directory with write access
     ByteString aDir;
     for( std::list< int >::const_iterator dir_it = m_aPrivateFontDirectories.begin();
-         dir_it != m_aFontDirectories.end(); ++dir_it )
+         dir_it != m_aPrivateFontDirectories.end(); ++dir_it )
     {
         aDir = getDirectory( *dir_it );
         if( ! access( aDir.GetBuffer(), W_OK ) || createPath( aDir ) )
