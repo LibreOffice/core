@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conncleanup.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:48:11 $
+ *  last change: $Author: oj $ $Date: 2001-06-21 14:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ namespace dbtools
     //=====================================================================
     //---------------------------------------------------------------------
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
+        : m_xRowSet(_rxRowSet)
+        ,m_bWasAttached(sal_False)
     {
         Reference< XPropertySet > xProps(_rxRowSet, UNO_QUERY);
         OSL_ENSURE(xProps.is(), "OAutoConnectionDisposer::OAutoConnectionDisposer: invalid rowset (no XPropertySet)!");
@@ -121,12 +123,6 @@ namespace dbtools
 
         try
         {
-            // dispose the old connection
-            Reference< XComponent > xComp(m_xOriginalConnection, UNO_QUERY);
-            if (xComp.is())
-                xComp->dispose();
-            m_xOriginalConnection.clear();
-
             // remove ourself as property change listener
             Reference< XPropertySet > xProps(_rReason.Source, UNO_QUERY);
             OSL_ENSURE(xProps.is(), "OAutoConnectionDisposer::detach: invalid event source (no XPropertySet)!");
@@ -148,6 +144,16 @@ namespace dbtools
             _rEvent.OldValue >>= xOldConnection;
             OSL_ENSURE(xOldConnection.get() == m_xOriginalConnection.get(), "OAutoConnectionDisposer::propertyChange: unexpected (original) property value!");
 #endif
+            try
+            {
+                // add as listener
+                m_xRowSet->addRowSetListener(this);
+            }
+            catch(Exception&)
+            {
+                OSL_ENSURE(sal_False, "OAutoConnectionDisposer::propertyChange: caught an exception!");
+            }
+            m_bWasAttached = sal_True;
             // detach
             detach(_rEvent);
         }
@@ -157,8 +163,58 @@ namespace dbtools
     void SAL_CALL OAutoConnectionDisposer::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         // the rowset is beeing disposed, and nobody has set a new ActiveConnection in the meantime
+        try
+        {
+            if(m_bWasAttached)
+                m_xRowSet->removeRowSetListener(this);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::disposing: caught an exception!");
+        }
+        clearConnection();
         detach(_rSource);
     }
+    //---------------------------------------------------------------------
+    void OAutoConnectionDisposer::clearConnection()
+    {
+        try
+        {
+        // dispose the old connection
+            Reference< XComponent > xComp(m_xOriginalConnection, UNO_QUERY);
+            if (xComp.is())
+                xComp->dispose();
+            m_xOriginalConnection.clear();
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::clearConnection: caught an exception!");
+        }
+    }
+    //---------------------------------------------------------------------
+    void SAL_CALL OAutoConnectionDisposer::cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //---------------------------------------------------------------------
+    void SAL_CALL OAutoConnectionDisposer::rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //---------------------------------------------------------------------
+    void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        try
+        {
+            m_xRowSet->removeRowSetListener(this);
+            m_bWasAttached = sal_False;
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::rowSetChanged: caught an exception!");
+        }
+        clearConnection();
+
+    }
+    //---------------------------------------------------------------------
 
 //.........................................................................
 }   // namespace dbtools
@@ -167,6 +223,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/12 09:48:11  fs
+ *  initial checkin - helper for automatically disposing a rowset's connection
+ *
  *
  *  Revision 1.0 12.04.01 09:36:29  fs
  ************************************************************************/

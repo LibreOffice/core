@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conncleanup.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:48:22 $
+ *  last change: $Author: oj $ $Date: 2001-06-21 14:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_CONNCLEANUP_HXX_
 #define _CONNECTIVITY_CONNCLEANUP_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -83,13 +83,16 @@ namespace dbtools
     //=====================================================================
     //= OAutoConnectionDisposer
     //=====================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener,
+                                        ::com::sun::star::sdbc::XRowSetListener
                                     >   OAutoConnectionDisposer_Base;
 
     class OAutoConnectionDisposer : public OAutoConnectionDisposer_Base
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     m_xOriginalConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > m_xRowSet; // needed to add as listener
+        sal_Bool m_bWasAttached; // true when we are listen on rowset
 
     public:
         /** constructs an object
@@ -109,8 +112,14 @@ namespace dbtools
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XRowSetListener
+        virtual void SAL_CALL cursorMoved( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
         void detach(const ::com::sun::star::lang::EventObject& _rReason);
+        void clearConnection();
     };
 
 //.........................................................................
@@ -122,6 +131,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/04/12 09:48:22  fs
+ *  initial checkin - helper for automatically disposing a rowset's connection
+ *
  *
  *  Revision 1.0 12.04.01 09:36:51  fs
  ************************************************************************/
