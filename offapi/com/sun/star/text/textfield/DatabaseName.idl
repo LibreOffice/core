@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseName.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:44:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,22 +72,38 @@ module com { module sun { module star { module text { module textfield {
 //=============================================================================
 /** specifies service of text field that displayes the name of a database.
     @see com::sun::star::text::TextField
+
+    Only one of the properties <member>DataBaseName</member>,
+    <member>DataBaseURL</member> and <member>DataBaseResource</member>
+    should be set. If more than one are set the last one will be used.
 */
 published service DatabaseName
 {
     service  com::sun::star::text::DependentTextField;
 
-    /** contains the name of the database.
+    /** specifies the database name.
      */
-    [property]string DataBaseName;
+    [property] string DataBaseName;
+
     /** determines the interpretation of the property DataTableName.
         @see com::sun::star::sdb::CommandType
      */
-    [property]long DataCommandType;
+    [property] long DataCommandType;
+
     /** contains the name of the database table, query or a statement depending
      on the DataCommandType property.
      */
-    [property]string DataTableName;
+    [property] string DataTableName;
+
+    /** indicates the URL of a database file.
+        @since #i25411#
+     */
+    [optional, property] string DataBaseURL;
+
+    /** indicates a connection URL, which locates a database driver.
+        @since #i25411#
+     */
+    [optional, property] string DataBaseResource;
 
 };
 
