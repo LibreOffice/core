@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef _RTL_UUID_H_
@@ -106,7 +106,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
@@ -163,12 +163,12 @@ void ScAccessibleEditObject::GotFocus()
 
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAt(
+uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPoint(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
     uno::Reference<XAccessible> xRet;
-    if (contains(rPoint))
+    if (containsPoint(rPoint))
     {
          ScUnoGuard aGuard;
         IsObjectValid();
@@ -267,8 +267,8 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         // all states are const, because this object exists only in one state
         pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTILINE);
-        pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
+        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
+        pStateSet->AddState(AccessibleStateType::MULTI_SELECTABLE);
         pStateSet->AddState(AccessibleStateType::SHOWING);
         pStateSet->AddState(AccessibleStateType::VISIBLE);
     }
@@ -361,7 +361,7 @@ void ScAccessibleEditObject::CreateTextHelper()
                 (new ScAccessibleEditObjectTextData(mpEditView, mpWindow));
             ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
 
-            mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+            mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
             mpTextHelper->SetEventSource(this);
         }
         else
@@ -370,7 +370,7 @@ void ScAccessibleEditObject::CreateTextHelper()
                 (new ScAccessibleEditLineTextData(NULL, mpWindow));
             ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
 
-            mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+            mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
             mpTextHelper->SetEventSource(this);
         }
         mpTextHelper->SetFocus(mbHasFocus);
