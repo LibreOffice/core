@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:27:17 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,10 +287,11 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
         if (nTypeId != USHRT_MAX)
         {
-            SvStringsDtor& rLst = GetFldMgr().GetSubTypes(nTypeId);
+            SvStringsDtor aLst;
+            GetFldMgr().GetSubTypes(nTypeId, aLst);
 
             if (nTypeId != TYP_AUTHORFLD)
-                nCount = rLst.Count();
+                nCount = aLst.Count();
             else
                 nCount = GetFldMgr().GetFormatCount(nTypeId, FALSE, IsFldDlgHtmlMode());
 
@@ -301,7 +302,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                 if (!IsFldEdit())
                 {
                     if (nTypeId != TYP_AUTHORFLD)
-                        nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                        nPos = aSelectionLB.InsertEntry(*aLst[i]);
                     else
                         nPos = aSelectionLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
 
@@ -315,7 +316,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                     {
                         case TYP_DATEFLD:
                         case TYP_TIMEFLD:
-                            nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                            nPos = aSelectionLB.InsertEntry(*aLst[i]);
                             aSelectionLB.SetEntryData(nPos, (void*)i);
                             if (((SwDateTimeField*)GetCurField())->IsFixed() && !i)
                                 aSelectionLB.SelectEntryPos(nPos);
@@ -325,7 +326,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                         case TYP_EXTUSERFLD:
                         case TYP_DOCSTATFLD:
-                            nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                            nPos = aSelectionLB.InsertEntry(*aLst[i]);
                             aSelectionLB.SetEntryData(nPos, (void*)i);
                             if (GetCurField()->GetSubType() == i)
                                 aSelectionLB.SelectEntryPos(nPos);
@@ -341,13 +342,13 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                         }
 
                         default:
-                            if (*rLst[i] == GetCurField()->GetPar1())
+                            if (*aLst[i] == GetCurField()->GetPar1())
                                 bInsert = TRUE;
                             break;
                     }
                     if (bInsert)
                     {
-                        nPos = aSelectionLB.InsertEntry(*rLst[i]);
+                        nPos = aSelectionLB.InsertEntry(*aLst[i]);
                         aSelectionLB.SetEntryData(nPos, (void*)i);
                         break;
                     }
