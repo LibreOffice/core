@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:31:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _SVT_BROADCAST_HXX
 #include <svtools/broadcast.hxx>
@@ -81,7 +81,8 @@ class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 class SvStream;
 
-class ScDdeLink : public ::so3::SvBaseLink, public SvtBroadcaster
+class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
+//class ScDdeLink : public ::so3::SvBaseLink, public SvtBroadcaster
 {
 private:
 static BOOL bIsInUpdate;
