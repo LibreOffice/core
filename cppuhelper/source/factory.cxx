@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:56:02 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,14 @@ public:
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     Reference<XInterface > SAL_CALL createInstanceWithArguments( const Sequence<Any>& Arguments )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    // XSingleComponentFactory
+    virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
+        Reference< XComponentContext > const & xContext )
+        throw (Exception, RuntimeException);
+    virtual Reference< XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
+        Sequence< Any > const & rArguments,
+        Reference< XComponentContext > const & xContext )
+        throw (Exception, RuntimeException);
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -425,12 +433,47 @@ Reference<XInterface > OFactoryComponentHelper::createInstanceWithArguments(
     if( bOneInstance )
     {
         MutexGuard aGuard( aMutex );
+//          OSL_ENSURE( !xTheInstance.is(), "### arguments will be ignored!" );
         if( !xTheInstance.is() )
             xTheInstance = OSingleFactoryHelper::createInstanceWithArguments( Arguments );
         return xTheInstance;
     }
     return OSingleFactoryHelper::createInstanceWithArguments( Arguments );
 }
+
+// XSingleComponentFactory
+//__________________________________________________________________________________________________
+Reference< XInterface > OFactoryComponentHelper::createInstanceWithContext(
+    Reference< XComponentContext > const & xContext )
+    throw (Exception, RuntimeException)
+{
+    if( bOneInstance )
+    {
+        MutexGuard aGuard( aMutex );
+//          OSL_ENSURE( !xTheInstance.is(), "### context will be ignored!" );
+        if( !xTheInstance.is() )
+            xTheInstance = OSingleFactoryHelper::createInstanceWithContext( xContext );
+        return xTheInstance;
+    }
+    return OSingleFactoryHelper::createInstanceWithContext( xContext );
+}
+//__________________________________________________________________________________________________
+Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndContext(
+    Sequence< Any > const & rArguments,
+    Reference< XComponentContext > const & xContext )
+    throw (Exception, RuntimeException)
+{
+    if( bOneInstance )
+    {
+        MutexGuard aGuard( aMutex );
+//          OSL_ENSURE( !xTheInstance.is(), "### context and arguments will be ignored!" );
+        if( !xTheInstance.is() )
+            xTheInstance = OSingleFactoryHelper::createInstanceWithArgumentsAndContext( rArguments, xContext );
+        return xTheInstance;
+    }
+    return OSingleFactoryHelper::createInstanceWithArgumentsAndContext( rArguments, xContext );
+}
+
 
 // OComponentHelper
 void OFactoryComponentHelper::dispose()
