@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "jni_bridge.h"
 
+#include "com/sun/star/uno/RuntimeException.hpp"
+
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -79,8 +81,7 @@ namespace jni_uno
 //______________________________________________________________________________
 JNI_type_info::JNI_type_info(
     JNI_context const & jni, typelib_TypeDescription * td )
-    : m_base( 0 ),
-      m_td( td ),
+    : m_td( td ),
       m_class( 0 )
 {
     m_td.makeComplete();
@@ -112,17 +113,9 @@ JNI_interface_type_info::JNI_interface_type_info(
     : JNI_type_info( jni, td_ )
 {
     OSL_ASSERT( typelib_TypeClass_INTERFACE == m_td.get()->eTypeClass );
-    typelib_InterfaceTypeDescription * td =
-        reinterpret_cast< typelib_InterfaceTypeDescription * >( m_td.get() );
 
     OUString const & uno_name = OUString::unacquired( &m_td.get()->pTypeName );
     JNI_info const * jni_info = jni.get_info();
-
-    // retrieve info for base type
-    typelib_TypeDescription * base_td =
-        reinterpret_cast< typelib_TypeDescription * >(
-            td->pBaseTypeDescription );
-    m_base = (0 == base_td ? 0 : jni_info->get_type_info( jni, base_td ));
 
     OString java_name(
         OUStringToOString(
@@ -148,6 +141,9 @@ JNI_interface_type_info::JNI_interface_type_info(
         // retrieve method ids for all direct members
         try
         {
+            typelib_InterfaceTypeDescription * td =
+                reinterpret_cast< typelib_InterfaceTypeDescription * >(
+                    m_td.get() );
             m_methods = new jmethodID[ td->nMapFunctionIndexToMemberIndex ];
             sal_Int32 nMethodIndex = 0;
             typelib_TypeDescriptionReference ** ppMembers = td->ppMembers;
@@ -290,11 +286,21 @@ JNI_compound_type_info::JNI_compound_type_info(
     OUString const & uno_name =
         OUString::unacquired( &((typelib_TypeDescription *)td)->pTypeName );
 
-    OString java_name(
-        OUStringToOString(
-            uno_name.replace( '.', '/' ),
-            RTL_TEXTENCODING_JAVA_UTF8 ) );
-    JLocalAutoRef jo_class( jni, find_class( jni, java_name.getStr() ) );
+    // Erase type arguments of instantiated polymorphic struct types:
+    OUString nucleus;
+    sal_Int32 i = uno_name.indexOf( '<' );
+    if ( i < 0 ) {
+        nucleus = uno_name;
+    } else {
+        nucleus = uno_name.copy( 0, i );
+    }
+    JLocalAutoRef jo_class(
+        jni,
+        find_class(
+            jni,
+            OUStringToOString(
+                nucleus.replace( '.', '/' ),
+                RTL_TEXTENCODING_JAVA_UTF8 ).getStr() ) );
 
     JNI_info const * jni_info = jni.get_info();
 
@@ -338,9 +344,20 @@ JNI_compound_type_info::JNI_compound_type_info(
 
             for ( sal_Int32 nPos = 0; nPos < nMembers; ++nPos )
             {
-                OStringBuffer sig_buf( 32 );
-                JNI_info::append_sig( &sig_buf, td->ppTypeRefs[ nPos ] );
-                OString sig( sig_buf.makeStringAndClear() );
+                OString sig;
+                if (td->aBase.eTypeClass == typelib_TypeClass_STRUCT
+                    && reinterpret_cast< typelib_StructTypeDescription * >(
+                        td)->pParameterizedTypes != 0
+                    && reinterpret_cast< typelib_StructTypeDescription * >(
+                        td)->pParameterizedTypes[nPos])
+                {
+                    sig = OString(
+                        RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;"));
+                } else {
+                    OStringBuffer sig_buf( 32 );
+                    JNI_info::append_sig( &sig_buf, td->ppTypeRefs[ nPos ] );
+                    sig = sig_buf.makeStringAndClear();
+                }
 
                 OString member_name(
                     OUStringToOString(
