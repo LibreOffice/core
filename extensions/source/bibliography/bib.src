@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-03-27 11:02:00 $
+ *  last change: $Author: kz $ $Date: 2002-04-30 09:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selecci� de camp:";
     Text[ finnish ] = "Kentt�valinta:";
+    Text[ thai ] = "เลือกเขตข้อมูล:";
 };
 
 String RID_BIB_STR_TABWIN_PREFIX
@@ -111,6 +112,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
     Text[ catalan ] = "Taula;Consulta;SQL;SQL [Natiu]";
     Text[ finnish ] = "Taulukko;kysely;Sql;Sql [alkuper�inen]";
+    Text[ thai ] = "ตาราง;แบบสอบถาม;Sql;Sql [โดยกำเนิด]";
 };
 String RID_BIB_STR_FRAME_TITLE
 {
@@ -136,6 +138,7 @@ String RID_BIB_STR_FRAME_TITLE
     Text[ turkish ] = "Kaynak�a veritaban�";
     Text[ catalan ] = "Base de dades bibliogr�fica";
     Text[ finnish ] = "Bibliografiatietokanta";
+    Text[ thai ] = "ฐานข้อมูลบรรณานุกรม";
 };
 String RID_MAP_QUESTION
 {
@@ -150,7 +153,7 @@ String RID_MAP_QUESTION
     Text[ spanish ] = "�Desea modificar el orden de las columnas?";
     Text[ italian ] = "Volete modificare l'ordine delle colonne?";
     Text[ danish ] = "Vil du redigere kolonnetildelingen?";
-    Text[ swedish ] = "Vill Du redigera kolumntilldelningen?";
+    Text[ swedish ] = "Vill du redigera kolumntilldelningen?";
     Text[ polish ] = "Chcesz edytowa� przyporz�dkowanie kolumn?";
     Text[ portuguese_brazilian ] = "Dow you want to edit the column arrangement";
     Text[ japanese ] = "列の分類を編集しますか。";
@@ -161,6 +164,7 @@ String RID_MAP_QUESTION
     Text[ turkish ] = "S�tunlar� d�zenlemek istiyor musunuz?";
     Text[ catalan ] = "Voleu editar la disposici� de les columnes?";
     Text[ finnish ] = "Haluatko muokata sarakej�rjestyst�?";
+    Text[ thai ] = "คุณต้องการแก้ไขการจัดเรียงคอลัมน์หรือไม่?";
 };
 
 
