@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:13:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,8 +1795,17 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
             xStorage = pMedium->GetStorage();
             bOk = SaveCompleted( xStorage );
             if ( bOk && (!pOld || !pOld->HasStorage_Impl() || xOld != pOld->GetStorage() ) )
+            {
                 // old own storage was not controlled by old Medium -> dispose it
-                xOld->dispose();
+                try {
+                    xOld->dispose();
+                } catch( uno::Exception& )
+                {
+                    // the storage is disposed already
+                    // can happen during reload scenario when the medium has disposed it during the closing
+                    // will be fixed in one of the next milestones
+                }
+            }
         }
         else
         {
@@ -2376,7 +2385,8 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 //REMOVE            }
 //REMOVE        }
 
-    SFX_APP()->NotifyEvent(SfxEventHint( bSaveTo? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,this));
+    // this notification should be already sent by caller in sfxbasemodel
+    // SFX_APP()->NotifyEvent(SfxEventHint( bSaveTo? SFX_EVENT_SAVETODOC : SFX_EVENT_SAVEASDOC,this));
 
     if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
         aParams->Put( SfxBoolItem( SID_UNPACK, sal_False ) );
@@ -2854,6 +2864,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT );
             pImp->m_bCreateTempStor = sal_False;
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, this ) );
         }
         catch( uno::Exception& )
         {
@@ -3122,7 +3133,10 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     }
 
     if ( bSendNotification )
-        SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOC, this ) );
+    {
+        // this notification will be sent by caller from sfxbasemodel
+        // SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOC, this ) );
+    }
 
     return bResult;
 }
