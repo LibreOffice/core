@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:57:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return oWizardResource;
     }
 
-    public void activate() {
+
+        public void activate() {
         try {
             XTopWindow top = (XTopWindow)UnoRuntime.queryInterface(XTopWindow.class,  xWindow );
             if (top != null)
@@ -365,9 +366,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     }
 
 
-
-
-
     public void drawNaviBar() {
 
         try {
@@ -396,10 +394,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             String[] propNames = new String[] { "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width" };
 
             Helper.setUnoPropertyValue(super.xDialogModel, "HelpURL", "HID:" + hid);
-
             insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "PushButtonType", "Step", "TabIndex", "Width" } ,
                                 new Object[] { new Boolean(true), IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), new Integer(iHelpPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.HELP_value), ICurStep, new Short(curtabindex++), IButtonWidth });
-            hid++;
             insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames ,
                                 new Object[] { new Boolean(false), IButtonHeight, "HID:" + (hid + 2) ,oWizardResource.getResText(UIConsts.RID_COMMON + 13), new Integer(iBackPosX), new Integer(iBtnPosY), new Short((short)PushButtonType.STANDARD_value), ICurStep, new Short(curtabindex++), IButtonWidth });
 
