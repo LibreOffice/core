@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XClassifiedObject.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:24:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,44 +70,45 @@
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
+//============================================================================
 /** represents common functionality for embedded objects
  */
 interface XClassifiedObject: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** Retrieves class ID for the object
+    // -----------------------------------------------------------------------
+    /** retrieves class ID of the object.
 
         @return
             unique class ID of the object
      */
     sequence< byte > getClassID();
 
-    //-------------------------------------------------------------------------
-    /** Retrieves symbolic name for the object type to be used in UI
+    // -----------------------------------------------------------------------
+    /** retrieves symbolic name for the object type to be used in UI.
 
         @return
             the symbolic name for the object
      */
     string getClassName();
 
-    //-------------------------------------------------------------------------
-    /** Sets the class ID and symbolic name to an object.
+    // -----------------------------------------------------------------------
+    /** sets the class ID and symbolic name to an object.
 
         @param aClassID
             the new class ID
 
-        @param aClassName
+        @param sClassName
             the new symbolic name
 
         @throws ::com::sun::star::lang::NoSupportException
             in case changing of class information is not allowed
      */
-    void setClassInfo( [in] sequence< byte > aClassID, [in] string aClassName )
+    void setClassInfo(  [in] sequence< byte > aClassID,
+                        [in] string sClassName )
         raises( ::com::sun::star::lang::NoSupportException );
 };
 
