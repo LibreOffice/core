@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:55:16 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 11:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,13 +968,13 @@ void SmXMLContext_Helper::ApplyAttrs()
         }
         if (sFontFamily.getLength())
         {
-            if (sFontFamily.equalsIgnoreAsciiCase(OUString(
+            if (sFontFamily.equalsIgnoreCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM(sXML_fixed))))
                 aToken.eType = TFIXED;
-            else if (sFontFamily.equalsIgnoreAsciiCase(OUString(
+            else if (sFontFamily.equalsIgnoreCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM("sans"))))
                 aToken.eType = TSANS;
-            else if (sFontFamily.equalsIgnoreAsciiCase(OUString(
+            else if (sFontFamily.equalsIgnoreCase(OUString(
                 RTL_CONSTASCII_USTRINGPARAM("serif"))))
                 aToken.eType = TSERIF;
             else //Just give up, we need to extend our font mechanism to be
@@ -3045,36 +3045,33 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 
 void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfProps)
 {
-    uno::Reference <frame::XModel> xModel = GetModel();
-    if( !xModel.is() )
-        return;
-
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
-
-    if( !pModel )
-        return;
-
-    SmDocShell *pDocShell =
-        static_cast<SmDocShell*>(pModel->GetObjectShell());
-    if( !pDocShell )
-        return;
-
-    const PropertyValue *pValue = aConfProps.getConstArray();
-    sal_Int32 nLength = aConfProps.getLength();
-    Sequence < OUString > aNames ( nLength );
-    Sequence < Any > aValues ( nLength );
-    OUString *pString = aNames.getArray();
-    Any *pAny = aValues.getArray();
-
-    for (sal_Int32 i = 0 ; i < nLength; i++, pString++, pAny++)
+    uno::Reference < XPropertySet > xProps ( GetModel(), UNO_QUERY );
+    if ( xProps.is() )
     {
-        *pString = pValue[i].Name;
-        *pAny = pValue[i].Value;
+        Reference < XPropertySetInfo > xInfo ( xProps->getPropertySetInfo() );
+        if (xInfo.is() )
+        {
+            sal_Int32 nCount = aConfProps.getLength();
+            const PropertyValue* pValues = aConfProps.getConstArray();
+
+            while( nCount-- )
+            {
+                try
+                {
+                    if( xInfo->hasPropertyByName( pValues->Name ) )
+                    {
+                        xProps->setPropertyValue( pValues->Name, pValues->Value );
+                    }
+                }
+                catch( Exception& )
+                {
+                    DBG_ERROR( "SmXMLImport::SetConfigurationSettings: Exception!" );
+                }
+
+                pValues++;
+            }
+        }
     }
-    pModel->setPropertyValues ( aNames, aValues );
 }
 void SmXMLExport::_ExportContent()
 {
@@ -3139,47 +3136,12 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
     pValue[nIndex++].Value <<= rRect.GetHeight();
 }
 
-#define SM_NUM_EXPORTED_ITEMS 56
 void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & aProps)
 {
-    uno::Reference <frame::XModel> xModel = GetModel();
-    if( !xModel.is() )
-        return;
-
-    uno::Reference <lang::XUnoTunnel> xTunnel;
-    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
-    SmModel *pModel = reinterpret_cast<SmModel *>
-        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
-
-    if( !pModel )
-        return;
-
-    SmDocShell *pDocShell =
-        static_cast<SmDocShell*>(pModel->GetObjectShell());
-    if( !pDocShell )
-        return;
-    const SmFormat &rFormat = (static_cast < SmDocShell* > ( pDocShell ))->GetFormat();
-    const SfxItemPropertyMap *pMap = pModel->getPropertyMap();
-
-    aProps.realloc( SM_NUM_EXPORTED_ITEMS );
-    PropertyValue *pValue = aProps.getArray();
-    Sequence < OUString > aStrings ( SM_NUM_EXPORTED_ITEMS );
-    OUString *pString = aStrings.getArray();
-
-    for (sal_Int32 i = 0, nLength = SM_NUM_EXPORTED_ITEMS; i < nLength; i++, pString++)
-        *pString = OUString::createFromAscii( pMap[i].pName );
-    Sequence < PropertyValue > aAllValues = pModel->getPropertyValueSequence ( aStrings );
-    PropertyValue *pAllValue = aAllValues.getArray();
-
-    sal_Int32 nRealNum = 0;
-    for (i = 0, nLength = SM_NUM_EXPORTED_ITEMS; i < nLength; i++, pAllValue++)
-    {
-        if (pAllValue->State == PropertyState_DIRECT_VALUE)
-            pValue[nRealNum++] = *pAllValue;
-    }
-    aProps.realloc ( nRealNum );
+    Reference < XPropertySet > xProps ( GetModel(), UNO_QUERY );
+    if ( xProps.is() )
+        SvXMLUnitConverter::convertPropertySet ( aProps, xProps );
 }
-#undef SM_NUM_EXPORTED_ITEMS
 
 void SmXMLExport::ExportLine(const SmNode *pNode,int nLevel)
 {
