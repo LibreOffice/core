@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontEmphasisMark.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 10:38:23 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 11:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,31 +79,43 @@ constants FontEmphasisMark
 
     /** specifies no emphasis mark.
      */
-    const short NONE = 0;
+    const short NONE = 0x0000;
 
     //-------------------------------------------------------------------------
 
     /** specifies emphasis mark dot.
      */
-    const short DOT = 1;
+    const short DOT = 0x0001;
 
     //-------------------------------------------------------------------------
 
     /** specifies emphasis mark circle.
      */
-    const short CIRCLE = 2;
+    const short CIRCLE = 0x0002;
 
     //-------------------------------------------------------------------------
 
     /** specifies emphasis mark disc.
      */
-    const short DISC = 3;
+    const short DISC = 0x0003;
 
     //-------------------------------------------------------------------------
 
     /** specifies emphasis mark accent.
      */
-    const short ACCENT = 4;
+    const short ACCENT = 0x0004;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the emphasis mark should be positioned above the characters
+     */
+    const short ABOVE = 0x1000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the emphasis mark should be positioned below the characters
+     */
+    const short BELOW = 0x2000;
  };
 
 //=============================================================================
@@ -113,6 +125,9 @@ constants FontEmphasisMark
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/06/01 10:38:23  mt
+    EmphasisMark
+
 
 =============================================================================*/
 #endif
