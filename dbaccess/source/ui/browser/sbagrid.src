@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:10:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,5 +355,6 @@ String STR_VIEW_TITLE
     Text[ catalan ] = "View #";
     Text[ finnish ] = "Ansicht #";
 };
+
 
 
