@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-30 12:04:07 $
+ *  last change: $Author: jsc $ $Date: 2001-03-30 13:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,6 +837,132 @@ static void testEnvironment(void)
     (*pEnv->release)( pEnv );
 }
 
+
+void testArray(void)
+{
+    long a[5][6];
+    getCppuArrayType2( &a );
+
+    getCppuArrayType1( (const long (*)[5])0 );
+    getCppuArrayType2( (const long (*)[6][7])0 );
+    getCppuArrayType3( (const long (*)[7][8][9])0 );
+    getCppuArrayType4( (const long (*)[8][9][10][11])0 );
+    getCppuArrayType5( (const long (*)[9][10][11][12][13])0 );
+    getCppuArrayType6( (const long (*)[10][11][12][13][14][15])0 );
+
+    getCppuArrayType2( (const Reference< XInterface > (*)[6][7])0 );
+
+    getCppuArrayType1( (const Test1 (*)[5])0 );
+    getCppuArrayType2( (const Test1 (*)[6][7])0 );
+    getCppuArrayType3( (const Test1 (*)[7][8][9])0 );
+    getCppuArrayType4( (const Test1 (*)[8][9][10][11])0 );
+    getCppuArrayType5( (const Test1 (*)[9][10][11][12][13])0 );
+    getCppuArrayType6( (const Test1 (*)[10][11][12][13][14][15])0 );
+
+    typelib_TypeDescription* pType = NULL;
+    typelib_TypeDescriptionReference* pTypeRef = NULL;
+    sal_Int32 pDim[] = { 2, 4 };
+    Type rType = getCppuType((const sal_Int32*)0);
+    typelib_typedescription_newArray(&pType, rType.getTypeLibType(), 2, pDim);
+    OSL_ASSERT( pType );
+    typelib_typedescriptionreference_new(&pTypeRef, typelib_TypeClass_ARRAY, pType->pTypeName);
+    OSL_ASSERT( pTypeRef );
+
+    sal_Int32 a1[2][4];
+    sal_Int32 a2[2][4] = { 1,2,3,4,5,6,7,8 };
+//  uno_constructData( &a1, pType );
+    uno_type_constructData( &a1, pTypeRef );
+
+    sal_Bool bAssignable = uno_assignData(&a1, pType, a2, pType,
+                   cpp_queryInterface, cpp_acquire, cpp_release );
+    sal_Int32 i,j;
+    for ( i=0; i<2; i++ )
+        for ( j=0; j<4; j++ )
+            OSL_ASSERT( a1[i][j] == a2[i][j] );
+
+//  uno_destructData( a1, pType, cpp_release );
+    uno_type_destructData( &a1, pTypeRef, cpp_release );
+    uno_destructData( a2, pType, cpp_release );
+
+    typelib_typedescription_release(pType);
+    typelib_typedescriptionreference_release(pTypeRef);
+    pType = NULL;
+    pTypeRef = NULL;
+
+    typelib_typedescription_newArray(&pType, getCppuType((const OUString*)0).getTypeLibType(), 2, pDim);
+    OSL_ASSERT( pType );
+    typelib_typedescriptionreference_new(&pTypeRef, typelib_TypeClass_ARRAY, pType->pTypeName);
+    OSL_ASSERT( pTypeRef );
+
+    OUString s1(OUString::createFromAscii("Hallo"));
+    OUString s2(OUString::createFromAscii("jetzt"));
+    OUString s3(OUString::createFromAscii("teste"));
+    OUString s4(OUString::createFromAscii("ich"));
+    OUString s5(OUString::createFromAscii("ein"));
+    OUString s6(OUString::createFromAscii("Array"));
+    OUString s7(OUString::createFromAscii("mit"));
+    OUString s8(OUString::createFromAscii("strings"));
+    OUString st1,st2,st3,st4,st5,st6,st7,st8;
+
+    void* p = rtl_allocateMemory(8 * sizeof(rtl_uString*));
+    void* p2 = rtl_allocateMemory(8 * sizeof(rtl_uString*));
+    rtl_uString** ppS = (rtl_uString**)p;
+    rtl_uString* sa1[2][4] = { st1.pData,st2.pData,st3.pData,st4.pData,
+                               st5.pData,st6.pData,st7.pData,st8.pData };
+    rtl_uString* sa2[2][4] = { s1.pData,s2.pData,s3.pData,s4.pData,
+                               s5.pData,s6.pData,s7.pData,s8.pData };
+    uno_constructData( p, pType );
+
+    bAssignable = uno_assignData(p, pType, sa2, pType,
+                   cpp_queryInterface, cpp_acquire, cpp_release );
+
+    bAssignable = uno_assignData(sa1, pType, p, pType,
+                   cpp_queryInterface, cpp_acquire, cpp_release );
+
+    for ( i=0; i<2; i++ )
+        for ( j=0; j<4; j++ )
+            OSL_ASSERT( sa1[i][j] == sa2[i][j] );
+
+    OUString sA[2][4];
+    sA[0][0] = s1;
+    sA[1][0] = s5;
+    sA[0][1] = s2;
+    sA[1][1] = s6;
+    sA[0][2] = s3;
+    sA[1][2] = s7;
+    sA[0][3] = s4;
+    sA[1][3] = s8;
+
+    Any aa1, aa2;
+    Type arrayType;
+    OUString (*sB)[2][4];
+    aa1.setValue(&sA, getCppuArrayType2( (const OUString (*)[2][4])0 ));
+    aa2 = aa1;
+    arrayType = aa2.getValueType();
+    sB = (OUString(*)[2][4])aa2.getValue();
+    for ( i=0; i<2; i++ )
+        for ( j=0; j<4; j++ )
+            OSL_ASSERT( sA[i][j] == (*sB)[i][j] );
+
+
+    uno_constructData( p2, pType );
+    ppS = (rtl_uString**)p2;
+    uno_copyData(p2, sa1, pType, cpp_acquire);
+    uno_copyData(sa2, p2, pType, cpp_acquire);
+
+    uno_destructData( p, pType, cpp_release );
+    uno_destructData( p2, pType, cpp_release );
+    uno_destructData( sa1, pType, cpp_release );
+    uno_destructData( sa2, pType, cpp_release );
+
+    rtl_freeMemory(p);
+    rtl_freeMemory(p2);
+    typelib_typedescription_release(pType);
+    typelib_typedescriptionreference_release(pTypeRef);
+    pType = NULL;
+    pTypeRef = NULL;
+}
+
 /*
  * main.
  */
@@ -858,7 +984,8 @@ int SAL_CALL main(int argc, char **argv)
     test_di();
     testAssignment();
     testCppu();
-//      test_cache(); // cache test not possible if types are loaded dynamically...
+    testArray();
+    //      test_cache(); // cache test not possible if types are loaded dynamically...
     test_interface();
     test_inheritance();
 
