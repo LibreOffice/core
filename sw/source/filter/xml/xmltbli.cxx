@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 17:28:23 $
+ *  last change: $Author: dvo $ $Date: 2001-08-30 10:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using ::std::hash_map;
 
 enum SwXMLTableElemTokens
 {
@@ -1238,6 +1239,16 @@ SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 
 // ---------------------------------------------------------------------
 
+class StringIntHasher
+{
+public:
+    size_t operator() (const pair<OUString,sal_Int32> & rArg) const
+    {
+        return rArg.second + rArg.first.hashCode();
+    }
+};
+
+
 typedef SwXMLTableRow_Impl* SwXMLTableRowPtr;
 SV_DECL_PTRARR_DEL(SwXMLTableRows_Impl,SwXMLTableRowPtr,5,5)
 SV_IMPL_PTRARR(SwXMLTableRows_Impl,SwXMLTableRowPtr)
@@ -1268,7 +1279,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     bFirstSection( sal_True ),
     bRelWidth( sal_True ),
     bHasHeading( sal_False ),
-    pDDESource(NULL)
+    pDDESource(NULL),
+    pSharedBoxFormats(NULL)
 {
     OUString aName;
 
@@ -1404,13 +1416,15 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     bFirstSection( sal_False ),
     bRelWidth( sal_True ),
     bHasHeading( sal_False ),
-    pDDESource(NULL)
+    pDDESource(NULL),
+    pSharedBoxFormats(NULL)
 {
 }
 
 SwXMLTableContext::~SwXMLTableContext()
 {
     delete pColumnDefaultCellStyleNames;
+    delete pSharedBoxFormats;
 }
 
 SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -1586,15 +1600,19 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         nRowsReq = USHRT_MAX;
     }
 
-    // Add columns: TODO: This should never happen, since we require
-    // column definitions!
-    for( i=GetColumnCount(); i<nColsReq; i++ )
+    // Add columns (if # required columns greater than # columns):
+    // This should never happen, since we require column definitions!
+    if ( nColsReq > GetColumnCount() )
     {
-        aColumnWidths.Insert( MINLAY, aColumnWidths.Count() );
-        aColumnRelWidths.Insert( sal_True, aColumnRelWidths.Count() );
+        for( i=GetColumnCount(); i<nColsReq; i++ )
+        {
+            aColumnWidths.Insert( MINLAY, aColumnWidths.Count() );
+            aColumnRelWidths.Insert( sal_True, aColumnRelWidths.Count() );
+        }
+        // adjust columns in *all* rows, if columns must be inserted
+        for( i=0; i<pRows->Count(); i++ )
+            (*pRows)[(sal_uInt16)i]->Expand( nColsReq, i<nCurRow );
     }
-    for( i=0; i<pRows->Count(); i++ )
-        (*pRows)[(sal_uInt16)i]->Expand( nColsReq, i<nCurRow );
 
     // Add rows
     if( pRows->Count() < nRowsReq )
@@ -1812,6 +1830,59 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
     return pBox;
 }
 
+SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
+    SwTableBox* pBox,
+    const OUString& rStyleName,
+    sal_Int32 nColumnWidth,
+    sal_Bool bMayShare,
+    sal_Bool& bNew,
+    sal_Bool* pModifyLocked )
+{
+    if ( pSharedBoxFormats == NULL )
+        pSharedBoxFormats = new map_BoxFmt();
+
+    SwTableBoxFmt* pBoxFmt;
+
+    pair<OUString,sal_Int32> aKey( rStyleName, nColumnWidth );
+    map_BoxFmt::iterator aIter = pSharedBoxFormats->find( aKey );
+    if ( aIter == pSharedBoxFormats->end() )
+    {
+        // unknown format so far -> construct a new one
+
+        // get the old format, and reset all attributes
+        // (but preserve FillOrder)
+        pBoxFmt = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
+        SwFmtFillOrder aFillOrder( pBoxFmt->GetFillOrder() );
+        pBoxFmt->ResetAllAttr();
+        pBoxFmt->SetAttr( aFillOrder );
+        bNew = sal_True;    // it's a new format now
+
+        // share this format, if allowed
+        if ( bMayShare )
+            (*pSharedBoxFormats)[ aKey ] = pBoxFmt;
+    }
+    else
+    {
+        // set the shared format
+        pBoxFmt = aIter->second;
+        pBox->ChgFrmFmt( pBoxFmt );
+        bNew = sal_False;   // copied from an existing format
+
+        // claim it, if we are not allowed to share
+        if ( !bMayShare )
+            pBoxFmt = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
+    }
+
+    // lock format (if so desired)
+    if ( pModifyLocked != NULL )
+    {
+        (*pModifyLocked) = pBoxFmt->IsModifyLocked();
+        pBoxFmt->LockModify();
+    }
+
+    return pBoxFmt;
+}
+
 SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                                               sal_uInt32 nTopRow,
                                              sal_uInt32 nLeftCol,
@@ -1930,26 +2001,28 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         pCell->GetSubTable()->MakeTable( pBox, nColWidth );
     }
 
-    // TODO: Share formats!
-    SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
-    SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllAttr();
-    pFrmFmt->SetAttr( aFillOrder );
+    // Share formats!
+    OUString sStyleName = pCell->GetStyleName();
+    sal_Bool bModifyLocked;
+    sal_Bool bNew;
+    SwTableBoxFmt *pBoxFmt = GetSharedBoxFormat(
+        pBox, sStyleName, nColWidth,
+        pCell->GetStartNode() && pCell->GetFormula().getLength() == 0 &&
+            ! pCell->HasValue(),
+        bNew, &bModifyLocked  );
 
-    // no update for cell number format (in style), formula, value
-    // (else cell alignment gets fumbled)
-    sal_Bool bModifyLocked = pFrmFmt->IsModifyLocked();
-    pFrmFmt->LockModify();
-
-    const SfxItemSet *pAutoItemSet = 0;
-    const OUString& rStyleName = pCell->GetStyleName();
-    if( pCell->GetStartNode() && rStyleName &&
-        GetSwImport().FindAutomaticStyle(
-            XML_STYLE_FAMILY_TABLE_CELL, pCell->GetStyleName(),
-                                          &pAutoItemSet ) )
+    // if a new format was created, then we need to set the style
+    if ( bNew )
     {
-        if( pAutoItemSet )
-            pFrmFmt->SetAttr( *pAutoItemSet );
+        // set style
+        const SfxItemSet *pAutoItemSet = 0;
+        if( pCell->GetStartNode() && sStyleName &&
+            GetSwImport().FindAutomaticStyle(
+                XML_STYLE_FAMILY_TABLE_CELL, sStyleName, &pAutoItemSet ) )
+        {
+            if( pAutoItemSet )
+                pBoxFmt->SetAttr( *pAutoItemSet );
+        }
     }
 
     if( pCell->GetStartNode() )
@@ -1959,29 +2032,30 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         {
             // formula cell: insert formula if valid
             SwTblBoxFormula aFormulaItem( rFormula );
-            pFrmFmt->SetAttr( aFormulaItem );
+            pBoxFmt->SetAttr( aFormulaItem );
         }
 
         // always insert value, even if default
         if( pCell->HasValue() )
         {
             SwTblBoxValue aValueItem( pCell->GetValue() );
-            pFrmFmt->SetAttr( aValueItem );
+            pBoxFmt->SetAttr( aValueItem );
         }
     }
+
     // restore old modify-lock state
     if (! bModifyLocked)
-        pFrmFmt->UnlockModify();
+        pBoxFmt->UnlockModify();
 
     // table cell protection
     if( pCell->IsProtected() )
     {
         SvxProtectItem aProtectItem;
         aProtectItem.SetCntntProtect( sal_True );
-        pFrmFmt->SetAttr( aProtectItem );
+        pBoxFmt->SetAttr( aProtectItem );
     }
 
-    pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
+    pBoxFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
 
     return pBox;
 }
