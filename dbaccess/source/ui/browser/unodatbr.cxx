@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,15 @@
 #endif
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef DBAUI_TOKENWRITER_HXX
+#include "TokenWriter.hxx"
+#endif
+#ifndef DBAUI_DBEXCHANGE_HXX
+#include "dbexchange.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -1427,16 +1436,27 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
 
         // 1. for tables
         SvLBoxEntry* pTables    = m_pTreeView->getListBox()->GetEntry(pDSEntry,1);
+
         aContextMenu.EnableItem(ID_TREE_TABLE_CREATE_DESIGN, (pTables == pEntry || pTables == pTemp));
-        aContextMenu.EnableItem(ID_TREE_TABLE_EDIT,   (pTables != pEntry && pTables == pTemp));
-        aContextMenu.EnableItem(ID_TREE_TABLE_DELETE, (pTables != pEntry && pTables == pTemp));
+        sal_Bool bPasteAble = (pTables == pEntry || pTables == pTemp);
+        if(bPasteAble)
+        {
+            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+            bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+        }
+        aContextMenu.EnableItem(ID_TREE_TABLE_PASTE, bPasteAble);
+
+        aContextMenu.EnableItem(ID_TREE_TABLE_EDIT,     (pTables != pEntry && pTables == pTemp));
+        aContextMenu.EnableItem(ID_TREE_TABLE_DELETE,   (pTables != pEntry && pTables == pTemp));
+        aContextMenu.EnableItem(ID_TREE_TABLE_COPY,     (pTables != pEntry && pTables == pTemp));
 
         // 2. for queries
         SvLBoxEntry* pQueries   = m_pTreeView->getListBox()->GetEntry(pDSEntry,0);
         aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_DESIGN, (pQueries == pEntry || pQueries == pTemp));
         aContextMenu.EnableItem(ID_TREE_QUERY_CREATE_TEXT, (pQueries == pEntry || pQueries == pTemp));
-        aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,   (pQueries != pEntry && pQueries == pTemp));
-        aContextMenu.EnableItem(ID_TREE_QUERY_DELETE, (pQueries != pEntry && pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_EDIT,     (pQueries != pEntry && pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_DELETE,   (pQueries != pEntry && pQueries == pTemp));
+        aContextMenu.EnableItem(ID_TREE_QUERY_COPY,     (pQueries != pEntry && pQueries == pTemp));
     }
 
     // rebuild conn not implemented yet
@@ -1503,20 +1523,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                 ::osl::MutexGuard aGuard(m_aEntryMutex);
 
                 // get all needed properties for design
-                ::rtl::OUString aDSName;
-                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
                 Reference<XConnection> xConnection;  // supports the service sdb::connection
-                if (pDSData)
-                    xConnection = Reference<XConnection>(pDSData->xObject,UNO_QUERY);
-                if(!xConnection.is() && pDSData)
-                {
-                    xConnection = connect(aDSName);
-                    pDSData->xObject = xConnection; // share the conenction with the querydesign
-                }
-
-                if(!xConnection.is())
+                if(!secureConnection(pDSEntry,pDSData,xConnection))
                     break;
 
                 ::rtl::OUString sCurrentObject;
@@ -1579,6 +1587,10 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                         pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory) ;
                         break;
                 }
+                ::rtl::OUString aDSName;
+                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                if (pTextItem)
+                    aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
 
                 if (bEdit)
                     pDispatcher->edit(aDSName, sCurrentObject, xConnection);
@@ -1622,45 +1634,98 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
             }
             break;
         case ID_TREE_TABLE_DELETE:
-            if(pDSEntry)
+        case ID_TREE_TABLE_COPY:
             {
                 ::osl::MutexGuard aGuard(m_aEntryMutex);
-
-                // get all needed properties for design
-                ::rtl::OUString aDSName;
-                SvLBoxItem* pTextItem = pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                if (pTextItem)
-                    aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
                 Reference<XConnection> xConnection;  // supports the service sdb::connection
-                if (pDSData)
-                    xConnection = Reference<XConnection>(pDSData->xObject,UNO_QUERY);
-                if(!xConnection.is() && pDSData)
-                {
-                    xConnection = connect(aDSName);
-                    pDSData->xObject = xConnection; // share the conenction with the querydesign
-                }
-
-                if(!xConnection.is())
+                if(!secureConnection(pDSEntry,pDSData,xConnection))
                     break;
+                // get all needed properties for design
+
                 Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
                 OSL_ENSURE(xSup.is(),"NO XTablesSuppier!");
-                Reference<XDrop> xDrop(xSup,UNO_QUERY);
-                if(xDrop.is() && QueryBox(getBrowserView()->getVclControl(),ModuleRes(QUERY_BRW_DELETE_TABLE)).Execute() == RET_YES)
+                ::rtl::OUString aName;
+                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                if (pTextItem)
+                    aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
+                if(ID_TREE_TABLE_DELETE == nPos)
                 {
-                    try
+                    Reference<XDrop> xDrop(xSup,UNO_QUERY);
+                    if(xDrop.is() && QueryBox(getBrowserView()->getVclControl(),ModuleRes(QUERY_BRW_DELETE_TABLE)).Execute() == RET_YES)
                     {
-                        ::rtl::OUString aName;
-                        SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-                        if (pTextItem)
-                            aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
-                        if(aName.getLength())
-                            xDrop->dropByName(aName);
+                        try
+                        {
+                            if(aName.getLength())
+                                xDrop->dropByName(aName);
+                        }
+                        catch(SQLException& e)
+                        {
+                            showError(SQLExceptionInfo(e));
+                        }
+                        catch(Exception&)
+                        {
+                        }
                     }
-                    catch(SQLException& e)
+                }
+                else
+                {
+                    Reference<XNameAccess> xTables = xSup->getTables();
+                    if(xTables.is() && xTables->hasByName(aName))
                     {
-                        showError(SQLExceptionInfo(e));
+                        Reference<XPropertySet> xTable;
+                        xTables->getByName(aName) >>= xTable;
+                        if(xTable.is())
+                        {
+                            ::std::auto_ptr<ORTFImportExport> pRtf(new ORTFImportExport(xTable,xConnection,getORB(),getNumberFormatter()));
+                            ::std::auto_ptr<OHTMLImportExport> pHtml(new OHTMLImportExport(xTable,xConnection,getORB(),getNumberFormatter()));
+                            // the owner ship goes to ODataClipboard
+                            ODataClipboard* pData = new ODataClipboard(pHtml,pRtf);
+                            Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+                            pData->CopyToClipboard();
+                        }
                     }
-                    catch(Exception&)
+                }
+            }
+            break;
+        case ID_TREE_QUERY_COPY:
+            {
+                ::osl::MutexGuard aGuard(m_aEntryMutex);
+                Reference<XConnection> xConnection;  // supports the service sdb::connection
+                if(!secureConnection(pDSEntry,pDSData,xConnection))
+                    break;
+                Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
+                OSL_ENSURE(xSup.is(),"NO XQueriesSupplier!");
+                ::rtl::OUString aName;
+                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                if (pTextItem)
+                    aName = static_cast<SvLBoxString*>(pTextItem)->GetText();
+                Reference<XNameAccess> xQueries = xSup->getQueries();
+                if(xQueries.is() && xQueries->hasByName(aName))
+                {
+                    Reference<XPropertySet> xQuery;
+                    xQueries->getByName(aName) >>= xQuery;
+                    if(xQuery.is())
+                    {
+                        ::std::auto_ptr<ORTFImportExport> pRtf(new ORTFImportExport(xQuery,xConnection,getORB(),getNumberFormatter()));
+                        ::std::auto_ptr<OHTMLImportExport> pHtml(new OHTMLImportExport(xQuery,xConnection,getORB(),getNumberFormatter()));
+                        // the owner ship goes to ODataClipboard
+                        ODataClipboard* pData = new ODataClipboard(pHtml,pRtf);
+                        Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+                        pData->CopyToClipboard();
+                    }
+                }
+            }
+            break;
+        case ID_TREE_TABLE_PASTE:
+            {
+                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+                if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE))
+                {
+                    ::com::sun::star::datatransfer::DataFlavor aFlavor;
+                    SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE,aFlavor);
+                    Sequence<PropertyValue> aSeq;
+                    aTransferData.GetAny(aFlavor) >>= aSeq;
+                    if(aSeq.getLength())
                     {
                     }
                 }
@@ -2459,6 +2524,28 @@ void SbaTableQueryBrowser::showExplorer()
     getBrowserView()->Resize();
 
     InvalidateFeature(ID_BROWSER_EXPLORER);
+}
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::secureConnection(SvLBoxEntry* _pDSEntry,void* pDSData,Reference<XConnection>& _xConnection)
+{
+    if(_pDSEntry)
+    {
+        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pDSData);
+        ::rtl::OUString aDSName;
+        SvLBoxItem* pTextItem = _pDSEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+        if (pTextItem)
+            aDSName = static_cast<SvLBoxString*>(pTextItem)->GetText();
+
+        if (pData)
+            _xConnection = Reference<XConnection>(pData->xObject,UNO_QUERY);
+        if(!_xConnection.is() && pData)
+        {
+            _xConnection = connect(aDSName);
+            pData->xObject = _xConnection; // share the conenction with the querydesign
+        }
+    }
+
+    return _xConnection.is();
 }
 // .........................................................................
 }   // namespace dbaui

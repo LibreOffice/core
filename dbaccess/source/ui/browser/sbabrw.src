@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:29:32 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,11 +627,23 @@ Menu MENU_BROWSERTREE_CONTEXT
         };
         MenuItem
         {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
             Identifier = ID_TREE_QUERY_DELETE ;
             HelpId = HID_BROWSER_QUERY_DELETE ;
             Text = "Abfrage ~löschen" ;
             Text [ english ] = "de~lete query" ;
             Text [ english_us ] = "de~lete query" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_QUERY_COPY ;
+            HelpId = HID_BROWSER_QUERY_COPY ;
+            Text = "Abfrage ~kopieren" ;
+            Text [ english ] = "c~opy query" ;
+            Text [ english_us ] = "c~opy query" ;
         };
         MenuItem
         {
@@ -655,11 +667,31 @@ Menu MENU_BROWSERTREE_CONTEXT
         };
         MenuItem
         {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
             Identifier = ID_TREE_TABLE_DELETE ;
             HelpId = HID_BROWSER_TABLE_DELETE ;
             Text = "Tabelle ~löschen" ;
             Text [ english ] = "de~lete table" ;
             Text [ english_us ] = "de~lete table" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_TABLE_COPY ;
+            HelpId = HID_BROWSER_TABLE_COPY ;
+            Text = "Tabelle ~kopieren" ;
+            Text [ english ] = "c~opy table" ;
+            Text [ english_us ] = "c~opy table" ;
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_TABLE_PASTE ;
+            HelpId = HID_BROWSER_TABLE_PASTE ;
+            Text = "Tabelle e~infügen" ;
+            Text [ english ] = "~insert table" ;
+            Text [ english_us ] = "~insert table" ;
         };
     };
 };
