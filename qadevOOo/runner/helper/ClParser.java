@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClParser.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-10-06 12:38:46 $
+ *  last change:$Date: 2003-11-18 16:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ public class ClParser {
         map.setProperty("-o","TestJob");
         map.setProperty("-sce","TestJob");
         map.setProperty("-aca", "AdditionalConnectionArguments");
+        map.setProperty("-xcl", "ExclusionList");
         return map;
     }
 
