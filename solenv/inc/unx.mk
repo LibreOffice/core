@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: svesik $ $Date: 2001-06-22 11:52:20 $
+#   last change: $Author: hjs $ $Date: 2001-11-05 17:46:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,13 +66,8 @@
 
 # --- Ole2 Behandlung -------------
 
-.IF "$(DONT_USE_OLE2)"!=""
 OLE2=
 OLE2DEF=
-.ELSE
-OLE2=true
-OLE2DEF=-DOLE2
-.ENDIF
 
 
 # Dieses Define gilt fuer alle  WNT- Plattformen

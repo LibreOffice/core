@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 13:03:25 $
+#   last change: $Author: hjs $ $Date: 2001-11-05 17:46:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,13 +70,8 @@ JAVAFLAGSDEBUG=-g
 
 # --- Ole2 Behandlung -------------
 
-.IF "$(DONT_USE_OLE2)"!=""
 OLE2=
 OLE2DEF=
-.ELSE
-OLE2=true
-OLE2DEF=-DOLE2
-.ENDIF
 
 # --- C/C++ defines fuer nt ----------------------------------------
 
