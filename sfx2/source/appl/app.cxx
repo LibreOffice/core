@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:09:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
+#endif
+#ifndef _BASRDLL_HXX
+#include <basic/basrdll.hxx>
 #endif
 
 #ifndef SVTOOLS_ASYNCLINK_HXX
@@ -265,7 +268,7 @@ static SvtSysLocaleOptions *pSysLocaleOptions = NULL;
 static SvtSysLocale *pSysLocale = NULL;
 static SvtExtendedSecurityOptions* pExtendedSecurityOptions = NULL;
 static framework::AddonsOptions* pAddonsOptions = NULL;
-
+static BasicDLL*       pBasic   = NULL;
 
 class SfxPropertyHandler : public PropertyHandler
 {
@@ -288,18 +291,6 @@ SfxPropertyHandler* GetOrCreatePropertyHandler()
 
 void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 {
-#if SUPD<613//MUSTINI
-    SfxApplication* pApp = SFX_APP();
-    SfxIniManager* pIni = pApp->GetIniManager();
-
-    // AppIniManger?
-    SfxAppIniManagerProperty* pAppIniMgr = PTR_CAST(SfxAppIniManagerProperty, &rProp);
-    if ( pAppIniMgr )
-    {
-        pAppIniMgr->SetIniManager( pIni );
-        return;
-    }
-#endif
     TTProperties* pTTProperties = PTR_CAST( TTProperties, &rProp );
     if ( pTTProperties )
     {
@@ -406,6 +397,11 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
     }
 }
 
+#include <framework/imageproducer.hxx>
+#include <framework/acceleratorinfo.hxx>
+#include "imagemgr.hxx"
+#include "accelinfo.hxx"
+
 SfxApplication* SfxApplication::GetOrCreate()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -413,12 +409,24 @@ SfxApplication* SfxApplication::GetOrCreate()
     // SFX on demand
     if ( !pApp )
     {
-        com::sun::star::uno::Reference < com::sun::star::lang::XInitialization >
-            xWrp(::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper")), com::sun::star::uno::UNO_QUERY );
-            xWrp->initialize( com::sun::star::uno::Sequence < com::sun::star::uno::Any >() );
-//        SfxApplication *pNew = new SfxApplication;
-//        pNew->StartUpScreen( NULL );
-//        SetApp( pNew );
+        SfxApplication *pNew = new SfxApplication;
+        SetApp( pNew );
+
+        ::framework::SetImageProducer( GetImage );
+        ::framework::SetCommandURLFromKeyCode( GetCommandURLFromKeyCode );
+
+        SfxHelp* pSfxHelp = new SfxHelp;
+        Application::SetHelp( pSfxHelp );
+        if ( SvtHelpOptions().IsExtendedHelp() )
+            Help::EnableBalloonHelp();
+        else
+            Help::DisableBalloonHelp();
+        if ( SvtHelpOptions().IsHelpTips() )
+            Help::EnableQuickHelp();
+        else
+            Help::DisableQuickHelp();
+
+        pNew->NotifyEvent(SfxEventHint(SFX_EVENT_STARTAPP), sal_False);
     }
 
     return pApp;
@@ -429,9 +437,7 @@ void SfxApplication::SetApp( SfxApplication* pSfxApp )
     static ::osl::Mutex aProtector;
     ::osl::MutexGuard aGuard( aProtector );
 
-#if SUPD>637
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
-#endif
     DBG_ASSERT( !pApp, "SfxApplication already created!" );
     if ( pApp )
         DELETEZ( pApp );
@@ -465,15 +471,13 @@ SfxApplication::SfxApplication()
     , pImageMgr( 0 )
     , nInterfaces( 0 )
 {
-#if SUPD>637
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
-#endif
 
+    SetName( DEFINE_CONST_UNICODE("StarOffice") );
     GetpApp()->SetPropertyHandler( GetOrCreatePropertyHandler() );
 
-#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ precreate svtools options objects" );
-#endif
+
     pSaveOptions = new SvtSaveOptions;
     pUndoOptions = new SvtUndoOptions;
     pHelpOptions = new SvtHelpOptions;
@@ -493,19 +497,9 @@ SfxApplication::SfxApplication()
     pExtendedSecurityOptions = new SvtExtendedSecurityOptions;
     pAddonsOptions = new framework::AddonsOptions;
     SvtViewOptions::AcquireOptions();
-#if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
-#endif
 
-/*
-#if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ UCB_Helper::Initialize" );
-#endif
-    UCB_Helper::Initialize();
-#if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} UCB_Helper::Initialize" );
-#endif
-*/
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
+
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
     pImp->pEmptyMenu = 0;
@@ -526,22 +520,7 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
-/*AS
-#if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
-#endif
-    String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
-    LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
-    LanguageType eLanguage = pSysLocaleOptions->GetLocaleLanguageType();
-    AllSettings aSettings( Application::GetSettings() );
-    aSettings.SetUILanguage( eUILanguage );
-    aSettings.SetLanguage( eLanguage );
-    Application::SetSettings( aSettings );
 
-#if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
-#endif
-*/
     // Create instance of SvtSysLocale _after_ setting the locale at the application,
     // so that it can initialize itself correctly.
     pSysLocale = new SvtSysLocale;
@@ -551,17 +530,12 @@ SfxApplication::SfxApplication()
     pAppData_Impl->m_xImeStatusWindow->init();
     pApp->PreInit();
 
-#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SfxConfigManager" );
-#endif
     pCfgMgr = new SfxConfigManager;
-#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SfxConfigManager" );
-#endif
 
-#if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
-#endif
+
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
     InitializeDde();
@@ -577,9 +551,15 @@ SfxApplication::SfxApplication()
     }
 #endif
 #endif
-#if SUPD>637
+
+    InitLabelResMgr( "iso" );
+    pBasic   = new BasicDLL;
+
+    StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
+
+
+
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
-#endif
 }
 
 SfxApplication::~SfxApplication()
@@ -605,6 +585,7 @@ SfxApplication::~SfxApplication()
     delete pSysLocale;
     delete pExtendedSecurityOptions;
     delete pAddonsOptions;
+    delete pBasic;
 
     if ( !bDowning )
         Deinitialize();
@@ -1035,9 +1016,7 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
 
 ResMgr* SfxApplication::GetSfxResManager()
 {
-    if ( !pImp->pSfxResManager )
-        pImp->pSfxResManager = CreateResManager("sfx");
-    return pImp->pSfxResManager;
+    return SfxResId::GetResMgr();
 }
 
 //--------------------------------------------------------------------
@@ -1308,3 +1287,51 @@ void SfxApplication::Invalidate( USHORT nId )
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
+
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
+
+typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
+IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pBasic )
+{
+    // get basctl dllname
+    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
+    ::rtl::OUString aLibName( sLibName );
+
+    // load module
+    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+    // get symbol
+    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_handle_basic_error" ) );
+    basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getSymbol( handleMod, aSymbol.pData );
+
+    // call basicide_handle_basic_error in basctl
+    long nRet = pSymbol( pBasic );
+
+    return nRet;
+}
+
+::rtl::OUString SfxApplication::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
+{
+    // get basctl dllname
+    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
+    ::rtl::OUString aLibName( sLibName );
+
+    // load module
+    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+    // get symbol
+    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
+    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getSymbol( handleMod, aSymbol.pData );
+
+    // call basicide_choose_macro in basctl
+    rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
+
+    ::rtl::OUString aScriptURL( pScriptURL );
+    rtl_uString_release( pScriptURL );
+    return aScriptURL;
+}
+
