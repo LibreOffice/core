@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-24 07:09:45 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
