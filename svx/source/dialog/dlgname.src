@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.src,v $
  *
- *  $Revision: 1.1.1.7 $
+ *  $Revision: 1.1.1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 11:09:24 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 21:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ ModalDialog RID_SVXDLG_MESSBOX
     };
 };
  // ********************************************************************** EOF
+
 
 
 
