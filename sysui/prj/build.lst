@@ -1,7 +1,5 @@
 su	sysui	:	offapi xml2cmp rdbmaker transex3 NULL
 su	sysui\win32\office\icons		nmake	-	w	su_iconsw NULL
-su	sysui\tools\lngconv				nmake	-	u	su_lngconv NULL
-su	sysui\oounix\office\cde 			nmake	-	u	su_cdezips su_lngconv.u NULL
 su	sysui\source\win32\QuickStart	nmake	-	w	su_win32_quickstart NULL
 su	sysui\source\win32\QuickStart\so	nmake	-	w	su_win32_quickstart_so su_win32_quickstart.w NULL
 su	sysui\desktop\kde			nmake	-	u	su_kde su_dtshare.u NULL
