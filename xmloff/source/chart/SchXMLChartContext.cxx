@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-17 15:48:47 $
+ *  last change: $Author: bm $ $Date: 2001-05-25 12:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,46 +519,46 @@ void SchXMLChartContext::EndElement()
                 msCategoriesAddress = aStrSeq[ nLength * 2 ];
             }
         }
+    }
 
-        // set table references at document
-        if( xProp.is())
+    // set table references at document
+    // even when having own table (Writer)
+    if( xProp.is())
+    {
+        try
         {
-            try
+            uno::Any aAny;
+            if( msChartAddress.getLength())
             {
-                uno::Any aAny;
-                if( msChartAddress.getLength())
-                {
-                    aAny <<= msChartAddress;
-                    xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "ChartRangeAddress" ), aAny );
+                aAny <<= msChartAddress;
+                xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "ChartRangeAddress" ), aAny );
 
-                    if( msTableNumberList.getLength())
-                    {
-                        aAny <<= msTableNumberList;
-                        xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "TableNumberList" ), aAny );
-                    }
+                if( msTableNumberList.getLength())
+                {
+                    aAny <<= msTableNumberList;
+                    xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "TableNumberList" ), aAny );
                 }
-                else
+            }
+            else
+            {
+                // deprecated
+                if( msCategoriesAddress.getLength())
                 {
-                    // deprecated
-                    if( msCategoriesAddress.getLength())
-                    {
-                        aAny <<= msCategoriesAddress;
-                        xProp->setPropertyValue( rtl::OUString::createFromAscii( "CategoriesRangeAddress" ), aAny );
-                    }
-
-                    // deprecated
-                    if( maSeriesAddresses.getLength())
-                    {
-                        aAny <<= maSeriesAddresses;
-                        xProp->setPropertyValue( rtl::OUString::createFromAscii( "SeriesAddresses" ), aAny );
-                    }
+                    aAny <<= msCategoriesAddress;
+                    xProp->setPropertyValue( rtl::OUString::createFromAscii( "CategoriesRangeAddress" ), aAny );
                 }
 
+                // deprecated
+                if( maSeriesAddresses.getLength())
+                {
+                    aAny <<= maSeriesAddresses;
+                    xProp->setPropertyValue( rtl::OUString::createFromAscii( "SeriesAddresses" ), aAny );
+                }
             }
-            catch( beans::UnknownPropertyException )
-            {
-                DBG_WARNING( "Required property not found in ChartDocument" );
-            }
+        }
+        catch( beans::UnknownPropertyException )
+        {
+            DBG_WARNING( "Required property not found in ChartDocument" );
         }
     }
 
@@ -581,9 +581,13 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
+    static const sal_Bool bTrue = sal_True;
+    static const uno::Any aTrueBool( &bTrue, ::getBooleanCppuType());
+
     SvXMLImportContext* pContext = 0;
     const SvXMLTokenMap& rTokenMap = mrImportHelper.GetChartElemTokenMap();
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
+    uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
 
     switch( rTokenMap.Get( nPrefix, rLocalName ))
     {
@@ -596,7 +600,6 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         case XML_TOK_CHART_TITLE:
             if( xDoc.is())
             {
-                uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
                 if( xProp.is())
                 {
                     uno::Any aTrueBool;
@@ -614,11 +617,8 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         case XML_TOK_CHART_SUBTITLE:
             if( xDoc.is())
             {
-                uno::Reference< beans::XPropertySet > xProp( xDoc, uno::UNO_QUERY );
                 if( xProp.is())
                 {
-                    uno::Any aTrueBool;
-                    aTrueBool <<= (sal_Bool)(sal_True);
                     xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSubTitle" ), aTrueBool );
                     SCH_BUILDCHART( xDoc );
                 }
@@ -636,7 +636,18 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         case XML_TOK_CHART_TABLE:
             pContext = new SchXMLTableContext( mrImportHelper, GetImport(), rLocalName, maTable );
             if( pContext )
+            {
                 mbHasOwnTable = sal_True;
+                if( xProp.is())
+                    try
+                    {
+                        xProp->setPropertyValue( ::rtl::OUString::createFromAscii( "ExportData" ), aTrueBool );
+                    }
+                    catch( uno::Exception )
+                    {
+                        DBG_ERRORFILE( "Property missing" );
+                    }
+            }
             break;
     }
 

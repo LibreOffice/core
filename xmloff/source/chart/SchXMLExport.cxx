@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-25 08:18:35 $
+ *  last change: $Author: bm $ $Date: 2001-05-25 12:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,12 +611,12 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             uno::Any aAny;
             try
             {
-                aAny = xDocPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ExportForClipboard" ));
+                aAny = xDocPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ExportData" ));
                 aAny >>= bExportTable;
             }
             catch( uno::Exception )
             {
-                DBG_ERROR( "Export for Clipboard flag not found" );
+                DBG_ERROR( "Property ExportData not found" );
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-10 12:37:57 $
+ *  last change: $Author: bm $ $Date: 2001-05-25 12:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,6 +469,19 @@ void SchXMLTableHelper::applyTableSimple(
         uno::Reference< chart::XChartDataArray > xData( xChartDoc->getData(), uno::UNO_QUERY );
         if( xData.is())
         {
+            // get NaN
+            double fSolarNaN;
+            SolarMath::SetNAN( fSolarNaN, FALSE );
+            double fNaN = fSolarNaN;
+            sal_Bool bConvertNaN = sal_False;
+
+            uno::Reference< chart::XChartData > xChartData( xData, uno::UNO_QUERY );
+            if( xChartData.is())
+            {
+                fNaN = xChartData->getNotANumber();
+                bConvertNaN = ( ! SolarMath::IsNAN( fNaN ));
+            }
+
             sal_Int32 nRowCount = rTable.aData.size();
             sal_Int32 nColumnCount = 0;
             sal_Int32 nCol = 0, nRow = 0;
@@ -489,11 +502,20 @@ void SchXMLTableHelper::applyTableSimple(
             }
             xData->setColumnDescriptions( aLabels );
 
+            double fVal;
+            const sal_Bool bConstConvertNan = bConvertNaN;
             for( ++iRow, nRow = 0; iRow != rTable.aData.end(); iRow++, nRow++ )
             {
                 aCategories[ nRow ] = (*iRow)[ 0 ].aString;
                 for( nCol = 1; nCol < nColumnCount; nCol++ )
-                    aData[ nRow ][ nCol - 1 ] = (*iRow)[ nCol ].fValue;
+                {
+                    fVal = (*iRow)[ nCol ].fValue;
+                    if( bConstConvertNan &&
+                        SolarMath::IsNAN( fVal ))
+                        aData[ nRow ][ nCol - 1 ] = fNaN;
+                    else
+                        aData[ nRow ][ nCol - 1 ] = fVal;
+                }
             }
             xData->setRowDescriptions( aCategories );
             xData->setData( aData );
