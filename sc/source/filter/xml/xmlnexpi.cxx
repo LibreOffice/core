@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-12-06 18:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,33 +196,34 @@ void ScXMLNamedExpressionsContext::EndElement()
             if (aNamedRanges >>= xNamedRanges)
             {
                 ScMyNamedExpressions* pNamedExpressions = GetScImport().GetNamedExpressions();
-                ScMyNamedExpressions::const_iterator i = pNamedExpressions->begin();
+                ScMyNamedExpressions::iterator aItr = pNamedExpressions->begin();
+                ScMyNamedExpressions::const_iterator aEndItr = pNamedExpressions->end();
                 table::CellAddress aCellAddress;
                 rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
-                while (i != pNamedExpressions->end())
+                while (aItr != aEndItr)
                 {
                     sal_Int32 nOffset(0);
                     if (ScXMLConverter::GetAddressFromString(
-                        aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
-                        xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
-                    i++;
+                        aCellAddress, (*aItr)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
+                        xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+                    aItr++;
                 }
-                i = pNamedExpressions->begin();
-                while (i != pNamedExpressions->end())
+                aItr = pNamedExpressions->begin();
+                while (aItr != aEndItr)
                 {
                     sal_Int32 nOffset(0);
                     if (ScXMLConverter::GetAddressFromString(
-                        aCellAddress, (*i)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
+                        aCellAddress, (*aItr)->sBaseCellAddress, GetScImport().GetDocument(), nOffset ))
                     {
-                        sTempContent = (*i)->sContent;
-                        ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
-                        uno::Any aNamedRange = xNamedRanges->getByName((*i)->sName);
+                        sTempContent = (*aItr)->sContent;
+                        ScXMLConverter::ParseFormula(sTempContent, (*aItr)->bIsExpression);
+                        uno::Any aNamedRange = xNamedRanges->getByName((*aItr)->sName);
                         uno::Reference <sheet::XNamedRange> xNamedRange;
                         if (aNamedRange >>= xNamedRange)
                             xNamedRange->setContent(sTempContent);
                     }
-                    delete *i;
-                    i++;
+                    delete *aItr;
+                    aItr = pNamedExpressions->erase(aItr);
                 }
             }
         }
