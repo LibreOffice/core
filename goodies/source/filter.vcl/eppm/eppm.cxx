@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:34:20 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@ public:
 //=================== Methoden von PPMWriter ==============================
 
 PPMWriter::PPMWriter() :
-    mpAcc       ( NULL ),
-    mbStatus    ( TRUE )
+    mbStatus    ( TRUE ),
+    mpAcc       ( NULL )
 {
 }
 
@@ -312,7 +312,9 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
     return bRet;
 }
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 // ------------------------------------------------------------------------
 
