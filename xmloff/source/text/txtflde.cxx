@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-23 16:30:17 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // nFormat may be -1 for numeric fields that display their
             //  variable name. (Maybe this should be a field type, then?)
             if (nFormat != -1) {
-                GetExport().addDataStyle(nFormat);
+                GetExport().addDataStyle(nFormat, nToken == FIELD_ID_TIME );
             }
         }
         break;
@@ -1217,7 +1217,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessValueAndType(sal_False,
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True);
+                                sal_False, sal_False, sal_True, sal_True);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
@@ -2096,7 +2096,8 @@ void XMLTextFieldExport::ProcessValueAndType(
     double fValue,          /// float content; possibly invalid
     sal_Bool bExportValue,  /// export value attribute?
     sal_Bool bExportValueType,  /// export value-type attribute?
-    sal_Bool bExportStyle)  /// export style-sttribute?
+    sal_Bool bExportStyle,  /// export style-sttribute?
+    sal_Bool bTimeStyle)    // exporting a time style?
 {
     // String or number?
     if (bIsString)
@@ -2137,7 +2138,7 @@ void XMLTextFieldExport::ProcessValueAndType(
                 GetExport().AddAttribute(XML_NAMESPACE_STYLE,
                                          sXML_data_style_name,
                                          GetExport().getDataStyleName(
-                                             nFormatKey));
+                                             nFormatKey, bTimeStyle));
             }  // else: ignore (no number format)
         }
     }

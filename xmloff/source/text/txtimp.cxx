@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-04 14:42:58 $
+ *  last change: $Author: cl $ $Date: 2001-05-09 14:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@
 #endif
 #ifndef _XMLOFF_FORMSIMP_HXX
 #include "formsimp.hxx"
+#endif
+#ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
+#include "XMLNumberStylesImport.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1608,15 +1611,26 @@ SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
 /// get data style key for use with NumberFormat property
 sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName)
 {
-    // get appropriate context
-    SvXMLNumFormatContext* pStyle =
-        PTR_CAST( SvXMLNumFormatContext,
-                  ((SvXMLStylesContext *)&xAutoStyles)->
+    const SvXMLStyleContext* pStyle = ((SvXMLStylesContext *)&xAutoStyles)->
                   FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE,
-                                              sStyleName, sal_True ) );
+                                              sStyleName, sal_True );
 
-    // return key or default (-1)
-    return (0 != pStyle) ? pStyle->GetKey() : -1;
+    // get appropriate context
+    SvXMLNumFormatContext* pNumStyle = PTR_CAST( SvXMLNumFormatContext, pStyle );
+    if( pNumStyle )
+    {
+        // return key
+        return pNumStyle->GetKey();
+    }
+    else
+    {
+        // for the impress and draw application that do not have a number formater
+        // check if its one of their styles.
+        SdXMLNumberFormatImportContext* pSdNumStyle = PTR_CAST( SdXMLNumberFormatImportContext, pStyle );
+
+        // return key or default (-1)
+        return (0 != pSdNumStyle) ? pSdNumStyle->GetKey() : -1;
+    }
 }
 
 const SvxXMLListStyleContext *XMLTextImportHelper::FindAutoListStyle( const OUString& rName ) const
