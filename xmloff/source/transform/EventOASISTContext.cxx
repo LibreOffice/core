@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventOASISTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:48:41 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,17 @@
 #include "TransformerBase.hxx"
 #endif
 
+#ifndef OASIS_FILTER_OOO_1X
+// Used to parse Scripting Framework URLs
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <hash_map>
 
 using namespace ::rtl;
@@ -149,6 +160,12 @@ XMLTransformerOASISEventMap_Impl
     return new XMLTransformerOASISEventMap_Impl( aTransformerEventMap );
 }
 
+XMLTransformerOASISEventMap_Impl
+    *XMLEventOASISTransformerContext::CreateFormEventMap()
+{
+    return new XMLTransformerOASISEventMap_Impl( aFormTransformerEventMap );
+}
+
 void XMLEventOASISTransformerContext::FlushEventMap(
         XMLTransformerOASISEventMap_Impl *p )
 {
@@ -158,9 +175,18 @@ void XMLEventOASISTransformerContext::FlushEventMap(
 OUString XMLEventOASISTransformerContext::GetEventName(
         sal_uInt16 nPrefix,
         const OUString& rName,
-           XMLTransformerOASISEventMap_Impl& rMap )
+           XMLTransformerOASISEventMap_Impl& rMap,
+           XMLTransformerOASISEventMap_Impl *pMap2)
 {
     XMLTransformerOASISEventMap_Impl::key_type aKey( nPrefix, rName );
+    if( pMap2 )
+    {
+        XMLTransformerOASISEventMap_Impl::const_iterator aIter =
+            pMap2->find( aKey );
+        if( !(aIter == pMap2->end()) )
+            return (*aIter).second;
+    }
+
     XMLTransformerOASISEventMap_Impl::const_iterator aIter = rMap.find( aKey );
     if( aIter == rMap.end() )
         return rName;
@@ -168,6 +194,109 @@ OUString XMLEventOASISTransformerContext::GetEventName(
         return (*aIter).second;
 }
 
+bool ParseURLAsString(
+    const OUString& rAttrValue,
+    OUString* pName, OUString* pLocation )
+{
+    OUString SCHEME( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ) );
+
+    sal_Int32 params = rAttrValue.indexOf( '?' );
+    if ( rAttrValue.indexOf( SCHEME ) != 0 || params < 0 )
+    {
+        return FALSE;
+    }
+
+    sal_Int32 start = SCHEME.getLength();
+    *pName = rAttrValue.copy( start, params - start );
+
+    OUString aToken;
+    OUString aLanguage;
+    params++;
+    do
+    {
+        aToken = rAttrValue.getToken( 0, '&', params );
+        sal_Int32 dummy = 0;
+
+        if ( aToken.match( GetXMLToken( XML_LANGUAGE ) ) )
+        {
+            aLanguage = aToken.getToken( 1, '=', dummy );
+        }
+        else if ( aToken.match( GetXMLToken( XML_LOCATION ) ) )
+        {
+            OUString tmp = aToken.getToken( 1, '=', dummy );
+            if ( tmp.equalsIgnoreAsciiCase( GetXMLToken( XML_DOCUMENT ) ) )
+            {
+                *pLocation = GetXMLToken( XML_DOCUMENT );
+            }
+            else
+            {
+                *pLocation = GetXMLToken( XML_APPLICATION );
+            }
+        }
+    } while ( params >= 0 );
+
+    if ( aLanguage.equalsIgnoreAsciiCaseAscii( "basic" ) )
+    {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+bool ParseURL(
+    const OUString& rAttrValue,
+    OUString* pName, OUString* pLocation )
+{
+#ifdef OASIS_FILTER_OOO_1X
+    return ParseURLAsString( rAttrValue, pName, pLocation );
+#else
+    Reference< com::sun::star::lang::XMultiServiceFactory >
+        xSMgr = ::comphelper::getProcessServiceFactory();
+
+    Reference< com::sun::star::uri::XUriReferenceFactory >
+        xFactory( xSMgr->createInstance( OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+
+    if ( xFactory.is() )
+    {
+        Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl (
+            xFactory->parse( rAttrValue ), UNO_QUERY );
+
+        if ( xUrl.is() )
+        {
+            OUString aLanguageKey = GetXMLToken( XML_LANGUAGE );
+            if ( xUrl.is() && xUrl->hasParameter( aLanguageKey ) )
+            {
+                OUString aLanguage = xUrl->getParameter( aLanguageKey );
+
+                if ( aLanguage.equalsIgnoreAsciiCaseAscii( "basic" ) )
+                {
+                    *pName = xUrl->getName();
+
+                    OUString tmp =
+                        xUrl->getParameter( GetXMLToken( XML_LOCATION ) );
+
+                    OUString doc = GetXMLToken( XML_DOCUMENT );
+
+                    if ( tmp.equalsIgnoreAsciiCase( doc ) )
+                    {
+                        *pLocation = doc;
+                    }
+                    else
+                    {
+                        *pLocation = GetXMLToken( XML_APPLICATION );
+                    }
+                    return TRUE;
+                }
+            }
+        }
+        return FALSE;
+    }
+    else
+    {
+        return ParseURLAsString( rAttrValue, pName, pLocation );
+    }
+#endif
+}
 
 void XMLEventOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
@@ -201,11 +330,55 @@ void XMLEventOASISTransformerContext::StartElement(
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_HREF:
-                // TODO
+                {
+                    OUString aAttrValue( rAttrValue );
+                    OUString aName, aLocation;
+
+                    bool bNeedsTransform =
+                        ParseURL( rAttrValue, &aName, &aLocation );
+
+                    if ( bNeedsTransform )
+                    {
+                        pMutableAttrList->RemoveAttributeByIndex( i );
+
+                        OUString aAttrQName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_SCRIPT,
+                            ::xmloff::token::GetXMLToken( XML_MACRO_NAME ) ) );
+
+                        pMutableAttrList->AddAttribute( aAttrQName, aName );
+
+                        sal_Int16 idx = pMutableAttrList->GetIndexByName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_SCRIPT,
+                            GetXMLToken( XML_LANGUAGE ) ) );
+
+                        pMutableAttrList->SetValueByIndex( idx,
+                            OUString::createFromAscii("StarBasic") );
+
+                        OUString aLocQName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_SCRIPT,
+                                GetXMLToken( XML_LOCATION ) ) );
+
+                        pMutableAttrList->AddAttribute( aLocQName, aLocation );
+                    }
+                }
                 break;
             case XML_ATACTION_EVENT_NAME:
-                pMutableAttrList->SetValueByIndex( i,
-                               GetTransformer().GetEventName( rAttrValue ) );
+                {
+                    // Check if the event belongs to a form or control by
+                    // cehcking the 2nd ancestor element, f.i.:
+                    // <form:button><form:event-listeners><form:event-listener>
+                    const XMLTransformerContext *pObjContext =
+                        GetTransformer().GetAncestorContext( 1 );
+                    sal_Bool bForm = pObjContext &&
+
+                        pObjContext->HasNamespace(XML_NAMESPACE_FORM );
+                    pMutableAttrList->SetValueByIndex( i,
+                                   GetTransformer().GetEventName( rAttrValue,
+                                                                    bForm ) );
+                }
                 break;
             case XML_ATACTION_REMOVE_NAMESPACE_PREFIX:
                 {
@@ -219,6 +392,31 @@ void XMLEventOASISTransformerContext::StartElement(
                 break;
             case XML_ATACTION_MACRO_NAME:
                 {
+                    OUString aName, aLocation;
+                    bool bNeedsTransform =
+                        ParseURL( rAttrValue, &aName, &aLocation );
+
+                    if ( bNeedsTransform )
+                    {
+                        pMutableAttrList->SetValueByIndex( i, aName );
+
+                        sal_Int16 idx = pMutableAttrList->GetIndexByName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_SCRIPT,
+                            GetXMLToken( XML_LANGUAGE ) ) );
+
+                        pMutableAttrList->SetValueByIndex( idx,
+                            OUString::createFromAscii("StarBasic") );
+
+                        OUString aLocQName(
+                            GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_SCRIPT,
+                                GetXMLToken( XML_LOCATION ) ) );
+
+                        pMutableAttrList->AddAttribute( aLocQName, aLocation );
+                    }
+                    else
+                    {
                     const OUString& rApp = GetXMLToken( XML_APPLICATION );
                     const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
                     OUString aLocation;
@@ -254,7 +452,7 @@ void XMLEventOASISTransformerContext::StartElement(
                             ::xmloff::token::GetXMLToken( XML_LIBRARY ) );
                         pMutableAttrList->AddAttribute( aAttrQName, aLocation );
                     }
-
+                    }
                 }
                 break;
             case XML_ATACTION_COPY:
