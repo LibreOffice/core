@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-08 12:02:19 $
+ *  last change: $Author: sj $ $Date: 2000-12-19 13:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,29 +1319,25 @@ void GraphicFilter::ImplCreateMultiConfig( const String& rMultiPath )
         for( long i = rMultiPath.GetTokenCount( ';' ); i; )
         {
             String      aConfigUrl( rMultiPath.GetToken( (USHORT) --i, ';' ) );
-            String      aPhysicalConfigName;
-            if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aConfigUrl, aPhysicalConfigName ) )
+            Config      aCfg( aConfigUrl );
+            // clone import entries
+            if( aCfg.HasGroup( IMP_FILTERSECTION ) )
             {
-                Config aCfg( aPhysicalConfigName );
-                // clone import entries
-                if( aCfg.HasGroup( IMP_FILTERSECTION ) )
-                {
-                    aCfg.SetGroup( IMP_FILTERSECTION );
-                    pConfig->SetGroup( IMP_FILTERSECTION );
+                aCfg.SetGroup( IMP_FILTERSECTION );
+                pConfig->SetGroup( IMP_FILTERSECTION );
 
-                    for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
-                        pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
-                }
+                for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
+                    pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
+            }
 
-                // clone export entries
-                if( aCfg.HasGroup( EXP_FILTERSECTION ) )
-                {
-                    aCfg.SetGroup( EXP_FILTERSECTION );
-                    pConfig->SetGroup( EXP_FILTERSECTION );
+            // clone export entries
+            if( aCfg.HasGroup( EXP_FILTERSECTION ) )
+            {
+                aCfg.SetGroup( EXP_FILTERSECTION );
+                pConfig->SetGroup( EXP_FILTERSECTION );
 
-                    for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
-                        pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
-                }
+                for( USHORT n = 0, nCount = aCfg.GetKeyCount(); n < nCount; n++ )
+                    pConfig->WriteKey( aCfg.GetKeyName( n ), aCfg.ReadKey( n ) );
             }
         }
     }
