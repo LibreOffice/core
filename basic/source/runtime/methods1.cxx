@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:36:19 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 14:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,8 @@ RTLFUNC(Array)
     // Option Base zunaechst ignorieren (kennt leider nur der Compiler)
     if( nArraySize )
         pArray->AddDim( 0, nArraySize-1 );
+    else
+        pArray->unoAddDim( 0, -1 );
 
     // Parameter ins Array uebernehmen
     for( short i = 0 ; i < nArraySize ; i++ )
@@ -615,6 +617,9 @@ RTLFUNC(DimArray)
             pArray->AddDim32( 0, ub );
         }
     }
+    else
+        pArray->unoAddDim( 0, -1 );
+
     // Array zurueckliefern
     SbxVariableRef refVar = rPar.Get(0);
     USHORT nFlags = refVar->GetFlags();
