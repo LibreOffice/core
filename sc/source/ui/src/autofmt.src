@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:38:55 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Μ’Η‰Α";
         Text[ chinese_traditional ] = "·sΌW¦Ϋ°Κ®ζ¦΅";
         Text[ arabic ] = "ΕΦΗέΙ ΚδΣνή ΚαήΗΖν";
-        Text[ greek ] = "Προσθήκη ΑυτοΜορφοποίησης";
+        Text[ greek ] = "Προσθήκη ΑυτοΜορφής";
         Text[ korean ] = "ΐΪµΏ Ό­½Δ Γί°΅";
         Text[ turkish ] = "Otomatik formatlama ekle";
         Text[ language_user1 ] = " ";
@@ -547,7 +547,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Μ–Ό‘O‚Μ•ΟX";
         Text[ chinese_traditional ] = "­«·s©R¦W¦Ϋ°Κ®ζ¦΅";
         Text[ arabic ] = "ΕΪΗΟΙ ΚΣγνΙ ΗαΚδΣνή ΗαΚαήΗΖν";
-        Text[ greek ] = "Μετονομασία ΑυτοΜορφοποίησης";
+        Text[ greek ] = "Μετονομασία ΑυτοΜορφής";
         Text[ korean ] = "ΐΪµΏΌ­½Δ ΐΜΈ§ ΉΩ²Ω±β";
         Text[ turkish ] = "Otom. formatlamayύ yen. adlandύr";
         Text[ language_user1 ] = " ";
@@ -603,7 +603,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ‚Μν";
         Text[ chinese_traditional ] = "§R°£¦Ϋ°Κ®ζ¦΅";
         Text[ arabic ] = "ΝΠέ ΚδΣνή ΚαήΗΖν";
-        Text[ greek ] = "Διαγραφή ΑυτοΜορφοποίησης";
+        Text[ greek ] = "Διαγραφή ΑυτοΜορφής";
         Text[ korean ] = "ΐΪµΏΌ­½Δ »θΑ¦";
         Text[ turkish ] = "Otomatik formatlamayύ sil";
         Text[ language_user1 ] = " ";
@@ -632,7 +632,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ japanese ] = "# µ°ΔΜ«°Ο―Δ‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
         Text[ chinese_traditional ] = "±z―u­n§R°£¦Ϋ°Κ®ζ¦΅ # ?";
         Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαΚδΣνή ΗαΚαήΗΖν #Ώ";
-        Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί η ΑυτοΜορφοποίηση #;";
+        Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί η ΑυτοΜορφή #;";
         Text[ korean ] = "# ΐΪµΏΌ­½Δ ΐ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "Otomatik formatlama # gerηekten silinsin mi?";
         Text[ language_user1 ] = " ";
@@ -854,7 +854,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ japanese ] = "µ°ΔΜ«°Ο―Δ";
     Text[ chinese_traditional ] = "¦Ϋ°Κ®ζ¦΅";
     Text[ arabic ] = "ΗαΚδΣνή ΗαΚαήΗΖν";
-    Text[ greek ] = "ΑυτοΜορφοποίηση";
+    Text[ greek ] = "ΑυτοΜορφή";
     Text[ korean ] = "ΐΪµΏ Ό­½Δ";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
