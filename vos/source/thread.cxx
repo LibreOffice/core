@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 10:53:07 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 #include <vos/diagnose.hxx>
 #include <vos/object.hxx>
 #include <vos/thread.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-26 16:32:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #include <rtl/memory.h>
 
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 #include <vos/socket.hxx>
 #include <vos/diagnose.hxx>
 //#include <osl/tools.h>

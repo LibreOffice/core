@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 12:28:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 
 #include <vos/timer.hxx>
 #include <vos/diagnose.hxx>

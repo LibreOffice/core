@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:16 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
 #include <vos/conditn.hxx>
 #include <vos/diagnose.hxx>
 
