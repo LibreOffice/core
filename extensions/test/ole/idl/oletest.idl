@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:55 $
+ *  last change: $Author: hjs $ $Date: 2000-09-18 23:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,6 @@
 #include <com/sun/star/script/XInvocation.idl>
 //#include <stardiv/uno/beans/propset.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-
-/*=============================================================================
-
-    $Source: /cvs/Archiv/one/stardiv/one/chart/xcenum.idl,v 1.6 1999/04/26 10:42
-
-    status: proofreading done
-
-    (c) Copyright 1998-1999, Star Office Entwicklungs GmbH, Hamburg
-
-=============================================================================*/
 
 module oletest
 {
