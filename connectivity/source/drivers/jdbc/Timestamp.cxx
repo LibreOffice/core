@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 09:24:54 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 15:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,16 +86,16 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
         return;
     jvalue args[1];
     // Parameter konvertieren
-    double nVal = ::dbtools::DBTypeConversion::toDouble(_rOut,::com::sun::star::util::Date(1,1,1970));
-    nVal *= fMilliSecondsPerDay;
+    ::rtl::OUString sDateStr;
+    sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
+    args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
-    args[0].j = (jlong)nVal;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(J)V";
+    char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObject( getMyClass(), mID, args[0].j );
+    jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     // und aufraeumen
@@ -170,16 +170,17 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
         return;
     jvalue args[1];
     // Parameter konvertieren
-    double nVal = ::dbtools::DBTypeConversion::getMsFromTime(_rOut);
-    //  nVal = nVal * 8640000;
+    ::rtl::OUString sDateStr;
+    sDateStr = ::dbtools::DBTypeConversion::toTimeString(_rOut);
+    args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
-    args[0].j = (jlong)nVal;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(J)V";
+    char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObject( getMyClass(), mID, args[0].j );
+    jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
+    t.pEnv->DeleteLocalRef((jstring)args[0].l);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     // und aufraeumen
@@ -228,19 +229,23 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
         return;
     jvalue args[1];
     // Parameter konvertieren
-    ::com::sun::star::util::Date aDate(_rOut.Day,_rOut.Month,_rOut.Year);
-    double nVal = ::dbtools::DBTypeConversion::toDouble(aDate,::com::sun::star::util::Date(1,1,1970));
-    nVal *= fMilliSecondsPerDay;
-    ::com::sun::star::util::Time aTime(_rOut.HundredthSeconds,_rOut.Seconds,_rOut.Minutes,_rOut.Hours);
-    nVal += ::dbtools::DBTypeConversion::getMsFromTime(aTime);
+    ::rtl::OUString sDateStr;
+    sDateStr = ::dbtools::DBTypeConversion::toDateTimeString(_rOut);
+    if ( _rOut.HundredthSeconds )
+    {
+        sDateStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+        sDateStr += ::rtl::OUString::valueOf(_rOut.HundredthSeconds);
+    }
 
-    args[0].j = (jlong)nVal;
+    args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
+
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
-    char * cSignature = "(J)V";
+    char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
-    jmethodID mID = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObject( getMyClass(), mID, args[0].j );
+    jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );OSL_ENSURE(mID,"Unknown method id!");
+    tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
+
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     // und aufraeumen
