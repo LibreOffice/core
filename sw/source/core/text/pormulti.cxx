@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-16 11:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1529,16 +1529,21 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     else
         pFontSave = NULL;
 
+    SwTwips nTmpX = 0;
+
     if( rMulti.HasRotation() )
     {
+        // For nMaxWidth we take the height of the body frame
+        // We set nTmpX (which is used for portion calculating) to the
+        // current Y value
         const SwPageFrm* pPage = pFrm->FindPageFrm();
         ASSERT( pPage, "No page in frame!");
 
         const SwLayoutFrm* pBody = pPage->FindBodyCont();
         nMaxWidth = pBody ? pBody->Prt().Height() : USHRT_MAX;
     }
-
-    SwTwips nTmpX = rInf.X();
+    else
+        nTmpX = rInf.X();
 
     pMulti = &rMulti;
     SwLineLayout *pOldCurr = pCurr;
@@ -1738,7 +1743,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         rMulti.Width( rMulti.Height() );
         rMulti.Height( KSHORT(nH) );
         rMulti.SetAscent( KSHORT(nAsc) );
-        if( nTmpX + rMulti.Width() > rInf.Width() )
+        if( rInf.GetPos().X() + rMulti.Width() > rInf.Width() )
         {
             bRet = sal_True;
             rMulti.GetRoot().Truncate();
