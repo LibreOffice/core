@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:02:55 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,13 +395,10 @@ void ScCompiler::MakeColStr( rtl::OUStringBuffer& rBuffer, USHORT nCol )
             rBuffer.append(  sal_Unicode('A' + (sal_uChar) nCol));
         else
         {
-            sal_Unicode* pCol = new sal_Unicode[2];
             USHORT nLoCol = nCol % 26;
             USHORT nHiCol = (nCol / 26) - 1;
-            pCol[0] = 'A' + (sal_uChar)nHiCol;
-            pCol[1] = 'A' + (sal_uChar)nLoCol;
-            // terminating null character is set in AllocBuffer
-            rBuffer.append(pCol, 2);
+            rBuffer.append( sal_Unicode('A' + (sal_uChar)nHiCol) );
+            rBuffer.append( sal_Unicode('A' + (sal_uChar)nLoCol) );
         }
     }
 }
