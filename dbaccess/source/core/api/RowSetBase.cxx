@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-11 11:08:33 $
+ *  last change: $Author: oj $ $Date: 2002-10-16 10:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,7 +1044,7 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     sal_Int32 i=0;
     try
     {
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.end();++aIter)
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.end();++aIter,++i) // #104278# OJ ++i inserted
             (*aIter)->fireValueChange(aRow.isValid() ? (*aRow)[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)
