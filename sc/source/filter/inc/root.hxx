@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-30 16:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,11 @@ class ExtSheetBuffer;
 class ExcExternDup;
 class ScExtDocOptions;
 class ScEditEngineDefaulter;
+
 class FilterProgressBar;
-class ValueFormBuffer;
 
 class XclImpFontBuffer;
+class XclImpNumFmtBuffer;
 class XclImpXFBuffer;
 class XclImpExtsheetBuffer;
 class XclImpTabIdBuffer;
@@ -139,9 +140,11 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     SvNumberFormatter*  pFormTable;
     ScRangeName*        pScRangeName;
     ColorBuffer*        pColor;
-    ValueFormBuffer*    pValueFormBuffer;       // ... Number-Formats
+
     XclImpFontBuffer*   pFontBuffer;
+    XclImpNumFmtBuffer* pNumFmtBuffer;
     XclImpXFBuffer*     pXFBuffer;
+
     LanguageType        eDefLanguage;
     String              aStandard;              // Schluessel fuer Exc-Standard-Format
     BiffTyp             eDateiTyp;              // feine Differenzierung

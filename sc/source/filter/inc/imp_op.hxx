@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-30 16:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,8 +208,6 @@ protected:
     void                    Horizontalpagebreaks( void );   // 0x1B
     void                    Note( void );                   // 0x1C
     void                    Selection( void );              // 0x1D
-    void                    Format235( void );              // 0x1E
-    void                    Formatcount( void );            // 0x1F
     void                    Columndefault( void );          // 0x20
     void                    Array25( void );                // 0x21
     void                    Rec1904( void );                // 0x22
@@ -266,7 +264,6 @@ protected:
     //void                  Rk( void );                     // 0x027E -> 0x7E
     void                    Formula4( void );               // 0x0406       -> excform.cxx
     void                    Bof4( void );                   // 0x0409
-    void                    Format4( void );                // 0x041E
     void                    Bof5( void );                   // 0x0809
     // ---------------------------------------------------------------
     void                    SetLineStyle( SfxItemSet&, short, short, short );
