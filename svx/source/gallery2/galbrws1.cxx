@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:03:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,14 +221,10 @@ ULONG GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 
     if( pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes ) )
     {
-        Bitmap aBMP( GAL_RESID( RID_SVXBMP_THEME_NORMAL ) );
-        static const Image aImgNormal( BitmapEx( aBMP, COL_LIGHTMAGENTA ) );
-        aBMP = Bitmap( GAL_RESID( RID_SVXBMP_THEME_DEFAULT ) );
-        static const Image aImgDefault( BitmapEx( aBMP, COL_LIGHTMAGENTA ) );
-        aBMP = Bitmap( GAL_RESID( RID_SVXBMP_THEME_READONLY ) );
-        static const Image aImgReadOnly( BitmapEx( aBMP, COL_LIGHTMAGENTA ) );
-        aBMP = Bitmap( GAL_RESID( RID_SVXBMP_THEME_IMPORTED ) );
-        static const Image aImgImported( BitmapEx( aBMP, COL_LIGHTMAGENTA ) );
+        static const Image aImgNormal( GalleryResGetBitmapEx( RID_SVXBMP_THEME_NORMAL ) );
+        static const Image aImgDefault( GalleryResGetBitmapEx( RID_SVXBMP_THEME_DEFAULT ) );
+        static const Image aImgReadOnly( GalleryResGetBitmapEx( RID_SVXBMP_THEME_READONLY ) );
+        static const Image aImgImported( GalleryResGetBitmapEx( RID_SVXBMP_THEME_IMPORTED ) );
 
         const Image* pImage;
 
