@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 15:45:30 $
+ *  last change: $Author: obo $ $Date: 2004-03-16 12:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     j = 0;
     for(;aIdxColIter != aIndexColumnPositions.end();++aIdxColIter,++i,++j)
     {
-        OSL_ENSURE(j < aIndexSignedValues.size(),"Illegal signed pos!");
         setParameter(i,xParameter,(*_rOrginalRow)[*aIdxColIter],aIter->second.second);
     }
 
