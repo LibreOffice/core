@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
+ *  last change: $Author: mib $ $Date: 2001-04-23 07:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ class XMLTextShapeImportHelper : public XMLShapeImportHelper
 
     const ::rtl::OUString sAnchorType;
     const ::rtl::OUString sAnchorPageNo;
+    const ::rtl::OUString sVertOrientPosition;
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 13:22:16 $
+ *  last change: $Author: mib $ $Date: 2001-04-23 07:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ XMLTextShapeImportHelper::XMLTextShapeImportHelper(
                           XMLTextImportHelper::CreateShapeExtPropMapper() ),
     rImport( rImp ),
     sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType")),
-    sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
+    sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo")),
+    sVertOrientPosition(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition"))
 {
     Reference < XDrawPageSupplier > xDPS( rImp.GetModel(), UNO_QUERY );
     if( xDPS.is() )
@@ -137,6 +138,7 @@ void XMLTextShapeImportHelper::addShape(
 
     TextContentAnchorType eAnchorType = TextContentAnchorType_AT_PARAGRAPH;
     sal_Int16   nPage = 0;
+    sal_Int32   nY = 0;
 
     UniReference < XMLTextImportHelper > xTxtImport =
         rImport.GetTextImport();
@@ -175,6 +177,9 @@ void XMLTextShapeImportHelper::addShape(
                     nPage = (sal_Int16)nTmp;
             }
             break;
+        case XML_TOK_TEXT_FRAME_Y:
+            rImport.GetMM100UnitConverter().convertMeasure( nY, rValue );
+            break;
         }
     }
 
@@ -190,9 +195,15 @@ void XMLTextShapeImportHelper::addShape(
 
     // page number (must be set after the frame is inserted, because it
     // will be overwritten then inserting the frame.
-    if( TextContentAnchorType_AT_PAGE == eAnchorType )
+    switch( eAnchorType )
     {
+    case TextContentAnchorType_AT_PAGE:
         aAny <<= nPage;
         xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+        break;
+    case TextContentAnchorType_AS_CHARACTER:
+        aAny <<= nY;
+        xPropSet->setPropertyValue( sVertOrientPosition, aAny );
+        break;
     }
 }
