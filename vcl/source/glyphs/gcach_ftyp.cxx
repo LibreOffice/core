@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.32 $
- *  last change: $Author: hdu $ $Date: 2001-04-27 08:08:17 $
+ *  $Revision: 1.33 $
+ *  last change: $Author: pl $ $Date: 2001-04-27 14:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,9 +370,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     rTo.meType              = TYPE_SCALABLE;
     rTo.mbDevice            = FALSE;
 
-    rTo.mnStrikeoutSize     = rTo.mnAscent / 6;
-    rTo.mnStrikeoutOffset   = +rTo.mnAscent / 2;
-
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     if( pOS2 && (~pOS2->version != 0) )
     {
@@ -383,9 +380,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
         rTo.mnLastChar      = pOS2->usLastCharIndex;
-
-        rTo.mnStrikeoutSize     = Min( 1L, (long)( pOS2->yStrikeoutSize * fScale + 0.5 ) );
-        rTo.mnStrikeoutOffset   = (long)( pOS2->yStrikeoutPosition * fScale + 0.5 );
     }
 }
 
