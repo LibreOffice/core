@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:20:23 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3617,8 +3617,15 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     GetDispatcher()->Update_Impl( TRUE );
 
     // ggf. recorden
-    rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
-    rReq.Done();
+    if ( nSID == SID_HYPERLINK_DIALOG )
+    {
+        rReq.Ignore();
+    }
+    else
+    {
+        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
+        rReq.Done();
+    }
 }
 
 //--------------------------------------------------------------------
