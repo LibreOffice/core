@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-11 12:27:57 $
+ *  last change: $Author: rt $ $Date: 2002-06-13 14:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "Resolution" ;
         Text [ SPANISH ] = "Resolución" ;
         Text [ FINNISH ] = "~Tarkkuus" ;
-        Text [ FRENCH ] = "~Résolution" ;
+        Text [ FRENCH ] = "Résolution" ;
         Text [ ITALIAN ] = "Risoluzione" ;
         Text [ DUTCH ] = "Resol~utie" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Resolu??o" ;
@@ -296,7 +296,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ ENGLISH_US ] = "Subdivision" ;
         Text [ SPANISH ] = "Subdivisión" ;
         Text [ FINNISH ] = "~Alaosasto" ;
-        Text [ FRENCH ] = "~Finesse" ;
+        Text [ FRENCH ] = "Finesse" ;
         Text [ ITALIAN ] = "Suddivisione" ;
         Text [ DUTCH ] = "~Onderverdeling" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Divis?o" ;
@@ -326,7 +326,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Ãîðèçîíòàëüíî";
         Text[ greek ] = "Ïñéæüíôéá";
         Text[ dutch ] = "H~orizontaal";
-        Text[ french ] = "H~orizontal";
+        Text[ french ] = "Horizontal";
         Text[ spanish ] = "~Horizontal";
         Text[ italian ] = "~Orizzontale";
         Text[ danish ] = "X-akse";
@@ -355,7 +355,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ russian ] = "Âåðòèêàëüíî";
         Text[ greek ] = "Êáôáêüñ~õöá";
         Text[ dutch ] = "~Verticaal";
-        Text[ french ] = "~Vertical";
+        Text[ french ] = "Vertical";
         Text[ spanish ] = "~Vertical";
         Text[ italian ] = "~Verticale";
         Text[ danish ] = "Y-akse";
