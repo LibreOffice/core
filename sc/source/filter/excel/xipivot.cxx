@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,8 +568,8 @@ XclImpPivotCache::XclImpPivotCache( const XclImpStream& rBookStrm, sal_uInt16 nS
     XclImpRoot( rBookStrm.GetRoot() ),
     mnSrcType( EXC_SXVS_UNKNOWN )
 {
-    SvStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
-    SvStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( nStrmId ) );
+    SotStorageRef xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    SotStorageStreamRef xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( nStrmId ) );
     if( xSvStrm.Is() )
     {
         XclImpStream aStrm( *xSvStrm, GetRoot() );
