@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+#   last change: $Author: fs $ $Date: 2001-01-12 14:13:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ SRC1FILES= \
     dbmsgbox.src 	\
     fmexpl.src 		\
     filtnav.src		\
-    propbrw.src 	\
     taborder.src 	\
     fmstring.src 	\
     tbxform.src		\
@@ -92,38 +91,18 @@ SRC1FILES= \
 
 
 SLOFILES = \
+    $(SLO)$/fmpage.obj      \
     $(SLO)$/fmPropBrw.obj			\
-    $(SLO)$/fmPropertyListener.obj	\
-    $(SLO)$/fmPropCommonControl.obj	\
-    $(SLO)$/fmPropComboBox.obj		\
-    $(SLO)$/fmPropColorBox.obj		\
-    $(SLO)$/fmPropListBox.obj		\
-    $(SLO)$/fmPropTimeField.obj		\
-    $(SLO)$/fmPropDateField.obj		\
-    $(SLO)$/fmPropNumField.obj		\
-    $(SLO)$/fmPropCurField.obj		\
-    $(SLO)$/fmPropEdit.obj			\
-    $(SLO)$/fmPropertyLine.obj		\
-    $(SLO)$/fmPropController.obj	\
-    $(SLO)$/fmpropcontrol.obj		\
     $(SLO)$/dialogservices.obj		\
     $(SLO)$/fmundo.obj  	\
     $(SLO)$/fmprop.obj      \
     $(SLO)$/fmmodel.obj		\
     $(SLO)$/fmexpl.obj      \
     $(SLO)$/fmctrler.obj    \
-    $(SLO)$/propbrw.obj     \
-    $(SLO)$/propbrw1.obj    \
-    $(SLO)$/propbrw2.obj    \
-    $(SLO)$/propbrw3.obj    \
     $(SLO)$/fmpgeimp.obj	\
     $(SLO)$/fmvwimp.obj     \
-    $(SLO)$/fmpage.obj      \
     $(SLO)$/taborder.obj    \
     $(SLO)$/fmdpage.obj		\
-    $(SLO)$/propctrs.obj    \
-    $(SLO)$/propctr2.obj	\
-    $(SLO)$/property.obj    \
     $(SLO)$/fmitems.obj  	\
     $(SLO)$/tbxform.obj     \
     $(SLO)$/fmobj.obj      	\
