@@ -1,4 +1,4 @@
-cr	crashrep	:	sal sysui gtk tools NULL
+cr	crashrep	:	sal sysui gtk tools shell NULL
 cr	crashrep				usr1	-	all	cr_mkout NULL
 cr	crashrep\scripts		nmake	-	all	cr_suscript NULL
 cr	crashrep\source\all		get		-	all	cr_sresource NULL
