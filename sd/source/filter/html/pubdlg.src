@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:17:53 $
+ *  last change: $Author: rt $ $Date: 2002-06-13 12:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1661,7 +1661,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "Wybierz schemat kolorσw";
         Text[ japanese ] = "ι…θ‰²γ®ιΈζ";
         Text[ greek ] = "Επιλογή συνδυασμού χρωμάτων";
-        Text[ korean ] = "μƒ‰λ„ν‘ μ„ νƒ";
+        Text[ korean ] = "μƒ‰ κµ¬μ„±ν‘ μ„ νƒ";
         Text[ chinese_traditional ] = "ιΈζ“‡ε½©θ‰²ε–ζ΅";
         Text[ arabic ] = "ΗΞΚνΗΡ δΩΗγ ΗαΓαζΗδ";
         Text[ turkish ] = "Renk seη";
@@ -1691,7 +1691,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "Zastosuj schemat koloru z dokumentu";
         Text[ japanese ] = "ι…θ‰²γ‚’γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ‹γ‚‰ι©η”¨(~A)";
         Text[ greek ] = "Εφαρμογή συνδυασμό χρωμάτων από έγγραφο";
-        Text[ korean ] = "λ¬Έμ„μ μƒ‰ λ„ν‘ μ μ©(~A)";
+        Text[ korean ] = "λ¬Έμ„μ μƒ‰ κµ¬μ„±ν‘ μ μ©(~A)";
         Text[ chinese_traditional ] = "εΎζ–‡δ»¶δΈ­ζ΅η”¨ε½©θ‰²ε–ζ΅(~A)";
         Text[ arabic ] = "ΚΨΘνή δΩΗγ ΗαΓαζΗδ ΗαγΣΚΞΟγ έν ΗαγΣΚδΟ";
         Text[ turkish ] = "Belgedeki renkleri kullan";
@@ -1750,7 +1750,7 @@ ModalDialog DLG_PUBLISHING
         Text[ polish ] = "~Zastosuj w³asny schemat kolorσw:";
         Text[ japanese ] = "γƒ¦γƒΌγ‚¶γƒΌε®ηΎ©γ®ι…θ‰²γ‚’δ½Ώη”¨(~U)";
         Text[ greek ] = "Χρήσ~η προσωπικού συνδυασμού χρωμάτων:";
-        Text[ korean ] = "μ‚¬μ©μ μ •μ μƒ‰ λ„ν‘ μ‚¬μ©(~U)";
+        Text[ korean ] = "μ‚¬μ©μ μ •μ μƒ‰ κµ¬μ„±ν‘ μ‚¬μ©(~U)";
         Text[ chinese_traditional ] = "δ½Ώη”¨θ‡ªθ¨‚ι΅θ‰²(~U)";
         Text[ arabic ] = "ΗΣΚΞΟΗγ δΩΗγ ΓαζΗδ γΞΥΥ";
         Text[ turkish ] = "Kullanύcύ tanύmlύ renkleri kullan:";
