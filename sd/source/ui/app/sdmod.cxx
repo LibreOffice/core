@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 09:38:48 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
         aStmName += rOptionName;
 
         if( SD_OPTION_STORE == eMode || xOptionStorage->IsContained( aStmName ) )
-            xStm = xOptionStorage->OpenStream( aStmName );
+            xStm = xOptionStorage->OpenSotStream( aStmName );
     }
 
     return xStm;
