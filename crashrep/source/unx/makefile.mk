@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-14 10:31:05 $
+#   last change: $Author: vg $ $Date: 2003-07-15 14:31:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=crashrep
 TARGET=crash_report.bin
+TARGET2=crash_report_with_gtk.bin
 TARGETTYPE=CUI
 
 ENABLE_EXCEPTIONS=TRUE
@@ -75,17 +76,10 @@ LIBSALCPPRT=$(0)
 .INCLUDE :  settings.mk
 # ------------------------------------------------------------------
 
-.IF "$(ENABLE_STATIC_GTK)" == "FALSE"
-ONLYMODLIBS=
-GTKLINKFLAGS=
-.ELSE
-ONLYMODLIBS=--only-mod-libs
-.IF "$(COM)" == "GCC"
-GTKLINKFLAGS=-Wl,-Bstatic
-.ELSE
-GTKLINKFLAGS=-Bstatic
-.ENDIF
-.ENDIF
+# Only build crash reporter if either a product build with debug info 
+# or a non-pro build is done.
+
+.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" != "FULL"
 
 CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
@@ -99,11 +93,27 @@ OBJFILES=\
 APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
-.IF "$(COM)" == "GCC"
-APP1STDLIBS=$(GTKLINKFLAGS) `pkg-config $(ONLYMODLIBS) --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Wl,-Bdynamic -lXext -lX11 -ldl -lnsl
-.ELSE
-APP1STDLIBS=$(GTKLINKFLAGS) `pkg-config $(ONLYMODLIBS) --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Bdynamic -lXext -lX11 -ldl -lsocket -lnsl
+
+APP1STDLIBS=`pkg-config --libs gtk+-2.0` $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+.IF "$(OS)" == "SOLARIS"
+APP1STDLIBS+=-lsocket
 .ENDIF
+
+
+# Build statically linked version for special builds and non-pros
+
+.IF "$(ENABLE_CRASHDUMP)" == "STATIC" || "$(PRODUCT)" != "FULL"
+APP2NOSAL=TRUE
+APP2TARGET=$(TARGET2)
+APP2OBJS=$(OBJFILES)
+
+APP2STDLIBS=$(STATIC) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
+.IF "$(OS)" == "SOLARIS"
+APP2STDLIBS+=-lsocket
+.ENDIF
+
+.ENDIF
+# Building crash_report_static
 
 ALL: ALLTAR $(BIN)$/crash_dump.res.01
 
@@ -115,3 +125,6 @@ $(OBJ)$/main.obj: $(INCCOM)$/_version.h
 
 $(BIN)$/crash_dump.res.01: ..$/all$/crashrep.lng
     $(BIN)$/unxcrashres ..$/all$/crashrep.lng $(BIN)$/crash_dump.res
+
+.ENDIF
+# Building crash_report
