@@ -1,13 +1,14 @@
 sa	sal	:	xml2cmp NULL 
 sa	sal										usr1	-	all	sa_mkout NULL
+sa	sal\typesconfig						nmake	-	u	sa_tc NULL
 sa	sal\cpprt								nmake	-	u	sa_cpprt sa_util NULL
-sa	sal\systools\macxp_extras\x11osx		nmake	-	u	sa_mxpext_x11osx NULL
-sa	sal\rtl\source							nmake	-	all	sa_rtl NULL
-sa	sal\textenc								nmake	-	all	sa_textenc NULL
+sa	sal\systools\macxp_extras\x11osx		nmake	-	u	sa_mxpext_x11osx sa_tc.u NULL
+sa	sal\rtl\source							nmake	-	all	sa_rtl sa_tc.u NULL
+sa	sal\textenc								nmake	-	all	sa_textenc sa_tc.u NULL
 sa	sal\systools\win32\uwinapi				nmake	-	n	sa_uwinapi NULL
 sa	sal\systools\win32\guistdio				nmake	-	n	sa_guistdio sa_uwinapi.n NULL
 sa	sal\osl\w32								nmake	-	n	sa_osln NULL
-sa	sal\osl\unx								nmake	-	u	sa_oslu NULL
-sa	sal\osl\all								nmake	-	all	sa_oslall NULL
-sa	sal\util								nmake	-	all	sa_util sa_oslall sa_uwinapi.n sa_guistdio.n sa_osln.n sa_oslu.u sa_rtl sa_textenc NULL
 sa  sal\qa                                  nmake   -   all sa_qa sa_util NULL
+sa	sal\osl\unx								nmake	-	u	sa_oslu sa_tc.u NULL
+sa	sal\osl\all								nmake	-	all	sa_oslall sa_tc.u NULL
+sa	sal\util								nmake	-	all	sa_util sa_tc.u sa_oslall sa_uwinapi.n sa_guistdio.n sa_osln.n sa_oslu.u sa_rtl sa_textenc NULL
