@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:30:36 $
+ *  last change: $Author: dic $ $Date: 2001-02-12 18:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,18 +755,134 @@ const char * getPREnv(const char * envVar)
 }
 
 
-sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe Pipe, oslSocket Socket)
+/************************************************
+ * Portal send/receive interface implementation
+ ************************************************/
+
+static sal_Bool ReadPipe(oslPipe hPipe,
+                void* pBuffer,
+                sal_Int32 BytesToRead,
+                sal_Int32* nBytes)
 {
-    /* mfe: for portal not implemented in Windows yet*/
-    return sal_False;
+        *nBytes = osl_receivePipe(hPipe, pBuffer, BytesToRead);
+        OSL_TRACE("tried to recieve %d, recieved %d.\n",
+                        BytesToRead, *nBytes);
+        return (*nBytes >= 0) &&
+               (osl_getLastPipeError(hPipe) == osl_Pipe_E_None);
+}
+
+static sal_Bool WritePipe(oslPipe hPipe,
+                void* pBuffer,
+                sal_Int32 BytesToSend,
+                sal_Int32* nBytes)
+{
+        *nBytes = osl_sendPipe(hPipe, pBuffer, BytesToSend);
+        OSL_TRACE("tried to send %d, sent %d\n",
+                        BytesToSend, *nBytes);
+        return (*nBytes == BytesToSend) &&
+               (osl_getLastPipeError(hPipe) == osl_Pipe_E_None);
+}
+
+sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket hSocket)
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 bytes = 0;
+        oslSocketImpl* pSockImpl = (oslSocketImpl*)hSocket;
+
+        /*  duplicate handle on this other side ->
+                receive remote process
+                duplicate handle and send it */
+        DWORD remoteProcessID = 0;
+        HANDLE fd = (HANDLE)pSockImpl->m_Socket;
+        oslDescriptorType code = osl_Process_TypeSocket;
+
+        OSL_TRACE("osl_sendResourcePipe: enter...");
+
+        if (ReadPipe(hPipe, &remoteProcessID, sizeof(remoteProcessID), &bytes))
+        {
+                HANDLE hRemoteProc = OpenProcess(PROCESS_DUP_HANDLE,
+                                                 FALSE,
+                                                 remoteProcessID);
+
+                if (hRemoteProc != (HANDLE)NULL)
+                {
+                        HANDLE newFd;
+
+                        if (DuplicateHandle(GetCurrentProcess(),
+                                            fd,
+                                            hRemoteProc,
+                                            &newFd,
+                                            0, FALSE, DUPLICATE_SAME_ACCESS))
+                        {
+                                if (
+                                        WritePipe(hPipe, &code, sizeof(code), &bytes) &&
+                                        WritePipe(hPipe, &newFd, sizeof(fd), &bytes)
+                                   )
+                                        bRet = sal_True;
+                        }
+
+                        CloseHandle(hRemoteProc);
+                }
+        }
+
+    if (bRet)
+    {
+        sal_Int32 commitCode;
+                OSL_TRACE("osl_sendResourcePipe: handle sent successfully, verify...\n");
+
+        if (
+            !ReadPipe(hPipe, &commitCode, sizeof(commitCode), &bytes) ||
+            (commitCode <= 0)
+           )
+            bRet = sal_False;
+    }
+
+        OSL_TRACE("osl_sendResourcePipe: exit... %d\n", bRet);
+    return(bRet);
 }
 
 
-oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe Pipe)
+oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
 {
-    /* mfe: for portal not implemented in Windows yet*/
-    return 0;
+    sal_Bool bRet = sal_False;
+    sal_Int32 bytes = 0;
+    sal_Int32 commitCode;
+        oslSocketImpl* pSockImpl = NULL;
+
+        /* duplicate handle on the other side ->
+        send my process id receive duplicated handle */
+        HANDLE fd = INVALID_HANDLE_VALUE;
+        DWORD myProcessID = GetCurrentProcessId();
+        oslDescriptorType code = osl_Process_TypeNone;
+
+        OSL_TRACE("osl_receiveResourcePipe: enter...\n");
+
+        if (
+                WritePipe(hPipe, &myProcessID, sizeof(myProcessID), &bytes) &&
+                ReadPipe(hPipe, &code, sizeof(code), &bytes) &&
+                ReadPipe(hPipe, &fd, sizeof(fd), &bytes)
+           )
+        {
+                if (code == osl_Process_TypeSocket)
+                {
+                        pSockImpl = __osl_createSocketImpl((SOCKET)fd);
+                        bRet = sal_True;
+                }
+                else
+                {
+                        OSL_TRACE("osl_receiveResourcePipe: UKNOWN\n");
+                        bRet = sal_False;
+                }
+        }
+
+        if (bRet)
+                commitCode = 1;
+        else
+                commitCode = 0;
+
+        WritePipe(hPipe, &commitCode, sizeof(commitCode), &bytes);
+
+        OSL_TRACE("osl_receiveResourcePipe: exit... %d, %p\n", bRet, pSockImpl);
+
+    return (oslSocket)pSockImpl;
 }
-
-
-
