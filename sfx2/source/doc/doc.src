@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-06 20:14:02 $
+ *  last change: $Author: kz $ $Date: 2001-09-21 20:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message [ english_us ] = "Do you want to reset the default template?" ;
     Message[ chinese_simplified ] = "æ‚¨è¦é‡è®¾æ ‡å‡†æ ·å¼æ–‡ä»¶å—ï¼Ÿ";
     Message[ russian ] = "Âû õîòèòå âîññòàíîâèòü ñòàíäàğòíûé øàáëîí?";
-    Message[ polish ] = "Czy chcesz zresetowaæ szablon domyœlny?";
+    Message[ polish ] = "Czy chcesz przywróciæ szablon standardowy?";
     Message[ japanese ] = "æ¨™æº–ï½½ï¾€ï½²ï¾™ã‚’ï¾˜ï½¾ï½¯ï¾„ã—ã¾ã™ã‹ã€‚";
     Message[ chinese_traditional ] = "æ‚¨è¦é‡è¨­æ¨™æº–æ¨£å¼æª”æ¡ˆï¼Ÿ";
     Message[ arabic ] = "åá ÊÑíÏ ÅÚÇÏÉ ÊÚííä ÇáŞÇáÈ ÇáÇİÊÑÇÖí¿";
@@ -2042,7 +2042,7 @@ String STR_PACKNGO_NEWMEDIUM
 {
     Text = "Legen Sie den nächsten Datenträger ein und betätigen Sie den OK-Button." ;
     Text [ ENGLISH ] = "Insert the next media and press OK.";
-    Text [ english_us ] = "Insert the next data carrier and press OK." ;
+    Text [ english_us ] = "Insert the next data carrier and click OK." ;
     Text[ portuguese ] = "Coloque o suporte de dados seguinte e prima OK.";
     Text[ russian ] = "Âñòàâüòå ñëåäóşùèé äèñê è íàæìèòå OK.";
     Text[ greek ] = "ÅéóÜãåôå ôïí åğüìåíï öïñİá äåäïìİíùí êáé åğéëİîôå ôï ğåäßï OK.";
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
