@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:37:06 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,15 @@ namespace svt
 
         sal_Bool bResult = sal_True;
         if ( nNewIndex > nCurrentIndex )
+        {
             bResult = skipUntil( (WizardState)nCurItemId );
+            WizardState nTemp = (WizardState)nCurItemId;
+            while( nTemp )
+            {
+                if( m_pImpl->aDisabledStates.find( --nTemp ) != m_pImpl->aDisabledStates.end() )
+                    removePageFromHistory( nTemp );
+            }
+        }
         else
             bResult = skipBackwardUntil( (WizardState)nCurItemId );
 
@@ -520,10 +528,39 @@ namespace svt
         if ( _bEnable )
             m_pImpl->aDisabledStates.erase( _nState );
         else
+        {
             m_pImpl->aDisabledStates.insert( _nState );
+            removePageFromHistory( _nState );
+        }
 
         // if the state is currently in the roadmap, reflect it's new status
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
+    }
+    //--------------------------------------------------------------------
+    void RoadmapWizard::updateRoadmapItemLabel( WizardState _nState )
+    {
+        Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
+        RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)aActivePathPos->second.size();
+        RoadmapTypes::ItemIndex nLoopUntil = ::std::max( (RoadmapTypes::ItemIndex)nUpperStepBoundary, m_pImpl->pRoadmap->GetItemCount() );
+        sal_Int32 nCurrentStatePathIndex = -1;
+        if ( m_pImpl->nActivePath != -1 )
+            nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
+        for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
+        {
+            bool bExistentItem = ( nItemIndex < m_pImpl->pRoadmap->GetItemCount() );
+            if ( bExistentItem )
+            {
+                // there is an item with this index in the roadmap - does it match what is requested by
+                // the respective state in the active path?
+                RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
+                WizardState nRequiredState = aActivePathPos->second[ nItemIndex ];
+                if ( _nState == nRequiredState )
+                {
+                    m_pImpl->pRoadmap->ChangeRoadmapItemLabel( nPresentItemId, getStateDisplayName( nRequiredState ) );
+                    break;
+                }
+            }
+        }
     }
 
 //........................................................................
