@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:37:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "GraphicViewShellBase.hxx"
 
+#include "ViewTabBar.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
 #endif
@@ -75,10 +76,37 @@ class DrawDocShell;
 
 TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 
+// We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
+// new GraphicViewShellBase object has been constructed.
+
+/*
 SFX_IMPL_VIEWFACTORY(GraphicViewShellBase, SdResId(STR_DEFAULTVIEW))
 {
     SFX_VIEW_REGISTRATION(GraphicDocShell);
 }
+*/
+SfxViewFactory* GraphicViewShellBase::pFactory;
+SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
+    SfxViewFrame *pFrame, SfxViewShell *pOldView)
+{
+    GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
+    pBase->LateInit();
+    return pBase;
+}
+void GraphicViewShellBase::RegisterFactory( USHORT nPrio )
+{
+    pFactory = new SfxViewFactory(
+        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+    InitFactory();
+}
+void GraphicViewShellBase::InitFactory()
+{
+    SFX_VIEW_REGISTRATION(GraphicDocShell);
+}
+
+
+
+
 
 
 
@@ -88,6 +116,16 @@ GraphicViewShellBase::GraphicViewShellBase (
     SfxViewShell* pOldShell)
     : ViewShellBase (pFrame, pOldShell, ViewShell::ST_DRAW)
 {
+}
+
+
+
+
+void GraphicViewShellBase::LateInit (void)
+{
+    ViewShellBase::LateInit();
+    // Turn the ViewTabBar off again.  It is not needed for Draw.
+    mpViewTabBar.reset();
 }
 
 
