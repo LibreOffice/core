@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase1.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,114 @@
 #include <cppuhelper/implbase.hxx>
 #endif
 
+/*
 #define __IFC1 Ifc1
 #define __CLASS_IFC1 class Ifc1
 #define __PUBLIC_IFC1 public Ifc1
 __DEF_IMPLHELPER_PRE( 1 )
     __IFC_WRITEOFFSET( 1 )
 __DEF_IMPLHELPER_POST( 1 )
+*/
+
+namespace cppu
+{
+    struct ClassData1 : public ClassDataBase
+    {
+        Type_Offset arType2Offset[ 1 ];
+        ClassData1( sal_Int32 nClassCode ) SAL_THROW( () )
+            : ClassDataBase( nClassCode )
+            {}
+    };
+    template< class Ifc1 >
+    class ImplHelperBase1
+        : public ::com::sun::star::lang::XTypeProvider
+        , public Ifc1
+    {
+    protected:
+        ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () )
+            {
+                ClassData & rCD = * static_cast< ClassData * >( &s_aCD );
+                if (! rCD.bOffsetsInit)
+                {
+                    ::osl::MutexGuard aGuard( getImplHelperInitMutex() );
+                    if (! rCD.bOffsetsInit)
+                    {
+                        char * pBase = (char *)this;
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc1 > *)0 ),
+                                             (char *)(Ifc1 *)this - pBase );
+                        rCD.bOffsetsInit = sal_True;
+                    }
+                }
+                return rCD;
+            }
+    };
+    template< class Ifc1 >
+    class ImplHelper1
+        : public ImplHelperBase1< Ifc1 >
+    {
+        static ClassData1 s_aCD;
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).query( rType, (ImplHelperBase1< Ifc1 > *)this ); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getTypes(); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getImplementationId(); }
+    };
+    template< class Ifc1 >
+    class WeakImplHelper1
+        : public ::cppu::OWeakObject
+        , public ImplHelperBase1< Ifc1 >
+    {
+        static ClassData1 s_aCD;
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            {
+                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase1< Ifc1 > *)this ) );
+                return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
+            }
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getTypes(); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getImplementationId(); }
+    };
+    template< class Ifc1 >
+    class WeakAggImplHelper1
+        : public ::cppu::OWeakAggObject
+        , public ImplHelperBase1< Ifc1 >
+    {
+        static ClassData1 s_aCD;
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return OWeakAggObject::queryInterface( rType ); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            {
+                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase1< Ifc1 > *)this ) );
+                return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
+            }
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakAggObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakAggObject::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getTypes(); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getImplementationId(); }
+    };
+
+#ifndef MACOSX
+    template< class Ifc1 >
+    ClassData1 ImplHelper1< Ifc1 >::s_aCD = ClassData1( 0 );
+    template< class Ifc1 >
+    ClassData1 WeakImplHelper1< Ifc1 >::s_aCD = ClassData1( 1 );
+    template< class Ifc1 >
+    ClassData1 WeakAggImplHelper1< Ifc1 >::s_aCD = ClassData1( 2 );
+#endif
+
+}
 
 #endif

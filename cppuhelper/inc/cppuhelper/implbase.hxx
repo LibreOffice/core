@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ struct ClassData : public ClassDataBase
 ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 }
 
+/* MACROS EXPANDED AND CHECKED IN
+
 //
 // settle down beavis, here comes the macro template hell :]
 //
@@ -134,7 +136,8 @@ struct ClassData##N : public ClassDataBase \
 }; \
 template< __CLASS_IFC##N > \
 class ImplHelperBase##N \
-    : public ::com::sun::star::lang::XTypeProvider, __PUBLIC_IFC##N \
+    : public ::com::sun::star::lang::XTypeProvider \
+    , __PUBLIC_IFC##N \
 { \
 protected: \
     ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () ) \
@@ -178,14 +181,14 @@ class WeakImplHelper##N \
 { \
     static ClassData##N s_aCD; \
 public: \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType )); \
     } \
-    virtual void SAL_CALL acquire() throw() \
+    virtual void SAL_CALL acquire() throw () \
         { OWeakObject::acquire(); } \
-    virtual void SAL_CALL release() throw() \
+    virtual void SAL_CALL release() throw () \
         { OWeakObject::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getTypes(); } \
@@ -199,16 +202,16 @@ class WeakAggImplHelper##N \
 { \
     static ClassData##N s_aCD; \
 public: \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
         { return OWeakAggObject::queryInterface( rType ); } \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType )); \
     } \
-    virtual void SAL_CALL acquire() throw() \
+    virtual void SAL_CALL acquire() throw () \
         { OWeakAggObject::acquire(); } \
-    virtual void SAL_CALL release() throw() \
+    virtual void SAL_CALL release() throw () \
         { OWeakAggObject::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getTypes(); } \
@@ -235,11 +238,13 @@ ClassData##N WeakAggImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 2 );
 #define __DEF_IMPLHELPER_POST( N ) \
 __DEF_IMPLHELPER_POST_A( N ) \
 __DEF_IMPLHELPER_POST_C( N )
-#else   /* MACOSX */
+#else
 #define __DEF_IMPLHELPER_POST( N ) \
 __DEF_IMPLHELPER_POST_A( N ) \
 __DEF_IMPLHELPER_POST_B( N ) \
 __DEF_IMPLHELPER_POST_C( N )
-#endif  /* MACOSX */
+#endif
+
+MACROS EXPANDED AND CHECKED IN */
 
 #endif

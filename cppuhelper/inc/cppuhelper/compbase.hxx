@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
+/* MACROS EXPANDED AND CHECKED IN
 
 //==================================================================================================
 #define __DEF_COMPIMPLHELPER_A( N ) \
@@ -93,7 +94,7 @@ public: \
     WeakComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW( () ) \
         : rBHelper( rMutex ) \
         {} \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         if (aRet.hasValue()) \
@@ -105,9 +106,9 @@ public: \
         } \
         return OWeakObject::queryInterface( rType ); \
     } \
-    virtual void SAL_CALL acquire() throw() \
+    virtual void SAL_CALL acquire() throw () \
         { OWeakObject::acquire(); } \
-    virtual void SAL_CALL release() throw() \
+    virtual void SAL_CALL release() throw () \
     { \
         if (1 == m_refCount && !rBHelper.bDisposed) \
         { \
@@ -133,11 +134,11 @@ public: \
             rBHelper.bInDispose = sal_False; \
         } \
     } \
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         rBHelper.addListener( ::getCppuType( &xListener ), xListener ); \
     } \
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         rBHelper.removeListener( ::getCppuType( &xListener ), xListener ); \
     } \
@@ -157,9 +158,9 @@ public: \
     WeakAggComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW( () ) \
         : rBHelper( rMutex ) \
         {} \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
         { return OWeakAggObject::queryInterface( rType ); } \
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase##N< __IFC##N > *)this ) ); \
         if (aRet.hasValue()) \
@@ -171,9 +172,9 @@ public: \
         } \
         return OWeakAggObject::queryAggregation( rType ); \
     } \
-    virtual void SAL_CALL acquire() throw() \
+    virtual void SAL_CALL acquire() throw () \
         { OWeakAggObject::acquire(); } \
-    virtual void SAL_CALL release() throw() \
+    virtual void SAL_CALL release() throw () \
     { \
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > x( xDelegator ); \
         if (!x.is() && 1 == m_refCount && !rBHelper.bDisposed) \
@@ -198,11 +199,11 @@ public: \
             rBHelper.bInDispose = sal_False; \
         } \
     } \
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         rBHelper.addListener( ::getCppuType( &xListener ), xListener ); \
     } \
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw(::com::sun::star::uno::RuntimeException) \
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener ) throw (::com::sun::star::uno::RuntimeException) \
     { \
         rBHelper.removeListener( ::getCppuType( &xListener ), xListener ); \
     } \
@@ -225,11 +226,13 @@ ClassData##N WeakAggComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 3 
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_C( N )
-#else   /* MACOSX */
+#else
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_B( N ) \
 __DEF_COMPIMPLHELPER_C( N )
-#endif  /* MACOSX */
+#endif
+
+MACROS EXPANDED AND CHECKED IN */
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase9.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 15:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <cppuhelper/implbase.hxx>
 #endif
 
+/*
 #define __IFC9 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9
 #define __CLASS_IFC9 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9
 #define __PUBLIC_IFC9 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
@@ -74,5 +75,123 @@ __DEF_IMPLHELPER_PRE( 9 )
     __IFC_WRITEOFFSET( 5 ) __IFC_WRITEOFFSET( 6 ) __IFC_WRITEOFFSET( 7 ) __IFC_WRITEOFFSET( 8 )
     __IFC_WRITEOFFSET( 9 )
 __DEF_IMPLHELPER_POST( 9 )
+*/
+
+namespace cppu
+{
+    struct ClassData9 : public ClassDataBase
+    {
+        Type_Offset arType2Offset[ 9 ];
+        ClassData9( sal_Int32 nClassCode ) SAL_THROW( () )
+            : ClassDataBase( nClassCode )
+            {}
+    };
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    class ImplHelperBase9
+        : public ::com::sun::star::lang::XTypeProvider
+        , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9
+    {
+    protected:
+        ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () )
+            {
+                ClassData & rCD = * static_cast< ClassData * >( &s_aCD );
+                if (! rCD.bOffsetsInit)
+                {
+                    ::osl::MutexGuard aGuard( getImplHelperInitMutex() );
+                    if (! rCD.bOffsetsInit)
+                    {
+                        char * pBase = (char *)this;
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc1 > *)0 ),
+                                             (char *)(Ifc1 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc2 > *)0 ),
+                                             (char *)(Ifc2 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc3 > *)0 ),
+                                             (char *)(Ifc3 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc4 > *)0 ),
+                                             (char *)(Ifc4 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc5 > *)0 ),
+                                             (char *)(Ifc5 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc6 > *)0 ),
+                                             (char *)(Ifc6 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc7 > *)0 ),
+                                             (char *)(Ifc7 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc8 > *)0 ),
+                                             (char *)(Ifc8 *)this - pBase );
+                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc9 > *)0 ),
+                                             (char *)(Ifc9 *)this - pBase );
+                        rCD.bOffsetsInit = sal_True;
+                    }
+                }
+                return rCD;
+            }
+    };
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    class ImplHelper9
+        : public ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >
+    {
+        static ClassData9 s_aCD;
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).query( rType, (ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 > *)this ); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getTypes(); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getImplementationId(); }
+    };
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    class WeakImplHelper9
+        : public ::cppu::OWeakObject
+        , public ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >
+    {
+        static ClassData9 s_aCD;
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            {
+                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 > *)this ) );
+                return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
+            }
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakObject::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getTypes(); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getImplementationId(); }
+    };
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    class WeakAggImplHelper9
+        : public ::cppu::OWeakAggObject
+        , public ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >
+    {
+        static ClassData9 s_aCD;
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return OWeakAggObject::queryInterface( rType ); }
+        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
+            {
+                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 > *)this ) );
+                return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
+            }
+        virtual void SAL_CALL acquire() throw ()
+            { OWeakAggObject::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { OWeakAggObject::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getTypes(); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return getClassData( s_aCD ).getImplementationId(); }
+    };
+
+#ifndef MACOSX
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    ClassData9 ImplHelper9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >::s_aCD = ClassData9( 0 );
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    ClassData9 WeakImplHelper9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >::s_aCD = ClassData9( 1 );
+    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
+    ClassData9 WeakAggImplHelper9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >::s_aCD = ClassData9( 2 );
+#endif
+
+}
 
 #endif
