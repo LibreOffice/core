@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:46:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#include <com/sun/star/awt/XWindow.hpp>
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
@@ -131,9 +132,6 @@ namespace dbaui
     {
     protected:
         // ---------------------------
-        DECLARE_STL_STDKEY_MAP( sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >, SpecialSlotDispatchers);
-        DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
-
         struct DropDescriptor
         {
             ::svx::ODataAccessDescriptor    aDroppedData;
@@ -150,11 +148,24 @@ namespace dbaui
         // ---------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xCurrentFrameParent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
 
         ::osl::Mutex            m_aEntryMutex;
 
-        SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
-        SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
+        // ---------------------------
+        struct ExternalFeature
+        {
+            ::com::sun::star::util::URL     aURL;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
+                                            xDispatcher;
+            sal_Bool                        bEnabled;
+
+            ExternalFeature() : bEnabled( sal_False ) { }
+            ExternalFeature( const ::com::sun::star::util::URL& _rURL ) : aURL( _rURL ), bEnabled( sal_False ) { }
+        };
+
+        typedef ::std::map< sal_uInt16, ExternalFeature, ::std::less< sal_uInt16 > >  ExternalFeaturesMap;
+        ExternalFeaturesMap     m_aExternalFeatures;
 
         ::svx::ODataAccessDescriptor    m_aDocumentDataSource;
             // if we're part of a document, this is the state of the DocumentDataSource slot
@@ -280,6 +291,7 @@ namespace dbaui
 
         // IControlActionListener overridables
         virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent );
+        virtual sal_Bool    requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
         virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
@@ -310,7 +322,7 @@ namespace dbaui
 
     private:
         // check the state of the external slot given, update any UI elements if necessary
-        void implCheckExternalSlot(sal_Int32 _nId);
+        void implCheckExternalSlot( sal_uInt16 _nId );
 
         // connect to the external dispatchers (if any)
         void connectExternalDispatches();
@@ -319,7 +331,7 @@ namespace dbaui
             <p>The slot is available if an external dispatcher is responsible for it, _and_ if this dispatcher
             told us the slot is available.</p>
         */
-        sal_Bool    getExternalSlotState( sal_Int32 _nId ) const;
+        sal_Bool    getExternalSlotState( sal_uInt16 _nId ) const;
 
         /** add an entry (including the subentries for queries/tables) to the list model
 
@@ -372,7 +384,7 @@ namespace dbaui
         sal_Bool    ensureEntryObject( SvLBoxEntry* _pEntry );
 
         // get the display text of the entry given
-        String      GetEntryText( SvLBoxEntry* _pEntry );
+        String      GetEntryText( SvLBoxEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
         DECL_LINK( OnEntryDoubleClicked, SvLBoxEntry* );
@@ -445,8 +457,11 @@ namespace dbaui
             void* _pTreeListUserData    // in rela a DBTreeListModel::DBTreeListUserData*, but we do not know this class here ....
         );
 
-        // set _rsName as title at the frame
+        // sets a frame title
         void setDefaultTitle();
+
+        /// retrieves the data source URL/name for the given entry representing a data source
+        String  getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const;
 
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
@@ -475,6 +490,11 @@ namespace dbaui
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
         sal_Bool isCurrentlyDisplayedChanged(const String& _sName,SvLBoxEntry* _pContainer);
+
+        /** called whenever the content of the browser is used for preview, as the very last action
+            of the load process
+        */
+        void initializePreviewMode();
     };
 
 // .........................................................................
