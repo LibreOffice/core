@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-07-31 12:53:43 $
+ *  last change: $Author: od $ $Date: 2002-08-28 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,8 @@ public:
     void PaintLines  ( OutputDevice *pOut );
     void LockLines( BOOL bLock );
 
-    BYTE Free() const { return nFree; }
+    /// OD 13.08.2002 - correct type of function
+    const USHORT Free() const { return nFree; }
 };
 
 class SwSubsRects : public SwLineRects
@@ -1285,11 +1286,20 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         //er steht im Hell-Layer (#31941#)
         BOOL bHell = pO->GetLayer() == pFly->GetFmt()->GetDoc()->GetHellId();
         if ( (bStopOnHell && bHell) ||
-             (pFly->Lower() && pFly->Lower()->IsNoTxtFrm() &&
-              !bHell &&
-              (((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
-               ((SwNoTxtFrm*)pFly->Lower())->HasAnimation() ||
-               pFly->GetFmt()->GetSurround().IsContour())))
+             /// OD 05.08.2002 #99657# - add condition:
+             ///    if the background or the shadow of the fly frame is transparent,
+             ///    then this frame will not be substracted from given region
+             ( pFly->IsBackgroundTransparent() || pFly->IsShadowTransparent() ) ||
+             /// OD 05.08.2002 - change internal order of condition
+             ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
+             ///    have not to be performed, if frame is in "Hell"
+             ( !bHell && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() &&
+               ( ((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
+                 ((SwNoTxtFrm*)pFly->Lower())->HasAnimation() ||
+                 pFly->GetFmt()->GetSurround().IsContour()
+               )
+             )
+           )
             continue;
 
 
@@ -1352,6 +1362,11 @@ void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
 
 //---------------- Ausgabe fuer das BrushItem ----------------
 
+/// OD 06.08.2002 #99657# - Note: the transparency of the background graphic
+///     is saved in SvxBrushItem.GetGraphicObject(<shell>).GetAttr().Set/GetTransparency()
+///     and is considered in the drawing of the graphic.
+///     Thus, to provide transparent background graphic for text frames nothing
+///     has to be coded.
 void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       BOOL bClip, BOOL bGrfNum )
@@ -1368,17 +1383,54 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject(
                                                     GETOBJSHELL() );
 
+    /// OD 20.08.2002 #99657#
+    ///     NOTE:
+    ///     Draw background rectangle with background color, if the intrinsic
+    ///     graphic is transparent or the intrinsic graphic doesn't exists.
+    ///     If <bGrfNum> is set, the graphic is used as a numbering, thus,
+    ///     we don't have to paint a background rectangle.
     if( !bGrfNum &&
          ( pGrf->IsTransparent() || GRAPHIC_NONE == pGrf->GetType() ) )
     {
-        const Color aColor( !rBrush.GetColor().GetTransparency() ||
+        /// OD 20.08.2002 #99657# #GetTransChg#
+        ///     check, if brush color is not "no fill"/"auto fill" instead of checking,
+        ///     if its transparency is not set.
+        const Color aColor( (rBrush.GetColor() != COL_TRANSPARENT) ||
+        ///const Color aColor( !rBrush.GetColor().GetTransparency() ||
                                 bFlyMetafile
                             ? rBrush.GetColor()
                             : aGlobalRetoucheColor );
 
-        if ( pOut->GetFillColor() != aColor )
-            pOut->SetFillColor( aColor );
-        pOut->DrawRect( rGrf.SVRect() );
+        /// OD 23.08.2002 #99657#
+        ///     determine, if background color have to be drawn transparent
+        ///     and calculate transparency percent value
+        sal_Int8 nTransparencyPercent = 0;
+        if ( aColor.GetTransparency() != 0 )
+        ///     background color is transparent --> draw transparent.
+        {
+            nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
+        } else if ( (pGrf->GetAttr().GetTransparency() != 0) &&
+                    (rBrush.GetColor() == COL_TRANSPARENT) )
+        ///     graphic is drawn transparent and background color is
+        ///     "no fill"/"auto fill" --> draw transparent
+        {
+            nTransparencyPercent = (pGrf->GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
+        }
+
+        /// OD 23.08.2002 #99657#
+        ///     draw background color transparent, if a transparency percent
+        ///     value has been calculated - see above.
+        if ( nTransparencyPercent != 0)
+        {
+            if( pOut->GetFillColor() != aColor.GetRGBColor() )
+                pOut->SetFillColor( aColor.GetRGBColor() );
+            PolyPolygon aPoly( rGrf.SVRect() );
+            pOut->DrawTransparent( aPoly, nTransparencyPercent );
+        } else {
+            if ( pOut->GetFillColor() != aColor )
+                pOut->SetFillColor( aColor );
+            pOut->DrawRect( rGrf.SVRect() );
+        }
     }
     pGrf->Draw( pOut, rGrf.Pos(), rGrf.SSize() );
 
@@ -1387,7 +1439,10 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 }
 
 void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
-    const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum )
+    const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum,
+    const sal_Bool bConsiderBackgroundTransparency )
+    /// OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
+    ///   consider background transparency, saved in the color of the brush item
 {
     ViewShell &rSh = *pGlobalShell;
     BOOL bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
@@ -1485,7 +1540,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
                 do{
                     if( aGrf.IsOver( rOut ) )
                         lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf,
-                                                rOut, FALSE, bGrfNum );
+                                         rOut, FALSE, bGrfNum );
                     aGrf.Pos().X() += aGrf.Width();
 
                 } while( aGrf.Left() < rOut.Right() );
@@ -1509,21 +1564,109 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
 
     if ( bRetouche )
     {
+        /// OD 08.08.2002 #99657# - create region - which has to be drawn - later,
+        ///     because it has to considered transparent drawing.
+        ///     Thus, commenting the following two lines of code here.
+        /*
         SwRegionRects aRegion( rOut, 4 );
         aRegion -= aGrf;
+        */
         pOut->Push( PUSH_FILLCOLOR );
 
-        const Color aColor( pBrush && ( (!pBrush->GetColor().
-                                            GetTransparency()) || bFlyMetafile )
+        /// OD 07.08.2002 #99657# #GetTransChg#
+        ///     If we have to consider background transparency,
+        ///     check, if a existing background graphic (not filling the complete
+        ///     background) is transparent drawn and the background color is
+        ///     "no fill" respectively "auto fill".
+        ///     If YES, memorise transparency of background graphic.
+        sal_Bool bTransparentGrfWithNoFillBackgrd = sal_False;
+        sal_Int32 nGrfTransparency = 0;
+        if ( bConsiderBackgroundTransparency &&
+             (ePos != GPOS_NONE) &&
+             (ePos != GPOS_TILED) && (ePos != GPOS_AREA)
+           )
+        {
+            GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject(
+                                                    GETOBJSHELL() );
+            GraphicAttr pGrfAttr = pGrf->GetAttr();
+            if ( (pGrfAttr.GetTransparency() != 0) &&
+                 ( pBrush && (pBrush->GetColor() == COL_TRANSPARENT) )
+               )
+            {
+                bTransparentGrfWithNoFillBackgrd = sal_True;
+                nGrfTransparency = pGrfAttr.GetTransparency();
+            }
+        }
+
+        /// OD 06.08.2002 #99657# #GetTransChg# - to get color of brush,
+        ///     check background color against COL_TRANSPARENT ("no fill"/"auto fill")
+        ///     instead of checking, if transparency is not set.
+        Color aColor( pBrush &&
+                            ( !(pBrush->GetColor() == COL_TRANSPARENT) ||
+                              bFlyMetafile )
                     ? pBrush->GetColor()
                     : aGlobalRetoucheColor );
 
+        /// OD 08.08.2002 #99657# - determine, if background region have to be
+        ///     drawn transparent.
+        ///     background region has to be drawn transparent, if
+        ///         background transparency have to be considered
+        ///     AND
+        ///       ( background color is transparent OR
+        ///         background graphic is transparent and background color is "no fill"
+        ///       )
+        sal_Bool bDrawTransparent = bConsiderBackgroundTransparency &&
+                                ( ( aColor.GetTransparency() != 0) ||
+                                    bTransparentGrfWithNoFillBackgrd );
+        /// OD 08.08.2002 #99657# - calculate transparency percent, if background
+        ///     region have to be drawn transparent.
+        sal_Int8 nTransparencyPercent = 0;
+        if ( bDrawTransparent )
+        {
+            nTransparencyPercent =
+              (( bTransparentGrfWithNoFillBackgrd
+                    ? nGrfTransparency : aColor.GetTransparency()
+               )*100 + 0x7F)/0xFF;
+        }
+        /// OD 08.08.2002 #99657# - calculate background region to be drawn
+        ///     in logical or pixel coordinates, depending on <bDrawTransparent>.
+        ///     If background region have to be drawn transparent, create the region
+        ///     in pixel coordinates to avoid overlapping of the different rectangles
+        ///     in the region. An overlapping would cause paint errors, if the
+        ///     different rectangle are drawn transparent.
+        SwRegionRects aRegion( (bDrawTransparent ? (pOut->LogicToPixel(rOut.SVRect())) : rOut ), 4 );
+        if ( aGrf.HasArea() )
+        {
+            aRegion -= (bDrawTransparent ? ( pOut->LogicToPixel(aGrf.SVRect()) ) : aGrf);
+        }
+
+        /// OD 06.08.2002 #99657# - if background region have to be drawn
+        ///     transparent, set only the RGB values of the background color as
+        ///     the fill color for the output device. Implemented by setting
+        ///     transparency of color to zero, before setting fill color.
+        if ( bDrawTransparent )
+            aColor.SetTransparency(0);
         if( pOut->GetFillColor() != aColor )
             pOut->SetFillColor( aColor );
+
+        /// loop rectangle of background region, which has to be drawn
         for( USHORT i = 0; i < aRegion.Count(); ++i )
-            pOut->DrawRect( aRegion[i].SVRect() );
+        {
+            /// OD 05.08.2002 #99657# - if background region have to be drawn
+            ///     transparent, create an poly-polygon from the to be drawn
+            ///     rectangle and draw it with the corresponding transparency
+            ///     percent, which is calculated above.
+            if ( bDrawTransparent )
+            {
+                PolyPolygon aPoly( pOut->PixelToLogic(aRegion[i].SVRect()) );
+                pOut->DrawTransparent( aPoly, nTransparencyPercent );
+            } else {
+                pOut->DrawRect( aRegion[i].SVRect() );
+            }
+        }
         pOut->Pop();
     }
+
     if( bDraw && aGrf.IsOver( rOut ) )
         lcl_DrawGraphic( *pBrush, pOut, rSh, aGrf, rOut, TRUE, bGrfNum );
 
@@ -1924,6 +2067,38 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
     }
 }
 
+
+/** FlyFrm::IsBackgroundTransparent - for feature #99657#
+
+    OD 12.08.2002
+    determines, if background of fly frame has to be drawn transparent
+    declaration found in /core/inc/flyfrm.cxx
+
+    @author OD
+
+    @return true, if background color is transparent, but not "no fill"/"auto fill",
+    or the transparency value of a existing background graphic is set.
+*/
+const sal_Bool SwFlyFrm::IsBackgroundTransparent() const
+{
+    return GetFmt()->IsBackgroundTransparent();
+};
+
+/** FlyFrm::IsShadowTransparent - for feature #99657#
+
+    OD 13.08.2002
+    determine, if shadow color of fly frame has to be drawn transparent
+    declaration found in /core/inc/flyfrm.cxx
+
+    @author OD
+
+    @return true, if shadow color is transparent.
+*/
+const sal_Bool SwFlyFrm::IsShadowTransparent() const
+{
+    return GetFmt()->IsShadowTransparent();
+};
+
 /*************************************************************************
 |*
 |*  SwFlyFrm::IsPaint()
@@ -2045,11 +2220,13 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
 
     const SwNoTxtFrm *pNoTxt = Lower() && Lower()->IsNoTxtFrm()
                                                 ? (SwNoTxtFrm*)Lower() : 0;
-    FASTBOOL bTransparent = pNoTxt ? pNoTxt->IsTransparent() : FALSE,
+    /// OD 19.08.2002 #99657# - rename local variable
+    ///     <bTransparent> --> <bIsGraphicTransparent>
+    FASTBOOL bIsGraphicTransparent = pNoTxt ? pNoTxt->IsTransparent() : FALSE,
              bContour     = GetFmt()->GetSurround().IsContour(),
              bHell, bPaintBack;
 
-    if ( bTransparent &&
+    if ( bIsGraphicTransparent &&
          GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId() &&
          GetAnchor()->FindFlyFrm() )
     {
@@ -2070,14 +2247,19 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
         bPaintBack = !pNoTxt || Prt().SSize() != Frm().SSize();
         //sowie fuer Transparente und Contour in der Hoelle
         bPaintBack = bPaintBack ||
-                ((bTransparent || bContour ) &&
+                ((bIsGraphicTransparent || bContour ) &&
                 TRUE == (bHell = GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId()));
         //sowie fuer Transparente und Contour mit eigener Brush
-        if ( !bPaintBack && (bTransparent||bContour) )
+        if ( !bPaintBack && (bIsGraphicTransparent||bContour) )
         {
             const SvxBrushItem &rBack = GetFmt()->GetBackground();
-            bPaintBack = !rBack.GetColor().GetTransparency() ||
-                             rBack.GetGraphicPos() != GPOS_NONE;
+            /// OD 07.08.2002 #99657# #GetTransChg#
+            ///     to determine, if background has to be painted, by checking, if
+            ///     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
+            ///     or a background graphic exists.
+            bPaintBack = !(rBack.GetColor() == COL_TRANSPARENT) ||
+            ///bPaintBack = !rBack.GetColor().GetTransparency() ||
+                         rBack.GetGraphicPos() != GPOS_NONE;
         }
 
         if ( bPaintBack )
@@ -2104,37 +2286,46 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
                 GetAnchor()->PaintBackground( aRect, pPage, rAttrs, FALSE );
             }
 */
-            SwRegionRects aRegion( aRect );
-            if ( pNoTxt && !bTransparent )
-            {
-                //Was wir eigentlich Painten wollen ist der schmale Streifen
-                //zwischen PrtArea und aeusserer Umrandung.
-                 SwRect aTmp( Prt() ); aTmp += Frm().Pos();
-                aRegion -= aTmp;
-            }
-            if ( bContour )
-            {
-                pOut->Push();
-                if ( !pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER )
-                {
-                    pOut->SetClipRegion( aPoly );
-                }
-                for ( USHORT i = 0; i < aRegion.Count(); ++i )
-                    PaintBackground( aRegion[i], pPage, rAttrs, FALSE, TRUE );
-                pOut->Pop();
-            }
-            else
-                for ( USHORT i = 0; i < aRegion.Count(); ++i )
-                    PaintBackground( aRegion[i], pPage, rAttrs, FALSE, TRUE );
 
-            SwRect aTmp( rRect );
-            if ( IsFlyInCntFrm() )
-                ::SizeBorderRect( aTmp );
+            /// OD 06.08.2002 #99657# - paint border before painting background
+            /// paint border
+            {
+                SwRect aTmp( rRect );
+                if ( IsFlyInCntFrm() )
+                    ::SizeBorderRect( aTmp );
 //??        aTmp._Intersection( Frm() );
-            PaintBorder( aTmp, pPage, rAttrs );
+                PaintBorder( aTmp, pPage, rAttrs );
 /*          if ( bUnlock )
-                bLockFlyBackground = FALSE;
+                    bLockFlyBackground = FALSE;
 */
+            }
+
+            /// paint background
+            {
+                SwRegionRects aRegion( aRect );
+                if ( pNoTxt && !bIsGraphicTransparent )
+                {
+                    //Was wir eigentlich Painten wollen ist der schmale Streifen
+                    //zwischen PrtArea und aeusserer Umrandung.
+                    SwRect aTmp( Prt() ); aTmp += Frm().Pos();
+                    aRegion -= aTmp;
+                }
+                if ( bContour )
+                {
+                    pOut->Push();
+                    if ( !pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER )
+                    {
+                        pOut->SetClipRegion( aPoly );
+                    }
+                    for ( USHORT i = 0; i < aRegion.Count(); ++i )
+                        PaintBackground( aRegion[i], pPage, rAttrs, FALSE, TRUE );
+                    pOut->Pop();
+                }
+                else
+                    for ( USHORT i = 0; i < aRegion.Count(); ++i )
+                        PaintBackground( aRegion[i], pPage, rAttrs, FALSE, TRUE );
+            }
+
             pOut->Pop();
         }
     }
@@ -2183,7 +2374,8 @@ void SwTabFrm::Paint( const SwRect& rRect ) const
 |*  Letzte Aenderung    MA 29. May. 97
 |*
 |*************************************************************************/
-
+/// OD 23.08.2002 #99657#
+///     draw full shadow rectangle for frames with transparent drawn backgrounds.
 void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
                          const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
@@ -2213,21 +2405,41 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
         }
     }
 
+    /// OD 23.08.2002 #99657# - determine, if full shadow rectangle have to
+    ///     be drawn or only two shadow rectangles beside the frame.
+    ///     draw full shadow rectangle, if frame background is drawn transparent.
+    ///     Status Quo:
+    ///         SwLayoutFrm can have transparent drawn backgrounds. Thus,
+    ///         "asked" their frame format.
+    sal_Bool bDrawFullShadowRectangle =
+            ( IsLayoutFrm() &&
+              (static_cast<const SwLayoutFrm*>(this))->GetFmt()->IsBackgroundTransparent()
+            );
     switch ( eLoc )
     {
         case SVX_SHADOW_BOTTOMRIGHT:
             {
-                aOut.Top ( aOut.Bottom() - nHeight );
-                aOut.Left( aOut.Left()   + nWidth );
-                if ( bBottom )
+                if ( bDrawFullShadowRectangle )
+                {
+                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    aOut.Top( aOut.Top() + nHeight );
+                    aOut.Left( aOut.Left() + nWidth );
                     aRegion.Insert( aOut, aRegion.Count() );
-                aOut.Left( aOut.Right()   - nWidth );
-                aOut.Top ( rOutRect.Top() + nHeight );
-                if ( bBottom )
-                    aOut.Bottom( aOut.Bottom() - nHeight );
-                if ( bCnt && (!bTop || !bBottom) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
-                aRegion.Insert( aOut, aRegion.Count() );
+                }
+                else
+                {
+                    aOut.Top ( aOut.Bottom() - nHeight );
+                    aOut.Left( aOut.Left()   + nWidth );
+                    if ( bBottom )
+                        aRegion.Insert( aOut, aRegion.Count() );
+                    aOut.Left( aOut.Right()   - nWidth );
+                    aOut.Top ( rOutRect.Top() + nHeight );
+                    if ( bBottom )
+                        aOut.Bottom( aOut.Bottom() - nHeight );
+                    if ( bCnt && (!bTop || !bBottom) )
+                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                    aRegion.Insert( aOut, aRegion.Count() );
+                }
 
                 rOutRect.Right ( rOutRect.Right() - nWidth );
                 rOutRect.Bottom( rOutRect.Bottom()- nHeight );
@@ -2235,17 +2447,27 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
         case SVX_SHADOW_TOPLEFT:
             {
-                aOut.Bottom( aOut.Top()   + nHeight );
-                aOut.Right ( aOut.Right() - nWidth );
-                if ( bTop )
+                if ( bDrawFullShadowRectangle )
+                {
+                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    aOut.Bottom( aOut.Bottom() - nHeight );
+                    aOut.Right( aOut.Right() - nWidth );
                     aRegion.Insert( aOut, aRegion.Count() );
-                aOut.Right ( aOut.Left() + nWidth );
-                aOut.Bottom( rOutRect.Bottom() - nHeight );
-                if ( bTop )
-                    aOut.Top( aOut.Top() + nHeight );
-                if ( bCnt && (!bBottom || !bTop) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
-                aRegion.Insert( aOut, aRegion.Count() );
+                }
+                else
+                {
+                    aOut.Bottom( aOut.Top()   + nHeight );
+                    aOut.Right ( aOut.Right() - nWidth );
+                    if ( bTop )
+                        aRegion.Insert( aOut, aRegion.Count() );
+                    aOut.Right ( aOut.Left() + nWidth );
+                    aOut.Bottom( rOutRect.Bottom() - nHeight );
+                    if ( bTop )
+                        aOut.Top( aOut.Top() + nHeight );
+                    if ( bCnt && (!bBottom || !bTop) )
+                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                    aRegion.Insert( aOut, aRegion.Count() );
+                }
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
                 rOutRect.Top(  rOutRect.Top() + nHeight );
@@ -2253,17 +2475,27 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
         case SVX_SHADOW_TOPRIGHT:
             {
-                aOut.Bottom( aOut.Top() + nHeight );
-                aOut.Left (  aOut.Left()+ nWidth );
-                if ( bTop )
+                if ( bDrawFullShadowRectangle )
+                {
+                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    aOut.Bottom( aOut.Bottom() - nHeight);
+                    aOut.Left( aOut.Left() + nWidth );
                     aRegion.Insert( aOut, aRegion.Count() );
-                aOut.Left  ( aOut.Right() - nWidth );
-                aOut.Bottom( rOutRect.Bottom() - nHeight );
-                if ( bTop )
-                    aOut.Top( aOut.Top() + nHeight );
-                if ( bCnt && (!bBottom || bTop) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
-                aRegion.Insert( aOut, aRegion.Count() );
+                }
+                else
+                {
+                    aOut.Bottom( aOut.Top() + nHeight );
+                    aOut.Left (  aOut.Left()+ nWidth );
+                    if ( bTop )
+                        aRegion.Insert( aOut, aRegion.Count() );
+                    aOut.Left  ( aOut.Right() - nWidth );
+                    aOut.Bottom( rOutRect.Bottom() - nHeight );
+                    if ( bTop )
+                        aOut.Top( aOut.Top() + nHeight );
+                    if ( bCnt && (!bBottom || bTop) )
+                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                    aRegion.Insert( aOut, aRegion.Count() );
+                }
 
                 rOutRect.Right( rOutRect.Right() - nWidth );
                 rOutRect.Top( rOutRect.Top() + nHeight );
@@ -2271,17 +2503,27 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
         case SVX_SHADOW_BOTTOMLEFT:
             {
-                aOut.Top  ( aOut.Bottom()- nHeight );
-                aOut.Right( aOut.Right() - nWidth );
-                if ( bBottom )
+                if ( bDrawFullShadowRectangle )
+                {
+                    /// OD 06.08.2002 #99657# - draw full shadow rectangle
+                    aOut.Top( aOut.Top() + nHeight );
+                    aOut.Right( aOut.Right() - nWidth );
                     aRegion.Insert( aOut, aRegion.Count() );
-                aOut.Right( aOut.Left() + nWidth );
-                aOut.Top( rOutRect.Top() + nHeight );
-                if ( bBottom )
-                    aOut.Bottom( aOut.Bottom() - nHeight );
-                if ( bCnt && (!bTop || !bBottom) )
-                    ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
-                aRegion.Insert( aOut, aRegion.Count() );
+                }
+                else
+                {
+                    aOut.Top  ( aOut.Bottom()- nHeight );
+                    aOut.Right( aOut.Right() - nWidth );
+                    if ( bBottom )
+                        aRegion.Insert( aOut, aRegion.Count() );
+                    aOut.Right( aOut.Left() + nWidth );
+                    aOut.Top( rOutRect.Top() + nHeight );
+                    if ( bBottom )
+                        aOut.Bottom( aOut.Bottom() - nHeight );
+                    if ( bCnt && (!bTop || !bBottom) )
+                        ::lcl_ExtendLeftAndRight( aOut, this, rAttrs, fnRect );
+                    aRegion.Insert( aOut, aRegion.Count() );
+                }
 
                 rOutRect.Left( rOutRect.Left() + nWidth );
                 rOutRect.Bottom( rOutRect.Bottom() - nHeight );
@@ -3095,15 +3337,25 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
         pFly->GetAnchor()->PaintBackground( rRect, pPage, rAttrs, FALSE );
     }
 */
-    PaintBackground( rRect, pPage, rAttrs, FALSE, bLowerBorder );
-    SwRect aRect( rRect );
-    ::SizeBorderRect( aRect );
-    if( IsPageFrm() )
-        ((SwPageFrm*)this)->PaintGrid( pOut, aRect );
-    PaintBorder( aRect, pPage, rAttrs );
-/*  if ( bUnlock )
-        bLockFlyBackground = FALSE;
-*/
+
+    /// OD 06.08.2002 #99657# - paint border before painting background
+    /// paint grid for page frame and paint border
+    {
+        SwRect aRect( rRect );
+        ::SizeBorderRect( aRect );
+        if( IsPageFrm() )
+            ((SwPageFrm*)this)->PaintGrid( pOut, aRect );
+        PaintBorder( aRect, pPage, rAttrs );
+    /*  if ( bUnlock )
+            bLockFlyBackground = FALSE;
+    */
+    }
+
+    /// paint background
+    {
+        PaintBackground( rRect, pPage, rAttrs, FALSE, bLowerBorder );
+    }
+
     pOut->Pop();
 }
 
@@ -3128,7 +3380,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     const SvxBrushItem* pItem;
     const Color* pCol;
     SwRect aOrigBackRect;
-    FASTBOOL bBack= GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
+    FASTBOOL bBack = GetBackgroundBrush( pItem, pCol, aOrigBackRect, bLowerMode );
     const FASTBOOL bPageFrm = IsPageFrm();
     FASTBOOL bLowMode = TRUE;
 
@@ -3238,15 +3490,28 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             }
             if ( pPage->GetSortedObjs() )
                 ::lcl_SubtractFlys( this, pPage, aRect, aRegion );
-            for ( USHORT i = 0; i < aRegion.Count(); ++i )
+
             {
-                if ( 1 < aRegion.Count() )
+                /// OD 06.08.2002 #99657# - determine, if background transparency
+                ///     have to be considered for drawing.
+                ///     --> Status Quo: background transparency have to be
+                ///        considered for fly frames
+                const sal_Bool bConsiderBackgroundTransparency = IsFlyFrm();
+                for ( USHORT i = 0; i < aRegion.Count(); ++i )
                 {
-                    ::SwAlignRect( aRegion[i], pGlobalShell );
-                    if( !aRegion[i].HasArea() )
-                        continue;
+                    if ( 1 < aRegion.Count() )
+                    {
+                        ::SwAlignRect( aRegion[i], pGlobalShell );
+                        if( !aRegion[i].HasArea() )
+                            continue;
+                    }
+                    /// OD 06.08.2002 #99657# - add 6th parameter to indicate, if
+                    ///     background transparency have to be considered
+                    ///     Set missing 5th parameter to the default value GRFNUM_NO
+                    ///         - see declaration in /core/inc/frmtool.hxx.
+                    ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i], GRFNUM_NO,
+                            bConsiderBackgroundTransparency );
                 }
-                ::DrawGraphic( pItem, pOut, aOrigBackRect, aRegion[i] );
             }
             if( pCol )
                 delete pNewItem;
@@ -3279,12 +3544,13 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             {
                 SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)pFrm );
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
+                /// OD 06.08.2002 #99657# - paint border before painting background
+                if ( bLowerBorder )
+                    pFrm->PaintBorder( aBorderRect, pPage, rAttrs );
                 if ( ( pFrm->IsLayoutFrm() && bLowerBorder ) ||
                      aFrmRect.IsOver( aRect ) )
                     pFrm->PaintBackground( aRect, pPage, rAttrs, bLowMode,
                                            bLowerBorder );
-                if ( bLowerBorder )
-                    pFrm->PaintBorder( aBorderRect, pPage, rAttrs );
             }
             pFrm = pFrm->GetNext();
         } while ( pFrm && pFrm->GetUpper() == this &&
@@ -3736,20 +4002,50 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         ResetRetouche();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::GetBackgroundBrush()
-|*
-|*  Beschreibung        Liefert die Backgroundbrush fuer den Bereich des
-|*      des Frm. Die Brush wird entweder von ihm selbst oder von einem
-|*      Upper vorgegeben, die erste Brush wird benutzt.
-|*      Ist fuer keinen Frm eine Brush angegeben, so wird FALSE zurueck-
-|*      geliefert.
-|*  Ersterstellung      MA 23. Dec. 92
-|*  Letzte Aenderung    MA 04. Feb. 97
-|*
-|*************************************************************************/
+/** SwFrm::GetBackgroundBrush
 
+    @descr
+    determine the background brush for the frame:
+    the background brush is taken from it-self or from its parent (anchor/upper).
+    Normally, the background brush is taken, which has no transparent color or
+    which has a background graphic. But there are some special cases:
+    (1) No background brush is taken from a page frame, if view option "IsPageBack"
+        isn't set.
+    (2) Background brush from a index section is taken under special conditions.
+        In this case parameter <rpCol> is set to the index shading color.
+    (3) New (OD 20.08.2002) - Background brush is taken, if on background drawing
+        of the frame transparency is considered and its color is not "no fill"/"auto fill"
+    ---- old description in german:
+    Beschreibung        Liefert die Backgroundbrush fuer den Bereich des
+        des Frm. Die Brush wird entweder von ihm selbst oder von einem
+        Upper vorgegeben, die erste Brush wird benutzt.
+        Ist fuer keinen Frm eine Brush angegeben, so wird FALSE zurueck-
+        geliefert.
+    Ersterstellung      MA 23. Dec. 92
+    Letzte Aenderung    MA 04. Feb. 97
+
+    @param rpBrush
+    output parameter - constant reference pointer the found background brush
+
+    @param rpCol
+    output parameter - constant reference pointer to the color of the index shading
+    set under special conditions, if background brush is taken from an index section.
+
+    @param rOrigRect
+    in-/output parameter - reference to the retangle the background brush is
+    considered for - adjusted to the frame, from which the background brush is
+    taken.
+
+    @parem bLowerMode
+    input parameter - boolean indicating, if background brush should *not* be
+    taken from parent.
+
+    @author MA
+    @change 20.08.2002 by OD
+    @docdate 20.08.2002
+
+    @return true, if a background brush for the frame is found
+*/
 BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
                                 const Color*& rpCol,
                                 SwRect &rOrigRect,
@@ -3768,16 +4064,41 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
         if( pFrm->IsSctFrm() )
         {
             const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
-            if( pSection && ( TOX_HEADER_SECTION == pSection->GetType() ||
-                TOX_CONTENT_SECTION == pSection->GetType() ) &&
-                rBack.GetColor().GetTransparency() &&
+            /// OD 20.08.2002 #99657# #GetTransChg#
+            ///     Note: If frame <pFrm> is a section of the index and
+            ///         it its background color is "no fill"/"auto fill" and
+            ///         it has no background graphic and
+            ///         we are not in the page preview and
+            ///         we are not in read-only mode and
+            ///         option "index shadings" is set and
+            ///         the output is not the printer
+            ///         then set <rpCol> to the color of the index shading
+            if( pSection && (   TOX_HEADER_SECTION == pSection->GetType() ||
+                                TOX_CONTENT_SECTION == pSection->GetType() ) &&
+                (rBack.GetColor() == COL_TRANSPARENT) &&
+                ///rBack.GetColor().GetTransparency() &&
                 rBack.GetGraphicPos() == GPOS_NONE &&
                 !pOpt->IsPagePreview() && !pOpt->IsReadonly() && SwViewOption::IsIndexShadings() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
+            {
                 rpCol = &SwViewOption::GetIndexShadingsColor();
+            }
         }
+
+        /// OD 20.08.2002 #99657#
+        ///     determine, if background draw of frame <pFrm> considers transparency
+        ///     --> Status Quo: background transparency have to be
+        ///                     considered for fly frames
+        const sal_Bool bConsiderBackgroundTransparency = pFrm->IsFlyFrm();
+        /// OD 20.08.2002 #99657#
+        ///     add condition:
+        ///     If <bConsiderBackgroundTransparency> is set - see above -,
+        ///     return brush of frame <pFrm>, if its color is *not* "no fill"/"auto fill"
         if ( !rBack.GetColor().GetTransparency() ||
-             rBack.GetGraphicPos() != GPOS_NONE || rpCol )
+             rBack.GetGraphicPos() != GPOS_NONE ||
+             rpCol ||
+             (bConsiderBackgroundTransparency && (rBack.GetColor() != COL_TRANSPARENT))
+           )
         {
             rpBrush = &rBack;
             if ( pFrm->IsPageFrm() && pSh->GetDoc()->IsBrowseMode() )
@@ -3798,13 +4119,21 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
             }
             return TRUE;
         }
+
         if ( bLowerMode )
+            /// Do not try to get background brush from parent (anchor/upper)
             return FALSE;
+
+        /// get parent frame - anchor or upper - for next loop
         if ( pFrm->IsFlyFrm() )
-            pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
+            /// OD 20.08.2002 - use "static_cast" instead of "old C-cast"
+            pFrm = (static_cast<const SwFlyFrm*>(pFrm))->GetAnchor();
+            ///pFrm = ((SwFlyFrm*)pFrm)->GetAnchor();
         else
             pFrm = pFrm->GetUpper();
+
     } while ( pFrm );
+
     return FALSE;
 }
 
@@ -3938,6 +4267,3 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* pMap )
     }
     return aRet;
 }
-
-
-
