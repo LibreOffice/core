@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 18:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,6 @@ struct ScMyImpDetectiveOp
     sal_Int32                   nIndex;
 
     inline                      ScMyImpDetectiveOp() : nIndex( -1 ) {}
-
-    static sal_Bool             operator<(
-                                    const ScMyImpDetectiveOp& rDetOp1,
-                                    const ScMyImpDetectiveOp& rDetOp2 );
 };
 
 typedef ::std::vector< ScMyImpDetectiveOp > ScMyImpDetectiveOpVec;
