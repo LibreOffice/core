@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.48 $
- *  last change: $Author: cp $ $Date: 2001-07-05 15:37:21 $
+ *  $Revision: 1.49 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ FtFontInfo::FtFontInfo( const ImplFontData& rFontData,
 
     // using unicode emulation for non-symbol fonts
     if( maFontData.meCharSet != RTL_TEXTENCODING_SYMBOL )
-        maFontData.meCharSet    = RTL_TEXTENCODING_UNICODE;
+        maFontData.meCharSet = RTL_TEXTENCODING_UNICODE;
 }
 
 // -----------------------------------------------------------------------
@@ -243,6 +243,49 @@ bool std::equal_to<FtFontInfo*>::operator()( const FtFontInfo* pA, const FtFontI
 }
 
 // -----------------------------------------------------------------------
+
+static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
+static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
+static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
+
+// -----------------------------------------------------------------------
+
+const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) const
+{
+    const unsigned char* pBuffer = GetBuffer();
+    int nFileSize = GetFileSize();
+    if( !pBuffer || nFileSize<1024 )
+        return NULL;
+
+    // we currently only handle TTF and TTC headers
+    unsigned nFormat = GetUInt( pBuffer );
+    const unsigned char* p = pBuffer + 12;
+    if( nFormat == 0x74746366 )         // TTC_MAGIC
+        p += GetUInt( p + 4 * mnFaceNum );
+    else if( nFormat != 0x00010000 )    // TTF_MAGIC
+        return NULL;
+
+    // walk table directory until match
+    int nTables = GetUShort( p - 8 );
+    if( nTables >= 64 )  // something fishy?
+        return NULL;
+    for( int i = 0; i < nTables; ++i, p+=16 )
+    {
+        if( p[0]==pTag[0] && p[1]==pTag[1] && p[2]==pTag[2] && p[3]==pTag[3] )
+        {
+            ULONG nLength = GetUInt( p + 12 );
+            if( pLength != NULL )
+                *pLength = nLength;
+            const unsigned char* pTable = pBuffer + GetUInt( p + 8 );
+            if( (pTable + nLength) <= (GetBuffer() + nFileSize) )
+                return pTable;
+        }
+    }
+
+    return NULL;
+}
+
+// =======================================================================
 
 FreetypeManager::FreetypeManager()
 {
@@ -424,10 +467,10 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #if (FTVERSION < 200)
         eEncoding = ft_encoding_none;
 #else
-        if (FT_IS_SFNT( maFaceFT ))
+        if( FT_IS_SFNT( maFaceFT ) )
             eEncoding = ft_encoding_symbol;
         else
-            eEncoding = ft_encoding_adobe_custom;
+            eEncoding = ft_encoding_adobe_custom; // freetype wants this for PS symbol fonts
 #endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
@@ -446,9 +489,9 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
     if( nSin != 0 && nCos != 0 )        // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
-        mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
+    mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-#if (FTVERSION < 203) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+#if (FTVERSION < 205) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
 #endif
 }
@@ -591,12 +634,11 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
         if( FT_IS_SFNT( maFaceFT ) )
             aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
-        else {
-            if( (aChar&0xFF00) == 0xF000)
-                aChar &= 0x00FF;    // PS font symbol mapping
-            if (aChar<256)
-                return FT_Get_Char_Index( maFaceFT, aChar );
-            else
+        else
+        {
+            if( (aChar&0xFF00) == 0xF000 )
+                aChar &= 0xFF;    // PS font symbol mapping
+            else if( aChar > 0xFF )
                 return 0;
         }
 
@@ -730,8 +772,8 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     const unsigned char* pSrc = rBitmapFT.buffer;
     unsigned char* pDest = rRawBitmap.mpBits;
-     for( int i = nNeededSize; --i >= 0; )
-         *(pDest++) = ~*(pSrc++);
+    for( int i = nNeededSize; --i >= 0; )
+        *(pDest++) = ~*(pSrc++);
 
     FT_Done_Glyph( aGlyphFT );
     return true;
@@ -746,8 +788,8 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
     if( nGlyphFlags != 0 )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
-#if (FTVERSION < 203) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    // autohinting in FT<=2.0.2 makes antialiased glyphs look worse
+#if (FTVERSION < 205) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+    // autohinting in FT<=2.0.4 makes antialiased glyphs look worse
     nLoadFlags |= FT_LOAD_NO_HINTING;
 #endif
 
@@ -828,6 +870,74 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 }
 
 // -----------------------------------------------------------------------
+// determine unicode ranges in font
+// -----------------------------------------------------------------------
+
+ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
+{
+    int nRangeCount = 0;
+
+    const unsigned char* pCmap = NULL;
+    ULONG nLength = 0;
+    if( FT_IS_SFNT( maFaceFT ) )
+        pCmap = mpFontInfo->GetTable( "cmap", &nLength );
+
+    if( pCmap && GetUShort( pCmap )==0 )
+    {
+        int nSubTables  = GetUShort( pCmap + 2 );
+        const unsigned char* p = pCmap + 4;
+        int nOffset = 0;
+        int nFormat = -1;
+        for( ; --nSubTables>=0; p+=8 )
+        {
+            int nPlatform = GetUShort( p );
+            int nEncoding = GetUShort( p+2 );
+            if( nEncoding!=0 && nEncoding!=1 )  // unicode encodings?
+                continue;
+            nOffset       = GetUInt( p+4 );
+            nFormat       = GetUShort( pCmap + nOffset );
+            if( nFormat==4 )
+                break;
+        }
+
+        if( nFormat==4 && (nOffset+16)<nLength )
+        {
+            // analyze most common unicode mapping table
+            int nSegCount = GetUShort( pCmap + nOffset + 6 );
+            nRangeCount = nSegCount/2 - 1;
+            if( pCodes )
+            {
+                const unsigned char* pLimit = pCmap + nOffset + 14;
+                const unsigned char* pBegin = pLimit + 2 + nSegCount;
+                for( int i = 0; i < nRangeCount; ++i )
+                {
+                    *(pCodes++) = GetUShort( pBegin + 2*i );
+                    *(pCodes++) = GetUShort( pLimit + 2*i ) + 1;
+                }
+            }
+        }
+    }
+
+    if( !nRangeCount )
+    {
+        // unknown format, platform or encoding => use the brute force method
+        for( sal_uInt32 cCode = 0x0020;; )
+        {
+            for(; cCode<0xFFF0 && !GetGlyphIndex( cCode ); ++cCode );
+            if( cCode >= 0xFFF0 )
+                break;
+            ++nRangeCount;
+            if( pCodes )
+                *(pCodes++) = cCode;
+            for(; cCode<0xFFF0 && GetGlyphIndex( cCode ); ++cCode );
+            if( pCodes )
+                *(pCodes++) = cCode;
+        }
+    }
+
+    return nRangeCount;
+}
+// -----------------------------------------------------------------------
 // kerning stuff
 // -----------------------------------------------------------------------
 
@@ -838,17 +948,10 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         return 0;
 
     // first figure out which glyph pairs are involved in kerning
-    SFNT_Interface* pSFNT = (SFNT_Interface*) FT_Get_Module_Interface( aLibFT, "sfnt" );
-    if( !pSFNT )
+    ULONG nKernLength = 0;
+    const FT_Byte* const pKern = mpFontInfo->GetTable( "kern", &nKernLength );
+    if( !pKern )
         return 0;
-
-    FT_ULong nKernLength = 0;
-    FT_Error rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_kern, 0, NULL, &nKernLength );
-    if( rcFT != FT_Err_Ok )
-        return 0;
-
-    FT_Byte* const pKern = new FT_Byte[ nKernLength ];
-    rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_kern, 0, pKern, &nKernLength );
 
     typedef std::vector<ImplKernPairData> KernVector;
     KernVector aKernGlyphVector;
@@ -920,8 +1023,6 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         }
     }
 
-    delete[] pKern;
-
     // now create VCL's ImplKernPairData[] format for all glyph pairs
     ULONG nKernCount = aKernGlyphVector.size();
     if( nKernCount )
@@ -931,7 +1032,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
         typedef std::hash_multimap<USHORT,sal_Unicode> Cmap;
         Cmap aCmap;
-        for( sal_Unicode aChar = 0x0001; aChar < 0xFFFE; ++aChar )
+        for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
         {
             USHORT nGlyphIndex = GetGlyphIndex( aChar );
             if( nGlyphIndex )
@@ -1158,18 +1259,6 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
 
 bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 {
-    if( !FT_IS_SFNT( maFaceFT ) )
-        return false;
-    SFNT_Interface* pSFNT = (SFNT_Interface*) FT_Get_Module_Interface( aLibFT, "sfnt" );
-    if( !pSFNT )
-        return false;
-
-    // get length of GSUB table if it exists
-    FT_ULong nLength = 0;
-    FT_Error rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_GSUB, 0, NULL, &nLength );
-    if( rcFT != FT_Err_Ok )
-        return false;
-
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
     typedef std::vector<ULONG> ReqFeatureTagList;
@@ -1184,8 +1273,10 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         return true;
 
     // load GSUB table into memory
-    FT_Byte* const pGsubBase = new FT_Byte[ nLength ];
-    rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_GSUB, 0, pGsubBase, &nLength );
+    ULONG nLength = 0;
+    const FT_Byte* const pGsubBase = mpFontInfo->GetTable( "GSUB", &nLength );
+    if( !pGsubBase )
+        return false;
 
     // parse GSUB header
     const FT_Byte* pGsubHeader = pGsubBase;
@@ -1198,9 +1289,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     UshortList aFeatureIndexList;
     UshortList aFeatureOffsetList;
 
-#ifdef DEBUG
-    fprintf(stderr,"***GSUB\n");
-#endif
     // parse Script Table
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
     const USHORT nCntScript = NEXT_UShort( pScriptHeader );
@@ -1208,9 +1296,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     {
         const ULONG nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
         const USHORT nOfsScriptTable= NEXT_UShort( pScriptHeader );
-#ifdef DEBUG
-        fprintf(stderr,"Script[%d] tag=%.4s, ofs=%d\n", nScriptIndex, &nTag, nOfsScriptTable);
-#endif
         if( (nTag != nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
@@ -1218,16 +1303,10 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         const USHORT nDefaultLangsysOfs = NEXT_UShort( pScriptTable );
         const USHORT nCntLangSystem     = NEXT_UShort( pScriptTable );
         USHORT nLangsysOffset = 0;
-#ifdef DEBUG
-        fprintf(stderr,"ofs=%d => def=%d, cnt=%d\n", nOfsScriptTable, nDefaultLangsysOfs, nCntLangSystem );
-#endif
         for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
             const ULONG nTag    = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
             const USHORT nOffset= NEXT_UShort( pScriptTable );
-#ifdef DEBUG
-            fprintf(stderr,"Langsys[%d] tag=%.4s, ofs=%d\n", nLangsysIndex, &nTag, nOffset);
-#endif
             if( (nTag != nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
             nLangsysOffset = nOffset;
@@ -1241,15 +1320,9 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
             const USHORT nCntFeature    = NEXT_UShort( pLangSys );
             aFeatureIndexList.push_back( nReqFeatureIdx );
-#ifdef DEBUG
-            fprintf(stderr,"Feature defreq=%d, ofs=%d cnt=%d\n", nReqFeatureIdx, nDefaultLangsysOfs, nCntFeature );
-#endif
             for( USHORT i = 0; i < nCntFeature; ++i )
             {
                 const USHORT nFeatureIndex = NEXT_UShort( pLangSys );
-#ifdef DEBUG
-                fprintf(stderr,"Feature defopt=%d\n", nFeatureIndex);
-#endif
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
         }
@@ -1261,15 +1334,9 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
             const USHORT nCntFeature    = NEXT_UShort( pLangSys );
             aFeatureIndexList.push_back( nReqFeatureIdx );
-#ifdef DEBUG
-            fprintf(stderr,"Feature req=%d, ofs=%d cnt=%d\n", nReqFeatureIdx, nLangsysOffset, nCntFeature );
-#endif
             for( USHORT i = 0; i < nCntFeature; ++i )
             {
                 const USHORT nFeatureIndex = NEXT_UShort( pLangSys );
-#ifdef DEBUG
-                fprintf(stderr,"Feature opt=%d\n", nFeatureIndex);
-#endif
                 aFeatureIndexList.push_back( nFeatureIndex );
             }
         }
@@ -1281,23 +1348,13 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
     UshortList aLookupIndexList;
     UshortList aLookupOffsetList;
 
-#ifdef DEBUG
-    fprintf(stderr,"*parsing Feature Table ofs=%d\n", nOfsFeatureTable);
-#endif
     // parse Feature Table
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
     const USHORT nCntFeature = NEXT_UShort( pFeatureHeader );
-#ifdef DEBUG
-    fprintf(stderr,"nFeatureCount=%d\n", nCntFeature);
-#endif
     for( USHORT nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
         const ULONG nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
         const USHORT nOffset= NEXT_UShort( pFeatureHeader );
-
-#ifdef DEBUG
-        fprintf(stderr,"Feature[%d] tag=%.4s, ofs=%d\n", nFeatureIndex, &nTag, nOffset );
-#endif
 
         // feature (required && (requested || available))?
         if( (aFeatureIndexList[0] != nFeatureIndex)
@@ -1307,34 +1364,21 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
         const FT_Byte* pFeatureTable = pGsubBase + nOfsFeatureTable + nOffset;
         const USHORT nCntLookups = NEXT_UShort( pFeatureTable );
-#ifdef DEBUG
-        fprintf(stderr,"=> FeatLookup cnt=%d\n", nCntLookups);
-#endif
         for( USHORT i = 0; i < nCntLookups; ++i )
         {
             const USHORT nLookupIndex = NEXT_UShort( pFeatureTable );
-#ifdef DEBUG
-            fprintf(stderr,"=> FeatLookup[%d][%d] idx=%d\n", nFeatureIndex, i, nLookupIndex);
-#endif
             aLookupIndexList.push_back( nLookupIndex );
         }
         if( nCntLookups == 0 ) //### hack needed by Mincho/Gothic/Mingliu/Simsun/...
             aLookupIndexList.push_back( 0 );
     }
 
-
     // parse Lookup List
-#ifdef DEBUG
-    fprintf(stderr,"*parsing Lookup Table ofs=%d\n", nOfsLookupList);
-#endif
     const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
     const USHORT nCntLookupTable = NEXT_UShort( pLookupHeader );
     for( USHORT nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
     {
         const USHORT nOffset = NEXT_UShort( pLookupHeader );
-#ifdef DEBUG
-        fprintf(stderr,"=> Lookup[%d] ofs=%d\n", nLookupIdx, nOffset);
-#endif
         if( std::count( aLookupIndexList.begin(), aLookupIndexList.end(), nLookupIdx ) )
             aLookupOffsetList.push_back( nOffset );
     }
@@ -1347,9 +1391,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         const USHORT eLookupType        = NEXT_UShort( pLookupTable );
         const USHORT eLookupFlag        = NEXT_UShort( pLookupTable );
         const USHORT nCntLookupSubtable = NEXT_UShort( pLookupTable );
-#ifdef DEBUG
-        fprintf(stderr,"Lookup.ofs=%d type=%d flag=0x%02X, cnt=%d\n", nOfsLookupTable, eLookupType, eLookupFlag, nCntLookupSubtable );
-#endif
 
         // TODO: switch( eLookupType )
         if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
@@ -1376,9 +1417,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                     {
                         const USHORT nCntGlyph = NEXT_UShort( pCoverage );
                         aSubstVector.reserve( nCntGlyph );
-#ifdef DEBUG
-                        fprintf(stderr,"cov1.count = %d\n", nCntGlyph );
-#endif
                         for( USHORT i = 0; i < nCntGlyph; ++i )
                         {
                             const USHORT nGlyphId = NEXT_UShort( pCoverage );
@@ -1397,9 +1435,6 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                             const USHORT nCovIdx = NEXT_UShort( pCoverage );
                             for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
                                 aSubstVector.push_back( GlyphSubst( j + nCovIdx, 0 ) );
-#ifdef DEBUG
-                            fprintf(stderr,"cov2 0x%04X - 0x%04X\n", nGlyph0, nGlyph1 );
-#endif
                         }
                     }
                     break;
@@ -1414,18 +1449,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                         const USHORT nDeltaGlyphId = NEXT_UShort( pSubLookup );
                         for(; it != aSubstVector.end(); ++it )
                             (*it).second = (*it).first + nDeltaGlyphId;
-#ifdef DEBUG
-                        fprintf(stderr,"ssub1 delta = 0x%04X\n", nDeltaGlyphId );
-#endif
                     }
                     break;
 
                 case 2:     // Single Substitution Format 2
                     {
                         const USHORT nCntGlyph = NEXT_UShort( pSubLookup );
-#ifdef DEBUG
-                        fprintf(stderr,"ssub2.count = %d\n", nCntGlyph );
-#endif
                         for( int i = nCntGlyph; (it != aSubstVector.end()) && (--i>=0); ++it )
                         {
                             const USHORT nGlyphId = NEXT_UShort( pSubLookup );
@@ -1439,15 +1468,9 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             // now apply the glyph substitutions that have been collected in this subtable
             for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
                 aGlyphSubstitution[ (*it).first ] =  (*it).second;
-#ifdef DEBUG
-            fprintf(stderr,"SingleSubst.count=%d, buckets=%d\n", aSubstVector.size(), aGlyphSubstitution.bucket_count() );
-//          for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
-//              fprintf(stderr,"\t0x%04X => 0x%04X\n", (*it).first, (*it).second );
-#endif
         }
     }
 
-    delete[] pGsubBase;
     return true;
 }
 
