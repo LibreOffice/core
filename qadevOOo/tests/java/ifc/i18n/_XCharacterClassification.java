@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCharacterClassification.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:35 $
+ *  last change:$Date: 2003-09-08 10:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.i18n;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.i18n.KParseTokens;
 import com.sun.star.i18n.KParseType;
 import com.sun.star.i18n.ParseResult;
 import com.sun.star.i18n.XCharacterClassification;
 import com.sun.star.lang.Locale;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.i18n.XCharacterClassification</code>

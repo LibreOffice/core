@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCollator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:34 $
+ *  last change:$Date: 2003-09-08 10:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,13 @@
 
 package ifc.i18n;
 
+import java.text.Collator;
+
+import lib.MultiMethodTest;
+
 import com.sun.star.i18n.CollatorOptions;
 import com.sun.star.i18n.XCollator;
 import com.sun.star.lang.Locale;
-import java.text.Collator;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.i18n.XCollator</code>
