@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:55:05 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,18 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             pView->pImp->bPlugInsActive = bActive;
                             Rectangle aVisArea = GetObjectShell()->GetVisArea();
                             VisAreaChanged(aVisArea);
+
+                            // the plugins might need change in their state
+                            SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(FALSE);
+                            if ( pClients )
+                            {
+                                for (USHORT n=0; n < pClients->Count(); n++)
+                                {
+                                    SfxInPlaceClient* pIPClient = pClients->GetObject(n);
+                                    if ( pIPClient )
+                                        pView->CheckIPClient_Impl( pIPClient, aVisArea );
+                                }
+                            }
                         }
                     }
 
@@ -1342,15 +1354,18 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
     if ( GetObjectShell()->IsInClose() )
         return;
 
-    // this method is called when either a client is created
-    if ( !pIPClient->IsObjectInPlaceActive() )
+    sal_Bool bAlwaysActive =
+        ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) != 0 );
+    sal_Bool bActiveWhenVisible =
+        ( ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) != 0 );
+
+    // this method is called when either a client is created or the "Edit/Plugins" checkbox is checked
+    if ( !pIPClient->IsObjectInPlaceActive() && pImp->bPlugInsActive )
     {
-        // object in client is currently not active
-        // check if the object wants to be activated always or when it becomes at least partially visible
-        // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
-        BOOL bAlwaysActive =  ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY );
-        if ( bAlwaysActive || ( pIPClient->GetObjectMiscStatus() & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE ) &&
-                rVisArea.IsOver( pIPClient->GetObjArea() ) )
+           // object in client is currently not active
+           // check if the object wants to be activated always or when it becomes at least partially visible
+           // TODO/LATER: maybe we should use the scaled area instead of the ObjArea?!
+           if ( bAlwaysActive || bActiveWhenVisible && rVisArea.IsOver( pIPClient->GetObjArea() ) )
         {
             try
             {
@@ -1360,6 +1375,14 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
             {
             }
         }
+    }
+    else if ( !pImp->bPlugInsActive )
+    {
+           // object in client is currently active and "Edit/Plugins" checkbox is selected
+           // check if the object wants to be activated always or when it becomes at least partially visible
+        // in this case selecting of the "Edit/Plugin" checkbox should let such objects deactivate
+           if ( bAlwaysActive || bActiveWhenVisible )
+               pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
     }
 }
 
