@@ -8097,3 +8097,16 @@ _real@3fd3333333333333
 ??_GWinImeStatus@@UAEPAXI@Z
 ?canToggle@WinImeStatus@@UAE_NXZ
 ?toggle@WinImeStatus@@UAEXXZ
+?Draw@ScrollBar@@UAEXPAVOutputDevice@@ABVPoint@@ABVSize@@K@Z
+?GetFocus@ScrollBar@@UAEXXZ
+?LoseFocus@ScrollBar@@UAEXXZ
+?getHeight@Rectangle@@QBEJXZ
+?Draw@SpinButton@@UAEXPAVOutputDevice@@ABVPoint@@ABVSize@@K@Z
+?GetFocus@SpinButton@@UAEXXZ
+?GetRangeMax@SpinButton@@QBEJXZ
+?GetRangeMin@SpinButton@@QBEJXZ
+?LoseFocus@SpinButton@@UAEXXZ
+?SetRange@SpinButton@@QAEXABVRange@@@Z
+?SetRangeMax@SpinButton@@QAEXJ@Z
+?SetRangeMin@SpinButton@@QAEXJ@Z
+?SetValue@SpinButton@@QAEXJ@Z
