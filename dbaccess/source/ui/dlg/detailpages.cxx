@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:01:30 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,9 @@ namespace dbaui
         ,m_aTextNone                (ResId(STR_TEXT_FIELD_SEP_NONE))
     {
         xub_StrLen nCnt = m_aFieldSeparatorList.GetTokenCount( '\t' );
-        for( xub_StrLen i=0 ; i<nCnt ; i+=2 )
+        xub_StrLen i;
+
+        for( i = 0 ; i < nCnt ; i += 2 )
             m_aFieldSeparator.InsertEntry( m_aFieldSeparatorList.GetToken( i, '\t' ) );
 
         nCnt = m_aTextSeparatorList.GetTokenCount( '\t' );
