@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:28 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ namespace configmgr
             ValueData *                     m_pValueData;
             sal_uInt16                      m_nSkipLevels;
             bool                            m_bEmpty;
+            bool                            m_bInProperty;
         public:
             typedef uno::Reference< lang::XMultiServiceFactory > ServiceFactory;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "valuetypeconverter.hxx"
 #include "valueconverter.hxx"
 
 #ifndef _CONFIGMGR_STRDECL_HXX_
@@ -517,6 +518,29 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rS
 }
 
 // -----------------------------------------------------------------------------
+// special conversion for string sequence
+
+static
+inline
+void stringListToSequence(uno::Sequence< OUString >& rSequence, StringList const& aStringList)
+{
+    rSequence .realloc( aStringList.size() );
+
+    std::copy( aStringList.begin(), aStringList.end(), rSequence.getArray() );
+}
+// -----------------------------------------------------------------------------
+
+uno::Sequence< OUString > ValueConverter::splitStringList(OUString const& aContent) const
+{
+    StringList aList;
+    splitListData(aContent, aList);
+
+    uno::Sequence< OUString > aResult;
+    stringListToSequence(aResult,aList);
+
+    return aResult;
+}
+// -----------------------------------------------------------------------------
 // special overload for binary sequence
 
 // template<> // use an explicit specialization
@@ -539,6 +563,20 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Se
 }
 
 // -----------------------------------------------------------------------------
+// special overload for string sequence
+
+// template<> // use an explicit specialization
+bool convertListToSequence(StringList const& aStringList, uno::Sequence< OUString >& rSequence, uno::TypeClass aElementTypeClass, ValueConverter const& rParser )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
+{
+    OSL_ASSERT(aElementTypeClass == uno::TypeClass_STRING);
+
+    stringListToSequence(rSequence, aStringList);
+
+    return true;
+}
+
+// -----------------------------------------------------------------------------
 
 #define MAYBE_EXTRACT_SEQUENCE( type ) \
     if (aElementType == ::getCppuType( (type const *)0))    \
@@ -552,7 +590,7 @@ bool ValueConverter::convertListToAny(StringList const& aContentList, uno::Any& 
         CFG_UNO_THROW1 ( script::CannotConvertException )
 {
     OSL_PRECOND(!this->isNull(),"OValueConverter::convertListToAny - check for NULL before calling");
-    OSL_ENSURE(m_aType.getTypeClass() != uno::TypeClass_ANY,"'Any' not allowed for lists");
+    OSL_ENSURE(m_aType.getTypeClass() == uno::TypeClass_SEQUENCE,"'Any' not allowed for lists");
 
     uno::Type       aElementType        = getSequenceElementType(m_aType);
     uno::TypeClass  aElementTypeClass   = aElementType.getTypeClass();

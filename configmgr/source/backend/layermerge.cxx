@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include "matchlocale.hxx"
 #endif
 
+#ifndef CONFIGMGR_VALUECONVERTER_HXX
+#include "valuetypeconverter.hxx"
+#endif
+
 #include <drafts/com/sun/star/configuration/backend/SchemaAttribute.hpp>
 #include <drafts/com/sun/star/configuration/backend/NodeAttribute.hpp>
 
@@ -99,21 +103,38 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-        static void check_if_complete()
+        static void check_if_complete(uno::Reference< lang::XMultiServiceFactory > const & _xServiceFactory)
         {
             MergedComponentData aData;
 
             uno::Reference< backenduno::XLayerHandler >
-                test(new LayerMergeHandler(aData, localehelper::getDefaultLocale()));
+                test(new LayerMergeHandler(_xServiceFactory, aData, localehelper::getDefaultLocale()));
         }
 
 // -----------------------------------------------------------------------------
-LayerMergeHandler::LayerMergeHandler( MergedComponentData & _rData, OUString const & _aLocale )
+
+struct LayerMergeHandler::Converter
+{
+    typedef uno::Reference< com::sun::star::script::XTypeConverter > TypeConverter;
+
+    explicit
+    Converter(ServiceFactory const & _xServiceFactory);
+
+    uno::Any convertValue(uno::Type const & _aTargetType, uno::Any const & _aValue);
+
+    static TypeConverter createTCV(ServiceFactory const & _xServiceFactory);
+
+    ValueConverter m_aConverter;
+    bool m_bConvertData;
+};
+// -----------------------------------------------------------------------------
+LayerMergeHandler::LayerMergeHandler(ServiceFactory const & _xServiceFactory, MergedComponentData & _rData, OUString const & _aLocale )
 : m_rData(_rData)
 , m_aContext(static_cast<backenduno::XLayerHandler*>(this))
 , m_aFactory()
 , m_aLocale(_aLocale)
 , m_pProperty(NULL)
+, m_pConverter( new Converter(_xServiceFactory) )
 {
     OSL_ENSURE( m_rData.hasSchema(), "Creating layer merger without default data" );
 }
@@ -121,6 +142,7 @@ LayerMergeHandler::LayerMergeHandler( MergedComponentData & _rData, OUString con
 
 LayerMergeHandler::~LayerMergeHandler(  )
 {
+    delete m_pConverter;
 }
 // -----------------------------------------------------------------------------
 
@@ -242,20 +264,23 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
 
     if (ValueNode * pValue = m_pProperty->asValueNode())
     {
-        if (_aType == uno::Type()) // VOID
-            m_aContext.raiseIllegalTypeException("Layer merging: Illegal property type: VOID");
-
         if (pValue->getValueType() != _aType)
         {
             if (pValue->getValueType().getTypeClass() == uno::TypeClass_ANY)
             {
+                if (_aType == uno::Type()) // VOID
+                    m_aContext.raiseIllegalTypeException("Layer merging: Illegal property type: VOID overriding ANY");
+
                 OSL_ENSURE( pValue->isNull(), "Layer merging: Non-null 'any' value" );
 
                 // TODO:
                 // pValue->setValueType(_aType);
             }
+            else if (_aType == uno::Type() && m_pConverter)
+                m_pConverter->m_bConvertData = true;
+
             else
-                m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: type does not match");
+                m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: types does not match");
         }
     }
     // TODO: validation for localized properties
@@ -266,7 +291,16 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
 void LayerMergeHandler::setValueAndCheck(ValueNode& _rValueNode, uno::Any const & _aValue)
     CFG_UNO_THROW1( beans::IllegalTypeException )
 {
-    if (! _rValueNode.setValue(_aValue) )
+    if (_aValue.hasValue() && m_pConverter && m_pConverter->m_bConvertData)
+    {
+        uno::Any aConvertedValue = m_pConverter->convertValue(_rValueNode.getValueType(),_aValue);
+        if (!aConvertedValue.hasValue())
+            m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: cannot convert data to type of property");
+
+        if (! _rValueNode.setValue(aConvertedValue) )
+            m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: converted type does not match");
+    }
+    else if (! _rValueNode.setValue(_aValue) )
     {
         m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: type does not match");
     }
@@ -611,6 +645,7 @@ void SAL_CALL LayerMergeHandler::endProperty( )
         this->propagateAttributes(*pLocalizedSet);
 
     m_pProperty = NULL;
+    if (m_pConverter) m_pConverter->m_bConvertData = false;
 }
 // -----------------------------------------------------------------------------
 
@@ -662,6 +697,67 @@ void SAL_CALL LayerMergeHandler::setPropertyValueForLocale( const uno::Any& aVal
     applyPropertyValue(aValue,aLocale);
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+LayerMergeHandler::Converter::TypeConverter
+    LayerMergeHandler::Converter::createTCV(ServiceFactory const & _xServiceFactory)
+{
+    OSL_ENSURE(_xServiceFactory.is(),"Cannot create TypeConverter for LayerMergeHandler without a ServiceManager");
+
+    TypeConverter xTCV;
+    if (_xServiceFactory.is())
+    {
+        static const rtl::OUString k_sTCVService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"));
+
+        xTCV = TypeConverter::query(_xServiceFactory->createInstance(k_sTCVService));
+    }
+    return xTCV;
+}
+// -----------------------------------------------------------------------------
+
+LayerMergeHandler::Converter::Converter(ServiceFactory const & _xServiceFactory)
+: m_aConverter( createTCV(_xServiceFactory) )
+, m_bConvertData(false)
+{
+}
+// -----------------------------------------------------------------------------
+typedef uno::Sequence< sal_Int8 > Binary;
+// -----------------------------------------------------------------------------
+static
+inline
+uno::Type getBinaryDataType()
+{
+    Binary const * const forBinary = 0;
+    return ::getCppuType(forBinary);
+}
+// -----------------------------------------------------------------------------
+
+uno::Any LayerMergeHandler::Converter::convertValue(uno::Type const & _aTargetType, uno::Any const & _aValue)
+{
+    OSL_ENSURE( m_bConvertData, "Unexpected: Calling convert data, when data conversion is not active");
+    OSL_ENSURE( _aValue.hasValue(), "Unexpected: Calling convert data, when data to convert is VOID");
+
+    if (_aTargetType == _aValue.getValueType()) return _aValue;
+
+    m_aConverter.reset(_aTargetType);
+
+    if (m_aConverter.isList())
+    {
+        uno::Sequence< OUString > aStringList;
+        if (_aValue >>= aStringList)
+            return m_aConverter.convertListToAny(aStringList);
+    }
+
+    OUString aContent;
+    if (_aValue >>= aContent)
+        return m_aConverter.convertToAny(aContent);
+
+
+    OSL_ENSURE(false, "Cannot convert typed value (not a string)");
+    return uno::Any();
+}
+// -----------------------------------------------------------------------------
+
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
     } // namespace backend

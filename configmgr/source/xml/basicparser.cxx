@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:28 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #endif
 
-#ifndef CONFIGMGR_XML_VALUECONVERTER_HXX
-#include "valueconverter.hxx"
+#ifndef CONFIGMGR_VALUECONVERTER_HXX
+#include "valuetypeconverter.hxx"
 #endif
 // -----------------------------------------------------------------------------
 
@@ -122,6 +122,16 @@ struct BasicParser::ValueData : ValueConverter
         return ValueConverter::convertToAny(this->content);
     }
 
+    OUString toString() const
+    {
+        return this->content;
+    }
+
+    uno::Sequence<OUString> toStringList() const
+    {
+        return ValueConverter::splitStringList(this->content);
+    }
+
     void setLocalized(OUString const & _aLocale)
     {
         isLocalized = true;
@@ -138,7 +148,8 @@ BasicParser::BasicParser(ServiceFactory const & _xSvcFactory)
 , m_aValueType()
 , m_pValueData(NULL)
 , m_nSkipLevels(0)
-, m_bEmpty()
+, m_bEmpty(true)
+, m_bInProperty(false)
 {
     if (!m_xTypeConverter.is())
         throw uno::RuntimeException();
@@ -156,6 +167,7 @@ void SAL_CALL BasicParser::startDocument(  )
 {
     m_aDataParser.reset();
     m_aValueType    = uno::Type();
+    m_bInProperty   = false;
     m_nSkipLevels   = 0;
 
     delete m_pValueData, m_pValueData = NULL;
@@ -282,9 +294,7 @@ void BasicParser::startProperty( ElementInfo const & aInfo, const uno::Reference
         raiseParseException( "Configuration XML Parser - Invalid Data: Properties may not nest" );
 
     m_aValueType = getDataParser().getPropertyValueType(xAttribs);
-
-    if (m_aValueType == uno::Type())
-        raiseParseException( "Configuration XML Parser - Invalid Data: Property without a type" );
+    m_bInProperty = true;
 
     m_aNodes.push(aInfo);
     m_bEmpty = true;
@@ -305,6 +315,7 @@ void BasicParser::endProperty( )
     m_bEmpty = false;
 
     m_aValueType = uno::Type();
+    m_bInProperty = false;
 
     OSL_POSTCOND( !isInProperty(), "Could not get mark end of property" );
 }
@@ -318,13 +329,13 @@ uno::Type BasicParser::getActivePropertyType()
 
 bool BasicParser::isInProperty()
 {
-    return m_aValueType.getTypeClass() != uno::TypeClass_VOID;
+    return m_bInProperty;
 }
 // -----------------------------------------------------------------------------
 
 bool BasicParser::isInUnhandledProperty()
 {
-    return m_bEmpty && m_aValueType.getTypeClass() != uno::TypeClass_VOID;
+    return m_bEmpty && m_bInProperty;
 }
 // -----------------------------------------------------------------------------
 
@@ -343,16 +354,19 @@ void BasicParser::startValueData(const uno::Reference< sax::XAttributeList >& xA
 
     m_pValueData->setIsNull( getDataParser().isNull(xAttribs) );
 
+    m_pValueData->setSeparator( getDataParser().getSeparator(xAttribs) );
+
+    OSL_ENSURE( !m_pValueData->hasSeparator() ||
+                !m_pValueData->isTypeSet() ||
+                m_pValueData->isList(),
+                "Warning: Spurious oor:separator on value that is not a list");
+    OSL_ENSURE( !m_pValueData->hasSeparator() || !
+                !m_pValueData->isNull(),
+                "Warning: Spurious oor:separator on value that is not a list");
+
     OUString aLocale;
     if ( getDataParser().getLanguage(xAttribs,aLocale) )
         m_pValueData->setLocalized( aLocale );
-
-    if (!m_pValueData->isNull() && m_pValueData->isList())
-        m_pValueData->setSeparator( getDataParser().getSeparator(xAttribs) );
-
-    else
-        OSL_ENSURE(getDataParser().getSeparator(xAttribs).getLength() == 0,
-                    "Warning: Spurious oor:separator on value that is not a list (or null)");
 }
 // -----------------------------------------------------------------------------
 
@@ -382,7 +396,25 @@ uno::Any BasicParser::getCurrentValue()
 {
     OSL_ASSERT( isInValueData() );
 
-    return m_pValueData->convertToAny();
+    uno::Any aResult;
+
+    if (m_pValueData->isTypeSet())
+    {
+        aResult = m_pValueData->convertToAny();
+    }
+    else if (m_pValueData->isNull())
+    {
+        // nothing to do
+    }
+    else if (m_pValueData->hasSeparator() || m_pValueData->isList())
+    {
+        aResult <<= m_pValueData->toStringList();
+    }
+    else
+    {
+        aResult <<= m_pValueData->toString();
+    }
+    return aResult;
 }
 // -----------------------------------------------------------------------------
 

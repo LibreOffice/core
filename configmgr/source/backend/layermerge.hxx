@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:33:36 $
+ *  last change: $Author: jb $ $Date: 2002-05-28 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
@@ -98,8 +102,10 @@ namespace configmgr
         :   public LayerMergeHandler_Base
         {
         public:
+            typedef uno::Reference< lang::XMultiServiceFactory > ServiceFactory;
+
             explicit
-            LayerMergeHandler(MergedComponentData & _rData, OUString const & _aLocale);
+            LayerMergeHandler(ServiceFactory const & _xServiceFactory , MergedComponentData & _rData, OUString const & _aLocale);
             virtual ~LayerMergeHandler();
 
         // checking the result
@@ -198,11 +204,13 @@ namespace configmgr
             void setValueAndCheck(ValueNode & _rValueNode, uno::Any const & _aValue)
                 CFG_UNO_THROW1( beans::IllegalTypeException );
        private:
+            struct Converter;
             MergedComponentData &   m_rData;
             DataBuilderContext      m_aContext;
             ComponentDataFactory    m_aFactory;
             OUString                m_aLocale;
             INode *                 m_pProperty;
+            Converter *             m_pConverter;
         };
 // -----------------------------------------------------------------------------
 
