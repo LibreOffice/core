@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:38:42 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
+    {
+        m_pImpl->setAutoStyleContext(_pNewContext);
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_pImpl->seekPage(_rxDrawPage);
@@ -141,6 +147,12 @@ namespace xmloff
         return m_pImpl->createContext(_nPrefix, _rLocalName, _rxAttribs);
     }
 
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rControlNumerStyleName)
+    {
+        m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -148,6 +160,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/20 13:38:42  fs
+ *  #83970# +createOfficeFormsContext
+ *
  *  Revision 1.6  2001/03/20 08:02:56  fs
  *  removed setAutoStyle (was obsolete)
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:35:38 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::OUString OFormLayerXMLExport::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
+    {
+        return m_pImpl->getControlNumberStyle(_rxControl);
+    }
+
+    //---------------------------------------------------------------------
     ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport::getStylePropertyMapper()
     {
         return m_pImpl->getStylePropertyMapper();
@@ -172,6 +178,18 @@ namespace xmloff
         m_pImpl->exportForms(_rxDrawPage);
     }
 
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport::exportControlNumberStyles()
+    {
+        m_pImpl->exportControlNumberStyles();
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport::exportAutoControlNumberStyles()
+    {
+        m_pImpl->exportAutoControlNumberStyles();
+    }
+
     //=========================================================================
     //= OOfficeFormsExport
     //=========================================================================
@@ -195,6 +213,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/20 13:35:38  fs
+ *  #83970# +OOfficeFormsExport
+ *
  *  Revision 1.9  2001/03/20 08:04:08  fs
  *  removed exportAutoStyles (was obsolete)
  *

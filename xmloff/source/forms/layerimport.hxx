@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:39:58 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace xmloff
         OAttribute2Property                 m_aAttributeMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                                             m_xForms;   // the forms of the currently imported page
+        SvXMLStylesContext*                 m_pAutoStyles;
 
     protected:
         // style handling
@@ -208,6 +209,21 @@ namespace xmloff
         */
         void seekPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
+
+        /** announces the auto-style context to the form importer
+        */
+        void setAutoStyleContext(SvXMLStylesContext* _pNewContext);
+
+        /** sets the given number style on the given control
+            @param _rxControlModel
+                the control model which's style is to be set
+            @param _rControlNumerStyleName
+                the style name for the control's number style
+        */
+        void applyControlNumberStyle(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
+            const ::rtl::OUString& _rControlNumerStyleName
+        );
     };
 
 //.........................................................................
@@ -219,6 +235,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/20 13:39:58  fs
+ *  #83970# +createOfficeFormsContext
+ *
  *  Revision 1.7  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
+#include <com/sun/star/util/XNumberFormats.hpp>
+#endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
@@ -79,8 +82,10 @@
 #endif
 
 class SvXMLExport;
+class SvXMLNumFmtExport;
 class XMLPropertyHandlerFactory;
 class SvXMLExportPropertyMapper;
+
 //.........................................................................
 namespace xmloff
 {
@@ -98,10 +103,30 @@ namespace xmloff
 
     protected:
         SvXMLExport&        m_rContext;
+        SvXMLNumFmtExport*  m_pControlNumberStyles;
 
         // style handling
         ::vos::ORef< XMLPropertyHandlerFactory >    m_xPropertyHandlerFactory;
         ::vos::ORef< SvXMLExportPropertyMapper >    m_xExportMapper;
+
+        // we need our own number formats supplier:
+        // Controls which have a number formats do not work with the formats supplier of the document they reside
+        // in, instead they use the formats of the data source their form is associated with. If there is no
+        // such form or no such data source, they work with an own formatter.
+        // Even more, time and date fields do not work with a central formatter at all, they have their own one
+        // (which is shared internally, but this is a (hidden) implementation detail.)
+        //
+        // To not contaminate the global (document) number formats supplier (which could be obtained from the context),
+        // we have an own one.
+        // (Contaminate means: If a user adds a user-defined format to a formatted field, this format is stored in
+        // in the data source's formats supplier. To export this _and_ reuse existing structures, we would need to
+        // add this format to the global (document) formats supplier.
+        // In case of an export we could do some cleanup afterwards, but in case of an import, there is no such
+        // chance, as (if other user-defined formats exist in the document as well) we can't distinguish
+        // between user-defined formats really beeded for the doc (i.e. in a calc cell) and formats only added
+        // to the supplier because the controls needed it.
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >
+                                                    m_xControlNumberFormats;
 
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::rtl::OUString, OPropertySetCompare, MapPropertySet2String);
             // maps objects (property sets) to strings, e.g. control ids.
@@ -125,8 +150,13 @@ namespace xmloff
         // TODO: To avoid this construct above, and to have a cleaner implementation, an class encapsulating the
         // export of a single page should be introduced.
 
+        DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, sal_Int32, OPropertySetCompare, MapPropertySet2Int);
+        MapPropertySet2Int  m_aControlNumberFormats;
+            // maps controls to format keys, which are relative to our own formats supplier
+
     public:
         OFormLayerXMLExport_Impl(SvXMLExport& _rContext);
+        ~OFormLayerXMLExport_Impl();
 
     protected:
         /** exports one single grid column
@@ -166,10 +196,18 @@ namespace xmloff
         ::rtl::OUString
                 getControlId(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
 
+        /** retrieves the style name for the control's number style.
+
+            <p>For performance reasons, this method is allowed to be called for any controls, even those which
+            do not have a number style. In this case, an empty string is returned.</p>
+        */
+        ::rtl::OUString
+                getControlNumberStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
+
         // IFormsExportContext
-        virtual void exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
-        virtual SvXMLExport& getGlobalContext();
-        virtual ::vos::ORef< SvXMLExportPropertyMapper > getStylePropertyMapper();
+        virtual void                                        exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
+        virtual SvXMLExport&                                getGlobalContext();
+        virtual ::vos::ORef< SvXMLExportPropertyMapper >    getStylePropertyMapper();
 
         /** clear any structures which have been build in the recent <method>examine</method> calls.
         */
@@ -206,6 +244,14 @@ namespace xmloff
         void exportForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
 
+        /** exports the controls number styles
+        */
+        void    exportControlNumberStyles();
+
+        /** exports the automatic control number styles
+        */
+        void    exportAutoControlNumberStyles();
+
     protected:
         sal_Bool implCheckPage(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
@@ -218,6 +264,36 @@ namespace xmloff
         sal_Bool implMoveIterators(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
             sal_Bool _bClear);
+
+        /** check the object given if it's a control, if so, examine it.
+            @return <TRUE/> if the object has been handled
+        */
+        sal_Bool checkExamineControl(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+
+        /** examines the control's number format, so later the format style can be referred
+        */
+        void examineControlNumberFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
+
+        /** ensures that the number format of the given control exist in our own formats supplier.
+
+            <p>The given control is examined for it's format (i.e. it's FormatKey/FormatsSupplier properties),
+            and the format is added (if necessary) to m_xControlNumberFormats</p>.
+
+            @return
+                the format key of the control's format relative to our own formats supplier
+
+        */
+        sal_Int32   ensureTranslateFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxFormattedControl);
+
+        /// returns the instance exporting our control's number styles
+        SvXMLNumFmtExport*  getControlNumberStyleExport();
+
+        /// ensures that the instance exporting our control's number styles exists
+        void                ensureControlNumberStyleExport();
+
+        /** returns the prefix to be used for control number styles
+        */
+        static const ::rtl::OUString& getControlNumberStyleNamePrefix();
     };
 
 //.........................................................................
@@ -229,6 +305,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.8  2001/01/02 15:58:22  fs
  *  event ex- & import
  *

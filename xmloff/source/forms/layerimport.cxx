@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:39:58 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _XMLOFF_XMLIMPPR_HXX
 #include "xmlimppr.hxx"
 #endif
+#ifndef _XMLOFF_XMLNUMFI_HXX
+#include "xmlnumfi.hxx"
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_FORMSUBMITENCODING_HPP_
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
 #endif
@@ -125,6 +131,9 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
 #include "controlpropertyhdl.hxx"
 #endif
@@ -148,6 +157,7 @@ namespace xmloff
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::xml;
+    using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::sdb;
 
@@ -157,6 +167,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         :m_rImporter(_rImporter)
+        ,m_pAutoStyles(NULL)
     {
         // build the attribute2property map
         // string properties which are exported as attributes
@@ -295,7 +306,7 @@ namespace xmloff
             &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
         // initialize our style map
-        m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory;
+        m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
         m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
 
@@ -307,6 +318,79 @@ namespace xmloff
     OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
     {
         // outlined to allow forward declaration of OAttribute2Property in the header
+        static_cast<OControlPropertyHandlerFactory*>(m_xPropertyHandlerFactory.getBodyPtr())->releaseContext();
+
+        if (m_pAutoStyles)
+            m_pAutoStyles->ReleaseRef();
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
+    {
+        OSL_ENSURE(!m_pAutoStyles, "OFormLayerXMLImport_Impl::setAutoStyleContext: not to be called twice!");
+        m_pAutoStyles = _pNewContext;
+        if (m_pAutoStyles)
+            m_pAutoStyles->AddRef();
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rControlNumerStyleName)
+    {
+        OSL_ENSURE(_rxControlModel.is() && (0 != _rControlNumerStyleName.getLength()),
+            "OFormLayerXMLImport_Impl::applyControlNumberStyle: invalid arguments (this will crash)!");
+
+        OSL_ENSURE(m_pAutoStyles, "OFormLayerXMLImport_Impl::applyControlNumberStyle: have no auto style context!");
+        if (!m_pAutoStyles)
+        {
+            m_pAutoStyles = m_rImporter.GetShapeImport()->GetAutoStylesContext();
+            if (m_pAutoStyles)
+                m_pAutoStyles->AddRef();
+        }
+
+        if (m_pAutoStyles)
+        {
+            const SvXMLStyleContext* pStyle = m_pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, _rControlNumerStyleName);
+            if (pStyle)
+            {
+                const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
+
+                ::rtl::OUString sFormatDescription;
+                Locale aFormatLocale;
+                const_cast<SvXMLNumFormatContext*>(pDataStyle)->GetFormat(sFormatDescription, aFormatLocale);
+
+                // set this format at the control model
+                try
+                {
+                    // the models number format supplier and formats
+                    Reference< XNumberFormatsSupplier > xFormatsSupplier;
+                    _rxControlModel->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xFormatsSupplier;
+                    Reference< XNumberFormats > xFormats;
+                    if (xFormatsSupplier.is())
+                        xFormats = xFormatsSupplier->getNumberFormats();
+                    OSL_ENSURE(xFormats.is(), "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain the controls number formats!");
+
+                    // obtain a key
+                    if (xFormats.is())
+                    {
+                        sal_Int32 nFormatKey = xFormats->queryKey(sFormatDescription, aFormatLocale, sal_False);
+                        if (-1 == nFormatKey)
+                        {   // not yet available -> add it
+                            nFormatKey = xFormats->addNew(sFormatDescription, aFormatLocale);
+                        }
+
+                        OSL_ENSURE(-1 != nFormatKey, "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain a format key!");
+                        // set the format on the control model
+                        _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
+                    }
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
+                }
+            }
+            else
+                OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
+        }
     }
 
     //---------------------------------------------------------------------
@@ -504,6 +588,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/20 13:39:58  fs
+ *  #83970# +createOfficeFormsContext
+ *
  *  Revision 1.10  2001/03/20 08:05:15  fs
  *  #85514# added an attribute to the map for compatibility to old (buggy) files
  *

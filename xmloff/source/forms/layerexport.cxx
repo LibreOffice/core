@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 16:54:38 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #include "controlpropertymap.hxx"
 #endif
@@ -124,6 +127,9 @@
 #ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
 #include "formevents.hxx"
 #endif
+#ifndef _XMLOFF_XMLNUMFE_HXX
+#include "xmlnumfe.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -138,31 +144,40 @@ namespace xmloff
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::script;
+    using namespace ::com::sun::star::util;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
     //=====================================================================
     //---------------------------------------------------------------------
+    const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
+    {
+        static const ::rtl::OUString s_sControlNumberStyleNamePrefix = ::rtl::OUString::createFromAscii("C");
+        return s_sControlNumberStyleNamePrefix;
+    }
+
+    //---------------------------------------------------------------------
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
+        ,m_pControlNumberStyles(NULL)
     {
         initializePropertyMaps();
 
         // add our style family to the export context's style pool
-        m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory;
+        m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
         ::vos::ORef< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(aControlStyleProperties, m_xPropertyHandlerFactory.getBodyPtr());
         m_xExportMapper = new SvXMLExportPropertyMapper(xStylePropertiesMapper.getBodyPtr());
-
-//      m_rContext.GetAutoStylePool()->AddFamily(
-//          XML_STYLE_FAMILY_CONTROL_ID,
-//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_NAME)),
-//          m_xExportMapper.getBodyPtr(),
-//          ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_CONTROL_PREFIX)));
 
         // add our event translation table
         m_rContext.GetEventExport().AddTranslationTable(g_pFormsEventTranslation);
 
         clear();
+    }
+
+    //---------------------------------------------------------------------
+    OFormLayerXMLExport_Impl::~OFormLayerXMLExport_Impl()
+    {
+        static_cast<OControlPropertyHandlerFactory*>(m_xPropertyHandlerFactory.getBodyPtr())->releaseContext();
     }
 
     //---------------------------------------------------------------------
@@ -301,6 +316,22 @@ namespace xmloff
         m_aCurrentPageIds = m_aControlIds.end();
         m_aCurrentPageReferring = m_aReferringControls.end();
 
+        m_aControlNumberFormats.clear();
+
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::exportControlNumberStyles()
+    {
+        if (m_pControlNumberStyles)
+            m_pControlNumberStyles->Export(m_rContext.GetNamespaceMap(), sal_False);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::exportAutoControlNumberStyles()
+    {
+        if (m_pControlNumberStyles)
+            m_pControlNumberStyles->Export(m_rContext.GetNamespaceMap(), sal_True);
     }
 
     //---------------------------------------------------------------------
@@ -371,6 +402,23 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    ::rtl::OUString OFormLayerXMLExport_Impl::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
+    {
+        ::rtl::OUString sNumberStyle;
+
+        ConstMapPropertySet2IntIterator aControlFormatPos = m_aControlNumberFormats.find(_rxControl);
+        if (m_aControlNumberFormats.end() != aControlFormatPos)
+        {
+            OSL_ENSURE(m_pControlNumberStyles, "OFormLayerXMLExport_Impl::getControlNumberStyle: have a control which has a format style, but no style exporter!");
+            sNumberStyle = getControlNumberStyleExport()->GetStyleName(aControlFormatPos->second);
+        }
+        // it's allowed to ask for a control which does not have format information.
+        // (This is for performance reasons)
+
+        return sNumberStyle;
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::examineForms(const Reference< XDrawPage >& _rxDrawPage)
     {
         // get the forms collection of the page
@@ -389,12 +437,6 @@ namespace xmloff
         ::std::stack< sal_Int32 >                   aIndexHistory;
 
         Reference< XPropertySet >       xCurrent;
-        Reference< XPropertySetInfo >   xCurrentInfo;
-        Reference< XPropertySet >       xCurrentReference;
-
-        const ::rtl::OUString sControlCheck(PROPERTY_CLASSID);
-        const ::rtl::OUString sReferenceCheck(PROPERTY_CONTROLLABEL);
-        const ::rtl::OUString sControlId(RTL_CONSTASCII_USTRINGPARAM("control"));
 
         Reference< XIndexAccess > xLoop = xCollectionIndex;
         sal_Int32 nChildPos = 0;
@@ -407,45 +449,7 @@ namespace xmloff
                 if (!xCurrent.is())
                     continue;
 
-                xCurrentInfo = xCurrent->getPropertySetInfo();
-                OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::examineForms: no property set info");
-                if (xCurrentInfo->hasPropertyByName(sControlCheck))
-                {
-                    // generate a new control id
-
-                    // find a free id
-                    ::rtl::OUString sCurrentId = sControlId;
-                    sCurrentId += ::rtl::OUString::valueOf((sal_Int32)(m_aCurrentPageIds->second.size() + 1));
-                #ifdef DBG_UTIL
-                    // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
-                    // from the map, so the approach used above (take the map size) should be sufficient. But if somebody
-                    // changes this (e.g. allows removing entries from the map), this assertion here probably will fail.
-                    for (   ConstMapPropertySet2StringIterator aCheck = m_aCurrentPageIds->second.begin();
-                            aCheck != m_aCurrentPageIds->second.end();
-                            ++aCheck
-                        )
-                        OSL_ENSURE(aCheck->second != sCurrentId,
-                            "OFormLayerXMLExport_Impl::examineForms: auto-generated control ID is already used!");
-                #endif
-                    // add it to the map
-                    m_aCurrentPageIds->second[xCurrent] = sCurrentId;
-
-                    // check if this control has a "LabelControl" property referring another control
-                    if (xCurrentInfo->hasPropertyByName(sReferenceCheck))
-                    {
-                        ::cppu::extractInterface(xCurrentReference, xCurrent->getPropertyValue(sReferenceCheck));
-                        if (xCurrentReference.is())
-                        {
-                            ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
-                            if (sReferencedBy.getLength())
-                                // it's not the first xCurrent referring to the xCurrentReference
-                                // -> separate the id
-                                sReferencedBy += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-                            sReferencedBy += sCurrentId;
-                        }
-                    }
-                }
-                else
+                if (!checkExamineControl(xCurrent))
                 {
                     // step down
                     Reference< XIndexAccess > xNextContainer(xCurrent, UNO_QUERY);
@@ -473,6 +477,184 @@ namespace xmloff
         while (xLoop.is() && aContainerHistory.size());
     }
 
+    //---------------------------------------------------------------------
+    sal_Bool OFormLayerXMLExport_Impl::checkExamineControl(const Reference< XPropertySet >& _rxObject)
+    {
+        static const ::rtl::OUString sControlCheck(PROPERTY_CLASSID);
+        static const ::rtl::OUString sReferenceCheck(PROPERTY_CONTROLLABEL);
+        static const ::rtl::OUString sFormatCheck(PROPERTY_FORMATKEY);
+        static const ::rtl::OUString sControlId(RTL_CONSTASCII_USTRINGPARAM("control"));
+
+        Reference< XPropertySetInfo > xCurrentInfo = _rxObject->getPropertySetInfo();
+        OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::checkExamineControl: no property set info");
+
+        sal_Bool bIsControl = xCurrentInfo->hasPropertyByName(sControlCheck);
+        if (bIsControl)
+        {
+            // ----------------------------------
+            // generate a new control id
+
+            // find a free id
+            ::rtl::OUString sCurrentId = sControlId;
+            sCurrentId += ::rtl::OUString::valueOf((sal_Int32)(m_aCurrentPageIds->second.size() + 1));
+        #ifdef DBG_UTIL
+            // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
+            // from the map, so the approach used above (take the map size) should be sufficient. But if somebody
+            // changes this (e.g. allows removing entries from the map), this assertion here probably will fail.
+            for (   ConstMapPropertySet2StringIterator aCheck = m_aCurrentPageIds->second.begin();
+                    aCheck != m_aCurrentPageIds->second.end();
+                    ++aCheck
+                )
+                OSL_ENSURE(aCheck->second != sCurrentId,
+                    "OFormLayerXMLExport_Impl::checkExamineControl: auto-generated control ID is already used!");
+        #endif
+            // add it to the map
+            m_aCurrentPageIds->second[_rxObject] = sCurrentId;
+
+            // ----------------------------------
+            // check if this control has a "LabelControl" property referring another control
+            if (xCurrentInfo->hasPropertyByName(sReferenceCheck))
+            {
+                Reference< XPropertySet > xCurrentReference;
+                ::cppu::extractInterface(xCurrentReference, _rxObject->getPropertyValue(sReferenceCheck));
+                if (xCurrentReference.is())
+                {
+                    ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
+                    if (sReferencedBy.getLength())
+                        // it's not the first _rxObject referring to the xCurrentReference
+                        // -> separate the id
+                        sReferencedBy += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                    sReferencedBy += sCurrentId;
+                }
+            }
+
+            // ----------------------------------
+            // check if the control needs a number format style
+            if (xCurrentInfo->hasPropertyByName(sFormatCheck))
+            {
+                examineControlNumberFormat(_rxObject);
+            }
+        }
+
+        return bIsControl;
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::examineControlNumberFormat(const Reference< XPropertySet >& _rxControl)
+    {
+        // get the format key relative to our own formats supplier
+        sal_Int32 nOwnFormatKey = ensureTranslateFormat(_rxControl);
+
+        if (-1 == nOwnFormatKey)
+            // nothing to do, the number format of this control is void
+            return;
+
+        // tell the exporter that we used this format
+        getControlNumberStyleExport()->SetUsed(nOwnFormatKey);
+
+        // remember the format key for this control (we'll be asked in getControlNumberStyle for this)
+        OSL_ENSURE(m_aControlNumberFormats.end() == m_aControlNumberFormats.find(_rxControl),
+            "OFormLayerXMLExport_Impl::examineControlNumberFormat: already handled this control!");
+        m_aControlNumberFormats[_rxControl] = nOwnFormatKey;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Int32 OFormLayerXMLExport_Impl::ensureTranslateFormat(const Reference< XPropertySet >& _rxFormattedControl)
+    {
+        ensureControlNumberStyleExport();
+        OSL_ENSURE(m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::ensureTranslateFormat: no own formats supplier!");
+            // (should have been created in ensureControlNumberStyleExport)
+
+        sal_Int32 nOwnFormatKey = -1;
+
+        // the format key (relative to the control's supplier)
+        sal_Int32 nControlFormatKey = -1;
+        Any aControlFormatKey = _rxFormattedControl->getPropertyValue(PROPERTY_FORMATKEY);
+        if (aControlFormatKey >>= nControlFormatKey)
+        {
+            // the control's number format
+            Reference< XNumberFormatsSupplier > xControlFormatsSupplier;
+            _rxFormattedControl->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xControlFormatsSupplier;
+            Reference< XNumberFormats > xControlFormats;
+            if (xControlFormatsSupplier.is())
+                xControlFormats = xControlFormatsSupplier->getNumberFormats();
+            OSL_ENSURE(xControlFormats.is(), "OFormLayerXMLExport_Impl::examineControlNumberFormat: formatted control without supplier!");
+
+            // obtain the persistent (does not depend on the formats supplier) representation of the control's format
+            Locale aFormatLocale;
+            ::rtl::OUString sFormatDescription;
+            if (xControlFormats.is())
+            {
+                Reference< XPropertySet > xControlFormat = xControlFormats->getByKey(nControlFormatKey);
+
+                xControlFormat->getPropertyValue(PROPERTY_LOCALE)       >>= aFormatLocale;
+                xControlFormat->getPropertyValue(PROPERTY_FORMATSTRING) >>= sFormatDescription;
+            }
+
+            // check if our own formats collection already knows the format
+            nOwnFormatKey = m_xControlNumberFormats->queryKey(sFormatDescription, aFormatLocale, sal_False);
+            if (-1 == nOwnFormatKey)
+            {   // no, we don't
+                // -> create a new format
+                nOwnFormatKey = m_xControlNumberFormats->addNew(sFormatDescription, aFormatLocale);
+            }
+            OSL_ENSURE(-1 != nOwnFormatKey, "OFormLayerXMLExport_Impl::examineControlNumberFormat: could not translate the controls format key!");
+        }
+        else
+            OSL_ENSURE(!aControlFormatKey.hasValue(), "OFormLayerXMLExport_Impl::examineControlNumberFormat: invalid number format property value!");
+
+        return nOwnFormatKey;
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::ensureControlNumberStyleExport()
+    {
+        if (!m_pControlNumberStyles)
+        {
+            // create our number formats supplier (if necessary)
+            Reference< XNumberFormatsSupplier > xFormatsSupplier;
+
+            OSL_ENSURE(!m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: inconsistence!");
+                // the m_xControlNumberFormats and m_pControlNumberStyles should be maintained together
+
+            try
+            {
+                // create it for en-US (does not really matter, as we will specify a locale for every
+                // concrete language to use)
+                Sequence< Any > aSupplierArgs(1);
+                aSupplierArgs[0] <<= Locale (   ::rtl::OUString::createFromAscii("en"),
+                                                ::rtl::OUString::createFromAscii("US"),
+                                                ::rtl::OUString()
+                                            );
+                Reference< XInterface > xFormatsSupplierUntyped =
+                    ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                        SERVICE_NUMBERFORMATSSUPPLIER,
+                        aSupplierArgs
+                    );
+                OSL_ENSURE(xFormatsSupplierUntyped.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not instantiate a number formats supplier!");
+
+                xFormatsSupplier = Reference< XNumberFormatsSupplier >(xFormatsSupplierUntyped, UNO_QUERY);
+                if (xFormatsSupplier.is())
+                    m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
+            }
+            catch(const Exception&)
+            {
+            }
+
+            OSL_ENSURE(m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not obtain my default number formats!");
+
+            // create the exporter
+            m_pControlNumberStyles = new SvXMLNumFmtExport(m_rContext.GetDocHandler(), xFormatsSupplier, getControlNumberStyleNamePrefix());
+        }
+    }
+
+    //---------------------------------------------------------------------
+    SvXMLNumFmtExport* OFormLayerXMLExport_Impl::getControlNumberStyleExport()
+    {
+        ensureControlNumberStyleExport();
+        return m_pControlNumberStyles;
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -480,6 +662,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/21 16:54:38  jl
+ *  Replaced OSL_ENSHURE by OSL_ENSURE
+ *
  *  Revision 1.11  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
