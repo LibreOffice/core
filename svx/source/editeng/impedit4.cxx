@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-08 10:04:47 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1616,7 +1616,11 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         }
 
         if ( aWord.Len() > 1 )
-            xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
+        {
+            LanguageType eLang = GetLanguage( aCurSel.Max() );
+            SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
+            xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
+        }
 
         if ( bForward && !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -1867,7 +1871,11 @@ EESpellState ImpEditEngine::HasSpellErrors()
         aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
         if ( aWord.Len() > 1 )
-            xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
+        {
+            LanguageType eLang = GetLanguage( aCurSel.Max() );
+            SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
+            xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
+        }
         aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     }
 #endif
