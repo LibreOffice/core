@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-15 15:43:15 $
+ *  last change: $Author: obr $ $Date: 2001-06-08 13:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,37 +66,11 @@
 #include <osl/time.h>
 
 /* FIXME: detection should be done in configure script */
-#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || defined(LINUX)
 #define STRUCT_TM_HAS_GMTOFF 1
 
 #elif defined(SOLARIS)
 #define HAS_ALTZONE 1
-#define HAS_GMTIME_R 1
-#define HAS_LOCALTIME_R 1
-
-#elif defined(LINUX)
-#define STRUCT_TM_HAS_GMTOFF 1
-#define HAS_GMTIME_R 1
-#define HAS_LOCALTIME_R 1
-#endif
-
-
-#if !defined(HAS_LOCALTIME_R)
-struct tm *localtime_r(const time_t *clock, struct tm *res)
-{
-    // FIXME: copy buffer and make thread safe!
-    return localtime( clock );
-}
-#endif
-
-#if !defined(HAS_GMTIME_R)
-struct tm *gmtime_r(const time_t *clock, struct tm *res)
-{
-    // FIXME: copy buffer and make thread safe!
-    return gmtime( clock );
-}
-#endif
-
 
 /*--------------------------------------------------
  * osl_getSystemTime
