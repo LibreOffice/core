@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 11:48:02 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 16:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,42 +657,60 @@ void __EXPORT ScDocShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
 BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
 {
     DBG_ASSERT( pStor, "Nanu... LoadFrom ohne Storage?" );
+    BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 
     WaitObject aWait( GetDialogParent() );
 
     BOOL bRet = FALSE;
-    SvStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName), STREAM_STD_READ );
-    if ( !aPoolStm->GetError() )
+
+    if ( bXML )
     {
-        aPoolStm->SetVersion(pStor->GetVersion());
+        //  until loading/saving only the styles in XML is implemented,
+        //  load the whole file
 
-        aDocument.Clear();                      // keine Referenzen auf Pool behalten!
-        RemoveItem( SID_ATTR_CHAR_FONTLIST );
-        RemoveItem( ITEMID_COLOR_TABLE );
-        RemoveItem( ITEMID_GRADIENT_LIST );
-        RemoveItem( ITEMID_HATCH_LIST );
-        RemoveItem( ITEMID_BITMAP_LIST );
-        RemoveItem( ITEMID_DASH_LIST );
-        RemoveItem( ITEMID_LINEEND_LIST );
-
-        aDocument.LoadPool( *aPoolStm, TRUE );      // TRUE: RefCounts aus Datei laden
-        bRet = (aPoolStm->GetError() == 0);
-        DBG_ASSERT( bRet, "Error in pool stream" );
-
-        //  UpdateStdNames is called from ScDocument::Load, but is also needed
-        //  if only the styles are loaded!
-        ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
-        if (pStylePool)
-            pStylePool->UpdateStdNames();   // correct style names for different languages
-
-        //  Hier auf keinen Fall LoadCompleted, weil ohne Laden der Tabellen die RefCounts
-        //  nicht hochgezaehlt wurden.
-        //  Die Items wuerden dann geloescht, und beim Speichern wuerde Muell herauskommen.
-        //  Darum die Ref-Counts aus der Datei laden (TRUE bei LoadPool).
-        //  (Bug #37635#)
-
+        bRet = LoadXML( NULL, pStor );
+        if ( bRet )
+        {
+            CalcOutputFactor();
+            UpdateAllRowHeights();
+        }
         InitItems();
-        //  CalcOutputFactor interessiert hier nicht
+    }
+    else
+    {
+        SvStorageStreamRef aPoolStm = pStor->OpenStream( String::CreateFromAscii(pStyleName), STREAM_STD_READ );
+        if ( !aPoolStm->GetError() )
+        {
+            aPoolStm->SetVersion(pStor->GetVersion());
+
+            aDocument.Clear();                      // keine Referenzen auf Pool behalten!
+            RemoveItem( SID_ATTR_CHAR_FONTLIST );
+            RemoveItem( ITEMID_COLOR_TABLE );
+            RemoveItem( ITEMID_GRADIENT_LIST );
+            RemoveItem( ITEMID_HATCH_LIST );
+            RemoveItem( ITEMID_BITMAP_LIST );
+            RemoveItem( ITEMID_DASH_LIST );
+            RemoveItem( ITEMID_LINEEND_LIST );
+
+            aDocument.LoadPool( *aPoolStm, TRUE );      // TRUE: RefCounts aus Datei laden
+            bRet = (aPoolStm->GetError() == 0);
+            DBG_ASSERT( bRet, "Error in pool stream" );
+
+            //  UpdateStdNames is called from ScDocument::Load, but is also needed
+            //  if only the styles are loaded!
+            ScStyleSheetPool* pStylePool = aDocument.GetStyleSheetPool();
+            if (pStylePool)
+                pStylePool->UpdateStdNames();   // correct style names for different languages
+
+            //  Hier auf keinen Fall LoadCompleted, weil ohne Laden der Tabellen die RefCounts
+            //  nicht hochgezaehlt wurden.
+            //  Die Items wuerden dann geloescht, und beim Speichern wuerde Muell herauskommen.
+            //  Darum die Ref-Counts aus der Datei laden (TRUE bei LoadPool).
+            //  (Bug #37635#)
+
+            InitItems();
+            //  CalcOutputFactor interessiert hier nicht
+        }
     }
 
     SfxObjectShell::LoadFrom( pStor );
