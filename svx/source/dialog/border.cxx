@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:50:26 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // include ---------------------------------------------------------------
 
 #ifndef _SFXAPP_HXX
@@ -98,6 +97,12 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#include "svxids.hrc" //CHINA001
+#include "flagsdef.hxx" //CHINA001
+#include <sfx2/request.hxx>
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
 #ifndef SFX_ITEMCONNECT_HXX
 #include <sfx2/itemconnect.hxx>
 #endif
@@ -1589,6 +1594,17 @@ void SvxBorderTabPage::DataChanged( const DataChangedEvent& rDCEvt )
             InitValueSets_Impl();
 
     SfxTabPage::DataChanged( rDCEvt );
+}
+
+void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pSWModeItem,SfxUInt16Item,SID_SWMODE_TYPE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_FLAG_TYPE,sal_False);
+    if (pSWModeItem)
+        SetSWMode(pSWModeItem->GetValue());
+    if (pFlagItem)
+        if ( ( pFlagItem->GetValue() & SVX_HIDESHADOWCTL ) == SVX_HIDESHADOWCTL )
+            HideShadowControls();
 }
 
 #undef EQSTYLE
