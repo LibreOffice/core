@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-12 12:26:06 $
+ *  last change: $Author: obr $ $Date: 2001-02-13 13:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6672,7 +6672,7 @@ Reference< XDropTarget > Window::GetDropTarget()
 
     if( ! mxDNDListenerContainer.is() )
     {
-        sal_Int32 nDefaultActions = 0;
+        sal_Int8 nDefaultActions = 0;
 
         if( mpFrameData && mpFrameData->mxDropTarget.is() )
             nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();
@@ -6701,7 +6701,7 @@ Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 
     if( ! mxDNDListenerContainer.is() )
     {
-        sal_Int32 nDefaultActions = 0;
+        sal_Int8 nDefaultActions = 0;
 
         if( mpFrameData && mpFrameData->mxDropTarget.is() )
             nDefaultActions = mpFrameData->mxDropTarget->getDefaultActions();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-12 12:26:06 $
+ *  last change: $Author: obr $ $Date: 2001-02-13 13:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ public:
      * XDropTargetDragContext
      */
 
-    virtual void SAL_CALL acceptDrag( const sal_Int8 dropAction ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acceptDrag( sal_Int8 dropAction ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL rejectDrag() throw(::com::sun::star::uno::RuntimeException);
 
     /*

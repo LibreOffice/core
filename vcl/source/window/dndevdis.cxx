@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-12 12:26:06 $
+ *  last change: $Author: obr $ $Date: 2001-02-13 13:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ void SAL_CALL DNDEventDispatcher::disposing( const EventObject& eo )
 // DNDEventDispatcher::acceptDrag
 //==================================================================================================
 
-void SAL_CALL DNDEventDispatcher::acceptDrag( const sal_Int8 dropAction ) throw(RuntimeException)
+void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 dropAction ) throw(RuntimeException)
 {
 }
 
