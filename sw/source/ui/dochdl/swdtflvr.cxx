@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:51:28 $
+ *  last change: $Author: jp $ $Date: 2001-02-05 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ extern BOOL bExecuteDrag;
 #define SWTRANSFER_OBJECTTYPE_HTML              0x00000002
 #define SWTRANSFER_OBJECTTYPE_RTF               0x00000004
 #define SWTRANSFER_OBJECTTYPE_STRING            0x00000008
-#define SWTRANSFER_OBJECTTYPE_DRAWOLE           0x00000010
+#define SWTRANSFER_OBJECTTYPE_SWOLE             0x00000010
 #define SWTRANSFER_OBJECTTYPE_DDE               0x00000020
 
 
@@ -624,12 +624,13 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             if( !aDocShellRef.Is() )
             {
                 SwDoc *pDoc = pClpDocFac->GetDoc();
-                SwDocShell* pNewDocSh = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
+                SwDocShell* pNewDocSh = new SwDocShell( pDoc,
+                                         SFX_CREATE_MODE_EMBEDDED );
                 aDocShellRef = pNewDocSh;
                 aDocShellRef->DoInitNew( NULL );
                 SwTransferable::InitOle( aDocShellRef, *pDoc );
             }
-            bOK = SetObject( &aDocShellRef, SWTRANSFER_OBJECTTYPE_DRAWOLE,
+            bOK = SetObject( &aDocShellRef, SWTRANSFER_OBJECTTYPE_SWOLE,
                             rFlavor );
         }
     }
@@ -665,7 +666,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         }
         break;
 
-    case SWTRANSFER_OBJECTTYPE_DRAWOLE:
+    case SWTRANSFER_OBJECTTYPE_SWOLE:
         {
             SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*) pObject;
             SvStorageRef xWorkStore( new SvStorage( *xStream ) );
@@ -794,7 +795,7 @@ int SwTransferable::Copy( BOOL bIsCut )
     {
         pClpDocFac = new SwDocFac;
         SwDoc *pDoc = pClpDocFac->GetDoc();
-        aDocShellRef = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
+        aDocShellRef = new SwDocShell( pDoc, SFX_CREATE_MODE_EMBEDDED);
         aDocShellRef->DoInitNew( NULL );
         pWrtShell->Copy( pDoc );
 
