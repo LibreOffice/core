@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:41:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,9 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* pSet )
             pTblData->SetWidth(lWidth);
 
             SwTwips nColSum = 0;
-            for(USHORT i = 0; i < pTblData->GetColCount(); i++)
+            USHORT i;
+
+            for( i = 0; i < pTblData->GetColCount(); i++)
             {
                 nColSum += pTblData->GetColumns()[i].nWidth;
             }
@@ -994,7 +996,8 @@ void  SwTableColumnPage::Reset( const SfxItemSet& )
                             pTblData->GetAlign() != HORI_LEFT_AND_WIDTH?
                         pTblData->GetWidth() : pTblData->GetSpace();
 
-        for( USHORT i = 0; i < nNoOfCols; i++ )
+        USHORT i;
+        for( i = 0; i < nNoOfCols; i++ )
         {
             if( pTblData->GetColumns()[i].nWidth  < nMinWidth )
                     nMinWidth = pTblData->GetColumns()[i].nWidth;
@@ -1159,7 +1162,9 @@ BOOL  SwTableColumnPage::FillItemSet( SfxItemSet& rSet )
 void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
 {
         USHORT nAktPos;
-        for( USHORT i = 0; i < MET_FIELDS; i++)
+        USHORT i;
+
+        for( i = 0; i < MET_FIELDS; i++)
             if(pEdit == pFieldArr[i])
                 break;
 
@@ -1174,8 +1179,9 @@ void   SwTableColumnPage::ModifyHdl( PercentField* pEdit )
 void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 {
     SwTwips nSum = 0;
+    USHORT i;
 
-    for(USHORT i = 0; i < nNoOfCols; i++ )
+    for( i = 0; i < nNoOfCols; i++ )
     {
         nSum += (pTblData->GetColumns())[i].nWidth;
     }
@@ -1548,7 +1554,9 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
          nOldRight = rTabCols.GetRight();
 
     BOOL bSingleLine = FALSE;
-    for ( USHORT i = 0; i < rTabCols.Count(); ++i )
+    USHORT i;
+
+    for ( i = 0; i < rTabCols.Count(); ++i )
         if(!pTColumns[i].bVisible)
         {
             bSingleLine = TRUE;
@@ -1820,7 +1828,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
     {
         // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
         const USHORT nCount = pShell->GetPageDescCnt();
-        for(USHORT i = 0; i < nCount; ++i)
+        USHORT i;
+
+        for( i = 0; i < nCount; ++i)
         {
             const SwPageDesc &rPageDesc = pShell->GetPageDesc(i);
             aPageCollLB.InsertEntry(rPageDesc.GetName());
