@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:21:07 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 11:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,10 @@ private:
     ScrollBar           aHorSBar;
     ScrollBarBox        aScrBarBox;
 
-    static Image        s_aDefCollapsed;
-    static Image        s_aDefExpanded;
-    static Image        s_aDefCollapsedHC;
-    static Image        s_aDefExpandedHC;
+    static Image*       s_aDefCollapsed;
+    static Image*       s_aDefExpanded;
+    static Image*       s_aDefCollapsedHC;
+    static Image*       s_aDefExpandedHC;
 
     // Node Bitmaps
     enum ImageType
