@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-09 11:19:35 $
+ *  last change: $Author: os $ $Date: 2001-07-11 11:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _GALLERY_HXX_ //autogen
 #include <gallery.hxx>
@@ -342,9 +342,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     if(xDefNum.is())
     {
         Sequence< Sequence< PropertyValue > > aNumberings;
-        LanguageType eLang = System::GetLanguage();
-        if(LANGUAGE_SYSTEM == eLang)
-            eLang = ::GetSystemLanguage();
+        LanguageType eLang = Application::GetSettings().GetLanguage();
         Locale aLocale = SvxCreateLocale(eLang);
         try
         {
@@ -753,9 +751,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
     if(xDefNum.is())
     {
         Sequence<Reference<XIndexAccess> > aOutlineAccess;
-        LanguageType eLang = System::GetLanguage();
-        if(LANGUAGE_SYSTEM == eLang)
-            eLang = ::GetSystemLanguage();
+        LanguageType eLang = Application::GetSettings().GetLanguage();
         Locale aLocale = SvxCreateLocale(eLang);
         try
         {
