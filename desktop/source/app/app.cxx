@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:41:15 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,14 @@ void Desktop::Init()
 
 void Desktop::DeInit()
 {
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::DeInit" );
+
     try {
+        // instead of removing of the configManager just let it commit all the changes
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+
         // close splashscreen if it's still open
         CloseSplashScreen();
 
@@ -690,8 +697,9 @@ void Desktop::DeInit()
     } catch (RuntimeException&) {
         // someone threw an exception during shutdown
         // this will leave some garbage behind..
-        return;
     }
+
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::DeInit" );
 }
 
 BOOL Desktop::QueryExit()
@@ -1709,10 +1717,6 @@ void Desktop::Main()
     ::ucb::ContentBroker::deinitialize();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
-    // instead of removing of the configManager just let it commit all the changes
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
 }
 
