@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:19:22 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,42 @@ private:
     void CreateSlideTransferable (
         ::Window* pWindow,
         bool bDrag);
+
+    /** Select the pages stored in the maPagesToSelect member.  The list in
+        the member is cleared afterwards.
+    */
+    void SelectPages (void);
+
+    /** Determine the position of where to insert the pages in the current
+        transferable of the sd module.
+        @param pWindow
+            This window is used as parent for dialogs that have to be shown
+            to the user.
+        @return
+            The index in the range [0,n] (both inclusive) with n the number
+            of pages is returned.
+    */
+    sal_Int32 GetInsertionPosition (::Window* pWindow);
+
+    /** Paste the pages of the transferable of the sd module at the given
+        position.
+        @param nInsertPosition
+            The position at which to insert the pages.  The valid range is
+            [0,n] (both inclusive) with n the number of pages in the
+            document.
+        @return
+            The number of inserted pages is returned.
+    */
+    sal_Int32 PasteTransferable (sal_Int32 nInsertPosition);
+
+    /** Select a range of pages of the model.  Typicall usage is the
+        selection of newly inserted pages.
+        @param nFirstIndex
+            The index of the first page to select.
+        @param nPageCount
+            The number of pages to select.
+    */
+    void SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
