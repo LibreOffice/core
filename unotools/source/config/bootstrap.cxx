@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 10:31:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
     return bURL && implEnsureAbsolute(_rsPathOrURL);
 }
 // ---------------------------------------------------------------------------------------
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 static
 PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 {
