@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:13:53 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 17:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_VERSIONS
         Text [ english_us ] = "New versions" ;
         Text [ portuguese_brazilian ] = "Neue Versionen" ;
         Text [ swedish ] = "Nya versioner" ;
-        Text [ danish ] = "Ny version" ;
+        Text [ danish ] = "Nye versioner" ;
         Text [ italian ] = "Nuove versioni" ;
         Text [ spanish ] = "Nuevas versiones" ;
         Text [ french ] = "Nouvelles versions" ;
@@ -164,7 +164,7 @@ ModalDialog DLG_VERSIONS
         Text [ english_us ] = "Existing versions" ;
         Text [ portuguese_brazilian ] = "Vorhandene Versionen" ;
         Text [ swedish ] = "Befintliga versioner" ;
-        Text [ danish ] = "Eksisterende version" ;
+        Text [ danish ] = "Tilg�ngelige versioner" ;
         Text [ italian ] = "Versioni esistenti" ;
         Text [ spanish ] = "Versiones existentes" ;
         Text [ french ] = "Versions existantes" ;
@@ -264,7 +264,7 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "주석";
         Text[ turkish ] = "A��klama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentario";
+        Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautukset";
     };
     Control TLB_VERSIONS
@@ -300,7 +300,7 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "닫기";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
     };
     PushButton PB_OPEN
@@ -329,7 +329,7 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "열기";
         Text[ turkish ] = "A�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Abrir";
+        Text[ catalan ] = "Obre";
         Text[ finnish ] = "Avaa";
     };
     PushButton PB_VIEW
@@ -388,7 +388,7 @@ ModalDialog DLG_VERSIONS
         Text[ korean ] = "삭제(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
     };
     PushButton PB_COMPARE
@@ -558,7 +558,7 @@ ModalDialog DLG_COMMENTS
         Text[ korean ] = "닫기(~C)";
         Text[ turkish ] = "~Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
     };
     HelpButton PB_HELP
