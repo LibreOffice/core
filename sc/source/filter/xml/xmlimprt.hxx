@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:10:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,7 @@ enum ScXMLDataPilotFieldAttrTokens
     XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD,
     XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION,
     XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION,
+    XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE,
     XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY
 };
 
