@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:03:07 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,6 +513,13 @@ public:
     BOOL MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft );
     // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
     BOOL NumOrNoNum( BOOL bDelete = FALSE, BOOL bChkStart = TRUE);
+    // -> #i23726#
+    void NumIndent(short nIndent, int nLevel = -1, BOOL bRelative = TRUE);
+    void NumIndent(short nIndent, const SwPosition & rPos);
+    BOOL IsFirstOfNumRule() const;
+    BOOL IsFirstOfNumRule(const SwPaM & rPaM) const;
+    // <- #i23726#
+
     BOOL IsNoNum( BOOL bChkStart = TRUE, BOOL bOutline = FALSE ) const;
     // returne den Num-Level des Nodes, in dem sich der Point vom
     // Cursor befindet. Return kann sein :
