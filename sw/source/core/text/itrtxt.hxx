@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
+ *  last change: $Author: fme $ $Date: 2002-04-12 11:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,6 @@ protected:
     sal_Bool bOneBlock      : 1;    // Blocksatz: Einzelwoerter austreiben
     sal_Bool bLastBlock     : 1;    // Blocksatz: Auch die letzte Zeile
     sal_Bool bLastCenter    : 1;    // Blocksatz: Letzte Zeile zentrieren
-    sal_Bool bUnderPara     : 1;    // Absatz unterstrichen
-    sal_Bool bEscPara       : 1;    // Absatz mit Escapement
 
     SwLineLayout *_GetPrev();
 

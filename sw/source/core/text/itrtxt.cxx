@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
+ *  last change: $Author: fme $ $Date: 2002-04-12 11:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,6 @@ void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
         bRegisterOn = pFrm->FillRegister( nRegStart, nRegDiff );
     else
         bRegisterOn = sal_False;
-    bUnderPara = UNDERLINE_NONE != pFnt->GetUnderline();
-    bEscPara = 0 != pFnt->GetEscapement();
 }
 
 /*************************************************************************
