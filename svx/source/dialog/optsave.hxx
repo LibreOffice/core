@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:25:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,9 @@ private:
 #ifdef _SVX_OPTSAVE_CXX
     DECL_LINK( AutoClickHdl_Impl, CheckBox * );
     DECL_LINK( FilterHdl_Impl, ListBox * );
-    sal_Bool SetDefaultFilter_Impl(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties,
-                                sal_Bool bSet/*, sal_Bool& bShowWarning*/);
+
+    bool AcceptFilter( USHORT nPos );
+
 #endif
 
 public:
