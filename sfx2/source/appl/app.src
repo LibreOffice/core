@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-04 10:29:42 $
+ *  last change: $Author: rt $ $Date: 2001-09-06 20:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,7 +1254,7 @@ String GID_CONTROLS
     Text [ swedish ] = "Kontrollelement" ;
     Text [ danish ] = "Kontrolelementer" ;
     Text[ chinese_simplified ] = "æ§åˆ¶å•å…ƒ";
-    Text[ russian ] = "Êîíòğîëüíûå ıëåìåíòû";
+    Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
     Text[ polish ] = "Formanty";
     Text[ japanese ] = "ï½ºï¾ï¾„ï¾›ï½°ï¾™è¦ç´ ";
     Text[ chinese_traditional ] = "æ§ä»¶å–®å…ƒ";
@@ -1460,7 +1460,7 @@ InfoBox MSG_CANT_QUIT
     Message[ arabic ] = "áÇ íãßä ÅäåÇÁ ÇáÊØÈíŞ ÍÇáíÇğ.\nÇáÑÌÇÁ ÇáÇäÊÙÇÑ ÍÊì ÇäÊåÇÁ ßá ãåÇã ÇáØÈÇÚÉ¡ æ/Ãæ\nÊäÔíØÇÊ OLE¡ Ëã Şã ÈÅÛáÇŞ ßá ãÑÈÚÇÊ ÇáÍæÇÑ.";
     Message[ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen.";
     Message[ chinese_simplified ] = "ç°åœ¨æ— æ³•ç»“æŸè¿™ä¸ªåº”ç”¨ç¨‹åºã€‚\nè¯·æ‚¨ç¨ç­‰ç›´åˆ°ç¨‹åºå®Œæˆæ‰€æœ‰æ‰“å°ä»»åŠ¡æˆ–OLEå¯åŠ¨çŠ¶æ€ç»“æŸï¼Œ\nç„¶åå†å…³é—­æ‰€æœ‰å¯¹è¯æ¡†ã€‚";
-    Message[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá ôåñìáôéóôåß áõôŞ ç åöáñìïãŞ.\nĞáñáêáëş ğåñéìİíåôå ìİ÷ñé íá åêôåëåóôïıí üëåò ïé åñãáóßåò åêôığùóçò êáé/Ş\nïé ";
+    Message[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá ôåñìáôéóôåß áõôŞ ç åöáñìïãŞ.\nĞáñáêáëş ğåñéìİíåôå ìİ÷ñé íá åêôåëåóôïıí üëåò ïé åñãáóßåò åêôığùóçò êáé/Ş\nïé";
     Message[ korean ] = "ì‘ìš©í”„ë¡œê·¸ë¨ì„ í˜„ì¬ ì¢…ë£Œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\nì¸ì‡„ ì‘ì—…ì´ ëª¨ë‘ ëë‚  ë•Œê¹Œì§€ ê·¸ë¦¬ê³ /ë˜ëŠ”\nOLEê°€ í™œì„±í™”ë  ë•Œê¹Œì§€ ê¸°ë‹¤ë ¸ë‹¤ê°€ ëª¨ë“  ëŒ€í™”ìƒìë¥¼ ë‹«ìœ¼ì‹­ì‹œì˜¤.";
     Message[ turkish ] = "Şu an uygulamadan çıkılamıyor.\nTüm yazdırma işlerinin ve/veya\nOLE işlemlerinin bitmesini bekleyip tüm pencereleri kapatın.";
     Message[ language_user1 ] = " ";
@@ -1603,7 +1603,7 @@ String STR_AUTOSAVE
     TEXT [ spanish ] = "Guardar automáticamente" ;
     TEXT [ english_us ] = "AutoSave" ;
     TEXT[ chinese_simplified ] = "è‡ªåŠ¨å­˜ç›˜";
-    TEXT[ russian ] = "Ñîõğàíèòü àâòîìàòè÷åñêè";
+    TEXT[ russian ] = "Ñîõğàíÿòü àâòîìàòè÷åñêè";
     TEXT[ polish ] = "Zapisz automatycznie";
     TEXT[ japanese ] = "è‡ªå‹•çš„ã«ä¿å­˜";
     TEXT[ chinese_traditional ] = "è‡ªå‹•å„²å­˜";
@@ -1981,7 +1981,7 @@ String MSG_IOERR_SHARING
     Text [ norwegian ] = "+++Sharing violation while accessing $(FILE)." ;
     Text [ italian ] = "Violazione di condivisione durante l'accesso al $(FILE)." ;
     Text [ portuguese_brazilian ] = "Viola??o de compartilhamento durante o acesso do $(FILE)." ;
-    Text [ portuguese ] = "Erro durante o acesso compartilhado ao ficheiro $(FILE)." ;
+    Text [ portuguese ] = "Erro ao tentar acesso partilhado ao ficheiro $(FILE)." ;
     Text [ finnish ] = "On ilmennyt virhe tiedoston $(FILE) yhteiskäytössä." ;
     Text [ danish ] = "Fejl under fælles adgang til filen $(FILE)." ;
     Text [ french ] = "Erreur de partage d'accès au fichier $(FILE)." ;
@@ -2040,7 +2040,7 @@ String MSG_IOERR_GENERAL
     Text [ portuguese ] = "Erro geral de acesso/saída ao tentar entrar em $(FILE)." ;
     Text[ chinese_simplified ] = "åœ¨è¯»å–$(FILE)æ—¶å‘ç”Ÿä¸€ä¸ªä¸€èˆ¬çš„è¾“å…¥/è¾“å‡ºé”™è¯¯ã€‚";
     Text[ russian ] = "Îáùàÿ îøèáêà ââîäà âûâîäà ïğè äîñòóïå ê ôàéëó $(FILE).";
-    Text[ polish ] = "Ogólny b³¹d dostêpu We/Wy podczas dostêpu do $(FILE).";
+    Text[ polish ] = "Ogólny b³¹d w wejœciu/wyjœciu w dostêpie do $(FILE).";
     Text[ japanese ] = "$(FILE)ã¸ã®ï½±ï½¸ï½¾ï½½ã®éš›ã®ä¸€èˆ¬çš„ãªI/Oï½´ï¾—ï½°ã€‚";
     Text[ chinese_traditional ] = "åœ¨è®€å–$(FILE)æ™‚ç™¼ç”Ÿä¸€å€‹ä¸€èˆ¬çš„è¼¸å…¥/è¼¸å‡ºéŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá æÅÎÑÇÌ ÚÇã ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá Åáì$(FILE).";
@@ -2452,7 +2452,7 @@ String STR_EVENT_SAVEASDOCDONE
     Text[ turkish ] = "Belge farklı kaydedildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El documento se guardó como";
-    Text[ finnish ] = "Asiakirja on tallennettu nimellä";
+    Text[ finnish ] = "Asiakirja on tallennettu nimell?";
 };
 
 String STR_EVENT_ACTIVATEDOC
@@ -2796,7 +2796,7 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text[ russian ] = "Íåàâòîìàòè÷åñêèé çàïóñê ïğè 'XX'";
     Text[ polish ] = "Przy 'XX' nie startuj automatycznie";
     Text[ japanese ] = "'XX'ã§è‡ªå‹•çš„ã«é–‹å§‹ã—ãªã„ã€‚";
-    Text[ chinese_traditional ] = "åœ¨ 'XX' æ™‚ä¸è‡ªå‹•é‹è¡Œã€‚";
+    Text[ chinese_traditional ] = "åœ¨<XX>æ™‚ä¸è‡ªå‹•é‹è¡Œã€‚";
     Text[ arabic ] = "ÚÏã ÈÏÁ ÊáŞÇÆíÇğ ÚäÏ 'XX'";
     Text[ dutch ] = "Bij 'XX' niet automatisch starten";
     Text[ chinese_simplified ] = "åœ¨ 'XX' æ—¶ä¸è‡ªåŠ¨è¿è¡Œã€‚";
@@ -3333,7 +3333,7 @@ String STR_CORRUPT_INSTALLATION
     Text[ arabic ] = "ÊÚĞÑ ÊËÈíÊ ÈÚÖ ÚäÇÕÑ ÇáÈÑäÇãÌ ÇáåÇãÉ ÈÔßá ÕÍíÍ.\nÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ ÈÇáÎíÇÑ /repair.";
     Text[ turkish ] = "Önemli program öğeleri doğru bir şekilde başlatılamadı.\nKurulumu /repair seçeneği ile başlatın.";
     Text[ catalan ] = "Algunos componentes importantes del programa no se pudieron instalar.\nInicie por favor el programa de instalación con la opción /repair.";
-    Text[ finnish ] = "Tärkeitä ohjelman osia ei voitu alustaa oikein.\nKäynnistä asennusohjelma käyttämällä korjausasetusta.";
+    Text[ finnish ] = "T?rkeit? ohjelman osia ei voitu alustaa oikein.\nK?ynnist? asennusohjelma k?ytt?m?ll? korjausasetusta.";
 };
 
 String IDS_SBERR_STOREREF
@@ -3743,6 +3743,26 @@ String STR_KEY_TEMP_PATH
 {
     Text = "Temporäre Dateien" ;
     Text [ English ] = "Temporary Files" ;
+    Text[ english_us ] = "Temporary files";
+    Text[ portuguese ] = "Directório de base temporáro";
+    Text[ russian ] = "Âğåìåííûé áàçèñíûé êàòàëîã";
+    Text[ greek ] = "Temporary base directory";
+    Text[ dutch ] = "Temporary base directory";
+    Text[ french ] = "Répertoire de base temporaire";
+    Text[ spanish ] = "Archivos temporales";
+    Text[ finnish ] = "Temporary base directory";
+    Text[ italian ] = "File temporanei";
+    Text[ danish ] = "Temporary base directory";
+    Text[ swedish ] = "Temporära filer";
+    Text[ polish ] = "Pliki tymczasowe";
+    Text[ portuguese_brazilian ] = "Temporary base directory";
+    Text[ japanese ] = "ä¸€æ™‚ï¾ï½°ï¾‘ï¾ƒï¾ï½¨ï¾šï½¸ï¾„ï¾˜";
+    Text[ korean ] = "Temporary base directory";
+    Text[ chinese_simplified ] = "ä¸´æ—¶æ ¹ç›®å½•";
+    Text[ chinese_traditional ] = "æš«æ™‚çš„æ ¹ç›®éŒ„";
+    Text[ turkish ] = "Temporary base directory";
+    Text[ arabic ] = "Temporary base directory";
+    Text[ catalan ] = "Temporary base directory";
 };
 String STR_KEY_PLUGINS_PATH
 {
@@ -4105,6 +4125,7 @@ String STR_QUICKSTART_LNKNAME
 
 
  // ********************************************************************** EOF
+
 
 
 
