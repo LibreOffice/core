@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.28 2001-04-25 08:45:16 dvo Exp $
+	$Id: text.mod,v 1.29 2001-04-25 15:59:57 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -677,7 +677,7 @@
 <!ATTLIST text:footnotes-configuration text:citation-style-name %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:default-style-name  %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:master-page-name %styleName; #IMPLIED>
-<!ATTLIST text:footnotes-configuration text:start-value %integer; #IMPLIED>
+<!ATTLIST text:footnotes-configuration text:offset %integer; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:footnotes-position (document|page) "page">
 <!ATTLIST text:footnotes-configuration text:start-numbering-at (document|chapter|page) "document">
 
@@ -692,7 +692,7 @@
 <!ATTLIST text:endnotes-configuration text:citation-body-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:default-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:master-page-name %styleName; #IMPLIED>
-<!ATTLIST text:endnotes-configuration text:start-value %integer; #IMPLIED>
+<!ATTLIST text:endnotes-configuration text:offset %integer; #IMPLIED>
 
 <!-- Validity constraint: text:footnote and text:endnote elements may not 
 	contain other text:footnote or text:endnote elements, even though the DTD
