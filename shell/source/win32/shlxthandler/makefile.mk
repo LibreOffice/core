@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-07 11:04:47 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 14:59:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,4 +123,3 @@ DEF1EXPORTFILE=exports.dxp
 
 .INCLUDE :	target.mk
 
-    
