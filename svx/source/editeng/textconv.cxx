@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:45:43 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,16 +111,8 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
 {
     DBG_ASSERT( pWindow, "TextConvWrapper: window missing" );
 
+    nConvTextLang = LANGUAGE_NONE;
     nUnitOffset = 0;
-//    nSourceLang = SvxLocaleToLanguage( rSourceLocale );
-//    nTargetLang = SvxLocaleToLanguage( rTargetLocale );
-
-#ifdef TL_OLD
-    // currently this implementation only works for Korean (Hangu/Hanja conversion)
-    // since it is derived by 'HangulHanjaConversion' and there is not
-    // a more general base class for text conversion yet...
-    DBG_ASSERT( nLang == LANGUAGE_KOREAN, "unexpected language" );
-#endif
 
     bStartChk   = sal_False;
     bStartDone  = bIsStart;
@@ -327,7 +319,11 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
 {
     // modified version of EditSpellWrapper::SpellContinue
 
-    aConvText = pEditView->GetImpEditEngine()->ImpConvert( pEditView, GetSourceLanguage(), aConvSel );
+    // get next convertible text portion and its language
+    aConvText = rtl::OUString();
+    nConvTextLang = LANGUAGE_NONE;
+    pEditView->GetImpEditEngine()->ImpConvert( aConvText, nConvTextLang,
+            pEditView, GetSourceLanguage(), aConvSel );
     return aConvText.getLength() != 0;
 }
 
@@ -350,10 +346,13 @@ void TextConvWrapper::SelectNewUnit_impl(
 }
 
 
-void TextConvWrapper::GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion )
+void TextConvWrapper::GetNextPortion(
+        ::rtl::OUString& /* [out] */ rNextPortion,
+        LanguageType&    /* [out] */ rLangOfPortion )
 {
     FindConvText_impl();
-    rNextPortion = aConvText;
+    rNextPortion    = aConvText;
+    rLangOfPortion  = nConvTextLang;
     nUnitOffset  = 0;
 
     ESelection  aSelection = pEditView->GetSelection();
@@ -376,7 +375,8 @@ void TextConvWrapper::HandleNewUnit(
 void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
         const ::rtl::OUString& rReplaceWith,
-        ReplacementAction eAction )
+        ReplacementAction eAction,
+        LanguageType *pNewUnitLanguage )
 {
     BOOL bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
@@ -413,10 +413,15 @@ void TextConvWrapper::ReplaceUnit(
     }
     nUnitOffset += (USHORT) (nUnitStart + aNewTxt.getLength() );
 
+    // remember current original language for kater use
+    ImpEditEngine *pImpEditEng = pEditView->GetImpEditEngine();
+    ESelection aOldSel      = pEditView->GetSelection();
+    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() );
+
     pEditView->InsertText( aNewTxt );
 
     // change language and font if necessary
-    if (GetSourceLanguage() != GetTargetLanguage())
+    if (IsChinese( GetSourceLanguage() ))
     {
         DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                 "TextConvWrapper::ReplaceUnit : unexpected target language" );
@@ -430,12 +435,17 @@ void TextConvWrapper::ReplaceUnit(
 
         // get new language
         SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
-        aNewSet.Put( SvxLanguageItem( GetTargetLanguage(), EE_CHAR_LANGUAGE_CJK ) );
+        if (pNewUnitLanguage)
+        {
+            DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
+                    "similar language should not be changed!");
+            aNewSet.Put( SvxLanguageItem( *pNewUnitLanguage, EE_CHAR_LANGUAGE_CJK ) );
+        }
 
         // new font to be set?
         const Font *pTargetFont = GetTargetFont();
         DBG_ASSERT( pTargetFont, "target font missing?" );
-        if (pTargetFont)
+        if (pTargetFont && pNewUnitLanguage)
         {
             SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( EE_CHAR_FONTINFO_CJK );
             aFontItem.GetFamilyName()   = pTargetFont->GetName();
@@ -447,7 +457,8 @@ void TextConvWrapper::ReplaceUnit(
         }
 
         // set new language and font attributes
-        pEditView->SetAttribs( aNewSet );
+        if (aNewSet.Count() > 0)
+            pEditView->SetAttribs( aNewSet );
 
         pEditView->SetSelection( aOldSel );
     }
