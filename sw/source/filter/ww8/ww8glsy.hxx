@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:43:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ private:
 
     bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
         const ::std::vector<String>& rStrings,
-        const ::std::vector<String>& rExtra);
+        const ::std::vector<ww::bytes>& rExtra);
     bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 
     //No copying
