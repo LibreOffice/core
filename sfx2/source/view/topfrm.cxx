@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:26:16 $
+ *  last change: $Author: mba $ $Date: 2001-09-27 10:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,7 +1023,8 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_NEWDOCDIRECT :
         {
-            if ( pImp->pFactoryName )
+            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
+            if ( !pFactoryItem && pImp->pFactoryName )
             {
                 SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
                 String aFact = String::CreateFromAscii("private:factory/");
