@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:21:50 $
+ *  last change: $Author: aw $ $Date: 2001-05-10 11:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,8 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             BOOL bSetItemSet(FALSE);
 
-                            if(aAttr.GetItemState(XATTR_LINESTARTWIDTH) == SFX_ITEM_SET)
+                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINESTARTWIDTH))
                             {
                                 INT32 nValAct = ((const XLineStartWidthItem&)aAttr.Get(XATTR_LINESTARTWIDTH)).GetValue();
                                 INT32 nValNew = nValAct + (((nNewLineWidth - nActLineWidth) * 15) / 10);
@@ -257,7 +258,8 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                                 aAttr.Put(XLineStartWidthItem(nValNew));
                             }
 
-                            if(aAttr.GetItemState(XATTR_LINEENDWIDTH) == SFX_ITEM_SET)
+                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINEENDWIDTH))
                             {
                                 INT32 nValAct = ((const XLineEndWidthItem&)aAttr.Get(XATTR_LINEENDWIDTH)).GetValue();
                                 INT32 nValNew = nValAct + (((nNewLineWidth - nActLineWidth) * 15) / 10);
