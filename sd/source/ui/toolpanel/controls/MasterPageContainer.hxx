@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageContainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:43:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
+#include "tools/SdGlobalResourceContainer.hxx"
 
 class SdPage;
 class SdDrawDocument;
@@ -90,21 +91,17 @@ namespace sd { namespace toolpanel { namespace controls {
     store master page objects.  For each master page container stores its
     URL, preview bitmap, page name, and, if available, the page object.
 
-    The lifetime is reference count controlled.  After Unregister() has been
-    called as many times as Register() the instance is destroyed.  A call to
-    Instance() after that creates a new one.
+    The lifetime is limited by the SdGlobalResourceContainer to that of the
+    sd module.
 */
 class MasterPageContainer
+    : public SdGlobalResource
 {
 public:
     typedef int Token;
     static const Token NIL_TOKEN = -1;
 
-
     static MasterPageContainer& Instance (void);
-
-    static void Register (void);
-    static void Unregister (void);
 
     /** Put the master page identified and described by the given parameters
         into the container.  When there already is a master page with the
@@ -184,15 +181,11 @@ public:
     void RemoveCallback (const Link& rCallback);
 
 private:
-    static MasterPageContainer* mpInstance;
-    static ::osl::Mutex maMutex;
-    static int mnReferenceCount;
-
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
 
     MasterPageContainer (void);
-    ~MasterPageContainer (void);
+    virtual ~MasterPageContainer (void);
 
     void LateInit (void);
 };
