@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,67 @@ using namespace ::rtl;
 #include "fcontnr.hxx"
 #include "loadenv.hxx"
 #include "docfile.hxx"
+
+Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstance(void) throw(Exception, RuntimeException)
+{
+    Reference < XFrameLoader > xLoader( pCreateFunction( xSMgr ), UNO_QUERY );
+    SfxFrameLoader* pLoader = (SfxFrameLoader*) xLoader.get();
+    pLoader->SetFilterName( aImplementationName );
+    return xLoader;
+}
+
+Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstanceWithArguments(const Sequence<Any>& Arguments) throw(Exception, RuntimeException)
+{
+    return createInstance();
+}
+
+::rtl::OUString SAL_CALL SfxFrameLoaderFactory::getImplementationName() throw(RuntimeException)
+{
+    return aImplementationName;
+}
+
+sal_Bool SAL_CALL SfxFrameLoaderFactory::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
+{
+    if ( ServiceName.compareToAscii("com.sun.star.frame.FrameLoader") == COMPARE_EQUAL )
+        return sal_True;
+    else
+        return sal_False;
+}
+
+Sequence< ::rtl::OUString > SAL_CALL SfxFrameLoaderFactory::getSupportedServiceNames(void) throw(RuntimeException)
+{
+    Sequence< ::rtl::OUString > aRet(1);
+    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
+    return aRet;
+}
+
+void SAL_CALL SfxFrameLoader::initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException )
+{
+    sal_Int32 nLen = aArguments.getLength();
+    for ( sal_Int32 n=0; n<nLen; n++ )
+    {
+        PropertyValue aValue;
+        if ( ( aArguments[n] >>= aValue ) && aValue.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
+        {
+            ::rtl::OUString aTmp;
+            aValue.Value >>= aTmp;
+            aFilterName = aTmp;
+        }
+    }
+}
+
+SfxFrameLoader::SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+    : pMatcher( 0 )
+    , pLoader( 0 )
+{
+}
+
+SfxFrameLoader::~SfxFrameLoader()
+{
+    if ( pLoader )
+        pLoader->ReleaseRef();
+    delete pMatcher;
+}
 
 void SAL_CALL SfxFrameLoader::load( const Reference < XFrame >& rFrame, const OUString& rURL,
                 const Sequence < PropertyValue >& rArgs,
@@ -251,19 +312,6 @@ void SfxFrameLoader::cancel() throw( RUNTIME_EXCEPTION )
         pLoader->CancelTransfers();
 }
 
-SfxFrameLoader::SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-    : pMatcher( 0 )
-    , pLoader( 0 )
-{
-}
-
-SfxFrameLoader::~SfxFrameLoader()
-{
-    if ( pLoader )
-        pLoader->ReleaseRef();
-    delete pMatcher;
-}
-
 IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
 {
     DBG_ASSERT( pLoader, "No Loader created, but LoadDone ?!" );
@@ -292,63 +340,6 @@ IMPL_LINK( SfxFrameLoader, LoadDone_Impl, void*, pVoid )
     return NULL;
 }
 
-Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstance(void) throw(Exception, RuntimeException)
-{
-    Reference < XFrameLoader > xLoader( pCreateFunction( xSMgr ), UNO_QUERY );
-    SfxFrameLoader* pLoader = (SfxFrameLoader*) xLoader.get();
-    pLoader->SetFilterName( aImplementationName );
-    return xLoader;
-}
-
-Reference< XInterface > SAL_CALL SfxFrameLoaderFactory::createInstanceWithArguments(const Sequence<Any>& Arguments) throw(Exception, RuntimeException)
-{
-    return createInstance();
-}
-
-::rtl::OUString SAL_CALL SfxFrameLoaderFactory::getImplementationName() throw(RuntimeException)
-{
-    return aImplementationName;
-}
-
-sal_Bool SAL_CALL SfxFrameLoaderFactory::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
-{
-    if ( ServiceName.compareToAscii("com.sun.star.frame.FrameLoader") == COMPARE_EQUAL )
-        return sal_True;
-    else
-        return sal_False;
-}
-
-Sequence< ::rtl::OUString > SAL_CALL SfxFrameLoaderFactory::getSupportedServiceNames(void) throw(RuntimeException)
-{
-    Sequence< ::rtl::OUString > aRet(1);
-    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
-    return aRet;
-}
-
-void SAL_CALL SfxFrameLoader::initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException )
-{
-    sal_Int32 nLen = aArguments.getLength();
-    for ( sal_Int32 n=0; n<nLen; n++ )
-    {
-        PropertyValue aValue;
-        if ( ( aArguments[n] >>= aValue ) && aValue.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
-        {
-            ::rtl::OUString aTmp;
-            aValue.Value >>= aTmp;
-            aFilterName = aTmp;
-        }
-    }
-}
-
-SFX_IMPL_XINTERFACE_0( SfxFrameLoader_Impl, SfxFrameLoader )
-SFX_IMPL_XSERVICEINFO( SfxFrameLoader_Impl, "com.sun.star.frame.FrameLoader", "com.sun.star.comp.office.FrameLoader" )
-SFX_IMPL_SINGLEFACTORY( SfxFrameLoader_Impl )
-
-SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference < XMultiServiceFactory >& xFactory )
-    : SfxFrameLoader( xFactory )
-{
-}
-
 SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 {
     SfxObjectFactory* pFactory = 0;
@@ -364,30 +355,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     return *pFactory;
 }
 
-SFX_IMPL_XSERVICEINFO( SfxFilterDetect_Impl, "com.sun.star.frame.ExtendedFilterDetect", "com.sun.star.comp.office.FilterDetect" )
-SFX_IMPL_SINGLEFACTORY( SfxFilterDetect_Impl )
-
-SfxFilterDetect_Impl::SfxFilterDetect_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-{
-}
-
-void SAL_CALL SfxFilterDetect_Impl::initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException )
-{
-    sal_Int32 nLen = aArguments.getLength();
-    for ( sal_Int32 n=0; n<nLen; n++ )
-    {
-        PropertyValue aValue;
-        if ( ( aArguments[n] >>= aValue ) && aValue.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
-        {
-            ::rtl::OUString aTmp;
-            aValue.Value >>= aTmp;
-            aFilterName = aTmp;
-        }
-    }
-}
-
-::rtl::OUString SAL_CALL SfxFilterDetect_Impl::detect( const ::rtl::OUString& sURL,
-                                                       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw(::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL SfxFrameLoader::detect( const ::rtl::OUString& sURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw(::com::sun::star::uno::RuntimeException )
 {
     String aFact( sURL );
     String aPrefix = String::CreateFromAscii( "private:factory/" );
@@ -405,25 +374,28 @@ void SAL_CALL SfxFilterDetect_Impl::initialize( const Sequence< Any >& aArgument
         SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
         TransformParameters( SID_OPENDOC, aArgumentlist, *pSet );
 
-        SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False,
-                           sal_True, NULL, pSet );
+        SfxMedium aMedium( sURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, sal_True, NULL, pSet );
+        aMedium.DownLoad();
 /*      String aMime;
         aMedium.GetMIMEAndRedirect( aMime );
         if( aMime.Len() )
             pFilter = rMatcher.GetFilter4Mime( aMime );
-        else */
-        if ( aMedium.IsStorage() )
-        {
-            SvStorageRef aStor = aMedium.GetStorage();
-            pNew = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
-        }
-
-        if ( pNew )
-            pFilter = pNew;
-
+*/
         ErrCode nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
         if ( !pFilter )
+        {
+            if ( aMedium.IsStorage() )
+            {
+                SvStorageRef aStor = aMedium.GetStorage();
+                pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+            }
+
+            nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+        }
+
+        if ( !pFilter )
             nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
+
         if ( pFilter )
             pFilter = rMatcher.ResolveRedirection( pFilter, aMedium );
     }
@@ -433,4 +405,62 @@ void SAL_CALL SfxFilterDetect_Impl::initialize( const Sequence< Any >& aArgument
     else
         return pFilter->GetName();
 }
+
+SFX_IMPL_XINTERFACE_0( SfxFrameLoader_Impl, SfxFrameLoader )
+SFX_IMPL_SINGLEFACTORY( SfxFrameLoader_Impl )
+
+/* XServiceInfo */
+UNOOUSTRING SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( UNORUNTIMEEXCEPTION )
+{
+    return impl_getStaticImplementationName();
+}
+                                                                                                                                \
+/* XServiceInfo */
+sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const UNOOUSTRING& sServiceName ) throw( UNORUNTIMEEXCEPTION )
+{
+    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
+    const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
+    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
+    {
+        if ( pArray[nCounter] == sServiceName )
+        {
+            return sal_True ;
+        }
+    }
+    return sal_False ;
+}
+
+/* XServiceInfo */
+UNOSEQUENCE< UNOOUSTRING > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION )
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
+/* Helper for XServiceInfo */
+UNOSEQUENCE< UNOOUSTRING > SfxFrameLoader_Impl::impl_getStaticSupportedServiceNames()
+{
+    UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
+    UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 2 );
+    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.FrameLoader" );
+    seqServiceNames.getArray() [1] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedFilterDetect" );
+    return seqServiceNames ;
+}
+
+/* Helper for XServiceInfo */
+UNOOUSTRING SfxFrameLoader_Impl::impl_getStaticImplementationName()
+{
+    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.office.FrameLoader" );
+}
+
+/* Helper for registry */
+UNOREFERENCE< UNOXINTERFACE > SAL_CALL SfxFrameLoader_Impl::impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION )
+{
+    return UNOREFERENCE< UNOXINTERFACE >( *new SfxFrameLoader_Impl( xServiceManager ) );
+}
+
+SfxFrameLoader_Impl::SfxFrameLoader_Impl( const Reference < XMultiServiceFactory >& xFactory )
+    : SfxFrameLoader( xFactory )
+{
+}
+
 
