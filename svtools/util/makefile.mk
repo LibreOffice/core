@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.46 $
+#*  $Revision: 1.47 $
 #*
-#*  last change: $Author: vg $ $Date: 2004-01-06 19:34:38 $
+#*  last change: $Author: obo $ $Date: 2004-03-17 13:31:06 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -204,7 +204,11 @@ SHL1STDLIBS+= $(JPEG3RDLIB)
 SHL1STDLIBS+= \
         uwinapi.lib \
         $(LIBPRE) advapi32.lib	\
-        $(LIBPRE) gdi32.lib
+        $(LIBPRE) gdi32.lib \
+        ole32.lib 	\
+        uuid.lib 	\
+        advapi32.lib	\
+        oleaut32.lib
 .ENDIF # WNT
 
 SHL1LIBS= \
