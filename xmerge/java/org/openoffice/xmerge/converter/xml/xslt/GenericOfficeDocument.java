@@ -108,5 +108,16 @@ public class GenericOfficeDocument extends OfficeDocument {
 
     return "";
     }
+
+    /**
+     * Method to return the MIME type of the document.
+     *
+     * @return  String  The document's MIME type.
+     */
+    protected String getDocumentMimeType() {
+        /* TODO: Determine the MIME-type from the input. */
+        return "";
+    }
+
 }
 
