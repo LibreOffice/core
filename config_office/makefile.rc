@@ -3,8 +3,8 @@
 #*    $Workfile:$
 #*
 #*    generated recursive makefile
-#*    last change       $Author: jmarmion $ $Date: 2000-10-11 09:51:20 $
-#*    $Revision: 1.1 $
+#*    last change       $Author: jmarmion $ $Date: 2000-10-11 14:43:18 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:$
 #*
@@ -167,7 +167,7 @@ idl : tools
 ie : svx
 inet : tools ldapber
 io : ucbhelper
-javaunohelper : cppuhelper unoil
+javaunohelper : cppuhelper 
 jurt : codemaker sandbox
 lingu : sfx2
 offmgr : sch sdb sim2 starmath uui
@@ -184,7 +184,7 @@ scp : scptools
 scptools : setup2 
 sd : offmgr sc
 sdb : sfx2
-setup2 : basic transex3 unzip automation
+setup2 : basic transex3 unzip automation unoil
 sfx2 : setup2
 sim2 : svx
 sj2 : svtools sandbox
