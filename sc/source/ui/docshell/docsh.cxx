@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 12:15:25 $
+ *  last change: $Author: er $ $Date: 2000-12-22 01:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,8 +1317,11 @@ BOOL __EXPORT ScDocShell::IsInformationLost()
 void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode cStrDelim,
                             CharSet eCharSet)
 {
-    // could be UTF8 => ByteString, not sal_Char
-    ByteString aDelim( cDelim, eCharSet );
+    CharSet eOldCharSet = rStream.GetStreamCharSet();
+    rStream.SetStreamCharSet( eCharSet );
+    USHORT nOldNumberFormatInt = rStream.GetNumberFormatInt();
+    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
+        rStream.StartWritingUnicodeText();
 
     USHORT nStartCol = 0;
     USHORT nStartRow = 0;
@@ -1329,7 +1332,6 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
     ScProgress aProgress( this, ScGlobal::GetRscString( STR_SAVE_DOC ), nEndRow );
 
     String aString;
-    ByteString aEmptyLine;      // fuer WriteLine mit ConvertEndl
 
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
     const ScViewOptions& rOpt = (pViewSh)
@@ -1350,40 +1352,40 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
     ScBaseCell* pCell;
     while ( pCell = aIter.GetNext( nCol, nRow ) )
     {
-        BOOL bProgress = FALSE;     // nur bei Zeilenwechsel
+        BOOL bProgress = FALSE;     // only upon line change
         if ( nNextRow < nRow )
-        {   // leere Zeilen oder/und leere Spalten bis zum Ende der Zeile
+        {   // empty rows or/and empty columns up to end of row
             bProgress = TRUE;
             if(cDelim!=0) //@ BugId 55355
                 for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
-                {   // restliche Spalten der letzten Zeile
-                    rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+                {   // remaining columns of last row
+                    rStream.WriteUniOrByteChar( cDelim );
                 }
 
-            rStream.WriteLine( aEmptyLine );        // ConvertEndl
+            endlub( rStream );
             nNextRow++;
             for ( nEmptyRow = nNextRow; nEmptyRow < nRow; nEmptyRow++ )
-            {   // ganze leere Zeilen
+            {   // completely empty rows
                 if(cDelim!=0) //@ BugId 55355
                     for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
                     {
-                        rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+                        rStream.WriteUniOrByteChar( cDelim );
                     }
-                rStream.WriteLine( aEmptyLine );        // ConvertEndl
+                endlub( rStream );
             }
             if(cDelim!=0) //@ BugId 55355
                 for ( nEmptyCol = nStartCol; nEmptyCol < nCol; nEmptyCol++ )
-                {   // leere Spalten am Anfang der Zeile
-                    rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+                {   // empty columns at beginning of row
+                    rStream.WriteUniOrByteChar( cDelim );
                 }
             nNextRow = nRow;
         }
         else if ( nNextCol < nCol )
-        {   // leere Spalten in gleicher Zeile
+        {   // empty columns in same row
             if(cDelim!=0) //@ BugId 55355
                 for ( nEmptyCol = nNextCol; nEmptyCol < nCol; nEmptyCol++ )
-                {   // dazwischen liegende Spalten
-                    rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+                {   // columns in between
+                    rStream.WriteUniOrByteChar( cDelim );
                 }
         }
         if ( nCol == nEndCol )
@@ -1404,7 +1406,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
             if ( pProtAttr->GetHideCell() ||
                         ( eType == CELLTYPE_FORMULA && bShowFormulas &&
                             pProtAttr->GetHideFormula() ) )
-                eType = CELLTYPE_NONE;  // ausblenden
+                eType = CELLTYPE_NONE;  // hide
         }
         BOOL bString;
         switch ( eType )
@@ -1479,47 +1481,44 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
                 aString.Insert( cStrDelim, 0 );
                 aString += cStrDelim;
             }
-            ByteString aByteStr( aString, eCharSet );
-            rStream.Write( aByteStr.GetBuffer(), aByteStr.Len() );
         }
-        else
-        {
-            ByteString aByteStr( aString, eCharSet );
-            rStream.Write( aByteStr.GetBuffer(), aByteStr.Len() );
-        }
+        rStream.WriteUnicodeOrByteText( aString );
 
         if( nCol < nEndCol )
         {
             if(cDelim!=0) //@ BugId 55355
-                rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+                rStream.WriteUniOrByteChar( cDelim );
         }
         else
-            rStream.WriteLine( aEmptyLine );        // ConvertEndl
+            endlub( rStream );
 
         if ( bProgress )
             aProgress.SetStateOnPercent( nRow );
     }
 
-    // was noch gewuenscht ist leer rausschreiben
+    // write out empty if requested
     if ( nNextRow <= nEndRow )
     {
         if(cDelim!=0) //@ BugId 55355
             for ( nEmptyCol = nNextCol; nEmptyCol < nEndCol; nEmptyCol++ )
-            {   // restliche Spalten der letzten Zeile
-                rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+            {   // remaining empty columns of last row
+                rStream.WriteUniOrByteChar( cDelim );
             }
-        rStream.WriteLine( aEmptyLine );        // ConvertEndl
+        endlub( rStream );
         nNextRow++;
     }
     for ( nEmptyRow = nNextRow; nEmptyRow <= nEndRow; nEmptyRow++ )
-    {   // ganze leere Zeilen
+    {   // entire empty rows
         if(cDelim!=0) //@ BugId 55355
             for ( nEmptyCol = nStartCol; nEmptyCol < nEndCol; nEmptyCol++ )
             {
-                rStream.Write( aDelim.GetBuffer(), aDelim.Len() );
+                rStream.WriteUniOrByteChar( cDelim );
             }
-        rStream.WriteLine( aEmptyLine );        // ConvertEndl
+        endlub( rStream );
     }
+
+    rStream.SetStreamCharSet( eOldCharSet );
+    rStream.SetNumberFormatInt( nOldNumberFormatInt );
 }
 
 

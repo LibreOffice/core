@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:56:47 $
+ *  last change: $Author: er $ $Date: 2000-12-22 01:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,6 +722,8 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
     USHORT nEndCol = aRange.aEnd.Col();
     USHORT nEndRow = aRange.aEnd.Row();
     ULONG  nOldPos = rStrm.Tell();
+    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
+        rStrm.StartReadingUnicodeText();
     BOOL   bData = BOOL( !bSingle );
     if( !bSingle)
         bOk = StartPaste();
@@ -734,9 +736,7 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
         rStrm.Seek( nOldPos );
         for( ;; )
         {
-            //! allow unicode
-            rStrm.ReadLine( aByteLine );
-            aLine = String( aByteLine, rStrm.GetStreamCharSet() );
+            rStrm.ReadUniOrByteStringLine( aLine );
             if( rStrm.IsEof() )
                 break;
             USHORT nCol = nStartCol;
@@ -938,6 +938,8 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     rStrm.Seek( STREAM_SEEK_TO_END );
     ScProgress aProgress( pDocSh, ScGlobal::GetRscString( STR_LOAD_DOC ), rStrm.Tell() - nOldPos );
     rStrm.Seek( nOldPos );
+    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
+        rStrm.StartReadingUnicodeText();
 
     BOOL bOld = ScColumn::bDoubleAlloc;
     ScColumn::bDoubleAlloc = TRUE;
@@ -964,23 +966,19 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
     if ( eDocLang != LANGUAGE_ENGLISH_US )
         pEnglish = new International( LANGUAGE_ENGLISH_US );    // for English month names
 
-    ByteString aByteLine;
     String aLine, aCell;
     USHORT i;
     USHORT nRow = nStartRow;
 
     while(--nSkipLines>0)
     {
-        //! allow unicode
-        rStrm.ReadLine( aByteLine );        // content is ignored
+        rStrm.ReadUniOrByteStringLine( aLine );     // content is ignored
         if ( rStrm.IsEof() )
             break;
     }
     for( ;; )
     {
-        //! allow unicode
-        rStrm.ReadLine( aByteLine );
-        aLine = String( aByteLine, rStrm.GetStreamCharSet() );
+        rStrm.ReadUniOrByteStringLine( aLine );
         if ( rStrm.IsEof() )
             break;
 

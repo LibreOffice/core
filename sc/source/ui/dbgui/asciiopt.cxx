@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 12:16:54 $
+ *  last change: $Author: er $ $Date: 2000-12-22 01:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,11 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aCharSetUser( ScResId( SCSTR_CHARSET_USER ) ),
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
-        aTextSepList( ScResId( SCSTR_TEXTSEP ) )
+        aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
+        pEndValues  ( NULL ),
+        pFlags      ( NULL ),
+        pRowPosArray( NULL ),
+        pRowPosArrayUnicode( NULL )
 {
     String aName = GetText();
     aName.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" - ["));
@@ -583,23 +587,24 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                      break;
     }
 
-    nArrayEndPos=0;
+    nArrayEndPos = nArrayEndPosUnicode = 0;
     USHORT nField;
     if(pDatStream!=NULL)
     {
+        USHORT j;
         pRowPosArray=new ULONG[ASCIIDLG_MAXROWS+2];
-        if(pRowPosArray!=NULL)
+        pRowPosArrayUnicode=new ULONG[ASCIIDLG_MAXROWS+2];
+        ULONG *pPtrRowPos=pRowPosArray;
+        ULONG *pPtrRowPosUnicode=pRowPosArrayUnicode;
+        for(nField=0;nField<ASCIIDLG_MAXROWS;nField++)
         {
-            ULONG *pPtrRowPos=pRowPosArray;
-            for(nField=0;nField<ASCIIDLG_MAXROWS;nField++)
-            {
-                *pPtrRowPos++=0;
-            }
+            *pPtrRowPos++=0;
+            *pPtrRowPosUnicode++=0;
         }
         pDatStream->SetBufferSize(ASCIIDLG_MAXROWS);
         pDatStream->SetStreamCharSet( gsl_getSystemTextEncoding() );    //!???
         pDatStream->Seek( 0 );
-        for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+        for ( j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
         {
             pRowPosArray[nArrayEndPos++]=pDatStream->Tell();
             if(!pDatStream->ReadLine( aPreviewLine[j] ))
@@ -612,6 +617,17 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                 break;
             }
         }
+        nStreamPos = pDatStream->Tell();
+
+        pDatStream->Seek( 0 );
+        pDatStream->StartReadingUnicodeText();
+        for ( j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+        {
+            pRowPosArrayUnicode[nArrayEndPosUnicode++] = pDatStream->Tell();
+            if( !pDatStream->ReadUniStringLine( aPreviewLineUnicode[j] ) )
+                break;
+        }
+        nStreamPosUnicode = pDatStream->Tell();
     }
     nScrollPos = 0;
     nUsedCols = 0;
@@ -641,11 +657,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     //  CharacterSet / TextEncoding - Listbox
 
-    // All TextEncodings but raw Unicode; Unicode would need a special handling
-    // in preview and import, not ByteString -> UniString but UniString only.
-    //!TODO: should be implemented though
-    aLbCharSet.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE,
-        RTL_TEXTENCODING_INFO_MIME );
+    // all encodings allowed, including Unicode
+    aLbCharSet.FillFromTextEncodingTable();
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
@@ -694,6 +707,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
     delete[] pEndValues;
     delete[] pFlags;
     delete[] pRowPosArray;
+    delete[] pRowPosArrayUnicode;
 
 }
 
@@ -768,7 +782,7 @@ IMPL_LINK( ScImportAsciiDlg, ScrollHdl, void*, pScroll )
     else if((ScrollBar *)pScroll==&aVScroll)
     {
         BOOL bVFlag1=bVFlag;
-        if(pDatStream !=NULL && pRowPosArray!=NULL) UpdateVertical();
+        if(pDatStream !=NULL) UpdateVertical();
         if(bVFlag!=bVFlag1) UpdateVertical();
         CheckScrollPos();
         CheckColTypes(FALSE);
@@ -784,7 +798,17 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, void*, EMPTY_ARG )
 {
     if ( aLbCharSet.GetSelectEntryCount() == 1 )
     {
+        CharSet eOldCharSet = eCharSet;
         GetCharSet();
+        if ( eOldCharSet != eCharSet &&
+                (eCharSet == RTL_TEXTENCODING_UNICODE ||
+                eOldCharSet == RTL_TEXTENCODING_UNICODE) )
+        {   // switching to/from Unicode invalidates all positions
+            if ( pDatStream !=NULL )
+                UpdateVertical( TRUE );
+            CheckScrollPos();
+            CheckColTypes(FALSE);
+        }
         CheckValues();              // Preview anpassen
     }
 
@@ -865,7 +889,8 @@ void ScImportAsciiDlg::CheckValues( BOOL bReadVal, USHORT nEditField )
     {
         aField = String::CreateFromInt32( nRowNum++ );
 
-        String aPreviewConv( aPreviewLine[j], eCharSet );
+        String aPreviewConv = (eCharSet == RTL_TEXTENCODING_UNICODE ?
+            aPreviewLineUnicode[j] : String( aPreviewLine[j], eCharSet ) );
         aTableBox.SetDataAtRowCol(j+1,0,aField);
         //aTableBox.SetNumOfCharsForCol(0,aField.Len()+2);
 
@@ -963,7 +988,8 @@ void ScImportAsciiDlg::DelimitedPreview()
     const sal_Unicode* pSeps = aSeps.GetBuffer();
     for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
     {
-        String aPreviewConv( aPreviewLine[j], eCharSet );
+        String aPreviewConv = (eCharSet == RTL_TEXTENCODING_UNICODE ?
+            aPreviewLineUnicode[j] : String( aPreviewLine[j], eCharSet ) );
 
         const sal_Unicode* p = aPreviewConv.GetBuffer();
         String aPrevStr;
@@ -1038,55 +1064,107 @@ void ScImportAsciiDlg::CheckScrollPos()
     */
 }
 
-void ScImportAsciiDlg::UpdateVertical()
+void ScImportAsciiDlg::UpdateVertical( BOOL bSwitchToFromUnicode )
 {
-    ByteString aString;
-    ULONG   nRows=0;
-    ULONG   nNew=0;
-    double fNew;
+    if ( bSwitchToFromUnicode )
+    {
+        bVFlag = FALSE;
+        aVScroll.SetThumbPos( 0 );
+        aVScroll.SetRange( Range( 0, ASCIIDLG_MAXROWS ) );
+    }
+    ULONG nNew = 0;
     if(!bVFlag && aVScroll.GetType()==SCROLL_DRAG)
     {
         bVFlag=TRUE;
-        pDatStream->Seek(0);
-
-        ULONG *pPtrRowPos=pRowPosArray;
-        *pPtrRowPos++=0;
         SetPointer(Pointer(POINTER_WAIT));
-        while(pDatStream->ReadLine(aString))
+        ULONG nRows = 0;
+
+        pDatStream->Seek(0);
+        if ( eCharSet == RTL_TEXTENCODING_UNICODE )
         {
-            nRows++;
-
-            if(nRows>ASCIIDLG_MAXROWS) break;
-
-            *pPtrRowPos++=pDatStream->Tell();
+            String aStringUnicode;
+            pDatStream->StartReadingUnicodeText();
+            ULONG* pPtrRowPos = pRowPosArrayUnicode;
+            *pPtrRowPos++ = 0;
+            while( pDatStream->ReadUniStringLine( aStringUnicode ) )
+            {
+                nRows++;
+                if( nRows > ASCIIDLG_MAXROWS )
+                    break;
+                *pPtrRowPos++ = pDatStream->Tell();
+            }
+            nStreamPosUnicode = pDatStream->Tell();
         }
-        fNew=((double) (aVScroll.GetThumbPos())*nRows)/ASCIIDLG_MAXROWS;
-        nNew =(ULONG) fNew;
+        else
+        {
+            ByteString aString;
+            ULONG* pPtrRowPos = pRowPosArray;
+            *pPtrRowPos++ = 0;
+            while( pDatStream->ReadLine( aString ) )
+            {
+                nRows++;
+                if( nRows > ASCIIDLG_MAXROWS )
+                    break;
+                *pPtrRowPos++ = pDatStream->Tell();
+            }
+            nStreamPos = pDatStream->Tell();
+        }
+
+        double fNew = ((double) (aVScroll.GetThumbPos())*nRows)/ASCIIDLG_MAXROWS;
+        nNew = (ULONG) fNew;
         aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1);
         aVScroll.SetThumbPos(nNew);
         aVScroll.SetRange( Range( 0, nRows) );
         SetPointer(Pointer(POINTER_ARROW));
     }
 
-    nNew=aVScroll.GetThumbPos();
+    nNew = aVScroll.GetThumbPos();
 
-    if(bVFlag || nNew<=nArrayEndPos) pDatStream->Seek(pRowPosArray[nNew]);
-
-
-    for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
+    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
-        if(!bVFlag && nNew+j>=nArrayEndPos)
+        if ( bVFlag || nNew <= nArrayEndPosUnicode )
+            pDatStream->Seek( pRowPosArrayUnicode[nNew] );
+        else
+            pDatStream->Seek( nStreamPosUnicode );
+        for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
         {
-            pRowPosArray[nNew+j]=pDatStream->Tell();
-            nArrayEndPos=(USHORT) nNew+j;
+            if( !bVFlag && nNew+j >= nArrayEndPos )
+            {
+                pRowPosArrayUnicode[nNew+j] = pDatStream->Tell();
+                nArrayEndPosUnicode = (USHORT) nNew+j;
+            }
+            if( !pDatStream->ReadUniStringLine( aPreviewLineUnicode[j] ) && !bVFlag )
+            {
+                bVFlag = TRUE;
+                aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1 );
+                aVScroll.SetThumbPos( nNew-1 );
+                aVScroll.SetRange( Range( 0, nArrayEndPosUnicode ) );
+            }
         }
-        if(!pDatStream->ReadLine( aPreviewLine[j] )&& !bVFlag)
+        nStreamPosUnicode = pDatStream->Tell();
+    }
+    else
+    {
+        if ( bVFlag || nNew <= nArrayEndPos )
+            pDatStream->Seek( pRowPosArray[nNew] );
+        else
+            pDatStream->Seek( nStreamPos );
+        for ( USHORT j=0; j < SC_ASCIIOPT_PREVIEW_LINES; j++ )
         {
-            bVFlag=TRUE;
-            aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1);
-            aVScroll.SetThumbPos(nNew-1);
-            aVScroll.SetRange( Range( 0, nArrayEndPos) );
+            if( !bVFlag && nNew+j >= nArrayEndPos )
+            {
+                pRowPosArray[nNew+j] = pDatStream->Tell();
+                nArrayEndPos = (USHORT) nNew+j;
+            }
+            if( !pDatStream->ReadLine( aPreviewLine[j] ) && !bVFlag )
+            {
+                bVFlag = TRUE;
+                aVScroll.SetPageSize( aTableBox.GetYMaxVisChars()-1 );
+                aVScroll.SetThumbPos( nNew-1 );
+                aVScroll.SetRange( Range( 0, nArrayEndPos ) );
+            }
         }
+        nStreamPos = pDatStream->Tell();
     }
 }
 

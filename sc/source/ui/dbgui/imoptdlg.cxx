@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-12-20 12:18:06 $
+ *  last change: $Author: er $ $Date: 2000-12-22 01:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,9 +232,8 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
             else
                 aEdTextSep.SetText( aStr );
         }
-        //!TODO: raw Unicode would need work in AsciiFilter
-        aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE,
-            RTL_TEXTENCODING_INFO_MIME );
+        // all encodings allowed, even Unicode
+        aLbFont.FillFromTextEncodingTable();
     }
 
     aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
