@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:13:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,8 +513,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
         SvXMLUnitConverter::convertNumber(sBuffer, pAutoInfo->ItemCount);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, sBuffer.makeStringAndClear());
 
-        if (pAutoInfo->DataField.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
 
         SvXMLElementExport aElemDPLAI(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_DISPLAY_INFO, sal_True, sal_True);
     }
