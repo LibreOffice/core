@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:39:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1301,8 +1301,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_CheckAutoCorrect, KS_EditFormula,
                     KS_ColLeftBig, KS_ColRightBig,
                     KS_ColLeftSmall, KS_ColRightSmall,
-                    KS_ColTopBig, KS_ColBottomBig,
-                    KS_ColTopSmall, KS_ColBottomSmall,
+                    KS_ColBottomBig,
+                    KS_ColBottomSmall,
                     KS_CellLeftBig, KS_CellRightBig,
                     KS_CellLeftSmall, KS_CellRightSmall,
                     KS_CellTopBig, KS_CellBottomBig,
@@ -1426,12 +1426,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     eFlyState = KS_Fly_Change;
                     nDir = MOVE_DOWN_SMALL;
                     goto KEYINPUT_CHECKTABLE;
-                case KEY_UP | KEY_MOD2 | KEY_SHIFT:
-                    eKeyState = KS_ColTopBig;
-                    goto KEYINPUT_CHECKTABLE;
-                case KEY_DOWN | KEY_MOD2 | KEY_SHIFT:
-                    eKeyState = KS_ColTopSmall;
-                    goto KEYINPUT_CHECKTABLE;
+//              case KEY_UP | KEY_MOD2 | KEY_SHIFT:
+//                  eKeyState = KS_ColTopBig;
+//                  goto KEYINPUT_CHECKTABLE;
+//              case KEY_DOWN | KEY_MOD2 | KEY_SHIFT:
+//                  eKeyState = KS_ColTopSmall;
+//                  goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellBottomSmall;
@@ -2129,9 +2129,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_ColRightBig:        rSh.SetColRowWidthHeight( WH_COL_RIGHT|WH_FLAG_BIGGER, pModOpt->GetTblHMove() );    break;
             case KS_ColLeftSmall:       rSh.SetColRowWidthHeight( WH_COL_LEFT, pModOpt->GetTblHMove() );    break;
             case KS_ColRightSmall:      rSh.SetColRowWidthHeight( WH_COL_RIGHT, pModOpt->GetTblHMove() );   break;
-            case KS_ColTopBig:          rSh.SetColRowWidthHeight( WH_ROW_TOP|WH_FLAG_BIGGER, pModOpt->GetTblVMove() );  break;
+//          case KS_ColTopBig:          rSh.SetColRowWidthHeight( WH_ROW_TOP|WH_FLAG_BIGGER, pModOpt->GetTblVMove() );  break;
             case KS_ColBottomBig:       rSh.SetColRowWidthHeight( WH_ROW_BOTTOM|WH_FLAG_BIGGER, pModOpt->GetTblVMove() );   break;
-            case KS_ColTopSmall:        rSh.SetColRowWidthHeight( WH_ROW_TOP, pModOpt->GetTblVMove() ); break;
+//          case KS_ColTopSmall:        rSh.SetColRowWidthHeight( WH_ROW_TOP, pModOpt->GetTblVMove() ); break;
             case KS_ColBottomSmall:     rSh.SetColRowWidthHeight( WH_ROW_BOTTOM, pModOpt->GetTblVMove() );  break;
             case KS_CellLeftBig:        rSh.SetColRowWidthHeight( WH_CELL_LEFT|WH_FLAG_BIGGER, pModOpt->GetTblHMove() );    break;
             case KS_CellRightBig:       rSh.SetColRowWidthHeight( WH_CELL_RIGHT|WH_FLAG_BIGGER, pModOpt->GetTblHMove() );   break;
@@ -2298,14 +2298,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ))
     {
         //Zuppeln von Tabellenspalten aus dem Dokument heraus.
-        rView.SetTabColFromDoc( TRUE );
+        if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
+            rView.SetTabColFromDoc( TRUE );
+        else
+            rView.SetTabRowFromDoc( TRUE );
         rView.SetTabColFromDocPos( aDocPos );
         rView.InvalidateRulerPos();
         SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
         rBind.Update();
-        if ( RulerColumnDrag( rView , rMEvt, SW_TABCOL_VERT == nMouseTabCol ) )
+        if ( RulerColumnDrag( rView , rMEvt,
+                (SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol)) )
         {
             rView.SetTabColFromDoc( FALSE );
+            rView.SetTabRowFromDoc( FALSE );
             rView.InvalidateRulerPos();
             rBind.Update();
             bCallBase = FALSE;
@@ -3022,7 +3027,7 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
     {
         //Zuppeln von Tabellenspalten aus dem Dokument heraus.
 
-        SetPointer( SW_TABCOL_VERT == nMouseTabCol ? POINTER_VSIZEBAR : POINTER_HSIZEBAR );
+        SetPointer( SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol? POINTER_VSIZEBAR : POINTER_HSIZEBAR );
         return;
     }
 
@@ -3329,6 +3334,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     // sicherheitshalber zuruecksetzen Bug 27900
     rView.SetTabColFromDoc( FALSE );
+    rView.SetTabRowFromDoc( FALSE );
     SwWrtShell &rSh = rView.GetWrtShell();
     SET_CURR_SHELL( &rSh );
     SdrView *pSdrView = rSh.GetDrawView();
