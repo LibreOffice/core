@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 10:41:54 $
+ *  last change: $Author: sab $ $Date: 2001-06-26 07:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,12 @@ using namespace ::com::sun::star;
 struct SvXMLTagAttribute_Impl
 {
     SvXMLTagAttribute_Impl(){}
-    SvXMLTagAttribute_Impl( const OUString &sName, const OUString &sType,
-                         const OUString &sValue )
+    SvXMLTagAttribute_Impl( const OUString &rName, const OUString &rType,
+                         const OUString &rValue )
+        : sName(rName),
+        sType(rType),
+        sValue(rValue)
     {
-        this->sName     = sName;
-        this->sType     = sType;
-        this->sValue    = sValue;
     }
 
     OUString sName;
