@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:30:44 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 10:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,6 @@ void InitSalMain()
 
 void DeInitSalMain()
 {
-    // tell session manager that we're almost done
-    SessionManagerClient::shutdownDone();
 }
 
 void SetFilterCallback( void* pCallback, void* pInst )
@@ -205,6 +203,7 @@ SalInstance *CreateSalInstance()
 
 void DestroySalInstance( SalInstance *pInst )
 {
+    SessionManagerClient::close();
     SalData *pSalData = GetSalData();
 
     // reset instance (only one instance in this version !!!)
