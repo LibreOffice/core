@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleValueImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:13:35 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
