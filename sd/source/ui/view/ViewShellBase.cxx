@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:15:33 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include "ViewShellBase.hxx"
 
+#include "EventMultiplexer.hxx"
+#include "../toolpanel/controls/MasterPageContainer.hxx"
 #include "ShellFactory.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
@@ -249,7 +251,8 @@ ViewShellBase::ViewShellBase (
       mpDocShell (NULL),
       mpDocument (NULL),
       maPrintManager (*this),
-      mpFormShellManager(NULL)
+      mpFormShellManager(NULL),
+      mpEventMultiplexer(NULL)
 {
     // Set up the members in the correct order.
     if (GetViewFrame()->GetObjectShell()->ISA(DrawDocShell))
@@ -301,6 +304,7 @@ ViewShellBase::~ViewShellBase (void)
     mpPaneManager->Shutdown();
     mpViewShellManager->Shutdown();
 
+    mpEventMultiplexer.reset();
     mpFormShellManager.reset();
 
     EndListening(*GetViewFrame());
@@ -341,6 +345,9 @@ void ViewShellBase::LateInit (void)
     // is called automatically.
     if (GetMainViewShell() != NULL)
         GetMainViewShell()->GetController();
+
+    //    GetMainViewShell()->GetController();
+    mpEventMultiplexer.reset (new tools::EventMultiplexer (*this));
 }
 
 
@@ -735,6 +742,8 @@ SvBorder ViewShellBase::ArrangeGUIElements (
 void ViewShellBase::Execute (SfxRequest& rRequest)
 {
     USHORT nSlotId = rRequest.GetSlot();
+    const SfxItemSet* pArgs = rRequest.GetArgs();
+
     switch (nSlotId)
     {
         case SID_SWITCH_SHELL:
@@ -758,6 +767,57 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
         case SID_WIN_FULLSCREEN:
             // The full screen mode is not supported.  Ignore the request.
             break;
+
+        case SID_TASK_PANE:
+        {
+            // Set the visibility state of the toolpanel and one of its top
+            // level panels.
+            BOOL bShowToolPanel = TRUE;
+            toolpanel::TaskPaneViewShell::PanelId nPanelId (
+                toolpanel::TaskPaneViewShell::PID_UNKNOWN);
+            bool bPanelIdGiven = false;
+
+            // Extract the given arguments.
+            if (pArgs)
+            {
+                if ((pArgs->Count() == 1) || (pArgs->Count() == 2))
+                {
+                    SFX_REQUEST_ARG (rRequest, pIsPanelVisible,
+                        SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
+                    if (pIsPanelVisible != NULL)
+                        bShowToolPanel = pIsPanelVisible->GetValue();
+                }
+                if (pArgs->Count() == 2)
+                {
+                    SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item,
+                        ID_VAL_PANEL_INDEX, FALSE);
+                    if (pPanelId != NULL)
+                    {
+                        nPanelId = static_cast<
+                            toolpanel::TaskPaneViewShell::PanelId>(
+                                pPanelId->GetValue());
+                        bPanelIdGiven = true;
+                    }
+                }
+            }
+
+            // Set the visibility of the right pane.
+            GetViewFrame()->SetChildWindow (
+                ::sd::RightPaneChildWindow::GetChildWindowId(),
+                bShowToolPanel,
+                PaneManager::CM_SYNCHRONOUS);
+
+            // Now we can call the tool pane to make the specified panel
+            // visible.
+            if (bShowToolPanel && bPanelIdGiven)
+            {
+                toolpanel::TaskPaneViewShell* pTaskPane
+                    = static_cast<toolpanel::TaskPaneViewShell*>(
+                        GetPaneManager().GetViewShell(PaneManager::PT_RIGHT));
+                if (pTaskPane != NULL)
+                    pTaskPane->ShowPanel (nPanelId);
+            }
+        }
 
         default:
             // Ignore any other slot.
@@ -981,6 +1041,7 @@ void ViewShellBase::ShowUIControls (bool bVisible)
 
 
 
+
 ViewShell::ShellType ViewShellBase::GetInitialViewShellType (void)
 {
     ViewShell::ShellType aShellType (ViewShell::ST_IMPRESS);
@@ -1053,6 +1114,39 @@ IMPL_LINK(ViewShellBase, WindowEventHandler, VclWindowEvent*, pEvent)
         UpdateBorder();
     return 1;
 }
+
+
+
+
+/** this method starts the presentation by
+    executing the slot SID_PRESENTATION asynchronous */
+void ViewShellBase::StartPresentation()
+{
+    if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
+        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+}
+
+
+
+
+/** this methods ends the presentation by
+    executing the slot SID_PRESENTATION_END asynchronous */
+void ViewShellBase::StopPresentation()
+{
+    if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
+        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION_END, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+}
+
+
+
+
+tools::EventMultiplexer& ViewShellBase::GetEventMultiplexer (void)
+{
+    // Maybe we should throw an exception in the unlikely case that
+    // mpEventMultiplexer is NULL.
+    return *mpEventMultiplexer.get();
+}
+
 
 
 } // end of namespace sd
