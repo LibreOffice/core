@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-05-17 00:00:15 $
+ *  last change: $Author: er $ $Date: 2001-05-17 00:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3314,7 +3314,9 @@ void ScInterpreter::ScLookup()
     USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
     USHORT nCol3, nRow3, nTab3, nCol4, nRow4, nTab4;
     USHORT nDelta;
-    if (nParamCount == 3)
+
+    // param 3: data range
+    if ( nParamCount == 3 )
     {
         if (GetStackType() == svDoubleRef)
         {
@@ -3348,28 +3350,25 @@ void ScInterpreter::ScLookup()
             SetIllegalParameter();
             return;
         }
-        if (GetStackType() == svDoubleRef)
+    }
+
+    // param 2: key range, or key range and data range
+    if (GetStackType() == svDoubleRef)
+    {
+        PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+        if ( nTab1 != nTab2 || (nParamCount == 3 && nCol1 != nCol2 && nRow1 != nRow2) )
         {
-            PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-            if (nTab1 != nTab2 || (nCol1 != nCol2 && nRow1 != nRow2))
-            {
-                SetIllegalParameter();
-                return;
-            }
+            SetIllegalParameter();
+            return;
         }
-        else if (GetStackType() == svMatrix)
+    }
+    else if (GetStackType() == svMatrix)
+    {
+        pMat1 = PopMatrix();
+        if (pMat1)
         {
-            pMat1 = PopMatrix();
-            if (pMat1)
-            {
-                pMat1->GetDimensions(nC1, nR1);
-                if (nC1 != 1 && nR1 != 1)
-                {
-                    SetIllegalParameter();
-                    return;
-                }
-            }
-            else
+            pMat1->GetDimensions(nC1, nR1);
+            if (nC1 != 1 && nR1 != 1)
             {
                 SetIllegalParameter();
                 return;
@@ -3380,192 +3379,220 @@ void ScInterpreter::ScLookup()
             SetIllegalParameter();
             return;
         }
-        BOOL bSpMatrix, bSpVector;
-        USHORT nMatCount, nVecCount;
-        if (pMat1 == NULL)
+    }
+    else
+    {
+        SetIllegalParameter();
+        return;
+    }
+    BOOL bSpMatrix, bSpVector;
+    USHORT nMatCount, nVecCount;
+    if (pMat1 == NULL)
+    {
+        if (nRow1 == nRow2)
         {
-            if (nCol1 == nCol2)
-            {
-                nMatCount = nRow2 - nRow1 + 1;
-                bSpMatrix = TRUE;
-            }
-            else
-            {
-                nMatCount = nCol2 - nCol1 + 1;
-                bSpMatrix = FALSE;
-            }
+            nMatCount = nCol2 - nCol1 + 1;
+            bSpMatrix = FALSE;
         }
         else
         {
-            if (nR1 == 1)
-            {
-                nMatCount = nC1;
-                bSpMatrix = TRUE;
-            }
-            else
-            {
-                nMatCount = nR1;
-                bSpMatrix = FALSE;
-            }
+            nMatCount = nRow2 - nRow1 + 1;
+            bSpMatrix = TRUE;
         }
-        if (pMat3 == NULL)
+    }
+    else
+    {
+        if (nR1 == 1)
         {
-            if (nCol3 == nCol4)
-            {
-                nVecCount = nRow4 - nRow3 + 1;
-                bSpVector = TRUE;
-            }
-            else
-            {
-                nVecCount = nCol4 - nCol3 + 1;
-                bSpVector = FALSE;
-            }
+            nMatCount = nC1;
+            bSpMatrix = FALSE;
         }
         else
         {
-            if (nR3 == 1)
-            {
-                nVecCount = nC3;
-                bSpVector = TRUE;
-            }
-            else
-            {
-                nVecCount = nR3;
-                bSpVector = FALSE;
-            }
+            nMatCount = nR1;
+            bSpMatrix = TRUE;
         }
-        if (nGlobalError == 0 && nVecCount == nMatCount)
+    }
+    if ( nParamCount < 3 )
+    {
+        nVecCount = nMatCount;
+        bSpVector = bSpMatrix;
+    }
+    else if (pMat3 == NULL)
+    {
+        if (nRow3 == nRow4)
         {
-            String sStr;
-            ScQueryParam rParam;
-            rParam.nCol1       = nCol1;
-            rParam.nRow1       = nRow1;
-            rParam.nCol2       = nCol2;
-            rParam.bHasHeader  = FALSE;
-            rParam.bInplace    = TRUE;
-            rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
-            rParam.bDuplicate  = FALSE;
+            nVecCount = nCol4 - nCol3 + 1;
+            bSpVector = FALSE;
+        }
+        else
+        {
+            nVecCount = nRow4 - nRow3 + 1;
+            bSpVector = TRUE;
+        }
+    }
+    else
+    {
+        if (nR3 == 1)
+        {
+            nVecCount = nC3;
+            bSpVector = FALSE;
+        }
+        else
+        {
+            nVecCount = nR3;
+            bSpVector = TRUE;
+        }
+    }
+    if (nGlobalError == 0 && nVecCount == nMatCount)
+    {
+        String sStr;
+        ScQueryParam rParam;
+        rParam.nCol1       = nCol1;
+        rParam.nRow1       = nRow1;
+        rParam.nCol2       = (bSpMatrix ? nCol1 : nCol2);
+        rParam.nRow2       = (bSpMatrix ? nRow2 : nRow1);
+        rParam.bHasHeader  = FALSE;
+        rParam.bInplace    = TRUE;
+        rParam.bCaseSens   = FALSE;
+        rParam.bRegExp     = pDok->GetDocOptions().IsFormulaRegexEnabled();
+        rParam.bDuplicate  = FALSE;
 
-            ScQueryEntry& rEntry = rParam.GetEntry(0);
-            rEntry.bDoQuery = TRUE;
-            rEntry.eOp = SC_LESS_EQUAL;
-            switch ( GetStackType() )
+        ScQueryEntry& rEntry = rParam.GetEntry(0);
+        rEntry.bDoQuery = TRUE;
+        rEntry.eOp = SC_LESS_EQUAL;
+        rEntry.nField = nCol1;
+        switch ( GetStackType() )
+        {
+            case svDouble:
             {
-                case svDouble:
+                rEntry.bQueryByString = FALSE;
+                rEntry.nVal = GetDouble();
+            }
+            break;
+            case svString:
+            {
+                sStr = GetString();
+                rEntry.bQueryByString = TRUE;
+                *rEntry.pStr = sStr;
+            }
+            break;
+            case svDoubleRef :
+            case svSingleRef :
+            {
+                ScAddress aAdr;
+                if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                {
+                    PushInt(0);
+                    return ;
+                }
+                ScBaseCell* pCell = GetCell( aAdr );
+                if (HasCellValueData(pCell))
                 {
                     rEntry.bQueryByString = FALSE;
-                    rEntry.nVal = GetDouble();
-                }
-                break;
-                case svString:
-                {
-                    sStr = GetString();
-                    rEntry.bQueryByString = TRUE;
-                    *rEntry.pStr = sStr;
-                }
-                break;
-                case svDoubleRef :
-                case svSingleRef :
-                {
-                    ScAddress aAdr;
-                    if ( !PopDoubleRefOrSingleRef( aAdr ) )
-                    {
-                        PushInt(0);
-                        return ;
-                    }
-                    ScBaseCell* pCell = GetCell( aAdr );
-                    if (HasCellValueData(pCell))
-                    {
-                        rEntry.bQueryByString = FALSE;
-                        rEntry.nVal = GetCellValue( aAdr, pCell );
-                    }
-                    else
-                    {
-                        if ( GetCellType( pCell ) == CELLTYPE_NOTE )
-                        {
-                            rEntry.bQueryByString = FALSE;
-                            rEntry.nVal = 0.0;
-                        }
-                        else
-                        {
-                            GetCellString(sStr, pCell);
-                            rEntry.bQueryByString = TRUE;
-                            *rEntry.pStr = sStr;
-                        }
-                    }
-                }
-                break;
-                default:
-                {
-                    SetIllegalParameter();
-                    return;
-                }
-            }
-            if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
-            if (pMat1)
-            {
-                if (rEntry.bQueryByString)
-                {
-                    BOOL bFound = FALSE;
-                    sal_Int32 nRes;
-                    String aParamStr = *rEntry.pStr;
-                    for (USHORT i = 0; i < nMatCount; i++)
-                    {
-                        if (!pMat1->IsValue(i))
-                        {
-                            nRes = ScGlobal::pCollator->compareString(
-                                pMat1->GetString(i), aParamStr );
-                            if (nRes == COMPARE_EQUAL)
-                            {
-                                bFound = TRUE;
-                                nDelta = i;
-                            }
-                            else if (nRes == COMPARE_LESS)
-                                i = nMatCount+1;
-                        }
-                    }
-                    if (i == nMatCount+2 && !bFound)
-                    {
-                        SetNV();
-                        return;
-                    }
-                    else if (!bFound)
-                        nDelta = i-1;
+                    rEntry.nVal = GetCellValue( aAdr, pCell );
                 }
                 else
                 {
-                    BOOL bFound = FALSE;
-                    double fVal1;
-                    for (USHORT i = 0; i < nMatCount; i++)
+                    if ( GetCellType( pCell ) == CELLTYPE_NOTE )
                     {
-                        if (pMat1->IsValue(i))
-                            fVal1 = pMat1->GetDouble(i);
-                        else
-                            fVal1 = MAXDOUBLE;
-                        if (fVal1 == rEntry.nVal)
+                        rEntry.bQueryByString = FALSE;
+                        rEntry.nVal = 0.0;
+                    }
+                    else
+                    {
+                        GetCellString(sStr, pCell);
+                        rEntry.bQueryByString = TRUE;
+                        *rEntry.pStr = sStr;
+                    }
+                }
+            }
+            break;
+            default:
+            {
+                SetIllegalParameter();
+                return;
+            }
+        }
+        if ( rEntry.bQueryByString )
+            rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
+        if (pMat1)
+        {
+            if (rEntry.bQueryByString)
+            {
+//!!!!!!!
+//! TODO: enable regex on matrix strings
+//!!!!!!!
+                BOOL bFound = FALSE;
+                sal_Int32 nRes;
+                String aParamStr = *rEntry.pStr;
+                for (USHORT i = 0; i < nMatCount; i++)
+                {
+                    if (!pMat1->IsValue(i))
+                    {
+                        nRes = ScGlobal::pCollator->compareString(
+                            pMat1->GetString(i), aParamStr );
+                        if (nRes == COMPARE_EQUAL)
                         {
                             bFound = TRUE;
                             nDelta = i;
                         }
-                        else if (fVal1 > rEntry.nVal)
+                        else if (nRes == COMPARE_LESS)
                             i = nMatCount+1;
                     }
-                    if (i == nMatCount+2 && !bFound)
-                    {
-                        SetNV();
-                        return;
-                    }
-                    else if (!bFound)
-                        nDelta = i-1;
                 }
+                if (i == nMatCount+2 && !bFound)
+                {
+                    SetNV();
+                    return;
+                }
+                else if (!bFound)
+                    nDelta = i-1;
             }
-            else if (bSpMatrix)                         // spaltenweise
+            else
             {
-                rParam.nRow2 = nRow2;
-                rEntry.nField = nCol1;
+                BOOL bFound = FALSE;
+                double fVal1;
+                for (USHORT i = 0; i < nMatCount; i++)
+                {
+                    if (pMat1->IsValue(i))
+                        fVal1 = pMat1->GetDouble(i);
+                    else
+                        fVal1 = MAXDOUBLE;
+                    if (fVal1 == rEntry.nVal)
+                    {
+                        bFound = TRUE;
+                        nDelta = i;
+                    }
+                    else if (fVal1 > rEntry.nVal)
+                        i = nMatCount+1;
+                }
+                if (i == nMatCount+2 && !bFound)
+                {
+                    SetNV();
+                    return;
+                }
+                else if (!bFound)
+                    nDelta = i-1;
+            }
+        }
+        else if (bSpMatrix)             // lookup in column
+        {
+//!!!!!!!
+//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
+//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
+//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
+//!!!!!!!
+            // try equality first, also works with regex
+            rEntry.eOp = SC_EQUAL;
+            ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
+            if ( aEqualIter.GetFirst() )
+                nDelta = aEqualIter.GetRow() - nRow1;
+            else
+            {
+                rEntry.eOp = SC_LESS_EQUAL;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                aCellIter.SetStopOnMismatch( TRUE );    // assume sorted keys
                 if ( aCellIter.GetFirst() )
                 {
                     USHORT nR;
@@ -3581,13 +3608,28 @@ void ScInterpreter::ScLookup()
                     return;
                 }
             }
-            else                                    // zeilenweise
+        }
+        else                            // lookup in row
+        {
+//!!!!!!!
+//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
+//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
+//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
+//!!!!!!!
+            // try equality first, also works with regex
+            rEntry.eOp = SC_EQUAL;
+            ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
+            // advance Entry.nField in Iterator upon switching columns
+            aEqualIter.SetAdvanceQueryParamEntryField( TRUE );
+            if ( aEqualIter.GetFirst() )
+                nDelta = aEqualIter.GetCol() - nCol1;
+            else
             {
-                rParam.nRow2 = nRow1;
-                rEntry.nField = nCol1;
+                rEntry.eOp = SC_LESS_EQUAL;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                // Entry.nField im Iterator bei Spaltenwechsel weiterschalten
+                // advance Entry.nField in Iterator upon switching columns
                 aCellIter.SetAdvanceQueryParamEntryField( TRUE );
+                aCellIter.SetStopOnMismatch( TRUE );    // assume sorted keys
                 if ( aCellIter.GetFirst() )
                 {
                     USHORT nC;
@@ -3604,21 +3646,38 @@ void ScInterpreter::ScLookup()
                 }
             }
         }
+    }
+    else
+    {
+        SetIllegalParameter();
+        return;
+    }
+    if (pMat3)
+    {
+        if (pMat3->IsValue(nDelta))
+            PushDouble(pMat3->GetDouble(nDelta));
         else
+            PushString(pMat3->GetString(nDelta));
+    }
+    else
+    {
+        ScAddress aAdr;
+        if ( nParamCount < 3 )
         {
-            SetIllegalParameter();
-            return;
-        }
-        if (pMat3)
-        {
-            if (pMat3->IsValue(nDelta))
-                PushDouble(pMat3->GetDouble(nDelta));
+            if (bSpVector)
+            {
+                aAdr.SetCol( nCol2 );   // data in right col of key/data range
+                aAdr.SetRow( nRow1 + nDelta );
+            }
             else
-                PushString(pMat3->GetString(nDelta));
+            {
+                aAdr.SetCol( nCol1 + nDelta );
+                aAdr.SetRow( nRow2 );   // data in lower row of key/data range
+            }
+            aAdr.SetTab( nTab1 );
         }
         else
         {
-            ScAddress aAdr;
             if (bSpVector)
             {
                 aAdr.SetCol( nCol3 );
@@ -3630,179 +3689,15 @@ void ScInterpreter::ScLookup()
                 aAdr.SetRow( nRow3 );
             }
             aAdr.SetTab( nTab3 );
-            ScBaseCell* pCell = GetCell( aAdr );
-            if (HasCellValueData(pCell))
-                PushDouble(GetCellValue( aAdr, pCell ));
-            else
-            {
-                String aStr;
-                GetCellString(aStr, pCell);
-                PushString(aStr);
-            }
         }
-    }
-    else if (nParamCount == 2)
-    {
-        USHORT nMatInd;
-        BOOL bSpMatrix;
-        USHORT nMatCount;
-        pMat1 = GetMatrix(nMatInd);
-        if (!pMat1)
-        {
-            SetIllegalParameter();
-            return;
-        }
-        pMat1->GetDimensions(nC1, nR1);
-        if (nR1 >= nC1)
-        {
-            bSpMatrix = FALSE;
-            nMatCount = nR1;
-        }
+        ScBaseCell* pCell = GetCell( aAdr );
+        if (HasCellValueData(pCell))
+            PushDouble(GetCellValue( aAdr, pCell ));
         else
         {
-            bSpMatrix = TRUE;
-            nMatCount = nC1;
-        }
-        BOOL bIsStr;
-        double fVal;
-        String sStr;
-        switch ( GetStackType() )
-        {
-            case svDouble:
-            {
-                fVal = GetDouble();
-                bIsStr = FALSE;
-            }
-            break;
-            case svString:
-            {
-                sStr = GetString();
-                bIsStr = TRUE;
-            }
-            break;
-            case svDoubleRef :
-            case svSingleRef :
-            {
-                ScAddress aAdr;
-                if ( !PopDoubleRefOrSingleRef( aAdr ) )
-                {
-                    PushInt(0);
-                    return ;
-                }
-                ScBaseCell* pCell = GetCell( aAdr );
-                if (HasCellValueData(pCell))
-                {
-                    fVal = GetCellValue( aAdr, pCell );
-                    bIsStr = FALSE;
-                }
-                else
-                {
-                    if ( GetCellType( pCell ) == CELLTYPE_NOTE )
-                    {
-                        fVal = 0.0;
-                        bIsStr = FALSE;
-                    }
-                    else
-                    {
-                        GetCellString(sStr, pCell);
-                        bIsStr = TRUE;
-                    }
-                }
-            }
-            break;
-            default:
-            {
-                SetIllegalParameter();
-                return;
-            }
-        }
-        if (bIsStr)
-        {
-            BOOL bFound = FALSE;
-            for (USHORT i = 0; i < nMatCount; i++)
-            {
-                sal_Int32 nRes;
-                if (bSpMatrix)
-                {
-                    if (pMat1->IsString(i, 0))
-                        nRes = ScGlobal::pCollator->compareString(
-                            pMat1->GetString(i,0), sStr );
-                    else
-                        nRes = COMPARE_GREATER;
-                }
-                else
-                {
-                    if (pMat1->IsString(0, i))
-                        nRes = ScGlobal::pCollator->compareString(
-                            pMat1->GetString(0,i), sStr );
-                    else
-                        nRes = COMPARE_GREATER;
-                }
-                if (nRes == COMPARE_EQUAL)
-                {
-                    bFound = TRUE;
-                    nDelta = i;
-                }
-                else if (nRes == COMPARE_LESS)
-                    i = nMatCount+1;
-            }
-            if (i == nMatCount+2 && !bFound)
-            {
-                SetNV();
-                return;
-            }
-            else if (!bFound)
-                nDelta = i-1;
-        }
-        else
-        {
-            BOOL bFound = FALSE;
-            double fVal1;
-            for (USHORT i = 0; i < nMatCount; i++)
-            {
-                if (bSpMatrix)
-                {
-                    if (!pMat1->IsString(i, 0))
-                        fVal1 = pMat1->GetDouble(i, 0);
-                    else
-                        fVal1 = MAXDOUBLE;
-                }
-                else
-                {
-                    if (!pMat1->IsString(0, i))
-                        fVal1 = pMat1->GetDouble(0, i);
-                    else
-                        fVal1 = MAXDOUBLE;
-                }
-                if (fVal1 == fVal)
-                {
-                    bFound = TRUE;
-                    nDelta = i;
-                }
-                else if (fVal1 > fVal)
-                    i = nMatCount+1;
-            }
-            if (i == nMatCount+2 && !bFound)
-            {
-                SetNV();
-                return;
-            }
-            else if (!bFound)
-                nDelta = i-1;
-        }
-        if (bSpMatrix)
-        {
-            if (pMat1->IsString(nDelta, nR1-1))
-                PushString(pMat1->GetString(nDelta, nR1-1));
-            else
-                PushDouble(pMat1->GetDouble(nDelta, nR1-1));
-        }
-        else
-        {
-            if (pMat1->IsString(nC1-1, nDelta))
-                PushString(pMat1->GetString(nC1-1, nDelta));
-            else
-                PushDouble(pMat1->GetDouble(nC1-1, nDelta));
+            String aStr;
+            GetCellString(aStr, pCell);
+            PushString(aStr);
         }
     }
 }
@@ -3933,6 +3828,9 @@ void ScInterpreter::ScHLookup()
                 short nDelta = -1;
                 if (rEntry.bQueryByString)
                 {
+//!!!!!!!
+//! TODO: enable regex on matrix strings
+//!!!!!!!
                     sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     USHORT i;
@@ -4017,18 +3915,46 @@ void ScInterpreter::ScHLookup()
             else
             {
                 rEntry.nField = nCol1;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                // Entry.nField im Iterator bei Spaltenwechsel weiterschalten
-                aCellIter.SetAdvanceQueryParamEntryField( TRUE );
-                if ( aCellIter.GetFirst() )
+                BOOL bFound = FALSE;
+                USHORT nC;
+                if ( bSorted )
                 {
-                    USHORT nC = aCellIter.GetCol();
-                    if ( bSorted )
-                    {   // <= Suche, #37661#: nicht abbrechen wenn nC > nCol1
-                        // weil leere Zelle
-                        while ( aCellIter.GetNext() )
-                            nC = aCellIter.GetCol();
+//!!!!!!!
+//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
+//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
+//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
+//!!!!!!!
+                    // try equality first, also works with regex
+                    rEntry.eOp = SC_EQUAL;
+                    ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
+                    if ( aEqualIter.GetFirst() )
+                    {
+                        bFound = TRUE;
+                        nC = aEqualIter.GetCol();
                     }
+                    else
+                        rEntry.eOp = SC_LESS_EQUAL;
+                }
+                if ( !bFound )
+                {
+                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                    // advance Entry.nField in Iterator upon switching columns
+                    aCellIter.SetAdvanceQueryParamEntryField( TRUE );
+                    if ( bSorted )
+                        aCellIter.SetStopOnMismatch( TRUE );
+                    if ( aCellIter.GetFirst() )
+                    {
+                        bFound = TRUE;
+                        nC = aCellIter.GetCol();
+                        if ( bSorted )
+                        {
+                            while ( aCellIter.GetNext() )
+                                nC = aCellIter.GetCol();
+                        }
+                    }
+                }
+                if ( bFound )
+                {
                     ScBaseCell* pCell;
                     ScAddress aAdr( nC, nZIndex, nTab1 );
                     if ( HasCellValueData( pCell = GetCell( aAdr ) ) )
@@ -4175,6 +4101,9 @@ void ScInterpreter::ScVLookup()
                 short nDelta = -1;
                 if (rEntry.bQueryByString)
                 {
+//!!!!!!!
+//! TODO: enable regex on matrix strings
+//!!!!!!!
                     sal_Int32 nRes;
                     String aParamStr = *rEntry.pStr;
                     USHORT i;
@@ -4259,16 +4188,44 @@ void ScInterpreter::ScVLookup()
             else
             {
                 rEntry.nField = nCol1;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                if (aCellIter.GetFirst())
+                BOOL bFound = FALSE;
+                USHORT nR;
+                if ( bSorted )
                 {
-                    USHORT nR = aCellIter.GetRow();
-                    if ( bSorted )
-                    {   // <= Suche, #37661#: nicht abbrechen wenn nR > nRow1
-                        // weil leere Zelle
-                        while (aCellIter.GetNext())
-                            nR = aCellIter.GetRow();
+//!!!!!!!
+//! TODO: Can the Iterator and ScTable::ValidQuery() be modified to return a
+//!       special flag if an SC_EQUAL entry is found during a SC_LESS_EQUAL or
+//!       SC_GREATER_EQUAL query? Would make the first iteration unnecessary.
+//!!!!!!!
+                    // try equality first, also works with regex
+                    rEntry.eOp = SC_EQUAL;
+                    ScQueryCellIterator aEqualIter(pDok, nTab1, rParam, FALSE);
+                    if ( aEqualIter.GetFirst() )
+                    {
+                        bFound = TRUE;
+                        nR = aEqualIter.GetRow();
                     }
+                    else
+                        rEntry.eOp = SC_LESS_EQUAL;
+                }
+                if ( !bFound )
+                {
+                    ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
+                    if ( bSorted )
+                        aCellIter.SetStopOnMismatch( TRUE );
+                    if (aCellIter.GetFirst())
+                    {
+                        bFound = TRUE;
+                        nR = aCellIter.GetRow();
+                        if ( bSorted )
+                        {
+                            while (aCellIter.GetNext())
+                                nR = aCellIter.GetRow();
+                        }
+                    }
+                }
+                if ( bFound )
+                {
                     ScBaseCell* pCell;
                     ScAddress aAdr( nSpIndex, nR, nTab1 );
                     if ( HasCellValueData( pCell = GetCell( aAdr ) ) )
@@ -5440,10 +5397,10 @@ void ScInterpreter::ScErrorType()
 
 BOOL ScInterpreter::MayBeRegExp( const String& rStr, const ScDocument* pDoc  )
 {
-    if ( !rStr.Len() || (rStr.Len() == 1 && rStr.GetChar(0) != '.') )
-        return FALSE;   // einzelnes Metazeichen kann keine RegExp sein
     if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
         return FALSE;
+    if ( !rStr.Len() || (rStr.Len() == 1 && rStr.GetChar(0) != '.') )
+        return FALSE;   // einzelnes Metazeichen kann keine RegExp sein
     static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','<','>','(',')','|', 0 };
     const sal_Unicode* p1 = rStr.GetBuffer();
     sal_Unicode c1;
