@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-12 13:35:43 $
+ *  last change: $Author: er $ $Date: 2002-07-17 17:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,11 @@ public:
         {}
         ScImportOptions( const String& rStr );
 
-        ScImportOptions( USHORT nFieldSep, USHORT nTextSep, const String& rStr )
+        ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const String& rStr )
             : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),aStrFont(rStr),bFixedWidth(FALSE)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
-        ScImportOptions( USHORT nFieldSep, USHORT nTextSep, rtl_TextEncoding nEnc )
+        ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),bFixedWidth(FALSE)
         { SetTextEncoding( nEnc ); }
 
@@ -180,11 +180,11 @@ public:
 
     void    SetTextEncoding( rtl_TextEncoding nEnc );
 
-    USHORT  nFieldSepCode;
-    USHORT  nTextSepCode;
-    String  aStrFont;
-    CharSet eCharSet;
-    BOOL    bFixedWidth;
+    sal_Unicode nFieldSepCode;
+    sal_Unicode nTextSepCode;
+    String      aStrFont;
+    CharSet     eCharSet;
+    BOOL        bFixedWidth;
 };
 
 
