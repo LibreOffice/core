@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-21 08:30:40 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 14:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,9 +185,6 @@
 #include "fmservs.hxx"
 #endif
 
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -238,14 +235,18 @@
 #endif
 
 using namespace ::com::sun::star::uno;
-using namespace connectivity;
+using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::dbtools;
 using namespace ::svxform;
+using namespace ::connectivity;
 
 extern sal_uInt16 AutoSlotMap[];
 
@@ -382,7 +383,6 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
                   ,m_bCurrentRecordModified(sal_False)
                   ,m_bCurrentRecordNew(sal_False)
                   ,m_bLocked(sal_False)
-                  ,m_bControlsSorted(sal_True)
                   ,m_aMode(getDataModeIdentifier())
                   ,m_bFiltering(sal_False)
                   ,m_bAttachEvents(sal_True)
@@ -1035,7 +1035,7 @@ void SAL_CALL FmXFormController::textChanged(const ::com::sun::star::awt::TextEv
         }
     }
     else if (!m_bModified)
-        onModify();
+        onModify( e.Source );
 }
 
 // ::com::sun::star::awt::XItemListener
@@ -1044,7 +1044,7 @@ void SAL_CALL FmXFormController::itemStateChanged(const ::com::sun::star::awt::I
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     if (!m_bModified)
-        onModify();
+        onModify( rEvent.Source );
 }
 
 // XModificationBroadcaster
@@ -1064,15 +1064,15 @@ void FmXFormController::removeModifyListener(const Reference< ::com::sun::star::
 
 // XModificationListener
 //------------------------------------------------------------------------------
-void FmXFormController::modified(const ::com::sun::star::lang::EventObject& rEvent)
+void FmXFormController::modified(const EventObject& rEvent)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     if (!m_bModified)
-        onModify();
+        onModify( rEvent.Source );
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::onModify()
+void FmXFormController::onModify( const Reference< XInterface >& _rxControl )
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     if (!m_bModified)
@@ -1080,11 +1080,21 @@ void FmXFormController::onModify()
         ::osl::MutexGuard aGuard( m_aMutex );
         m_bModified = sal_True;
 
-        // Satz in den BearbeitenModus schalten
     }
 
-    ::com::sun::star::lang::EventObject aEvt((cppu::OWeakObject*)this);
-    NOTIFY_LISTENERS(m_aModifyListeners, ::com::sun::star::util::XModifyListener, modified, aEvt);
+    Reference< XControl > xSourceControl(_rxControl, UNO_QUERY);
+    if  (xSourceControl.get() != m_xCurrentControl.get())
+    {   // let this control grab the focus
+        // (this case may happen if somebody moves the scroll wheel of the mouse over a control
+        // which does not have the focus)
+        // 85511 - 29.05.2001 - frank.schoenheit@germany.sun.com
+        Reference< XWindow > xControlWindow(_rxControl, UNO_QUERY);
+        if (xControlWindow.is())
+            xControlWindow->setFocus();
+    }
+
+    EventObject aEvt(static_cast<cppu::OWeakObject*>(this));
+    NOTIFY_LISTENERS(m_aModifyListeners, XModifyListener, modified, aEvt);
 }
 
 //------------------------------------------------------------------------------
@@ -1128,7 +1138,7 @@ void FmXFormController::focusGained(const ::com::sun::star::awt::FocusEvent& e)
 
         if ((m_bModified || m_bFiltering) &&
             m_xCurrentControl.is() &&
-            (((::com::sun::star::awt::XControl*)xControl.get() != (::com::sun::star::awt::XControl*)m_xCurrentControl.get()) ||
+            ((xControl.get() != m_xCurrentControl.get()) ||
              ((e.FocusFlags & ::com::sun::star::awt::FocusChangeReason::AROUND) && (m_bCycle || m_bFiltering)))
             )
         {
@@ -1176,8 +1186,9 @@ void FmXFormController::focusGained(const ::com::sun::star::awt::FocusEvent& e)
     }
 
     // Immer noch ein und dasselbe Control
-    if ((::com::sun::star::awt::XControl*)m_xActiveControl.get() == (::com::sun::star::awt::XControl*)xControl.get() &&
-        (::com::sun::star::awt::XControl*)xControl.get() == (::com::sun::star::awt::XControl*)m_xCurrentControl.get())
+    if  (   (m_xActiveControl.get() == xControl.get())
+        &&  (xControl.get() == m_xCurrentControl.get())
+        )
     {
         DBG_ASSERT(m_xCurrentControl.is(), "Kein CurrentControl selektiert");
         return;
@@ -1203,7 +1214,7 @@ void FmXFormController::focusGained(const ::com::sun::star::awt::FocusEvent& e)
         if (xWindow.is() && m_pView && m_pWindow)
         {
             ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
-            Rectangle aNewRect(aRect.X,aRect.Y,aRect.X+aRect.Width,aRect.Y+aRect.Height);
+            ::Rectangle aNewRect(aRect.X,aRect.Y,aRect.X+aRect.Width,aRect.Y+aRect.Height);
             aNewRect = m_pWindow->PixelToLogic(aNewRect);
             m_pView->MakeVisible(aNewRect, *m_pWindow);
         }
@@ -2251,13 +2262,19 @@ void FmXFormController::activateLast()
 
 // ::com::sun::star::form::XFormController
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormController::addActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l)
+Reference< XControl> SAL_CALL FmXFormController::getCurrentControl(void)
+{
+    return m_xCurrentControl;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL FmXFormController::addActivateListener(const Reference< XFormControllerListener > & l)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aActivateListeners.addInterface(l);
 }
 //------------------------------------------------------------------------------
-void SAL_CALL FmXFormController::removeActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l)
+void SAL_CALL FmXFormController::removeActivateListener(const Reference< XFormControllerListener > & l)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     m_aActivateListeners.removeInterface(l);
