@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:30:11 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 07:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
+
 #ifndef _EEITEMID_HXX
 #include <svx/eeitemid.hxx>
 #endif
@@ -109,6 +111,9 @@
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #pragma hdrstop
@@ -489,20 +494,21 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
         else
         {
-            switch( ( ( (SvxWritingModeItem&) aAttrSet.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+            switch( ( ( (SvxFrameDirectionItem&) aAttrSet.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
             {
-                case com::sun::star::text::WritingMode_TB_RL:
+                case FRMDIR_VERT_TOP_LEFT:
+                case FRMDIR_VERT_TOP_RIGHT:
                 {
                     rSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
                     rSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
                 break;
 
-                case com::sun::star::text::WritingMode_LR_TB:
+                case FRMDIR_HORI_LEFT_TOP:
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, TRUE ) );
                 break;
 
-                case com::sun::star::text::WritingMode_RL_TB:
+                case FRMDIR_HORI_RIGHT_TOP:
                     rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, TRUE ) );
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:30:12 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 07:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#define ITEMID_FRAMEDIR EE_PARA_WRITINGDIR
 
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
@@ -141,10 +143,12 @@
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
 #endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #ifndef _SFXITEMITER_HXX
 #include <svtools/itemiter.hxx>
 #endif
-
 
 #pragma hdrstop
 
@@ -470,13 +474,13 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_PARA_LEFT_TO_RIGHT:
                     {
-                        aNewAttr.Put( SvxWritingModeItem( ::com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR ) );
+                        aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
                         aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT ) );
                     }
                     break;
                     case SID_ATTR_PARA_RIGHT_TO_LEFT:
                     {
-                        aNewAttr.Put( SvxWritingModeItem( ::com::sun::star::text::WritingMode_RL_TB, EE_PARA_WRITINGDIR ) );
+                        aNewAttr.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
                         aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT ) );
                     }
                     break;

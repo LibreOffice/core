@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:43 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 07:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #include <offmgr/osplcfg.hxx>
 #endif
 #include "sdoutl.hxx"
-#ifndef _SVX_WRITINGMODEITEM_HXX
-#include <svx/writingmodeitem.hxx>
-#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif#else
@@ -98,10 +95,11 @@
 
 #include <eetext.hxx>
 
-#define ITEMID_SEARCH           SID_SEARCH_ITEM
-#define ITEMID_LANGUAGE           EE_CHAR_LANGUAGE
-#define ITEMID_EMPHASISMARK       EE_CHAR_EMPHASISMARK
-#define ITEMID_CHARRELIEF         EE_CHAR_RELIEF
+#define ITEMID_SEARCH               SID_SEARCH_ITEM
+#define ITEMID_LANGUAGE             EE_CHAR_LANGUAGE
+#define ITEMID_EMPHASISMARK         EE_CHAR_EMPHASISMARK
+#define ITEMID_CHARRELIEF           EE_CHAR_RELIEF
+#define ITEMID_FRAMEDIR             EE_PARA_WRITINGDIR
 
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
@@ -241,6 +239,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #include "sdresid.hxx"
@@ -384,14 +385,14 @@ void SdDrawDocument::CreateLayoutTemplates()
         pDocSh->IsNewDocument() &&
         SD_MOD()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB )
     {
-        SvxAdjustItem       aAdjust( SVX_ADJUST_RIGHT );
-        SvxWritingModeItem  aWritingMode( ::com::sun::star::text::WritingMode_RL_TB, EE_PARA_WRITINGDIR );
+        SvxAdjustItem           aAdjust( SVX_ADJUST_RIGHT );
+        SvxFrameDirectionItem   aFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR );
 
         rISet.Put( aAdjust );
-        rISet.Put( aWritingMode );
+        rISet.Put( aFrameDirectionItem );
 
         pItemPool->SetPoolDefaultItem( aAdjust );
-        pItemPool->SetPoolDefaultItem( aWritingMode );
+        pItemPool->SetPoolDefaultItem( aFrameDirectionItem );
     }
     else
         rISet.Put( SvxAdjustItem() );
@@ -1453,9 +1454,22 @@ void SdDrawDocument::SetTextDefaults() const
 
 ::com::sun::star::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 {
-    const SfxPoolItem* pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );
+    const SfxPoolItem*                  pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );
+    ::com::sun::star::text::WritingMode eRet = ::com::sun::star::text::WritingMode_LR_TB;
 
-    return( pItem ?
-            (::com::sun::star::text::WritingMode)( (SvxWritingModeItem&)( *pItem ) ).GetValue() :
-            ::com::sun::star::text::WritingMode_LR_TB );
+    if( pItem )
+    {
+        switch( ( (SvxFrameDirectionItem&)( *pItem ) ).GetValue() )
+        {
+            case( FRMDIR_HORI_LEFT_TOP ): eRet = ::com::sun::star::text::WritingMode_LR_TB; break;
+            case( FRMDIR_HORI_RIGHT_TOP ): eRet = ::com::sun::star::text::WritingMode_RL_TB; break;
+            case( FRMDIR_VERT_TOP_RIGHT ): eRet = ::com::sun::star::text::WritingMode_TB_RL; break;
+
+            default:
+                DBG_ERROR( "Frame direction not supported yet" );
+            break;
+        }
+    }
+
+    return eRet;
 }
