@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:15:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~स्वचालित";
+        Text[ slovak ] = "~Automaticky";
     };
     RadioButton RB_NUMBER_CHAR
     {
@@ -199,6 +200,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ czech ] = "Znak";
         Text[ hebrew ] = "~Zeichen";
         Text[ hindi ] = "~अक्षर";
+        Text[ slovak ] = "~Znak";
     };
     FixedLine FL_NUMBER
     {
@@ -232,6 +234,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "संख्या देना";
+        Text[ slovak ] = "Číslovanie";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -273,6 +276,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ czech ] = "Poznámka pod čarou";
         Text[ hebrew ] = "‮הערת שוליים‬";
         Text[ hindi ] = "पृष्ठ के ~नीचे की टीका";
+        Text[ slovak ] = "~Poznámka pod čiarou";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
@@ -305,6 +309,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ czech ] = "Vysvětlivka";
         Text[ hebrew ] = "~Endnote";
         Text[ hindi ] = "अंतिम टीका";
+        Text[ slovak ] = "~Vysvetlivka";
     };
     FixedLine FL_TYPE
     {
@@ -337,6 +342,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "वर्ग";
+        Text[ slovak ] = "Typ";
     };
     Text[ chinese_simplified ] = "插入注脚";
     Text[ russian ] = "�������� ������";
@@ -353,7 +359,10 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ czech ] = "Vložit poznámku pod čarou";
     Text[ hebrew ] = "‮הוספת הערת שוליים‬";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका जोड़ो";
+    Text[ slovak ] = "Vložiť poznámku pod čiarou";
 };
+
+
 
 
 
