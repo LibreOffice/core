@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:54:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,11 +178,28 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
 
         // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
         pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if (pLockLayer)
+        if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
             pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
     }
 
     return (pFoundObj != NULL);
+}
+
+void FuSelection::ActivateNoteHandles(SdrObject* pObject) const
+{
+    if(!pObject && !pView)
+        return;
+    if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj))
+    {
+        SdrLayer* pLockLayer = NULL;
+
+        // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
+        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+        if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
+            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
+        SdrPageView* pPV = pView->GetPageViewPvNum(0);
+        pView->MarkObj(pObject, pPV);
+    }
 }
 
 //==================================================================
