@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-11 17:43:51 $
+#   last change: $Author: pluby $ $Date: 2001-03-13 05:37:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,10 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX=-pipe -fno-for-scope -fpermissive -fno-operator-names
 
+.IF "$(shell uname -r)">="1.3"
+CFLAGSCXX+=-fno-coalesce
+.ENDIF
+
 CFLAGSOBJGUIST=-fPIC
 CFLAGSOBJCUIST=-fPIC
 CFLAGSOBJGUIMT=-fPIC
@@ -120,6 +124,11 @@ CFLAGSSLOCUIMT=-fPIC
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
+
+.IF "$(shell uname -r)">="1.3"
+CFLAGSOPT=-O2
+CFLAGSNOOPT=-O
+.ELSE
 # Workaround for the compiler's buggy opitmizer when exceptions are turned on.
 # Note that we have to define NO_OPTIMIZE for all files as once you turn off
 # optimizing for one file, we need to adjust our compiling of the remaining
@@ -131,6 +140,7 @@ CFLAGSNOOPT=-O
 .ELSE
 CFLAGSOPT=
 CFLAGSNOOPT=
+.ENDIF
 .ENDIF
 CFLAGSOUTOBJ=-o
 
