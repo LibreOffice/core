@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:37:46 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
     if ( !aName.Len() )
         return;
 
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    Reference< XDispatchProvider > xDispatchProvider( getFrameInterface(), UNO_QUERY );
     if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
         URL             aTargetURL;
@@ -170,10 +170,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
 
         aTargetURL.Complete = aName;
 
-        Reference < XURLTransformer > xTrans( m_xServiceManager->createInstance(
-                                                OUString::createFromAscii( "com.sun.star.util.URLTransformer" )),
-                                            UNO_QUERY );
-        xTrans->parseStrict( aTargetURL );
+        getURLTransformer()->parseStrict( aTargetURL );
         Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTarget, 0 );
         if ( xDispatch.is() )
         {
