@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase10.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:00:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,18 +82,27 @@ namespace cppu
 
     /** @internal */
     template< typename Ifc1, typename Ifc2, typename Ifc3, typename Ifc4, typename Ifc5, typename Ifc6, typename Ifc7, typename Ifc8, typename Ifc9, typename Ifc10, typename Impl >
-        struct ImplClassData10
+    struct ImplClassData10
     {
         class_data* operator ()()
         {
             static class_data10 s_cd =
             {
                 10 +1, sal_False, sal_False,
-                    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                    {
-                        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc1 > const * ))&getCppuType, ((sal_Int32)(Ifc1 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc2 > const * ))&getCppuType, ((sal_Int32)(Ifc2 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc3 > const * ))&getCppuType, ((sal_Int32)(Ifc3 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc4 > const * ))&getCppuType, ((sal_Int32)(Ifc4 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc5 > const * ))&getCppuType, ((sal_Int32)(Ifc5 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc6 > const * ))&getCppuType, ((sal_Int32)(Ifc6 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc7 > const * ))&getCppuType, ((sal_Int32)(Ifc7 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc8 > const * ))&getCppuType, ((sal_Int32)(Ifc8 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc9 > const * ))&getCppuType, ((sal_Int32)(Ifc9 *) (Impl *) 16) - 16 }, { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< Ifc10 > const * ))&getCppuType, ((sal_Int32)(Ifc10 *) (Impl *) 16) - 16 },
-                            { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * ))&getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
-                    }
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                {
+                    { Ifc1::static_type, ((sal_Int32)(Ifc1 *) (Impl *) 16) - 16 },
+                    { Ifc2::static_type, ((sal_Int32)(Ifc2 *) (Impl *) 16) - 16 },
+                    { Ifc3::static_type, ((sal_Int32)(Ifc3 *) (Impl *) 16) - 16 },
+                    { Ifc4::static_type, ((sal_Int32)(Ifc4 *) (Impl *) 16) - 16 },
+                    { Ifc5::static_type, ((sal_Int32)(Ifc5 *) (Impl *) 16) - 16 },
+                    { Ifc6::static_type, ((sal_Int32)(Ifc6 *) (Impl *) 16) - 16 },
+                    { Ifc7::static_type, ((sal_Int32)(Ifc7 *) (Impl *) 16) - 16 },
+                    { Ifc8::static_type, ((sal_Int32)(Ifc8 *) (Impl *) 16) - 16 },
+                    { Ifc9::static_type, ((sal_Int32)(Ifc9 *) (Impl *) 16) - 16 },
+                    { Ifc10::static_type, ((sal_Int32)(Ifc10 *) (Impl *) 16) - 16 },
+                    { ::com::sun::star::lang::XTypeProvider::static_type, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
+                }
             };
             return reinterpret_cast< class_data * >(&s_cd);
         }
