@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 13:45:09 $
+ *  last change: $Author: os $ $Date: 2001-04-23 13:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,12 +154,8 @@ service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLastLineAdjust
     /** determines the adjustment of the last line.
-
-
-
-        <p>It is only valid if <member>ParagraphProperties::ParagraphAdjust</member>
+        <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member>
         is set to <const>ParagraphAdjust::BLOCK</const>.</p>
      */
     [property] short ParaLastLineAdjust;
