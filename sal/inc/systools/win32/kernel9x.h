@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-15 12:08:17 $
+ *  last change: $Author: hro $ $Date: 2001-05-23 11:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,10 @@ extern "C" {
 #undef GetLocaleInfoW
 #endif
 
+#ifdef GetFullPathNameW
+#undef GetFullPathNameW
+#endif
+
 //------------------------------------------------------------------------
 // set the compiler directives for the function pointer we declare below
 // if we build sal or sal will be used as static library we define extern
@@ -252,6 +256,13 @@ KERNEL9X_API int ( WINAPI* lpfnGetLocaleInfoW ) (
     int cchData         // size of buffer
 );
 
+KERNEL9X_API ( WINAPI * lpfnGetFullPathNameW )(
+    LPCWSTR lpFileName,     // file name
+    DWORD   nBufferLength,  // size of path buffer
+    LPWSTR  lpBuffer,       // path buffer
+    LPWSTR  *lpFilePart     // address of file name in path
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -270,6 +281,7 @@ KERNEL9X_API int ( WINAPI* lpfnGetLocaleInfoW ) (
 #define CreateDirectoryW            lpfnCreateDirectoryW
 #define CreateDirectoryExW          lpfnCreateDirectoryExW
 #define GetLongPathNameW            lpfnGetLongPathNameW
+#define GetFullPathNameW            lpfnGetFullPathNameW
 
 #define GetCanonicalPath            lpfnGetCanonicalPathW
 #define GetLocaleInfoW              lpfnGetLocaleInfoW
