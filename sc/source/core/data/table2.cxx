@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2001-02-07 11:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,8 +759,55 @@ void ScTable::TransposeClip( USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nR
         {
             if ( !IsDefaultItem( pPattern ) )
             {
-                for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
-                    pTransClip->SetPattern( nRow-nRow1, nCol-nCol1, *pPattern, TRUE );
+                const SfxItemSet& rSet = pPattern->GetItemSet();
+                if ( rSet.GetItemState( ATTR_MERGE, FALSE ) == SFX_ITEM_DEFAULT &&
+                     rSet.GetItemState( ATTR_MERGE_FLAG, FALSE ) == SFX_ITEM_DEFAULT &&
+                     rSet.GetItemState( ATTR_BORDER, FALSE ) == SFX_ITEM_DEFAULT )
+                {
+                    // no borders or merge items involved - use pattern as-is
+                    for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
+                        pTransClip->SetPattern( nRow-nRow1, nCol-nCol1, *pPattern, TRUE );
+                }
+                else
+                {
+                    // transpose borders and merge values, remove merge flags (refreshed after pasting)
+                    ScPatternAttr aNewPattern( *pPattern );
+                    SfxItemSet& rNewSet = aNewPattern.GetItemSet();
+
+                    const SvxBoxItem& rOldBox = (const SvxBoxItem&)rSet.Get(ATTR_BORDER);
+                    if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )
+                    {
+                        SvxBoxItem aNew( ATTR_BORDER );
+                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_TOP ), BOX_LINE_LEFT );
+                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_LEFT ), BOX_LINE_TOP );
+                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_BOTTOM ), BOX_LINE_RIGHT );
+                        aNew.SetLine( rOldBox.GetLine( BOX_LINE_RIGHT ), BOX_LINE_BOTTOM );
+                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_TOP ), BOX_LINE_LEFT );
+                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_LEFT ), BOX_LINE_TOP );
+                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_BOTTOM ), BOX_LINE_RIGHT );
+                        aNew.SetDistance( rOldBox.GetDistance( BOX_LINE_RIGHT ), BOX_LINE_BOTTOM );
+                        rNewSet.Put( aNew );
+                    }
+
+                    const ScMergeAttr& rOldMerge = (const ScMergeAttr&)rSet.Get(ATTR_MERGE);
+                    if (rOldMerge.IsMerged())
+                        rNewSet.Put( ScMergeAttr(
+                            Min( rOldMerge.GetRowMerge(), (INT16)(MAXCOL+1 - (nAttrRow2-nRow1)) ),
+                            Min( rOldMerge.GetColMerge(), (INT16)(MAXROW+1 - (nCol-nCol1)) ) ) );
+
+                    const ScMergeFlagAttr& rOldFlag = (const ScMergeFlagAttr&)rSet.Get(ATTR_MERGE_FLAG);
+                    if (rOldFlag.IsOverlapped())
+                    {
+                        INT16 nNewFlags = rOldFlag.GetValue() & ~( SC_MF_HOR | SC_MF_VER );
+                        if ( nNewFlags )
+                            rNewSet.Put( ScMergeFlagAttr( nNewFlags ) );
+                        else
+                            rNewSet.ClearItem( ATTR_MERGE_FLAG );
+                    }
+
+                    for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
+                        pTransClip->SetPattern( nRow-nRow1, nCol-nCol1, aNewPattern, TRUE );
+                }
             }
         }
 
