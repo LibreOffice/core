@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:15:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,15 +934,17 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
 
             ::rtl::OUString aDocumentName;
             uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
-            uno::Sequence< beans::PropertyValue > aDocArgs = xDocument->getArgs();
-            for ( sal_Int32 nInd = 0; nInd < aDocArgs.getLength(); nInd++ )
-                if ( aDocArgs[nInd].Name.equalsAscii( "Title" ) )
-                {
-                    aDocArgs[nInd].Value >>= aDocumentName;
-                    break;
-                }
 
-            SetTitle( aDocumentName );
+//REMOVE                uno::Sequence< beans::PropertyValue > aDocArgs = xDocument->getArgs();
+//REMOVE                for ( sal_Int32 nInd = 0; nInd < aDocArgs.getLength(); nInd++ )
+//REMOVE                    if ( aDocArgs[nInd].Name.equalsAscii( "Title" ) )
+//REMOVE                    {
+//REMOVE                        aDocArgs[nInd].Value >>= aDocumentName;
+//REMOVE                        break;
+//REMOVE                    }
+//REMOVE
+//REMOVE                SetTitle( aDocumentName );
+
             return sal_True;
         }
         else
