@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-10 09:12:19 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,11 @@ class LocaleNode
     LocaleNode* * children;
     sal_Int32 nChildren;
     sal_Int32 childArrSize;
-    int nError;
 
     void setParent ( LocaleNode*  node);
+
+protected:
+    mutable int nError;
 
 public:
     LocaleNode (const OUString& name, const Reference< XAttributeList > & attr);
