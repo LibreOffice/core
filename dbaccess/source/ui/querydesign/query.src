@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-24 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 06:51:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,19 @@ Menu RID_QUERYCOLPOPUPMENU
 ImageList IMG_JOINS
 {
     ImageBitmap = Bitmap { File = "joins.bmp"; };
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
+    IdList = {
+        IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
+    };
+    IdCount = { 2; };
+};
+ImageList IMG_JOINS_H
+{
+    ImageBitmap = Bitmap { File = "joins_h.bmp"; };
     MaskColor   = Color {
             Red   = 0xffff;
             Green = 0x0000;
