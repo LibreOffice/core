@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowAttribute.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:09:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     <p><b>IMPORTANT:</b> These constands have to be disjunct with
     constants in <type>VclWindowPeerAttribute</type>.</p>
  */
-constants WindowAttribute
+published constants WindowAttribute
 {
     //-------------------------------------------------------------------------
 
