@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpnote.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 18:27:34 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "xmlictxt.hxx"
 #endif
 
-#ifndef _SDXMLIMP_HXX
-#include "sdxmlimp.hxx"
+#ifndef _SDXMLIMP_IMPL_HXX
+#include "sdxmlimp_impl.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-05 17:36:23 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 
 #ifndef _SDXMLEXP_HXX
 #include "sdxmlexp.hxx"
+#endif
+
+#ifndef _SDXMLEXP_IMPL_HXX
+#include "sdxmlexp_impl.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
@@ -637,6 +641,7 @@ SdXMLExport::SdXMLExport(
     mpPageMasterInfoList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpPageMaterUsageList(new ImpXMLEXPPageMasterList(1, 4, 4)),
     mpDrawPageInfoList(new ImpXMLDrawPageInfoList(4, 8, 8)),
+    mpMasterPageInfoList(new ImpXMLDrawPageInfoList(4, 8, 8)),
     mpShapeStyleInfoList(new ImpXMLShapeStyleInfoList(16, 64, 64)),
     mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList(1, 4, 4)),
     mpPropertySetMapper(0L),
@@ -665,12 +670,13 @@ SdXMLExport::SdXMLExport(
 
         // construct PropertySetMapper
         UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( aFactoryRef);
+
         mpPropertySetMapper = new XMLShapeExportPropertyMapper( xMapper, (XMLTextListAutoStylePool*)&GetTextParagraphExport()->GetListAutoStylePool(), *this );
-        if(mpPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            mpPropertySetMapper->acquire();
-        }
+        // set lock to avoid deletion
+        mpPropertySetMapper->acquire();
+
+        // chain text attributes
+        mpPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(*this));
 
         // construct PresPagePropsMapper
         xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
@@ -694,6 +700,11 @@ SdXMLExport::SdXMLExport(
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
           GetPropertySetMapper(),
           OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX)));
+    GetAutoStylePool()->AddFamily(
+        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID,
+        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)),
+          GetPresPagePropsMapper(),
+          OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX)));
 
     // prepare access to styles
     uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
@@ -800,6 +811,15 @@ __EXPORT SdXMLExport::~SdXMLExport()
             delete mpDrawPageInfoList->Remove(mpDrawPageInfoList->Count() - 1L);
         delete mpDrawPageInfoList;
         mpDrawPageInfoList = 0L;
+    }
+
+    // clear draw style infos
+    if(mpMasterPageInfoList)
+    {
+        while(mpMasterPageInfoList->Count())
+            delete mpMasterPageInfoList->Remove(mpMasterPageInfoList->Count() - 1L);
+        delete mpMasterPageInfoList;
+        mpMasterPageInfoList = 0L;
     }
 
     // clear shape style infos
@@ -1445,9 +1465,9 @@ void SdXMLExport::ImpWritePageMasterInfos()
             AddAttribute(XML_NAMESPACE_FO, sXML_page_height, sString);
 
             if(pInfo->GetOrientation() == view::PaperOrientation_PORTRAIT)
-                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_orientation_portrait);
+                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_portrait);
             else
-                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_orientation_landscape);
+                AddAttributeASCII(XML_NAMESPACE_STYLE, sXML_print_orientation, sXML_landscape);
 
             // write style:properties
             SvXMLElementExport aPMF(*this, XML_NAMESPACE_STYLE, sXML_properties, sal_True, sal_True);
@@ -1494,11 +1514,51 @@ void SdXMLExport::ImpPrepDrawPageInfos()
             if(aAny >>= xDrawPage)
             {
                 // create name
-                OUString sNewName = OUString(RTL_CONSTASCII_USTRINGPARAM("P"));
-                sNewName += OUString::valueOf((sal_Int32)nCnt);
+                OUString sStyleName;
+
+                // create style for this page and add to auto style pool
+
+                uno::Reference< beans::XPropertySet > xPropSet1(xDrawPage, uno::UNO_QUERY);
+                if(xPropSet1.is())
+                {
+                    // since the background items are in a different propertyset
+                    // which itself is a property of the pages property set
+                    // we now merge these two propertysets if possible to simulate
+                    // a single propertyset with all draw page properties
+                    const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                    uno::Reference< beans::XPropertySet > xPropSet2;
+                    uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                    if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
+                    {
+                        uno::Any aAny( xPropSet1->getPropertyValue( aBackground ) );
+                        aAny >>= xPropSet2;
+                    }
+
+                    uno::Reference< beans::XPropertySet > xPropSet;
+                    if( xPropSet2.is() )
+                        xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
+                    else
+                        xPropSet = xPropSet1;
+
+                    const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
+                    std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
+
+                    if( !xPropStates.empty() )
+                    {
+                        // there are filtered properties -> hard attributes
+                        // try to find this style in AutoStylePool
+                        sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
+
+                        if(!sStyleName.getLength())
+                        {
+                            // Style did not exist, add it to AutoStalePool
+                            sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
+                        }
+                    }
+                }
 
                 // create Info object
-                ImpXMLDrawPageInfo* pInfo = new ImpXMLDrawPageInfo(sNewName);
+                ImpXMLDrawPageInfo* pInfo = new ImpXMLDrawPageInfo(sStyleName);
                 mpDrawPageInfoList->Insert(pInfo, LIST_APPEND);
 
                 if(IsImpress())
@@ -1518,64 +1578,64 @@ void SdXMLExport::ImpPrepDrawPageInfos()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpWriteDrawPageInfos()
+void SdXMLExport::ImpPrepMasterPageInfos()
 {
-    if(mnDocDrawPageCount && mpDrawPageInfoList->Count())
+    // create draw:style-name entries for master page export
+    // containing only background attributes
+    // fixed family for page-styles is "drawing-page" (XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)
+    if(mnDocMasterPageCount)
     {
-        // prepare write
-        for(sal_Int32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
+        // prepare name creation
+        for(sal_Int32 nCnt = 0L; nCnt < mnDocMasterPageCount; nCnt++)
         {
-            uno::Any aAny(mxDocDrawPages->getByIndex(nCnt));
+            uno::Any aAny(mxDocMasterPages->getByIndex(nCnt));
             uno::Reference<drawing::XDrawPage> xDrawPage;
 
             if(aAny >>= xDrawPage)
             {
-                ImpXMLDrawPageInfo* pInfo = mpDrawPageInfoList->GetObject(nCnt);
-                if(pInfo)
+                // create name
+                OUString sStyleName;
+
+                // create style for this page and add to auto style pool
+                uno::Reference< beans::XPropertySet > xPropSet1(xDrawPage, uno::UNO_QUERY);
+                if(xPropSet1.is())
                 {
-                    // prepare draw-style attributes, style-name
-                    AddAttribute(XML_NAMESPACE_STYLE, sXML_name, pInfo->GetStyleName());
-
-                    // style-family
-                    AddAttribute(XML_NAMESPACE_STYLE, sXML_family,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME)));
-
-                    // write draw-style attributes
-                    SvXMLElementExport aDSE(*this, XML_NAMESPACE_STYLE, sXML_style, sal_True, sal_True);
-
-                    // write draw-style properites
-                    uno::Reference< beans::XPropertySet > xPropSet1(xDrawPage, uno::UNO_QUERY);
-                    if(xPropSet1.is())
+                    // since the background items are in a different propertyset
+                    // which itself is a property of the pages property set
+                    // we now merge these two propertysets if possible to simulate
+                    // a single propertyset with all draw page properties
+                    const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
+                    uno::Reference< beans::XPropertySet > xPropSet2;
+                    uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
+                    if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
                     {
-                        // since the background items are in a different propertyset
-                        // which itself is a property of the pages property set
-                        // we now merge these two propertysets if possible to simulate
-                        // a single propertyset with all draw page properties
-                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
-                        uno::Reference< beans::XPropertySet > xPropSet2;
-                        uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
-                        if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
-                        {
-                            uno::Any aAny( xPropSet1->getPropertyValue( aBackground ) );
-                            aAny >>= xPropSet2;
-                        }
+                        uno::Any aAny( xPropSet1->getPropertyValue( aBackground ) );
+                        aAny >>= xPropSet2;
+                    }
 
-                        uno::Reference< beans::XPropertySet > xPropSet;
-                        if( xPropSet2.is() )
-                            xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
-                        else
-                            xPropSet = xPropSet1;
-
+                    if( xPropSet2.is() )
+                    {
                         const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );
-                        std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet ) );
+                        std::vector< XMLPropertyState > xPropStates( aMapperRef->Filter( xPropSet2 ) );
 
-                        if(xPropStates.size())
+                        if( !xPropStates.empty() )
                         {
-                            aMapperRef->exportXML(GetDocHandler(), xPropStates,
-                                GetMM100UnitConverter(), GetNamespaceMap());
+                            // there are filtered properties -> hard attributes
+                            // try to find this style in AutoStylePool
+                            sStyleName = GetAutoStylePool()->Find(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
+
+                            if(!sStyleName.getLength())
+                            {
+                                // Style did not exist, add it to AutoStalePool
+                                sStyleName = GetAutoStylePool()->Add(XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, sStyleName, xPropStates);
+                            }
                         }
                     }
                 }
+
+                // create Info object
+                ImpXMLDrawPageInfo* pInfo = new ImpXMLDrawPageInfo(sStyleName);
+                mpMasterPageInfoList->Insert(pInfo, LIST_APPEND);
             }
         }
     }
@@ -1644,7 +1704,8 @@ void SdXMLExport::_ExportContent()
             if(pInfo)
             {
                 OUString sString = pInfo->GetStyleName();
-                AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, sString);
+                if( sString.getLength() )
+                    AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, sString);
             }
 
             // draw:master-page-name
@@ -3631,7 +3692,7 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfo(uno::Reference< drawing::XShape >&
 
         uno::Any aAny = xPropSet->getPropertyValue(
             OUString(RTL_CONSTASCII_USTRINGPARAM("Style")));
-        if(aAny >>= xStyle)
+        if((aAny >>= xStyle) && xStyle.is())
         {
             // get family ID
             uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
@@ -3800,20 +3861,8 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
     // write draw:style-name for object graphic-styles
     ImpWriteObjGraphicStyleInfos();
 
-// #80012# PageMaster export moved to _ExportAutoStyles
-//  // prepare page-master infos
-//  ImpPrepPageMasterInfos();
-//  // write page-master infos
-//  ImpWritePageMasterInfos();
-
     // write presentation styles
     ImpWritePresentationStyles();
-
-    // prepare draw:style-name for page export
-    ImpPrepDrawPageInfos();
-
-    // write draw:style-name for page export
-    ImpWriteDrawPageInfos();
 
     // write draw:auto-layout-name for page export
     ImpWriteAutoLayoutInfos();
@@ -3831,6 +3880,19 @@ void SdXMLExport::_ExportAutoStyles()
 
     // write page-master infos
     ImpWritePageMasterInfos();
+
+    // prepare draw:style-name for master page export
+    ImpPrepMasterPageInfos();
+
+    // prepare draw:style-name for page export
+    ImpPrepDrawPageInfos();
+
+    // export draw-page styles
+    GetAutoStylePool()->exportXML(
+        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID,
+        GetDocHandler(),
+        GetMM100UnitConverter(),
+        GetNamespaceMap());
 
     // create auto style infos for objects on master pages
     for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
@@ -3961,6 +4023,15 @@ void SdXMLExport::_ExportMasterStyles()
                 AddAttribute(XML_NAMESPACE_STYLE, sXML_page_master_name, sString);
             }
 
+            // draw:style-name (background attributes)
+            ImpXMLDrawPageInfo* pStyleInfo = mpMasterPageInfoList->GetObject(nMPageId);
+            if(pInfo)
+            {
+                OUString sString = pStyleInfo->GetStyleName();
+                if( sString.getLength() )
+                    AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, sString);
+            }
+
             // write masterpage
             SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_master_page, sal_True, sal_True);
 
@@ -3995,3 +4066,14 @@ void SdXMLExport::_ExportMasterStyles()
 }
 
 
+sal_uInt32 SdXMLExportDoc(
+        const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& rMod,
+        const rtl::OUString& rFileName,
+        const com::sun::star::uno::Reference<com::sun::star::xml::sax::XDocumentHandler>& rHandler,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rGrfContainer,
+        com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& rStatusIndicator,
+        BOOL bShowProgr, BOOL bIsDraw )
+{
+    SdXMLExport aExp( rMod, rFileName, rHandler, rGrfContainer, bShowProgr, bIsDraw );
+    return aExp.exportDoc( bIsDraw ? sXML_drawing : sXML_presentation );
+}

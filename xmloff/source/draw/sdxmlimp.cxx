@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-05 11:22:40 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef _SDXMLIMP_HXX
 #include "sdxmlimp.hxx"
+#endif
+
+#ifndef _SDXMLIMP_IMPL_HXX
+#include "sdxmlimp_impl.hxx"
 #endif
 
 #ifndef _XIMPBODY_HXX
@@ -164,6 +168,7 @@ static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  sXML_name,              XML_TOK_MASTERPAGE_NAME },
     { XML_NAMESPACE_STYLE,  sXML_page_master_name,  XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
+    { XML_NAMESPACE_DRAW,   sXML_style_name,        XML_TOK_MASTERPAGE_STYLE_NAME       },
     XML_TOKEN_MAP_END
 };
 
@@ -622,4 +627,17 @@ void SdXMLImport::ImportPoolDefaults(const XMLPropStyleContext* pPool)
 {
 }
 
+//////////////////////////////////////////////////////////////////////////////
 
+uno::Reference< xml::sax::XDocumentHandler >
+    CreateSdXMLImport(
+        uno::Reference< frame::XModel >& rMod,
+        uno::Reference< container::XIndexContainer >& rGrfContainer,
+        uno::Reference< task::XStatusIndicator >& rStatusIndicator,
+        sal_Bool bLoadDoc,
+        sal_uInt16 nStyleFamMask,
+        sal_Bool bShowProgr,
+        sal_Bool bIsDraw )
+{
+    return new SdXMLImport( rMod, rGrfContainer, bLoadDoc, nStyleFamMask, bShowProgr, bIsDraw );
+}

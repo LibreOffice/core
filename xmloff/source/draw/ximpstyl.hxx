@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "xmlictxt.hxx"
 #endif
 
-#ifndef _SDXMLIMP_HXX
-#include "sdxmlimp.hxx"
+#ifndef _SDXMLIMP_IMPL_HXX
+#include "sdxmlimp_impl.hxx"
 #endif
 
 #ifndef _XIMPGROUP_HXX
@@ -153,6 +153,7 @@ class SdXMLMasterPageContext: public SdXMLGroupShapeContext
 {
     rtl::OUString               msPageMasterName;
     rtl::OUString               msName;
+    rtl::OUString               msStyleName;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }

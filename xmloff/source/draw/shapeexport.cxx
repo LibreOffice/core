@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include "sdpropls.hxx"
 #endif
 
-#ifndef _SDXMLEXP_HXX
-#include "sdxmlexp.hxx"
+#ifndef _SDXMLEXP_IMPL_HXX
+#include "sdxmlexp_impl.hxx"
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
@@ -116,6 +116,9 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
         UniReference < SvXMLExportPropertyMapper > xExtMapper( pExtMapper );
         xPropertySetMapper->ChainExportMapper( xExtMapper );
     }
+
+    // chain text attributes
+    xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateCharExtPropMapper(rExp));
 
     rExp.GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_SD_GRAPHICS_ID,

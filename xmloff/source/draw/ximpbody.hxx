@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include "xmlictxt.hxx"
 #endif
 
-#ifndef _SDXMLIMP_HXX
-#include "sdxmlimp.hxx"
+#ifndef _SDXMLIMP_IMPL_HXX
+#include "sdxmlimp_impl.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
