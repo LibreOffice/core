@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-19 09:32:15 $
+ *  last change: $Author: sj $ $Date: 2002-07-23 10:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,24 +559,39 @@
             </prop>
         </group>
         <group oor:name="GraphicSize">
+            <info>
+                <desc xml:lang="en-US">Specifies size of a graphic. [UNIT=1/100 mm]</desc>
+            </info>
             <prop oor:name="Width" oor:type="xs:int">
                 <value>10000</value>
                 <info>
-                    <desc xml:lang="en-US">Specifies the export width for the graphic format.  [UNIT=1/100 mm]</desc>
+                    <desc xml:lang="en-US">Specifies width of graphic. [UNIT=1/100 mm]</desc>
                 </info>
                 <constraints>
                     <minInclusive oor:value="100"/>
+	                <info>
+		                <desc xml:lang="en-US">Represents the lowest value which can be entered in the dialog.</desc>
+			        </info>
                     <maxInclusive oor:value="99999"/>
+	                <info>
+		                <desc xml:lang="en-US">Represents the highest value which can be entered in the dialog.</desc>
+			        </info>
                 </constraints>
             </prop>
             <prop oor:name="Height" oor:type="xs:int">
                 <value>10000</value>
                 <info>
-                    <desc xml:lang="en-US">Specifies the export height for the graphic format.  [UNIT=1/100 mm]</desc>
+                    <desc xml:lang="en-US">Specifies height of graphic. [UNIT=1/100 mm]</desc>
                 </info>
                 <constraints>
                     <minInclusive oor:value="100"/>
+	                <info>
+		                <desc xml:lang="en-US">Represents the lowest value which can be entered in the dialog.</desc>
+			        </info>
                     <maxInclusive oor:value="99999"/>
+	                <info>
+		                <desc xml:lang="en-US">Represents the highest value which can be entered in the dialog.</desc>
+			        </info>
                 </constraints>
             </prop>
         </group>
@@ -2920,68 +2935,68 @@
         <group oor:name="Filter">
             <!-- Responsible: SJ / OS -->
             <info>
-                <desc xml:lang="en-US">settings for Microsoft-, Graphic- and HTML filter</desc>
+                <desc xml:lang="en-US">Specifies default settings of Microsoft-, Graphic- and HTML filters.</desc>
             </info>
             <group oor:name="Microsoft">
                 <!-- Responsible: SJ -->
 				<info>
-					<desc xml:lang="en-US">specifies, what kind of OLE objects are to be converted when importing/exporting Microsoft documents</desc>
+					<desc xml:lang="en-US">Specifies default settings of Microsoft filters.</desc>
 				</info>
                 <group oor:name="Import">
 					<info>
-						<desc xml:lang="en-US">specifies, what kind of OLE objects are to be converted when importing Microsoft documents</desc>
+						<desc xml:lang="en-US">Specifies default settings of Microsoft import filters.</desc>
 					</info>
                     <prop oor:name="MathTypeToMath" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies, if convertable MathType OLE objects should be converted into Math objects </desc>
+                            <desc xml:lang="en-US">Specifies, if convertable MathType OLE objects should be converted into Math objects.</desc>
                         </info>
                     </prop>
                     <prop oor:name="WinWordToWriter" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies, if convertable WinWord OLE objects should be converted into Writer objects</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable WinWord OLE objects should be converted into Writer objects.</desc>
                         </info>
                     </prop>
                     <prop oor:name="ExcelToCalc" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies, if convertable Excel OLE objects should be converted into Calc objects</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable Excel OLE objects should be converted into Calc objects.</desc>
                         </info>
                     </prop>
                     <prop oor:name="PowerPointToImpress" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies, if convertable PowerPoint OLE objects should be converted into Impress objects</desc>
+                            <desc xml:lang="en-US">Specifies, if convertable PowerPoint OLE objects should be converted into Impress objects.</desc>
                         </info>
                     </prop>
                 </group>
                 <group oor:name="Export">
 					<info>
-						<desc xml:lang="en-US">specifies, what kind of OLE objects are to be converted when exporting Microsoft documents</desc>
+						<desc xml:lang="en-US">Specifies default settings of Microsoft export filters.</desc>
 					</info>
                     <prop oor:name="MathToMathType" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies if embedded Math objects should be converted into MathType objects</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Math objects should be converted into MathType objects.</desc>
                         </info>
                     </prop>
                     <prop oor:name="WriterToWinWord" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies if embedded Writer objects should be converted into WinWord objects</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Writer objects should be converted into WinWord objects.</desc>
                         </info>
                     </prop>
                     <prop oor:name="CalcToExcel" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies if embedded Calc objects should be converted into Excel objects</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Calc objects should be converted into Excel objects.</desc>
                         </info>
                     </prop>
                     <prop oor:name="ImpressToPowerPoint" oor:type="xs:boolean">
                         <value>false</value>
                         <info>
-                            <desc xml:lang="en-US">specifies if embedded Impress objects should be converted into PowerPoint objects</desc>
+                            <desc xml:lang="en-US">Specifies if embedded Impress objects should be converted into PowerPoint objects.</desc>
                         </info>
                     </prop>
                 </group>
@@ -2989,53 +3004,51 @@
             <group oor:name="Graphic">
                 <!-- Responsible: SJ -->
 				<info>
-					<desc xml:lang="en-US">default settings for graphic import and export dialogs</desc>
+					<desc xml:lang="en-US">Specifies default settings of graphic import and export dialogs.</desc>
 				</info>
                 <group oor:name="Import">
 					<info>
-						<desc xml:lang="en-US">graphic import</desc>
+						<desc xml:lang="en-US">Specifies default settings of graphic import dialogs.</desc>
 					</info>
                     <group oor:name="PCD">
 						<info>
-							<desc xml:lang="en-US">PCD - Photo CD Base</desc>
+							<desc xml:lang="en-US">Specifies default settings of the PCD - Photo CD Base import dialog.</desc>
 						</info>
                         <prop oor:name="Resolution" oor:type="xs:int">
                             <!-- OldPath: PCD-IMPORT-RESOLUTION -->
                             <!-- OldLocation: fltopt.ini -->
                             <value>2</value>
                             <info>
-                                <desc xml:lang="en-US">specifies the import resolution for the PCD-format: 0 - Base16 ( 192 * 128 pixel ) 1 - Base4 ( 384 * 256 pixel ) 2 - Base ( 768 * 512 pixel )</desc>
+                                <desc xml:lang="en-US">Specifies import resolution of PCD graphics.</desc>
                                 <label xml:lang="en-US">Resolution - Base16 / Base4 / Base</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Base16</desc>
+                                        <desc xml:lang="en-US">PCD-Base16, imports a PCD graphic with a resolution of 192*128 pixel.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Base4</desc>
+                                        <desc xml:lang="en-US">PCD-Base4, imports a PCD graphic with a resolution of 384*256 pixel.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US">Base</desc>
+                                        <desc xml:lang="en-US">PCD-Base, imports a PCD graphic with a resolution of 768 * 512 pixel.</desc>
                                     </info>
                                 </enumeration>
-                                <minInclusive oor:value="0"/>
-                                <maxInclusive oor:value="2"/>
                             </constraints>
                         </prop>
                     </group>
                 </group>
                 <group oor:name="Export">
 					<info>
-						<desc xml:lang="en-US">graphic export</desc>
+						<desc xml:lang="en-US">Specifies default settings of graphic export dialogs.</desc>
 					</info>
                     <group oor:name="BMP">
 						<info>
-							<desc xml:lang="en-US">BMP - Windows Bitmap</desc>
+							<desc xml:lang="en-US">Specifies default settings of the Windows Bitmap export dialog.</desc>
 						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: BMP-EXPORT-MODE -->
@@ -3043,27 +3056,26 @@
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the export mode for the BMP-format: 0 - Original (keeps the original mode) 1 - Resolution (for exporting with a defined resolution) 2 - Size (for exporting with a defined size)</desc>
+                                <desc xml:lang="en-US">Specifies usable export modes.</desc>
                                 <label xml:lang="en-US">Mode - Original / Resolution / Size</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original mode</desc>
+                                        <desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Resolution</desc>
+                                        <desc xml:lang="en-US">Resolution mode, graphics are stored using a logical size that depends to the given dpi/pixel ratio.
+										Storing a 300 pixel wide graphic by 150 dpi will result in a graphic which is 2 inch wide.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US">Size</desc>
+                                        <desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
                                     </info>
                                 </enumeration>
-                                <minInclusive oor:value="0"/>
-                                <maxInclusive oor:value="2"/>
                             </constraints>
                         </prop>
                         <prop oor:name="Resolution" oor:type="xs:int">
@@ -3072,28 +3084,28 @@
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>75</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the export resolution for the BMP format. (Only if EXPORT MODE=1.)  [UNIT=dpi]</desc>
+                                <desc xml:lang="en-US">Specifies resolution which is to be used if export mode is 1. [UNIT=dpi]</desc>
                                 <label xml:lang="en-US">Resolution</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="75">
                                     <info>
-                                        <desc xml:lang="en-US">Export with a resolution of 75 dpi</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using a resolution of 75 dpi.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="150">
                                     <info>
-                                        <desc xml:lang="en-US">Export with a resolution of 150 dpi</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using a resolution of 150 dpi.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="300">
                                     <info>
-                                        <desc xml:lang="en-US">Export with a resolution of 300 dpi</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using a resolution of 300 dpi.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="600">
                                     <info>
-                                        <desc xml:lang="en-US">Export with a resolution of 600 dpi</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using a resolution of 600 dpi.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3103,48 +3115,48 @@
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the number of colors for export in the BMP format</desc>
+                                <desc xml:lang="en-US">Specifies number colors that are to be used for the export.</desc>
                                 <label xml:lang="en-US">Color resolution</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original</desc>
+                                        <desc xml:lang="en-US">Original - Graphics are exported using the same number of colors as the original.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">1 bit - threshold value</desc>
+                                        <desc xml:lang="en-US">1 bit - Graphics are exported with a color reduction to 1 bit threshold value.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US">1 bit - dithered</desc>
+                                        <desc xml:lang="en-US">1 bit - Graphics are exported with a color reduction to 1 bit dithered value.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="3">
                                     <info>
-                                        <desc xml:lang="en-US">4 bit - grayscale</desc>
+                                        <desc xml:lang="en-US">4 bit - Graphics are exported with a color resolution of 4 bit grayscale value.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="4">
                                     <info>
-                                        <desc xml:lang="en-US">4 bit - color palette</desc>
+                                        <desc xml:lang="en-US">4 bit - Graphics are exported with a color resolution of 4 bit color palette value.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="5">
                                     <info>
-                                        <desc xml:lang="en-US">8 bit - grayscale</desc>
+                                        <desc xml:lang="en-US">8 bit - Graphics are exported with a color resolution of 8 bit grayscale color value.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="6">
                                     <info>
-                                        <desc xml:lang="en-US">8 bit - color palette</desc>
+                                        <desc xml:lang="en-US">8 bit - Graphics are exported with a color resolution of 8 bit color palette value.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="7">
                                     <info>
-                                        <desc xml:lang="en-US">24 bit - true colors</desc>
+                                        <desc xml:lang="en-US">24 bit true color - Graphics are exported with a color resolution of 24 bit.</desc>
                                     </info>
                                 </enumeration>
                                 <minInclusive oor:value="0"/>
@@ -3157,7 +3169,7 @@
                             <!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
                             <value>true</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if BMP graphics should be exported with a RLE coding (Run-Length-Encoding). Possiblewith 4 bit and higher (COLORS=3 and higher). False - Export without RLE-coding True - Export with RLE-coding</desc>
+                                <desc xml:lang="en-US">Specifies, if Run-Length-Encoding should be used in the export.</desc>
                                 <label xml:lang="en-US">RLE coding</label>
                             </info>
                         </prop>
@@ -3168,35 +3180,42 @@
                     </group>
                     <group oor:name="EPS">
 						<info>
-							<desc xml:lang="en-US">EPS - Encapsulated PostScript</desc>
+							<desc xml:lang="en-US">Specifies default settings of the EPS - Encapsualted Postscript export dialog.</desc>
 						</info>
                         <!-- OldLocation: fltopt.ini -->
                         <!-- UIHints: File  Export  Filetype File  Export  Filetype  EPS-Encapsulated Postscript -->
                         <prop oor:name="Preview" oor:type="xs:int">
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if a preview graphic should be exported together with the PostScript file</desc>
+                                <desc xml:lang="en-US">Specifies, if a preview graphic should be exported together with the Encapsulated PostScript file.
+													   Due to the fact that most programs can't render eps graphics, it is sometimes useful to 
+													   provide a preview that can be display as replacement. The preview graphic will also be
+													   printed if the printer is not capable of Postscript.</desc>
                                 <label xml:lang="en-US">Preview - Picture preview (TIFF) / Interchange (EPSI)</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US"> Export with no preview graphic</desc>
+                                        <desc xml:lang="en-US">Graphics are exported without preview graphic.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US"> Export with preview in Picture (TIFF) format</desc>
+                                        <desc xml:lang="en-US">Graphics are exported together with a TIFF preview graphic.
+															   If a TIFF preview graphic is used, the created eps won't be editable as standard text file.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US"> Export with preview in Interchange (EPSI) format</desc>
+                                        <desc xml:lang="en-US">Graphics are exported together with a Interchange (EPSI) preview graphic, which 
+															   has a color resolution of 1 bit. EPS graphics containing an EPSI preview 
+															   graphic remain editable as standard text file.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="3">
                                     <info>
-                                        <desc xml:lang="en-US"> Export with preview in Picture (TIFF) and Interchange (EPSI) format</desc>
+                                        <desc xml:lang="en-US">Graphics are exported together with a TIFF- and EPSI preview graphic. 
+															   The created eps won't be editable as standard text file.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3204,91 +3223,92 @@
                         <prop oor:name="Version" oor:type="xs:int">
                             <value>2</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the PostScript Level for the export</desc>
+                                <desc xml:lang="en-US">Specifies the PostScript version which has to be used for the EPS export,
+													   because not every PostScript printer is capable of version 2 PostScript, it
+													   is sometimes necessary to create version 1 PostScript graphics.
+													   PostScript Level 1 is not supporting color and bitmap compression.</desc>
                                 <label xml:lang="en-US">Version - Level 1 / Level 2</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Level 1</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to version 1 PostScript.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US">Level 2</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to version 2 PostScript.</desc>
                                     </info>
                                 </enumeration>
-                                <minInclusive oor:value="1"/>
-                                <maxInclusive oor:value="2"/>
                             </constraints>
                         </prop>
                         <prop oor:name="ColorFormat" oor:type="xs:int">
                             <value>2</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the color format for the EPS export: color or grayscale.</desc>
+                                <desc xml:lang="en-US">Specifies if color or grayscale format is used for the EPS export.
+													   This option is not available for version 1 PostScript files.</desc>
                                 <label xml:lang="en-US">Color format - Color / Grayscale</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Export in color</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using color format.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US">Export in grayscale</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using grayscale format.</desc>
                                     </info>
                                 </enumeration>
-                                <minInclusive oor:value="1"/>
-                                <maxInclusive oor:value="2"/>
                             </constraints>
                         </prop>
                         <prop oor:name="CompressionMode" oor:type="xs:int">
                             <value>2</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if a file should be exported by using the LZW (Lempel - Ziv - Welch) compression algorithm. (Only possible with VERSION=2, Level 2).</desc>
+                                <desc xml:lang="en-US">Specifies, if bitmaps should be exported by using the LZW (Lempel - Ziv - Welch) compression algorithm.
+													   Compression is only available for level 2 PostScript files.</desc>
                                 <label xml:lang="en-US">Compression - LZW encoding / None</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">With LZW compression</desc>
+                                        <desc xml:lang="en-US">Bitmpas are exported with LZW compression.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="2">
                                     <info>
-                                        <desc xml:lang="en-US">No LZW compression</desc>
+                                        <desc xml:lang="en-US">Bitmaps are exported without compression.</desc>
                                     </info>
                                 </enumeration>
-                                <minInclusive oor:value="1"/>
-                                <maxInclusive oor:value="2"/>
                             </constraints>
                         </prop>
                         <prop oor:name="TextMode" oor:type="xs:int">
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if glyph outlines are exported or not. It is a big problem when fonts are not available during printing, this can be solved using this option.</desc>
+                                <desc xml:lang="en-US">Specifies, if glyph outlines are exported or not.</desc>
                                 <label xml:lang="en-US">Export text using glyph outlines - always / never</label>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">always use glyph outlines</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using glyph outlines.
+															   This will produce the highest quality and it will be the only
+															   possibility to create EPS files which are CJK compliant.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">never use glyph outlines=</desc>
+                                        <desc xml:lang="en-US">Graphics are exported without using glyph outlines.
+															   This will produce smaller files, but it might lead to problems,
+															   if not all fonts are available during printing.</desc>
                                     </info>
                                 </enumeration>
-                                <minInclusive oor:value="0"/>
-                                <maxInclusive oor:value="1"/>
                             </constraints>
                         </prop>
                     </group>
                     <group oor:name="GIF">
 						<info>
-							<desc xml:lang="en-US">GIF - Graphics Interchange</desc>
+							<desc xml:lang="en-US">Specifies default settings of the GIF - Graphics Interchange export dialog.</desc>
 						</info>
                         <prop oor:name="Interlaced" oor:type="xs:int">
                             <!-- OldPath: GIF-EXPORT-INTERLACED -->
@@ -3296,17 +3316,19 @@
                             <!-- UIHints: File  Export  Filetype  GIF-Graphics Interchange -->
                             <value>1</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the graphic should be exported as interlaced GIF or not. This is recommended for big pictures, as the content can be displayed immediately when loading the picture.</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics should be exported using interlace. It is recommended
+								                       for big pictures to activate interlace, so the content can be displayed immediately
+													   when loading the picture.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Export as non-interlaced GIF</desc>
+                                        <desc xml:lang="en-US">Deactivate interlace modus.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Export as interlaced GIF</desc>
+                                        <desc xml:lang="en-US">Activate interlace modus.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3317,17 +3339,17 @@
                             <!-- UIHints: File  Export  Filetype  GIF-Graphics Interchange -->
                             <value>1</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the background of the picture is saved transparent. In the GIF picture only the objects are visible then.</desc>
+                                <desc xml:lang="en-US">Specifies, if the graphic background is stored transparent.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Saving background non-transparent</desc>
+                                        <desc xml:lang="en-US">Export graphics without transparency.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Saving background transparent</desc>
+                                        <desc xml:lang="en-US">Export graphics using transparency.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3335,7 +3357,7 @@
                     </group>
                     <group oor:name="JPG">
 						<info>
-							<desc xml:lang="en-US">JPEG - Joint Photographic Experts Group</desc>
+							<desc xml:lang="en-US">Specifies default settings of the JPEG - Joint Photographic Experts Group export dialog.</desc>
 						</info>
                         <prop oor:name="Quality" oor:type="xs:int">
                             <!-- OldPath: JPG-EXPORT-QUALITY -->
@@ -3343,11 +3365,20 @@
                             <!-- UIHints: File  Export  Filetype  JPG-JPEG -->
                             <value>75</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the quality for the JPG export. 1 is minimal quality and file size, 100 is maximal quality and file size.</desc>
+                                <desc xml:lang="en-US">Specifies quality of the JPG export.
+													   A higher value results in hiqher quality and file size.</desc>
                             </info>
                             <constraints>
                                 <minInclusive oor:value="1"/>
+                                    <info>
+                                        <desc xml:lang="en-US">Represents lowest value that can be used. The lower the value, the less good is
+										the compression quality and the bigger is be the file size.</desc>
+                                    </info>
                                 <maxInclusive oor:value="100"/>
+                                    <info>
+                                        <desc xml:lang="en-US">Represents highest value that can be used. The higher the value, the better is
+										the compression quality and the smaller is the file size.</desc>
+                                    </info>
                             </constraints>
                         </prop>
                         <prop oor:name="ColorMode" oor:type="xs:int">
@@ -3356,17 +3387,17 @@
                             <!-- UIHints: File  Export  Filetype  JPG-JPEG -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies the color resolution for the JPG export. True colors exports with original colors.</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics are exported using true color or grayscale.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">True colors</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using true colors.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Grayscale</desc>
+                                        <desc xml:lang="en-US">Graphics are exported using grayscale.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3374,7 +3405,7 @@
                     </group>
                     <group oor:name="MET">
 						<info>
-							<desc xml:lang="en-US">MET - OS/2 Metafile</desc>
+							<desc xml:lang="en-US">Specifies, if graphics are exported with the original- or selected size.</desc>
 						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: MET-EXPORT-MODE -->
@@ -3382,17 +3413,17 @@
                             <!-- UIHints: File  Export  Filetype  MET-OS/2 Metafile -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the graphic should be exported with the original size or with a selected size</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics are exported with the original- or selected size.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original size</desc>
+                                        <desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Modified size</desc>
+                                        <desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3404,7 +3435,7 @@
                     </group>
                     <group oor:name="PCT">
 						<info>
-							<desc xml:lang="en-US">PCT - Mac Pict</desc>
+							<desc xml:lang="en-US">Specifies default settings of the PCT - Mac Pict export dialog.</desc>
 						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: PCT-EXPORT-MODE -->
@@ -3412,17 +3443,17 @@
                             <!-- UIHints: File  Export  Filetype  PCT-Mac Pict -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the graphic should be exported with the original size or with a selected size</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics are exported with original- or selected size.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original size</desc>
+                                        <desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Modified size</desc>
+                                        <desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3434,7 +3465,7 @@
                     </group>
                     <group oor:name="PBM">
 						<info>
-							<desc xml:lang="en-US">PBM - Portable Bitmap</desc>
+							<desc xml:lang="en-US">Specifies default settings of the PBM - Portable Bitmap export dialog.</desc>
 						</info>
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PBM-EXPORT-FORMAT -->
@@ -3442,17 +3473,17 @@
                             <!-- UIHints: File  Export  Filetype  PBM-Portable Bitmap -->
                             <value>1</value>
                             <info>
-                                <desc xml:lang="en-US">To save the file in binary or ASCII format</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics are exported to binary- or ASCII format.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Binary</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to binary format.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">ASCII</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to ASCII format.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3460,7 +3491,7 @@
                     </group>
                     <group oor:name="PGM">
 						<info>
-							<desc xml:lang="en-US">PGM - Portable Graymap</desc>
+							<desc xml:lang="en-US">Specifies default settings of the PGM - Portable Graymap export dialog.</desc>
 						</info>
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PGM-EXPORT-FORMAT -->
@@ -3468,17 +3499,17 @@
                             <!-- UIHints: File  Export  Filetype  PGM-Portable Graymap -->
                             <value>1</value>
                             <info>
-                                <desc xml:lang="en-US">To save the file in binary or ASCII format</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics are exported to a binary- or ASCII format.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Binary</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to binary format.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">ASCII</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to ASCII format.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3486,7 +3517,7 @@
                     </group>
                     <group oor:name="PPM">
 						<info>
-							<desc xml:lang="en-US">PPM - Portable Pixelmap</desc>
+							<desc xml:lang="en-US">Specifies default settings of the PPM - Portable Pixelmap export dialog.</desc>
 						</info>
                         <prop oor:name="FileFormat" oor:type="xs:int">
                             <!-- OldPath: PPM-EXPORT-FORMAT -->
@@ -3494,17 +3525,17 @@
                             <!-- UIHints: File  Export  Filetype  PPM-Portable Pixelmap -->
                             <value>1</value>
                             <info>
-                                <desc xml:lang="en-US">To save the file in binary or ASCII format</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics are exported to a binary- or ASCII format.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Binary</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to binary format.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">ASCII</desc>
+                                        <desc xml:lang="en-US">Graphics are exported to ASCII format.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3512,7 +3543,7 @@
                     </group>
                     <group oor:name="SVM">
 						<info>
-							<desc xml:lang="en-US">SVM - StarView Meta File</desc>
+							<desc xml:lang="en-US">Specifies default settings of the SVM - StarView Meta File export dialog.</desc>
 						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: SVM-EXPORT-MODE -->
@@ -3520,17 +3551,17 @@
                             <!-- UIHints: File  Export  Filetype  SVM - StarView Metafile -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the graphic should be exported with the original size or with a selected size</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics should be exported with the original- or selected size.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original size</desc>
+                                        <desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Modified size</desc>
+                                        <desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3542,7 +3573,7 @@
                     </group>
                     <group oor:name="WMF">
 						<info>
-							<desc xml:lang="en-US">WMF - Windows Metafile</desc>
+							<desc xml:lang="en-US">Specifies default settings of the WMF - Windows Metafile export dialog.</desc>
 						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: WMF-EXPORT-MODE -->
@@ -3550,17 +3581,17 @@
                             <!-- UIHints: File  Export  Filetype  WMF -MS Windows Metafile -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the graphic should be exported with the original size or with a selected size</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics should be exported with the original- or selected size.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original size</desc>
+                                        <desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Modified size</desc>
+                                        <desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3572,7 +3603,7 @@
                     </group>
                    <group oor:name="EMF">
 						<info>
-							<desc xml:lang="en-US">EMF - Enhanced Metafile</desc>
+							<desc xml:lang="en-US">Specifies default settings of the EMF - Enhanced Metafile export dialog.</desc>
 						</info>
                         <prop oor:name="ExportMode" oor:type="xs:int">
                             <!-- OldPath: EMF-EXPORT-MODE -->
@@ -3580,17 +3611,17 @@
                             <!-- UIHints: File - Export -->
                             <value>0</value>
                             <info>
-                                <desc xml:lang="en-US">Specifies, if the graphic should be exported with the original size or with a selected size</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics should be exported with the original- or selected size.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Original size</desc>
+                                        <desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Modified size</desc>
+                                        <desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
@@ -3602,7 +3633,7 @@
                     </group>
                     <group oor:name="PNG">
 						<info>
-							<desc xml:lang="en-US">PNG - Portable Network Graphic</desc>
+							<desc xml:lang="en-US">Specifies default settings of the PNG - Portable Network Graphic export dialog.</desc>
 						</info>
                         <prop oor:name="Compression" oor:type="xs:int">
                             <!-- OldPath: PNG-EXPORT-COMPRESSION -->
@@ -3610,11 +3641,21 @@
                             <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
                             <value>6</value>
                             <info>
-                                <desc xml:lang="en-US">The export compression setting from 0 (no compression) to 9 (maximum compression). The calculating time increases with an ascending compression value, and the result occupies less bytes.</desc>
+                                <desc xml:lang="en-US">Specifies export compression settings which ranges from 0 (no compression) to 
+													   9 (maximum compression). The calculating time increases with an ascending
+													   compression value.</desc>
                             </info>
                             <constraints>
                                 <minInclusive oor:value="0"/>
+                                    <info>
+                                        <desc xml:lang="en-US">Represents lowest value that can be used. The lower the value, the less good is
+										the compression quality and the bigger is be the file size.</desc>
+                                    </info>
                                 <maxInclusive oor:value="9"/>
+                                    <info>
+                                        <desc xml:lang="en-US">Represents highest value that can be used. The higher the value, the better is
+										the compression quality and the smaller is the file size.</desc>
+                                    </info>
                             </constraints>
                         </prop>
                         <prop oor:name="Interlaced" oor:type="xs:int">
@@ -3623,17 +3664,19 @@
                             <!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
                             <value>1</value>
                             <info>
-                                <desc xml:lang="en-US">Using interlaced pictures it is possible to display every n-th row and column when loading. The vacancies will be filled when the rest of the data is available.</desc>
+                                <desc xml:lang="en-US">Specifies, if graphics should be exported using interlace. It is recommended
+								                       for big pictures to activate interlace, so the content can be displayed immediately
+													   when loading the picture.</desc>
                             </info>
                             <constraints>
                                 <enumeration oor:value="0">
                                     <info>
-                                        <desc xml:lang="en-US">Interlaced deactivated</desc>
+                                        <desc xml:lang="en-US">Deactivate interlace modus.</desc>
                                     </info>
                                 </enumeration>
                                 <enumeration oor:value="1">
                                     <info>
-                                        <desc xml:lang="en-US">Interlaced activated</desc>
+                                        <desc xml:lang="en-US">Activate interlace modus.</desc>
                                     </info>
                                 </enumeration>
                             </constraints>
