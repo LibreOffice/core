@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:04:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #include <stdarg.h>
 #define dump_state( a, b, c, d ) fprintf( stderr, a, b, c, d );
 #else
@@ -76,7 +76,7 @@
 #endif
 inline void dbg_msg( char* pString, ... )
 {
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     va_list ap;
     va_start( ap, pString );
     vfprintf( stderr, pString, ap );
@@ -167,7 +167,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
     nStatus = p_control_option( maHandle, (SANE_Int)nOption,
                                 nAction, pData, &nInfo );
     DUMP_STATE( nStatus, "sane_control_option" );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     if( nStatus != SANE_STATUS_GOOD )
     {
         char* pAction = "Unknown";
@@ -266,7 +266,7 @@ void Sane::Init()
             for( nDevices = 0 ; ppDevices[ nDevices ]; nDevices++ );
         }
     }
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     else
         fprintf( stderr, "libsane.so could not be opened: %s\n",
                  dlerror() );
@@ -670,7 +670,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
             nStatus = p_get_parameters( maHandle, &aParams );
             DUMP_STATE( nStatus, "sane_get_parameters" );
             CheckConsistency( "sane_get_parameters" );
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             char* ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",
                                   "SANE_FRAME_BLUE", "Unknown !!!" };
@@ -720,7 +720,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
                 bSynchronousRead = FALSE;
                 nStatus = p_set_io_mode( maHandle, SANE_TRUE );
                 CheckConsistency( "sane_set_io_mode" );
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
                 if( nStatus != SANE_STATUS_GOOD )
                     // what ?!?
                     fprintf( stderr, "Sane::Start: driver is confused\n" );
@@ -787,7 +787,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
                     nWidthMM = (int)(((double)nWidth / fResl) * 25.4);
                 if( ! nHeightMM )
                     nHeightMM = (int)(((double)nHeight / fResl) * 25.4);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "set dimensions to (%d, %d) Pixel, (%d, %d) mm, resolution is %lg\n", nWidth, nHeight, nWidthMM, nHeightMM, fResl );
 #endif
 
