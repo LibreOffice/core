@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:32:29 $
+ *  last change: $Author: oj $ $Date: 2002-03-01 14:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ sal_uInt16 UnoDataBrowserView::ViewColumnCount() const
 void UnoDataBrowserView::GetFocus()
 {
     Window::GetFocus();
-    if( m_pTreeView )
+    if( m_pTreeView && m_pTreeView->IsVisible() )
         m_pTreeView->GrabFocus();
     else if (m_pVclControl && m_xGrid.is())
     {
@@ -376,7 +376,7 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         {
             if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
                 m_pVclControl->GrabFocus();
-            else if ( m_pVclControl && m_pVclControl->HasChildPathFocus() )
+            else if ( m_pVclControl && pLeft && pLeft->IsVisible() && m_pVclControl->HasChildPathFocus() )
                 pLeft->GrabFocus();
             nDone = 1L;
         }
@@ -390,11 +390,13 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
             {
                 pLeft  = getToolBox();
                 pRight = m_pTreeView;
+                if ( pRight->IsVisible() )
+                    pRight = pLeft;
             }
 
             if ( pLeft && m_pVclControl && pLeft->HasChildPathFocus() && bGrabAllowed )
                 m_pVclControl->GrabFocus();
-            else if ( m_pVclControl && pRight && m_pVclControl->HasChildPathFocus() )
+            else if ( m_pVclControl && pRight && pRight->IsVisible() && m_pVclControl->HasChildPathFocus() )
                 pRight->GrabFocus();
             else
                 nDone = 0L;

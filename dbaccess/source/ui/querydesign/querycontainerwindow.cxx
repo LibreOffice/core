@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 12:58:53 $
+ *  last change: $Author: oj $ $Date: 2002-03-01 14:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
-
+#ifndef _SV_TOOLBOX_HXX
+#include <vcl/toolbox.hxx>
+#endif
 //.........................................................................
 namespace dbaui
 {
@@ -235,22 +237,28 @@ namespace dbaui
                         &&  !rCode.IsMod2()
                         &&  rCode.GetCode() == KEY_F6)
                     {
-                        Window* pLeft = m_pViewSwitch->getActive();
+                        ToolBox* pToolBox   = getToolBox();
+                        Window*  pLeft      = m_pViewSwitch->getActive();
                         //  if ( !rCode.IsShift() )
                         {
-                            if ( m_pBeamer && pLeft && pLeft->HasChildPathFocus() )
+                            if ( m_pBeamer && pLeft && m_pBeamer->HasChildPathFocus() )
+                            {
+                                pLeft->GrabFocus();
+                                bHandled = sal_True;
+                            }
+                            else if ( m_pBeamer && pToolBox && pToolBox->HasChildPathFocus() )
                             {
                                 m_pBeamer->GrabFocus();
                                 bHandled = sal_True;
                             }
-                            else if ( m_pBeamer && pLeft && m_pBeamer->HasChildPathFocus() )
+                            else if ( pLeft && pToolBox && pToolBox->HasChildPathFocus() )
                             {
                                 pLeft->GrabFocus();
                                 bHandled = sal_True;
                             }
-                            else if ( pLeft )
+                            else if ( pToolBox )
                             {
-                                pLeft->GrabFocus();
+                                pToolBox->GrabFocus();
                                 bHandled = sal_True;
                             }
                         }
@@ -320,6 +328,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/02/11 12:58:53  oj
+ *  #90580# enable F6 key for components
+ *
  *  Revision 1.3  2001/09/20 12:56:16  oj
  *  #92232# fixes for BIGINT type and new property HELPTEXT
  *
