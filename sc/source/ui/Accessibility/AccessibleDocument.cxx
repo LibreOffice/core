@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:15:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1437,7 +1437,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
             {
-                Window* pChildWin = static_cast < Window * >( pVclEvent->GetWindow() );
+                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     AddChild( pChildWin->GetAccessible(), sal_True );
@@ -1446,7 +1446,7 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
             break;
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
             {
-                Window* pChildWin = static_cast < Window * >( pVclEvent->GetWindow() );
+                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     RemoveChild( pChildWin->GetAccessible(), sal_True );
