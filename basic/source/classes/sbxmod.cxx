@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-09 10:27:16 $
+ *  last change: $Author: ab $ $Date: 2002-10-25 10:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2003,6 +2003,11 @@ ErrCode SbMethod::Call( SbxValue* pRet )
     // Values anlegen, um Return-Wert zu erhalten
     SbxValues aVals;
     aVals.eType = SbxVARIANT;
+
+    // #104083: Compile BEFORE get
+    if( bInvalid && !pMod->Compile() )
+        StarBASIC::Error( SbERR_BAD_PROP_VALUE );
+
     Get( aVals );
     if ( pRet )
         pRet->Put( aVals );
