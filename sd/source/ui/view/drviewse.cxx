@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-17 10:28:02 $
+ *  last change: $Author: aw $ $Date: 2001-11-13 18:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,9 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                 sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
                 if(nCount >= nNumber)
                 {
-                    while(nNumber--)
+                    // #94637# when UndoStack is cleared by ModifyPageUndoAction
+                    // the nCount may have changed, so test GetUndoActionCount()
+                    while(nNumber-- && pUndoManager->GetUndoActionCount())
                     {
                         pUndoManager->Undo();
                     }
@@ -1506,7 +1508,9 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                 sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
                 if(nCount >= nNumber)
                 {
-                    while(nNumber--)
+                    // #94637# when UndoStack is cleared by ModifyPageRedoAction
+                    // the nCount may have changed, so test GetRedoActionCount()
+                    while(nNumber-- && pUndoManager->GetRedoActionCount())
                     {
                         pUndoManager->Redo();
                     }
