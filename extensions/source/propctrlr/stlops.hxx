@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlops.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,5 +104,5 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
-#endif _EXTENSIONS_PROPCTRLR_STLOPS_HXX_
+#endif // _EXTENSIONS_PROPCTRLR_STLOPS_HXX_
 
