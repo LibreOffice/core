@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:11:05 $
+ *  last change: $Author: mt $ $Date: 2002-08-06 12:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3611,9 +3611,12 @@ Color ImpEditEngine::GetAutoColor() const
 {
     Color aColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
 
-    if ( ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() )
+    if ( GetBackgroundColor() != COL_AUTO )
     {
-        aColor = COL_WHITE;
+        if ( GetBackgroundColor().IsDark() && aColor.IsDark() )
+            aColor = COL_WHITE;
+        else if ( GetBackgroundColor().IsBright() && aColor.IsBright() )
+            aColor = COL_BLACK;
     }
 
     return aColor;
