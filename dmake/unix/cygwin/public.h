@@ -2,9 +2,9 @@
  *
  *  $RCSfile: public.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:02:46 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 16:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void Epilog ANSI((int));
 char *Get_current_dir ANSI(());
 int Set_dir ANSI((char*));
 char Get_switch_char ANSI(());
-FILE* Get_temp ANSI((char **, char *, int));
+FILE* Get_temp ANSI((char **, char *, char *));
 FILE *Start_temp ANSI((char *, CELLPTR, char **));
 void Open_temp_error ANSI((char *, char *));
 void Link_temp ANSI((CELLPTR, FILE *, char *));
