@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1937,6 +1937,41 @@ SdPage* SdOutlineView::GetActualPage()
     SdPage* pPage = (SdPage*)pDoc->GetSdPage(nPageToSelect, PK_STANDARD);
 
     return(pPage);
+}
+
+/** selects the paragraph for the given page at the outliner view*/
+void SdOutlineView::SetActualPage( SdPage* pActual )
+{
+    if( pActual )
+    {
+        // get the number of paragraphs with ident 0 we need to skip before
+        // we finde the actual page
+        USHORT nPagesToSkip = (pActual->GetPageNum() - 1) / 2; // Sdr --> Sd
+
+        ULONG nParaPos = 0;
+        Paragraph* pPara = pOutliner->GetParagraph( 0 );
+
+        while( pPara )
+        {
+            // if this paragraph is a page ...
+            if ( pOutliner->GetDepth( (USHORT) nParaPos ) == 0 )
+            {
+                // see if we already skiped enough pages
+                if( 0 == nPagesToSkip )
+                    break;  // and if so, end the loop
+
+                // we skiped another page
+                nPagesToSkip--;
+            }
+
+            // get next paragraph
+            pPara = pOutliner->GetParagraph( ++nParaPos );
+        }
+
+        // if we found a paragraph, select its text at the outliner view
+        if( pPara )
+            pOutlinerView[0]->Select( pPara, TRUE, FALSE );
+    }
 }
 
 /*************************************************************************
