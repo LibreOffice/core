@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: sab $ $Date: 2002-12-02 12:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,8 @@ void SwXMLImport::SetStatisticAttributes(
 {
     if( IsStylesOnlyMode() || IsInsertMode() )
         return;
+
+    SvXMLImport::SetStatisticAttributes(xAttrList);
 
     Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                        UNO_QUERY);
