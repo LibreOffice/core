@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosqlmessage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-01 16:34:16 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 17:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ namespace dbaui
 OSQLMessageDialog::OSQLMessageDialog(const Reference< XMultiServiceFactory >& _rxORB)
     :OGenericUnoDialog(_rxORB)
 {
-    registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT,
+    registerMayBeVoidProperty(PROPERTY_SQLEXCEPTION, PROPERTY_ID_SQLEXCEPTION, PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID,
         &m_aException, ::getCppuType(static_cast<SQLException*>(NULL)));
 }
 
@@ -206,6 +206,9 @@ Dialog* OSQLMessageDialog::createDialog(Window* _pParent)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/01 16:34:16  fs
+ *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
+ *
  *  Revision 1.2  2000/10/27 08:08:47  fs
  *  don't include stringconstants.hrc directly anymore
  *
