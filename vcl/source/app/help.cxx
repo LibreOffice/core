@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-30 10:11:17 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 13:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,8 +352,8 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     ImplSetMouseTransparent( TRUE );
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;
-
-    EnableAlwaysOnTop();
+//  on windows this will raise the application window, because help windows are system windows now
+//  EnableAlwaysOnTop();
     EnableSaveBackground();
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
