@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-14 12:47:22 $
+ *  last change: $Author: bm $ $Date: 2000-12-15 17:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include "NamedBoolPropertyHdl.hxx"
 #endif
 
+#ifndef _XMLERRORINDICATORPROPERTYHDL_HXX_
+#include "XMLErrorIndicatorPropertyHdl.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #endif
@@ -143,6 +147,8 @@ using namespace com::sun::star;
 #define XML_SCH_TYPE_ERROR_CATEGORY         ( XML_SCH_TYPES_START + 1 )
 #define XML_SCH_TYPE_REGRESSION_TYPE        ( XML_SCH_TYPES_START + 2 )
 #define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
+#define XML_SCH_TYPE_ERROR_INDICATOR_UPPER  ( XML_SCH_TYPES_START + 4 )
+#define XML_SCH_TYPE_ERROR_INDICATOR_LOWER  ( XML_SCH_TYPES_START + 5 )
 // copyied from draw
 #define XML_SCH_TYPE_STROKE                 ( XML_SCH_TYPES_START + 20 )
 #define XML_SCH_TYPE_LINEJOIN               ( XML_SCH_TYPES_START + 21 )
@@ -158,8 +164,6 @@ using namespace com::sun::star;
 #define XML_SCH_SPECIAL_TICKS_MAJ_OUTER 2
 #define XML_SCH_SPECIAL_TICKS_MIN_INNER 3
 #define XML_SCH_SPECIAL_TICKS_MIN_OUTER 4
-#define XML_SCH_SPECIAL_ERROR_UPPER_INDICATOR 5
-#define XML_SCH_SPECIAL_ERROR_LOWER_INDICATOR 6
 #define XML_SCH_SPECIAL_TEXT_ROTATION 7
 #define XML_SCH_SPECIAL_DATA_LABEL_NUMBER 8
 #define XML_SCH_SPECIAL_DATA_LABEL_TEXT 9
@@ -193,10 +197,10 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // axis properties
     MAP_ENTRY( "DisplayLabels", CHART, display_label, XML_TYPE_BOOL ),
-    MAP_SPECIAL( "Marks", CHART, tick_marks_major_inner, XML_TYPE_NUMBER, TICKS_MAJ_INNER ),            // convert one constant
-    MAP_SPECIAL( "Marks", CHART, tick_marks_major_outer, XML_TYPE_NUMBER, TICKS_MAJ_OUTER ),            // to two bools
-    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_inner, XML_TYPE_NUMBER, TICKS_MIN_INNER ),        // see above
-    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_outer, XML_TYPE_NUMBER, TICKS_MIN_OUTER ),
+    MAP_SPECIAL( "Marks", CHART, tick_marks_major_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_INNER ),          // convert one constant
+    MAP_SPECIAL( "Marks", CHART, tick_marks_major_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_OUTER ),          // to two bools
+    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_INNER ),      // see above
+    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_OUTER ),
     MAP_ENTRY( "Logarithmic", CHART, logarithmic, XML_TYPE_BOOL ),
     MAP_CONTEXT( "Min", CHART, minimum, XML_TYPE_DOUBLE, MIN ),
     MAP_CONTEXT( "Max", CHART, maximum, XML_TYPE_DOUBLE, MAX ),
@@ -214,16 +218,16 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "ErrorMargin", CHART, error_margin, XML_TYPE_DOUBLE ),
     MAP_ENTRY( "ConstantErrorLow", CHART, error_lower_limit, XML_TYPE_DOUBLE ),
     MAP_ENTRY( "ConstantErrorHigh", CHART, error_upper_limit, XML_TYPE_DOUBLE ),
-    MAP_SPECIAL( "ErrorIndicator", CHART, error_upper_indicator, XML_TYPE_NUMBER, ERROR_UPPER_INDICATOR ),  // convert one constant
-    MAP_SPECIAL( "ErrorIndicator", CHART, error_lower_indicator, XML_TYPE_NUMBER, ERROR_LOWER_INDICATOR ),  // to two bools
+    MAP_ENTRY( "ErrorIndicator", CHART, error_upper_indicator, XML_SCH_TYPE_ERROR_INDICATOR_UPPER | MID_FLAG_MERGE_PROPERTY ),  // convert one constant
+    MAP_ENTRY( "ErrorIndicator", CHART, error_lower_indicator, XML_SCH_TYPE_ERROR_INDICATOR_LOWER | MID_FLAG_MERGE_PROPERTY ),  // to two bools
       MAP_ENTRY( "ErrorCategory", CHART, error_category, XML_SCH_TYPE_ERROR_CATEGORY ),
       MAP_ENTRY( "PercentageError", CHART, error_percentage, XML_TYPE_DOUBLE ),
       MAP_ENTRY( "RegressionCurves", CHART, regression_type, XML_SCH_TYPE_REGRESSION_TYPE ),
 
     // series/data-point properties
-    MAP_SPECIAL( "DataCaption", CHART, data_label_number, XML_TYPE_NUMBER, DATA_LABEL_NUMBER ), // convert one constant
-    MAP_SPECIAL( "DataCaption", CHART, data_label_text, XML_TYPE_NUMBER, DATA_LABEL_TEXT ),     // to 'tristate' and two bools
-    MAP_SPECIAL( "DataCaption", CHART, data_label_symbol, XML_TYPE_NUMBER, DATA_LABEL_SYMBOL ),
+    MAP_SPECIAL( "DataCaption", CHART, data_label_number, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_NUMBER ),   // convert one constant
+    MAP_SPECIAL( "DataCaption", CHART, data_label_text, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_TEXT ),       // to 'tristate' and two bools
+    MAP_SPECIAL( "DataCaption", CHART, data_label_symbol, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_SYMBOL ),
     MAP_ENTRY( "SegmentOffset", CHART, pie_offset, XML_TYPE_NUMBER ),
 
     // text properties for titles
@@ -399,6 +403,13 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                                                ::getCppuType((const chart::ChartRegressionCurveType*)0) );
                 break;
 
+            case XML_SCH_TYPE_ERROR_INDICATOR_LOWER:
+                pHdl = new XMLErrorIndicatorPropertyHdl( sal_False );
+                break;
+            case XML_SCH_TYPE_ERROR_INDICATOR_UPPER:
+                pHdl = new XMLErrorIndicatorPropertyHdl( sal_True );
+                break;
+
             case XML_SCH_TYPE_SOLID_TYPE:
                 // here we have a constant rather than an enum
                 pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
@@ -572,24 +583,6 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 bValue = (( nValue & chart::ChartAxisMarks::OUTER ) == chart::ChartAxisMarks::OUTER );
                 SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
                 break;
-            case XML_SCH_SPECIAL_ERROR_UPPER_INDICATOR:
-                {
-                    chart::ChartErrorIndicatorType eType;
-                    rProperty.maValue >>= eType;
-                    bValue = ( eType == chart::ChartErrorIndicatorType_TOP_AND_BOTTOM ||
-                               eType == chart::ChartErrorIndicatorType_UPPER );
-                    SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
-                }
-                break;
-            case XML_SCH_SPECIAL_ERROR_LOWER_INDICATOR:
-                {
-                    chart::ChartErrorIndicatorType eType;
-                    rProperty.maValue >>= eType;
-                    bValue = ( eType == chart::ChartErrorIndicatorType_TOP_AND_BOTTOM ||
-                               eType == chart::ChartErrorIndicatorType_LOWER );
-                    SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
-                }
-                break;
             case XML_SCH_SPECIAL_TEXT_ROTATION:
                 {
                     // convert from 100th degrees to degrees (double)
@@ -683,42 +676,6 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                 else
                     SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::OUTER );
                 rProperty.maValue <<= nValue;
-                break;
-            case XML_SCH_SPECIAL_ERROR_UPPER_INDICATOR:
-                {
-                    SvXMLUnitConverter::convertBool( bValue, rValue );
-                    // modify old value
-                    chart::ChartErrorIndicatorType eType;
-                    rProperty.maValue >>= eType;
-                    if( bValue )
-                        eType = ( eType == chart::ChartErrorIndicatorType_LOWER )
-                            ? chart::ChartErrorIndicatorType_TOP_AND_BOTTOM
-                            : chart::ChartErrorIndicatorType_UPPER;
-                    else
-                        eType = ( eType == chart::ChartErrorIndicatorType_TOP_AND_BOTTOM )
-                            ? chart::ChartErrorIndicatorType_LOWER
-                            : chart::ChartErrorIndicatorType_NONE;
-
-                    rProperty.maValue <<= eType;
-                }
-                break;
-            case XML_SCH_SPECIAL_ERROR_LOWER_INDICATOR:
-                {
-                    SvXMLUnitConverter::convertBool( bValue, rValue );
-                    // modify old value
-                    chart::ChartErrorIndicatorType eType;
-                    rProperty.maValue >>= eType;
-                    if( bValue )
-                        eType = ( eType == chart::ChartErrorIndicatorType_UPPER )
-                            ? chart::ChartErrorIndicatorType_TOP_AND_BOTTOM
-                            : chart::ChartErrorIndicatorType_LOWER;
-                    else
-                        eType = ( eType == chart::ChartErrorIndicatorType_TOP_AND_BOTTOM )
-                            ? chart::ChartErrorIndicatorType_UPPER
-                            : chart::ChartErrorIndicatorType_NONE;
-
-                    rProperty.maValue <<= eType;
-                }
                 break;
             case XML_SCH_SPECIAL_TEXT_ROTATION:
                 {
