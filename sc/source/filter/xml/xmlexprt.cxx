@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1927,7 +1927,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                 }
                                             }
                                             sal_Int32 nOld = nRow;
-                                            nRow = pDoc->GetNextDifferentChangedRow(nTable, static_cast<USHORT>(nRow));
+                                            nRow = pDoc->GetNextDifferentChangedRow(nTable, static_cast<USHORT>(nRow), false);
                                             if (nRow == MAXROW)
                                                 nRow++;
                                             for (sal_Int32 i = nOld + 1; i < nRow; i++)
