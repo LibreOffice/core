@@ -202,6 +202,7 @@
 "SvxShapeDimensioning";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "SvxShapeDimensioning";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SvxShapeDimensioning";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
+"SvxShapeDimensioning";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SvxShapeDimensioning";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SvxShapeDimensioning";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SvxShapeDimensioning";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

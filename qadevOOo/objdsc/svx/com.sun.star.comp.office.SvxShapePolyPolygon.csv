@@ -209,6 +209,7 @@
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SvxShapePolyPolygon";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
+"SvxShapePolyPolygon";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SvxShapePolyPolygon";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SvxShapePolyPolygon";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SvxShapePolyPolygon";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

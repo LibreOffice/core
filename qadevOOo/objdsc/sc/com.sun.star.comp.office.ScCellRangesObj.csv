@@ -180,6 +180,7 @@
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
+"ScCellRangesObj";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScCellRangesObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScCellRangesObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScCellRangesObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

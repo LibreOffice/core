@@ -96,6 +96,7 @@
 "ChartLegend";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ChartLegend";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ChartLegend";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
+"ChartLegend";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ChartLegend";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ChartLegend";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ChartLegend";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
