@@ -51,6 +51,7 @@ JAVA_FILES = \
     AccessibleTreeCellRenderer.java		\
     AccessibleTreeHandler.java	\
     AccessibleTreeNode.java		\
+    AccessibleUNOHandler.java		\
     Canvas.java					\
     FrameActionListener.java	\
     InformationWriter.java		\
