@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2004-12-16 11:17:09 $
+#   last change: $Author: hr $ $Date: 2004-12-20 09:55:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -49,7 +49,6 @@ PRJ=..$/..
 
 PRJNAME=crashrep
 TARGET=crash_report.bin
-TARGET2=crash_report_with_gtk.bin
 TARGETTYPE=CUI
 
 ENABLE_EXCEPTIONS=TRUE
@@ -79,51 +78,16 @@ dummy:
 SOLARLIB!:=$(SOLARLIB:s/jre/jnore/)
 
 OBJFILES=\
-    $(OBJ)$/interface.obj            \
-    $(OBJ)$/res.obj                  \
     $(OBJ)$/main.obj
 
 APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 
-APP1STDLIBS=$(PKGCONFIG_LIBS)
-APP1STDLIBS+=$(DYNAMIC) -lXext -lX11 -ldl -lnsl
+APP1STDLIBS=$(DYNAMIC) -lXext -lX11 -ldl -lnsl
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
-
-# Build statically linked version for special builds and non-pros
-
-.IF "$(ENABLE_CRASHDUMP)" == "STATIC" || "$(PRODUCT)" == ""
-APP2NOSAL=TRUE
-APP2TARGET=$(TARGET2)
-APP2OBJS=$(OBJFILES)
-.IF "$(OS)"=="SOLARIS"
-LINKFLAGSAPP!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
-.ENDIF          # "$(OS)"=="SOLARIS"
-APP2STDLIBS=$(PKGCONFIG_LIBS)
-APP2STDLIBS+=$(STATIC)
-.IF "$(SYSTEM_ZLIB)"=="YES"
-APP2STDLIBS+=-lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
-.ELSE
-APP2STDLIBS+=-lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11 -ldl -lnsl
-.ENDIF
-.IF "$(OS)" == "SOLARIS"
-APP2STDLIBS+=-lsocket
-.ENDIF
-.IF "$(OS)" == "FREEBSD"
-.IF "$(SYSTEM_ZLIB)"=="YES"
-APP2STDLIBS+=-lpng $(ZLIB3RDLIB) -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
-.ELSE
-APP2STDLIBS+=-lpng -lzlib -ljpeg -ltiff $(DYNAMIC) -lXext -lX11
-.ENDIF
-.ENDIF
-
-.ENDIF
-# Building crash_report_static
-
-CRASH_RES=$(foreach,i,$(alllangiso) $(BIN)$/crash_dump.res.$i)
 
 .ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 
@@ -133,13 +97,6 @@ CRASH_RES=$(foreach,i,$(alllangiso) $(BIN)$/crash_dump.res.$i)
 
 .INCLUDE :	target.mk
 
-ALLTAR : $(CRASH_RES)
-
 $(OBJ)$/main.obj: $(INCCOM)$/_version.h
-
-.IF "$(CRASH_RES)"!=""
-$(CRASH_RES) .UPDATEALL : $(COMMONMISC)$/crash_res$/crashrep.ulf
-    $(BIN)$/unxcrashres $(COMMONMISC)$/crash_res$/crashrep.ulf $(BIN)$/crash_dump.res
-.ENDIF          # "$(CRASH_RES)"!=""
 
 # Building crash_report
