@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2001-06-21 08:18:25 $
+#   last change: $Author: fs $ $Date: 2001-06-21 16:55:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,18 @@ all: \
     $(MISC)$/unpacked_$(TARGET)_lib \
     $(BIN)$/mozruntime.zip
 
+.IF "$(GUI)" == "UNX"
+
 $(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)lib.zip
-    +unzip -o -d $(LB) $(OS)$(COM)lib.zip && $(TOUCH)	$@
+    +unzip -o -d $(LB) $(OS)$(COM)lib.zip && unzip -o -d $(LB) $(OS)$(COM)runtime.zip && $(TOUCH) $@
+
+.ELSE
+
+$(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)lib.zip
+    +unzip -o -d $(LB) $(OS)$(COM)lib.zip && \
+    $(TOUCH) $@
+
+.ENDIF
 
 $(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)inc.zip
     +unzip -o -d $(INCCOM) $(OS)$(COM)inc.zip && $(TOUCH)	$@
