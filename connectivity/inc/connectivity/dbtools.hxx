@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-07 08:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,6 +413,17 @@ namespace dbtools
     */
     ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+
+    /** creates a SQL CREATE TABLE statement
+        @param  descriptor
+            The descriptor of the new table.
+        @param  _xConnection
+            The connection.
+        @return
+            The CREATE TABLE statement.
+    */
+    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable
