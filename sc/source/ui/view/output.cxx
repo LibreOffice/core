@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-30 18:39:33 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 14:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2703,12 +2703,16 @@ void ScOutputData::DrawClipMarks()
     if (!bAnyClipped)
         return;
 
+    Color aArrowFillCol( COL_LIGHTRED );
+
     ULONG nOldDrawMode = pDev->GetDrawMode();
-    if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    if ( bUseStyleColor && rStyleSettings.GetHighContrastMode() )
     {
-        // force SvxFont::DrawArrow to draw in a way suitable for high contrast mode
-        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-                            DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+        //  use DrawMode to change the arrow's outline color
+        pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE );
+        //  use text color also for the fill color
+        aArrowFillCol = rStyleSettings.GetWindowTextColor();
     }
 
     long nPosY = nScrY;
@@ -2763,7 +2767,7 @@ void ScOutputData::DrawClipMarks()
                     pDev->DrawRect(aMarkRect);
                     //! Test
 #endif
-                    SvxFont::DrawArrow( *pDev, aMarkRect, aMarkSize, Color(COL_LIGHTRED), FALSE );
+                    SvxFont::DrawArrow( *pDev, aMarkRect, aMarkSize, aArrowFillCol, FALSE );
                 }
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth;
