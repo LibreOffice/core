@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:40:30 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <dispatch/interceptionhelper.hxx>
 #endif
 
+#ifndef __FRAMEWORK_DISPATCH_CLOSEDISPATCHER_HXX_
+#include <dispatch/closedispatcher.hxx>
+#endif
+
 #ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
 #include <loadenv/loadenv.hxx>
 #endif
@@ -103,6 +107,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
 #include <classes/framelistanalyzer.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_DOCKINGAREADEFAULTACCEPTOR_HXX_
+#include <helper/dockingareadefaultacceptor.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
@@ -267,8 +275,6 @@ namespace framework{
 //  non exported const
 //_________________________________________________________________________________________________________________
 
-//#define ENABLE_DEFMODALDIALOGPARENT
-
 //_________________________________________________________________________________________________________________
 //  non exported definitions
 //_________________________________________________________________________________________________________________
@@ -379,6 +385,18 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // establish notifies for changing of "disabled commands" configuration during runtime
                                             m_aCommandOptions.EstablisFrameCallback(this);
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            // Create an initial layout manager
+                                            // Create layout manager and connect it to the newly created frame
+                                            css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager( m_xFactory->createInstance(
+                                                                                                                                    rtl::OUString::createFromAscii(
+                                                                                                                                        "drafts.com.sun.star.frame.LayoutManager" )),
+                                                                                                                                 css::uno::UNO_QUERY );
+                                            m_xLayoutManager = xLayoutManager;
+                                            m_xLayoutManager->attachFrame( this );
+
+                                            addFrameActionListener( css::uno::Reference< css::frame::XFrameActionListener >( m_xLayoutManager, css::uno::UNO_QUERY ));
                                         }
                                     )
 
@@ -427,7 +445,6 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
         ,   m_aPoster                   ( LINK( this, Frame, implts_windowClosing )         )
         ,   m_bIsHidden                 ( sal_True                                          )
-        ,   m_bIsBackingMode            ( sal_False                                         )
 {
     // Check incoming parameter to avoid against wrong initialization.
     LOG_ASSERT2( implcp_ctor( xFactory ), "Frame::Frame()", "Invalid parameter detected!" )
@@ -682,6 +699,13 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     {
         StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory( m_xFactory, m_xContainerWindow, sal_False );
         m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
+    }
+
+    // Provide container window to our layout manager implementation
+    if ( m_xLayoutManager.is() )
+    {
+        css::uno::Reference< drafts::com::sun::star::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject *>( new DockingAreaDefaultAcceptor( this )), css::uno::UNO_QUERY );
+        m_xLayoutManager->setDockingAreaAcceptor( xDockingAreaAcceptor );
     }
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
@@ -1240,19 +1264,6 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         m_eActiveState = eState;
         aWriteLock.unlock();
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
-
-#ifdef ENABLE_DEFMODALDIALOGPARENT
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-        Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
-        if ( !pWindow )
-            pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
-
-        if( pWindow != NULL && bisTop && m_xController.is() )
-        {
-            Application::SetDefDialogParent( pWindow );
-        }
-        aSolarGuard.clear();
-#endif // ENABLE_DEFMODALDIALOGPARENT
     }
 }
 
@@ -1446,26 +1457,6 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     aReadLock.unlock();
     /* } SAFE */
 
-#ifdef ENABLE_DEFMODALDIALOGPARENT
-    // Before dispose() of this window we must search another def modal dialog parent.
-    // Set the container window of this frame as the new one - but do it only if our old
-    // component window was this special dialog parent realy.
-    /* SOLAR SAFE { */
-    ::vos::OClearableGuard aGlobalSolarLock( Application::GetSolarMutex() );
-    Window* pContainerWindow    = VCLUnoHelper::GetWindow( xContainerWindow    );
-    Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow );
-    if (
-        ( pOldComponentWindow                    != NULL                )   &&
-        ( Application::GetDefDialogParent() == pOldComponentWindow ) &&
-        isTop()
-        )
-    {
-        Application::SetDefDialogParent( pContainerWindow );
-    }
-
-    aGlobalSolarLock.clear();
-    /* } SAFE */
-#endif
     //_____________________________________________________________________________________________________
     // stop listening on old window
     // May it produce some trouble.
@@ -1556,16 +1547,6 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     {
         if ( bHadFocus )
             xComponentWindow->setFocus();
-
-#ifdef ENABLE_DEFMODALDIALOGPARENT
-        /* SOLAR SAFE { */
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-        Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
-        if ( pWindow!=NULL && isTop() && xController.is() )
-            Application::SetDefDialogParent( pWindow );
-        aSolarGuard.clear();
-        /* } SOLAR SAFE */
-#endif
     }
 
     // If it was a new component window - we must resize it to fill out
@@ -1576,25 +1557,11 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     // OK - start listening on new window again - or do nothing if it is an empty one.
     implts_startWindowListening();
 
-    // We have to reset the backing component state property!
-    // It was set from outside ... but it can't be true for a new component.
-    // So we have to reset it. The outside code must restore this state again.
-    // Bute note:
-    // Because the backing component doesn't show the closer ...
-    // but every other document frame have it (if it's the last opened document) ...
-    // we have to update this state her too. The frame will may be recycled and switch
-    // from backing mode to a document mode.
     /* SAFE { */
     aWriteLock.lock();
-    if (m_bIsBackingMode)
-    {
-        m_bIsBackingMode = sal_False;
-        impl_checkMenuCloser();
-    }
+    impl_checkMenuCloser();
     aWriteLock.unlock();
     /* } SAFE */
-
-
 
     return sal_True;
 }
@@ -1955,6 +1922,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_xFactory                  = NULL;
     m_xDropTargetListener       = NULL;
     m_xDispatchRecorderSupplier = NULL;
+    m_xLayoutManager            = NULL;
 
     // It's important to set default values here!
     // If may be later somewhere change the disposed-behaviour of this implementation
@@ -1966,7 +1934,6 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     m_nExternalLockCount = 0;
     m_bSelfClose         = sal_False;
     m_bIsHidden          = sal_True;
-    m_bIsBackingMode     = sal_False;
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -2606,9 +2573,9 @@ sal_Bool SAL_CALL Frame::convertFastPropertyValue(          css::uno::Any&      
                     css::uno::makeAny(m_bIsHidden), aValue, aOldValue, aConvertedValue );
                 break;
 
-        case FRAME_PROPHANDLE_ISBACKINGMODE :
+        case FRAME_PROPHANDLE_LAYOUTMANAGER:
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_bIsBackingMode), aValue, aOldValue, aConvertedValue );
+                    css::uno::makeAny(m_xLayoutManager), aValue, aOldValue, aConvertedValue );
                 break;
 
         #ifdef ENABLE_WARNINGS
@@ -2659,8 +2626,8 @@ void SAL_CALL Frame::setFastPropertyValue_NoBroadcast(          sal_Int32       
                 aValue >>= m_xDispatchRecorderSupplier;
                 break;
 
-        case FRAME_PROPHANDLE_ISBACKINGMODE :
-                aValue >>= m_bIsBackingMode;
+        case FRAME_PROPHANDLE_LAYOUTMANAGER :
+                aValue >>= m_xLayoutManager;
                 break;
 
         #ifdef ENABLE_WARNINGS
@@ -2707,8 +2674,8 @@ void SAL_CALL Frame::getFastPropertyValue(  css::uno::Any&  aValue  ,
                 aValue <<= m_bIsHidden;
                 break;
 
-        case FRAME_PROPHANDLE_ISBACKINGMODE :
-                aValue <<= m_bIsBackingMode;
+        case FRAME_PROPHANDLE_LAYOUTMANAGER :
+                aValue <<= m_xLayoutManager;
                 break;
 
         #ifdef ENABLE_WARNINGS
@@ -2818,10 +2785,10 @@ const css::uno::Sequence< css::beans::Property > Frame::impl_getStaticPropertyDe
 
     static const css::beans::Property pPropertys[] =
     {
-        css::beans::Property( FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER, FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( FRAME_PROPNAME_ISBACKINGMODE           , FRAME_PROPHANDLE_ISBACKINGMODE           , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( FRAME_PROPNAME_ISHIDDEN                , FRAME_PROPHANDLE_ISHIDDEN                , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( FRAME_PROPNAME_TITLE                   , FRAME_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER, FRAME_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL)          , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( FRAME_PROPNAME_ISHIDDEN                , FRAME_PROPHANDLE_ISHIDDEN                , ::getBooleanCppuType()                                                                            , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( FRAME_PROPNAME_LAYOUTMANAGER           , FRAME_PROPHANDLE_LAYOUTMANAGER           , ::getCppuType((const css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >*)NULL)  , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( FRAME_PROPNAME_TITLE                   , FRAME_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                                       , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
     static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pPropertys, FRAME_PROPCOUNT );
@@ -2845,18 +2812,6 @@ void Frame::impl_disposeContainerWindow( css::uno::Reference< css::awt::XWindow 
 {
     if( xWindow.is() == sal_True )
     {
-#ifdef ENABLE_DEFMODALDIALOGPARENT
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if  (
-                ( pWindow                                !=  NULL     )   &&
-                ( Application::GetDefDialogParent() ==  pWindow  )
-            )
-        {
-            Application::SetDefDialogParent( NULL );
-        }
-        aSolarGuard.clear();
-#endif
         xWindow->setVisible( sal_False );
         // All VclComponents are XComponents; so call dispose before discarding
         // a css::uno::Reference< XVclComponent >, because this frame is the owner of the window
@@ -2930,36 +2885,6 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
 *//*-*****************************************************************************************************/
 void Frame::implts_resizeComponentWindow()
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Sometimes used by dispose() => soft exceptions!
-    TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-
-    // Make snapshot of both windows.
-    css::uno::Reference< css::awt::XWindow >   xContainerWindow    =   m_xContainerWindow  ;
-    css::uno::Reference< css::awt::XWindow >   xComponentWindow    =   m_xComponentWindow  ;
-
-    aReadLock.unlock();
-    /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-
-    // Work only if container window is set!
-    if  (
-            ( xContainerWindow.is() == sal_True )   &&
-            ( xComponentWindow.is() == sal_True )
-        )
-    {
-        // Get reference to his device.
-        css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
-        // Convert relativ size to output size.
-        css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
-        css::awt::DeviceInfo aInfo       = xDevice->getInfo();
-        css::awt::Size       aSize       (   aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
-                                             aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
-        // Resize ouer component window.
-        xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::SIZE );
-    }
 }
 
 /*-****************************************************************************************************//**
@@ -3264,7 +3189,8 @@ void Frame::implts_checkSuicide()
 /** little helper to enable/disable the menu closer at the menubar of the given frame.
 
     @param  xFrame
-                we use it's container window
+            we use its layout manager to set/reset a special callback.
+            Its existence regulate visibility of this closer item.
 
     @param  bState
                 <TRUE/> enable; <FALSE/> disable this state
@@ -3273,28 +3199,28 @@ void Frame::implts_checkSuicide()
 void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame ,
                             /*IN*/       sal_Bool                                   bState  )
 {
-    if (!xFrame.is())
+    // Note: If start module isnt installed - no closer has to be shown!
+    if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return;
 
     try
     {
-        css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
-        /* SOLAR SAFE { */
-        ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pWindow && pWindow->IsSystemWindow() )
+        css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
+        css::uno::Reference< dcss::frame::XLayoutManager > xLayoutManager;
+        xFrameProps->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+        css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XStatusListener > xCallback;
+        if (bState)
         {
-            MenuBar* pMenu = ((SystemWindow*)pWindow)->GetMenuBar();
-            if (pMenu)
-                pMenu->ShowCloser(bState);
+            CloseDispatcher* pHandler = new CloseDispatcher(m_xFactory, xFrame);
+            xCallback = css::uno::Reference< css::frame::XStatusListener >( static_cast< ::cppu::OWeakObject* >(pHandler), css::uno::UNO_QUERY );
         }
-        aSolarGuard.clear();
-        /* } SOLAR SAFE */
+        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::makeAny(xCallback));
     }
-    catch( css::uno::Exception& )
-    {
-        return;
-    }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 //_______________________________________________________________
