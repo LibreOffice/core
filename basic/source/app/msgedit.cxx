@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-26 12:59:07 $
+ *  last change: $Author: gh $ $Date: 2001-08-09 13:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,16 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
             BOOL bFileWasChanged = pAppWin->DiskFileChanged( SINCE_LAST_LOAD );
 
             DBG_ASSERT( aLogFileName == LogMsg->aLogFileName, "Logging to different logfile as before" );
+            DirEntry aEntry( LogMsg->aLogFileName );
+            BOOL bNewFile = !aEntry.Exists();
             SvFileStream aStrm( LogMsg->aLogFileName, STREAM_STD_WRITE );
+            if ( bNewFile )
+            {
+                String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");      // Version 3
+                aSave.ConvertLineEnd(LINEEND_CRLF);
+                aStrm << ByteString( aSave, RTL_TEXTENCODING_IBM_850 ).GetBuffer();
+            }
+
             String aLogMsg = Impl_MakeSaveText( LogMsg->aDebugData ).AppendAscii("\n");
             if( aStrm.IsOpen() )
             {
@@ -586,7 +595,8 @@ BOOL MsgEdit::Load( const String& aName )
             }
             else if ( bFirstLine && (aLine.Search( VERSION_STRING ) == 0) )
                 nVersion = aLine.Copy( VERSION_STRING.Len() ).ToInt32();
-            else bLoadError = TRUE;
+            else if ( aLine.Len() )
+                bLoadError = TRUE;
 
             bFirstLine = FALSE;
         }
@@ -620,7 +630,7 @@ BOOL MsgEdit::Save( const String& aName )
         else
         {
 //              LogType;Filename;Line;Col1;Col2;Message
-            String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");      // Version 2
+            String aSave = VERSION_STRING.Append( UniString::CreateFromInt32( 3 ) ).AppendAscii("\n");      // Version 3
             SvLBoxEntry *pRun = aEditTree.First();
             while ( pRun && aEditTree.NextSibling( pRun ) )
                 pRun = aEditTree.NextSibling( pRun );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-20 08:26:17 $
+ *  last change: $Author: gh $ $Date: 2001-08-09 13:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
         Reference< XImplementationRegistration >
             xIR( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
 
-        // Ask stefaqn bergmann or Kai Sommerfeld
+        // Ask Stephan Bergmann or Kai Sommerfeld
         // Andreas Bille
         xIR->registerImplementation( OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                                         OUString::createFromAscii(SAL_MODULENAME( "ucb1" )),
@@ -383,6 +383,7 @@ void BasicApp::Main( )
 
     pFrame->Show();
 
+    SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
     SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
     PostUserEvent( LINK( this, BasicApp, LateInit ) );
@@ -1461,7 +1462,8 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                     aResId = ResId( IDD_TT_ABOUT_DIALOG );
                 else
                     aResId = ResId( IDD_ABOUT_DIALOG );
-                AboutDialog( this, aResId ).Execute();
+                AboutDialog aAbout( this, aResId );
+                aAbout.Execute();
             }
             break;
         case RID_POPUPEDITVAR:
