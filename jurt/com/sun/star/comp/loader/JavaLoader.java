@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:40:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.13 $ $ $Date: 2003-05-26 08:40:06 $
+ * @version     $Revision: 1.14 $ $ $Date: 2004-07-23 14:43:37 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -323,9 +323,8 @@ public class JavaLoader implements XImplementationLoader,
         //    Normally a string must no be null.
         try {
             if ( locationUrl != null ) {
-                RegistrationClassFinder classFinder = new RegistrationClassFinder( locationUrl );
                 // 1.
-                clazz = classFinder.getRegistrationClass();
+                clazz = RegistrationClassFinder.find( locationUrl );
             }
             else {
                 // 2.
@@ -462,9 +461,7 @@ public class JavaLoader implements XImplementationLoader,
 
         try {
 
-            RegistrationClassFinder classFinder =
-                new RegistrationClassFinder(locationUrl);
-            Class clazz = classFinder.getRegistrationClass();
+            Class clazz = RegistrationClassFinder.find(locationUrl);
             if (null == clazz)
             {
                 throw new CannotRegisterImplementationException(
