@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:13 $
+ *  last change:$Date: 2003-02-04 15:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ import com.sun.star.table.CellRangeAddress;
 import util.ValueComparer;
 import com.sun.star.view.XSelectionSupplier;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.sheet.SpreadsheetView</code>. <p>
@@ -158,8 +161,7 @@ public class ScTabViewObj extends TestCase {
     * @see com.sun.star.frame.XModel
     * @see com.sun.star.sheet.SpreadsheetView
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XModel aModel = (XModel)
                     UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
@@ -174,11 +176,15 @@ public class ScTabViewObj extends TestCase {
         XIndexAccess oIndexAccess = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
         try {
-            oSheet = (XSpreadsheet)oIndexAccess.getByIndex(1);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class), oIndexAccess.getByIndex(1));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException( "Couldn't get a spreadsheet", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get a spreadsheet", e);
         }
@@ -226,4 +232,3 @@ public class ScTabViewObj extends TestCase {
     }
 
 }    // finish class ScTabViewObj
-
