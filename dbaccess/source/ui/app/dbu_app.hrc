@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbu_app.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:31:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): Ocke Janssen
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_APP_HRC_
+#define _DBU_APP_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define TBI_SWITCH_PREVIEW                  RID_DBACCESS_START
+
+#define RID_STR_NEW_FORM                    RID_STR_APP_START
+#define RID_STR_NEW_FORM_AUTO               RID_STR_APP_START + 1
+#define RID_STR_NEW_REPORT                  RID_STR_APP_START + 2
+#define RID_STR_NEW_REPORT_AUTO             RID_STR_APP_START + 3
+#define RID_STR_NEW_TABLE                   RID_STR_APP_START + 4
+#define RID_STR_NEW_TABLE_AUTO              RID_STR_APP_START + 5
+#define RID_STR_NEW_VIEW                    RID_STR_APP_START + 6
+#define RID_STR_NEW_VIEW_AUTO               RID_STR_APP_START + 7
+#define RID_STR_NEW_QUERY                   RID_STR_APP_START + 8
+#define RID_STR_NEW_QUERY_AUTO              RID_STR_APP_START + 9
+#define STR_QUERY_DELETE_DATASOURCE         RID_STR_APP_START + 10
+#define STR_APP_TITLE                       RID_STR_APP_START + 11
+#define RID_STR_NEW_QUERY_SQL               RID_STR_APP_START + 12
+#define RID_STR_REPORTS_CONTAINER           RID_STR_APP_START + 13
+#define RID_STR_FORMS_CONTAINER             RID_STR_APP_START + 14
+#define RID_STR_REPORTS_HELP_TEXT_WIZARD    RID_STR_APP_START + 15
+#define RID_STR_FORMS_HELP_TEXT             RID_STR_APP_START + 16
+#define RID_STR_QUERIES_HELP_TEXT           RID_STR_APP_START + 17
+#define RID_STR_QUERIES_HELP_TEXT_SQL       RID_STR_APP_START + 18
+#define RID_STR_VIEWS_HELP_TEXT_DESIGN      RID_STR_APP_START + 19
+#define RID_STR_VIEWS_HELP_TEXT_WIZARD      RID_STR_APP_START + 20
+#define STR_DATABASE                        RID_STR_APP_START + 21
+#define STR_TASKS                           RID_STR_APP_START + 22
+#define STR_DESCRIPTION                     RID_STR_APP_START + 23
+#define STR_PREVIEW                         RID_STR_APP_START + 24
+#define STR_DISABLEPREVIEW                  RID_STR_APP_START + 25
+#define RID_STR_QUERIES_HELP_TEXT_WIZARD    RID_STR_APP_START + 26
+#define RID_STR_TABLES_HELP_TEXT_DESIGN     RID_STR_APP_START + 27
+#define RID_STR_TABLES_HELP_TEXT_WIZARD     RID_STR_APP_START + 28
+#define RID_STR_FORMS_HELP_TEXT_WIZARD      RID_STR_APP_START + 29
+
+
+// please adjust checking before insert new strings
+
+#if RID_STR_FORMS_HELP_TEXT_WIZARD > RID_STR_APP_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif // _DBU_BRW_HRC_
+
