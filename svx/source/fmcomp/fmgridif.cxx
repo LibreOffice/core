@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:56:26 $
+ *  last change: $Author: fs $ $Date: 2000-12-20 09:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,7 +1596,12 @@ void FmXGridPeer::elementReplaced(const ::com::sun::star::container::ContainerEv
     sal_Int32 nWidth = 0;
     if (aWidth >>= nWidth)
         nWidth = pGrid->LogicToPixel(Point(nWidth,0),MAP_10TH_MM).X();
-    pGrid->AppendColumn(aName, nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
+    sal_uInt16 nNewId = pGrid->AppendColumn(aName, nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
+    sal_uInt16 nNewPos = pGrid->GetModelColumnPos(nNewId);
+
+    // set the model of the new column
+    DbGridColumn* pCol = pGrid->GetColumns().GetObject(nNewPos);
+    pCol->setModel(xNewColumn);
 
     addColumnListeners(xNewColumn);
 }
