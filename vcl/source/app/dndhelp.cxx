@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndhelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-23 12:38:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+
 
 #include <dndhelp.hxx>
 
