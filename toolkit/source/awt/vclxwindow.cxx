@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:10:01 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,19 +636,6 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 
     mxViewGraphics = NULL;
 
-    // dispose our accessibility wrapper
-    try
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
-    }
-    catch( const ::com::sun::star::uno::Exception& )
-    {
-        DBG_ERROR( "VCLXWindow::dispose: could not dispose the accessibility wrapper!" );
-    }
-    mxAccessibleContext = ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >();
-
     if ( !mbDisposing )
     {
         mbDisposing = sal_True;
@@ -674,9 +661,23 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
             DestroyOutputDevice();
         }
 
+        // #i14103# dispose the accessible context after the window has been destroyed,
+        // otherwise the old value in the child event fired in VCLXAccessibleComponent::ProcessWindowEvent()
+        // for VCLEVENT_WINDOW_CHILDDESTROYED contains a reference to an already disposed accessible object
+        try
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
+            if ( xComponent.is() )
+                xComponent->dispose();
+        }
+        catch ( const ::com::sun::star::uno::Exception& )
+        {
+            DBG_ERROR( "VCLXWindow::dispose: could not dispose the accessible context!" );
+        }
+        mxAccessibleContext.clear();
+
         mbDisposing = sal_False;
     }
-
 }
 
 void VCLXWindow::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
