@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-11 06:26:32 $
+ *  last change: $Author: pb $ $Date: 2001-08-23 10:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,9 +196,14 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     "src",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "svh",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_SVHELP,
     "svm",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM,
+    "stc",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_CALCTEMPLATE,
+    "sti",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_IMPRESSTEMPLATE,
+    "stw",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE,
     "sxc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
     "sxd",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
+    "sxg",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC,
     "sxi",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS,
+    "sxm",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH,
     "sxs",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART,
     "sxw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER,
     "sys",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
