@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
+ *  last change: $Author: kso $ $Date: 2002-10-24 11:59:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ public:
     }
 
     virtual sal_Bool CanUse( const ::rtl::OUString & inPath ) = 0;
+
+    virtual sal_Bool UsesProxy() = 0;
 
     // DAV methods
     //

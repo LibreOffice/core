@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
+ *  last change: $Author: kso $ $Date: 2002-10-24 11:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,6 +583,7 @@ NeonSession::~NeonSession( )
 }
 
 // -------------------------------------------------------------------
+// virtual
 sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
 {
     NeonUri theUri( inUri );
@@ -592,6 +593,13 @@ sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
         return sal_True;
 
     return sal_False;
+}
+
+// -------------------------------------------------------------------
+// virtual
+sal_Bool NeonSession::UsesProxy()
+{
+    return ( m_aProxyName.getLength() > 0 );
 }
 
 // -------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 12:46:13 $
+ *  last change: $Author: kso $ $Date: 2002-10-24 11:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ void DAVResourceAccess::OPTIONS( DAVCapabilities & rCapabilities,
         bRetry = sal_False;
         try
         {
-            m_xSession->OPTIONS( m_aPath,
+            m_xSession->OPTIONS( getRequestURI(),
                                  rCapabilities,
                                  DAVRequestEnvironment(
                                     new AuthListener( xEnv ) ) );
@@ -244,7 +244,7 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
         bRetry = sal_False;
         try
         {
-            m_xSession->PROPFIND( m_aPath,
+            m_xSession->PROPFIND( getRequestURI(),
                                   nDepth,
                                   rPropertyNames,
                                   rResources,
@@ -276,7 +276,7 @@ void DAVResourceAccess::PROPFIND( const Depth nDepth,
         bRetry = sal_False;
         try
         {
-            m_xSession->PROPFIND( m_aPath,
+            m_xSession->PROPFIND( getRequestURI(),
                                   nDepth,
                                   rResInfo,
                                   DAVRequestEnvironment(
@@ -306,7 +306,7 @@ void DAVResourceAccess::PROPPATCH( const std::vector< ProppatchValue >& rValues,
         bRetry = sal_False;
         try
         {
-            m_xSession->PROPPATCH( m_aPath,
+            m_xSession->PROPPATCH( getRequestURI(),
                                    rValues,
                                    DAVRequestEnvironment(
                                     new AuthListener( xEnv ) ) );
@@ -336,7 +336,7 @@ void DAVResourceAccess::HEAD( const std::vector< rtl::OUString > & rHeaderNames,
         bRetry = sal_False;
         try
         {
-            m_xSession->HEAD( m_aPath,
+            m_xSession->HEAD( getRequestURI(),
                               rHeaderNames,
                               rResource,
                               DAVRequestEnvironment(
@@ -366,7 +366,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
-            xStream = m_xSession->GET( m_aPath,
+            xStream = m_xSession->GET( getRequestURI(),
                                        DAVRequestEnvironment(
                                         new AuthListener( xEnv ) ) );
         }
@@ -396,7 +396,7 @@ void DAVResourceAccess::GET( uno::Reference< io::XOutputStream > & rStream,
         bRetry = sal_False;
         try
         {
-            m_xSession->GET( m_aPath,
+            m_xSession->GET( getRequestURI(),
                              rStream,
                              DAVRequestEnvironment(
                                 new AuthListener( xEnv ) ) );
@@ -427,7 +427,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
-            xStream = m_xSession->GET( m_aPath,
+            xStream = m_xSession->GET( getRequestURI(),
                                        rHeaderNames,
                                        rResource,
                                        DAVRequestEnvironment(
@@ -461,7 +461,7 @@ void DAVResourceAccess::GET(
         bRetry = sal_False;
         try
         {
-            m_xSession->GET( m_aPath,
+            m_xSession->GET( getRequestURI(),
                              rStream,
                              rHeaderNames,
                              rResource,
@@ -492,7 +492,7 @@ void DAVResourceAccess::PUT( const uno::Reference< io::XInputStream > & rStream,
         bRetry = sal_False;
         try
         {
-            m_xSession->PUT( m_aPath,
+            m_xSession->PUT( getRequestURI(),
                              rStream,
                              DAVRequestEnvironment(
                                 new AuthListener( xEnv ) ) );
@@ -524,7 +524,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
         bRetry = sal_False;
         try
         {
-            xStream = m_xSession->POST( m_aPath,
+            xStream = m_xSession->POST( getRequestURI(),
                                         rContentType,
                                         rReferer,
                                         rInputStream,
@@ -561,7 +561,7 @@ void DAVResourceAccess::POST(
         bRetry = sal_False;
         try
         {
-            m_xSession->POST( m_aPath,
+            m_xSession->POST( getRequestURI(),
                               rContentType,
                               rReferer,
                               rInputStream,
@@ -592,7 +592,7 @@ void DAVResourceAccess::MKCOL( const uno::Reference<
         bRetry = sal_False;
         try
         {
-            m_xSession->MKCOL( m_aPath,
+            m_xSession->MKCOL( getRequestURI(),
                                DAVRequestEnvironment(
                                 new AuthListener( xEnv ) ) );
         }
@@ -683,7 +683,7 @@ void DAVResourceAccess::DESTROY( const uno::Reference<
         bRetry = sal_False;
         try
         {
-            m_xSession->DESTROY( m_aPath,
+            m_xSession->DESTROY( getRequestURI(),
                                  DAVRequestEnvironment(
                                     new AuthListener( xEnv ) ) );
         }
@@ -743,7 +743,7 @@ void DAVResourceAccess::initialize()
 
             if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL ) )
             {
-                m_xSession = 0;
+                m_xSession.clear();
 
                 // create new webdav session
                 m_xSession
@@ -760,6 +760,19 @@ void DAVResourceAccess::initialize()
             m_aPath = aPath;
         }
     }
+}
+
+//=========================================================================
+const rtl::OUString & DAVResourceAccess::getRequestURI() const
+{
+    OSL_ENSURE( m_xSession.is(),
+                "DAVResourceAccess::getRequestURI - Not initialized!" );
+
+    // In case a proxy is used we have to use the absolute URI for a request.
+    if ( m_xSession->UsesProxy() )
+        return m_aURL;
+
+    return m_aPath;
 }
 
 //=========================================================================

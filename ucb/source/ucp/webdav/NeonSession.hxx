@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 12:46:14 $
+ *  last change: $Author: kso $ $Date: 2002-10-24 11:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,7 @@ class NeonSession : public DAVSession
         // DAVSession methods
         virtual sal_Bool CanUse( const ::rtl::OUString & inUri );
 
-        const rtl::OUString & getHostName() const { return m_aHostName; }
-
-        const void * getRequestData() const { return m_pRequestData; }
+        virtual sal_Bool UsesProxy();
 
         const DAVRequestEnvironment & getRequestEnvironment() const
         { return m_aEnv; }
@@ -251,6 +249,11 @@ class NeonSession : public DAVSession
                              const DAVRequestEnvironment & rEnv )
             throw ( DAVException );
         */
+
+        // helpers
+        const rtl::OUString & getHostName() const { return m_aHostName; }
+
+        const void * getRequestData() const { return m_pRequestData; }
 
     private:
         // Initialise "Neon sockets"
