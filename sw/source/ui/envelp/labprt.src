@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:54:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "‮דף שלם‬";
         Text[ hindi ] = "~सम्पूर्ण पृष्ठ";
         Text[ slovak ] = "~Celá stránka";
+        Text[ hungarian ] = "~Egész lap";
+        Text[ slovenian ] = "C~ela stran";
     };
     RadioButton BTN_SINGLE
     {
@@ -111,7 +113,7 @@ TabPage TP_LAB_PRT
         Text = "Einzelnes Eti~kett" ;
         Text [ ENGLISH ] = "Single label" ;
         Text [ NORWEGIAN ] = "Single label" ;
-        Text [ DANISH ] = "Enkelt etiket" ;
+        Text [ DANISH ] = "~Enkelt etiket" ;
         Text [ ENGLISH_US ] = "~Single label" ;
         Text [ SPANISH ] = "~Una etiqueta" ;
         Text [ FINNISH ] = "~Yksitt�inen tarra" ;
@@ -136,6 +138,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "‮מדבקה יחידה‬";
         Text[ hindi ] = "~अकेला लेबिल";
         Text[ slovak ] = "~Jeden štítok";
+        Text[ hungarian ] = "~Egyetlen címke";
+        Text[ slovenian ] = "~Ena sama nalepka";
     };
     FixedText TXT_COL
     {
@@ -144,7 +148,7 @@ TabPage TP_LAB_PRT
         Text = "S~palte" ;
         Text [ ENGLISH ] = "Column" ;
         Text [ NORWEGIAN ] = "Column" ;
-        Text [ DANISH ] = "Kolonne" ;
+        Text [ DANISH ] = "~Kolonne" ;
         Text [ ENGLISH_US ] = "Colu~mn" ;
         Text [ SPANISH ] = "C~olumna" ;
         Text [ FINNISH ] = "~Sarake" ;
@@ -170,6 +174,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "S~palte";
         Text[ hindi ] = "स्तं~भ";
         Text[ slovak ] = "S~tĺpec";
+        Text[ hungarian ] = "Oszl~op";
+        Text[ slovenian ] = "Stolpe~c";
     };
     NumericField FLD_COL
     {
@@ -190,7 +196,7 @@ TabPage TP_LAB_PRT
         Text = "Zei~le" ;
         Text [ ENGLISH ] = "Row" ;
         Text [ NORWEGIAN ] = "Row" ;
-        Text [ DANISH ] = "R�kke" ;
+        Text [ DANISH ] = "~R�kke" ;
         Text [ ENGLISH_US ] = "Ro~w" ;
         Text [ SPANISH ] = "~Fila" ;
         Text [ FINNISH ] = "Ri~vi" ;
@@ -216,6 +222,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "Zei~le";
         Text[ hindi ] = "~पंक्ति";
         Text[ slovak ] = "Ria~dok";
+        Text[ hungarian ] = "~Sor";
+        Text[ slovenian ] = "Vrsti~ca";
     };
     NumericField FLD_ROW
     {
@@ -261,6 +269,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "‮סינכרון תוכן‬";
         Text[ hindi ] = "विष~यों की समीकरण";
         Text[ slovak ] = "Synchroni~zovať obsahy";
+        Text[ hungarian ] = "Tartalom ~egyeztetése";
+        Text[ slovenian ] = "~Sinhroniziraj vsebino";
     };
     FixedLine FL_DONTKNOW
     {
@@ -293,6 +303,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "‮פיזור‬";
         Text[ hindi ] = "वितरण";
         Text[ slovak ] = "Rozdelenie";
+        Text[ hungarian ] = "Elosztás";
+        Text[ slovenian ] = "Porazdeli";
     };
     FixedText INF_PRINTER
     {
@@ -326,6 +338,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "‮שם מדפסת‬";
         Text[ hindi ] = "मुद्रक नाम";
         Text[ slovak ] = "Názov tlačiarne";
+        Text[ hungarian ] = "Nyomtatónév";
+        Text[ slovenian ] = "Ime tiskalnika";
     };
     PushButton BTN_PRTSETUP
     {
@@ -359,6 +373,8 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "~Einrichten...";
         Text[ hindi ] = "सेटप...";
         Text[ slovak ] = "Nastavenie...";
+        Text[ hungarian ] = "Beállítás...";
+        Text[ slovenian ] = "Nastavi...";
     };
     FixedLine FL_PRINTER
     {
@@ -391,9 +407,12 @@ TabPage TP_LAB_PRT
         Text[ hebrew ] = "‮מדפסת ‬";
         Text[ hindi ] = " मुद्रक ";
         Text[ slovak ] = " Tlačiareň";
+        Text[ hungarian ] = "Nyomtató";
+        Text[ slovenian ] = " Tiskalnik";
     };
 };
  // **************************************************************************
+
 
 
 
