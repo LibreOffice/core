@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-26 13:31:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class Path;
 
 class SfxOrganizeDlg_Impl;
 
-class SfxOrganizeListBox_Impl: public SvTreeListBox
+class SfxOrganizeListBox_Impl : public SvTreeListBox
 {
     enum BMPTYPE            { BMPTYPE_FOLDER, BMPTYPE_DOC };
 
@@ -124,6 +124,7 @@ protected:
     virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* );
     virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void            DragFinished( sal_Int8 nDropAction );
 
 public:
     enum DataEnum   { VIEW_TEMPLATES, VIEW_FILES } eViewType;
