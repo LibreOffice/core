@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:12:13 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ Resource RSC_DATASOURCE_TYPES
         Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
         Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
+        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;“екст;Ёлектронна€ таблица;јдресна€ книга";
+        Text[ finnish ] = "Adabas;JDBC;ODBC;dBase;ADO;Teksti;Laskentataulut;Osoitteisto";
     };
 };
 
@@ -324,12 +326,12 @@ Resource RSC_CHARSETS
         Text [ english ] = "System";
         Text [ english_us ] = "System";
         Text[ portuguese ] = "Sistema";
-        Text[ russian ] = "»з системы";
+        Text[ russian ] = "System";
         Text[ greek ] = "”эуфзмб";
         Text[ dutch ] = "Systeem";
         Text[ french ] = "Systиme";
         Text[ spanish ] = "Sistema";
-        Text[ finnish ] = "J?rjestelm?";
+        Text[ finnish ] = "Jдrjestelmд";
         Text[ italian ] = "Sistema";
         Text[ danish ] = "System";
         Text[ swedish ] = "System";
@@ -405,7 +407,7 @@ String STR_GENERAL_SDB_ERROR
     Text [ english ] = "Error while connecting to the data source";
     Text [ english_us ] = "Error while connecting to the data source";
     Text[ portuguese ] = "Erro na ligaзгo а fonte de dados";
-    Text[ russian ] = "ќшибка при соединении с исходными данными";
+    Text[ russian ] = "ќшибка подключени€ к источнику данных";
     Text[ greek ] = "–бспхуй№уфзке уц№лмб кбф№ фз уэндеуз ме фзн рспЁлехуз фщн дедпмЁнщн";
     Text[ dutch ] = "Fout bij verbinding met gegevensbron";
     Text[ french ] = "Erreur lors de la connexion а la source de donnйes";
@@ -432,7 +434,7 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text [ english ] = "Error while creating!";
     Text [ english_us ] = "Error during creation!";
     Text[ portuguese ] = "Erro ao criar objecto!";
-    Text[ russian ] = "ќшибка во врем€ создани€.";
+    Text[ russian ] = "ќшибка создани€!";
     Text[ greek ] = "”ц№лмб кбф№ фзн дзмйпхсгяб!";
     Text[ dutch ] = "Fout bij definiлren!";
     Text[ french ] = "Erreur durant le processus de crйation !";
@@ -459,12 +461,12 @@ String STR_UNEXPECTED_ERROR
     Text [ english ] = "An unexpected error occured. The operation could not be completed.";
     Text [ english_us ] = "An unexpected error occurred. The operation could not be performed.";
     Text[ portuguese ] = "Ocorreu um erro imprevisto. … impossнvel executar a operaзгo.";
-    Text[ russian ] = "ѕроизошла неожиданна€ ошибка. ¬ыполнить данную операцию невозможно.";
+    Text[ russian ] = "ѕроизошла неожиданна€ ошибка. Ќевозможно выполнить данную операцию.";
     Text[ greek ] = "–бспхуй№уфзке Ёнб мз бнбменьменп уц№лмб. ƒен ёфбн дхнбфьн нб екфелеуфея з енфплё.";
     Text[ dutch ] = "Er is een onverwachte fout opgetreden. De opdracht kan niet worden uitgevoerd.";
     Text[ french ] = "Une erreur imprйvue s'est produite : impossible d'exйcuter l'opйration !";
     Text[ spanish ] = "Se ha producido un error. Imposible ejecutar la operaciуn.";
-    Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa";
+    Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa.";
     Text[ italian ] = "Si и verificato un errore inaspettato. Impossibile terminare l'operazione.";
     Text[ danish ] = "Der er opstеet en uventet fejl. Operationen kan ikke udfшres.";
     Text[ swedish ] = "Ett ovдntat fel har uppstеtt. Det gеr inte att utfцra operationen.";
@@ -486,12 +488,12 @@ String STR_COULDNOTOPEN_LINKEDDOC
     Text [ english ] = "Th document\n\n$file$\n\ncould not be opened.";
     Text [ english_us ] = "The document\n\n$file$\n\ncould not be opened.";
     Text[ portuguese ] = "Foi impossнvel abrir o documento\n\n$file$\n\n.";
-    Text[ russian ] = "ќткрыть документ\n\n$file$\n\nневозможно.";
+    Text[ russian ] = "Ќевозможно открыть документ\n\n$file$\n\n.";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб бнпйчфея фп Ёггсбцп\n\n$file$.";
-    Text[ dutch ] = "Het document\n\n$file$\n\nkon niet worden geopend.";
+    Text[ dutch ] = "Het document\n\n$file$\n\nkan niet worden geopend.";
     Text[ french ] = "Impossible d'ouvrir\n\nle document\n\n$file$ !";
     Text[ spanish ] = "No se pudo abrir el documento\n\n$file$\n\n.";
-    Text[ finnish ] = "Asiakirjan \n\n$file$\n\navaaminen ei onnistunut.";
+    Text[ finnish ] = "Asiakirjan\n\n$file$\n\navaaminen ei onnistunut.";
     Text[ italian ] = "Impossibile\naprire il documento\n\n$file$.";
     Text[ danish ] = "Dokumentet\n\n$file$\n\nkunne ikke еbnes.";
     Text[ swedish ] = "Det gick inte att цppna dokumentet\n\n$file$\n\n.";
@@ -513,12 +515,12 @@ String STR_MISSING_TABLES_XDROP
     Text [ english ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text [ english_us ] = "The table cannot be deleted because the database connection does not support this.";
     Text[ portuguese ] = "A tabela nгo tem suporte na ligaзгo da base de dados e por isso impossнvel de eliminar.";
-    Text[ russian ] = "”далить таблицу невозможно, поскольку соедиенение базы данных этого не поддерживает.";
+    Text[ russian ] = "Ќевозможно удалить таблицу, так как подключение к базе данных это не поддерживает.";
     Text[ greek ] = "ƒен еянбй дхнбфьн нб дйбгсбцея п рянбкбт, ерейдё ден хр№счей уэндеуз ме фзн в№уз дедпмЁнщн.";
-    Text[ dutch ] = "De tabel kan niet worden gewist, daar deze niet wordt ondersteund door de database.";
+    Text[ dutch ] = "De tabel kan niet worden gewist omdat deze niet wordt ondersteund door de database.";
     Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportйe par la connexion de BD.";
     Text[ spanish ] = "No se puede eliminar la tabla porque la conexiуn con la base de datos no apoya esta operaciуn.";
-    Text[ finnish ] = "Taulukkoa ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
+    Text[ finnish ] = "Taulua ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
     Text[ italian ] = "Impossibile eliminare la tabella perchй non и supportata dal collegamento al database.";
     Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke understшtter den.";
     Text[ swedish ] = "Det gеr inte att radera tabellen eftersom databasfцrbindelsen inte stцdjer den.";
@@ -620,6 +622,9 @@ String STR_REDO_COLON
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.50  2002/11/25 15:12:13  kz
+ *  Merge SRX644: 25.11.02 - 16:08:20
+ *
  *  Revision 1.49  2002/11/21 15:27:11  oj
  *  #105213# impl new feature of rown mysql driver page
  *
