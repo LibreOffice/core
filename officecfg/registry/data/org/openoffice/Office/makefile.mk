@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-07 10:02:52 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:46:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ XCUFILES= \
     SFX.xcu \
     TableWizard.xcu \
     UI.xcu \
+    Views.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
     Writer.xcu
