@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:55:44 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 11:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2025,7 +2025,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    Sequence< ::rtl::OUString > &rServices = OPackageStructureCreator::impl_getStaticSupportedServiceNames();
+    Sequence< ::rtl::OUString > rServices = OPackageStructureCreator::impl_getStaticSupportedServiceNames();
     for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
         xNewKey->createKey( rServices.getConstArray()[ind] );
 
