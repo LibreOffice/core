@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:33:32 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class SdFormatClipboard;
 
 #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
 #define SO2_DECL_SVSTORAGESTREAM_DEFINED
@@ -110,7 +111,6 @@ class FuPoor;
 class FrameView;
 class View;
 class ViewShell;
-
 
 // ------------------
 // - DrawDocShell -
@@ -259,6 +259,9 @@ public:
                             // #91457# ExecuteSpellPopup now handled by DrawDocShell
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
 #endif
+
+public:
+    SdFormatClipboard*      pFormatClipboard;
 
 protected:
 
