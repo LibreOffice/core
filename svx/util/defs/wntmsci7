@@ -22771,3 +22771,6 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?s_pType_com_sun_star_reflection_XProxyFactory@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXProxyFactory@reflection@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?set@?$Reference@VXAccessibleContext@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@QAAEPAVXAccessibleContext@accessibility@345drafts@@@Z
 ?set@?$Reference@VXProxyFactory@reflection@star@sun@com@@@uno@star@sun@com@@QAAEPAVXProxyFactory@reflection@345@@Z
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx2255622305@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx1511529@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx24232423@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
