@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:30:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case FID_DEFINE_NAME:
             case FID_USE_NAME:
             case FID_INSERT_NAME:
-            case SID_SPELLING:
+            case SID_SPELL_DIALOG:
             case SID_HANGUL_HANJA_CONVERSION:
 
             pScMod->InputEnterHandler();
@@ -1581,8 +1581,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        case SID_SPELLING:
-            pTabViewShell->DoSpellingChecker();
+        case SID_SPELL_DIALOG:
+//           pTabViewShell->DoSpellingChecker();
+            {
+                SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
+                if( rReq.GetArgs() )
+                    pViewFrame->SetChildWindow( SID_SPELL_DIALOG,
+                        static_cast< const SfxBoolItem& >( rReq.GetArgs()->
+                            Get( SID_SPELL_DIALOG ) ).GetValue() );
+                else
+                    pViewFrame->ToggleChildWindow( SID_SPELL_DIALOG );
+
+                pViewFrame->GetBindings().Invalidate( SID_SPELL_DIALOG );
+                rReq.Ignore();
+            }
             break;
 
         case SID_HANGUL_HANJA_CONVERSION:
