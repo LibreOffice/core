@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:43:18 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
     //Follow erzeugt und aufgebaut und direkt hinter this gepastet.
     //Join() Holt sich den Inhalt aus dem Follow und vernichtet diesen.
-    bool Split( const SwTwips nCutPos );
+    bool Split( const SwTwips nCutPos, bool bTryToSplit );
     bool Join();
 
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
