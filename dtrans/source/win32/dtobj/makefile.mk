@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 14:05:37 $
+#   last change: $Author: rt $ $Date: 2004-10-22 07:57:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,8 @@ LIBTARGET=NO
 # ------------------------------------------------------------------
 
 .INCLUDE : ..$/..$/cppumaker.mk
-
-#CFLAGS+=-GR -DUNICODE -D_UNICODE
+#-DUNICODE -D_UNICODE
+CFLAGS+=-GR /Ob0
 UNOTYPES= \
     com.sun.star.datatransfer.XSystemTransferable
     
