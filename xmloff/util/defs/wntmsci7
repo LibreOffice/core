@@ -10964,3 +10964,6 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ?ImpressXMLClipboardExport_createInstance@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@2345@@Z
 ?ImpressXMLClipboardExport_getImplementationName@@YA?AVOUString@rtl@@XZ
 ?ImpressXMLClipboardExport_getSupportedServiceNames@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
+?Imp_CorrectPolygonFlag@@YAXKQBUPoint@awt@star@sun@com@@QAW4PolygonFlags@drawing@345@JJ@Z
+?Imp_ImportDoubleAndSpaces@@YANNABVOUString@rtl@@AAJJABVSvXMLUnitConverter@@@Z
+?Imp_SkipDoubleAndSpacesAndCommas@@YAXABVOUString@rtl@@AAJJ@Z
