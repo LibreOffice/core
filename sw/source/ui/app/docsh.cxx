@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,7 +1032,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     //Einen leeren JobSetup setzen wir nicht ein, denn der wuerde nur zu
     //fragwuerdigem Ergebnis nach teurer Neuformatierung fuehren (Preview!)
     JobSetup *pOrig = 0;
-    if ( rSetup.GetPrinterName().Len() || ASPECT_THUMBNAIL != nAspect )
+    if ( rSetup.GetPrinterName().Len() && ASPECT_THUMBNAIL != nAspect )
     {
         JobSetup* pOrig = (JobSetup*)pDoc->GetJobsetup();
         if( pOrig )         // dann kopieren wir uns den
@@ -1124,6 +1124,11 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
 Printer *SwDocShell::GetDocumentPrinter()
 {
     return pDoc->GetPrt();
+}
+
+OutputDevice* SwDocShell::GetDocumentRefDev()
+{
+    return pDoc->_GetRefDev();
 }
 
 void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
