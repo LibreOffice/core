@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jbu $ $Date: 2002-04-29 14:32:46 $
+ *  last change: $Author: jbu $ $Date: 2002-05-22 07:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
 
 #else
 #define INI_FILE "java.ini"
-#define DEF_JAVALIB "javai.dll"
+#define DEF_JAVALIB "jvm.dll"
 
 #define TIMEZONE "MET"
 
