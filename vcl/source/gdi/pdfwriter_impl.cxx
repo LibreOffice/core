@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:33:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1485,15 +1485,20 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
     SetText( aText );
     SetUnitsPerPixel( 1000 );
 
+    rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( RTL_TEXTENCODING_MS_1252 );
+
     Point aNewPos( 0, 0 );
     bool bRightToLeft;
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
+        if( bRightToLeft )
+            cChar = GetMirroredChar( cChar );
+
         if( cChar & 0xff00 )
         {
             // some characters can be used by conversion
-            if( (cChar >= 0xf000) && mbIsSymbolFont  )
+            if( (cChar >= 0xf000) && mbIsSymbolFont )
                 cChar -= 0xf000;
             else
             {
@@ -1501,7 +1506,6 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
                 sal_uInt32 nInfo;
                 sal_Size nSrcCvtChars;
 
-                rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( RTL_TEXTENCODING_MS_1252 );
                 sal_Size nConv = rtl_convertUnicodeToText( aConv,
                                                            NULL,
                                                            &cChar, 1,
@@ -1513,8 +1517,6 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
                 // are handled via WinAnsi encoding
                 if( nConv > 0 )
                     cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
-
-                rtl_destroyUnicodeToTextConverter( aConv );
             }
         }
         if( cChar & 0xff00 )
@@ -1533,6 +1535,8 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         aNewPos.X() += nGlyphWidth;
     }
+
+    rtl_destroyUnicodeToTextConverter( aConv );
 
     return true;
 }
