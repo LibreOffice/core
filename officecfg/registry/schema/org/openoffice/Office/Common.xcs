@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:19:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -28488,6 +28488,7 @@
 		</set>
 		<group oor:name="ExternalApps" oor:extensible="true">
 			<info>
+				<deprecated>Without replacement.</deprecated>
 				<author>OBR</author>
 				<desc xml:lang="en-US">Specifies external helper applications / protocol handlers.</desc>
 				<desc xml:lang="el">Specifies external helper applications / protocol handlers.</desc>
