@@ -10,4 +10,5 @@
  <library:library library:name="Gimmicks" library:link="true"/>
  <library:library library:name="ImportWizard" library:link="true"/>
  <library:library library:name="Euro" library:link="true"/>
+ <library:library library:name="Depot" library:link="true"/>
 </library:libraries>

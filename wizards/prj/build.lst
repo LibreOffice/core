@@ -9,4 +9,5 @@ wz      wizards\source\schedule                                 nmake           
 wz      wizards\source\template                                 nmake           -       all     wz_templatewiz NULL
 wz      wizards\source\tools                                    nmake           -       all     wz_toolswiz NULL
 wz      wizards\source\webwizard                                nmake           -       all     wz_webwizard NULL
+wz      wizards\source\depot                                    nmake           -       all     wz_depot NULL
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
