@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:01:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,10 +224,11 @@ sal_Bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* 
 //              case HINT_LAYERSETCHG:          // Layerset geaendert
 //              case HINT_LAYERSETORDERCHG:     // Layersetreihenfolge geaendert (Insert/Remove/ChangePos)
 
-        case HINT_PAGECHG:              // Page geaendert
-            aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageModified" ) );
-            pPage = pSdrHint->GetPage();
-            break;
+// #115423#
+//      case HINT_PAGECHG:              // Page geaendert
+//          aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageModified" ) );
+//          pPage = pSdrHint->GetPage();
+//          break;
         case HINT_PAGEORDERCHG:         // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
             aEvent.EventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageOrderModified" ) );
             pPage = pSdrHint->GetPage();
