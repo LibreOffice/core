@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.122 $
+#   $Revision: 1.123 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-22 13:27:25 $
+#   last change: $Author: svesik $ $Date: 2002-08-29 13:48:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1013,6 +1013,9 @@ SCPDEFS+=-DISO_CODE=$(L10N_framework)
 
 SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
+.IF "$(COM)"=="GCC"
+SCPDEFS+=-DLIBSTDCPP3=$(LIBSTDCPP3) -DSHORTSTDCPP3=$(SHORTSTDCPP3)
+.ENDIF			# "$(LIBSTDCPP3)"!=""
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
@@ -1488,8 +1491,13 @@ UNOUCROUT*=$(OUT)$/inc
 UNOUCRRDB*=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/udkapi.rdb
 .ELSE           # "$(UDKSTAMP)"==""
+.IF "$(remote)"!=""
+UNOUCRRDB*=$(SOLARBINDIR)$/remote/applicat.rdb
+UNOUCRDEP*=$(SOLARBINDIR)$/remote/applicat.rdb
+.ELSE			# "$(remote)"!=""
 UNOUCRRDB*=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRDEP*=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF			# "$(remote)"!=""
 .ENDIF          # "$(UDKSTAMP)"==""
 
 # --- Compiler -----------------------------------------------------
