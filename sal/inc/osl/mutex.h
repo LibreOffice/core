@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: mfe $ $Date: 2001-02-27 15:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex);
 */
 sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex);
 
+/** Returns a unique and global mutex.
+    @return the global mutex.
+*/
 oslMutex * SAL_CALL osl_getGlobalMutex();
 
 #ifdef __cplusplus
@@ -112,6 +115,9 @@ oslMutex * SAL_CALL osl_getGlobalMutex();
 /*************************************************************************
 *
 *    $Log: not supported by cvs2svn $
+*    Revision 1.1.1.1  2000/09/18 15:17:13  hr
+*    initial import
+*
 *    Revision 1.6  2000/09/18 14:28:49  willem.vandorp
 *    OpenOffice header added.
 *
