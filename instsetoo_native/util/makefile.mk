@@ -62,6 +62,11 @@ TARGET=util
 GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
+.IF "$(USE_SHELL)"=="4nt"
+PYTHONPATH:=.;$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
+.EXPORT: PYTHONPATH
+.ENDIF			# "$(USE_SHELL)"=="4nt"
+
 .EXPORT: LAST_MINOR
 .EXPORT: PRJ
 .EXPORT: PRJNAME
