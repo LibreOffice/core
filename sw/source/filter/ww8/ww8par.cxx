@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:17:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1941,7 +1941,9 @@ bool SwWW8ImplReader::ReadPlainChars(long& rPos, long nEnd, long nCpOfs)
     // read the stream data
     BYTE   nBCode;
     UINT16 nUCode;
-    for( xub_StrLen nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
+    xub_StrLen nL2;
+
+    for( nL2 = 0; nL2 < nLen; ++nL2, ++pWork )
     {
         if (bIsUnicode)
             *pStrm >> nUCode;   // unicode  --> read 2 bytes
