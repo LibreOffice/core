@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:20:48 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #include <svx/dlgutil.hxx>
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
 
 // -----------------
 // - Option ranges -
@@ -117,7 +120,7 @@ class FrameView;
 
 class SdOptionsGeneric;
 
-class SdOptionsItem : public ::utl::ConfigItem
+class SD_DLLPUBLIC SdOptionsItem : public ::utl::ConfigItem
 {
 
 private:
@@ -127,8 +130,8 @@ private:
 
 public:
 
-                            SdOptionsItem( const SdOptionsGeneric& rParent, const ::rtl::OUString rSubTree );
-                            ~SdOptionsItem();
+    SdOptionsItem( const SdOptionsGeneric& rParent, const ::rtl::OUString rSubTree );
+    virtual ~SdOptionsItem();
 
     virtual void            Commit();
 
@@ -143,7 +146,7 @@ public:
 // - SdOptionsGeneric -
 // --------------------
 
-class SdOptionsGeneric
+class SD_DLLPUBLIC SdOptionsGeneric
 {
 friend class SdOptionsItem;
 
@@ -155,8 +158,8 @@ private:
     BOOL                    mbInit          : 1;
     BOOL                    mbEnableModify  : 1;
 
-    void                    Commit( SdOptionsItem& rCfgItem ) const;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const;
+    SD_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
+    SD_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const;
 
 protected:
 
@@ -189,7 +192,7 @@ public:
 // - SdOptionsLayout -
 // -------------------
 
-class SdOptionsLayout : public SdOptionsGeneric
+class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
 {
 private:
 
@@ -233,7 +236,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SdOptionsLayoutItem : public SfxPoolItem, public SdOptionsLayout
+class SD_DLLPUBLIC SdOptionsLayoutItem : public SfxPoolItem, public SdOptionsLayout
 {
 public:
 
@@ -250,7 +253,7 @@ public:
 // - SdOptionsContents -
 // ---------------------
 
-class SdOptionsContents : public SdOptionsGeneric
+class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
 {
 private:
 
@@ -286,7 +289,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SdOptionsContentsItem : public SfxPoolItem, public SdOptionsContents
+class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem, public SdOptionsContents
 {
 public:
 
@@ -304,7 +307,7 @@ public:
 // - SdOptionsMisc -
 // -----------------
 
-class SdOptionsMisc : public SdOptionsGeneric
+class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
@@ -414,7 +417,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SdOptionsMiscItem : public SfxPoolItem, public SdOptionsMisc
+class SD_DLLPUBLIC SdOptionsMiscItem : public SfxPoolItem, public SdOptionsMisc
 {
 public:
 
@@ -432,7 +435,7 @@ public:
 // - SdOptionsSnap -
 // -----------------
 
-class SdOptionsSnap : public SdOptionsGeneric
+class SD_DLLPUBLIC SdOptionsSnap : public SdOptionsGeneric
 {
 private:
 
@@ -486,7 +489,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SdOptionsSnapItem : public SfxPoolItem, public SdOptionsSnap
+class SD_DLLPUBLIC SdOptionsSnapItem : public SfxPoolItem, public SdOptionsSnap
 {
 public:
 
@@ -604,7 +607,7 @@ public:
 // - SdOptionsPrint -
 // ------------------
 
-class SdOptionsPrint : public SdOptionsGeneric
+class SD_DLLPUBLIC SdOptionsPrint : public SdOptionsGeneric
 {
 private:
 
@@ -687,7 +690,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-class SdOptionsPrintItem : public SfxPoolItem, public SdOptionsPrint
+class SD_DLLPUBLIC SdOptionsPrintItem : public SfxPoolItem, public SdOptionsPrint
 {
 public:
 
