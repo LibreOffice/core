@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-08 15:38:30 $
+#   last change: $Author: jl $ $Date: 2002-10-25 06:52:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,8 @@ PRJNAME	= ridljar
 TARGET	= ridl
 
 # --- Settings -----------------------------------------------------
+USE_UDK_EXTENDED_MANIFESTFILE=TRUE
+USE_EXTENDED_MANIFESTFILE=TRUE
 
 .INCLUDE :  settings.mk
 
