@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2003-12-17 15:01:13 $
+dnl * Date: $Date: 2004-02-02 18:16:59 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.58 $ )
+AC_REVISION( $Revision: 1.59 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -37,13 +37,13 @@ AC_ARG_ENABLE(libsn,
 [  --enable-libsn          Enables the use of libstartup-notification
 ],,)
 AC_ARG_WITH(fonts,
-[  --without-fonts        Removes Bitstream Vera fonts from
+[  --without-fonts         Removes Bitstream Vera fonts from
                           openoffice.org installation set, for people building
                           for specific distributions where the fonts are known 
                           to be already available
 ],,)
 AC_ARG_ENABLE(mozilla,
-[  --enable-mozilla       OO.o may include a strangely hacked up mozilla
+[  --enable-mozilla        OO.o may include a strangely hacked up mozilla
 			  binary for your platform, to build with this
 			  enabled, use this option.
  
@@ -162,7 +162,7 @@ AC_ARG_WITH(frame-home,
                           Usage: --with-frame-home=<absolute path to Framework SDK>
 ],,)
 AC_ARG_WITH(wdevenv-path,
-[  --with-wdevenv-path       For Microsoft C/C++ .NET compiler users, please supply the path
+[  --with-wdevenv-path     For Microsoft C/C++ .NET compiler users, please supply the path
                           pointing to the wdevenv.exe. 
  
                           Usage: --with-wdevenv-path=<absolute path to wdevenv.exe>
@@ -363,6 +363,9 @@ case "$_os" in
 		;;
 	"NetBSD")
 		test_x=yes
+		test_gtk=yes
+		PTHREAD_CFLAGS="-pthread"
+		PTHREAD_LIBS="-pthread -lpthread"
 		;;
 	"IRIX")
 		test_x=yes
@@ -550,19 +553,16 @@ dnl ===================================================================
 dnl  Checks for c compiler,
 dnl  The check for the c++ compiler is later on.
 dnl ===================================================================
-if test -n "$with_cl_home"; then
-   if test -z "$CC"; then
-      CC="$with_cl_home/bin/cl"
-   fi
-fi
 if test -n "$with_gcc_home"; then
    if test -z "$CC"; then
       CC="$with_gcc_home/bin/gcc"
    fi
 fi
 
-dnl The following checks for gcc, cc and then (cl if win32)
-AC_PROG_CC
+dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
+if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+   AC_PROG_CC
+fi
 
 COMPATH=`dirname "$CC"`
 if test "$COMPATH" = "." ; then
@@ -574,7 +574,7 @@ fi
 dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
-if test "$GCC" = "yes"; then
+if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; then
     AC_MSG_CHECKING([the GNU gcc compiler version])
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
@@ -612,25 +612,18 @@ if test -z "$GNUMAKE"; then
     echo "gnu make not found build may fail" >> warn
 else
     _make_version=`$GNUMAKE --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
-    _make_major=`echo $_make_version | $AWK -F. '{print $1;}'` 
-    _make_middle=`echo $_make_version | $AWK -F. '{ print $2; }'` 
-    _make_minor=`echo $_make_version | $AWK -F. '{ print $3; }'` 
-    if test "$_make_major" -gt "3" ; then
+    _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+    if test "$_make_longver" -ge "037901" ; then
        AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
     else
-       if test "$_make_middle" -gt "79" ; then
-          AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
+       if test "$_os" = "Darwin"; then
+           if test "$_make_longver" -ge "037900" ; then
+			   AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
+           else
+               AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.0+)])
+           fi
        else
-          if test "$_make_minor" -ge "1" ; then
-             AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
-          else
-             if test "$_os" = "Darwin"; then
-                 AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.1+)])
-                 echo "$GNUMAKE $_make_version may cause problems need 3.79.1+" >> warn
-			 else
-                 AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
-			 fi
-          fi
+           AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
        fi
     fi
 fi
@@ -881,7 +874,9 @@ AC_SUBST(WDEVENV_PATH)
 dnl ===================================================================
 dnl Check if stdc headers are available excluding windows.
 dnl ===================================================================
-AC_HEADER_STDC
+if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+   AC_HEADER_STDC
+fi
 
 dnl ===================================================================
 dnl Check if pam-appl.h is available on Linux or FreeBSD
@@ -1750,8 +1745,13 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([whether to build mozilla connectivity])
 if test -n "$enable_mozilla"; then
+  if test "$enable_mozilla" = "no"; then
    AC_MSG_RESULT([yes])
+   WITH_MOZILLA=NO
+  else
+   AC_MSG_RESULT([no])
    WITH_MOZILLA=YES
+  fi
 else
    AC_MSG_RESULT([no])
    WITH_MOZILLA=NO
