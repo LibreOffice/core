@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxprinter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:43:39 $
+ *  last change: $Author: mt $ $Date: 2002-12-10 15:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <vcl/print.hxx>
 #include <vcl/jobset.hxx>
+#include <vcl/svapp.hxx>
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -130,6 +131,8 @@ IMPL_XTYPEPROVIDER_END
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
 {
+    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+
     mpPrinter = new Printer( rPrinterName );
     mnOrientation = 0;
     mbHorizontal = sal_False;
@@ -137,7 +140,9 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
 
 VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 {
-    delete mpPrinter;
+    osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
+
+     delete mpPrinter;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  VCLXPrinterPropertySet::GetDevice()
