@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 11:03:35 $
+#   last change: $Author: vg $ $Date: 2003-04-24 18:33:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,19 +135,11 @@ UNOIDLDBFILES= \
     $(UCR)$/cssimage.db\
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
-    $(UCR)$/dcssframe.db \
-    $(UCR)$/dcssaccessibility.db\
-    $(UCR)$/dcssawt.db\
+    $(UCR)$/cssaccessibility.db\
     $(UCR)$/dcssabridge.db\
-    $(UCR)$/dcssi18n.db\
+    $(UCR)$/dcssframe.db \
+    $(UCR)$/dcssabridge.db\
     $(UCR)$/dcsscbackend.db\
-    $(UCR)$/dcssauth.db\
-    $(UCR)$/dcssdrawing.db\
-    $(UCR)$/dcssformula.db \
-    $(UCR)$/dcsssheet.db\
-    $(UCR)$/dcsstable.db\
-    $(UCR)$/dcsstext.db \
-    $(UCR)$/dcsschart.db
 
 
 REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb
