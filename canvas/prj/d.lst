@@ -3,6 +3,7 @@
 ..\%__SRC%\bin\directxcanvas*.dll %_DEST%\bin%_EXT%\directxcanvas*.dll
 ..\%__SRC%\lib\icanvastools.lib %_DEST%\lib%_EXT%\icanvastools.lib
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\class\javacanvas*.jar %_DEST%\bin%_EXT%\javacanvas*.jar
 
 mkdir: %_DEST%\inc%_EXT%\canvas
