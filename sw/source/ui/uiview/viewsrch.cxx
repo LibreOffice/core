@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:51:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,11 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
     const SfxPoolItem* pItem = 0;
     const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
     SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
-    BOOL bApi = !pWrp | bNoMessage;
+    BOOL bQuiet = FALSE;
+    if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SEARCH_QUIET, FALSE, &pItem))
+        bQuiet = ((const SfxBoolItem*) pItem)->GetValue();
+
+    BOOL bApi = bQuiet | bNoMessage;
     BOOL bSrchList = TRUE;
 
     USHORT nSlot = rReq.GetSlot();
@@ -258,6 +262,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
 
         case FN_REPEAT_SEARCH:
         case FID_SEARCH_NOW:
+        {
             {
                 if(FID_SEARCH_NOW == nSlot && !rReq.IsAPI())
                     SwView::SetMoveType(NID_SRCH_REP);
@@ -414,9 +419,15 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                 }
                 break;
             }
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                    GetViewFrame()->GetBindings().GetRecorder();
+            //prevent additional dialogs in recorded macros
+            if ( xRecorder.is() )
+                rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, sal_True));
 
             rReq.Done();
-            break;
+        }
+        break;
         case FID_SEARCH_SEARCHSET:
         case FID_SEARCH_REPLACESET:
         {
