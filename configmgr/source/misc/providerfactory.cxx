@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-18 16:16:52 $
+ *  last change: $Author: jb $ $Date: 2001-05-22 07:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,12 @@ namespace configmgr
 
         ensureBootstrapSettings();
 
-        m_xDefaultProvider = implCreateProviderWithSettings(m_pPureSettings->settings,true,true);
+        ConnectionSettings aThisRoundSettings(m_pPureSettings->settings);
+
+        aThisRoundSettings.validate();
+        OSL_ENSURE(aThisRoundSettings.isComplete(), "Incomplete Data for creating a ConfigurationProvider");
+
+        m_xDefaultProvider = implCreateProviderWithSettings(aThisRoundSettings,true,true);
 
         // register disposing listener
         Reference<com::sun::star::lang::XComponent> xComponent(m_xDefaultProvider, UNO_QUERY);
@@ -411,6 +416,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/05/18 16:16:52  jb
+ *  #81412# Cleaned up bootstrap settings handling; Added recognition of bootstrap errors
+ *
  *  Revision 1.8  2001/04/03 16:33:58  jb
  *  Local AdministrationProvider now mapped to Setup-session
  *
