@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:54:57 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
 #endif
+#ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
+#include "fmdocumentclassification.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -93,6 +96,9 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
@@ -1177,6 +1183,28 @@ sal_Int16 FmXFormView::implInitializeNewControlModel( const Reference< XProperty
 
     try
     {
+        // if the control lives in an eForm or database, give it some nicer layout
+        // Notice that in such documents, and FmXFormController will additionally enable
+        // dynamic control border colors (i.e. the color changes when the mouse hovers over
+        // the control, or the control has the focus)
+        Reference< XPropertySetInfo > xPSI( _rxModel->getPropertySetInfo() );
+        if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_BORDER ) )
+        {
+            sal_Int16 nCurrentBorder = VisualEffect::NONE;
+            OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_BORDER ) >>= nCurrentBorder );
+            if ( nCurrentBorder != VisualEffect::NONE )
+            {
+                DocumentType eDocType = DocumentClassification::classifyHostDocument( _rxModel.get() );
+                if ( ( eDocType == eElectronicForm ) || ( eDocType == eDatabaseForm ) )
+                {
+                    _rxModel->setPropertyValue( FM_PROP_BORDER, makeAny( VisualEffect::FLAT ) );
+                    OSL_ENSURE( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ), "FmXFormView::implInitializeNewControlModel: Border, but no border color?" );
+                    if ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
+                        _rxModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) );  // light gray
+                }
+            }
+        }
+
         _rxModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
 
         switch ( nClassId )
