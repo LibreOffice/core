@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: mt $ $Date: 2001-10-17 08:44:14 $
+#   last change: $Author: mi $ $Date: 2001-10-22 16:03:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -231,6 +231,7 @@ IDLFILES=\
     XScrollBar.idl\
     XSpinField.idl\
     XSpinListener.idl\
+    XSystemChildFactory.idl\
     XSystemDependentWindowPeer.idl\
     SystemDependentXWindow.idl\
     XTabController.idl\

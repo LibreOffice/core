@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obr $ $Date: 2001-02-09 10:55:21 $
+#   last change: $Author: mi $ $Date: 2001-10-22 16:00:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ IDLFILES=\
     OleDropTarget.idl \
     X11DragSource.idl \
     X11DropTarget.idl \
+    XAutoScroll.idl\
     XDragGestureListener.idl \
     XDragGestureRecognizer.idl \
     XDragSource.idl \

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: TabControllerModel.idl,v $
+ *  $RCSfile: XAutoscroll.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-22 16:03:10 $
+ *  last change: $Author: mi $ $Date: 2001-10-22 16:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,52 +59,66 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_awt_XSystemChildFactory_idl__
-#define __com_sun_star_awt_XSystemChildFactory_idl__
+#ifndef __com_sun_star_datatransfer_dnd_XAutoscroll_idl__
+#define __com_sun_star_datatransfer_dnd_XAutoscroll_idl__
 
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __com_sun_star_awt_Rectangle_idl__
+#include <com/sun/star/awt/Rectangle.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+
 //=============================================================================
 
-module com { module sun { module star { module awt {
+module com { module sun { module star { module datatransfer { module dnd {
 
-interface XWindowPeer;
+//=============================================================================
+/** interface for autoscroll support.
 
-interface XSystemChildFactory : com::sun::star::uno::XInterface
+    <p>During DnD operations it is possible that a user may wish to drop the
+    subject of the operation on a region of a scrollable GUI control that is
+    not currently visible to the user. </p>
+
+    <p>In such situations it is desirable that the GUI control detect this and
+    institute a scroll operation in order to make obscured region(s) visible to
+    the user. This feature is known as autoscrolling. </p>
+
+    <p>If a GUI control is both an active DropTarget and is also scrollable,
+    it can receive notifications of autoscrolling gestures by the user from
+    the DnD system by implementing this interface. </p>
+
+    <p>An autoscrolling gesture is initiated by the user by keeping the drag
+    cursor motionless with a border region of the Component, referred to as
+    the "autoscrolling region", for a predefined period of time, this will
+    result in repeated scroll requests to the Component until the drag Cursor
+    resumes its motion. </p>
+
+*/
+
+interface XAutoscroll: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns
-        a interface from the created window.
-
-        @param Parent
-        a sytem-specific handle to a window
-
-        <p>You must check the machine ID and the process ID.<BR>
-        WIN32: HWND.<BR>
-        WIN16: HWND.<BR>
-
-        JAVA: global reference to a java.awt.Component
-        object provided from the JNI-API.<BR>
-
-        OS2: HWND.<BR>
-        MAC: Not supported<BR>
-
-        @param ProcessId
-        the process identifier. Use the sal_getGlobalProcessId
-        function of the RTL library.
-
-        @param SystemType
-        one constant out of the constant group
-        SystemDependent.
+    /** notify the Component to autoscroll.
     */
-     XWindowPeer createSystemChild( [in] any Parent, [in] sequence< byte > ProcessId, [in] short SystemType );
+
+    [oneway] void autoscroll( [in] com::sun::star::awt::Point cursorLocation );
+
+    //-------------------------------------------------------------------------
+    /** @returns the regions describing the autoscrolling region or border
+        relative to the geometry of the implementing Component.
+    */
+
+    sequence < com::sun::star::awt::Rectangle > getAutoscrollRegion();
 };
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; };
 
 #endif
-
