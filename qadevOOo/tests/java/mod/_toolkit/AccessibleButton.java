@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2003-09-08 12:58:36 $
+ *  last change: $Date: 2004-01-05 20:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -87,6 +77,17 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
 
 /**
  * Object implements the following interfaces :
@@ -116,7 +117,6 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleButton extends lib.TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
 
@@ -126,30 +126,31 @@ public class AccessibleButton extends lib.TestCase {
      * window) and finds accessible button 'OK' walking through the
      * accessible component tree.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
         XMultiServiceFactory msf = (XMultiServiceFactory) Param.getMSF();
 
         try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         shortWait();
 
-        DiagThread psDiag = new DiagThread(xTextDoc,msf);
+        DiagThread psDiag = new DiagThread(xTextDoc, msf);
         psDiag.start();
-        try{
+
+        try {
             psDiag.join();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         shortWait();
 
@@ -159,54 +160,55 @@ public class AccessibleButton extends lib.TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,atw);
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-//        at.printAccessibleTree(log, xRoot);
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSH_BUTTON,"Cancel");
+        //        at.printAccessibleTree(log, xRoot);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+                                             "Cancel");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        action = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
+        action = (XAccessibleAction) UnoRuntime.queryInterface(
+                         XAccessibleAction.class, oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
+        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                   XAccessibleComponent.class,
+                                                   oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    System.out.println("Grabbing focus ... ");
-                    acomp.grabFocus();
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                System.out.println("Grabbing focus ... ");
+                acomp.grabFocus();
+            }
+        });
 
-        XAccessibleText text = (XAccessibleText)
-                    UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
+        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+                                       XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this component");
+                            "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         return tEnv;
-
     }
 
     /**
      * Closes the dialog using accessible button 'OK' found in
      * <code>createTestEnvironment()</code>.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    disposing xTextDoc " );
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
         try {
             action.doAccessibleAction(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
@@ -214,7 +216,9 @@ public class AccessibleButton extends lib.TestCase {
         } catch (com.sun.star.lang.DisposedException de) {
             log.println("Dialog already disposed");
         }
-        xTextDoc.dispose();
+
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
@@ -222,7 +226,8 @@ public class AccessibleButton extends lib.TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -235,9 +240,9 @@ public class AccessibleButton extends lib.TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 
@@ -245,42 +250,47 @@ public class AccessibleButton extends lib.TestCase {
      * Thread for opening modal dialog 'Print Settings'.
      */
     public class DiagThread extends Thread {
-
         public XTextDocument xTextDoc = null;
         public XMultiServiceFactory msf = null;
 
         public DiagThread(XTextDocument xTextDoc, XMultiServiceFactory msf) {
-            this.xTextDoc = xTextDoc ;
+            this.xTextDoc = xTextDoc;
             this.msf = msf;
         }
 
         public void run() {
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                               xTextDoc);
 
-        XController xController = aModel.getCurrentController();
+            XController xController = aModel.getCurrentController();
 
-        //Opening PrinterSetupDialog
-        try {
-            String aSlotID = ".uno:Zoom";
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-            msf.createInstance("com.sun.star.util.URLTransformer"));
-            // Because it's an in/out parameter
-            // we must use an array of URL objects.
-            URL[] aParseURL = new URL[1];
-            aParseURL[0] = new URL();
-            aParseURL[0].Complete = aSlotID;
-            xParser.parseStrict(aParseURL);
-            URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
-            if( xDispatcher != null )
-                    xDispatcher.dispatch( aURL, null );
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't open dialog");
-        }
+            //Opening PrinterSetupDialog
+            try {
+                String aSlotID = ".uno:Zoom";
+                XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                                      XDispatchProvider.class,
+                                                      xController);
+                XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                                                  XURLTransformer.class,
+                                                  msf.createInstance(
+                                                          "com.sun.star.util.URLTransformer"));
+
+                // Because it's an in/out parameter
+                // we must use an array of URL objects.
+                URL[] aParseURL = new URL[1];
+                aParseURL[0] = new URL();
+                aParseURL[0].Complete = aSlotID;
+                xParser.parseStrict(aParseURL);
+
+                URL aURL = aParseURL[0];
+                XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+
+                if (xDispatcher != null) {
+                    xDispatcher.dispatch(aURL, null);
+                }
+            } catch (com.sun.star.uno.Exception e) {
+                log.println("Couldn't open dialog");
+            }
         }
     }
 }
