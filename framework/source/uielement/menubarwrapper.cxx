@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:12:51 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,20 +256,25 @@ void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException )
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( m_bPersistent &&
-         m_xConfigSource.is() &&
-         m_xMenuBarManager.is() )
+    if ( m_xMenuBarManager.is() )
     {
-        try
+        if ( m_xConfigSource.is() && m_bPersistent )
         {
-            MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
+            try
+            {
+                MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
 
-            m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
-            if ( m_xConfigData.is() )
-                pMenuBarManager->SetItemContainer( m_xConfigData );
+                m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
+                if ( m_xConfigData.is() )
+                    pMenuBarManager->SetItemContainer( m_xConfigData );
+            }
+            catch ( NoSuchElementException& )
+            {
+            }
         }
-        catch ( NoSuchElementException& )
+        else if ( !m_bPersistent )
         {
+            // Transient menubar: do nothing
         }
     }
 }
@@ -304,6 +309,14 @@ void SAL_CALL MenuBarWrapper::setSettings( const Reference< XIndexAccess >& xSet
             catch( NoSuchElementException& )
             {
             }
+        }
+        else if ( !m_bPersistent )
+        {
+            // Transient menubar => Fill menubar with new data
+            MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
+
+            if ( pMenuBarManager )
+                pMenuBarManager->SetItemContainer( m_xConfigData );
         }
     }
 }
