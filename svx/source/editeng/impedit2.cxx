@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-07 06:39:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-08 13:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2831,7 +2831,7 @@ BOOL ImpEditEngine::HasData( ExchangeType eExchange )
         uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
 
         DBG_ASSERT( GetActiveView(), "HasData: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow, "HasData: Active view has no window!" );
+        DBG_ASSERT( GetActiveView()->GetWindow(), "HasData: Active view has no window!" );
 
         if( GetActiveView() && GetActiveView()->GetWindow() )
             xClipboard = GetActiveView()->GetWindow()->GetClipboard();
@@ -2898,7 +2898,7 @@ void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) con
         uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
 
         DBG_ASSERT( GetActiveView(), "CopyData: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow, "CopyData: Active view has no window!" );
+        DBG_ASSERT( GetActiveView()->GetWindow(), "CopyData: Active view has no window!" );
 
         if( GetActiveView() && GetActiveView()->GetWindow() )
             xClipboard = GetActiveView()->GetWindow()->GetClipboard();
@@ -2932,7 +2932,7 @@ EditSelection ImpEditEngine::PasteData( EditPaM aPaM, ExchangeType eExchange, BO
         uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
 
         DBG_ASSERT( GetActiveView(), "PasteData: No active view!" );
-        DBG_ASSERT( GetActiveView()->GetWindow, "PasteData: Active view has no window!" );
+        DBG_ASSERT( GetActiveView()->GetWindow(), "PasteData: Active view has no window!" );
 
         if( GetActiveView() && GetActiveView()->GetWindow() )
             xClipboard = GetActiveView()->GetWindow()->GetClipboard();
