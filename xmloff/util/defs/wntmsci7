@@ -10435,3 +10435,5 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?DrawingLayerXMLExport_createInstance@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@2345@@Z
 ?DrawingLayerXMLExport_getImplementationName@@YA?AVOUString@rtl@@XZ
 ?DrawingLayerXMLExport_getSupportedServiceNames@@YA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
+??0?$pair@$$CBVOUString@rtl@@V?$ORef@VNameSpaceEntry@@@vos@@@_STL@@QAE@ABVOUString@rtl@@ABV?$ORef@VNameSpaceEntry@@@vos@@@Z
+?bind@?$ORef@VNameSpaceEntry@@@vos@@QAAXPAVNameSpaceEntry@@@Z
