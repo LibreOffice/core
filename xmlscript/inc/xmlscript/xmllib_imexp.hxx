@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_imexp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:42:25 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,27 +102,27 @@ struct LibDescriptorArray
 
 };
 
-SAL_DLLEXPORT void
+void
 SAL_CALL exportLibraryContainer(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-SAL_DLLEXPORT ::com::sun::star::uno::Reference<
+::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
 
-SAL_DLLEXPORT void
+void
 SAL_CALL exportLibrary(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-SAL_DLLEXPORT ::com::sun::star::uno::Reference<
+::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibrary( LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) );
