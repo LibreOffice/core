@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:58:04 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ struct SwIoDetect
 #endif
 
     const sal_Char* IsReader(const sal_Char* pHeader, ULONG nLen_,
-        const String &rFileName) const;
+        const String &rFileName, const String& rUserData ) const;
 };
 
 
@@ -277,7 +277,7 @@ struct W1_FIB
 #endif
 
 const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
-    const String &rFileName) const
+    const String &rFileName, const String& rUserData) const
 {
     int bRet = FALSE;
     if( sHTML == pName )
@@ -332,7 +332,7 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     else if (FILTER_TEXT == pName)
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
     else if (FILTER_W4W == pName)
-        bRet = SwIoSystem::IsDetectableW4W(rFileName);
+        bRet = SwIoSystem::IsDetectableW4W(rFileName, rUserData);
     return bRet ? pName : 0;
 }
 
@@ -490,7 +490,8 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     {
         if( pFltr->GetUserData() == rFmtName )
         {
-            if( 'C' == *pFltr->GetUserData().GetBuffer() )
+            const String& rUserData = pFltr->GetUserData();
+            if( 'C' == *rUserData.GetBuffer() )
             {
                 if ( xStor.is() )
                     bRet = IsValidStgFilter( xStor, *pFltr );
@@ -511,7 +512,8 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                     {
                         if (aReaderWriter[i].IsFilter(rFmtName))
                         {
-                            bRet = 0 != aReaderWriter[i].IsReader( aBuffer, nBytesRead, rMedium.GetPhysicalName() );
+                            bRet = 0 != aReaderWriter[i].IsReader( aBuffer, nBytesRead,
+                                                    rMedium.GetPhysicalName(), rUserData );
                             break;
                         }
                     }
@@ -665,8 +667,9 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         const sal_Char* pNm;
         for( USHORT n = 0; n < MAXFILTER; ++n )
         {
+            String sEmptyUserData;
             if(
-               (pNm = aReaderWriter[n].IsReader(aBuffer, nBytesRead, rFileName))
+               (pNm = aReaderWriter[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData))
                 && (pFilter = SwIoSystem::GetFilterOfFormat(
                      String::CreateFromAscii(pNm), pFCntnr))
               )
@@ -861,14 +864,28 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, ULONG nLen)
     return SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(pNm), 0 );
 }
 
-bool SwIoSystem::IsDetectableW4W(const String& rFileName)
+bool SwIoSystem::IsDetectableW4W(const String& rFileName, const String& rUserData)
 {
     bool bRet(false);
     if (rFileName.Len())
     {
         USHORT nVersion, nW4WId = AutoDetec( rFileName, nVersion );
-        if (nW4WId > 1)
-            bRet = true;
+        if( 1 < nW4WId )
+        {
+            if(rUserData.Len())
+            {
+                String aW4WName( String::CreateFromAscii(FILTER_W4W ));
+                if( nW4WId < 10 )
+                    aW4WName += '0';
+                aW4WName += String::CreateFromInt32(nW4WId);
+                aW4WName += '_';
+                aW4WName += String::CreateFromInt32(nVersion);
+                if( 0 == rUserData.Search( aW4WName ) )
+                    bRet = true;
+            }
+            else
+                bRet = true;
+        }
     }
     return bRet;
 }
