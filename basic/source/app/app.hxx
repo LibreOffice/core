@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-14 11:33:53 $
+ *  last change: $Author: gh $ $Date: 2001-08-14 13:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,7 @@ public:
 //  MenuBar*    pMainMenu;          // Hauptmenue
     Accelerator*    pMainAccel;     // Acceleratoren
 
-#ifndef VCL
-    void  Main( int, char*[] );
-#else
     void  Main( );
-#endif
 
     void  LoadIniFile();
     void  SetFocus();

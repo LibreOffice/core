@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-05 10:42:52 $
+ *  last change: $Author: gh $ $Date: 2001-08-14 13:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,7 @@ class BreakpointWindow;
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-#ifdef VCL
 #include <svtools/svmedit.hxx>
-#endif
 
 #include "dataedit.hxx"
 
