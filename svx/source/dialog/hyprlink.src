@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:31:04 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ chinese_traditional ] = "URL ¦WºÙ";
         QuickHelpText[ arabic ] = "URL ÇÓã ÇáÜ";
         QuickHelpText[ greek ] = "¼íïìá ôïõ URL";
-        QuickHelpText[ korean ] = "URL Name";
+        QuickHelpText[ korean ] = "URL ÀÌ¸§!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Name der URL";
     };
@@ -163,7 +163,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ chinese_traditional ] = "Internet URL ¦ì§}¦C";
         QuickHelpText[ arabic ] = "ÇáÅäÊÑäÊ URLs ÕäÏæŞ ÌãÚ";
         QuickHelpText[ greek ] = "Ğëáßóéï óõëëïãŞò ãéá URL ôïõ Internet";
-        QuickHelpText[ korean ] = "Internet URLs";
+        QuickHelpText[ korean ] = "ÀÎÅÍ³İ URL!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Sammelbox für Internet-URLs";
     };
@@ -358,7 +358,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ chinese_traditional ] = "¥u¦³¦b«Ø¥ß³s½u«á¤~¯à½T©w³o­Ó URL ¬O§_¥¿½T¡C\n±z­n²{¦b³s½u¨ì Internet¡S";
     Message[ arabic ] = "áÇ íãßä İÍÕ ÇáÚäæÇä (URL)¡ ÅáÇ ÈÚÏ ÅŞÇãÉ ÇáÇÊÕÇá.\nåá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá¿";
     Message[ greek ] = "Ï İëåã÷ïò áõôïı ôïõ URL åßíáé äõíáôüí íá ãßíåé ìåôÜ ôçí óıíäåóç.\nÈİëåôå íá óõíäåèåßôå;";
-    Message[ korean ] = "ÀÌ URL Á¢¼ÓÀÌ ÀÌ·ç¾îÁø ÀÌÈÄ¿¡ À¯È¿¼ºÀÌ ÀÔÁõµÉ ¼ö ÀÖ½À´Ï´Ù.Á¢¼ÓÀ» ¸¸µå½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ÀÌ URLÀº Á¢¼ÓÀÌ ÀÌ·ç¾îÁø ÈÄ¿¡¾ß °Ë»çÇÒ ¼ö ÀÖ½À´Ï´Ù. Á¢¼ÓÀ» ±¸ÃàÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bu URL bağlantı kurulduktan sonra kontrol edilebilir.\nBağlantı kurulsun mu?";
     Message[ language_user1 ] = " ";
 };
