@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:04:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,8 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
 SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SfxPoolItem( RES_FRM_SIZE ),
     aSize( nWidth, nHeight ),
-    eFrmSize( eSize )
+    eFrmHeightType( eSize ),
+    eFrmWidthType( ATT_FIX_SIZE )
 {
     nWidthPercent = nHeightPercent = 0;
 }
@@ -457,7 +458,8 @@ SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
 SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
 {
     aSize = rCpy.GetSize();
-    eFrmSize = rCpy.GetSizeType();
+    eFrmHeightType = rCpy.GetHeightSizeType();
+    eFrmWidthType = rCpy.GetWidthSizeType();
     nHeightPercent = rCpy.GetHeightPercent();
     nWidthPercent  = rCpy.GetWidthPercent();
     return *this;
@@ -466,7 +468,8 @@ SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
 int  SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
 {
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return( eFrmSize        == ((SwFmtFrmSize&)rAttr).eFrmSize &&
+    return( eFrmHeightType  == ((SwFmtFrmSize&)rAttr).eFrmHeightType &&
+            eFrmWidthType  == ((SwFmtFrmSize&)rAttr).eFrmWidthType &&
             aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
             nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
             nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() );
@@ -524,13 +527,16 @@ BOOL SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Int32)TWIP_TO_MM100(aSize.Height() < MINLAY ? MINLAY : aSize.Height() );
         break;
         case MID_FRMSIZE_SIZE_TYPE:
-            rVal <<= (sal_Int16)GetSizeType();
+            rVal <<= (sal_Int16)GetHeightSizeType();
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            BOOL bTmp = ATT_FIX_SIZE != GetSizeType();
+            BOOL bTmp = ATT_FIX_SIZE != GetHeightSizeType();
             rVal.setValue(&bTmp, ::getBooleanCppuType());
         }
+        break;
+        case MID_FRMSIZE_WIDTH_TYPE:
+            rVal <<= (sal_Int16)GetWidthSizeType();
         break;
     }
     return sal_True;
@@ -611,10 +617,9 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 if(bConvert)
                     nWd = MM100_TO_TWIP(nWd);
-                if(nWd > 0)
-                    aSize.Width() = nWd;
-                else
-                    bRet = sal_False;
+                if(nWd < MINLAY)
+                   nWd = MINLAY;
+                aSize.Width() = nWd;
             }
             else
                 bRet = sal_False;
@@ -627,10 +632,9 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 if(bConvert)
                     nHg = MM100_TO_TWIP(nHg);
-                if(nHg > 0)
-                    aSize.Height() = nHg;
-                else
-                    bRet = sal_False;
+                if(nHg < MINLAY)
+                    nHg = MINLAY;
+                aSize.Height() = nHg;
             }
             else
                 bRet = sal_False;
@@ -641,7 +645,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int16 nType;
             if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
             {
-                SetSizeType((SwFrmSize)nType);
+                SetHeightSizeType((SwFrmSize)nType);
             }
             else
                 bRet = sal_False;
@@ -650,7 +654,18 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
             sal_Bool bSet = *(sal_Bool*)rVal.getValue();
-            SetSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+            SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+        }
+        break;
+        case MID_FRMSIZE_WIDTH_TYPE:
+        {
+            sal_Int16 nType;
+            if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
+            {
+                SetWidthSizeType((SwFrmSize)nType);
+            }
+            else
+                bRet = sal_False;
         }
         break;
         default:
