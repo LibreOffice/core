@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:14:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include "svdobj.hxx"
+#include "svdomedia.hxx"
 #include "svdpagv.hxx"
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
@@ -136,9 +136,22 @@ void ViewObjectContactOfSdrMediaObj::PaintObject(DisplayInfo& rDisplayInfo)
                 ( aPaintRect.Left() < aPaintRect.Right() &&
                   aPaintRect.Top() < aPaintRect.Bottom() ) )
             {
-                pOutDev->SetLineColor( COL_BLACK );
-                pOutDev->SetFillColor( COL_BLACK );
+                const Color aBackgroundColor( 67, 67, 67 );
+
+                pOutDev->SetLineColor( aBackgroundColor );
+                pOutDev->SetFillColor( aBackgroundColor );
                 pOutDev->DrawRect( aPaintRect );
+
+                if( pObj->ISA( SdrMediaObj ) )
+                {
+                    const Graphic& rGraphic = static_cast< SdrMediaObj* >( pObj )->getGraphic();
+
+                    if( rGraphic.GetType() != GRAPHIC_NONE )
+                    {
+                        rGraphic.Draw( pOutDev, aPaintRect.TopLeft(), aPaintRect.GetSize() );
+                    }
+                }
+
                 bWasPainted = true;
             }
         }
