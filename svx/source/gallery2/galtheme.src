@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 16:02:07 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ String RID_GALLERYSTR_THEME_3D
     Text[ chinese_traditional ] = "3 D";
     Text[ arabic ] = "ÃÔßÇá ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ greek ] = "3Ä";
-    Text[ korean ] = "3D";
+    Text[ korean ] = "3Â÷¿ø";
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
 };
