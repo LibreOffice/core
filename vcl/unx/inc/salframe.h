@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:31:00 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,6 @@ class SalFrameData
     bool            mbDeleteInputContext;
     Bool            mbInputFocus;
     SalFrameDelData *mpDeleteData;
-    void            RegisterDeleteData (SalFrameDelData *pData);
-    void            UnregisterDeleteData (SalFrameDelData *pData);
     void            NotifyDeleteData ();
 
     SalGraphics    *GetGraphics();
@@ -277,6 +275,8 @@ public:
     void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
     bool                    isMapped() const { return bMapped_; }
+    void            RegisterDeleteData (SalFrameDelData *pData);
+    void            UnregisterDeleteData (SalFrameDelData *pData);
 };
 
 #ifdef _SV_SALDISP_HXX
