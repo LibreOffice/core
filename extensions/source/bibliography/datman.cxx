@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-30 17:14:44 $
+ *  last change: $Author: os $ $Date: 2002-02-22 09:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,52 +380,52 @@ class MappingDialog_Impl : public ModalDialog
     ListBox         aIdentifierLB;
     FixedText       aAuthorityTypeFT;
     ListBox         aAuthorityTypeLB;
+    FixedText       aYearFT;
+    ListBox         aYearLB;
     FixedText       aAuthorFT;
     ListBox         aAuthorLB;
     FixedText       aTitleFT;
     ListBox         aTitleLB;
-    FixedText       aMonthFT;
-    ListBox         aMonthLB;
-    FixedText       aYearFT;
-    ListBox         aYearLB;
-    FixedText       aISBNFT;
-    ListBox         aISBNLB;
-    FixedText       aBooktitleFT;
-    ListBox         aBooktitleLB;
-    FixedText       aChapterFT;
-    ListBox         aChapterLB;
-    FixedText       aEditionFT;
-    ListBox         aEditionLB;
-    FixedText       aEditorFT;
-    ListBox         aEditorLB;
-    FixedText       aHowpublishedFT;
-    ListBox         aHowpublishedLB;
-    FixedText       aInstitutionFT;
-    ListBox         aInstitutionLB;
-    FixedText       aJournalFT;
-    ListBox         aJournalLB;
-    FixedText       aNoteFT;
-    ListBox         aNoteLB;
-    FixedText       aAnnoteFT;
-    ListBox         aAnnoteLB;
-    FixedText       aNumberFT;
-    ListBox         aNumberLB;
-    FixedText       aOrganizationsFT;
-    ListBox         aOrganizationsLB;
-    FixedText       aPagesFT;
-    ListBox         aPagesLB;
     FixedText       aPublisherFT;
     ListBox         aPublisherLB;
     FixedText       aAddressFT;
     ListBox         aAddressLB;
-    FixedText       aSchoolFT;
-    ListBox         aSchoolLB;
-    FixedText       aSeriesFT;
-    ListBox         aSeriesLB;
-    FixedText       aReportTypeFT;
-    ListBox         aReportTypeLB;
+    FixedText       aISBNFT;
+    ListBox         aISBNLB;
+    FixedText       aChapterFT;
+    ListBox         aChapterLB;
+    FixedText       aPagesFT;
+    ListBox         aPagesLB;
+    FixedText       aEditorFT;
+    ListBox         aEditorLB;
+    FixedText       aEditionFT;
+    ListBox         aEditionLB;
+    FixedText       aBooktitleFT;
+    ListBox         aBooktitleLB;
     FixedText       aVolumeFT;
     ListBox         aVolumeLB;
+    FixedText       aHowpublishedFT;
+    ListBox         aHowpublishedLB;
+    FixedText       aOrganizationsFT;
+    ListBox         aOrganizationsLB;
+    FixedText       aInstitutionFT;
+    ListBox         aInstitutionLB;
+    FixedText       aSchoolFT;
+    ListBox         aSchoolLB;
+    FixedText       aReportTypeFT;
+    ListBox         aReportTypeLB;
+    FixedText       aMonthFT;
+    ListBox         aMonthLB;
+    FixedText       aJournalFT;
+    ListBox         aJournalLB;
+    FixedText       aNumberFT;
+    ListBox         aNumberLB;
+    FixedText       aSeriesFT;
+    ListBox         aSeriesLB;
+    FixedText       aAnnoteFT;
+    ListBox         aAnnoteLB;
+    FixedText       aNoteFT;
+    ListBox         aNoteLB;
     FixedText       aURLFT;
     ListBox         aURLLB;
     FixedText       aCustom1FT;
