@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:40:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,24 +798,6 @@ SvXMLImportContext *SdXMLImport::CreateScriptContext(
                                     XML_NAMESPACE_OFFICE, rLocalName,
                                     GetModel() );
     return pContext;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void SdXMLImport::setDrawPageId( sal_Int32 nId, uno::Reference< drawing::XDrawPage > xPage )
-{
-    maDrawPageIds[nId] = xPage;
-}
-
-uno::Reference< drawing::XDrawPage > SdXMLImport::getDrawPageForId( sal_Int32 nId )
-{
-    uno::Reference< drawing::XDrawPage > xPage;
-
-    DrawPageIdMap::iterator aFound( maDrawPageIds.find( nId ) );
-    if( aFound != maDrawPageIds.end() )
-        xPage = (*aFound).second;
-
-    return xPage;
 }
 
 //////////////////////////////////////////////////////////////////////////////
