@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLinguServiceManager.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ module com { module sun { module star { module linguistic2 {
     @see    <type scope="com::sun::star::linguistic2">Hyphenator</type>
     @see    <type scope="com::sun::star::linguistic2">Thesaurus</type>
 */
-interface XLinguServiceManager : com::sun::star::uno::XInterface
+published interface XLinguServiceManager : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /**
