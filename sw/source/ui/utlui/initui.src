@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 23:02:52 $
+ *  last change: $Author: os $ $Date: 2001-07-02 12:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1153,29 +1153,8 @@ Resource RID_SW_SHELLRES
 
 String STR_AUTH_TYPE_ARTICLE
 {
-    Text = "Zeitschriftenartikel" ;
-    Text [ ENGLISH ] = "Article" ;
-    Text[ english_us ] = "Magazine Article";
-    Text[ portuguese ] = "Artigo de revista";
-    Text[ russian ] = "Ñòàòüÿ èç ãàçåòû/æóğíàëà";
-    Text[ greek ] = "¢ñèñï ğåñéïäéêïı";
-    Text[ dutch ] = "Krantenartikel";
-    Text[ french ] = "Article (revue)";
-    Text[ spanish ] = "Artículo de revista";
-    Text[ italian ] = "Articolo di rivista";
-    Text[ danish ] = "Tidsskriftsartikel";
-    Text[ swedish ] = "Tidskriftsartikel";
-    Text[ polish ] = "Artyku³ czasopisma";
-    Text[ portuguese_brazilian ] = "Article";
-    Text[ japanese ] = "G‹L–";
-    Text[ korean ] = "ÀâÁö ±â»ç";
-    Text[ chinese_simplified ] = "ÔÓÖ¾ÎÄÕÂ";
-    Text[ chinese_traditional ] = "Âø»x¤å³¹";
-    Text[ arabic ] = "ãŞÇáÉ İí ãÌáÉ";
-    Text[ turkish ] = "Dergi makalesi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Artículo de revista";
-    Text[ finnish ] = "Lehtiartikkeli";
+    Text = "Artikel" ;
+    Text [ English ] = "Article" ;
 };
 String STR_AUTH_TYPE_BOOK
 {
@@ -1777,55 +1756,13 @@ String STR_AUTH_FIELD_AUTHORITY_TYPE
 };
 String STR_AUTH_FIELD_ADDRESS
 {
-    Text = "~Verlagsadresse" ;
-    Text [ ENGLISH ] = "Publisher address" ;
-    Text[ english_us ] = "Publisher address";
-    Text[ portuguese ] = "~Endereço da editora";
-    Text[ russian ] = "Àäğåñ èçäàòåëüñòâà";
-    Text[ greek ] = "Äéåıèõíóç åêäüôç";
-    Text[ dutch ] = "~Adres uitgeverij";
-    Text[ french ] = "Adresse de l'édition";
-    Text[ spanish ] = "~Dirección editorial";
-    Text[ italian ] = "Indirizzo editore";
-    Text[ danish ] = "Forlagsadresse";
-    Text[ swedish ] = "Förlagsadress";
-    Text[ polish ] = "Adres wydawnictwa";
-    Text[ portuguese_brazilian ] = "Publisher address";
-    Text[ japanese ] = "o”Å’n";
-    Text[ korean ] = "ÃâÆÇ»ç ÁÖ¼Ò";
-    Text[ chinese_simplified ] = "³ö°æÉçµØÖ·";
-    Text[ chinese_traditional ] = "¥Xª©ªÀ¦a§}";
-    Text[ arabic ] = "ÚäæÇä ÏÇÑ ÇáäÔÑ";
-    Text[ turkish ] = "~Yayınevi adresi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Dirección editorial";
-    Text[ finnish ] = "Julkaisijan osoite";
+    Text = "Adresse";
+    Text [ENGLISH] = "Address";
 };
 String STR_AUTH_FIELD_ANNOTE
 {
     Text = "~Anmerkung" ;
     Text [ ENGLISH ] = "Annotation" ;
-    Text[ english_us ] = "Notes";
-    Text[ portuguese ] = "A~notações";
-    Text[ russian ] = "Êîììåíòàğèé";
-    Text[ greek ] = "ĞáñáôŞñçóç";
-    Text[ dutch ] = "~Commentaar";
-    Text[ french ] = "~Commentaire";
-    Text[ spanish ] = "~Notas";
-    Text[ italian ] = "~Annotazione";
-    Text[ danish ] = "Anmærkning";
-    Text[ swedish ] = "Anmärkning";
-    Text[ polish ] = "Adnotacja";
-    Text[ portuguese_brazilian ] = "Annotation";
-    Text[ japanese ] = "’ß";
-    Text[ korean ] = "ÁÖ";
-    Text[ chinese_simplified ] = "ËµÃ÷(~M)";
-    Text[ chinese_traditional ] = "³Æµù(~M)";
-    Text[ arabic ] = "ãáÇÍÙÉ";
-    Text[ turkish ] = "~Not";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Notas";
-    Text[ finnish ] = "Huomautukset";
 };
 String STR_AUTH_FIELD_AUTHOR
 {
@@ -2219,29 +2156,8 @@ String STR_AUTH_FIELD_SCHOOL
 };
 String STR_AUTH_FIELD_SERIES
 {
-    Text = "Name ~der Serie" ;
-    Text [ ENGLISH ] = "Series name" ;
-    Text[ english_us ] = "Series name";
-    Text[ portuguese ] = "Nome da ~série";
-    Text[ russian ] = "Íàçâàíèå ñåğèè";
-    Text[ greek ] = "¼íïìá óåéñÜò";
-    Text[ dutch ] = "Naam van de ~serie";
-    Text[ french ] = "Nom de la série";
-    Text[ spanish ] = "No~mbre de la serie";
-    Text[ italian ] = "Nome ~della serie";
-    Text[ danish ] = "Seriens navn";
-    Text[ swedish ] = "Namn på serie";
-    Text[ polish ] = "Nazwa serii";
-    Text[ portuguese_brazilian ] = "Series name";
-    Text[ japanese ] = "¼Ø°½Ş–¼";
-    Text[ korean ] = "½Ã¸®Áî ÀÌ¸§";
-    Text[ chinese_simplified ] = "ÏµÁĞÃû³Æ";
-    Text[ chinese_traditional ] = "¨t¦C¦W";
-    Text[ arabic ] = "ÇÓã ÇáÓáÓáÉ";
-    Text[ turkish ] = "Seri ~adı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No~mbre de la serie";
-    Text[ finnish ] = "Sarjan nimi";
+    Text = "Ser~ie";
+    Text[English]= "Series";
 };
 String STR_AUTH_FIELD_TITLE
 {
@@ -2297,55 +2213,13 @@ String STR_AUTH_FIELD_TYPE
 };
 String STR_AUTH_FIELD_VOLUME
 {
-    Text = "Nummer des Bandes" ;
+    Text = "Band" ;
     Text [ ENGLISH ] = "Volume" ;
-    Text[ english_us ] = "Volume number";
-    Text[ portuguese ] = "Volume";
-    Text[ russian ] = "Íîìåğ òîìà";
-    Text[ greek ] = "Áñéèìüò ôüìïõ";
-    Text[ dutch ] = "Deel nummer";
-    Text[ french ] = "No. de volume";
-    Text[ spanish ] = "Número de tomo";
-    Text[ italian ] = "Numero del volume";
-    Text[ danish ] = "Bind";
-    Text[ swedish ] = "Nummer på band";
-    Text[ polish ] = "Numer tomu";
-    Text[ portuguese_brazilian ] = "Volume";
-    Text[ japanese ] = "Šª”";
-    Text[ korean ] = "±Ç ¹øÈ£";
-    Text[ chinese_simplified ] = "²áµÄ±àºÅ";
-    Text[ chinese_traditional ] = "¥U¼Æ";
-    Text[ arabic ] = "ÑŞã ÇáãÌáÏ";
-    Text[ turkish ] = "Cilt sayısı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Número de tomo";
-    Text[ finnish ] = "Osan numero";
 };
 String STR_AUTH_FIELD_YEAR
 {
-    Text = "Erscheinungs~jahr" ;
+    Text = "~Jahr" ;
     Text [ ENGLISH ] = "Year" ;
-    Text[ english_us ] = "Year of publication";
-    Text[ portuguese ] = "~Ano de publicação";
-    Text[ russian ] = "Ãîä èçäàíèÿ";
-    Text[ greek ] = "¸ôïò İêäïóçò";
-    Text[ dutch ] = "Verschijnings~jaar";
-    Text[ french ] = "Année de parution";
-    Text[ spanish ] = "Año de publi~cación";
-    Text[ italian ] = "Anno di pubblicazione";
-    Text[ danish ] = "Udgivelsesår";
-    Text[ swedish ] = "Utgivningsår";
-    Text[ polish ] = "Rok wydania";
-    Text[ portuguese_brazilian ] = "Year";
-    Text[ japanese ] = "o”Å”N";
-    Text[ korean ] = "ÃâÆÇ³âµµ";
-    Text[ chinese_simplified ] = "³ö°æÄê·İ";
-    Text[ chinese_traditional ] = "¥Xª©¦~¥÷";
-    Text[ arabic ] = "ÓäÉ ÇáÅÕÏÇÑ";
-    Text[ turkish ] = "Yayım yılı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Año de publi~cación";
-    Text[ finnish ] = "Julkaisuvuosi";
 };
 String STR_AUTH_FIELD_URL
 {
