@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mav $ $Date: 2002-03-05 12:51:24 $
+ *  last change: $Author: mav $ $Date: 2002-05-13 08:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2384,6 +2384,21 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // or should we assume that the content does it by itself because he throwed an exception ?!
                     // any other error - not specified
                     SetError( ERRCODE_IO_GENERAL );
+                    return COMMIT_RESULT_FAILURE;
+                }
+                catch ( InteractiveIOException& r )
+                {
+                    if ( r.Code == IOErrorCode_ACCESS_DENIED || r.Code == IOErrorCode_LOCKING_VIOLATION )
+                        SetError( ERRCODE_IO_ACCESSDENIED );
+                    else if ( r.Code == IOErrorCode_NOT_EXISTING )
+                        SetError( ERRCODE_IO_NOTEXISTS );
+                    else if ( r.Code == IOErrorCode_CANT_READ )
+                        SetError( ERRCODE_IO_CANTREAD );
+                    else if ( r.Code == IOErrorCode_CANT_WRITE )
+                        SetError( ERRCODE_IO_CANTWRITE );
+                    else
+                        SetError( ERRCODE_IO_GENERAL );
+
                     return COMMIT_RESULT_FAILURE;
                 }
                 catch ( Exception& )
