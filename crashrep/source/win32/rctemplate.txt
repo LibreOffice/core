@@ -1,15 +1,16 @@
-LANGUAGE %LANGUAGE% , %SUBLANGUAGE%
 
 #ifdef FONTSIZE
 #undef FONTSIZE
 #endif
 
-#if ( %LANGUAGE% == LANG_KOREAN ) || ( %LANGUAGE% == LANG_CHINESE ) || ( %LANGUAGE% == LANG_JAPANESE )
+//#if ( %PLACEHOLDER% == LANG_KOREAN ) || ( %PLACEHOLDER% == LANG_CHINESE ) || ( %PLACEHOLDER% == LANG_JAPANESE )
+//#define FONTSIZE 9
+//#define LANG_CJK
+//#else
+//#define FONTSIZE 8
+//#endif
+
 #define FONTSIZE 9
-#define LANG_CJK
-#else
-#define FONTSIZE 8
-#endif
 
 /////////////////////////////////////////////////////////////////////////////
 //
