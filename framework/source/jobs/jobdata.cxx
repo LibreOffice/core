@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <classes/converter.hxx>
 #endif
 
+#ifndef __FRAMEWORK_CLASSES_WILDCARD_HXX_
+#include <classes/wildcard.hxx>
+#endif
+
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
@@ -125,27 +129,24 @@ namespace framework{
 //  exported const
 
 const sal_Char* JobData::JOBCFG_ROOT              = "/org.openoffice.Office.Jobs/Jobs/"   ;
-const sal_Char* JobData::JOBCFG_PROP_ADMINTIME    = "AdminTime"                           ;
-const sal_Char* JobData::JOBCFG_PROP_ARGUMENTS    = "Arguments"                           ;
-const sal_Char* JobData::JOBCFG_PROP_ASYNC        = "Async"                               ;
 const sal_Char* JobData::JOBCFG_PROP_SERVICE      = "Service"                             ;
-const sal_Char* JobData::JOBCFG_PROP_USERTIME     = "UserTime"                            ;
+const sal_Char* JobData::JOBCFG_PROP_ARGUMENTS    = "Arguments"                           ;
 
 const sal_Char* JobData::EVENTCFG_ROOT            = "/org.openoffice.Office.Jobs/Events/" ;
-const sal_Char* JobData::EVENTCFG_PROP_JOBLIST    =  "Joblist"                            ;
+const sal_Char* JobData::EVENTCFG_PATH_JOBLIST    = "/JobList"                            ;
+const sal_Char* JobData::EVENTCFG_PROP_ADMINTIME  = "AdminTime"                           ;
+const sal_Char* JobData::EVENTCFG_PROP_USERTIME   = "UserTime"                            ;
 
 const sal_Char* JobData::PROPSET_CONFIG           = "Config"                              ;
 const sal_Char* JobData::PROPSET_OWNCONFIG        = "JobConfig"                           ;
 const sal_Char* JobData::PROPSET_ENVIRONMENT      = "Environment"                         ;
 const sal_Char* JobData::PROPSET_DYNAMICDATA      = "DynamicData"                         ;
 
-const sal_Char* JobData::PROP_ADMINTIME           = "AdminTime"                           ;
 const sal_Char* JobData::PROP_ALIAS               = "Alias"                               ;
-const sal_Char* JobData::PROP_ASYNC               = "Async"                               ;
-const sal_Char* JobData::PROP_EVENT               = "Event"                               ;
+const sal_Char* JobData::PROP_EVENTNAME           = "EventName"                           ;
+const sal_Char* JobData::PROP_ENVTYPE             = "EnvType"                             ;
 const sal_Char* JobData::PROP_FRAME               = "Frame"                               ;
 const sal_Char* JobData::PROP_SERVICE             = "Service"                             ;
-const sal_Char* JobData::PROP_USERTIME            = "UserTime"                            ;
 
 //________________________________
 //  non exported definitions
@@ -163,11 +164,12 @@ const sal_Char* JobData::PROP_USERTIME            = "UserTime"                  
     @param      xSMGR
                     reference to the uno service manager
 */
-JobData::JobData( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+JobData::JobData( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
     : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_eMode       (E_UNKNOWN                    )
     , m_xSMGR       (xSMGR                        )
 {
+    // share code for member initialization with defaults!
+    impl_reset();
 }
 
 //________________________________
@@ -202,14 +204,11 @@ void JobData::operator=( const JobData& rCopy )
     // Please don't copy the uno service manager reference.
     // That can change the uno context, which isn't a good idea!
     m_eMode                = rCopy.m_eMode               ;
+    m_eEnvironment         = rCopy.m_eEnvironment        ;
     m_sAlias               = rCopy.m_sAlias              ;
     m_sService             = rCopy.m_sService            ;
     m_sEvent               = rCopy.m_sEvent              ;
     m_lArguments           = rCopy.m_lArguments          ;
-    m_aAdminTime           = rCopy.m_aAdminTime          ;
-    m_aUserTime            = rCopy.m_aUserTime           ;
-    m_bAsync               = rCopy.m_bAsync              ;
-    m_bEnabled             = rCopy.m_bEnabled            ;
     m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
     aWriteLock.unlock();
     /* } SAFE */
@@ -236,7 +235,7 @@ JobData::~JobData()
     @param      sAlias
                     the alias name of this job, used to locate job properties inside cfg
 */
-void JobData::setAlias( /*IN*/ const ::rtl::OUString& sAlias )
+void JobData::setAlias( const ::rtl::OUString& sAlias )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
@@ -264,25 +263,7 @@ void JobData::setAlias( /*IN*/ const ::rtl::OUString& sAlias )
     css::uno::Reference< css::beans::XPropertySet > xJobProperties(aConfig.cfg(), css::uno::UNO_QUERY);
     if (xJobProperties.is())
     {
-        css::uno::Any   aValue;
-        ::rtl::OUString sTime ;
-
-        // read and convert "AdminTime"
-        aValue = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_ADMINTIME));
-        if (aValue >>= sTime)
-            m_aAdminTime = Converter::convert_String2DateTime(sTime);
-
-        // read and convert "UserTime"
-        aValue = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_USERTIME));
-        if (aValue >>= sTime)
-            m_aUserTime = Converter::convert_String2DateTime(sTime);
-
-        // check active state by comparing time stamps
-        m_bEnabled = (m_aAdminTime > m_aUserTime);
-
-        // read async state
-        aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_ASYNC));
-        aValue >>= m_bAsync;
+        css::uno::Any aValue;
 
         // read uno implementation name
         aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_SERVICE));
@@ -321,35 +302,53 @@ void JobData::setAlias( /*IN*/ const ::rtl::OUString& sAlias )
     @param      sService
                     the uno service name of this "non configured" job
 */
-void JobData::setService( /*IN*/ const ::rtl::OUString& sService )
+void JobData::setService( const ::rtl::OUString& sService )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
+
     // delete all old informations! Otherwhise we mix it with the new one ...
     impl_reset();
-
     // take over the new informations
     m_sService = sService;
+    m_eMode    = E_SERVICE;
+
     aWriteLock.unlock();
     /* } SAFE */
 }
 
 //________________________________
 /**
-    @short      a job can(!) be registered for such event
-    @descr      This information can be set from outside as part of this container.
-                We use it to add it to the argument list of the job ... but for temp. using only.
-                So the outside code can pass the extended list of arguments to the job at execution time.
-                But we don't make it persistent!
+    @short      initialize this instance with new job values.
+    @descr      It reads automaticly all properties of the specified
+                job (using it's alias name) and "register it" for the
+                given event. This registration will not be validated against
+                the underlying configuration! (That must be done from outside.
+                Because the caller must have the configuration already open to
+                get the values for sEvent and sAlias! And doing so it can perform
+                only, if the time stanp values are readed outside too.
+                Further it make no sense to initialize and start a disabled job.
+                So this initialization method will be called for enabled jobs only.)
 
     @param      sEvent
-                    the possible event, for which a job can be registered
+                    the triggered event, for which this job should be started
+
+    @param      sAlias
+                    mark the required job inside event registration list
 */
-void JobData::setEvent( /*IN*/ const ::rtl::OUString& sEvent )
+void JobData::setEvent( const ::rtl::OUString& sEvent ,
+                        const ::rtl::OUString& sAlias )
 {
+    // share code to read all job properties!
+    setAlias(sAlias);
+
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
+
+    // take over the new informations - which differ against set on of method setAlias()!
     m_sEvent = sEvent;
+    m_eMode  = E_EVENT;
+
     aWriteLock.unlock();
     /* } SAFE */
 }
@@ -366,7 +365,7 @@ void JobData::setEvent( /*IN*/ const ::rtl::OUString& sEvent )
     @param      lArguments
                     list of arguments, which should be set for this job
  */
-void JobData::setJobConfig( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lArguments )
+void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& lArguments )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
@@ -442,6 +441,22 @@ void JobData::setResult( const JobResult& aResult )
 
 //________________________________
 /**
+    @short  set a new environment descriptor for this job
+    @descr  It must(!) be done everytime this container is initialized
+            with new job datas e.g.: setAlias()/setEvent()/setService() ...
+            Otherwhise the environment will be unknown!
+ */
+void JobData::setEnvironment( EEnvironment eEnvironment )
+{
+    /* SAFE { */
+    WriteGuard aWriteLock(m_aLock);
+    m_eEnvironment = eEnvironment;
+    aWriteLock.unlock();
+    /* } SAFE */
+}
+
+//________________________________
+/**
     @short      these functions provides access to our internal members
     @descr      These member represent any information about the job
                 and can be used from outside to e.g. start a job.
@@ -452,6 +467,37 @@ JobData::EMode JobData::getMode() const
     ReadGuard aReadLock(m_aLock);
     return m_eMode;
     /* } SAFE */
+}
+
+//________________________________
+
+JobData::EEnvironment JobData::getEnvironment() const
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    return m_eEnvironment;
+    /* } SAFE */
+}
+
+//________________________________
+
+::rtl::OUString JobData::getEnvironmentDescriptor() const
+{
+    ::rtl::OUString sDescriptor;
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    switch(m_eEnvironment)
+    {
+        case E_EXECUTION :
+            sDescriptor = ::rtl::OUString::createFromAscii("EXECUTOR");
+            break;
+
+        case E_DISPATCH :
+            sDescriptor = ::rtl::OUString::createFromAscii("DISPATCH");
+            break;
+    }
+    /* } SAFE */
+    return sDescriptor;
 }
 
 //________________________________
@@ -503,25 +549,16 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
-        lConfig.realloc(6);
+        lConfig.realloc(2);
+        sal_Int32 i = 0;
 
-        lConfig[0].Name = ::rtl::OUString::createFromAscii(PROP_ADMINTIME);
-        lConfig[0].Value <<= Converter::convert_DateTime2String(m_aAdminTime);
+        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_ALIAS);
+        lConfig[i].Value <<= m_sAlias;
+        ++i;
 
-        lConfig[1].Name = ::rtl::OUString::createFromAscii(PROP_ALIAS);
-        lConfig[1].Value <<= m_sAlias;
-
-        lConfig[2].Name = ::rtl::OUString::createFromAscii(PROP_ASYNC);
-        lConfig[2].Value <<= m_bAsync;
-
-        lConfig[3].Name = ::rtl::OUString::createFromAscii(PROP_EVENT);
-        lConfig[3].Value <<= m_sEvent;
-
-        lConfig[4].Name = ::rtl::OUString::createFromAscii(PROP_SERVICE);
-        lConfig[4].Value <<= m_sService;
-
-        lConfig[5].Name = ::rtl::OUString::createFromAscii(PROP_USERTIME);
-        lConfig[5].Value <<= Converter::convert_DateTime2String(m_aUserTime);
+        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_SERVICE);
+        lConfig[i].Value <<= m_sService;
+        ++i;
     }
     aReadLock.unlock();
     /* } SAFE */
@@ -539,22 +576,22 @@ JobResult JobData::getResult() const
 }
 
 //________________________________
+/**
+    @short  return information, if this job is part of the global configuration package
+            org.openoffice.Office.Jobs
+    @descr  Because jobs can be executed by the dispatch framework using an uno service name
+            directly - an executed job must not have any configuration realy. Such jobs
+            must provide the right interfaces only! But after finishing jobs can return
+            some informations (e.g. for updating her configuration ...). We must know
+            if such request is valid or not then.
 
-sal_Bool JobData::isAsync() const
+    @return TRUE if the represented job is part of the underlying configuration package.
+ */
+sal_Bool JobData::hasConfig() const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    return m_bAsync;
-    /* } SAFE */
-}
-
-//________________________________
-
-sal_Bool JobData::isEnabled() const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    return m_bEnabled;
+    return (m_eMode==E_ALIAS || m_eMode==E_EVENT);
     /* } SAFE */
 }
 
@@ -574,28 +611,22 @@ void JobData::disableJob()
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // No configuration => no chance
-    if (m_eMode!=E_ALIAS)
+    // No configuration - not used from EXECUTOR and not triggered from an event => no chance!
+    if (m_eMode!=E_EVENT)
         return;
-
-    // actualize the user time stamp
-    // It should be newer then the admin value ... and
-    // that disable this job.
-    // (default ctor of DateTime set current date & time on instanciated object automaticly!)
-    m_aUserTime = DateTime();
-
-    // But we have to actualize this state internaly too.
-    m_bEnabled = sal_False;
 
     // actualize the configuration
     // It doesn't matter if this config object was already opened before.
     // It doesn nothing here then ... or it change the mode automaticly, if
     // it was opened using another one before.
-    ::rtl::OUString sKey;
-    sKey  = ::rtl::OUString::createFromAscii(JOBCFG_ROOT);
-    sKey += ::utl::wrapConfigurationElementName(m_sAlias);
+    ::rtl::OUStringBuffer sKey(256);
+    sKey.appendAscii(JobData::EVENTCFG_ROOT                       );
+    sKey.append     (::utl::wrapConfigurationElementName(m_sEvent));
+    sKey.appendAscii(JobData::EVENTCFG_PATH_JOBLIST               );
+    sKey.appendAscii("/"                                          );
+    sKey.append     (::utl::wrapConfigurationElementName(m_sAlias));
 
-    ConfigAccess aConfig(m_xSMGR, sKey);
+    ConfigAccess aConfig(m_xSMGR, sKey.makeStringAndClear());
     aConfig.open(ConfigAccess::E_READWRITE);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return;
@@ -605,8 +636,8 @@ void JobData::disableJob()
     {
         // Convert and write the user timestamp to the configuration.
         css::uno::Any aValue;
-        aValue <<= Converter::convert_DateTime2String(m_aUserTime);
-        xPropSet->setPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_USERTIME), aValue);
+        aValue <<= Converter::convert_DateTime2ISO8601(DateTime());
+        xPropSet->setPropertyValue(::rtl::OUString::createFromAscii(EVENTCFG_PROP_USERTIME), aValue);
     }
 
     aConfig.close();
@@ -617,24 +648,119 @@ void JobData::disableJob()
 
 //________________________________
 /**
+ */
+sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
+                    const ::rtl::OUString& sUserTime  )
+{
+    /*Attention!
+        To prevent interpreting of TriGraphs inside next const string value,
+        we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
+        to "~" ...
+     */
+    static ::rtl::OUString PATTERN_ISO8601 = ::rtl::OUString::createFromAscii("\?\?\?\?-\?\?-\?\?*\0");
+
+    sal_Bool bValidAdmin = Wildcard::match(sAdminTime, PATTERN_ISO8601);
+    sal_Bool bValidUser  = Wildcard::match(sUserTime , PATTERN_ISO8601);
+
+    // We check for "isEnabled()" here only.
+    // Note further: ISO8601 formated strings can be compared as strings directly!
+    return (
+            (!bValidAdmin && !bValidUser                         ) ||
+            ( bValidAdmin &&  bValidUser && sAdminTime>=sUserTime)
+           );
+}
+
+//________________________________
+/**
+ */
+css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                                                                       const ::rtl::OUString&                                        sEvent )
+{
+    // these static values may perform following loop for reading time stamp values ...
+    static ::rtl::OUString ADMINTIME = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_ADMINTIME);
+    static ::rtl::OUString USERTIME  = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_USERTIME );
+
+    // generate the full qualified path to the job list, which is registered for the given event.
+    // e.g. "/org.openoffice.Office.Jobs/Events/<event name>/JobList"
+    ::rtl::OUStringBuffer sCfgEntry(256);
+    sCfgEntry.appendAscii(JobData::EVENTCFG_ROOT                     );
+    sCfgEntry.append     (::utl::wrapConfigurationElementName(sEvent));
+    sCfgEntry.appendAscii(JobData::EVENTCFG_PATH_JOBLIST             );
+
+    // create a config access
+    ConfigAccess aConfig(xSMGR,sCfgEntry.makeStringAndClear());
+    aConfig.open(ConfigAccess::E_READONLY);
+    if (aConfig.getMode()==ConfigAccess::E_CLOSED)
+        return css::uno::Sequence< ::rtl::OUString >();
+
+    css::uno::Reference< css::container::XNameAccess > xEventRegistry(aConfig.cfg(), css::uno::UNO_QUERY);
+    if (!xEventRegistry.is())
+        return css::uno::Sequence< ::rtl::OUString >();
+
+    // get all alias names of jobs, which are part of this job list
+    // But Some of them can be disabled by it's time stamp values.
+    // We create an additional job name list iwth the same size, then the original list ...
+    // step over all job entries ... check her time stamps ... and put only job names to the
+    // destination list, which represent an enabled job.
+    css::uno::Sequence< ::rtl::OUString > lAllJobs = xEventRegistry->getElementNames();
+    sal_Int32 c = lAllJobs.getLength();
+    css::uno::Sequence< ::rtl::OUString > lEnabledJobs(c);
+    sal_Int32 d = 0;
+    for (sal_Int32 s=0; s<c; ++s)
+    {
+        css::uno::Any aNode = xEventRegistry->getByName(lAllJobs[s]);
+        css::uno::Reference< css::beans::XPropertySet > xJob;
+        if (
+            !(aNode >>= xJob) ||
+            !(xJob.is()     )
+           )
+        {
+           continue;
+        }
+
+        aNode = xJob->getPropertyValue(ADMINTIME);
+        ::rtl::OUString sAdminTime;
+        aNode >>= sAdminTime;
+
+        aNode = xJob->getPropertyValue(USERTIME);
+        ::rtl::OUString sUserTime;
+        aNode >>= sUserTime;
+
+        if (!isEnabled(sAdminTime, sUserTime))
+            continue;
+
+        lEnabledJobs[d] = lAllJobs[s];
+        ++d;
+    }
+    lEnabledJobs.realloc(d);
+
+    aConfig.close();
+
+    return lEnabledJobs;
+}
+
+//________________________________
+/**
     @short      reset all internal structures
     @descr      If somehwere recycle this instance, he can switch from one
                 using mode to another one. But then we have to reset all currently
                 used informations. Otherwhise we mix it and they can make trouble.
+
+                But note: that does not set defaults for internal used members, which
+                does not relate to any job property! e.g. the reference to the global
+                uno service manager. Such informations are used for internal processes only
+                and are neccessary for our work.
  */
 void JobData::impl_reset()
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
-    m_eMode      = E_UNKNOWN;
-    m_sAlias     = ::rtl::OUString();
-    m_sService   = ::rtl::OUString();
-    m_sEvent     = ::rtl::OUString();
-    m_lArguments = css::uno::Sequence< css::beans::NamedValue >();
-    m_aAdminTime = DateTime();
-    m_aUserTime  = DateTime();
-    m_bAsync     = sal_False;
-    m_bEnabled   = sal_False;
+    m_eMode        = E_UNKNOWN_MODE;
+    m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
+    m_sAlias       = ::rtl::OUString();
+    m_sService     = ::rtl::OUString();
+    m_sEvent       = ::rtl::OUString();
+    m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
     aWriteLock.unlock();
     /* } SAFE */
 }

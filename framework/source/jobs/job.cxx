@@ -1,10 +1,10 @@
-    /*************************************************************************
+/*************************************************************************
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,23 +261,12 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     css::uno::Reference< css::task::XJob >       xSJob;
 
     // create the job
+    // We must check for the supported interface on demand!
+    // But we preferr the synchronous one ...
     m_xJob = m_xSMGR->createInstance(m_aJobCfg.getService());
-    if (m_aJobCfg.getMode()==JobData::E_ALIAS)
-    {
-        // If it's a configured job - the interface wich must be used is fix!
-        if (m_aJobCfg.isAsync())
-            xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
-        else
-            xSJob = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
-    }
-    else
-    {
-        // If it's a job withou a configuration we must check for the supported interface on demand.
-        // But we preferr the synchronous one ...
-        xSJob = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
-        if (!xSJob.is())
-            xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
-    }
+    xSJob  = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
+    if (!xSJob.is())
+        xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
 
     // execute it asynchron (and wait for finishing it!)
     if (xAJob.is())
@@ -369,28 +358,44 @@ void Job::die()
 */
 css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
-    css::uno::Sequence< css::beans::NamedValue > lConfigArgs   ;
-    css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
-    css::uno::Sequence< css::beans::NamedValue > lEnvArgs      ;
-    css::uno::Sequence< css::beans::NamedValue > lAllArgs      ;
+    css::uno::Sequence< css::beans::NamedValue > lAllArgs;
 
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    // get the configuration lists from the job data container ... if possible
-    // Means: if this job has any configuration data.
-    if (m_aJobCfg.getMode()==JobData::E_ALIAS)
+    // the real structure of the returned list depends from the environment of this job!
+    JobData::EMode eMode = m_aJobCfg.getMode();
+
+    // Create list of environment variables. This list must be part of the
+    // returned structure everytimes ... but some of its members are opetional!
+    css::uno::Sequence< css::beans::NamedValue > lEnvArgs(1);
+    lEnvArgs[0].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_ENVTYPE);
+    lEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
+
+    if (m_xFrame.is())
+    {
+        sal_Int32 c = lEnvArgs.getLength();
+        lEnvArgs.realloc(c+1);
+        lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_FRAME);
+        lEnvArgs[c].Value <<= m_xFrame;
+    }
+    if (eMode==JobData::E_EVENT)
+    {
+        sal_Int32 c = lEnvArgs.getLength();
+        lEnvArgs.realloc(c+1);
+        lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_EVENTNAME);
+        lEnvArgs[c].Value <<= m_aJobCfg.getEvent();
+    }
+
+    // get the configuration data from the job data container ... if possible
+    // Means: if this job has any configuration data. Note: only realy
+    // filled lists will be set to the return structure at the end of this method.
+    css::uno::Sequence< css::beans::NamedValue > lConfigArgs   ;
+    css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
+    if (eMode==JobData::E_ALIAS || eMode==JobData::E_EVENT)
     {
         lConfigArgs    = m_aJobCfg.getConfig();
         lJobConfigArgs = m_aJobCfg.getJobConfig();
-    }
-
-    // Create list of environment variables.
-    if (m_xFrame.is())
-    {
-        lEnvArgs.realloc(1);
-        lEnvArgs[0].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_FRAME);
-        lEnvArgs[0].Value <<= m_xFrame;
     }
 
     aReadLock.unlock();
@@ -446,28 +451,43 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
+    // analyze the result set ...
     JobResult aAnalyzedResult(aResult);
 
-    // These items are interesting for configured jobs only.
-    if (aAnalyzedResult.existPart(JobResult::E_ARGUMENTS))
-        m_aJobCfg.setJobConfig(aAnalyzedResult.getArguments());
+    // some of the following operations will be supported for different environments
+    // or different type of jobs only.
+    JobData::EEnvironment eEnvironment = m_aJobCfg.getEnvironment();
 
+    // write back the job specific configuration data ...
+    // If the environment allow it and if this job has a configuration!
     if (
-        (aAnalyzedResult.existPart(JobResult::E_DEACTIVATE)) &&
-        (aAnalyzedResult.getDeactivate()                   )
+        (m_aJobCfg.hasConfig()                            ) &&
+        (aAnalyzedResult.existPart(JobResult::E_ARGUMENTS))
+       )
+    {
+        m_aJobCfg.setJobConfig(aAnalyzedResult.getArguments());
+    }
+
+    // disable a job for further executions.
+    // Note: this option is available inside the environment EXECUTOR only
+    if (
+        (eEnvironment == JobData::E_EXECUTION              ) &&
+        (m_aJobCfg.hasConfig()                             ) &&
+        (aAnalyzedResult.existPart(JobResult::E_DEACTIVATE))
        )
     {
         m_aJobCfg.disableJob();
     }
 
-    // handle all other results
-    // They does not depend if this job is an ALIAS or a SERVICE!
-    m_aJobCfg.setResult(aAnalyzedResult);
+    // notify any interested listener with the may given result state.
+    // Note: this option is available inside the environment DISPATCH only
     if (
-        (aAnalyzedResult.existPart(JobResult::E_DISPATCHRESULT)) &&
-        (m_xResultListener.is()                                )
+        (eEnvironment == JobData::E_DISPATCH                   ) &&
+        (m_xResultListener.is()                                ) &&
+        (aAnalyzedResult.existPart(JobResult::E_DISPATCHRESULT))
        )
     {
+        m_aJobCfg.setResult(aAnalyzedResult);
         // Attention: Because the listener expect that the original object send this event ...
         // and we nor the job are the right ones ...
         // our user has set itself before. So we can fake this source address!
