@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceContext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:19 $
+ *  last change: $Author: arellano $ $Date: 2001-07-17 15:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@ interface XDragSourceListener;
 /** The DragSourceContext class is responsible for managing the initiator side
     of the Drag and Drop protocol.
 
-    <p>In particular it is responsible for managing event notifications to the
-    DragSourceListener, and providing the Transferable state to enable the data
+    <p>In particular, it is responsible for managing event notifications to the
+    DragSourceListener and providing the Transferable state to enable the data
     transfer. </p>
 
     <p>An instance of this class is created as a result of a DragSource's
@@ -89,7 +89,8 @@ interface XDragSourceListener;
 interface XDragSourceContext: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns the currently selected drag cursor.
+    /** @returns
+    the currently selected drag cursor.
     */
 
     long getCurrentCursor();
@@ -97,7 +98,9 @@ interface XDragSourceContext: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** this method sets the current drag Cursor.
 
-        <p>This method should only be called to set an other cursor than the
+    <!-- Editor: Should Cursor have a leading capital? -->
+
+        <p>This method should only be called to set another cursor than the
         default one for drag action currently selected by the user.
         Invalid cursor Ids will be ignored.</p>
 
