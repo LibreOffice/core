@@ -4,16 +4,10 @@
  <node oor:name="UIElements">
   <node oor:name="States">
   <node oor:name="private:resource/toolbar/designobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
@@ -25,16 +19,10 @@
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/sqlobjectbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
-     <value>0</value>
-    </prop>
-    <prop oor:name="Style" oor:type="xs:int">
      <value>0</value>
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
@@ -46,21 +34,15 @@
     </prop>
    </node>
    <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
-    <prop oor:name="DockPos" oor:type="xs:string">
-     <value>0,1</value>
-    </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
     <prop oor:name="DockingArea" oor:type="xs:int">
      <value>0</value>
     </prop>
-    <prop oor:name="Style" oor:type="xs:int">
-     <value>0</value>
-    </prop>
     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Standard</value>
-     <value xml:lang="de">Standard</value>
+     <value xml:lang="en-US">Query Design</value>
+     <value xml:lang="de">Abfrageentwurf</value>
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
