@@ -2,9 +2,9 @@
  *
  *  $RCSfile: barcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:37:59 $
+ *  last change: $Author: os $ $Date: 2000-10-12 15:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ class CfgUSHORTTable;
 
 class SwToolbarConfigItem : public utl::ConfigItem
 {
-    sal_uInt16          aTbxIdArray[4];
+    sal_uInt16          aTbxIdArray[5];
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 

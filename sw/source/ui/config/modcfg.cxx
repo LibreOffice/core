@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:34:45 $
+ *  last change: $Author: os $ $Date: 2000-10-12 15:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,67 +357,77 @@ Sequence<OUString> SwInsertConfig::GetPropertyNames()
         "Table/Border",                                 // 2
         "Table/Split",                                  // 3 from here not in writer/web
         "Caption/Automatic",                            // 4
-        "Caption/StarWriterObject/Table/Category",      // 5
-        "Caption/StarWriterObject/Table/Numbering",     // 6
-        "Caption/StarWriterObject/Table/CaptionText",   // 7
-        "Caption/StarWriterObject/Table/Delimiter",     // 8
-        "Caption/StarWriterObject/Table/Level",         // 9
-        "Caption/StarWriterObject/Table/Position",      //10
-        "Caption/StarWriterObject/Frame/Category",      //11
-        "Caption/StarWriterObject/Frame/Numbering",     //12
-        "Caption/StarWriterObject/Frame/CaptionText",   //13
-        "Caption/StarWriterObject/Frame/Delimiter",     //14
-        "Caption/StarWriterObject/Frame/Level",         //15
-        "Caption/StarWriterObject/Frame/Position",      //16
-        "Caption/StarWriterObject/Graphic/Category",    //17
-        "Caption/StarWriterObject/Graphic/Numbering",   //18
-        "Caption/StarWriterObject/Graphic/CaptionText", //19
-        "Caption/StarWriterObject/Graphic/Delimiter",   //20
-        "Caption/StarWriterObject/Graphic/Level",       //21
-        "Caption/StarOfficeObject/Calc/Category",       //22
-        "Caption/StarOfficeObject/Calc/Numbering",      //23
-        "Caption/StarOfficeObject/Calc/CaptionText",    //24
-        "Caption/StarOfficeObject/Calc/Delimiter",      //25
-        "Caption/StarOfficeObject/Calc/Level",          //26
-        "Caption/StarOfficeObject/Calc/Position",       //27
-        "Caption/StarOfficeObject/Impress/Category",    //28
-        "Caption/StarOfficeObject/Impress/Numbering",   //29
-        "Caption/StarOfficeObject/Impress/CaptionText", //30
-        "Caption/StarOfficeObject/Impress/Delimiter",   //31
-        "Caption/StarOfficeObject/Impress/Level",       //32
-        "Caption/StarOfficeObject/Impress/Position",    //33
-        "Caption/StarOfficeObject/Chart/Category",      //34
-        "Caption/StarOfficeObject/Chart/Numbering",     //35
-        "Caption/StarOfficeObject/Chart/CaptionText",   //36
-        "Caption/StarOfficeObject/Chart/Delimiter",     //37
-        "Caption/StarOfficeObject/Chart/Level",         //38
-        "Caption/StarOfficeObject/Chart/Position",      //39
-        "Caption/StarOfficeObject/Image/Category",      //40
-        "Caption/StarOfficeObject/Image/Numbering",     //41
-        "Caption/StarOfficeObject/Image/CaptionText",   //42
-        "Caption/StarOfficeObject/Image/Delimiter",     //43
-        "Caption/StarOfficeObject/Image/Level",         //44
-        "Caption/StarOfficeObject/Image/Position",      //45
-        "Caption/StarOfficeObject/Formula/Category",    //46
-        "Caption/StarOfficeObject/Formula/Numbering",   //47
-        "Caption/StarOfficeObject/Formula/CaptionText", //48
-        "Caption/StarOfficeObject/Formula/Delimiter",   //49
-        "Caption/StarOfficeObject/Formula/Level",       //50
-        "Caption/StarOfficeObject/Formula/Position",    //51
-        "Caption/StarOfficeObject/Draw/Category",       //52
-        "Caption/StarOfficeObject/Draw/Numbering",      //53
-        "Caption/StarOfficeObject/Draw/CaptionText",    //54
-        "Caption/StarOfficeObject/Draw/Delimiter",      //55
-        "Caption/StarOfficeObject/Draw/Level",          //56
-        "Caption/StarOfficeObject/Draw/Position",       //57
-        "Caption/StarOfficeObject/OLEMisc/Category",    //58
-        "Caption/StarOfficeObject/OLEMisc/Numbering",   //59
-        "Caption/StarOfficeObject/OLEMisc/CaptionText", //60
-        "Caption/StarOfficeObject/OLEMisc/Delimiter",   //61
-        "Caption/StarOfficeObject/OLEMisc/Level",       //62
-        "Caption/StarOfficeObject/OLEMisc/Position",    //63
+        "Caption/StarWriterObject/Table/Enable",        // 5
+        "Caption/StarWriterObject/Table/Settings/Category",     // 6
+        "Caption/StarWriterObject/Table/Settings/Numbering",    // 7
+        "Caption/StarWriterObject/Table/Settings/CaptionText",  // 8
+        "Caption/StarWriterObject/Table/Settings/Delimiter",    // 9
+        "Caption/StarWriterObject/Table/Settings/Level",        //10
+        "Caption/StarWriterObject/Table/Settings/Position",     //11
+        "Caption/StarWriterObject/Frame/Enable",                //12
+        "Caption/StarWriterObject/Frame/Settings/Category",     //13
+        "Caption/StarWriterObject/Frame/Settings/Numbering",    //14
+        "Caption/StarWriterObject/Frame/Settings/CaptionText",  //15
+        "Caption/StarWriterObject/Frame/Settings/Delimiter",    //16
+        "Caption/StarWriterObject/Frame/Settings/Level",        //17
+        "Caption/StarWriterObject/Frame/Settings/Position",     //18
+        "Caption/StarWriterObject/Graphic/Enable",              //19
+        "Caption/StarWriterObject/Graphic/Settings/Category",   //20
+        "Caption/StarWriterObject/Graphic/Settings/Numbering",  //21
+        "Caption/StarWriterObject/Graphic/Settings/CaptionText",//22
+        "Caption/StarWriterObject/Graphic/Settings/Delimiter",  //23
+        "Caption/StarWriterObject/Graphic/Settings/Level",      //24
+        "Caption/StarOfficeObject/Calc/Enable",                 //25
+        "Caption/StarOfficeObject/Calc/Settings/Category",      //26
+        "Caption/StarOfficeObject/Calc/Settings/Numbering",     //27
+        "Caption/StarOfficeObject/Calc/Settings/CaptionText",   //28
+        "Caption/StarOfficeObject/Calc/Settings/Delimiter",     //29
+        "Caption/StarOfficeObject/Calc/Settings/Level",         //30
+        "Caption/StarOfficeObject/Calc/Settings/Position",      //31
+        "Caption/StarOfficeObject/Impress/Enable",              //32
+        "Caption/StarOfficeObject/Impress/Settings/Category",   //33
+        "Caption/StarOfficeObject/Impress/Settings/Numbering",  //34
+        "Caption/StarOfficeObject/Impress/Settings/CaptionText",//35
+        "Caption/StarOfficeObject/Impress/Settings/Delimiter",  //36
+        "Caption/StarOfficeObject/Impress/Settings/Level",      //37
+        "Caption/StarOfficeObject/Impress/Settings/Position",   //38
+        "Caption/StarOfficeObject/Chart/Enable",                //39
+        "Caption/StarOfficeObject/Chart/Settings/Category",     //40
+        "Caption/StarOfficeObject/Chart/Settings/Numbering",    //41
+        "Caption/StarOfficeObject/Chart/Settings/CaptionText",  //42
+        "Caption/StarOfficeObject/Chart/Settings/Delimiter",    //43
+        "Caption/StarOfficeObject/Chart/Settings/Level",        //44
+        "Caption/StarOfficeObject/Chart/Settings/Position",     //45
+        "Caption/StarOfficeObject/Image/Enable",                //46
+        "Caption/StarOfficeObject/Image/Settings/Category",     //47
+        "Caption/StarOfficeObject/Image/Settings/Numbering",    //48
+        "Caption/StarOfficeObject/Image/Settings/CaptionText",  //49
+        "Caption/StarOfficeObject/Image/Settings/Delimiter",    //50
+        "Caption/StarOfficeObject/Image/Settings/Level",        //51
+        "Caption/StarOfficeObject/Image/Settings/Position",     //52
+        "Caption/StarOfficeObject/Formula/Enable",              //53
+        "Caption/StarOfficeObject/Formula/Settings/Category",   //54
+        "Caption/StarOfficeObject/Formula/Settings/Numbering",  //55
+        "Caption/StarOfficeObject/Formula/Settings/CaptionText",//56
+        "Caption/StarOfficeObject/Formula/Settings/Delimiter",  //57
+        "Caption/StarOfficeObject/Formula/Settings/Level",      //58
+        "Caption/StarOfficeObject/Formula/Settings/Position",   //59
+        "Caption/StarOfficeObject/Draw/Enable",                 //60
+        "Caption/StarOfficeObject/Draw/Settings/Category",      //61
+        "Caption/StarOfficeObject/Draw/Settings/Numbering",     //62
+        "Caption/StarOfficeObject/Draw/Settings/CaptionText",   //63
+        "Caption/StarOfficeObject/Draw/Settings/Delimiter",     //64
+        "Caption/StarOfficeObject/Draw/Settings/Level",         //65
+        "Caption/StarOfficeObject/Draw/Settings/Position",      //66
+        "Caption/StarOfficeObject/OLEMisc/Enable",              //67
+        "Caption/StarOfficeObject/OLEMisc/Settings/Category",   //68
+        "Caption/StarOfficeObject/OLEMisc/Settings/Numbering",  //69
+        "Caption/StarOfficeObject/OLEMisc/Settings/CaptionText",//70
+        "Caption/StarOfficeObject/OLEMisc/Settings/Delimiter",  //71
+        "Caption/StarOfficeObject/OLEMisc/Settings/Level",      //72
+        "Caption/StarOfficeObject/OLEMisc/Settings/Position"    //73
     };
-    const int nCount = bIsWeb ? 3: 64;
+    const int nCount = bIsWeb ? 3: 74;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -465,12 +475,18 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
 {
     switch(nOffset)
     {
-        case 0: pValues[nProp] <<= OUString(rOpt.GetCategory()); break;//Category
-        case 1: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
-        case 2: pValues[nProp] <<= OUString(rOpt.GetCaption());  break;//CaptionText",
-        case 3: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
-        case 4: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
-        case 5: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
+        case 0:
+        {
+            sal_Bool bTemp = rOpt.UseCaption();
+            pValues[nProp].setValue(&bTemp, ::getBooleanCppuType());
+        }
+        break;//Enable
+        case 1: pValues[nProp] <<= OUString(rOpt.GetCategory()); break;//Category
+        case 2: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
+        case 3: pValues[nProp] <<= OUString(rOpt.GetCaption());  break;//CaptionText",
+        case 4: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
+        case 5: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
+        case 6: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
     }
 }
 //-----------------------------------------------------------------------------
@@ -530,46 +546,46 @@ void SwInsertConfig::Commit()
             break;//"Table/Split",
             case  4: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
 
-            case  5: case  6: case  7: case  8: case  9: case 10: //"Caption/StarWriterObject/Table/Position",
+            case  5: case  6: case  7: case  8: case  9: case 10: case 11: //"Caption/StarWriterObject/Table/Position",
                     if(pWriterTableOpt)
                         lcl_WriteOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
             break;
-            case 11: case 12: case 13: case 14: case 15: case 16:
+            case 12: case 13: case 14: case 15: case 16: case 17: case 18:
                     if(pWriterFrameOpt)
-                        lcl_WriteOpt(*pWriterFrameOpt, pValues, nProp, nProp - 11);
-            case 17: case 18: case 19: case 20: case 21:
+                        lcl_WriteOpt(*pWriterFrameOpt, pValues, nProp, nProp - 12);
+            case 19: case 20: case 21: case 22: case 23: case 24:
                     if(pWriterGraphicOpt)
-                        lcl_WriteOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 17);
+                        lcl_WriteOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 19);
                     break;
-            case 22: case 23: case 24: case 25: case 26: case 27:
+            case 25: case 26: case 27: case 28: case 29: case 30: case 31:
                     if(pOLECalcOpt)
-                        lcl_WriteOpt(*pOLECalcOpt, pValues, nProp, nProp - 22);
+                        lcl_WriteOpt(*pOLECalcOpt, pValues, nProp, nProp - 25);
             break;
-            case 28: case 29: case 30: case 31: case 32:
-            case 33:
+            case 32: case 33: case 34: case 35: case 36: case 37: case 38:
                     if(pOLEImpressOpt)
-                        lcl_WriteOpt(*pOLEImpressOpt, pValues, nProp, nProp - 28);
+                        lcl_WriteOpt(*pOLEImpressOpt, pValues, nProp, nProp - 32);
             break;
-            case 34: case 35: case 36: case 37: case 38: case 39:
+            case 39: case 40: case 41: case 42: case 43: case 44: case 45:
                     if(pOLEChartOpt)
-                        lcl_WriteOpt(*pOLEChartOpt, pValues, nProp, nProp - 34);
+                        lcl_WriteOpt(*pOLEChartOpt, pValues, nProp, nProp - 39);
             break;
-            case 40: case 41: case 42: case 43: case 44: case 45:
+            case 46: case 47: case 48: case 49: case 50: case 51: case 52:
                     if(pOLEImageOpt)
-                        lcl_WriteOpt(*pOLEImageOpt, pValues, nProp, nProp - 40);
+                        lcl_WriteOpt(*pOLEImageOpt, pValues, nProp, nProp - 46);
             break;
-            case 46: case 47: case 48: case 49: case 50: case 51:
+            case 53: case 54:   case 55: case 56: case 57: case 58: case 59:
                     if(pOLEFormulaOpt)
-                        lcl_WriteOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 46);
+                        lcl_WriteOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 53);
             break;
-            case 52: case 53: case 54:  case 55: case 56: case 57:
+            case 60: case 61: case 62: case 63: case 64: case 65: case 66:
                     if(pOLEDrawOpt)
-                        lcl_WriteOpt(*pOLEDrawOpt, pValues, nProp, nProp - 52);
+                        lcl_WriteOpt(*pOLEDrawOpt, pValues, nProp, nProp - 60);
             break;
-            case 58: case 59: case 60: case 61: case 62: case 63:
+            case 67: case 68: case 69: case 70: case 71: case 72: case 73:
                     if(pOLEMiscOpt)
-                        lcl_WriteOpt(*pOLEMiscOpt, pValues, nProp, nProp - 58);
+                        lcl_WriteOpt(*pOLEMiscOpt, pValues, nProp, nProp - 67);
             break;
+
         }
     }
     PutProperties(aNames, aValues);
@@ -582,37 +598,40 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
     switch(nOffset)
     {
         case 0:
+            rOpt.UseCaption() = *(sal_Bool*)pValues[nProp].getValue();
+        break;//Enable
+        case 1:
         {
             OUString sTemp; pValues[nProp] >>= sTemp;
             rOpt.SetCategory(sTemp);
         }
         break;//Category
-        case 1:
+        case 2:
         {
             sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
             rOpt.SetNumType(nTemp);
         }
         break;//Numbering",
-        case 2:
+        case 3:
         {
             OUString sTemp; pValues[nProp] >>= sTemp;
             rOpt.SetCaption(sTemp);
         }
         break;//CaptionText",
-        case 3:
+        case 4:
         {
             OUString sTemp; pValues[nProp] >>= sTemp;
             if(sTemp.getLength())
                 rOpt.SetSeparator(sTemp[0]);
         }
         break;//Delimiter",
-        case 4:
+        case 5:
         {
             sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
             rOpt.SetLevel(nTemp);
         }
         break;//Level",
-        case 5:
+        case 6:
         {
             sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
             rOpt.SetPos(nTemp);
@@ -689,7 +708,7 @@ void SwInsertConfig::Load()
                             nInsTblFlags|= SPLIT_LAYOUT;
                     }
                     break;//"Table/Split",
-                    case  5: case  6: case  7: case  8: case  9: case 10:
+                    case  5: case  6: case  7: case  8: case  9: case 10: case 11:
                         if(!pWriterTableOpt)
                         {
                             pWriterTableOpt = new InsCaptionOpt(TABLE_CAP);
@@ -697,76 +716,75 @@ void SwInsertConfig::Load()
                         }
                         lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
                     break;
-                    case 11: case 12: case 13: case 14: case 15: case 16:
+                    case 12: case 13: case 14: case 15: case 16: case 17: case 18:
                         if(!pWriterFrameOpt)
                         {
                             pWriterFrameOpt = new InsCaptionOpt(FRAME_CAP);
                             pCapOptions->Insert(pWriterFrameOpt);
                         }
-                        lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - 11);
-                    case 17: case 18: case 19: case 20: case 21:
+                        lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - 12);
+                    case 19: case 20: case 21:case 22: case 23: case 24:
                         if(!pWriterGraphicOpt)
                         {
                             pWriterGraphicOpt = new InsCaptionOpt(GRAPHIC_CAP);
                             pCapOptions->Insert(pWriterGraphicOpt);
                         }
-                        lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 17);
+                        lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 19);
                         break;
-                    case 22: case 23: case 24: case 25: case 26: case 27:
+                    case 25: case 26: case 27: case 28: case 29: case 30: case 31:
                         if(!pOLECalcOpt)
                         {
                             pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
                             pCapOptions->Insert(pOLECalcOpt);
                         }
-                        lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - 22);
+                        lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - 25);
                     break;
-                    case 28: case 29: case 30: case 31: case 32:
-                    case 33:
+                    case 32: case 33: case 34: case 35: case 36: case 37: case 38:
                         if(!pOLEImpressOpt)
                         {
                             pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
                             pCapOptions->Insert(pOLEImpressOpt);
                         }
-                        lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - 28);
+                        lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - 32);
                     break;
-                    case 34: case 35: case 36: case 37: case 38: case 39:
+                    case 39: case 40: case 41: case 42: case 43: case 44: case 45:
                         if(!pOLEChartOpt)
                         {
                             pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART]);
                             pCapOptions->Insert(pOLEChartOpt);
                         }
-                        lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - 34);
+                        lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - 39);
                     break;
-                    case 40: case 41: case 42: case 43: case 44: case 45:
+                    case 46: case 47: case 48: case 49: case 50: case 51: case 52:
                         if(!pOLEImageOpt)
                         {
                             pOLEImageOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_SIM]);
                             pCapOptions->Insert(pOLEImageOpt);
                         }
-                        lcl_ReadOpt(*pOLEImageOpt, pValues, nProp, nProp - 40);
+                        lcl_ReadOpt(*pOLEImageOpt, pValues, nProp, nProp - 46);
                     break;
-                    case 46: case 47: case 48: case 49: case 50: case 51:
+                    case 53: case 54:   case 55: case 56: case 57: case 58: case 59:
                         if(!pOLEFormulaOpt)
                         {
                             pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH]);
                             pCapOptions->Insert(pOLEFormulaOpt);
                         }
-                        lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 46);
+                        lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 53);
                     break;
-                    case 52: case 53: case 54:  case 55: case 56: case 57:
+                    case 60: case 61: case 62: case 63: case 64: case 65: case 66:
                         if(!pOLEDrawOpt)
                         {
                             pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
                             pCapOptions->Insert(pOLEDrawOpt);
                         }
-                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - 52);
+                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - 60);
                     break;
-                    case 58: case 59: case 60: case 61: case 62: case 63:
+                    case 67: case 68: case 69: case 70: case 71: case 72: case 73:
                         if(!pOLEMiscOpt)
                         {
                             pOLEMiscOpt = new InsCaptionOpt(OLE_CAP);
                         }
-                        lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - 58);
+                        lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - 67);
                     break;
 
                 }
