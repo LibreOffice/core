@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: jb $ $Date: 2001-05-30 15:01:31 $
+#   last change: $Author: lla $ $Date: 2001-05-31 14:10:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SLOFILES=\
     $(SLO)$/binarydecide.obj \
     $(SLO)$/pathhelper.obj \
     $(SLO)$/binarybasereader.obj \
+    $(SLO)$/generatecache.obj \
 
 # --- Targets ---
 
