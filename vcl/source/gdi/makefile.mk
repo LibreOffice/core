@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ssa $ $Date: 2002-07-11 07:31:16 $
+#   last change: $Author: vg $ $Date: 2002-07-15 15:36:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,6 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/print2.obj		\
             $(SLO)$/regband.obj 	\
             $(SLO)$/region.obj		\
-            $(SLO)$/salgdilayout.obj \
             $(SLO)$/virdev.obj		\
             $(SLO)$/wall.obj		\
             $(SLO)$/opengl.obj		\
@@ -137,6 +136,9 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/pdfwriter.obj	\
             $(SLO)$/pdfwriter_impl.obj
 
+.IF "$(remote)"==""
+    SLOFILES += $(SLO)/salgdilayout.obj
+.ENDIF
 
 .IF "$(ENABLE_CTL)"!=""
     SLOFILES +=     $(SLO)$/sallayout.obj
