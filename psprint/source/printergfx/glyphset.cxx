@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 15:32:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,13 +483,13 @@ GlyphSet::PSDefineReencodedFont (osl::File* pOutFile, sal_Int32 nGlyphSetID)
     sal_Char  pEncodingVector [256];
     sal_Int32 nSize = 0;
 
-    nSize += psp::appendStr ("/", pEncodingVector + nSize);
+    nSize += psp::appendStr ("(", pEncodingVector + nSize);
     nSize += psp::appendStr (GetReencodedFontName(nGlyphSetID),
                                   pEncodingVector + nSize);
-    nSize += psp::appendStr (" /", pEncodingVector + nSize);
+    nSize += psp::appendStr (") cvn (", pEncodingVector + nSize);
     nSize += psp::appendStr (maBaseName.getStr(),
                                   pEncodingVector + nSize);
-    nSize += psp::appendStr (" ", pEncodingVector + nSize);
+    nSize += psp::appendStr (") cvn ", pEncodingVector + nSize);
     nSize += psp::appendStr (GetGlyphSetEncodingName(nGlyphSetID),
                                   pEncodingVector + nSize);
     nSize += psp::appendStr (" psp_definefont\n",
@@ -804,7 +804,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 }
 
 sal_Bool
-GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
+GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< rtl::OString >& rSuppliedFonts )
 {
     // only for truetype fonts
     if (meBaseType != fonttype::TrueType)
@@ -862,6 +862,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
                                    pTTGlyphMapping, pEncoding, (*aCharSet).size(),
                                    0 /* 0 = horizontal, 1 = vertical */ );
         fprintf( pTmpFile, "%%%%EndResource\n" );
+        rSuppliedFonts.push_back( aCharSetName );
     }
 
     // loop thru all the font glyph subsets
@@ -895,6 +896,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 )
                                    pTTGlyphMapping, pEncoding, (*aGlyphSet).size(),
                                    0 /* 0 = horizontal, 1 = vertical */ );
         fprintf( pTmpFile, "%%%%EndResource\n" );
+        rSuppliedFonts.push_back( aGlyphSetName );
     }
 
     // copy the file into the page header

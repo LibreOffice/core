@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:15:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,10 +342,12 @@ public:
                                 sal_Int16 nGlyphs, sal_Int16 nBytes,
                                 const sal_Int32* pDeltaArray = NULL);
     void            PSComment (const sal_Char* pComment );
-    void            LicenceWarning (const Point& rPoint, const sal_Unicode* pStr,
+    void            LicenseWarning (const Point& rPoint, const sal_Unicode* pStr,
                                     sal_Int16 nLen, const sal_Int32* pDeltaArray);
 
     void            OnEndPage ();
+    void            OnEndJob ();
+    void            writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppliedFonts, std::list< rtl::OString >& rNeededFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawVerticalizedText (const Point& rPoint,
@@ -397,6 +399,16 @@ public:
     void            DrawPolyPolygon (sal_uInt32 nPoly,
                                      const sal_uInt32 *pPolygonSize,
                                      const Point** pPolygonList);
+    void            DrawPolyLineBezier (sal_uInt32 nPoints,
+                                     const Point* pPath,
+                                     const BYTE* pFlgAry );
+    void            DrawPolygonBezier  (sal_uInt32 nPoints,
+                                     const Point* pPath,
+                                     const BYTE* pFlgAry);
+    void            DrawPolyPolygonBezier  (sal_uInt32 nPoly,
+                                     const sal_uInt32* pPoints,
+                                     const Point* const* pPtAry,
+                                     const BYTE* const* pFlgAry);
 
     // eps
     sal_Bool        DrawEPS ( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize);

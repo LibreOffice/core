@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-12-10 17:27:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <tools/config.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/config.h>
-#include <cpputools/jenv.hxx>
+#include "jvmaccess/javainfo.hxx"
 
 namespace psp {
 
@@ -197,15 +197,30 @@ const ::rtl::OUString& psp::getFontPath()
         // if no javarc (e.g. in setup) exists or it failed try the UDK method
         if( ! aJREpath.getLength() )
         {
-            char* pJavaLib = getJavaRuntimeLib();
-            if( pJavaLib && *pJavaLib )
+            rtl::OString aJavaLib;
+            try
             {
-                rtl::OString aTestPath( pJavaLib );
+                rtl::OUString aLib;
+                if (osl::FileBase::getSystemPathFromFileURL(
+                            jvmaccess::JavaInfo::createBestInfo(true).
+                                getRuntimeLibLocation(),
+                            aLib)
+                        == osl::FileBase::E_None)
+                    aLib.convertToString(
+                        &aJavaLib, osl_getThreadTextEncoding(),
+                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                            | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
+            }
+            catch (jvmaccess::JavaInfo::InitException &)
+            {}
+
+            if (aJavaLib.getLength() != 0)
+            {
                 sal_Int32 nIndex;
-                while( ( nIndex = aTestPath.lastIndexOf( '/' ) ) != -1 )
+                while( ( nIndex = aJavaLib.lastIndexOf( '/' ) ) != -1 )
                 {
-                    aTestPath = aTestPath.copy( 0, nIndex );
-                    rtl::OString aTmpPath = aTestPath;
+                    aJavaLib = aJavaLib.copy( 0, nIndex );
+                    rtl::OString aTmpPath = aJavaLib;
                     aTmpPath += "/lib/fonts";
                     if( access( aTmpPath.getStr(), R_OK ) == 0 )
                     {
@@ -214,7 +229,6 @@ const ::rtl::OUString& psp::getFontPath()
                     }
                 }
             }
-            free( pJavaLib );
         }
 
         if( aJREpath.getLength() )

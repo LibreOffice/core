@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:15:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 #ifndef _PSPRINT_PPDPARSER_HXX_
 #define _PSPRINT_PPDPARSER_HXX_
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
+#include <vector>
+
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx> // hash_map and OUString hash
 #endif
@@ -99,23 +99,28 @@ class PPDKey
 {
     friend class PPDParser;
 
-    String          m_aKey;
-    ::std::hash_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash >
-    m_aValues;
-    const PPDValue* m_pDefaultValue;
-    bool            m_bQueryValue;
-    PPDValue        m_aQueryValue;
+    typedef ::std::hash_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
+    typedef ::std::vector< PPDValue* > value_type;
+
+    String              m_aKey;
+    hash_type           m_aValues;
+    value_type          m_aOrderedValues;
+    const PPDValue*     m_pDefaultValue;
+    bool                m_bQueryValue;
+    PPDValue            m_aQueryValue;
 
 public:
     enum UIType { PickOne, PickMany, Boolean };
     enum SetupType { ExitServer, Prolog, DocumentSetup, PageSetup, JCLSetup, AnySetup };
 private:
 
-    bool            m_bUIOption;
-    String          m_aUITranslation;
-    UIType          m_eUIType;
-    int             m_nOrderDependency;
-    SetupType       m_eSetupType;
+    bool                m_bUIOption;
+    String              m_aUITranslation;
+    UIType              m_eUIType;
+    int                 m_nOrderDependency;
+    SetupType           m_eSetupType;
+
+    void eraseValue( const String& rOption );
 public:
     PPDKey( const String& rKey );
     ~PPDKey();
@@ -148,6 +153,11 @@ class PPDContext;
 class PPDParser
 {
     friend class PPDContext;
+
+    typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
+    typedef ::std::vector< PPDKey* > value_type;
+
+    void insertKey( const String& rKey, PPDKey* pKey );
 public:
     struct PPDConstraint
     {
@@ -161,40 +171,40 @@ public:
 
     static ::std::list< PPDParser* >            aAllParsers;
 
-    ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash >
-    m_aKeys;
-    ::std::list< PPDConstraint >    m_aConstraints;
+    hash_type                                   m_aKeys;
+    value_type                                  m_aOrderedKeys;
+    ::std::list< PPDConstraint >                m_aConstraints;
 
     // some identifying fields
-    String                          m_aPrinterName;
-    String                          m_aNickName;
+    String                                      m_aPrinterName;
+    String                                      m_aNickName;
     // the full path of the PPD file
-    String                          m_aFile;
+    String                                      m_aFile;
     // some basic attributes
-    bool                            m_bColorDevice;
-    bool                            m_bType42Capable;
-    ULONG                           m_nLanguageLevel;
+    bool                                        m_bColorDevice;
+    bool                                        m_bType42Capable;
+    ULONG                                       m_nLanguageLevel;
 
 
     // shortcuts to important keys and their default values
     // imageable area
-    const PPDValue*                     m_pDefaultImageableArea;
-    const PPDKey*                       m_pImageableAreas;
+    const PPDValue*                             m_pDefaultImageableArea;
+    const PPDKey*                               m_pImageableAreas;
     // paper dimensions
-    const PPDValue*                     m_pDefaultPaperDimension;
-    const PPDKey*                       m_pPaperDimensions;
+    const PPDValue*                             m_pDefaultPaperDimension;
+    const PPDKey*                               m_pPaperDimensions;
     // paper trays
-    const PPDValue*                     m_pDefaultInputSlot;
-    const PPDKey*                       m_pInputSlots;
+    const PPDValue*                             m_pDefaultInputSlot;
+    const PPDKey*                               m_pInputSlots;
     // resolutions
-    const PPDValue*                     m_pDefaultResolution;
-    const PPDKey*                       m_pResolutions;
+    const PPDValue*                             m_pDefaultResolution;
+    const PPDKey*                               m_pResolutions;
     // duplex commands
-    const PPDValue*                     m_pDefaultDuplexType;
-    const PPDKey*                       m_pDuplexTypes;
+    const PPDValue*                             m_pDefaultDuplexType;
+    const PPDKey*                               m_pDuplexTypes;
 
     // fonts
-    const PPDKey*                       m_pFontList;
+    const PPDKey*                               m_pFontList;
 
     PPDParser( const String& rFile );
     ~PPDParser();

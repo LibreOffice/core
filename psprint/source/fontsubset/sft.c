@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-12-09 17:44:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.18 2002-12-09 17:44:39 pl Exp $
+/* $Id: sft.c,v 1.19 2003-03-26 14:24:04 hr Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1825,7 +1825,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
         "/FontType 3 def\n"
         "/StrokeWidth 0 def\n";
 
-    const char *h11 = "/FontName /%s def\n";
+    const char *h11 = "/FontName (%s) cvn def\n";
 
     /*
       const char *h12 = "%/UniqueID %d def\n";
@@ -1860,7 +1860,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
         "} bind def\n"
         "currentdict end\n";
 
-    const char *h41 = "/%s exch definefont pop\n";
+    const char *h41 = "(%s) cvn exch definefont pop\n";
 
 
     if (!((nGlyphs > 0) && (nGlyphs <= 256))) return SF_GLYPHNUM;
@@ -2278,7 +2278,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     fprintf(outf, "%%- Original font family: %s\n", ttf->family);
     fprintf(outf, "%%- Original font sub-family: %s\n", ttf->subfamily);
     fprintf(outf, "11 dict begin\n");
-    fprintf(outf, "/FontName /%s def\n", psname);
+    fprintf(outf, "/FontName (%s) cvn def\n", psname);
     fprintf(outf, "/PaintType 0 def\n");
     fprintf(outf, "/FontMatrix [1 0 0 1 0 0] def\n");
     fprintf(outf, "/FontBBox [%d %d %d %d] def\n", XUnits(UPEm, GetInt16(headP, 36, 1)), XUnits(UPEm, GetInt16(headP, 38, 1)), XUnits(UPEm, GetInt16(headP, 40, 1)), XUnits(UPEm, GetInt16(headP, 42, 1)));

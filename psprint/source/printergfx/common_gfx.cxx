@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-14 12:25:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
+#ifndef _POLY_HXX
+#include <tools/poly.hxx>
+#endif
 
 using namespace psp ;
 
@@ -221,8 +224,6 @@ PrinterGfx::Clear()
     mbColor                         = sal_True;
     mnTextAngle                     = 0;
 
-    maPS1Font.clear();
-    maPS3Font.clear();
     maClipRegion.clear();
     maGraphicsStack.clear();
     maGraphicsStack.push_back( GraphicsStatus() );
@@ -571,9 +572,200 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
 }
 
 /*
- * postscript generating routines
+ * Bezier Polygon Drawing methods.
  */
 
+void
+PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BYTE* pFlgAry)
+{
+    const sal_uInt32 nBezString = 1024;
+    sal_Char pString[nBezString];
+
+    if ( maLineColor.Is() && nPoints && pPath )
+    {
+        PSSetColor (maLineColor);
+        PSSetColor ();
+        PSSetLineWidth ();
+
+        if (pFlgAry[0] != POLY_NORMAL) //There must be a starting point to moveto
+        {
+            return;
+        }
+        else
+        {
+            snprintf(pString, nBezString, "%i %i moveto\n", pPath[0].X(), pPath[0].Y());
+            WritePS(mpPageBody, pString);
+        }
+
+        // Handle the drawing of mixed lines mixed with curves
+        // - a normal point followed by a normal point is a line
+        // - a normal point followed by 2 control points and a normal point is a curve
+        for (int i=1; i<nPoints;)
+        {
+            if (pFlgAry[i+1] != POLY_CONTROL) //If the next point is a POLY_NORMAL, we're drawing a line
+            {
+                if (i+1 >= nPoints) return; //Make sure we don't pass the end of the array
+                snprintf(pString, nBezString, "%i %i lineto\n", pPath[i].X(), pPath[i].Y());
+                i++;
+            }
+            else //Otherwise we're drawing a spline
+            {
+                if (i+3 >= nPoints) return; //Make sure we don't pass the end of the array
+                snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
+                        pPath[i+1].X(), pPath[i+1].Y(),
+                        pPath[i+2].X(), pPath[i+2].Y(),
+                        pPath[i+3].X(), pPath[i+3].Y());
+                i+=3;
+            }
+            WritePS(mpPageBody, pString);
+        }
+    }
+
+    // if eofill and stroke, save the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGSave();
+
+    // first draw area
+    if( maFillColor.Is() )
+    {
+        PSSetColor (maFillColor);
+        PSSetColor ();
+        WritePS (mpPageBody, "eofill\n");
+    }
+
+    // restore the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGRestore();
+
+    // now draw outlines
+    if( maLineColor.Is() )
+    {
+        PSSetColor (maLineColor);
+        PSSetColor ();
+        PSSetLineWidth ();
+        WritePS (mpPageBody, "stroke\n");
+    }
+}
+
+void
+PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYTE* pFlgAry)
+{
+    const sal_uInt32 nBezString = 1024;
+    sal_Char pString[nBezString];
+    // premature end of operation
+    if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
+        return;
+
+    snprintf(pString, nBezString, "%i %i moveto\n", pPath[0].X(), pPath[0].Y());
+    WritePS(mpPageBody, pString); //Move to the starting point for the PolyPoygon
+    for (int i=1; i < nPoints;)
+    {
+        if (pFlgAry[i] != POLY_CONTROL)
+        {
+            snprintf(pString, nBezString, "%i %i lineto\n", pPath[i].X(), pPath[i].Y());
+            WritePS(mpPageBody, pString);
+            i++;
+        }
+        else
+        {
+            if (i+2 >= nPoints)
+                return; //Error: wrong sequence of contol/normal points somehow
+            if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
+                    (pFlgAry[i+2] != POLY_CONTROL))
+            {
+                snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
+                        pPath[i].X(), pPath[i].Y(),
+                        pPath[i+1].X(), pPath[i+1].Y(),
+                        pPath[i+2].X(), pPath[i+2].Y());
+                WritePS(mpPageBody, pString);
+            }
+            else
+            {
+                fprintf(stderr, "Strange output\n");
+            }
+            i+=3;
+        }
+    }
+
+    // if fill and stroke, save the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGSave();
+
+    if (maFillColor.Is ())
+    {
+        PSSetColor (maFillColor);
+        PSSetColor ();
+        WritePS (mpPageBody, "eofill\n");
+    }
+
+    // restore the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGRestore();
+}
+
+void
+PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const BYTE* const* pFlgAry)
+{
+    const sal_uInt32 nBezString = 1024;
+    sal_Char pString[nBezString];
+    if ( !nPoly || !pPtAry || !pPoints || !(maFillColor.Is() || maLineColor.Is()))
+        return;
+
+
+    for (int i=0; i<nPoly;i++)
+    {
+        sal_uInt32 nPoints = pPoints[i];
+        snprintf(pString, nBezString, "%i %i moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
+        WritePS(mpPageBody, pString);
+        for (int j=1; j < nPoints;)
+        {
+            if (pFlgAry[i][j] != POLY_CONTROL)
+            {
+                snprintf(pString, nBezString, "%i %i lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
+                WritePS(mpPageBody, pString);
+                j++;
+            }
+            else
+            {
+                if (j+2 >= nPoints)
+                    return; //Error: wrong sequence of contol/normal points somehow
+                if ((pFlgAry[i][j] == POLY_CONTROL) && (pFlgAry[i][j+1] == POLY_CONTROL) && (pFlgAry[i][j+2] != POLY_CONTROL))
+                {
+                    snprintf(pString, nBezString, "%i %i %i %i %i %i curveto\n",
+                            pPtAry[i][j].X(), pPtAry[i][j].Y(),
+                            pPtAry[i][j+1].X(), pPtAry[i][j+1].Y(),
+                            pPtAry[i][j+2].X(), pPtAry[i][j+2].Y());
+                    WritePS(mpPageBody, pString);
+                }
+                else
+                {
+                    fprintf(stderr, "Strange output\n");
+                }
+                j+=3;
+            }
+        }
+    }
+
+    // if fill and stroke, save the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGSave();
+
+    if (maFillColor.Is ())
+    {
+        PSSetColor (maFillColor);
+        PSSetColor ();
+        WritePS (mpPageBody, "eofill\n");
+    }
+
+    // restore the current path
+    if( maFillColor.Is() && maLineColor.Is())
+        PSGRestore();
+}
+
+
+/*
+ * postscript generating routines
+ */
 void
 PrinterGfx::PSGSave ()
 {
@@ -677,19 +869,21 @@ PrinterGfx::PSSetFont ()
                         psp::GlyphSet::GetReencodedFontName (rCurrent.maEncoding,
                                                                 rCurrent.maFont);
 
-            nChar += psp::appendStr  ("/",          pSetFont + nChar);
+            nChar += psp::appendStr  ("(",          pSetFont + nChar);
             nChar += psp::appendStr  (aReencodedFont.getStr(),
                                                     pSetFont + nChar);
-            nChar += psp::appendStr  (" ",          pSetFont + nChar);
-            nChar += psp::appendStr  (" findfont ", pSetFont + nChar);
+            nChar += psp::appendStr  (") cvn findfont ",
+                                                    pSetFont + nChar);
         }
         else
         // tt based fonts mustn't reencode, the encoding is implied by the fontname
         // same for symbol type1 fonts, dont try to touch them
         {
-            nChar += psp::appendStr  ("/",          pSetFont + nChar);
-            nChar += psp::appendStr  (rCurrent.maFont.getStr(), pSetFont + nChar);
-            nChar += psp::appendStr  (" findfont ", pSetFont + nChar);
+            nChar += psp::appendStr  ("(",          pSetFont + nChar);
+            nChar += psp::appendStr  (rCurrent.maFont.getStr(),
+                                                    pSetFont + nChar);
+            nChar += psp::appendStr  (") cvn findfont ",
+                                                    pSetFont + nChar);
         }
 
         nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
@@ -1006,28 +1200,56 @@ PrinterGfx::PSComment( const sal_Char* pComment )
 sal_Bool
 PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize )
 {
+    if( nSize == 0 )
+        return sal_True;
+
     sal_Bool bSuccess = sal_False;
 
     // first search the BoundingBox of the EPS data
     SvMemoryStream aStream( pPtr, nSize, STREAM_READ );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     ByteString aLine;
+
+    ByteString aDocTitle;
     double fLeft = 0, fRight = 0, fTop = 0, fBottom = 0;
-    while( ! aStream.IsEof() && fLeft == 0 && fRight == 0 && fTop == 0 && fBottom == 0 )
+    bool bEndComments = false;
+    while( ! aStream.IsEof()
+           && ( ( fLeft == 0 && fRight == 0 && fTop == 0 && fBottom == 0 ) ||
+                ( aDocTitle.Len() == 0 && bEndComments == false ) )
+           )
     {
         aStream.ReadLine( aLine );
-        if( aLine.CompareIgnoreCaseToAscii( "%%BoundingBox:", 14 ) == COMPARE_EQUAL )
+        if( aLine.Len() > 1 && aLine.GetChar( 0 ) == '%' )
         {
-            aLine = WhitespaceToSpace( aLine.GetToken( 1, ':' ) );
-            if( aLine.Len() && aLine.Search( "atend" ) == STRING_NOTFOUND )
+            char cChar = aLine.GetChar(1);
+            if( cChar == '%' )
             {
-                fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );
-                fBottom = StringToDouble( GetCommandLineToken( 1, aLine ) );
-                fRight  = StringToDouble( GetCommandLineToken( 2, aLine ) );
-                fTop    = StringToDouble( GetCommandLineToken( 3, aLine ) );
+                if( aLine.CompareIgnoreCaseToAscii( "%%BoundingBox:", 14 ) == COMPARE_EQUAL )
+                {
+                    aLine = WhitespaceToSpace( aLine.GetToken( 1, ':' ) );
+                    if( aLine.Len() && aLine.Search( "atend" ) == STRING_NOTFOUND )
+                    {
+                        fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );
+                        fBottom = StringToDouble( GetCommandLineToken( 1, aLine ) );
+                        fRight  = StringToDouble( GetCommandLineToken( 2, aLine ) );
+                        fTop    = StringToDouble( GetCommandLineToken( 3, aLine ) );
+                    }
+                }
+                else if( aLine.CompareIgnoreCaseToAscii( "%%Title:", 8 ) == COMPARE_EQUAL )
+                    aDocTitle = WhitespaceToSpace( aLine.Copy( 8 ) );
+                else if( aLine.CompareIgnoreCaseToAscii( "%%EndComments", 13 ) == COMPARE_EQUAL )
+                    bEndComments = true;
             }
+            else if( cChar == ' ' || cChar == '\t' || cChar == '\r' || cChar == '\n' )
+                bEndComments = true;
         }
+        else
+            bEndComments = true;
     }
+
+    static sal_uInt16 nEps = 0;
+    if( ! aDocTitle.Len() )
+        aDocTitle = ByteString::CreateFromInt32( (sal_Int32)(nEps++) );
 
     if( fLeft != fRight && fTop != fBottom )
     {
@@ -1059,10 +1281,20 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
         PSTranslate( aTranslatePoint );
         PSScale( fScaleX, fScaleY );
 
+        // DSC requires BeginDocument
+        WritePS( mpPageBody, "%%BeginDocument: " );
+        WritePS( mpPageBody, aDocTitle );
+        WritePS( mpPageBody, "\n" );
+
         // write the EPS data
         sal_uInt64 nOutLength;
         mpPageBody->write( pPtr, nSize, nOutLength );
         bSuccess = nOutLength == nSize;
+
+        // corresponding EndDocument
+        if( ((char*)pPtr)[ nSize-1 ] != '\n' )
+            WritePS( mpPageBody, "\n" );
+        WritePS( mpPageBody, "%%EndDocument\n" );
 
         // clean up EPS
         WritePS( mpPageBody,

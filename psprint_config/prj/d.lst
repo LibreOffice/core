@@ -1,8 +1,6 @@
-mkdir: %_DEST%\pck%_EXT%
-mkdir: %_DEST%\pck%_EXT%\letter
+mkdir: %COMMON_DEST%\pck%_EXT%
+mkdir: %COMMON_DEST%\pck%_EXT%\letter
 
-..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
-..\common\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\%__SRC%\bin\fontunxpsprint_letter.zip %_DEST%\pck%_EXT%\letter\fontunxpsprint.zip
 
-..\common.pro\bin\fontunxpsprint_letter.zip %_DEST%\pck%_EXT%\letter\fontunxpsprint.zip
-..\common\bin\fontunxpsprint_letter.zip %_DEST%\pck%_EXT%\letter\fontunxpsprint.zip

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:15:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ PPDParser::PPDParser( const String& rFile ) :
     parse( aLines );
 #ifdef __DEBUG
     fprintf( stderr, "acquired %d Keys from PPD %s:\n", m_aKeys.Count(), BSTRING( m_aFile ).GetBuffer() );
-    for( ::std::hash_map< OUString, PPDKey*, OUStringHash >::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
+    for( PPDParser::hash_type::const_iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
     {
         const PPDKey* pKey = it->second;
         char* pSetupType = "<unknown>";
@@ -380,21 +380,24 @@ PPDParser::PPDParser( const String& rFile ) :
 
 PPDParser::~PPDParser()
 {
-    for( ::std::hash_map< OUString, PPDKey*, OUStringHash >::iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
+    for( PPDParser::hash_type::iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
         delete it->second;
+}
+
+void PPDParser::insertKey( const String& rKey, PPDKey* pKey )
+{
+    m_aKeys[ rKey ] = pKey;
+    m_aOrderedKeys.push_back( pKey );
 }
 
 const PPDKey* PPDParser::getKey( int n ) const
 {
-    ::std::hash_map< OUString, PPDKey*, OUStringHash >::const_iterator it;
-    for( it = m_aKeys.begin(); it != m_aKeys.end() && n--; ++it )
-        ;
-    return it != m_aKeys.end() ? it->second : NULL;
+    return (n < m_aOrderedKeys.size() && n >= 0) ? m_aOrderedKeys[n] : NULL;
 }
 
 const PPDKey* PPDParser::getKey( const String& rKey ) const
 {
-    ::std::hash_map< OUString, PPDKey*, OUStringHash >::const_iterator it = m_aKeys.find( rKey );
+    PPDParser::hash_type::const_iterator it = m_aKeys.find( rKey );
     return it != m_aKeys.end() ? it->second : NULL;
 }
 
@@ -412,7 +415,7 @@ void PPDParser::parse( ::std::list< String >& rLines )
     PPDKey*     pKey    = NULL;
 
     ::std::list< String >::iterator line = rLines.begin();
-    ::std::hash_map< OUString, PPDKey*, OUStringHash >::const_iterator keyit;
+    PPDParser::hash_type::const_iterator keyit;
     while( line != rLines.end() )
     {
         String aCurrentLine( *line );
@@ -443,6 +446,8 @@ void PPDParser::parse( ::std::list< String >& rLines )
         }
         else if( aKey.EqualsAscii( "UIConstraints" ) || aKey.EqualsAscii( "NonUIConstraints" ) )
             continue; // parsed in pass 2
+        else if( aKey.EqualsAscii( "CustomPageSize" ) ) // currently not handled
+            continue;
 
         // default values are parsed in pass 2
         if( aKey.CompareToAscii( "Default", 7 ) == COMPARE_EQUAL )
@@ -459,7 +464,7 @@ void PPDParser::parse( ::std::list< String >& rLines )
         if( keyit == m_aKeys.end() )
         {
             pKey = new PPDKey( aKey );
-            m_aKeys[ aKey ] = pKey;
+            insertKey( aKey, pKey );
         }
         else
             pKey = keyit->second;
@@ -482,7 +487,7 @@ void PPDParser::parse( ::std::list< String >& rLines )
         {
             pKey->m_aQueryValue = *pValue;
             pKey->m_bQueryValue = true;
-            pKey->m_aValues.erase( pValue->m_aOption );
+            pKey->eraseValue( pValue->m_aOption );
         }
 
         if( nPos == STRING_NOTFOUND )
@@ -582,7 +587,7 @@ void PPDParser::parse( ::std::list< String >& rLines )
                     pKey = new PPDKey( aKey );
                     PPDValue* pValue = pKey->insertValue( aOption );
                     pValue->m_eType = eInvocation; // or what ?
-                    m_aKeys[ aKey ] = pKey;
+                    insertKey( aKey, pKey );
                 }
             }
         }
@@ -610,7 +615,7 @@ void PPDParser::parseOpenUI( const String& rLine )
     aKey = GetCommandLineToken( 1, aKey );
     aKey.Erase( 0, 1 );
 
-    ::std::hash_map< OUString, PPDKey*, OUStringHash >::const_iterator keyit = m_aKeys.find( aKey );
+    PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aKey );
     PPDKey* pKey;
     if( keyit == m_aKeys.end() )
     {
@@ -647,11 +652,11 @@ void PPDParser::parseOrderDependency( const String& rLine )
     aKey.Erase( 0, 1 );
 
     PPDKey* pKey;
-    ::std::hash_map< OUString, PPDKey*, OUStringHash >::const_iterator keyit = m_aKeys.find( aKey );
+    PPDParser::hash_type::const_iterator keyit = m_aKeys.find( aKey );
     if( keyit == m_aKeys.end() )
     {
         pKey = new PPDKey( aKey );
-        m_aKeys [ aKey ] = pKey;
+        insertKey( aKey, pKey );
     }
     else
         pKey = keyit->second;
@@ -929,14 +934,19 @@ void PPDParser::getResolutionFromString(
 {
     int nPos = 0, nDPIPos;
 
+    rXRes = rYRes = 300;
+
     nDPIPos = rString.SearchAscii( "dpi" );
-    if( ( nPos = rString.Search( 'x' ) ) != STRING_NOTFOUND )
+    if( nDPIPos != STRING_NOTFOUND )
     {
-        rXRes = rString.Copy( 0, nPos ).ToInt32();
-        rYRes = rString.GetToken( 1, 'x' ).Erase( nDPIPos - nPos - 1 ).ToInt32();
-        return;
+        if( ( nPos = rString.Search( 'x' ) ) != STRING_NOTFOUND )
+        {
+            rXRes = rString.Copy( 0, nPos ).ToInt32();
+            rYRes = rString.GetToken( 1, 'x' ).Erase( nDPIPos - nPos - 1 ).ToInt32();
+        }
+        else
+            rXRes = rYRes = rString.Copy( 0, nDPIPos ).ToInt32();
     }
-    rXRes = rYRes = rString.Copy( 0, nDPIPos ).ToInt32();
 }
 
 void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
@@ -1101,9 +1111,7 @@ PPDKey::~PPDKey()
 
 const PPDValue* PPDKey::getValue( int n ) const
 {
-    for( ::std::hash_map< OUString, PPDValue, OUStringHash >::const_iterator it = m_aValues.begin(); it != m_aValues.end() && n--; ++it )
-        ;
-    return it != m_aValues.end() ? &it->second : NULL;
+    return (n < m_aOrderedValues.size() && n >= 0) ? m_aOrderedValues[n] : NULL;
 }
 
 // -------------------------------------------------------------------
@@ -1111,8 +1119,27 @@ const PPDValue* PPDKey::getValue( int n ) const
 const PPDValue* PPDKey::getValue( const String& rOption ) const
 {
     const PPDValue* pValue = NULL;
-    ::std::hash_map< OUString, PPDValue, OUStringHash >::const_iterator it = m_aValues.find( rOption );
+    PPDKey::hash_type::const_iterator it = m_aValues.find( rOption );
     return it != m_aValues.end() ? &it->second : NULL;
+}
+
+// -------------------------------------------------------------------
+
+void PPDKey::eraseValue( const String& rOption )
+{
+    PPDKey::hash_type::iterator it = m_aValues.find( rOption );
+    if( it == m_aValues.end() )
+        return;
+
+    for( PPDKey::value_type::iterator vit = m_aOrderedValues.begin(); vit != m_aOrderedValues.end(); ++vit )
+    {
+        if( *vit == &(it->second ) )
+        {
+            m_aOrderedValues.erase( vit );
+            break;
+        }
+    }
+    m_aValues.erase( it );
 }
 
 // -------------------------------------------------------------------
@@ -1125,7 +1152,9 @@ PPDValue* PPDKey::insertValue( const String& rOption )
     PPDValue aValue;
     aValue.m_aOption = rOption;
     m_aValues[ rOption ] = aValue;
-    return &(m_aValues.find( rOption )->second);
+    PPDValue* pValue = &m_aValues[rOption];
+    m_aOrderedValues.push_back( pValue );
+    return pValue;
 }
 
 // -------------------------------------------------------------------

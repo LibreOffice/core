@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:15:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,17 @@
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #include <psprint/printerinfomanager.hxx>
 #endif
+#ifndef _PSPRINT_PRINTERGFX_HXX_
+#include <psprint/printergfx.hxx>
+#endif
 #ifndef _PSPRINT_PRINTERUTIL_HXX_
 #include <psputil.hxx>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -93,6 +99,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <pwd.h>
 
@@ -280,8 +287,12 @@ getUserName (char* pName, int nSize)
 
     sal_Bool bSuccess = sal_False;
 
+#ifdef FREEBSD
+        pPWEntry = getpwuid( getuid());
+#else
     if (getpwuid_r(getuid(), &aPWEntry, pPWBuffer, sizeof(pPWBuffer), &pPWEntry) != 0)
         pPWEntry = NULL;
+#endif
 
     if (pPWEntry != NULL && pPWEntry->pw_name != NULL)
     {
@@ -405,14 +416,20 @@ getLocalTime(sal_Char* pBuffer, sal_uInt32 nBufSize)
 sal_Bool
 PrinterJob::StartJob (
                       const rtl::OUString& rFileName,
+                      int nMode,
                       const rtl::OUString& rJobName,
                       const rtl::OUString& rAppName,
-                      const JobData& rSetupData)
+                      const JobData& rSetupData,
+                      PrinterGfx* pGraphics
+                      )
 {
+    mnMaxWidthPt = mnMaxHeightPt = 0;
+    m_pGraphics = pGraphics;
     InitPaperSize (rSetupData);
 
     // create file container for document header and trailer
     maFileName = rFileName;
+    mnFileMode = nMode;
     maSpoolDirName = createSpoolDir ();
 
     rtl::OUString aExt = rtl::OUString::createFromAscii (".ps");
@@ -420,27 +437,16 @@ PrinterJob::StartJob (
     mpJobTrailer = CreateSpoolFile (rtl::OUString::createFromAscii("psp_tail"), aExt);
 
     // write document header according to Document Structuring Conventions (DSC)
-    WritePS (mpJobHeader, "%!PS-Adobe-3.0\n");
+    WritePS (mpJobHeader,
+             "%!PS-Adobe-3.0\n"
+             "%%BoundingBox: (atend)\n" );
 
-    // BoundingBox
-    sal_Char  pBBox [256];
-    sal_Int32 nChar = 0;
-
-    nChar  = psp::appendStr  ("%%BoundingBox: ",    pBBox);
-    nChar += psp::getValueOf (0,                    pBBox + nChar);
-    nChar += psp::appendStr  (" ",                  pBBox + nChar);
-    nChar += psp::getValueOf (0,                    pBBox + nChar);
-    nChar += psp::appendStr  (" ",                  pBBox + nChar);
-    nChar += psp::getValueOf (mnWidthPt,            pBBox + nChar);
-    nChar += psp::appendStr  (" ",                  pBBox + nChar);
-    nChar += psp::getValueOf (mnHeightPt,           pBBox + nChar);
-    nChar += psp::appendStr  ("\n",                 pBBox + nChar);
-
-    WritePS (mpJobHeader, pBBox);
+    rtl::OUString aFilterWS;
 
     // Creator (this application)
+    aFilterWS = WhitespaceToSpace( rAppName, FALSE );
     WritePS (mpJobHeader, "%%Creator: ");
-    WritePS (mpJobHeader, rAppName);
+    WritePS (mpJobHeader, aFilterWS);
     WritePS (mpJobHeader, "\n");
 
     // For (user name)
@@ -458,8 +464,9 @@ PrinterJob::StartJob (
     WritePS (mpJobHeader, getLocalTime(pCreationDate, sizeof(pCreationDate)));
 
     // Document Title
+    aFilterWS = WhitespaceToSpace( rJobName, FALSE );
     WritePS (mpJobHeader, "%%Title: ");
-    WritePS (mpJobHeader, rJobName);
+    WritePS (mpJobHeader, aFilterWS);
     WritePS (mpJobHeader, "\n");
 
     // Language Level
@@ -476,13 +483,12 @@ PrinterJob::StartJob (
     WritePS (mpJobHeader, "%%PageOrder: Ascend\n");
     WritePS (mpJobHeader, "%%EndComments\n");
 
+    // write Prolog
     writeProlog (mpJobHeader);
 
     // mark last job setup as not set
     m_aLastJobData.m_pParser = NULL;
     m_aLastJobData.m_aContext.setParser( NULL );
-
-//    writeSetup( mpJobHeader, rSetupData );
 
     return sal_True;
 }
@@ -490,16 +496,22 @@ PrinterJob::StartJob (
 sal_Bool
 PrinterJob::EndJob ()
 {
-    // write document trailer according to Document Structuring Conventions (DSC)
-    sal_Char pPageNr [16];
-    sal_Int32 nSz = getValueOf((sal_Int32)maPageList.size(), pPageNr);
-    pPageNr [nSz] = '\0';
+    // write document setup (done here because it
+    // includes the accumulated fonts
+    writeSetup( mpJobHeader, m_aDocumentJobData );
+    m_pGraphics->OnEndJob();
 
-    WritePS (mpJobTrailer, "%%Trailer\n");
-    WritePS (mpJobTrailer, "%%Pages: ");
-    WritePS (mpJobTrailer, pPageNr);
-    WritePS (mpJobTrailer, "\n");
-    WritePS (mpJobTrailer, "%%EOF\n");
+    // write document trailer according to Document Structuring Conventions (DSC)
+    rtl::OStringBuffer aTrailer(512);
+    aTrailer.append( "%%Trailer\n" );
+    aTrailer.append( "%%BoundingBox: 0 0 " );
+    aTrailer.append( (sal_Int32)mnMaxWidthPt );
+    aTrailer.append( " " );
+    aTrailer.append( (sal_Int32)mnMaxHeightPt );
+    aTrailer.append( "\n%%Pages: " );
+    aTrailer.append( (sal_Int32)maPageList.size() );
+    aTrailer.append( "\n%%EOF\n" );
+    WritePS (mpJobTrailer, aTrailer.getStr());
 
     /*
      * spool the set of files to their final destination, this is U**X dependent
@@ -514,8 +526,25 @@ PrinterJob::EndJob ()
     {
         const rtl::OString aFileName = rtl::OUStringToOString (maFileName,
                                                                osl_getThreadTextEncoding());
+        if( mnFileMode )
+        {
+            int nFile = open( aFileName.getStr(), O_CREAT | O_EXCL | O_RDWR, mnFileMode );
+            if( nFile != -1 )
+            {
+                pDestFILE = fdopen( nFile, "w" );
+                if( pDestFILE == NULL )
+                {
+                    close( nFile );
+                    unlink( aFileName.getStr() );
+                    return sal_False;
+                }
+            }
+            else
+                chmod( aFileName.getStr(), mnFileMode );
+        }
+        if (pDestFILE == NULL)
+            pDestFILE = fopen (aFileName.getStr(), "w");
 
-        pDestFILE = fopen (aFileName.getStr(), "w");
         if (pDestFILE == NULL)
             return sal_False;
     }
@@ -577,6 +606,7 @@ PrinterJob::EndJob ()
 sal_Bool
 PrinterJob::AbortJob ()
 {
+    m_pGraphics->OnEndJob();
     return sal_False;
 }
 
@@ -599,6 +629,11 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     mnWidthPt       = nWidth;
     mnHeightPt      = nHeight;
 
+    if( mnWidthPt > mnMaxWidthPt )
+        mnMaxWidthPt = mnWidthPt;
+    if( mnHeightPt > mnMaxHeightPt )
+        mnMaxHeightPt = mnHeightPt;
+
     mnLMarginPt     = nLeft;
     mnRMarginPt     = nRight;
     mnTMarginPt     = nUpper;
@@ -609,12 +644,12 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
 }
 
 
-SalGraphics*
+sal_Bool
 PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
 {
     InitPaperSize (rJobSetup);
 
-    rtl::OUString aPageNo = rtl::OUString::valueOf ((sal_Int32)maPageList.size());
+    rtl::OUString aPageNo = rtl::OUString::valueOf ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
     rtl::OUString aExt    = aPageNo + rtl::OUString::createFromAscii (".ps");
 
     osl::File* pPageHeader = CreateSpoolFile (
@@ -625,19 +660,19 @@ PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);
 
-    /* #i7262# write setup only befor first page
+    /* #i7262# write setup only before first page
      *  don't do this in StartJob since the jobsetup there may be
      *  different.
      */
     bool bSuccess =  true;
     if( 1 == maPageList.size() )
-        bSuccess = writeSetup  ( pPageHeader, rJobSetup );
+        m_aDocumentJobData = rJobSetup;
 
     // write page header according to Document Structuring Conventions (DSC)
     WritePS (pPageHeader, "%%Page: ");
     WritePS (pPageHeader, aPageNo);
     WritePS (pPageHeader, " ");
-    WritePS (pPageHeader, aPageNo+1); // sequential page number must start with 1
+    WritePS (pPageHeader, aPageNo);
     WritePS (pPageHeader, "\n");
 
     sal_Char  pBBox [256];
@@ -661,12 +696,14 @@ PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
         m_aLastJobData = rJobSetup;
 
 
-    return NULL;
+    return bSuccess;
 }
 
 sal_Bool
 PrinterJob::EndPage ()
 {
+    m_pGraphics->OnEndPage();
+
     osl::File* pPageHeader = maHeaderList.back();
     osl::File* pPageBody   = maPageList.back();
 
@@ -835,6 +872,7 @@ bool PrinterJob::writeProlog (osl::File* pFile)
 {
     const sal_Char pProlog[] = {
         "%%BeginProlog\n"
+        "%%BeginResource: procset PSPrint-Prolog 1.0 0\n"
         "/ISO1252Encoding [\n"
         "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
         "/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef\n"
@@ -911,6 +949,7 @@ bool PrinterJob::writeProlog (osl::File* pFile)
         "/ImageMatrix [1 0 0 1 0 0] dup 5 8 -1 roll put put dup\n"
         "/DataSource 4 -1 roll 1 eq { psp_lzwfilter } { psp_ascii85filter } ifelse put\n"
         "} def\n"
+        "%%EndResource\n"
         "%%EndProlog\n"
     };
     WritePS (pFile, pProlog);
@@ -921,6 +960,36 @@ bool PrinterJob::writeProlog (osl::File* pFile)
 bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
 {
     WritePS (pFile, "%%BeginSetup\n%\n");
+
+    // download fonts
+    std::list< rtl::OString > aFonts[2];
+    m_pGraphics->writeResources( pFile, aFonts[0], aFonts[1] );
+
+    for( int i = 0; i < 2; i++ )
+    {
+        if( !aFonts[i].empty() )
+        {
+            std::list< rtl::OString >::const_iterator it = aFonts[i].begin();
+            rtl::OStringBuffer aLine( 256 );
+            if( i == 0 )
+                aLine.append( "%%DocumentSuppliedResources: font " );
+            else
+                aLine.append( "%%DocumentNeededResources: font " );
+            aLine.append( *it );
+            aLine.append( "\n" );
+            WritePS ( pFile, aLine.getStr() );
+            while( (++it) != aFonts[i].end() )
+            {
+                aLine.setLength(0);
+                aLine.append( "%%+ font " );
+                aLine.append( *it );
+                aLine.append( "\n" );
+                WritePS ( pFile, aLine.getStr() );
+            }
+        }
+    }
+
+    // setup code
     ByteString aLine( "/#copies " );
     aLine += ByteString::CreateFromInt32( rJob.m_nCopies );
     aLine +=  " def\n";

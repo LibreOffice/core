@@ -1,8 +1,8 @@
-pp	psprint	:	tools unotools NULL
+pp	psprint	:	tools unotools cpputools jvmaccess NULL
 pp	psprint									usr1	-	all	pp_mkout NULL
 pp	psprint\source\fontsubset				nmake	-	all	pp_fontsset NULL
 pp	psprint\source\printer					nmake	-	u	pp_printer NULL
 pp	psprint\source\fontmanager				nmake	-	u	pp_fontmgr NULL
 pp	psprint\source\helper					nmake	-	u	pp_helper NULL
 pp	psprint\source\printergfx				nmake	-	u	pp_printergfx NULL
-pp	psprint\util							nmake	-	all	pp_util pp_fontmgr.u pp_fontsset.u pp_helper.u pp_printer.u pp_printergfx.u NULL
+pp	psprint\util							nmake	-	all	pp_util pp_fontmgr.u pp_fontsset pp_helper.u pp_printer.u pp_printergfx.u NULL

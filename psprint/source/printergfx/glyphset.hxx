@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2002-07-22 13:52:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ public:
                                 sal_Int16 nLen,
                                 const sal_Int32* pDeltaArray );
     sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
-    sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42 );
+    sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< rtl::OString >& rSuppliedFonts );
 };
 
 

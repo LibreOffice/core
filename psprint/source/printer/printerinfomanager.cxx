@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-05 14:07:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ bool PrinterInfoManager::checkPrintersChanged()
         }
         else
         {
-            FileStatus aStatus( FileStatusMask_All );
+            FileStatus aStatus( FileStatusMask_ModifyTime );
             if( aItem.getFileStatus( aStatus ) )
                 bChanged = true; // unlikely but not impossible
             else
@@ -256,7 +256,7 @@ void PrinterInfoManager::initialize()
 
 
         FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aUniPath );
-        FileStatus aStatus( FileStatusMask_All );
+        FileStatus aStatus( FileStatusMask_ModifyTime );
         DirectoryItem aItem;
 
         // setup WatchFile list
@@ -915,7 +915,7 @@ struct SystemCommandParameters
 
 static const struct SystemCommandParameters aParms[] =
 {
-#ifdef LINUX
+#if defined(LINUX) || defined(NETBSD) || defined(FREEBSD)
     { "/usr/sbin/lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
     { "lpc status", "lpr -P \"(PRINTER)\"", "", ":", 0 },
     { "LANG=C;LC_ALL=C;export LANG LC_ALL;lpstat -s", "lp -d \"(PRINTER)\"", "system for ", ": ", 1 }

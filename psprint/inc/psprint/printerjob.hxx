@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 14:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@
 #include <rtl/string.hxx>
 #endif
 
-// forward declarations
-class SalGraphics;
-
 namespace psp {
+
+// forward declarations
+class PrinterGfx;
 
 
 class PrinterJob
@@ -87,6 +87,7 @@ private:            // private data
 
     rtl::OUString           maSpoolDirName;
     rtl::OUString           maFileName; // empty: spool to command, else spool to named file
+    int                     mnFileMode;
 
     osl::File*              mpJobHeader;
     osl::File*              mpJobTrailer;
@@ -94,12 +95,16 @@ private:            // private data
     std::list< osl::File* > maPageList;
     std::list< osl::File* > maHeaderList;
 
+    JobData                 m_aDocumentJobData;
     JobData                 m_aLastJobData;
+    PrinterGfx*             m_pGraphics;
 
     sal_uInt32      mnResolution;
 
     sal_uInt32      mnWidthPt;
     sal_uInt32      mnHeightPt;
+    sal_uInt32      mnMaxWidthPt;
+    sal_uInt32      mnMaxHeightPt;
 
     sal_uInt32      mnLMarginPt;
     sal_uInt32      mnRMarginPt;
@@ -141,15 +146,29 @@ public:
     PrinterJob ();
     ~PrinterJob ();
 
+    /*  rFileName: if length is greater than 0 save resulting PostScript
+     *  to named file.
+     *  nMode: only meaningful when saving to file: if nonzero, try
+     *  to impose the mode on the resulting file's inode; for nonexistant
+     *  files use open, for existant files try a chmod
+     *  rJobName: text to appear in the %%Title comment
+     *  rAppName: text to appear in the %%Creator comment
+     *  rSetupData: JobData that apply to this job
+     *  pGraphics: the graphics used to print this job;
+     *             this graphics must live until End/AbortJob has returned
+     */
     sal_Bool        StartJob (const rtl::OUString& rFileName,
+                              int nMode,
                               const rtl::OUString& rJobName,
                               const rtl::OUString& rAppName,
-                              const JobData& rSetupData);
+                              const JobData& rSetupData,
+                              PrinterGfx* pGraphics
+                              );
     sal_Bool        EndJob ();
 
     sal_Bool        AbortJob ();
 
-    SalGraphics*    StartPage (const JobData& rJobSetup, sal_Bool bNewJobData);
+    sal_Bool        StartPage (const JobData& rJobSetup, sal_Bool bNewJobData);
     sal_Bool        EndPage ();
 
     sal_uInt32      GetErrorCode ();
