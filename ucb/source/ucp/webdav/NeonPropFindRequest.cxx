@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-30 13:57:56 $
+ *  last change: $Author: kso $ $Date: 2001-05-30 15:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,10 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
                                           propfind_results,
                                           &ioResources );
     }
+
+    // #87585# - Sometimes neon lies (because some servers lie).
+    if ( ( nError == HTTP_OK ) && ioResources.empty() )
+        nError = HTTP_ERROR;
 }
 
 // -------------------------------------------------------------------
@@ -163,7 +167,7 @@ NeonPropFindRequest::NeonPropFindRequest(
                             &ioResInfo );
 
     // #87585# - Sometimes neon lies (because some servers lie).
-    if ( ioResInfo.empty() )
+    if ( ( nError == HTTP_OK ) && ioResInfo.empty() )
         nError = HTTP_ERROR;
 }
 
