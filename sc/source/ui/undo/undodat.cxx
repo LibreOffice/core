@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-12-14 14:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,7 @@ void __EXPORT ScUndoSubTotals::Undo()
     if (pUndoRange)
         pDoc->SetRangeName( new ScRangeName( *pUndoRange ) );
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ) );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), TRUE );
 
     USHORT nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -898,7 +898,7 @@ void __EXPORT ScUndoSort::Undo()
                                 IDF_NONE, FALSE, pDoc );
 
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ) );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), TRUE );
 
     USHORT nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nSortTab )
@@ -1047,7 +1047,7 @@ void __EXPORT ScUndoQuery::Undo()
                                         IDF_NONE, FALSE, pDoc );
 
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ) );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), TRUE );
 
     if (!bCopy)
         pDoc->UpdatePageBreaks( nTab );
@@ -1143,7 +1143,7 @@ void __EXPORT ScUndoDBData::Undo()
     BOOL bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( FALSE );         // unnoetige Berechnungen vermeiden
     pDoc->CompileDBFormula( TRUE );     // CreateFormulaString
-    pDoc->SetDBCollection( new ScDBCollection(*pUndoColl) );
+    pDoc->SetDBCollection( new ScDBCollection(*pUndoColl), TRUE );
     pDoc->CompileDBFormula( FALSE );    // CompileFormulaString
     pDoc->SetAutoCalc( bOldAutoCalc );
 
@@ -1162,7 +1162,7 @@ void __EXPORT ScUndoDBData::Redo()
     BOOL bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( FALSE );         // unnoetige Berechnungen vermeiden
     pDoc->CompileDBFormula( TRUE );     // CreateFormulaString
-    pDoc->SetDBCollection( new ScDBCollection(*pRedoColl) );
+    pDoc->SetDBCollection( new ScDBCollection(*pRedoColl), TRUE );
     pDoc->CompileDBFormula( FALSE );    // CompileFormulaString
     pDoc->SetAutoCalc( bOldAutoCalc );
 
@@ -1524,7 +1524,7 @@ void __EXPORT ScUndoRepeatDB::Undo()
     if (pUndoRange)
         pDoc->SetRangeName( new ScRangeName( *pUndoRange ) );
     if (pUndoDB)
-        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ) );
+        pDoc->SetDBCollection( new ScDBCollection( *pUndoDB ), TRUE );
 
 // erack! it's broadcasted
 //  pDoc->SetDirty();
