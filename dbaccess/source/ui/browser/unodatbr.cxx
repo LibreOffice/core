@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 06:46:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,8 +395,12 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_pSplitter(NULL)
     ,m_pCurrentlyDisplayed(NULL)
     ,m_nAsyncDrop(0)
+    ,m_bQueryEscapeProcessing( sal_False )
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
+
+    m_aRefreshMenu.SetTimeoutHdl( LINK( this, SbaTableQueryBrowser, OnShowRefreshDropDown ) );
+    m_aRefreshMenu.SetTimeout( 300 );
 }
 
 //------------------------------------------------------------------------------
@@ -767,7 +771,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 //------------------------------------------------------------------------------
 ToolBox* SbaTableQueryBrowser::CreateToolBox(Window* _pParent)
 {
-    return new ToolBox(_pParent, ModuleRes(RID_BRW_QRY_TOOLBOX));
+    return new ToolBox( _pParent, ModuleRes( RID_BRW_QRY_TOOLBOX ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1419,6 +1423,18 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
 {
     SbaXDataBrowserController::LoadFinished(_bWasSynch);
 
+    m_sQueryCommand = ::rtl::OUString();
+    m_bQueryEscapeProcessing = sal_False;
+
+    if (isValid() && !loadingCancelled())
+    {
+        // -------------------------------
+        // did we load a query?
+        sal_Bool bTemporary;    // needed because we m_bQueryEscapeProcessing is only one bit wide (and we want to pass it by reference)
+        if ( implGetQuerySignature( m_sQueryCommand, bTemporary ) )
+            m_bQueryEscapeProcessing = bTemporary;
+    }
+
     // if the form has been loaded, this means that our "selection" has changed
     ::com::sun::star::lang::EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIter(m_aSelectionListeners);
@@ -1619,9 +1635,9 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
     catch(Exception& e)
     {
 #if DBG_UTIL
-        String sMessage("SbaXDataBrowserController::GetState(", RTL_TEXTENCODING_ASCII_US);
+        String sMessage("SbaTableQueryBrowser::GetState(", RTL_TEXTENCODING_ASCII_US);
         sMessage += String::CreateFromInt32(nId);
-        sMessage.AppendAscii(") : catched an exception ! message : ");
+        sMessage.AppendAscii(") : caught an exception ! message : ");
         sMessage += (const sal_Unicode*)e.Message;
         DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
 #else
@@ -1638,6 +1654,49 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 {
     switch (nId)
     {
+        case ID_BROWSER_REFRESH:
+        {
+            if (!SaveData(sal_True, sal_False))
+                // nothing to do
+                break;
+
+            sal_Bool bFullReinit = sal_False;
+            // check if the query signature (if the form is based on a query) has changed
+            if ( m_sQueryCommand.getLength() )
+            {
+                ::rtl::OUString sNewQueryCommand;
+                sal_Bool bNewQueryEP;
+
+#ifdef _DEBUG
+                sal_Bool bIsQuery =
+#endif
+                implGetQuerySignature( sNewQueryCommand, bNewQueryEP );
+                OSL_ENSURE( bIsQuery, "SbaTableQueryBrowser::Execute: was a query before, but is not anymore?" );
+
+                bFullReinit = ( sNewQueryCommand != m_sQueryCommand ) || ( m_bQueryEscapeProcessing != bNewQueryEP );
+            }
+            if ( !bFullReinit )
+            {
+                // let the base class do a simple reload
+                SbaXDataBrowserController::Execute(nId);
+                break;
+            }
+            // NO break here!
+        }
+
+        case ID_BROWSER_REFRESH_REBUILD:
+        {
+            SvLBoxEntry* pSelected = m_pCurrentlyDisplayed;
+            OSL_ENSURE( pSelected, "SbaTableQueryBrowser::Execute: invalid current selection!" );
+
+            // unload
+            unloadAndCleanup( sal_False, sal_True );
+
+            // reselect the entry
+            OnSelectEntry( pSelected );
+        }
+        break;
+
         case ID_BROWSER_EXPLORER:
             toggleExplorer();
             break;
@@ -1939,7 +1998,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
                 if(e.TargetException >>= aSql)
                     aInfo = aSql;
                 else
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
             }
             catch(const Exception&)
             {
@@ -2434,7 +2493,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             if(e.TargetException >>= aSql)
                 showError(SQLExceptionInfo(aSql));
             else
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnSelectEntry: something strange happended!");
             // reset the values
             xProp->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
@@ -2884,7 +2943,7 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
     }
     catch(Exception&)
     {
@@ -3059,6 +3118,63 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
 }
 
 // -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::onToolBoxSelected( sal_uInt16 _nSelectedItem )
+{
+    if ( ID_BROWSER_REFRESH == _nSelectedItem )
+    {
+        if ( m_aRefreshMenu.IsActive() )
+            m_aRefreshMenu.Stop();
+    }
+    SbaXDataBrowserController::onToolBoxSelected( _nSelectedItem );
+}
+
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::onToolBoxClicked( sal_uInt16 _nClickedItem )
+{
+    if ( ID_BROWSER_REFRESH == _nClickedItem )
+        m_aRefreshMenu.Start();
+    else
+        SbaXDataBrowserController::onToolBoxClicked( _nClickedItem );
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( SbaTableQueryBrowser, OnShowRefreshDropDown, void*, NOTINTERESTEDIN )
+{
+    ToolBox* pToolBox = NULL;
+    if ( getView() )
+        pToolBox = getView()->getToolBox();
+    OSL_ENSURE( pToolBox, "SbaTableQueryBrowser::OnShowRefreshDropDown: no toolbox (anymore)!" );
+
+    if ( !pToolBox )
+        return 0L;
+
+    pToolBox->EndSelection();
+
+    // tell the toolbox that the item is pressed down
+    pToolBox->SetItemDown( ID_BROWSER_REFRESH, sal_True );
+
+    // simulate a mouse move (so the "down" state is really painted)
+    Point aPoint = pToolBox->GetItemRect( ID_BROWSER_REFRESH ).TopLeft();
+    MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
+    pToolBox->MouseMove( aMove );
+
+    pToolBox->Update();
+
+    // execute the menu
+    PopupMenu aNewForm( ModuleRes( RID_MENU_REFRESH_DATA ) );
+    sal_uInt16 nSelectedRefreshAction = aNewForm.Execute(pToolBox, pToolBox->GetItemRect( ID_BROWSER_REFRESH ));
+
+    // "cleanup" the toolbox state
+    MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
+    pToolBox->MouseMove( aLeave );
+    pToolBox->SetItemDown( ID_BROWSER_REFRESH, sal_False);
+
+    Execute( nSelectedRefreshAction );
+
+    return 1L;
+}
+
+// -----------------------------------------------------------------------------
 IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortData )
 {
     SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
@@ -3141,7 +3257,7 @@ void SbaTableQueryBrowser::implDirectSQL( SvLBoxEntry* _pApplyTo )
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implDirectSQL: something strange happended!");
     }
     catch(const Exception&)
     {
@@ -3275,7 +3391,7 @@ void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implCreateObject: something strange happended!");
     }
     catch(Exception&)
     {
@@ -3327,7 +3443,7 @@ void SbaTableQueryBrowser::implRemoveQuery( SvLBoxEntry* _pApplyTo )
                     if(e.TargetException >>= aSql)
                         showError(SQLExceptionInfo(aSql));
                     else
-                        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+                        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implRemoveQuery: something strange happended!");
                 }
                 catch(Exception&)
                 {
@@ -3392,7 +3508,7 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
                 if(e.TargetException >>= aSql)
                     aErrorInfo = aSql;
                 else
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implDropTable: something strange happended!");
             }
             catch(Exception&)
             {
@@ -3823,6 +3939,54 @@ void SbaTableQueryBrowser::setTitle(const ::rtl::OUString& _rsDataSourceName,con
     Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
     if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
         xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sTitle));
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing )
+{
+    _rCommand = ::rtl::OUString();
+    _bEscapeProcessing = sal_False;
+
+    try
+    {
+        // ontain the dss (data source signature) of the form
+        ::rtl::OUString sDataSourceName;
+        ::rtl::OUString sCommand;
+        sal_Int32       nCommandType = CommandType::COMMAND;
+        ODataAccessDescriptor aDesc( Reference< XPropertySet >( getRowSet(), UNO_QUERY ) );
+        aDesc[ daDataSource ]   >>= sDataSourceName;
+        aDesc[ daCommand ]      >>= sCommand;
+        aDesc[ daCommandType ]  >>= nCommandType;
+
+        // do we need to do anything?
+        if ( CommandType::QUERY != nCommandType )
+            return sal_False;
+
+        // get the query object
+        Reference< XQueryDefinitionsSupplier > xSuppQueries;
+        Reference< XNameAccess > xQueries;
+        Reference< XPropertySet > xQuery;
+        m_xDatabaseContext->getByName( sDataSourceName ) >>= xSuppQueries;
+        if ( xSuppQueries.is() )
+            xQueries = xSuppQueries->getQueryDefinitions();
+        if ( xQueries.is() )
+            xQueries->getByName( sCommand ) >>= xQuery;
+        OSL_ENSURE( xQuery.is(), "SbaTableQueryBrowser::implGetQuerySignature: could not retrieve the query object!" );
+
+        // get the two properties we need
+        if ( xQuery.is() )
+        {
+            xQuery->getPropertyValue( PROPERTY_COMMAND ) >>= _rCommand;
+            _bEscapeProcessing = ::cppu::any2bool( xQuery->getPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING ) );
+            return sal_True;
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::implGetQuerySignature: caught an exception!" );
+    }
+
+    return sal_False;
 }
 
 // .........................................................................
