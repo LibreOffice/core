@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2001-05-14 07:23:40 $
+#*    last change       $Author: jbu $ $Date: 2002-10-01 13:31:06 $
 #*
-#*    $Revision: 1.16 $
+#*    $Revision: 1.17 $
 #*
 #*    $Logfile:$
 #*
@@ -26,7 +26,7 @@ JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar ridl.jar jurt.jar jut.jar xmls
 EXTRAJARFILES 	= 
 
 CLASSGENDIR		= $(OUT)$/classgen
-RDB		 		= $(SOLARBINDIR)$/applicat.rdb
+RDB		 		= $(SOLARBINDIR)$/types.rdb
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
 UNIXTEXT= \
