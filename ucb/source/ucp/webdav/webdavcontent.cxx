@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-18 16:01:08 $
+ *  last change: $Author: kso $ $Date: 2002-09-23 10:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,9 +1320,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             catch ( DAVException const & e )
             {
                 if ( ( e.getStatus() == 404 /* not found */ ) ||
-                     ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) )
+                     ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) ||
+                     ( e.getError() == DAVException::DAV_HTTP_AUTH ) ||
+                     ( e.getError() == DAVException::DAV_HTTP_AUTHPROXY ) )
                 {
-                    // PROPFIND failed, only Title prop available.
+                    // Resource not accessable, only Title property available.
                     xProps.reset( new ContentProperties(
                                     NeonUri::unescape( m_aEscapedTitle ) ) );
                 }
@@ -1333,50 +1335,54 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             bNetAccessSucceeded = true;
         }
 
-        if ( !bNetAccessSucceeded )
+        if ( !xProps.get() )
         {
-            // PROPFIND failed. Try a HEAD request; possibly the requested
-            // properties can by obtained this way.
-
-            std::vector< rtl::OUString > aHeaderNames;
-            ContentProperties::UCBNamesToHTTPNames(
-                rProperties, aHeaderNames, false /* bIncludeUnmatched */ );
-
-            // Note: Setting bIncludeUnmatched to true would provide support for
-            // obtaining arbitrary header values, but will result in additional
-            // network traffic (HEAD requests). For the moment it is okay only
-            // to support the header values which can be mapped to UCB
-            // properties (like "Content-Length" header <-> "Size" property)
-
-            if ( aHeaderNames.size() > 0 )
+            if ( !bNetAccessSucceeded )
             {
-                try
-                {
-                    resources.clear();
+                // PROPFIND failed. Try a HEAD request; possibly the requested
+                // properties can by obtained this way.
 
-                    DAVResource resource;
-                    m_xResAccess->HEAD( aHeaderNames, resource, xEnv );
+                std::vector< rtl::OUString > aHeaderNames;
+                ContentProperties::UCBNamesToHTTPNames(
+                    rProperties, aHeaderNames, false /* bIncludeUnmatched */ );
 
-                    resources.push_back( resource );
-                    bNetAccessSucceeded = true;
-                }
-                catch ( DAVException const & )
+                // Note: Setting bIncludeUnmatched to true would provide support
+                // for obtaining arbitrary header values, but will result in
+                // additional network traffic (HEAD requests). For the moment it
+                // is okay only to support the header values which can be mapped
+                // to UCB properties (like "Content-Length" header <-> "Size"
+                // property)
+
+                if ( aHeaderNames.size() > 0 )
                 {
-                    bNetAccessSucceeded = false;
+                    try
+                    {
+                        resources.clear();
+
+                        DAVResource resource;
+                        m_xResAccess->HEAD( aHeaderNames, resource, xEnv );
+
+                        resources.push_back( resource );
+                        bNetAccessSucceeded = true;
+                    }
+                    catch ( DAVException const & )
+                    {
+                        bNetAccessSucceeded = false;
+                    }
                 }
             }
-        }
 
-        bNetAccessSucceeded &= ( resources.size() == 1 );
+            bNetAccessSucceeded &= ( resources.size() == 1 );
 
-        if ( bNetAccessSucceeded )
-        {
-            xProps.reset( new ContentProperties( resources[ 0 ] ) );
-        }
-        else
-        {
-            xProps.reset( new ContentProperties(
-                                NeonUri::unescape( m_aEscapedTitle ) ) );
+            if ( bNetAccessSucceeded )
+            {
+                xProps.reset( new ContentProperties( resources[ 0 ] ) );
+            }
+            else
+            {
+                xProps.reset( new ContentProperties(
+                                    NeonUri::unescape( m_aEscapedTitle ) ) );
+            }
         }
     }
 
