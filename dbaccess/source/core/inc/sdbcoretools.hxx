@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcoretools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,8 @@ namespace dbaccess
 {
 //.........................................................................
 
-    //=====================================================================
-    /** retrieves the number formats of a data source, given a connection which was created by a data source
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
-        getDataSourceNumberFormats(
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxDataSourceConnection
-        );
+    // -----------------------------------------------------------------------------
+    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,sal_Bool _bModified);
 
 //.........................................................................
 }   // namespace dbaccess
