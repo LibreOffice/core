@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-09-28 14:47:56 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 11:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,7 +1629,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescription_getByName(
                 MutexGuard aGuard( aInit.getMutex() );
                 if( !aInit.pCache )
                     aInit.pCache = new TypeDescriptionList_Impl;
-                if( aInit.pCache->size() >= nCacheSize )
+                if( (sal_Int32)aInit.pCache->size() >= nCacheSize )
                 {
                     typelib_typedescription_release( aInit.pCache->front() );
                     aInit.pCache->pop_front();
@@ -1689,7 +1689,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_typedescriptionreference_new(
                 MutexGuard aGuard( aInit.getMutex() );
                 if( !aInit.pCache )
                     aInit.pCache = new TypeDescriptionList_Impl;
-                if( aInit.pCache->size() >= nCacheSize )
+                if( (sal_Int32)aInit.pCache->size() >= nCacheSize )
                 {
                     typelib_typedescription_release( aInit.pCache->front() );
                     aInit.pCache->pop_front();
@@ -1901,7 +1901,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL typelib_setCacheSize( sal_Int32 nNewSize 
         MutexGuard aGuard( aInit.getMutex() );
         if ((nNewSize < nCacheSize) && aInit.pCache)
         {
-            while (aInit.pCache->size() != nNewSize)
+            while ((sal_Int32)aInit.pCache->size() != nNewSize)
             {
                 typelib_typedescription_release( aInit.pCache->front() );
                 aInit.pCache->pop_front();
@@ -2074,7 +2074,7 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_complete(
             MutexGuard aGuard( aInit.getMutex() );
             if( !aInit.pCache )
                 aInit.pCache = new TypeDescriptionList_Impl;
-            if( aInit.pCache->size() >= nCacheSize )
+            if( (sal_Int32)aInit.pCache->size() >= nCacheSize )
             {
                 typelib_typedescription_release( aInit.pCache->front() );
                 aInit.pCache->pop_front();
