@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:02:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,14 +800,16 @@ void SfxChildWindow::Deactivate_Impl()
 
 sal_Bool SfxChildWindow::QueryClose()
 {
+    sal_Bool bAllow = sal_True;
+
     if ( pImp->xFrame.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >  xCtrl = pImp->xFrame->getController();
         if ( xCtrl.is() )
-            xCtrl->suspend( sal_True );
+            bAllow = xCtrl->suspend( sal_True );
     }
 
-    return sal_True;
+    return bAllow;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  SfxChildWindow::GetFrame()
