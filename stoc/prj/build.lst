@@ -1,4 +1,4 @@
-tc	stoc	:	rdbmaker jvmaccess salhelper NULL
+tc	stoc	:	rdbmaker cppuhelper cppu jvmaccess salhelper NULL
 tc	stoc									usr1	-	all	tc_mkout NULL
 tc	stoc\source\defaultregistry				nmake	-	all	tc_defr NULL
 tc	stoc\source\implementationregistration	nmake	-	all	tc_ireg tc_defr NULL
