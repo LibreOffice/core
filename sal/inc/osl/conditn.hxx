@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:35 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 16:10:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,31 @@ namespace osl
     private:
         oslCondition condition;
 
-        Condition(oslCondition condition)
-        {
-            this->condition = condition;
-        }
+        /** The underlying oslCondition has no reference count.
+
+        Since the underlying oslCondition is not a reference counted object, copy
+        constructed Condition may work on an already destructed oslCondition object.
+
+        */
+        Condition(const Condition&);
+
+        /** The underlying oslCondition has no reference count.
+
+        When destructed, the Condition object destroys the undelying oslCondition,
+        which might cause severe problems in case it's a temporary object.
+
+        */
+        Condition(oslCondition condition);
+
+        /** This assignment operator is private for the same reason as
+            the copy constructor.
+        */
+        Condition& operator= (const Condition&);
+
+        /** This assignment operator is private for the same reason as
+            the constructor taking a oslCondition argument.
+        */
+        Condition& operator= (oslCondition);
     };
 
 }
