@@ -34,6 +34,7 @@
 class SdView;
 class SdDrawViewShell;
 class SdXImpressDocument;
+class SdPage;
 
 struct SdUnoDrawViewBase
 {
@@ -61,6 +62,7 @@ public:
     void fireChangeEditMode( sal_Bool bMasterPageMode ) throw();
     void fireChangeLayerMode( sal_Bool bLayerMode ) throw();
     void fireVisAreaChanged( const Rectangle& rVisArea ) throw();
+    void fireSwitchCurrentPage( SdPage* pCurrentPage ) throw();
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -142,17 +144,19 @@ protected:
     sal_Bool getLayerMode(void) const throw();
     void setLayerMode(sal_Bool LayerMode_) throw();
 
+    SdUnoDrawViewKind   meKind;
+
 private:
     SdView*             mpView;
     SdDrawViewShell*    mpViewSh;
 
-    SdUnoDrawViewKind   meKind;
     sal_Bool            mbDisposing;
 
     Rectangle           maLastVisArea;
 
     sal_Bool mbOldMasterPageMode;
     sal_Bool mbOldLayerMode;
+    SdPage* mpCurrentPage;
 };
 
 #endif
