@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: as $ $Date: 2003-04-29 12:40:40 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,7 @@ SfxApplication::SfxApplication()
     pImp->pDialogLibContainer = 0;
     pImp->pBasicTestWin = 0;
     pImp->pSfxResManager = 0;
+    pImp->pOfaResMgr = 0;
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
@@ -1099,7 +1100,7 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-
+/*
 sal_uInt32 SfxApplication::DetectFilter( const String &rFileName,
                                     const SfxFilter **ppFilter,
                                     sal_uInt16 nFilterClass )
@@ -1147,8 +1148,7 @@ sal_uInt32 SfxApplication::DetectFilter(
 
     return pFilter? 0: 1; HACK(Error-Code verwenden)
 }
-
-
+*/
 
 //--------------------------------------------------------------------
 
