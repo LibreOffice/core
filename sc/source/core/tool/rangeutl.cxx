@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:18 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 15:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,8 @@ void ScRangeUtil::CutPosString( const String&   theAreaStr,
 BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 ScDocument*     pDoc,
                                 ScArea***       pppAreas,
-                                USHORT*         pAreaCount ) const
+                                USHORT*         pAreaCount,
+                                BOOL            bAcceptCellRef ) const
 {
     DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
     if ( !pDoc )
@@ -215,6 +216,9 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
     /*
      * Erwartet wird ein String der Form
      *      "$Tabelle1.$A$1:$Tabelle3.$D$17"
+     * Wenn bAcceptCellRef == TRUE ist, wird auch ein String der Form
+     *      "$Tabelle1.$A$1"
+     * akzeptiert.
      *
      * als Ergebnis wird ein ScArea-Array angelegt,
      * welches ueber ppAreas bekannt gegeben wird und auch
@@ -222,19 +226,26 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
      */
 
     BOOL    bStrOk = FALSE;
+    String  aTempAreaStr(rAreaStr);
     String  aStartPosStr;
     String  aEndPosStr;
 
-    USHORT  nColonPos = rAreaStr.Search(':');
+    if ( STRING_NOTFOUND == aTempAreaStr.Search(':') )
+    {
+        aTempAreaStr.Append(':');
+        aTempAreaStr.Append(rAreaStr);
+    }
+
+    USHORT   nColonPos = aTempAreaStr.Search(':');
 
     if (   STRING_NOTFOUND != nColonPos
-        && STRING_NOTFOUND != rAreaStr.Search('.') )
+        && STRING_NOTFOUND != aTempAreaStr.Search('.') )
     {
         ScRefTripel aStartPos;
         ScRefTripel aEndPos;
 
-        aStartPosStr = rAreaStr.Copy( 0,           nColonPos  );
-        aEndPosStr   = rAreaStr.Copy( nColonPos+1, STRING_LEN );
+        aStartPosStr = aTempAreaStr.Copy( 0,           nColonPos  );
+        aEndPosStr   = aTempAreaStr.Copy( nColonPos+1, STRING_LEN );
 
         if ( ConvertSingleRef( pDoc, aStartPosStr, 0, aStartPos ) )
         {

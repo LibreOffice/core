@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 15:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
             ScArea**    ppAreas = NULL;
             USHORT      nAreaCount = 0;
 
-            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount ) )
+            if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, TRUE ) )
             {
                 // IsAbsTabArea() legt ein Array von ScArea-Zeigern an,
                 // welche ebenfalls dynamisch erzeugt wurden.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 15:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ public:
     BOOL    IsAbsTabArea        ( const String&     rAreaStr,
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
-                                  USHORT*           pAreaCount  = 0 ) const;
+                                  USHORT*           pAreaCount  = 0,
+                                  BOOL              bAcceptCellRef = FALSE ) const;
 
     BOOL    IsAbsArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
