@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-11-23 19:55:06 $
+ *  last change: $Author: er $ $Date: 2000-11-23 20:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,10 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
 #ifndef PRODUCT
         ByteString aMsg( "loadCalendar: Exception caught\nrequested: " );
         aMsg += ByteString( String( rUniqueID ), RTL_TEXTENCODING_UTF8 );
-        aMsg += '\n';
+        aMsg += "   Locale: ";
+        aMsg += ByteString( String( rLocale.Language ), RTL_TEXTENCODING_UTF8 );
+        aMsg += '_';
+        aMsg += ByteString( String( rLocale.Country ), RTL_TEXTENCODING_UTF8 );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
