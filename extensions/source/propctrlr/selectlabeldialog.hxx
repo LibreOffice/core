@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectlabeldialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:33:05 $
+ *  last change: $Author: obo $ $Date: 2001-01-18 14:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <vcl/dialog.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertyset.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
@@ -136,6 +136,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:33:05  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 09.01.01 14:06:24  fs
  ************************************************************************/
