@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headermenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:51:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,7 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
     if ( Event.State >>= xModel )
     {
         ResetableGuard aLock( m_aLock );
+        m_xModel = xModel;
         if ( m_xPopupMenu.is() )
             fillPopupMenu( xModel, m_xPopupMenu );
     }
@@ -378,6 +379,20 @@ void SAL_CALL HeaderMenuController::setPopupMenu( const Reference< css::awt::XPo
 
         updatePopupMenu();
     }
+}
+
+void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    Reference< com::sun::star::frame::XModel > xModel( m_xModel );
+    aLock.unlock();
+
+    if ( !xModel.is() )
+        PopupMenuControllerBase::updatePopupMenu();
+
+    aLock.lock();
+    if ( m_xPopupMenu.is() && m_xModel.is() )
+        fillPopupMenu( m_xModel, m_xPopupMenu );
 }
 
 // XInitialization
