@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: cl $ $Date: 2001-01-30 10:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <vcl/metaact.hxx>   // fuer TakeContour
 #include <vcl/cvtsvm.hxx>
 #include <tools/bigint.hxx>
+#include <vector>
 #include "svdobj.hxx"
 #include "xpoly.hxx"
 #include "svdxout.hxx"
@@ -3288,10 +3289,10 @@ void SdrObject::ClearItem( const sal_uInt16 nWhich )
 
 void SdrObject::SetItemSet( const SfxItemSet& rSet )
 {
-    SfxWhichIter aIter(rSet);
-    sal_uInt16 nWhich(aIter.FirstWhich());
+    SfxWhichIter aWhichIter(rSet);
+    sal_uInt16 nWhich(aWhichIter.FirstWhich());
     const SfxPoolItem *pPoolItem;
-    List aPostItemChangeList;
+    std::vector< sal_uInt16 > aPostItemChangeList;
 
     while(nWhich)
     {
@@ -3300,16 +3301,18 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
             if(AllowItemChange(nWhich, pPoolItem))
             {
                 ItemChange(nWhich, pPoolItem);
-                aPostItemChangeList.Insert((void*)((sal_uInt32)nWhich), LIST_APPEND);
+                aPostItemChangeList.push_back( nWhich );
             }
         }
-        nWhich = aIter.NextWhich();
+        nWhich = aWhichIter.NextWhich();
     }
 
-    for(sal_uInt32 a(0); a < aPostItemChangeList.Count(); a++)
+    std::vector< sal_uInt16 >::iterator aIter = aPostItemChangeList.begin();
+    const std::vector< sal_uInt16 >::iterator aEnd = aPostItemChangeList.end();
+    while( aIter != aEnd )
     {
-        nWhich = (sal_uInt16)aPostItemChangeList.GetObject(a);
-        PostItemChange(nWhich);
+        PostItemChange((*aIter));
+        aIter++;
     }
 }
 
