@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.16 $
+  *  $Revision: 1.17 $
   *
-  *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
+  *  last change: $Author: pl $ $Date: 2002-08-01 18:54:33 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -223,6 +223,34 @@ PrinterGfx::SetFallbackFont ( sal_Int32 nFontID )
     return 0;
 }
 
+void PrinterGfx::drawGlyphs(
+                            const Point& rPoint,
+                            sal_uInt32* pGlyphIds,
+                            sal_Unicode* pUnicodes,
+                            sal_Int16 nLen,
+                            sal_Int32* pDeltaArray
+                            )
+{
+
+    // draw the string
+    // search for a glyph set matching the set font
+    std::list< GlyphSet >::iterator aIter;
+    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
+        if ( ((*aIter).GetFontID()  == mnFontID)
+             && ((*aIter).IsVertical() == mbTextVertical))
+        {
+            (*aIter).DrawGlyphs (*this, rPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+            break;
+        }
+
+    // not found ? create a new one
+    if (aIter == maPS3Font.end())
+    {
+        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
+        maPS3Font.back().DrawGlyphs (*this, rPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+    }
+}
+
 void PrinterGfx::DrawGlyphs(
                             const Point& rPoint,
                             sal_uInt32* pGlyphIds,
@@ -245,6 +273,7 @@ void PrinterGfx::DrawGlyphs(
         DrawText( rPoint, pUnicodes, nLen, pDeltaArray );
         return;
     }
+
     // move and rotate the user coordinate system
     // avoid the gsave/grestore for the simple cases since it allows
     // reuse of the current font if it hasn't changed
@@ -260,23 +289,109 @@ void PrinterGfx::DrawGlyphs(
         aPoint = Point( 0, 0 );
     }
 
-    // draw the string
-    // search for a glyph set matching the set font
-    std::list< GlyphSet >::iterator aIter;
-    for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); aIter++)
-        if ( ((*aIter).GetFontID()  == mnFontID)
-             && ((*aIter).IsVertical() == mbTextVertical))
+    if( mbTextVertical )
+    {
+        // vertical glyphs can have an additional rotation ... sigh.
+        // so break up text in chunks of normal glyphs and print out
+        // specially rotated glyphs extra
+        sal_uInt32* pTempGlyphIds = (sal_uInt32*)alloca(sizeof(sal_Int32)*nLen);
+        sal_Int32* pTempDelta = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
+        sal_Unicode* pTempUnicodes = (sal_Unicode*)alloca(sizeof(sal_Unicode)*nLen);
+        sal_Int16 nTempLen = 0;
+        sal_Int16 nTempDeltaOffset = -1;
+        sal_Int32 nTempFirstDelta = 0;
+        sal_Int32 nRot = 0;
+        Point aRotPoint;
+        sal_Int32 nTextHeight = maVirtualStatus.mnTextHeight;
+        sal_Int32 nTextWidth  = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
+        sal_Int32 nAscend = mrFontMgr.getFontAscend( mnFontID );
+        sal_Int32 nDescend = mrFontMgr.getFontDescend( mnFontID );
+
+        nDescend = nDescend * nTextHeight / 1000;
+        nAscend = nAscend * nTextHeight / 1000;
+
+        for( sal_Int16 i = 0; i < nLen; i++ )
         {
-            (*aIter).DrawGlyphs (*this, aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
-            break;
+            sal_Int32 nRot = ((pGlyphIds[i] >> 24) & 3);
+            if( nRot == 0 )
+            {
+                pTempUnicodes[nTempLen] = pUnicodes[i];
+                pTempGlyphIds[nTempLen] = pGlyphIds[i];
+                if( nTempLen > 0 )
+                    pTempDelta[nTempLen+nTempDeltaOffset]   = pDeltaArray[i-1];
+                else
+                {
+                    // the first element in pDeltaArray shows
+                    // the offset of the second character
+                    // so if the first glyph is normal
+                    // then we do not need to move the delta indices
+                    // else we have to move them down by one and
+                    // recalculate aPoint and all deltas
+                    if( i == 0 )
+                        nTempDeltaOffset = 0;
+                    else
+                        nTempFirstDelta = pDeltaArray[ i-1 ];
+                }
+                nTempLen++;
+            }
+            else
+            {
+                sal_Int32 nOffset = i > 0 ? pDeltaArray[i-1] : 0;
+                sal_Int32 nRotAngle = 0;
+                switch( nRot )
+                {
+                    case 3:
+                        nRotAngle = 2700;
+                        aRotPoint = Point( -nAscend*nTextWidth/nTextHeight, -nDescend*nTextWidth/nTextHeight - nOffset );
+                        break;
+                    case 2:
+                        nRotAngle = 1800;
+                        aRotPoint = Point( -nOffset, (nAscend+nDescend) );
+                        break;
+                    case 1:
+                        nRotAngle = 900;
+                        aRotPoint = Point( -nDescend*nTextWidth/nTextHeight, nOffset + nAscend*nTextWidth/nTextHeight );
+                        break;
+                }
+                sal_uInt32 nRotGlyphId      = pGlyphIds[i];
+                sal_Unicode nRotUnicode     = pUnicodes[i];
+                sal_Int32 nRotDelta         = 0;
+
+                // transform matrix to new individual direction
+                PSGSave ();
+                GraphicsStatus aSaveStatus = maVirtualStatus;
+                if( nRot != 2 ) // switch font aspect
+                {
+                    maVirtualStatus.mnTextWidth = nTextHeight;
+                    maVirtualStatus.mnTextHeight = nTextWidth;
+                }
+                if( aPoint.X() || aPoint.Y() )
+                    PSTranslate( aPoint );
+                PSRotate (nRotAngle);
+                // draw the rotated glyph
+                drawGlyphs( aRotPoint, &nRotGlyphId, &nRotUnicode, 1, &nRotDelta );
+
+                // restore previous state
+                maVirtualStatus = aSaveStatus;
+                PSGRestore();
+            }
         }
 
-    // not found ? create a new one
-    if (aIter == maPS3Font.end())
-    {
-        maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
-        maPS3Font.back().DrawGlyphs (*this, aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray);
+        pGlyphIds = pTempGlyphIds;
+        pUnicodes = pTempUnicodes;
+        pDeltaArray = pTempDelta;
+        nLen = nTempLen;
+
+        if( nTempFirstDelta )
+        {
+            aPoint.X() += nTempFirstDelta;
+            for( sal_Int16 i = 0; i < nLen; i++ )
+                pDeltaArray[i] -= nTempFirstDelta;
+        }
     }
+
+    if( nLen > 0 )
+        drawGlyphs( aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray );
 
     // restore the user coordinate system
     if (nCurrentTextAngle != 0)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-19 16:28:53 $
+ *  last change: $Author: pl $ $Date: 2002-08-01 18:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,6 +356,12 @@ public:
     void            drawText (const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,
                               const sal_Int32* pDeltaArray = NULL);
+
+    void            drawGlyphs( const Point& rPoint,
+                                sal_uInt32* pGlyphIds,
+                                sal_Unicode* pUnicodes,
+                                sal_Int16 nLen,
+                                sal_Int32* pDeltaArray );
 public:
     PrinterGfx();
     ~PrinterGfx();
