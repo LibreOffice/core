@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:29:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,17 +74,15 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Kompatibilit�tsoptionen f�r %DOCNAME" ;
-        Text[ english_us ] = "Compatibility options for %DOCNAME";
-        Text[ chinese_simplified ] = "%DOCNAME 的兼容选项";
+        Text [ de ] = "Kompatibilit�tsoptionen f�r %DOCNAME" ;
+        Text [ en-US ] = "Compatibility options for %DOCNAME";
     };
     FixedText FT_FORMATTING
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text = "Empfohlen ~Formatierungsoptionen f�r" ;
-        Text[ english_us ] = "Recommended ~formatting options for";
-        Text[ chinese_simplified ] = "推荐的格式选项";
+        Text [ de ] = "Empfohlen ~Formatierungsoptionen f�r" ;
+        Text [ en-US ] = "Recommended ~formatting options for";
     };
     ListBox LB_FORMATTING
     {
@@ -96,9 +94,8 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text = "~Optionen" ;
-        Text[ english_us ] = "~Options";
-        Text[ chinese_simplified ] = "选项";
+        Text [ de ] = "~Optionen" ;
+        Text [ en-US ] = "~Options";
     };
     Control LB_OPTIONS
     {
@@ -112,89 +109,79 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Pos = MAP_APPFONT ( 125 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Zur�cksetzen" ;
-        Text[ english_us ] = "~Reset";
-        Text[ chinese_simplified ] = "重设";
+        Text [ de ] = "~Zur�cksetzen" ;
+        Text [ en-US ] = "~Reset";
     };
     PushButton PB_DEFAULT
     {
         Pos = MAP_APPFONT ( 188 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "Als ~Standard verwenden" ;
-        Text[ english_us ] = "Use as ~Default";
-        Text[ chinese_simplified ] = "做为默认值使用";
+        Text [ de ] = "Als ~Standard verwenden" ;
+        Text [ en-US ] = "Use as ~Default";
     };
 
     String STR_USERENTRY
     {
-        Text = "<Benutzerdefiniert>";
-        Text[ english_us ] = "<User settings>";
-        Text[ chinese_simplified ] = "<用户设置>";
+        Text [ de ] = "<Benutzerdefiniert>";
+        Text [ en-US ] = "<User settings>";
     };
 
     String STR_QRYBOX_USEASDEFAULT
     {
-        Text = "M�chten Sie die Kompatibilt�tsoptionen der Standard-Vorlage �ndern?\nDiese �nderungen wirken sich auf alle neuen Dokumente aus, die auf der Standard-Vorlage basieren.";
-        Text[ english_us ] = "Do you want to change the compatibility options of the default template?\nThis will affect all new documents based on the default template.";
-        Text[ chinese_simplified ] = "您要更改默认文档样式的兼容选项吗？\n这样将影响所有基于默认文档样式的新文档。";
+        Text [ de ] = "M�chten Sie die Kompatibilt�tsoptionen der Standard-Vorlage �ndern?\nDiese �nderungen wirken sich auf alle neuen Dokumente aus, die auf der Standard-Vorlage basieren.";
+        Text [ en-US ] = "Do you want to change the compatibility options of the default template?\nThis will affect all new documents based on the default template.";
     };
 
 // the option strings ----------------------------------------------------
 
     String STR_PRINTER_METRICS
     {
-        Text = "Druckerma�e f�r Dokumentformatierung verwenden";
-        Text[ english_us ] = "Use printer metrics for document formatting";
-        Text[ chinese_simplified ] = "文档格式采用打印机版式";
+        Text [ de ] = "Druckerma�e f�r Dokumentformatierung verwenden";
+        Text [ en-US ] = "Use printer metrics for document formatting";
     };
     String STR_MERGE_PARA_DIST
     {
-        Text = "Alle Absatz- und Tabellenabst�nde addieren (aktuelles Dokument)";
-        Text[ english_us ] = "Add spacing between paragraphs and tables (in current document)";
-        Text[ chinese_simplified ] = "段落和表格之间添加空格(在当前文档)";
+        Text [ de ] = "Alle Absatz- und Tabellenabst�nde addieren (aktuelles Dokument)";
+        Text [ en-US ] = "Add spacing between paragraphs and tables (in current document)";
     };
     String STR_MERGE_PARA_DIST_PAGESTART
     {
-        Text = "Absatz- und Tabellenabst�nde an Seitenanf�ngen addieren (aktuelles Dokument)";
-        Text[ english_us ] = "Add paragraph and table spacing at tops of pages (in current document)";
-        Text[ chinese_simplified ] = "在页面上方添加段落和表格空格(在当前文档)";
+        Text [ de ] = "Absatz- und Tabellenabst�nde an Seitenanf�ngen addieren (aktuelles Dokument)";
+        Text [ en-US ] = "Add paragraph and table spacing at tops of pages (in current document)";
     };
     String STR_TAB_ALIGNMENT
     {
-        Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text = "%FORMATNAME %FORMATVERSION Tabulator-Formatierungen verwenden";
-        Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION tabstop formatting";
-        Text[ chinese_simplified ] = "使用 %FORMATNAME %FORMATVERSION 制表符格式化";
+        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%FORMATNAME %FORMATVERSION Tabulator-Formatierungen verwenden";
+        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION tabstop formatting";
     };
     String STR_EXTERNAL_LEADING
     {
-        Text = "Keinen zus�tzlichen Leerraum zwischen Textzeilen hinzuf�gen";
-        Text[ english_us ] = "Do not add leading (extra space) between lines of text";
-        Text[ chinese_simplified ] = "在行和文字之间不添加行间距离 (多余空格)";
+        Text [ de ] = "Keinen zus�tzlichen Leerraum zwischen Textzeilen hinzuf�gen";
+        Text [ en-US ] = "Do not add leading (extra space) between lines of text";
     };
     String STR_LINE_SPACING
     {
-        Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text = "%FORMATNAME %FORMATVERSION Zeilenabstand verwenden";
-        Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION line spacing";
-        Text[ chinese_simplified ] = "使用 %FORMATNAME %FORMATVERSION 线条间隔";
+        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%FORMATNAME %FORMATVERSION Zeilenabstand verwenden";
+        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION line spacing";
     };
     String STR_ADD_TABLESPACING
     {
-        Text = "Absatz- und Tabellenabst�nde am Ende von Tabellenzellen hinzuf�gen";
-        Text[ english_us ] = "Add paragraph and table spacing at bottom of table cells";
+        Text [ de ] = "Absatz- und Tabellenabst�nde am Ende von Tabellenzellen hinzuf�gen";
+        Text [ en-US ] = "Add paragraph and table spacing at bottom of table cells";
     };
     String STR_USE_OBJPOSITIONING
     {
-        Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text = "%FORMATNAME %FORMATVERSION Positionierung von Objekten verwenden";
-        Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION object positioning";
+        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%FORMATNAME %FORMATVERSION Positionierung von Objekten verwenden";
+        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION object positioning";
     };
     String STR_USE_OURTEXTWRAPPING
     {
-        Text[ language_user1 ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
-        Text = "%FORMATNAME %FORMATVERSION Textfluss um Objekte verwenden";
-        Text[ english_us ] = "Use %FORMATNAME %FORMATVERSION text wrapping around objects";
+        Text [ x-comment ] = "pb: %FORMATNAME %FORMATVERSION will be replaced with 'StarOffice 6.0/7' or 'OpenOffice.org 1.1'";
+        Text [ de ] = "%FORMATNAME %FORMATVERSION Textfluss um Objekte verwenden";
+        Text [ en-US ] = "Use %FORMATNAME %FORMATVERSION text wrapping around objects";
     };
 };
 
