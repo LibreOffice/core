@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:45 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 14:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (registry::InvalidRegistryException&)
         {
-            OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
         }
     }
     return sal_False;
