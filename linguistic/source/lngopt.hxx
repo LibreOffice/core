@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-25 10:55:07 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 11:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -115,124 +118,17 @@ namespace com { namespace sun { namespace star {
     }
 }}};
 
-///////////////////////////////////////////////////////////////////////////
 
-INT16 CfgLocaleStrToLanguage( const rtl::OUString &rCfgLocaleStr );
-const rtl::OUString LanguageToCfgLocaleStr( INT16 nLanguage );
-INT16 CfgAnyToLanguage( const com::sun::star::uno::Any &rVal );
 
 ///////////////////////////////////////////////////////////////////////////
 // LinguOptions
 // This class represents all Linguistik relevant options.
 //
 
-class LinguOptConfig : public utl::ConfigItem
-{
-public:
-    LinguOptConfig( const String& rPath ) :
-        ConfigItem( rPath )
-    {}
-    ::com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames( INT16 nCfgItem );
-
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any >
-        GetProperties(
-            const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames )
-        {
-            return ConfigItem::GetProperties(rNames);
-        }
-
-    sal_Bool PutProperties(
-             const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames,
-            const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rValues)
-        {
-            return ConfigItem::PutProperties( rNames, rValues);
-        }
-
-    sal_Bool SetSetProperties(
-            const rtl::OUString& rNode,
-            com::sun::star::uno::Sequence<
-                com::sun::star::beans::PropertyValue > rValues )
-        {
-            return ConfigItem::SetSetProperties( rNode, rValues );
-        }
-
-    com::sun::star::uno::Sequence< rtl::OUString >
-        GetNodeNames( const rtl::OUString& rNode )
-        {
-            return ConfigItem::GetNodeNames( rNode );
-        }
-};
-
-
-
-struct LinguOptionsData
-{
-    Timer aSaveTimer;
-    ::vos::ORefCount    aRefCount;  // number of objects of this class
-
-    ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveDics;
-
-    // Hyphenator service specific options
-    INT16   nHyphMinLeading,
-            nHyphMinTrailing,
-            nHyphMinWordLength;
-
-    // OtherLingu service specific option
-    INT16   nOtherIndex;                    // index of foreign Linguistik to use
-
-    // misc options (non-service specific)
-    INT16   nDefaultLanguage;
-    INT16   nDefaultLanguage_CJK;
-    INT16   nDefaultLanguage_CTL;
-
-    // spelling options (non-service specific)
-    BOOL    bIsSpellSpecial;
-    BOOL    bIsSpellInAllLanguages;
-    BOOL    bIsSpellAuto;
-    BOOL    bIsSpellHideMarkings;
-    BOOL    bIsSpellReverse;
-
-    // hyphenation options (non-service specific)
-    BOOL    bIsHyphSpecial;
-    BOOL    bIsHyphAuto;
-
-    // common to SpellChecker, Hyphenator and Thesaurus service
-    BOOL    bIsGermanPreReform;
-    BOOL    bIsUseDictionaryList;
-    BOOL    bIsIgnoreControlCharacters;
-
-    // SpellChecker service specific options
-    BOOL    bIsSpellWithDigits,
-            bIsSpellUpperCase,
-            bIsSpellCapitalization;
-
-    // OtherLingu service specific options
-    BOOL    bIsStdSpell;
-    BOOL    bIsStdHyph; // TRUE if foreign Hyphenator should not be used
-    BOOL    bIsStdThes; // TRUE if foreign SpellChecker should not be used
-
-    BOOL    bIsModified;    // TRUE if data is changed
-
-    LinguOptionsData();
-
-    BOOL    LoadConfig();
-    BOOL    SaveConfig();
-
-    DECL_LINK( TimeOut, Timer* );
-/*
-     virtual void       Notify( const com::sun::star::uno::Sequence<
-                                    rtl::OUString >& rPropertyNames );
-    virtual void        Commit();
-*/
-    inline void         SetModified()
-        { bIsModified = TRUE; aSaveTimer.Start(); }
-};
-
-
 class LinguOptions
 {
-    static LinguOptionsData        *pData;
-
+    static SvtLinguOptions     *pData;
+    static vos::ORefCount       aRefCount;  // number of objects of this class
 
     //! uses default assignment-operator
 
@@ -263,9 +159,6 @@ public:
     BOOL    IsStandardSpell() const         { return pData->bIsStdSpell; }
     BOOL    IsStandardHyph() const          { return pData->bIsStdHyph; }
     BOOL    IsStandardThes() const          { return pData->bIsStdThes; }
-
-    BOOL    Load();
-    BOOL    Save();
 };
 
 
@@ -300,22 +193,8 @@ class LinguProps :
         com::sun::star::lang::XServiceInfo
     >
 {
-    class MyAppExitListener : public linguistic::AppExitListener
-    {
-        LinguOptions & rMyOpt;
-
-    public:
-        MyAppExitListener( LinguOptions &rOpt ) : rMyOpt( rOpt ) {}
-        virtual void    AtExit();
-    };
-
-
     ::cppu::OInterfaceContainerHelper           aEvtListeners;
     OPropertyListenerContainerHelper            aPropListeners;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::frame::XTerminateListener >   xExitListener;
-    MyAppExitListener                                  *pExitListener;
 
     SfxItemPropertyMap                         *pMap;
     LinguOptions                                aOpt;
@@ -330,7 +209,6 @@ class LinguProps :
 
 public:
     LinguProps();
-    virtual ~LinguProps();
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference<
