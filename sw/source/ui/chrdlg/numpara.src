@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:45:52 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,4 +439,5 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
 
