@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:26:06 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,18 +199,30 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             } while( sal_True );
         }
 
-        const SwNodeNum& rNum = *pTxtNd->GetOutlineNum();
+        const SwNodeNum * pNum = pTxtNd->GetOutlineNum();
         // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
-        sNumber = pDoc->GetOutlineNumRule()->MakeNumString( rNum, sal_False );
 
-        if( rNum.IsShowNum() )
+        if (pNum)
         {
-            const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get( rNum.GetLevel() );
-            sPost = rNFmt.GetSuffix();
-            sPre = rNFmt.GetPrefix();
+            sNumber =
+                pDoc->GetOutlineNumRule()->MakeNumString( *pNum, sal_False );
+
+            if( pNum->IsShowNum() )
+            {
+                const SwNumFmt& rNFmt =
+                    pDoc->GetOutlineNumRule()->Get( pNum->GetLevel() );
+                sPost = rNFmt.GetSuffix();
+                sPre = rNFmt.GetPrefix();
+            }
+            else
+                sPost = aEmptyStr, sPre = aEmptyStr;
         }
         else
-            sPost = aEmptyStr, sPre = aEmptyStr;
+        {
+            sPost = aEmptyStr;
+            sPre = aEmptyStr;
+            sNumber = String("??", RTL_TEXTENCODING_ASCII_US);
+        }
 
         sTitle = pTxtNd->GetExpandTxt();
 
