@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dicimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:01:47 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,6 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
 
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
@@ -176,23 +169,8 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
 
     if( rMainURL.getLength() > 0 )
     {
-        bIsReadonly = TRUE;
         BOOL bExists = FALSE;
-
-        try
-        {
-            ::ucb::Content aContent( rMainURL ,
-                    Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-            bExists = aContent.isDocument();
-            if( bExists )
-            {
-                Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" )) );
-                aAny >>= bIsReadonly;
-            }
-        }
-        catch(Exception &)
-        {
-        }
+        bIsReadonly = IsReadOnly( rMainURL, &bExists );
 
         if( !bExists )
         {
@@ -200,11 +178,11 @@ DictionaryNeo::DictionaryNeo(const OUString &rName,
             nDicVersion  = 6;
 
             //! create physical representation of an **empty** dictionary
-            //! that could be searched for (see DicList::searchForDictionaries)
+            //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
             saveEntries( rMainURL );
             bNeedEntries = FALSE;
-            bIsReadonly = isReadonly_Impl();
+            bIsReadonly = IsReadOnly( rMainURL );   // will be FALSE if saveEntries was succesfull
         }
     }
     else
@@ -980,30 +958,6 @@ OUString SAL_CALL DictionaryNeo::getLocation()
     return aMainURL;
 }
 
-BOOL DictionaryNeo::isReadonly_Impl()
-{
-    MutexGuard  aGuard( GetLinguMutex() );
-
-    BOOL bRes = FALSE;
-
-    if (hasLocation())
-    {
-        try
-        {
-            Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv;
-            ::ucb::Content aContent( getLocation(), xCmdEnv );
-            Any aAny( aContent.getPropertyValue( A2OU( "IsReadOnly" ) ) );
-            aAny >>= bRes;
-        }
-        catch (/*::com::sun::star::ucb::ContentCreation*/Exception &)
-        {
-            bRes = TRUE;
-        }
-    }
-
-    return bRes;
-}
-
 sal_Bool SAL_CALL DictionaryNeo::isReadonly()
         throw(RuntimeException)
 {
@@ -1047,7 +1001,7 @@ void SAL_CALL DictionaryNeo::storeAsURL(
     {
         aMainURL = aURL;
         bIsModified = FALSE;
-        bIsReadonly = isReadonly_Impl();
+        bIsReadonly = IsReadOnly( getLocation() );
     }
 }
 
