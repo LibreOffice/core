@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 11:03:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,17 @@
 #ifndef _XMLOFF_IMAGESTYLE_HXX
 #define _XMLOFF_IMAGESTYLE_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
@@ -72,7 +83,7 @@ class SvXMLUnitConverter;
 class SvXMLExport;
 class SvXMLImport;
 
-class XMLImageStyle
+class XMLOFF_DLLPUBLIC XMLImageStyle
 {
 public:
     XMLImageStyle();
@@ -83,9 +94,9 @@ public:
 
 private:
 
-    sal_Bool ImpExportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
+    SAL_DLLPRIVATE sal_Bool ImpExportXML( const ::rtl::OUString& rStrName, const ::com::sun::star::uno::Any& rValue,
                            SvXMLExport& rExport );
-    sal_Bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+    SAL_DLLPRIVATE sal_Bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                            ::com::sun::star::uno::Any& rValue, ::rtl::OUString& rStrName,
                            SvXMLImport& rImport );
 };
