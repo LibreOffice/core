@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.18 $
-# Date:        $Date: 2004-06-16 10:48:31 $
+# Version:     $Revision: 1.19 $
+# Date:        $Date: 2004-07-13 15:43:01 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -41,7 +41,7 @@ use File::Basename;
 #
 my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGW,
-     $platform, $cygwinver, $machine_type, $empty, $no_ant, $no_stl, $no_gcc_include, 
+     $platform, $cygwinver, $machine_type, $empty, $no_stl, $no_gcc_include, 
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
@@ -124,7 +124,6 @@ $Irix64         = "IRIX64";         # return of uname command of Irix on a 64 bi
 $Winnt          = "WINNT";          # return of uname command on Windows NT
 $Macosx         = "Darwin";         # return of uname command on Mac OS X/Darwin
 $empty          = "";               # used as argument
-$no_ant         = "NO_ANT_HOME";    # possible argument
 $no_stl         = "NO_STLPORT4";    # possible argument
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
@@ -1755,11 +1754,7 @@ if ($platform ne "$Winnt")
 {  ToFile( "TEMP",              $TEMP,              "e" );
    ToFile( "TMP",               $TEMP,              "e" );
 }
-if (( $platform eq "$Winnt" ) and ( '@USE_SHELL@' ne "4nt" )) {
-   ToFile( "SOLARSRC",          $SOLARSRC   ,       "j" );
-} else {
-   ToFile( "SOLARSRC",          $SOLARSRC,          "e" );
-}
+ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 if ( $platform eq "$Winnt" )
 {
    # these variables marked with "j" are used with cygwin only
