@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module ucb {
     @see XContentCreator
     @see XCommandProcessor
 */
-struct ContentInfo
+published struct ContentInfo
 {
     //-------------------------------------------------------------------------
     /** A type identifier string for a content.
