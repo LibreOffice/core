@@ -147,7 +147,7 @@ class SelectionDialog extends JDialog
 
     void selectAll()
     {
-        mxSelection.selectAllAccessible();
+        mxSelection.selectAllAccessibleChildren();
     }
 
     void clearSelection()
