@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tlog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 10:55:26 $
+ *  last change: $Author: ganaya $ $Date: 2001-05-04 04:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public:
     ::osl::FileBase::RC open( sal_Bool append = sal_False );
     ::osl::FileBase::RC close();
 
-    ::osl::FileBase::RC writeRes( ::rtl::tRes& oRes, sal_Bool v = sal_False ,
+    ::osl::FileBase::RC writeRes( ::rtl::TestResult& oRes, sal_Bool v = sal_False ,
                                                   sal_Bool xml = sal_False );
 
     // write methods without (default) or with echo on display
