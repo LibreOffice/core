@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-30 17:22:07 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:58:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -224,7 +224,7 @@ SOLARSHAREDBIN=$(SOLARLIBDIR)
 SONAME_SWITCH*=-h
 
 .IF "$(UNIXVERSIONNAMES)"!=""
-DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR).$($(UNIXVERSIONNAMES)_MINOR).$($(UNIXVERSIONNAMES)_MICRO)
+DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(GUI)" == "UNX"
 
