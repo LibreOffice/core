@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2001-09-26 09:16:22 $
+ *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,10 @@ CommandLineArgs::CommandLineArgs( const ::rtl::OUString& aCmdLineArgs )
 
 void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtCmdLine )
 {
-    sal_Bool   bPrintEvent = sal_False;
-    sal_Bool   bOpenEvent  = sal_True;
+    sal_Bool    bPrintEvent     = sal_False;
+    sal_Bool    bPrintToEvent   = sal_False;
+    sal_Bool    bOpenEvent      = sal_True;
+    sal_Int32   bPrinterName    = sal_False;
 
     ::vos::OExtCommandLine aCmdLine;
     sal_uInt32 nCount = aCmdLine.getCommandArgCount();
@@ -120,28 +122,57 @@ void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtC
                 if ( (*pArg == (sal_Unicode)'p') ||
                      (*pArg == (sal_Unicode)'P') )
                 {
-                    bPrintEvent = TRUE;
+                    if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
+                    {
+                        bPrintEvent = sal_False;
+                        bPrintToEvent = sal_True;
+
+                        bPrinterName = sal_True;
+                    }
+                    else
+                    {
+                        bPrintEvent = sal_True;
+                        bPrintToEvent = sal_False;
+                    }
+
                     bOpenEvent = FALSE;    // no more open events
                 }
             }
             else
             {
-                // interpreted as file name
-                if ( bOpenEvent )
+                if ( bPrinterName && bPrintToEvent )
                 {
-                    // append open event
-                    if ( m_aOpenList.getLength() > 0 )
-                        m_aOpenList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                    m_aOpenList += aArgStr;
-                    m_bOpenList = sal_True;
+                    // first argument after "-pt" this must be the printer name
+                    m_aPrinterName = aArgStr;
+                    m_bPrinterName = sal_True;
+                    bPrinterName = sal_False;
                 }
-                else if ( bPrintEvent )
+                else
                 {
-                    // append print event
-                    if( m_aPrintList.getLength() )
-                        m_aPrintList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                    m_aPrintList += aArgStr;
-                    m_bPrintList = sal_True;
+                    // interpreted as file name
+                    if ( bOpenEvent )
+                    {
+                        // append open event
+                        if ( m_aOpenList.getLength() > 0 )
+                            m_aOpenList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                        m_aOpenList += aArgStr;
+                        m_bOpenList = sal_True;
+                    }
+                    else if ( bPrintEvent )
+                    {
+                        // append print event
+                        if( m_aPrintList.getLength() )
+                            m_aPrintList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                        m_aPrintList += aArgStr;
+                        m_bPrintList = sal_True;
+                    }
+                    else
+                    {
+                        if ( m_aPrintToList.getLength() )
+                            m_aPrintToList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                        m_aPrintToList += aArgStr;
+                        m_bPrintToList = sal_True;
+                    }
                 }
             }
         }
@@ -151,8 +182,10 @@ void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtC
 void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineString )
 {
     // parse command line arguments
-    sal_Bool    bPrintEvent = sal_False;
-    sal_Bool    bOpenEvent  = sal_True;
+    sal_Bool    bPrintEvent     = sal_False;
+    sal_Bool    bOpenEvent      = sal_True;
+    sal_Bool    bPrintToEvent   = sal_False;
+    sal_Bool    bPrinterName    = sal_False;
 
     sal_Int32 nIndex = 0;
     do
@@ -170,27 +203,52 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                     if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
                     {
                         bPrintEvent = sal_True;
-                        bOpenEvent  = sal_False;    // Ab hier keine OpenEvents mehr
+                        bPrintToEvent = sal_False;
                     }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
+                    {
+                        bPrintEvent = sal_False;
+                        bPrintToEvent = sal_True;
+                        bPrinterName = sal_True;
+                    }
+
+                    bOpenEvent  = sal_False;    // Ab hier keine OpenEvents mehr
                 }
                 else
                 {
-                    // handle this argument as a filename
-                    if ( bOpenEvent )
+                    if ( bPrinterName && bPrintToEvent )
                     {
-                        // Open Event anhaengen
-                        if ( m_aOpenList.getLength() )
-                            m_aOpenList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                        m_aOpenList += aArgStr;
-                        m_bOpenList = sal_True;
+                        // first argument after "-pt" this must be the printer name
+                        m_aPrinterName = aArgStr;
+                        m_bPrinterName = sal_True;
+                        bPrinterName = sal_False;
                     }
-                    else if ( bPrintEvent )
+                    else
                     {
-                        // Print Event anhaengen
-                        if( m_aPrintList.getLength() )
-                            m_aPrintList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                        m_aPrintList += aArgStr;
-                        m_bPrintList = sal_True;
+                        // handle this argument as a filename
+                        if ( bOpenEvent )
+                        {
+                            // Open Event anhaengen
+                            if ( m_aOpenList.getLength() )
+                                m_aOpenList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                            m_aOpenList += aArgStr;
+                            m_bOpenList = sal_True;
+                        }
+                        else if ( bPrintEvent )
+                        {
+                            // Print Event anhaengen
+                            if( m_aPrintList.getLength() )
+                                m_aPrintList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                            m_aPrintList += aArgStr;
+                            m_bPrintList = sal_True;
+                        }
+                        else
+                        {
+                            if ( m_aPrintToList.getLength() )
+                                m_aPrintToList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                            m_aPrintToList += aArgStr;
+                            m_bPrintToList = sal_True;
+                        }
                     }
                 }
             }

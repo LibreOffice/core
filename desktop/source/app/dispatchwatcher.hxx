@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
+ *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,16 +112,18 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
         enum RequestType
         {
             REQUEST_OPEN,
-            REQUEST_PRINT
+            REQUEST_PRINT,
+            REQUEST_PRINTTO
         };
 
         struct DispatchRequest
         {
-            DispatchRequest( RequestType aType, const ::rtl::OUString& aFile ) :
-                aRequestType( aType ), aURL( aFile ) {}
+            DispatchRequest( RequestType aType, const ::rtl::OUString& aFile, const ::rtl::OUString aPrinter ) :
+                aRequestType( aType ), aURL( aFile ), aPrinterName( aPrinter ) {}
 
             RequestType     aRequestType;
             rtl::OUString   aURL;
+            rtl::OUString   aPrinterName;
         };
 
         typedef std::vector< DispatchRequest > DispatchList;

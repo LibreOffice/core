@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-29 15:45:22 $
+ *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,13 +123,20 @@ IMPL_STATIC_LINK( ImplForeignAppEventClass, CallEvent, void*, pEvent )
 
     if ( pAppEvent->GetEvent().CompareTo( "OPENPRINTCMDLINE" ) == COMPARE_EQUAL )
     {
-        // Special application event to execute OPEN and PRINT requests from the command line
+        // Special application event to execute OPEN, PRINT and PRINTTO requests from the command line
+        ::rtl::OUString aPrintToList;
+        ::rtl::OUString aPrinterName;
         ::rtl::OUString aOpenList( pAppEvent->GetSenderAppName() );
         ::rtl::OUString aPrintList( pAppEvent->GetData() );
+        ApplicationAddress aAppAddress;
+
+        aAppAddress = pAppEvent->GetAppAddress();
+        aPrintToList = aAppAddress.GetHost();
+        aPrinterName = aAppAddress.GetDisplay();
 
         OfficeIPCThread* pIPCThread = OfficeIPCThread::GetOfficeIPCThread();
         if ( pIPCThread )
-            pIPCThread->ExecuteCmdLineRequests( aOpenList, aPrintList );
+            pIPCThread->ExecuteCmdLineRequests( aOpenList, aPrintList, aPrintToList, aPrinterName );
     }
     else
     {
@@ -476,6 +483,8 @@ void SAL_CALL OfficeIPCThread::run()
 
                 ::rtl::OUString aOpenList;
                 ::rtl::OUString aPrintList;
+                ::rtl::OUString aPrintToList;
+                ::rtl::OUString aPrinter;
                 String          aEmpty;
                 CommandLineArgs aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
 
@@ -490,10 +499,16 @@ void SAL_CALL OfficeIPCThread::run()
 
                 aCmdLineArgs.GetOpenList( aOpenList );
                 aCmdLineArgs.GetPrintList( aPrintList );
+                aCmdLineArgs.GetPrintToList( aPrintToList );
 
                 // send requests to dispatch watcher
-                if ( aOpenList.getLength() > 0 || aPrintList.getLength() > 0 )
-                {
+                if ( aOpenList.getLength() > 0 ||
+                     aPrintList.getLength() > 0 ||
+                     ( aPrintToList.getLength() > 0 && aPrinter.getLength() > 0 ))
+                 {
+                    // use application address to transport print to data
+                    ApplicationAddress aAppAddress( aPrintToList, aPrinter, aEmpty );
+
                     ApplicationEvent* pAppEvent =
                         new ApplicationEvent( aOpenList, aEmpty, "OPENPRINTCMDLINE", aPrintList );
 
@@ -524,9 +539,14 @@ void SAL_CALL OfficeIPCThread::run()
     }
 }
 
-void OfficeIPCThread::ExecuteCmdLineRequests( const ::rtl::OUString& aOpenList, const ::rtl::OUString& aPrintList )
+void OfficeIPCThread::ExecuteCmdLineRequests(
+    const ::rtl::OUString& aOpenList,
+    const ::rtl::OUString& aPrintList,
+    const ::rtl::OUString& aPrintToList,
+    const ::rtl::OUString& aPrinterName )
 {
-    DispatchWatcher::DispatchList aDispatchList;
+    ::rtl::OUString                 aEmpty;
+    DispatchWatcher::DispatchList   aDispatchList;
 
     if ( aOpenList.getLength() > 0 )
     {
@@ -536,7 +556,7 @@ void OfficeIPCThread::ExecuteCmdLineRequests( const ::rtl::OUString& aOpenList, 
             OUString aToken = aOpenList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
             if ( aToken.getLength() > 0 )
                 aDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_OPEN, aToken ));
+                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_OPEN, aToken, aEmpty ));
         }
         while ( nIndex >= 0 );
     }
@@ -549,7 +569,20 @@ void OfficeIPCThread::ExecuteCmdLineRequests( const ::rtl::OUString& aOpenList, 
             OUString aToken = aPrintList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
             if ( aToken.getLength() > 0 )
                 aDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_PRINT, aToken ));
+                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_PRINT, aToken, aEmpty ));
+        }
+        while ( nIndex >= 0 );
+    }
+
+    if ( aPrintToList.getLength() > 0 && aPrinterName.getLength() > 0 )
+    {
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken = aPrintToList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            if ( aToken.getLength() > 0 )
+                aDispatchList.push_back(
+                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_PRINTTO, aToken, aPrinterName ));
         }
         while ( nIndex >= 0 );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:26:26 $
+ *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,11 +191,18 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         const DispatchRequest&  aDispatchRequest = *p;
 
         // create parameter array
-        sal_Int32 nCount = ( aDispatchRequest.aRequestType == REQUEST_PRINT ) ? 5 : 1;
+        sal_Int32 nCount = 1;
+
+        // we need more properties for a print/print to request
+        if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
+             aDispatchRequest.aRequestType == REQUEST_PRINTTO  )
+            nCount = 5;
+
         Sequence < PropertyValue > aArgs( nCount );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
 
-        if ( aDispatchRequest.aRequestType == REQUEST_PRINT )
+        if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
+             aDispatchRequest.aRequestType == REQUEST_PRINTTO )
         {
             aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
             aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
@@ -209,16 +216,10 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         String aName( aDispatchRequest.aURL );
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
-        // is the parameter a printername ?
-        if( aName.Len()>1 && *aName.GetBuffer()=='@' )
-        {
-            aPrinterName = aName.Copy(1);
-            continue;
-        }
-
         aName = GetURL_Impl(aName);
 
-        if ( aDispatchRequest.aRequestType == REQUEST_PRINT )
+        if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
+             aDispatchRequest.aRequestType == REQUEST_PRINTTO )
         {
             // documents opened for printing are opened readonly because they must be opened as a new document and this
             // document could be open already
@@ -288,16 +289,17 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 // request is completed
                 OfficeIPCThread::RequestsCompleted( 1 );
             }
-            else if ( aDispatchRequest.aRequestType == REQUEST_PRINT )
+            else if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
+                      aDispatchRequest.aRequestType == REQUEST_PRINTTO )
             {
                 if ( xDoc.is() )
                 {
-                    if ( aPrinterName.Len() )
+                    if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
                     {
                         // create the printer
                         Sequence < PropertyValue > aPrinterArgs( 1 );
                         aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
-                        aPrinterArgs[0].Value <<= ::rtl::OUString( aPrinterName );
+                        aPrinterArgs[0].Value <<= ::rtl::OUString( aDispatchRequest.aPrinterName );
                         xDoc->setPrinter( aPrinterArgs );
                     }
 

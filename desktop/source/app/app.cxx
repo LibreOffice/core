@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 18:15:20 $
+ *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1675,16 +1675,22 @@ void Desktop::OpenClients()
 
     if ( !pArgs->IsServer() )
     {
+        ::rtl::OUString aPrinter;
         ::rtl::OUString aOpenList;
         ::rtl::OUString aPrintList;
+        ::rtl::OUString aPrintToList;
 
         pArgs->GetOpenList( aOpenList );
         pArgs->GetPrintList( aPrintList );
+        pArgs->GetPrintToList( aPrintToList );
+        pArgs->GetPrinterName( aPrinter );
 
-        if ( aOpenList.getLength() > 0 || aPrintList.getLength() > 0 )
+        if ( aOpenList.getLength() > 0 ||
+             aPrintList.getLength() > 0 ||
+             ( aPrintToList.getLength() > 0 && aPrinter.getLength() > 0 ))
         {
             bLoaded = sal_True;
-            OfficeIPCThread::ExecuteCmdLineRequests( aOpenList, aPrintList );
+            OfficeIPCThread::ExecuteCmdLineRequests( aOpenList, aPrintList, aPrintToList, aPrinter );
         }
     }
 
@@ -1974,7 +1980,8 @@ void Desktop::OpenStartupScreen()
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
          !pCmdLine->IsTerminateAfterInit() &&
-         !pCmdLine->GetPrintList( aTmpString ) )
+         !pCmdLine->GetPrintList( aTmpString ) &&
+         !pCmdLine->GetPrintToList( aTmpString ) )
     {
         String          aBmpFileName;
         ::rtl::OUString aProductKey;
