@@ -6,8 +6,8 @@ vc	vcl\source\glyphs						nmake	-	all	vc_glyphs NULL
 vc	vcl\source\remote						nmake	-	all	vc_remo vc_glyphs vc_unot NULL
 vc	vcl\source\app							nmake	-	all	vc_app vc_remo NULL
 vc	vcl\source\gdi							nmake	-	all	vc_gdi NULL
-vc	vcl\source\window						nmake	-	all	vc_win NULL
-vc	vcl\source\control						nmake	-	all	vc_ctrl NULL
+vc	vcl\source\window						nmake	-	all	vc_win	vc_unot NULL
+vc	vcl\source\control						nmake	-	all	vc_ctrl	vc_unot NULL
 vc	vcl\source\src							nmake	-	all	vc_src NULL
 vc	vcl\source\helper						nmake	-	all	vc_hlp NULL
 vc	vcl\win\source\app						nmake	-	w	vc__appw NULL
