@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:38:07 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+
+#include <algorithm>
 
 
 #include "MDriver.hxx"
