@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.22 $
+#*  $Revision: 1.23 $
 #*
-#*  last change: $Author: kz $ $Date: 2003-08-25 15:22:30 $
+#*  last change: $Author: rt $ $Date: 2004-01-07 16:07:34 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -94,6 +94,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ar_TN.cxx  \
     $(MISC)$/localedata_ca_ES.cxx  \
     $(MISC)$/localedata_cs_CZ.cxx  \
+    $(MISC)$/localedata_cy_GB.cxx  \
     $(MISC)$/localedata_da_DK.cxx  \
     $(MISC)$/localedata_de_AT.cxx  \
     $(MISC)$/localedata_de_CH.cxx  \
@@ -255,6 +256,7 @@ SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
 SHL3OBJS=	\
     $(SLO)$/localedata_ca_ES.obj	\
     $(SLO)$/localedata_cs_CZ.obj	\
+    $(SLO)$/localedata_cy_GB.obj	\
     $(SLO)$/localedata_da_DK.obj	\
     $(SLO)$/localedata_de_AT.obj	\
     $(SLO)$/localedata_de_CH.obj	\
