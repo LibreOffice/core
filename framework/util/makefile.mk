@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-02 05:44:28 $
+#   last change: $Author: as $ $Date: 2001-05-02 13:00:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,9 +111,12 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/ocomponentenumeration.obj	\
                 $(SLO)$/odispatchprovider.obj		\
                 $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
                 $(SLO)$/writeguard.obj				\
                 $(SLO)$/readguard.obj				\
                 $(SLO)$/resetableguard.obj			\
+                $(SLO)$/gate.obj					\
                 $(SLO)$/omenudispatcher.obj			\
                 $(SLO)$/menumanager.obj				\
                 $(SLO)$/bmkmenu.obj					\
@@ -156,8 +159,11 @@ SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
                 $(SLO)$/writeguard.obj				\
                 $(SLO)$/readguard.obj				\
+                $(SLO)$/gate.obj					\
                 $(SLO)$/resetableguard.obj
 
 SHL2STDLIBS=	$(CPPULIB)							\

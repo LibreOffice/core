@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: as $ $Date: 2001-04-24 07:51:55 $
+#   last change: $Author: as $ $Date: 2001-05-02 13:00:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,36 +80,38 @@ LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 
 # --- applikation: "test" --------------------------------------------------
 
-APP1TARGET= 	test
+#APP1TARGET= 	test
 
-APP1OBJS=		$(SLO)$/test.obj
+#APP1OBJS=		$(SLO)$/test.obj
 
-APP1LIBS=		$(SLB)$/fwk_classes.lib				\
-                $(SLB)$/fwk_helper.lib
+#APP1LIBS=		$(SLB)$/fwk_classes.lib				\
+#				$(SLB)$/fwk_helper.lib
 
-APP1STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
-                $(SALLIB)							\
-                $(VOSLIB)							\
-                $(TOOLSLIB) 						\
-                $(SVTOOLLIB)						\
-                $(TKLIB)							\
-                $(COMPHELPERLIB)					\
-                $(SVLIB)
+#APP1STDLIBS=	$(CPPULIB)							\
+#				$(CPPUHELPERLIB)					\
+#				$(OSLLIB)							\
+#				$(SALLIB)							\
+#				$(VOSLIB)							\
+#				$(TOOLSLIB) 						\
+#				$(SVTOOLLIB)						\
+#				$(TKLIB)							\
+#				$(COMPHELPERLIB)					\
+#				$(SVLIB)
 
-APP1DEPN=		$(SLB)$/fwk_helper.lib				\
-                $(SLB)$/fwk_classes.lib
+#APP1DEPN=		$(SLB)$/fwk_helper.lib				\
+#				$(SLB)$/fwk_classes.lib
 
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/test.def
-.ENDIF
+#.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+#APP1DEF=		$(MISC)$/test.def
+#.ENDIF
 
 # --- application: "threadtest" --------------------------------------------------
 
 APP2TARGET= 	threadtest
 
 APP2OBJS=		$(SLO)$/threadtest.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
                 $(SLO)$/fairrwlock.obj				\
                 $(SLO)$/resetableguard.obj			\
                 $(SLO)$/gate.obj					\
@@ -124,6 +126,8 @@ APP2STDLIBS=	$(CPPULIB)							\
                 $(SVLIB)
 
 APP2DEPN=		$(SLO)$/fairrwlock.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
                 $(SLO)$/resetableguard.obj			\
                 $(SLO)$/gate.obj					\
                 $(SLO)$/readguard.obj				\

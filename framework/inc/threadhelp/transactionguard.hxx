@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: writeguard.hxx,v $
+ *  $RCSfile: transactionguard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
-#define __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#define __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -70,8 +70,8 @@
 #include <threadhelp/inoncopyable.h>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
-#include <threadhelp/irwlock.h>
+#ifndef __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
+#include <threadhelp/itransactionmanager.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -97,40 +97,40 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          implement a guard to set write locks
-    @descr          This guard should be used to set a lock for reading AND writing object internal member.
-                    We never need a own mutex to safe our internal member access - because
-                    a guard is used as function-local member only. There exist no multithreaded access to it realy ...
+    @short          implement a guard to support non breakable transactions
+    @descr          If you whish to support non breakable method calls without lockingf any mutex, rw-lock or
+                    something like that - you should use this guard implementation.
+                    Initialize it at first in your method and don't release it till end of your function!
+                    Your "transaction" is registered in ctor and automaticly released in dtor.
+                    Use set/get of working mode to enable/disable further transactions.
+                    It's possible too, to enable automaticly throwing of some exceptions for illegal
+                    transaction requests ... e.g. interface call for already disposed objects.
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
     @implements     -
     @base           INonCopyAble
 
-    @devstatus      ready to use
+    @devstatus      draft
 *//*-*************************************************************************************************************/
-
-class WriteGuard : private INonCopyAble
+class TransactionGuard : private INonCopyAble
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        //---------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------
         //  ctor/dtor
-        //---------------------------------------------------------------------------------------------------------
-         WriteGuard ( IRWLock* pLock );
-         WriteGuard ( IRWLock& rLock );
-        ~WriteGuard (                );
+        //-------------------------------------------------------------------------------------------------------------
+         TransactionGuard( ITransactionManager* pManager, EExceptionMode eMode, ERejectReason* eReason = NULL );
+         TransactionGuard( ITransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason = NULL );
+        ~TransactionGuard(                                                                                    );
 
-        //---------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------
         //  interface
-        //---------------------------------------------------------------------------------------------------------
-        void      lock      ()      ;
-        void      unlock    ()      ;
-        void      downgrade ()      ;
-        ELockMode getMode   () const;
+        //-------------------------------------------------------------------------------------------------------------
+        void stop();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -149,18 +149,17 @@ class WriteGuard : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-        WriteGuard();
+        TransactionGuard();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        IRWLock*    m_pLock ;   /// refrence to lock-member of protected object
-        ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
+        ITransactionManager*   m_pManager   ;   /// pointer to safed transaction manager
 
-};      //  class WriteGuard
+};      //  class TransactionGuard
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_

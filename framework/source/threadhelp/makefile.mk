@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: as $ $Date: 2001-03-29 13:17:16 $
+#   last change: $Author: as $ $Date: 2001-05-02 13:00:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,13 +70,15 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
-.INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
+.INCLUDE :			svpre.mk
+.INCLUDE :			settings.mk
+.INCLUDE :			sv.mk
 
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			$(SLO)$/resetableguard.obj						\
+                    $(SLO)$/transactionmanager.obj					\
+                    $(SLO)$/transactionguard.obj					\
                     $(SLO)$/fairrwlock.obj							\
                     $(SLO)$/gate.obj								\
                     $(SLO)$/readguard.obj							\

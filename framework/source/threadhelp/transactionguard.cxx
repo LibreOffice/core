@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: writeguard.hxx,v $
+ *  $RCSfile: transactionguard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
-#define __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
-
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_THREADHELP_INONCOPYABLE_H_
-#include <threadhelp/inoncopyable.h>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
-#include <threadhelp/irwlock.h>
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#include <threadhelp/transactionguard.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -83,84 +76,118 @@
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
+//  const
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  const
+//  non exported const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//  non exported declarations
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  definitions
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          implement a guard to set write locks
-    @descr          This guard should be used to set a lock for reading AND writing object internal member.
-                    We never need a own mutex to safe our internal member access - because
-                    a guard is used as function-local member only. There exist no multithreaded access to it realy ...
+    @short      ctors
+    @descr      Use these ctor methods to initialize the guard right.
+                Given reference must be valid - otherwise crashes could occure!
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention  It's not neccessary to lock any mutex here! Because a ctor should not be called
+                from different threads at the same time ... this class use no refcount mechanism!
 
-    @implements     -
-    @base           INonCopyAble
+    @seealso    -
 
-    @devstatus      ready to use
+    @param      "pManager"  pointer to transaction manager for using to register a request
+    @param      "rManager"  same as reference
+    @param      "eMode"     enable/disable throwing of exceptions for rejected calls
+    @param      "eReason"   returns reason for rejected calls if "eMode=E_NOEXCEPTIONS"!
+    @return     -
+
+    @onerror    -
 *//*-*************************************************************************************************************/
-
-class WriteGuard : private INonCopyAble
+TransactionGuard::TransactionGuard( ITransactionManager* pManager, EExceptionMode eMode, ERejectReason* eReason )
+    : m_pManager( pManager )
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-    public:
+    // If exception mode is set to E_HARDEXCETIONS we don't need a buffer to return reason!
+    // We handle it private. If a call is rejected, our manager throw some exceptions ... and the reason
+    // could be ignorable ...
+    if( eReason == NULL )
+    {
+        ERejectReason eMyReason;
+        m_pManager->acquire( eMode, eMyReason );
+    }
+    else
+    {
+        m_pManager->acquire( eMode, *eReason );
+    }
+}
 
-        //---------------------------------------------------------------------------------------------------------
-        //  ctor/dtor
-        //---------------------------------------------------------------------------------------------------------
-         WriteGuard ( IRWLock* pLock );
-         WriteGuard ( IRWLock& rLock );
-        ~WriteGuard (                );
+//*****************************************************************************************************************
+TransactionGuard::TransactionGuard( ITransactionManager& rManager, EExceptionMode eMode, ERejectReason* eReason )
+    : m_pManager( &rManager )
+{
+    // If exception mode is set to E_HARDEXCETIONS we don't need a buffer to return reason!
+    // We handle it private. If a call is rejected, our manager throw some exceptions ... and the reason
+    // could be ignorable ...
+    if( eReason == NULL )
+    {
+        ERejectReason eMyReason;
+        m_pManager->acquire( eMode, eMyReason );
+    }
+    else
+    {
+        m_pManager->acquire( eMode, *eReason );
+    }
+}
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-        void      lock      ()      ;
-        void      unlock    ()      ;
-        void      downgrade ()      ;
-        ELockMode getMode   () const;
+/*-************************************************************************************************************//**
+    @short      dtor
+    @descr      We must release the transaction manager and can forget his pointer.
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-    private:
+    @seealso    -
 
-        /*-****************************************************************************************************//**
-            @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
-                        Thats why we disable it by make it private.
+    @param      -
+    @return     -
 
-            @seealso    other ctor
+    @onerror    -
+*//*-*************************************************************************************************************/
+TransactionGuard::~TransactionGuard()
+{
+    stop();
+}
 
-            @param      -
-            @return     -
+/*-************************************************************************************************************//**
+    @short      stop current transaction
+    @descr      We must release the transaction manager and can forget his pointer.
 
-            @onerror    -
-        *//*-*****************************************************************************************************/
-        WriteGuard();
+    @attention  We don't support any start() method here - because it is not easy to
+                detect if a transaction already started or not!
+                (combination of EExceptionMode and ERejectReason)
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private member
-    //-------------------------------------------------------------------------------------------------------------
-    private:
+    @seealso    -
 
-        IRWLock*    m_pLock ;   /// refrence to lock-member of protected object
-        ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
+    @param      -
+    @return     -
 
-};      //  class WriteGuard
+    @onerror    -
+*//*-*************************************************************************************************************/
+void TransactionGuard::stop()
+{
+    if( m_pManager != NULL )
+    {
+        m_pManager->release();
+        m_pManager = NULL;
+    }
+}
 
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+}   //  namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writeguard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,70 +101,95 @@ namespace framework{
 //  definitions
 //_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-WriteGuard::WriteGuard( IRWLock*        pLock   ,
-                        ERejectReason&  eReason )
+/*-****************************************************************************************************//**
+    @short      ctor
+    @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
+                Null isn't allowed as value!
+
+    @seealso    -
+
+    @param      "pLock" ,reference to used lock member of object to protect
+    @param      "rLock" ,reference to used lock member of object to protect
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
+WriteGuard::WriteGuard( IRWLock* pLock )
     :   m_pLock ( pLock     )
     ,   m_eMode ( E_NOLOCK  )
 {
-    lock( eReason );
+    lock();
 }
 
 //*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-WriteGuard::WriteGuard( IRWLock&        rLock   ,
-                        ERejectReason&  eReason )
+WriteGuard::WriteGuard( IRWLock& rLock )
     :   m_pLock ( &rLock    )
     ,   m_eMode ( E_NOLOCK  )
 {
-    lock( eReason );
+    lock();
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      dtor
+    @descr      We unlock the used lock member automaticly if user forget it.
+
+    @seealso    -
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
 WriteGuard::~WriteGuard()
 {
     unlock();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void WriteGuard::lock( ERejectReason& eReason )
+/*-****************************************************************************************************//**
+    @short      set write lock
+    @descr      Call this method to set the write lock. The call will block till all current threads are synchronized!
+
+    @seealso    method unlock()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
+void WriteGuard::lock()
 {
     switch( m_eMode )
     {
         case E_NOLOCK       :   {
                                     // Acquire write access and set return state.
                                     // Mode is set later if it was successful!
-                                    m_pLock->acquireWriteAccess( eReason );
-                                    if( eReason == E_NOREASON )
-                                    {
-                                        m_eMode = E_WRITELOCK;
-                                    }
+                                    m_pLock->acquireWriteAccess();
+                                    m_eMode = E_WRITELOCK;
                                 }
                                 break;
         case E_READLOCK     :   {
                                     // User has downgrade to read access before!
                                     // We must release it before we can set a new write access!
-                                    m_pLock->releaseReadAccess();
-                                    m_pLock->acquireWriteAccess( eReason );
-                                    if( eReason == E_NOREASON )
-                                    {
-                                        m_eMode = E_WRITELOCK;
-                                    }
+                                    m_pLock->releaseReadAccess ();
+                                    m_pLock->acquireWriteAccess();
+                                    m_eMode = E_WRITELOCK;
                                 }
                                 break;
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      unset write lock
+    @descr      Call this method to unlock the rw-lock temp.!
+                Normaly we do it at dtor automaticly for you ...
+
+    @seealso    method lock()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
 void WriteGuard::unlock()
 {
     switch( m_eMode )
@@ -183,9 +208,18 @@ void WriteGuard::unlock()
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      downgrade write access to read access without new blocking!
+    @descr      If this write lock is set you can change it to a "read lock".
+                An "upgrade" is the same like new calling "lock()"!
+
+    @seealso    -
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
 void WriteGuard::downgrade()
 {
     if( m_eMode == E_WRITELOCK )
@@ -195,9 +229,17 @@ void WriteGuard::downgrade()
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      return internal lock state
+    @descr      For user they dont know what they are doing there ...
+
+    @seealso    -
+
+    @param      -
+    @return     Current set lock mode.
+
+    @onerror    No error should occure.
+*//*-*****************************************************************************************************/
 ELockMode WriteGuard::getMode() const
 {
     return m_eMode;

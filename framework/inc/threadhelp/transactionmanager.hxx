@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: writeguard.hxx,v $
+ *  $RCSfile: transactionmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
-#define __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONMANAGER_HXX_
+#define __FRAMEWORK_THREADHELP_TRANSACTIONMANAGER_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -70,8 +70,12 @@
 #include <threadhelp/inoncopyable.h>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
-#include <threadhelp/irwlock.h>
+#ifndef __FRAMEWORK_THREADHELP_ITRANSACTIONMANAGER_H_
+#include <threadhelp/itransactionmanager.h>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_GATE_HXX_
+#include <threadhelp/gate.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -81,6 +85,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -97,70 +105,58 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short          implement a guard to set write locks
-    @descr          This guard should be used to set a lock for reading AND writing object internal member.
-                    We never need a own mutex to safe our internal member access - because
-                    a guard is used as function-local member only. There exist no multithreaded access to it realy ...
+    @short          implement a transaction manager to support non breakable interface methods
+    @descr          Use it to support non breakable interface methods without using any thread
+                    synchronization like e.g. mutex, rw-lock!
+                    That protect your code against wrong calls at wrong time ... e.g. calls after disposing an object!
+                    Use combination of EExceptionMode and ERejectReason to detect rejected requests
+                    and react for it. You can enable automaticly throwing of exceptions too.
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
-
-    @implements     -
+    @implements     ITransactionManager
     @base           INonCopyAble
+                    ITransactionManager
 
-    @devstatus      ready to use
+    @devstatus      draft
 *//*-*************************************************************************************************************/
-
-class WriteGuard : private INonCopyAble
+class TransactionManager    :   private INonCopyAble
+                            ,   public  ITransactionManager
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
-
         //---------------------------------------------------------------------------------------------------------
         //  ctor/dtor
         //---------------------------------------------------------------------------------------------------------
-         WriteGuard ( IRWLock* pLock );
-         WriteGuard ( IRWLock& rLock );
-        ~WriteGuard (                );
+        TransactionManager();
 
         //---------------------------------------------------------------------------------------------------------
-        //  interface
+        //  IRWLock
         //---------------------------------------------------------------------------------------------------------
-        void      lock      ()      ;
-        void      unlock    ()      ;
-        void      downgrade ()      ;
-        ELockMode getMode   () const;
+        virtual EWorkingMode SAL_CALL getWorkingMode (                                                ) const;
+        virtual void         SAL_CALL setWorkingMode ( EWorkingMode   eMode                           )      ;
+        virtual sal_Bool     SAL_CALL isCallRejected ( ERejectReason& eReason                         ) const;
+        virtual void         SAL_CALL acquire        ( EExceptionMode eMode  , ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        virtual void         SAL_CALL release        (                                                ) throw( css::uno::RuntimeException, css::lang::DisposedException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-
-        /*-****************************************************************************************************//**
-            @short      disable using of these functions!
-            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
-                        Thats why we disable it by make it private.
-
-            @seealso    other ctor
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-        WriteGuard();
+        void impl_throwExceptions( EExceptionMode eMode, ERejectReason eReason ) const throw( css::uno::RuntimeException, css::lang::DisposedException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        IRWLock*    m_pLock ;   /// refrence to lock-member of protected object
-        ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
+        mutable ::osl::Mutex    m_aAccessLock           ;   /// regulate access on internal member of this instance
+        Gate                    m_aBarrier              ;   /// used to block transactions requests during change or work mode
+        EWorkingMode            m_eWorkingMode          ;   /// current working mode of object which use this manager (used to reject calls at wrong time)
+        sal_Int32               m_nTransactionCount     ;   /// every transaction request is registered by this counter
 
-};      //  class WriteGuard
+};      //  class TransactionManager
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONMANAGER_HXX_

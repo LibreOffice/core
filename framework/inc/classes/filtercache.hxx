@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-04-24 07:49:35 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,13 @@
  *
  ************************************************************************/
 
+/*TODO
+    - late init
+    - order by number!
+    - insert default detector and loader as last ones in hashes ... don't hold it as an extra member!
+      => CheckedIterator will be obsolete!
+ */
+
 #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 #define __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 
@@ -76,6 +83,10 @@
 
 #ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
 #include <threadhelp/rwlockbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
+#include <threadhelp/transactionbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_GENERAL_H_
@@ -529,12 +540,15 @@ typedef CheckedIterator< FileTypeHash >                             CheckedTypeI
 
     @implements     -
     @base           FairRWLockBase
+                    TransactionBase
                     ConfigItem
 
     @devstatus      ready to use
+    @threadsafe     yes
 *//*-*************************************************************************************************************/
 
 class FilterCache   :   private FairRWLockBase
+                    ,   private TransactionBase
                     ,   public  ::utl::ConfigItem
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -547,19 +561,6 @@ class FilterCache   :   private FairRWLockBase
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      standard constructor
-            @descr      This will initialize the cache automaticly ... but at first call only!
-                        These class use a refcount mechanism to share cache between different ownern.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    An assertion is thrown and the cache will be empty!
-                        Method isValid() returns false then.
-        *//*-*****************************************************************************************************/
 
          FilterCache();
 
@@ -936,6 +937,8 @@ class FilterCache   :   private FairRWLockBase
             @short      support query mode
             @descr      These helper functions returns subsets of our internal cached values.
 
+            @attention  This methods are threadsafe by himself! Don't call it with any locked rw-lock!
+
             @seealso    methods query...()
 
             @param      -
@@ -944,9 +947,9 @@ class FilterCache   :   private FairRWLockBase
             @onerror    We return empty structures.
         *//*-*****************************************************************************************************/
 
-        css::uno::Sequence< ::rtl::OUString >   impl_queryFilter_ByDocumentService              (   const   ::rtl::OUString&    sService    ) const;
-        css::uno::Sequence< ::rtl::OUString >   impl_queryFilter_ByDocumentService_WithDefault  (   const   ::rtl::OUString&    sService    ) const;
-        css::uno::Sequence< ::rtl::OUString >   impl_queryFilter_ByFlags                        (           sal_Int32           nFlags      ) const;
+        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService              (   const   ::rtl::OUString&    sService    ) const;
+        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService_WithDefault  (   const   ::rtl::OUString&    sService    ) const;
+        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByFlags                        (           sal_Int32           nFlags      ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

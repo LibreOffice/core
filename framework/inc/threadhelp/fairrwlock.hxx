@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fairrwlock.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:33 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,10 @@ namespace framework{
                     for writer this mutex is used to have an exclusiv access on your class member!
                     => It's a multi-reader/single-writer lock, which no preferred accessor.
 
-    @implements     -
-    @base           IRWLock
+    @implements     IRWlock
+    @base           INonCopyAble
+                    IRWLock
+
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
@@ -128,193 +130,19 @@ class FairRWLock    :   private INonCopyAble
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        /*-****************************************************************************************************//**
-            @short      standard ctor
-            @descr      Initialize instance with right start values for correct working.
-                        no reader could exist               =>  m_nReadCount   = 0
-                        user initialize himself             =>  m_eWorkingMode = E_INIT
-                        don't block first comming writer    =>  m_aWriteCondition.set()
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
+        //---------------------------------------------------------------------------------------------------------
+        //  ctor/dtor
+        //---------------------------------------------------------------------------------------------------------
         FairRWLock();
 
-        /*-****************************************************************************************************//**
-            @short      set new working mode for this lock
-            @descr      These lock implementation knows three states of working: E_INIT, E_WORK, E_CLOSE
-                        You can step during this ones only from the left to the right side and start at left side again!
-                        (This is neccessary e.g. for refcounted objects!)
-                        Follow results occure:
-                            E_INIT  :   All requests on this lock are refused.
-                                        It's your decision to react in a right way.
-                                        Otherwise this call will block till write access to internal member is available.
-
-                            E_WORK  :   The object work now. The full functionality is available.
-                                        This set-call will block till write access to internal member is available.
-
-                            E_CLOSE :   All further requests on this lock will be refused.
-                                        It's your decision to react in a right way.
-                                        This set-call will block till write access to internal member is available AND
-                                        all current reader or writer are gone!
-
-            @seealso    -
-
-            @param      "eMode", is the new mode - but we don't accept setting mode in wrong order!
-            @return     -
-
-            @onerror    We do nothing.
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL setWorkingMode( EWorkingMode eMode );
-
-        /*-****************************************************************************************************//**
-            @short      get current working mode
-            @descr      If you stand in your close() or init() method ... but don't know
-                        if you called more then ones(!) ... you can use this function to get
-                        right information.
-                        e.g:    You have a method init() which is used to change working mode from
-                                E_INIT to E_WORK and should be used to initialize some member too ...
-                                What should you do:
-                                    void init( sal_Int32 nValue )
-                                    {
-                                        // Best place to initialize internal member is before you call
-                                        // setWorkingMode() ... but if somewhere call this function
-                                        // more then ones ...
-                                        // => check current mode before!
-
-                                        if( m_aLock.getWorkingMode() == E_INIT )
-                                        {
-                                            // OK - This is the first call of init().
-                                            // Set new value and change mode then.
-
-                                            m_nMember = nValue;
-                                            m_aLock.setWorkingMode( E_WORK );
-
-                                            // After that it's not a good idea to work with internal member
-                                            // without using the lock!
-                                        }
-                                    }
-
-            @attention  I think it's an easy method - we don't need any mutex here!
-
-            @seealso    method setWorkingMode()
-
-            @param      -
-            @return     Current set mode.
-
-            @onerror    No error should occure.
-        *//*-*****************************************************************************************************/
-
-        virtual EWorkingMode SAL_CALL getWorkingMode();
-
-        /*-****************************************************************************************************//**
-            @short      set lock for reading
-            @descr      A guard should call this method to acquire read access on your member.
-                        Writing isn't allowed then - but nobody could check it for you!
-                        You must look for a possible refused call by check given parameter - eReason!
-                        What you should do then is your problem ... but there is no access to
-                        safed variables allowed!
-
-            @seealso    method setWorkingMode()
-            @seealso    method releaseReadAccess()
-
-            @param      "eRejectReason", is the reason for rejected calls.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL acquireReadAccess( ERejectReason& eReason );
-
-        /*-****************************************************************************************************//**
-            @short      reset lock for reading
-            @descr      A guard should call this method to release read access on your member.
-
-            @seealso    method acquireReadAccess()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL releaseReadAccess();
-
-        /*-****************************************************************************************************//**
-            @short      set lock for writing
-            @descr      A guard should call this method to acquire write access on your member.
-                        Reading is allowed too - of course.
-                        You must look for a possible refused call by check given parameter - eReason!
-                        What you should do then is your problem ... but there is no access to
-                        safed variables allowed!
-                        After successfully calling of this method you are the only writer.
-
-            @seealso    method setWorkingMode()
-            @seealso    method releaseWriteAccess()
-
-            @param      "eRejectReason", is the reason for rejected calls.
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL acquireWriteAccess( ERejectReason& eReason );
-
-        /*-****************************************************************************************************//**
-            @short      reset lock for writing
-            @descr      A guard should call this method to release write access on your member.
-
-            @seealso    method acquireWriteAccess()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual void SAL_CALL releaseWriteAccess();
-
-        /*-****************************************************************************************************//**
-            @short      downgrade a write access to a read access
-            @descr      A guard should call this method to change a write to a read access.
-                        New readers can work too - new writer are blocked!
-
-            @attention  Don't call this method if you are not a writer!
-                        Results are not defined then ...
-                        An upgrade can't be implemented realy ... because acquiring new access
-                        will be the same - there no differences!
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
+        //---------------------------------------------------------------------------------------------------------
+        //  IRWLock
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL acquireReadAccess   ();
+        virtual void SAL_CALL releaseReadAccess   ();
+        virtual void SAL_CALL acquireWriteAccess  ();
+        virtual void SAL_CALL releaseWriteAccess  ();
         virtual void SAL_CALL downgradeWriteAccess();
-
-        /*-****************************************************************************************************//**
-            @short      look for rejected calls without using a lock
-            @descr      Sometimes user need a possibility to get information about rejected calls
-                        without setting a read- or write lock!
-                        e.g. All member are threadsafe by himself ... but we will look for already disposed objects!
-
-            @seealso    -
-
-            @param      "eReason" returns reason of a rejected call
-            @return     true if call was rejected, false otherwise
-
-            @onerror    We return false.
-        *//*-*****************************************************************************************************/
-
-        virtual sal_Bool SAL_CALL isCallRejected( ERejectReason& eReason );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
@@ -322,7 +150,6 @@ class FairRWLock    :   private INonCopyAble
     private:
 
         ::osl::Mutex        m_aAccessLock       ;   /// regulate access on internal member of this instance
-        EWorkingMode        m_eWorkingMode      ;   /// current working mode of object which use this lock (used to reject calls at wrong time)
         ::osl::Mutex        m_aSerializer       ;   /// serialze incoming read/write access threads
         ::osl::Condition    m_aWriteCondition   ;   /// a writer must wait till current working reader are gone
         sal_Int32           m_nReadCount        ;   /// every reader is registered - the last one open the door for waiting writer

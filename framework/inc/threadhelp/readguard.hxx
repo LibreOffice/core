@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readguard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:33 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,18 +103,13 @@ namespace framework{
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it realy ...
 
-    @attention      1) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
-                    2) Every method support a return value "eReason". Use this value to react for refused lock-calls!
-                       This means: You can't work with this object! We are not ready for working yet ...
-                       React for that in a right way.
-                       (see "irwlock.h" for further informations)
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
     @implements     -
     @base           INonCopyAble
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-
 class ReadGuard : private INonCopyAble
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -122,84 +117,19 @@ class ReadGuard : private INonCopyAble
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        /*-****************************************************************************************************//**
-            @short      ctor
-            @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
-                        Null isn't allowed as value!
+          //---------------------------------------------------------------------------------------------------------
+           //   ctor/dtor
+           //---------------------------------------------------------------------------------------------------------
+         ReadGuard ( IRWLock* pLock );
+         ReadGuard ( IRWLock& rLock );
+        ~ReadGuard (                );
 
-            @seealso    -
-
-            @param      "pLock",    reference to used lock member of object to protect
-            @param      "rLock",    reference to used lock member of object to protect
-            @param      "eReason",  return value if call was refused
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        ReadGuard(  IRWLock*        pLock   ,
-                    ERejectReason&  eReason );
-        ReadGuard(  IRWLock&        rLock   ,
-                    ERejectReason&  eReason );
-
-        /*-****************************************************************************************************//**
-            @short      dtor
-            @descr      We unlock the used lock member automaticly if user forget it.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        ~ReadGuard();
-
-        /*-****************************************************************************************************//**
-            @short      set read lock
-            @descr      Call this method to set the read lock. The call will block till all current threads are synchronized!
-                        If the return value right you can work ... If return value is different from E_NONE you have no permission!
-                        May be the lock call was refused and must be handled in another way!
-
-            @seealso    method unlock()
-
-            @param      "eReason", return the reason for rejected calls
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void lock( ERejectReason& eReason );
-
-        /*-****************************************************************************************************//**
-            @short      unset read lock
-            @descr      Call this method to unlock the rw-lock temp.!
-                        Normaly we do it at dtor automaticly for you ...
-
-            @seealso    method lock()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void unlock();
-
-        /*-****************************************************************************************************//**
-            @short      return internal lock state
-            @descr      For user they dont know what they are doing there ...
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        sal_Bool isLocked() const;
+          //---------------------------------------------------------------------------------------------------------
+           //   interface
+           //---------------------------------------------------------------------------------------------------------
+        void     lock     ()      ;
+        void     unlock   ()      ;
+        sal_Bool isLocked () const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -218,7 +148,6 @@ class ReadGuard : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
         ReadGuard();
 
     //-------------------------------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadtest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:24:14 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,16 @@
 #include <threadhelp/resetableguard.hxx>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#include <threadhelp/transactionguard.hxx>
+#endif
+
 #ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
 #include <threadhelp/rwlockbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
+#include <threadhelp/transactionbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -151,9 +159,9 @@ using namespace ::framework ;
 
 /*---------------- Use follow defines to enable/disable some special features of this little test program! -------*/
 
-//#define ENABLE_LOG
+#define ENABLE_LOG
 //#define ENABLE_THREADDELAY
-//#define ENABLE_REQUESTCOUNT
+#define ENABLE_REQUESTCOUNT
 
 /*----------------------------------------------------------------------------------------------------------------*/
 
@@ -341,9 +349,12 @@ sal_uInt16 getRandomValue()
     @attention      Our public base class FaiRWLockBase is a struct with a RWLock as member.
                     This member can be used by guards to safe access at internal variables
                     in interface methods.
+                    Another baseclass is the TransactionBase. They support rejection of wrong calls at wrong time.
+                    e.g. calls after closing object!
 *//*-*************************************************************************************************************/
 
-class ThreadSafeClass : private FairRWLockBase
+class ThreadSafeClass : private TransactionBase
+                      , private FairRWLockBase
 {
     public:
 
@@ -383,7 +394,8 @@ class ThreadSafeClass : private FairRWLockBase
 
 //_________________________________________________________________________________________________________________
 ThreadSafeClass::ThreadSafeClass()
-    :   FairRWLockBase  (   )   /// This struct "export" a public lock member, which can be used by our methods!
+    :   TransactionBase (   )
+    ,   FairRWLockBase  (   )
     ,   m_nA            ( 0 )
     #ifdef ENABLE_REQUESTCOUNT
     ,   m_nReadCount    ( 0 )
@@ -400,132 +412,108 @@ ThreadSafeClass::~ThreadSafeClass()
 //_________________________________________________________________________________________________________________
 void ThreadSafeClass::init( sal_Int32 nA, sal_Int32 nThreadID )
 {
+    // Set write lock for setting internal member AND
+    // protect changing of working mode!
+    WriteGuard aWriteLock( m_aLock );
+
     LOG_INIT( nA, nThreadID )
-    // Best place to initialize internal member is before you call
-    // setWorkingMode() ... but if somewhere call this function
-    // more then ones ...
-    // => check current mode before!
-    switch( m_aLock.getWorkingMode() )
+
+    // Look for multiple calls of this method first!
+    // Use E_SOFTEXCEPTIONS to disable automaticly throwing of exceptions for some working modes.
+    ERejectReason       eReason;
+    TransactionGuard    aTransaction( m_aTransactionManager, E_NOEXCEPTIONS, eReason );
+    if( eReason == E_UNINITIALIZED )
     {
-        case E_INIT     :   {
-                                // OK - This is the first call of init().
-                                // Set new value and change mode then.
-                                m_nA = nA;
-                                m_aLock.setWorkingMode( E_WORK );
-                                // After that it's not a good idea to work with internal member
-                                // iwthout using the lock!
-                            }
-                            break;
-        case E_WORK     :   {
-                                LOG_ERROR( "ThreadSafeClass::init()", "Don't call this method more then ones!" )
-                            }
-                            break;
-        case E_CLOSE    :   LOG_CLOSEEXCEPTION( "init()", nThreadID )
-                            break;
+        // OK, it must be the first call and we are synchronized with all other threads by using the write lock!
+        // Otherwise (e.g. if working mode == E_WORK) we get a exception and follow lines are never called.
+
+        // We can set our member and change the working mode now.
+        m_nA = nA;
+        m_aTransactionManager.setWorkingMode( E_WORK );
     }
 }
 
 //_________________________________________________________________________________________________________________
 void ThreadSafeClass::close( sal_Int32 nThreadID )
 {
+    // Make it threadsafe.
+    // It must be an exclusiv access! => WriteLock!
+    WriteGuard aWriteLock( m_aLock );
+
     LOG_CLOSE( nThreadID )
-    // First get current working mode to prevent us against
-    // multiple calls of this method or calls at wrong time!
-    switch( m_aLock.getWorkingMode() )
+
+    // We must look for multiple calls of this method.
+    // Try to register this method as a transaction.
+    // In combination with E_HARDEXCEPTIONS only working mode E_WORK pass this barrier.
+    ERejectReason       eReason;
+    TransactionGuard    aTransaction( m_aTransactionManager, E_NOEXCEPTIONS, eReason );
+    if( eReason == E_NOREASON )
     {
-        case E_INIT     :   LOG_INITEXCEPTION( "close()", nThreadID )
-                            //throw Exception();
-                            break;
-        case E_CLOSE    :   LOG_CLOSEEXCEPTION( "close()", nThreadID )
-                            //throw Exception();
-                            break;
-        case E_WORK     :   {
-                                // This is the only accepted mode for this method.
-                                // Now we should change it to E_CLOSE before we do something
-                                // with our internal member!!!
-                                // This call will block till all current reader and writer are gone!
-                                m_aLock.setWorkingMode( E_CLOSE );
-                                // Now we are alone ...
-                                // All further calls to this object are rejected.
-                                m_nA = 0;
-                            }
-                            break;
+        // Change working mode to BEFORECLOSE to enable rejection of normal interface calls
+        // and enable SOFTEXCEPTION mode for some impl- or helper methods!
+        // Attention: We must stop successful registered transaction first ...
+        // because setWorkingMode() blocks and wait for all current existing ones!
+        aTransaction.stop();
+        m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
+
+        // Now we are alone ...
+        // All further calls to this object are rejected ...
+        // (not all ... some special ones can work by using E_SOFTEXCEPTIONS!)
+
+        // Deinitialize all member and set working mode to E_CLOSE.
+        m_nA = 0;
+        m_aTransactionManager.setWorkingMode( E_CLOSE );
     }
 }
 
 //_________________________________________________________________________________________________________________
 void ThreadSafeClass::setA( sal_Int32 nA, sal_Int32 nThreadID   )
 {
+    // Make it threadsafe.
+    WriteGuard aWriteLock( m_aLock );
+
     LOG_SETA_START( nA, nThreadID )
 
-    // Try to set a write lock ... but look for
-    // rejected calls. We must react for.
-    ERejectReason   eReason;
-    WriteGuard      aGuard( m_aLock, eReason );
-    switch( eReason )
+    // Register this method as a transaction to prevent code against wrong calls
+    // after close() or before init()!
+    ERejectReason       eReason;
+    TransactionGuard    aTransaction( m_aTransactionManager, E_NOEXCEPTIONS, eReason );
+    if( eReason == E_NOREASON )
     {
-        case E_UNINITIALIZED    :   {
-                                        // This object isn't initialized => not ready for working!
-                                        // We should throw an exception or do nothing.
-                                        LOG_INITEXCEPTION( "setA()", nThreadID )
-                                        //throw Exception();
-                                    }
-                                    break;
-        case E_CLOSED           :   {
-                                        // This object is closed => not ready for working!
-                                        // We should throw an exception or do nothing.
-                                        LOG_CLOSEEXCEPTION( "setA()", nThreadID )
-                                        //throw Exception();
-                                    }
-                                    break;
-        case E_NOREASON         :   {
-                                        // This object is ready for working and we have full write access.
-                                        // We can work with our member.
-                                        m_nA = nA;
-                                        #ifdef ENABLE_REQUESTCOUNT
-                                        osl_incrementInterlockedCount( &m_nWriteCount );
-                                        #endif
-                                    }
-                                    break;
+        // This object is ready for working and we have full write access.
+        // We can work with our member.
+        m_nA = nA;
+        #ifdef ENABLE_REQUESTCOUNT
+        osl_incrementInterlockedCount( &m_nWriteCount );
+        #endif
     }
-
     LOG_SETA_END( nA, eReason, nThreadID )
 }
 
 //_________________________________________________________________________________________________________________
 sal_Int32 ThreadSafeClass::getA( sal_Int32 nThreadID )
 {
+    // Make it threadsafe.
+    ReadGuard aReadLock( m_aLock );
+
     LOG_GETA_START( nThreadID )
 
-    // Try to set a read lock ... but look for
-    // rejected calls. We must react for.
-    // Define a default return value for this case.
-    sal_Int32       nReturn = 0;
-    ERejectReason   eReason;
-    ReadGuard       aGuard( m_aLock, eReason );
-    switch( eReason )
+    // Register this method as a transaction to prevent code against wrong calls
+    // after close() or before init()!
+    sal_Int32           nReturn = 0;
+    ERejectReason       eReason;
+    TransactionGuard    aTransaction( m_aTransactionManager, E_NOEXCEPTIONS, eReason );
+    if( eReason == E_NOREASON )
     {
-        case E_UNINITIALIZED    :   {
-                                        LOG_INITEXCEPTION( "getA()", nThreadID )
-                                        //throw Exception();
-                                    }
-                                    break;
-        case E_CLOSED           :   {
-                                        LOG_CLOSEEXCEPTION( "getA()", nThreadID )
-                                        //throw Exception();
-                                    }
-                                    break;
-        case E_NOREASON         :   {
-                                        nReturn = m_nA;
-                                        #ifdef ENABLE_REQUESTCOUNT
-                                        osl_incrementInterlockedCount( &m_nReadCount );
-                                        #endif
-                                    }
-                                    break;
+        // This object is ready for working and we have a read access.
+        // We can work with our member.
+        nReturn = m_nA;
+        #ifdef ENABLE_REQUESTCOUNT
+        osl_incrementInterlockedCount( &m_nReadCount );
+        #endif
     }
 
     LOG_GETA_END( nReturn, eReason, nThreadID )
-
     return nReturn;
 }
 
@@ -533,44 +521,33 @@ sal_Int32 ThreadSafeClass::getA( sal_Int32 nThreadID )
 sal_Int32 ThreadSafeClass::workA(   sal_Int32   nA          ,
                                     sal_Int32   nThreadID   )
 {
-    LOG_WORKA_START( nA, nThreadID )
     // This method test the downgrade-mechanism of used lock implementation!
+    // Make it threadsafe.
+    WriteGuard aWriteLock( m_aLock );
 
-    // Try to set a write lock first ... but look for
-    // rejected calls. We must react for.
-    // Define a default return value for this case.
-    sal_Int32       nReturn = 0;
-    ERejectReason   eReason;
-    WriteGuard      aGuard( m_aLock, eReason );
-    switch( eReason )
+    LOG_WORKA_START( nA, nThreadID )
+
+    // Register this method as a transaction to prevent code against wrong calls
+    // after close() or before init()!
+    sal_Int32           nReturn = 0;
+    ERejectReason       eReason;
+    TransactionGuard    aTransaction( m_aTransactionManager, E_NOEXCEPTIONS, eReason );
+    if( eReason == E_NOREASON )
     {
-        case E_UNINITIALIZED    :   {
-                                        LOG_INITEXCEPTION( "workA()", nThreadID )
-                                        //throw Exception();
-                                    }
-                                    break;
-        case E_CLOSED           :   {
-                                        LOG_CLOSEEXCEPTION( "workA()", nThreadID )
-                                        //throw Exception();
-                                    }
-                                    break;
-        case E_NOREASON         :   {
-                                        // We have write access to our member.
-                                        // Set new value.
-                                        m_nA = nA;
-                                        #ifdef ENABLE_REQUESTCOUNT
-                                        osl_incrementInterlockedCount( &m_nWriteCount );
-                                        #endif
+        // We have write access to our member.
+        // Set new value.
+        m_nA = nA;
+        #ifdef ENABLE_REQUESTCOUNT
+        osl_incrementInterlockedCount( &m_nWriteCount );
+        #endif
 
-                                        // Downgrade write access to read access and read the set value again.
-                                        // This call can't be rejected - but it can fail!
-                                        aGuard.downgrade();
-                                        nReturn = m_nA;
-                                        #ifdef ENABLE_REQUESTCOUNT
-                                        osl_incrementInterlockedCount( &m_nReadCount );
-                                        #endif
-                                    }
-                                    break;
+        // Downgrade write access to read access and read the set value again.
+        // This call can't be rejected - but it can fail!
+        aWriteLock.downgrade();
+        nReturn = m_nA;
+        #ifdef ENABLE_REQUESTCOUNT
+        osl_incrementInterlockedCount( &m_nReadCount );
+        #endif
     }
 
     LOG_WORKA_END( nReturn, eReason, nThreadID )

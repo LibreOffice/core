@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,13 +205,16 @@ Reference< XFrame > TaskCreator::createNewSystemTask( const OUString& sName )
                 ( xTask.is()    ==  sal_True    )
             )
         {
+            // Set window on task.
+            // Do it before you call other interface methods on task-object ...
+            // because this object must be initialized before you can do such things.
+            // Otherwise he throw an exception for UNINITIALIZED working mode!
+            xTask->initialize( xWindow );
             // Don't forget to create tree-bindings! Set this desktop as parent of new task ...
             // ... and append it to his container.
             // (Parent will automaticly set by "append()"!)
             xTask->setName( sFrameName );
             xDesktop->getFrames()->append( xTask );
-            // Set window on task.
-            xTask->initialize( xWindow );
             xWindow->setEnable( sal_True );
         }
     }

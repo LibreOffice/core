@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: irwlock.h,v $
+ *  $RCSfile: transactionbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
  *
@@ -59,20 +59,24 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
-#define __FRAMEWORK_THREADHELP_IRWLOCK_H_
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_H_
+#define __FRAMEWORK_THREADHELP_TRANSACTIONBASE_H_
 
 //_________________________________________________________________________________________________________________
-//  includes
+//  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONMANAGER_HXX_
+#include <threadhelp/transactionmanager.hxx>
 #endif
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -81,55 +85,79 @@
 namespace framework{
 
 //_________________________________________________________________________________________________________________
+//  const
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @descr          A guard (specialy a write guard) support different internal working states.
-                    His lock can set for reading or writing/reading! Or he was unlocked by user ...
-*//*-*************************************************************************************************************/
-enum ELockMode
-{
-    E_NOLOCK    ,
-    E_READLOCK  ,
-    E_WRITELOCK
-};
+    @short          make it possible to instanciate a transacion manager as first member!
+    @descr          If you use a transaction manager as a member of your class and whish to use it earlier then other ones
+                    you should have a look on this implementation. You must use it as the first base class
+                    of your implementation - because base classes are initialized by his order and before your
+                    member! Thats why ist a good place to declare this member.
 
-/*-************************************************************************************************************//**
-    @descr          We implement two guards for using an rw-lock. But if you wish to implement
-                    different rw-locks to you will have problems by using with same guard implementation!
-                    Thats why we define this "pure virtual base class" ...
-                    All rw-locks must support this base interface for working and all guard must use this one too!
+    @implements     -
+    @base           -
+
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
-class IRWLock
+struct TransactionBase
 {
     //-------------------------------------------------------------------------------------------------------------
-    //  public methods
+    //  public Methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
         /*-****************************************************************************************************//**
-            @descr      The dtor isn't realy important ... but if you whish to use derived classes
-                        with any pointer ... you must have it!
-        *//*-*****************************************************************************************************/
-        virtual ~IRWLock() {}
+            @short      return a reference to a static manager
+            @descr      Sometimes we need the global member! (e.g. in our own static methods)
+                        We create our own "class global static" member threadsafe.
+                        It will be created at first call only!
+                        All other requests use these created one then directly.
 
-        /*-****************************************************************************************************//**
-            @descr      These functions must be supported by a derived class!
-                            acquireReadAccess()     -try to register thread as reader
-                            releaseReadAccess()     -unregister thread as reader
-                            acquireWriteAccess()    -try to register thread as writer
-                            releaseWriteAccess()    -unregister thread as writer
-                            downgradeWriteAccess()  -make writer to reader
-        *//*-*****************************************************************************************************/
-        virtual void SAL_CALL acquireReadAccess    () = 0;
-        virtual void SAL_CALL releaseReadAccess    () = 0;
-        virtual void SAL_CALL acquireWriteAccess   () = 0;
-        virtual void SAL_CALL releaseWriteAccess   () = 0;
-        virtual void SAL_CALL downgradeWriteAccess () = 0;
+            @seealso    -
 
-};      //  class IRWLock
+            @param      -
+            @return     A reference to a static member.
+
+            @onerror    No error should occure.
+        *//*-*****************************************************************************************************/
+
+        static TransactionManager& getGlobalTransactionManager()
+        {
+            // Initialize static member only for one time!
+            static TransactionManager* pManager = NULL;
+            // If these method first called (member not already exist!) ...
+            if( pManager == NULL )
+            {
+                // ... we must create a new one. Protect follow code with the global mutex -
+                // It must be - we create a static variable!
+                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+                // We must check our pointer again - because ... another instance of ouer class could be faster then these one!
+                if( pManager == NULL )
+                {
+                    // Create the new manager and set it for return on static variable.
+                    static TransactionManager aManager;
+                    pManager = &aManager;
+                }
+            }
+            // Return new created or already existing object.
+            return *pManager;
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        mutable TransactionManager    m_aTransactionManager    ;   /// "your" public manager-member!
+                                                                   /// Make it mutable for using in const functions!
+
+};      //  struct TransactionBase
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_H_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
 #include <threadhelp/rwlockbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
+#include <threadhelp/transactionbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
@@ -146,12 +150,14 @@ typedef TFrameContainer::const_iterator                             TConstFrameI
 
     @implements     -
     @base           FairRWLockBase
+                    TransactionBase
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
 class FrameContainer : private FairRWLockBase
+                     , private TransactionBase
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods

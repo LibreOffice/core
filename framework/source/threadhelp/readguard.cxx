@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readguard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,54 +97,82 @@ namespace framework{
 //  definitions
 //_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-ReadGuard::ReadGuard(   IRWLock*        pLock   ,
-                        ERejectReason&  eReason )
+/*-****************************************************************************************************//**
+    @short      ctor
+    @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
+                Null isn't allowed as value!
+
+    @seealso    -
+
+    @param      "pLock" ,reference to used lock member of object to protect
+    @param      "rLock" ,reference to used lock member of object to protect
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
+ReadGuard::ReadGuard( IRWLock* pLock )
     :   m_pLock     ( pLock     )
     ,   m_bLocked   ( sal_False )
 {
-    lock( eReason );
+    lock();
 }
 
 //*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-ReadGuard::ReadGuard(   IRWLock&        rLock   ,
-                        ERejectReason&  eReason )
+ReadGuard::ReadGuard( IRWLock& rLock )
     :   m_pLock     ( &rLock    )
     ,   m_bLocked   ( sal_False )
 {
-    lock( eReason );
+    lock();
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      dtor
+    @descr      We unlock the used lock member automaticly if user forget it.
+
+    @seealso    -
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
 ReadGuard::~ReadGuard()
 {
     unlock();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void ReadGuard::lock( ERejectReason& eReason )
+/*-****************************************************************************************************//**
+    @short      set read lock
+    @descr      Call this method to set the read lock. The call will block till all current threads are synchronized!
+
+    @seealso    method unlock()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
+void ReadGuard::lock()
 {
     if( m_bLocked == sal_False )
     {
-        m_pLock->acquireReadAccess( eReason );
-        if( eReason == E_NOREASON )
-        {
-            m_bLocked = sal_True;
-        }
+        m_pLock->acquireReadAccess();
+        m_bLocked = sal_True;
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      unset read lock
+    @descr      Call this method to unlock the rw-lock temp.!
+                Normaly we do it at dtor automaticly for you ...
+
+    @seealso    method lock()
+
+    @param      -
+    @return     -
+
+    @onerror    -
+*//*-*****************************************************************************************************/
 void ReadGuard::unlock()
 {
     if( m_bLocked == sal_True )
@@ -154,9 +182,17 @@ void ReadGuard::unlock()
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+/*-****************************************************************************************************//**
+    @short      return internal lock state
+    @descr      For user they dont know what they are doing there ...
+
+    @seealso    -
+
+    @param      -
+    @return     true, if lock is set, false otherwise.
+
+    @onerror    -
+*//*-*****************************************************************************************************/
 sal_Bool ReadGuard::isLocked() const
 {
     return m_bLocked;

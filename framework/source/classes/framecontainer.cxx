@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-12 13:26:22 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <classes/framecontainer.hxx>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
+#include <threadhelp/transactionguard.hxx>
+#endif
+
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
 #endif
@@ -114,14 +118,16 @@ using namespace ::com::sun::star::frame     ;
 //  constructor
 //*****************************************************************************************************************
 FrameContainer::FrameContainer()
-        // initialize RWLock-member at first!
-        :   FairRWLockBase()
+        // initialize base classes first.
+        // Order is neccessary for right initilization of his and OUR member ... m_aLock, m_aTransactionManager ...
+        : FairRWLockBase ()
+        , TransactionBase()
 {
     // Make object ready for working.
     // change working mode from E_INIT to E_WORK
-    // We don't must look for current set modi - a ctor
-    // couldn't be called more then ones ... I think so :-)
-    m_aLock.setWorkingMode( E_WORK );
+    // We don't must look for current set modi -
+    // a ctor couldn't be called more then ones ... I think so :-)
+    m_aTransactionManager.setWorkingMode( E_WORK );
 }
 
 //*****************************************************************************************************************
@@ -134,13 +140,15 @@ FrameContainer::~FrameContainer()
     // but I think it's alittle bit superflous by using in dtor ...
     // May be - it's neccessary?
     // So we wait for current working reader/writer till they finish her work.
-    m_aLock.setWorkingMode( E_CLOSE );
+    m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
     // Disable possible active quit timer!
     // He can be active for owner=desktop only.
     impl_disableQuitTimer();
     // Don't forget to free memory!
     impl_clear();
+
+    m_aTransactionManager.setWorkingMode( E_CLOSE );
 }
 
 //*****************************************************************************************************************
@@ -155,16 +163,15 @@ void FrameContainer::append( const Reference< XFrame >& xFrame )
     //      These frames are created (e.g. by dispatch()) but not used ...
     LOG_ASSERT2( implcp_append( xFrame ), "FrameContainer::append()", "Invalid parameter detected!"             )
     LOG_ASSERT2( exist(xFrame)==sal_True, "FrameContainer::append()", "New frame already exist in container!"   )
-    // LOG_ASSERT2( impldbg_existZombie(), "FrameContainer::append()", "Zombie frame detected!"                 )
+
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
 
     // Append new frame to container.
-    // Make it threadsafe by using write lock - Look for refused calls => Do nothing then.
-    ERejectReason   eReason                         ;
-    WriteGuard      aWriteLock( m_aLock, eReason )  ;
-    if( eReason == E_NOREASON )
-    {
-        m_aContainer.push_back( xFrame );
-    }
+    m_aContainer.push_back( xFrame );
 }
 
 //*****************************************************************************************************************
@@ -178,47 +185,49 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
     LOG_ASSERT2( implcp_remove( xFrame )    , "FrameContainer::remove()", "Invalid parameter detected!"             )
     LOG_ASSERT2( exist(xFrame)==sal_False   , "FrameContainer::remove()", "Frame to remove not exist in container!" )
 
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
     // Search frame and remove it from container if he exist.
-    // Make it threadsafe. I think removing container elements must be "atomar".
-    // We shouldn't make a copy of current container items to work on it.
-    // Use write lock for whole method.
-    ERejectReason   eReason                         ;
-    WriteGuard      aWriteLock( m_aLock, eReason )  ;
-    if( eReason == E_NOREASON )
+    TFrameIterator aSearchedItem = find( m_aContainer.begin(), m_aContainer.end(), xFrame );
+    if( aSearchedItem != m_aContainer.end() )
     {
-        TFrameIterator aSearchedItem = find( m_aContainer.begin(), m_aContainer.end(), xFrame );
-        if( aSearchedItem != m_aContainer.end() )
+        m_aContainer.erase( aSearchedItem );
+
+        // If removed frame the current active frame - reset state variable.
+        if( m_xActiveFrame == xFrame )
         {
-            m_aContainer.erase( aSearchedItem );
+            m_xActiveFrame = Reference< XFrame >();
+        }
 
-            // If removed frame the current active frame - reset state variable.
-            if( m_xActiveFrame == xFrame )
+        // looking for zombies ... and deletion of it!
+        for( sal_uInt32 nIndex=0; nIndex<m_aContainer.size();  )
+        {
+            if( m_aContainer.at(nIndex)->getComponentWindow().is() == sal_False )
             {
-                m_xActiveFrame = Reference< XFrame >();
+                m_aContainer.erase( m_aContainer.begin() + nIndex );
             }
-
-            // looking for zombies ...
-            for( sal_uInt32 nIndex=0; nIndex < m_aContainer.size();  )
+            else
             {
-                if ( !m_aContainer.at(nIndex)->getComponentWindow().is() )
-                    m_aContainer.erase( m_aContainer.begin() + nIndex );
-                else
-                    nIndex++;
+                ++nIndex;
             }
+        }
 
-            // We don't need the write lock any longer ...
-            // downgrade to read access.
-            aWriteLock.downgrade();
+        // We don't need the write lock any longer ...
+        // downgrade to read access.
+        aWriteLock.downgrade();
 
-            // If last frame was removed and special quit timer is enabled by the desktop
-            // we must terminate the desktop by using this timer!
-            if  (
-                    ( m_aContainer.size()       <   1           )   &&
-                    ( m_rQuitTimer.isValid()    ==  sal_True    )
-                )
-            {
-                m_rQuitTimer->start();
-            }
+        // If last frame was removed and special quit timer is enabled by the desktop
+        // we must terminate the desktop by using this timer!
+        if  (
+                ( m_aContainer.size()       <   1           )   &&
+                ( m_rQuitTimer.isValid()    ==  sal_True    )
+            )
+        {
+            m_rQuitTimer->start();
         }
     }
 }
@@ -229,23 +238,17 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
 sal_Bool FrameContainer::exist( const Reference< XFrame >& xFrame ) const
 {
     // Safe impossible cases
-    // a)   This method is not defined for ALL incoming parameters!
+    // This method is not defined for ALL incoming parameters!
     LOG_ASSERT2( implcp_exist( xFrame ), "FrameContainer::exist()", "Invalid parameter detected!" )
 
-    // Search for frame.
-    // Make it threadsafe by using readlock. Declare default return value for refused calls!
-    sal_Bool        bExist      = sal_False         ;
-    ERejectReason   eReason                         ;
-    ReadGuard       aReadLock   ( m_aLock, eReason );
-    if( eReason == E_NOREASON )
-    {
-        bExist =    (   find(   m_aContainer.begin()    ,
-                                m_aContainer.end()      ,
-                                   xFrame                   ) != m_aContainer.end()
-                    );
-    }
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    return bExist;
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    // Search for given frame.
+    return( find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );
 }
 
 //*****************************************************************************************************************
@@ -253,13 +256,13 @@ sal_Bool FrameContainer::exist( const Reference< XFrame >& xFrame ) const
 //*****************************************************************************************************************
 void FrameContainer::clear()
 {
-    // We need write access to our member.
-    ERejectReason   eReason                         ;
-    WriteGuard      aWriteLock  ( m_aLock, eReason );
-    if( eReason == E_NOREASON )
-    {
-        impl_clear();
-    }
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
+    impl_clear();
 }
 
 //*****************************************************************************************************************
@@ -267,16 +270,13 @@ void FrameContainer::clear()
 //*****************************************************************************************************************
 sal_uInt32 FrameContainer::getCount() const
 {
-    // We need read access to our member.
-    // Declare default return value for refused calls.
-    sal_uInt32      nCount      = 0                 ;
-    ERejectReason   eReason                         ;
-    ReadGuard       aReadLock   ( m_aLock, eReason );
-    if( eReason == E_NOREASON )
-    {
-        nCount = (sal_uInt32)m_aContainer.size();
-    }
-    return nCount;
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    return( (sal_uInt32)m_aContainer.size() );
 }
 
 //*****************************************************************************************************************
@@ -288,24 +288,24 @@ Reference< XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
     // a)   This method is not defined for ALL incoming parameters!
     LOG_ASSERT2( implcp_IndexOperator( nIndex, getCount() ), "FrameContainer::operator[]()", "Invalid parameter detected!" )
 
-    // Use read lock to make it threadsafe. Declare default return value for refused calls!
-    Reference< XFrame > xFrame                          ;
-    ERejectReason       eReason                         ;
-    ReadGuard           aReadLock   ( m_aLock, eReason );
-    if( eReason == E_NOREASON )
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    Reference< XFrame > xFrame;
+    try
     {
-        try
-        {
-            // Get element form container WITH automatic test of ranges!
-            // If index not valid, a out_of_range exception is thrown.
-            xFrame = m_aContainer.at( nIndex );
-        }
-        catch( std::out_of_range& )
-        {
-            // The index is not valid for current container-content - we must handle this case!
-            // We can return the default value ...
-            LOG_EXCEPTION( "FrameContainer::operator[]", "Exception catched ...", DECLARE_ASCII("::std::out_of_range") )
-        }
+        // Get element form container WITH automatic test of ranges!
+        // If index not valid, a out_of_range exception is thrown.
+        xFrame = m_aContainer.at( nIndex );
+    }
+    catch( std::out_of_range& )
+    {
+        // The index is not valid for current container-content - we must handle this case!
+        // We can return the default value ...
+        LOG_EXCEPTION( "FrameContainer::operator[]", "Exception catched ...", DECLARE_ASCII("::std::out_of_range") )
     }
     return xFrame;
 }
@@ -315,20 +315,20 @@ Reference< XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
 //*****************************************************************************************************************
 Sequence< Reference< XFrame > > FrameContainer::getAllElements() const
 {
-    // Use read lock. Declare default return value if call is refused.
-    Sequence< Reference< XFrame > > lElements                       ;
-    ERejectReason                   eReason                         ;
-    ReadGuard                       aReadLock   ( m_aLock, eReason );
-    if( eReason == E_NOREASON )
-    {
-        sal_uInt32 nCount = (sal_uInt32)m_aContainer.size();
-        lElements.realloc( nCount );
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-        for( sal_uInt32 nPosition=0; nPosition<nCount; ++nPosition )
-        {
-            lElements[nPosition] = m_aContainer[nPosition];
-        }
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    sal_uInt32                      nCount      = (sal_uInt32)m_aContainer.size();
+    Sequence< Reference< XFrame > > lElements   ( nCount );
+
+    for( sal_uInt32 nPosition=0; nPosition<nCount; ++nPosition )
+    {
+        lElements[nPosition] = m_aContainer[nPosition];
     }
+
     return lElements;
 }
 
@@ -337,15 +337,13 @@ Sequence< Reference< XFrame > > FrameContainer::getAllElements() const
 //*****************************************************************************************************************
 sal_Bool FrameContainer::hasElements() const
 {
-    // Use read lock. Declare default return value if call is refused.
-    sal_Bool        bHasElements=   sal_False       ;
-    ERejectReason   eReason                         ;
-    ReadGuard       aReadLock   ( m_aLock, eReason );
-    if( eReason == E_NOREASON )
-    {
-        bHasElements = ( m_aContainer.size() > 0 );
-    }
-    return bHasElements;
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    return( m_aContainer.size()>0 );
 }
 
 //*****************************************************************************************************************
@@ -359,12 +357,13 @@ void FrameContainer::setActive( const Reference< XFrame >& xFrame )
     LOG_ASSERT2( implcp_setActive( xFrame )                         , "FrameContainer::setActive()", "Invalid parameter detected!"                                                      )
     LOG_ASSERT2( xFrame.is()==sal_True && exist(xFrame)==sal_False  , "FrameContainer::setActive()", "The new active frame is not a member of current container!You cant activate it."  )
 
-    ERejectReason   eReason                         ;
-    WriteGuard      aWriteLock( m_aLock, eReason )  ;
-    if( eReason == E_NOREASON )
-    {
-        m_xActiveFrame = xFrame;
-    }
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
+    m_xActiveFrame = xFrame;
 }
 
 //*****************************************************************************************************************
@@ -372,15 +371,13 @@ void FrameContainer::setActive( const Reference< XFrame >& xFrame )
 //*****************************************************************************************************************
 Reference< XFrame > FrameContainer::getActive() const
 {
-    // Use read lock. Declare default return value if call is refused.
-    Reference< XFrame > xActive                         ;
-    ERejectReason       eReason                         ;
-    ReadGuard           aReadLock( m_aLock, eReason )   ;
-    if( eReason == E_NOREASON )
-    {
-        xActive = m_xActiveFrame;
-    }
-    return xActive;
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    return m_xActiveFrame;
 }
 
 //*****************************************************************************************************************
@@ -388,15 +385,16 @@ Reference< XFrame > FrameContainer::getActive() const
 //*****************************************************************************************************************
 void FrameContainer::enableQuitTimer( const Reference< XDesktop >& xDesktop )
 {
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
     // If no current timer exist - create a new one.
-    ERejectReason   eReason                         ;
-    WriteGuard      aWriteLock( m_aLock, eReason )  ;
-    if( eReason == E_NOREASON )
+    if( m_rQuitTimer.isEmpty() == sal_True )
     {
-        if( m_rQuitTimer.isEmpty() == sal_True )
-        {
-            m_rQuitTimer.bind( new AsyncQuit( xDesktop ) );
-        }
+        m_rQuitTimer.bind( new AsyncQuit( xDesktop ) );
     }
 }
 
@@ -405,14 +403,15 @@ void FrameContainer::enableQuitTimer( const Reference< XDesktop >& xDesktop )
 //*****************************************************************************************************************
 void FrameContainer::disableQuitTimer()
 {
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
     // Delete current quit timer.
     // If user wish to create it again he must do it with "enableQuitTimer()".
-    ERejectReason   eReason                         ;
-    WriteGuard      aWriteLock( m_aLock, eReason )  ;
-    if( eReason == E_NOREASON )
-    {
-        impl_disableQuitTimer();
-    }
+    impl_disableQuitTimer();
 }
 
 //*****************************************************************************************************************
@@ -423,29 +422,28 @@ Reference< XFrame > FrameContainer::searchDeepDown( const OUString& sName ) cons
     // Check incoming parameter.
     LOG_ASSERT2( implcp_searchDeepDown( sName ), "FrameContainer::searchDeepDown()", "Invalid parameter detected!" )
 
-    // Use read lock to make it threadsafe.
-    // Declare default return value for refused calls.
-    Reference< XFrame > xSearchedFrame                  ;
-    ERejectReason       eReason                         ;
-    ReadGuard           aReadLock( m_aLock, eReason )   ;
-    if( eReason == E_NOREASON )
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    // Step over all child frames. But if direct child isn't the right one search on his children first - before
+    // you go to next direct child of this container!
+    Reference< XFrame > xSearchedFrame;
+    for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
     {
-        // Step over all child frames. But if direct child isn't the right one search on his children first - before
-        // you go to next direct child of this container!
-        for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+        if( (*pIterator)->getName() == sName )
         {
-            if( (*pIterator)->getName() == sName )
+            xSearchedFrame = *pIterator;
+            break;
+        }
+        else
+        {
+            xSearchedFrame = (*pIterator)->findFrame( sName, FrameSearchFlag::CHILDREN );
+            if( xSearchedFrame.is() == sal_True )
             {
-                xSearchedFrame = *pIterator;
                 break;
-            }
-            else
-            {
-                xSearchedFrame = (*pIterator)->findFrame( sName, FrameSearchFlag::CHILDREN );
-                if( xSearchedFrame.is() == sal_True )
-                {
-                    break;
-                }
             }
         }
     }
@@ -460,33 +458,32 @@ Reference< XFrame > FrameContainer::searchFlatDown( const OUString& sName ) cons
     // Check incoming parameter.
     LOG_ASSERT2( implcp_searchFlatDown( sName ), "FrameContainer::searchFlatDown()", "Invalid parameter detected!" )
 
-    // Use read lock to make it threadsafe.
-    // Declare default return value for refused calls.
-    Reference< XFrame > xSearchedFrame                  ;
-    ERejectReason       eReason                         ;
-    ReadGuard           aReadLock( m_aLock, eReason )   ;
-    if( eReason == E_NOREASON )
-    {
-        // Step over all direct child frames first.
-        // Even right frame wasn't found, start search at children of direct children.
-        for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
-        {
-            if( (*pIterator)->getName() == sName )
-            {
-                xSearchedFrame = *pIterator;
-                break;
-            }
-        }
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-        if( xSearchedFrame.is() == sal_False )
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    // Step over all direct child frames first.
+    // Even right frame wasn't found, start search at children of direct children.
+    Reference< XFrame > xSearchedFrame;
+    for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+    {
+        if( (*pIterator)->getName() == sName )
         {
-            for( pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+            xSearchedFrame = *pIterator;
+            break;
+        }
+    }
+
+    if( xSearchedFrame.is() == sal_False )
+    {
+        for( pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+        {
+            xSearchedFrame = (*pIterator)->findFrame( sName, FrameSearchFlag::CHILDREN | FrameSearchFlag::SIBLINGS );
+            if( xSearchedFrame.is() == sal_True )
             {
-                xSearchedFrame = (*pIterator)->findFrame( sName, FrameSearchFlag::CHILDREN | FrameSearchFlag::SIBLINGS );
-                if( xSearchedFrame.is() == sal_True )
-                {
-                    break;
-                }
+                break;
             }
         }
     }
@@ -501,21 +498,20 @@ Reference< XFrame > FrameContainer::searchDirectChildren( const OUString& sName 
     // Check incoming parameter.
     LOG_ASSERT2( implcp_searchDirectChildren( sName ), "FrameContainer::searchDirectChildren()", "Invalid parameter detected!" )
 
-    // Use read lock to make it threadsafe.
-    // Declare default return value for refused calls.
-    Reference< XFrame > xSearchedFrame                  ;
-    ERejectReason       eReason                         ;
-    ReadGuard           aReadLock( m_aLock, eReason )   ;
-    if( eReason == E_NOREASON )
+    // Register transaction. Reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    // Step over all current container items and search for right target.
+    Reference< XFrame > xSearchedFrame;
+    for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
     {
-        // Step over all current container items and search for right target.
-        for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
+        if( (*pIterator)->getName() == sName )
         {
-            if( (*pIterator)->getName() == sName )
-            {
-                xSearchedFrame = *pIterator;
-                break;
-            }
+            xSearchedFrame = *pIterator;
+            break;
         }
     }
     return xSearchedFrame;
@@ -526,6 +522,10 @@ Reference< XFrame > FrameContainer::searchDirectChildren( const OUString& sName 
 //*****************************************************************************************************************
 void FrameContainer::impl_clear()
 {
+    /*ATTENTION:
+        Don't use any lock here ... because our "owner" should make it threadsafe!
+     */
+
     // Clear the container ...
     m_aContainer.erase( m_aContainer.begin(), m_aContainer.end() );
     m_aContainer.clear();
@@ -546,6 +546,10 @@ void FrameContainer::impl_clear()
 //*****************************************************************************************************************
 void FrameContainer::impl_disableQuitTimer()
 {
+    /*ATTENTION:
+        Don't use any lock here ... because our "owner" should make it threadsafe!
+     */
+
     if( m_rQuitTimer.isValid() == sal_True )
     {
         m_rQuitTimer.unbind();

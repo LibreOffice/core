@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cd $ $Date: 2001-04-02 14:10:27 $
+#   last change: $Author: as $ $Date: 2001-05-02 13:00:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ BOOTSTRAP_SERVICE=	FALSE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			$(SLO)$/otasksaccess.obj	 					\
+                    $(SLO)$/ostatusindicatorfactory.obj				\
                     $(SLO)$/otasksenumeration.obj					\
                     $(SLO)$/ocomponentaccess.obj 					\
                     $(SLO)$/ocomponentenumeration.obj				\

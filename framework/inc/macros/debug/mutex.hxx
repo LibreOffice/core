@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:24:13 $
+ *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,18 @@
     //_____________________________________________________________________________________________________________
     //  includes
     //_____________________________________________________________________________________________________________
+
+    #ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
+    #include <threadhelp/irwlock.h>
+    #endif
+
+    #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+    #include <threadhelp/readguard.hxx>
+    #endif
+
+    #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+    #include <threadhelp/writeguard.hxx>
+    #endif
 
     #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
@@ -200,33 +212,6 @@
     #define LOCK_MUTEX( AGUARD, AMUTEX, SMETHOD )                                                               \
                 dbgGuard AGUARD( AMUTEX, SMETHOD );
 
-//  #define LOCK_MUTEX( AGUARD, AMUTEX, SMETHOD )                                                               \
-//              /* Use new scope to declare necessary variables as localy private! */                           \
-//              {                                                                                               \
-//                  if ( AMUTEX.tryToAcquire() == sal_False )                                                   \
-//                  {                                                                                           \
-//                      ::rtl::OStringBuffer sBuffer(1024);                                                     \
-//                      sBuffer.append( "mutex aquire block at \""  );                                          \
-//                      sBuffer.append( SMETHOD                     );                                          \
-//                      sBuffer.append( "\" ...\n"                  );                                          \
-//                      WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                           \
-//                  }                                                                                           \
-//                  else                                                                                        \
-//                  {   /* Don't forget to release successfull aquired mutex again! */                          \
-//                      AMUTEX.release();                                                                       \
-//                  }                                                                                           \
-//              }                                                                                               \
-//              /* These line must be in parent scope because the guard is used there! */                       \
-//              ::osl::ClearableMutexGuard AGUARD( AMUTEX );                                                    \
-//              /* Use new scope to declare necessary variables as localy private! */                           \
-//              {                                                                                               \
-//                  ::rtl::OStringBuffer sBuffer(1024);                                                         \
-//                  sBuffer.append( "mutex successfull aquired at \""   );                                      \
-//                  sBuffer.append( SMETHOD                             );                                      \
-//                  sBuffer.append( "\" ....\n"                         );                                      \
-//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                               \
-//              }
-
     /*_____________________________________________________________________________________________________________
         LOCK_GLOBALMUTEX( AGUARD, SMETHOD )
 
@@ -239,33 +224,6 @@
     #define LOCK_GLOBALMUTEX( AGUARD, SMETHOD )                                                                 \
                 dbgGuard AGUARD( ::osl::Mutex::getGlobalMutex(), SMETHOD );
 
-//  #define LOCK_GLOBALMUTEX( AGUARD, SMETHOD )                                                                 \
-//              /* Use new scope to declare necessary variables as localy private! */                           \
-//              {                                                                                               \
-//                  if ( ::osl::Mutex::getGlobalMutex()->tryToAcquire() == sal_False )                          \
-//                  {                                                                                           \
-//                      ::rtl::OStringBuffer sBuffer(1024);                                                     \
-//                      sBuffer.append( "\tAttention:\tglobal mutex aquire block at \"" );                      \
-//                      sBuffer.append( SMETHOD                                         );                      \
-//                      sBuffer.append( "\" ...\n"                                      );                      \
-//                      WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                           \
-//                  }                                                                                           \
-//                  else                                                                                        \
-//                  {   /* Don't forget to release successfull aquired mutex again! */                          \
-//                      ::osl::Mutex::getGlobalMutex()->release();                                              \
-//                  }                                                                                           \
-//              }                                                                                               \
-//              /* These line must be in parent scope because the guard is used there! */                       \
-//              ::osl::ClearableMutexGuard AGUARD( ::osl::Mutex::getGlobalMutex() );                            \
-//              /* Use new scope to declare necessary variables as localy private! */                           \
-//              {                                                                                               \
-//                  ::rtl::OStringBuffer sBuffer(1024);                                                         \
-//                  sBuffer.append( "global mutex successfull aquired at \"");                                  \
-//                  sBuffer.append( SMETHOD                                 );                                  \
-//                  sBuffer.append( "\" ....\n"                             );                                  \
-//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                               \
-//              }
-
     /*_____________________________________________________________________________________________________________
         UNLOCK_MUTEX( AGUARD, SMETHOD )
 
@@ -275,16 +233,6 @@
 
     #define UNLOCK_MUTEX( AGUARD, SMETHOD )                                                                     \
                 AGUARD.clear();
-
-//  #define UNLOCK_MUTEX( AGUARD, SMETHOD )                                                                     \
-//              AGUARD.clear();                                                                                 \
-//              {                                                                                               \
-//                  ::rtl::OStringBuffer sBuffer(1024);                                                         \
-//                  sBuffer.append( "mutex cleared at \""   );                                                  \
-//                  sBuffer.append( SMETHOD                 );                                                  \
-//                  sBuffer.append( "\" sucessful ...\n"    );                                                  \
-//                  WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );                               \
-//              }
 
 #else   // #ifdef ENABLE_MUTEXDEBUG
 
