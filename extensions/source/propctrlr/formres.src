@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-28 16:58:12 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String RID_STR_FORMS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lomakkeet";
     Text[ catalan ] = "Formularis";
+    Text[ thai ] = "แบบฟอร์ม";
 };
 
 ModalDialog RID_DLG_SELECTLABELCONTROL
@@ -116,7 +117,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ french ] = "Voici tous les champs de contr�le qui peuvent �tre assign�s comme champ d'�tiquette � $control_class$ $control_name$.";
         Text[ spanish ] = "Estos son todos los campos de control que pueden asignarse al $control_class$ $control_name$ como campo de etiqueta.";
         Text[ italian ] = "Tutti questi campi di controllo possono essere assegnati a $control_class$ $control_name$ come testo fisso.";
-        Text[ danish ] = "Dette er alle kontrolfelter, som kan tildeles $control_class$ $control_name$ som etiketfelt.";
+        Text[ danish ] = "Alle disse kontrolelementer kan tildeles til $control_class$ $control_name$ som etiketfelt.";
         Text[ swedish ] = "Detta �r alla kontrollf�lt som kan tilldelas $control_class$ $control_name$ som etikettf�lt.";
         Text[ polish ] = "S� to wszystkie pola kontrolne, kt�re mo�na przypisa� $control_class$ $control_name$ jako pola etykiety.";
         Text[ portuguese_brazilian ] = "This are all controls which may be used as label field for the $control_class$ $control_name$.";
@@ -129,6 +130,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "N�m� kent�t ovat ohjauskentti�, joita voi k�ytt�� ohjaimen $control_class$ $control_name$ nimi�kenttin�.";
         Text[ catalan ] = "Aquests camps s�n de control i es poden utilitzar com a camps d'etiqueta per al $control_class$ $control_name$.";
+        Text[ thai ] = "มีเขตข้อมูลควบคุมที่สามารถถูกใช้เป็นเขตข้อมูลระบุชื่อสำหรับ $control_class$ $control_name$";
     };
     Control 1
     {
@@ -151,7 +153,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ french ] = "~Aucune assignation";
         Text[ spanish ] = "~sin asignaci�n";
         Text[ italian ] = "~nessuna assegnazione";
-        Text[ danish ] = "ingen tildeling";
+        Text[ danish ] = "~ingen tildeling";
         Text[ swedish ] = "~ingen tilldelning";
         Text[ polish ] = "~bez przyporz�dkowania";
         Text[ portuguese_brazilian ] = "~no assignment";
@@ -163,6 +165,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         Text[ turkish ] = "Atama yok";
         Text[ finnish ] = "~Ei m��rityst�";
         Text[ catalan ] = "Se~nse assignaci�";
+        Text[ thai ] = "ไ~ม่มีการกำหนด";
     };
     FixedLine 1
     {
@@ -190,7 +193,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     Text[ french ] = "S�lection de champ d'�tiquette";
     Text[ spanish ] = "Selecci�n campo de etiqueta";
     Text[ italian ] = "Selezione testo fisso";
-    Text[ danish ] = "Udvalg etiketfelt";
+    Text[ danish ] = "Valg af etiketfelt";
     Text[ swedish ] = "Urval etikettf�lt";
     Text[ polish ] = "Wyb�r pola etykiety";
     Text[ portuguese_brazilian ] = "Label field selection";
@@ -202,6 +205,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     Text[ turkish ] = "Etiket alan� se�imi";
     Text[ finnish ] = "Nimi�kent�n valinta";
     Text[ catalan ] = "Selecci� del camp d'etiqueta";
+    Text[ thai ] = "เลือกเขตข้อมูลระบุชื่อ";
 };
 
 ImageList RID_IL_FORMEXPLORER
@@ -244,6 +248,7 @@ String RID_STR_PROPTITLE_PUSHBUTTON
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Painike";
     Text[ catalan ] = "Bot�";
+    Text[ thai ] = "ปุ่ม";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
@@ -270,6 +275,7 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Valintanappi";
     Text[ catalan ] = "Bot� d'opci�";
+    Text[ thai ] = "ปุ่มตัวเลือก";
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
@@ -296,6 +302,7 @@ String RID_STR_PROPTITLE_CHECKBOX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Valintaruutu";
     Text[ catalan ] = "Quadre de verificaci�";
+    Text[ thai ] = "กล่องกาเครื่องหมาย";
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
@@ -322,6 +329,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Nimi�kentt�";
     Text[ catalan ] = "Camp d'etiqueta";
+    Text[ thai ] = "เขตข้อมูลป้ายชื่อ";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
@@ -348,6 +356,7 @@ String RID_STR_PROPTITLE_GROUPBOX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ryhm�ruutu";
     Text[ catalan ] = "Quadre de grup";
+    Text[ thai ] = "กล่องที่จัดเป็นกลุ่ม";
 };
 String RID_STR_PROPTITLE_EDIT
 {
@@ -374,6 +383,7 @@ String RID_STR_PROPTITLE_EDIT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tekstikehys";
     Text[ catalan ] = "Quadre de text";
+    Text[ thai ] = "กล่องข้อความ";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
@@ -400,6 +410,7 @@ String RID_STR_PROPTITLE_FORMATTED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muotoiltu kentt�";
     Text[ catalan ] = "Camp formatat";
+    Text[ thai ] = "เขตข้อมูลที่จัดรูปแบบ";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
@@ -426,6 +437,7 @@ String RID_STR_PROPTITLE_LISTBOX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Luetteloruutu";
     Text[ catalan ] = "Quadre de llista";
+    Text[ thai ] = "กล่องรายการ";
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
@@ -452,6 +464,7 @@ String RID_STR_PROPTITLE_COMBOBOX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Yhdistelm�ruutu";
     Text[ catalan ] = "Quadre combinat";
+    Text[ thai ] = "กล่องคอมโบ้";
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
@@ -478,6 +491,7 @@ String RID_STR_PROPTITLE_IMAGEBUTTON
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kuvapainike";
     Text[ catalan ] = "Bot� d'imatge";
+    Text[ thai ] = "ปุ่มรูป";
 };
 String RID_STR_PROPTITLE_HIDDENCONTROL
 {
@@ -491,7 +505,7 @@ String RID_STR_PROPTITLE_HIDDENCONTROL
     Text[ french ] = "Contr�le masqu�";
     Text[ spanish ] = "Campo de control oculto";
     Text[ italian ] = "Campo di controllo nascosto";
-    Text[ danish ] = "Hidden Control";
+    Text[ danish ] = "skjult kontrolelement";
     Text[ swedish ] = "dolt kontrollf�lt";
     Text[ polish ] = "Ukryte pole kontrolne";
     Text[ portuguese_brazilian ] = "Hidden Control";
@@ -503,6 +517,7 @@ String RID_STR_PROPTITLE_HIDDENCONTROL
     Text[ arabic ] = "���� ���� ����";
     Text[ finnish ] = "Piilotettu ohjausobjekti";
     Text[ catalan ] = "Control ocult";
+    Text[ thai ] = "ควบคุมแบบปกปิด";
 };
 String RID_STR_PROPTITLE_UNKNOWNCONTROL
 {
@@ -516,7 +531,7 @@ String RID_STR_PROPTITLE_UNKNOWNCONTROL
     Text[ french ] = "Contr�le (type inconnu)";
     Text[ spanish ] = "Campo de control (tipo desconocido)";
     Text[ italian ] = "Campo di controllo (tipo sconosciuto)";
-    Text[ danish ] = "Control (unknown type)";
+    Text[ danish ] = "Kontrolelement (ukendt type)";
     Text[ swedish ] = "Kontrollf�lt (ok�nd typ)";
     Text[ polish ] = "Pole kontrolne (nieznany typ)";
     Text[ portuguese_brazilian ] = "Control (unknown type)";
@@ -528,6 +543,7 @@ String RID_STR_PROPTITLE_UNKNOWNCONTROL
     Text[ arabic ] = "���� ���� (��� ����� �����)";
     Text[ finnish ] = "Ohjain (tuntematon tyyppi)";
     Text[ catalan ] = "Control (tipus desconegut)";
+    Text[ thai ] = "ควบคุม (ไม่รู้จักชนิด)";
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
@@ -554,6 +570,7 @@ String RID_STR_PROPTITLE_IMAGECONTROL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kuvan ohjaus";
     Text[ catalan ] = "Control d'imatge";
+    Text[ thai ] = "ควบคุมรูป";
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
@@ -580,6 +597,7 @@ String RID_STR_PROPTITLE_FILECONTROL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tiedoston valinta";
     Text[ catalan ] = "Selecci� de fitxers";
+    Text[ thai ] = "เลือกแฟ้ม";
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
@@ -606,6 +624,7 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "P�iv�m��r�kentt�";
     Text[ catalan ] = "Camp de data";
+    Text[ thai ] = "เขตข้อมูลวันที่";
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
@@ -632,6 +651,7 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Aikakentt�";
     Text[ catalan ] = "Camp d'hora";
+    Text[ thai ] = "เขตข้อมูลเวลา";
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
@@ -658,6 +678,7 @@ String RID_STR_PROPTITLE_NUMERICFIELD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Numeerinen kentt�";
     Text[ catalan ] = "Camp num�ric";
+    Text[ thai ] = "เขตข้อมูลตัวเลข";
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
@@ -684,6 +705,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Valuuttakentt�";
     Text[ catalan ] = "Camp de moneda";
+    Text[ thai ] = "เขตข้อมูลสกุลเงิน";
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
@@ -710,6 +732,7 @@ String RID_STR_PROPTITLE_PATTERNFIELD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kuviokentt�";
     Text[ catalan ] = "Camp patr�";
+    Text[ thai ] = "เขตข้อมูลลวดลาย";
 };
 String RID_STR_PROPTITLE_DBGRID
 {
@@ -736,6 +759,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Taulukko-ohjain";
     Text[ catalan ] = "Control de taula ";
+    Text[ thai ] = "ตารางควบคุม ";
 };
 String RID_STR_EDITMASK
 {
@@ -762,6 +786,7 @@ String RID_STR_EDITMASK
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa peitett�";
     Text[ catalan ] = "Edita la m�scara";
+    Text[ thai ] = "แก้ไขหน้ากาก";
 };
 String RID_STR_LITERALMASK
 {
@@ -788,6 +813,7 @@ String RID_STR_LITERALMASK
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Literaalipeite";
     Text[ catalan ] = "M�scara literal";
+    Text[ thai ] = "หน้ากากสัญพจน์";
 };
 String RID_STR_READONLY
 {
@@ -797,7 +823,7 @@ String RID_STR_READONLY
     Text [ english_us ] = "Read-only" ;
     Text [ portuguese_brazilian ] = "Nur lesen" ;
     Text [ swedish ] = "Bara l�sning" ;
-    Text [ danish ] = "Skrivebeskyttet" ;
+    Text [ danish ] = "Kun l�se" ;
     Text [ italian ] = "Solo lettura" ;
     Text [ spanish ] = "S�lo lectura" ;
     Text [ french ] = "En lecture seule" ;
@@ -814,6 +840,7 @@ String RID_STR_READONLY
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Vain luku";
     Text[ catalan ] = "Nom�s de lectura";
+    Text[ thai ] = "อ่านอย่างเดียว";
 };
 String RID_STR_ENABLED
 {
@@ -840,6 +867,7 @@ String RID_STR_ENABLED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "K�yt�ss�";
     Text[ catalan ] = "Habilitat";
+    Text[ thai ] = "เปิดใช้งาน";
 };
 String RID_STR_AUTOCOMPLETE
 {
@@ -849,7 +877,7 @@ String RID_STR_AUTOCOMPLETE
     Text [ english_us ] = "AutoFill" ;
     Text [ portuguese_brazilian ] = "Automatisch f?len" ;
     Text [ swedish ] = "Fyll automatiskt" ;
-    Text [ danish ] = "Fyld automatisk" ;
+    Text [ danish ] = "Udfyld automatisk" ;
     Text [ italian ] = "Riempi automaticamente" ;
     Text [ spanish ] = "Rellenar autom�ticamente" ;
     Text [ french ] = "Remplir automatiquement" ;
@@ -866,6 +894,7 @@ String RID_STR_AUTOCOMPLETE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Automaattinen t�ytt�";
     Text[ catalan ] = "Compleci� autom�tica";
+    Text[ thai ] = "เติมอัตโนมัติ";
 };
 String RID_STR_LINECOUNT
 {
@@ -875,7 +904,7 @@ String RID_STR_LINECOUNT
     Text [ english_us ] = "Line count" ;
     Text [ portuguese_brazilian ] = "Anzahl der Zeilen" ;
     Text [ swedish ] = "Antal rader" ;
-    Text [ danish ] = "Antal r�kker" ;
+    Text [ danish ] = "Antal linjer" ;
     Text [ italian ] = "Numero delle righe" ;
     Text [ spanish ] = "N�mero de l�neas" ;
     Text [ french ] = "Nombre de lignes" ;
@@ -892,6 +921,7 @@ String RID_STR_LINECOUNT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Rivim��r�";
     Text[ catalan ] = "Recompte de l�nies";
+    Text[ thai ] = "นับบรรทัด";
 };
 String RID_STR_MAXTEXTLEN
 {
@@ -918,6 +948,7 @@ String RID_STR_MAXTEXTLEN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Suurin tekstin pituus";
     Text[ catalan ] = "Longitud m�xima del text";
+    Text[ thai ] = "ความยาวข้อความมากที่สุด";
 };
 String RID_STR_SPIN
 {
@@ -944,6 +975,7 @@ String RID_STR_SPIN
     Text[ turkish ] = "De�er kutusu";
     Text[ finnish ] = "Askelluspainike";
     Text[ catalan ] = "Gira el bot�";
+    Text[ thai ] = "ปุมสปิน ";
 };
 String RID_STR_STRICTFORMAT
 {
@@ -970,6 +1002,7 @@ String RID_STR_STRICTFORMAT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tarkka muoto";
     Text[ catalan ] = "Format estricte";
+    Text[ thai ] = "รูปแบบเคร่งครัด";
 };
 String RID_STR_SHOWTHOUSANDSEP
 {
@@ -979,7 +1012,7 @@ String RID_STR_SHOWTHOUSANDSEP
     Text [ english_us ] = "Thousands separator" ;
     Text [ portuguese_brazilian ] = "Tausender-Trennz." ;
     Text [ swedish ] = "Tusentalsavgr�nsare" ;
-    Text [ danish ] = "Tusindtalsseparator" ;
+    Text [ danish ] = "Tusindtalssep." ;
     Text [ italian ] = "Car. di separz. migliaia" ;
     Text [ spanish ] = "Delimitador decimal" ;
     Text [ french ] = "S�parateur de milliers" ;
@@ -996,6 +1029,7 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tuhatlukuerotin";
     Text[ catalan ] = "Separador de milers";
+    Text[ thai ] = "ตัวแยกจำนวนพัน";
 };
 String RID_STR_HARDLINEBREAKS
 {
@@ -1022,6 +1056,7 @@ String RID_STR_HARDLINEBREAKS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "N�yt� rivinvaihto";
     Text[ catalan ] = "Salt de l�nia directe";
+    Text[ thai ] = "เส้นแบ่งโดยตรง";
 };
 String RID_STR_PRINTABLE
 {
@@ -1048,6 +1083,7 @@ String RID_STR_PRINTABLE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tulosta";
     Text[ catalan ] = "Imprimeix";
+    Text[ thai ] = "พิมพ์";
 };
 String RID_STR_TARGET_URL
 {
@@ -1100,6 +1136,7 @@ String RID_STR_TARGET_FRAME
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kehys";
     Text[ catalan ] = "Marc";
+    Text[ thai ] = "กรอบ";
 };
 String RID_STR_HELPTEXT
 {
@@ -1126,6 +1163,7 @@ String RID_STR_HELPTEXT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ohjeteksti";
     Text[ catalan ] = "Text d'ajuda";
+    Text[ thai ] = "ข้อความช่วยเหลือ";
 };
 String RID_STR_HELPURL
 {
@@ -1138,7 +1176,7 @@ String RID_STR_HELPURL
     Text[ french ] = "URL de l'aide";
     Text[ spanish ] = "Ayuda URL";
     Text[ italian ] = "URL della Guida";
-    Text[ danish ] = "Hj�lp-URL";
+    Text[ danish ] = "Hj�lp til URL";
     Text[ swedish ] = "Hj�lp-URL";
     Text[ polish ] = "Pomoc URL";
     Text[ portuguese_brazilian ] = "Help URL";
@@ -1152,13 +1190,14 @@ String RID_STR_HELPURL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ohjeen URL-osoite";
     Text[ catalan ] = "URL d'ajuda";
+    Text[ thai ] = " URL ช่วยเหลือ";
 };
 String RID_STR_TAG
 {
     Text = "Zusatzinformation" ;
     Text [ English ] = "Tag" ;
     Text [ portuguese ] = "Informa��o adicional" ;
-    Text [ english_us ] = "Additonal information" ;
+    Text [ english_us ] = "Additional information" ;
     Text [ portuguese_brazilian ] = "Zusatzinformation" ;
     Text [ swedish ] = "Till�ggsinformation" ;
     Text [ danish ] = "Yderligere information" ;
@@ -1178,6 +1217,7 @@ String RID_STR_TAG
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis�tietoja";
     Text[ catalan ] = "Informaci� addicional";
+    Text[ thai ] = "ข้อมูลเพิ่มเติม";
 };
 String RID_STR_ECHO_CHAR
 {
@@ -1204,6 +1244,7 @@ String RID_STR_ECHO_CHAR
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Salasanan merkit";
     Text[ catalan ] = "Car�cters de la contrasenya";
+    Text[ thai ] = "ตัวอักขระรหัสผ่าน";
 };
 String RID_STR_TRISTATE
 {
@@ -1230,6 +1271,7 @@ String RID_STR_TRISTATE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tristate";
     Text[ catalan ] = "Estat triple";
+    Text[ thai ] = "สามสถานะ";
 };
 String RID_STR_EMPTY_IS_NULL
 {
@@ -1243,7 +1285,7 @@ String RID_STR_EMPTY_IS_NULL
     Text [ french ] = "Espace vide �gale NULL" ;
     Text [ dutch ] = "Opvullen met NUL" ;
     Text[ portuguese_brazilian ] = "Leerzeichen ist NULL";
-    Text[ danish ] = "Tom streng er NULL";
+    Text[ danish ] = "Tom tegnsekvens er NUL";
     Text[ chinese_simplified ] = "空缺字符是 NULL";
     Text[ russian ] = "������ ������ - ����";
     Text[ polish ] = "Pusty ci�g znak�w jest ZEREM";
@@ -1256,6 +1298,7 @@ String RID_STR_EMPTY_IS_NULL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tyhj�n merkkijonon arvo on NULL";
     Text[ catalan ] = "La cadena buida �s NULL";
+    Text[ thai ] = "สายอักขระคือ NULL ว่าง";
 };
 String RID_STR_DECIMAL_ACCURACY
 {
@@ -1282,6 +1325,7 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Desimaalitarkkuus";
     Text[ catalan ] = "Precisi� decimal";
+    Text[ thai ] = "ความแม่นยำระดับทศนิยม";
 };
 String RID_STR_IMAGE_URL
 {
@@ -1308,6 +1352,7 @@ String RID_STR_IMAGE_URL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kuvat";
     Text[ catalan ] = "Gr�fics";
+    Text[ thai ] = "กราฟิค";
 };
 String RID_STR_DEFAULT_SELECT_SEQ
 {
@@ -1334,6 +1379,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Oletusvalinta";
     Text[ catalan ] = "Selecci� per defecte";
+    Text[ thai ] = "เลือกค่าเริ่มต้น";
 };
 String RID_STR_DEFAULT_BUTTON
 {
@@ -1360,6 +1406,7 @@ String RID_STR_DEFAULT_BUTTON
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Oletuspainike";
     Text[ catalan ] = "Bot� per defecte";
+    Text[ thai ] = "ค่าเริ่มต้นปุ่ม";
 };
 String RID_STR_LABELCONTROL
 {
@@ -1385,6 +1432,7 @@ String RID_STR_LABELCONTROL
     Text[ turkish ] = "Etiket alan�";
     Text[ finnish ] = "Nimi�kentt�";
     Text[ catalan ] = "Camp d'etiqueta";
+    Text[ thai ] = "เขตข้อมูลระบุชื่อ";
 };
 String RID_STR_LABEL
 {
@@ -1394,7 +1442,7 @@ String RID_STR_LABEL
     Text [ english_us ] = "Label" ;
     Text [ portuguese_brazilian ] = "Titel" ;
     Text [ swedish ] = "Etikett" ;
-    Text [ danish ] = "Overskrift" ;
+    Text [ danish ] = "Titel" ;
     Text [ italian ] = "Titolo" ;
     Text [ spanish ] = "T�tulo" ;
     Text [ french ] = "Titre" ;
@@ -1411,6 +1459,7 @@ String RID_STR_LABEL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Nimi�";
     Text[ catalan ] = "Etiqueta";
+    Text[ thai ] = "ป้ายชื่อ";
 };
 String RID_STR_ALIGN
 {
@@ -1437,6 +1486,7 @@ String RID_STR_ALIGN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tasaus";
     Text[ catalan ] = "Alineament";
+    Text[ thai ] = "การจัดตำแหน่ง";
 };
 String RID_STR_FONT
 {
@@ -1463,6 +1513,7 @@ String RID_STR_FONT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Merkist�";
     Text[ catalan ] = "Joc de car�cters";
+    Text[ thai ] = "ชุดตัวอักขระ";
 };
 String RID_STR_BACKGROUNDCOLOR
 {
@@ -1489,6 +1540,7 @@ String RID_STR_BACKGROUNDCOLOR
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Taustav�ri";
     Text[ catalan ] = "Color de fons";
+    Text[ thai ] = "สีพื้นหลัง";
 };
 String RID_STR_BORDER
 {
@@ -1515,6 +1567,7 @@ String RID_STR_BORDER
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Reuna";
     Text[ catalan ] = "Vora";
+    Text[ thai ] = "เส้นขอบ";
 };
 String RID_STR_HSCROLL
 {
@@ -1541,6 +1594,7 @@ String RID_STR_HSCROLL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Vaakavierityspalkki";
     Text[ catalan ] = "Barra de despla�ament horitzontal";
+    Text[ thai ] = "แถบเลื่อนหน้าจอแนวนอน";
 };
 String RID_STR_VSCROLL
 {
@@ -1567,6 +1621,7 @@ String RID_STR_VSCROLL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Pystyvierityspalkki";
     Text[ catalan ] = "Barra de despla�ament vertical";
+    Text[ thai ] = "แถบเลื่อนหน้าจอแนวตั้ง";
 };
 String RID_STR_MULTILINE
 {
@@ -1593,6 +1648,7 @@ String RID_STR_MULTILINE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Usean rivin sy�tt�";
     Text[ catalan ] = "Entrada multil�nia";
+    Text[ thai ] = "นำเข้าหลายเส้น";
 };
 String RID_STR_MULTISELECTION
 {
@@ -1619,6 +1675,7 @@ String RID_STR_MULTISELECTION
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Monivalinta";
     Text[ catalan ] = "Selecci� m�ltiple";
+    Text[ thai ] = "เลือกหลายส่วน";
 };
 String RID_STR_NAME
 {
@@ -1645,6 +1702,7 @@ String RID_STR_NAME
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Nimi";
     Text[ catalan ] = "Nom";
+    Text[ thai ] = "ชื่อ";
 };
 String RID_STR_TABINDEX
 {
@@ -1671,6 +1729,7 @@ String RID_STR_TABINDEX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "J�rjestys";
     Text[ catalan ] = "Ordre";
+    Text[ thai ] = "ลำดับ";
 };
 String RID_STR_FILTER_CRITERIA
 {
@@ -1680,7 +1739,7 @@ String RID_STR_FILTER_CRITERIA
     Text[ italian ] = "Filtro";
     Text[ portuguese_brazilian ] = "Filter";
     Text[ portuguese ] = "Filtro";
-    Text[ danish ] = "Filtre";
+    Text[ danish ] = "Filter";
     Text[ french ] = "Filtre";
     Text[ swedish ] = "Filter";
     Text[ dutch ] = "Filters";
@@ -1697,6 +1756,7 @@ String RID_STR_FILTER_CRITERIA
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Suodatin";
     Text[ catalan ] = "Filtre";
+    Text[ thai ] = "ตัวกรอง";
 };
 String RID_STR_SORT_CRITERIA
 {
@@ -1723,6 +1783,7 @@ String RID_STR_SORT_CRITERIA
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lajittele";
     Text[ catalan ] = "Ordena";
+    Text[ thai ] = "เรียง";
 };
 String RID_STR_RECORDMARKER
 {
@@ -1748,6 +1809,7 @@ String RID_STR_RECORDMARKER
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tietuemerkki";
     Text[ catalan ] = "Marcador de registre";
+    Text[ thai ] = "เครื่องหมายระเบียน";
 };
 String RID_STR_FILTERPROPOSAL
 {
@@ -1774,6 +1836,7 @@ String RID_STR_FILTERPROPOSAL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Suodata ehdotus";
     Text[ catalan ] = "Proposta de filtre";
+    Text[ thai ] = "ข้อเสนอตัวกรอง";
 };
 String RID_STR_NAVIGATION
 {
@@ -1800,6 +1863,7 @@ String RID_STR_NAVIGATION
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Siirtymisty�kalurivi";
     Text[ catalan ] = "Barra de navegaci�";
+    Text[ thai ] = "แถบนำทาง";
 };
 String RID_STR_CYCLE
 {
@@ -1826,6 +1890,7 @@ String RID_STR_CYCLE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kierto";
     Text[ catalan ] = "Cicle";
+    Text[ thai ] = "วงเวียน";
 };
 String RID_STR_TABSTOP
 {
@@ -1852,6 +1917,7 @@ String RID_STR_TABSTOP
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Sarkain";
     Text[ catalan ] = "Aturada de tabulaci�";
+    Text[ thai ] = "ระยะกั้นหยุด";
 };
 String RID_STR_CONTROLSOURCE
 {
@@ -1878,6 +1944,7 @@ String RID_STR_CONTROLSOURCE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tietokentt�";
     Text[ catalan ] = "Camp de dades";
+    Text[ thai ] = "เขตข้อมูลของข้อมูล";
 };
 String RID_STR_DROPDOWN
 {
@@ -1904,6 +1971,7 @@ String RID_STR_DROPDOWN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Pudotus";
     Text[ catalan ] = "Llista d'opcions";
+    Text[ thai ] = "หล่นลง";
 };
 String RID_STR_BOUNDCOLUMN
 {
@@ -1930,6 +1998,7 @@ String RID_STR_BOUNDCOLUMN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Sidottu kentt�";
     Text[ catalan ] = "Camp l�mit";
+    Text[ thai ] = "เขตข้อมูลที่ผูกอยู่";
 };
 String RID_STR_LISTSOURCE
 {
@@ -1956,6 +2025,7 @@ String RID_STR_LISTSOURCE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Luettelon sis�lt�";
     Text[ catalan ] = "Contingut de la llista";
+    Text[ thai ] = "รายการเนื้อหา";
 };
 String RID_STR_LISTSOURCETYPE
 {
@@ -1982,6 +2052,7 @@ String RID_STR_LISTSOURCETYPE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hakemistomerkint�jen tyypit";
     Text[ catalan ] = "Tipus de contingut de la llista";
+    Text[ thai ] = "ชนิดของรายการเนื้อหา";
 };
 String RID_STR_CURSORSOURCE
 {
@@ -1995,7 +2066,7 @@ String RID_STR_CURSORSOURCE
     Text[ french ] = "Contenu";
     Text[ spanish ] = "Contenido";
     Text[ italian ] = "Contenuto";
-    Text[ danish ] = "Datakilde";
+    Text[ danish ] = "Indhold";
     Text[ swedish ] = "Inneh�ll";
     Text[ polish ] = "Zawarto��";
     Text[ portuguese_brazilian ] = "Datenquelle";
@@ -2007,6 +2078,7 @@ String RID_STR_CURSORSOURCE
     Text[ arabic ] = "���������";
     Text[ finnish ] = "Sis�lt�";
     Text[ catalan ] = "Contingut";
+    Text[ thai ] = "เนื้อหา";
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -2020,7 +2092,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ french ] = "Type de contenu";
     Text[ spanish ] = "Tipo de contenido";
     Text[ italian ] = "Tipo di contenuto";
-    Text[ danish ] = "Datakildetype";
+    Text[ danish ] = "Indholdstype";
     Text[ swedish ] = "Typ av inneh�ll";
     Text[ polish ] = "Rodzaj zawarto�ci";
     Text[ portuguese_brazilian ] = "Typ der Datenquelle";
@@ -2032,6 +2104,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ arabic ] = "��� ���������";
     Text[ finnish ] = "Sis�lt�laji";
     Text[ catalan ] = "Tipus de contingut";
+    Text[ thai ] = "ชนิดเนื้อหา";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -2058,6 +2131,7 @@ String RID_STR_ALLOW_ADDITIONS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Salli lis�ykset";
     Text[ catalan ] = "Permet addicions";
+    Text[ thai ] = "ให้เพิ่มเติมได้";
 };
 String RID_STR_ALLOW_DELETIONS
 {
@@ -2084,6 +2158,7 @@ String RID_STR_ALLOW_DELETIONS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Poista tiedot";
     Text[ catalan ] = "Suprimeix les dades";
+    Text[ thai ] = "ลบข้อมูล";
 };
 String RID_STR_ALLOW_EDITS
 {
@@ -2110,6 +2185,7 @@ String RID_STR_ALLOW_EDITS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Salli muokkaukset";
     Text[ catalan ] = "Permet modificacions";
+    Text[ thai ] = "ให้ดัดแปลงแก้ไขได้";
 };
 String RID_STR_DATAENTRY
 {
@@ -2136,6 +2212,7 @@ String RID_STR_DATAENTRY
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis�� vain tietoja ";
     Text[ catalan ] = "Afegeix �nicament dades";
+    Text[ thai ] = "เพิ่มข้อมูลเท่านั้น";
 };
 String RID_STR_DATASOURCE
 {
@@ -2149,7 +2226,7 @@ String RID_STR_DATASOURCE
     Text[ french ] = "Source de donn�es";
     Text[ spanish ] = "Fuente de datos";
     Text[ italian ] = "Sorgente dati";
-    Text[ danish ] = "Database";
+    Text[ danish ] = "Datakilde";
     Text[ swedish ] = "Datak�lla";
     Text[ polish ] = "�r�d�o danych";
     Text[ portuguese_brazilian ] = "Datenbank";
@@ -2161,6 +2238,7 @@ String RID_STR_DATASOURCE
     Text[ arabic ] = "���� ��������";
     Text[ finnish ] = "Tietol�hde";
     Text[ catalan ] = "Font de les dades";
+    Text[ thai ] = "แหล่งข้อมูล";
 };
 String RID_STR_MASTERFIELDS
 {
@@ -2187,6 +2265,7 @@ String RID_STR_MASTERFIELDS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Linkit� p��kent�t";
     Text[ catalan ] = "Enlla� a els camps mestres";
+    Text[ thai ] = "เขตข้อมูลหลักที่เชื่อมโยง";
 };
 String RID_STR_SLAVEFIELDS
 {
@@ -2213,6 +2292,7 @@ String RID_STR_SLAVEFIELDS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Linkit� alisteiset kent�t";
     Text[ catalan ] = "Enlla� a els camps esclaus";
+    Text[ thai ] = "เขตข้อมูลทาสที่เชื่อมโยง";
 };
 String RID_STR_VALUEMIN
 {
@@ -2239,6 +2319,7 @@ String RID_STR_VALUEMIN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Arvo v�h.";
     Text[ catalan ] = "Valor m�n.";
+    Text[ thai ] = "ค่าที่น้อยที่สุด";
 };
 String RID_STR_VALUEMAX
 {
@@ -2265,6 +2346,7 @@ String RID_STR_VALUEMAX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Arvo enint.";
     Text[ catalan ] = "Valor m�x.";
+    Text[ thai ] = "ค่าที่มากที่สุด";
 };
 String RID_STR_VALUESTEP
 {
@@ -2291,6 +2373,7 @@ String RID_STR_VALUESTEP
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lis�ys-/v�hennysarvo";
     Text[ catalan ] = "Valor d'increment/decrement";
+    Text[ thai ] = "ค่าเพิ่ม/ลด";
 };
 String RID_STR_CURRENCYSYMBOL
 {
@@ -2317,6 +2400,7 @@ String RID_STR_CURRENCYSYMBOL
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Valuuttasymboli";
     Text[ catalan ] = "S�mbol de moneda";
+    Text[ thai ] = "สัญลักษณ์สกุลเงิน";
 };
 String RID_STR_DATEMIN
 {
@@ -2343,6 +2427,7 @@ String RID_STR_DATEMIN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "P�iv�m��r� v�hint��n";
     Text[ catalan ] = "Data m�n.";
+    Text[ thai ] = "วันที่ที่น้อยที่สุด";
 };
 String RID_STR_DATEMAX
 {
@@ -2369,6 +2454,7 @@ String RID_STR_DATEMAX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "P�iv�m��r� enint��n";
     Text[ catalan ] = "Data m�x.";
+    Text[ thai ] = "วันที่ที่มากที่สุด";
 };
 String RID_STR_DATEFORMAT
 {
@@ -2395,6 +2481,7 @@ String RID_STR_DATEFORMAT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "P�iv�m��r�muoto";
     Text[ catalan ] = "Format de la data";
+    Text[ thai ] = "รูปแบบวันที่";
 };
 String RID_STR_TIMEMIN
 {
@@ -2421,6 +2508,7 @@ String RID_STR_TIMEMIN
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Aika v�h.";
     Text[ catalan ] = "Hora m�n.";
+    Text[ thai ] = "เวลาที่น้อยที่สุด";
 };
 String RID_STR_TIMEMAX
 {
@@ -2447,6 +2535,7 @@ String RID_STR_TIMEMAX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Aika enint.";
     Text[ catalan ] = "Hora m�x.";
+    Text[ thai ] = "เวลาที่มากที่สุด";
 };
 String RID_STR_TIMEFORMAT
 {
@@ -2473,6 +2562,7 @@ String RID_STR_TIMEFORMAT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ajan muoto";
     Text[ catalan ] = "Format d'hora";
+    Text[ thai ] = "รูปแบบเวลา";
 };
 String RID_STR_CURRSYM_POSITION
 {
@@ -2486,7 +2576,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ french ] = "Placer le symbole avant le nombre";
     Text[ spanish ] = "Situar s�mbolo delante";
     Text[ italian ] = "Premetti simbolo";
-    Text[ danish ] = "Placer symbolet foran";
+    Text[ danish ] = "Foranstil symbol";
     Text[ swedish ] = "Placera symbol framf�r";
     Text[ polish ] = "Ustaw z przodu symbol";
     Text[ portuguese_brazilian ] = "prepend currency symbol";
@@ -2499,6 +2589,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Etuliitteen symboli";
     Text[ catalan ] = "S�mbol de prefix";
+    Text[ thai ] = "สัญลักษณ์นำหน้า";
 };
 String RID_STR_VALUE
 {
@@ -2524,7 +2615,8 @@ String RID_STR_VALUE
     Text[ turkish ] = "De�er";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Arvo";
-    Text[ catalan ] = "Valor";
+    Text[ catalan ] = "valor";
+    Text[ thai ] = "ค่า";
 };
 String RID_STR_FORMATKEY
 {
@@ -2551,6 +2643,7 @@ String RID_STR_FORMATKEY
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muotoilu";
     Text[ catalan ] = "Formatatge";
+    Text[ thai ] = "จัดรูปแบบ";
 };
 String RID_STR_CLASSID
 {
@@ -2577,6 +2670,7 @@ String RID_STR_CLASSID
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Luokan tunnus";
     Text[ catalan ] = "Identificador de classe";
+    Text[ thai ] = "คลาส ID";
 };
 String RID_STR_HEIGHT
 {
@@ -2603,6 +2697,7 @@ String RID_STR_HEIGHT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Korkeus";
     Text[ catalan ] = "Al�ada";
+    Text[ thai ] = "ความสูง";
 };
 String RID_STR_WIDTH
 {
@@ -2629,6 +2724,7 @@ String RID_STR_WIDTH
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Leveys";
     Text[ catalan ] = "Amplada";
+    Text[ thai ] = "ความกว้าง";
 };
 String RID_STR_LISTINDEX
 {
@@ -2638,7 +2734,7 @@ String RID_STR_LISTINDEX
     Text [ english_us ] = "List index" ;
     Text [ portuguese_brazilian ] = "ListIndex" ;
     Text [ swedish ] = "Listindex" ;
-    Text [ danish ] = "ListIndeks" ;
+    Text [ danish ] = "Listeindeks" ;
     Text [ italian ] = "Indice elenco" ;
     Text [ spanish ] = "Indice de listas" ;
     Text [ french ] = "Index de liste" ;
@@ -2655,6 +2751,7 @@ String RID_STR_LISTINDEX
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Luettelohakemisto";
     Text[ catalan ] = "�ndex de la llista";
+    Text[ thai ] = "ดัชนีรายการ";
 };
 String RID_STR_ROWHEIGHT
 {
@@ -2681,6 +2778,7 @@ String RID_STR_ROWHEIGHT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Rivin korkeus";
     Text[ catalan ] = "Al�ada de la fila";
+    Text[ thai ] = "ความสูงของแถว";
 };
 String RID_STR_FILLCOLOR
 {
@@ -2707,6 +2805,7 @@ String RID_STR_FILLCOLOR
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "T�ytt�v�ri";
     Text[ catalan ] = "Color d'emplenament";
+    Text[ thai ] = "เติมสี";
 };
 String RID_STR_LINECOLOR
 {
@@ -2733,6 +2832,7 @@ String RID_STR_LINECOLOR
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Viivan v�ri";
     Text[ catalan ] = "Color de la l�nia";
+    Text[ thai ] = "สีของเส้น";
 };
 String RID_STR_REFVALUE
 {
@@ -2759,6 +2859,7 @@ String RID_STR_REFVALUE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Viitteen arvo";
     Text[ catalan ] = "Valor de refer�ncia";
+    Text[ thai ] = "ค่าอ้างอิง";
 };
 String RID_STR_STRINGITEMLIST
 {
@@ -2785,6 +2886,7 @@ String RID_STR_STRINGITEMLIST
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Luettelomerkinn�t";
     Text[ catalan ] = "Entrades de la llista";
+    Text[ thai ] = "รายการป้อนเข้า";
 };
 String RID_STR_BUTTONTYPE
 {
@@ -2811,6 +2913,7 @@ String RID_STR_BUTTONTYPE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Painikkeen tyyppi";
     Text[ catalan ] = "Tipus de bot�";
+    Text[ thai ] = "ชนิดของปุ่ม";
 };
 String RID_STR_SUBMIT_ACTION
 {
@@ -2846,7 +2949,7 @@ String RID_STR_SUBMIT_METHOD
     Text [ english_us ] = "Type of submission" ;
     Text [ portuguese_brazilian ] = "Art der Submission" ;
     Text [ swedish ] = "S�ndningstyp" ;
-    Text [ danish ] = "Fremsendelsestype" ;
+    Text [ danish ] = "Sendetype" ;
     Text [ italian ] = "Tipo di submission" ;
     Text [ spanish ] = "Tipo de submit" ;
     Text [ french ] = "Type d'envoi" ;
@@ -2863,6 +2966,7 @@ String RID_STR_SUBMIT_METHOD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "L�hetyksen tyyppi";
     Text[ catalan ] = "Tipus de tramesa";
+    Text[ thai ] = "ชนิดของการเสนอ";
 };
 String RID_STR_DEFAULT_CHECKED
 {
@@ -2889,6 +2993,7 @@ String RID_STR_DEFAULT_CHECKED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Oletustila";
     Text[ catalan ] = "Estat per defecte";
+    Text[ thai ] = "สถานะค่าเริ่มต้น";
 };
 String RID_STR_SUBMIT_ENCODING
 {
@@ -2898,7 +3003,7 @@ String RID_STR_SUBMIT_ENCODING
     Text [ english_us ] = "Submission encoding" ;
     Text [ portuguese_brazilian ] = "Kodierung der Submission" ;
     Text [ swedish ] = "Kodning vid s�ndning" ;
-    Text [ danish ] = "Kodning ved fremsendelse" ;
+    Text [ danish ] = "Kodning ved afsendelse" ;
     Text [ italian ] = "Codifica all'invio" ;
     Text [ spanish ] = "Codificar submit" ;
     Text [ french ] = "Encodage de l'envoi" ;
@@ -2915,6 +3020,7 @@ String RID_STR_SUBMIT_ENCODING
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "L�hetyskoodaus";
     Text[ catalan ] = "Codificaci� de la tramesa";
+    Text[ thai ] = "ยอมให้เข้ารหัส";
 };
 String RID_STR_DEFAULTVALUE
 {
@@ -2941,6 +3047,7 @@ String RID_STR_DEFAULTVALUE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Oletusarvo";
     Text[ catalan ] = "Valor per defecte";
+    Text[ thai ] = "ค่าเริ่มต้น";
 };
 String RID_STR_SUBMIT_TARGET
 {
@@ -2967,6 +3074,7 @@ String RID_STR_SUBMIT_TARGET
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kehys";
     Text[ catalan ] = "Marc";
+    Text[ thai ] = "กรอบ";
 };
 String RID_STR_BORDER_TYPE
 {
@@ -2976,7 +3084,7 @@ String RID_STR_BORDER_TYPE
     Text [ english_us ] = "Without frame;3D look;Flat" ;
     Text [ portuguese_brazilian ] = "Transparent;3D-Look;Flach" ;
     Text [ swedish ] = "Utan ram;3D-look;Platt" ;
-    Text [ danish ] = "Uden ramme;3D-look;Flad" ;
+    Text [ danish ] = "Uden ramme;3D-design;Flad" ;
     Text [ italian ] = "Senza cornice;3D;Piano" ;
     Text [ spanish ] = "Sin marco;3D-Look;Plano" ;
     Text [ french ] = "Sans cadre;3D;Plat" ;
@@ -2993,6 +3101,7 @@ String RID_STR_BORDER_TYPE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ilman kehyst�;3D-ulkoasu;Litte�";
     Text[ catalan ] = "Sense marc;Apari�ncia 3D;Pla";
+    Text[ thai ] = "ไม่มีกรอบ;มองแบบสามมิติ;แบน";
 };
 String RID_STR_COMMAND_TYPE
 {
@@ -3018,6 +3127,7 @@ String RID_STR_COMMAND_TYPE
     Text[ turkish ] = "Tablo;Sorgu;SQL komutu";
     Text[ finnish ] = "Taulukko;Kysely;SQL-komento";
     Text[ catalan ] = "Taula;Consulta;Ordre SQL";
+    Text[ thai ] = "ตาราง;แบบสอบถาม;คำสั่ง SQL ";
 };
 String RID_STR_LISTSOURCE_TYPE
 {
@@ -3043,6 +3153,7 @@ String RID_STR_LISTSOURCE_TYPE
     Text[ turkish ] = "De�er listesi;Tablo;Sorgu;Sql;Sql [Native];Tablo alanlar�";
     Text[ finnish ] = "Arvoluettelo;taulukko;Kysely;Sql;Sql [alkuper�inen];Taulukkokent�t";
     Text[ catalan ] = "Llista de valors;Taula;Consulta;SQL;SQL [natiu];Camps de taula";
+    Text[ thai ] = "รายการค่า;ตาราง;แบบสอบถาม;Sql;Sql [โดยกำเนิด];เขตข้อมูลตาราง";
 };
 String RID_STR_ALIGNMENT
 {
@@ -3069,6 +3180,7 @@ String RID_STR_ALIGNMENT
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Vasen:Keskitys;Oikea";
     Text[ catalan ] = "Esquerra;Centre;Dreta";
+    Text[ thai ] = "ซ้าย;ตรงกลาง;ขวา";
 };
 String RID_STR_ENUM_SIDE_ALIGN
 {
@@ -3083,7 +3195,7 @@ String RID_STR_ENUM_SIDE_ALIGN
     Text[ spanish ] = "Izquierda;Arriba;Derecha;Abajo";
     Text[ finnish ] = "Vasen;Yl�reuna;Oikea;Alareuna";
     Text[ italian ] = "A sinistra;in alto;a destra;in basso";
-    Text[ danish ] = "Left;Top;Right;Bottom";
+    Text[ danish ] = "Venstre;�verst;H�jre;Nederst";
     Text[ swedish ] = "V�nster;Uppe;H�ger;Nere";
     Text[ polish ] = "Z lewej;U g�ry;Z prawej;Na dole";
     Text[ portuguese_brazilian ] = "Left;Top;Right;Bottom";
@@ -3093,7 +3205,8 @@ String RID_STR_ENUM_SIDE_ALIGN
     Text[ chinese_traditional ] = "向左;向上;向右;向下";
     Text[ turkish ] = "Left;Top;Right;Bottom";
     Text[ arabic ] = "Left;Top;Right;Bottom";
-    Text[ catalan ] = "Left;Top;Right;Bottom";
+    Text[ catalan ] = "Esquerra;Amunt;Dreta;Avall";
+    Text[ thai ] = "ซ้าย;บน;ขวา;ล่าง";
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
@@ -3103,7 +3216,7 @@ String RID_STR_ENUM_BUTTONTYPE
     Text [ english_us ] = "Push;Submit;Reset;Url" ;
     Text [ portuguese_brazilian ] = "Push;Submit;Reset;Url" ;
     Text [ swedish ] = "Push;Submit;Reset;Url" ;
-    Text [ danish ] = "Push;Submit;Reset;Url" ;
+    Text [ danish ] = "Push;Send;Nulstil;Url" ;
     Text [ italian ] = "Push;Submit;Reset;Url" ;
     Text [ spanish ] = "Push;Submit;Reset;Url" ;
     Text [ french ] = "Push;Submit;Reset;Url" ;
@@ -3120,6 +3233,7 @@ String RID_STR_ENUM_BUTTONTYPE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ty�nn�;L�het�;Palauta;Url-osoite";
     Text[ catalan ] = "Empeny;Trament;Reinicia;URL";
+    Text[ thai ] = "ผลัก;ส่ง;ตั้งใหม่;Url";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
 {
@@ -3129,7 +3243,7 @@ String RID_STR_ENUM_SUBMIT_METHOD
     Text [ english_us ] = "Get;Post" ;
     Text [ portuguese_brazilian ] = "Get;Post" ;
     Text [ swedish ] = "Get;Post" ;
-    Text [ danish ] = "Get;Post" ;
+    Text [ danish ] = "Hent;Send" ;
     Text [ italian ] = "Get;Post" ;
     Text [ spanish ] = "Get;Post" ;
     Text [ french ] = "Get;Post" ;
@@ -3146,6 +3260,7 @@ String RID_STR_ENUM_SUBMIT_METHOD
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hae;L�het�";
     Text[ catalan ] = "Recupera;Envia";
+    Text[ thai ] = "ได้รับ;ติดประกาศ";
 };
 String RID_STR_ENUM_SUBMIT_ENCODING
 {
@@ -3155,7 +3270,7 @@ String RID_STR_ENUM_SUBMIT_ENCODING
     Text [ english_us ] = "URL;Multipart;Text" ;
     Text [ portuguese_brazilian ] = "URL;Multipart" ;
     Text [ swedish ] = "URL;Multipart;Text" ;
-    Text [ danish ] = "URL;Multipart;Tekst" ;
+    Text [ danish ] = "URL;Flere dele;Tekst" ;
     Text [ italian ] = "URL;Multipart;Testo" ;
     Text [ spanish ] = "URL;Multipart;Texto" ;
     Text [ french ] = "URL;Multipart;Texte" ;
@@ -3172,6 +3287,7 @@ String RID_STR_ENUM_SUBMIT_ENCODING
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "URL;Moniosainen;Teksti";
     Text[ catalan ] = "URL;Multipart;Text";
+    Text[ thai ] = "URL;หลายส่วน;ข้อความ";
 };
 String RID_STR_DATEFORMAT_LIST
 {
@@ -3198,6 +3314,7 @@ String RID_STR_DATEFORMAT_LIST
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Vakio (lyhyt);Vakio (lyhyt VV);Vakio (lyhyt VVVV);Vakio (pitk�);PP/KK/VV;KK/PP/VV;VV/KK/PP;PP/KK/VVVV;KK/PP/VVVV;VVVV/KK/PP;VV-KK-PP;VVVV-KK-PP";
     Text[ catalan ] = "Est�ndard (curt);Est�ndard (curt AA);Est�ndard (curt AAAA);Est�ndard (llarg);DD/MM/AA;MM/DD/AA;AA/MM/DD;DD/MM/AAAA;MM/DD/AAAA;AAAA/MM/DD;AA-MM-DD;AAAA-MM-DD";
+    Text[ thai ] = "มาตรฐาน (สั้น);มาตรฐาน (สั้น ปป);มาตรฐาน (สั้น ปปปป);มาตรฐาน (ยาว);วว/ดด/ปป;ดด/วว/ปป;ปป/ดด/วว;วว/ดด/ปปปป;ดด/วว/ปปปป;ปปปป/ดด/วว;ปป-ดด-วว;ปปปป-ดด-วว";
 };
 String RID_STR_TIMEFORMAT_LIST
 {
@@ -3233,7 +3350,7 @@ String RID_STR_ENUM_CHECKED
     Text [ english_us ] = "Not Selected;Selected;Not Defined" ;
     Text [ portuguese_brazilian ] = "Nein;Ja;Unbestimmt" ;
     Text [ swedish ] = "Ej utvalt;Utvalt;Obest�mt" ;
-    Text [ danish ] = "Ikke valgt;Valgt;Udefineret" ;
+    Text [ danish ] = "Ikke valgt;Valgt;Ubestemt" ;
     Text [ italian ] = "Non selezionato;Selezionato;Indefinito" ;
     Text [ spanish ] = "No seleccionado;Seleccionado;Indeterminado" ;
     Text [ french ] = "Non s�lectionn�;S�lectionn�;Ind�termin�" ;
@@ -3250,6 +3367,7 @@ String RID_STR_ENUM_CHECKED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ei valittu;Valittu;Ei m��ritetty";
     Text[ catalan ] = "No seleccionat;Seleccionat;No definit";
+    Text[ thai ] = "ไม่ได้เลือก;เลือก;ไม่ระบุ";
 };
 String RID_STR_ENUM_CYCLE
 {
@@ -3276,6 +3394,7 @@ String RID_STR_ENUM_CYCLE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kaikki tietueet;Aktiivinen tietue;Nykyinen sivu";
     Text[ catalan ] = "Tots els registres;Registre actiu;P�gina actual";
+    Text[ thai ] = "ระเบียนทั้งหมด;ระเบียนที่ใช้งาน;หน้าปัจจุบัน";
 };
 String RID_STR_ENUM_NAVIGATION
 {
@@ -3285,7 +3404,7 @@ String RID_STR_ENUM_NAVIGATION
     Text[ italian ] = "No;Si;Formulario superiore";
     Text[ portuguese_brazilian ] = "No;Yes;Parent";
     Text[ portuguese ] = "N�o; Sim;Formul�rio superior";
-    Text[ danish ] = "Nei;Ja;Overordnet formular";
+    Text[ danish ] = "Nej;Ja;Overordnet formular";
     Text[ french ] = "Non;Oui;Formulaire parent";
     Text[ swedish ] = "Nej;Ja;�verordnat formul�r";
     Text[ dutch ] = "Nee;ja;Bovenliggend formulier";
@@ -3302,6 +3421,7 @@ String RID_STR_ENUM_NAVIGATION
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ei;Kyll�;P��lomake";
     Text[ catalan ] = "No;S�;Formulari pare";
+    Text[ thai ] = "ไม่ใช่;ใช่;ฟอร์มแม่แบบ";
 };
 String RID_STR_ENUM_SUBMIT_TARGET
 {
@@ -3319,7 +3439,7 @@ String RID_STR_EVT_APPROVEPARAMETER
     Text[ french ] = "Remplir les param�tres";
     Text[ spanish ] = "Rellenar par�metros";
     Text[ italian ] = "Compila parametri";
-    Text[ danish ] = "Fyld parametre";
+    Text[ danish ] = "Udfyld parameter";
     Text[ swedish ] = "Fyll parametrar";
     Text[ polish ] = "Wype�nij parametry";
     Text[ portuguese_brazilian ] = "Fill parameters";
@@ -3332,6 +3452,7 @@ String RID_STR_EVT_APPROVEPARAMETER
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "T�ytt�parametrit";
     Text[ catalan ] = "Par�metres d'emplenament";
+    Text[ thai ] = "เติมพารามิเตอร์";
 };
 String RID_STR_EVT_ACTIONPERFORMED
 {
@@ -3341,7 +3462,7 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text [ english_us ] = "When initiating" ;
     Text [ portuguese_brazilian ] = "Aktion ausgel?t" ;
     Text [ swedish ] = "Vid utf�rande" ;
-    Text [ danish ] = "Under udf�relse" ;
+    Text [ danish ] = "Ved udl�sning" ;
     Text [ italian ] = "Durante l'esecuzione" ;
     Text [ spanish ] = "Al ejecutar" ;
     Text [ french ] = "Lors du d�clenchement" ;
@@ -3358,6 +3479,7 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Otettaessa k�ytt��n";
     Text[ catalan ] = "En iniciar";
+    Text[ thai ] = "เมื่อกำลังเริ่ม";
 };
 String RID_STR_EVT_AFTERUPDATE
 {
@@ -3384,6 +3506,7 @@ String RID_STR_EVT_AFTERUPDATE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "P�ivityksen j�lkeen";
     Text[ catalan ] = "Despr�s d'actualitzar";
+    Text[ thai ] = "ภายหลังการปรับปรุง";
 };
 String RID_STR_EVT_BEFOREUPDATE
 {
@@ -3393,7 +3516,7 @@ String RID_STR_EVT_BEFOREUPDATE
     Text [ english_us ] = "Before updating" ;
     Text [ portuguese_brazilian ] = "Vor dem Aktualisieren" ;
     Text [ swedish ] = "F�re uppdatering" ;
-    Text [ danish ] = "Inden opdatering" ;
+    Text [ danish ] = "F�r udl�sning" ;
     Text [ italian ] = "Prima di aggiornare" ;
     Text [ spanish ] = "Antes de actualizar" ;
     Text [ french ] = "Avant l'actualisation" ;
@@ -3410,6 +3533,7 @@ String RID_STR_EVT_BEFOREUPDATE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ennen p�ivityst�";
     Text[ catalan ] = "Abans d'actualitzar";
+    Text[ thai ] = "ก่อนการปรับปรุง";
 };
 String RID_STR_EVT_APPROVEROWCHANGE
 {
@@ -3424,7 +3548,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ spanish ] = "Antes de la acci�n en el registro de datos";
     Text[ finnish ] = "Ennen tietuetoimintoa";
     Text[ italian ] = "Prima della modifica dei record di dati";
-    Text[ danish ] = "Inden datapost�ndring";
+    Text[ danish ] = "F�r dataposthandling";
     Text[ swedish ] = "F�re datapost�tg�rd";
     Text[ polish ] = "Przed operacj� rekordu";
     Text[ portuguese_brazilian ] = "Before row change";
@@ -3435,6 +3559,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ arabic ] = "��� ����� �����";
     Text[ catalan ] = "Abans de registrar";
     Text[ korean ] = "데이터 레코드 실행 전에";
+    Text[ thai ] = "ก่อนการกระทำระเบียน";
 };
 String RID_STR_EVT_ROWCHANGE
 {
@@ -3449,7 +3574,7 @@ String RID_STR_EVT_ROWCHANGE
     Text[ spanish ] = "Despu�s de la acci�n en el registro de datos";
     Text[ finnish ] = "Tietuetoiminnon j�lkeen";
     Text[ italian ] = "Dopo la modifica dei record di dati";
-    Text[ danish ] = "Efter datapost�ndring";
+    Text[ danish ] = "Efter dataposthandling";
     Text[ swedish ] = "Efter datapost�tg�rd";
     Text[ polish ] = "Po operacji rekordu";
     Text[ portuguese_brazilian ] = "After row change";
@@ -3460,6 +3585,7 @@ String RID_STR_EVT_ROWCHANGE
     Text[ arabic ] = "��� ����� �����";
     Text[ catalan ] = "Despr�s de registrar";
     Text[ korean ] = "데이터 레코드 실행 후에";
+    Text[ thai ] = "ภายหลังการกระทำระเบียน";
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
@@ -3486,6 +3612,7 @@ String RID_STR_EVT_CONFIRMDELETE
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Vahvista poistaminen";
     Text[ catalan ] = "Confirmeu la supressi�";
+    Text[ thai ] = "ยืนยันการลบ";
 };
 String RID_STR_EVT_ERROROCCURED
 {
@@ -3495,7 +3622,7 @@ String RID_STR_EVT_ERROROCCURED
     Text [ english_us ] = "Error occurred" ;
     Text [ portuguese_brazilian ] = "Fehler aufgetreten" ;
     Text [ swedish ] = "Fel har uppst�tt" ;
-    Text [ danish ] = "Der opstod en fejl" ;
+    Text [ danish ] = "Der er opst�et en fejl" ;
     Text [ italian ] = "Si � verificato un errore" ;
     Text [ spanish ] = "Ha ocurrido un error" ;
     Text [ french ] = "Erreur survenue" ;
@@ -3512,6 +3639,7 @@ String RID_STR_EVT_ERROROCCURED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "On ilmennyt virhe";
     Text[ catalan ] = "S'ha produ�t un error";
+    Text[ thai ] = "เกิดข้อผิดพลาด";
 };
 String RID_STR_EVT_FOCUSGAINED
 {
@@ -3521,7 +3649,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text [ english_us ] = "When receiving focus" ;
     Text [ portuguese_brazilian ] = "Bei Fokuserhalt" ;
     Text [ swedish ] = "Vid fokusering" ;
-    Text [ danish ] = "Ved fokusopretholdelse" ;
+    Text [ danish ] = "Ved fokus" ;
     Text [ italian ] = "Raggiungimento del punto focale" ;
     Text [ spanish ] = "Recepci�n de foco" ;
     Text [ french ] = "R�ception de focus" ;
@@ -3538,6 +3666,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kun kohdistus saavutetaan";
     Text[ catalan ] = "En rebre el focus";
+    Text[ thai ] = "เมื่อได้โฟกัส";
 };
 String RID_STR_EVT_FOCUSLOST
 {
@@ -3547,7 +3676,7 @@ String RID_STR_EVT_FOCUSLOST
     Text [ english_us ] = "When losing focus" ;
     Text [ portuguese_brazilian ] = "Bei Fokusverlust" ;
     Text [ swedish ] = "Vid fokusf�rlust" ;
-    Text [ danish ] = "Ved fokustab" ;
+    Text [ danish ] = "Ved manglende fokus" ;
     Text [ italian ] = "Perdita del punto focale" ;
     Text [ spanish ] = "Al perder el foco" ;
     Text [ french ] = "Perte de focus" ;
@@ -3564,6 +3693,7 @@ String RID_STR_EVT_FOCUSLOST
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Kun kohdistus menetet��n";
     Text[ catalan ] = "En perdre el focus";
+    Text[ thai ] = "เมื่อเสียโฟกัส";
 };
 String RID_STR_EVT_ITEMSTATECHANGED
 {
@@ -3590,6 +3720,7 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Nimikkeen tilaa muutettu";
     Text[ catalan ] = "L'estat de l'element ha canviat";
+    Text[ thai ] = "สถานะหน่วยเปลี่ยนแปลงไป";
 };
 String RID_STR_EVT_KEYTYPED
 {
@@ -3599,7 +3730,7 @@ String RID_STR_EVT_KEYTYPED
     Text [ english_us ] = "Key pressed" ;
     Text [ portuguese_brazilian ] = "Nach Tastendruck" ;
     Text [ swedish ] = "Tangent tryckt" ;
-    Text [ danish ] = "Knap trykket" ;
+    Text [ danish ] = "Taste aktiveret" ;
     Text [ italian ] = "Tasto premuto" ;
     Text [ spanish ] = "Tecla pulsada" ;
     Text [ french ] = "Touche enfonc�e" ;
@@ -3616,6 +3747,7 @@ String RID_STR_EVT_KEYTYPED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "N�pp�int� painettu";
     Text[ catalan ] = "S'ha premut la tecla";
+    Text[ thai ] = "ปุ่มกด";
 };
 String RID_STR_EVT_KEYUP
 {
@@ -3625,7 +3757,7 @@ String RID_STR_EVT_KEYUP
     Text [ english_us ] = "Key released" ;
     Text [ portuguese_brazilian ] = "Nach Tastendruck" ;
     Text [ swedish ] = "Efter tangenttryck" ;
-    Text [ danish ] = "Knap sluppet" ;
+    Text [ danish ] = "Taste sluppet" ;
     Text [ italian ] = "Dopo aver premuto il tasto" ;
     Text [ spanish ] = "Tecla soltada" ;
     Text [ french ] = "Apr�s avoir l�ch� la touche" ;
@@ -3642,6 +3774,7 @@ String RID_STR_EVT_KEYUP
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Vapautettu avain";
     Text[ catalan ] = "S'ha alliberat la tecla";
+    Text[ thai ] = "ปุ่มปล่อย";
 };
 String RID_STR_EVT_LOADED
 {
@@ -3668,6 +3801,7 @@ String RID_STR_EVT_LOADED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ladattaessa";
     Text[ catalan ] = "En carregar";
+    Text[ thai ] = "เมื่อกำลังโหลด";
 };
 String RID_STR_EVT_RELOADING
 {
@@ -3681,7 +3815,7 @@ String RID_STR_EVT_RELOADING
     Text[ french ] = "Avant le rechargement";
     Text[ spanish ] = "Antes de recargar";
     Text[ italian ] = "Prima del ricaricamento";
-    Text[ danish ] = "Before reloading";
+    Text[ danish ] = "F�r ny indl�sning";
     Text[ swedish ] = "F�re omladdning";
     Text[ polish ] = "Przed ponownym za�adowaniem";
     Text[ portuguese_brazilian ] = "Before reloading";
@@ -3693,6 +3827,7 @@ String RID_STR_EVT_RELOADING
     Text[ arabic ] = "��� ����� �������";
     Text[ finnish ] = "Ennen uudelleenlatausta";
     Text[ catalan ] = "Abans de tornar a carregar";
+    Text[ thai ] = "ก่อนการโหลดอีกครั้ง";
 };
 String RID_STR_EVT_RELOADED
 {
@@ -3706,7 +3841,7 @@ String RID_STR_EVT_RELOADED
     Text[ french ] = "Lors du rechargement";
     Text[ spanish ] = "Al recargar";
     Text[ italian ] = "Durante il ricaricamento";
-    Text[ danish ] = "Under genladning";
+    Text[ danish ] = "Ved ny indl�sning";
     Text[ swedish ] = "Vid omladdning";
     Text[ polish ] = "Podczas ponownego �adowania";
     Text[ portuguese_brazilian ] = "When reloading";
@@ -3718,6 +3853,7 @@ String RID_STR_EVT_RELOADED
     Text[ turkish ] = "Yeniden y�kleme s�ras�nda";
     Text[ finnish ] = "Uudelleenlatauksen yhteydess�";
     Text[ catalan ] = "En tornar a carregar";
+    Text[ thai ] = "เมื่อโหลดอีกครั้ง";
 };
 String RID_STR_EVT_MOUSEDRAGGED
 {
@@ -3727,7 +3863,7 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text [ english_us ] = "Mouse moved while key pressed" ;
     Text [ portuguese_brazilian ] = "Mausbewegung bei Tastendruck" ;
     Text [ swedish ] = "Musr�relse vid tangenttryck" ;
-    Text [ danish ] = "Musbev�gelse ved knaptryk" ;
+    Text [ danish ] = "Musbev�gelse ved tastetryk" ;
     Text [ italian ] = "Movimento del mouse premendo i tasti" ;
     Text [ spanish ] = "Mover rat�n por medio del teclado" ;
     Text [ french ] = "D�placement de la souris et touche enfonc�e" ;
@@ -3744,6 +3880,7 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hiirt� siirretty, kun painiketta painettu";
     Text[ catalan ] = "S'ha mogut el ratol� mentre es premia la tecla";
+    Text[ thai ] = "เม้าส์เคลื่อนที่ขณะกดปุ่ม";
 };
 String RID_STR_EVT_MOUSEENTERED
 {
@@ -3770,6 +3907,7 @@ String RID_STR_EVT_MOUSEENTERED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hiiri sis�puolella";
     Text[ catalan ] = "Ratol� dins";
+    Text[ thai ] = "ด้านในเม้าส์";
 };
 String RID_STR_EVT_MOUSEEXITED
 {
@@ -3796,6 +3934,7 @@ String RID_STR_EVT_MOUSEEXITED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hiiri ulkopuolella";
     Text[ catalan ] = "Ratol� fora";
+    Text[ thai ] = "ด้านนอกเม้าส์";
 };
 String RID_STR_EVT_MOUSEMOVED
 {
@@ -3822,6 +3961,7 @@ String RID_STR_EVT_MOUSEMOVED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hiirt� siirretty";
     Text[ catalan ] = "El ratol� s'ha mogut";
+    Text[ thai ] = "ย้ายเม้าส์";
 };
 String RID_STR_EVT_MOUSEPRESSED
 {
@@ -3831,7 +3971,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text [ english_us ] = "Mouse button pressed" ;
     Text [ portuguese_brazilian ] = "Maustaste gedr?kt" ;
     Text [ swedish ] = "Musknapp nedtryckt" ;
-    Text [ danish ] = "Museknap trykket" ;
+    Text [ danish ] = "Mustaste trykket" ;
     Text [ italian ] = "Tasto del mouse premuto" ;
     Text [ spanish ] = "Bot�n del rat�n pulsado" ;
     Text [ french ] = "Bouton de souris enfonc�" ;
@@ -3848,6 +3988,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hiiren painiketta painettu";
     Text[ catalan ] = "S'ha premut el bot� del ratol�";
+    Text[ thai ] = "กดปุ่มเม้าส์";
 };
 String RID_STR_EVT_MOUSERELEASED
 {
@@ -3857,7 +3998,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text [ english_us ] = "Mouse button released" ;
     Text [ portuguese_brazilian ] = "Maustaste losgelassen" ;
     Text [ swedish ] = "Musknapp uppsl�ppt" ;
-    Text [ danish ] = "Museknap sluppet" ;
+    Text [ danish ] = "Mustaste sluppet" ;
     Text [ italian ] = "Tasto del mouse rilasciato" ;
     Text [ spanish ] = "Bot�n del rat�n soltado" ;
     Text [ french ] = "Bouton de souris rel�ch�" ;
@@ -3874,6 +4015,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Hiiren painike vapautettu";
     Text[ catalan ] = "S'ha deixat anar el bot� del ratol�";
+    Text[ thai ] = "ปล่อยปุ่มเม้าส์";
 };
 String RID_STR_EVT_POSITIONING
 {
@@ -3887,7 +4029,7 @@ String RID_STR_EVT_POSITIONING
     Text[ french ] = "Avant le changement d'enregistrement";
     Text[ spanish ] = "Antes del cambio de registro de datos";
     Text[ italian ] = "Prima del cambio record di dati";
-    Text[ danish ] = "Inden datapostskift";
+    Text[ danish ] = "F�r skift af datapost";
     Text[ swedish ] = "F�re datapostv�xling";
     Text[ polish ] = "Przed zmian� rekord�w";
     Text[ portuguese_brazilian ] = "Prior positioning";
@@ -3899,6 +4041,7 @@ String RID_STR_EVT_POSITIONING
     Text[ turkish ] = "Veri k�mesi de�i�ikli�inden �nce";
     Text[ finnish ] = "Ennen tietueen muuttamista";
     Text[ catalan ] = "Abans del canvi al registre";
+    Text[ thai ] = "ก่อนการเปลี่ยนแปลงระเบียน";
 };
 String RID_STR_EVT_POSITIONED
 {
@@ -3907,7 +4050,7 @@ String RID_STR_EVT_POSITIONED
     Text [ english_us ] = "After record change" ;
     Text [ portuguese_brazilian ] = "Position ver?ndert" ;
     Text [ swedish ] = "Efter datapostv�xling" ;
-    Text [ danish ] = "Efter datapostskift" ;
+    Text [ danish ] = "Efter skift af datapost" ;
     Text [ italian ] = "Dopo il cambio record di dati" ;
     Text [ spanish ] = "Tras el cambio de registro de datos" ;
     Text [ french ] = "Apr�s le changement d'enregistrement" ;
@@ -3925,6 +4068,7 @@ String RID_STR_EVT_POSITIONED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tietueen muuttamisen j�lkeen";
     Text[ catalan ] = "Despr�s del canvi al registre";
+    Text[ thai ] = "ภายหลังการเปลี่ยนแปลงระเบียน";
 };
 String RID_STR_EVT_RESETTED
 {
@@ -3951,6 +4095,7 @@ String RID_STR_EVT_RESETTED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Uudelleenasetuksen j�lkeen";
     Text[ catalan ] = "Despr�s de reiniciar";
+    Text[ thai ] = "ภายหลังการตั้งค่าใหม่";
 };
 String RID_STR_EVT_APPROVERESETTED
 {
@@ -3960,7 +4105,7 @@ String RID_STR_EVT_APPROVERESETTED
     Text [ portuguese ] = "Antes de restaurar" ;
     Text [ portuguese_brazilian ] = "Zur?kgesetzt" ;
     Text [ swedish ] = "Innan �terst�llande" ;
-    Text [ danish ] = "Inden nulstilning" ;
+    Text [ danish ] = "F�r nulstilling" ;
     Text [ italian ] = "Prima di ripristinare" ;
     Text [ spanish ] = "Antes de restablecer" ;
     Text [ french ] = "Avant la restauration" ;
@@ -3977,6 +4122,7 @@ String RID_STR_EVT_APPROVERESETTED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ennen uudelleenk�ynnistyst�";
     Text[ catalan ] = "Abans de reinicialitzar";
+    Text[ thai ] = "ลำดับก่อนตั้งค่าใหม่";
 };
 String RID_STR_EVT_APPROVEACTIONPERFORMED
 {
@@ -3986,7 +4132,7 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
     Text [ english_us ] = "Before commencing" ;
     Text [ portuguese_brazilian ] = "Aktion ausgel?t" ;
     Text [ swedish ] = "Innan utf�rande" ;
-    Text [ danish ] = "Inden udf�relse" ;
+    Text [ danish ] = "F�r udl�sning" ;
     Text [ italian ] = "Prima dell'esecuzione" ;
     Text [ spanish ] = "Antes de ejecutar" ;
     Text [ french ] = "Avant le d�clenchement" ;
@@ -4003,6 +4149,7 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ennen aloittamista";
     Text[ catalan ] = "Abans de comen�ar";
+    Text[ thai ] = "ก่อนการตั้งต้น";
 };
 String RID_STR_EVT_SUBMITTED
 {
@@ -4016,7 +4163,7 @@ String RID_STR_EVT_SUBMITTED
     Text[ french ] = "Avant l'envoi";
     Text[ spanish ] = "Antes del env�o";
     Text[ italian ] = "Prima dell'invio";
-    Text[ danish ] = "Inden submitting";
+    Text[ danish ] = "F�r afsendelse";
     Text[ swedish ] = "F�re s�ndning";
     Text[ polish ] = "Przed submitem";
     Text[ portuguese_brazilian ] = "Submit";
@@ -4029,6 +4176,7 @@ String RID_STR_EVT_SUBMITTED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Ennen l�hett�mist�";
     Text[ catalan ] = "Abans de trametre";
+    Text[ thai ] = "ก่อนการส่ง";
 };
 String RID_STR_EVT_TEXTCHANGED
 {
@@ -4038,7 +4186,7 @@ String RID_STR_EVT_TEXTCHANGED
     Text [ english_us ] = "Text modified" ;
     Text [ portuguese_brazilian ] = "Text modifiziert" ;
     Text [ swedish ] = "Text modifierad" ;
-    Text [ danish ] = "Tekst �ndret" ;
+    Text [ danish ] = "Tekst modificeret" ;
     Text [ italian ] = "Testo modificato" ;
     Text [ spanish ] = "Texto modificado" ;
     Text [ french ] = "Texte modifi�" ;
@@ -4055,6 +4203,7 @@ String RID_STR_EVT_TEXTCHANGED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokattu teksti";
     Text[ catalan ] = "Text modificat";
+    Text[ thai ] = "ดัดแปลงแก้ไขข้อความ";
 };
 String RID_STR_EVT_UNLOADING
 {
@@ -4068,7 +4217,7 @@ String RID_STR_EVT_UNLOADING
     Text[ french ] = "Avant le d�chargement";
     Text[ spanish ] = "Antes de descargar";
     Text[ italian ] = "Prima di scaricare";
-    Text[ danish ] = "Before unloading";
+    Text[ danish ] = "F�r fjernelse";
     Text[ swedish ] = "F�re avladdning";
     Text[ polish ] = "Przed roz�adowaniem";
     Text[ portuguese_brazilian ] = "Before unloading";
@@ -4080,6 +4229,7 @@ String RID_STR_EVT_UNLOADING
     Text[ arabic ] = "��� ����� �������";
     Text[ finnish ] = "Ennen muistista poistamista";
     Text[ catalan ] = "Abans de descarregar";
+    Text[ thai ] = "ก่อนไม่โหลด";
 };
 String RID_STR_EVT_UNLOADED
 {
@@ -4089,7 +4239,7 @@ String RID_STR_EVT_UNLOADED
     Text [ english_us ] = "When unloading" ;
     Text [ portuguese_brazilian ] = "Beim Schlie?en" ;
     Text [ swedish ] = "Vid avladdning" ;
-    Text [ danish ] = "Under afladning" ;
+    Text [ danish ] = "Ved fjernelse" ;
     Text [ italian ] = "Durante lo scaricamento" ;
     Text [ spanish ] = "Al descargar" ;
     Text [ french ] = "Lors du d�chargement" ;
@@ -4106,6 +4256,7 @@ String RID_STR_EVT_UNLOADED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Poistettaessa muistista";
     Text[ catalan ] = "En descarregar";
+    Text[ thai ] = "เมื่อไม่โหลด";
 };
 String RID_STR_EVT_CHANGED
 {
@@ -4132,6 +4283,7 @@ String RID_STR_EVT_CHANGED
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muutettu";
     Text[ catalan ] = "Canviat";
+    Text[ thai ] = "เปลี่ยนแปลง";
 };
 String RID_STR_EVENTS
 {
@@ -4141,7 +4293,7 @@ String RID_STR_EVENTS
     Text [ english_us ] = "Events" ;
     Text [ portuguese_brazilian ] = "Ereignisse" ;
     Text [ swedish ] = "H�ndelser" ;
-    Text [ danish ] = "Begivenheder" ;
+    Text [ danish ] = "H�ndelser" ;
     Text [ italian ] = "Eventi" ;
     Text [ spanish ] = "Acontecimientos" ;
     Text [ french ] = "�v�nements" ;
@@ -4158,6 +4310,7 @@ String RID_STR_EVENTS
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Tapahtumat";
     Text[ catalan ] = "Esdeveniments";
+    Text[ thai ] = "เหตุการณ์";
 };
 String RID_STR_ESCAPE_PROCESSING
 {
@@ -4183,6 +4336,7 @@ String RID_STR_ESCAPE_PROCESSING
     Text[ turkish ] = "SQL komutunu ��z�mle";
     Text[ finnish ] = "Analysoi SQL-komento";
     Text[ catalan ] = "Analitza l'ordre SQL";
+    Text[ thai ] = "วิเคราะห์คำสั่ง SQL ";
 };
 String RID_STR_POSITIONX
 {
@@ -4196,7 +4350,7 @@ String RID_STR_POSITIONX
     Text[ french ] = "PositionX";
     Text[ spanish ] = "Posici�nX";
     Text[ italian ] = "PosizioneX";
-    Text[ danish ] = "PositionX";
+    Text[ danish ] = "X-position";
     Text[ swedish ] = "PositionX";
     Text[ polish ] = "PozycjaX";
     Text[ portuguese_brazilian ] = "PositionX";
@@ -4208,6 +4362,7 @@ String RID_STR_POSITIONX
     Text[ arabic ] = "������X";
     Text[ finnish ] = "SijaintiX";
     Text[ catalan ] = "Posici�";
+    Text[ thai ] = "ตำแหน่งX";
 };
 String RID_STR_POSITIONY
 {
@@ -4221,7 +4376,7 @@ String RID_STR_POSITIONY
     Text[ french ] = "PositionY";
     Text[ spanish ] = "Posici�nY";
     Text[ italian ] = "PosizioneY";
-    Text[ danish ] = "PositionY";
+    Text[ danish ] = "Y-position";
     Text[ swedish ] = "PositionY";
     Text[ polish ] = "PozycjaY";
     Text[ portuguese_brazilian ] = "PositionY";
@@ -4233,6 +4388,7 @@ String RID_STR_POSITIONY
     Text[ arabic ] = "������Y";
     Text[ finnish ] = "SijaintiY";
     Text[ catalan ] = "Posici�";
+    Text[ thai ] = "ตำแหน่งY";
 };
 String RID_STR_TITLE
 {
@@ -4246,7 +4402,7 @@ String RID_STR_TITLE
     Text[ french ] = "Titre";
     Text[ spanish ] = "T�tulo";
     Text[ italian ] = "Titolo";
-    Text[ danish ] = "Title";
+    Text[ danish ] = "Titel";
     Text[ swedish ] = "Titel";
     Text[ polish ] = "Tytu�";
     Text[ portuguese_brazilian ] = "Title";
@@ -4258,6 +4414,7 @@ String RID_STR_TITLE
     Text[ arabic ] = "�����";
     Text[ finnish ] = "Otsikko";
     Text[ catalan ] = "T�tol";
+    Text[ thai ] = "ชื่อเรื่อง";
 };
 String RID_STR_STEP
 {
@@ -4271,7 +4428,7 @@ String RID_STR_STEP
     Text[ french ] = "Page (Step)";
     Text[ spanish ] = "P�gina (Step)";
     Text[ italian ] = "Pagina (Step)";
-    Text[ danish ] = "Step";
+    Text[ danish ] = "Side (Step)";
     Text[ swedish ] = "Sida (steg)";
     Text[ polish ] = "Strona (Krok)";
     Text[ portuguese_brazilian ] = "Step";
@@ -4283,6 +4440,7 @@ String RID_STR_STEP
     Text[ arabic ] = "���� (����)";
     Text[ finnish ] = "Sivu (vaihe)";
     Text[ catalan ] = "P�gina (pas)";
+    Text[ thai ] = "หน้า (ขั้น)";
 };
 TabDialog RID_TABDLG_FONTDIALOG
 {
@@ -4336,6 +4494,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ korean ] = "글꼴";
                 Text [ turkish ] = "Yaz�tipi";
                 Text[ catalan ] = "Tipus de lletra";
+                Text[ thai ] = "ตัวอักษร";
             };
             PageItem
             {
@@ -4366,6 +4525,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ korean ] = "글꼴 효과";
                 Text [ turkish ] = "Yaz�tipi efektleri";
                 Text[ catalan ] = "Efectes de lletra";
+                Text[ thai ] = "ลักษณะตัวอักษร";
             };
         };
     };
@@ -4379,6 +4539,7 @@ TabDialog RID_TABDLG_FONTDIALOG
     Text[ turkish ] = "Character";
     Text[ arabic ] = "����";
     Text[ catalan ] = "Car�cter";
+    Text[ thai ] = "ตัวอักขระ";
 };
 String RID_STR_PROGRESSVALUE
 {
@@ -4392,7 +4553,7 @@ String RID_STR_PROGRESSVALUE
     Text[ french ] = "Valeur de progression";
     Text[ spanish ] = "Valor de progreso";
     Text[ italian ] = "Valore di progressione";
-    Text[ danish ] = "Progress value";
+    Text[ danish ] = "Forl�bsv�rdi";
     Text[ swedish ] = "Framstegsv�rde";
     Text[ polish ] = "Warto�� post�pu";
     Text[ portuguese_brazilian ] = "Progress value";
@@ -4404,6 +4565,7 @@ String RID_STR_PROGRESSVALUE
     Text[ arabic ] = "���� ������";
     Text[ catalan ] = "Valor de progressi�";
     Text[ finnish ] = "Edist� arvoa";
+    Text[ thai ] = "ค่าเพิ่มขึ้น";
 };
 String RID_STR_PROGRESSVALUE_MIN
 {
@@ -4417,7 +4579,7 @@ String RID_STR_PROGRESSVALUE_MIN
     Text[ french ] = "Valeur de progression min.";
     Text[ spanish ] = "Valor m�n. de progreso";
     Text[ italian ] = "Valore min. progressione";
-    Text[ danish ] = "Progress value min.";
+    Text[ danish ] = "Min. forl�bsv�rdi";
     Text[ swedish ] = "Min. framstegsv�rde";
     Text[ polish ] = "Min. warto�� post�pu";
     Text[ portuguese_brazilian ] = "Progress value min.";
@@ -4429,6 +4591,7 @@ String RID_STR_PROGRESSVALUE_MIN
     Text[ arabic ] = "��� ���� ����";
     Text[ catalan ] = "Valor m�nim de progressi�";
     Text[ finnish ] = "Edist� arvoa v�h.";
+    Text[ thai ] = "ค่าเพิ่มขึ้นน้อยที่สุด";
 };
 String RID_STR_PROGRESSVALUE_MAX
 {
@@ -4439,10 +4602,10 @@ String RID_STR_PROGRESSVALUE_MAX
     Text[ russian ] = "����. �������� ���������";
     Text[ greek ] = "Progress value max.";
     Text[ dutch ] = "Max. voortgangswaarde";
-    Text[ french ] = "Veleur de progression max.";
+    Text[ french ] = "Valeur de progression max.";
     Text[ spanish ] = "Valor m�x. de progreso";
     Text[ italian ] = "Valore max. progressione";
-    Text[ danish ] = "Progress value max.";
+    Text[ danish ] = "Maks. forl�bsv�rdi";
     Text[ swedish ] = "Max. framstegsv�rde";
     Text[ polish ] = "Maks. warto�� post�pu";
     Text[ portuguese_brazilian ] = "Progress value max.";
@@ -4454,6 +4617,7 @@ String RID_STR_PROGRESSVALUE_MAX
     Text[ arabic ] = "���� ���� ����";
     Text[ catalan ] = "Valor m�xim de progressi�";
     Text[ finnish ] = "Edist� arvoa enint.";
+    Text[ thai ] = "ค่าเพิ่มขึ้นมากที่สุด";
 };
 String RID_STR_SCROLLVALUE
 {
@@ -4467,7 +4631,7 @@ String RID_STR_SCROLLVALUE
     Text[ french ] = "Valeur de d�filement";
     Text[ spanish ] = "Valor";
     Text[ italian ] = "Valore scorrimento";
-    Text[ danish ] = "Scroll value";
+    Text[ danish ] = "Rullev�rdi";
     Text[ swedish ] = "Rullningsv�rde";
     Text[ polish ] = "Warto�� przewijania";
     Text[ portuguese_brazilian ] = "Scroll value";
@@ -4479,6 +4643,7 @@ String RID_STR_SCROLLVALUE
     Text[ arabic ] = "���� �������";
     Text[ catalan ] = "Valor de despla�ament";
     Text[ finnish ] = "Vierit� arvoa";
+    Text[ thai ] = "เลื่อนค่า";
 };
 String RID_STR_SCROLLVALUE_MAX
 {
@@ -4492,7 +4657,7 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ french ] = "Valeur de d�filement max.";
     Text[ spanish ] = "Valor m�ximo";
     Text[ italian ] = "Valori max. scorrimento";
-    Text[ danish ] = "Scroll value max.";
+    Text[ danish ] = "Maks. rullev�rdi";
     Text[ swedish ] = "Max. rullningsv�rde";
     Text[ polish ] = "Maks. warto�� przewijania";
     Text[ portuguese_brazilian ] = "Scroll value max.";
@@ -4504,6 +4669,7 @@ String RID_STR_SCROLLVALUE_MAX
     Text[ arabic ] = "���� ���� �����";
     Text[ catalan ] = "Valor m�xim de despla�ament";
     Text[ finnish ] = "Vierit� arvoa enint.";
+    Text[ thai ] = "เลื่อนค่ามากที่สุด";
 };
 String RID_STR_LINEINCREMENT
 {
@@ -4517,7 +4683,7 @@ String RID_STR_LINEINCREMENT
     Text[ french ] = "Incr�ment de ligne";
     Text[ spanish ] = "Incremento de l�nea";
     Text[ italian ] = "Incremento linea";
-    Text[ danish ] = "Line increment";
+    Text[ danish ] = "Linjefor�gelse";
     Text[ swedish ] = "Linjeinkrement";
     Text[ polish ] = "Inkrement linii";
     Text[ portuguese_brazilian ] = "Line increment";
@@ -4529,6 +4695,7 @@ String RID_STR_LINEINCREMENT
     Text[ arabic ] = "Line increment";
     Text[ catalan ] = "Increment de l�nia";
     Text[ finnish ] = "Rivin lis�ys";
+    Text[ thai ] = "ส่วนเพิ่มบรรทัด";
 };
 String RID_STR_BLOCKINCREMENT
 {
@@ -4542,7 +4709,7 @@ String RID_STR_BLOCKINCREMENT
     Text[ french ] = "Incr�ment de bloc";
     Text[ spanish ] = "Incremento de bloque";
     Text[ italian ] = "Incremento blocco";
-    Text[ danish ] = "Block increment";
+    Text[ danish ] = "Blokfor�gelse";
     Text[ swedish ] = "Blockinkrement";
     Text[ polish ] = "Inkrement bloku";
     Text[ portuguese_brazilian ] = "Block increment";
@@ -4554,6 +4721,7 @@ String RID_STR_BLOCKINCREMENT
     Text[ arabic ] = "����� ������";
     Text[ catalan ] = "Increment de bloc";
     Text[ finnish ] = "Lohkon lis�ys";
+    Text[ thai ] = "ส่วนเพิ่มบล็อค";
 };
 String RID_STR_VISIBLESIZE
 {
@@ -4567,7 +4735,7 @@ String RID_STR_VISIBLESIZE
     Text[ french ] = "Taille visible";
     Text[ spanish ] = "Tama�o visible";
     Text[ italian ] = "Dimensioni visibili";
-    Text[ danish ] = "Visible size";
+    Text[ danish ] = "Synlig st�rrelse";
     Text[ swedish ] = "Synlig storlek";
     Text[ polish ] = "Widoczny rozmiar";
     Text[ portuguese_brazilian ] = "Visible size";
@@ -4579,6 +4747,7 @@ String RID_STR_VISIBLESIZE
     Text[ arabic ] = "����� ������";
     Text[ catalan ] = "Mida visible";
     Text[ finnish ] = "N�ytett�v� koko";
+    Text[ thai ] = "ขนาดที่มองเห็น";
 };
 String RID_STR_ORIENTATION
 {
@@ -4592,7 +4761,7 @@ String RID_STR_ORIENTATION
     Text[ french ] = "Orientation";
     Text[ spanish ] = "Orientaci�n";
     Text[ italian ] = "Orientamento";
-    Text[ danish ] = "Orientation";
+    Text[ danish ] = "Papirretning";
     Text[ swedish ] = "Orientering";
     Text[ polish ] = "Orientacja";
     Text[ portuguese_brazilian ] = "Orientation";
@@ -4604,6 +4773,7 @@ String RID_STR_ORIENTATION
     Text[ arabic ] = "�������";
     Text[ catalan ] = "Orientaci�";
     Text[ finnish ] = "Suunta";
+    Text[ thai ] = "การวางแนว";
 };
 String RID_STR_ENUM_ORIENTATION
 {
@@ -4617,7 +4787,7 @@ String RID_STR_ENUM_ORIENTATION
     Text[ french ] = "Horizontal;Vertical";
     Text[ spanish ] = "Horizontal;Vertical";
     Text[ italian ] = "Orizzontale;Verticale";
-    Text[ danish ] = "Horizontal;Vertical";
+    Text[ danish ] = "Vandret;Lodret";
     Text[ swedish ] = "Horisontell;Vertikal";
     Text[ polish ] = "Pozioma;Pionowa";
     Text[ portuguese_brazilian ] = "Horizontal;Vertical";
@@ -4629,6 +4799,7 @@ String RID_STR_ENUM_ORIENTATION
     Text[ arabic ] = "����;����";
     Text[ catalan ] = "Horitzontal;Vertical";
     Text[ finnish ] = "Vaakataso;Pystytaso";
+    Text[ thai ] = "แนวนอน;แนวตั้ง";
 };
 String RID_STR_EVT_ADJUSTMENTVALUECHANGED
 {
@@ -4644,7 +4815,7 @@ String RID_STR_EVT_ADJUSTMENTVALUECHANGED
     Text[ spanish ] = "Al ajustar";
     Text[ finnish ] = "On adjust";
     Text[ italian ] = "Durante la regolazione";
-    Text[ danish ] = "On adjust";
+    Text[ danish ] = "Ved justering";
     Text[ swedish ] = "Vid justering";
     Text[ polish ] = "W trakcie justowania";
     Text[ portuguese_brazilian ] = "On adjust";
@@ -4669,7 +4840,7 @@ String RID_STR_DATE
     Text[ spanish ] = "Fecha";
     Text[ finnish ] = "Date";
     Text[ italian ] = "Data";
-    Text[ danish ] = "Date";
+    Text[ danish ] = "Dato";
     Text[ swedish ] = "Datum";
     Text[ polish ] = "Date";
     Text[ portuguese_brazilian ] = "Date";
@@ -4679,7 +4850,7 @@ String RID_STR_DATE
     Text[ chinese_traditional ] = "日期";
     Text[ turkish ] = "Date";
     Text[ arabic ] = "Date";
-    Text[ catalan ] = "Date";
+    Text[ catalan ] = "Data";
 };
 String RID_STR_STATE
 {
@@ -4694,7 +4865,7 @@ String RID_STR_STATE
     Text[ spanish ] = "Estado";
     Text[ finnish ] = "State";
     Text[ italian ] = "Stato";
-    Text[ danish ] = "State";
+    Text[ danish ] = "Status";
     Text[ swedish ] = "Status";
     Text[ polish ] = "State";
     Text[ portuguese_brazilian ] = "State";
@@ -4704,7 +4875,7 @@ String RID_STR_STATE
     Text[ chinese_traditional ] = "狀態";
     Text[ turkish ] = "State";
     Text[ arabic ] = "State";
-    Text[ catalan ] = "State";
+    Text[ catalan ] = "Estat";
 };
 String RID_STR_TIME
 {
@@ -4719,7 +4890,7 @@ String RID_STR_TIME
     Text[ spanish ] = "Hora";
     Text[ finnish ] = "Time";
     Text[ italian ] = "Ora";
-    Text[ danish ] = "Time";
+    Text[ danish ] = "Tid";
     Text[ swedish ] = "Tid";
     Text[ polish ] = "Time";
     Text[ portuguese_brazilian ] = "Time";
@@ -4729,7 +4900,7 @@ String RID_STR_TIME
     Text[ chinese_traditional ] = "時間";
     Text[ turkish ] = "Time";
     Text[ arabic ] = "Time";
-    Text[ catalan ] = "Time";
+    Text[ catalan ] = "Temps";
 };
 String RID_STR_SCALEIMAGE
 {
@@ -4744,7 +4915,7 @@ String RID_STR_SCALEIMAGE
     Text[ spanish ] = "Escala";
     Text[ finnish ] = "Scaling";
     Text[ italian ] = "Scala";
-    Text[ danish ] = "Scaling";
+    Text[ danish ] = "Skaler";
     Text[ swedish ] = "Skala";
     Text[ polish ] = "Scaling";
     Text[ portuguese_brazilian ] = "Scaling";
@@ -4754,7 +4925,8 @@ String RID_STR_SCALEIMAGE
     Text[ chinese_traditional ] = "顯示比例";
     Text[ turkish ] = "Scaling";
     Text[ arabic ] = "Scaling";
-    Text[ catalan ] = "Scaling";
+    Text[ catalan ] = "Escala";
+    Text[ thai ] = "สเกล";
 };
 String RID_STR_PUSHBUTTONTYPE
 {
@@ -4769,7 +4941,7 @@ String RID_STR_PUSHBUTTONTYPE
     Text[ spanish ] = "Tipo de bot�n";
     Text[ finnish ] = "Button type";
     Text[ italian ] = "Tipo di pulsante";
-    Text[ danish ] = "Button type";
+    Text[ danish ] = "Knaptype";
     Text[ swedish ] = "Typ av kommandoknapp";
     Text[ polish ] = "Button type";
     Text[ portuguese_brazilian ] = "Button type";
@@ -4779,7 +4951,8 @@ String RID_STR_PUSHBUTTONTYPE
     Text[ chinese_traditional ] = "按鈕類型";
     Text[ turkish ] = "Button type";
     Text[ arabic ] = "Button type";
-    Text[ catalan ] = "Button type";
+    Text[ catalan ] = "Tipus de bot�";
+    Text[ thai ] = "ชนิดของปุ่ม";
 };
 String RID_STR_ENUM_PUSHBUTTONTYPE
 {
@@ -4794,17 +4967,17 @@ String RID_STR_ENUM_PUSHBUTTONTYPE
     Text[ spanish ] = "Predeterminado;Aceptar;Cancelar;Ayuda";
     Text[ finnish ] = "Standard;OK;Cancel;Help";
     Text[ italian ] = "Standard;OK;Annulla;?";
-    Text[ danish ] = "Standard;OK;Cancel;Help";
+    Text[ danish ] = "\"Standard;OK;Annuller;Hj�lp\"";
     Text[ swedish ] = "Standard;OK;Avbryt;Hj�lp";
     Text[ polish ] = "Standard;OK;Cancel;Help";
     Text[ portuguese_brazilian ] = "Standard;OK;Cancel;Help";
     Text[ japanese ] = "標準;OK;キャンセル;ヘルプ";
     Text[ korean ] = "표준;확인;취소;도움말";
     Text[ chinese_simplified ] = "标准;确定;取消;帮助";
-    Text[ chinese_traditional ] = "標準;確定;取消;説明";
+    Text[ chinese_traditional ] = "標準;確定;取消;說明";
     Text[ turkish ] = "Standard;OK;Cancel;Help";
     Text[ arabic ] = "Standard;OK;Cancel;Help";
-    Text[ catalan ] = "Standard;OK;Cancel;Help";
+    Text[ catalan ] = "Est�ndard;D'acord;Cancel�la;Ajuda";
 };
 String RID_STR_UNABLETOCONNECT
 {
@@ -4819,7 +4992,7 @@ String RID_STR_UNABLETOCONNECT
     Text[ spanish ] = "No se pudo establecer la conexi�n a la fuente de datos \"$name$\" ";
     Text[ finnish ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati \"$name$\".";
-    Text[ danish ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ danish ] = "\"Der kunne ikke oprettes forbindelse til datakilden \"\"$name$\"\".\"";
     Text[ swedish ] = "Det gick inte att ansluta till datak�llan \"$name$\".";
     Text[ polish ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ portuguese_brazilian ] = "The connection to the data source \"$name$\" could not be established.";
@@ -4829,7 +5002,7 @@ String RID_STR_UNABLETOCONNECT
     Text[ chinese_traditional ] = "無法連線到資料源 \"$name$\" 。";
     Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
     Text[ arabic ] = "The connection to the data source \"$name$\" could not be established.";
-    Text[ catalan ] = "The connection to the data source \"$name$\" could not be established.";
+    Text[ catalan ] = "No s'ha pogut establir la connexi� amb la font de dades \"$name$\".";
 };
 String RID_STR_TEXT
 {
@@ -4860,6 +5033,9 @@ String RID_STR_TEXT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.43  2002/02/28 16:58:12  rt
+ *  Merge SRC641: 28.02.02 - 17:57:35
+ *
  *  Revision 1.42  2002/01/16 21:17:52  kz
  *  Merge SRC641: 16.01.02 - 22:12:40
  *
