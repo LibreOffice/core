@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:22:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,30 @@
 
 using namespace psp;
 using namespace rtl;
+
+JobData& JobData::operator=(const JobData& rRight)
+{
+    m_nCopies               = rRight.m_nCopies;
+    m_nScale                = rRight.m_nScale;
+    m_nLeftMarginAdjust     = rRight.m_nLeftMarginAdjust;
+    m_nRightMarginAdjust    = rRight.m_nRightMarginAdjust;
+    m_nTopMarginAdjust      = rRight.m_nTopMarginAdjust;
+    m_nBottomMarginAdjust   = rRight.m_nBottomMarginAdjust;
+    m_nColorDepth           = rRight.m_nColorDepth;
+    m_eOrientation          = rRight.m_eOrientation;
+    m_aPrinterName          = rRight.m_aPrinterName;
+    m_pParser               = rRight.m_pParser;
+    m_aContext              = rRight.m_aContext;
+    m_nPSLevel              = rRight.m_nPSLevel;
+    m_nColorDevice          = rRight.m_nColorDevice;
+
+    if( ! m_pParser && m_aPrinterName.getLength() )
+    {
+        PrinterInfoManager& rMgr = PrinterInfoManager::get();
+        rMgr.setupJobContextData( *this );
+    }
+    return *this;
+}
 
 bool JobData::getStreamBuffer( void*& pData, int& bytes )
 {
