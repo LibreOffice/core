@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 08:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+#ifndef _VCL_UNOHELP2_HXX
+#include <vcl/unohelp2.hxx>
 #endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
@@ -585,7 +588,10 @@ OUString SAL_CALL SmAccessibility::getTextAtIndex(
     if (AccessibleTextType::CHARACTER != aTextType)
         return OUString();
     String aTxt( GetAccessibleText_Impl() );
-    return aTxt.Copy(nIndex, 1);
+    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+        throw IndexOutOfBoundsException();
+    return aTxt.Copy(nIdx, 1);
 }
 
 OUString SAL_CALL SmAccessibility::getTextBeforeIndex(
@@ -597,7 +603,10 @@ OUString SAL_CALL SmAccessibility::getTextBeforeIndex(
     if (AccessibleTextType::CHARACTER != aTextType)
         return OUString();
     String aTxt( GetAccessibleText_Impl() );
-    return aTxt.Copy(0, nIndex);
+    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+        throw IndexOutOfBoundsException();
+    return aTxt.Copy(0, nIdx);
 }
 
 OUString SAL_CALL SmAccessibility::getTextBehindIndex(
@@ -609,7 +618,10 @@ OUString SAL_CALL SmAccessibility::getTextBehindIndex(
     if (AccessibleTextType::CHARACTER != aTextType)
         return OUString();
     String aTxt( GetAccessibleText_Impl() );
-    return aTxt.Copy(nIndex, aTxt.Len()-1);
+    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+        throw IndexOutOfBoundsException();
+    return aTxt.Copy(nIdx, aTxt.Len()-1);
 }
 
 sal_Bool SAL_CALL SmAccessibility::copyText(
@@ -618,17 +630,24 @@ sal_Bool SAL_CALL SmAccessibility::copyText(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    String aTxt( GetAccessibleText_Impl() );
-    String aCopy( aTxt.Copy(nStartIndex, nEndIndex - nStartIndex + 1) );
-
     sal_Bool bReturn = sal_False;
-/*
+
     if ( pWin )
     {
+        String aTxt( GetAccessibleText_Impl() );
+        xub_StrLen nStart = (xub_StrLen) nStartIndex;
+        xub_StrLen nEnd   = (xub_StrLen) nEndIndex;
+        if (!(0 <= nStart  &&  nStart < aTxt.Len()) ||
+            !(0 <= nEnd    &&  nEnd   < aTxt.Len()))
+            throw IndexOutOfBoundsException();
+        String aCopy;
+        if (nStart <= nEnd)
+            aCopy =  aTxt.Copy(nStart, nEnd - nStart + 1);
+
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+            ::rtl::OUString sText( aCopy );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -643,7 +662,7 @@ sal_Bool SAL_CALL SmAccessibility::copyText(
             bReturn = sal_True;
         }
     }
-*/
+
     return bReturn;
 }
 
