@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 15:34:55 $
+ *  last change: $Author: oj $ $Date: 2002-07-23 11:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ SwTbxInsertCtrl::SwTbxInsertCtrl( USHORT nId,
         SfxToolBoxControl( nId, rTbx, rBind ),
         nLastSlotId(FN_INSERT_CTRL == nId ? FN_INSERT_TABLE : SID_INSERT_DIAGRAM)
 {
-    sal_Bool bHighContrast = rTbx.GetBackground().GetColor().IsDark();
+    sal_Bool bHighContrast = rTbx.GetDisplayBackground().GetColor().IsDark();
     Image aImage = GetBindings().GetImageManager()->GetImage( nLastSlotId, bHighContrast, SW_MOD() );
     rTbx.SetItemImage(GetId(), aImage);
 }
@@ -181,7 +181,7 @@ void SwTbxInsertCtrl::StateChanged( USHORT nSID,
             if( nLastSlotId )
                 nId = nLastSlotId;
 
-            BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
+            BOOL bHiContrast = GetToolBox().GetDisplayBackground().GetColor().IsDark();
             Image aImage = GetBindings().GetImageManager()->GetImage( nId, bHiContrast, SW_MOD() );
             ToolBox& rBox = GetToolBox();
             rBox.SetItemImage(GetId(), aImage);
@@ -679,7 +679,7 @@ SwNaviImageButton::SwNaviImageButton(Window* pParent) :
     FreeResource();
     SetStyle(GetStyle()|WB_NOPOINTERFOCUS);
     SetQuickHelpText(sQuickText);
-    SetImage( GetBackground().GetColor().IsDark() ? aImageH : aImage);
+    SetImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
 }
 /* -----------------------------2002/07/05 9:41-------------------------------
 
@@ -688,7 +688,7 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            SetImage( GetBackground().GetColor().IsDark() ? aImageH : aImage);
+            SetImage( GetDisplayBackground().GetColor().IsDark() ? aImageH : aImage);
 
     Window::DataChanged( rDCEvt );
 }

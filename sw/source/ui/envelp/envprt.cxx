@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-23 11:10:22 $
+ *  last change: $Author: oj $ $Date: 2002-07-23 11:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ SwEnvPrtPage::~SwEnvPrtPage()
 
 IMPL_LINK( SwEnvPrtPage, ClickHdl, Button *, EMPTYARG )
 {
-    sal_Bool bHC = GetBackground().GetColor().IsDark();
+    sal_Bool bHC = GetDisplayBackground().GetColor().IsDark();
     if (aBottomButton.IsChecked())
     {
         // Briefumschlaege von unten
@@ -295,6 +295,9 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
 // ----------------------------------------------------------------------------
 /*
 $Log: not supported by cvs2svn $
+Revision 1.4  2002/07/23 11:10:22  oj
+#101522# change to the right bitmaps when in HC mode
+
 Revision 1.3  2002/07/23 08:19:39  gt
 #101614#, #101547# handling of pSet==NULL in DeactivatePage()
 
