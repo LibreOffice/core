@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:21:12 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class ZipPackageEntry : public cppu::WeakImplHelper5
 {
 protected:
     bool mbIsFolder:1;
-    com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xParent;
+    // com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xParent;
     ::rtl::OUString     sMediaType;
     ZipPackageFolder * pParent;
 public:
@@ -116,7 +116,8 @@ public:
 
     void clearParent ( void )
     {
-        xParent.clear();
+        // xParent.clear();
+        pParent = NULL;
     }
     // XNamed
     virtual ::rtl::OUString SAL_CALL getName(  )
