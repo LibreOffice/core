@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-05 10:52:34 $
+ *  last change: $Author: pl $ $Date: 2001-04-05 16:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                  )
                )
             pFrame = pFrame->maFrameData.pNextFrame_;
-        if( mpParent || ! pFrame )
+        if( mpParent || ! pFrame || ! ( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
         {
             SetSize( Size( w, h ) );
         }
