@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 12:42:27 $
+ *  last change: $Author: oj $ $Date: 2000-11-16 16:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
-
+using namespace ::com::sun::star::uno;
 
 //#define COMPARE_BOOKMARKS(a, b) compareUsrAny(a, b)
 #define COMPARE_BOOKMARKS(a, b) ::comphelper::compare(a, b)
@@ -164,13 +164,13 @@
 #else
 #define INLINE_METHOD inline
 #endif // DEBUG || DBG_UTIL
-#define IFACECAST(c)          ((const com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&)c)
+#define IFACECAST(c)          ((const Reference< XInterface >&)c)
  // SUN C52 has some ambiguities without this cast ....
 
 // ***************************************************************************************************
 
 SV_IMPL_OBJARR(SvInt32Array, sal_Int32);
-DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ,InterfaceArray);
+DECLARE_STL_VECTOR( Reference< XInterface > ,InterfaceArray);
 
 //========================================================================
 // = FmSearchThread
@@ -195,11 +195,11 @@ void FmSearchThread::onTerminated()
 
 DBG_NAME(FmRecordCountListener);
 //------------------------------------------------------------------------
-FmRecordCountListener::FmRecordCountListener(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > & dbcCursor)
+FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::sdbc::XResultSet > & dbcCursor)
 {
     DBG_CTOR(FmRecordCountListener,NULL);
 
-    m_xListening = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (dbcCursor, ::com::sun::star::uno::UNO_QUERY);
+    m_xListening = Reference< ::com::sun::star::beans::XPropertySet > (dbcCursor, UNO_QUERY);
     if (!m_xListening.is())
         return;
 
@@ -241,7 +241,7 @@ void FmRecordCountListener::DisConnect()
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL FmRecordCountListener::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL FmRecordCountListener::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
 {
     DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::disposing should never have been called without a propset !");
     DisConnect();
@@ -267,8 +267,8 @@ void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::Prope
 //========================================================================
 // FmSearchEngine - local classes
 //------------------------------------------------------------------------
-FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent > & _xText)
-    :ControlTextWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (_xText, ::com::sun::star::uno::UNO_QUERY))
+FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
+    :ControlTextWrapper(Reference< XInterface > (_xText, UNO_QUERY))
     ,m_xText(_xText)
 {
     DBG_ASSERT(m_xText.is(), "FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper : invalid argument !");
@@ -281,8 +281,8 @@ FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper(const ::com::sun::star::uno
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::ListBoxWrapper::ListBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox > & _xBox)
-    :ControlTextWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (_xBox, ::com::sun::star::uno::UNO_QUERY))
+FmSearchEngine::ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox > & _xBox)
+    :ControlTextWrapper(Reference< XInterface > (_xBox, UNO_QUERY))
     ,m_xBox(_xBox)
 {
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::ListBoxWrapper::ListBoxWrapper : invalid argument !");
@@ -295,8 +295,8 @@ FmSearchEngine::ListBoxWrapper::ListBoxWrapper(const ::com::sun::star::uno::Refe
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox > & _xBox)
-    :ControlTextWrapper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (_xBox, ::com::sun::star::uno::UNO_QUERY))
+FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckBox > & _xBox)
+    :ControlTextWrapper(Reference< XInterface > (_xBox, UNO_QUERY))
     ,m_xBox(_xBox)
 {
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper : invalid argument !");
@@ -352,10 +352,10 @@ sal_Bool FmSearchEngine::MoveCursor()
 
         bSuccess = sal_False;
     }
-    catch(::com::sun::star::uno::Exception  e)
+    catch(Exception  e)
     {
         UniString sDebugMessage;
-        sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched an ::com::sun::star::uno::Exception (");
+        sDebugMessage.AssignAscii("FmSearchEngine::MoveCursor : catched an Exception (");
         sDebugMessage += (const sal_Unicode*)e.Message;
         sDebugMessage.AppendAscii(") !");
         DBG_ERROR(ByteString(sDebugMessage, RTL_TEXTENCODING_ASCII_US).GetBuffer());
@@ -365,7 +365,7 @@ sal_Bool FmSearchEngine::MoveCursor()
 #endif // _DEBUG || DBG_UTIL
     catch(...)
     {
-        DBG_ERROR("FmSearchEngine::MoveCursor : catched an unknown ::com::sun::star::uno::Exception !");
+        DBG_ERROR("FmSearchEngine::MoveCursor : catched an unknown Exception !");
         bSuccess = sal_False;
     }
 
@@ -402,24 +402,24 @@ INLINE_METHOD sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollectio
 }
 
 //------------------------------------------------------------------------
-void FmSearchEngine::BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xAllFields, sal_Int32 nField)
+void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::container::XIndexAccess > & xAllFields, sal_Int32 nField)
 {
     // das Feld selber
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xCurrentField;
+    Reference< XInterface > xCurrentField;
     xAllFields->getByIndex(nField) >>= xCurrentField;
 
     // von dem weiss ich jetzt, dass es den DatabaseRecord-Service unterstuetzt (hoffe ich)
     // fuer den FormatKey und den Typ brauche ich das PropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xProperties(xCurrentField, ::com::sun::star::uno::UNO_QUERY);
+    Reference< ::com::sun::star::beans::XPropertySet >  xProperties(xCurrentField, UNO_QUERY);
 
     // die FieldInfo dazu aufbauen
     FieldInfo fiCurrent;
-    fiCurrent.xContents = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn > (xCurrentField, ::com::sun::star::uno::UNO_QUERY);
+    fiCurrent.xContents = Reference< ::com::sun::star::sdb::XColumn > (xCurrentField, UNO_QUERY);
     fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
     fiCurrent.bDoubleHandling = sal_False;
     if (m_xFormatSupplier.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(m_xFormatSupplier->getNumberFormats());
+        Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(m_xFormatSupplier->getNumberFormats());
 
         sal_Int16 nFormatType = ::comphelper::getNumberFormatType(xNumberFormats, fiCurrent.nFormatKey) & ~((sal_Int16)::com::sun::star::util::NumberFormat::DEFINED);
         fiCurrent.bDoubleHandling = (nFormatType != ::com::sun::star::util::NumberFormat::TEXT);
@@ -503,7 +503,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bo
     FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
 {
     // die Startposition merken
-    ::com::sun::star::uno::Any aStartMark = m_xSearchCursor.getBookmark();
+    Any aStartMark = m_xSearchCursor.getBookmark();
     FieldCollectionIterator iterInitialField = iterFieldLoop;
 
     // --------------------------------------------------------------
@@ -561,7 +561,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
     FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
 {
     // die Startposition merken
-    ::com::sun::star::uno::Any aStartMark = m_xSearchCursor.getBookmark();
+    Any aStartMark = m_xSearchCursor.getBookmark();
     FieldCollectionIterator iterInitialField = iterFieldLoop;
 
     WildCard aSearchExpression(strExpression);
@@ -640,7 +640,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
         "FmSearchEngine::SearchRegularApprox : kann nicht nach regulaeren Ausdruecken und nach Aehnlichkeiten gleichzeitig suchen !");
 
     // Startposition merken
-    ::com::sun::star::uno::Any aStartMark = m_xSearchCursor.getBookmark();
+    Any aStartMark = m_xSearchCursor.getBookmark();
     FieldCollectionIterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
@@ -743,8 +743,8 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
 
 DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
-FmSearchEngine::FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
+FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
+    const Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_bUsingTextComponents(sal_False)
@@ -759,8 +759,8 @@ FmSearchEngine::FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::su
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
-    m_xFormatter = ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > (::comphelper::getProcessServiceFactory()
-                    ->createInstance(FM_NUMBER_FORMATTER), ::com::sun::star::uno::UNO_QUERY);
+    m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (::comphelper::getProcessServiceFactory()
+                    ->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
     if (m_xFormatter.is())
         m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
 
@@ -768,7 +768,7 @@ FmSearchEngine::FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::su
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
+FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
     const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xOriginalIterator(xCursor)
@@ -814,27 +814,27 @@ void FmSearchEngine::clearControlTexts()
 void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
     clearControlTexts();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xCurrent;
+    Reference< XInterface >  xCurrent;
     for (int i=0; i<arrFields.size(); ++i)
     {
         xCurrent = arrFields.at(i);
         DBG_ASSERT(xCurrent.is(), "FmSearchEngine::fillControlTexts : invalid field interface !");
         // check which type of control this is
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >  xAsText(xCurrent, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::awt::XTextComponent >  xAsText(xCurrent, UNO_QUERY);
         if (xAsText.is())
         {
             m_aControlTexts.insert(m_aControlTexts.end(), new SimpleTextWrapper(xAsText));
             continue;
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >  xAsListBox(xCurrent, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::awt::XListBox >  xAsListBox(xCurrent, UNO_QUERY);
         if (xAsListBox.is())
         {
             m_aControlTexts.insert(m_aControlTexts.end(), new ListBoxWrapper(xAsListBox));
             continue;
         }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >  xAsCheckBox(xCurrent, ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::awt::XCheckBox >  xAsCheckBox(xCurrent, UNO_QUERY);
         DBG_ASSERT(xAsCheckBox.is(), "FmSearchEngine::fillControlTexts : invalid field interface (no supported type) !");
             // we don't have any more options ...
         m_aControlTexts.insert(m_aControlTexts.end(), new CheckBoxWrapper(xAsCheckBox));
@@ -850,33 +850,45 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     // Iterator gelieferten Spalte y
     m_arrFieldMapping.Remove(0, m_arrFieldMapping.Count());
 
-    // der Cursor kann mir einen Record (als PropertySet) liefern, dieser unterstuetzt den DatabaseRecord-Service
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   xSupplyCols(IFACECAST(m_xSearchCursor), ::com::sun::star::uno::UNO_QUERY);
-    DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        xAllFieldNames = xSupplyCols->getColumns();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  seqFieldNames = xAllFieldNames->getElementNames();
-    ::rtl::OUString*            pFieldNames = seqFieldNames.getArray();
-
-
-    ::rtl::OUString sCurrentField;
-    UniString sVis(sVisibleFields.getStr());
-    for (xub_StrLen i=0; i<sVis.GetTokenCount(); ++i)
+    try
     {
-        sCurrentField = sVis.GetToken(i);
+        // der Cursor kann mir einen Record (als PropertySet) liefern, dieser unterstuetzt den DatabaseRecord-Service
+        Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
+        DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
+        Reference< ::com::sun::star::container::XNameAccess >       xAllFieldNames = xSupplyCols->getColumns();
+        Sequence< ::rtl::OUString > seqFieldNames = xAllFieldNames->getElementNames();
+        ::rtl::OUString*            pFieldNames = seqFieldNames.getArray();
 
-        // in der Feld-Sammlung suchen
-        sal_Int32 nFoundIndex = -1;
-        for (sal_Int32 j=0; j<seqFieldNames.getLength(); ++j, ++pFieldNames)
+
+        ::rtl::OUString sCurrentField;
+        UniString sVis(sVisibleFields.getStr());
+        xub_StrLen nLen = sVis.GetTokenCount();
+        for (xub_StrLen i=0; i<nLen; ++i)
         {
-            if (pFieldNames->equals(sCurrentField))
+            sCurrentField = sVis.GetToken(i);
+
+            // in der Feld-Sammlung suchen
+            sal_Int32 nFoundIndex = -1;
+            for (sal_Int32 j=0; j<seqFieldNames.getLength(); ++j, ++pFieldNames)
             {
-                nFoundIndex = j;
-                break;
+                if (pFieldNames->equals(sCurrentField))
+                {
+                    nFoundIndex = j;
+                    break;
+                }
             }
+            // set the field selection back to the first
+            pFieldNames = seqFieldNames.getArray();;
+            DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Es wurden ungueltige Feldnamen angegeben !");
+            if(j < nLen)
+                m_arrFieldMapping.Insert(nFoundIndex, m_arrFieldMapping.Count());
         }
-        DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Es wurden ungueltige Feldnamen angegeben !");
-        m_arrFieldMapping.Insert(nFoundIndex, m_arrFieldMapping.Count());
     }
+    catch(Exception&)
+    {
+        DBG_ERROR("Exception occured!");
+    }
+
 }
 
 //------------------------------------------------------------------------
@@ -1111,7 +1123,7 @@ void FmSearchEngine::CancelSearch()
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmSearchEngine::SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields, const InterfaceArray& arrFields,
+sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
     DBG_ASSERT(!m_bSearchingCurrently, "FmSearchEngine::SwitchToContext : please do not call while I'm searching !");
@@ -1212,21 +1224,21 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
     m_arrUsedFields.clear();
     if (nFieldIndex == -1)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xFields;
+        Reference< ::com::sun::star::container::XIndexAccess >  xFields;
         for (sal_uInt16 i=0; i<m_arrFieldMapping.Count(); ++i)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
             DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
-            xFields = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+            xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
             BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(i));
         }
     }
     else
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xFields;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexAccess >  xFields;
+        Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
-        xFields = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), ::com::sun::star::uno::UNO_QUERY);
+        xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
         BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(nFieldIndex));
     }
 
