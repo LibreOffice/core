@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:52:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 09:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,14 +110,14 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
             SubMenu = Menu
             {
             };
-            Text = "Sichtbare ~Schaltflächen";
+            Text[ de ] = "Sichtbare ~Schaltflächen";
             Text[ en-US ] = "Visible ~Buttons";
         };
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR;
             Command = ".uno:ConfigureToolboxVisible" ;
-            Text = "~Werkzeugleiste anpassen..." ;
+            Text[ de ] = "~Werkzeugleiste anpassen..." ;
             Text[ en-US ] = "~Customize Toolbar...";
         };
         MenuItem
@@ -127,13 +127,13 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_DOCKTOOLBAR;
-            Text = "Werkzeugleiste an~docken" ;
+            Text[ de ] = "Werkzeugleiste an~docken" ;
             Text[ en-US ] = "~Dock Toolbar" ;
         };
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_DOCKALLTOOLBAR;
-            Text = "~Alle Werkzeugleisten andocken" ;
+            Text[ de ] = "~Alle Werkzeugleisten andocken" ;
             Text[ en-US ] = "Dock ~All Toolbars" ;
         };
         MenuItem
@@ -143,7 +143,7 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION;
-            Text = "Werkzeugleisten~position sperren" ;
+            Text[ de ] = "Werkzeugleisten~position sperren" ;
             Text[ en-US ] = "~Lock Toolbar Position" ;
         };
     };
