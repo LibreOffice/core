@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 18:08:20 $
+ *  last change: $Author: jp $ $Date: 2001-10-17 10:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,7 +603,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         // (Array kopieren und alle gefunden wieder loeschen;
                         //  erleichtert das suchen!!)
                         SwNodeIndex aMvIdx( aRg.aEnd, 1 );
-                        for( USHORT n = 0; n < nInsPos; ++n )
+                        for( ULONG n = 0; n < nInsPos; ++n )
                         {
                             SwNode* pNd = &aMvIdx.GetNode();
 /*                          if( bNewFrms )
