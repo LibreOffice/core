@@ -135,7 +135,7 @@
 "ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"CharCombineIsOn#optional"
 "ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"CharCombinePrefix#optional"
 "ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"CharCombineSuffix#optional"
-"ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"CharEmphasize#optional"
+"ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"CharEmphasis#optional"
 "ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"CharRelief#optional"
 "ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"RubyText#optional"
 "ScHeaderFooterTextCursor";"com::sun::star::style::CharacterProperties";"RubyAdjust#optional"
