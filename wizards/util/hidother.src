@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tv $ $Date: 2001-11-16 14:41:01 $
+ *  last change: $Author: tv $ $Date: 2001-11-23 15:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,14 @@ hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_OPTIONLETTER2; };
 #define HID_DLGCORRESPONDENCE_LETTEROKAY     34637
 hidspecial HID { HelpID = HID_DLGCORRESPONDENCE_LETTEROKAY; };
 
+#define HID_DLGSTYLES_DIALOG     34650
+hidspecial HID { HelpID = HID_DLGSTYLES_DIALOG; };
+#define HID_DLGSTYLES_LISTBOX     34651
+hidspecial HID { HelpID = HID_DLGSTYLES_LISTBOX; };
+#define HID_DLGSTYLES_CANCEL     34652
+hidspecial HID { HelpID = HID_DLGSTYLES_CANCEL; };
+#define HID_DLGSTYLES_OKAY     34653
+hidspecial HID { HelpID = HID_DLGSTYLES_OKAY; };
 
 #define HID_DLGCONVERT_DIALOG       34660
 hidspecial HID { HelpID = HID_DLGCONVERT_DIALOG; };
