@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:36:49 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,6 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
-#endif
 #ifndef _FESH_HXX
 #include <fesh.hxx>
 #endif
@@ -171,6 +168,9 @@
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 
 #ifndef _STATSTR_HRC
@@ -1397,7 +1397,9 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
     GetOut()->Push( PUSH_FILLCOLOR );
-    GetOut()->SetFillColor( Color(SW_MOD()->GetColorConfig().GetColorValue(svx::APPBACKGROUND).nColor) );
+    //make sure the color configuration has been loaded
+    SW_MOD()->GetColorConfig();
+    GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
     for ( USHORT i = 0; i < rRegion.Count(); ++i )
         GetOut()->DrawRect( rRegion[i].SVRect() );
     GetOut()->Pop();
@@ -1941,16 +1943,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     }
 
     SET_CURR_SHELL( this );
-
-    if( pOpt->IsSubsLines() != rOpt.IsSubsLines() ||
-        pOpt->IsSubsTable() != rOpt.IsSubsTable() )
-    {
-        pOpt->SetSubsLines( rOpt.IsSubsLines() ); // Frame-Hilfslinien
-        pOpt->SetSubsTable( rOpt.IsSubsTable() ); // Table-Hilfslinien
-        SetSubsLines();
-        if ( *pOpt == rOpt )
-            return;
-    }
 
     BOOL bReformat   = FALSE;
 

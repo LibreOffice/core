@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-04-03 13:28:37 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
 
         const SwViewOption *pOpt = pSh->GetViewOptions();
 
-        if (pOpt->IsField())
+        if (SwViewOption::IsFieldShadings())
             nCntrl |= EE_CNTRL_MARKFIELDS;
         else
             nCntrl &= ~EE_CNTRL_MARKFIELDS;

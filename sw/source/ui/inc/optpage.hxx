@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:57:28 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@ class SwContentOptPage : public SfxTabPage
 {
     //visual aids
     FixedLine   aLineFL;
-    CheckBox    aTxtbegCB;
-    CheckBox    aTblbegCB;
-    CheckBox    aSectBoundsCB;
     CheckBox    aCrossCB;
     CheckBox    aSolidHandleCB;
     CheckBox    aBigHandleCB;
@@ -131,12 +128,6 @@ class SwContentOptPage : public SfxTabPage
     CheckBox    aDrwCB;
     CheckBox    aFldNameCB;
     CheckBox    aPostItCB;
-    //highlighting
-    FixedLine   aBackFL;
-    CheckBox    aIdxEntryCB;
-    CheckBox    aIdxBackCB;
-    CheckBox    aFootBackCB;
-    CheckBox    aFldBackCB;
 
     FixedLine   aSettingsFL;
     FixedText   aMetricFT;
@@ -339,39 +330,9 @@ public:
 
 
 };
-/*-----------------19.04.97 13:17-------------------
-
---------------------------------------------------*/
-class SwSourceViewOptionsTabPage : public SfxTabPage
-{
-    FixedLine        aColorFL;
-    FixedText       aSGMLFT;
-    ColorListBox    aSGMLLB;
-    FixedText       aCommentFT;
-    ColorListBox    aCommentLB;
-    FixedText       aKeywdFT;
-    ColorListBox    aKeywdLB;
-    FixedText       aUnknownFT;
-    ColorListBox    aUnknownLB;
-
-                SwSourceViewOptionsTabPage( Window* pParent,
-                                           const SfxItemSet& rSet );
-                ~SwSourceViewOptionsTabPage();
-
-public:
-
-    static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet );
-
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
-    virtual void        Reset( const SfxItemSet& rSet );
-
-};
-
 /*-----------------31.10.97 17:55-------------------
  TabPage fuer ShadowCrsr
 --------------------------------------------------*/
-
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
@@ -395,9 +356,6 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     RadioButton     aFillIndentRB;
     RadioButton     aFillTabRB;
     RadioButton     aFillSpaceRB;
-
-    FixedText       aColorFT;
-    ColorListBox    aColorLB;
 
     FixedLine       aCrsrOptFL;
     CheckBox        aCrsrInProtCB;

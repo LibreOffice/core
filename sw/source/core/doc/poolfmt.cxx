@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 11:57:39 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
 #endif
 
 #ifndef _DOC_HXX
@@ -1354,16 +1357,22 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLCHR_INET_NORMAL:
         {
-            Color aCol( COL_BLUE );
-            aSet.Put( SvxColorItem( aCol ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+            if(SwViewOption::IsLinks())
+            {
+                Color aCol( SwViewOption::GetLinksColor() );
+                aSet.Put( SvxColorItem( aCol ) );
+                aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+            }
         }
         break;
     case RES_POOLCHR_INET_VISIT:
         {
-            Color aCol( COL_RED );
-            aSet.Put( SvxColorItem( aCol ) );
-            aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+            if(SwViewOption::IsVisitedLinks())
+            {
+                Color aCol( SwViewOption::GetVisitedLinksColor() );
+                aSet.Put( SvxColorItem( aCol ) );
+                aSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE ) );
+            }
         }
         break;
     case RES_POOLCHR_JUMPEDIT:

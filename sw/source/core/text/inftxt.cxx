@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-24 11:23:43 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,7 +1240,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     if ( aIntersect.HasArea() )
     {
         OutputDevice *pOut = (OutputDevice*)GetOut();
-        Color aCol( COL_LIGHTGRAY );
+        Color aCol( SwViewOption::GetFieldShadingsColor() );
         const Color aOldColor( pOut->GetFillColor() );
         sal_Bool bChgBrsh;
         if( 0 != (bChgBrsh = aOldColor != aCol) )
@@ -1286,14 +1286,17 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         sal_Bool bDraw = sal_False;
         switch( nWhich )
         {
-            case POR_FTN:       if ( GetOpt().IsFootNote() )bDraw = sal_True; break;
-            case POR_TOX:       if ( GetOpt().IsTox() )     bDraw = sal_True; break;
-            case POR_REF:       if ( GetOpt().IsRef() )     bDraw = sal_True; break;
+            case POR_FTN:
             case POR_QUOVADIS:
             case POR_NUMBER:
             case POR_FLD:
             case POR_URL:
-            case POR_HIDDEN:    if ( GetOpt().IsField() )   bDraw = sal_True; break;
+            case POR_HIDDEN:
+            case POR_TOX:
+            case POR_REF :
+                if ( !GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings() )
+                    bDraw = sal_True;
+            break;
             case POR_TAB:       if ( GetOpt().IsTab() )     bDraw = sal_True; break;
             case POR_SOFTHYPH:  if ( GetOpt().IsSoftHyph() )bDraw = sal_True; break;
             case POR_BLANK:     if ( GetOpt().IsHardBlank())bDraw = sal_True; break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,17 +208,10 @@ SwElemItem::SwElemItem( USHORT nWhich ) :
     bHorzRuler     =
     bVertRuler     =
     bVertRulerRight=
-    bTableBounds   =
-    bSectionBounds =
     bCrosshair     =
-    bBounds        =
     bHandles       =
     bBigHandles     =
     bSmoothScroll  =
-    bIndexEntry         =
-    bIndexBackground    =
-    bFootnoteBackground =
-    bField              =
     bTable              =
     bGraphic            =
     bDrawing            =
@@ -246,17 +239,10 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT nWhich) :
     bHorzRuler      = rVOpt.IsViewTabwin();
     bVertRuler      = rVOpt.IsViewVLin();
     bVertRulerRight = rVOpt.IsVRulerRight();
-    bTableBounds    = rVOpt.IsSubsTable();
-    bSectionBounds  = rVOpt.IsSectionBounds();
     bCrosshair      = rVOpt.IsCrossHair();
-    bBounds         = rVOpt.IsSubsLines();
     bHandles        = rVOpt.IsSolidMarkHdl();
     bBigHandles     = rVOpt.IsBigMarkHdl();
     bSmoothScroll   = rVOpt.IsSmoothScroll();
-    bIndexEntry         = rVOpt.IsTox();
-    bIndexBackground    = rVOpt.IsIndexBackground();
-    bFootnoteBackground = rVOpt.IsFootNote();
-    bField              = rVOpt.IsField();
     bTable              = rVOpt.IsTable();
     bGraphic            = rVOpt.IsGraphic();
     bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
@@ -289,17 +275,10 @@ int SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bHorzRuler      == rItem.bHorzRuler     &&
                 bVertRuler      == rItem.bVertRuler     &&
                 bVertRulerRight == rItem.bVertRulerRight&&
-                bTableBounds    == rItem.bTableBounds   &&
-                bSectionBounds  == rItem.bSectionBounds &&
                 bCrosshair      == rItem.bCrosshair     &&
-                bBounds         == rItem.bBounds        &&
                 bHandles        == rItem.bHandles       &&
                 bBigHandles     == rItem.bBigHandles    &&
                 bSmoothScroll   == rItem.bSmoothScroll  &&
-                bIndexEntry           == rItem.bIndexEntry         &&
-                bIndexBackground      == rItem.bIndexBackground    &&
-                bFootnoteBackground   == rItem.bFootnoteBackground &&
-                bField                == rItem.bField              &&
                 bTable                == rItem.bTable              &&
                 bGraphic              == rItem.bGraphic            &&
                 bDrawing              == rItem.bDrawing            &&
@@ -319,17 +298,10 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bHorzRuler      = rElemItem.  bHorzRuler        ;
     bVertRuler      = rElemItem.  bVertRuler        ;
     bVertRulerRight = rElemItem.  bVertRulerRight   ;
-    bTableBounds    = rElemItem.  bTableBounds      ;
-    bSectionBounds  = rElemItem.  bSectionBounds    ;
     bCrosshair      = rElemItem.  bCrosshair        ;
-    bBounds         = rElemItem.  bBounds           ;
     bHandles        = rElemItem.  bHandles          ;
     bBigHandles     = rElemItem.  bBigHandles       ;
     bSmoothScroll   = rElemItem.  bSmoothScroll     ;
-    bIndexEntry         = rElemItem.bIndexEntry           ;
-    bIndexBackground    = rElemItem.bIndexBackground      ;
-    bFootnoteBackground = rElemItem.bFootnoteBackground   ;
-    bField              = rElemItem.bField                ;
     bTable              = rElemItem.bTable                ;
     bGraphic            = rElemItem.bGraphic              ;
     bDrawing            = rElemItem.bDrawing              ;
@@ -348,17 +320,10 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetViewTabwin(bHorzRuler    );
     rVOpt.SetViewVLin(bVertRuler      );
     rVOpt.SetVRulerRight(bVertRulerRight );
-    rVOpt.SetSubsTable(bTableBounds   );
-    rVOpt.SetSectionBounds(bSectionBounds);
     rVOpt.SetCrossHair(bCrosshair     );
-    rVOpt.SetSubsLines(bBounds        );
     rVOpt.SetSolidMarkHdl(bHandles    );
     rVOpt.SetBigMarkHdl(bBigHandles );
     rVOpt.SetSmoothScroll(bSmoothScroll);
-    rVOpt.SetTox        (bIndexEntry        );
-    rVOpt.SetFootNote   (bFootnoteBackground);
-    rVOpt.SetIndexBackground(bIndexBackground);
-    rVOpt.SetField      (bField             );
     rVOpt.SetTable      (bTable             );
     rVOpt.SetGraphic    (bGraphic           );
     rVOpt.SetDraw       (bDrawing           );
@@ -422,21 +387,21 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 
 SwShadowCursorItem::SwShadowCursorItem( USHORT nWhich )
     : SfxPoolItem( nWhich ),
-    bOn( FALSE ), eMode( FILL_TAB ), aColor( COL_BLUE )
+    bOn( FALSE ), eMode( FILL_TAB )
 {
 }
 
 SwShadowCursorItem::SwShadowCursorItem( const SwShadowCursorItem& rCpy )
     : SfxPoolItem( rCpy.Which() ),
-    bOn( rCpy.IsOn() ), eMode( rCpy.GetMode() ), aColor( rCpy.GetColor() )
+    bOn( rCpy.IsOn() ),
+    eMode( rCpy.GetMode() )
 {
 }
 
 SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt, USHORT nWhich )
     : SfxPoolItem( nWhich ),
     bOn( rVOpt.IsShadowCursor() ),
-    eMode( rVOpt.GetShdwCrsrFillMode() ),
-    aColor( rVOpt.GetShdwCrsrColor() )
+    eMode( rVOpt.GetShdwCrsrFillMode() )
 {
 }
 
@@ -448,15 +413,13 @@ SfxPoolItem* SwShadowCursorItem::Clone( SfxItemPool* ) const
 int SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return  IsOn() == ((SwShadowCursorItem&)rCmp).IsOn() &&
-            GetMode() == ((SwShadowCursorItem&)rCmp).GetMode() &&
-            GetColor() == ((SwShadowCursorItem&)rCmp).GetColor();
+            GetMode() == ((SwShadowCursorItem&)rCmp).GetMode();
 }
 
 void SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )
 {
     SetOn( rCpy.IsOn() );
     SetMode( rCpy.GetMode() );
-    SetColor( rCpy.GetColor() );
 }
 
 
@@ -464,7 +427,6 @@ void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const
 {
     rVOpt.SetShadowCursor( bOn );
     rVOpt.SetShdwCrsrFillMode( eMode );
-    rVOpt.SetShdwCrsrColor( aColor );
 }
 
 #ifndef PRODUCT
@@ -524,6 +486,9 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/03/07 08:57:07  os
+    #96678# enable right alignment of the vertical ruler
+
     Revision 1.3  2001/05/10 08:47:33  os
     store print options at the document
 

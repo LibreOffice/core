@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:37:35 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,20 +348,14 @@ sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
             rVOpt.IsSoftHyph() &&
-            rVOpt.IsTox() &&
-            rVOpt.IsFootNote() &&
-            rVOpt.IsField();
+            SwViewOption::IsFieldShadings();
 }
-
-
 void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
 {
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
-    rVOpt.SetTox(bOn);
-    rVOpt.SetFootNote(bOn);
-    rVOpt.SetField(bOn);
-    rVOpt.SetRef(bOn);
+    SwViewOption::SetAppearanceFlag(
+            VIEWOPT_FIELD_SHADINGS, bOn, TRUE);
 }
 
 /*--------------------------------------------------------------------
@@ -399,11 +393,11 @@ void SwModule::StateViewOptions(SfxItemSet &rSet)
                 case FN_RULER:
                     aBool.SetValue( pActView->StatTab() );  break;
                 case FN_VIEW_BOUNDS:
-                    aBool.SetValue( pOpt->IsSubsLines() ); break;
+                    aBool.SetValue( SwViewOption::IsDocBoundaries()); break;
                 case FN_VIEW_GRAPHIC:
                     aBool.SetValue( !pOpt->IsGraphic() ); break;
                 case FN_VIEW_FIELDS:
-                    aBool.SetValue( pOpt->IsField() ); break;
+                    aBool.SetValue( SwViewOption::IsFieldShadings() ); break;
                 case FN_VIEW_FIELDNAME:
                     aBool.SetValue( pOpt->IsFldName() ); break;
                 case FN_VIEW_MARKS:
@@ -411,7 +405,7 @@ void SwModule::StateViewOptions(SfxItemSet &rSet)
                 case FN_VIEW_META_CHARS:
                     aBool.SetValue( pOpt->IsViewMetaChars() ); break;
                 case FN_VIEW_TABLEGRID:
-                    aBool.SetValue( pOpt->IsSubsTable() ); break;
+                    aBool.SetValue( SwViewOption::IsTableBoundaries() ); break;
                 case FN_VIEW_HIDDEN_PARA:
                     aBool.SetValue( pOpt->IsShowHiddenPara()); break;
                 case SID_GRID_VISIBLE:
@@ -612,18 +606,14 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
 
         case FN_VIEW_FIELDS:
                 if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsField() ;
-
-                pOpt->SetField( bFlag );
-                pOpt->SetRef( bFlag );
+                    bFlag = !SwViewOption::IsFieldShadings() ;
+                SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, TRUE );
                 break;
 
         case FN_VIEW_BOUNDS:
-
                 if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsSubsLines();
-
-                pOpt->SetSubsLines( bFlag );
+                    bFlag = !SwViewOption::IsDocBoundaries();
+                SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, TRUE );
                 break;
 
         case SID_GRID_VISIBLE:
@@ -692,9 +682,8 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
 
         case FN_VIEW_TABLEGRID:
                 if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsSubsTable();
-
-                pOpt->SetSubsTable( bFlag );
+                    bFlag = !SwViewOption::IsTableBoundaries();
+                SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, TRUE );
                 break;
 
         case FN_VIEW_FIELDNAME:
@@ -1021,7 +1010,8 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
         if(SFX_HINT_COLORS_CHANGED == nHintId)
         {
-            SwViewOption::SetSpellColor(pColorConfig->GetColorValue(svx::WRITERSPELL).nColor);
+            SwViewOption::ApplyColorConfigValues(*pColorConfig);
+
             //invalidate all edit windows
             const TypeId aSwViewTypeId = TYPE(SwView);
             const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
@@ -1036,8 +1026,6 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pViewShell->GetWindow()->Invalidate();
                 pViewShell = SfxViewShell::GetNext( *pViewShell );
             }
-
-
         }
         else if(SFX_HINT_DEINITIALIZING == nHintId)
         {
@@ -1141,9 +1129,11 @@ SwDBConfig* SwModule::GetDBConfig()
 svx::ColorConfig& SwModule::GetColorConfig()
 {
     if(!pColorConfig)
+    {
         pColorConfig = new svx::ColorConfig;
-    StartListening(*pColorConfig);
-    SwViewOption::SetSpellColor(pColorConfig->GetColorValue(svx::WRITERSPELL).nColor);
+        SwViewOption::ApplyColorConfigValues(*pColorConfig);
+        StartListening(*pColorConfig);
+    }
     return *pColorConfig;
 }
 /*-----------------30.01.97 08.30-------------------

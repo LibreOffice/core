@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:43:06 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,8 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
 
 void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 {
-    if ( rInf.OnWin() && rInf.GetOpt().IsField() )
+    if ( rInf.OnWin() &&
+        !rInf.GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings()    )
         rInf.DrawBackground( *this );
 
     ASSERT( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
@@ -399,7 +400,8 @@ void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
     // ganz normale Ausgabe wird hier erledigt.
     if( ! nDropHeight || ! pPart || 1 == nLines )
     {
-        if ( rInf.OnWin() && rInf.GetOpt().IsField() )
+        if ( rInf.OnWin() &&
+            !rInf.GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings()       )
             rInf.DrawBackground( *this );
 
         SwTxtPortion::Paint( rInf );

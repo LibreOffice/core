@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
 #endif
+
+#pragma hdrstop
+
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
@@ -83,10 +86,9 @@
 #ifndef _FESH_HXX
 #include "fesh.hxx"
 #endif
-
-
-#pragma hdrstop
-
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -1025,7 +1027,7 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
                 equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharBackColor")),
                 "Please adjust CHAR_BACK_COLOR_POS constant." );
     if( GetPortionData().IsInGrayPortion( nIndex ) )
-        pValues[CHAR_BACK_COLOR_POS].Value <<= COL_LIGHTGRAY;
+        pValues[CHAR_BACK_COLOR_POS].Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
 
     return aValues;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-24 08:15:40 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,7 +646,6 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case  RID_SW_TP_OPTTEST_PAGE:   pRet = SwTestTabPage::Create(pParent, rSet); break;
 #endif
         case  RID_SW_TP_BACKGROUND:     pRet = SvxBackgroundTabPage::Create(pParent, rSet); break;
-        case  RID_SW_TP_OPTSRCVIEW:     pRet = SwSourceViewOptionsTabPage::Create(pParent, rSet); break;
     }
     DBG_ASSERT(pRet, "Id unbekannt")
     return pRet;

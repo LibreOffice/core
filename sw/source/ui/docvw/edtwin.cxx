@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-04-23 13:31:23 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2910,7 +2910,7 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
                     {
                         if( !pShadCrsr )
                             pShadCrsr = new SwShadowCursor( *this,
-                                rSh.GetViewOptions()->GetShdwCrsrColor() );
+                                SwViewOption::GetDirectCursorColor() );
                         if( HORI_RIGHT != eOrient && HORI_CENTER != eOrient )
                             eOrient = HORI_LEFT;
                         pShadCrsr->SetPos( aRect.Pos(), aRect.Height(), eOrient );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:12:49 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,6 @@
 #define TP_PICK_BULLET              (RC_GLOBALS_BEGIN +  60)
 #define TP_PICK_NUM                 (RC_GLOBALS_BEGIN +  61)
 #define TP_PICK_BMP                 (RC_GLOBALS_BEGIN +  62)
-#define TP_OPTSRCVIEW               (RC_GLOBALS_BEGIN +  63)
 
 #define TP_FLD_DB                   (RC_GLOBALS_BEGIN +  64)
 #define TP_FLD_DOKINF               (RC_GLOBALS_BEGIN +  65)

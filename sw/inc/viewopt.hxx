@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:38:44 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class Window;
 class OutputDevice;
 class ViewShell;
 class SwDocShell;
+namespace svx{ class ColorConfig;}
 
 #define VIEWOPT_1_IDLE          0x00000001L
 #define VIEWOPT_1_TAB           0x00000002L
@@ -87,19 +88,19 @@ class SwDocShell;
 #define VIEWOPT_1_PAGEBREAK     0x00000040L
 #define VIEWOPT_1_COLUMNBREAK   0x00000080L
 #define VIEWOPT_1_SOFTHYPH      0x00000100L
-#define VIEWOPT_1_TOX           0x00000200L
+
 #define VIEWOPT_1_REF           0x00000400L
 #define VIEWOPT_1_FLDNAME       0x00000800L
-#define VIEWOPT_1_FIELD         0x00001000L
-#define VIEWOPT_1_FOOTNOTE      0x00002000L
+
+
 #define VIEWOPT_1_POSTITS       0x00004000L
 #define VIEWOPT_1_HIDDEN        0x00008000L
-#define VIEWOPT_1_SUBSLINES     0x00010000L
+
 #define VIEWOPT_1_GRAPHIC       0x00020000L
 #define VIEWOPT_1_TABLE         0x00040000L
 #define VIEWOPT_1_DRAW          0x00080000L
 #define VIEWOPT_1_CONTROL       0x00100000L
-#define VIEWOPT_1_SUBSTABLE     0x00200000L
+
 #define VIEWOPT_1_CROSSHAIR     0x00400000L
 #define VIEWOPT_1_SNAP          0x00800000L
 #define VIEWOPT_1_SYNCHRONIZE   0x01000000L
@@ -115,20 +116,12 @@ class SwDocShell;
 #define VIEWOPT_CORE2_HIDDENPARA        0x00000002L
 #define VIEWOPT_CORE2_SMOOTHSCROLL      0x00000004L
 #define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
-#define VIEWOPT_CORE2_SECTION_BOUNDS    0x00000010L
-#define VIEWOPT_CORE2_INDEX_BACKGROUND  0x00000020L
+
+
 #define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
 
-//#define VIEWOPT_2_TOOLBOX         0x00000001L
-//#define VIEWOPT_2_TOOLBOXTEXT     0x00000002L
-//#define VIEWOPT_2_TOOLBOXBITMAP       0x00000004L
-//#define VIEWOPT_2_TOOLBOXBOTH     0x00000008L
-//#define VIEWOPT_2_TOOLBOXLEFT     0x00000010L
-//#define VIEWOPT_2_TOOLBOXRIGHT      0x00000020L
-//#define VIEWOPT_2_TOOLBOXTOP      0x00000040L
-//#define VIEWOPT_2_TOOLBOXBOTTOM       0x00000080L
 #define VIEWOPT_2_UNUSED1           0x00000100L
-//#define VIEWOPT_2_RIBBONBAR           0x00000200L
+
 #define VIEWOPT_2_TABWIN            0x00000400L
 #define VIEWOPT_2_VSCROLLBAR        0x00000800L
 #define VIEWOPT_2_HSCROLLBAR        0x00001000L
@@ -151,12 +144,39 @@ class SwDocShell;
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
+//Appearance flags
+#define VIEWOPT_DOC_BOUNDARIES      0x0001
+#define VIEWOPT_OBJECT_BOUNDARIES   0x0002
+#define VIEWOPT_TABLE_BOUNDARIES    0x0004
+#define VIEWOPT_INDEX_SHADINGS      0x0008
+#define VIEWOPT_LINKS               0x0010
+#define VIEWOPT_VISITED_LINKS       0x0020
+#define VIEWOPT_FIELD_SHADINGS      0x0040
+#define VIEWOPT_SECTION_BOUNDARIES  0x0080
+
 // Implementierung in core/text/txtpaint.cxx
 extern void SyncVout( const OutputDevice *pOut );
 
 class SwViewOption
 {
+    static Color    aDocColor;  // color of document boundaries
+    static Color    aDocBoundColor;  // color of document boundaries
+    static Color    aObjectBoundColor; // color of object boundaries
+    static Color    aAppBackgroundColor; // application background
+    static Color    aTableBoundColor; // color of table boundaries
+    static Color    aIndexShadingsColor; // background color of indexes
+    static Color    aLinksColor;
+    static Color    aVisitedLinksColor;
+    static Color    aDirectCursorColor;
+    static Color    aAnchorColor;
+    static Color    aTextGridColor;
     static Color    aSpellColor;     // mark color of online spell checking
+    static Color    aFieldShadingsColor;
+    static Color    aSectionBoundColor;
+    static Color    aNotesIndicatorColor;
+    static Color    aScriptIndicatorColor;
+
+    static sal_Int32 nAppearanceFlags;  //
 protected:
     static USHORT   nPixelTwips;// 1 Pixel == ? Twips
 
@@ -165,8 +185,6 @@ protected:
     UINT32          nCore2Options;      // Bits fuer die ViewShell
     UINT32          nUIOptions;         // UI-Bits
     Color           aRetoucheColor;     // DefaultBackground fuer BrowseView
-    Color           aShdwCrsrCol;       // Farbe fuer den ShadowCrsr
-    Color           aIdxBackgrndCol;    // color of index background
     Size            aSnapSize;          // Beschreibt hori. wie vert. Snap
     short           nDivisionX;         // Rasterunterteilung
     short           nDivisionY;
@@ -175,6 +193,7 @@ protected:
     BYTE            nShdwCrsrFillMode;  // FillMode fuer den ShadowCrsr
     BOOL            bReadonly : 1;      // Readonly-Doc
     BOOL            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
+    BOOL            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
@@ -223,8 +242,11 @@ public:
                                     ? TRUE : FALSE; }
     inline void SetTab( BOOL b )        {
         (b != 0) ? (nCoreOptions |= VIEWOPT_1_TAB ) : ( nCoreOptions &= ~VIEWOPT_1_TAB); }
-           void PaintTab( OutputDevice *pOut, const SwRect &rRect ) const;
 
+#ifdef VERTICAL_LAYOUT
+#else
+           void PaintTab( OutputDevice *pOut, const SwRect &rRect ) const;
+#endif
 
     inline BOOL IsBlank(BOOL bHard = FALSE) const
                     { return !bReadonly && (nCoreOptions & VIEWOPT_1_BLANK) &&
@@ -251,7 +273,10 @@ public:
                                     ? TRUE : FALSE; }
     inline void SetLineBreak( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_LINEBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_LINEBREAK); }
+#ifdef VERTICAL_LAYOUT
+#else
         void PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) const;
+#endif
     USHORT GetLineBreakWidth( const OutputDevice *pOut = 0 ) const;
 
     inline BOOL IsPageBreak() const     { return !bReadonly && (nCoreOptions & VIEWOPT_1_PAGEBREAK) ? TRUE : FALSE; }
@@ -267,28 +292,9 @@ public:
     inline void SetSoftHyph( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SOFTHYPH ) : ( nCoreOptions &= ~VIEWOPT_1_SOFTHYPH); }
 
-    inline BOOL IsTox() const
-                        { return !bReadonly && (nCoreOptions & VIEWOPT_1_TOX) ? TRUE : FALSE; }
-    inline void SetTox( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_TOX ) : ( nCoreOptions &= ~VIEWOPT_1_TOX); }
-
-    inline BOOL IsRef() const           { return !bReadonly && (nCoreOptions & VIEWOPT_1_REF) ? TRUE : FALSE; }
-    inline void SetRef( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_REF ) : ( nCoreOptions &= ~VIEWOPT_1_REF); }
-
     inline BOOL IsFldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) ? TRUE : FALSE; }
     inline void SetFldName( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FLDNAME ) : ( nCoreOptions &= ~VIEWOPT_1_FLDNAME); }
-
-    inline BOOL IsField() const
-                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_FIELD) ? TRUE : FALSE; }
-    inline void SetField( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FIELD ) : ( nCoreOptions &= ~VIEWOPT_1_FIELD); }
-
-    inline BOOL IsFootNote() const
-                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_FOOTNOTE) ? TRUE : FALSE; }
-    inline void SetFootNote( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_FOOTNOTE) : ( nCoreOptions &= ~VIEWOPT_1_FOOTNOTE); }
 
     inline BOOL IsPostIts() const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_POSTITS) ? TRUE : FALSE; }
@@ -302,11 +308,6 @@ public:
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_HIDDEN) ? TRUE : FALSE; }
     inline void SetHidden( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_HIDDEN); }
-
-    inline BOOL IsSubsLines() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_SUBSLINES) ? TRUE : FALSE; }
-    inline void SetSubsLines( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SUBSLINES ) : ( nCoreOptions &= ~VIEWOPT_1_SUBSLINES); }
 
     inline BOOL IsGraphic() const
         { return nCoreOptions & VIEWOPT_1_GRAPHIC ? TRUE : FALSE; }
@@ -342,11 +343,6 @@ public:
         { return nCoreOptions & VIEWOPT_1_CONTROL ? TRUE : FALSE; }
     inline void SetControl( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_CONTROL ) : ( nCoreOptions &= ~VIEWOPT_1_CONTROL); }
-
-    inline BOOL IsSubsTable() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_SUBSTABLE) ? TRUE : FALSE; }
-    inline void SetSubsTable( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_SUBSTABLE ) : ( nCoreOptions &= ~VIEWOPT_1_SUBSTABLE); }
 
     inline BOOL IsSnap() const
         { return nCoreOptions & VIEWOPT_1_SNAP ? TRUE : FALSE; }
@@ -413,20 +409,6 @@ public:
     inline void SetCursorInProtectedArea(BOOL b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
 
-    inline BOOL IsSectionBounds() const
-        {return !bReadonly && (nCore2Options & VIEWOPT_CORE2_SECTION_BOUNDS) ? TRUE : FALSE;}
-
-    inline void SetSectionBounds(BOOL b)
-        { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_SECTION_BOUNDS) : (nCore2Options &= ~VIEWOPT_CORE2_SECTION_BOUNDS);}
-
-    inline BOOL IsIndexBackground() const
-        {return nCore2Options & VIEWOPT_CORE2_INDEX_BACKGROUND ? TRUE : FALSE;}
-
-    inline void SetIndexBackground(BOOL b)
-        { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_INDEX_BACKGROUND) : (nCore2Options &= ~VIEWOPT_CORE2_INDEX_BACKGROUND);}
-
-
-
 /*---------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------*/
@@ -487,8 +469,6 @@ public:
     Optionen aus nUIOptions
 ----------------------------------------------------------------------------*/
 
-//  BOOL    IsViewRibbonBar()  const
-//      { return nUIOptions & VIEWOPT_2_RIBBONBAR ? TRUE : FALSE; }
     BOOL    IsViewVScrollBar() const
         { return nUIOptions & VIEWOPT_2_VSCROLLBAR ? TRUE : FALSE;    }
     BOOL    IsViewHScrollBar() const
@@ -510,14 +490,10 @@ public:
 
     BYTE    GetTblDest() const    { return nTblDest; }
 
-//  void   SetViewRibbonBar (BOOL b)
-//      { b ? (nUIOptions |= VIEWOPT_2_RIBBONBAR ) : ( nUIOptions &= ~VIEWOPT_2_RIBBONBAR); }
     void   SetViewVScrollBar(BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_VSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_VSCROLLBAR); }
     void   SetViewHScrollBar(BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_HSCROLLBAR ) : ( nUIOptions &= ~VIEWOPT_2_HSCROLLBAR); }
-//  void   SetViewSVLook    (BOOL b)
-//      { b ? (nUIOptions |= VIEWOPT_2_SVLOOK ) : ( nUIOptions &= ~VIEWOPT_2_SVLOOK); }
     void   SetKeepRatio     (BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_KEEPASPECTRATIO ) : ( nUIOptions &= ~VIEWOPT_2_KEEPASPECTRATIO); }
     void   SetGrfKeepZoom   (BOOL b)
@@ -558,17 +534,45 @@ public:
     BOOL            IsStarOneSetting() const {return bStarOneSetting; }
     void            SetStarOneSetting(BOOL bSet) {bStarOneSetting = bSet; }
 
-    const Color&    GetShdwCrsrColor() const { return aShdwCrsrCol; }
-    void            SetShdwCrsrColor( const Color& rCol ) { aShdwCrsrCol = rCol; };
+    BOOL            IsPagePreview() const {return bIsPagePreview; }
+    void            SetPagePreview(BOOL bSet) { bIsPagePreview= bSet; }
 
     BYTE            GetShdwCrsrFillMode() const { return nShdwCrsrFillMode; }
     void            SetShdwCrsrFillMode( BYTE nMode ) { nShdwCrsrFillMode = nMode; };
 
-    const Color&    GetIndexBackgrndColor() const { return aIdxBackgrndCol;}
-    void            SetIndexBackgrndColor(const Color& rCol) {aIdxBackgrndCol = rCol;}
-
+    static Color&   GetDocColor();
+    static Color&   GetDocBoundariesColor();
+    static Color&   GetAppBackgroundColor();
+    static Color&   GetObjectBoundariesColor();
+    static Color&   GetTableBoundariesColor();
+    static Color&   GetIndexShadingsColor();
+    static Color&   GetLinksColor();
+    static Color&   GetVisitedLinksColor();
+    static Color&   GetDirectCursorColor();
+    static Color&   GetAnchorColor();
+    static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
-    static void     SetSpellColor(ColorData nColor);
+    static Color&   GetFieldShadingsColor();
+    static Color&   GetSectionBoundColor();
+    static Color&   GetNotesIndicatorColor();
+    static Color&   GetScriptIndicatorColor();
+
+    static BOOL     IsAppearanceFlag(sal_Int32 nFlag);
+
+    static BOOL     IsDocBoundaries()   {return IsAppearanceFlag(VIEWOPT_DOC_BOUNDARIES);}
+    static BOOL     IsObjectBoundaries(){return IsAppearanceFlag(VIEWOPT_OBJECT_BOUNDARIES);}
+    static BOOL     IsTableBoundaries() {return IsAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES );}
+    static BOOL     IsIndexShadings()   {return IsAppearanceFlag(VIEWOPT_INDEX_SHADINGS   );}
+    static BOOL     IsLinks()           {return IsAppearanceFlag(VIEWOPT_LINKS            );}
+    static BOOL     IsVisitedLinks()    {return IsAppearanceFlag(VIEWOPT_VISITED_LINKS    );}
+    static BOOL     IsFieldShadings()   {return IsAppearanceFlag(VIEWOPT_FIELD_SHADINGS);}
+    static BOOL     IsSectionBoundaries() {return IsAppearanceFlag(VIEWOPT_SECTION_BOUNDARIES);}
+
+    static void     SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInConfig = FALSE);
+
+    void    SetDocBoundaries(BOOL bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
+
+    static void     ApplyColorConfigValues(const svx::ColorConfig& rConfig);
 };
 
 
@@ -582,7 +586,6 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
     nUIOptions = rVOpt.nUIOptions;
     nTblDest = rVOpt.nTblDest;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
-    aShdwCrsrCol = rVOpt.aShdwCrsrCol;
 }
 
 inline BOOL SwViewOption::IsViewTabwin() const

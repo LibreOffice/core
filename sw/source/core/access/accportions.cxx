@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-24 13:08:01 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,16 +405,18 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType )
     sal_Bool bGray = sal_False;
     switch( nType )
     {
-        case POR_FTN:       bGray = pViewOptions->IsFootNote();     break;
-        case POR_ISOTOX:
-        case POR_TOX:       bGray = pViewOptions->IsTox();          break;
+        case POR_FTN:
         case POR_ISOREF:
-        case POR_REF:       bGray = pViewOptions->IsRef();          break;
+        case POR_REF:
         case POR_QUOVADIS:
         case POR_NUMBER:
         case POR_FLD:
         case POR_URL:
-        case POR_HIDDEN:    bGray = pViewOptions->IsField();        break;
+        case POR_ISOTOX:
+        case POR_TOX:
+        case POR_HIDDEN:
+            bGray = !pViewOptions->IsPagePreview() && SwViewOption::IsFieldShadings();
+        break;
         case POR_TAB:       bGray = pViewOptions->IsTab();          break;
         case POR_SOFTHYPH:  bGray = pViewOptions->IsSoftHyph();     break;
         case POR_BLANK:     bGray = pViewOptions->IsHardBlank();    break;

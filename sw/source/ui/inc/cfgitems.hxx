@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:57:28 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,17 +137,9 @@ class SwElemItem : public SfxPoolItem
     BOOL bVertRulerRight:1;
     BOOL bSmoothScroll  :1;
     //visual aids
-    BOOL bTableBounds   :1;
-    BOOL bSectionBounds :1;
     BOOL bCrosshair     :1;
     BOOL bHandles       :1;
     BOOL bBigHandles    :1;
-    BOOL bBounds        :1;
-    //highlighting
-    BOOL bIndexEntry        :1;
-    BOOL bIndexBackground   :1;
-    BOOL bFootnoteBackground:1;
-    BOOL bField             :1;
     //display
     BOOL bTable             :1;
     BOOL bGraphic           :1;
@@ -216,7 +208,6 @@ Item fuer Einstellungsdialog, ShadowCursorSeite
 
 class SwShadowCursorItem : public SfxPoolItem
 {
-    Color aColor;
     BYTE eMode;
     BOOL bOn;
 public:
@@ -232,11 +223,9 @@ public:
 
     void FillViewOptions( SwViewOption& rVOpt) const;
 
-    const Color& GetColor() const       { return aColor; }
     BYTE GetMode() const                { return eMode; }
     BOOL IsOn() const                   { return bOn; }
 
-    void SetColor( const Color& rCol )  { aColor = rCol; }
     void SetMode( BYTE eM )             { eMode = eM; }
     void SetOn( BOOL bFlag )            { bOn = bFlag; }
 };

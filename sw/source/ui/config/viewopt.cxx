@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-12 10:37:11 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,13 +113,32 @@
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>
 #endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
 
 
 #ifndef PRODUCT
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
 #endif
+Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::aObjectBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::aDocColor(COL_LIGHTGRAY);
+Color SwViewOption::aAppBackgroundColor(COL_LIGHTGRAY);
+Color SwViewOption::aTableBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::aIndexShadingsColor(COL_LIGHTGRAY);
+Color SwViewOption::aLinksColor(COL_BLUE);
+Color SwViewOption::aVisitedLinksColor(COL_RED);
+Color SwViewOption::aDirectCursorColor(COL_BLUE);
+Color SwViewOption::aAnchorColor(COL_LIGHTGRAY);
+Color SwViewOption::aTextGridColor(COL_LIGHTGRAY);
 Color SwViewOption::aSpellColor(COL_LIGHTRED);
+Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
+Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
+Color SwViewOption::aNotesIndicatorColor(COL_YELLOW);
+Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 
+sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
 USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
 
 
@@ -297,6 +316,8 @@ void SwViewOption::DrawRectPrinter( OutputDevice *pOut,
 /*************************************************************************
  *                    SwViewOption::PaintTab()
  *************************************************************************/
+#ifdef VERTICAL_LAYOUT
+#else
 void SwViewOption::PaintTab( OutputDevice *pOut, const SwRect &rRect ) const
 {
     SwPxlToTwips aSave( pOut, rRect, Size( TAB_SIZE ) );
@@ -339,7 +360,7 @@ void SwViewOption::PaintTab( OutputDevice *pOut, const SwRect &rRect ) const
         }
     }
 }
-
+#endif
 /*************************************************************************
  *                    SwViewOption::GetLineBreakWidth()
  *************************************************************************/
@@ -354,7 +375,8 @@ USHORT SwViewOption::GetLineBreakWidth( const OutputDevice *pOut ) const
 /*************************************************************************
  *                    SwViewOption::PaintLineBreak()
  *************************************************************************/
-
+#ifdef VERTICAL_LAYOUT
+#else
 void SwViewOption::PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) const
 {
     const Size aSz( LINEBREAK_SIZE );
@@ -401,7 +423,7 @@ void SwViewOption::PaintLineBreak( OutputDevice *pOut, const SwRect &rRect ) con
     aEnd.Y() = aStart.Y() + 3;
     aSave.DrawLine( aStart, aEnd );
 }
-
+#endif
 /*************************************************************************
  *                    SwViewOption::GetPostItsWidth()
  *************************************************************************/
@@ -430,7 +452,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
         const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
         const Point aBotRight( rRect.Right() - nPix, rRect.Bottom() - nPix );
         const SwRect aRect( aTopLeft, aBotRight );
-        sal_Int32 nColor = bIsScript ? COL_LIGHTGREEN : COL_YELLOW;
+        sal_Int32 nColor = bIsScript ? aScriptIndicatorColor.GetColor() : aNotesIndicatorColor.GetColor();
         DrawRect( pOut, aRect, nColor );
         pOut->SetLineColor( aOldLineColor );
     }
@@ -453,21 +475,20 @@ SwViewOption::SwViewOption() :
     nTblDest(TBL_DEST_CELL),
     bReadonly(FALSE),
     aRetoucheColor( COL_TRANSPARENT ),
-    aShdwCrsrCol( COL_BLUE ),
-    aIdxBackgrndCol( COL_LIGHTGRAY ),
     nShdwCrsrFillMode( FILL_TAB ),
-    bStarOneSetting(FALSE)
+    bStarOneSetting(FALSE),
+    bIsPagePreview(FALSE)
 {
     // Initialisierung ist jetzt etwas einfacher
     // alle Bits auf 0
     nCoreOptions =  VIEWOPT_1_IDLE | VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
-                    VIEWOPT_1_TOX | VIEWOPT_1_REF | VIEWOPT_1_FIELD |
-                    VIEWOPT_1_FOOTNOTE | VIEWOPT_1_SUBSLINES | VIEWOPT_1_GRAPHIC |
+                    VIEWOPT_1_REF |
+                    VIEWOPT_1_GRAPHIC |
                     VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
-                    VIEWOPT_1_SUBSTABLE| VIEWOPT_1_PAGEBACK |
+                    VIEWOPT_1_PAGEBACK |
                     VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA|
-                    VIEWOPT_CORE2_INDEX_BACKGROUND | VIEWOPT_CORE2_SECTION_BOUNDS;
+                    VIEWOPT_CORE2_SECTION_BOUNDS;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS;
 
     if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
@@ -501,8 +522,6 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     nCore2Options   = rVOpt.nCore2Options  ;
     aRetoucheColor  = rVOpt.GetRetoucheColor();
     sSymbolFont     = rVOpt.sSymbolFont;
-    aShdwCrsrCol    = rVOpt.aShdwCrsrCol;
-    aIdxBackgrndCol = rVOpt.aIdxBackgrndCol;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
 
@@ -535,8 +554,6 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     nCore2Options   = rVOpt.nCore2Options;
     aRetoucheColor  = rVOpt.GetRetoucheColor();
     sSymbolFont     = rVOpt.sSymbolFont;
-    aShdwCrsrCol    = rVOpt.aShdwCrsrCol;
-    aIdxBackgrndCol = rVOpt.aIdxBackgrndCol;
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
 
@@ -632,18 +649,228 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
     }
     return nRet;
 }
-/* -----------------------------12.04.2002 10:39------------------------------
+/* -----------------------------24.04.2002 10:20------------------------------
 
  ---------------------------------------------------------------------------*/
+Color&   SwViewOption::GetDocColor()
+{
+    return aDocColor;
+}
+/* -----------------------------23.04.2002 17:18------------------------------
+
+ ---------------------------------------------------------------------------*/
+Color&   SwViewOption::GetDocBoundariesColor()
+{
+    return aDocBoundColor;
+}
+/* -----------------------------23.04.2002 17:53------------------------------
+
+ ---------------------------------------------------------------------------*/
+Color&   SwViewOption::GetObjectBoundariesColor()
+{
+    return aObjectBoundColor;
+}
+/* -----------------------------24.04.2002 10:41------------------------------
+
+ ---------------------------------------------------------------------------*/
+Color& SwViewOption::GetAppBackgroundColor()
+{
+    return aAppBackgroundColor;
+}
+/*-- 24.04.2002 10:50:11---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetTableBoundariesColor()
+{
+    return aTableBoundColor;
+}
+/*-- 24.04.2002 10:50:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetIndexShadingsColor()
+{
+    return aIndexShadingsColor;
+}
+/*-- 24.04.2002 10:50:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetLinksColor()
+{
+    return aLinksColor;
+}
+/*-- 24.04.2002 10:50:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetVisitedLinksColor()
+{
+    return aVisitedLinksColor;
+}
+/*-- 24.04.2002 10:50:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetDirectCursorColor()
+{
+    return aDirectCursorColor;
+}
+/*-- 24.04.2002 10:50:13---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetAnchorColor()
+{
+    return aAnchorColor;
+}
+/*-- 24.04.2002 10:50:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetTextGridColor()
+{
+    return aTextGridColor;
+}
+/*-- 24.04.2002 10:50:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 Color&   SwViewOption::GetSpellColor()
 {
     return aSpellColor;
 }
-/* -----------------------------12.04.2002 10:41------------------------------
+/*-- 24.04.2002 10:50:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetFieldShadingsColor()
+{
+    return aFieldShadingsColor;
+}
+/*-- 24.04.2002 10:50:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetSectionBoundColor()
+{
+    return aSectionBoundColor;
+}
+/*-- 24.04.2002 10:50:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetNotesIndicatorColor()
+{
+    return aNotesIndicatorColor;
+}
+/*-- 24.04.2002 10:50:15---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetScriptIndicatorColor()
+{
+    return aScriptIndicatorColor;
+}
+/* -----------------------------23.04.2002 17:41------------------------------
 
  ---------------------------------------------------------------------------*/
-void     SwViewOption::SetSpellColor(ColorData nColor)
+void SwViewOption::ApplyColorConfigValues(const svx::ColorConfig& rConfig )
 {
-    aSpellColor.SetColor(nColor);
+    aDocColor.SetColor(rConfig.GetColorValue(svx::DOCCOLOR).nColor);
+
+    svx::ColorConfigValue aValue = rConfig.GetColorValue(svx::DOCBOUNDARIES);
+    aDocBoundColor.SetColor(aValue.nColor);
+    nAppearanceFlags = 0;
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_DOC_BOUNDARIES;
+
+    aAppBackgroundColor.SetColor(rConfig.GetColorValue(svx::APPBACKGROUND).nColor);
+
+    aValue = rConfig.GetColorValue(svx::OBJECTBOUNDARIES);
+    aObjectBoundColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_OBJECT_BOUNDARIES;
+
+    aValue = rConfig.GetColorValue(svx::TABLEBOUNDARIES);
+    aTableBoundColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_TABLE_BOUNDARIES;
+
+    aValue = rConfig.GetColorValue(svx::WRITERIDXSHADINGS);
+    aIndexShadingsColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_INDEX_SHADINGS;
+
+    aValue = rConfig.GetColorValue(svx::LINKS);
+    aLinksColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_LINKS;
+
+    aValue = rConfig.GetColorValue(svx::LINKSVISITED);
+    aVisitedLinksColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
+
+    aDirectCursorColor.SetColor(rConfig.GetColorValue(svx::WRITERDIRECTCURSOR).nColor);
+
+    aValue = rConfig.GetColorValue(svx::ANCHOR);
+    aAnchorColor.SetColor(aValue.nColor);
+
+    aTextGridColor.SetColor(rConfig.GetColorValue(svx::WRITERTEXTGRID).nColor);
+
+    aSpellColor.SetColor(rConfig.GetColorValue(svx::SPELL).nColor);
+
+    aValue = rConfig.GetColorValue(svx::WRITERFIELDSHADINGS);
+    aFieldShadingsColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_FIELD_SHADINGS;
+
+    aValue = rConfig.GetColorValue(svx::WRITERSECTIONBOUNDARIES);
+    aSectionBoundColor.SetColor(aValue.nColor);
+    if(aValue.bIsVisible)
+        nAppearanceFlags |= VIEWOPT_SECTION_BOUNDARIES;
+
+    aNotesIndicatorColor.SetColor(rConfig.GetColorValue(svx::WRITERNOTESINDICATOR).nColor);
+    aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svx::WRITERSCRIPTINDICATOR).nColor);
+}
+/* -----------------------------23.04.2002 17:48------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInConfig )
+{
+    if(bSet)
+        nAppearanceFlags |= nFlag;
+    else
+        nAppearanceFlags &= ~nFlag;
+    if(bSaveInConfig)
+    {
+        //create an editable svx::ColorConfig and store the change
+        svx::EditableColorConfig aEditableConfig;
+        struct FlagToConfig_Impl
+        {
+            sal_Int32               nFlag;
+            svx::ColorConfigEntry   eEntry;
+        };
+        static const FlagToConfig_Impl aFlags[] =
+        {
+            VIEWOPT_DOC_BOUNDARIES     ,   svx::DOCBOUNDARIES     ,
+            VIEWOPT_OBJECT_BOUNDARIES  ,   svx::OBJECTBOUNDARIES  ,
+            VIEWOPT_TABLE_BOUNDARIES   ,   svx::TABLEBOUNDARIES   ,
+            VIEWOPT_INDEX_SHADINGS     ,   svx::WRITERIDXSHADINGS     ,
+            VIEWOPT_LINKS              ,   svx::LINKS              ,
+            VIEWOPT_VISITED_LINKS      ,   svx::LINKSVISITED      ,
+            VIEWOPT_FIELD_SHADINGS     ,   svx::WRITERFIELDSHADINGS     ,
+            VIEWOPT_SECTION_BOUNDARIES ,   svx::WRITERSECTIONBOUNDARIES ,
+            0                          ,   svx::ColorConfigEntryCount
+        };
+        sal_uInt16 nPos = 0;
+        while(aFlags[nPos].nFlag)
+        {
+            if(0 != (nFlag&aFlags[nPos].nFlag))
+            {
+                svx::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
+                aValue.bIsVisible = bSet;
+                aEditableConfig.SetColorValue(aFlags[nPos].eEntry, aValue);
+            }
+            nPos++;
+        }
+    }
+}
+/* -----------------------------24.04.2002 10:42------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
+{
+    return 0 != (nAppearanceFlags & nFlag);
 }
 

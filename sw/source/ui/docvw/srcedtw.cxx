@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-30 12:53:31 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@
 #ifndef _TXTATTR_HXX //autogen
 #include <svtools/txtattr.hxx>
 #endif
-
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -856,7 +858,18 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         DBG_ASSERT( nCol < SYNTAX_COLOR_MAX, "Neue Syntax-Farbe?" );
         if ( nCol < SYNTAX_COLOR_MAX )
         {
-            Color aColor = pSrcVwConfig->GetSyntaxColor(nCol);
+            svx::ColorConfigEntry eEntry;
+            switch(nCol)
+            {
+                case  SRC_SYN_SGML    : eEntry = svx::HTMLSGML   ; break;
+                case  SRC_SYN_COMMENT : eEntry = svx::HTMLCOMMENT; break;
+                case  SRC_SYN_KEYWRD  : eEntry = svx::HTMLKEYWORD; break;
+//                case  SRC_SYN_UNKNOWN :
+                default:
+                    eEntry = svx::HTMLUNKNOWN; break;
+            }
+
+            Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue(eEntry).nColor);
             USHORT nLine = nLineOff+r.nLine; //
             pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
         }

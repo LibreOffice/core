@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-08 14:32:03 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,12 @@
 //Tabellenhilfslinien an?
 #define IS_SUBS_TABLE \
     (pGlobalShell->GetViewOptions()->IsTable() && \
-     pGlobalShell->GetViewOptions()->IsSubsTable())
+    !pGlobalShell->GetViewOptions()->IsPagePreview()&&\
+     SwViewOption::IsTableBoundaries())
 //sonstige Hilfslinien an?
-#define IS_SUBS pGlobalShell->GetViewOptions()->IsSubsLines()
+#define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && SwViewOption::IsDocBoundaries())
 //Hilfslinien fuer Bereiche
-#define IS_SUBS_SECTION pGlobalShell->GetViewOptions()->IsSectionBounds()
+#define IS_SUBS_SECTION SwViewOption::IsSectionBoundaries()
 
 #define SW_MAXBORDERCACHE 20
 
@@ -951,7 +952,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         {
             pOut->Push( PUSH_FILLCOLOR );
 
-            const Color aStandard( COL_LIGHTGRAY );
             const Color aGray( COL_GRAY );
             const Color aBreak(COL_BLUE );
 
@@ -963,7 +963,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                     const Color *pCol;
                     switch ( rLRect.GetSubColor() )
                     {
-                        case SUBCOL_STANDARD: pCol = &aStandard; break;
+                        case SUBCOL_STANDARD: pCol = &SwViewOption::GetDocBoundariesColor(); break;
                         case SUBCOL_BREAK:    pCol = &aBreak;    break;
                         case SUBCOL_GRAY:     pCol = &aGray;     break;
                     }
@@ -3826,7 +3826,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 
     BYTE nSubColor = SUBCOL_STANDARD;
     const SvxBrushItem &rBrush = pPage->GetFmt()->GetBackground();
-    const Color aTmp( COL_LIGHTGRAY );
+    const Color aTmp( SwViewOption::GetTableBoundariesColor() );
     if ( rBrush.GetColor() == aTmp ||
          (rBrush.GetColor().GetTransparency() &&
           aGlobalRetoucheColor == aTmp ))
@@ -4058,9 +4058,10 @@ BOOL SwFrm::GetBackgroundBrush( const SvxBrushItem* & rpBrush,
             if( pSection && ( TOX_HEADER_SECTION == pSection->GetType() ||
                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
                 rBack.GetColor().GetTransparency() &&
-                rBack.GetGraphicPos() == GPOS_NONE && pOpt->IsIndexBackground() &&
+                rBack.GetGraphicPos() == GPOS_NONE &&
+                !pOpt->IsPagePreview() && SwViewOption::IsIndexShadings() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
-                rpCol = &pOpt->GetIndexBackgrndColor();
+                rpCol = &SwViewOption::GetIndexShadingsColor();
         }
         if ( !rBack.GetColor().GetTransparency() ||
              rBack.GetGraphicPos() != GPOS_NONE || rpCol )

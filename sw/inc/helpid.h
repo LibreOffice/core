@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 15:12:49 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@
 #define HID_PICK_BULLET             (HID_BASE + 433)
 #define HID_PICK_NUM                (HID_BASE + 434)
 #define HID_PICK_BMP                (HID_BASE + 435)
-#define HID_OPTSRCVIEW              (HID_BASE + 436)
+
 #define HID_FLD_DB                  (HID_BASE + 437)
 #define HID_FLD_DOKINF              (HID_BASE + 438)
 #define HID_FLD_VAR                 (HID_BASE + 439)

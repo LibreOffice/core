@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 11:00:27 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,6 +1421,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
 
     SwViewOption aOpt( *pPrefs );
+    aOpt.SetPagePreview(TRUE);
     aOpt.SetTab( FALSE );
     aOpt.SetBlank( FALSE );
     aOpt.SetHardBlank( FALSE );
@@ -1429,23 +1430,23 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetPageBreak( FALSE );
     aOpt.SetColumnBreak( FALSE );
     aOpt.SetSoftHyph( FALSE );
-    aOpt.SetTox( FALSE );
-    aOpt.SetRef( FALSE );
+//    aOpt.SetTox( FALSE );
+//    aOpt.SetRef( FALSE );
     aOpt.SetFldName( FALSE );
-    aOpt.SetField( FALSE );
-    aOpt.SetFootNote( FALSE );
+//    aOpt.SetField( FALSE );
+//    aOpt.SetFootNote( FALSE );
     aOpt.SetPostIts( FALSE );
     aOpt.SetHidden( FALSE );
-    aOpt.SetSubsLines( FALSE );
+//    aOpt.SetSubsLines( FALSE );
     aOpt.SetViewVLin( FALSE );
     aOpt.SetViewTabwin( FALSE );
     aOpt.SetGraphic( TRUE );
     aOpt.SetTable( TRUE );
-    aOpt.SetSubsTable( FALSE );
+//    aOpt.SetSubsTable( FALSE );
     aOpt.SetSnap( FALSE );
     aOpt.SetGridVisible( FALSE );
     aOpt.SetHideSpell( TRUE );
-    aOpt.SetIndexBackground( FALSE );
+//    aOpt.SetIndexBackground( FALSE );
     aOpt.SetSectionBounds( FALSE );
     GetViewShell().ApplyViewOptions( aOpt );
 
@@ -2262,6 +2263,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2002/03/20 11:00:27  os
+      #97978# close preview button as text only
+
       Revision 1.13  2002/03/20 09:18:37  os
       #97978# keyboard access corrected
 

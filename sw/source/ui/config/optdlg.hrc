@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #define FL_DISP                 1
 #define FL_NOPRINT              2
 #define FL_WINDOW               3
-#define FL_BACK                 4
 
 #define CB_GRF              1
 #define CB_TBL                  2
@@ -76,16 +75,11 @@
 #define CB_SHYPH                9
 #define CB_HIDDEN               10
 #define CB_BREAK                11
-#define CB_TXTBEG               12
-#define CB_TABBEG               13
 #define CB_CROSS        14
 #define CB_HSCROLL              15
 #define CB_VSCROLL              16
 #define CB_HRULER               17
 #define CB_VRULER               18
-#define CB_IDX_ENTRY            19
-#define CB_FOOTBACK             20
-#define CB_FLDBACK              21
 #define FL_LINE                 22
 #define CB_POSTIT               23
 #define CB_VRULER_RIGHT         24
@@ -224,9 +218,6 @@
 #define RB_SHDWCRSFILLINDENT           6
 #define RB_SHDWCRSFILLTAB              7
 #define RB_SHDWCRSFILLSPACE            8
-#define FL_SHDWCRSCOLOR                9
-#define FT_SHDWCRSCOLOR               10
-#define LB_SHDWCRSCOLOR               11
 #define CB_ALLOW_IN_PROT              12
 #define FL_CRSR_OPT                   13
 #define FL_SEPARATOR_SHDW               14

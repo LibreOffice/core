@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:57:07 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,6 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SW_RES( TP_CONTENT_OPT ), rCoreSet ),
     aLineFL       ( this,   SW_RES( FL_LINE     ) ),
-    aTxtbegCB     ( this,   SW_RES( CB_TXTBEG   ) ),
-    aTblbegCB     ( this,   SW_RES( CB_TABBEG   ) ),
-    aSectBoundsCB( this,    SW_RES( CB_SECT_BOUNDS ) ),
     aCrossCB      ( this,   SW_RES( CB_CROSS     ) ),
     aSolidHandleCB( this,   SW_RES( CB_HANDLE   ) ),
     aBigHandleCB  ( this,   SW_RES( CB_BIGHANDLE) ),
@@ -238,11 +235,6 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     aDrwCB        ( this,   SW_RES( CB_DRWFAST   ) ),
     aFldNameCB    ( this,   SW_RES( CB_FIELD    ) ),
     aPostItCB     ( this,   SW_RES( CB_POSTIT   ) ),
-    aBackFL      ( this,   SW_RES( FL_BACK     ) ),
-    aIdxEntryCB   ( this,   SW_RES( CB_IDX_ENTRY     ) ),
-    aIdxBackCB   ( this,    SW_RES( CB_INDEX     ) ),
-    aFootBackCB   ( this,   SW_RES( CB_FOOTBACK  ) ),
-    aFldBackCB    ( this,   SW_RES( CB_FLDBACK      ) ),
     aSettingsFL   ( this,   SW_RES( FL_SETTINGS   ) ),
     aMetricLB     ( this,   SW_RES( LB_METRIC   ) ),
     aMetricFT     ( this,   SW_RES( FT_METRIC   ) )
@@ -252,10 +244,6 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
-        aFootBackCB .Hide();
-        aIdxEntryCB .Hide();
-        aIdxBackCB.Hide();
-        aFldBackCB.SetPosPixel(aIdxEntryCB.GetPosPixel());
         aMetricLB.Show();
         aSettingsFL.Show();
         aMetricFT.Show();
@@ -343,18 +331,11 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
                                     (const SfxPoolItem**)&pElemAttr );
     if(pElemAttr)
     {
-        aIdxEntryCB .Check  (pElemAttr->bIndexEntry           );
-        aIdxBackCB.Check    (pElemAttr->bIndexBackground      );
-        aFootBackCB .Check  (pElemAttr->bFootnoteBackground   );
-        aFldBackCB  .Check  (pElemAttr->bField                );
         aTblCB      .Check  (pElemAttr->bTable                );
         aGrfCB      .Check  (pElemAttr->bGraphic              );
         aDrwCB      .Check  (pElemAttr->bDrawing              );
         aFldNameCB  .Check  (pElemAttr->bFieldName            );
         aPostItCB   .Check  (pElemAttr->bNotes                );
-        aTxtbegCB  .Check( pElemAttr->bBounds           );
-        aTblbegCB  .Check( pElemAttr->bTableBounds      );
-        aSectBoundsCB.Check( pElemAttr->bSectionBounds  );
         aCrossCB   .Check( pElemAttr->bCrosshair        );
         aSolidHandleCB.Check( !pElemAttr->bHandles          );
         aBigHandleCB.Check(pElemAttr->bBigHandles       );
@@ -384,18 +365,11 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     SwElemItem aElem;
     if(pOldAttr)
         aElem = *pOldAttr;
-    aElem.bIndexEntry           = aIdxEntryCB   .IsChecked();
-    aElem.bIndexBackground      = aIdxBackCB    .IsChecked();
-    aElem.bFootnoteBackground   = aFootBackCB   .IsChecked();
-    aElem.bField                = aFldBackCB    .IsChecked();
     aElem.bTable                = aTblCB        .IsChecked();
     aElem.bGraphic              = aGrfCB        .IsChecked();
     aElem.bDrawing              = aDrwCB        .IsChecked();
     aElem.bFieldName            = aFldNameCB    .IsChecked();
     aElem.bNotes                = aPostItCB     .IsChecked();
-    aElem.bBounds        = aTxtbegCB  .IsChecked();
-    aElem.bTableBounds   = aTblbegCB  .IsChecked();
-    aElem.bSectionBounds = aSectBoundsCB.IsChecked();
     aElem.bCrosshair     = aCrossCB   .IsChecked();
     aElem.bHandles       = !aSolidHandleCB.IsChecked();
     aElem.bBigHandles    = aBigHandleCB.IsChecked();
@@ -1240,144 +1214,6 @@ IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     return 0;
 }
-/*-----------------19.04.97 13:20-------------------
-
---------------------------------------------------*/
-SwSourceViewOptionsTabPage::SwSourceViewOptionsTabPage(
-                    Window* pParent,   const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, SW_RES(TP_OPTSRCVIEW), rSet),
-    aColorFL(this,      ResId(FL_COLOR  )),
-    aSGMLFT(this,       ResId(FT_SGML   )),
-    aSGMLLB(this,       ResId(LB_SGML   )),
-    aCommentFT(this,    ResId(FT_COMMENT)),
-    aCommentLB(this,    ResId(LB_COMMENT)),
-    aKeywdFT(this,      ResId(FT_KEYWD  )),
-    aKeywdLB(this,      ResId(LB_KEYWD  )),
-    aUnknownFT(this,    ResId(FT_UNKNOWN)),
-    aUnknownLB(this,    ResId(LB_UNKNOWN))
-{
-    FreeResource();
-    String sSGML    ;
-    String sComment ;
-    String sKeywd   ;
-    String sUnknown ;
-
-    XColorTable* pColorTbl = OFF_APP()->GetStdColorTable();
-    SwSrcViewConfig* pSrcVwCfg = SW_MOD()->GetSourceViewConfig();
-    USHORT nCount = (USHORT)pColorTbl->Count();
-    aSGMLLB     .SetUpdateMode(FALSE);
-    aCommentLB  .SetUpdateMode(FALSE);
-    aKeywdLB    .SetUpdateMode(FALSE);
-    aUnknownLB  .SetUpdateMode(FALSE);
-
-    Color aTmpColSGML(pSrcVwCfg->GetSyntaxColor(SRC_SYN_SGML));
-    Color aTmpColComment(pSrcVwCfg->GetSyntaxColor(SRC_SYN_COMMENT));
-    Color aTmpColKey(pSrcVwCfg->GetSyntaxColor(SRC_SYN_KEYWRD));
-    Color aTmpColUnknown(pSrcVwCfg->GetSyntaxColor(SRC_SYN_UNKNOWN));
-
-    for(USHORT i = 0; i < nCount; i++)
-    {
-        XColorEntry* pEntry = pColorTbl->Get(i);
-        Color aColor = pEntry->GetColor();
-        String sName = pEntry->GetName();
-        if(aColor == aTmpColSGML )
-            sSGML = sName;
-        if(aColor == aTmpColComment )
-            sComment = sName;
-        if(aColor == aTmpColKey )
-            sKeywd = sName;
-        if(aColor == aTmpColUnknown )
-            sUnknown = sName;
-        aSGMLLB     .InsertEntry(aColor, sName);
-        aCommentLB  .InsertEntry(aColor, sName);
-        aKeywdLB    .InsertEntry(aColor, sName);
-        aUnknownLB  .InsertEntry(aColor, sName);
-    }
-    aSGMLLB     .SetUpdateMode(TRUE);
-    aCommentLB  .SetUpdateMode(TRUE);
-    aKeywdLB    .SetUpdateMode(TRUE);
-    aUnknownLB  .SetUpdateMode(TRUE);
-    aSGMLLB     .SelectEntry(sSGML      );
-    aCommentLB  .SelectEntry(sComment   );
-    aKeywdLB    .SelectEntry(sKeywd     );
-    aUnknownLB  .SelectEntry(sUnknown   );
-
-}
-
-/*-----------------19.04.97 13:22-------------------
-
---------------------------------------------------*/
-SwSourceViewOptionsTabPage::~SwSourceViewOptionsTabPage()
-{
-}
-
-/*-----------------19.04.97 13:22-------------------
-
---------------------------------------------------*/
-SfxTabPage* SwSourceViewOptionsTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet )
-{
-    return new SwSourceViewOptionsTabPage(pParent, rAttrSet);
-}
-
-/*-----------------19.04.97 13:23-------------------
-
---------------------------------------------------*/
-BOOL SwSourceViewOptionsTabPage::FillItemSet( SfxItemSet& rSet )
-{
-    SwSrcViewConfig* pSrcVwCfg = SW_MOD()->GetSourceViewConfig();
-    BOOL bModified = FALSE;
-    if(aSGMLLB.GetSelectEntry().Len() &&
-        !aSGMLLB.GetSelectEntryColor().IsRGBEqual(pSrcVwCfg->GetSyntaxColor(SRC_SYN_SGML)))
-    {
-        bModified = TRUE;
-        pSrcVwCfg->SetSyntaxColor(SRC_SYN_SGML, aSGMLLB.GetSelectEntryColor());
-    }
-    if(aCommentLB.GetSelectEntry().Len() &&
-        !aCommentLB.GetSelectEntryColor().IsRGBEqual(pSrcVwCfg->GetSyntaxColor(SRC_SYN_COMMENT)))
-    {
-        bModified = TRUE;
-        pSrcVwCfg->SetSyntaxColor(SRC_SYN_COMMENT, aCommentLB.GetSelectEntryColor());
-    }
-    if(aKeywdLB.GetSelectEntry().Len() &&
-        !aKeywdLB.GetSelectEntryColor().IsRGBEqual(pSrcVwCfg->GetSyntaxColor(SRC_SYN_KEYWRD)))
-    {
-        bModified = TRUE;
-        pSrcVwCfg->SetSyntaxColor(SRC_SYN_KEYWRD, aKeywdLB.GetSelectEntryColor());
-    }
-    if(aUnknownLB.GetSelectEntry().Len() &&
-        !aUnknownLB.GetSelectEntryColor().IsRGBEqual(pSrcVwCfg->GetSyntaxColor(SRC_SYN_UNKNOWN)))
-    {
-        bModified = TRUE;
-        pSrcVwCfg->SetSyntaxColor(SRC_SYN_UNKNOWN, aUnknownLB.GetSelectEntryColor());
-    }
-    if(bModified)
-    {
-        TypeId aType(TYPE(SwSrcView));
-        SfxViewShell* pShell = SfxViewShell::GetFirst(&aType);
-        while( pShell )
-        {
-            ((SwSrcView*)pShell)->GetEditWin().SyntaxColorsChanged();
-            pShell = SfxViewShell::GetNext(*pShell, &aType);
-        }
-
-    }
-    return FALSE;
-}
-
-/*-----------------19.04.97 13:23-------------------
-
---------------------------------------------------*/
-void SwSourceViewOptionsTabPage::Reset( const SfxItemSet& rSet )
-{
-    SwSrcViewConfig* pSrcVwCfg = SW_MOD()->GetSourceViewConfig();
-
-    aSGMLLB     .SelectEntry( pSrcVwCfg->GetSyntaxColor(SRC_SYN_SGML) );
-    aCommentLB  .SelectEntry( pSrcVwCfg->GetSyntaxColor(SRC_SYN_COMMENT) );
-    aKeywdLB    .SelectEntry( pSrcVwCfg->GetSyntaxColor(SRC_SYN_KEYWRD) );
-    aUnknownLB  .SelectEntry( pSrcVwCfg->GetSyntaxColor(SRC_SYN_UNKNOWN) );
-}
-
 /*  */
 
 /*-----------------31.10.97 17:55-------------------
@@ -1394,8 +1230,6 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aFillIndentRB( this, ResId( RB_SHDWCRSFILLINDENT )),
     aFillTabRB( this, ResId( RB_SHDWCRSFILLTAB )),
     aFillSpaceRB( this, ResId( RB_SHDWCRSFILLSPACE )),
-    aColorFT( this, ResId( FT_SHDWCRSCOLOR )),
-    aColorLB( this, ResId( LB_SHDWCRSCOLOR )),
     aCrsrOptFL   ( this, ResId( FL_CRSR_OPT)),
     aCrsrInProtCB( this, ResId( CB_ALLOW_IN_PROT )),
     aSeparatorFL(   this, ResId( FL_SEPARATOR_SHDW)),
@@ -1424,24 +1258,6 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     aFillTabRB.Check( FILL_TAB == eMode );
     aFillSpaceRB.Check( FILL_SPACE == eMode );
 
-    const Color& rShdwCol = aOpt.GetColor();
-
-    String sColor;
-    aColorLB.SetUpdateMode(FALSE);
-
-    XColorTable* pColorTbl = OFF_APP()->GetStdColorTable();
-    for( USHORT i = 0; i < pColorTbl->Count(); ++i )
-    {
-        XColorEntry* pEntry = pColorTbl->Get( i );
-        Color aColor = pEntry->GetColor();
-        String sName = pEntry->GetName();
-        if( aColor == rShdwCol )
-            sColor = sName;
-        aColorLB.InsertEntry( aColor, sName );
-    }
-    aColorLB.SetUpdateMode( TRUE );
-    aColorLB.SelectEntry( sColor );
-
     if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
@@ -1456,8 +1272,6 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
         aFillIndentRB   .Hide();
         aFillTabRB      .Hide();
         aFillSpaceRB    .Hide();
-        aColorFT        .Hide();
-        aColorLB        .Hide();
         aCrsrOptFL      .Hide();
         aCrsrInProtCB   .Hide();
         aSeparatorFL.Hide();
@@ -1494,7 +1308,6 @@ BOOL SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     else
         eMode = FILL_SPACE;
     aOpt.SetMode( eMode );
-    aOpt.SetColor( aColorLB.GetSelectEntryColor() );
 
     BOOL bRet = FALSE;
     const SfxPoolItem* pItem = 0;
@@ -1549,8 +1362,6 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     aFillMarginRB.Check( FILL_MARGIN == eMode );
     aFillTabRB.Check( FILL_TAB == eMode );
     aFillSpaceRB.Check( FILL_SPACE == eMode );
-
-    aColorLB.SelectEntry( aOpt.GetColor() );
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
         aCrsrInProtCB.Check(((const SfxBoolItem*)pItem)->GetValue());

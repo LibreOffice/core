@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,8 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
 #ifndef PRODUCT
     // Wir wollen uns die Fixbreite anzeigen
-    if( rInf.OnWin() && OPTDBG( rInf ) && rInf.GetOpt().IsField() )
+    if( rInf.OnWin() && OPTDBG( rInf ) &&
+        !rInf.GetOpt().IsPagePreview() && SwViewOption::IsFieldShadings()    )
     {
         const KSHORT nWidth = PrtWidth();
         ((SwTabPortion*)this)->PrtWidth( GetFixWidth() );
