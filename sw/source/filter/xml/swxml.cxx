@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-29 14:18:06 $
+ *  last change: $Author: mib $ $Date: 2001-05-30 09:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,10 +219,10 @@ sal_Int32 ReadThroughComponent(
 
             if ( NULL != pFilter )
             {
+                // In formats only mode the reader's bInsertMode is set
                 if ( bFormatsOnly )
                     pFilter->setStyleInsertMode( nStyleFamilyMask,
                                                  !bMergeStyles );
-
                 if ( rInsertTextRange.is() )
                     pFilter->setTextInsertMode( rInsertTextRange );
 
@@ -537,6 +537,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
 
     // prepare for special modes
     sal_uInt16 nStyleFamilyMask = 0U;
+    Reference<XTextRange> xInsertTextRange = NULL;
     if( aOpt.IsFmtsOnly() )
     {
         if( aOpt.IsFrmFmts() )
@@ -548,8 +549,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         if( aOpt.IsNumRules() )
             nStyleFamilyMask |= SFX_STYLE_FAMILY_PSEUDO;
     }
-    Reference<XTextRange> xInsertTextRange = NULL;
-    if( bInsertMode )
+    else if( bInsertMode )
     {
         xInsertTextRange = SwXTextRange::CreateTextRangeFromPosition(
             &rDoc, *rPaM.GetPoint(), 0 );
@@ -582,35 +582,37 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         sal_uInt32 nWarn = 0;
         sal_uInt32 nWarn2 = 0;
         // read storage streams
-        if( !IsOrganizerMode() && !IsBlockMode() )
+        if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+              bInsertMode) )
+        {
             nWarn = ReadThroughComponent(
                 pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLMetaImporter",
                 aEmptyArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+                aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
                 sal_False );
 
-        if ( !IsBlockMode() )
             nWarn2 = ReadThroughComponent(
                 pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
                 "com.sun.star.comp.Writer.XMLSettingsImporter",
                 aFilterArgs, rName, sal_False, IsBlockMode(), xInsertTextRange,
-                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+                aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
                 IsOrganizerMode() );
+        }
 
         nRet = ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesImporter",
             aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
             IsOrganizerMode() );
 
-        if( !nRet && !IsOrganizerMode() )
+        if( !nRet && !(IsOrganizerMode() || aOpt.IsFmtsOnly()) )
             nRet = ReadThroughComponent(
                pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
                "com.sun.star.comp.Writer.XMLContentImporter",
                aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-               aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+               aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
                sal_False );
 
         if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
@@ -649,7 +651,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             xInputStream, xModelComp, aEmptyStr, xServiceFactory,
             "com.sun.star.comp.Writer.XMLImporter",
             aFilterArgs, rName, sal_True, IsBlockMode(), xInsertTextRange,
-            aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
+            aOpt.IsFmtsOnly(), nStyleFamilyMask, aOpt.IsMerge(),
             IsOrganizerMode() );
     }
 
