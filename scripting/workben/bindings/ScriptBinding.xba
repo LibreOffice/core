@@ -1605,6 +1605,13 @@ end sub
 
 REM ------ Event Handling Functions (Buttons) ------
 
+Sub DoNewAndEdit()
+    combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
+    language = combo.text
+    RunDebugger(language, &quot;&quot;, &quot;&quot;)
+    bindingDialog.endExecute()
+End Sub
+
 Sub DoBrowseAndEdit()
     Dim oFilePicker As Object, oSimpleFileAccess As Object
     Dim oSettings As Object, oPathSettings As Object
@@ -1619,7 +1626,15 @@ Sub DoBrowseAndEdit()
 
     oFilePicker.AppendFilter( bshfilter, &quot;*.bsh&quot; )
     oFilePicker.AppendFilter( rhinofilter, &quot;*.js&quot; )
-    &apos; oFilePicker.SetCurrentFilter( &quot;BeanShell (*.bsh)&quot; )
+
+    combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
+    language = combo.text
+
+    if language = &quot;BeanShell&quot; then
+        oFilePicker.SetCurrentFilter( bshfilter )
+    elseif language = &quot;Rhino&quot; then
+        oFilePicker.SetCurrentFilter( rhinofilter )
+    end if
 
     If sFileURL = &quot;&quot; Then
         oSettings = CreateUnoService( &quot;com.sun.star.frame.Settings&quot; )
@@ -1682,16 +1697,18 @@ sub DoEdit()
     menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
     selectedScript = menuScriptList.getSelectedItem()
 
-    scripts() = scriptDisplayList(0)
-    for n = LBOUND( scripts() ) to UBOUND( scripts() )
-        if ( scripts( n ).Name = selectedScript ) then
-            scriptInfo = scripts( n ).Value
-            exit for
-        end if
-    next n
+    if not (selectedScript = &quot;&quot;) then
+        scripts() = scriptDisplayList(0)
+        for n = LBOUND( scripts() ) to UBOUND( scripts() )
+            if ( scripts( n ).Name = selectedScript ) then
+                scriptInfo = scripts( n ).Value
+                exit for
+            end if
+        next n
 
-    RunDebugger(scriptInfo.getLanguage, scriptInfo.getParcelURI, scriptInfo.getFunctionName)
-    bindingDialog.endExecute()
+        RunDebugger(scriptInfo.getLanguage, scriptInfo.getParcelURI, scriptInfo.getFunctionName)
+        bindingDialog.endExecute()
+    end if
 end sub
 
 sub MenuOKButton()
