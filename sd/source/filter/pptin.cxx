@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-14 17:35:59 $
+ *  last change: $Author: sj $ $Date: 2001-06-20 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,21 +1386,21 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
                                     case PPT_TRANSITION_TYPE_PULL :
                                     {
                                         if ( nDirection == 0 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT );        // Nach links aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT );     // Nach links aufdecken
                                         else if ( nDirection == 1 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM );       // Nach oben aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP );      // Nach oben aufdecken
                                         else if ( nDirection == 2 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT );         // Nach rechts aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT );    // Nach rechts aufdecken
                                         else if ( nDirection == 3 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP );          // Nach unten aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM );   // Nach unten aufdecken
                                         else if ( nDirection == 4 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT );    // Nach links oben aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT );// Nach links oben aufdecken
                                         else if ( nDirection == 5 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT );   // Nach rechts oben aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT );// Nach rechts oben aufdecken
                                         else if ( nDirection == 6 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT );    // Nach links unten aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERLEFT );// Nach links unten aufdecken
                                         else if ( nDirection == 7 )
-                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT );   // Nach rechts unten aufdecken
+                                            pPage->SetFadeEffect( ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT );// Nach rechts unten aufdecken
                                     }
                                     break;
                                     case PPT_TRANSITION_TYPE_WIPE :
