@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:42:13 $
+ *  last change: $Author: jp $ $Date: 2002-03-18 14:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1230,6 +1230,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         rRTFWrt.OutListNum( *pNd );
         OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
     }
+    else if( !rRTFWrt.bWriteAll && rRTFWrt.bFirstLine )
+        OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
+
 
     // gibt es harte Attributierung ?
     if( bNewFmts && ( pNd->GetpSwAttrSet() || pNd->GetNum() ))
@@ -1310,16 +1313,6 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         aEndPosLst.OutAttrs( nStrPos );
 
         rRTFWrt.bTxtAttr = FALSE;
-    }
-
-    if( !rRTFWrt.bWriteAll && rRTFWrt.bFirstLine )
-    {
-        if( rRTFWrt.bOutFmtAttr )
-        {
-            rRTFWrt.Strm() << ' ';
-            rRTFWrt.bOutFmtAttr = FALSE;
-        }
-        OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
     }
 
     if( rRTFWrt.bOutFmtAttr &&
