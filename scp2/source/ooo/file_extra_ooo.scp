@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-28 16:24:57 $
+*  last change: $Author: rt $ $Date: 2005-01-31 09:28:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -131,17 +131,6 @@ File gid_File_Extra_Databasebiblio
     Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
     Name = "databasebiblio.zip";
 End
-
-#ifdef UNX
-
-File gid_File_Extra_Dir_Fonts
-    Dir = gid_Dir_Fonts_Truetype;
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Name = "fonts.dir";
-End
-
-#endif
 
 File gid_File_Extra_Edit_Asp
     Dir = gid_Dir_Config_Webcast;
