@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.109 $
+#   $Revision: 1.110 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-21 13:47:44 $
+#   last change: $Author: vg $ $Date: 2004-04-22 16:56:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.109 $ ';
+    $id_str = ' $Revision: 1.110 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1523,11 +1523,9 @@ sub prepare_incompartible_build {
         &prepare_build_from_opt($deps_hash);
         delete $$deps_hash{$build_from_opt};
     };
-    if ($prepare) {
-        @modules_built = keys %$deps_hash;
-        &check_modules(\@modules_built);
-        &clear_delivered;
-    };
+    @modules_built = keys %$deps_hash;
+    &check_modules(\@modules_built);
+    &clear_delivered if ($prepare);
     print "\n";
     foreach $prj (keys %$deps_hash) {
         my $prj_lnk = '';
