@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 18:55:54 $
+#   last change: $Author: obo $ $Date: 2004-03-17 10:51:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ TARGET=printer
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_CUPS)" != ""
+CDEFS += -DENABLE_CUPS
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 .IF "$(GUIBASE)"=="aqua"
@@ -81,10 +85,20 @@ dummy:
 
 SLOFILES=\
     $(SLO)$/printerinfomanager.obj	\
-    $(SLO)$/jobdata.obj
+    $(SLO)$/jobdata.obj				\
+    $(SLO)$/cupsmgr.obj
 
 .ENDIF # GUIBASE = aqua
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+XSALSETLIBNAME=$(DLLPRE)spa$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+
+$(INCCOM)$/rtsname.hxx:
+    rm -f $(INCCOM)$/rtsname.hxx ; \
+    echo "#define _XSALSET_LIBNAME "\"$(XSALSETLIBNAME)\" > $(INCCOM)$/rtsname.hxx
+
+$(SLO)$/cupsmgr.obj : $(INCCOM)$/rtsname.hxx
+
