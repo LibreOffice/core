@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:43:08 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:03:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,24 +75,26 @@ TARGET=copying
 #----------------------------------------------------
 
 BASICANDDIALOGS_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/FirstStepsBasic.sxw
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/FirstStepsBasic.odt
 
 CREATINGDIALOGS_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/CreatingDialogs$/SampleDialog.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/CreatingDialogs$/CreatingDialogs.sxw \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/CreatingDialogs$/CreatingDialogs.odt \
     $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/CreatingDialogs$/Makefile
 
 TOOLKITCONTROLS_FILES=\
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/dialog.xlb \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/FileDialog.xba \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/FileDialogDlg.xdl \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/MultiPage.xba \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/MultiPageDlg.xdl \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ProgressBar.xba \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ProgressBarDlg.xdl \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/script.xlb \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ScrollBar.xba \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ScrollBarDlg.xdl
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/Makefile \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls.odt \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/dialog.xlb \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/FileDialog.xba \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/FileDialogDlg.xdl \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/MultiPage.xba \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/MultiPageDlg.xdl \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/ProgressBar.xba \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/ProgressBarDlg.xdl \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/script.xlb \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/ScrollBar.xba \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/BasicAndDialogs$/ToolkitControls$/ToolkitControls$/ScrollBarDlg.xdl
 
 DIR_FILE_LIST= \
     $(BASICANDDIALOGS_FILES) \
