@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.26 2001-03-23 16:30:15 dvo Exp $
+	$Id: text.mod,v 1.27 2001-04-23 17:35:09 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -670,14 +670,14 @@
 <!ATTLIST text:reference-mark-end text:name CDATA #REQUIRED>
 
 <!ELEMENT text:footnotes-configuration (text:footnote-continuation-notice-forward?,text:footnote-continuation-notice-backward?)>
-<!ATTLIST text:footnotes-configuration text:num-prefix %string; #IMPLIED>
-<!ATTLIST text:footnotes-configuration text:num-suffix %string; #IMPLIED>
+<!ATTLIST text:footnotes-configuration style:num-prefix %string; #IMPLIED>
+<!ATTLIST text:footnotes-configuration style:num-suffix %string; #IMPLIED>
 <!ATTLIST text:footnotes-configuration style:num-format %string; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:citation-body-style-name %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:citation-style-name %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:default-style-name  %styleName; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:master-page-name %styleName; #IMPLIED>
-<!ATTLIST text:footnotes-configuration text:offset %integer; #IMPLIED>
+<!ATTLIST text:footnotes-configuration text:start-value %integer; #IMPLIED>
 <!ATTLIST text:footnotes-configuration text:footnotes-position (document|page) "page">
 <!ATTLIST text:footnotes-configuration text:start-numbering-at (document|chapter|page) "document">
 
@@ -685,14 +685,14 @@
 <!ELEMENT text:footnote-continuation-notice-backward (#PCDATA)>
 
 <!ELEMENT text:endnotes-configuration EMPTY>
-<!ATTLIST text:endnotes-configuration text:num-prefix %string; #IMPLIED>
-<!ATTLIST text:endnotes-configuration text:num-suffix %string; #IMPLIED>
+<!ATTLIST text:endnotes-configuration style:num-prefix %string; #IMPLIED>
+<!ATTLIST text:endnotes-configuration style:num-suffix %string; #IMPLIED>
 <!ATTLIST text:endnotes-configuration style:num-format %string; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:citation-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:citation-body-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:default-style-name %styleName; #IMPLIED>
 <!ATTLIST text:endnotes-configuration text:master-page-name %styleName; #IMPLIED>
-<!ATTLIST text:endnotes-configuration text:offset %integer; #IMPLIED>
+<!ATTLIST text:endnotes-configuration text:start-value %integer; #IMPLIED>
 
 <!-- Validity constraint: text:footnote and text:endnote elements may not 
 	contain other text:footnote or text:endnote elements, even though the DTD
@@ -904,6 +904,10 @@
 												(1|2|3|separator) #REQUIRED>
 <!ATTLIST text:alphabetical-index-entry-template text:style-name 
 												%styleName; #REQUIRED>
+
+<!ELEMENT text:alphabetical-index-auto-mark-file EMPTY>
+<!ATTLIST text:alphabetical-index-auto-mark-file xlink:href CDATA #IMPLIED>
+<!ATTLIST text:alphabetical-index-auto-mark-file xlink:type (simple) #FIXED "simple">
 
 <!ELEMENT text:bibliography (text:bibliography-source, text:index-body) >
 <!ATTLIST text:bibliography text:style-name %styleName; #IMPLIED>
