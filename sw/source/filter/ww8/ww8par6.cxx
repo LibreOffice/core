@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 08:37:43 $
+ *  last change: $Author: cmc $ $Date: 2002-07-01 11:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,8 +458,8 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     }
     if ((eDir == FRMDIR_HORI_LEFT_TOP) && bIsBiDi)
         eDir = FRMDIR_HORI_RIGHT_TOP;
-    if (eDir != FRMDIR_HORI_LEFT_TOP)
-        rFmt.SetAttr(SvxFrameDirectionItem(eDir));
+
+    rFmt.SetAttr(SvxFrameDirectionItem(eDir));
 
     if (eDir == FRMDIR_VERT_TOP_RIGHT || eDir == FRMDIR_VERT_TOP_LEFT)
         bVerticalEnviron=TRUE;
