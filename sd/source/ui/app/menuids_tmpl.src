@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:58:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,8 +248,7 @@
                 MN_DELETE_PAGE\
             };\
         };\
-        Text [ en-US ] = "Slid~e" ; \
-        Text [ x-comment ] = " ";\
+        Text [ en-US ] = "Pag~e" ; \
     };
 
 #define MN_SLIDE_MENU \
@@ -313,7 +312,7 @@
         Identifier = SID_DELETE_PAGE ; \
         HelpID = SID_DELETE_PAGE ; \
         Text [ de ] = "Seite ~löschen" ; \
-        Text [ en-US ] = "D~elete Slide" ; \
+        Text [ en-US ] = "D~elete Page" ; \
         Text [ x-comment ] = " ";\
     };
 
