@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-05 13:52:03 $
+ *  last change: $Author: cmc $ $Date: 2001-04-05 16:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3680,6 +3680,43 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
 
     if( nLen < 0 )  // Ende des Attributes
     {
+        //end of a sprmPDxaLeft
+        if ( (nId == 17) || (nId == 0x840F) )
+        {
+            // adjust tabs that were set at this paragraph/style resp. before
+            // we encountered the LR Space Attribute. Tabstops in winword
+            // are relative to page, tabstops in OOo are relative to para
+            // edge, so adjust them, and remove negative ones.
+
+            /*
+            ##573##
+            Leave adjustment to end of left processing so as to collect any
+            potential negative first line adjustment and take that into
+            consideration before removing an otherwise negative tab setting
+            */
+            SvxTabStopItem* pTStop;
+            pTStop = (SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
+            if( pTStop )
+            {
+                for( USHORT nCnt = 0; nCnt < pTStop->Count(); ++nCnt )
+                {
+                    SvxTabStop& rTab = (SvxTabStop&)((*pTStop)[ nCnt ]);
+                    if(SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
+                    {
+                        if (rTab.GetTabPos() >= nLeftParaMgn+nTxtFirstLineOfst)
+                            rTab.GetTabPos() -= nLeftParaMgn;
+                        else
+                        {
+                            pTStop->Remove( nCnt );
+                            --nCnt;
+                        }
+                    }
+                }
+                if (pTStop->Count())
+                    NewAttr( *pTStop );
+            }
+        }
+
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_LR_SPACE );
         return;
     }
@@ -3709,32 +3746,6 @@ void SwWW8ImplReader::Read_LR( USHORT nId, BYTE* pData, short nLen ) // Sprm 16,
         {
             nLeftParaMgn      = nPara; // fuer Tabs merken
             nTxtFirstLineOfst = aLR.GetTxtFirstLineOfst();
-        }
-
-        // adjust tabs that were set at this paragraph/style resp. before
-        // we encountered the LR Space Attribute. Tabstops in winword
-        // are relative to page, tabstops in OOo are relative to para
-        // edge, so adjust them, and remove negative ones.
-        SvxTabStopItem* pTStop;
-        pTStop = (SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
-        if( pTStop )
-        {
-            for( USHORT nCnt = 0; nCnt < pTStop->Count(); ++nCnt )
-            {
-                SvxTabStop& rTab = (SvxTabStop&)((*pTStop)[ nCnt ]);
-                if(SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
-                {
-                    if (rTab.GetTabPos() >= nLeftParaMgn )
-                        rTab.GetTabPos() -= nLeftParaMgn;
-                    else
-                    {
-                        pTStop->Remove( nCnt );
-                        --nCnt;
-                    }
-                }
-            }
-            if (pTStop->Count())
-                NewAttr( *pTStop );
         }
         break;
     //sprmPDxaLeft1
@@ -4996,12 +5007,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.18 2001-04-05 13:52:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.19 2001-04-05 16:54:15 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/04/05 13:52:03  cmc
+      ##582## Subtle textbox layout and background colour issues
+
       Revision 1.17  2001/03/16 17:15:59  jp
       new: im-/export emboss / engrave attribute
 
