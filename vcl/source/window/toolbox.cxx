@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-11 16:52:16 $
+ *  last change: $Author: ssa $ $Date: 2002-03-14 08:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2973,6 +2973,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         {
             ImplDrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE );
 
+            // no shadows until our icons are not redesigned
+            /*
             if( bHighlight == 2 && pItem->meState != STATE_CHECK )
             {
                 nTempOffX++;
@@ -2984,6 +2986,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
                 nTempOffX-=2;
                 nTempOffY-=2;
             }
+            */
             DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
 
         }
@@ -3416,7 +3419,26 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     Point aMousePos = rMEvt.GetPosPixel();
 
-    if ( mbSelection )
+    // only highlight when the focus is not inside a child window of a toolbox
+    // eg, in a edit control
+    // and do not hilight when focus is in a different toolbox
+    BOOL bDrawHotSpot = TRUE;
+    Window *pWin = Application::GetFocusWindow();
+    if( pWin && pWin->mbToolBox && pWin != this )
+        bDrawHotSpot = FALSE;
+    else
+        if( pWin && !pWin->mbToolBox )
+            while( pWin )
+            {
+                pWin = pWin->GetParent();
+                if( pWin && pWin->mbToolBox )
+                {
+                    bDrawHotSpot = FALSE;
+                    break;
+                }
+            }
+
+    if ( mbSelection && bDrawHotSpot )
     {
         USHORT  i = 0;
         USHORT  nNewPos = TOOLBOX_ITEM_NOTFOUND;
@@ -3456,11 +3478,11 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             mnCurPos = nNewPos;
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
-                mnCurItemId = pItem->mnId;
+                mnCurItemId = mnHighItemId = pItem->mnId;
                 ImplDrawItem( mnCurPos, TRUE );
             }
             else
-                mnCurItemId = 0;
+                mnCurItemId = mnHighItemId = 0;
 
             Highlight();
         }
@@ -3519,25 +3541,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-
-    // only highlight when the focus is not inside a child window of a toolbox
-    // eg, in a edit control
-    // and do not hilight when focus is in a different toolbox
-    BOOL bDrawHotSpot = TRUE;
-    Window *pWin = Application::GetFocusWindow();
-    if( pWin && pWin->mbToolBox && pWin != this )
-        bDrawHotSpot = FALSE;
-    else
-        if( pWin && !pWin->mbToolBox )
-            while( pWin )
-            {
-                pWin = pWin->GetParent();
-                if( pWin && pWin->mbToolBox )
-                {
-                    bDrawHotSpot = FALSE;
-                    break;
-                }
-            }
 
     if ( bDrawHotSpot && ( ((eStyle == POINTER_ARROW) && (mnOutStyle & TOOLBOX_STYLE_HANDPOINTER)) ||
          (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
@@ -4072,6 +4075,7 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         // deselect
         ImplHideFocus();
         mnHighItemId = 0;
+        mnCurPos = TOOLBOX_ITEM_NOTFOUND;
     }
 
     return DockingWindow::Notify( rNEvt );
@@ -4541,7 +4545,8 @@ void ToolBox::LoseFocus()
 
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    USHORT nCode = aKeyCode.GetCode();
     BOOL bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
     switch ( nCode )
     {
@@ -4600,13 +4605,31 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             else
             {
                 // send focus to document pane
+                Window *pWin = this;
+                while( pWin )
+                {
+                    if( !pWin->GetParent() )
+                    {
+                        pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
+                        break;
+                    }
+                    pWin = pWin->GetParent();
+                }
                 mpFrameWindow->GrabFocus();
             }
         }
         break;
         case KEY_LEFT:
         {
-            ImplChangeHighlightUpDn( TRUE );
+            // Ctrl-Left activates next toolbox, indicated by a blue arrow pointing to the left
+            if( aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
+            {
+                ImplDrawNext( TRUE );
+                ImplDrawNext( FALSE );
+                NextToolBox();
+            }
+            else
+                ImplChangeHighlightUpDn( TRUE );
         }
         break;
         case KEY_RIGHT:
@@ -4815,6 +4838,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 
             mnHighItemId = pItem->mnId;
             ImplDrawItem( aPos, 2 );
+            mnCurPos = aPos;
             ImplShowFocus();
         }
     }
@@ -4822,6 +4846,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
     {
         ImplHideFocus();
         mnHighItemId = 0;
+        mnCurPos = TOOLBOX_ITEM_NOTFOUND;
     }
 
     mbDummy3_ChangingHighlight = FALSE;
