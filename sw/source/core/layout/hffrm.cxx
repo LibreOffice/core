@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:15:12 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
     const SwFmtFrmSize &rSz = rFrm.GetFmt()->GetFrmSize();
     SwTwips nMinHeight;
 
-    switch (rSz.GetSizeType())
+    switch (rSz.GetHeightSizeType())
     {
     case ATT_MIN_SIZE:
         nMinHeight = rSz.GetHeight();
