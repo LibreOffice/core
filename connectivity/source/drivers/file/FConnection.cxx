@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:30:09 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii("Extenstion"))
+        if(!pBegin->Name.compareToAscii("Extension"))
             pBegin->Value >>= aExt;
         if(!pBegin->Name.compareToAscii("CharSet"))
             pBegin->Value >>= m_nTextEncoding;

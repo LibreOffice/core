@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
+ *  last change: $Author: oj $ $Date: 2000-10-05 14:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ namespace connectivity
             OConnection(OFileDriver*    _pDriver);
             virtual ~OConnection();
 
-            void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
+            virtual void construct(const ::rtl::OUString& _rUrl,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo ) throw( ::com::sun::star::sdbc::SQLException);
 
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
 
