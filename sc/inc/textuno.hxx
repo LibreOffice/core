@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-26 09:21:56 $
+ *  last change: $Author: sab $ $Date: 2002-03-01 08:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ public:
 
 class ScCellTextData : public SfxListener
 {
+protected:
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
     ScFieldEditEngine*      pEditEngine;
@@ -411,7 +412,7 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // helper functions for ScSharedCellEditSource:
-    SvxTextForwarder*       GetTextForwarder();
+    virtual SvxTextForwarder* GetTextForwarder();
     void                    UpdateData();
     ScFieldEditEngine*      GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
