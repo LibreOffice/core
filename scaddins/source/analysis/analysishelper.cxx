@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:14:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,7 @@ double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim )
 
     register const sal_Unicode* p = aStr.getStr();
 
-    sal_uInt16          nFirstDig;
+    sal_uInt16          nFirstDig = 0;
     sal_Bool            bFirstDig = sal_True;
     double              fBase = nBase;
 
