@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:48:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,140 +83,32 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Druckdaten reduzieren" ;
-        Text [ English ] = "Reduce printing data" ;
-        Text[ english_us ] = "Reduce print data";
-        Text[ portuguese ] = "Reduzir dados de impressão";
-        Text[ russian ] = "Ñîêğàòèòü äàííûå ïå÷àòè";
-        Text[ greek ] = "Ìåßùóç äåäïìİíùí åêôığùóçò";
-        Text[ dutch ] = "Afdrukgegevens reduceren";
-        Text[ french ] = "Réduire les données d'impression";
-        Text[ spanish ] = "Reducir los datos de impresión";
-        Text[ italian ] = "Riduci i dati di stampa";
-        Text[ danish ] = "Reducer udskriftsdata";
-        Text[ swedish ] = "Reducera utskriftsdata";
-        Text[ polish ] = "Zmniejsz iloœæ danych do wydruku";
-        Text[ portuguese_brazilian ] = "Reduzir dados de impressão";
-        Text[ japanese ] = "å°åˆ·ãƒ‡ãƒ¼ã‚¿ã‚’æ¸›ã‚‰ã™";
-        Text[ korean ] = "ì¸ì‡„ ë°ì´í„° ì¤„ì´ê¸°";
-        Text[ chinese_simplified ] = "å‡å°‘æ‰“å°æ•°æ®";
-        Text[ chinese_traditional ] = "æ¸›å°‘åˆ—å°è³‡æ–™";
-        Text[ turkish ] = "Yazdırılan veriyi küçült";
-        Text[ arabic ] = "Reduce printing data";
-        Text[ catalan ] = "Redueix les dades d'impressió";
-        Text[ finnish ] = "Pienennä tulostustietoja";
-        Text[ thai ] = "à¸¥à¸”à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
-        Text[ czech ] = "Redukovat data k tisku";
-        Text[ hebrew ] = "â€®×¦×™××¦×•× × ×ª×•× ×™ ×”×“×¤×¡×”â€¬";
-        Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ à¤˜à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "RedukovaÅ¥ dÃ¡ta k tlaÄi";
-        Text[ hungarian ] = "NyomtatÃ¡si adatok mennyisÃ©gÃ©nek csÃ¶kkentÃ©se";
-        Text[ slovenian ] = "ZmanjÅ¡aj podatke za tiskanje";
+        Text [ de ] = "Druckdaten reduzieren" ;
+        Text [ en-US ] = "Reduce print data";
     };
     FixedText FT_OUTPUTTYPE
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 60, 10 ) ;
-        Text = "Einstellungen für" ;
-        Text [ ENGLISH ] = "Settings for" ;
-        Text[ english_us ] = "Settings for";
-        Text[ portuguese ] = "Definições para";
-        Text[ russian ] = "Íàñòğîéêè äëÿ";
-        Text[ greek ] = "Ñõèìßóåéò ãéá";
-        Text[ dutch ] = "Instellingen voor";
-        Text[ french ] = "Paramètres pour";
-        Text[ spanish ] = "Configuración para";
-        Text[ italian ] = "Impostazioni per";
-        Text[ danish ] = "Indstillinger for";
-        Text[ swedish ] = "Inställningar för";
-        Text[ polish ] = "Ustawienia dotycz¹";
-        Text[ portuguese_brazilian ] = "Definições para";
-        Text[ japanese ] = "è¨­å®š";
-        Text[ korean ] = "ì„¤ì •";
-        Text[ chinese_simplified ] = "è®¾å®šç”¨äº";
-        Text[ chinese_traditional ] = "è¨­å®šç”¨æ–¼";
-        Text[ turkish ] = "Ayarlar";
-        Text[ arabic ] = "Settings for";
-        Text[ catalan ] = "Paràmetres de";
-        Text[ finnish ] = "Asetukset:";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸ªà¸³à¸«à¸£à¸±à¸š";
-        Text[ czech ] = "NastavenÃ­ pro";
-        Text[ hebrew ] = "â€®×§×‘×™×¢×•×ª ×¢×‘×•×¨â€¬";
-        Text[ hindi ] = "à¤•à¥‡à¤²à¤¿à¤ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-        Text[ slovak ] = "Nastavenie pre";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok:";
-        Text[ slovenian ] = "Nastavitve za";
+        Text [ de ] = "Einstellungen für" ;
+        Text [ en-US ] = "Settings for";
     };
     RadioButton RB_PRINTEROUTPUT
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 81, 14 ) ;
         Size = MAP_APPFONT ( 60, 10 ) ;
-        Text = "~Drucker" ;
-        Text [ ENGLISH ] = "~Printer" ;
-        Text[ english_us ] = "~Printer";
-        Text[ portuguese ] = "Impressora";
-        Text[ russian ] = "Ïğèíòåğ";
-        Text[ greek ] = "~ÅêôõğùôŞò";
-        Text[ dutch ] = "~Printer";
-        Text[ french ] = "Imprimante";
-        Text[ spanish ] = "Impresora";
-        Text[ italian ] = "~Stampante";
-        Text[ danish ] = "~Printer";
-        Text[ swedish ] = "~Skrivare";
-        Text[ polish ] = "D~rukarka";
-        Text[ portuguese_brazilian ] = "Im~pressora";
-        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿(~P)";
-        Text[ korean ] = "í”„ë¦°í„°(~P)";
-        Text[ chinese_simplified ] = "æ‰“å°æœº(~P)";
-        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿ(~P)";
-        Text[ turkish ] = "~Yazıcı";
-        Text[ arabic ] = "~Printer";
-        Text[ catalan ] = "Im~pressora";
-        Text[ finnish ] = "~Tulostin";
-        Text[ thai ] = "à¹€~à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
-        Text[ czech ] = "TiskÃ¡rna";
-        Text[ hebrew ] = "â€®××“×¤×¡×ªâ€¬";
-        Text[ hindi ] = "~à¤®à¥à¤¦à¥à¤°à¤•";
-        Text[ slovak ] = "~TlaÄiareÅˆ";
-        Text[ hungarian ] = "~NyomtatÃ³";
-        Text[ slovenian ] = "~Tiskalnik";
+        Text [ de ] = "~Drucker" ;
+        Text [ en-US ] = "~Printer";
     };
     RadioButton RB_PRINTFILEOUTPUT
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 142, 14 ) ;
         Size = MAP_APPFONT ( 100, 10 ) ;
-        Text = "Drucken ~in Datei" ;
-        Text [ ENGLISH ] = "Print to ~file" ;
-        Text[ english_us ] = "Print to ~file";
-        Text[ portuguese ] = "Imprimir em ~ficheiro";
-        Text[ russian ] = "Ïå÷àòàòü â ôàéë";
-        Text[ greek ] = "Åêôığùó~ç óå áñ÷åßï";
-        Text[ dutch ] = "Afdrukken naar ~bestand";
-        Text[ french ] = "Imprimer dans un fichier";
-        Text[ spanish ] = "Imprimir en ~archivo";
-        Text[ italian ] = "Stampa nel ~file";
-        Text[ danish ] = "Udskriv til ~fil";
-        Text[ swedish ] = "Skriv ut t~ill fil";
-        Text[ polish ] = "Dr~ukowanie do pliku";
-        Text[ portuguese_brazilian ] = "Imprimir para ~arquivo";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã«å‡ºåŠ›(~F)";
-        Text[ korean ] = "íŒŒì¼ë¡œ ì¸ì‡„(~F)";
-        Text[ chinese_simplified ] = "æ‰“å°æˆæ–‡ä»¶(~F)";
-        Text[ chinese_traditional ] = "åˆ—å°æˆæª”æ¡ˆ(~F)";
-        Text[ turkish ] = "Dosya içerisine yazdır..";
-        Text[ arabic ] = "Print to ~file";
-        Text[ catalan ] = "Imprimeix a ~fitxer";
-        Text[ finnish ] = "Tulosta tie~dostoon";
-        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œà¸–à¸¶à¸‡à¹~à¸Ÿà¹‰à¸¡";
-        Text[ czech ] = "Tisk do souboru";
-        Text[ hebrew ] = "â€®×”×“×¤×¡×” ×œ×§×•×‘×¥â€¬";
-        Text[ hindi ] = "~à¤«à¤¾à¤‡à¤² à¤®à¥‡à¤‚ à¤›à¤ªà¤¾à¤ˆ";
-        Text[ slovak ] = "TlaÄ do sÃº~boru";
-        Text[ hungarian ] = "~FÃ¡jlba nyomtatÃ¡s";
-        Text[ slovenian ] = "Natisni v ~datoteko";
+        Text [ de ] = "Drucken ~in Datei" ;
+        Text [ en-US ] = "Print to ~file";
     };
 
     // -----------
@@ -232,105 +124,24 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 18, 38 ) ;
         Size = MAP_APPFONT ( 115, 10 ) ;
-        Text = "Transparenz ~reduzieren" ;
-        Text [ ENGLISH ] = "~Reduce transparency" ;
-        Text[ english_us ] = "~Reduce transparency";
-        Text[ portuguese ] = "~Reduzir transparência";
-        Text[ russian ] = "~Ñîêğàòèòü ïğîçğà÷íîñòü";
-        Text[ greek ] = "~Óìßêñõíóç äéáöÜíåéáò";
-        Text[ dutch ] = "~Transparantie reduceren";
-        Text[ french ] = "Réduire la transparence";
-        Text[ spanish ] = "Reducir transparencia";
-        Text[ italian ] = "Riduci trasparenza";
-        Text[ danish ] = "~Reducer transparens";
-        Text[ swedish ] = "~Reducera transparens";
-        Text[ polish ] = "Re~dukuj przezroczystoœæ";
-        Text[ portuguese_brazilian ] = "~Reduzir transparência";
-        Text[ japanese ] = "é€éæ€§ã‚’æ¸›ã‚‰ã™(~R)";
-        Text[ korean ] = "íˆ¬ëª…ë„ ì¤„ì´ê¸°(~R)";
-        Text[ chinese_simplified ] = "å‡å°‘é€æ˜åº¦(~R)";
-        Text[ chinese_traditional ] = "æ¸›å°‘é€æ˜(~R)";
-        Text[ turkish ] = "~Saydamlığı arttır";
-        Text[ arabic ] = "~Reduce transparency";
-        Text[ catalan ] = "~Redueix la transparència";
-        Text[ finnish ] = "~Heikennä läpinäkyvyyttä";
-        Text[ thai ] = "~à¸¥à¸”à¸„à¸§à¸²à¸¡à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-        Text[ czech ] = "Redukovat prÅ¯hlednost";
-        Text[ hebrew ] = "â€®×¦××¦×•× ×©×§×™×¤×•×ªâ€¬";
-        Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ ~à¤˜à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~RedukovaÅ¥ priehÄ¾adnosÅ¥";
-        Text[ hungarian ] = "ÃtlÃ¡tszÃ³sÃ¡g ~csÃ¶kkentÃ©se";
-        Text[ slovenian ] = "Z~manjÅ¡aj prosojnost";
+        Text [ de ] = "Transparenz ~reduzieren" ;
+        Text [ en-US ] = "~Reduce transparency";
     };
     RadioButton RB_REDUCETRANSPARENCY_AUTO
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 28, 51 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
-        Text = "Auto~matisch" ;
-        Text [ ENGLISH ] = "Auto~matic" ;
-        Text[ english_us ] = "Auto~matically";
-        Text[ portuguese ] = "Auto~maticamente";
-        Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ greek ] = "Áõôü~ìáôá";
-        Text[ dutch ] = "Auto~matisch";
-        Text[ french ] = "Automatique";
-        Text[ spanish ] = "~Automáticamente";
-        Text[ italian ] = "Auto~matico";
-        Text[ danish ] = "~Automatisk";
-        Text[ swedish ] = "Auto~matiskt";
-        Text[ polish ] = "~Automatycznie";
-        Text[ portuguese_brazilian ] = "Auto~maticamente";
-        Text[ japanese ] = "è‡ªå‹•(~M)";
-        Text[ korean ] = "ìë™(~M)";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨(~M)";
-        Text[ chinese_traditional ] = "è‡ªå‹•(~M)";
-        Text[ turkish ] = "Oto~matik";
-        Text[ arabic ] = "Auto~matic";
-        Text[ catalan ] = "Auto~màtic";
-        Text[ finnish ] = "A~utomaattiseesti";
-        Text[ thai ] = "à¸­à¸¢à¹ˆà¸²à¸‡à¸­à¸±à¸•à¹‚à¸™~à¸¡à¸±à¸•à¸´";
-        Text[ czech ] = "Automaticky";
-        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤µ~à¤šà¤¾à¤²à¤¿à¤¤ à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¥‡";
-        Text[ slovak ] = "Auto~maticky";
-        Text[ hungarian ] = "A~utomatikusan";
-        Text[ slovenian ] = "Samo~dejno";
+        Text [ de ] = "Auto~matisch" ;
+        Text [ en-US ] = "Auto~matically";
     };
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 28, 64 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
-        Text = "~Keine Transparenz" ;
-        Text [ ENGLISH ] = "~No transparency" ;
-        Text[ english_us ] = "~No transparency";
-        Text[ portuguese ] = "~Sem transparência";
-        Text[ russian ] = "~Áåç ïğîçğà÷íîñòè";
-        Text[ greek ] = "~×ùñßò äéáöÜíåéá";
-        Text[ dutch ] = "~Geen transparantie";
-        Text[ french ] = "Aucune transparence";
-        Text[ spanish ] = "~Sin transparencia";
-        Text[ italian ] = "Nessuna trasparenza";
-        Text[ danish ] = "~Ingen transparens";
-        Text[ swedish ] = "I~ngen transparens";
-        Text[ polish ] = "Bez przezro~czystoœci";
-        Text[ portuguese_brazilian ] = "~Sem transparência";
-        Text[ japanese ] = "é€éæ€§ãªã—(~N)";
-        Text[ korean ] = "íˆ¬ëª… ì—†ìŒ(~N)";
-        Text[ chinese_simplified ] = "ä¸é€æ˜(~N)";
-        Text[ chinese_traditional ] = "ä¸é€æ˜(~N)";
-        Text[ turkish ] = "~Saydamlığı kapat";
-        Text[ arabic ] = "ÈÏæä ÔİÇİíÉ";
-        Text[ catalan ] = "~Sense transparència";
-        Text[ finnish ] = "E~i läpinäkyvyyttä";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-        Text[ czech ] = "Å½Ã¡dnÃ¡ prÅ¯hlednost";
-        Text[ hebrew ] = "â€®×œ×œ× ×©×§×™×¤×•×ªâ€¬";
-        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "Å½iad~na priehÄ¾adnosÅ¥";
-        Text[ hungarian ] = "Nincsenek Ã¡t~lÃ¡tszÃ³ elemek";
-        Text[ slovenian ] = "~Brez prosojnosti";
+        Text [ de ] = "~Keine Transparenz" ;
+        Text [ en-US ] = "~No transparency";
     };
 
     // -----------
@@ -340,70 +151,16 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 136, 38 ) ;
         Size = MAP_APPFONT ( 121, 10 ) ;
-        Text = "Farb~verläufe reduzieren" ;
-        Text [ ENGLISH ] = "Reduce ~gradients" ;
-        Text[ english_us ] = "Reduce ~gradients";
-        Text[ portuguese ] = "Reduzir gradações";
-        Text[ russian ] = "Ñîêğàòèòü ãğàäèåíò";
-        Text[ greek ] = "Ìåßùóç ~äéáâáèìßóåùí";
-        Text[ dutch ] = "Kle~urverlopen reduceren";
-        Text[ french ] = "Réduire les dé~gradés";
-        Text[ spanish ] = "Reducir ~gradientes";
-        Text[ italian ] = "Riduci sfumature";
-        Text[ danish ] = "Reducer farve~gradueringer";
-        Text[ swedish ] = "Reducera färg~gradienter";
-        Text[ polish ] = "Zmniejsz ~gradienty";
-        Text[ portuguese_brazilian ] = "Reduzir ~gradientes";
-        Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ¸›ã‚‰ã™(~G)";
-        Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ ê°ì†Œ(~G)";
-        Text[ chinese_simplified ] = "å‡å°‘å½©è‰²å›¾æ¡ˆ(~G)";
-        Text[ chinese_traditional ] = "æ¸›å°‘å½©è‰²åœ–æ¡ˆ(~G)";
-        Text[ turkish ] = " ~Gradyan değerini düşür.";
-        Text[ arabic ] = "Reduce ~gradients";
-        Text[ catalan ] = "Redueix les gradacions";
-        Text[ finnish ] = "~Pienennä liukuvärjäystä";
-        Text[ thai ] = "à¸¥à¸”à¸•à¸±à¸§à¹„~à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
-        Text[ czech ] = "Redukovat pÅ™echody";
-        Text[ hebrew ] = "â€®×¦××¦×•× ×©×™×¤×•×¢ ×¦×‘×¢â€¬";
-        Text[ hindi ] = "~à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥à¤¸ à¤˜à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "RedukovaÅ¥ pr~echody";
-        Text[ hungarian ] = "SzÃ­nÃ¡tmenetek csÃ¶~kkentÃ©se";
-        Text[ slovenian ] = "ZmanjÅ¡aj ~prelive";
+        Text [ de ] = "Farb~verläufe reduzieren" ;
+        Text [ en-US ] = "Reduce ~gradients";
     };
     RadioButton RB_REDUCEGRADIENTS_STRIPES
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 146, 51 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
-        Text = "Farbverlauf~sstreifen" ;
-        Text [ ENGLISH ] = "Gradient ~stripes" ;
-        Text[ english_us ] = "Gradient ~stripes";
-        Text[ portuguese ] = "Faixas de gradação";
-        Text[ russian ] = "Ãğàäèåíòíûå ïîëîñû";
-        Text[ greek ] = "Ë~ùñßäåò ìå äéáâáèìßóåéò";
-        Text[ dutch ] = "~Strepen in kleurovergangen";
-        Text[ french ] = "Bandes de dégradés";
-        Text[ spanish ] = "Tiras de gra~dientes";
-        Text[ italian ] = "~Bande sfumate";
-        Text[ danish ] = "Farvegraduerings~striber";
-        Text[ swedish ] = "Färggra~dientränder";
-        Text[ polish ] = "Paski gradie~ntu";
-        Text[ portuguese_brazilian ] = "Faixas de gradiente";
-        Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã®ç·šå½¢(~S)";
-        Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ ì„ í˜•(~S)";
-        Text[ chinese_simplified ] = "å½©è‰²å›¾æ¡ˆæ¡çº¹(~S)";
-        Text[ chinese_traditional ] = "å½©è‰²åœ–æ¡ˆæ¢ç´‹(~S)";
-        Text[ turkish ] = "Gradyan ~çizgileri";
-        Text[ arabic ] = "Gradient ~stripes";
-        Text[ catalan ] = "~Tires de gradients";
-        Text[ finnish ] = "Liukuvär~jäysviivat";
-        Text[ thai ] = "~à¸¥à¸²à¸¢à¸—à¸²à¸‡à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
-        Text[ czech ] = "Pruhy pÅ™echodÅ¯";
-        Text[ hebrew ] = "â€®×¤×¡×™ ×©×•×¤×•×¢ ×¦×‘×¢â€¬";
-        Text[ hindi ] = "à¤—à¥à¤°à¥‡à¤¡à¤¿à¤à¤¨à¥à¤Ÿà¥à¤¸ ~à¤¸à¥à¤Ÿà¥à¤°à¤‡à¤ªà¥à¤¸";
-        Text[ slovak ] = "P~ruhy prechodov";
-        Text[ hungarian ] = "Ã~rnyalatok szÃ¡ma";
-        Text[ slovenian ] = "Pro~ge v prelivu";
+        Text [ de ] = "Farbverlauf~sstreifen" ;
+        Text [ en-US ] = "Gradient ~stripes";
     };
     NumericField NF_REDUCEGRADIENTS_STEPCOUNT
     {
@@ -421,35 +178,8 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 146, 64 ) ;
         Size = MAP_APPFONT ( 108, 10 ) ;
-        Text = "~Zwischenfarbe" ;
-        Text [ ENGLISH ] = "Medium ~color" ;
-        Text[ english_us ] = "Intermediate ~color";
-        Text[ portuguese ] = "Co~r intermédia";
-        Text[ russian ] = "Ïğîìåæóòî÷íûé öâåò";
-        Text[ greek ] = "ÅíäéÜìåóï ÷~ñşìá";
-        Text[ dutch ] = "Tussenkleu~r";
-        Text[ french ] = "Couleur intermédiaire";
-        Text[ spanish ] = "Color intermedio";
-        Text[ italian ] = "Colore intermedio";
-        Text[ danish ] = "~Mellemfarve";
-        Text[ swedish ] = "Mellan~färg";
-        Text[ polish ] = "Kolor ~poœredni";
-        Text[ portuguese_brazilian ] = "Co~r intermediária";
-        Text[ japanese ] = "ä¸­é–“è‰²(~C)";
-        Text[ korean ] = "ì¤‘ê°„ìƒ‰(~C)";
-        Text[ chinese_simplified ] = "ä¸­é—´è‰²(~C)";
-        Text[ chinese_traditional ] = "ä¸­é–“è‰²(~C)";
-        Text[ turkish ] = "Ara ~renk";
-        Text[ arabic ] = "Medium ~color";
-        Text[ catalan ] = "~Color intermig";
-        Text[ finnish ] = "Väli~väri";
-        Text[ thai ] = "~à¸ªà¸µà¸£à¸°à¸”à¸±à¸šà¸à¸¥à¸²à¸‡";
-        Text[ czech ] = "PÅ™echodnÃ¡ barva";
-        Text[ hebrew ] = "â€®×¦×‘×¢ ×‘×™× ×™×™×â€¬";
-        Text[ hindi ] = "à¤¬à¥€à¤š à¤•à¤¾ ~à¤°à¤‚à¤—";
-        Text[ slovak ] = "Pre~chodnÃ¡ farba";
-        Text[ hungarian ] = "KÃ¶~ztes szÃ­n";
-        Text[ slovenian ] = "Vmesna ~barva";
+        Text [ de ] = "~Zwischenfarbe" ;
+        Text [ en-US ] = "Intermediate ~color";
     };
 
     // -----------
@@ -459,140 +189,32 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 18, 80 ) ;
         Size = MAP_APPFONT ( 115, 10 ) ;
-        Text = "~Bitmaps reduzieren" ;
-        Text [ ENGLISH ] = "Reduce ~bitmaps" ;
-        Text[ english_us ] = "Reduce ~bitmaps";
-        Text[ portuguese ] = "Reduzir ~bitmaps";
-        Text[ russian ] = "Ñîêğàòèòü ğàñòğîâûå ~èçîáğàæåíèÿ";
-        Text[ greek ] = "Ìåßùóç ~bitmap";
-        Text[ dutch ] = "Bitmaps redu~ceren";
-        Text[ french ] = "Réduire les ~bitmaps";
-        Text[ spanish ] = "Reducir los ~mapas de bits";
-        Text[ italian ] = "Riduci bitmap";
-        Text[ danish ] = "Reducer ~bitmaps";
-        Text[ swedish ] = "Reducera ~bitmaps";
-        Text[ polish ] = "Zmniejsz mapy ~bitowe";
-        Text[ portuguese_brazilian ] = "Reduzir ~bitmaps";
-        Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’æ¸›ã‚‰ã™(~B)";
-        Text[ korean ] = "ë¹„íŠ¸ë§µ ê°ì†Œ(~B)";
-        Text[ chinese_simplified ] = "å‡å°‘ä½å›¾(~B)";
-        Text[ chinese_traditional ] = "æ¸›å°‘é»é™£åœ–(~B)";
-        Text[ turkish ] = "~Bit eşlem değerini düşür";
-        Text[ arabic ] = "Reduce ~bitmaps";
-        Text[ catalan ] = "Redueix els mapes de ~bits";
-        Text[ finnish ] = "Pienennä ~bittikarttaa";
-        Text[ thai ] = "à¸¥à¸”~à¸šà¸´à¸—à¹à¸¡à¹‡à¸›";
-        Text[ czech ] = "Redukovat bitovÃ© mapy";
-        Text[ hebrew ] = "â€®×¦××¦×•× ××¤×•×ª ×¡×™×‘×™×•×ªâ€¬";
-        Text[ hindi ] = "~à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ªà¥à¤¸ à¤˜à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "RedukovaÅ¥ ~bitovÃ© mapy";
-        Text[ hungarian ] = "B~itkÃ©pek minÅ‘sÃ©gÃ©nek csÃ¶kkentÃ©se";
-        Text[ slovenian ] = "ZmanjÅ¡aj ~bitne slike";
+        Text [ de ] = "~Bitmaps reduzieren" ;
+        Text [ en-US ] = "Reduce ~bitmaps";
     };
     RadioButton RB_REDUCEBITMAPS_OPTIMAL
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 28, 93 ) ;
         Size = MAP_APPFONT ( 226, 10 ) ;
-        Text = "Hohe Druck~qualität" ;
-        Text [ ENGLISH ] = "High ~quality" ;
-        Text[ english_us ] = "~High print quality";
-        Text[ portuguese ] = "~Qualidade de impressão optimizada";
-        Text[ russian ] = "~Âûñîêîå êà÷åñòâî ïå÷àòè";
-        Text[ greek ] = "~ÕøçëŞ ğïéüôçôá åêôığùóçò";
-        Text[ dutch ] = "Goede afdru~kkwaliteit";
-        Text[ french ] = "Qualité d'impression optimale";
-        Text[ spanish ] = "~Calidad de impresión óptima";
-        Text[ italian ] = "Qualità ottima";
-        Text[ danish ] = "~Høj udskriftskvalitet";
-        Text[ swedish ] = "Hög utskrifts~kvalitet";
-        Text[ polish ] = "Wy~soka jakoœæ wydruku";
-        Text[ portuguese_brazilian ] = "~Qualidade de impressão otimizada";
-        Text[ japanese ] = "é«˜åº¦ãªå°åˆ·å“è³ª(~H)";
-        Text[ korean ] = "ê³  ì¸ì‡„ìš© í’ˆì§ˆ(~H)";
-        Text[ chinese_simplified ] = "å¾ˆå¥½çš„æ‰“å°è´¨é‡(~H)";
-        Text[ chinese_traditional ] = "å¾ˆå¥½çš„åˆ—å°å“è³ª(~H)";
-        Text[ turkish ] = "~Yüksek basım kalitesi";
-        Text[ arabic ] = "~Good quality";
-        Text[ catalan ] = "~Bona qualitat";
-        Text[ finnish ] = "H~yvä tulostuslaatu";
-        Text[ thai ] = "à¸„à¸¸à¸“à¸ à¸²à¸à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ~à¸ªà¸¹à¸‡";
-        Text[ czech ] = "VysokÃ¡ kvalita tisku";
-        Text[ hebrew ] = "â€®××™×›×•×ª ×”×“×¤×¡×” ×’×‘×•×”×”â€¬";
-        Text[ hindi ] = "~à¤‰à¤šà¥à¤š à¤›à¤ªà¤¾à¤ˆ à¤—à¥à¤£";
-        Text[ slovak ] = "VysokÃ¡ ~kvalita tlaÄe";
-        Text[ hungarian ] = "JÃ³ ~minÅ‘sÃ©gÅ± nyomtatÃ¡s";
-        Text[ slovenian ] = "~Visoka kakovost tiskanja";
+        Text [ de ] = "Hohe Druck~qualität" ;
+        Text [ en-US ] = "~High print quality";
     };
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 28, 106 ) ;
         Size = MAP_APPFONT ( 226, 10 ) ;
-        Text = "N~ormale Druckqualität" ;
-        Text [ ENGLISH ] = "N~ormal quality" ;
-        Text[ english_us ] = "N~ormal print quality";
-        Text[ portuguese ] = "Qualidade de impressão ~normal";
-        Text[ russian ] = "Íîğìàëüíîå êà÷åñòâî ïå÷àòè";
-        Text[ greek ] = "Êá~íïíéêŞ ğïéüôçôá åêôığùóçò";
-        Text[ dutch ] = "~Normale afdrukkwaliteit";
-        Text[ french ] = "Qualité d'impression ~standard";
-        Text[ spanish ] = "Calidad ~normal de impresión";
-        Text[ italian ] = "Qualità ~normale";
-        Text[ danish ] = "~Normal udskriftskvalitet";
-        Text[ swedish ] = "N~ormal utskriftskvalitet";
-        Text[ polish ] = "Zwyk³a jak~oœæ wydruku";
-        Text[ portuguese_brazilian ] = "Qualidade de impressão ~normal";
-        Text[ japanese ] = "æ¨™æº–ã®å°åˆ·å“è³ª(~O)";
-        Text[ korean ] = "ì¼ë°˜ ì¸ì‡„ìš© í’ˆì§ˆ(~O)";
-        Text[ chinese_simplified ] = "ä¸€èˆ¬çš„æ‰“å°è´¨é‡(~O)";
-        Text[ chinese_traditional ] = "ä¸€èˆ¬çš„å“è³ª(~O)";
-        Text[ turkish ] = "N~ormal basım kalitesi";
-        Text[ arabic ] = "N~ormal quality";
-        Text[ catalan ] = "Qualitat n~ormal";
-        Text[ finnish ] = "~Normaali tulostuslaatu";
-        Text[ thai ] = "à¸„à¸¸à¸“à¸ à¸²à¸à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¸›~à¸à¸•à¸´";
-        Text[ czech ] = "NormÃ¡lnÃ­ kvalita tisku";
-        Text[ hebrew ] = "â€®××™×›×•×ª ×”×“×¤×¡×” ×¨×’×™×œ×”â€¬";
-        Text[ hindi ] = "à¤¸à¤¾~à¤®à¤¾à¤¨à¥à¤¯ à¤›à¤ªà¤¾à¤ˆ à¤—à¥à¤£";
-        Text[ slovak ] = "N~ormÃ¡lna kvalita tlaÄe";
-        Text[ hungarian ] = "N~ormÃ¡l nyomtatÃ¡si minÅ‘sÃ©g";
-        Text[ slovenian ] = "N~avadna kakovost tiskanja";
+        Text [ de ] = "N~ormale Druckqualität" ;
+        Text [ en-US ] = "N~ormal print quality";
     };
     RadioButton RB_REDUCEBITMAPS_RESOLUTION
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 28, 119 ) ;
         Size = MAP_APPFONT ( 52, 10 ) ;
-        Text = "Aufl~ösung" ;
-        Text [ ENGLISH ] = "Reso~lution" ;
-        Text[ english_us ] = "Reso~lution";
-        Text[ portuguese ] = "~Resolução";
-        Text[ russian ] = "Ğàçğåøåíèå";
-        Text[ greek ] = "ÁíÜ~ëõóç";
-        Text[ dutch ] = "Reso~lutie";
-        Text[ french ] = "~Résolution";
-        Text[ spanish ] = "R~esolución";
-        Text[ italian ] = "Risoluzione";
-        Text[ danish ] = "~Opløsning";
-        Text[ swedish ] = "Uppl~ösning";
-        Text[ polish ] = "Rozdzie~lczoœæ";
-        Text[ portuguese_brazilian ] = "~Resolução";
-        Text[ japanese ] = "è§£åƒåº¦(~L)";
-        Text[ korean ] = "í•´ìƒë„(~L)";
-        Text[ chinese_simplified ] = "åˆ†è¾¨ç‡(~L)";
-        Text[ chinese_traditional ] = "è§£æåº¦(~L)";
-        Text[ turkish ] = "Çözünür~lük";
-        Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
-        Text[ catalan ] = "Reso~lució";
-        Text[ finnish ] = "Ta~rkkuus";
-        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
-        Text[ czech ] = "RozliÅ¡enÃ­";
-        Text[ hebrew ] = "â€®×¨×–×•×œ×•×¦×™×”â€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤¶à¥à¤²à¥‡~à¤·à¤£";
-        Text[ slovak ] = "Roz~lÃ­Å¡enie";
-        Text[ hungarian ] = "Fel~bontÃ¡s";
-        Text[ slovenian ] = "LoÄl~jivost";
+        Text [ de ] = "Aufl~ösung" ;
+        Text [ en-US ] = "Reso~lution";
     };
     ListBox LB_REDUCEBITMAPS_RESOLUTION
     {
@@ -602,7 +224,7 @@ TabPage TP_COMMONPRINTOPTIONS
         Size = MAP_APPFONT ( 40, 100 ) ;
         DropDown = TRUE;
 
-        StringList =
+        StringList [ de ] =
         {
             < "72 DPI"; 0; > ;
             < "96 DPI"; 0;  > ;
@@ -611,16 +233,7 @@ TabPage TP_COMMONPRINTOPTIONS
             < "300 DPI"; 0; > ;
             < "600 DPI"; 0; > ;
         };
-        StringList [English] =
-        {
-            < "72 DPI"; 0; > ;
-            < "96 DPI"; 0;  > ;
-            < "150 DPI (Fax)"; 0; > ;
-            < "200 DPI (Default)"; 0; > ;
-            < "300 DPI"; 0; > ;
-            < "600 DPI"; 0; > ;
-        };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < "; 72 DPI"; 0; > ;
         < "; 96 DPI"; 0;  > ;
@@ -629,246 +242,12 @@ TabPage TP_COMMONPRINTOPTIONS
         < "; 300 DPI"; 0; > ;
         < "; 600 DPI"; 0; > ;
     };
-    StringList [ english_us ] =
+    StringList [ en-US ] =
     {
             < "72 DPI"; 0; > ;
         < "96 DPI"; 0;  > ;
         < "150 DPI (Fax)"; 0; > ;
         < "200 DPI (default)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (predefinição)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 dpi (ôàêñ)"; 0; > ;
-        < "200 dpi (ïî óìîë÷àíèş)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Öáî)"; 0; > ;
-        < "200 DPI (ğñïåğéëïãŞ)"; 0; > ;
-        < "300 dpi"; 0; > ;
-        < "600 dpi"; 0; > ;
-    };
-    StringList [ dutch ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (standaard)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ french ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (par défaut)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ spanish ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (predeterminado)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ italian ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (standard)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ danish ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (standard)"; 0; > ;
-        < "300 dpi"; 0; > ;
-        < "600 dpi"; 0; > ;
-    };
-    StringList [ swedish ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (fax)"; 0; > ;
-        < "200 DPI (förinställning)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "72 dpi"; 0; > ;
-        < "96 dpi"; 0;  > ;
-        < "150 dpi (faks)"; 0; > ;
-        < "200 dpi (domyœlnie)"; 0; > ;
-        < "300 dpi"; 0; > ;
-        < "600 dpi"; 0; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (padrão)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (åˆæœŸè¨­å®š)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (íŒ©ìŠ¤)"; 0; > ;
-        < "200 DPI (ê¸°ë³¸ê°’)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (ä¼ çœŸ)"; 0; > ;
-        < "200 DPI (é¢„è®¾å€¼)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (å‚³çœŸ)"; 0; > ;
-        < "200 DPI (é è¨­å®š)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Faks)"; 0; > ;
-        < "200 DPI (Öntanımlı)"; 0; > ;
-        < "300 dpi"; 0; > ;
-        < "600 dpi"; 0; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (default)"; 0; > ;
-        < "300 äŞØÉ İí ÇáÈæÕÉ"; 0; > ;
-        < "600 äŞØÉ İí ÇáÈæÕÉ"; 0; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "72 PPP"; 0; > ;
-        < "96 PPP"; 0;  > ;
-        < "150 PPP (fax)"; 0; > ;
-        < "200 PPP (per defecte)"; 0; > ;
-        < "300 PPP"; 0; > ;
-        < "600 PPP"; 0; > ;
-    };
-    StringList [ finnish ] =
-    {
-             < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (faksi)"; 0; > ;
-        < "200 DPI (oletus)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (à¹‚à¸—à¸£à¸ªà¸²à¸£)"; 0; > ;
-        < "200 DPI (à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (vÃ½chozÃ­)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®72 × ×§×•×“×•×ª ×œ××™× ×¦'â€¬"; 0; > ;
-        < "â€®96 × ×§×•×“×•×ª ×œ××™× ×¦'â€¬"; 0;  > ;
-        < "â€®150 × ×§×•×“×•×ª ×œ××™× ×¦' (×¤×§×¡)â€¬"; 0; > ;
-        < "â€®200 × ×§×•×“×•×ª ×œ××™× ×¦' (×‘×¨×™×¨×ª ×”××—×“×œ)â€¬"; 0; > ;
-        < "â€®300 × ×§×•×“×ª ×œ××™× ×¦'â€¬"; 0; > ;
-        < "â€®600 × ×§×•×“×•×ª ×œ××™× ×¦'â€¬"; 0; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (à¤«à¤¼à¥‰à¤•à¥à¤¸)"; 0; > ;
-        < "200 DPI (à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (vÃ½chodzie)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Fax)"; 0; > ;
-        < "200 DPI (alapÃ©rtelmezett)"; 0; > ;
-        < "300 DPI"; 0; > ;
-        < "600 DPI"; 0; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "72 DPI"; 0; > ;
-        < "96 DPI"; 0;  > ;
-        < "150 DPI (Faks)"; 0; > ;
-        < "200 DPI (Privzeto)"; 0; > ;
         < "300 DPI"; 0; > ;
         < "600 DPI"; 0; > ;
     };
@@ -878,35 +257,8 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 28, 132 ) ;
         Size = MAP_APPFONT ( 226, 10 ) ;
-        Text = "Transparente Ob~jekte einschließen" ;
-        Text [ ENGLISH ] = "Include transparent ob~jects" ;
-        Text[ english_us ] = "Include transparent ob~jects";
-        Text[ portuguese ] = "Incluir ob~jectos transparentes";
-        Text[ russian ] = "Âêëş÷èòü ïğîçğà÷íûå îáúåêòû";
-        Text[ greek ] = "ĞñïóèŞêç äéáöáíşí áíôé~êåéìİíùí";
-        Text[ dutch ] = "Inclusief transparante ob~jecten";
-        Text[ french ] = "Inclure les ob~jets transparents";
-        Text[ spanish ] = "Incluir ob~jetos transparentes";
-        Text[ italian ] = "Includi oggetti trasparenti";
-        Text[ danish ] = "Medtag transparente ob~jekter";
-        Text[ swedish ] = "Inkludera transparenta ob~jekt";
-        Text[ polish ] = "Do³¹cz ob~iekty przezroczyste";
-        Text[ portuguese_brazilian ] = "Incluir ob~jetos transparentes";
-        Text[ japanese ] = "é€éæ€§ã®ã‚ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚‚å«ã‚€(~J)";
-        Text[ korean ] = "íˆ¬ëª… ê°œì²´ í¬í•¨(~J)";
-        Text[ chinese_simplified ] = "åŒ…æ‹¬é€æ˜å¯¹è±¡(~J)";
-        Text[ chinese_traditional ] = "åŒ…æ‹¬é€æ˜ç‰©ä»¶(~J)";
-        Text[ turkish ] = "Saydam nesneler içerir";
-        Text[ arabic ] = "Include transparent ob~jects";
-        Text[ catalan ] = "Inclou els ob~jectes transparents";
-        Text[ finnish ] = "Lis~ää läpinäkyvät objektit";
-        Text[ thai ] = "à¸£à¸§à¸¡à¸§à¸±à¸•~à¸–à¸¸à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-        Text[ czech ] = "Zahrnout prÅ¯hlednÃ© objekty";
-        Text[ hebrew ] = "â€®×”×›×œ×œ×ª ×¢×¦××™× ×©×§×•×¤×™×â€¬";
-        Text[ hindi ] = "à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤• à¤µà¤¸à¥à¤¤à¥~à¤“à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "ZahrnÃºÅ¥ priehÄ¾adnÃ© ob~jekty";
-        Text[ hungarian ] = "ÃtlÃ¡tszÃ³ ~elemekre is vonatkozzon";
-        Text[ slovenian ] = "VkljuÄi prosojne p~redmete";
+        Text [ de ] = "Transparente Ob~jekte einschließen" ;
+        Text [ en-US ] = "Include transparent ob~jects";
     };
 
     // -----------
@@ -916,35 +268,8 @@ TabPage TP_COMMONPRINTOPTIONS
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 136, 80 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
-        Text = "Farben in Graustufen um~wandeln" ;
-        Text [ ENGLISH ] = "Con~vert colors to greyscales" ;
-        Text[ english_us ] = "Con~vert colors to grayscale";
-        Text[ portuguese ] = "Con~verter cores em tons cinzentos";
-        Text[ russian ] = "Ïğåîáğàçîâàòü öâåòà â îòòåíêè ñåğîãî";
-        Text[ greek ] = "ÌåôáôñïğŞ ÷ñùìÜôùí óå äéáâá~è. ôïõ ãêñé";
-        Text[ dutch ] = "Kleuren naar grijs~waarden converteren";
-        Text[ french ] = "Con~vertir les couleurs en niveaux de gris";
-        Text[ spanish ] = "Con~vertir colores en escala de grises";
-        Text[ italian ] = "Con~verti i colori in sfumature di grigio";
-        Text[ danish ] = "Kon~verter farver til gråtoner";
-        Text[ swedish ] = "Om~vandla färger till gråskalor";
-        Text[ polish ] = "~Konwertuj kolory na odcienie szaroœci";
-        Text[ portuguese_brazilian ] = "Con~verter cores para tons de cinza";
-        Text[ japanese ] = "è‰²ã‚’ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«ã«å¤‰æ›ã™ã‚‹(~V)";
-        Text[ korean ] = "ìƒ‰ìƒì„ íšŒìƒ‰ì¡°ë¡œ ë³€í™˜(~V)";
-        Text[ chinese_simplified ] = "å½©è‰²è½¬æ¢æˆç°åº¦(~V)";
-        Text[ chinese_traditional ] = "å½©è‰²è½‰æ›æˆç°éš(~V)";
-        Text[ turkish ] = "Renkleri gri tonlara dönüştür";
-        Text[ arabic ] = "Con~vert colors to greyscales";
-        Text[ catalan ] = "Con~verteix els colors a escala de grisos";
-        Text[ finnish ] = "~Muunna värit harmaasävyiksi";
-        Text[ thai ] = "à¹à¸›~à¸¥à¸‡à¸ªà¸µà¹€à¸›à¹‡à¸™à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²";
-        Text[ czech ] = "PÅ™evÃ©st barvy na odstÃ­ny Å¡edi";
-        Text[ hebrew ] = "â€®×”××¨×ª ×¦×‘×¢×™× ×œ×¡×•×œ× ×”××¤×•×¨â€¬";
-        Text[ hindi ] = "à¤°à¤‚à¤—à¥‹à¤‚ à¤•à¥‹ à¤—à¥à¤°à¥‡à¤¸à¥à¤•à¥‡à¤² à¤®à¥‡à¤‚ à¤¬à¤¦~à¤²à¥‹";
-        Text[ slovak ] = "Pre~viesÅ¥ farby na odtiene Å¡edi";
-        Text[ hungarian ] = "SzÃ­nek konvertÃ¡lÃ¡sa szÃ¼rkeÃ¡rn~yalatra";
-        Text[ slovenian ] = "Pret~vori barve v sivine";
+        Text [ de ] = "Farben in Graustufen um~wandeln" ;
+        Text [ en-US ] = "Con~vert colors to grayscale";
     };
 
     // -----------
@@ -953,141 +278,32 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6, 148 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Drucker-Warnungen" ;
-        Text [ English ] = "Printer Warnings" ;
-        Text [ norwegian ] = "Warnings" ;
-        Text [ italian ] = "Avvertenze di stampa" ;
-        Text [ portuguese_brazilian ] = "Avisos da Impressora" ;
-        Text [ portuguese ] = "Advertências" ;
-        Text [ finnish ] = "Tulostinvaroitukset" ;
-        Text [ danish ] = "Printeradvarsler" ;
-        Text [ french ] = "Avertissements" ;
-        Text [ swedish ] = "Skrivarvarningar" ;
-        Text [ dutch ] = "Printerwaarschuwingen" ;
-        Text [ spanish ] = "Advertencias" ;
-        Text [ english_us ] = "Printer warnings" ;
-        Text[ chinese_simplified ] = "æ‰“å°æœºçš„è­¦å‘Š";
-        Text[ russian ] = "Ïğåäóïğåæäåíèÿ ïğèíòåğà";
-        Text[ polish ] = "Ostrze¿enia dot. drukarki";
-        Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ã®è­¦å‘Š";
-        Text[ chinese_traditional ] = "å°è¡¨æ©Ÿçš„è­¦å‘Š";
-        Text[ arabic ] = "ÊÍĞíÑÇÊ ÇáØÇÈÚÉ";
-        Text[ greek ] = "ĞñïåéäïğïéŞóåéò åêôõğùôŞ";
-        Text[ korean ] = "í”„ë¦°í„° ê²½ê³ ";
-        Text[ turkish ] = "Yazıcı uyarıları";
-        Text[ catalan ] = "Avisos de la impressora";
-        Text[ thai ] = "à¸„à¸³à¹€à¸•à¸·à¸­à¸™à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ";
-        Text[ czech ] = "UpozornÄ›nÃ­ tiskÃ¡rny";
-        Text[ hebrew ] = "â€®××–×”×¨×•×ª ××“×¤×¡×ªâ€¬";
-        Text[ hindi ] = "à¤®à¥à¤¦à¥à¤°à¤• à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€";
-        Text[ slovak ] = "HlÃ¡senia tlaÄiarne";
-        Text[ hungarian ] = "FigyelmeztetÃ©sek nyomtatÃ¡skor";
-        Text[ slovenian ] = "Opozorila tiskalnika";
+        Text [ de ] = "Drucker-Warnungen" ;
+        Text [ en-US ] = "Printer warnings" ;
     };
     CheckBox CB_PAPERSIZE
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 12, 159 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
-        Text = "P~apiergröße" ;
-        Text [ ENGLISH ] = "P~aper size" ;
-        Text [ english_us ] = "P~aper size" ;
-        Text [ italian ] = "~Dimensione carta" ;
-        Text [ spanish ] = "~Tamaño del papel" ;
-        Text [ french ] = "Taille du papier" ;
-        Text [ dutch ] = "Papiergr~ootte" ;
-        Text [ swedish ] = "P~appersstorlek" ;
-        Text [ danish ] = "~Papirstørrelse" ;
-        Text [ portuguese_brazilian ] = "~Tamanho do papel" ;
-        Text [ portuguese ] = "~Tamanho do papel" ;
-        Text[ chinese_simplified ] = "çº¸å¼ å¤§å°(~A)";
-        Text[ russian ] = "Ğàçìåğ áóìàãè";
-        Text[ polish ] = "Rozmiar papi~eru";
-        Text[ japanese ] = "ç”¨ç´™ã‚µã‚¤ã‚º(~A)";
-        Text[ chinese_traditional ] = "ç´™å¼µå¤§å°(~A)";
-        Text[ arabic ] = "ÍÌã ÇáæÑŞ";
-        Text[ greek ] = "Ìİãåèïò ÷~áñôéïı";
-        Text[ korean ] = "ìš©ì§€ í¬ê¸°(~A)";
-        Text[ turkish ] = "S~ayfa boyutu";
-        Text[ catalan ] = "Mida del p~aper";
-        Text[ finnish ] = "Paperi~koko";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸”à¸à¸£à¸°~à¸”à¸²à¸©";
-        Text[ czech ] = "Velikost papÃ­ru";
-        Text[ hebrew ] = "â€®×’×•×“×œ ×“×£â€¬";
-        Text[ hindi ] = "à¤•à¤¾~à¤—à¤œ à¤ªà¤°à¤¿à¤®à¤¾à¤£";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ p~apiera";
-        Text[ hungarian ] = "P~apÃ­rmÃ©ret";
-        Text[ slovenian ] = "Velikost p~apirja";
+        Text [ de ] = "P~apiergröße" ;
+        Text [ en-US ] = "P~aper size" ;
     };
     CheckBox CB_PAPERORIENTATION
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 12, 172 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
-        Text = "Papi~erorientierung" ;
-        Text [ ENGLISH ] = "Pap~er orientation" ;
-        Text [ dutch ] = "Papi~eroriëntatie" ;
-        Text [ english_us ] = "Pap~er orientation" ;
-        Text [ italian ] = "~Orientamento carta" ;
-        Text [ spanish ] = "~Orientación del papel" ;
-        Text [ french ] = "~Orientation du papier" ;
-        Text [ swedish ] = "Papp~ersorientering" ;
-        Text [ danish ] = "Papirr~etning" ;
-        Text [ portuguese_brazilian ] = "~Orientação do papel" ;
-        Text [ portuguese ] = "~Orientação do papel" ;
-        Text[ chinese_simplified ] = "è¿›çº¸æ–¹å‘(~E)";
-        Text[ russian ] = "Îğèåíòàöèÿ áóìàãè";
-        Text[ polish ] = "Orien~tacja papieru";
-        Text[ japanese ] = "å°åˆ·æ–¹å‘(~E)";
-        Text[ chinese_traditional ] = "ç´™å¼µæ–¹å‘(~E)";
-        Text[ arabic ] = "ÇÊÌÇå ÇáæÑŞ";
-        Text[ greek ] = "Ğñïóáíáôïëéóìüò ÷áñ~ôéïı";
-        Text[ korean ] = "ìš©ì§€ ë°©í–¥(~E)";
-        Text[ turkish ] = "Say~fa duruşu";
-        Text[ catalan ] = "Orientació del pap~er";
-        Text[ finnish ] = "Paperin ~suunta";
-        Text[ thai ] = "à¸à¸²à¸£à¸§à¸²à¸‡à¹à¸™à¸§à¸à¸£à¸°à¸”à¸²~à¸©";
-        Text[ czech ] = "Orientace papÃ­ru";
-        Text[ hebrew ] = "â€®×›×™×•×•× ×•×Ÿ × ×™×™×¨â€¬";
-        Text[ hindi ] = "à¤•à¤¾à¤—~à¤œ à¤…à¤¨à¥à¤¸à¥à¤¥à¤¾à¤ªà¤¨";
-        Text[ slovak ] = "OrientÃ¡cia papi~era";
-        Text[ hungarian ] = "~PapÃ­r tÃ¡jolÃ¡sa";
-        Text[ slovenian ] = "Us~merjenost papirja";
+        Text [ de ] = "Papi~erorientierung" ;
+        Text [ en-US ] = "Pap~er orientation" ;
     };
     CheckBox CB_TRANSPARENCY
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT ( 136, 159 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
-        Text = "~Transparenz" ;
-        Text [ ENGLISH ] = "~Transparency" ;
-        Text[ english_us ] = "~Transparency";
-        Text[ portuguese ] = "~Transparência";
-        Text[ russian ] = "Ïğîçğà÷íîñòü";
-        Text[ greek ] = "Äéá~öÜíåéá";
-        Text[ dutch ] = "Tr~ansparantie";
-        Text[ french ] = "Transparence";
-        Text[ spanish ] = "Transparencia";
-        Text[ italian ] = "~Trasparenza";
-        Text[ danish ] = "~Transparens";
-        Text[ swedish ] = "Trans~parens";
-        Text[ polish ] = "Przezrocz~ystoœæ";
-        Text[ portuguese_brazilian ] = "~Transparência";
-        Text[ japanese ] = "é€æ˜(~T)";
-        Text[ korean ] = "íˆ¬ëª…ë„(~T)";
-        Text[ chinese_simplified ] = "é€æ˜(~T)";
-        Text[ chinese_traditional ] = "é€æ˜(~T)";
-        Text[ turkish ] = "~Saydamlık";
-        Text[ arabic ] = "ÔİÇİíÉ";
-        Text[ catalan ] = "~Transparència";
-        Text[ finnish ] = "~Läpinäkyvyys";
-        Text[ thai ] = "à¹‚~à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
-        Text[ czech ] = "PrÅ¯hlednost";
-        Text[ hebrew ] = "â€®×©×§×£â€¬";
-        Text[ hindi ] = "~à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾";
-        Text[ slovak ] = "PriehÄ¾adno~sÅ¥";
-        Text[ hungarian ] = "Ã~tlÃ¡tszÃ³ elemek nyomtatÃ¡sakor";
-        Text[ slovenian ] = "~Prosojnost";
+        Text [ de ] = "~Transparenz" ;
+        Text [ en-US ] = "~Transparency";
     };
 };
 
@@ -1099,27 +315,9 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
 {
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 195 , 85 ) ;
-    Text = "Warnung" ;
-    Text[ English ] = "Warning" ;
-    Text[ english_us ] = "Warning" ;
-    Text[ portuguese_brazilian ] = "Aviso" ;
-    Text[ swedish ] = "Varning" ;
-    Text[ danish ] = "Advarsel" ;
-    Text[ italian ] = "Avvertimento" ;
-    Text[ spanish ] = "Advertencia" ;
-    Text[ french ] = "Avertissement" ;
-    Text[ dutch ] = "Waarschuwing" ;
-    Text[ portuguese ] = "Advertência" ;
-    Text[ chinese_simplified ] = "è­¦å‘Š";
-    Text[ russian ] = "Ïğåäóïğåæäåíèå";
-    Text[ polish ] = "Ostrze¿enie";
-    Text[ japanese ] = "è­¦å‘Š";
-    Text[ chinese_traditional ] = "è­¦å‘Š";
-    Text[ arabic ] = "ÊÍĞíÑ";
-    Text[ greek ] = "Ğñïåéäïğïßçóç";
-    Text[ korean ] = "ê²½ê³ ";
-    Text[ turkish ] = "Uyarı";
-    Text[ language_user1 ] = "-";
+    Text [ de ] = "Warnung" ;
+    Text [ en-US ] = "Warning" ;
+    Text [ x-comment ] = "-";
     Moveable = TRUE ;
     FixedImage FI_PRINTTRANSWARN
     {
@@ -1131,185 +329,41 @@ ModalDialog RID_WARN_PRINTTRANSPARENCY
         Pos = MAP_APPFONT ( 29 , 6 ) ;
         Size = MAP_APPFONT ( 163 , 36 ) ;
         WordBreak = TRUE ;
-        Text = "Ihr Dokument enthält transparente Objekte.\nAuf vielen Druckern führt dies zu\nverlängerten Druckzeiten. Soll die Transparenz\nfür diesen Ausdruck ignoriert werden?";
-        Text [ english ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
-        Text [ english_us ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
-        Text[ russian ] = "Â äîêóìåíòå ñîäåğæàòñÿ ïğîçğà÷íûå îáúåêòû.\nÏå÷àòü òàêèõ îáúåêòîâ ìîæåò çàíÿòü íåêîòîğîå\n âğåìÿ. Èãíîğèğîâàòü ïğîçğà÷íîñòü ïå÷àòè?";
-        Text[ greek ] = "Ôï İããñáöü óáò ğåñéİ÷åé äéáöáíŞ áíôéêåßìåíá.\nÁõôü ìğïñåß íá İ÷åé ùò áğïôİëåóìá íá áğáéôåßôáé ğåñéóóüôåñïò ÷ñüíïò ãéá åêôığùóç \nóå ïñéóìİíïõò åêôõğùôİò. Èİëåôå íá ìåéùèåß ôï ÷áñáêôçñéóôéêü ôçò \näéáöÜíåéáò;";
-        Text[ danish ] = "Dokumentet indeholder transparente objekter.\nPå mange printere medfører dette \nlængere udskriftstider. Skal transparens\nignoreres ved denne udskrivning?";
-        Text[ polish ] = "Dokument zawiera przezroczyste obiekty.\nW przypadku niektórych drukarek wydruk tych obiektów\nmo¿e potrwaæ trochê d³u¿ej. Czy zignorowaæ\ninformacje o przezroczystoœci?";
-        Text[ portuguese_brazilian ] = "O documento contém objetos transparentes.\nAlgumas impressoras poderão necessitar de mais\ntempo para a impressão. Gostaria que as transparências\nfossem reduzidas??";
-        Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã¯é€éæ€§ã®ã‚ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚\nãã®ãŸã‚ã«ãƒ—ãƒªãƒ³ã‚¿ã«ã‚ˆã£ã¦ã¯\nå°åˆ·ã«æ™‚é–“ãŒã‹ã‹ã‚‹ã‚‚ã®ã‚‚ã‚ã‚Šã¾ã™ã€‚é€éæ€§ã‚’\nç„¡è¦–ã—ã¾ã™ã‹ã€‚";
-        Text[ korean ] = "ë¬¸ì„œì— íˆ¬ëª… ê°œì²´ê°€ í¬í•¨ë˜ì–´ ìˆìŠµë‹ˆë‹¤.\në”°ë¼ì„œ ë‹¤ëŸ‰ ì¸ì‡„ì‹œ ì¸ì‡„ ì‹œê°„ì´ ë” ì˜¤ë˜ ê±¸ë¦½ë‹ˆë‹¤.\nì´ í‘œí˜„ì—ì„œ íˆ¬ëª…ë„ë¥¼ ë¬´ì‹œí•˜ê² ìŠµë‹ˆê¹Œ?";
-        Text[ chinese_simplified ] = "æ‚¨çš„æ–‡æ¡£å«æœ‰é€æ˜å¯¹è±¡ã€‚\nè®¸å¤šæ‰“å°æœºä¼šå› æ­¤éœ€è¦å¾ˆé•¿çš„æ—¶é—´æ¥å®Œæˆæ‰“å°ä»»åŠ¡ã€‚\nè®©æ‰“å°æœºå¿½ç•¥è¿™äº›é€æ˜å¯¹è±¡å—ï¼Ÿ";
-        Text[ chinese_traditional ] = "æ‚¨çš„æ–‡ä»¶å«æœ‰é€æ˜ç‰©ä»¶ã€‚\nè¨±å¤šå°è¡¨æ©Ÿæœƒå› æ­¤éœ€è¦å¾ˆé•·çš„æ™‚é–“ä¾†å®Œæˆåˆ—å°ä»»å‹™ã€‚\nè¦è®“å°è¡¨æ©Ÿå¿½ç•¥é€™äº›é€æ˜ç‰©ä»¶ï¼Ÿ";
-        Text[ turkish ] = "Dökümanınız saydam nesneler içeriyor.\nBu durum";
-        Text[ arabic ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe ignored?";
-        Text[ portuguese ] = "O documento inclui objectos transparentes.\nAlgumas impressoras poderão necessitar de mais\ntempo para a impressão. Ignorar objectos\ntransparentes na impressão?";
-        Text[ dutch ] = "Uw document bevat transparante objecten.\nDit kan op sommige printers leiden tot traagheid.\nWilt u de transparantie negeren?";
-        Text[ french ] = "Le document contient des objets transparents.\nCeci peut entraîner une durée d'impression plus\nlongue sur certaines imprimantes. Ignorer\nles informations de transparence pour l'impression?";
-        Text[ spanish ] = "El documento contiene objetos transparentes.\nEsto puede causar demoras en muchas impresoras.\n¿Desea que se ignoren las informaciones\nde transparencia para la impresión?";
-        Text[ italian ] = "Il vostro documento contiene oggetti trasparenti.\nCon alcune stampanti il processo di stampa potrebbe\ndurare più a lungo del solito. Volete ignorare\nle informazioni di trasparenza per la stampa?";
-        Text[ swedish ] = "Dokumentet innehåller transparenta objekt.\nDet kan leda till längre väntetid på vissa skrivare.\nSka transparensen ignoreras för\nutskriften?";
-        Text[ catalan ] = "Aquest document conté objectes transparents.\nAixò pot provocar un temps més llarg d'impressió en algunes\nimpressores. S'han d'ignorar les transparències?";
-        Text[ finnish ] = "Asiakirjassa on läpinäkyviä objekteja.\nTämä saattaa hidastaa tulostusta joissakin\ntulostimissa. Vähennetäänkö\nläpinäkyvyyttä?";
-        Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¸­à¸‡à¸„à¸¸à¸“à¸¡à¸µà¸§à¸±à¸•à¸–à¸¸à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡\nà¸™à¸µà¹‰à¸ˆà¸°à¸™à¸³à¹„à¸›à¸ªà¸¹à¹ˆà¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¹€à¸§à¸¥à¸²à¸™à¸²à¸™à¸šà¸™\nà¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸”à¸„à¸§à¸²à¸¡à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-        Text[ czech ] = "VÃ¡Å¡ dokument obsahuje prÅ¯svitnÃ© objekty.\nTo mÅ¯Å¾e na urÄitÃ½ch tiskÃ¡rnÃ¡ch zpÅ¯sobit prodlouÅ¾enÃ­ doby tisku.\nMÃ¡ bÃ½t omezeno pouÅ¾itÃ­ prÅ¯hlednosti?";
-        Text[ hebrew ] = "â€®×”××¡××š ××›×™×œ ×¢×¦××™× ×©×§×•×¤×™×.\n×¢×•×‘×“×” ×–×• ×™×›×•×œ×” ×œ×”××˜ ××ª ×”×”×“×¤×¡×” ×‘××“×¤×¡×•×ª ××¡×•×™××•×ª.\n×”×× ×œ×¦××¦× ××ª ××™×“×ª ×”×©×§×™×¤×•×ª ×›×“×™ ×œ×–×¨×– ××ª ×”×”×“×¤×¡×”?â€¬";
-        Text[ hindi ] = "à¤†à¤ªà¤•à¤¾ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤• à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¹à¥ˆ à¥¤\nà¤‡à¤¸à¤•à¥‡ à¤•à¤¾à¤°à¤£ à¤•à¥à¤› à¤®à¥à¤¦à¥à¤°à¤•à¥‡à¤‚ à¤®à¥‡à¤‚ à¤›à¤ªà¤¾à¤ˆ à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤§à¤¿à¤• à¤¸à¤®à¤¯ à¤²à¥‡ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤\nà¤ªà¤¾à¤°à¤¦à¤°à¥à¤¶à¤•à¤¤à¤¾ à¤…à¤µà¤¸à¥à¤¥à¤¾ à¤•à¥‹ à¤˜à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ ?";
-        Text[ slovak ] = "VÃ¡Å¡ dokument obsahuje priesvitnÃ© objekty.\nTo mÃ´Å¾e na urÄitÃ½ch tlaÄiarÅˆach spÃ´sobiÅ¥ predÄºÅ¾enie doby tlaÄe.\nMÃ¡ byÅ¥ obmedzenÃ© pouÅ¾itie priehÄ¾adnosti?";
-        Text[ hungarian ] = "A dokumentum Ã¡tlÃ¡tszÃ³ objektumokat \ntartalmaz. Ez bizonyos nyomtatÃ³kon \nhosszabb nyomtatÃ¡si idÅ‘hÃ¶z vezethet. \nCsÃ¶kkenthetÅ‘ az Ã¡tlÃ¡tszÃ³sÃ¡g foka?";
-        Text[ slovenian ] = "VaÅ¡ dokument vsebuje prosojne predmete.\nTo lahko povzroÄi pri doloÄenih tiskalnikih daljÅ¡i Äas\ntiskanja. Ali naj zmanjÅ¡am vidik\nprosojnosti?";
+        Text [ de ] = "Ihr Dokument enthält transparente Objekte.\nAuf vielen Druckern führt dies zu\nverlängerten Druckzeiten. Soll die Transparenz\nfür diesen Ausdruck ignoriert werden?";
+        Text [ en-US ] = "Your document contains transparent objects.\nThis may lead to longer printing time on certain\nprinters. Should the aspect of transparency\nbe reduced?";
     };
     OKButton BTN_PRINTTRANS_YES
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
-        Text = "~Ja" ;
-        Text [ English ] = "~Yes" ;
-        Text [ portuguese ] = "~Sim" ;
-        Text [ english_us ] = "~Yes" ;
-        Text [ portuguese_brazilian ] = "~Sim" ;
-        Text [ swedish ] = "~Ja" ;
-        Text [ danish ] = "~Ja" ;
-        Text [ italian ] = "~Sì" ;
-        Text [ spanish ] = "~Sí" ;
-        Text [ french ] = "~Oui" ;
-        Text [ dutch ] = "~Ja" ;
-        Text[ chinese_simplified ] = "æ˜¯(~Y)";
-        Text[ russian ] = "~Äà";
-        Text[ polish ] = "~Tak";
-        Text[ japanese ] = "ã¯ã„(~Y)";
-        Text[ chinese_traditional ] = "æ˜¯(~Y)";
-        Text[ arabic ] = "äÚã";
-        Text[ greek ] = "~Íáé";
-        Text[ korean ] = "ì˜ˆ(~Y)";
-        Text[ turkish ] = "~Evet";
-        Text[ language_user1 ] = "-";
-        Text[ catalan ] = "~Sí";
-        Text[ finnish ] = "~Kyllä";
-        Text[ thai ] = "à¹ƒ~à¸Šà¹ˆ";
-        Text[ czech ] = "Ano";
-        Text[ hebrew ] = "â€®×›×Ÿâ€¬";
-        Text[ hindi ] = "~à¤¹à¤¾à¤";
-        Text[ slovak ] = "Ãn~o";
-        Text[ hungarian ] = "~Igen";
-        Text[ slovenian ] = "~Da";
+        Text [ de ] = "~Ja" ;
+        Text [ en-US ] = "~Yes" ;
+        Text [ x-comment ] = "-";
     };
     PushButton BTN_PRINTTRANS_NO
     {
         Pos = MAP_APPFONT ( 68 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Nein" ;
-        Text [ English ] = "~No" ;
-        Text [ english_us ] = "~No" ;
-        Text [ portuguese_brazilian ] = "~Não" ;
-        Text [ swedish ] = "~Nej" ;
-        Text [ danish ] = "~Nej" ;
-        Text [ italian ] = "~No" ;
-        Text [ spanish ] = "~No" ;
-        Text [ french ] = "~Non" ;
-        Text [ dutch ] = "~Nee" ;
-        Text [ portuguese ] = "~Não" ;
-        Text[ chinese_simplified ] = "å¦(~N)";
-        Text[ russian ] = "~Íåò";
-        Text[ polish ] = "~Nie";
-        Text[ japanese ] = "ã„ã„ãˆ(~N)";
-        Text[ chinese_traditional ] = "å¦(~N)";
-        Text[ arabic ] = "áÇ";
-        Text[ greek ] = "~¼÷é";
-        Text[ korean ] = "ì•„ë‹ˆì˜¤(~N)";
-        Text[ turkish ] = "~Hayır";
-        Text[ language_user1 ] = "-";
-        Text[ catalan ] = "~No";
-        Text[ finnish ] = "~Ei";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¹ƒà¸Šà¹ˆ";
-        Text[ czech ] = "Ne";
-        Text[ hebrew ] = "â€®×œ×â€¬";
-        Text[ hindi ] = "~à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "~Nie";
-        Text[ hungarian ] = "~Nem";
-        Text[ slovenian ] = "~Ne";
+        Text [ de ] = "~Nein" ;
+        Text [ en-US ] = "~No" ;
+        Text [ x-comment ] = "-";
     };
     CancelButton BTN_PRINTTRANS_CANCEL
     {
         Pos = MAP_APPFONT ( 124 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Abbrechen" ;
-        Text [ English ] = "~Cancel" ;
-        Text [ english_us ] = "~Cancel" ;
-        Text[ portuguese ] = "~Cancelar";
-        Text[ russian ] = "Îòìåíèòü";
-        Text[ greek ] = "~¢êõñï";
-        Text[ dutch ] = "~Annuleren";
-        Text[ french ] = "Annuler";
-        Text[ spanish ] = "~Cancelar";
-        Text[ italian ] = "~Annulla";
-        Text[ danish ] = "~Annuller";
-        Text[ swedish ] = "~Avbryt";
-        Text[ polish ] = "~Anuluj";
-        Text[ portuguese_brazilian ] = "~Cancelar";
-        Text[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«(~C)";
-        Text[ korean ] = "ì·¨ì†Œ(~C)";
-        Text[ chinese_simplified ] = "å–æ¶ˆ(~C)";
-        Text[ chinese_traditional ] = "å–æ¶ˆ(~C)";
-        Text[ turkish ] = "İ~ptal";
-        Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
-        Text[ catalan ] = "~Cancel.la";
-        Text[ finnish ] = "P~eruuta";
-        Text[ thai ] = "~à¸¢à¸à¹€à¸¥à¸´à¸";
-        Text[ czech ] = "ZruÅ¡it";
-        Text[ hebrew ] = "â€®×‘×™×˜×•×œâ€¬";
-        Text[ hindi ] = "~à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~ZruÅ¡iÅ¥";
-        Text[ hungarian ] = "~MÃ©gsem";
-        Text[ slovenian ] = "Pre~kliÄi";
+        Text [ de ] = "~Abbrechen" ;
+        Text [ en-US ] = "~Cancel" ;
     };
     CheckBox CBX_NOPRINTTRANSWARN
     {
         Pos = MAP_APPFONT ( 6 , 68 ) ;
         Size = MAP_APPFONT ( 183 , 10 ) ;
-        Text = "~Diese Warnung nicht mehr anzeigen" ;
-        Text [ English ] = "~Show this warning no more" ;
-        Text [ portuguese ] = "~Não mostrar mais esta advertência" ;
-        Text [ english_us ] = "~Do not show warning again" ;
-        Text [ portuguese_brazilian ] = "~Não mostrar mais este aviso" ;
-        Text [ swedish ] = "Visa inte ~den här varningen igen" ;
-        Text [ danish ] = "~Vis ikke denne advarsel igen" ;
-        Text [ italian ] = "~Non mostrare più questa avvertenza" ;
-        Text [ spanish ] = "~No mostrar más esta advertencia" ;
-        Text [ french ] = "~Ne plus afficher cet avertissement" ;
-        Text [ dutch ] = "~Deze waarschuwing niet meer weergeven" ;
-        Text[ chinese_simplified ] = "ä¸å†æ˜¾ç¤ºè¿™ä¸ªè­¦å‘Š(~D)";
-        Text[ russian ] = "Áîëüøå íå ïîêàçûâàòü ïğåäóïğåæäåíèå";
-        Text[ polish ] = "~Nie pokazuj wiêcej ostrze¿eñ";
-        Text[ japanese ] = "ä»Šå¾Œã“ã®è­¦å‘Šã‚’è¡¨ç¤ºã—ãªã„ã€‚(~D)";
-        Text[ chinese_traditional ] = "ä¸å†é¡¯ç¤ºé€™å€‹è­¦å‘Š(~D)";
-        Text[ arabic ] = "ÚÏã ÅÙåÇÑ åĞÇ ÇáÊÍĞíÑ ãÑÉ ÃÎÑì";
-        Text[ greek ] = "~Íá ìçí åìöáíéóôåß îáíÜ áõôŞ ç ğñïåéäïğïßçóç";
-        Text[ korean ] = "ì´ ê²½ê³ ë¥¼ ë‹¤ì‹œ í‘œì‹œí•˜ì§€ ì•ŠìŒ(~D)";
-        Text[ turkish ] = "~Bu uyarıyı tekrar gösterme";
-        Text[ language_user1 ] = "-";
-        Text[ catalan ] = "No ~tornis a mostrar aquest avís";
-        Text[ finnish ] = "~Älä näytä varoitusta vastaisuudessa.";
-        Text[ thai ] = "~à¸«à¹‰à¸²à¸¡à¹à¸ªà¸”à¸‡à¸„à¸³à¹€à¸•à¸·à¸­à¸™à¸­à¸µà¸";
-        Text[ czech ] = "UpozornÄ›nÃ­ znovu nezobrazovat";
-        Text[ hebrew ] = "â€®×œ× ×œ×”×¦×™×’ ××–×”×¨×” ×–×• ×©× ×™×ªâ€¬";
-        Text[ hindi ] = "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€ à¤•à¥‹ à¤«à¤¼à¤¿à¤° à¤¸à¥‡ ~à¤®à¤¤ à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "Upozornenie znovu nezo~brazovaÅ¥";
-        Text[ hungarian ] = "~Ne jelenjen meg Ãºjra a figyelmeztetÃ©s.";
-        Text[ slovenian ] = "~Ne kaÅ¾i veÄ opozorila";
+        Text [ de ] = "~Diese Warnung nicht mehr anzeigen" ;
+        Text [ en-US ] = "~Do not show warning again" ;
+        Text [ x-comment ] = "-";
     };
-    Text[ catalan ] = "Avís";
-    Text[ finnish ] = "Varoitus";
-    Text[ thai ] = "à¸„à¸³à¹€à¸•à¸·à¸­à¸™";
-    Text[ czech ] = "UpozornÄ›nÃ­";
-    Text[ hebrew ] = "â€®××–×”×¨×”â€¬";
-    Text[ hindi ] = "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€";
-    Text[ slovak ] = "Upozornenie";
-    Text[ hungarian ] = "FigyelmeztetÃ©s";
-    Text[ slovenian ] = "Opozorilo";
 };
 
 
