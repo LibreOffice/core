@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-05 08:04:34 $
+ *  last change: $Author: ssa $ $Date: 2002-03-07 17:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,12 @@
 #ifndef _SV_TOOLBOX_H
 #include <toolbox.h>
 #endif
-
+#ifndef _SV_BITMAP_HXX
+#include <bitmap.hxx>
+#endif
+#ifndef _SV_POLY_HXX
+#include <poly.hxx>
+#endif
 // =======================================================================
 
 DBG_NAMEEX( Window );
@@ -171,6 +176,114 @@ DBG_NAMEEX( Window );
 #define DOCK_LINELEFT           ((USHORT)0x4000)
 #define DOCK_LINETOP            ((USHORT)0x8000)
 #define DOCK_LINEOFFSET         3
+
+
+// -----------------------------------------------------------------------
+
+// Hue, 360 degree
+// Saturation, 100 %
+// Brightness, 100 %
+
+void ImplRGBtoHSB( const Color& rColor, USHORT& nHue, USHORT& nSat, USHORT& nBri )
+{
+    UINT8 c[3];
+    UINT8 cMax, cMin;
+
+    c[0] = rColor.GetRed();
+    c[1] = rColor.GetGreen();
+    c[2] = rColor.GetBlue();
+
+    cMax = c[0];
+    if( c[1] > cMax )
+        cMax = c[1];
+    if( c[2] > cMax )
+        cMax = c[2];
+
+    // Brightness = max(R, G, B);
+    nBri = cMax * 100 / 255;
+
+    cMin = c[0];
+    if( c[1] < cMin )
+        cMin = c[1];
+    if( c[2] < cMin )
+        cMin = c[2];
+
+    UINT8 cDelta = cMax - cMin;
+
+    // Saturation = max - min / max
+    if( nBri > 0 )
+        nSat = cDelta * 100 / cMax;
+    else
+        nSat = 0;
+
+    if( nSat == 0 )
+        nHue = 0; // Default = undefined
+    else
+    {
+        double dHue;
+
+        if( c[0] == cMax )
+        {
+            dHue = (double)( c[1] - c[2] ) / (double)cDelta;
+        }
+        else if( c[1] == cMax )
+        {
+            dHue = 2.0 + (double)( c[2] - c[0] ) / (double)cDelta;
+        }
+        else if ( c[2] == cMax )
+        {
+            dHue = 4.0 + (double)( c[0] - c[1] ) / (double)cDelta;
+        }
+        dHue *= 60.0;
+
+        if( dHue < 0.0 )
+            dHue += 360.0;
+
+        nHue = (UINT16) dHue;
+    }
+}
+
+
+Color ImplHSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
+{
+    UINT8 cR,cG,cB;
+    UINT8 nB = (UINT8) ( nBri * 255 / 100 );
+
+    if( nSat == 0 )
+    {
+        cR = nB;
+        cG = nB;
+        cB = nB;
+    }
+    else
+    {
+        double dH = nHue;
+        double f;
+        UINT16 n;
+        if( dH == 360.0 )
+            dH = 0.0;
+
+        dH /= 60.0;
+        n = (UINT16) dH;
+        f = dH - n;
+
+        UINT8 a = (UINT8) ( nB * ( 100 - nSat ) / 100 );
+        UINT8 b = (UINT8) ( nB * ( 100 - ( (double)nSat * f + 0.5 ) ) / 100 );
+        UINT8 c = (UINT8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) + 0.5 ) ) / 100 );
+
+        switch( n )
+        {
+            case 0: cR = nB;    cG = c;     cB = a;     break;
+            case 1: cR = b;     cG = nB;    cB = a;     break;
+            case 2: cR = a;     cG = nB;    cB = c;     break;
+            case 3: cR = a;     cG = b;     cB = nB;    break;
+            case 4: cR = c;     cG = a;     cB = nB;    break;
+            case 5: cR = nB;    cG = a;     cB = b;     break;
+        }
+    }
+
+    return( Color( cR, cG, cB ) );
+}
 
 // -----------------------------------------------------------------------
 
@@ -2558,6 +2671,43 @@ void ToolBox::ImplDrawNext( BOOL bIn )
 
 // -----------------------------------------------------------------------
 
+void ToolBox::ImplDrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder )
+{
+    // colors used for item highlighting
+    Color aSelectionBorderCol( GetpApp()->GetSettings().GetStyleSettings().GetActiveColor() );
+    Color aSelectionFillCol( aSelectionBorderCol );
+    Color aSelectionMaskCol( aSelectionBorderCol );
+
+    Color oldFillCol = GetFillColor();
+    Color oldLineCol = GetLineColor();
+
+    SetFillColor( aSelectionFillCol );
+    if( bDrawBorder )
+        SetLineColor( aSelectionBorderCol );
+    else
+        SetLineColor();
+
+    USHORT nPercent;
+    if( !highlight )
+        nPercent = 95;              // just checked (light)
+    else
+    {
+        if( bChecked || highlight == 1 )
+            nPercent = 55;          // selected, pressed or checked ( very dark )
+        else
+            nPercent = 85;          // selected ( dark )
+    }
+
+    Polygon aPoly( rRect );
+    PolyPolygon aPolyPoly( aPoly );
+    DrawTransparent( aPolyPoly, nPercent );
+
+    SetFillColor( oldFillCol );
+    SetLineColor( oldLineCol );
+}
+
+// -----------------------------------------------------------------------
+
 void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -2676,12 +2826,13 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
     long    nTempOffX;
     long    nTempOffY;
     USHORT  nStyle      = 0;
+
     if ( pItem->meState == STATE_CHECK )
     {
         aBtnPos.Y() = aBtnSize.Height() * 2;
         nStyle |= BUTTON_DRAW_CHECKED;
-        nOffX = SMALLBUTTON_OFF_CHECKED_X;
-        nOffY = SMALLBUTTON_OFF_CHECKED_Y;
+        //nOffX = SMALLBUTTON_OFF_CHECKED_X;
+        //nOffY = SMALLBUTTON_OFF_CHECKED_Y;
     }
     else if ( pItem->meState == STATE_DONTKNOW )
     {
@@ -2692,8 +2843,8 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
     {
         aBtnPos.Y() += aBtnSize.Height();
         nStyle |= BUTTON_DRAW_PRESSED;
-        nOffX = SMALLBUTTON_OFF_PRESSED_X;
-        nOffY = SMALLBUTTON_OFF_PRESSED_Y;
+        //nOffX = SMALLBUTTON_OFF_PRESSED_X;
+        //nOffY = SMALLBUTTON_OFF_PRESSED_Y;
     }
 
     if ( mnOutStyle & TOOLBOX_STYLE_OUTBUTTON )
@@ -2806,6 +2957,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         if ( pItem->meState == STATE_DONTKNOW )
             nImageStyle |= IMAGE_DRAW_DISABLE;
 
+
         // Image ausgeben
         nTempOffX = nOffX;
         nTempOffY = nOffY;
@@ -2819,7 +2971,26 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
             else
                 nTempOffY += (nBtnHeight-aImageSize.Height())/2;
         }
-        DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
+        if ( bHighlight || (pItem->meState == STATE_CHECK) )
+        {
+            ImplDrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE );
+
+            if( bHighlight == 2 && pItem->meState != STATE_CHECK )
+            {
+                nTempOffX++;
+                nTempOffY++;
+                // draw shadow using active title bar color
+                if( pImage->HasMaskBitmap() )
+                    DrawMask( Point( nTempOffX, nTempOffY ), pImage->GetMaskBitmap(),
+                            GetpApp()->GetSettings().GetStyleSettings().GetActiveColor() );
+                nTempOffX-=2;
+                nTempOffY-=2;
+            }
+            DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
+
+        }
+        else
+            DrawImage( Point( nTempOffX, nTempOffY ), *pImage, nImageStyle );
     }
 
     // Text ausgeben
@@ -2885,6 +3056,11 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
     if ( pItem->mnBits & TIB_DROPDOWN )
     {
         Point aArrowPos( nOffX, nOffY );
+        if( bHighlight == 2 )
+        {
+            aArrowPos.X() -= 2;
+            aArrowPos.Y() -= 2;
+        }
         aArrowPos.X() += nBtnWidth-6;
 
         Color       aOldLineColor = GetLineColor();
@@ -2904,6 +3080,10 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
             aClearRect.Right()  += 2;
 
         Erase( aClearRect );
+
+        if( bHighlight || (pItem->meState == STATE_CHECK) )
+            ImplDrawSelectionBackground( aClearRect, bHighlight, pItem->meState == STATE_CHECK, FALSE );
+
         BOOL bBlack = FALSE;
 
         if ( !pItem->mbEnabled || !IsEnabled() )
@@ -2918,6 +3098,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         SetFillColor( aOldFillColor );
     }
 
+    /*
     if ( mnOutStyle & TOOLBOX_STYLE_FLAT )
     {
         if ( bHighlight || (pItem->meState == STATE_CHECK) )
@@ -2941,6 +3122,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
                       Point( aPos.X()+aSize.Width()-1, aPos.Y()+aSize.Height()-1 ) );
         }
     }
+    */
 
     // Gegebenenfalls noch Config-Frame zeichnen
     if ( pMgr )
@@ -3828,8 +4010,6 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
                     return DockingWindow::Notify( rNEvt );
                 }
                 break;
-            case KEY_ESCAPE:
-                break;
             default:
                 break;
         };
@@ -4372,6 +4552,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             break;
         case KEY_ESCAPE:
         {
+            // send focus to document pane
+            //mpFrameWindow->GrabFocus();
         }
         break;
         case KEY_LEFT:
