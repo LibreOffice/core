@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:52:38 $
+ *  last change: $Author: nf $ $Date: 2000-12-04 12:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,26 +708,26 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 66 , 157 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Disable = TRUE ;
-        Text = "~StarOffice Writer" ;
+        Text = "%PRODUCTNAME Writer" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~%PRODUCTNAME Writer" ;
+        Text [ english_us ] = "%PRODUCTNAME Writer" ;
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Writer" ;
-        Text [ swedish ] = "~%PRODUCTNAME Writer" ;
+        Text [ swedish ] = "%PRODUCTNAME Writer" ;
         Text [ danish ] = "%PRODUCTNAME Writer" ;
-        Text [ italian ] = "~%PRODUCTNAME Writer" ;
-        Text [ spanish ] = "~%PRODUCTNAME Writer" ;
+        Text [ italian ] = "%PRODUCTNAME Writer" ;
+        Text [ spanish ] = "%PRODUCTNAME Writer" ;
         Text [ french ] = "%PRODUCTNAME ~Writer" ;
-        Text [ dutch ] = "~%PRODUCTNAME Writer" ;
-        Text [ portuguese ] = "~%PRODUCTNAME Writer" ;
+        Text [ dutch ] = "%PRODUCTNAME Writer" ;
+        Text [ portuguese ] = "%PRODUCTNAME Writer" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Writer";
-        Text[ russian ] = "~%PRODUCTNAME Writer";
-        Text[ polish ] = "~%PRODUCTNAME Writer";
+        Text[ russian ] = "%PRODUCTNAME Writer";
+        Text[ polish ] = "%PRODUCTNAME Writer";
         Text[ japanese ] = "%PRODUCTNAME Writer";
-        Text[ chinese_traditional ] = "~%PRODUCTNAME Writer";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Writer";
         Text[ arabic ] = "%PRODUCTNAME Writer~";
         Text[ greek ] = "%PRODUCTNAME Writer";
         Text[ korean ] = "%PRODUCTNAME Writer";
-        Text[ turkish ] = "~%PRODUCTNAME Writer";
+        Text[ turkish ] = "%PRODUCTNAME Writer";
         Text[ language_user1 ] = " ";
     };
     GroupBox GB_DEST
