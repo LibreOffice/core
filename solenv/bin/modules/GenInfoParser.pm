@@ -2,9 +2,9 @@
 #
 #   $RCSfile: GenInfoParser.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2001-09-26 09:50:27 $
+#   last change: $Author: rt $ $Date: 2003-09-03 11:17:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,9 @@ sub get_keys
         foreach my $normalized_key (sort keys %$sub_data_ref) {
             push(@keys, $$sub_data_ref{$normalized_key}[0]);
         }
+    } elsif ( $value ) {
+        chomp $value;
+        push @keys, ($value);
     }
     return @keys;
 }
