@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-26 11:36:42 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 16:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,11 @@
 #include <systools/win32/user9x.h>
 
 #include <windows.h>
+
+#if (_MSC_VER < 1300)
 #include <olestd.h>
+#endif
+
 #include <shlobj.h>
 
 //------------------------------------------------------------------------
