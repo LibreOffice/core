@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderBrowseNode.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 13:56:11 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,6 @@ public class ProviderBrowseNode extends PropertySet
     }
 
     public String getName() {
-        LogUtils.DEBUG("*** ProviderBrowseNode getName");
         return name;
     }
 
@@ -183,17 +182,21 @@ public class ProviderBrowseNode extends PropertySet
     }
 
     public boolean hasChildNodes() {
-        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes() ");
-        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes() name " + container.getName() );
-        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes() path " + container.getParcelContainerDir() );
+        boolean result = true;
+
         if ( container == null ||
-             ( !container.hasElements() && !(container.getChildContainers().length == 0 ) )  )
+             ( !container.hasElements() &&
+               container.getChildContainers().length == 0 ) )
         {
-           LogUtils.DEBUG("** ProviderBrowseNode hasChildNodes() returning FALSE for has children");
-            return true;
+            result = false;
         }
-        LogUtils.DEBUG("** ProviderBrowseNode returning TRUE for has children");
-        return true;
+
+        LogUtils.DEBUG("***** ProviderBrowseNode.hasChildNodes(): " +
+            "name=" + name +
+            ", path=" + container.getParcelContainerDir() +
+            ", result=" + result );
+
+        return result;
     }
 
     public short getType() {
