@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-03-27 08:45:23 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 08:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "De�i�tir";
                 Text[ catalan ] = "Conmutar";
                 Text[ finnish ] = "Vaihda";
+                Text[ thai ] = "สลับ";
             };
             ToolBoxItem
             {
@@ -194,6 +195,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Dola�ma";
                 Text[ catalan ] = "Navegaci�n";
                 Text[ finnish ] = "Siirtyminen";
+                Text[ thai ] = "นำทาง";
             };
             /*            ToolBoxItem
             {
@@ -241,6 +243,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "뒤로";
                 Text[ turkish ] = "Geri";
                 Text[ catalan ] = "Retroceder";
+                Text[ thai ] = "กลับไป";
             };
             ToolBoxItem
             {
@@ -271,6 +274,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "앞으로";
                 Text[ turkish ] = "�leri";
                 Text[ catalan ] = "Avanzar";
+                Text[ thai ] = "ส่งต่อ";
             };
             ToolBoxItem
             {
@@ -308,6 +312,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "S�r�kleme kipi";
                 Text[ catalan ] = "Modo Arrastrar";
                 Text[ finnish ] = "Vetotila";
+                Text[ thai ] = "ลากโหมด";
             };
             ToolBoxItem
             {
@@ -342,6 +347,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "장 승격";
                 Text[ turkish ] = "B�l�m� yukar� al";
                 Text[ catalan ] = "Un cap�tulo hacia arriba";
+                Text[ thai ] = "เลื่อนบท";
             };
             ToolBoxItem
             {
@@ -371,6 +377,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "장 낮추기";
                 Text[ turkish ] = "B�l�m� a�a�� �ek";
                 Text[ catalan ] = "Un cap�tulo hacia abajo";
+                Text[ thai ] = "ลดบท";
             };
             ToolBoxItem
             {
@@ -402,6 +409,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Liste kutusu a��k/kapal�";
                 Text[ catalan ] = "Mostrar/ocultar cuadro de selecci�n";
                 Text[ finnish ] = "Luetteloruutu on/off";
+                Text[ thai ] = "กล่องรายการ เปิด/ปิด";
             };
             ToolBoxItem
             {
@@ -429,6 +437,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "��erik g�r�n�m�n� de�i�tir";
                 Text[ catalan ] = "Conmutar visualizaci�n del contenido";
                 Text[ finnish ] = "Sis�lt�n�kym�";
+                Text[ thai ] = "มุมมองเนื้อหา";
             };
             ToolBoxItem
             {
@@ -462,6 +471,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "표시자 설정";
                 Text[ turkish ] = "An�msat�c� yerle�tir";
                 Text[ catalan ] = "Insertar marca";
+                Text[ thai ] = "ตั้งค่าตัวเตือน";
             };
             ToolBoxItem
             {
@@ -495,6 +505,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "머리글";
                 Text[ turkish ] = "�stbilgi";
                 Text[ catalan ] = "Encabezamiento";
+                Text[ thai ] = "ส่วนหัว";
             };
             ToolBoxItem
             {
@@ -526,6 +537,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "바닥글";
                 Text[ turkish ] = "Altbilgi";
                 Text[ catalan ] = "Pie de p�gina";
+                Text[ thai ] = "ส่วนท้าย";
             };
             ToolBoxItem
             {
@@ -556,6 +568,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "고정<->텍스트";
                 Text[ turkish ] = "Sabitleyici<->Metin";
                 Text[ catalan ] = "Ancla <->Texto";
+                Text[ thai ] = "สมอ<->ข้อความ";
             };
             ToolBoxItem
             {
@@ -589,6 +602,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "G�r�nt�lenen ba�l�k d�zeyleri";
                 Text[ catalan ] = "Niveles de encabezados mostrados";
                 Text[ finnish ] = "Otsikkotasojen n�ytt�";
+                Text[ thai ] = "แสดงระดับส่วนหัว";
             };
             ToolBoxItem
             {
@@ -622,6 +636,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "수준 높이기";
                 Text[ turkish ] = "D�zeyi yukar� al";
                 Text[ catalan ] = "Subir un nivel";
+                Text[ thai ] = "เลื่อนระดับ";
             };
             ToolBoxItem
             {
@@ -651,6 +666,7 @@ Window DLG_NAVIGATION_PI
                 Text[ korean ] = "수준 낮추기";
                 Text[ turkish ] = "D�zeyi a�a�� �ek";
                 Text[ catalan ] = "Bajar un nivel";
+                Text[ thai ] = "ลดระดับ";
             };
         };
     };
@@ -688,6 +704,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Toggle";
                 Text[ catalan ] = "Conmutar";
                 Text[ finnish ] = "Vaihda";
+                Text[ thai ] = "สลับ";
             };
             ToolBoxItem
             {
@@ -719,6 +736,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "D�zenle";
                 Text[ catalan ] = "Editar";
                 Text[ finnish ] = "Muokkaa";
+                Text[ thai ] = "แก้ไข";
             };
             ToolBoxItem
             {
@@ -746,6 +764,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "G�ncelle";
                 Text[ catalan ] = "Actualizar";
                 Text[ finnish ] = "P�ivit�";
+                Text[ thai ] = "ปรับปรุง";
             };
             ToolBoxItem
             {
@@ -774,6 +793,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Ekle";
                 Text[ catalan ] = "Insertar";
                 Text[ finnish ] = "Lis��";
+                Text[ thai ] = "แทรก";
             };
             ToolBoxItem
             {
@@ -805,6 +825,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "��eri�i de kaydet";
                 Text[ catalan ] = "Guardar contenidos";
                 Text[ finnish ] = "Tallenna my�s sis�lt�";
+                Text[ thai ] = "บันทึกเนื้อหาเป็นอย่างดี";
             };
             ToolBoxItem
             {
@@ -837,6 +858,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "Yukar� ta��";
                 Text[ catalan ] = "Desplazar hacia arriba";
                 Text[ finnish ] = "Siirr� yl�s";
+                Text[ thai ] = "ย้ายขึ้น";
             };
             ToolBoxItem
             {
@@ -865,6 +887,7 @@ Window DLG_NAVIGATION_PI
                 Text[ turkish ] = "A�a�� ta��";
                 Text[ catalan ] = "Desplazar hacia abajo";
                 Text[ finnish ] = "Siirr� alas";
+                Text[ thai ] = "ย้ายลง";
             };
         };
     };
@@ -932,10 +955,11 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "大綱級";
         Text[ arabic ] = "������� �������";
         Text[ greek ] = "������� ����������";
-        Text[ korean ] = "아웃트라인";
+        Text[ korean ] = "다단계";
         Text[ turkish ] = "Anahat d�zeyleri";
         Text[ catalan ] = "Niveles del esquema";
         Text[ finnish ] = "J�sennystaso";
+        Text[ thai ] = "ระดับเค้าร่าง";
     };
     String ST_DRAGMODE
     {
@@ -961,6 +985,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "S�r�kleme kipi";
         Text[ catalan ] = "Modo Arrastrar";
         Text[ finnish ] = "Vetotila";
+        Text[ thai ] = "ลากโหมด";
     };
     String ST_HYPERLINK
     {
@@ -987,6 +1012,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Hyperlink olarak ekle";
         Text[ catalan ] = "Insertar como hiperenlace";
         Text[ finnish ] = "Lis�� hyperlinkkin�";
+        Text[ thai ] = "แทรกเป็นการเชื่อมโยงหลายมิติ";
     };
     String ST_LINK_REGION
     {
@@ -1013,6 +1039,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Ba�lant� olarak ekle";
         Text[ catalan ] = "Insertar como v�nculo";
         Text[ finnish ] = "Lis�� linkkin�";
+        Text[ thai ] = "แทรกเป็นการเชื่อมโยง";
     };
     String ST_COPY_REGION
     {
@@ -1039,6 +1066,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Kopya olarak ekle";
         Text[ catalan ] = "Insertar como copia";
         Text[ finnish ] = "Lis�� kopiona";
+        Text[ thai ] = "แทรกเป็นสำเนา";
     };
     String ST_DISPLAY
     {
@@ -1064,6 +1092,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "G�r�nt�";
         Text[ catalan ] = "Visualizaci�n";
         Text[ finnish ] = "N�yt�";
+        Text[ thai ] = "แสดงผล";
     };
     String ST_ACTIVE_VIEW
     {
@@ -1090,6 +1119,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Etkin pencere";
         Text[ catalan ] = "Ventana activa";
         Text[ finnish ] = "Aktiivinen ikkuna";
+        Text[ thai ] = "หน้าต่างที่ใช้งานอยู่";
     };
     String ST_HIDDEN
     {
@@ -1115,6 +1145,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "gizli";
         Text[ catalan ] = "oculto";
         Text[ finnish ] = "piilotettu";
+        Text[ thai ] = "ซ่อน";
     };
     String ST_ACTIVE
     {
@@ -1140,6 +1171,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "etkin";
         Text[ catalan ] = "activo";
         Text[ finnish ] = "aktiivinen";
+        Text[ thai ] = "ใช้งานอยู่";
     };
     String ST_INACTIVE
     {
@@ -1165,6 +1197,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "etkin de�il";
         Text[ catalan ] = "inactivo";
         Text[ finnish ] = "ei k�yt�ss�";
+        Text[ thai ] = "ไม่ได้ใช้";
     };
     String ST_EDIT_ENTRY
     {
@@ -1190,6 +1223,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "~D�zenle...";
         Text[ catalan ] = "Edi~tar...";
         Text[ finnish ] = "Muokkaa";
+        Text[ thai ] = "แก้ไข...";
     };
     String ST_UPDATE
     {
@@ -1215,6 +1249,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "~G�ncelle";
         Text[ catalan ] = "Actuali~zar";
         Text[ finnish ] = "~P�ivit�";
+        Text[ thai ] = "~ปรับปรุง";
     };
     String ST_EDIT_CONTENT
     {
@@ -1240,6 +1275,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "D�zenle";
         Text[ catalan ] = "Editar";
         Text[ finnish ] = "Muokkaa";
+        Text[ thai ] = "แก้ไข";
     };
     String ST_EDIT_LINK
     {
@@ -1265,6 +1301,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Edit link";
         Text[ arabic ] = "Edit link";
         Text[ catalan ] = "Edit link";
+        Text[ thai ] = "แก้ไขตัวเชื่อมโยง";
     };
     String ST_INSERT
     {
@@ -1292,6 +1329,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "삽입";
         Text[ turkish ] = "Ekle";
         Text[ catalan ] = "Insertar";
+        Text[ thai ] = "แทรก";
     };
     String ST_INDEX
     {
@@ -1317,6 +1355,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "~Dizin";
         Text[ catalan ] = "�~ndice";
         Text[ finnish ] = "~Hakemisto";
+        Text[ thai ] = "~ดัชนี";
     };
     String ST_FILE
     {
@@ -1342,6 +1381,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Dosya";
         Text[ catalan ] = "Archivo";
         Text[ finnish ] = "Tiedosto";
+        Text[ thai ] = "แฟ้ม";
     };
     String ST_NEW_FILE
     {
@@ -1367,6 +1407,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Yeni belge";
         Text[ catalan ] = "Nuevo documento";
         Text[ finnish ] = "Uusi asiakirja";
+        Text[ thai ] = "เอกสารใหม่";
     };
     String ST_TEXT
     {
@@ -1392,6 +1433,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Metin";
         Text[ catalan ] = "Texto";
         Text[ finnish ] = "Teksti";
+        Text[ thai ] = "ข้อความ";
     };
     String ST_DELETE
     {
@@ -1419,6 +1461,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "삭제";
         Text[ turkish ] = "Sil";
         Text[ catalan ] = "Eliminar";
+        Text[ thai ] = "ลบ";
     };
     String ST_DELETE_ENTRY
     {
@@ -1445,6 +1488,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "삭제(~D)";
         Text[ turkish ] = "~Sil";
         Text[ catalan ] = "~Eliminar";
+        Text[ thai ] = "~ลบ";
     };
     String ST_UPDATE_SEL
     {
@@ -1470,6 +1514,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Se�im";
         Text[ catalan ] = "Selecci�n";
         Text[ finnish ] = "Valinta";
+        Text[ thai ] = "เลือก";
     };
     String ST_UPDATE_INDEX
     {
@@ -1495,6 +1540,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Dizin";
         Text[ catalan ] = "�ndices";
         Text[ finnish ] = "Hakemistot";
+        Text[ thai ] = "ดัชนี";
     };
     String ST_UPDATE_LINK
     {
@@ -1521,6 +1567,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Ba�lant�";
         Text[ catalan ] = "V�nculos";
         Text[ finnish ] = "Linkit";
+        Text[ thai ] = "เชื่อมโยง";
     };
     String ST_UPDATE_ALL
     {
@@ -1546,6 +1593,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "T�m�";
         Text[ catalan ] = "Todo";
         Text[ finnish ] = "Kaikki";
+        Text[ thai ] = "ทั้งหมด";
     };
     String ST_REMOVE_INDEX
     {
@@ -1571,6 +1619,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "D~izini kald�r";
         Text[ catalan ] = "Eliminar dire~ctorio";
         Text[ finnish ] = "~Poista hakemisto";
+        Text[ thai ] = "เ~อาดัชนีออก";
     };
     String ST_REMOVE_TBL_PROTECTION
     {
@@ -1597,6 +1646,7 @@ Window DLG_NAVIGATION_PI
         Text[ korean ] = "보호 해제(~U)";
         Text[ turkish ] = "Korumay� ~kald�r";
         Text[ catalan ] = "~Desproteger";
+        Text[ thai ] = "ไ~ม่ป้องกัน";
     };
     String ST_INVISIBLE
     {
@@ -1622,6 +1672,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "gizli";
         Text[ catalan ] = "oculto";
         Text[ finnish ] = "piilotettu";
+        Text[ thai ] = "ซ่อน";
     };
     String ST_BROKEN_LINK
     {
@@ -1647,6 +1698,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Dosya bulunamad�: ";
         Text[ catalan ] = "Archivo no encontrado: ";
         Text[ finnish ] = "Tiedostoa ei l�ytynyt: ";
+        Text[ thai ] = "ไม่พบแฟ้ม: ";
     };
     String ST_RENAME
     {
@@ -1672,6 +1724,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "~Yeniden adland�r";
         Text[ catalan ] = "Ca~mbiar nombre";
         Text[ finnish ] = "~Nime� uudelleen";
+        Text[ thai ] = "เ~ปลี่ยนชื่อ";
     };
     String ST_READONLY_IDX
     {
@@ -1697,6 +1750,7 @@ Window DLG_NAVIGATION_PI
         Text[ turkish ] = "Sa~lt okunur";
         Text[ catalan ] = "Solo le~ctura";
         Text[ finnish ] = "Vain ~luku";
+        Text[ thai ] = "อ่าน~อย่างเดียว";
     };
     Text[ chinese_simplified ] = "助手";
     Text[ russian ] = "���������";
@@ -1708,6 +1762,7 @@ Window DLG_NAVIGATION_PI
     Text[ korean ] = "네비게이터";
     Text[ turkish ] = "Navigat�r";
     Text[ catalan ] = "Navegador";
+    Text[ thai ] = "ตัวนำ";
 };
 ImageList IMG_NAVI_ENTRYBMP
 {
