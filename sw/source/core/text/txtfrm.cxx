@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-04 10:57:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,8 @@ void SwTxtFrm::InitCtor()
     mnFlyAnchorOfst = 0;
     mnFlyAnchorOfstNoWrap = 0;
     mnFtnLine = 0;
+    // OD 2004-03-17 #i11860#
+    mnHeightOfLastLine = 0;
 
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
@@ -2092,13 +2094,15 @@ KSHORT SwTxtFrm::CalcFitToContent( )
     spacing
 
     OD 08.01.2004 #i11859#
+    OD 2004-03-17 #i11860# - method <GetHeightOfLastLineForPropLineSpacing()>
+    replace by method <_CalcHeightOfLastLine()>. Height of last line will be
+    stored in new member <mnHeightOfLastLine> and can be accessed via method
+    <GetHeightOfLastLine()>
 
     @author OD
 */
-long SwTxtFrm::GetHeightOfLastLineForPropLineSpacing() const
+void SwTxtFrm::_CalcHeightOfLastLine()
 {
-    long nHeightOfLastLine = 0L;
-
     // determine output device
     ViewShell* pVsh = (ViewShell*)GetShell();
     ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
@@ -2125,7 +2129,7 @@ long SwTxtFrm::GetHeightOfLastLineForPropLineSpacing() const
             pLastFont = NULL;
             aFont.SetFntChg( sal_True );
             aFont.ChgPhysFnt( pVsh, *pOut );
-            nHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
+            mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
             pLastFont->Unlock();
             pLastFont = pOldFont;
             pLastFont->SetDevFont( pVsh, *pOut );
@@ -2135,7 +2139,7 @@ long SwTxtFrm::GetHeightOfLastLineForPropLineSpacing() const
             Font aOldFont = pOut->GetFont();
             aFont.SetFntChg( sal_True );
             aFont.ChgPhysFnt( pVsh, *pOut );
-            nHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
+            mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );
             pLastFont->Unlock();
             pLastFont = NULL;
             pOut->SetFont( aOldFont );
@@ -2149,23 +2153,20 @@ long SwTxtFrm::GetHeightOfLastLineForPropLineSpacing() const
         {
             if ( IsUndersized() )
             {
-                nHeightOfLastLine = 0L;
+                mnHeightOfLastLine = 0L;
                 bCalcHeightOfLastLine = false;
             }
             else if ( IsEmpty() )
             {
-                nHeightOfLastLine = EmptyHeight();
+                mnHeightOfLastLine = EmptyHeight();
                 bCalcHeightOfLastLine = false;
-            }
-            else
-            {
-                const_cast<SwTxtFrm*>(this)->GetFormatted();
             }
         }
 
         if ( bCalcHeightOfLastLine )
         {
-
+            ASSERT( HasPara(),
+                    "<SwTxtFrm::_CalcHeightOfLastLine()> - missing paragraph portions." );
             const SwLineLayout* pLineLayout = GetPara();
             while ( pLineLayout && pLineLayout->GetNext() )
             {
@@ -2176,12 +2177,10 @@ long SwTxtFrm::GetHeightOfLastLineForPropLineSpacing() const
             {
                 SwTwips nAscent, nDescent, nDummy1, nDummy2;
                 pLineLayout->MaxAscentDescent( nAscent, nDescent, nDummy1, nDummy2 );
-                nHeightOfLastLine = nAscent + nDescent;
+                mnHeightOfLastLine = nAscent + nDescent;
             }
         }
     }
-
-    return nHeightOfLastLine;
 }
 
 /*************************************************************************
@@ -2213,8 +2212,8 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
                 break;
             }
 
-            // OD 08.01.2004 #i11859# - use method <_GetHeightOfLastLineForPropLineSpacing()>
-            nRet = GetHeightOfLastLineForPropLineSpacing();
+            // OD 2004-03-17 #i11860# - use method <GetHeightOfLastLine()>
+            nRet = GetHeightOfLastLine();
 
             long nTmp = nRet;
             nTmp *= rSpace.GetPropLineSpace();
