@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:26:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,9 @@ void SvxURLField::Load( SvPersistStream & rStm )
     eFormat= (SvxURLFormat)nFormat;
 
     // Relatives Speichern => Beim laden absolut machen.
-    aURL = INetURLObject::RelToAbs( aTmpURL );
+    DBG_ERROR("No BaseURL!");
+    // TODO/MBA: no BaseURL
+    aURL = INetURLObject::GetAbsURL( String(), aTmpURL );
 }
 
 // -----------------------------------------------------------------------
@@ -566,7 +568,9 @@ void SvxURLField::Load( SvPersistStream & rStm )
 void SvxURLField::Save( SvPersistStream & rStm )
 {
     // Relatives Speichern der URL
-    String aTmpURL = INetURLObject::AbsToRel( aURL );
+    DBG_ERROR("No BaseURL!");
+    // TODO/MBA: no BaseURL
+    String aTmpURL = INetURLObject::GetRelURL( String(), aURL );
 
     rStm << (USHORT)eFormat;
 
