@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:08 $
+ *  last change: $Author: mtg $ $Date: 2000-12-08 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)
     aGrabber >> nTestSig;
 
     if (nTestSig != LOCSIG)
-        throw (package::ZipException( OUString::createFromAscii("Invalid LOC header (bad signature"), uno::Reference < uno::XInterface > () ));
+        throw package::ZipException( OUString::createFromAscii("Invalid LOC header (bad signature"), uno::Reference < uno::XInterface > () );
     aGrabber >> nVersion;
     aGrabber >> nFlag;
     aGrabber >> nHow;
@@ -261,7 +261,7 @@ sal_Int32 ZipFile::findEND( )
             }
         }
     }
-    throw (package::ZipException( OUString::createFromAscii("Zip END signature not found!"), uno::Reference < uno::XInterface> () ));
+    throw package::ZipException( OUString::createFromAscii("Zip END signature not found!"), uno::Reference < uno::XInterface> () );
 }
 
 sal_Int32 ZipFile::readCEN()
@@ -280,18 +280,18 @@ sal_Int32 ZipFile::readCEN()
     aGrabber >> nCenOff;
 
     if (nTotal<0 || nTotal * CENHDR > nCenLen)
-        throw (package::ZipException(OUString::createFromAscii("invalid END header (bad entry count)"), uno::Reference < uno::XInterface > ()));
+        throw package::ZipException(OUString::createFromAscii("invalid END header (bad entry count)"), uno::Reference < uno::XInterface > ());
 
     if (nTotal > ZIP_MAXENTRIES)
-        throw (package::ZipException(OUString::createFromAscii("too many entries in ZIP File"), uno::Reference < uno::XInterface > ()));
+        throw package::ZipException(OUString::createFromAscii("too many entries in ZIP File"), uno::Reference < uno::XInterface > ());
 
     if (nCenLen < 0 || nCenLen > nEndPos)
-        throw (package::ZipException(OUString::createFromAscii("Invalid END header (bad central directory size)"), uno::Reference < uno::XInterface > ()));
+        throw package::ZipException(OUString::createFromAscii("Invalid END header (bad central directory size)"), uno::Reference < uno::XInterface > ());
 
     nCenPos = nEndPos - nCenLen;
 
     if (nCenOff < 0 || nCenOff > nCenPos)
-        throw (package::ZipException(OUString::createFromAscii("Invalid END header (bad central directory size)"), uno::Reference < uno::XInterface > ()));
+        throw package::ZipException(OUString::createFromAscii("Invalid END header (bad central directory size)"), uno::Reference < uno::XInterface > ());
 
     nLocPos = nCenPos - nCenOff;
     aGrabber.seek(nCenPos);
@@ -304,21 +304,21 @@ sal_Int32 ZipFile::readCEN()
         sal_Int16 nDisk, nIntAttr;
 
         if (aGrabber.getPosition() - nCenPos + CENHDR > nCenLen)
-            throw (package::ZipException(OUString::createFromAscii("Invalid CEN header (bad header size check 1)"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("Invalid CEN header (bad header size check 1)"), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nTestSig;
         if (nTestSig != CENSIG)
-            throw (package::ZipException(OUString::createFromAscii("Invalid CEN header (bad signature)"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("Invalid CEN header (bad signature)"), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nVerMade;
         aGrabber >> nVersion;
         if ((nVersion & 1) == 1)
-            throw (package::ZipException(OUString::createFromAscii("Invalid CEN header (encrypted entry)"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("Invalid CEN header (encrypted entry)"), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nFlag;
         aGrabber >> nHow;
         if (nHow != STORED && nHow != DEFLATED)
-            throw (package::ZipException(OUString::createFromAscii("Invalid CEN header (bad compression method)"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("Invalid CEN header (bad compression method)"), uno::Reference < uno::XInterface > ());
 
         aGrabber >> nTime;
         aGrabber >> nCRC;
@@ -333,13 +333,13 @@ sal_Int32 ZipFile::readCEN()
         aGrabber >> nOffset;
 
         if (aGrabber.getPosition() - nCenPos + nNameLen + nExtraLen + nCommentLen > nCenLen)
-            throw (package::ZipException(OUString::createFromAscii("Invalid CEN header (bad header siez check 2)"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("Invalid CEN header (bad header siez check 2)"), uno::Reference < uno::XInterface > ());
 
         if (nNameLen > ZIP_MAXNAMELEN)
-            throw (package::ZipException(OUString::createFromAscii("name length exceeds 512 bytes"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("name length exceeds 512 bytes"), uno::Reference < uno::XInterface > ());
 
         if (nExtraLen > ZIP_MAXEXTRA)
-            throw (package::ZipException(OUString::createFromAscii("extra header info exceeds 256 bytes"), uno::Reference < uno::XInterface > ()));
+            throw package::ZipException(OUString::createFromAscii("extra header info exceeds 256 bytes"), uno::Reference < uno::XInterface > ());
 
         pEntry->nTime   = nTime;
         pEntry->nCrc    = nCRC;
@@ -370,7 +370,7 @@ sal_Int32 ZipFile::readCEN()
     }
 
     if (nCount != nTotal)
-        throw (package::ZipException(OUString::createFromAscii("Count != Total"), uno::Reference < uno::XInterface > ()));
+        throw package::ZipException(OUString::createFromAscii("Count != Total"), uno::Reference < uno::XInterface > ());
 
     return nCenPos;
 }
