@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dg $ $Date: 2001-06-18 11:58:01 $
+ *  last change: $Author: dg $ $Date: 2001-06-22 08:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ namespace configmgr
         OSL_ASSERT(pProfile);
 
 #ifdef TF_CFGDATA
-        static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("Office"));
+        static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("L10N"));
         static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
 #else
         static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("International"));
