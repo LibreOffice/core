@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-03 16:45:31 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text = " Anschrift " ;
         Text [ ENGLISH ] = " Address " ;
         Text [ norwegian ] = " Adresse " ;
-        Text [ italian ] = "Indirizzo " ;
+        Text [ italian ] = " Indirizzo  " ;
         Text [ portuguese_brazilian ] = "Endereзo " ;
         Text [ portuguese ] = "  Endereзo  " ;
         Text [ finnish ] = " Osoite " ;
@@ -607,7 +607,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten geдndert.\nBitte bedenken Sie, daЯ dadurch die Registrierung verfдllt.\nSie benцtigen einen neuen Registrierungsschlьssel, der innerhalb der nдchsten 30 Tage eingegeben werden muЯ.\nDas Registrierungsformular finden Sie im Menь Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich дndern?";
     Message[ danish ] = "Du har жndret brugerdataene.\nBemжrk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnшgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjжlp - Registrering...\nEr du sikker pе, at du vil жndre brugerdataene?";
     Message[ chinese_simplified ] = "ДъТСѕ­ёьёДБЛУГ»§ЧКБПЎЈ\nХвСщДъµДЧўІбѕН»бОЮР§ЎЈ\nДъ±ШРлФЪЅсєу30МмЦ®ДЪКдИлТ»ёцРВµДЧўІбГЬВлЎЈ\nДъДЬ№»ФЪІЛµҐЎ°°пЦъ - ЧўІб...Ў±ґ¦ХТµЅЧўІб±нµҐЎЈ\nДъХжТЄёьёДУГ»§ЧКБПЈї";
-    Message[ russian ] = "Вы изменили данные пользователя.\nПожалуйста, помните, что из-за этого вы утратите регистрацию.\nВам понодобится новый регистрационный ключ, который необходимо будет ввести в течение 30 дней.\nРегистрационный формуляр вы найдете в меню Помощь - Регистрация...\nВы действительно хотите изменить данные пользователя?";
+    Message[ russian ] = "Вы изменили данные пользователя.\nПожалуйста, помните, что из-за этого Вы утратите регистрацию.\nВам понодобится новый регистрационный ключ, который необходимо будет ввести в течение 30 дней.\nРегистрационный формуляр Вы найдете в меню Справка - Регистрация...\nВы действительно хотите изменить данные пользователя?";
     Message[ polish ] = "Zmieniіeњ dane uїytkownika.\nProszк uwzglкdnij, їe przez to traci waїnoњж rejestracja.\nPotrzebujesz nowego klucza rejestracyjnego, ktуry musi byж wpisany w ci№gu nastкpnych 30 dni.\nFormularz rejestracji znajdziesz w menu Pomoc - Rejestracja...\nChcesz na pewno zmieniж dane uїytkownika?";
     Message[ japanese ] = "Х°»Ю°ГЮ°А‚Є•ПЌX‚і‚к‚Ь‚µ‚ЅЃB\n‚»‚М‚Ѕ‚Я“o^‚ЄЋёЊш‚·‚й‚М‚Н–Ж‚к‚Ь‚№‚сЃB\nђV‚µ‚ў“o^·°‚Є•K—v‚Ж‚И‚и¤‚»‚к‚р30“ъ€И“а‚ЙЌП‚Ь‚і‚И‚Ї‚к‚О‚И‚и‚Ь‚№‚сЃB\n“o^—pЋ†‚Н[ТЖ­°НЩМЯ/“o^...]‚Й‚ ‚и‚Ь‚·ЃB\nХ°»Ю°ГЮ°А‚р–{“–‚Й•ПЌX‚µ‚Ь‚·‚©?";
     Message[ chinese_traditional ] = "±z¤wёgЕЬ§уЁПҐОЄМёк®ЖЎC\nіoјЛ±zЄєµщҐUґN·|µL®ДЎC\n±z»Э­n¤@­У·sЄєЎMҐBҐІ¶·¦b30¤С¤§¤єїй¤JЄєµщҐU±KБдЅXЎC\n±zЇа°ч¦bҐ\\ЇаЄн»Ў©ъЎAµщҐU¤§¤U§дЁмµщҐUЄн®жЎC\nЇu­n­Ч§пЁПҐОЄМёк®ЖЎH";
