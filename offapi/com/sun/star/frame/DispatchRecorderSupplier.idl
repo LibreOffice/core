@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorderSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:05:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
     @see Frame
     @since #107627#
  */
-service DispatchRecorderSupplier
+published service DispatchRecorderSupplier
 {
     //-------------------------------------------------------------------------
     /** provides access to a <type>DispatchRecorder</type> and helps on recording
