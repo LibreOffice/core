@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-20 17:27:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1265,7 +1265,7 @@ XubString EditView::GetWordUnderMousePointer( Rectangle& rWordRect ) const
         Rectangle aTopLeftRec( pImpEE->PaMtoEditCursor( aWordSel.Min() ) );
         Rectangle aBottomRightRec( pImpEE->PaMtoEditCursor( aWordSel.Max() ) );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DBG_ASSERT( aTopLeftRec.Top() == aBottomRightRec.Top(), "Top() in einer Zeile unterschiedlich?" );
 #endif
 
