@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:56:43 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:48:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -208,13 +208,13 @@ sub add_root_directories
         $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        # $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
-        # push(@{$directorytableref}, $oneline);
+        $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
+        push(@{$directorytableref}, $oneline);
 
         $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::templatefolder\tTARGETDIR\t.\n";
+        $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$installer::globals::templatefoldername\n";
         push(@{$directorytableref}, $oneline);
 
         $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
