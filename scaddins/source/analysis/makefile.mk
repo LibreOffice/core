@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.4 2001-06-18 13:00:32 gt Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.5 2001-06-21 12:57:48 gt Exp $
 #
-#     $Date: 2001-06-18 13:00:32 $
+#     $Date: 2001-06-21 12:57:48 $
 #     $Author: gt $
-#     $Revision: 1.4 $
+#     $Revision: 1.5 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -100,6 +100,7 @@ UNOTYPES=\
     com.sun.star.lang.XTypeProvider \
     com.sun.star.uno.XWeak \
     com.sun.star.uno.XAggregation \
+    com.sun.star.uno.XComponentContext \
     com.sun.star.util.Date
 
 # --- Files -------------------------------------
