@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emptyproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:48:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((EmptyProperties*)this)->mpEmptyItemSet = &(((EmptyProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetItemPool()));
+                ((EmptyProperties*)this)->mpEmptyItemSet = &(((EmptyProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetObjectItemPool()));
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
@@ -196,13 +196,13 @@ namespace sdr
             return 0L;
         }
 
-        void EmptyProperties::PreProcessSave()
-        {
-        }
+//BFS01     void EmptyProperties::PreProcessSave()
+//BFS01     {
+//BFS01     }
 
-        void EmptyProperties::PostProcessSave()
-        {
-        }
+//BFS01     void EmptyProperties::PostProcessSave()
+//BFS01     {
+//BFS01     }
     } // end of namespace properties
 } // end of namespace sdr
 
