@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:01:55 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -587,8 +586,8 @@ void ImportExcel::Columndefault( void )
 
     aIn >> nColMic >> nColMac;
 
-    DBG_ASSERT( aIn.GetRecLeft() - 4 == (ULONG)(nColMac - nColMic) * 3,
-                "+ImportExcel::Columndefault(): Wie jetzt?!!..." );
+    DBG_ASSERT( aIn.GetRecLeft() == (ULONG)(nColMac - nColMic) * 3 + 2,
+                "ImportExcel::Columndefault - wrong record size" );
 
     nColMac--;
 
