@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgeimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:47 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _BRIDGES_REMOTE_BRIDGEIMPL_HXX_
 #define _BRIDGES_REMOTE_BRIDGEIMPL_HXX_
-
 #include <osl/interlck.h>
 
 #include <uno/environment.h>
@@ -91,16 +90,16 @@ namespace bridges_remote {
         // performance optimization. In some cases, it is not necessary to acquire the
         // environment.
         RemoteThreadCounter( uno_Environment *pEnvRemote, RemoteThreadCounter_HoldEnvWeak value )
-            : m_pEnvRemote( pEnvRemote )
-            , m_bReleaseEnvironment( sal_False )
+            : m_bReleaseEnvironment( sal_False )
+            , m_pEnvRemote( pEnvRemote )
         {
               remote_Context *pContext = ((remote_Context *) m_pEnvRemote->pContext );
             osl_incrementInterlockedCount( &( pContext->m_pBridgeImpl->m_nRemoteThreads ) );
         }
 
         RemoteThreadCounter( uno_Environment *pEnvRemote )
-            : m_pEnvRemote( pEnvRemote )
-            , m_bReleaseEnvironment( sal_True )
+            : m_bReleaseEnvironment( sal_True )
+            , m_pEnvRemote( pEnvRemote )
         {
             m_pEnvRemote->acquire( m_pEnvRemote );
 
