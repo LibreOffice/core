@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ TabDialog DLG_PARA
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
                 Text [ french ] = "Lettrines" ;
-                Text [ swedish ] = "Anfangsbokstäver" ;
+                Text [ swedish ] = "Anfanger" ;
                 Text [ dutch ] = "Initialen" ;
                 Text [ spanish ] = "Iniciales" ;
                 Text [ english_us ] = "Drop Caps" ;
