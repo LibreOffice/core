@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-19 14:51:55 $
+ *  last change: $Author: cl $ $Date: 2002-01-15 16:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,7 +646,7 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 //----------------------------------------------------------------------
 void SvxShape::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw()
 {
-    if(pObj && rPropSet.AreThereOwnUsrAnys())
+    if(pObj && rPropSet.AreThereOwnUsrAnys() && pModel)
     {
         SfxItemSet aSet( pModel->GetItemPool(), SDRATTR_START, SDRATTR_END, 0);
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
@@ -1011,7 +1011,12 @@ Reference< uno::XInterface > SvxShape_NewInstance()
 //----------------------------------------------------------------------
 void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 {
-    Reference< drawing::XShape > rHoldMyself( (drawing::XShape*)this );
+    if( pObj == NULL )
+        return;
+
+    uno::Reference< uno::XInterface > xSelf( pObj->getWeakUnoShape() );
+    if( !xSelf.is() )
+        return;
 
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
 
@@ -1284,6 +1289,12 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
                 break;
             }
         }
+    }
+
+    if( pModel )
+    {
+        EndListening( *pModel );
+        pModel = NULL;
     }
 }
 
@@ -2892,7 +2903,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pObj == NULL || pMap == NULL )
+    if( pObj == NULL || pMap == NULL || pModel == NULL )
         throw beans::UnknownPropertyException();
 
     if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
