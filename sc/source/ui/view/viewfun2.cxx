@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:30:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kohei Yoshida__________________________
  *
  *
  ************************************************************************/
@@ -1039,6 +1039,81 @@ void ScViewFunc::FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL
 
     pDocSh->PostPaintGridAll();
     pDocSh->PostDataChanged();
+}
+
+//----------------------------------------------------------------------------
+
+/** Downward fill of selected cell(s) by double-clicking cross-hair cursor
+
+    Extends a current selection down to the last non-empty cell of an adjacent
+    column when the lower-right corner of the selection is double-clicked.  It
+    uses a left-adjoining non-empty column as a guide if such is available,
+    otherwise a right-adjoining non-empty column is used.
+
+    @author Kohei Yoshida (kohei@openoffice.org)
+
+    @return No return value
+
+    @see #i12313#
+*/
+void ScViewFunc::FillCrossDblClick()
+{
+    ScRange aRange;
+    GetViewData()->GetSimpleArea( aRange );
+    aRange.Justify();
+
+    SCTAB nTab = GetViewData()->GetCurPos().Tab();
+    SCCOL nStartX = aRange.aStart.Col();
+    SCROW nStartY = aRange.aStart.Row();
+    SCCOL nEndX   = aRange.aEnd.Col();
+    SCROW nEndY   = aRange.aEnd.Row();
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
+
+    // Make sure the selection is not empty
+    if ( pDoc->IsBlockEmpty( nTab, nStartX, nStartY, nEndX, nEndY ) )
+        return;
+
+    if ( nEndY < MAXROW )
+    {
+        if ( nStartX > 0 )
+        {
+            SCCOL nMovX = nStartX - 1;
+            SCROW nMovY = nStartY;
+
+            if ( pDoc->HasData( nMovX, nStartY, nTab ) &&
+                 pDoc->HasData( nMovX, nStartY + 1, nTab ) )
+            {
+                pDoc->FindAreaPos( nMovX, nMovY, nTab, 0, 1 );
+
+                if ( nMovY > nEndY )
+                {
+                    FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY,
+                              nMovY - nEndY );
+                    return;
+                }
+            }
+        }
+
+        if ( nEndX < MAXCOL )
+        {
+            SCCOL nMovX = nEndX + 1;
+            SCROW nMovY = nStartY;
+
+            if ( pDoc->HasData( nMovX, nStartY, nTab ) &&
+                 pDoc->HasData( nMovX, nStartY + 1, nTab ) )
+            {
+                pDoc->FindAreaPos( nMovX, nMovY, nTab, 0, 1 );
+
+                if ( nMovY > nEndY )
+                {
+                    FillAuto( FILL_TO_BOTTOM, nStartX, nStartY, nEndX, nEndY,
+                              nMovY - nEndY );
+                    return;
+                }
+            }
+        }
+    }
 }
 
 //----------------------------------------------------------------------------
@@ -2577,20 +2652,23 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     ScDocShell*             pDocSh = GetViewData()->GetDocShell();
     const ScPatternAttr*    pSelAttrs = GetSelectionPattern();
-    const SfxPoolItem*      pBorderAttr = NULL;
-    SfxItemState            eItemState =
-                                pSelAttrs->GetItemSet().
-                                    GetItemState( ATTR_BORDER,
-                                                  TRUE,
-                                                  &pBorderAttr );
+    const SfxItemSet&       rSelItemSet = pSelAttrs->GetItemSet();
 
-    if ( eItemState != SFX_ITEM_DEFAULT )
+    const SfxPoolItem*      pBorderAttr = NULL;
+    SfxItemState            eItemState = rSelItemSet.GetItemState( ATTR_BORDER, TRUE, &pBorderAttr );
+
+    const SfxPoolItem*      pTLBRItem = 0;
+    SfxItemState            eTLBRState = rSelItemSet.GetItemState( ATTR_BORDER_TLBR, TRUE, &pTLBRItem );
+
+    const SfxPoolItem*      pBLTRItem = 0;
+    SfxItemState            eBLTRState = rSelItemSet.GetItemState( ATTR_BORDER_BLTR, TRUE, &pBLTRItem );
+
+    // any of the lines visible?
+    if( (eItemState != SFX_ITEM_DEFAULT) || (eTLBRState != SFX_ITEM_DEFAULT) || (eBLTRState != SFX_ITEM_DEFAULT) )
     {
-        if ( eItemState == SFX_ITEM_SET )
+        // none of the lines don't care?
+        if( (eItemState != SFX_ITEM_DONTCARE) && (eTLBRState != SFX_ITEM_DONTCARE) && (eBLTRState != SFX_ITEM_DONTCARE) )
         {
-            DBG_ASSERT( pBorderAttr, "Border-Attr not set!" );
-            SvxBoxItem      aBoxItem( *(const SvxBoxItem*)pBorderAttr );
-            SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
             ScDocument*     pDoc = GetViewData()->GetDocument();
             SfxItemSet*     pOldSet = new SfxItemSet(
                                             *(pDoc->GetPool()),
@@ -2607,18 +2685,42 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
             // hier wird die pBoxLine benutzt:
 
-            SET_LINE_ATTRIBUTES(Top,BOX_LINE_TOP)
-            SET_LINE_ATTRIBUTES(Bottom,BOX_LINE_BOTTOM)
-            SET_LINE_ATTRIBUTES(Left,BOX_LINE_LEFT)
-            SET_LINE_ATTRIBUTES(Right,BOX_LINE_RIGHT)
+            if( pBorderAttr )
+            {
+                SvxBoxItem      aBoxItem( *(const SvxBoxItem*)pBorderAttr );
+                SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
-            aBoxInfoItem.SetLine( aBoxItem.GetTop(), BOXINFO_LINE_HORI );
-            aBoxInfoItem.SetLine( aBoxItem.GetLeft(), BOXINFO_LINE_VERT );
-            aBoxInfoItem.ResetFlags(); // Lines auf Valid setzen
+                SET_LINE_ATTRIBUTES(Top,BOX_LINE_TOP)
+                SET_LINE_ATTRIBUTES(Bottom,BOX_LINE_BOTTOM)
+                SET_LINE_ATTRIBUTES(Left,BOX_LINE_LEFT)
+                SET_LINE_ATTRIBUTES(Right,BOX_LINE_RIGHT)
 
-            pOldSet->Put( *pBorderAttr );
-            pNewSet->Put( aBoxItem );
-            pNewSet->Put( aBoxInfoItem );
+                aBoxInfoItem.SetLine( aBoxItem.GetTop(), BOXINFO_LINE_HORI );
+                aBoxInfoItem.SetLine( aBoxItem.GetLeft(), BOXINFO_LINE_VERT );
+                aBoxInfoItem.ResetFlags(); // Lines auf Valid setzen
+
+                pOldSet->Put( *pBorderAttr );
+                pNewSet->Put( aBoxItem );
+                pNewSet->Put( aBoxInfoItem );
+            }
+
+            if( pTLBRItem && ((const SvxLineItem*)pTLBRItem)->GetLine() )
+            {
+                SvxLineItem aTLBRItem( *(const SvxLineItem*)pTLBRItem );
+                UpdateLineAttrs( aLine, aTLBRItem.GetLine(), pLine, bColorOnly );
+                aTLBRItem.SetLine( &aLine );
+                pOldSet->Put( *pTLBRItem );
+                pNewSet->Put( aTLBRItem );
+            }
+
+            if( pBLTRItem && ((const SvxLineItem*)pBLTRItem)->GetLine() )
+            {
+                SvxLineItem aBLTRItem( *(const SvxLineItem*)pBLTRItem );
+                UpdateLineAttrs( aLine, aBLTRItem.GetLine(), pLine, bColorOnly );
+                aBLTRItem.SetLine( &aLine );
+                pOldSet->Put( *pBLTRItem );
+                pNewSet->Put( aBLTRItem );
+            }
 
             ApplyAttributes( pNewSet, pOldSet );
 
