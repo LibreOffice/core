@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:47:55 $
+ *  last change: $Author: thb $ $Date: 2001-07-09 10:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ ModalDialog RID_SVXDLG_ZOOM
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 142 ) ;
-    Text = "Zoom" ;
+    Text = "Maﬂstab" ;
     Text [ ENGLISH ] = "Zoom" ;
     Moveable = TRUE ;
     RadioButton BTN_WHOLE_PAGE
