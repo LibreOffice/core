@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_provider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 14:46:05 $
+ *  last change: $Author: kso $ $Date: 2001-07-12 15:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,6 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
         const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
     throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
-
     // Check URL scheme...
 
     rtl::OUString aScheme( rtl::OUString::createFromAscii( MYUCP_URL_SCHEME ) );
@@ -187,6 +185,8 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
 #else
     uno::Reference< star::ucb::XContentIdentifier > xCanonicId = Identifier;
 #endif
+
+    vos::OGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
     uno::Reference< star::ucb::XContent > xContent
