@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_interact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:08:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,7 @@ void InteractionContinuationImpl::release() throw ()
 Any InteractionContinuationImpl::queryInterface( Type const & type )
     throw (RuntimeException)
 {
-    if (type.isAssignableFrom( m_type ))
-    {
+    if (type.isAssignableFrom( m_type )) {
         Reference<task::XInteractionContinuation> xThis(this);
         return Any( &xThis, type );
     }
@@ -170,7 +169,36 @@ InteractionRequest::getContinuations() throw (RuntimeException)
 }
 
 //==============================================================================
-void interactThrow(
+bool interactContinuation( Any const & request,
+                           Type const & continuation,
+                           Reference<XCommandEnvironment> const & xCmdEnv,
+                           bool * pabort )
+{
+    OSL_ASSERT(
+        task::XInteractionContinuation::static_type().isAssignableFrom(
+            continuation ) );
+    bool cont = false;
+    bool abort = false;
+    if (xCmdEnv.is()) {
+        Reference<task::XInteractionHandler> xInteractionHandler(
+            xCmdEnv->getInteractionHandler() );
+        if (xInteractionHandler.is()) {
+            Sequence< Reference<task::XInteractionContinuation> > conts( 2 );
+            conts[ 0 ] = new InteractionContinuationImpl(
+                task::XInteractionAbort::static_type(), &abort );
+            conts[ 1 ] = new InteractionContinuationImpl(
+                continuation, &cont );
+            xInteractionHandler->handle(
+                new InteractionRequest( request, conts ) );
+        }
+    }
+    if (pabort != 0)
+        *pabort = abort;
+    return cont;
+}
+
+//==============================================================================
+void interactContinuation_throw(
     deployment::DeploymentException const & exc,
     Type const & continuation,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -178,49 +206,26 @@ void interactThrow(
     OSL_ASSERT( exc.Cause.getValueTypeClass() == TypeClass_EXCEPTION );
 
     RuntimeException rt_exc;
-    if (exc.Cause >>= rt_exc)
-    {
+    if (exc.Cause >>= rt_exc) {
         OSL_ENSURE( 0, "### missing RuntimeException rethrow?" );
         ::cppu::throwException( exc.Cause );
     }
     deployment::DeploymentException depl_exc;
-    if (exc.Cause >>= depl_exc)
-    {
+    if (exc.Cause >>= depl_exc) {
         OSL_ENSURE( 0, "### missing DeploymentException rethrow?" );
         ::cppu::throwException( exc.Cause );
     }
     CommandFailedException cf_exc;
-    if (exc.Cause >>= cf_exc)
-    {
+    if (exc.Cause >>= cf_exc) {
         OSL_ENSURE( 0, "### missing CommandFailedException rethrow?" );
         ::cppu::throwException( exc.Cause );
     }
 
     bool abort = false;
-    if (xCmdEnv.is())
-    {
-        Reference<task::XInteractionHandler> xInteractionHandler(
-            xCmdEnv->getInteractionHandler() );
-        if (xInteractionHandler.is())
-        {
-            bool cont = false;
-            Sequence< Reference<task::XInteractionContinuation> > conts( 2 );
-            conts[ 0 ] = new InteractionContinuationImpl(
-                ::getCppuType(
-                    static_cast<Reference<task::XInteractionAbort>const *>(0) ),
-                &abort );
-            conts[ 1 ] = new InteractionContinuationImpl( continuation,
-                                                          &cont );
-            xInteractionHandler->handle(
-                new InteractionRequest( exc.Cause, conts ) );
-            if (cont)
-            {
-                OSL_ASSERT( ! abort );
-                return;
-            }
-        }
+    if (interactContinuation( exc.Cause, continuation, xCmdEnv, &abort )) {
+        OSL_ASSERT( ! abort );
+        return;
     }
-
     if (abort)
         throw CommandFailedException( exc.Message, exc.Context, exc.Cause );
     else
