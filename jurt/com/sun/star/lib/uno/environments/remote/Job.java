@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+ *  last change: $Author: kr $ $Date: 2000-11-17 10:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:53 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-11-17 10:45:40 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -190,15 +190,17 @@ public class Job {
             }
             while(theException instanceof InvocationTargetException);
 
+            // is this an exception we now?
             if(theException instanceof com.sun.star.uno.Exception
             || theException instanceof com.sun.star.uno.RuntimeException) {
-                if(_iMessage.isSynchron())
-                    _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
 
                 if(DEBUG) System.err.println("#### RemoteStub.request - exception:" + theException);
             }
-            else
-                throw (Exception)invocationTargetException.getTargetException();
+            else // wrap it as uno exception
+                theException = new com.sun.star.uno.RuntimeException("java exception: " + theException.toString(), null);
+
+            if(_iMessage.isSynchron())
+                _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
         }
 
         return result;
