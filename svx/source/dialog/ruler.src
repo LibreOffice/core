@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:23:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "¹Ð¸®¹ÌÅÍ";
             Text[ turkish ] = "Milimetre";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Milímetros";
         };
         MenuItem
         {
@@ -118,6 +119,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "¼¾Æ¼¹ÌÅÍ";
             Text[ turkish ] = "Santimetre";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Centímetro";
         };
         MenuItem
         {
@@ -144,6 +146,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "¹ÌÅÍ";
             Text[ turkish ] = "Metre";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Metro";
         };
         MenuItem
         {
@@ -170,6 +173,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "Å³·Î¹ÌÅÍ";
             Text[ turkish ] = "Kilometre";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Kilómetro";
         };
         MenuItem
         {
@@ -196,6 +200,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "ÀÎÄ¡";
             Text[ turkish ] = "Inç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Pulgadas";
         };
         MenuItem
         {
@@ -224,6 +229,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "ÇÇÆ®";
             Text[ turkish ] = "Ft";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Pie";
         };
         MenuItem
         {
@@ -250,6 +256,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "¸¶ÀÏ";
             Text[ turkish ] = "Mil";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Millas";
         };
         MenuItem
         {
@@ -278,6 +285,7 @@ Menu RID_SVXMN_RULER
             Text[ korean ] = "Á¡";
             Text[ turkish ] = "Nokta";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Punto";
         };
         MenuItem
         {
@@ -312,6 +320,7 @@ String RID_SVXSTR_RULER_TAB_LEFT
     TEXT[ korean ] = "¿ÞÂÊ";
     TEXT[ turkish ] = "Sol";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Izquierda";
 };
 String RID_SVXSTR_RULER_TAB_RIGHT
 {
@@ -338,6 +347,7 @@ String RID_SVXSTR_RULER_TAB_RIGHT
     TEXT[ korean ] = "¿À¸¥ÂÊ";
     TEXT[ turkish ] = "Sað";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Derecha";
 };
 String RID_SVXSTR_RULER_TAB_DECIMAL
 {
@@ -364,6 +374,7 @@ String RID_SVXSTR_RULER_TAB_DECIMAL
     TEXT[ korean ] = "¼Ò¼ö";
     TEXT[ turkish ] = "Ondalýk";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Decimal";
 };
 String RID_SVXSTR_RULER_TAB_CENTER
 {
@@ -390,4 +401,5 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT[ korean ] = "°¡¿îµ¥";
     TEXT[ turkish ] = "Orta";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Centrado";
 };
