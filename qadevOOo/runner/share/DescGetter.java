@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescGetter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:04:04 $
+ *  last change:$Date: 2003-10-06 12:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ public abstract class DescGetter {
         String line = "";
         BufferedReader scenario = null;
         DescEntry[] entries = null;
+
         try {
             scenario = new BufferedReader(new FileReader(url));
         } catch (java.io.FileNotFoundException fnfe) {
@@ -96,6 +97,14 @@ public abstract class DescGetter {
                 if (line.startsWith("-o")) {
                     entryList.add(getDescriptionForSingleJob(
                                     line.substring(3).trim(), descPath, debug));
+                }
+                else if (line.startsWith("-sce")) {
+                    DescEntry[] subs = getScenario(
+                                    line.substring(5,line.length()).trim(),
+                                                        descPath, debug);
+                    for (int i=0; i<subs.length; i++) {
+                        entryList.add(subs[i]);
+                    }
                 }
                 line = scenario.readLine();
             } catch (java.io.IOException ioe) {
