@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:44:20 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,6 +829,7 @@ void FmXUndoEnvironment::RemoveElement(const Reference< XInterface > & Element)
 // XScriptListener
 void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
 {
+    OSL_TRACE( "in FmXUndoEnvironment::firing_Impl");
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
 
     SfxObjectShellRef xObjSh = rModel.GetObjectShell();
@@ -891,16 +892,28 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
                     // (On the medium run, we should migrate to the mechanism where scripts are executed via
                     // XDispatch (or whatever they are planning to use). But at the moment this mechanism is not implemented at all ...)
                 }
-            }
 
-            if ( sMacroLocation.getLength() )
-            {   // we have a macro in the "new" runtime format (fully described)
-                xObjSh->CallStarBasicScript( sScriptCode, sMacroLocation, static_cast< void* >( &aArguments ), pSyncRet );
+                if ( sMacroLocation.getLength() )
+                {   // we have a macro in the "new" runtime format (fully described)
+                    xObjSh->CallStarBasicScript( sScriptCode, sMacroLocation, static_cast< void* >( &aArguments ), pSyncRet );
+                }
+                else
+                {   // we have a script in the old format
+                    xObjSh->CallScript( sScriptType, sScriptCode, xThis, static_cast< void* >( &aArguments ), pSyncRet );
+                }
+
             }
             else
-            {   // we have a script in the old format
-                xObjSh->CallScript( sScriptType, sScriptCode, xThis, static_cast< void* >( &aArguments ), pSyncRet );
+            {
+
+                Any aRet;
+
+                ::com::sun::star::uno::Sequence< sal_Int16 > aOutArgsIndex;
+                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aOutArgs;
+                xObjSh->CallXScript( sScriptCode,  aArguments, aRet,
+                                    aOutArgsIndex, aOutArgs);
             }
+
         }
 
     }
@@ -910,6 +923,7 @@ void FmXUndoEnvironment::firing_Impl( const ScriptEvent& evt, Any *pSyncRet )
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         xObjSh = NULL;
     }
+    OSL_TRACE( "leaving FmXUndoEnvironment::firing_Impl");
 }
 
 void SAL_CALL FmXUndoEnvironment::firing(const ScriptEvent& evt) throw(::com::sun::star::uno::RuntimeException)
