@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sz $ $Date: 2001-04-12 06:16:12 $
+ *  last change: $Author: sz $ $Date: 2001-05-03 08:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,20 +67,27 @@
 
 #define TST_BOOM(c, m)  OSL_ENSURE(c, m)
 
-
+// <namespace_rtl>
 namespace rtl {
-class tRes {
 
+// <class_TestResult>
+class TestResult {
+
+    // <private_members>
     sal_Char* m_name;
     sal_Char* m_result;
     sal_Bool m_state;
     sal_Bool m_boom;
+    // </private_members>
 
-    tRes();
-    tRes( const tRes& oRes );
+    // <private_ctors>
+    TestResult();
+    TestResult( const tRes& oRes );
+    // </private_ctors>
 
-    // private string copy method
-    sal_Char* cpy( sal_Char** dest, const sal_Char* src ) {
+    // <private_methods>
+    // <method_cpy>
+    sal_Char* cpy(sal_Char** dest, const sal_Char* src ) {
 
         *dest = new sal_Char[ ln(src)+1 ];
         // set pointer
@@ -92,8 +99,9 @@ class tRes {
 
         return ( *dest );
 
-    }
-    // private string cat method
+    } // </method_cpy>
+
+    // <method_cat>
     sal_Char* cat( const sal_Char* str1, const sal_Char* str2 ) {
 
         // allocate memory for destination string
@@ -111,9 +119,9 @@ class tRes {
 
         return ( dest );
 
-    }
+    } // </method_cat>
 
-    // private strlen method
+    // <method_ln>
     sal_uInt32 ln( const sal_Char* str ) {
 
         sal_uInt32 len = 0;
@@ -124,31 +132,32 @@ class tRes {
         }
 
         return(len);
-    }
+    } // </method_ln>
+    // </private_methods>
 
 public:
 
-    //> c'tor
-    tRes( const sal_Char* meth, sal_Bool boom = sal_False )
+    // <public_ctors>
+    TestResult( const sal_Char* meth, sal_Bool boom = sal_False )
             : m_name(0)
             , m_result(0)
             , m_state( sal_False )
             , m_boom( boom ) {
 
-
         cpy( &m_name, meth );
-    } ///< c'tor
+    } // </public_ctors>
 
 
-    //> d'tor
-    ~tRes() {
+    // <dtor>
+    ~TestResult() {
         if( m_name )
             delete( m_name );
         if( m_result )
             delete( m_result );
-    } ///< d'tor
+    } // </dtor>
 
-    //> state
+    // <public_methods>
+    // <method_state>
     inline void state( sal_Bool state, sal_Char* msg = 0 ) {
         m_state = state;
         if( ! state && m_boom ) {
@@ -157,14 +166,14 @@ public:
             }
             TST_BOOM( m_state, msg );
         }
-    } ///< state
+    } // </method_state>
 
-    //> getState
+    // <method_getState>
     inline sal_Bool getState() {
         return m_state;
-    } ///< getState
+    } // </method_getState>
 
-    //> end
+    // <method_end>
     inline void end( sal_Char* msg = 0 ) {
 
         sal_Char* okStr = "#OK#";
@@ -179,21 +188,23 @@ public:
         else
             cpy( &m_result, cat( msg, fdStr ) );
 
-    } ///< end
+    } // </method_end>
 
-    //> getName
+    // <method_getName>
     sal_Char* getName() {
         return m_name;
-    } ///< getName
+    } // </method_getName>
 
-    //> getResult
+    // <method_getResult>
     sal_Char* getResult() {
         return m_result;
-    } ///< getResult
+    } // </method_getResult>
 
-};
-}
+    // </public_methods>
 
+}; // </class_TestResult>
+
+} // </namespace_rtl>
 #endif
 
 
