@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:05:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,7 +1487,8 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
             XML_TEXT_TYPE_TEXTBOX == eType ||
              XML_TEXT_TYPE_SECTION == eType ||
             XML_TEXT_TYPE_HEADER_FOOTER == eType ||
-            XML_TEXT_TYPE_CHANGED_REGION == eType)
+            XML_TEXT_TYPE_CHANGED_REGION == eType ||
+            XML_TEXT_TYPE_CELL == eType )
             pContext = CreateTableChildContext( rImport, nPrefix, rLocalName,
                                                 xAttrList );
         break;
