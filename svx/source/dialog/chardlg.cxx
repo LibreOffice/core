@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-27 15:08:06 $
+ *  last change: $Author: pb $ $Date: 2000-11-30 05:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_BLINK            SID_ATTR_FLASH
 #define ITEMID_BRUSH            SID_ATTR_BRUSH
-
+#define ITEMID_EMPHASISMARK     SID_ATTR_CHAR_EMPHASISMARK
 
 #include "xtable.hxx"       // XColorTable
 #include "chardlg.hxx"
@@ -146,6 +146,7 @@
 #include "htmlmode.hxx"
 #include "charmap.hxx"
 #include "chardlg.h"
+#include "emphitem.hxx"
 
 using namespace ::com::sun::star;
 
@@ -826,8 +827,7 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
                             "LANGUAGE_SYSTEM nicht erlaubt!" );
                 if ( (LanguageType)rItem.GetValue() != LANGUAGE_DONTKNOW )
                 {
-                    USHORT nLang = SvxGetLanguagePos( SvxGetSelectableLanguages(),
-                                                      rItem.GetValue() );
+                    USHORT nLang = (USHORT)SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
                     for ( USHORT i = 0; i < aLanguageBox.GetEntryCount(); ++i )
                     {
                         if ( (USHORT)(ULONG)aLanguageBox.GetEntryData(i) == nLang )
@@ -1411,9 +1411,9 @@ void SvxCharStdPage::SetHandler_Impl()
         LINK( this, SvxCharStdPage, ColorBoxSelectHdl_Impl ) );
 
     // initialisieren Sprachen
-    const USHORT nLanguageCount = SvxGetSelectableLanguages().getLength();
+    const sal_Int32 nLanguageCount = SvxGetSelectableLanguages().getLength();
     const util::Language *pLang = SvxGetSelectableLanguages().getConstArray();
-    for ( USHORT i = 0; i < nLanguageCount; ++i )
+    for ( sal_Int32 i = 0; i < nLanguageCount; ++i )
     {
         LanguageType eType = pLang[i];
         USHORT nPos;
@@ -3076,6 +3076,11 @@ void SvxCharNamePage::Initialize()
     m_aSeparateLine.SetStyle( m_aSeparateLine.GetStyle() | WB_VERT );
     m_aColorLB.SetSelectHdl( LINK( this, SvxCharNamePage, ColorBoxSelectHdl_Impl ) );
 
+    Link aLink = LINK( this, SvxCharNamePage, FontModifyHdl_Impl );
+    m_aWestFontNameLB.SetModifyHdl( aLink );
+    m_aWestFontStyleLB.SetModifyHdl( aLink );
+    m_aWestFontSizeLB.SetModifyHdl( aLink );
+
     m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
     m_pImpl->m_aUpdateTimer.Start();
 }
@@ -3105,6 +3110,47 @@ const FontList* SvxCharNamePage::GetFontList() const
 
 void SvxCharNamePage::UpdatePreview_Impl()
 {
+    SvxFont& rFont = m_aPreviewWin.GetFont();
+    Size aSize = rFont.GetSize();
+    aSize.Width() = 0;
+    // Font
+    const FontList* pFontList = GetFontList();
+    FontInfo aFontInfo( pFontList->Get( m_aWestFontNameLB.GetText(), m_aWestFontStyleLB.GetText() ) );
+    // Size
+    if ( m_aWestFontSizeLB.IsRelative() )
+    {
+        DBG_ASSERT( GetItemSet().GetParent(), "No parent set" );
+        USHORT nWhich = GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
+        const SvxFontHeightItem& rOldItem = (SvxFontHeightItem&)GetItemSet().GetParent()->Get( nWhich );
+
+        // alter Wert, skaliert
+        long nHeight;
+        if ( m_aWestFontSizeLB.IsPtRelative() )
+            nHeight = rOldItem.GetHeight() + PointToTwips( m_aWestFontSizeLB.GetValue() / 10 );
+        else
+            nHeight = rOldItem.GetHeight() * m_aWestFontSizeLB.GetValue() / 100;
+
+        // Umrechnung in twips fuer das Beispiel-Window
+        aSize.Height() =
+            ItemToControl( nHeight, GetItemSet().GetPool()->GetMetric( nWhich ), SFX_FUNIT_TWIP );
+    }
+    else if ( m_aWestFontSizeLB.GetText().Len() )
+        aSize.Height() = PointToTwips( m_aWestFontSizeLB.GetValue() / 10 );
+    else
+        aSize.Height() = 200;   // default 10pt
+    aFontInfo.SetSize( aSize );
+
+    rFont.SetFamily( aFontInfo.GetFamily() );
+    rFont.SetName( aFontInfo.GetName() );
+    rFont.SetStyleName( aFontInfo.GetStyleName() );
+    rFont.SetPitch( aFontInfo.GetPitch() );
+    rFont.SetCharSet( aFontInfo.GetCharSet() );
+    rFont.SetWeight( aFontInfo.GetWeight() );
+    rFont.SetItalic( aFontInfo.GetItalic() );
+    rFont.SetSize( aFontInfo.GetSize() );
+
+    m_aPreviewWin.Invalidate();
+    m_aFontTypeFT.SetText( pFontList->GetFontMapText( aFontInfo ) );
 }
 
 // -----------------------------------------------------------------------
@@ -3280,10 +3326,10 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
             DBG_ASSERT( (LanguageType)rItem.GetValue() != LANGUAGE_SYSTEM, "LANGUAGE_SYSTEM not allowed" );
             if ( (LanguageType)rItem.GetValue() != LANGUAGE_DONTKNOW )
             {
-                USHORT nLang = SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
+                sal_Int32 nLang = SvxGetLanguagePos( SvxGetSelectableLanguages(), rItem.GetValue() );
                 for ( USHORT i = 0; i < pLangBox->GetEntryCount(); ++i )
                 {
-                    if ( (USHORT)(ULONG)pLangBox->GetEntryData(i) == nLang )
+                    if ( (sal_Int32)pLangBox->GetEntryData(i) == nLang )
                     {
                         pLangBox->SelectEntryPos(i);
                         break;
@@ -3293,6 +3339,10 @@ void SvxCharNamePage::ResetWestOrEast_Impl( const SfxItemSet& rSet, BOOL bWest )
             break;
         }
     }
+
+    if ( bWest )
+        m_aFontTypeFT.SetText( pFontList->GetFontMapText(
+            pFontList->Get( pNameBox->GetText(), pStyleBox->GetText() ) ) );
 }
 
 // -----------------------------------------------------------------------
@@ -3838,10 +3888,12 @@ void SvxCharEffectsPage::Initialize()
     m_aUnderlineLB.SetSelectHdl( aLink );
     m_aStrikeoutLB.SetSelectHdl( aLink );
     m_aEmphasisLB.SetSelectHdl( aLink );
+    m_aPositionLB.SetSelectHdl( aLink );
 
     m_aUnderlineLB.SelectEntryPos( 0 );
     m_aStrikeoutLB.SelectEntryPos( 0 );
     m_aEmphasisLB.SelectEntryPos( 0 );
+    m_aPositionLB.SelectEntryPos( 0 );
     SelectHdl_Impl( NULL );
     SelectHdl_Impl( &m_aEmphasisLB );
 
@@ -3850,52 +3902,37 @@ void SvxCharEffectsPage::Initialize()
 
 // -----------------------------------------------------------------------
 
-void SvxCharEffectsPage::ResetColorBox_Impl( const SfxItemSet& rSet )
+void SvxCharEffectsPage::UpdatePreview_Impl()
 {
-    USHORT nWhich = GetWhich( SID_ATTR_CHAR_COLOR2 );
-    SfxItemState eState = rSet.GetItemState( nWhich );
+    SvxFont& rFont = m_aPreviewWin.GetFont();
+    USHORT nPos = m_aUnderlineLB.GetSelectEntryPos();
+    FontUnderline eUnderline = (FontUnderline)(ULONG)m_aUnderlineLB.GetEntryData( nPos );
+    nPos = m_aStrikeoutLB.GetSelectEntryPos();
+    FontStrikeout eStrikeout = (FontStrikeout)(ULONG)m_aStrikeoutLB.GetEntryData( nPos );
+    rFont.SetUnderline( eUnderline );
+    rFont.SetStrikeout( eStrikeout );
+    nPos = m_aPositionLB.GetSelectEntryPos();
+    BOOL bUnder = ( CHRDLG_POSITION_UNDER == (ULONG)m_aPositionLB.GetEntryData( nPos ) );
+    FontEmphasisMark eMark = (FontEmphasisMark)m_aEmphasisLB.GetSelectEntryPos();
+    eMark |= bUnder ? EMPHASISMARK_POS_BELOW : EMPHASISMARK_POS_ABOVE;
+    rFont.SetEmphasisMark( eMark );
+    m_aPreviewWin.Invalidate();
+}
 
-    switch ( eState )
+// -----------------------------------------------------------------------
+
+void SvxCharEffectsPage::SetCaseMap_Impl( SvxCaseMap eCaseMap )
+{
+    if ( SVX_CASEMAP_END > eCaseMap )
+        m_aEffects2LB.SelectEntryPos( eCaseMap );
+    else
     {
-        case SFX_ITEM_UNKNOWN:
-            m_aColorFT.Hide();
-            m_aColorLB.Hide();
-            break;
-
-        case SFX_ITEM_DISABLED:
-        case SFX_ITEM_READONLY:
-            m_aColorFT.Disable();
-            m_aColorLB.Disable();
-            break;
-
-        case SFX_ITEM_DONTCARE:
-            m_aColorLB.SetNoSelection();
-            break;
-
-        case SFX_ITEM_DEFAULT:
-        case SFX_ITEM_SET:
-        {
-            const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
-            Color aColor = rItem.GetValue();
-            USHORT nSelPos = m_aColorLB.GetEntryPos( aColor );
-            if ( nSelPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color(COL_TRANSPARENT) )
-                nSelPos = m_aColorLB.GetEntryPos( m_aTransparentColorName );
-
-            if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-                m_aColorLB.SelectEntryPos( nSelPos );
-            else
-            {
-                nSelPos = m_aColorLB.GetEntryPos( aColor );
-                if ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
-                    m_aColorLB.SelectEntryPos( nSelPos );
-                else
-                    m_aColorLB.SelectEntryPos(
-                        m_aColorLB.InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
-            }
-
-            break;
-        }
+        m_aEffects2LB.SetNoSelection();
+        eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     }
+
+    m_aPreviewWin.GetFont().SetCaseMap( eCaseMap );
+    m_aPreviewWin.Invalidate();
 }
 
 // -----------------------------------------------------------------------
@@ -3904,7 +3941,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
 {
     if ( &m_aEmphasisLB == pBox )
         m_aPositionLB.Enable( m_aEmphasisLB.GetSelectEntryPos() > 0 );
-    else
+    else if ( &m_aPositionLB != pBox )
     {
         BOOL bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) |
                          ( m_aStrikeoutLB.GetSelectEntryPos() > 0 ) );
@@ -3912,6 +3949,7 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
         m_aIndividualWordsBtn.Enable( bEnable );
     }
 
+    UpdatePreview_Impl();
     return 0;
 }
 
@@ -3948,6 +3986,207 @@ USHORT* SvxCharEffectsPage::GetRanges()
 
 void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 {
+    SvxFont& rFont = m_aPreviewWin.GetFont();
+    BOOL bEnable = FALSE;
+
+    // Underline
+    USHORT nWhich = GetWhich( SID_ATTR_CHAR_UNDERLINE );
+    rFont.SetUnderline( UNDERLINE_NONE );
+    m_aUnderlineLB.SelectEntryPos( 0 );
+    SfxItemState eState = rSet.GetItemState( nWhich );
+
+    if ( eState >= SFX_ITEM_DONTCARE )
+    {
+        if ( eState == SFX_ITEM_DONTCARE )
+            m_aUnderlineLB.SetNoSelection();
+        else
+        {
+            const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
+            FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
+            rFont.SetUnderline( eUnderline );
+
+            if ( eUnderline != UNDERLINE_NONE )
+            {
+                for ( USHORT i = 0; i < m_aUnderlineLB.GetEntryCount(); ++i )
+                {
+                    if ( (FontUnderline)(ULONG)m_aUnderlineLB.GetEntryData(i) == eUnderline )
+                    {
+                        m_aUnderlineLB.SelectEntryPos(i);
+                        bEnable |= TRUE;
+                        break;
+                    }
+                }
+
+                Color aColor = rItem.GetColor();
+                USHORT nPos = m_aColorLB.GetEntryPos( aColor );
+                if ( nPos == LISTBOX_ENTRY_NOTFOUND && aColor == Color( COL_TRANSPARENT ) )
+                    nPos = m_aColorLB.GetEntryPos( m_aTransparentColorName );
+
+                if ( LISTBOX_ENTRY_NOTFOUND != nPos )
+                    m_aColorLB.SelectEntryPos( nPos );
+                else
+                {
+                    nPos = m_aColorLB.GetEntryPos( aColor );
+                    if ( LISTBOX_ENTRY_NOTFOUND != nPos )
+                        m_aColorLB.SelectEntryPos( nPos );
+                    else
+                        m_aColorLB.SelectEntryPos(
+                            m_aColorLB.InsertEntry( aColor, String( SVX_RES( RID_SVXSTR_COLOR_USER ) ) ) );
+                }
+            }
+            else
+            {
+                m_aColorLB.SetNoSelection();
+                m_aColorLB.Disable();
+            }
+        }
+    }
+
+    //  Strikeout
+    nWhich = GetWhich( SID_ATTR_CHAR_STRIKEOUT );
+    rFont.SetStrikeout( STRIKEOUT_NONE );
+    m_aStrikeoutLB.SelectEntryPos( 0 );
+    eState = rSet.GetItemState( nWhich );
+
+    if ( eState >= SFX_ITEM_DONTCARE )
+    {
+        if ( eState == SFX_ITEM_DONTCARE )
+            m_aStrikeoutLB.SetNoSelection();
+        else
+        {
+            const SvxCrossedOutItem& rItem = (SvxCrossedOutItem&)rSet.Get( nWhich );
+            FontStrikeout eStrikeout = (FontStrikeout)rItem.GetValue();
+            rFont.SetStrikeout( eStrikeout );
+
+            if ( eStrikeout != STRIKEOUT_NONE )
+            {
+                for ( USHORT i = 0; i < m_aStrikeoutLB.GetEntryCount(); ++i )
+                {
+                    if ( (FontStrikeout)(ULONG)m_aStrikeoutLB.GetEntryData(i) == eStrikeout )
+                    {
+                        m_aStrikeoutLB.SelectEntryPos(i);
+                        bEnable |= TRUE;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // WordLineMode
+    nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
+
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet.Get( nWhich );
+        rFont.SetWordLineMode( rItem.GetValue() );
+        m_aIndividualWordsBtn.Check( rItem.GetValue() );
+        m_aIndividualWordsBtn.Enable( bEnable );
+    }
+
+    // Emphasis
+    nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
+
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
+        FontEmphasisMark eMark = rItem.GetEmphasisMark();
+        rFont.SetEmphasisMark( eMark );
+        m_aEmphasisLB.SelectEntryPos( (USHORT)( eMark & EMPHASISMARK_STYLE ) );
+    }
+
+    // Effects
+    nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
+    SvxCaseMap eCaseMap = SVX_CASEMAP_END;
+
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
+        eCaseMap = (SvxCaseMap)rItem.GetValue();
+    }
+    SetCaseMap_Impl( eCaseMap );
+
+    // Outline
+    nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
+    eState = rSet.GetItemState( nWhich );
+
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            m_aOutlineBtn.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aOutlineBtn.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aOutlineBtn.SetState( STATE_DONTKNOW );
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxContourItem& rItem = (SvxContourItem&)rSet.Get( nWhich );
+            m_aOutlineBtn.SetState( (TriState)rItem.GetValue() );
+            m_aOutlineBtn.EnableTriState( FALSE );
+            break;
+        }
+    }
+
+    // Shadow
+    nWhich = GetWhich( SID_ATTR_CHAR_SHADOWED );
+    eState = rSet.GetItemState( nWhich );
+
+    switch ( eState )
+    {
+        case SFX_ITEM_UNKNOWN:
+            m_aShadowBtn.Hide();
+            break;
+
+        case SFX_ITEM_DISABLED:
+        case SFX_ITEM_READONLY:
+            m_aShadowBtn.Disable();
+            break;
+
+        case SFX_ITEM_DONTCARE:
+            m_aShadowBtn.SetState( STATE_DONTKNOW );
+            break;
+
+        case SFX_ITEM_DEFAULT:
+        case SFX_ITEM_SET:
+        {
+            const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
+            m_aShadowBtn.SetState( (TriState)rItem.GetValue() );
+            m_aShadowBtn.EnableTriState( FALSE );
+            break;
+        }
+    }
+
+    // Blinking
+    nWhich = GetWhich( SID_ATTR_FLASH );
+
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get( nWhich );
+        m_aBlinkingBtn.Check( rItem.GetValue() );
+    }
+
+    // preview update
+    m_aPreviewWin.Invalidate();
+
+    // save this settings
+    m_aUnderlineLB.SaveValue();
+    m_aColorLB.SaveValue();
+    m_aStrikeoutLB.SaveValue();
+    m_aIndividualWordsBtn.SaveValue();
+    m_aEmphasisLB.SaveValue();
+    m_aPositionLB.SaveValue();
+    m_aEffects2LB.SaveValue();
+    m_aOutlineBtn.SaveValue();
+    m_aShadowBtn.SaveValue();
+    m_aBlinkingBtn.SaveValue();
 }
 
 // -----------------------------------------------------------------------
