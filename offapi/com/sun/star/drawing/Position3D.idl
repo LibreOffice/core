@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Position3D.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: struct com::sun::star::drawing::Position3D
 /** specifies a 3-dimensional point.
  */
-struct Position3D
+published struct Position3D
 {
     // DocMerge from xml: field com::sun::star::drawing::Position3D::PositionX
     /** the position on the X-Axis in the 3D room in 100th of millimeters
