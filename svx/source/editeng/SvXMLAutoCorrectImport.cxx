@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:16:53 $
+ *  last change: $Author: mtg $ $Date: 2001-07-05 13:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,13 @@
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::xmloff::token;
 using namespace ::rtl;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
@@ -78,8 +82,8 @@ sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutocorr_List, SvxAutoCorrect &rNewAutoCorrect, SvStorageRef &rNewStorage)
 : pAutocorr_List (pNewAutocorr_List), rAutoCorrect ( rNewAutoCorrect ), rStorage ( rNewStorage )
 {
-    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
-                                     sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
+    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, OUString ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) ),
+                                     GetXMLToken ( XML_N_BLOCK_LIST), XML_NAMESPACE_BLOCKLIST );
 }
 
 SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport ( void )
@@ -93,8 +97,8 @@ SvXMLImportContext *SvXMLAutoCorrectImport::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_BLOCKLIST==nPrefix &&
-        rLocalName.compareToAscii( sXML_block_list ) == 0 )
+    if( XML_NAMESPACE_BLOCKLIST == nPrefix &&
+        IsXMLToken ( rLocalName, XML_BLOCK_LIST ) )
         pContext = new SvXMLWordListContext( *this, nPrefix, rLocalName, xAttrList );
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
@@ -120,7 +124,7 @@ SvXMLImportContext *SvXMLWordListContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if (nPrefix == XML_NAMESPACE_BLOCKLIST &&
-        rLocalName.compareToAscii( sXML_block ) == 0)
+        IsXMLToken ( rLocalName, XML_BLOCK ) )
         pContext = new SvXMLWordContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     else
         pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
@@ -150,11 +154,11 @@ SvXMLWordContext::SvXMLWordContext(
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
         if (XML_NAMESPACE_BLOCKLIST == nPrefix)
         {
-            if (aLocalName.compareToAscii( sXML_abbreviated_name ) == 0)
+            if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
                 sWrong = rAttrValue;
             }
-            else if (aLocalName.compareToAscii( sXML_name ) == 0)
+            else if ( IsXMLToken ( aLocalName, XML_NAME ) )
             {
                 sRight = rAttrValue;
             }
@@ -187,8 +191,8 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 SvXMLExceptionListImport::SvXMLExceptionListImport ( SvStringsISortDtor & rNewList )
 : rList (rNewList)
 {
-    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
-                                     sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
+    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, OUString ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) ) ,
+                                     GetXMLToken ( XML_N_BLOCK_LIST ), XML_NAMESPACE_BLOCKLIST );
 }
 
 SvXMLExceptionListImport::~SvXMLExceptionListImport ( void )
@@ -203,7 +207,7 @@ SvXMLImportContext *SvXMLExceptionListImport::CreateContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_BLOCKLIST==nPrefix &&
-        rLocalName.compareToAscii( sXML_block_list ) == 0 )
+        IsXMLToken ( rLocalName, XML_BLOCK_LIST ) )
         pContext = new SvXMLExceptionListContext( *this, nPrefix, rLocalName, xAttrList );
     else
         pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
@@ -229,7 +233,7 @@ SvXMLImportContext *SvXMLExceptionListContext::CreateChildContext(
     SvXMLImportContext *pContext = 0;
 
     if (nPrefix == XML_NAMESPACE_BLOCKLIST &&
-        rLocalName.compareToAscii( sXML_block ) == 0)
+        IsXMLToken ( rLocalName, XML_BLOCK ) )
         pContext = new SvXMLExceptionContext (rLocalRef, nPrefix, rLocalName, xAttrList);
     else
         pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
@@ -259,7 +263,7 @@ SvXMLExceptionContext::SvXMLExceptionContext(
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
         if (XML_NAMESPACE_BLOCKLIST == nPrefix)
         {
-            if (aLocalName.compareToAscii( sXML_abbreviated_name ) == 0)
+            if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
                 sWord = rAttrValue;
             }
