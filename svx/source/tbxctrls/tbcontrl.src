@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 13:48:35 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ String RID_SVXSTR_FILLPATTERN
     Text [ spanish ] = "Modelo" ;
     Text [ english_us ] = "Pattern" ;
     Text[ chinese_simplified ] = "å›¾æ¡ˆ";
-    Text[ russian ] = "Óçîğ";
+    Text[ russian ] = "Îğíàìåíò";
     Text[ polish ] = "Deseñ";
     Text[ japanese ] = "ãƒ‘ã‚¿ãƒ¼ãƒ³";
     Text[ chinese_traditional ] = "åœ–æ¡ˆ";
@@ -257,7 +257,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text [ dutch ] = "Tekenachtergrond" ;
     Text [ portuguese ] = "Destacar caracteres" ;
     Text[ chinese_simplified ] = "å­—ç¬¦èƒŒæ™¯";
-    Text[ russian ] = "Ôîí òåêñòà";
+    Text[ russian ] = "Âûäåëåíèå öâåòîì";
     Text[ polish ] = "T³o znaków";
     Text[ japanese ] = "æ–‡å­—ã®èƒŒæ™¯";
     Text[ chinese_traditional ] = "å­—å…ƒèƒŒæ™¯";
@@ -267,7 +267,7 @@ String RID_SVXSTR_EXTRAS_CHARBACKGROUND
     Text[ turkish ] = "Vurgu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ressaltament";
-    Text[ finnish ] = "Korostetaan";
+    Text[ finnish ] = "Korostus";
     Text[ thai ] = "à¹„à¸®à¹„à¸¥à¸•à¹Œ";
 };
 String RID_SVXSTR_BACKGROUND
@@ -304,7 +304,7 @@ String RID_SVXSTR_AUTOMATIC
     Text[ portuguese ] = "Automático";
     Text[ russian ] = "Àâòîìàòè÷åñêè";
     Text[ greek ] = "Áõôüìáôá";
-    Text[ dutch ] = "Automatic";
+    Text[ dutch ] = "Automatisch";
     Text[ french ] = "Automatique";
     Text[ spanish ] = "Automático";
     Text[ italian ] = "Automatico";
