@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:23:35 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,11 @@
 
 struct SfxPrintMonitor_Impl: public ModelessDialog
 {
-    SfxPrintMonitor_Impl( Window *pParent );
 
+    SfxPrintMonitor_Impl( Window *pParent, SfxViewShell *rpViewShell );
+    virtual BOOL Close();
+
+    SfxViewShell*           pViewShell;
     FixedText               aDocName;
     FixedText               aPrinting;
     FixedText               aPrinter;
@@ -178,7 +181,7 @@ void SfxPrintProgress_Impl::SFX_NOTIFY( SfxBroadcaster& rBC,
 
 //------------------------------------------------------------------------
 
-SfxPrintMonitor_Impl::SfxPrintMonitor_Impl( Window* pParent ) :
+SfxPrintMonitor_Impl::SfxPrintMonitor_Impl( Window* pParent, SfxViewShell* rpViewShell ) :
 
     ModelessDialog( pParent, SfxResId( DLG_PRINTMONITOR ) ),
 
@@ -186,7 +189,8 @@ SfxPrintMonitor_Impl::SfxPrintMonitor_Impl( Window* pParent ) :
     aPrinting   ( this, ResId( FT_PRINTING ) ),
     aPrinter    ( this, ResId( FT_PRINTER ) ),
     aPrintInfo  ( this, ResId( FT_PRINTINFO ) ),
-    aCancel     ( this, ResId( PB_CANCELPRNMON ) )
+    aCancel     ( this, ResId( PB_CANCELPRNMON ) ),
+    pViewShell  ( rpViewShell )
 
 {
     FreeResource();
@@ -234,7 +238,7 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
 {
     Window* pParent =
         pTheViewShell->GetWindow()->IsReallyVisible() ? pTheViewShell->GetWindow() : NULL;
-    pMonitor = new SfxPrintMonitor_Impl( pParent );
+    pMonitor = new SfxPrintMonitor_Impl( pParent, pViewShell );
     pMonitor->aDocName.SetText(
         pViewShell->GetViewFrame()->GetObjectShell()->GetTitle( SFX_TITLE_MAXLEN_PRINTMONITOR ) );
     pMonitor->aPrinter.SetText( pViewShell->GetPrinter()->GetName() );
@@ -297,6 +301,15 @@ IMPL_LINK( SfxPrintProgress_Impl, CancelHdl, Button *, pButton )
 
     bAborted = TRUE;
     return 0;
+}
+
+BOOL SfxPrintMonitor_Impl::Close()
+{
+    BOOL bAgree = pViewShell ? pViewShell->GetObjectShell()->Stamp_GetPrintCancelState() : TRUE;
+    if (!bAgree)
+        return FALSE;
+    else
+        return ModelessDialog::Close();
 }
 
 //--------------------------------------------------------------------
