@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:00:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {
     BOOL bReturn = FALSE;
 
-    if ( HasMarkedObj() )
+    if ( AreObjectsMarked() )
     {
         ScModule* pScMod = SC_MOD();
 
@@ -193,7 +193,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         aDragStartDiff = rStartPos - aMarkedRect.TopLeft();
 
         BOOL bAnyOle, bOneOle;
-        const SdrMarkList& rMarkList = GetMarkList();
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
         lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
         ScDocShellRef aDragShellRef;
@@ -236,7 +236,7 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 void ScDrawView::DoCopy()
 {
     BOOL bAnyOle, bOneOle;
-    const SdrMarkList& rMarkList = GetMarkList();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
     // update ScGlobal::pDrawClipDocShellRef
@@ -298,7 +298,7 @@ void ScDrawView::SetMarkedOriginalSize()
 {
     SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*GetModel());
 
-    const SdrMarkList& rMarkList = GetMarkList();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     long nDone = 0;
     ULONG nCount = rMarkList.GetMarkCount();
     for (ULONG i=0; i<nCount; i++)
