@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:06:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
 #endif
@@ -104,59 +107,70 @@
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
-
+#include <jvmaccess/virtualmachine.hxx>
+#ifndef DBAUI_ADABASPAGE_HRC
+#include "AdabasPage.hrc"
+#endif
+#ifndef _DBAUI_ADASTAT_HXX_
+#include "AdabasStat.hxx"
+#endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include <connectivity/CommonTools.hxx>
+#endif
+#ifndef DBAUI_DRIVERSETTINGS_HXX
+#include "DriverSettings.hxx"
+#endif
+#ifndef _DBAUI_DBADMIN_HXX_
+#include "dbadmin.hxx"
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
 
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::dbtools;
 
-    #define FILL_STRING_ITEM(editcontrol, itemset, itemid, modifiedflag)    \
-        if (editcontrol.GetText() != editcontrol.GetSavedValue())           \
-        {                                                                   \
-            itemset.Put(SfxStringItem(itemid, editcontrol.GetText()));      \
-            modifiedflag = sal_True;                                        \
-        }
-
     //========================================================================
     //= OCommonBehaviourTabPage
     //========================================================================
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs,
-        USHORT nControlFlags)
+        sal_uInt32 nControlFlags,bool _bFreeResource)
 
         :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
-        ,m_pUserNameLabel(NULL)
-        ,m_pUserName(NULL)
-        ,m_pPasswordRequired(NULL)
         ,m_pOptionsLabel(NULL)
         ,m_pOptions(NULL)
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
         ,m_pIsSQL92Check(NULL)
+        ,m_pAutoFixedLine(NULL)
         ,m_pAutoIncrementLabel(NULL)
         ,m_pAutoIncrement(NULL)
         ,m_pAutoRetrievingEnabled(NULL)
         ,m_pAutoRetrievingLabel(NULL)
         ,m_pAutoRetrieving(NULL)
+        ,m_pAppendTableAlias(NULL)
+        ,m_pIgnoreDriverPrivileges(NULL)
+        ,m_pDSFixedLine(NULL)
+        ,m_pParameterSubstitution(NULL)
+        ,m_pSuppressVersionColumn(NULL)
+        ,m_pEnableOuterJoin(NULL)
+        ,m_pCatalog(NULL)
+        ,m_pSchema(NULL)
+        ,m_pIndexAppendix(NULL)
+        ,m_pDosLineEnds(NULL)
+        ,m_pDataConvertFixedLine(NULL)
+        ,m_pBooleanComprisonModeLabel(NULL)
+        ,m_pBooleanComprisonMode(NULL)
         ,m_nControlFlags(nControlFlags)
     {
-        if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
-        {
-            m_pUserNameLabel = new FixedText(this, ResId(FT_USERNAME));
-            m_pUserName = new Edit(this, ResId(ET_USERNAME));
-            m_pUserName->SetModifyHdl(getControlModifiedLink());
-
-            m_pPasswordRequired = new CheckBox(this, ResId(CB_PASSWORD_REQUIRED));
-            m_pPasswordRequired->SetClickHdl(getControlModifiedLink());
-        }
-
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
         {
             m_pOptionsLabel = new FixedText(this, ResId(FT_OPTIONS));
@@ -166,6 +180,7 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
+            m_pDataConvertFixedLine = new FixedLine(this, ResId(FL_DATACONVERT));
             m_pCharsetLabel = new FixedText(this, ResId(FT_CHARSET));
             m_pCharset = new ListBox(this, ResId(LB_CHARSET));
             m_pCharset->SetSelectHdl(getControlModifiedLink());
@@ -181,6 +196,7 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
         {
+            m_pAutoFixedLine = new FixedLine(this, ResId(FL_SEPARATORAUTO));
             m_pAutoRetrievingEnabled = new CheckBox(this, ResId(CB_RETRIEVE_AUTO));
             m_pAutoRetrievingEnabled->SetClickHdl(LINK(this, OCommonBehaviourTabPage,OnCheckBoxClick));
 
@@ -195,26 +211,133 @@ namespace dbaui
 
         if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
         {
+            createBehaviourFixedLine();
             m_pIsSQL92Check = new CheckBox(this, ResId(CB_SQL92CHECK));
             m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
         }
+
+        if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
+        {
+            createBehaviourFixedLine();
+            m_pAppendTableAlias = new CheckBox(this, ResId(CB_APPENDTABLEALIAS));
+            m_pAppendTableAlias->SetClickHdl(getControlModifiedLink());
+        }
+        if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
+        {
+            createBehaviourFixedLine();
+            m_pParameterSubstitution = new CheckBox(this, ResId(CB_PARAMETERNAMESUBST));
+            m_pParameterSubstitution->SetClickHdl(getControlModifiedLink());
+        }
+        if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
+        {
+            createBehaviourFixedLine();
+            m_pIgnoreDriverPrivileges = new CheckBox(this, ResId(CB_IGNOREDRIVER_PRIV));
+            m_pIgnoreDriverPrivileges->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
+        {
+            createBehaviourFixedLine();
+            m_pSuppressVersionColumn = new CheckBox(this, ResId(CB_SUPPRESVERSIONCL));
+            m_pSuppressVersionColumn->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
+        {
+            createBehaviourFixedLine();
+            m_pEnableOuterJoin = new CheckBox(this, ResId(CB_ENABLEOUTERJOIN));
+            m_pEnableOuterJoin->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
+        {
+            createBehaviourFixedLine();
+            m_pCatalog = new CheckBox(this, ResId(CB_CATALOG));
+            m_pCatalog->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
+        {
+            createBehaviourFixedLine();
+            m_pSchema = new CheckBox(this, ResId(CB_SCHEMA));
+            m_pSchema->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
+        {
+            createBehaviourFixedLine();
+            m_pIndexAppendix = new CheckBox(this, ResId(CB_IGNOREINDEXAPPENDIX));
+            m_pIndexAppendix->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
+        {
+            createBehaviourFixedLine();
+            m_pDosLineEnds = new CheckBox(this, ResId(CB_DOSLINEENDS));
+            m_pDosLineEnds->SetClickHdl(getControlModifiedLink());
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
+        {
+            m_pBooleanComprisonModeLabel = new FixedText(this, ResId(FT_BOOLEANCOMPARISON));
+            m_pBooleanComprisonMode = new ListBox(this, ResId(LB_BOOLEANCOMPARISON));
+            m_pBooleanComprisonMode->SetDropDownLineCount(4);
+            m_pBooleanComprisonMode->SetSelectHdl(getControlModifiedLink());
+        }
+
+        Window* pWindows[] = {  m_pAutoRetrievingEnabled, m_pAutoFixedLine,
+                                m_pAutoIncrementLabel, m_pAutoIncrement,
+                                m_pAutoRetrievingLabel, m_pAutoRetrieving,
+                                m_pIsSQL92Check,m_pAppendTableAlias,
+                                m_pIgnoreDriverPrivileges,m_pParameterSubstitution ,m_pSuppressVersionColumn
+                                ,m_pEnableOuterJoin,m_pBooleanComprisonModeLabel,m_pBooleanComprisonMode
+                                ,m_pCatalog,m_pSchema,m_pIndexAppendix,m_pDosLineEnds};
+
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=1; i < nCount; ++i)
+        {
+            if ( pWindows[i] )
+            {
+                Window* pPrev = pWindows[i-1];
+                for (sal_Int32 j = i-1; pPrev == NULL && j >= 0 ; --j)
+                {
+                    pPrev = pWindows[j];
+                }
+                if ( pPrev )
+                    pWindows[i]->SetZOrder(pPrev, WINDOW_ZORDER_BEHIND);
+            }
+        }
+
+        if ( _bFreeResource )
+            FreeResource();
     }
 
     // -----------------------------------------------------------------------
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
-        DELETEZ(m_pUserNameLabel);
-        DELETEZ(m_pUserName);
-        DELETEZ(m_pPasswordRequired);
-
         DELETEZ(m_pOptionsLabel);
         DELETEZ(m_pOptions);
 
+        DELETEZ(m_pDataConvertFixedLine);
         DELETEZ(m_pCharsetLabel);
         DELETEZ(m_pCharset);
 
+        DELETEZ(m_pDSFixedLine);
         DELETEZ(m_pIsSQL92Check);
+        DELETEZ(m_pAppendTableAlias);
+        DELETEZ(m_pParameterSubstitution);
+        DELETEZ(m_pIgnoreDriverPrivileges);
+        DELETEZ(m_pSuppressVersionColumn);
+        DELETEZ(m_pEnableOuterJoin);
+        DELETEZ(m_pCatalog);
+        DELETEZ(m_pSchema);
+        DELETEZ(m_pIndexAppendix);
+        DELETEZ(m_pDosLineEnds);
 
+        DELETEZ(m_pBooleanComprisonModeLabel);
+        DELETEZ(m_pBooleanComprisonMode);
+
+        DELETEZ(m_pAutoFixedLine);
         DELETEZ(m_pAutoIncrementLabel);
         DELETEZ(m_pAutoIncrement);
 
@@ -238,6 +361,12 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    void OCommonBehaviourTabPage::createBehaviourFixedLine()
+    {
+        if ( !m_pDSFixedLine )
+            m_pDSFixedLine = new FixedLine(this, ResId(FL_DATAHANDLING));
+    }
+    // -----------------------------------------------------------------------
     namespace
     {
         void adjustCharSets( const SfxItemSet& _rSet, const OCharsetDisplay& _rCharSets, ListBox* _pCharsets )
@@ -252,7 +381,7 @@ namespace dbaui
                 eDSType = pTypeCollection->getType(pConnectUrl->GetValue());
 
             // the only types we're interested in is TEXT and DBASE
-            if ( ( DST_DBASE == eDSType ) || ( DST_TEXT == eDSType ) )
+            if ( ( DST_DBASE == eDSType ) || ( DST_FLAT == eDSType ) )
             {
                 // for these types, we need to exclude all encodings which do not have a fixed character
                 // length (such as UTF-8)
@@ -290,6 +419,80 @@ namespace dbaui
             }
         }
     }
+    // -----------------------------------------------------------------------
+    void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
+        {
+            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pOptionsLabel));
+        }
+
+        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
+        {
+            _rControlList.push_back(new ODisableWrapper<FixedLine>(m_pAutoFixedLine));
+            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pAutoIncrementLabel));
+            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pAutoRetrievingLabel));
+        }
+
+        if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
+        {
+            _rControlList.push_back(new ODisableWrapper<FixedLine>(m_pDataConvertFixedLine));
+            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
+        }
+
+        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
+        {
+            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pBooleanComprisonModeLabel));
+        }
+    }
+    // -----------------------------------------------------------------------
+    void OCommonBehaviourTabPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
+            _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pOptions));
+
+        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
+        {
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pAutoRetrievingEnabled));
+            _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pAutoIncrement));
+            _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pAutoRetrieving));
+        }
+        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pIsSQL92Check));
+
+        if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pAppendTableAlias));
+
+        if ((m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV)
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pIgnoreDriverPrivileges));
+
+        if ((m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST)
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pParameterSubstitution));
+
+        if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pSuppressVersionColumn));
+
+        if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pEnableOuterJoin));
+
+        if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pCatalog));
+
+        if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pSchema));
+
+        if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pIndexAppendix));
+
+        if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
+            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pDosLineEnds));
+
+        if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
+            _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharset));
+
+        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
+            _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pBooleanComprisonMode));
+    }
 
     // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
@@ -299,48 +502,37 @@ namespace dbaui
         getFlags(_rSet, bValid, bReadonly);
 
         // collect the items
-        SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pPwdItem, SfxStringItem, DSID_PASSWORD, sal_True);
         SFX_ITEMSET_GET(_rSet, pOptionsItem, SfxStringItem, DSID_ADDITIONALOPTIONS, sal_True);
         SFX_ITEMSET_GET(_rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, sal_True);
         SFX_ITEMSET_GET(_rSet, pAllowEmptyPwd, SfxBoolItem, DSID_PASSWORDREQUIRED, sal_True);
         SFX_ITEMSET_GET(_rSet, pSQL92Check, SfxBoolItem, DSID_SQL92CHECK, sal_True);
+        SFX_ITEMSET_GET(_rSet, pAppendTableAlias, SfxBoolItem, DSID_APPEND_TABLE_ALIAS, sal_True);
         SFX_ITEMSET_GET(_rSet, pAutoIncrementItem, SfxStringItem, DSID_AUTOINCREMENTVALUE, sal_True);
         SFX_ITEMSET_GET(_rSet, pAutoRetrieveValueItem, SfxStringItem, DSID_AUTORETRIEVEVALUE, sal_True);
         SFX_ITEMSET_GET(_rSet, pAutoRetrieveEnabledItem, SfxBoolItem, DSID_AUTORETRIEVEENABLED, sal_True);
+        SFX_ITEMSET_GET(_rSet, pParameterSubstitution, SfxBoolItem, DSID_PARAMETERNAMESUBST, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSuppressVersionColumn, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
+        SFX_ITEMSET_GET(_rSet, pIgnoreDriverPrivileges, SfxBoolItem, DSID_IGNOREDRIVER_PRIV, sal_True);
+        SFX_ITEMSET_GET(_rSet, pEnableOuterJoin, SfxBoolItem, DSID_ENABLEOUTERJOIN, sal_True);
+        SFX_ITEMSET_GET(_rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, sal_True);
+        SFX_ITEMSET_GET(_rSet, pSchema, SfxBoolItem, DSID_SCHEMA, sal_True);
+        SFX_ITEMSET_GET(_rSet, pCatalog, SfxBoolItem, DSID_CATALOG, sal_True);
+        SFX_ITEMSET_GET(_rSet, pIndexAppendix, SfxBoolItem, DSID_INDEXAPPENDIX, sal_True);
+        SFX_ITEMSET_GET(_rSet, pDosLineEnds, SfxBoolItem, DSID_DOSLINEENDS, sal_True);
 
         // forward the values to the controls
         if (bValid)
         {
-            if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
-            {
-                m_pUserName->SetText(pUidItem->GetValue());
-                m_pPasswordRequired->Check(pAllowEmptyPwd->GetValue());
-
-                m_pUserName->ClearModifyFlag();
-
-                if (_bSaveValue)
-                {
-                    m_pUserName->SaveValue();
-                    m_pPasswordRequired->SaveValue();
-                }
-            }
-
             if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
             {
                 m_pOptions->SetText(pOptionsItem->GetValue());
                 m_pOptions->ClearModifyFlag();
-                if (_bSaveValue)
-                    m_pOptions->SaveValue();
             }
 
             if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
             {
                 sal_Bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
                 m_pAutoRetrievingEnabled->Check(bEnabled);
-
-                if (_bSaveValue)
-                    m_pAutoRetrievingEnabled->SaveValue();
 
                 m_pAutoIncrement->Enable(bEnabled);
                 m_pAutoIncrementLabel->Enable(bEnabled);
@@ -351,19 +543,48 @@ namespace dbaui
                 m_pAutoIncrement->ClearModifyFlag();
                 m_pAutoRetrieving->SetText(pAutoRetrieveValueItem->GetValue());
                 m_pAutoRetrieving->ClearModifyFlag();
-                if (_bSaveValue)
-                {
-                    m_pAutoIncrement->SaveValue();
-                    m_pAutoRetrieving->SaveValue();
-                }
             }
 
             if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
             {
                 m_pIsSQL92Check->Check(pSQL92Check->GetValue());
-                if (_bSaveValue)
-                    m_pIsSQL92Check->SaveValue();
             }
+
+            if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
+            {
+                m_pAppendTableAlias->Check(pAppendTableAlias->GetValue());
+            }
+
+            if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
+            {
+                m_pParameterSubstitution->Check(pParameterSubstitution->GetValue());
+            }
+
+            if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
+            {
+                m_pIgnoreDriverPrivileges->Check(pIgnoreDriverPrivileges->GetValue());
+            }
+
+            if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
+                m_pSuppressVersionColumn->Check(pSuppressVersionColumn->GetValue());
+
+            if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
+                m_pEnableOuterJoin->Check(pEnableOuterJoin->GetValue());
+
+            if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
+                m_pCatalog->Check(pCatalog->GetValue());
+
+            if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
+                m_pSchema->Check(pSchema->GetValue());
+
+            if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
+                m_pIndexAppendix->Check(pIndexAppendix->GetValue());
+
+            if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
+                m_pDosLineEnds->Check(pDosLineEnds->GetValue());
+
+            if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
+                m_pBooleanComprisonMode->SelectEntryPos(static_cast<USHORT>(pBooleanComparison->GetValue()));
 
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
@@ -397,102 +618,62 @@ namespace dbaui
 
                     m_pCharset->SelectEntry( sDisplayName );
                 }
-
-                if (_bSaveValue)
-                    m_pCharset->SaveValue();
             }
         }
-
-        if (bReadonly)
-        {
-            if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
-            {
-                m_pUserNameLabel->Disable();
-                m_pUserName->Disable();
-                m_pPasswordRequired->Disable();
-            }
-
-            if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
-            {
-                m_pOptionsLabel->Disable();
-                m_pOptions->Disable();
-            }
-
-            if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
-            {
-                m_pAutoIncrementLabel->Disable();
-                m_pAutoIncrement->Disable();
-                m_pAutoRetrievingEnabled->Disable();
-                m_pAutoRetrievingLabel->Disable();
-                m_pAutoRetrieving->Disable();
-            }
-
-            if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
-            {
-                m_pIsSQL92Check->Disable();
-            }
-
-            if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
-            {
-                m_pCharsetLabel->Disable();
-                m_pCharset->Disable();
-            }
-        }
+        OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
-
     // -----------------------------------------------------------------------
     sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
     {
         sal_Bool bChangedSomething = sal_False;
-        if ((m_nControlFlags & CBTP_USE_UIDPWD) == CBTP_USE_UIDPWD)
-        {
-            if (m_pUserName->GetText() != m_pUserName->GetSavedValue())
-            {
-                _rSet.Put(SfxStringItem(DSID_USER, m_pUserName->GetText()));
-                _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));
-                bChangedSomething = sal_True;
-            }
-
-            if (m_pPasswordRequired->IsChecked() != m_pPasswordRequired->GetSavedValue())
-            {
-                _rSet.Put(SfxBoolItem(DSID_PASSWORDREQUIRED, m_pPasswordRequired->IsChecked()));
-                bChangedSomething = sal_True;
-            }
-        }
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
         {
-            if( m_pOptions->GetText() != m_pOptions->GetSavedValue() )
-            {
-                _rSet.Put(SfxStringItem(DSID_ADDITIONALOPTIONS, m_pOptions->GetText()));
-                bChangedSomething = sal_True;
-            }
+            fillString(_rSet,m_pOptions,DSID_ADDITIONALOPTIONS,bChangedSomething);
         }
 
         if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
         {
-            if( m_pAutoIncrement->GetText() != m_pAutoIncrement->GetSavedValue() )
-            {
-                _rSet.Put(SfxStringItem(DSID_AUTOINCREMENTVALUE, m_pAutoIncrement->GetText()));
-                bChangedSomething = sal_True;
-            }
-            if (m_pAutoRetrievingEnabled->IsChecked() != m_pAutoRetrievingEnabled->GetSavedValue())
-            {
-                _rSet.Put(SfxBoolItem(DSID_AUTORETRIEVEENABLED, m_pAutoRetrievingEnabled->IsChecked()));
-                bChangedSomething = sal_True;
-            }
-            if( m_pAutoRetrieving->GetText() != m_pAutoRetrieving->GetSavedValue() )
-            {
-                _rSet.Put(SfxStringItem(DSID_AUTORETRIEVEVALUE, m_pAutoRetrieving->GetText()));
-                bChangedSomething = sal_True;
-            }
+            fillString(_rSet,m_pAutoIncrement,DSID_AUTOINCREMENTVALUE,bChangedSomething);
+            fillBool(_rSet,m_pAutoRetrievingEnabled,DSID_AUTORETRIEVEENABLED,bChangedSomething);
+            fillString(_rSet,m_pAutoRetrieving,DSID_AUTORETRIEVEVALUE,bChangedSomething);
         }
 
         if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
+            fillBool(_rSet,m_pIsSQL92Check,DSID_SQL92CHECK,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
+            fillBool(_rSet,m_pAppendTableAlias,DSID_APPEND_TABLE_ALIAS,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
+            fillBool(_rSet,m_pParameterSubstitution,DSID_PARAMETERNAMESUBST,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
+            fillBool(_rSet,m_pIgnoreDriverPrivileges,DSID_IGNOREDRIVER_PRIV,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
+            fillBool(_rSet,m_pSuppressVersionColumn,DSID_SUPPRESSVERSIONCL,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
+            fillBool(_rSet,m_pEnableOuterJoin,DSID_ENABLEOUTERJOIN,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
+            fillBool(_rSet,m_pCatalog,DSID_CATALOG,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
+            fillBool(_rSet,m_pSchema,DSID_SCHEMA,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
+            fillBool(_rSet,m_pIndexAppendix,DSID_INDEXAPPENDIX,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
+            fillBool(_rSet,m_pDosLineEnds,DSID_DOSLINEENDS,bChangedSomething);
+
+        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
         {
-            if( m_pIsSQL92Check->IsChecked() != m_pIsSQL92Check->GetSavedValue() )
+            if ( m_pBooleanComprisonMode->GetSelectEntryPos() != m_pBooleanComprisonMode->GetSavedValue() )
             {
-                _rSet.Put(SfxBoolItem(DSID_SQL92CHECK, m_pIsSQL92Check->IsChecked()));
+                _rSet.Put(SfxInt32Item(DSID_BOOLEANCOMPARISON, m_pBooleanComprisonMode->GetSelectEntryPos()));
                 bChangedSomething = sal_True;
             }
         }
@@ -517,10 +698,10 @@ namespace dbaui
     //========================================================================
     //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_SQL92CHECK)
-        ,m_aLine1           (this, ResId(FL_SEPARATOR1))
-        ,m_aLine2           (this, ResId(FL_SEPARATOR2))
+        :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aShowDeleted     (this, ResId(CB_SHOWDELETEDROWS))
+        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
+        ,m_aFT_Message      (this, ResId( FT_SPECIAL_MESSAGE) )
         ,m_aIndexes         (this, ResId(PB_INDICIES))
     {
         m_aIndexes.SetClickHdl(LINK(this, ODbaseDetailsPage, OnButtonClicked));
@@ -528,7 +709,6 @@ namespace dbaui
 
         // correct the z-order which is mixed-up because the base class constructed some controls before we did
         m_pCharset->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEFOR);
-        m_pIsSQL92Check->SetZOrder(&m_aShowDeleted, WINDOW_ZORDER_BEHIND);
 
         FreeResource();
     }
@@ -539,34 +719,28 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* ODbaseDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_SHOWDELETEDROWS,
-                DSID_CHARSET,
-                DSID_SQL92CHECK,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-
-    // -----------------------------------------------------------------------
-    SfxTabPage* ODbaseDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new ODbaseDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
+    void ODbaseDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aShowDeleted));
+    }
+    // -----------------------------------------------------------------------
+    void ODbaseDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFT_Message));
+        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_aIndexes));
+    }
+    // -----------------------------------------------------------------------
     void ODbaseDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
@@ -580,17 +754,15 @@ namespace dbaui
 
         // get the other relevant items
         SFX_ITEMSET_GET(_rSet, pDeletedItem, SfxBoolItem, DSID_SHOWDELETEDROWS, sal_True);
-        sal_Bool bDeleted = sal_False, bLongNames = sal_False;
-        if (bValid)
-            bDeleted = pDeletedItem->GetValue();
+        SFX_ITEMSET_GET(_rSet, pAppendAliasItem, SfxBoolItem, DSID_APPEND_TABLE_ALIAS, sal_True);
 
-        m_aShowDeleted.Check(pDeletedItem->GetValue());
+        if ( bValid )
+        {
+            m_aShowDeleted.Check( pDeletedItem->GetValue() );
+            m_aFT_Message.Show(m_aShowDeleted.IsChecked());
+        }
 
-        if (_bSaveValue)
-            m_aShowDeleted.SaveValue();
-
-        if (bReadonly)
-            m_aShowDeleted.Disable();
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     // -----------------------------------------------------------------------
@@ -598,12 +770,7 @@ namespace dbaui
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        if( m_aShowDeleted.IsChecked() != m_aShowDeleted.GetSavedValue() )
-        {
-            _rSet.Put( SfxBoolItem(DSID_SHOWDELETEDROWS, m_aShowDeleted.IsChecked() ) );
-            bChangedSomething = sal_True;
-        }
-
+        fillBool(_rSet,&m_aShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -616,595 +783,513 @@ namespace dbaui
             aIndexDialog.Execute();
         }
         else
+        {
+            m_aFT_Message.Show(m_aShowDeleted.IsChecked());
             // it was one of the checkboxes -> we count as modified from now on
             callModifiedHdl();
+        }
 
         return 0;
-    }
-
-    //========================================================================
-    //= OJdbcDetailsPage
-    //========================================================================
-    OJdbcDetailsPage::OJdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_JDBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_SQL92CHECK | CBTP_USE_AUTOINCREMENT)
-
-        ,m_aDriverLabel     (this, ResId(FT_JDBCDRIVERCLASS))
-        ,m_aDriver          (this, ResId(ET_JDBCDRIVERCLASS))
-        ,m_aJdbcUrlLabel    (this, ResId(FT_CONNECTURL))
-        ,m_aJdbcUrl         (this, ResId(ET_CONNECTURL))
-        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
-    {
-        m_aDriver.SetModifyHdl(getControlModifiedLink());
-        m_aJdbcUrl.SetModifyHdl(getControlModifiedLink());
-
-
-        Window* pWindows[] = { &m_aJdbcUrl,
-                                m_pUserNameLabel, m_pUserName,
-                                m_pPasswordRequired,
-                                m_pAutoRetrievingEnabled,
-                                m_pAutoIncrementLabel, m_pAutoIncrement,
-                                m_pAutoRetrievingLabel, m_pAutoRetrieving,
-                                m_pIsSQL92Check };
-
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
-        for (sal_Int32 i=1; i < nCount; ++i)
-            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
-
-        FreeResource();
-    }
-
-    // -----------------------------------------------------------------------
-    OJdbcDetailsPage::~OJdbcDetailsPage()
-    {
-    }
-
-    // -----------------------------------------------------------------------
-    sal_Int32* OJdbcDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_JDBCDRIVERCLASS,
-                DSID_SQL92CHECK,
-                DSID_AUTOINCREMENTVALUE,
-                DSID_AUTORETRIEVEVALUE,
-                DSID_AUTORETRIEVEENABLED,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-
-    // -----------------------------------------------------------------------
-    SfxTabPage* OJdbcDetailsPage::Create( Window* pParent,  const SfxItemSet& _rAttrSet )
-    {
-        return ( new OJdbcDetailsPage( pParent, _rAttrSet ) );
-    }
-
-    // -----------------------------------------------------------------------
-    void OJdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
-    {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
-        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
-        getFlags(_rSet, bValid, bReadonly);
-
-        SFX_ITEMSET_GET(_rSet, pJdbcDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
-        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-
-        String sDriver, sURL;
-        if (bValid)
-        {
-            sDriver = pJdbcDrvItem->GetValue();
-            sURL = pUrlItem->GetValue();
-        }
-        m_aDriver.SetText(sDriver);
-        m_aJdbcUrl.SetText(sURL);
-
-        m_aDriver.ClearModifyFlag();
-        m_aJdbcUrl.ClearModifyFlag();
-
-        if (_bSaveValue)
-        {
-            m_aDriver.SaveValue();
-            m_aJdbcUrl.SaveValue();
-        }
-
-        if (bReadonly)
-        {
-            m_aDriverLabel.Disable();
-            m_aDriver.Disable();
-            m_aJdbcUrlLabel.Disable();
-            m_aJdbcUrl.Disable();
-        }
-    }
-
-    // -----------------------------------------------------------------------
-    sal_Bool OJdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
-    {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-
-        FILL_STRING_ITEM(m_aDriver, _rSet, DSID_JDBCDRIVERCLASS, bChangedSomething);
-        FILL_STRING_ITEM(m_aJdbcUrl, _rSet, DSID_CONNECTURL, bChangedSomething);
-
-        return bChangedSomething;
     }
 
     //========================================================================
     //= OAdoDetailsPage
     //========================================================================
     OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_SQL92CHECK)
-
-        ,m_aAdoUrlLabel     (this, ResId(FT_CONNECTURL))
-        ,m_aAdoUrl          (this, ResId(ET_CONNECTURL))
-        ,m_aSeparator1      (this, ResId(FL_SEPARATOR1))
-        ,m_aSeparator2      (this, ResId(FL_SEPARATOR2))
+        :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_CHARSET )
     {
-        m_aAdoUrl.SetModifyHdl(getControlModifiedLink());
-
-        Window* pWindows[] = { &m_aAdoUrl,
-                                m_pUserNameLabel, m_pUserName,
-                                m_pPasswordRequired,
-                                m_pIsSQL92Check };
-
-        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
-        for (sal_Int32 i=1; i < nCount; ++i)
-            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
-
-        FreeResource();
     }
 
     // -----------------------------------------------------------------------
     OAdoDetailsPage::~OAdoDetailsPage()
     {
     }
-
     // -----------------------------------------------------------------------
-    sal_Int32* OAdoDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_SQL92CHECK,
-                DSID_DOSLINEENDS,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-
-    // -----------------------------------------------------------------------
-    SfxTabPage* OAdoDetailsPage::Create( Window* pParent,   const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet& _rAttrSet )
     {
         return ( new OAdoDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    void OAdoDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
-    {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
-        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
-        sal_Bool bValid, bReadonly;
-        getFlags(_rSet, bValid, bReadonly);
-
-        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-
-        String sURL;
-        if (bValid)
-            sURL = pUrlItem->GetValue();
-        m_aAdoUrl.SetText(sURL);
-
-        m_aAdoUrl.ClearModifyFlag();
-
-        if (_bSaveValue)
-        {
-            m_aAdoUrl.SaveValue();
-        }
-
-        if (bReadonly)
-        {
-            m_aAdoUrlLabel.Disable();
-            m_aAdoUrl.Disable();
-        }
-    }
-
-    // -----------------------------------------------------------------------
-    sal_Bool OAdoDetailsPage::FillItemSet( SfxItemSet& _rSet )
-    {
-        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        FILL_STRING_ITEM(m_aAdoUrl, _rSet, DSID_CONNECTURL, bChangedSomething);
-        return bChangedSomething;
-    }
-
     //========================================================================
     //= OOdbcDetailsPage
     //========================================================================
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK| CBTP_USE_AUTOINCREMENT)
-        ,m_aSeparator1  (this, ResId(FL_SEPARATOR2))
+        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS,false)
+        ,m_aFL_1        (this, ResId(FL_SEPARATOR1))
         ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
+
+        Window* pWindows[] = {  m_pCharsetLabel, m_pCharset
+                                ,m_pOptionsLabel,m_pOptions,&m_aUseCatalog
+                                };
+
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=1; i < nCount; ++i)
+            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* OOdbcDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OOdbcDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_ADDITIONALOPTIONS,
-                DSID_CHARSET,
-                DSID_USECATALOG,
-                DSID_SQL92CHECK,
-                DSID_AUTOINCREMENTVALUE,
-                DSID_AUTORETRIEVEVALUE,
-                DSID_AUTORETRIEVEENABLED,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-    // -----------------------------------------------------------------------
     sal_Bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        _rSet.Put(SfxBoolItem(DSID_USECATALOG, m_aUseCatalog.IsChecked()));
+        fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
         return bChangedSomething;
+    }
+    // -----------------------------------------------------------------------
+    void OOdbcDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aUseCatalog));
+    }
+    // -----------------------------------------------------------------------
+    void OOdbcDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
     // -----------------------------------------------------------------------
     void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, sal_True);
 
-        m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+        if ( bValid )
+            m_aUseCatalog.Check(pUseCatalogItem->GetValue());
 
-        if (_bSaveValue)
-            m_aUseCatalog.SaveValue();
-
-        if (bReadonly)
-            m_aUseCatalog.Disable();
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     //========================================================================
     //= OOdbcDetailsPage
     //========================================================================
     OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS | CBTP_USE_SQL92CHECK| CBTP_USE_AUTOINCREMENT)
-        ,m_aSeparator1  (this, ResId(FL_SEPARATOR2))
-        ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
+        :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs,
+        CBTP_USE_CHARSET | CBTP_USE_OPTIONS ,false)
+        ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
+        ,m_aEDHostname      (this, ResId(ET_HOSTNAME))
+        ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
+        ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
+        ,m_aSeparator2      (this, ResId(FL_DATAHANDLING))
+        ,m_aUseCatalog      (this, ResId(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* OUserDriverDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OUserDriverDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_ADDITIONALOPTIONS,
-                DSID_CHARSET,
-                DSID_USECATALOG,
-                DSID_SQL92CHECK,
-                DSID_AUTOINCREMENTVALUE,
-                DSID_AUTORETRIEVEVALUE,
-                DSID_AUTORETRIEVEENABLED,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-    // -----------------------------------------------------------------------
     sal_Bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        _rSet.Put(SfxBoolItem(DSID_USECATALOG, m_aUseCatalog.IsChecked()));
+
+        fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
+        fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
+
         return bChangedSomething;
+    }
+    // -----------------------------------------------------------------------
+    void OUserDriverDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aUseCatalog));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+    }
+    // -----------------------------------------------------------------------
+    void OUserDriverDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aSeparator2));
     }
     // -----------------------------------------------------------------------
     void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, sal_True);
+        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
+        SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_CONN_PORTNUMBER, sal_True);
 
-        m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+        if ( bValid )
+        {
+            m_aEDHostname.SetText(pHostName->GetValue());
+            m_aEDHostname.ClearModifyFlag();
 
-        if (_bSaveValue)
-            m_aUseCatalog.SaveValue();
+            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
+            m_aNFPortNumber.ClearModifyFlag();
 
-        if (bReadonly)
-            m_aUseCatalog.Disable();
+            m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     //========================================================================
-    //= OMySQLDetailsPage
+    //= OMySQLODBCDetailsPage
     //========================================================================
-    OMySQLDetailsPage::OMySQLDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_MYSQL, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET )
-        ,m_aSeparator1          (this, ResId(FL_SEPARATOR1))
-        ,m_aUseODBC             (this, ResId(RB_USEMYODBC))
-        ,m_aUseJDBC             (this, ResId(RB_USECONNECTORJ3))
-        ,m_aFTDriverClass       (this, ResId(FT_JDBCDRIVERCLASS))
-        ,m_aEDDriverClass       (this, ResId(ET_JDBCDRIVERCLASS))
-        ,m_aSeparator2          (this, ResId(FL_SEPARATOR2))
-        ,m_aUrlLabel            (this, ResId(FT_CONNECTURL))
-        ,m_aUrl                 (this, ResId(ET_CONNECTURL))
-        ,m_aBrowseConnection    (this, ResId(PB_BROWSECONNECTION))
-        ,m_sJDBCDefaultUrl      (ResId(STR_JDBC_DEFAULT_URL))
+    OMySQLODBCDetailsPage::OMySQLODBCDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
+        :OCommonBehaviourTabPage(pParent, PAGE_MYSQL_ODBC, _rCoreAttrs, CBTP_USE_CHARSET )
     {
-        m_aUseODBC.SetToggleHdl(LINK(this, OMySQLDetailsPage,OnToggle));
-        m_aUrl.SetModifyHdl(getControlModifiedLink());
-        m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
-        m_aBrowseConnection.SetClickHdl(LINK(this, OMySQLDetailsPage, OnBrowseConnections));
+    }
 
-        Window* pWindows[] = {  &m_aUseODBC, &m_aUseJDBC,
-                                &m_aFTDriverClass, &m_aEDDriverClass,
-                                &m_aUrlLabel,&m_aUrl,
-                                &m_aBrowseConnection,
-                                m_pUserNameLabel, m_pUserName,
-                                m_pPasswordRequired,
-                                m_pCharsetLabel, m_pCharset };
+    // -----------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return ( new OMySQLODBCDetailsPage( pParent, _rAttrSet ) );
+    }
+
+    //========================================================================
+    //= OMySQLJDBCDetailsPage
+    //========================================================================
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, char* _pDriverName)
+        :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
+        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
+        ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
+        ,m_aEDHostname      (this, ResId(ET_HOSTNAME))
+        ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
+        ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
+        ,m_aFTDriverClass   (this, ResId(FT_JDBCDRIVERCLASS))
+        ,m_aEDDriverClass   (this, ResId(ET_JDBCDRIVERCLASS))
+        ,m_aTestJavaDriver  (this, ResId(PB_TESTDRIVERCLASS))
+        ,m_nPortId(_nPortId)
+    {
+        m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
+        m_aEDHostname.SetModifyHdl(getControlModifiedLink());
+        m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
+
+        m_aEDDriverClass.SetModifyHdl(LINK(this, OGeneralSpecialJDBCDetailsPage, OnEditModified));
+        m_aTestJavaDriver.SetClickHdl(LINK(this,OGeneralSpecialJDBCDetailsPage,OnTestJavaClickHdl));
+
+        // #98982# OJ
+        m_aNFPortNumber.SetUseThousandSep(sal_False);
+
+        Window* pWindows[] = {  &m_aFTHostname,&m_aEDHostname,
+                                &m_aPortNumber,&m_aNFPortNumber,
+                                &m_aFTDriverClass, &m_aEDDriverClass,&m_aTestJavaDriver,
+                                m_pCharsetLabel, m_pCharset};
 
         sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
         for (sal_Int32 i=1; i < nCount; ++i)
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
 
         FreeResource();
+
+        m_sDefaultJdbcDriverName = String::CreateFromAscii(_pDriverName);
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* OMySQLDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    void OGeneralSpecialJDBCDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        return ( new OMySQLDetailsPage( pParent, _rAttrSet ) );
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDDriverClass));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+    }
+    // -----------------------------------------------------------------------
+    void OGeneralSpecialJDBCDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OMySQLDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_CHARSET,
-                DSID_JDBCDRIVERCLASS,
-                DSID_CONNECTURL,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-    // -----------------------------------------------------------------------
-    sal_Bool OMySQLDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    sal_Bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        FILL_STRING_ITEM(m_aEDDriverClass, _rSet, DSID_JDBCDRIVERCLASS, bChangedSomething);
+        fillString(_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
 
-        if ( m_aUrl.GetText() != m_aUrl.GetSavedValue() )
-        {
-            _rSet.Put(SfxStringItem(DSID_CONNECTURL, m_aUrl.GetText()));
-            bChangedSomething = sal_True;
-        }
         return bChangedSomething;
     }
     // -----------------------------------------------------------------------
-    void OMySQLDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    void OGeneralSpecialJDBCDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
         SFX_ITEMSET_GET(_rSet, pDrvItem, SfxStringItem, DSID_JDBCDRIVERCLASS, sal_True);
-        SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
+        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
+        SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, m_nPortId, sal_True);
 
-        sal_Bool bODBC = pUrlItem->GetValue().EqualsIgnoreCaseAscii("sdbc:mysql:odbc:",0,16);
-        m_aBrowseConnection.Enable( bODBC );
-
-        m_aUseODBC.Check(bODBC);
-        m_aUseJDBC.Check(!bODBC);
-
-        m_aFTDriverClass.Enable( !bODBC );
-        m_aEDDriverClass.Enable( !bODBC );
-
-
-        String sURL;
         if ( bValid )
         {
-            sURL = pUrlItem->GetValue();
             m_aEDDriverClass.SetText(pDrvItem->GetValue());
+            m_aEDDriverClass.ClearModifyFlag();
+
+            m_aEDHostname.SetText(pHostName->GetValue());
+            m_aEDHostname.ClearModifyFlag();
+
+            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
+            m_aNFPortNumber.ClearModifyFlag();
         }
-        m_aUrl.SetText(sURL);
-        m_aUrl.ClearModifyFlag();
 
-        if ( _bSaveValue )
-            m_aEDDriverClass.SaveValue();
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
 
+        // to get the correcxt value when saveValue was called by base class
         if ( !m_aEDDriverClass.GetText().Len() )
-            m_aEDDriverClass.SetText(String::CreateFromAscii("com.mysql.jdbc.Driver"));
-        m_aEDDriverClass.ClearModifyFlag();
-
-        if ( !bODBC && !sURL.Len() )
-            m_aUrl.SetTextNoPrefix(m_sJDBCDefaultUrl);
-
-        if ( _bSaveValue )
         {
-            m_aUseODBC.SaveValue();
-            m_aUseJDBC.SaveValue();
-            m_aUrl.SaveValue();
-            m_aUrl.SaveValueNoPrefix();
-        }
-
-        if ( bReadonly )
-        {
-            m_aUseODBC.Disable();
-            m_aUseJDBC.Disable();
-            m_aUrlLabel.Disable();
-            m_aUrl.Disable();
-            m_aEDDriverClass.Disable();
+            m_aEDDriverClass.SetText(m_sDefaultJdbcDriverName);
+            m_aEDDriverClass.SetModifyFlag();
         }
     }
-    //------------------------------------------------------------------------
-    IMPL_LINK( OMySQLDetailsPage, OnToggle, RadioButton*, pRadioButton )
+    // -----------------------------------------------------------------------
+    IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnTestJavaClickHdl, PushButton*, _pButton)
     {
-        sal_Bool bODBC = &m_aUseODBC == pRadioButton && pRadioButton->IsChecked();
-        if ( m_aBrowseConnection.IsEnabled() && bODBC )
-            return 0;
-
-        m_aBrowseConnection.Enable(  bODBC );
-        m_aFTDriverClass.Enable(    !bODBC );
-        m_aEDDriverClass.Enable(    !bODBC );
-
-        String sOldContent;
-
-        if ( bODBC )
+        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        sal_Bool bSuccess = sal_False;
+        try
         {
-            sOldContent = m_sOldODBCUrl;
-            m_sOldJDBCUrl = m_aUrl.GetTextNoPrefix();
-            m_aUrl.SetText(String::CreateFromAscii("sdbc:mysql:odbc:"));
+            if ( m_aEDDriverClass.GetText().Len() )
+            {
+// TODO chage jvmaccess
+                ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_pAdminDialog->getORB());
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aEDDriverClass.GetText());
+            }
         }
-        else
+        catch(Exception&)
         {
-            sOldContent = m_sOldJDBCUrl;
-            m_sOldODBCUrl = m_aUrl.GetTextNoPrefix();
-            String sUrl = String::CreateFromAscii("sdbc:mysql:jdbc:");
-            sUrl += m_sJDBCDefaultUrl;
-            m_aUrl.SetText(sUrl);
         }
-        if ( sOldContent.Len() )
-            m_aUrl.SetTextNoPrefix(sOldContent);
+
+        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+
+        String aMessage = String(ModuleRes(nMessage));
+        String sTitle(ModuleRes(STR_JDBCDRIVER_TEST));
+        OSQLMessageBox aMsg(this,sTitle,aMessage);
+        aMsg.Execute();
+        return 0L;
+    }
+    // -----------------------------------------------------------------------
+    IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)
+    {
+        if ( _pEdit == &m_aEDDriverClass )
+            m_aTestJavaDriver.Enable( m_aEDDriverClass.GetText().Len() != 0 );
+
+        // tell the listener we were modified
         callModifiedHdl();
+        return 0L;
+    }
 
-        return 0;
-    }
-    //-------------------------------------------------------------------------
-    IMPL_LINK(OMySQLDetailsPage, OnBrowseConnections, PushButton*, _pButton)
+    // -----------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
     {
-        // collect all ODBC data source names
-        ::rtl::OUString sDataSource;
-        if ( getSelectedDataSource(DST_MYSQL_ODBC,sDataSource) && sDataSource.getLength() )
-        {
-            m_aUrl.SetTextNoPrefix(sDataSource);
-            callModifiedHdl();
-            return 0L;
-        }
-        else
-            return 1L;
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ,"com.mysql.jdbc.Driver") );
     }
+
+    // -----------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    {
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, _rAttrSet,DSID_ORACLE_PORTNUMBER,"oracle.jdbc.driver.OracleDriver" ) );
+    }
+
 
     //========================================================================
     //= OAdabasDetailsPage
     //========================================================================
     OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_SQL92CHECK)
-            // Yes, we're using the resource for the ODBC page here. It contains two controls which we don't use
-            // and except that it's excatly what we need here.
-        ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
+        :OCommonBehaviourTabPage(pParent, PAGE_ADABAS, _rCoreAttrs, CBTP_USE_CHARSET ,false)
+        ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
+        ,m_aEDHostname      (this, ResId(ET_HOSTNAME))
+        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
+        ,m_FT_CACHE_SIZE(       this, ResId( FT_CACHE_SIZE      ) )
+        ,m_NF_CACHE_SIZE(       this, ResId( NF_CACHE_SIZE      ) )
+        ,m_FT_DATA_INCREMENT(   this, ResId( FT_DATA_INCREMENT  ) )
+        ,m_NF_DATA_INCREMENT(   this, ResId( NF_DATA_INCREMENT  ) )
+        ,m_CB_SHUTDB(           this, ResId( CB_SHUTDB          ) )
+        ,m_aFL_2(               this, ResId( FL_SEPARATOR2      ) )
+        ,m_FT_CTRLUSERNAME(     this, ResId( FT_CTRLUSERNAME    ) )
+        ,m_ET_CTRLUSERNAME(     this, ResId( ET_CTRLUSERNAME    ) )
+        ,m_FT_CTRLPASSWORD(     this, ResId( FT_CTRLPASSWORD    ) )
+        ,m_ET_CTRLPASSWORD(     this, ResId( ET_CTRLPASSWORD    ) )
+        ,m_PB_STAT(             this, ResId( PB_STAT            ) )
     {
-        // move the charset related control some pixel up (as they are positioned as if above them there are the option
-        // controls, which is the case for the ODBC page only)
-        Size aMovesize(LogicToPixel(Size(0, 15), MAP_APPFONT));
-        Point aPos = m_pCharsetLabel->GetPosPixel();
-        m_pCharsetLabel->SetPosPixel(Point(aPos.X(), aPos.Y() - aMovesize.Height()));
-        aPos = m_pCharset->GetPosPixel();
-        m_pCharset->SetPosPixel(Point(aPos.X(), aPos.Y() - aMovesize.Height()));
-
-        if ( !m_pAutoRetrievingEnabled && m_pIsSQL92Check )
-        {
-            CheckBox aTemp(this, ResId(CB_RETRIEVE_AUTO));
-            m_pIsSQL92Check->SetPosPixel(aTemp.GetPosPixel());
-        }
+        m_aEDHostname.SetModifyHdl(getControlModifiedLink());
 
         FreeResource();
 
-        // don't use the ODBC help ids
-        m_pUserName->SetHelpId(HID_DSADMIN_USER_ADABAS);
-        m_pPasswordRequired->SetHelpId(HID_DSADMIN_PWDREC_ADABAS);
-        m_pCharset->SetHelpId(HID_DSADMIN_CHARSET_ADABAS);
+        m_PB_STAT.SetClickHdl(              LINK(this,OAdabasDetailsPage,PBClickHdl));
+
+        m_CB_SHUTDB.SetClickHdl(            LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_NF_CACHE_SIZE.SetModifyHdl(       LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_NF_DATA_INCREMENT.SetModifyHdl(   LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_ET_CTRLUSERNAME.SetModifyHdl(     LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+        m_ET_CTRLPASSWORD.SetModifyHdl(     LINK(this,OAdabasDetailsPage,AttributesChangedHdl));
+
+        m_ET_CTRLUSERNAME.SetLoseFocusHdl(  LINK(this,OAdabasDetailsPage,LoseFocusHdl));
+        m_ET_CTRLPASSWORD.SetLoseFocusHdl(  LINK(this,OAdabasDetailsPage,LoseFocusHdl));
+
+        m_NF_DATA_INCREMENT.SetMin(20);
+        m_NF_DATA_INCREMENT.SetMax(LONG_MAX);
+        m_NF_DATA_INCREMENT.SetValue(20);
+        m_NF_DATA_INCREMENT.SetDecimalDigits(0);
+
+        m_NF_CACHE_SIZE.SetMin(4);
+        m_NF_CACHE_SIZE.SetMax(LONG_MAX);
+        m_NF_CACHE_SIZE.SetValue(4);
+        m_NF_CACHE_SIZE.SetDecimalDigits(0);
+
+        Window* pWindows[] = {  &m_aFTHostname,&m_aEDHostname
+                                ,&m_FT_CACHE_SIZE,&m_NF_CACHE_SIZE
+                                ,&m_FT_DATA_INCREMENT,&m_NF_DATA_INCREMENT
+                                ,&m_FT_CTRLUSERNAME,&m_ET_CTRLUSERNAME
+                                ,&m_FT_CTRLPASSWORD,&m_ET_CTRLPASSWORD
+                                ,&m_CB_SHUTDB
+                                ,m_pCharsetLabel, m_pCharset,&m_PB_STAT};
+
+        sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
+        for (sal_Int32 i=1; i < nCount; ++i)
+            pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* OAdabasDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateAdabas( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OAdabasDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OAdabasDetailsPage::getDetailIds()
+    void OAdabasDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_SQL92CHECK,
-                DSID_CHARSET,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aEDHostname));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_NF_CACHE_SIZE));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_NF_DATA_INCREMENT));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_ET_CTRLUSERNAME));
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_ET_CTRLPASSWORD));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_CB_SHUTDB));
     }
+    // -----------------------------------------------------------------------
+    void OAdabasDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_FT_CACHE_SIZE));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_FT_DATA_INCREMENT));
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_2));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_FT_CTRLUSERNAME));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_FT_CTRLPASSWORD));
+        _rControlList.push_back(new ODisableWrapper<PushButton>(&m_PB_STAT));
+    }
+    // -----------------------------------------------------------------------
+    void OAdabasDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    {
+        // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
+        SFX_ITEMSET_GET(_rSet, pCtrlUserItem, SfxStringItem, DSID_CONN_CTRLUSER, sal_True);
+        SFX_ITEMSET_GET(_rSet, pCtrlPwdItem, SfxStringItem, DSID_CONN_CTRLPWD, sal_True);
+        SFX_ITEMSET_GET(_rSet, pShutItem, SfxBoolItem, DSID_CONN_SHUTSERVICE, sal_True);
+        SFX_ITEMSET_GET(_rSet, pIncItem, SfxInt32Item, DSID_CONN_DATAINC, sal_True);
+        SFX_ITEMSET_GET(_rSet, pCacheItem, SfxInt32Item, DSID_CONN_CACHESIZE, sal_True);
+        if ( bValid )
+        {
+            m_aEDHostname.SetText(pHostName->GetValue());
+            m_aEDHostname.ClearModifyFlag();
+            m_CB_SHUTDB.Check( pShutItem->GetValue() );
+            m_NF_DATA_INCREMENT.SetValue( pIncItem->GetValue() );
+            m_NF_CACHE_SIZE.SetValue( pCacheItem->GetValue() );
+            m_ET_CTRLUSERNAME.SetText(pCtrlUserItem->GetValue());
+            m_ET_CTRLPASSWORD.SetText(pCtrlPwdItem->GetValue());
+            m_CB_SHUTDB.Enable(m_ET_CTRLUSERNAME.GetText().Len() && m_ET_CTRLPASSWORD.GetText().Len());
+        }
+
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+    }
+    // -----------------------------------------------------------------------
+    sal_Bool OAdabasDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    {
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+
+        fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillBool(_rSet,&m_CB_SHUTDB,DSID_CONN_SHUTSERVICE,bChangedSomething);
+        fillInt32(_rSet,&m_NF_DATA_INCREMENT,DSID_CONN_DATAINC,bChangedSomething );
+        fillInt32(_rSet,&m_NF_CACHE_SIZE,DSID_CONN_CACHESIZE,bChangedSomething );
+        fillString(_rSet,&m_ET_CTRLUSERNAME,DSID_CONN_CTRLUSER,bChangedSomething );
+        fillString(_rSet,&m_ET_CTRLPASSWORD,DSID_CONN_CTRLPWD,bChangedSomething );
+
+        return bChangedSomething;
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( OAdabasDetailsPage, AttributesChangedHdl, void *, EMPTYARG )
+    {
+        m_CB_SHUTDB.Enable(m_ET_CTRLUSERNAME.GetText().Len() && m_ET_CTRLPASSWORD.GetText().Len());
+        bAttrsChanged = TRUE;
+        callModifiedHdl();
+        return 0;
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( OAdabasDetailsPage, LoseFocusHdl, Edit *, pEdit )
+    {
+        m_CB_SHUTDB.Enable(m_ET_CTRLUSERNAME.GetText().Len() && m_ET_CTRLPASSWORD.GetText().Len());
+        return 0;
+    }
+    //------------------------------------------------------------------------
+    IMPL_LINK( OAdabasDetailsPage, PBClickHdl, Button *, pButton )
+    {
+        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        if ( m_pAdminDialog )
+        {
+            m_pAdminDialog->saveDatasource();
+            try
+            {
+                Reference< XConnection > xConnection = m_pAdminDialog->createConnection();
+                if ( xConnection.is() )
+                {
+                    OAdabasStatistics aDlg(this,m_sUser,xConnection,m_pAdminDialog->getORB());
+                    aDlg.Execute();
+                    ::comphelper::disposeComponent(xConnection);
+                }
+            }
+            catch(Exception&)
+            {
+            }
+        }
+
+        return 0;
+    }
+
 
     //========================================================================
     //= OLDAPDetailsPage
     //========================================================================
     OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs, CBTP_USE_UIDPWD)
-         ,m_aSeparator1     (this, ResId(FL_SEPARATOR1))
-         ,m_aHostname       (this, ResId(FT_HOSTNAME))
-        ,m_aETHostname      (this, ResId(ET_HOSTNAME))
+        :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs,0,false)
+        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
         ,m_aBaseDN          (this, ResId(FT_BASEDN))
         ,m_aETBaseDN        (this, ResId(ET_BASEDN))
-        ,m_aSeparator2      (this, ResId(FL_SEPARATOR2))
          ,m_aCBUseSSL        (this, ResId(CB_USESSL))
         ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
         ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
         ,m_aFTRowCount      (this, ResId(FT_LDAPROWCOUNT))
         ,m_aNFRowCount      (this, ResId(NF_LDAPROWCOUNT))
     {
-        m_aETHostname.SetModifyHdl(getControlModifiedLink());
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
@@ -1220,52 +1305,20 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    SfxTabPage* OLDAPDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet& _rAttrSet )
     {
         return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OLDAPDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_CONN_LDAP_HOSTNAME,
-                DSID_CONN_LDAP_BASEDN,
-                DSID_CONN_LDAP_USESSL,
-                DSID_CONN_LDAP_PORTNUMBER,
-                DSID_CONN_LDAP_ROWCOUNT,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-    // -----------------------------------------------------------------------
     sal_Bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        FILL_STRING_ITEM(m_aETHostname,_rSet,DSID_CONN_LDAP_HOSTNAME,bChangedSomething)
-        FILL_STRING_ITEM(m_aETBaseDN,_rSet,DSID_CONN_LDAP_BASEDN,bChangedSomething)
-        if ( m_aCBUseSSL.IsChecked() != m_aCBUseSSL.GetSavedValue() )
-        {
-            _rSet.Put(SfxBoolItem(DSID_CONN_LDAP_USESSL, m_aCBUseSSL.IsChecked()));
-            bChangedSomething = sal_True;
-        }
-        if ( m_aNFPortNumber.GetValue() != m_aNFPortNumber.GetSavedValue().ToInt32() )
-        {
-            _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, m_aNFPortNumber.GetValue()));
-            bChangedSomething = sal_True;
-        }
-        if ( m_aNFRowCount.GetValue() != m_aNFRowCount.GetSavedValue().ToInt32() )
-        {
-            _rSet.Put(SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, m_aNFRowCount.GetValue()));
-            bChangedSomething = sal_True;
-        }
+        fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN,bChangedSomething);
+        fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillInt32(_rSet,&m_aNFRowCount,DSID_CONN_LDAP_ROWCOUNT,bChangedSomething);
+        fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
     //------------------------------------------------------------------------
@@ -1289,44 +1342,45 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
+    void OLDAPDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<Edit>(&m_aETBaseDN));
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aCBUseSSL));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFPortNumber));
+        _rControlList.push_back(new OSaveValueWrapper<NumericField>(&m_aNFRowCount));
+    }
+    // -----------------------------------------------------------------------
+    void OLDAPDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aBaseDN));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTRowCount));
+        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
+    }
+    // -----------------------------------------------------------------------
     void OLDAPDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
         // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
 
-        SFX_ITEMSET_GET(_rSet, pHostName, SfxStringItem, DSID_CONN_LDAP_HOSTNAME, sal_True);
         SFX_ITEMSET_GET(_rSet, pBaseDN, SfxStringItem, DSID_CONN_LDAP_BASEDN, sal_True);
         SFX_ITEMSET_GET(_rSet, pUseSSL, SfxBoolItem, DSID_CONN_LDAP_USESSL, sal_True);
         SFX_ITEMSET_GET(_rSet, pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
         SFX_ITEMSET_GET(_rSet, pRowCount, SfxInt32Item, DSID_CONN_LDAP_ROWCOUNT, sal_True);
 
-        m_aETHostname.SetText(pHostName->GetValue());
-        m_aETBaseDN.SetText(pBaseDN->GetValue());
-        m_aCBUseSSL.Check(pUseSSL->GetValue());
-        m_aNFPortNumber.SetValue(pPortNumber->GetValue());
-        m_aNFRowCount.SetValue(pRowCount->GetValue());
-
-        if (_bSaveValue)
+        if ( bValid )
         {
-            m_aETHostname.SaveValue();
-            m_aETBaseDN.SaveValue();
-            m_aCBUseSSL.SaveValue();
-            m_aNFPortNumber.SaveValue();
-            m_aNFRowCount.SaveValue();
+            m_aETBaseDN.SetText(pBaseDN->GetValue());
+            m_aNFPortNumber.SetValue(pPortNumber->GetValue());
+            m_aNFRowCount.SetValue(pRowCount->GetValue());
+            m_aCBUseSSL.Check(pUseSSL->GetValue());
         }
 
-        if (bReadonly)
-        {
-            m_aETHostname.Disable();
-            m_aETBaseDN.Disable();
-            m_aCBUseSSL.Disable();
-            m_aNFPortNumber.Disable();
-            m_aNFRowCount.Disable();
-        }
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
     //========================================================================
@@ -1334,7 +1388,7 @@ namespace dbaui
     //========================================================================
     //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
-        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_SQL92CHECK)
+        :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aLineFormat              (this, ResId(FL_SEPARATOR2))
         ,m_aHeader                  (this, ResId(CB_HEADER))
         ,m_aFieldSeparatorLabel     (this, ResId(FT_FIELDSEPARATOR))
@@ -1345,11 +1399,9 @@ namespace dbaui
         ,m_aDecimalSeparator        (this, ResId(CM_DECIMALSEPARATOR))
         ,m_aThousandsSeparatorLabel (this, ResId(FT_THOUSANDSSEPARATOR))
         ,m_aThousandsSeparator      (this, ResId(CM_THOUSANDSSEPARATOR))
-        ,m_aSeparator1              (this, ResId(FL_SEPARATOR1))
+        ,m_aSeparator1              (this, ResId(FL_SEPARATOR2))
         ,m_aExtensionLabel          (this, ResId(FT_EXTENSION))
         ,m_aExtension               (this, ResId(CM_EXTENSION))
-        ,m_aSeparator3              (this, ResId(FL_SEPARATOR3))
-
         ,m_aFieldSeparatorList      (ResId(STR_FIELDSEPARATORLIST))
         ,m_aTextSeparatorList       (ResId(STR_TEXTSEPARATORLIST))
         ,m_aTextNone                (ResId(STR_TEXT_FIELD_SEP_NONE))
@@ -1392,39 +1444,34 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    sal_Int32* OTextDetailsPage::getDetailIds()
-    {
-        static sal_Int32* pRelevantIds = NULL;
-        if (!pRelevantIds)
-        {
-            static sal_Int32 nRelevantIds[] =
-            {
-                DSID_FIELDDELIMITER,
-                DSID_TEXTDELIMITER,
-                DSID_DECIMALDELIMITER,
-                DSID_THOUSANDSDELIMITER,
-                DSID_TEXTFILEEXTENSION,
-                DSID_TEXTFILEHEADER,
-                DSID_CHARSET,
-                DSID_SQL92CHECK,
-                0
-            };
-            pRelevantIds = nRelevantIds;
-        }
-        return pRelevantIds;
-    }
-
-    // -----------------------------------------------------------------------
-    SfxTabPage* OTextDetailsPage::Create( Window* pParent,  const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet& _rAttrSet )
     {
         return ( new OTextDetailsPage( pParent, _rAttrSet ) );
     }
-
+    // -----------------------------------------------------------------------
+    void OTextDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillControls(_rControlList);
+        _rControlList.push_back(new OSaveValueWrapper<CheckBox>(&m_aHeader));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aFieldSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aTextSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aDecimalSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aThousandsSeparator));
+        _rControlList.push_back(new OSaveValueWrapper<ComboBox>(&m_aExtension));
+    }
+    // -----------------------------------------------------------------------
+    void OTextDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    {
+        OCommonBehaviourTabPage::fillWindows(_rControlList);
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFieldSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aTextSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aDecimalSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aThousandsSeparatorLabel));
+        _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aExtensionLabel));
+    }
     // -----------------------------------------------------------------------
     void OTextDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
-
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
@@ -1447,31 +1494,7 @@ namespace dbaui
             m_aThousandsSeparator.SetText(pThodelItem->GetValue());
             m_aExtension.SetText(pExtensionItem->GetValue());
         }
-
-        if (_bSaveValue)
-        {
-            m_aHeader.SaveValue();
-            m_aFieldSeparator.SaveValue();
-            m_aTextSeparator.SaveValue();
-            m_aDecimalSeparator.SaveValue();
-            m_aThousandsSeparator.SaveValue();
-            m_aExtension.SaveValue();
-        }
-
-        if (bReadonly)
-        {
-            m_aHeader.Disable();
-            m_aFieldSeparatorLabel.Disable();
-            m_aFieldSeparator.Disable();
-            m_aTextSeparatorLabel.Disable();
-            m_aTextSeparator.Disable();
-            m_aDecimalSeparatorLabel.Disable();
-            m_aDecimalSeparator.Disable();
-            m_aThousandsSeparatorLabel.Disable();
-            m_aThousandsSeparator.Disable();
-            m_aExtensionLabel.Disable();
-            m_aExtension.Disable();
-        }
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
     // -----------------------------------------------------------------------
     sal_Bool OTextDetailsPage::checkItems()
@@ -1561,11 +1584,9 @@ namespace dbaui
     {
         sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
 
-        if( m_aHeader.IsChecked() != m_aHeader.GetSavedValue() )
-        {
-            rSet.Put( SfxBoolItem(DSID_TEXTFILEHEADER, m_aHeader.IsChecked() ) );
-            bChangedSomething = sal_True;
-        }
+        fillString(rSet,&m_aExtension,DSID_TEXTFILEEXTENSION,bChangedSomething);
+        fillBool(rSet,&m_aHeader,DSID_TEXTFILEHEADER,bChangedSomething);
+
 
         if( m_aFieldSeparator.GetText() != m_aFieldSeparator.GetSavedValue() )
         {
@@ -1586,11 +1607,6 @@ namespace dbaui
         if( m_aThousandsSeparator.GetText() != m_aThousandsSeparator.GetSavedValue() )
         {
             rSet.Put( SfxStringItem(DSID_THOUSANDSDELIMITER, m_aThousandsSeparator.GetText().Copy(0,1) ) );
-            bChangedSomething = sal_True;
-        }
-        if( m_aExtension.GetText() != m_aExtension.GetSavedValue() )
-        {
-            rSet.Put( SfxStringItem(DSID_TEXTFILEEXTENSION, m_aExtension.GetText()));
             bChangedSomething = sal_True;
         }
 
@@ -1644,6 +1660,100 @@ namespace dbaui
         }
     }
 
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateGeneratedValues( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage(_pParent, PAGE_GENERATED_VALUES,_rAttrSet,CBTP_USE_AUTOINCREMENT);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateOJDsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage(   _pParent
+                                            , PAGE_DS_PROPERTIES_ENABLEOJ
+                                            , _rAttrSet
+                                            , CBTP_USE_ENABLEOUTERJOIN
+                                            | CBTP_USE_APPENDTABLEALIAS
+                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
+                                            | CBTP_USE_PARAMETERNAMESUBST
+                                            | CBTP_USE_IGNOREDRIVER_PRIV
+                                            | CBTP_USE_DOSLINEENDS
+                                            | CBTP_USE_BOOLEANCOMPARISON);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::Create1DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage(   _pParent
+                                            , PAGE_DS_PROPERTIES_1
+                                            , _rAttrSet
+                                            , CBTP_USE_APPENDTABLEALIAS
+                                            | CBTP_USE_DOSLINEENDS
+                                            | CBTP_USE_BOOLEANCOMPARISON);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::Create2DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage( _pParent
+                                            , PAGE_DS_PROPERTIES_2
+                                            ,_rAttrSet
+                                            ,CBTP_USE_SQL92CHECK
+                                            | CBTP_USE_APPENDTABLEALIAS
+                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
+                                            | CBTP_USE_DOSLINEENDS
+                                            | CBTP_USE_BOOLEANCOMPARISON);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::Create3DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage( _pParent
+                                            , PAGE_DS_PROPERTIES_3
+                                            ,_rAttrSet
+                                            ,CBTP_USE_SQL92CHECK
+                                            | CBTP_USE_APPENDTABLEALIAS
+                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
+                                            | CBTP_USE_ENABLEOUTERJOIN
+                                            | CBTP_USE_DOSLINEENDS
+                                            | CBTP_USE_BOOLEANCOMPARISON);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateFileDsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage( _pParent
+                                            , PAGE_DS_PROPERTIES_FILE
+                                            ,_rAttrSet
+                                            ,CBTP_USE_SQL92CHECK
+                                            | CBTP_USE_DOSLINEENDS);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::CreateAccessDsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage( _pParent
+                                            , PAGE_DS_PROPERTIES_ACCESS
+                                            ,_rAttrSet
+                                            ,CBTP_USE_SQL92CHECK
+                                            | CBTP_USE_APPENDTABLEALIAS
+                                            | CBTP_USE_ENABLEOUTERJOIN
+                                            | CBTP_USE_DOSLINEENDS
+                                            | CBTP_USE_BOOLEANCOMPARISON);
+    }
+    //------------------------------------------------------------------------
+    SfxTabPage* ODriversSettings::Create4DsProperties( Window* _pParent, const SfxItemSet& _rAttrSet )
+    {
+        return new OCommonBehaviourTabPage(_pParent
+                                            , PAGE_DS_PROPERTIES_4
+                                            ,_rAttrSet
+                                            ,CBTP_USE_SQL92CHECK
+                                            | CBTP_USE_APPENDTABLEALIAS
+                                            | CBTP_USE_ENABLEOUTERJOIN
+                                            | CBTP_USE_PARAMETERNAMESUBST
+                                            | CBTP_USE_IGNOREDRIVER_PRIV
+                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
+                                            | CBTP_USE_BOOLEANCOMPARISON
+                                            | CBTP_USE_CATALOG
+                                            | CBTP_USE_SCHEMA
+                                            | CBTP_USE_DOSLINEENDS
+                                            | CBTP_USE_INDEXAPPENDIX);
+    }
+    //------------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
