@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:00:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2956,7 +2956,8 @@ class EventsNameReplace_Impl:
             // URL- Adresse koennte relativ sein
             if ((nPropId == PROPERTY_ID_TARGET_URL || nPropId == PROPERTY_ID_IMAGE_URL) && aVal.Len())
             {
-                aUserVal = URIHelper::SmartRelToAbs(aVal);
+                INetURLObject aDocURL( getDocumentURL() );
+                aUserVal = URIHelper::SmartRel2Abs( aDocURL, aVal, Link(), false, true, INetURLObject::ENCODE_ALL, INetURLObject::DECODE_TO_IURI );
             }
 
             Any aValue;
