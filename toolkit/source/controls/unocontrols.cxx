@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 12:27:24 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 09:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,8 +1378,6 @@ uno::Any UnoButtonControl::queryAggregation( const uno::Type & rType ) throw(uno
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XButton*, this ),
-                                        SAL_STATIC_CAST( awt::XImageConsumer*, this ),
-                                        SAL_STATIC_CAST( awt::XImageProducer*, this ),
                                         SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
@@ -1387,8 +1385,6 @@ uno::Any UnoButtonControl::queryAggregation( const uno::Type & rType ) throw(uno
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoButtonControl )
 getCppuType( ( uno::Reference< awt::XButton>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XImageConsumer>* ) NULL ),
-getCppuType( ( uno::Reference< awt::XImageProducer>* ) NULL ),
 getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
 UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
@@ -1481,74 +1477,6 @@ awt::Size UnoButtonControl::getPreferredSize(  ) throw(uno::RuntimeException)
 awt::Size UnoButtonControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(uno::RuntimeException)
 {
     return Impl_calcAdjustedSize( rNewSize );
-}
-
-void UnoButtonControl::init( sal_Int32 Width, sal_Int32 Height ) throw(uno::RuntimeException)
-{
-    maImageConsumer.Init( Width, Height );
-}
-
-void UnoButtonControl::setColorModel( sal_Int16 BitCount, const uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(uno::RuntimeException)
-{
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const unsigned long*)RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
-}
-
-void UnoButtonControl::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(uno::RuntimeException)
-{
-    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (const unsigned char*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void UnoButtonControl::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(uno::RuntimeException)
-{
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const unsigned long*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void UnoButtonControl::complete( sal_Int32 Status, const uno::Reference < awt::XImageProducer > & Producer ) throw(uno::RuntimeException)
-{
-    maImageConsumer.Completed( Status );
-
-    // MT: Controls sollen angemeldet bleiben...
-//  Producer->removeConsumer( this );
-
-    ImplUpdateImage( sal_True );
-}
-
-void UnoButtonControl::addConsumer( const uno::Reference < awt::XImageConsumer > & Consumer ) throw(uno::RuntimeException)
-{
-    if ( mxImageProducer.is() )
-        mxImageProducer->addConsumer( Consumer );
-}
-
-void UnoButtonControl::removeConsumer( const uno::Reference < awt::XImageConsumer > & Consumer ) throw(uno::RuntimeException)
-{
-    if ( mxImageProducer.is() )
-        mxImageProducer->removeConsumer( Consumer );
-}
-
-void UnoButtonControl::startProduction() throw(uno::RuntimeException)
-{
-    if ( mxImageProducer.is() )
-    {
-//      UnoMemoryStream* pStrm = new UnoMemoryStream( 0x3FFF, 0x3FFF );
-//      (*pStrm) << maBitmap;
-//      uno::Reference < io::XInputStream >  xIn = pStrm;
-//      mxImageProducer->setImage( xIn );
-        mxImageProducer->startProduction();
-    }
-}
-
-void UnoButtonControl::ImplUpdateImage( sal_Bool bGetNewImage )
-{
-    sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
-    if ( bOK && mxPeer.is() && mxImageProducer.is() )
-    {
-        uno::Reference < awt::XImageConsumer >  xC( mxPeer, uno::UNO_QUERY );
-        addConsumer( xC );
-        startProduction();
-        removeConsumer( xC );
-    }
 }
 
 //  ----------------------------------------------------
@@ -1646,11 +1574,6 @@ UnoImageControlControl::UnoImageControlControl()
     // Woher die Defaults nehmen?
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 100;
-
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( szServiceName_ImageProducer ) );
-    if ( xI.is() )
-        mxImageProducer = uno::Reference< awt::XImageProducer >( xI, uno::UNO_QUERY );
 }
 
 ::rtl::OUString UnoImageControlControl::GetComponentServiceName()
@@ -1662,16 +1585,12 @@ UnoImageControlControl::UnoImageControlControl()
 uno::Any UnoImageControlControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( awt::XImageConsumer*, this ),
-                                        SAL_STATIC_CAST( awt::XImageProducer*, this ),
                                         SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoImageControlControl )
-    getCppuType( ( uno::Reference< awt::XImageConsumer>* ) NULL ),
-    getCppuType( ( uno::Reference< awt::XImageProducer>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
@@ -1702,74 +1621,6 @@ awt::Size UnoImageControlControl::getPreferredSize(  ) throw(uno::RuntimeExcepti
 awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(uno::RuntimeException)
 {
     return Impl_calcAdjustedSize( rNewSize );
-}
-
-void UnoImageControlControl::init( sal_Int32 Width, sal_Int32 Height ) throw(uno::RuntimeException)
-{
-    maImageConsumer.Init( Width, Height );
-}
-
-void UnoImageControlControl::setColorModel( sal_Int16 BitCount, const uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(uno::RuntimeException)
-{
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const unsigned long*)RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
-}
-
-void UnoImageControlControl::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(uno::RuntimeException)
-{
-    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (const unsigned char*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void UnoImageControlControl::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(uno::RuntimeException)
-{
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const unsigned long*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void UnoImageControlControl::complete( sal_Int32 Status, const uno::Reference < awt::XImageProducer > & Producer ) throw(uno::RuntimeException)
-{
-    maImageConsumer.Completed( Status );
-
-    // MT: Controls sollen angemeldet bleiben...
-//  Producer->removeConsumer( this );
-
-    ImplUpdateImage( sal_True );
-}
-
-void UnoImageControlControl::addConsumer( const uno::Reference < awt::XImageConsumer > & Consumer ) throw(uno::RuntimeException)
-{
-    if ( mxImageProducer.is() )
-        mxImageProducer->addConsumer( Consumer );
-}
-
-void UnoImageControlControl::removeConsumer( const uno::Reference < awt::XImageConsumer > & Consumer ) throw(uno::RuntimeException)
-{
-    if ( mxImageProducer.is() )
-        mxImageProducer->removeConsumer( Consumer );
-}
-
-void UnoImageControlControl::startProduction() throw(uno::RuntimeException)
-{
-    if ( mxImageProducer.is() )
-    {
-        // UnoMemoryStream* pStrm = new UnoMemoryStream( 0x3FFF, 0x3FFF );
-        // (*pStrm) << maBitmap;
-        // uno::Reference < io::XInputStream >  xIn = pStrm;
-        // mxImageProducer->setImage( xIn );
-        mxImageProducer->startProduction();
-    }
-}
-
-void UnoImageControlControl::ImplUpdateImage( sal_Bool bGetNewImage )
-{
-    sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
-    if ( bOK && mxPeer.is() && mxImageProducer.is() )
-    {
-        uno::Reference < awt::XImageConsumer >  xC( mxPeer, uno::UNO_QUERY );
-        addConsumer( xC );
-        startProduction();
-        removeConsumer( xC );
-    }
 }
 
 void UnoImageControlControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )

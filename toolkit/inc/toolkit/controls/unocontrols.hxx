@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 11:15:14 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 09:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,20 +506,11 @@ public:
 //  ----------------------------------------------------
 class UnoButtonControl :    public UnoControlBase,
                             public ::com::sun::star::awt::XButton,
-                            public ::com::sun::star::awt::XImageConsumer,
-                            public ::com::sun::star::awt::XImageProducer,
                             public ::com::sun::star::awt::XLayoutConstrains
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
     ::rtl::OUString             maActionCommand;
-
-    ImageConsumer               maImageConsumer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > mxImageProducer;
-    BitmapEx                    maBitmap;
-
-protected:
-    void                        ImplUpdateImage( sal_Bool bGetNewImage );
 
 public:
 
@@ -548,18 +539,6 @@ public:
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XImageConsumer
-    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XImageProducer
-    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL startProduction(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoButtonControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButton ) )
@@ -609,20 +588,11 @@ public:
 //  class UnoImageControlControl
 //  ----------------------------------------------------
 class UnoImageControlControl :  public UnoControlBase,
-                                public ::com::sun::star::awt::XImageConsumer,
-                                public ::com::sun::star::awt::XImageProducer,
                                 public ::com::sun::star::awt::XLayoutConstrains
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
     ::rtl::OUString             maActionCommand;
-
-    ImageConsumer               maImageConsumer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > mxImageProducer;
-    BitmapEx                    maBitmap;
-
-protected:
-    void            ImplUpdateImage( sal_Bool bGetNewImage );
 
 public:
 
@@ -648,18 +618,6 @@ public:
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XImageConsumer
-    void SAL_CALL init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByBytes( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int8 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setPixelsByLongs( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, const ::com::sun::star::uno::Sequence< sal_Int32 >& aProducerData, sal_Int32 nOffset, sal_Int32 nScanSize ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer >& xProducer ) throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XImageProducer
-    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL startProduction(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoImageControlControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControl ) )
