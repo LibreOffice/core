@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:37:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,27 @@ TabPage TP_COLUMN
         Text = "~Spalten" ;
         Text [ ENGLISH ] = "~Num." ;
         Left = TRUE ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "~Amount";
+        Text[ portuguese ] = "~Quantidade";
+        Text[ russian ] = "×èñëî";
+        Text[ greek ] = "~Áñéèìüò";
+        Text[ dutch ] = "~Aantal";
+        Text[ french ] = "~Nombre";
+        Text[ spanish ] = "~Cantidad";
+        Text[ finnish ] = "~Määrä";
+        Text[ italian ] = "~Num.";
+        Text[ danish ] = "Antal";
+        Text[ swedish ] = "~Antal";
+        Text[ polish ] = "Liczba";
+        Text[ portuguese_brazilian ] = "~N?m.";
+        Text[ japanese ] = "’i”(~A)";
+        Text[ korean ] = "°³¼ö(~A)";
+        Text[ chinese_simplified ] = "ÊıÄ¿(~A)";
+        Text[ chinese_traditional ] = "¼Æ¥Ø(~A)";
+        Text[ turkish ] = "S~ayı";
+        Text[ arabic ] = "ÇáÚÏÏ";
+        Text[ catalan ] = "~Cantidad";
     };
     NumericField ED_NUMBER
     {
@@ -130,10 +151,10 @@ TabPage TP_COLUMN
         Text[ italian ] = "Distribuisci in modo uniforme il contenuto di tutte le colonne.";
         Text[ danish ] = "Udjævn kolonner";
         Text[ swedish ] = "Fördela innehåll jämnt över ~alla kolumner";
-        Text[ polish ] = "Roz³ó¿ zawarto?æ równomiernie na wszystkie kolumny";
+        Text[ polish ] = "Roz³ó¿ zawartoœæ równomiernie na wszystkie kolumny";
         Text[ portuguese_brazilian ] = "Balance columns";
         Text[ japanese ] = "“à—e‚ğ’i‘g‚İ‘S‘Ì‚Å‹Ï“™‚É”z•ª‚·‚é";
-        Text[ korean ] = "³»¿ëÀ» ¸ğµç ´Ü¿¡ °ÉÃÄ ÀÏÁ¤ÇÏ°Ô ºĞ¹è(~B)";
+        Text[ korean ] = "³»¿ëÀ» ¸ğµç ¿­¿¡ °ÉÃÄ ÀÏÁ¤ÇÏ°Ô ºĞ¹è";
         Text[ chinese_simplified ] = "¶Ô³Æµ÷ÕûÀ¸¿í";
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
         Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
@@ -147,6 +168,27 @@ TabPage TP_COLUMN
         Size = MAP_APPFONT ( 163 , 8 ) ;
         Text = "Vorgaben" ;
         Text [ ENGLISH ] = "Columns" ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "Columns";
+        Text[ portuguese ] = "Colunas";
+        Text[ russian ] = "Êîëîíêè";
+        Text[ greek ] = "ÓôŞëåò";
+        Text[ dutch ] = "Kolommen";
+        Text[ french ] = "Colonnes";
+        Text[ spanish ] = "Columnas";
+        Text[ finnish ] = "Sarakkeet";
+        Text[ italian ] = "Colonne";
+        Text[ danish ] = "Kolonner";
+        Text[ swedish ] = "Kolumner";
+        Text[ polish ] = "Kolumny";
+        Text[ portuguese_brazilian ] = "Colunas";
+        Text[ japanese ] = "’i‘g‚İ";
+        Text[ korean ] = "¿­";
+        Text[ chinese_simplified ] = "À¸";
+        Text[ chinese_traditional ] = "Äæ";
+        Text[ turkish ] = "Sütun";
+        Text[ arabic ] = "ÇáÃÚãÏÉ";
+        Text[ catalan ] = "Columnas";
     };
     FixedText FT_COLUMN
     {
@@ -370,7 +412,7 @@ TabPage TP_COLUMN
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¿í¶È(~W)";
         Text[ russian ] = "Àâòîì. øèğèíà";
-        Text[ polish ] = "Automatyczna szeroko?æ";
+        Text[ polish ] = "Automatyczna szerokoœæ";
         Text[ japanese ] = "•©“®’²®(~W)";
         Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã¼e«×(~W)";
         Text[ arabic ] = "ÚÑÖ ÊáŞÇÆí";
@@ -388,6 +430,27 @@ TabPage TP_COLUMN
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Breite und Abstand" ;
         Text [ ENGLISH ] = "Column width" ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "Column width";
+        Text[ portuguese ] = "Largura da coluna";
+        Text[ russian ] = "Øèğèíà êîëîíîê";
+        Text[ greek ] = "ĞëÜôïò óôŞëçò";
+        Text[ dutch ] = "Kolombreedte";
+        Text[ french ] = "Largeur de colonne";
+        Text[ spanish ] = "Ancho de columna";
+        Text[ finnish ] = "Sarakkeen leveys";
+        Text[ italian ] = "Larghezza colonna";
+        Text[ danish ] = "Kolonnebredde";
+        Text[ swedish ] = "Kolumnbredd";
+        Text[ polish ] = "Szer. kolumny";
+        Text[ portuguese_brazilian ] = "Largura da coluna";
+        Text[ japanese ] = "’i‚Ì•";
+        Text[ korean ] = "¿­ ³Êºñ";
+        Text[ chinese_simplified ] = "À¸¿í";
+        Text[ chinese_traditional ] = "Äæ¼e";
+        Text[ turkish ] = "Sütun genişliği";
+        Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
+        Text[ catalan ] = "Ancho de columna";
     };
 
     FixedText FT_STYLE
@@ -712,7 +775,7 @@ TabPage TP_COLUMN
     StringList [ polish ] =
     {
             < "Na górze" ; Default ; > ;
-        < "Wy?rodkowany" ; Default ; > ;
+        < "Wyœrodkowany" ; Default ; > ;
         < "Na dole" ; Default ; > ;
     };
     StringList [ japanese ] =
