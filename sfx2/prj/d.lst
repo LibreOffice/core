@@ -19,6 +19,7 @@ touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 ..\%__SRC%\lib\sfx.lib %_DEST%\lib%_EXT%\sfx.lib
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\slb\sfx.lib %_DEST%\lib%_EXT%\xsfx.lib
 ..\%__SRC%\obj\appctor.obj %_DEST%\lib%_EXT%\xsfxapp.obj
 ..\%__SRC%\lib\isfx.lib %_DEST%\lib%_EXT%\isfx.lib
@@ -147,3 +148,4 @@ hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetai.hxx
 hedabu: ..\inc\cntids.hrc %_DEST%\inc%_EXT%\sfx2\cntids.hrc
 hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\sfx2\basmgr.hxx
 
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
