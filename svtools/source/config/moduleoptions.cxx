@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:37:40 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,10 @@ namespace css = ::com::sun::star;
 #define FACTORYNAME_IMPRESS                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"))
 #define FACTORYNAME_MATH                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"        ))
 #define FACTORYNAME_CHART                   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartDocument"              ))
+#define FACTORYNAME_DATABASE                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument"             ))
 #define FACTORYNAME_STARTMODULE             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule"                ))
 
-#define FACTORYCOUNT                        9
+#define FACTORYCOUNT                        10
 
 /*-************************************************************************************************************//**
     @descr  This struct hold information about one factory. We declare a complete array which can hold infos
@@ -690,6 +691,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
                                                 break;
         case SvtModuleOptions::E_SBASIC     :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
                                                 break;
+        case SvtModuleOptions::E_SDATABASE  :   bInstalled = sal_True; // Couldn't be deselected by setup yet!
+                                                break;
     }
 
     return bInstalled;
@@ -716,6 +719,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         nCount++;
     if( m_lFactories[SvtModuleOptions::E_SBASIC].getInstalled() )
         nCount++;
+    if( m_lFactories[SvtModuleOptions::E_SDATABASE].getInstalled() )
+        nCount++;
 
     css::uno::Sequence < ::rtl::OUString > aRet( nCount );
     sal_Int32 n=0;
@@ -737,6 +742,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         aRet[n++] = m_lFactories[SvtModuleOptions::E_SMATH].getFactory();
     if( m_lFactories[SvtModuleOptions::E_SBASIC].getInstalled() )
         aRet[n++] = m_lFactories[SvtModuleOptions::E_SBASIC].getFactory();
+    if( m_lFactories[SvtModuleOptions::E_SDATABASE].getInstalled() )
+        aRet[n++] = m_lFactories[SvtModuleOptions::E_SDATABASE].getFactory();
 
     return aRet;
 }
@@ -782,6 +789,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_CHART         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("schart"));
                                                   break;
         case SvtModuleOptions::E_BASIC         :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sbasic"));
+                                                  break;
+        case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdatabase"));
                                                   break;
     }
 
@@ -842,6 +851,8 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_CHART         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
                                                   break;
         case SvtModuleOptions::E_BASIC         :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sbasic"));
+                                                  break;
+        case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase"));
                                                   break;
     }
     return sURL;
@@ -1016,6 +1027,12 @@ sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const ::rtl::OUString& sN
     {
         eFactory = SvtModuleOptions::E_CHART     ;
         bState   = ( sName == FACTORYNAME_CHART );
+    }
+    // no else!
+    if( bState == sal_False )
+    {
+        eFactory = SvtModuleOptions::E_DATABASE     ;
+        bState   = ( sName == FACTORYNAME_DATABASE );
     }
     // no else!
     if( bState == sal_False )
@@ -1309,7 +1326,12 @@ sal_Bool SvtModuleOptions::IsBasicIDE( sal_Bool bClient ) const
     OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsBasicIDE()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
     return sal_True;
 }
-
+//*****************************************************************************************************************
+sal_Bool SvtModuleOptions::IsDataBase( sal_Bool bClient ) const
+{
+    OSL_ENSURE( !(bClient==sal_True), "SvtModuleOptions::IsDataBase()\nWho use special parameter [bClient=TRUE]? It's obsolete!" );
+    return sal_True;
+}
 //*****************************************************************************************************************
 sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
 {
@@ -1332,6 +1354,8 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
         nFeature |= FEATUREFLAG_MATH;
     if( m_pDataContainer->IsModuleInstalled( E_SBASIC ) == sal_True )
         nFeature |= FEATUREFLAG_BASICIDE;
+    if( m_pDataContainer->IsModuleInstalled( E_SDATABASE ) == sal_True )
+        nFeature |= FEATUREFLAG_INSIGHT;
 
     return nFeature;
 }
@@ -1383,6 +1407,7 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
         case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString::createFromAscii("Math"); break; }
         case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString::createFromAscii("Chart"); break; }
         case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString::createFromAscii("Basic"); break; }
+        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString::createFromAscii("Database"); break; }
     }
 
     return ::rtl::OUString();
@@ -1401,6 +1426,7 @@ sal_uInt32 SvtModuleOptions::GetFeatures( sal_Bool bClient ) const
         case SvtModuleOptions::E_MATH           :   { return ::rtl::OUString::createFromAscii("Math"); break; }
         case SvtModuleOptions::E_CHART          :   { return ::rtl::OUString::createFromAscii("Chart"); break; }
         case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString::createFromAscii("Basic"); break; }
+        case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString::createFromAscii("Database"); break; }
     }
 
     return ::rtl::OUString();
@@ -1454,6 +1480,8 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const 
         return E_MATH;
     if (sName.equals(FACTORYNAME_CHART))
         return E_CHART;
+    if (sName.equals(FACTORYNAME_DATABASE))
+        return E_DATABASE;
 
     return E_UNKNOWN_FACTORY;
 }
