@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:07 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 18:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,12 +388,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
             if (pStream->IsPackageMember() &&
-                ( (pTempEntry->nMethod == DEFLATED && bToBeCompressed) ||
-                  (pTempEntry->nMethod == STORED && !bToBeCompressed) ) )
+                ( (pStream->aEntry.nMethod == DEFLATED && bToBeCompressed) ||
+                  (pStream->aEntry.nMethod == STORED && !bToBeCompressed) ) )
             {
                 try
                 {
-                    Reference < XInputStream > xStream = pStream->getRawStream( *pTempEntry );
+                    Reference < XInputStream > xStream = pStream->getRawStream( pStream->aEntry );
                     try
                     {
                         rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted );
@@ -469,7 +469,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
             }
-
 
             // Then copy it back afterwards...
             ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
