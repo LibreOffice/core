@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-31 15:12:49 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 15:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 
 #include <string>
+#ifdef max
+#undef max
+#endif
 #include <algorithm>
 
 HACK( #define protected public )

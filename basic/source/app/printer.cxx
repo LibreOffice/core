@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 12:09:11 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 15:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 
 #include <string>
+#ifdef min
+#undef min
+#endif
 #include <algorithm>
 
 #include "app.hxx"
