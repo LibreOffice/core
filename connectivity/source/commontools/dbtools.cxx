@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:49:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 15:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,6 +705,8 @@ void TransferFormComponentProperties(
             const Reference< XPropertySet>& xNewProps,
             const Locale& _rLocale)
 {
+try
+{
     // kopieren wir erst mal alle Props, die in Quelle und Ziel vorhanden sind und identische Beschreibungen haben
     Reference< XPropertySetInfo> xOldInfo( xOldProps->getPropertySetInfo());
     Reference< XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
@@ -731,6 +733,7 @@ void TransferFormComponentProperties(
     ::rtl::OUString sPropValueMax(::rtl::OUString::createFromAscii("ValueMax"));
     ::rtl::OUString sPropDecimalAccuracy(::rtl::OUString::createFromAscii("DecimalAccuracy"));
     ::rtl::OUString sPropClassId(::rtl::OUString::createFromAscii("ClassId"));
+    ::rtl::OUString sFormattedServiceName( ::rtl::OUString::createFromAscii( "com.sun.star.form.component.FormattedField" ) );
 
     for (sal_Int16 i=0; i<aOldProperties.getLength(); ++i)
     {
@@ -765,8 +768,10 @@ void TransferFormComponentProperties(
 
 
     // fuer formatierte Felder (entweder alt oder neu) haben wir ein paar Sonderbehandlungen
-    sal_Bool bOldIsFormatted = hasProperty(sPropFormatsSupplier, xOldProps) && hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), xOldProps);
-    sal_Bool bNewIsFormatted = hasProperty(sPropFormatsSupplier, xNewProps) && hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), xNewProps);
+    Reference< XServiceInfo > xSI( xOldProps, UNO_QUERY );
+    sal_Bool bOldIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
+    xSI = Reference< XServiceInfo >( xNewProps, UNO_QUERY );
+    sal_Bool bNewIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
 
     if (!bOldIsFormatted && !bNewIsFormatted)
         return; // nothing to do
@@ -870,14 +875,6 @@ void TransferFormComponentProperties(
         {
             Reference< XNumberFormats> xFormats(xSupplier->getNumberFormats());
 
-            // Sprache des neuen Formats
-//          ::rtl::OString sLanguage, sCountry;
-//          ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), ::rtl::OUString(sLanguage.getStr()), ::rtl::OUString(sCountry.getStr()));
-//          Locale aNewLanguage(
-//              ::rtl::OStringToOUString(sLanguage, RTL_TEXTENCODING_ASCII_US),
-//              ::rtl::OStringToOUString(sCountry, RTL_TEXTENCODING_ASCII_US),
-//              ::rtl::OUString());
-
             // Dezimal-Stellen
             sal_Int16 nDecimals = 2;
             if (hasProperty(sPropDecimalAccuracy, xOldProps))
@@ -957,6 +954,11 @@ void TransferFormComponentProperties(
         if (aNewDefault.hasValue())
             xNewProps->setPropertyValue(sPropEffectiveDefault, aNewDefault);
     }
+}
+catch(const Exception&)
+{
+    OSL_ENSURE( sal_False, "TransferFormComponentProperties: caught an exception!" );
+}
 }
 
 //------------------------------------------------------------------------------
@@ -1695,6 +1697,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37  2001/08/06 14:49:22  fs
+ *  #87690# +connectRowset
+ *
  *  Revision 1.36  2001/06/26 10:09:13  oj
  *  #87808# new method to wrap setObject method
  *
