@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-26 15:31:35 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text[ turkish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME 4.0 HTML";
-    Text[ finnish ] = "%PRODUCTNAME 4,0 HTML";
+    Text[ finnish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ thai ] = "%PRODUCTNAME 4.0 HTML";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_50
@@ -151,7 +151,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text [ dutch ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ portuguese ] = "%PRODUCTNAME 5.0 HTML" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 HTML";
-    Text[ russian ] = "HTML в %PRODUCTNAME 5.0 ";
+    Text[ russian ] = "%PRODUCTNAME 5.0 HTML";
     Text[ polish ] = "%PRODUCTNAME 5.0 - HTML";
     Text[ japanese ] = "%PRODUCTNAME 5.0 HTML";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 HTML";
@@ -172,7 +172,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text [ English ] = "%PRODUCTNAME 6.0 HTML Document" ;
     Text[ english_us ] = "%PRODUCTNAME 6.0 HTML Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Documento HTML";
-    Text[ russian ] = "Документ HTML (%PRODUCTNAME 6.0) ";
+    Text[ russian ] = "HTML-документ (%PRODUCTNAME 6.0) ";
     Text[ greek ] = "%PRODUCTNAME 6.0 HTML - ёггсбцп";
     Text[ dutch ] = "%PRODUCTNAME 6.0 HTML Document";
     Text[ french ] = "%PRODUCTNAME 6.0 Document HTML";
@@ -189,7 +189,7 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ arabic ] = "%PRODUCTNAME 6.0 HTML";
     Text[ catalan ] = "%PRODUCTNAME 6.0 HTML";
-    Text[ finnish ] = "Tuotteen %PRODUCTNAME 6.0 HTML-asiakirja";
+    Text[ finnish ] = "%PRODUCTNAME 6.0 - HTML-asiakirja";
     Text[ thai ] = "а№Ђаё­аёЃаёЄаёІаёЈ %PRODUCTNAME 6.0 HTML ";
 };
 String STR_SHELLNAME_WEBTEXT
@@ -206,7 +206,7 @@ String STR_SHELLNAME_WEBTEXT
     Text [ portuguese_brazilian ] = "Text/Web" ;
     Text [ portuguese ] = "Texto/Web" ;
     Text[ chinese_simplified ] = "ж–‡е­—/дё‡з»ґзЅ‘";
-    Text[ russian ] = "Текст/Web";
+    Text[ russian ] = "Текст/Веб";
     Text[ polish ] = "Tekst/Web";
     Text[ japanese ] = "гѓ†г‚­г‚№гѓ€/Web";
     Text[ chinese_traditional ] = "ж–‡е­—/Web";
@@ -235,7 +235,7 @@ String STR_SHELLNAME_WEBFRAME
     Text [ portuguese_brazilian ] = "Rahmen/Web" ;
     Text [ portuguese ] = "Moldura/Web" ;
     Text[ chinese_simplified ] = "жЎ†/дё‡з»ґзЅ‘";
-    Text[ russian ] = "Кадр/Web";
+    Text[ russian ] = "Кадр/Веб";
     Text[ polish ] = "Ramka/Web";
     Text[ japanese ] = "жћ /Web";
     Text[ chinese_traditional ] = "иЁЉжЎ†/Web";
@@ -264,7 +264,7 @@ String RID_WEBTOOLS_TOOLBOX
     Text [ portuguese_brazilian ] = "Werkzeugleiste/Web" ;
     Text [ portuguese ] = "Barra de ferramentas/Web" ;
     Text[ chinese_simplified ] = "дё»е·Ґе…·ж Џ/дё‡з»ґзЅ‘";
-    Text[ russian ] = "Панель инструментов/Web";
+    Text[ russian ] = "Панель инструментов/Веб";
     Text[ polish ] = "Pasek narzкdziowy/Web";
     Text[ japanese ] = "жЁ™жє–гѓ„гѓјгѓ«гѓђгѓј/Web";
     Text[ chinese_traditional ] = "дё»е·Ґе…·е€—/Web";
@@ -414,7 +414,7 @@ String RID_WEBTEXT_TOOLBOX
     Text [ portuguese ] = "Barra de objectos de texto/Web" ;
     Text [ portuguese_brazilian ] = "Textobjektleiste/Web" ;
     Text[ chinese_simplified ] = "ж–‡е­—еЇ№и±Ўж Џ/дё‡з»ґзЅ‘";
-    Text[ russian ] = "Панель объектов текста/Web";
+    Text[ russian ] = "Контекстная панель текста/Веб";
     Text[ polish ] = "Pasek obiektуw tekstu/Web";
     Text[ japanese ] = "гѓ†г‚­г‚№гѓ€г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гѓђгѓј/Web";
     Text[ chinese_traditional ] = "ж–‡е­—з‰©д»¶е€—/Web";
@@ -426,7 +426,7 @@ String RID_WEBTEXT_TOOLBOX
     Text[ turkish ] = "Metin nesne зubuрu/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de text/Web";
-    Text[ finnish ] = "Tekstiobjektipalkki/Web";
+    Text[ finnish ] = "Tekstin muotoilurivi/Web";
     Text[ thai ] = "а№Ѓаё–аёљаё§аё±аё•аё–аёёаё‚а№‰аё­аё„аё§аёІаёЎ/а№Ђаё§а№‡аёљ";
 };
 ToolBox RID_WEBTEXT_TOOLBOX
@@ -464,7 +464,7 @@ String RID_WEBFRAME_TOOLBOX
     Text [ italian ] = "Barra degli oggetti per cornice/Web" ;
     Text [ portuguese_brazilian ] = "Moldura/Web" ;
     Text [ portuguese ] = "Barra de objectos de moldura/Web" ;
-    Text [ finnish ] = "Kehysobjektipalkki/Web" ;
+    Text [ finnish ] = "Kehyksen muotoilurivi/Web" ;
     Text [ danish ] = "Rammeobjektlinje/Web" ;
     Text [ french ] = "Barre d'objets de cadre/Web" ;
     Text [ swedish ] = "Ramobjektlist/Webb" ;
@@ -472,7 +472,7 @@ String RID_WEBFRAME_TOOLBOX
     Text [ spanish ] = "Barra de objetos de marco/Web" ;
     Text [ english_us ] = "Frame Object Bar/Web" ;
     Text[ chinese_simplified ] = "жЎ†еЇ№и±Ўж Џ/дё‡з»ґзЅ‘";
-    Text[ russian ] = "Панель объекта кадра/Web";
+    Text[ russian ] = "Контекстная панель кадра/Веб";
     Text[ polish ] = "Pasek obiektуw ramki/Web";
     Text[ japanese ] = "жћ г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гѓђгѓј/Web";
     Text[ chinese_traditional ] = "иЁЉжЎ†з‰©д»¶е€—/Web";
@@ -532,7 +532,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text [ italian ] = "Barra degli oggetti grafici/Web" ;
     Text [ portuguese_brazilian ] = "Gr?fico/Web" ;
     Text [ portuguese ] = "Barra de objectos grбficos/Web" ;
-    Text [ finnish ] = "Grafiikkaobjektipalkki/Web" ;
+    Text [ finnish ] = "Grafiikan muotoilurivi/Web" ;
     Text [ danish ] = "Grafikobjektlinje/Web" ;
     Text [ french ] = "Barre d'objets graphiques/Web" ;
     Text [ swedish ] = "Grafikobjektlist/Webb" ;
@@ -540,7 +540,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text [ spanish ] = "Barra de objetos grбficos/Web" ;
     Text [ english_us ] = "Graphics Object Bar/Web" ;
     Text[ chinese_simplified ] = "е›ѕеЅўеЇ№и±Ўж Џ/Web";
-    Text[ russian ] = "Панель графических объектов/Web";
+    Text[ russian ] = "Контекстная панель графических объектов/Веб";
     Text[ polish ] = "Pasek obiektуw graficznych/Web";
     Text[ japanese ] = "е›іеЅўжЏЏз”»г‚Єгѓ–г‚ёг‚§г‚Їгѓ€гѓђгѓј/Web";
     Text[ chinese_traditional ] = "ењ–еЅўз‰©д»¶е€—/Web";
