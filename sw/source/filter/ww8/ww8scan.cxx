@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 11:58:47 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 16:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _WW8SCAN_HXX
-#include <ww8scan.hxx>
+#include "ww8scan.hxx"
 #endif
 
 #define ASSERT_RET_ON_FAIL( aCon, aError, aRet ) \
@@ -123,37 +123,76 @@ namespace SL
     IMPLCONSTSTRINGARRAY(TextField);
 }
 
-class wwSprmSearcher
+template<class C> class wwSortedArray
 {
 private:
-    //The array of sprms, ww6 or ww8, whichever is appropiate
-    SprmInfo *mpWwSprmTab;
+    //The array e.g. of sprms.
+    C *mpWwSprmTab;
     size_t mnNoElems;
 public:
-    wwSprmSearcher(SprmInfo *pWwSprmTab, size_t nNoElems);
+    wwSortedArray(C *pWwSprmTab, size_t nNoElems)
+        : mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
+    {
+        ASSERT(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
+        ::std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
+#ifdef DEBUG
+//        Expected unique to leave duplicates untouched. Didn't actually
+//        happen that way with MSVC 6++
+//        const C *pIter = ::std::unique(mpWwSprmTab, mpWwSprmTab + mnNoElems);
 
-    //Find a sprm, return its address if found and 0 is not
-    const SprmInfo *wwSprmSearcher::search(SprmInfo aSrch) const;
+        bool bBroken=false;
+        rtl::OUString sError;
+        for (const C *pIter = mpWwSprmTab; pIter < mpWwSprmTab + mnNoElems - 1; ++pIter)
+        {
+            if (*pIter == *(pIter+1))
+            {
+                if (!bBroken)
+                {
+                    sError = rtl::OUString::createFromAscii(
+                        "WW8: Duplicate in list, almost certainly don't want that!\n"
+                        "(You will not see this message again unless you restart)\n"
+                        "Entries are...\n");
+                    bBroken=true;
+                }
+
+                size_t nSize = sizeof(C);
+                const sal_uInt8 *pHack =
+                    reinterpret_cast<const sal_uInt8 *>(&(*pIter));
+                for (size_t i=0; i < nSize; ++i)
+                {
+                    sError += rtl::OUString::valueOf(
+                        static_cast<sal_Int32>(pHack[i]), 16);
+                    sError += rtl::OUString::valueOf(sal_Unicode(' '));
+                }
+                sError += rtl::OUString::valueOf(sal_Unicode('\n'));
+            }
+        }
+        if (bBroken)
+            DbgError(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+#endif
+    }
+
+    //Find an entry, return its address if found and 0 if not
+    const C *search(C aSrch) const;
 };
 
-bool operator<(const SprmInfo &rFirst, const SprmInfo &rSecond)
+template<class C> const C *wwSortedArray<C>::search(C aSrch) const
 {
-    return (rFirst.nId < rSecond.nId);
-}
-
-wwSprmSearcher::wwSprmSearcher(SprmInfo *pWwSprmTab, size_t nNoElems)
-: mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
-{
-    ::std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
-}
-
-const SprmInfo *wwSprmSearcher::search(SprmInfo aSrch) const
-{
-    const SprmInfo *pIter =
+    const C *pIter =
         ::std::lower_bound(mpWwSprmTab, mpWwSprmTab + mnNoElems, aSrch);
     if (pIter == mpWwSprmTab + mnNoElems || *pIter < aSrch)
         pIter=0;
     return pIter;
+}
+
+bool operator==(const SprmInfo &rFirst, const SprmInfo &rSecond)
+{
+    return (rFirst.nId == rSecond.nId);
+}
+
+bool operator<(const SprmInfo &rFirst, const SprmInfo &rSecond)
+{
+    return (rFirst.nId < rSecond.nId);
 }
 
 const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher()
@@ -642,7 +681,6 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         0x4873, 2, L_FIX, // undocumented
         0x4874, 2, L_FIX, // undocumented
         0x6463, 4, L_FIX, // undocumented
-        0x6870, 4, L_FIX, // undocumented
         0x2461, 1, L_FIX, // undoc, must be asian version of "sprmPJc"
         0x845D, 2, L_FIX, // undoc, must be asian version of "sprmPDxaRight"
         0x845E, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 11:58:48 $
+ *  last change: $Author: cmc $ $Date: 2002-07-11 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,13 @@ namespace SL
     DEFCONSTSTRINGARRAY(TextField);
 }
 
+//simple template that manages a static [] array by sorting at construction
+template<class C> class wwSortedArray;
+
 //wwSprmParser knows how to take a sequence of bytes and split it up into
 //sprms and their arguments
 class SvUShortsSort;        //Remove these nasty old things
 class WW8PLCFx_SEPX;        //Yucky friend, remove this horror
-class wwSprmSearcher;       //pImpl that can lookup details of a single sprm
 
 struct SprmInfo
 {
@@ -121,6 +123,9 @@ struct SprmInfo
     int nLen : 6;
     int nVari : 2;
 };
+
+//a managed sorted sequence of sprminfos
+typedef wwSortedArray<SprmInfo> wwSprmSearcher;
 
 class wwSprmParser
 {
