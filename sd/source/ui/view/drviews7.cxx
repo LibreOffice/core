@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:37:34 $
+ *  last change: $Author: ka $ $Date: 2001-04-24 10:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
+#endif
+#ifndef _SVX_CLIPFMTITEM_HXX
+#include <svx/clipfmtitem.hxx>
 #endif
 #ifndef _SVX_FMSHELL_HXX
 #include <svx/fmshell.hxx>
@@ -513,12 +516,55 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put( SfxStringItem( SID_CONTEXT, pDrView->GetStatusText() ) );
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) )
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+
         if( !TransferableDataHelper::CreateFromSystemClipboard().GetFormatCount() )
         {
             rSet.DisableItem( SID_PASTE );
             rSet.DisableItem( SID_PASTE2 );
+        }
+        else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
+        {
+            SvxClipboardFmtItem aItem( SID_CLIPBOARD_FORMAT_ITEMS );
+
+            for( sal_uInt32 i = 0; i < aDataHelper.GetFormatCount(); i++ )
+            {
+                ::com::sun::star::datatransfer::DataFlavor  aFlavor;
+                const SotFormatStringId                     aTestFormat = aDataHelper.GetFormat( i );
+                static SotFormatStringId                    aSupportedFormats[] =
+                {
+                    SOT_FORMATSTR_ID_EMBED_SOURCE,
+                    SOT_FORMATSTR_ID_LINK_SOURCE,
+                    SOT_FORMATSTR_ID_DRAWING,
+                    SOT_FORMATSTR_ID_SVXB,
+                    FORMAT_GDIMETAFILE,
+                    FORMAT_BITMAP,
+                    FORMAT_STRING,
+                    SOT_FORMATSTR_ID_HTML,
+                    FORMAT_RTF,
+                    SOT_FORMATSTR_ID_EDITENGINE
+                };
+
+                for( sal_uInt32 n = 0, nCount = sizeof( aSupportedFormats ) / sizeof( SotFormatStringId ); n < nCount; n++ )
+                {
+                    if( aTestFormat == aSupportedFormats[ n ] )
+                    {
+                        if( ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) ||
+                            ( SOT_FORMATSTR_ID_EMBED_SOURCE == aTestFormat ) ||
+                            ( SOT_FORMATSTR_ID_EDITENGINE == aTestFormat ) )
+                        {
+                            aItem.AddClipbrdFormat( aTestFormat );
+                        }
+                        else
+                            aItem.AddClipbrdFormat( aTestFormat, ( SotExchange::GetFormatDataFlavor( aTestFormat, aFlavor ), aFlavor.HumanPresentableName ) );
+                    }
+                }
+            }
+
+            rSet.Put( aItem );
         }
     }
 

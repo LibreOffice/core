@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-24 18:49:42 $
+ *  last change: $Author: ka $ $Date: 2001-04-24 10:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #include <svx/editdata.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/svxenum.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-01 12:31:02 $
+ *  last change: $Author: ka $ $Date: 2001-04-24 10:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
 #endif
+#ifndef _SVX_CLIPBOARDCTL_HXX_
+#include <svx/clipboardctl.hxx>
+#endif
 
 #include "sddll.hxx"
 #define _SD_DIACTRL_CXX
@@ -235,7 +238,6 @@ void SdDLL::RegisterControllers()
     SfxMenuControl::RegisterControl( SID_SET_SNAPITEM, pMod );
     SfxMenuControl::RegisterControl( SID_DELETE_SNAPITEM, pMod );
     SfxMenuControl::RegisterControl( SID_BEZIER_CLOSE, pMod );
+
+    SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
 }
-
-
-
