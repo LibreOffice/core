@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationstate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:42:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,16 @@ namespace sdr
             if(GetAnimationInfo().DoRegisterAgain(nTime, nNewTime, *this))
             {
                 SetTime(nNewTime);
-                GetObjectAnimator().InsertEvent(this);
             }
+            else
+            {
+                // #i38135# Advance 10 minutes
+                nNewTime = nTime + (10L * 60000L);
+                SetTime(nNewTime);
+            }
+
+            // insert event again
+            GetObjectAnimator().InsertEvent(this);
         }
     } // end of namespace animation
 } // end of namespace sdr
