@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:05:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2289,6 +2289,9 @@ BOOL SwFEShell::IsGroupSelected()
             // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
             // Thus, use corresponding method instead of checking type.
             if ( pObj->IsGroupObject() &&
+                 // --> FME 2004-12-08 #i38505# No ungroup allowed for 3d objects
+                 !pObj->Is3DObj() &&
+                 // <--
                  FLY_IN_CNTNT != ((SwDrawContact*)GetUserCall(pObj))->
                                       GetFmt()->GetAnchor().GetAnchorId() )
             {
