@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:47:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "intfrm.hxx"
-#include "ipfrm.hxx"
+//#include "ipfrm.hxx"
 #include "tbxcust.hxx"
 #include "sfxhelp.hxx"
 #include "templdlg.hxx"
@@ -98,7 +98,7 @@ void SfxApplication::Registrations_Impl()
     SfxModule::RegisterInterface();
     SfxViewFrame::RegisterInterface();
     SfxInternalFrame::RegisterInterface();
-    SfxInPlaceFrame::RegisterInterface();
+    //SfxInPlaceFrame::RegisterInterface();
     SfxTopViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
