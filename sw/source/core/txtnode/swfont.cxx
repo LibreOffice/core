@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-18 12:23:54 $
+ *  last change: $Author: fme $ $Date: 2001-04-19 12:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1352,18 +1352,16 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 
 void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 {
-    const USHORT nOrientation = GetOrientation();
-    const USHORT nEscapement = GetEscapement();
     long nOfst;
 
-    switch ( nEscapement )
+    switch ( GetEscapement() )
     {
     case DFLT_ESC_AUTO_SUB :
         nOfst = nOrgHeight - nOrgAscent -
             pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
             pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
 
-        switch ( nOrientation )
+        switch ( GetOrientation() )
         {
         case 0 :
             rPos.Y() += nOfst;
@@ -1381,7 +1379,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
         nOfst = pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() ) -
                 nOrgAscent;
 
-        switch ( nOrientation )
+        switch ( GetOrientation() )
         {
         case 0 :
             rPos.Y() += nOfst;
@@ -1398,7 +1396,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     default :
         nOfst = ((long)nOrgHeight * GetEscapement()) / 100L;
 
-        switch ( nOrientation )
+        switch ( GetOrientation() )
         {
         case 0 :
             rPos.Y() -= nOfst;
