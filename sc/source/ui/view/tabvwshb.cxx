@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-24 17:08:13 $
+ *  last change: $Author: er $ $Date: 2002-09-06 13:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,14 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                             if ( aArray.IsValid() )
                                 aArray.SetExtraStrings( *pMemChart );
                         }
+
+                        // #102706# After loaded, a chart doesn't know our
+                        // number formatter, therefor new formats added in the
+                        // meantime aren't available in the chart's number
+                        // formatter dialog. Set the formatter here. The
+                        // original bug was the SourceFormat checkbox not being
+                        // available, but that is a problem of the chart.
+                        pMemChart->SetNumberFormatter( GetViewData()->GetDocument()->GetFormatTable() );
 
                         // disable DataBrowseBox for editing chart data
                         pMemChart->SetReadOnly( TRUE );
