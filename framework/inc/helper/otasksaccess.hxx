@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otasksaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <classes/framecontainer.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -154,6 +154,7 @@ namespace framework{
 
 class OTasksAccess  :   public css::lang::XTypeProvider             ,
                         public css::container::XEnumerationAccess   ,   // => XElementAccess
+                        private ThreadHelpBase                      ,
                         public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -177,15 +178,13 @@ class OTasksAccess  :   public css::lang::XTypeProvider             ,
 
             @param      "xOwner" is a reference to ouer owner and must be the desktop!
             @param      "pTasks" is a pointer to the taskcontainer of the desktop. We need it to create a new enumeration.
-            @param      "aMutex" is a reference to the shared mutex of ouer owner(the desktop).
             @return     -
 
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
          OTasksAccess(  const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
-                                FrameContainer*                                 pTasks  ,
-                                ::osl::Mutex&                                   aMutex  );
+                                FrameContainer*                                 pTasks  );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -302,8 +301,7 @@ class OTasksAccess  :   public css::lang::XTypeProvider             ,
     private:
 
         static sal_Bool impldbg_checkParameter_OTasksAccessCtor(    const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
-                                                                               FrameContainer*                                  pTasks  ,
-                                                                            ::osl::Mutex&                                   aMutex  );
+                                                                            FrameContainer*                                 pTasks  );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -314,7 +312,6 @@ class OTasksAccess  :   public css::lang::XTypeProvider             ,
 
     private:
 
-        ::osl::Mutex&                                       m_aMutex            ;   /// shared mutex with owner
         css::uno::WeakReference< css::frame::XDesktop >     m_xOwner            ;   /// weak reference to the desktop object!
         FrameContainer*                                     m_pTasks            ;   /// pointer to list of current tasks on desktop (is a member of class Desktop!)
                                                                                     /// This pointer is valid only, if weakreference can be locked.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 #include <classes/framecontainer.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -149,6 +153,7 @@ namespace framework{
 *//*-*************************************************************************************************************/
 
 class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElementAccess
+                    private ThreadHelpBase      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
                     public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -164,12 +169,11 @@ class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElemen
         /*-****************************************************************************************************//**
             @short      standard ctor
             @descr      These initialize a new instance of this class with all needed informations for work.
-                        We share mutex and framecontainer with owner implementation!
+                        We share framecontainer with owner implementation! It's a threadsafe container.
 
             @seealso    -
 
             @param      "xFactory"          , reference to factory which has created ouer owner(!). We can use these to create new uno-services.
-            @param      "aMutex"            , reference to shared mutex of owner implementation.
             @param      "xOwner"            , reference to ouer owner. We hold a wekreference to prevent us against cross-references!
             @param      "pFrameContainer"   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
             @return     -
@@ -178,7 +182,6 @@ class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElemen
         *//*-*****************************************************************************************************/
 
          OFrames(   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                            ::osl::Mutex&                                           aMutex          ,
                     const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
 
@@ -397,7 +400,6 @@ class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElemen
     private:
 
         static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                                                                        ::osl::Mutex&                                           aMutex          ,
                                                                 const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                                                                         FrameContainer*                                         pFrameContainer );
         static sal_Bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
@@ -414,7 +416,6 @@ class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElemen
     private:
 
         css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                      ;   /// reference to global servicemanager
-        ::osl::Mutex&                                               m_aMutex                        ;   /// shared mutex with owner of an instance of this class
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct childs of an XFramesSupplier
         sal_Bool                                                    m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents

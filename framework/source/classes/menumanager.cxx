@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 10:44:16 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include <helper/imageproducer.hxx>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -148,6 +152,10 @@
 #include <vcl/window.hxx>
 #include <vos/mutex.hxx>
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -184,7 +192,7 @@ const ::rtl::OUString aSlotSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5
 const ::rtl::OUString aSlotSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5610" ));
 
 MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
-    OMutexMember(), OWeakObject()
+    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -304,7 +312,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
 
 
 MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
-    OMutexMember(), OWeakObject()
+    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
 {
     m_bActive           = sal_False;
     m_bDeleteMenu       = bDelete;
@@ -401,7 +409,7 @@ MenuManager::~MenuManager()
 
 MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( USHORT nItemId )
 {
-    LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::GetMenuItemHandler" )
+    ResetableGuard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
     for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
@@ -422,7 +430,7 @@ throw ( RuntimeException )
     MenuItemHandler* pStatusChangedMenu = NULL;
 
     {
-        LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::statusChanged" )
+        ResetableGuard aGuard( m_aLock );
 
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
@@ -440,7 +448,7 @@ throw ( RuntimeException )
     {
         OGuard  aGuard( Application::GetSolarMutex() );
         {
-            LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::statusChanged" )
+            ResetableGuard aGuard( m_aLock );
 
             sal_Bool bCheckmark         = sal_False;
             sal_Bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
@@ -488,7 +496,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
 {
     if ( Source.Source == m_xFrame )
     {
-        LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::disposing" )
+        ResetableGuard aGuard( m_aLock );
 
         // disposing called from parent dispatcher
         // remove all listener to prepare shutdown
@@ -520,7 +528,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
         MenuItemHandler* pMenuItemDisposing = NULL;
 
         {
-            LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::disposing" )
+            ResetableGuard aGuard( m_aLock );
 
             std::vector< MenuItemHandler* >::iterator p;
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
@@ -630,7 +638,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         }
 
         {
-            LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::UpdateSpecialFileMenu" )
+            ResetableGuard aGuard( m_aLock );
 
             int nRemoveItemCount = 0;
             int nItemCount       = pMenu->GetItemCount();
@@ -708,7 +716,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
     }
 
     {
-        LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::UpdateSpecialWindowMenu" )
+        ResetableGuard aGuard( m_aLock );
 
         int nRemoveItemCount = 0;
         int nItemCount       = pMenu->GetItemCount();
@@ -815,7 +823,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
             REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
 
-            LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::Activate" )
+            ResetableGuard aGuard( m_aLock );
 
             REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )
@@ -886,7 +894,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     REFERENCE< XDISPATCH >  xDispatch;
 
     {
-        LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::Select" )
+        ResetableGuard aGuard( m_aLock );
 
         USHORT nCurItemId = pMenu->GetCurItemId();
         if ( pMenu == m_pVCLMenu &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <helper/ocomponentenumeration.hxx>
 #endif
 
+#ifndef _FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -82,6 +86,10 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -112,16 +120,15 @@ using namespace ::rtl                           ;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-OComponentAccess::OComponentAccess( const   Reference< XDesktop >&      xOwner  ,
-                                            Mutex&                      aMutex  )
+OComponentAccess::OComponentAccess( const Reference< XDesktop >& xOwner )
         //  Init baseclasses first
-        :   OWeakObject     (           )
+        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
+        ,   OWeakObject     (                               )
         // Init member
-        ,   m_aMutex        ( aMutex    )
-        ,   m_xOwner        ( xOwner    )
+        ,   m_xOwner        ( xOwner                        )
 {
     // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_OComponentAccessCtor( xOwner, aMutex ), "OComponentAccess::OComponentAccess()\nInvalid parameter detected!\n" )
+    LOG_ASSERT( impldbg_checkParameter_OComponentAccessCtor( xOwner ), "OComponentAccess::OComponentAccess()\nInvalid parameter detected!\n" )
 }
 
 //*****************************************************************************************************************
@@ -151,7 +158,7 @@ DEFINE_XTYPEPROVIDER_3( OComponentAccess                        ,
 Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OComponentAccess::createEnumeration()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value, if method failed.
     // If no desktop exist and there is no task container - return an empty enumeration!
@@ -191,7 +198,7 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException )
 sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OComponentAccess::hasElements()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value, if method failed.
     sal_Bool bReturn = sal_False;
@@ -294,15 +301,13 @@ Reference< XComponent > OComponentAccess::impl_getFrameComponent( const Referenc
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
-sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   Reference< XDesktop >&      xOwner  ,
-                                                                                Mutex&                      aMutex  )
+sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   Reference< XDesktop >&      xOwner  )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
     if  (
             ( &xOwner       ==  NULL        )   ||
-            ( &aMutex       ==  NULL        )   ||
             ( xOwner.is()   ==  sal_False   )
         )
     {

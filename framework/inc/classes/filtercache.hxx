@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: as $ $Date: 2001-06-06 05:21:59 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include <classes/filtercachedata.hxx>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
-#include <threadhelp/rwlockbase.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
@@ -155,14 +155,14 @@ namespace framework{
                     For better performance its neccessary to cache all needed values.
 
     @implements     -
-    @base           FairRWLockBase
+    @base           ThreadHelpBase
                     TransactionBase
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class FilterCache   :   private FairRWLockBase
+class FilterCache   :   private ThreadHelpBase
                     ,   private TransactionBase
 {
     //-------------------------------------------------------------------------------------------------------------

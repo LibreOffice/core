@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-06 17:24:57 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELPER_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -490,14 +490,14 @@ class cIMPL_Dialog  :   public ModalDialog
                 XServiceInfo
                 XDialog
 
-    @base       OMutexMember
+    @base       ThreadHelpBase
                 OWeakObject
 *//*-*************************************************************************************************************/
 
 class LoginDialog   :   public XTYPEPROVIDER                ,
                         public XSERVICEINFO                 ,
                         public XDIALOG                      ,
-                        public OMutexMember                 ,   // Order of baseclasses is neccessary for right initialization!
+                        private ThreadHelpBase              ,   // Order of baseclasses is neccessary for right initialization!
                         public OBROADCASTHELPER             ,
                         public OPROPERTYSETHELPER           ,
                         public OWEAKOBJECT

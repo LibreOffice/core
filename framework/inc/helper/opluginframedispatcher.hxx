@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opluginframedispatcher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -193,6 +193,7 @@ typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         
 class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider            ,
                                       public css::frame::XDispatch                  ,
                                     public css::mozilla::XPluginInstanceNotifySink  ,
+                                    private ThreadHelpBase                          ,
                                     public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -223,7 +224,6 @@ class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider        
         *//*-*****************************************************************************************************/
 
          OPlugInFrameDispatcher(    const   css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory    ,
-                                        ::osl::Mutex&                                               aMutex      ,
                                 const   css::uno::Reference< css::mozilla::XPluginInstance >&       xOwner      ,
                                 const   css::uno::Reference< css::mozilla::XPluginInstancePeer >&   xPlugInDLL  );
 
@@ -410,7 +410,6 @@ class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider        
     private:
 
          static sal_Bool impldbg_checkParameter_OPlugInFrameDispatcherCtor  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory            ,
-                                                                                        ::osl::Mutex&                                               aMutex              ,
                                                                                 const   css::uno::Reference< css::mozilla::XPluginInstance >&       xOwner              ,
                                                                                 const   css::uno::Reference< css::mozilla::XPluginInstancePeer >&   xPlugInDLL          );
         static sal_Bool impldbg_checkParameter_queryDispatch                (   const   css::util::URL&                                             aURL                ,
@@ -435,7 +434,6 @@ class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider        
     private:
 
         css::uno::Reference< css::lang::XMultiServiceFactory >          m_xFactory              ;   /// servicemanager to create uno services
-        ::osl::Mutex&                                                   m_aMutex                ;   /// shared mutex with owner instance
         css::uno::WeakReference< css::mozilla::XPluginInstance >        m_xOwnerWeak            ;   /// weakreference to owner (Don't use a hard reference. Owner can't delete us then!)
         css::uno::Reference< css::mozilla::XPluginInstancePeer >        m_xPlugInDLL            ;   /// Interface for communication with browser.
         ::rtl::OUString                                                 m_sTargetFrameName      ;   /// We need it as target for get/postURL.

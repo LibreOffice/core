@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -156,13 +156,15 @@ namespace framework{
                     XEnumerationAccess
                     XElementAccess
 
-    @base           OWeakObject
+    @base           ThreadHelpBase
+                    OWeakObject
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
 class OComponentAccess  :   public css::lang::XTypeProvider             ,
                             public css::container::XEnumerationAccess   ,   // => XElementAccess
+                            private ThreadHelpBase                      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
                             public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
@@ -185,14 +187,12 @@ class OComponentAccess  :   public css::lang::XTypeProvider             ,
             @seealso    class OComponentEnumeration
 
             @param      "xOwner" is a reference to ouer owner and must be the desktop!
-            @param      "aMutex" is a reference to the shared mutex of ouer owner(the desktop).
             @return     -
 
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OComponentAccess(  const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
-                                    ::osl::Mutex&                                   aMutex  );
+        OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -339,8 +339,7 @@ class OComponentAccess  :   public css::lang::XTypeProvider             ,
 
     private:
 
-        static sal_Bool impldbg_checkParameter_OComponentAccessCtor(    const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
-                                                                                   ::osl::Mutex&                                    aMutex  );
+        static sal_Bool impldbg_checkParameter_OComponentAccessCtor( const css::uno::Reference< css::frame::XDesktop >& xOwner );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -351,8 +350,7 @@ class OComponentAccess  :   public css::lang::XTypeProvider             ,
 
     private:
 
-        ::osl::Mutex&                                       m_aMutex            ;   /// shared mutex with owner
-        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner            ;   /// weak reference to the desktop object!
+        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner    ;   /// weak reference to the desktop object!
 
 };      //  class OComponentAccess
 

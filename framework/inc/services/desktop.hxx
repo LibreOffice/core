@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include <classes/taskcreator.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
@@ -256,7 +256,7 @@ enum eIMPL_loadState
                 XMultiPropertySet
                 XStatusListener
                 XEventListener
-    @base       OMutexMember
+    @base       ThreadHelpBase
                 OBroadcastHelper
                 OPropertySetHelper
                 OWeakObject
@@ -273,7 +273,7 @@ class Desktop   :   public css::lang::XTypeProvider             ,
                     public css::frame::XFramesSupplier          ,   // => XFrame => XComponent
                     public css::task::XStatusIndicatorFactory   ,
                     public css::frame::XStatusListener          ,   // => XEventListener
-                    public OMutexMember                         ,   // Struct for right initalization of mutex member! Must be the first one of baseclasses!
+                    public ThreadHelpBase                           ,   // Struct for right initalization of mutex member! Must be the first one of baseclasses!
                     public ::cppu::OBroadcastHelper             ,
                     public ::cppu::OPropertySetHelper           ,
                     public ::cppu::OWeakObject

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <helper/oframes.hxx>
 #endif
 
+#ifndef _FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -82,6 +86,10 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -115,21 +123,20 @@ using namespace ::vos                           ;
 //  constructor
 //*****************************************************************************************************************
 OFrames::OFrames(   const   Reference< XMultiServiceFactory >&  xFactory        ,
-                            Mutex&                              aMutex          ,
                     const   Reference< XFrame >&                xOwner          ,
                             FrameContainer*                     pFrameContainer )
         //  Init baseclasses first
-        :   OWeakObject                 (                   )
+        :   ThreadHelpBase              ( &Application::GetSolarMutex() )
+        ,   OWeakObject                 (                               )
         // Init member
-        ,   m_xFactory                  ( xFactory          )
-        ,   m_aMutex                    ( aMutex            )
-        ,   m_xOwner                    ( xOwner            )
-        ,   m_pFrameContainer           ( pFrameContainer   )
-        ,   m_bRecursiveSearchProtection( sal_False         )
+        ,   m_xFactory                  ( xFactory                      )
+        ,   m_xOwner                    ( xOwner                        )
+        ,   m_pFrameContainer           ( pFrameContainer               )
+        ,   m_bRecursiveSearchProtection( sal_False                     )
 {
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_OFramesCtor( xFactory, aMutex, xOwner, pFrameContainer ), "OFrames::OFrames()\nInvalid parameter detected!\n" )
+    LOG_ASSERT( impldbg_checkParameter_OFramesCtor( xFactory, xOwner, pFrameContainer ), "OFrames::OFrames()\nInvalid parameter detected!\n" )
 }
 
 //*****************************************************************************************************************
@@ -157,7 +164,7 @@ DEFINE_XINTERFACE_3     (   OFrames                         ,
 void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OFrames::append()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -183,7 +190,7 @@ void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( Runtim
 void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OFrames::remove()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -210,7 +217,7 @@ void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( Runtim
 Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OFrames::queryFrames()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -320,7 +327,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
 sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OFrames::getCount()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value.
     sal_Int32 nCount = 0;
@@ -346,7 +353,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
                                                             RuntimeException            )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OFrames::getByIndex()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value.
     Any aReturnValue;
@@ -380,7 +387,7 @@ Type SAL_CALL OFrames::getElementType() throw( RuntimeException )
 sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OFrames::hasElements()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Set default return value.
     sal_Bool bHasElements = sal_False;
@@ -477,7 +484,6 @@ void OFrames::impl_appendSequence(          Sequence< Reference< XFrame > >&    
 // We share the mutex with ouer owner class, need a valid factory to instanciate new services and
 // use the access to ouer owner for some operations.
 sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   Reference< XMultiServiceFactory >&  xFactory        ,
-                                                                Mutex&                              aMutex          ,
                                                         const   Reference< XFrame >&                xOwner          ,
                                                                 FrameContainer*                     pFrameContainer )
 {
@@ -486,7 +492,6 @@ sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   Reference< XMult
     // Check parameter.
     if  (
             ( &xFactory         ==  NULL        )   ||
-            ( &aMutex           ==  NULL        )   ||
             ( &xOwner           ==  NULL        )   ||
             ( xFactory.is()     ==  sal_False   )   ||
             ( xOwner.is()       ==  sal_False   )   ||

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:45 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -120,8 +124,8 @@ using namespace ::com::sun::star::frame     ;
 FrameContainer::FrameContainer()
         // initialize base classes first.
         // Order is neccessary for right initilization of his and OUR member ... m_aLock, m_aTransactionManager ...
-        : FairRWLockBase ()
-        , TransactionBase()
+        : ThreadHelpBase ( &Application::GetSolarMutex() )
+        , TransactionBase(                               )
 {
     // Make object ready for working.
     // change working mode from E_INIT to E_WORK

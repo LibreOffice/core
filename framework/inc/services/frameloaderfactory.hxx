@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frameloaderfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-04-04 13:28:32 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <classes/filtercache.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -176,7 +176,7 @@ struct tIMPLExtractedArguments
                 XMultiServiceFactory
                 XNameAccess
                 XElementAccess
-    @base       OMutexMember
+    @base       ThreadHelpBase
                 OWeakObject
 
     @devstatus  deprecated
@@ -186,7 +186,7 @@ class FrameLoaderFactory    :   public css::lang::XTypeProvider             ,
                                 public css::lang::XServiceInfo              ,
                                 public css::lang::XMultiServiceFactory      ,
                                 public css::container::XNameAccess          ,       // => XElementAccess
-                                public OMutexMember                         ,       // Struct for right initalization of mutex member! Mst first of baseclasses
+                                public ThreadHelpBase                           ,       // Struct for right initalization of mutex member! Mst first of baseclasses
                                 public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------

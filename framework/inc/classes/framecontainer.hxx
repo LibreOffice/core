@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:11:08 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
-#include <threadhelp/rwlockbase.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
@@ -149,14 +149,14 @@ typedef TFrameContainer::const_iterator                             TConstFrameI
                     container-items.
 
     @implements     -
-    @base           FairRWLockBase
+    @base           ThreadHelpBase
                     TransactionBase
 
     @devstatus      ready to use
     @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class FrameContainer : private FairRWLockBase
+class FrameContainer : private ThreadHelpBase
                      , private TransactionBase
 {
     //-------------------------------------------------------------------------------------------------------------

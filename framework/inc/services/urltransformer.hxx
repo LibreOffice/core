@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -138,14 +138,14 @@ namespace framework{
                 XServiceInfo
                 XURLTransformer
 
-    @base       OMutexMember
+    @base       ThreadHelpBase
                 OWeakObject
 *//*-*************************************************************************************************************/
 
 class URLTransformer    :   public css::lang::XTypeProvider     ,
                             public css::lang::XServiceInfo      ,
                             public css::util::XURLTransformer   ,
-                            public OMutexMember                 ,
+                            public ThreadHelpBase                   ,
                             public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-04 15:35:09 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,8 @@
 #include <threadhelp/transactionbase.hxx>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
-#include <threadhelp/rwlockbase.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_MUTEXBASE_HXX_
-#include <threadhelp/mutexbase.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
@@ -276,7 +272,7 @@ enum EActiveState
                 XEventListener
 
     @base       MutexBase
-                FairRWLockBase
+                ThreadHelpBase
                 TransactionBase
                 OBroadcastHelper
                 OPropertySetHelper
@@ -299,9 +295,8 @@ class Frame :   // interfaces
                 public  css::awt::XFocusListener                    ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
-                protected MutexBase                                   ,   // helper for threadsafe propertyset! OPropertySetHelper can't work with rw-lock.
-                private FairRWLockBase                              ,   // helper for own threadsafe code
-                private TransactionBase                             ,   // helper for rejecting calls for wrong object states
+                public ThreadHelpBase                              ,   // helper for own threadsafe code
+                public TransactionBase                             ,   // helper for rejecting calls for wrong object states
                 public  ::cppu::OBroadcastHelper                    ,   // helper for propertyset => XPropertySet, XFastPropertySet, XMultiPropertySet
                 public  ::cppu::OPropertySetHelper                  ,
                 public  ::cppu::OWeakObject                             // helper for refcount mechanism

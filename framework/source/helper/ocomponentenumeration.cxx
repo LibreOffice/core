@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentenumeration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <helper/ocomponentenumeration.hxx>
 #endif
 
+#ifndef _FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -74,6 +78,10 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -108,14 +116,14 @@ OComponentEnumeration::OComponentEnumeration( const Sequence< Reference< XCompon
         //  Init baseclasses first
         //  Attention:
         //      Don't change order of initialization!
-        //      OMutexMember is a struct with a mutex as member. We can't use a mutex as member, while
+        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
         //      we must garant right initialization and a valid value of this! First initialize
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
-        :   OMutexMember    (               )
-        ,   OWeakObject     (               )
+        :   ThreadHelpBase  ( &Application::GetSolarMutex() )
+        ,   OWeakObject     (                               )
         // Init member
-        ,   m_nPosition     ( 0             )   // 0 is the first position for a valid list and the right value for an invalid list to!
-        ,   m_seqComponents ( seqComponents )
+        ,   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
+        ,   m_seqComponents ( seqComponents                 )
 {
     // Safe impossible states
     // "Method" not defined for ALL parameters!
@@ -153,7 +161,7 @@ DEFINE_XTYPEPROVIDER_3  (   OComponentEnumeration           ,
 void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OComponentEnumeration::disposing()" )
+    ResetableGuard aGuard( m_aLock );
 
     // Safe impossible cases
     // This method is not specified for all incoming parameters.
@@ -169,7 +177,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
 sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OComponentEnumeration::hasMoreElements()" )
+    ResetableGuard aGuard( m_aLock );
 
     // First position in a valid list is 0.
     // => The last one is getLength() - 1!
@@ -186,7 +194,7 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
                                                             RuntimeException        )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "OComponentEnumeration::nextElement()" )
+    ResetableGuard aGuard( m_aLock );
 
     // If we have no elements or end of enumeration is arrived ...
     if ( hasMoreElements() == sal_False )

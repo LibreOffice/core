@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-24 14:21:08 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
@@ -127,7 +127,7 @@ namespace framework
 
 class BmkMenu;
 class MenuManager : public XSTATUSLISTENER      ,
-                    public OMutexMember         ,
+                    public ThreadHelpBase           ,
                     public ::cppu::OWeakObject
 {
     public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-23 05:49:43 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

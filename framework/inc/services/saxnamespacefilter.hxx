@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxnamespacefilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-05-23 06:12:17 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_XMLNAMESPACES_HXX_
@@ -96,7 +96,7 @@ namespace framework
 {
 
 class SaxNamespaceFilter : public ::com::sun::star::xml::sax::XDocumentHandler,
-                           public OMutexMember, // Struct for right initalization of mutex member! Must be first of baseclasses.
+                           public ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                            public ::cppu::OWeakObject
 {
     public:

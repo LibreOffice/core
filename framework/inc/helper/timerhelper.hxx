@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timerhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 13:40:22 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,17 @@
  *
  ************************************************************************/
 
-#ifndef _FRAMEWORK_HELPER_TIMERHELPER_HXX_
-#define _FRAMEWORK_HELPER_TIMERHELPER_HXX_
+#ifndef __FRAMEWORK_HELPER_TIMERHELPER_HXX_
+#define __FRAMEWORK_HELPER_TIMERHELPER_HXX_
+
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
+#endif
 
 #ifndef _VOS_TIMER_HXX_
 #include <vos/timer.hxx>
 #endif
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -88,18 +93,18 @@ namespace framework
     //====================================================================
     /** implements a timer
     */
-    class OTimerHelper : public ::vos::OTimer
+    class OTimerHelper : private ThreadHelpBase
+                       , public ::vos::OTimer
     {
     protected:
-        ::osl::Mutex&   m_rMutex;
         ITimerListener* m_pListener;
 
     public:
-        OTimerHelper( ::osl::Mutex& _rMutex, const ::vos::TTimeValue& _rExpireTime );
+        OTimerHelper( const ::vos::TTimeValue& _rExpireTime );
 
         // the link set here will be called with m_rMutex acquired
-        void            setListener( ITimerListener* _pListener ) { m_pListener = _pListener; }
-        ITimerListener* getListener( ) const { return m_pListener; }
+        void            setListener( ITimerListener* _pListener )       { m_pListener = _pListener; }
+        ITimerListener* getListener(                            ) const { return m_pListener;       }
 
     protected:
         virtual void SAL_CALL onShot();
@@ -114,6 +119,9 @@ namespace framework
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/07 13:40:22  fs
+ *  initial checkin - a vos-based timer using a callback on expiration
+ *
  *
  *  Revision 1.0 03.05.01 16:10:30  fs
  ************************************************************************/
