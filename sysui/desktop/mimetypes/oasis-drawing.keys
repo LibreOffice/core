@@ -1,4 +1,4 @@
-application/vnd.oasis.opendocument.drawing
+application/vnd.oasis.opendocument.graphics
 	description=OpenDocument Drawing
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=openoffice,staroffice,starsuite

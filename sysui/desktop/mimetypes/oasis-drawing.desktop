@@ -5,5 +5,5 @@ Hidden=false
 Icon=oasis-drawing
 Type=MimeType
 Patterns=*.odg
-MimeType=application/vnd.oasis.opendocument.drawing
+MimeType=application/vnd.oasis.opendocument.graphics
 Comment=OpenDocument Drawing

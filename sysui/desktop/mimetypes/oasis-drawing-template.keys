@@ -1,4 +1,4 @@
-application/vnd.oasis.opendocument.drawing-template
+application/vnd.oasis.opendocument.graphics-template
 	description=OpenDocument Drawing Template
 	default_action_type=application
 	short_list_application_ids_for_novice_user_level=openoffice,staroffice,starsuite
