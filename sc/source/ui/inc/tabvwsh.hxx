@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:57:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ private:
     String                  aEditChartName;
     ScRangeListRef          aChartSource;
     Rectangle               aChartPos;
-    USHORT                  nChartDestTab;
+    SCTAB                   nChartDestTab;
     USHORT                  nCurRefDlgId;
 
     SfxBroadcaster*         pAccessibilityBroadcaster;
@@ -381,7 +381,7 @@ public:
 
     void            ResetChartArea();
     void            SetChartArea( const ScRangeListRef& rSource, const Rectangle& rDest );
-    BOOL            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, USHORT& rTab ) const;
+    BOOL            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
     BOOL            IsChartDlgEdit() const;
     void            SetChartDlgEdit(BOOL bFlag){bChartDlgIsEdit=bFlag;}
