@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgadduser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:43 $
+ *  last change: $Author: mfe $ $Date: 2000-10-23 14:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,7 @@ int _cdecl main( int argc, char * argv[] )
                 {
                     ::rtl::OUString sHomeDir(sHomeDirBase);
                     sHomeDir += sUserName;
-                    xSecurityDataAccess->replaceByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("homeDirectory")), makeAny(sHomeDir));
+                    xSecurityDataAccess->replaceByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeDirectory")), makeAny(sHomeDir));
                     cout << "\n\thome dir      : " << ASCII_STRING(sHomeDir) << " ... ";
                     cout.flush();
                     bHadLinebreak = sal_True;
@@ -373,7 +373,7 @@ int _cdecl main( int argc, char * argv[] )
 
                 if (sSystemAccountName.getLength())
                 {
-                    xSecurityDataAccess->replaceByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("systemAccount")), makeAny(sSystemAccountName));
+                    xSecurityDataAccess->replaceByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemAccount")), makeAny(sSystemAccountName));
                     cout << "\n\tsystem account: " << ASCII_STRING(sSystemAccountName) << " ... ";
                     cout.flush();
                     bHadLinebreak = sal_True;
