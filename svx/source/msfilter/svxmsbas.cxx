@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2004-05-26 08:14:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,15 @@
 #include <msvbasic.hxx>
 #endif
 
+#include <comphelper/storagehelper.hxx>
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 using namespace com::sun::star::container;
 using namespace com::sun::star::script;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star;
 
 
 int SvxImportMSVBasic::Import( const String& rStorageName,
@@ -115,17 +118,17 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
 {
     BOOL bValidStg = FALSE;
     {
-        SvStorageRef xVBAStg( xRoot->OpenStorage( rStorageName,
+        SvStorageRef xVBAStg( xRoot->OpenSotStorage( rStorageName,
                                     STREAM_READWRITE | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYALL ));
         if( xVBAStg.Is() && !xVBAStg->GetError() )
         {
-            SvStorageRef xVBASubStg( xVBAStg->OpenStorage( rSubStorageName,
+            SvStorageRef xVBASubStg( xVBAStg->OpenSotStorage( rSubStorageName,
                                      STREAM_READWRITE | STREAM_NOCREATE |
                                     STREAM_SHARE_DENYALL ));
             if( xVBASubStg.Is() && !xVBASubStg->GetError() )
             {
-                // then we will copy these storages into the SfxObjectShell-storage
+                // then we will copy these storages into the (temporary) storage of the document
                 bValidStg = TRUE;
             }
         }
@@ -133,9 +136,18 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
 
     if( bValidStg )
     {
-        SvStorageRef xDstRoot( rDocSh.GetStorage() );
         String aDstStgName( GetMSBasicStorageName() );
-        bValidStg = xRoot->CopyTo( rStorageName, xDstRoot, aDstStgName );
+        SotStorageRef xDst = SotStorage::OpenOLEStorage( rDocSh.GetStorage(), aDstStgName, STREAM_READWRITE | STREAM_TRUNC );
+        SotStorageRef xSrc = xRoot->OpenSotStorage( rStorageName, STREAM_STD_READ );
+
+        // TODO/LATER: should we commit the storage?
+        xSrc->CopyTo( xDst );
+        xDst->Commit();
+        ErrCode nError;
+        if ( (nError = xDst->GetError() != ERRCODE_NONE) || (nError = xSrc->GetError() != ERRCODE_NONE) )
+            xRoot->SetError( nError );
+        else
+            bValidStg = TRUE;
     }
 
     return bValidStg;
@@ -150,9 +162,6 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
     if( aVBA.Open(rStorageName,rSubStorageName) )
     {
         SFX_APP()->EnterBasicCall();
-//this method is removed in the Unicode-Version
-//      rDocSh.GetSbxObject();
-
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
@@ -257,11 +266,10 @@ ULONG SvxImportMSVBasic::SaveOrDelMSVBAStorage( BOOL bSaveInto,
                                                 const String& rStorageName )
 {
     ULONG nRet = ERRCODE_NONE;
-    SvStorageRef xSrcRoot( rDocSh.GetStorage() );
+    uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     String aDstStgName( GetMSBasicStorageName() );
-    SvStorageRef xVBAStg( xSrcRoot->OpenStorage( aDstStgName,
-                                STREAM_READWRITE | STREAM_NOCREATE |
-                                STREAM_SHARE_DENYALL ));
+    SotStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
+                                STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYALL ) );
     if( xVBAStg.Is() && !xVBAStg->GetError() )
     {
         xVBAStg = 0;
@@ -269,31 +277,27 @@ ULONG SvxImportMSVBasic::SaveOrDelMSVBAStorage( BOOL bSaveInto,
         {
             BasicManager *pBasicMan = rDocSh.GetBasicManager();
             if( pBasicMan && pBasicMan->IsBasicModified() )
-            {
                 nRet = ERRCODE_SVX_MODIFIED_VBASIC_STORAGE;
 
-// don't reset the modified flag
-//              StarBASIC *pBasic = pBasicMan->GetStdLib();
-//              if( pBasic )
-//                  pBasic->SetModified( FALSE );
-            }
-// JP 02.05.00: Bug 75492 - save always the BasicStorage
-//          else
-                xSrcRoot->CopyTo( aDstStgName, xRoot, rStorageName);
+            SotStorageRef xSrc = SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName, STREAM_STD_READ );
+            SotStorageRef xDst = xRoot->OpenSotStorage( rStorageName, STREAM_READWRITE | STREAM_TRUNC );
+            xSrc->CopyTo( xDst );
+            xDst->Commit();
+            ErrCode nError;
+            if ( (nError = xDst->GetError() != ERRCODE_NONE) || (nError = xSrc->GetError() != ERRCODE_NONE) )
+                xRoot->SetError( nError );
         }
-// we never stored this storage in our own format, so it may not be deleted
-//      else
-//          rDocSh.SvPersist::Remove( aDstStgName );
     }
+
     return nRet;
 }
 
-    // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
-    // If it exist, then return the WarningId for loosing the information.
+// check if the MS-VBA-Storage exists in the RootStorage of the DocShell.
+// If it exists, then return the WarningId for losing the information.
 ULONG SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 {
-    SvStorageRef xSrcRoot( rDocSh.GetStorage() );
-    SvStorageRef xVBAStg( xSrcRoot->OpenStorage( GetMSBasicStorageName(),
+    uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
+    SvStorageRef xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
                     STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL ));
     return ( xVBAStg.Is() && !xVBAStg->GetError() )
                     ? ERRCODE_SVX_VBASIC_STORAGE_EXIST
