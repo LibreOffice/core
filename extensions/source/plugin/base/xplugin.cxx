@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:14:07 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,10 +812,21 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         fprintf( stderr, "Plugin wants it in Mode %s\n", pType );
 #endif
         if( isfile && stype == NP_ASFILEONLY )
+        {
+            OString aFileName;
+            if( url.compareToAscii( "file:", 5 ) == 0 )
+            {
+                OUString aSysName;
+                osl_getSystemPathFromFileURL( url.pData, &aSysName.pData );
+                aFileName = OUStringToOString( aSysName, m_aEncoding );
+            }
+            else
+                aFileName = OUStringToOString( url, m_aEncoding );
             m_pPluginComm->
                 NPP_StreamAsFile( &m_aInstance,
                                   pStream->getStream(),
-                                  pStream->getStream()->url );
+                                  aFileName.getStr() );
+        }
         else
         {
             pStream->setMode( stype );
