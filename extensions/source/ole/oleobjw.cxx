@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 13:22:20 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 15:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,14 @@ Any  IUnknownWrapper_Impl::getValueWithDispId(DISPID dispID)
     // converting return value and out parameter back to UNO
     if (hr == S_OK)
     {
-        variantToAny(&varResult, ret);
+        // If the com object implements uno interfaces then we have
+        // to convert the attribute into the expected type.
+        TypeDescription attrInfo;
+        getAttributeInfo( attrInfo);
+        if( attrInfo.is() )
+            variantToAny2( &varResult, ret, Type( attrInfo.get()->pWeakRef));
+        else
+            variantToAny(&varResult, ret);
     }
 
     // freeing allocated OLE parameters
@@ -1075,6 +1082,18 @@ void IUnknownWrapper_Impl::getMethodInfo( TypeDescription& methodInfo)
     }
 }
 
+void IUnknownWrapper_Impl::getAttributeInfo( TypeDescription& attributeInfo)
+{
+    TypeDescription desc= getInterfaceMemberDescOfCurrentCall();
+    if( desc.is())
+    {
+        typelib_TypeDescription* pMember= desc.get();
+        if( pMember->eTypeClass == TypeClass_INTERFACE_ATTRIBUTE )
+        {
+            attributeInfo= ((typelib_InterfaceAttributeTypeDescription*)pMember)->pAttributeTypeRef;
+        }
+    }
+}
 TypeDescription IUnknownWrapper_Impl::getInterfaceMemberDescOfCurrentCall( )
 {
     TypeDescription ret;

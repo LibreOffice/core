@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-20 11:29:39 $
+ *  last change: $Author: jl $ $Date: 2000-10-20 15:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ public:
     // XBridgeSupplier2
     // This interface is implemented to provide a safe way to obtain the original
     // IUnknown or IDispatch within the function anyToVariant. The function asks
-    // every UNO object for its XBridgeSupplier and if it is available uses it to convert
+    // every UNO object for its XBridgeSupplier2 and if it is available uses it to convert
     // the object with its own supplier.
     virtual Any SAL_CALL createBridge( const Any& modelDepObject, const Sequence< sal_Int8 >& aProcessId, sal_Int16 sourceModelType, sal_Int16 destModelType ) throw(IllegalArgumentException, RuntimeException);
 
@@ -150,6 +150,8 @@ protected:
     // object that implements UNO interfaces. In that case the member m_seqTypes
     // is set through XInitialization::initialize.
     void getMethodInfo( TypeDescription& methodDescription);
+    // After return attributInfo contains typelib_InterfaceAttributeTypeDescription::pAttributeTypeRef
+    void getAttributeInfo( TypeDescription& attributeInfo);
     // used by get MethodInfo
     TypeDescription  getInterfaceMemberDescOfCurrentCall( );
     ITypeInfo*  getTypeInfo();
@@ -157,9 +159,6 @@ protected:
 
     // Gets information about the parameter types ( VARTYPE) and mode ( in, out, in/out)
     sal_Bool getParameterInfo();
-    // analyses the type information provided by the COM component and saves the idizes of the
-    // out and in/out parameter in the member m_outIndizes
-//  sal_Bool prepareOutParams( VARIANT* params, sal_uInt32 count );
     // Builds up the complete vartype from a TYPEDESC, e.g VT_BSTR, VT_BYREF | VT_I4, VT_BYREF|VT_ARRAY|VT_I1
     sal_Bool getElementTypeDesc( TYPEDESC *desc, VARTYPE& varType );
     // Iterates over all functions and put the names and indices into a map (TLBFuncIndexMap)
@@ -179,14 +178,14 @@ protected:
     // -------------------------------------------------------------------------------
 
     DispIdMap::iterator getDispIdEntry(const OUString& name);
-    // If UNO interfaces are being implemented in JScript objects, VB or C++ COM objects
+    // If UNO interfaces are implemented in JScript objects, VB or C++ COM objects
     // and those are passed as parameter to a UNO interface function, then
     // the IDispatch* are wrapped by objects of this class. Assuming that the functions
     // implemented by the IDispatch object returns another UNO interface then
     // it has to be wrapped to this type. But this is only possible if an object of this
     // wrapper class knows what type it is represting. The member m_TypeDescription holds this
     // information.
-    // m_TypeDescription is only useful when an object wrapps an IDispatch object that implements
+    // m_TypeDescription is only useful when an object wraps an IDispatch object that implements
     // an UNO interface. The value is set during a call to XInitialization::initialize.
     Sequence<Type> m_seqTypes;
     IUnknown*           m_pUnknown;
@@ -195,8 +194,7 @@ protected:
     Reference<XIdlClass>*       m_pxIdlClass;
     Mutex               m_mutex;
 
-    // see prepare OutParams
-    Sequence< sal_Int16 > m_seqOutIndizes;
+
     // The name of the function being executed ( invoke)
     OUString    m_usCurrentInvoke;
     // The name of the property being retrieved ( getValue)
