@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-24 10:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,31 +1394,42 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
     // Bei verketteten Rahmen und ind Fussnoten wuerde die Abkuerzung noch aufwendiger
     if( pSect->HasFollow() && pSect->IsInDocBody() )
     {
-        SwFrm* pTmp;
-        if( !pSect->GetUpper()->IsColBodyFrm() ||
-            0 == ( pTmp = pSect->GetUpper()->GetUpper()->GetNext() ) )
-            pTmp = pSect->FindPageFrm()->GetNext();
-        if( pTmp ) // ist jetzt die naechste Spalte oder Seite
+        if( pSect->GetFollow() == pSect->GetNext() )
         {
-            SwFrm* pTmpX = pTmp;
-            if( pTmp->IsPageFrm() && ((SwPageFrm*)pTmp)->IsEmptyPage() )
-                pTmp = pTmp->GetNext(); // Dummyseiten ueberspringen
-            SwFrm *pUp = pSect->GetFollow()->GetUpper();
-            // pUp wird die Spalte, wenn der Follow in einer "nicht ersten" Spalte
-            // liegt, ansonsten die Seite:
-            if( !pUp->IsColBodyFrm() ||
-                !( pUp = pUp->GetUpper() )->GetPrev() )
-                pUp = pUp->FindPageFrm();
-            // Jetzt muessen pUp und pTmp die gleiche Seite/Spalte sein,
-            // sonst liegen Seiten oder Spalten zwischen Master und Follow.
-            if( pUp == pTmp || pUp->GetNext() == pTmpX )
+            SwPageFrm *pPg = pSect->GetFollow()->FindPageFrm();
+            if( WrongPageDesc( pPg ) )
+                bWrongPage = TRUE;
+            else
+                return FIRSTLEAF( pSect->GetFollow() );
+        }
+        else
+        {
+            SwFrm* pTmp;
+            if( !pSect->GetUpper()->IsColBodyFrm() ||
+                0 == ( pTmp = pSect->GetUpper()->GetUpper()->GetNext() ) )
+                pTmp = pSect->FindPageFrm()->GetNext();
+            if( pTmp ) // ist jetzt die naechste Spalte oder Seite
             {
-                SwPageFrm* pNxtPg = pUp->IsPageFrm() ?
-                                    (SwPageFrm*)pUp : pUp->FindPageFrm();
-                if( WrongPageDesc( pNxtPg ) )
-                    bWrongPage = TRUE;
-                else
-                    return FIRSTLEAF( pSect->GetFollow() );
+                SwFrm* pTmpX = pTmp;
+                if( pTmp->IsPageFrm() && ((SwPageFrm*)pTmp)->IsEmptyPage() )
+                    pTmp = pTmp->GetNext(); // Dummyseiten ueberspringen
+                SwFrm *pUp = pSect->GetFollow()->GetUpper();
+                // pUp wird die Spalte, wenn der Follow in einer "nicht ersten" Spalte
+                // liegt, ansonsten die Seite:
+                if( !pUp->IsColBodyFrm() ||
+                    !( pUp = pUp->GetUpper() )->GetPrev() )
+                    pUp = pUp->FindPageFrm();
+                // Jetzt muessen pUp und pTmp die gleiche Seite/Spalte sein,
+                // sonst liegen Seiten oder Spalten zwischen Master und Follow.
+                if( pUp == pTmp || pUp->GetNext() == pTmpX )
+                {
+                    SwPageFrm* pNxtPg = pUp->IsPageFrm() ?
+                                        (SwPageFrm*)pUp : pUp->FindPageFrm();
+                    if( WrongPageDesc( pNxtPg ) )
+                        bWrongPage = TRUE;
+                    else
+                        return FIRSTLEAF( pSect->GetFollow() );
+                }
             }
         }
     }
