@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-08 19:23:57 $
+#   last change: $Author: hjs $ $Date: 2001-08-10 10:01:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -644,6 +644,9 @@ SCP9 ?= TNR!:=9
 .ENDIF
 
 .IF "$(ZIP1TARGET)$(ZIP2TARGET)$(ZIP3TARGET)$(ZIP4TARGET)$(ZIP5TARGET)$(ZIP6TARGET)$(ZIP7TARGET)$(ZIP8TARGET)$(ZIP9TARGET)"!="$(ZIP1LIST:s/LANGDIR//)$(ZIP2LIST:s/LANGDIR//)$(ZIP3LIST:s/LANGDIR//)$(ZIP4LIST:s/LANGDIR//)$(ZIP5LIST:s/LANGDIR//)$(ZIP6LIST:s/LANGDIR//)$(ZIP7LIST:s/LANGDIR//)$(ZIP8LIST:s/LANGDIR//)$(ZIP9LIST:s/LANGDIR//)"
+
+ZIPALL=ZIPALLTARGET
+
 .IF "$(GUI)"=="UNX"
 ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
@@ -1862,7 +1865,7 @@ ALLTAR:	\
         $(SUBDIRS)		\
         $(DPRTARGET) \
         $(DPZTARGET) \
-        ZIPALLTARGET \
+        $(ZIPALL) \
         $(IDLTARGET)	$(IDL1TARGET)	$(IDL2TARGET)		\
         $(IDL3TARGET)	$(IDL4TARGET)	$(IDL5TARGET)		\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
@@ -1922,7 +1925,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(DEPFILES) $(DPCTARGET) \
         $(DPRTARGET) \
         $(DPZTARGET) \
-        ZIPALLTARGET \
+        $(ZIPALL) \
         $(IDLTARGET)	$(SDITARGET)	\
         $(UNODOCTARGET)	\
         $(LOCALDBTARGET)	\
