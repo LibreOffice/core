@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: as $ $Date: 2002-07-08 13:40:54 $
+ *  last change: $Author: cd $ $Date: 2002-07-09 05:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,71 +1102,71 @@ USHORT Desktop::Exception(USHORT nError)
             try
             {
 
-            // ask for controller
-            Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
-            if ( xCtrl.is() )
-            {
-                // ask for model
-                Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
-                Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
-                if ( xModifiable.is() && xModifiable->isModified() )
+                // ask for controller
+                Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
+                if ( xCtrl.is() )
                 {
-                    // ask if modified
-                    Reference< ::com::sun::star::frame::XStorable > xStor( xModel, UNO_QUERY );
-                    if ( xStor.is() )
+                    // ask for model
+                    Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
+                    Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
+                    if ( xModifiable.is() && xModifiable->isModified() )
                     {
-                        // get the media descriptor and retrieve filter name and password
-                        ::rtl::OUString aOrigPassword, aOrigFilterName, aTitle;
-                        Sequence < PropertyValue > aArgs( xModel->getArgs() );
-                        sal_Int32 nProps = aArgs.getLength();
-                        for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
+                        // ask if modified
+                        Reference< ::com::sun::star::frame::XStorable > xStor( xModel, UNO_QUERY );
+                        if ( xStor.is() )
                         {
-                            const PropertyValue& rProp = aArgs[nProp];
-                            if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
-                                rProp.Value >>= aOrigFilterName;
-                            if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
-                                rProp.Value >>= aOrigPassword;
-                            if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
-                                rProp.Value >>= aTitle;
-                        }
+                            // get the media descriptor and retrieve filter name and password
+                            ::rtl::OUString aOrigPassword, aOrigFilterName, aTitle;
+                            Sequence < PropertyValue > aArgs( xModel->getArgs() );
+                            sal_Int32 nProps = aArgs.getLength();
+                            for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
+                            {
+                                const PropertyValue& rProp = aArgs[nProp];
+                                if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+                                    rProp.Value >>= aOrigFilterName;
+                                if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
+                                    rProp.Value >>= aOrigPassword;
+                                if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
+                                    rProp.Value >>= aTitle;
+                            }
 
-                        // save document as tempfile in backup directory
-                        // remember old name or title
-                        ::rtl::OUString aOrigURL = xModel->getURL();
-                        ::rtl::OUString aOldName, aSaveURL;
-                        if ( aOrigURL.getLength() )
-                        {
-                            ::utl::TempFile aTempFile( &aSavePath );
-                            aSaveURL = aTempFile.GetURL();
-                            aOldName = INetURLObject( aOrigURL ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-                        }
-                        else
-                        {
-                            // untitled document
-                            String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
-                            ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
-                            aSaveURL = aTempFile.GetURL();
-                            aOldName = aTitle;
-                        }
+                            // save document as tempfile in backup directory
+                            // remember old name or title
+                            ::rtl::OUString aOrigURL = xModel->getURL();
+                            ::rtl::OUString aOldName, aSaveURL;
+                            if ( aOrigURL.getLength() )
+                            {
+                                ::utl::TempFile aTempFile( &aSavePath );
+                                aSaveURL = aTempFile.GetURL();
+                                aOldName = INetURLObject( aOrigURL ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                            }
+                            else
+                            {
+                                // untitled document
+                                String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
+                                ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
+                                aSaveURL = aTempFile.GetURL();
+                                aOldName = aTitle;
+                            }
 
-                        if ( aOrigPassword.getLength() )
-                        {
-                            // if the document was loaded with a password, it should be stored with password
-                            Sequence < PropertyValue > aSaveArgs(1);
-                            aSaveArgs[0].Name = DEFINE_CONST_UNICODE("Password");
-                            aSaveArgs[0].Value <<= aOrigPassword;
+                            if ( aOrigPassword.getLength() )
+                            {
+                                // if the document was loaded with a password, it should be stored with password
+                                Sequence < PropertyValue > aSaveArgs(1);
+                                aSaveArgs[0].Name = DEFINE_CONST_UNICODE("Password");
+                                aSaveArgs[0].Value <<= aOrigPassword;
 
-                            xStor->storeToURL( aSaveURL, aSaveArgs );
+                                xStor->storeToURL( aSaveURL, aSaveArgs );
+                            }
+                            else
+                                xStor->storeToURL( aSaveURL, Sequence < PropertyValue >() );
+
+                            // remember original name and filter
+                            aOpt.PushRecoveryItem(  aOldName, aOrigFilterName, aSaveURL );
+                            bRecovery = TRUE;
                         }
-                        else
-                            xStor->storeToURL( aSaveURL, Sequence < PropertyValue >() );
-
-                        // remember original name and filter
-                        aOpt.PushRecoveryItem(  aOldName, aOrigFilterName, aSaveURL );
-                        bRecovery = TRUE;
                     }
                 }
-            }
 
             }
             // ignore tasks, which are realy dead.
@@ -2145,6 +2145,7 @@ void Desktop::OpenStartupScreen()
          !pCmdLine->IsInvisible() &&
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
+         !pCmdLine->IsNoLogo() &&
          !pCmdLine->IsTerminateAfterInit() &&
          !pCmdLine->GetPrintList( aTmpString ) &&
          !pCmdLine->GetPrintToList( aTmpString ) )

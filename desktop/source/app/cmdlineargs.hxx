@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
+ *  last change: $Author: cd $ $Date: 2002-07-09 05:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ class CommandLineArgs
         sal_Bool            m_bPrinterName;
         sal_Bool            m_bForceOpenList;
         sal_Bool            m_bForceNewList;
+        sal_Bool            m_bNoLogo;
 
         ::rtl::OUString     m_aOpenList;
         ::rtl::OUString     m_aPrintList;
@@ -129,6 +130,7 @@ class CommandLineArgs
         sal_Bool        IsHeadless(){ return m_bHeadless; }
         sal_Bool        IsQuickstart(){ return m_bQuickstart; }
         sal_Bool        IsTerminateAfterInit() { return m_bTerminateAfterInit; }
+        sal_Bool        IsNoLogo() { return m_bNoLogo; }
 
         sal_Bool        GetPortalConnectString( ::rtl::OUString& rPara){ rPara = m_aPortalConnectString; return m_bPortalConnectString; }
         sal_Bool        GetAcceptString( ::rtl::OUString& rPara){ rPara =  m_aAcceptString; return m_bAcceptString; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-06-18 09:12:12 $
+ *  last change: $Author: cd $ $Date: 2002-07-09 05:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         m_bTerminateAfterInit = sal_True;
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nologo" )) == sal_True )
+    {
+        m_bNoLogo = sal_True;
+        return sal_True;
+    }
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         m_aAcceptString = aArgStr.Copy( 8 );
@@ -353,6 +358,7 @@ void CommandLineArgs::ResetParamValues()
     m_bPrinterName          = sal_False;
     m_bForceOpenList        = sal_False;
     m_bForceNewList         = sal_False;
+    m_bNoLogo               = sal_False;
 }
 
 } // namespace desktop
