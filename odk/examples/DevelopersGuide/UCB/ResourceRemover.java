@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResourceRemover.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:49:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,8 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-// base classes
-import com.sun.star.ucb.*;
 
 /**
  * Deleting a resource
@@ -49,16 +47,15 @@ public class ResourceRemover {
      * Member properties
      */
     private  Helper   m_helper;
-    private  XContent m_content;
-    private  String   m_connectString = "";
     private  String   m_contenturl    = "";
+    private  com.sun.star.ucb.XContent m_content;
 
     /**
      * Constructor.
      *
      *@param      String[]   This construtor requires the arguments:
-     *                          -connect=socket,host=..., port=...
-     *                          -url=..
+     *                          -url=...     (optional)
+     *                          -workdir=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
@@ -68,11 +65,9 @@ public class ResourceRemover {
 
         // Parse arguments
         parseArguments( args );
-        String connect = getConnect();
-        String url     = getContentURL();
 
         // Init
-        m_helper       = new Helper( connect, url );
+        m_helper       = new Helper( getContentURL() );
 
         // Create UCB content
         m_content      = m_helper.createUCBContent();
@@ -114,15 +109,6 @@ public class ResourceRemover {
     }
 
     /**
-     * Get source data connection.
-     *
-     *@return String    That contains the source data connection
-     */
-    public String getConnect() {
-        return m_connectString;
-    }
-
-    /**
      * Parse arguments
      *
      *@param      String[]   Arguments
@@ -130,11 +116,13 @@ public class ResourceRemover {
      */
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
+        String workdir = "";
+
         for ( int i = 0; i < args.length; i++ ) {
-            if ( args[i].startsWith( "-connect=" )) {
-                m_connectString = args[i].substring( 9 );
-            } else if ( args[i].startsWith( "-url=" )) {
+            if ( args[i].startsWith( "-url=" )) {
                 m_contenturl    = args[i].substring( 5 );
+            } else if ( args[i].startsWith( "-workdir=" )) {
+                workdir = args[i].substring( 9 );
             } else if ( args[i].startsWith( "-help" ) ||
                         args[i].startsWith( "-?" )) {
                 printCmdLineUsage();
@@ -142,12 +130,8 @@ public class ResourceRemover {
             }
          }
 
-        if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=2083";
-        }
-
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
-            m_contenturl = Helper.createTargetDataFile();
+            m_contenturl = Helper.createTargetDataFile( workdir );
         }
     }
 
@@ -156,9 +140,9 @@ public class ResourceRemover {
      */
     public void printCmdLineUsage() {
         System.out.println(
-            "Usage   : ResourceRemover -connect=socket,host=...,port=... -url=..." );
+            "Usage   : ResourceRemover -url=... -workdir=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/resource-<uniquepostfix>" );
+            "Defaults: -url=<workdir>/resource-<uniquepostfix> -workdir=<currentdir>" );
         System.out.println(
             "\nExample  : -url=file:///temp/MyFile.txt \n" );
     }
