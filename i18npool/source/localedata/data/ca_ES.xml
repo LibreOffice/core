@@ -325,10 +325,10 @@
 <ReservedWords>
 <trueWord>veritat</trueWord>
 <falseWord>fals</falseWord>
-<quarter1Word>1er trimestre</quarter1Word>
-<quarter2Word>2on trimestre</quarter2Word>
-<quarter3Word>3er trimestre</quarter3Word>
-<quarter4Word>4rt trimestre</quarter4Word>
+<quarter1Word>1r trimestre</quarter1Word>
+<quarter2Word>2n trimestre</quarter2Word>
+<quarter3Word>3r trimestre</quarter3Word>
+<quarter4Word>4t trimestre</quarter4Word>
 <aboveWord>sobre</aboveWord>
 <belowWord>sota</belowWord>
 <quarter1Abbreviation>1T</quarter1Abbreviation>
