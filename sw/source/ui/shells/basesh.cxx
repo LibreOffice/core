@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:48:33 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
     {
         case FN_REPAGINATE:
             {
-                Reference < XModel > & xModel = GetView().GetDocShell()->GetModel();
+                Reference < XModel > xModel = GetView().GetDocShell()->GetModel();
                 Reference < XUnoTunnel > xDocTunnel ( xModel, UNO_QUERY );
                 SwXTextDocument *pDoc = reinterpret_cast < SwXTextDocument * > ( xDocTunnel->getSomething ( SwXTextDocument::getUnoTunnelId() ) );
                 pDoc->notifyRefreshListeners();
