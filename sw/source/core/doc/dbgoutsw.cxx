@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:04:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,14 @@ static const String lcl_dbg_out(const SwNode & rNode)
             }
         }
 
+        SwFmtColl * pColl = pTxtNode->GetFmtColl();
+
+        if (pColl)
+        {
+            aTmpStr += String(" Coll: ", RTL_TEXTENCODING_ASCII_US);
+            aTmpStr += pColl->GetName();
+        }
+
         if (bDbgOutPrintAttrSet)
         {
             aTmpStr += String(" Attrs: ", RTL_TEXTENCODING_ASCII_US);
@@ -546,7 +554,11 @@ static String lcl_dbg_out(SwNodes & rNodes)
 {
     String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
 
-    rNodes.ForEach(lcl_dbg_add_node, &aStr);
+    for (ULONG i = 0; i < rNodes.Count(); i++)
+    {
+        aStr += lcl_dbg_out(*rNodes[i]);
+        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
+    }
 
     aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
 
