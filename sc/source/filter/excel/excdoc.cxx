@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:23:56 $
+ *  last change: $Author: dr $ $Date: 2001-01-11 09:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,6 +704,7 @@ void ExcTable::FillAsTable( void )
         }
 
         ScAddress aScPos( nCol, nRow, nScTab );
+        rR.sAddNoteText.Erase();
 
         if( pAktScCell )
         {// nicht-leere Zelle
@@ -815,7 +816,7 @@ void ExcTable::FillAsTable( void )
                     XclHlink*&      rpHlink = rR.pLastHlink;
                     if( rpHlink )
                     {
-                        rpHlink->Set( aScPos );
+                        rpHlink->SetPosition( aScPos );
                         pHlinks->Append( rpHlink );
                         rpHlink = NULL;
                     }
@@ -864,12 +865,26 @@ void ExcTable::FillAsTable( void )
             pAktExcCell = NULL;
         }
 
+        // notes
+        String sNoteText;
+        String sNoteAuthor;
         if( pNote )
         {
+            sNoteText = pNote->GetText();
+            sNoteAuthor = pNote->GetAuthor();
+        }
+        if( rR.sAddNoteText.Len() )
+        {
+            if( sNoteText.Len() )
+                (sNoteText += (sal_Unicode) 0x0A) += (sal_Unicode) 0x0A;
+            sNoteText += rR.sAddNoteText;
+        }
+        if( sNoteText.Len() || sNoteAuthor.Len() )
+        {
             if ( rR.eDateiTyp < Biff8 )
-                Add( new ExcNote( aScPos, pNote->GetText(), rR ) );
+                Add( new ExcNote( aScPos, sNoteText, rR ) );
             else
-                rR.pNoteRecs->Add( new XclNote( rR, aScPos, *pNote ) );
+                rR.pNoteRecs->Add( new XclNote( rR, aScPos, sNoteText, sNoteAuthor ) );
         }
 
         // merged cells
@@ -912,7 +927,6 @@ void ExcTable::FillAsTable( void )
 
     // insert merged cells
     Add( pCellMerging );
-
     // update dimensions
     pDimensions->SetLimits( nFirstCol, nFirstRow, nLastCol, nLastRow );
 
