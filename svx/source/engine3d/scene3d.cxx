@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:12:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,133 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #endif
 
+// for ::std::sort
+#include <algorithm>
+
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+
+//////////////////////////////////////////////////////////////////////////////
+// #110988#
+
+class ImpRemap3DDepth
+{
+    sal_uInt32                  mnOrdNum;
+    double                      mfMinimalDepth;
+
+    // bitfield
+    unsigned                    mbIsScene : 1;
+
+public:
+    ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth);
+    ImpRemap3DDepth(sal_uInt32 nOrdNum);
+    ~ImpRemap3DDepth();
+
+    // for ::std::sort
+    bool operator<(const ImpRemap3DDepth& rComp) const;
+
+    sal_uInt32 GetOrdNum() const { return mnOrdNum; }
+    sal_Bool IsScene() const { return mbIsScene; }
+};
+
+ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth)
+:   mnOrdNum(nOrdNum),
+    mfMinimalDepth(fMinimalDepth),
+    mbIsScene(sal_False)
+{
+}
+
+ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum)
+:   mnOrdNum(nOrdNum),
+    mbIsScene(sal_True)
+{
+}
+
+ImpRemap3DDepth::~ImpRemap3DDepth()
+{
+}
+
+bool ImpRemap3DDepth::operator<(const ImpRemap3DDepth& rComp) const
+{
+    if(IsScene())
+    {
+        return sal_False;
+    }
+    else
+    {
+        if(rComp.IsScene())
+        {
+            return sal_True;
+        }
+        else
+        {
+            return mfMinimalDepth < rComp.mfMinimalDepth;
+        }
+    }
+}
+
+// typedefs for a vector of ImpRemap3DDepths
+typedef ::std::vector< ImpRemap3DDepth > ImpRemap3DDepthVector;
+
+//////////////////////////////////////////////////////////////////////////////
+// #110988#
+
+class Imp3DDepthRemapper
+{
+    ImpRemap3DDepthVector       maVector;
+
+public:
+    Imp3DDepthRemapper(E3dScene& rScene);
+    ~Imp3DDepthRemapper();
+
+    sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
+};
+
+Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
+{
+    // only called when rScene.GetSubList() and nObjCount > 1L
+    SdrObjList* pList = rScene.GetSubList();
+    const sal_uInt32 nObjCount(pList->GetObjCount());
+
+    for(sal_uInt32 a(0L); a < nObjCount; a++)
+    {
+        SdrObject* pCandidate = pList->GetObj(a);
+
+        if(pCandidate)
+        {
+            if(pCandidate->ISA(E3dCompoundObject))
+            {
+                // single 3d object, calc depth
+                const double fMinimalDepth(((E3dCompoundObject*)pCandidate)->GetMinimalDepthInViewCoor(rScene));
+                ImpRemap3DDepth aEntry(a, fMinimalDepth);
+                maVector.push_back(aEntry);
+            }
+            else
+            {
+                // scene, use standard entry for scene
+                ImpRemap3DDepth aEntry(a);
+                maVector.push_back(aEntry);
+            }
+        }
+    }
+
+    // now, we need to sort the maVector by it's members minimal depth. The
+    // smaller, the nearer to the viewer.
+    ::std::sort(maVector.begin(), maVector.end());
+}
+
+Imp3DDepthRemapper::~Imp3DDepthRemapper()
+{
+}
+
+sal_uInt32 Imp3DDepthRemapper::RemapOrdNum(sal_uInt32 nOrdNum) const
+{
+    if(nOrdNum < maVector.size())
+    {
+        nOrdNum = maVector[(maVector.size() - 1) - nOrdNum].GetOrdNum();
+    }
+
+    return nOrdNum;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 // BaseProperties section
@@ -191,6 +317,8 @@ E3dScene::E3dScene()
     bFitInSnapRect(TRUE),
     aPaintTime(),
     nDisplayQuality(255),
+    // #110988#
+    mp3DDepthRemapper(0L),
     bDrawOnlySelected(FALSE)
 {
     // Defaults setzen
@@ -208,6 +336,8 @@ E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
     bFitInSnapRect(TRUE),
     aPaintTime(),
     nDisplayQuality(255),
+    // #110988#
+    mp3DDepthRemapper(0L),
     bDrawOnlySelected(FALSE)
 {
     // Defaults setzen
@@ -292,6 +422,39 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 
 E3dScene::~E3dScene()
 {
+    // #110988#
+    ImpCleanup3DDepthMapper();
+}
+
+// #110988#
+void E3dScene::ImpCleanup3DDepthMapper()
+{
+    if(mp3DDepthRemapper)
+    {
+        delete mp3DDepthRemapper;
+        mp3DDepthRemapper = 0L;
+    }
+}
+
+// #110988#
+sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nOrdNum) const
+{
+    if(!mp3DDepthRemapper)
+    {
+        const sal_uInt32 nObjCount(GetSubList() ? GetSubList()->GetObjCount() : 0L);
+
+        if(nObjCount > 1L)
+        {
+            ((E3dScene*)this)->mp3DDepthRemapper = new Imp3DDepthRemapper((E3dScene&)(*this));
+        }
+    }
+
+    if(mp3DDepthRemapper)
+    {
+        return mp3DDepthRemapper->RemapOrdNum(nOrdNum);
+    }
+
+    return nOrdNum;
 }
 
 /*************************************************************************
@@ -396,6 +559,9 @@ void E3dScene::NbcSetSnapRect(const Rectangle& rRect)
     E3dObject::NbcSetSnapRect(rRect);
     aCamera.SetDeviceWindow(rRect);
     aCameraSet.SetViewportRectangle((Rectangle&)rRect);
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -467,6 +633,9 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
         SetBoundVolInvalid();
         SetRectsDirty();
     }
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -502,6 +671,9 @@ void E3dScene::NewObjectInserted(const E3dObject* p3DObj)
             }
         }
     }
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -514,6 +686,9 @@ void E3dScene::StructureChanged(const E3dObject* p3DObj)
 {
     E3dObject::StructureChanged(p3DObj);
     SetRectsDirty();
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -683,6 +858,9 @@ Volume3D E3dScene::FitInSnapRect()
     aNewVol.MinVec().Z() = fZMin;
     aNewVol.MaxVec().Z() = fZMax;
 
+    // #110988#
+    ImpCleanup3DDepthMapper();
+
     // Rueckgabewert setzen
     return aNewVol;
 }
@@ -724,6 +902,9 @@ void E3dScene::InitTransformationSet()
     // Maximas fuer Abbildung verwenden
     rSet.SetDeviceVolume(aVolume, FALSE);
     rSet.SetViewportRectangle(aBound);
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -976,6 +1157,9 @@ void E3dScene::FitSnapRectToBoundVol()
     // eigene kann auch invalidiert werden, da ein RecalcSnapRect
     // an einer Szene nur aus der Kamera liest
     SetRectsDirty();
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -1004,6 +1188,9 @@ void E3dScene::CorrectSceneDimensions()
     // invalidieren, um diese auf der neuen Grundlage berechnen
     // zu lassen (falls diese von FitInSnapRect() berechnet wurden)
     SetRectsDirty();
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -1037,6 +1224,9 @@ void E3dScene::operator=(const SdrObject& rObj)
     RebuildLists();
 
     SetRectsDirty();
+
+    // #110988#
+    ImpCleanup3DDepthMapper();
 }
 
 /*************************************************************************
@@ -1060,7 +1250,6 @@ void E3dScene::RebuildLists()
         p3DObj->NbcSetLayer(nLayerID);
         NewObjectInserted(p3DObj);
     }
-
 }
 
 /*************************************************************************
