@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-09 08:56:41 $
+ *  last change: $Author: as $ $Date: 2001-08-06 05:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <svtools/saveopt.hxx>
+#include <tools/tenccvt.hxx>
 
 #include "docfilt.hxx"
 #include "fcontnr.hxx"
@@ -687,7 +688,9 @@ BOOL SfxDocumentInfo::Load( SvStream& rStream )
     Free();
     bPasswd = aHeader.bPasswd;
     rStream >> nUS;
-    eFileCharSet = (CharSet)nUS;
+    //eFileCharSet = (CharSet)nUS;
+    eFileCharSet = GetSOLoadTextEncoding( nUS );
+
         // Einstellen an den Streams
     rStream.SetStreamCharSet(eFileCharSet);
 
@@ -931,8 +934,9 @@ BOOL SfxDocumentInfo::Save( SvStream& rStream ) const
 {
     FileHeader aHeader(pDocInfoHeader, VERSION, bPasswd? 1: 0);
     aHeader.Save(rStream);
-    rStream << (USHORT)eFileCharSet;
-    rStream.SetStreamCharSet(eFileCharSet);
+    CharSet eNewFileCharSet = GetSOStoreTextEncoding( eFileCharSet );
+    rStream << (USHORT)eNewFileCharSet;
+    rStream.SetStreamCharSet(eNewFileCharSet);
     rStream << (bPortableGraphics? (BYTE)1: (BYTE)0)
             << (bQueryTemplate? (BYTE)1: (BYTE)0);
     aCreated.Save(rStream);
