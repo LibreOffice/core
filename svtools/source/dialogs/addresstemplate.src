@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 11:58:54 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ russian ] = "Òελετξν (πΰα.)";
     Text[ greek ] = "Τηλέφωνο (Εργασία)";
     Text[ dutch ] = "Telefoon bedrijf";
-    Text[ french ] = "Tιl. bureau";
+    Text[ french ] = "Tιl. bureau 1";
     Text[ spanish ] = "Telιfono trabajo";
     Text[ italian ] = "Telefono (lavoro)";
     Text[ danish ] = "Telephon Work";
@@ -947,7 +947,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ russian ] = "Òελετξν (πΰα.)";
     Text[ greek ] = "Τηλέφωνο (Γραφείο)";
     Text[ dutch ] = "Telefoon kantoor";
-    Text[ french ] = "Tιl. bureau";
+    Text[ french ] = "Tιl. bureau 2";
     Text[ spanish ] = "Telιfono trabajo";
     Text[ italian ] = "Telefono (uff.)";
     Text[ danish ] = "Telephon Office";
