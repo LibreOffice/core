@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbeddedObject.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:54:26 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,32 @@
 #include <com/sun/star/embed/XEmbeddedClient.idl>
 #endif
 
+#ifndef __com_sun_star_embed_XVisualObject_idl__
+#include <com/sun/star/embed/XVisualObject.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XClassifiedObject_idl__
+#include <com/sun/star/embed/XClassifiedObject.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XComponentSupplier_idl__
+#include <com/sun/star/embed/XComponentSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XStateChangeBroadcaster_idl__
+#include <com/sun/star/embed/XStateChangeBroadcaster.idl>
+#endif
+
 #ifndef __com_sun_star_datatransfer_XTransferable_idl__
 #include <com/sun/star/datatransfer/XTransferable.idl>
 #endif
 
-#ifndef __com_sun_star_embed_VerbDescr_idl__
-#include <com/sun/star/embed/VerbDescr.idl>
+#ifndef __com_sun_star_document_XEventBroadcaster_idl__
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_embed_VerbDescriptor_idl__
+#include <com/sun/star/embed/VerbDescriptor.idl>
 #endif
 
 #ifndef __com_sun_star_embed_UnreachableStateException_idl__
@@ -93,23 +113,61 @@
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
+#ifndef __com_sun_star_util_XCloseable_idl__
+#include <com/sun/star/util/XCloseable.idl>
+#endif
 
 
-//=============================================================================
+
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/** represents common functionality for embedded objects
+//============================================================================
+/** represents common functionality for embedded objects.
  */
-interface XEmbeddedObject: com::sun::star::uno::XInterface
+interface XEmbeddedObject
 {
-    //-------------------------------------------------------------------------
-    /** Changes the state of the object to the requested one.
+    // INTERFACES
+    //
+    //------------------------------------------------------------------------
+    /** represents common visualisation functionality for embedded objects.
+     */
+    interface XVisualObject;
+
+    //------------------------------------------------------------------------
+    /** allows to detect class ID of the object.
+     */
+    interface XClassifiedObject;
+
+    //------------------------------------------------------------------------
+    /** allows to get access to the component handled by the object.
+     */
+    interface XComponentSupplier;
+
+    //------------------------------------------------------------------------
+    /** allows to be notified when object changes the state.
+     */
+    interface XStateChangeBroadcaster;
+
+    //------------------------------------------------------------------------
+    /** allows to be notified about object related events.
+     */
+    interface ::com::sun::star::document::XEventBroadcaster;
+
+    //------------------------------------------------------------------------
+    /** allows to control lifetime of the object.
+     */
+    interface ::com::sun::star::util::XCloseable;
+
+    // METHODS
+    //
+    //------------------------------------------------------------------------
+    /** changes the state of the object to the requested one.
 
         @param nNewState
-            specifies the new state, can take values from
-            <type scope="com::sun::star::embed">EmbedStates</type> constant set
+            specifies the new state, can take values from the constant set
+            <type scope="com::sun::star::embed">EmbedStates</type>
 
         @throws com::sun::star::embed::UnreachableStateException
             the specified state can not be reached
@@ -125,15 +183,16 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Return supported states for the object
+    //------------------------------------------------------------------------
+    /** returns supported states for the object.
 
         @returns
             the sequence of states the object can be set to
 
         @throws com::sun::star::embed::NeedsRunnignStateException
-            means that the object is in loaded state now and can be switched to running state
-            other possible states can be detected only when the object is not in loaded state any more
+            means that the object is in loaded state now and can be switched
+            to running state, other possible states can be detected only when
+            the object is not in loaded state any more
 
         @throws com::sun::star::embed::WrongStateException
             in case object is in invalid state
@@ -142,8 +201,8 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::NeedsRunningStateException,
                 ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Return the current state of the object
+    //------------------------------------------------------------------------
+    /** returns the current state of the object.
 
         @returns
             the current state of the object
@@ -154,13 +213,14 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
     long getCurrentState()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Let object perform an action referenced by nVerbID.
+    //------------------------------------------------------------------------
+    /** lets object perform an action referenced by nVerbID.
 
         @param nVerbID
-            specifies an action to perform, can take values from <type>EmbedVerbs</type>
+            specifies an action to perform, can take values from
+            <type>EmbedVerbs</type>
 
-        @thrown ::com::sun::star::lang::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             the verb is not supported
 
         @throws com::sun::star::embed::WrongStateException
@@ -178,25 +238,26 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
                 ::com::sun::star::embed::UnreachableStateException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Return supported verbs for the object
+    //------------------------------------------------------------------------
+    /** returns supported verbs for the object.
 
         @returns
             the sequence of verbs the object supports
 
         @throws com::sun::star::embed::NeedsRunnignStateException
-            means that the object is in loaded state now and can be switched to running state
-            acceptable verbs can be detected only when the object is not in loaded state any more
+            means that the object is in loaded state now and can be switched
+            to running state, acceptable verbs can be detected only when the
+            object is not in loaded state any more
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state to call the function
      */
-    sequence< VerbDescr > getSupportedVerbs()
+    sequence< VerbDescriptor > getSupportedVerbs()
         raises( ::com::sun::star::embed::NeedsRunningStateException,
                 ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Sets a connection to the container client
+    //------------------------------------------------------------------------
+    /** sets a connection to the container's client.
 
         @param xClient
             provides a reference to a client implementation
@@ -207,19 +268,20 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
     void setClientSite( [in] XEmbeddedClient xClient )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Provides access to the internal link to the container client
+    //------------------------------------------------------------------------
+    /** provides access to the internal link to the container client.
 
         @returns
             a reference to related container client if any is set
 
         @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
      */
     XEmbeddedClient getClientSite()
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Updates object's representations
+    //------------------------------------------------------------------------
+    /** updates object's representations.
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state to call the function
@@ -231,27 +293,28 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
         raises( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception );
 
-    //-------------------------------------------------------------------------
-    /** Specifies how often the object's representation should be updated
+    //------------------------------------------------------------------------
+    /** specifies how often the object's representation should be updated.
 
         @param nMode
-            the new update mode
-            can take values from EmbeddedUpdateModes
+            the new update mode, can take values from
+            <type>EmbeddedUpdateModes</type>
 
         @throws ::com::sun::star::embed::WrongStateException
+            the object is in wrong state
      */
     void setUpdateMode( [in] long nMode )
         raises( ::com::sun::star::embed::WrongStateException );
 
-    //-------------------------------------------------------------------------
-    /** Retrieves the status of the object.
+    //------------------------------------------------------------------------
+    /** retrieves the status of the object.
 
         @param nAspect
             the aspect specifying the form of object representation
 
         @return
             the value specifying the status of the object for specified aspect
-            can take values from EmbedMisc constant set
+            can take values from <type>EmbedMisc</type> constant set
 
         @throws com::sun::star::embed::WrongStateException
             the object is in wrong state
@@ -259,9 +322,17 @@ interface XEmbeddedObject: com::sun::star::uno::XInterface
     hyper getStatus( [in] hyper nAspect )
         raises( ::com::sun::star::embed::WrongStateException );
 
+    //-------------------------------------------------------------------------
+    /** provides object with the name of container document.
+
+        @param sName
+            name of the container document
+     */
+    void setContainerName( [in] string sName );
+
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
