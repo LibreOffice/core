@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:56:14 $
+ *  last change: $Author: cd $ $Date: 2002-04-09 09:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,6 +539,22 @@ void EmitFontpathWarning( void )
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
     char msg[ 120 ];
+
+    if( ! bIgnoreXErrors_ )
+    {
+        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        while( pFrame )
+        {
+            if( pFrame->maFrameData.GetStyle() & SAL_FRAME_STYLE_CHILD )
+            {
+                bIgnoreXErrors_ = TRUE;
+                break;
+            }
+            pFrame = pFrame->maFrameData.GetNextFrame();
+        }
+    }
+
+
 
     if( ! bIgnoreXErrors_ )
     {
