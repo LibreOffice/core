@@ -127,7 +127,7 @@ public class XmlUpdater extends Thread {
         File scriptBindingLib = new File( starBasicPath );
         if( !scriptBindingLib.isDirectory() ) {
             if( !scriptBindingLib.mkdir() ) {
-                System.out.println( "ScriptBindingLibrary failed!!!!");
+                System.out.println( "ScriptBindingLibrary failed");
             }
             else {
                 System.out.println( "ScriptBindingLibrary directory created");
@@ -140,7 +140,7 @@ public class XmlUpdater extends Thread {
         File configDir = new File( configPath );
         if( !configDir.isDirectory() ) {
             if( !configDir.mkdir() ) {
-                System.out.println( "soffice.cfg directory failed!!!!");
+                System.out.println( "soffice.cfg directory failed");
             }
             else {
                 System.out.println( "soffice.cfg directory created");
@@ -153,23 +153,19 @@ public class XmlUpdater extends Thread {
 
         //Adding <Office>/user/Scripts/java/
         File scriptsDir = new File( scriptsPath );
-    File highlightDir = new File( scriptsPath+File.separator+"Highlight"+File.separator );
-    File memoryDir = new File( scriptsPath+File.separator+"MemoryUsage"+File.separator );
-        if( !scriptsDir.isDirectory() ) {
-        //File highlightDir = new File( scriptsPath+File.separator+"Highlight"+File.separator );
-        //File spellDir = new File( scriptsPath+File.separator+"Memory"+File.separator );
-            if( !highlightDir.mkdirs() ) {
-                System.out.println( "Highlight script directory failed!!!!");
-            }
-            if( !memoryDir.mkdirs() ) {
-                System.out.println( "MemoryUsage script directory failed!!!!");
-            }
-            else {
-                System.out.println( "Scripts/java directory created");
-            }
+    File highlightDir = new File( scriptsPath+"Highlight" );
+    File memoryDir = new File( scriptsPath+"MemoryUsage" );
+        if( !highlightDir.mkdirs() ) {
+            System.out.println( "Highlight script directory failed");
+        }
+        if( !memoryDir.mkdirs() )
+    {
+            System.out.println( "MemoryUsage script directory failed");
         }
         else
-            System.out.println( "Scripts/java directory exists" );
+    {
+            System.out.println( "Scripts/java directory created");
+        }
 
 //Robert Kinsella test 1 end
 
