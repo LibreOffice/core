@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clickableimage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:41:28 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,14 @@ namespace frm
             {
                 // if some outer component can provide an interaction handler, use it
                 Reference< XInteractionHandler > xHandler( m_pFeatureInterception->queryDispatch( "private:/InteractionHandler" ), UNO_QUERY );
-                implSubmit( rEvt, xHandler );
+                try
+                {
+                    implSubmit( rEvt, xHandler );
+                }
+                catch( const Exception& )
+                {
+                    // ignore
+                }
             }
             break;
 
