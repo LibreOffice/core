@@ -5580,7 +5580,30 @@ SfxVoidItem MergeDialog FN_QRY_MERGE
     ToolBoxConfig = TRUE,
     GroupId = GID_DOCUMENT;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem MailMergeWizard FN_MAILMERGE_WIZARD
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
 
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
 //--------------------------------------------------------------------------
 SfxBoolItem MergeTable FN_TABLE_MERGE_TABLE
 ()
@@ -9539,6 +9562,30 @@ SfxBoolItem RowSplit FN_TABLE_ROW_SPLIT
         ToolBoxConfig = TRUE,
         GroupId = GID_FORMAT;
 ]
+//--------------------------------------------------------------------------
+SfxBoolItem MailmergeChildWindow FN_MAILMERGE_CHILDWINDOW
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
@@ -9565,6 +9612,30 @@ SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
     GroupId = GID_OPTIONS;
 ]
 
+//--------------------------------------------------------------------------
+SfxBoolItem SendMailChildWindow FN_MAILMERGE_SENDMAIL_CHILDWINDOW
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
 //--------------------------------------------------------------------------
 SfxVoidItem DeleteTable FN_TABLE_DELETE_TABLE
 ()
