@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:13 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 14:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,11 @@ namespace xmlscript
 //==================================================================================================
 struct NameSpaceUid
 {
+    /** URI defining XML namespace
+    */
     ::rtl::OUString     sURI;
+    /** Identifier given for URI (given back in createRootContext(), createChildContext() callbacks
+    */
     sal_Int32           nUid;
 
     inline NameSpaceUid( ::rtl::OUString const & sURI_, sal_Int32 nUid_ ) SAL_THROW( () )
@@ -106,7 +110,27 @@ struct NameSpaceUid
         {}
 };
 
-//==================================================================================================
+/** Creates a document handler to be used for SAX1 parser that can handle namespaces.
+    Give a list of NameSpaceUid structs defining namespace mappings to integers (performance).
+    Implementing the XImporter interface, you will get a createRootContext() for the root
+    element of your XML document and subsequent createChildContext() callbacks for each
+    sub element.
+    Namespaces of tags are identified by their integer value.
+
+    @param pNamespaceUids
+           array of namespace mappings
+    @param nNameSpaceUids
+           number of element in namespace mappings array
+    @param nUnknownNamespaceUid
+           namespace id given for unrecognized namespace prefix
+           (one that is not given via pNamespaceUids)
+    @param xImporter
+           initial import object being called for root context
+    @param bSingleThreadedUse
+           flag whether context management is synchronized.
+    @return
+            document handler for parser
+*/
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL createDocumentHandler(
     NameSpaceUid const * pNamespaceUids, sal_Int32 nNameSpaceUids,
