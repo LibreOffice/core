@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:37:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,10 +335,10 @@ ToolBox TB_SVT_FRAMEWIN
             Text = "Dokumenteigenschaften" ;
             Text [ english_us ] = "Document Properties" ;
             Text[ portuguese ] = "Docinfo";
-            Text[ russian ] = "Docinfo";
+            Text[ russian ] = "—‚ÓÈÒÚ‚‡ ‰ÓÍÛÏÂÌÚ‡";
             Text[ greek ] = "Docinfo";
             Text[ dutch ] = "Docinfo";
-            Text[ french ] = "Docinfo";
+            Text[ french ] = "PropriÈtÈs du document";
             Text[ spanish ] = "Propiedades del documento";
             Text[ finnish ] = "Docinfo";
             Text[ italian ] = "Docinfo";
@@ -346,7 +346,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ swedish ] = "Dokumentegenskaper";
             Text[ polish ] = "W≥aúciwoúci dokumentu";
             Text[ portuguese_brazilian ] = "Docinfo";
-            Text[ japanese ] = "Docinfo";
+            Text[ japanese ] = "ƒﬁ∑≠“›ƒÇÃëÆê´";
             Text[ korean ] = "Docinfo";
             Text[ chinese_simplified ] = "Œƒµµ Ù–‘";
             Text[ chinese_traditional ] = "Docinfo";
@@ -364,10 +364,10 @@ ToolBox TB_SVT_FRAMEWIN
             Text = "Vorschau" ;
             Text [ english_us ] = "Preview" ;
             Text[ portuguese ] = "Preview";
-            Text[ russian ] = "Preview";
+            Text[ russian ] = "œÓÒÏÓÚ";
             Text[ greek ] = "Preview";
             Text[ dutch ] = "Preview";
-            Text[ french ] = "Preview";
+            Text[ french ] = "AperÁu";
             Text[ spanish ] = "PrevisualizaciÛn";
             Text[ finnish ] = "Preview";
             Text[ italian ] = "Preview";
@@ -375,7 +375,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ swedish ] = "Fˆrhandsvisning";
             Text[ polish ] = "Podglπd";
             Text[ portuguese_brazilian ] = "Preview";
-            Text[ japanese ] = "Preview";
+            Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
             Text[ korean ] = "Preview";
             Text[ chinese_simplified ] = "‘§¿¿";
             Text[ chinese_traditional ] = "Preview";
@@ -577,17 +577,17 @@ ItemList [ language_user1 ] =
     ItemList [ russian ] =
     {
              < "«‡„Î‡‚ËÂ" ; DI_TITLE ; > ;
-        < "ËÁ" ; DI_FROM ; > ;
+        < "»Á" ; DI_FROM ; > ;
         < "ƒ‡Ú‡" ; DI_DATE ; > ;
-        < "Schl¸sselwˆrter" ; DI_KEYWORDS ; > ;
+        < " Î˛˜Â‚˚Â ÒÎÓ‚‡" ; DI_KEYWORDS ; > ;
         < "ŒÔËÒ‡ÌËÂ" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "“ËÔ ÒÓ‰ÂÊËÏÓ„Ó" ; DI_MIMETYPE ; > ;
+        < "ƒ‡Ú‡ ËÁÏÂÌÂÌËˇ" ; DI_MODIFIEDDATE ; > ;
+        < "»ÁÏÂÌÂÌÓ" ; DI_MODIFIEDBY ; > ;
+        < "ƒ‡Ú‡ ÔÂ˜‡ÚË" ; DI_PRINTDATE ; > ;
+        < "Õ‡ÔÂ˜‡Ú‡ÌÓ" ; DI_PRINTBY ; > ;
         < "“ÂÏ‡" ; DI_THEME ; > ;
-        < "Grˆﬂe" ; DI_SIZE ; > ;
+        < "–‡ÁÏÂ" ; DI_SIZE ; > ;
     };
     ItemList [ greek ] =
     {
@@ -621,16 +621,16 @@ ItemList [ language_user1 ] =
     };
     ItemList [ french ] =
     {
-             < "Chapitre" ; DI_TITLE ; > ;
-        < "‡ partir de" ; DI_FROM ; > ;
+             < "Titre" ; DI_TITLE ; > ;
+        < "De" ; DI_FROM ; > ;
         < "Date" ; DI_DATE ; > ;
         < "Mots-clÈs" ; DI_KEYWORDS ; > ;
         < "Description" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Type de contenu" ; DI_MIMETYPE ; > ;
+        < "Date de modification" ; DI_MODIFIEDDATE ; > ;
+        < "ModifiÈ par" ; DI_MODIFIEDBY ; > ;
+        < "Date d'impression" ; DI_PRINTDATE ; > ;
+        < "ImprimÈ par" ; DI_PRINTBY ; > ;
         < "Sujet" ; DI_THEME ; > ;
         < "Taille" ; DI_SIZE ; > ;
     };
@@ -741,18 +741,18 @@ ItemList [ language_user1 ] =
     };
     ItemList [ japanese ] =
     {
-             < "å®èëÇ´" ; DI_TITLE ; > ;
-        < "åüçıÇénÇﬂÇÈëŒè€" ; DI_FROM ; > ;
-        < "??" ; DI_DATE ; > ;
-        < "Schl?selw?ter" ; DI_KEYWORDS ; > ;
+             < "¿≤ƒŸ" ; DI_TITLE ; > ;
+        < "çÏê¨é“" ; DI_FROM ; > ;
+        < "ì˙éû" ; DI_DATE ; > ;
+        < "∑∞‹∞ƒﬁ" ; DI_KEYWORDS ; > ;
         < "äTóv" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "ƒnderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge‰ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "ç\\ê¨ì‡óe" ; DI_MIMETYPE ; > ;
+        < "çXêVì˙éû" ; DI_MODIFIEDDATE ; > ;
+        < "çXêVé“" ; DI_MODIFIEDBY ; > ;
+        < "àÛç¸ì˙éû" ; DI_PRINTDATE ; > ;
+        < "àÛç¸é“" ; DI_PRINTBY ; > ;
         < "√∞œ" ; DI_THEME ; > ;
-        < "Gr?e" ; DI_SIZE ; > ;
+        < "ª≤Ωﬁ" ; DI_SIZE ; > ;
     };
     ItemList [ korean ] =
     {
@@ -845,4 +845,5 @@ ItemList [ language_user1 ] =
         < "Grˆﬂe" ; DI_SIZE ; > ;
     };
     };
+
 
