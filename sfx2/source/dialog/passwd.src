@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:55:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ModalDialog DLG_PASSWD
     Text[ chinese_traditional ] = "Ώι¤J±K½X";
     Text[ arabic ] = "ΕΟΞΗα ίαγΙ ΗαΣΡ";
     Text[ greek ] = "Εισαγωγή κωδικού πρόσβασης";
-    Text[ korean ] = "ΖΠ½ΊΏφµε ΐΤ·Β";
+    Text[ korean ] = "ΔΪµε Ώφµε ΐΤ·Β";
     Moveable = TRUE ;
     FixedText FT_PASSWD_USER
     {
@@ -146,7 +146,7 @@ ModalDialog DLG_PASSWD
         Text[ polish ] = "Has³o";
         Text[ portuguese_brazilian ] = "Password";
         Text[ japanese ] = "Κί½ά°Δή(~P)";
-        Text[ korean ] = "ΖΠ½ΊΏφµε(~P)";
+        Text[ korean ] = "ΔΪµε Ώφµε(~P)";
         Text[ chinese_simplified ] = "ΓάΒλ(~P)";
         Text[ chinese_traditional ] = "±K½X(~P)";
         Text[ arabic ] = "ίαγΙ ΗαΣΡ";
@@ -264,7 +264,7 @@ ModalDialog DLG_PASSWD
         Text[ chinese_traditional ] = "½T»{±K½X";
         Text[ arabic ] = "ΚΓίνΟ ίαγΙ ΗαΣΡ";
         Text[ greek ] = "Επιβεβαίωση κωδικού πρόσβασης";
-        Text[ korean ] = "ΖΠ½ΊΏφµε Θ®ΐΞ";
+        Text[ korean ] = "ΔΪµε Ώφµε Θ®ΐΞ";
         Text[ turkish ] = "ήifreyi onayla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Confirmar contraseρa";
@@ -275,6 +275,7 @@ ModalDialog DLG_PASSWD
 };
 
 // ********************************************************************** EOF
+
 
 
 
