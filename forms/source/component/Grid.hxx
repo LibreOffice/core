@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 17:12:27 $
+ *  last change: $Author: fs $ $Date: 2001-01-08 08:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,6 @@ class OGridControlModel :public OControlModel
 // [properties]
 
 protected:
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
     void _reset();
 
 public:
@@ -158,6 +157,9 @@ public:
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OGridControlModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+
+// XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();

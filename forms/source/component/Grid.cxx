@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 17:14:16 $
+ *  last change: $Author: fs $ $Date: 2001-01-08 08:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,15 +169,6 @@ InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiSer
     return *(new OGridControlModel(_rxFactory));
 }
 
-//------------------------------------------------------------------
-Sequence<Type> OGridControlModel::_getTypes()
-{
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OControlModel::_getTypes(), OInterfaceContainer::getTypes(), OGridControlModel_BASE::getTypes());
-    return aTypes;
-}
-
 DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
 OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
@@ -257,6 +248,14 @@ void SAL_CALL OGridControlModel::setParent(const InterfaceRef& Parent) throw(NoS
     xLoadable = Reference<XLoadable>  (xForm, UNO_QUERY);
     if (xLoadable.is())
         xLoadable->addLoadListener(this);
+}
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException)
+{
+    static Sequence<Type> aTypes;
+    if (!aTypes.getLength())
+        aTypes = concatSequences(OControlModel::getTypes(), OInterfaceContainer::getTypes(), OGridControlModel_BASE::getTypes());
+    return aTypes;
 }
 
 // OComponentHelper
