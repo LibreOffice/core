@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 14:37:43 $
+ *  last change: $Author: cmc $ $Date: 2002-11-29 16:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ enum RTF_FLD_TYPES {
     RTFFLD_INDEX,
     RTFFLD_SYMBOL,
     RTFFLD_PAGE,
+    RTFFLD_NUMPAGES,
     RTFFLD_DATE,
     RTFFLD_DATA,
     RTFFLD_MERGEFLD,
@@ -176,6 +177,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     sal_Char __READONLY_DATA sINDEX[]=      "\5index";
     sal_Char __READONLY_DATA sSYMBOL[]=     "\6symbol";
     sal_Char __READONLY_DATA sPAGE[]=       "\4page";
+    sal_Char __READONLY_DATA sNUMPAGES[]=   "\x8numpages";
     sal_Char __READONLY_DATA sDATE[]=       "\4date";
     sal_Char __READONLY_DATA sDATA[]=       "\4data";
     sal_Char __READONLY_DATA sMERGEFLD[]=   "\10mergefield";
@@ -194,6 +196,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             {RTFFLD_INDEX,       sINDEX},
             {RTFFLD_SYMBOL,      sSYMBOL},
             {RTFFLD_PAGE,        sPAGE},
+            {RTFFLD_NUMPAGES,    sNUMPAGES},
             {RTFFLD_DATE,        sDATE},
             {RTFFLD_DATA,        sDATA},
             {RTFFLD_MERGEFLD,    sMERGEFLD},
@@ -501,11 +504,29 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         }
         break;
 
+    case RTFFLD_NUMPAGES:
+        {
+            SwDocStatField aFld( (SwDocStatFieldType*)pDoc->GetSysFldType( RES_DOCSTATFLD ),
+                                  DS_PAGE, SVX_NUM_ARABIC );
+            if( STRING_NOTFOUND != ( nPos = aSaveStr.SearchAscii( "\\*" )) )
+            {
+                nPos += 2;
+                while( aSaveStr.GetChar(nPos) == ' ' ) nPos++;
+                aSaveStr.Erase( 0, nPos );
+
+                // steht jetzt geanu auf dem Format-Namen
+                aFld.ChangeFormat( CheckNumberFmtStr( aSaveStr ));
+            }
+            pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+            SkipGroup();
+        }
+        break;
+
     case RTFFLD_PAGE:
         {
             pFldType = pDoc->GetSysFldType( RES_PAGENUMBERFLD );
             SwPageNumberField aPF( (SwPageNumberFieldType*)pFldType,
-                                    PG_RANDOM, SVX_NUM_ARABIC );
+                                    PG_RANDOM, SVX_NUM_ARABIC);
             if( STRING_NOTFOUND != ( nPos = aSaveStr.SearchAscii( "\\*" )) )
             {
                 nPos += 2;
