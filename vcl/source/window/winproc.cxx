@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:26:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,9 +1694,24 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->mpWindowImpl->mbAllResize ||
                 ( pWindow->mpWindowImpl->mbFrame && pWindow->mpWindowImpl->mpClientWindow ) )   // propagate resize for system border windows
             {
+                bool bStartTimer = true;
                 // use resize buffering for user resizes
                 // ownerdraw decorated windows can be resized immediately
                 if( pWindow->mpWindowImpl->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE) && !(pWindow->GetStyle() & WB_OWNERDRAWDECORATION) )
+                {
+                    if( pWindow->mpWindowImpl->mpClientWindow )
+                    {
+                        // #i42750# presentation wants to be informed about resize
+                        // as early as possible
+                        WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow->mpWindowImpl->mpClientWindow);
+                        if( pWorkWindow && pWorkWindow->IsPresentationMode() )
+                            bStartTimer = false;
+                    }
+                }
+                else
+                    bStartTimer = false;
+
+                if( bStartTimer )
                     pWindow->mpWindowImpl->mpFrameData->maResizeTimer.Start();
                 else
                     pWindow->ImplCallResize(); // otherwise menues cannot be positioned
@@ -2264,6 +2279,12 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
     DBG_TESTSOLARMUTEX();
 
     long nRet = 0;
+
+    // #119709# for some unknown reason it is possible to receive events (in this case key events)
+    // although the corresponding VCL window must have been destroyed already
+    // at least mpWindowImpl was NULL in these cases, so check this here
+    if( !((Window*) pInst)->mpWindowImpl )
+        return 0;
 
     switch ( nEvent )
     {
