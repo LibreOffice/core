@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:14:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,7 +1637,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         SbxVariableRef pArg = rPar->Get( 1 );
                         String aKontext = pArg->GetString();
                         ControlDef WhatName(aKontext,SmartId());
-                        if (pControls->Seek_Entry(&WhatName,&nElement))
+                        if (pControls && pControls->Seek_Entry(&WhatName,&nElement))
                         {
                             pNameKontext = ((ControlDef*)pControls->GetObject(nElement))->GetSons();
 
@@ -2846,7 +2846,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.15 $
+    // search $Revision: 1.16 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
