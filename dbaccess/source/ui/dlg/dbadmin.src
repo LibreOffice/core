@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:23:00 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 07:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,7 +1280,8 @@ TabPage PAGE_GENERAL
     };
     String STR_MYSQL_CONFIG_NEXT_PAGE
     {
-        Text = "Die Einstellungen für MySQL können auf der nächsten Seite vorgenommen werden.";
+        Text = "Wechseln Sie zur MySQL-Registerseite um die Einstellungen vorzunehmen.";
+        Text [ english ] = "To adjust the settings, go to the MySQL tab page." ;
     };
 };
 
@@ -2118,6 +2119,7 @@ TabPage PAGE_MYSQL
         Pos = MAP_APPFONT ( 4 , 4 ) ;
         Size = MAP_APPFONT ( 252 , FIXEDTEXT_HEIGHT ) ;
         Text = "Art der Verbindung";
+        Text [ english ] = "Type of connection";
     };
 
     RadioButton RB_USEMYODBC
@@ -2125,6 +2127,7 @@ TabPage PAGE_MYSQL
         Pos                 = MAP_APPFONT ( 6 , 4 + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
         Size                = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
         Text                = "Existierende My~ODBC Datenquelle verwenden" ;
+        Text [ english ]    = "Use existing My~ODBC data source";
     };
 
     RadioButton RB_USECONNECTORJ3
@@ -2132,6 +2135,7 @@ TabPage PAGE_MYSQL
         Pos                 = MAP_APPFONT ( 6 , 4 + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 2*RELATED_CONTROLS ) ;
         Size                = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;
         Text                = "Connector/~J3 verwenden" ;
+        Text [ english ]    = "Use Connector/~J3";
     };
 
     FixedText FT_JDBCDRIVERCLASS
@@ -2139,6 +2143,7 @@ TabPage PAGE_MYSQL
         Pos = MAP_APPFONT ( 15 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 3*RELATED_CONTROLS) ;
         Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
         Text = "MySQL JDBC ~Treiberklasse" ;
+        Text [ english ] = "MySQL JDBC d~river class";
     };
     Edit ET_JDBCDRIVERCLASS
     {
@@ -2153,6 +2158,7 @@ TabPage PAGE_MYSQL
         Pos = MAP_APPFONT ( 4 , 4 + FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 3*RELATED_CONTROLS + EDIT_HEIGHT) ;
         Size = MAP_APPFONT ( 252 , FIXEDTEXT_HEIGHT ) ;
         Text = "Allgemein";
+        Text [ english ] = "General";
     };
 
     FixedText FT_CONNECTURL
@@ -2161,6 +2167,7 @@ TabPage PAGE_MYSQL
         Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "D~atenquellen-URL" ;
+        Text [ english ] = "~Data source URL";
     };
     Edit ET_CONNECTURL
     {
@@ -2184,6 +2191,7 @@ TabPage PAGE_MYSQL
         Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + EDIT_HEIGHT + BUTTON_HEIGHT ) ;
         Size = MAP_APPFONT ( 80 , FIXEDTEXT_HEIGHT ) ;
         Text = "~Benutzername" ;
+        Text [ english ] = "~User name";
     };
     Edit ET_USERNAME
     {
@@ -2198,12 +2206,14 @@ TabPage PAGE_MYSQL
         Pos = MAP_APPFONT ( 101 , 4 + 2*FIXEDTEXT_HEIGHT + 2*CHECKBOX_HEIGHT + 2*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT) ;
         Size = MAP_APPFONT ( 134 , CHECKBOX_HEIGHT ) ;
         Text = "Kennwort ~erforderlich";
+        Text [ english ] = "Password r~equired";
     };
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 6 , 4 + 2*FIXEDTEXT_HEIGHT + 3*CHECKBOX_HEIGHT + 3*UNRELATED_CONTROLS + 4*RELATED_CONTROLS + 2*EDIT_HEIGHT + BUTTON_HEIGHT ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~Zeichensatz" ;
+        Text [ english ] = "~Character set";
     };
     ListBox LB_CHARSET
     {
@@ -2219,6 +2229,7 @@ TabPage PAGE_MYSQL
     String STR_JDBC_DEFAULT_URL
     {
         Text = "<Rechnername>:<3306>/<DBNAME>" ;
+        Text [ english ] = "<host>:<3306>/<DBNAME>";
     };
 
 };
@@ -4098,6 +4109,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.114  2002/11/21 15:23:00  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
  *  Revision 1.113  2002/11/15 12:28:31  oj
  *  #105175# insert none for empty string
  *
