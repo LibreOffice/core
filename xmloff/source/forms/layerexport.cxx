@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 10:36:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,15 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -96,6 +105,8 @@ namespace xmloff
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::drawing;
+    using namespace ::com::sun::star::form;
 
     //=====================================================================
     //= OFormLayerXMLExport_Impl
@@ -104,6 +115,29 @@ namespace xmloff
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
     {
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OFormLayerXMLExport_Impl::implCheckPage(const Reference< XDrawPage >& _rxDrawPage, Reference< XIndexAccess >& _rxForms, ::rtl::OUString& _rPageName)
+    {
+        Reference< XFormsSupplier > xFormsSupp(_rxDrawPage, UNO_QUERY);
+        OSL_ENSURE(xFormsSupp.is(), "OFormLayerXMLExport_Impl::implCheckPage: invalid draw page (no XFormsSupplier)! Doin' nothing!");
+        if (!xFormsSupp.is())
+            return sal_False;
+
+        _rxForms = Reference< XIndexAccess >(xFormsSupp->getForms(), UNO_QUERY);
+        Reference< XServiceInfo > xSI(_rxForms, UNO_QUERY); // order is important!
+        OSL_ENSURE(xSI.is(), "OFormLayerXMLExport_Impl::implCheckPage: invalid collection (must not be NULL and must have a ServiceInfo)!");
+        if (!xSI.is())
+            return sal_False;
+
+        if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
+        {
+            OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::implCheckPage: invalid collection (is no com.sun.star.form.Forms)!");
+            // nothing to do
+            return sal_False;
+        }
+        return sal_True;
     }
 
     //---------------------------------------------------------------------
@@ -123,7 +157,7 @@ namespace xmloff
         if (aReferring != m_aReferringControls.end())
             sReferringControls = aReferring->second;
 
-        // the control id (should already have been created in collectReferences)
+        // the control id (should already have been created in examineForms)
         ::rtl::OUString sControlId;
         ConstMapPropertySet2StringIterator aControlId = m_aControlIds.find(_rxControl);
         OSL_ENSHURE(aControlId != m_aControlIds.end(), "OFormLayerXMLExport_Impl::exportControl: could not find the control id!");
@@ -191,8 +225,26 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::collectReferences(const Reference< XIndexAccess >& _rxStart)
+    void OFormLayerXMLExport_Impl::exportForms(const Reference< XDrawPage >& _rxDrawPage)
     {
+        // get the forms collection of the page
+        Reference< XIndexAccess > xCollectionIndex;
+        ::rtl::OUString sPageName;
+        if (!implCheckPage(_rxDrawPage, xCollectionIndex, sPageName))
+            return;
+
+        exportCollectionElements(xCollectionIndex);
+    }
+
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport_Impl::examineForms(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        // get the forms collection of the page
+        Reference< XIndexAccess > xCollectionIndex;
+        ::rtl::OUString sPageName;
+        if (!implCheckPage(_rxDrawPage, xCollectionIndex, sPageName))
+            return;
+
         m_aControlIds.clear();
         m_aReferringControls.clear();
 
@@ -207,19 +259,19 @@ namespace xmloff
         const ::rtl::OUString sReferenceCheck(PROPERTY_CONTROLLABEL);
         const ::rtl::OUString sControlId(RTL_CONSTASCII_USTRINGPARAM("control"));
 
-        Reference< XIndexAccess > xLoop = _rxStart;
+        Reference< XIndexAccess > xLoop = xCollectionIndex;
         sal_Int32 nChildPos = 0;
         do
         {
             if (nChildPos < xLoop->getCount())
             {
                 ::cppu::extractInterface(xCurrent, xLoop->getByIndex(nChildPos));
-                OSL_ENSURE(xCurrent.is(), "OFormLayerXMLExport_Impl::collectReferences: invalid child object");
+                OSL_ENSURE(xCurrent.is(), "OFormLayerXMLExport_Impl::examineForms: invalid child object");
                 if (!xCurrent.is())
                     continue;
 
                 xCurrentInfo = xCurrent->getPropertySetInfo();
-                OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::collectReferences: no property set info");
+                OSL_ENSURE(xCurrentInfo.is(), "OFormLayerXMLExport_Impl::examineForms: no property set info");
                 if (xCurrentInfo->hasPropertyByName(sControlCheck))
                 {
                     // generate a new control id
@@ -236,7 +288,7 @@ namespace xmloff
                             ++aCheck
                         )
                         OSL_ENSURE(aCheck->second != sCurrentId,
-                            "OFormLayerXMLExport_Impl::collectReferences: auto-generated control ID is already used!");
+                            "OFormLayerXMLExport_Impl::examineForms: auto-generated control ID is already used!");
                 #endif
                     // add it to the map
                     m_aControlIds[xCurrent] = sCurrentId;
@@ -260,7 +312,7 @@ namespace xmloff
                 {
                     // step down
                     Reference< XIndexAccess > xNextContainer(xCurrent, UNO_QUERY);
-                    OSL_ENSURE(xNextContainer.is(), "OFormLayerXMLExport_Impl::collectReferences: what the heck is this ... no control, no container?");
+                    OSL_ENSURE(xNextContainer.is(), "OFormLayerXMLExport_Impl::examineForms: what the heck is this ... no control, no container?");
                     aContainerHistory.push(xLoop);
                     aIndexHistory.push(nChildPos);
 
@@ -291,6 +343,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/29 10:36:05  mh
+ *  add: stdio.h for Solaris8
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

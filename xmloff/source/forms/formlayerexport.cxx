@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 10:32:13 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace xmloff
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::drawing;
 
     //=====================================================================
     //= OFormLayerXMLExport
@@ -125,38 +126,22 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport::exportStructure(const Reference< XNameAccess >& _rxFormsCollection)
+    void OFormLayerXMLExport::examine(const Reference< XDrawPage >& _rxDrawPage)
     {
-        Reference< XIndexAccess > xCollectionIndex(_rxFormsCollection, UNO_QUERY);
-        Reference< XServiceInfo > xSI(xCollectionIndex, UNO_QUERY); // order is important!
-        OSL_ENSHURE(xSI.is(), "OFormLayerXMLExport::exportStructure: invalid collection (must not be NULL and must have a ServiceInfo)!");
-        if (!xSI.is())
-            return;
-
-        if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
-        {
-            OSL_ENSHURE(sal_False, "OFormLayerXMLExport::exportStructure: invalid collection (is no FormsCollection)!");
-            // nothing to do
-            return;
-        }
-
-        // let the control exporter create ids for the controls
-        // They are needed at least for the references controls may have to other controls (e.g. when a
-        // radio button referes to a group box as it's frame), so we would need at least the ids of all controls
-        // which may be referring other controls. This way, we need to loop through the complete forms/controls
-        // structure before doing any real export, just to collect _some_ ids. So why shouldn't we collect _all_
-        // of them immediately ?
         try
         {
-            m_pImpl->collectReferences(xCollectionIndex);
+            m_pImpl->examineForms(_rxDrawPage);
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport::exportStructure: could not collect the control ids!");
+            OSL_ENSURE(sal_False, "OFormLayerXMLExport::examine: could not examine the draw page!");
         }
+    }
 
-        // let the impl method export this top-level collection
-        m_pImpl->exportCollectionElements(xCollectionIndex);
+    //---------------------------------------------------------------------
+    void OFormLayerXMLExport::export(const Reference< XDrawPage >& _rxDrawPage)
+    {
+        m_pImpl->examineForms(_rxDrawPage);
     }
 
 //.........................................................................
@@ -166,6 +151,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/29 10:32:13  mh
+ *  add: header for Solaris8
+ *
  *  Revision 1.1  2000/11/17 19:02:16  fs
  *  initial checkin - export and/or import the applications form layer
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-19 15:41:32 $
+ *  last change: $Author: fs $ $Date: 2000-12-03 10:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -146,7 +149,9 @@ namespace xmloff
         */
         void    exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
 
-        /** collect ids for all controls of a forms/controls hierarchy
+        /** examine a forms collection.
+
+            <p>The method will collect control ids and add styles to the export context as necessary.</p>
 
             <p>Every control in the object hierarchy given will be assigned to a unique id, which is stored for later
             use.</p>
@@ -157,13 +162,29 @@ namespace xmloff
             <p>Upon calling this method, the id map will be cleared before collecting the new ids, so any ids
             you collected previously will be lost</p>
 
-            @param  _rxStart
-                the starting point
+            @param _rxDrawPage
+                the draw page which's forms collection should be examined
 
             @see getControlId
             @see exportControl
+            @see exportForms
         */
-        void collectReferences(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxStart);
+        void examineForms(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
+
+        /** export a forms collection of a draw page
+
+            <p>The method will obtain the forms collection of the page and call
+            <method>exportCollectionElements</method>.</p>
+        */
+        void exportForms(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
+
+    protected:
+        sal_Bool implCheckPage(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxForms,
+            ::rtl::OUString& _rPageName);
     };
 
 //.........................................................................
@@ -175,6 +196,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/11/19 15:41:32  fs
+ *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
+ *
  *  Revision 1.1  2000/11/17 19:02:39  fs
  *  initial checkin - export and/or import the applications form layer
  *
