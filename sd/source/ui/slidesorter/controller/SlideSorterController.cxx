@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:17:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,8 @@ SlideSorterController::SlideSorterController (
       mbPostModelChangePending (false),
       maSelectionBeforeSwitch(),
       mnCurrentPageBeforeSwitch(0),
-      mpEditModeChangeMasterPage(NULL)
+      mpEditModeChangeMasterPage(NULL),
+      mbIsMakeSelectionVisiblePending(false)
 {
     OSL_ASSERT(pFrame!=NULL);
     OSL_ASSERT(pParentWindow!=NULL);
@@ -307,25 +308,55 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager (void)
 
 
 
-SdPage* SlideSorterController::GetActualPage (void)
+void SlideSorterController::Paint (
+    const Rectangle& rBBox,
+    ::sd::Window* pWindow)
 {
-    // First try the currently focused page.
-    model::PageDescriptor* pDescriptor = NULL;
-    if (GetFocusManager().IsFocusShowing())
-        pDescriptor = GetFocusManager().GetFocusedPageDescriptor();
-    if (pDescriptor == NULL)
+    if (mbIsMakeSelectionVisiblePending)
     {
-        // No focus so try the selection.
-        model::SlideSorterModel::Enumeration aEnumeration (
-            GetModel().GetSelectedPagesEnumeration());
-        if (aEnumeration.HasMoreElements())
-            pDescriptor = &aEnumeration.GetNextElement();
+        MakeSelectionVisible();
+        mbIsMakeSelectionVisiblePending = false;
     }
 
-    if (pDescriptor != NULL)
-        return pDescriptor->GetPage();
-    else
-        return NULL;
+    GetView().CompleteRedraw(pWindow, Region(rBBox));
+}
+
+
+
+
+SdPage* SlideSorterController::GetActualPage (void)
+{
+    SdPage* pCurrentPage = NULL;
+
+    // 1. Try to get the current page from the view shell in the center pane
+    // (if we are that not ourself).
+    if ( ! GetViewShell().IsMainViewShell())
+    {
+        ViewShell* pMainViewShell =  GetViewShell().GetViewShellBase().GetMainViewShell();
+        if (pMainViewShell != NULL)
+            pCurrentPage = pMainViewShell->GetActualPage();
+    }
+
+    // 2. Try the currently focused page.
+    if (pCurrentPage == NULL)
+    {
+        model::PageDescriptor* pDescriptor = NULL;
+        if (GetFocusManager().IsFocusShowing())
+            pDescriptor = GetFocusManager().GetFocusedPageDescriptor();
+        if (pDescriptor == NULL)
+        {
+            // 3. Take the first selected page.
+            model::SlideSorterModel::Enumeration aEnumeration (
+                GetModel().GetSelectedPagesEnumeration());
+            if (aEnumeration.HasMoreElements())
+                pDescriptor = &aEnumeration.GetNextElement();
+        }
+
+        if (pDescriptor != NULL)
+            pCurrentPage = pDescriptor->GetPage();
+    }
+
+    return pCurrentPage;
 }
 
 
@@ -534,30 +565,20 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
             switch (pEvent->GetId())
             {
                 case VCLEVENT_WINDOW_ACTIVATE:
-                    //                    rShell.ArrangeGUIElements();
-                    mrView.RequestRepaint();
-                    break;
-
                 case VCLEVENT_WINDOW_SHOW:
-                    //                    rShell.ArrangeGUIElements();
                     mrView.RequestRepaint();
                     break;
             }
         }
         else if (pWindow == rShell.GetActiveWindow())
         {
-            /*
             switch (pEvent->GetId())
             {
-                case VCLEVENT_WINDOW_GETFOCUS:
-                    GetFocusManager().ShowFocus();
-                    break;
-
-                case VCLEVENT_WINDOW_LOSEFOCUS:
-                    GetFocusManager().HideFocus();
+                case VCLEVENT_WINDOW_SHOW:
+                case VCLEVENT_WINDOW_RESIZE:
+                    //                    SelectionHasChanged(true);
                     break;
             }
-            */
         }
         else
         {
@@ -636,9 +657,10 @@ void SlideSorterController::DeleteSelectedPages (void)
         DBG_ASSERT(pPage!=NULL, "page does not exist");
         DBG_ASSERT(pNotesPage!=NULL, "notes does not exist");
 
-        // Add undo actions and delete the pages.
-        GetView().AddUndo (new SdrUndoDelPage (*pPage));
+        // Add undo actions and delete the pages.  The order of adding the
+        // undo actions is important.
         GetView().AddUndo (new SdrUndoDelPage (*pNotesPage));
+        GetView().AddUndo (new SdrUndoDelPage (*pPage));
         if (GetModel().GetEditMode() == EM_PAGE)
         {
             // Remove regular slides with the API.
@@ -815,7 +837,8 @@ void SlideSorterController::SelectionHasChanged (
     bool bMakeSelectionVisible)
 {
     if (bMakeSelectionVisible)
-        MakeSelectionVisible();
+        mbIsMakeSelectionVisiblePending = true;
+    //        MakeSelectionVisible();
 
     SlideSorterViewShell& rViewShell (GetViewShell());
     rViewShell.Invalidate (SID_EXPAND_PAGE);
@@ -861,15 +884,16 @@ void SlideSorterController::SelectionHasChanged (
 
 
 
-/** We have to distinguish two cases: a) the selection fits completely into
-    the visible area, b) it does not.
-    a) When the selection fits completely into the visible area we have to
+/** We have to distinguish three cases: 1) the selection is empty, 2) the
+    selection fits completely into the visible area, 3) it does not.
+    1) The visible area is not modified.
+    2) When the selection fits completely into the visible area we have to
     decide how to align it.  It is done by scrolling it there and thus when
     we scoll up the (towards the end of the document) the bottom of the
     selection is aligned with the bottom of the window.  When we scroll
     down (towards the beginning of the document) the top of the selection is
     aligned with the top of the window.
-    b) We have to decide what part of the selection to make visible.  Here
+    3) We have to decide what part of the selection to make visible.  Here
     we use the eSelectionHint and concentrate on either the first, the last,
     or the most recently selected page.  We then again apply the algorithm
     of a).
@@ -879,7 +903,7 @@ void SlideSorterController::MakeSelectionVisible (
     SelectionHint eSelectionHint)
 {
     // Determine the descriptors of the first, last, and most recently
-    // selected page and the bounding box that encloses all those page objects.
+    // selected page and the bounding box that encloses their page objects.
     model::PageDescriptor* pFirst = NULL;
     model::PageDescriptor* pLast = NULL;
     Rectangle aSelectionBox;
@@ -898,46 +922,52 @@ void SlideSorterController::MakeSelectionVisible (
             view::SlideSorterView::CS_MODEL,
             view::SlideSorterView::BBT_INFO));
     }
-    model::PageDescriptor* pRecent
-        = GetPageSelector().GetMostRecentlySelectedPage();
 
-    // Determine scroll direction and the position in model coordinates that
-    // will be aligned with the top or bottom window border.
-    Rectangle aVisibleArea (GetViewShell().GetActiveWindow()->PixelToLogic(
-        Rectangle(
-            Point(0,0),
-            GetViewShell().GetActiveWindow()->GetOutputSizePixel())));
-    if (aSelectionBox.GetHeight() > aVisibleArea.GetHeight())
+    if (pFirst != NULL)
     {
-        // We can show only a part of the selection.
+        // The mose recently selected page is assumed to lie in the range
+        // between first and last selected page.  Therefore the bounding box
+        // is not modified.
+        model::PageDescriptor* pRecent = GetPageSelector().GetMostRecentlySelectedPage();
 
-        // Get the bounding box of the page object on which to concentrate.
-        model::PageDescriptor* pRepresentative;
-        switch (eSelectionHint)
+        // Determine scroll direction and the position in model coordinates
+        // that will be aligned with the top or bottom window border.
+        Rectangle aVisibleArea (GetViewShell().GetActiveWindow()->PixelToLogic(
+            Rectangle(
+                Point(0,0),
+                GetViewShell().GetActiveWindow()->GetOutputSizePixel())));
+        if (aSelectionBox.GetHeight() > aVisibleArea.GetHeight())
         {
-            case SH_FIRST:
-                pRepresentative = pFirst;
-                break;
+            // We can show only a part of the selection.
 
-            case SH_LAST:
-                pRepresentative = pLast;
-                break;
-
-            case SH_RECENT:
-                if (pRecent == NULL)
+            // Get the bounding box of the page object on which to concentrate.
+            model::PageDescriptor* pRepresentative;
+            switch (eSelectionHint)
+            {
+                case SH_FIRST:
                     pRepresentative = pFirst;
-                else
-                    pRepresentative = pRecent;
-                break;
-        }
-        if (pRepresentative != NULL)
-            aSelectionBox = mrView.GetPageBoundingBox (
-                *pRepresentative,
-                view::SlideSorterView::CS_MODEL,
-                view::SlideSorterView::BBT_INFO);
-    }
+                    break;
 
-    MakeRectangleVisible (aSelectionBox);
+                case SH_LAST:
+                    pRepresentative = pLast;
+                    break;
+
+                case SH_RECENT:
+                    if (pRecent == NULL)
+                        pRepresentative = pFirst;
+                    else
+                        pRepresentative = pRecent;
+                    break;
+            }
+            if (pRepresentative != NULL)
+                aSelectionBox = mrView.GetPageBoundingBox (
+                    *pRepresentative,
+                    view::SlideSorterView::CS_MODEL,
+                    view::SlideSorterView::BBT_INFO);
+        }
+
+        MakeRectangleVisible (aSelectionBox);
+    }
 }
 
 
