@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:04:59 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1510,11 +1510,13 @@ namespace pcr
                                         {   // Dialog editor mode
                                             pWriteScriptEvents->ListenerType = aListener;
                                         }
+                                        if ( pMacro->GetLanguage().EqualsAscii("StarBasic") )
+                                        {
+                                            sal_Bool bApplicationMacro = pMacro->GetLibName().EqualsAscii("StarOffice");
 
-                                        sal_Bool bApplicationMacro = pMacro->GetLibName().EqualsAscii("StarOffice");
-
-                                        sScriptCode = ::rtl::OUString::createFromAscii( bApplicationMacro ? "application:" : "document:" );
-                                        sScriptCode += pMacro->GetMacName();
+                                            sScriptCode = ::rtl::OUString::createFromAscii( bApplicationMacro ? "application:" : "document:" );
+                                            sScriptCode += pMacro->GetMacName();
+                                        }
 
                                         pWriteScriptEvents->ScriptCode = sScriptCode;
                                         pWriteScriptEvents->EventMethod = *pMethods;
