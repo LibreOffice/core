@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: fme $ $Date: 2001-07-24 11:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,11 +207,7 @@ public:
     virtual SfxStyleSheetBase *operator[](USHORT nIdx);
     virtual SfxStyleSheetBase* First();
     virtual SfxStyleSheetBase* Next();
-#ifndef ENABLEUNICODE
-    virtual SfxStyleSheetBase* Find(const String& rStr);
-#else
     virtual SfxStyleSheetBase* Find(const UniString& rStr);
-#endif
 
     virtual void Notify( SfxBroadcaster&, const SfxHint& );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:50:17 $
+ *  last change: $Author: fme $ $Date: 2001-07-24 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2667,11 +2667,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Next()
     return 0;
 }
 
-#ifndef ENABLEUNICODE
-SfxStyleSheetBase*  SwStyleSheetIterator::Find( const String& rName )
-#else
 SfxStyleSheetBase*  SwStyleSheetIterator::Find( const UniString& rName )
-#endif
 {
     // suchen
     if( !bFirstCalled )
