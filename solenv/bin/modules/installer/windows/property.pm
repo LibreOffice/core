@@ -157,25 +157,7 @@ sub get_productname_for_property_table
 
 sub get_productversion_for_property_table
 {
-    my ( $allvariables ) = @_;
-
-    my $productversion = $allvariables->{'PRODUCTVERSION'};
-
-    if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
-    {
-        $productversion = $1 . "\." . $2 . $3 . "\." . $installer::globals::buildid;
-    }
-    elsif  ( $productversion =~ /^\s*(\d+)\.(\d+)\s*$/ )
-    {
-        $productversion = $1 . "\." . $2 . "\." . $installer::globals::buildid;
-    }
-    else
-    {
-        $productversion = $productversion . "\." . "00" . "\." . $installer::globals::buildid;
-    }
-
-    # my $productversion = $allvariables->{'PRODUCTVERSION'} . ".00." . $installer::globals::buildid;
-    return $productversion;
+    return $installer::globals::msiproductversion;
 }
 
 ####################################################################################
@@ -201,7 +183,7 @@ sub update_property_table
     my $manufacturer = get_manufacturer_for_property_table();
     my $productlanguage = get_productlanguage_for_property_table($language);
     my $productname = get_productname_for_property_table($allvariables);
-    my $productversion = get_productversion_for_property_table($allvariables);
+    my $productversion = get_productversion_for_property_table();
 
     # Updating the values
 
