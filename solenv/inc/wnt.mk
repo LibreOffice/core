@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:35:08 $
+#   last change: $Author: hjs $ $Date: 2003-04-08 13:57:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -258,6 +258,9 @@ CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .ENDIF
 CFLAGSDBGUTIL=
 CFLAGSOPT=-Ox
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT+=-Oy-
+.ENDIF			# "$(PRODUCT)"!=""
 CFLAGSNOOPT=-Od
 CFLAGSOUTOBJ=-Fo
 .IF "$(COMEX)"=="8"
