@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:35:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace basegfx
 
         bool isEmpty() const
         {
-            return Traits::initMin() == mnMinimum && Traits::initMax() == mnMaximum;
+            return Traits::initMin() == mnMinimum;
         }
 
         T getMinimum() const { return mnMinimum; }
@@ -114,22 +114,64 @@ namespace basegfx
 
         double getCenter() const
         {
-            return ((mnMaximum + mnMinimum) / 2.0);
+            if(isEmpty())
+            {
+                return 0.0;
+            }
+            else
+            {
+                return ((mnMaximum + mnMinimum) / 2.0);
+            }
         }
 
         bool isInside(T nValue) const
         {
-            return (nValue >= mnMinimum) && (nValue <= mnMaximum);
+            if(isEmpty())
+            {
+                return false;
+            }
+            else
+            {
+                return (nValue >= mnMinimum) && (nValue <= mnMaximum);
+            }
         }
 
         bool isInside(const BasicRange& rRange) const
         {
-            return (rRange.mnMinimum >= mnMinimum) && (rRange.mnMaximum <= mnMaximum);
+            if(isEmpty())
+            {
+                return false;
+            }
+            else
+            {
+                if(rRange.isEmpty())
+                {
+                    return false;
+                }
+                else
+                {
+                    return (rRange.mnMinimum >= mnMinimum) && (rRange.mnMaximum <= mnMaximum);
+                }
+            }
         }
 
         bool overlaps(const BasicRange& rRange) const
         {
-            return !((rRange.mnMaximum < mnMinimum) || (rRange.mnMinimum > mnMaximum));
+            if(isEmpty())
+            {
+                return false;
+            }
+            else
+            {
+                if(rRange.isEmpty())
+                {
+                    return false;
+                }
+                else
+                {
+                    return !((rRange.mnMaximum < mnMinimum) || (rRange.mnMinimum > mnMaximum));
+                }
+            }
         }
 
         bool operator==( const BasicRange& rRange ) const
@@ -150,32 +192,51 @@ namespace basegfx
 
         void expand(T nValue)
         {
-            if(nValue < mnMinimum)
+            if(isEmpty())
             {
-                mnMinimum = nValue;
+                mnMinimum = mnMaximum = nValue;
             }
-
-            if(nValue > mnMaximum)
+            else
             {
-                mnMaximum = nValue;
+                if(nValue < mnMinimum)
+                {
+                    mnMinimum = nValue;
+                }
+
+                if(nValue > mnMaximum)
+                {
+                    mnMaximum = nValue;
+                }
             }
         }
 
         void expand(const BasicRange& rRange)
         {
-            if(rRange.mnMinimum < mnMinimum)
+            if(isEmpty())
             {
                 mnMinimum = rRange.mnMinimum;
-            }
-
-            if(rRange.mnMaximum > mnMaximum)
-            {
                 mnMaximum = rRange.mnMaximum;
+            }
+            else
+            {
+                if(!rRange.isEmpty())
+                {
+                    if(rRange.mnMinimum < mnMinimum)
+                    {
+                        mnMinimum = rRange.mnMinimum;
+                    }
+
+                    if(rRange.mnMaximum > mnMaximum)
+                    {
+                        mnMaximum = rRange.mnMaximum;
+                    }
+                }
             }
         }
 
         void intersect(const BasicRange& rRange)
         {
+            // here, overlaps also tests all isEmpty() conditions already.
             if( !overlaps( rRange ) )
             {
                 reset();
@@ -196,20 +257,23 @@ namespace basegfx
 
         void grow(T nValue)
         {
-            bool bLessThanZero(nValue < 0);
-
-            if(nValue > 0 || bLessThanZero)
+            if(!isEmpty())
             {
-                mnMinimum -= nValue;
-                mnMaximum += nValue;
+                bool bLessThanZero(nValue < 0);
 
-                if(bLessThanZero)
+                if(nValue > 0 || bLessThanZero)
                 {
-                    // test if range did collapse
-                    if(mnMinimum > mnMaximum)
+                    mnMinimum -= nValue;
+                    mnMaximum += nValue;
+
+                    if(bLessThanZero)
                     {
-                        // if yes, collapse to center
-                        mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2;
+                        // test if range did collapse
+                        if(mnMinimum > mnMaximum)
+                        {
+                            // if yes, collapse to center
+                            mnMinimum = mnMaximum = (mnMinimum + mnMaximum) / 2;
+                        }
                     }
                 }
             }
@@ -217,7 +281,14 @@ namespace basegfx
 
         typename Traits::DifferenceType getRange() const
         {
-            return (mnMaximum - mnMinimum);
+            if(isEmpty())
+            {
+                return Traits::neutral();
+            }
+            else
+            {
+                return (mnMaximum - mnMinimum);
+            }
         }
     };
 
@@ -226,6 +297,7 @@ namespace basegfx
     {
         static double initMin() { return DBL_MAX; };
         static double initMax() { return DBL_MIN; };
+        static double neutral() { return 0.0; };
 
         typedef double DifferenceType;
     };
@@ -234,6 +306,7 @@ namespace basegfx
     {
         static sal_Int32 initMin() { return 0x7FFFFFFFL; };
         static sal_Int32 initMax() { return 0x80000000UL; };
+        static sal_Int32 neutral() { return 0L; };
 
         typedef sal_Int64 DifferenceType;
     };
