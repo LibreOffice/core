@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-22 12:01:17 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 10:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
