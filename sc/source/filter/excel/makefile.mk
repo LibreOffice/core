@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: dr $ $Date: 2002-04-10 12:58:12 $
+#   last change: $Author: dr $ $Date: 2002-05-22 11:11:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ SLOFILES =	\
         $(SLO)$/XclChartsApiHelper.obj		\
         $(SLO)$/XclImpStream.obj			\
         $(SLO)$/XclImpHelper.obj			\
+        $(SLO)$/XclImpDocContent.obj		\
         $(SLO)$/XclImpExternsheet.obj		\
         $(SLO)$/XclImpStyleBuffer.obj		\
         $(SLO)$/XclImpObjects.obj			\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-16 09:28:02 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 11:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,19 +876,17 @@ void Biff8RecDumper::DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre 
 void __AddGUID( ByteString& rStr, XclImpStream& rIn )
 {
     UINT16 nIndex;
-    for( nIndex = 0; nIndex < 4; nIndex++ )
-        __AddPureHex( rStr, Read1( rIn ) );
+    __AddPureHex( rStr, Read4( rIn ) );
     rStr += "-";
+    __AddPureHex( rStr, Read2( rIn ) );
+    rStr += "-";
+    __AddPureHex( rStr, Read2( rIn ) );
+    rStr += "-";
+    // last 2 parts byte for byte
     for( nIndex = 0; nIndex < 2; nIndex++ )
         __AddPureHex( rStr, Read1( rIn ) );
     rStr += "-";
-    for( nIndex = 0; nIndex < 2; nIndex++ )
-        __AddPureHex( rStr, Read1( rIn ) );
-    rStr += "-";
-    for( nIndex = 0; nIndex < 4; nIndex++ )
-        __AddPureHex( rStr, Read1( rIn ) );
-    rStr += "-";
-    for( nIndex = 0; nIndex < 4; nIndex++ )
+    for( nIndex = 0; nIndex < 6; nIndex++ )
         __AddPureHex( rStr, Read1( rIn ) );
 }
 
@@ -3137,19 +3135,30 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x01B8:        // HLINK
             {
-                UINT32 n1, n2;
                 PreDump( nL );
 
+                UINT32 n1, n2;
                 LINESTART();
                 PRINT();
-                ADDTEXT( "Row1 = " );       ADDDEC( 2 );
-                ADDTEXT( "  Row2 = " );     ADDDEC( 2 );
-                ADDTEXT( "  Col1 = " );     ADDDEC( 2 );
-                ADDTEXT( "  Col2 = " );     ADDDEC( 2 );
+                UINT16 nR1, nR2, nC1, nC2;
+                rIn >> nR1 >> nR2 >> nC1 >> nC2;
+                ADDTEXT( "Cellrange=" );
+                __AddRef( t, nC1, nR1 );
+                if( (nR1 != nR2) || (nC1 != nC2) )
+                {
+                    ADDTEXT( ":" );
+                    __AddRef( t, nC2, nR2 );
+                }
                 PRINT();
-
-                ContDump( 20 );
-
+                LINESTART();
+                ADDTEXT( "GUID StdLink=" );     __AddGUID( t, rIn );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "        must=79EAC9D0-BAF9-11CE-8C82-00AA004BA90B" );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "unknown=" );          ADDHEX( 4 );
+                PRINT();
                 UINT32 __nFlags = Read4( rIn );
                 LINESTART();
                 STARTFLAG();
@@ -3157,19 +3166,38 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDFLAG( 0x00000002, " fAbs" );
                 ADDFLAG( 0x00000014, " fDescr" );
                 ADDFLAG( 0x00000008, " fMark" );
-                ADDFLAG( 0x00000100, " fNetwork" );
-                ADDRESERVED( 0xFFFFFEE0 );
+                ADDFLAG( 0x00000080, " fFrame" );
+                ADDFLAG( 0x00000100, " fUNC" );
+                ADDRESERVED( 0xFFFFFE60 );
                 PRINT();
 
                 //description
+                String aData;
                 if( __nFlags & 0x00000014 )
                 {
                     LINESTART();
                     rIn >> n1;
-                    ADDTEXT( "## Description ##  len: " );
+                    ADDTEXT( "## Description ##  [l=" );
                     __AddDec( t, n1 );
+                    ADDTEXT( "]: '" );
+                    aData = rIn.ReadRawUniString( (USHORT)(n1 - 1), TRUE );
+                    t += GETSTR( aData );
+                    ADDTEXT( "<" ); ADDHEX( 2 ); ADDTEXT( ">'" ); // trailing zero
                     PRINT();
-                    ContDump( n1 << 1 );
+                }
+
+                // frame name
+                if( __nFlags & 0x00000080 )
+                {
+                    LINESTART();
+                    rIn >> n1;
+                    ADDTEXT( "## Frame ## [l=" );
+                    __AddDec( t, n1 );
+                    ADDTEXT( "]: '" );
+                    aData = rIn.ReadRawUniString( (USHORT)(n1 - 1), TRUE );
+                    t += GETSTR( aData );
+                    ADDTEXT( "<" ); ADDHEX( 2 ); ADDTEXT( ">'" ); // trailing zero
+                    PRINT();
                 }
 
                 // network path
@@ -3177,65 +3205,92 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 {
                     LINESTART();
                     rIn >> n1;
-                    ADDTEXT( "## Network path ##  len: " );
+                    ADDTEXT( "## UNC ## [l=" );
                     __AddDec( t, n1 );
+                    ADDTEXT( "]: '" );
+                    aData = rIn.ReadRawUniString( (USHORT)(n1 - 1), TRUE );
+                    t += GETSTR( aData );
+                    ADDTEXT( "<" ); ADDHEX( 2 ); ADDTEXT( ">'" ); // trailing zero
                     PRINT();
-                    ContDump( n1 << 1 );
                 }
+
                 // file link or URL
                 else if( __nFlags & 0x00000001 )
                 {
-                    LINESTART();
+                    rIn.PushPosition();
                     rIn >> n1;
+                    rIn.PopPosition();
                     LINESTART();
-                    ADDTEXT( "## identifier ## " );
-                    __AddHex( t, n1 );
-                    PRINT();
+                    ADDTEXT( "## Content GUID ## " );
+                    __AddGUID( t, rIn );
                     switch( n1 )
                     {
                         case 0x00000303:    // file
                         {
-                            ContDump( 12 );
-                            LINESTART();
-                            ADDTEXT( "## File link ##  up level: " );
-                            ADDDEC( 2 );
-                            ADDTEXT( "   len (8-bit String): " );
-                            rIn >> n2;
-                            __AddDec( t, n2 );
+                            ADDTEXT( " File Moniker" );
                             PRINT();
-                            ContDump( n2 );
+                            LINESTART();
+                            ADDTEXT( "              must=00000303-0000-0000-C000-000000000046" );
+                            PRINT();
+                            LINESTART();
+                            ADDTEXT( "## File link ##  up level=" );
+                            ADDDEC( 2 );
+                            rIn >> n2;
+                            ADDTEXT( "   [l=" );        __AddDec( t, n2 );
+                            ADDTEXT( ", 8-Bit]: '" );
+                            aData = rIn.ReadRawByteString( (USHORT)(n1 - 1) );
+                            t += GETSTR( aData );
+                            ADDTEXT( "<" ); ADDHEX( 1 ); ADDTEXT( ">'" ); // trailing zero
+                            PRINT();
                             ContDump( 24 );
                             rIn >> n2;
                             LINESTART();
-                            ADDTEXT( "Bytes left: " );
-                            __AddDec( t, n2 );
+                            ADDTEXT( "bytes left=" );  __AddDec( t, n2 );
+                            if( n2 )
+                            {
+                                rIn >> n2;
+                                LINESTART();
+                                ADDTEXT( "   string byte count=" );
+                                __AddDec( t, n2 );
+                                ADDTEXT( "   unknown=" );
+                                ADDHEX( 2 );
+                                PRINT();
+                                LINESTART();
+                                ADDTEXT( "[l=" );
+                                __AddDec( t, n2 / 2 );
+                                ADDTEXT( "]: '" );
+                                aData = rIn.ReadRawUniString( (USHORT)n2, TRUE );
+                                t += GETSTR( aData );
+                                ADDTEXT( "'" );
+                            }
                             PRINT();
-                            if( !n2 ) break;
-                            rIn >> n2;
-                            LINESTART();
-                            ADDTEXT( "link byte count: " );
-                            __AddDec( t, n2 );
-                            ADDTEXT( "   unknown: " );
-                            ADDHEX( 2 );
-                            PRINT();
-                            ContDump( n2 );
                         }
                         break;
                         case 0x79EAC9E0:    // URL
                         {
-                            ContDump( 12 );
+                            ADDTEXT( " URL Moniker" );
+                            PRINT();
+                            LINESTART();
+                            ADDTEXT( "              must=79EAC9E0-BAF9-11CE-8C82-00AA004BA90B" );
+                            PRINT();
                             rIn >> n2;
                             LINESTART();
-                            ADDTEXT( "## URL ##  byte count: " );
+                            ADDTEXT( "## URL ##  string byte count=" );
                             __AddDec( t, n2 );
                             PRINT();
-                            ContDump( n2 );
+                            LINESTART();
+                            ADDTEXT( "[l=" );
+                            __AddDec( t, n2 / 2 );
+                            ADDTEXT( "]: '" );
+                            aData = rIn.ReadRawUniString( (USHORT)(n2 / 2 - 1), TRUE );
+                            t += GETSTR( aData );
+                            ADDTEXT( "<" ); ADDHEX( 2 ); ADDTEXT( ">'" ); // trailing zero
+                            PRINT();
                         }
                         break;
                         default:
                         {
-                            LINESTART();
-                            ADDTEXT( "!! UNKNOWN ID !!" );
+                            ADDTEXT( " (!!UNKNOWN!!)" );
                             PRINT();
                         }
                         break;
@@ -3245,12 +3300,15 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 // text mark
                 if( __nFlags & 0x00000008 )
                 {
-                    rIn >> n1;
                     LINESTART();
-                    ADDTEXT( "## Text mark ##  len: " );
+                    rIn >> n1;
+                    ADDTEXT( "## Text mark ##  [l=" );
                     __AddDec( t, n1 );
+                    ADDTEXT( "]: '" );
+                    aData = rIn.ReadRawUniString( (USHORT)(n1 - 1), TRUE );
+                    t += GETSTR( aData );
+                    ADDTEXT( "<" ); ADDHEX( 2 ); ADDTEXT( ">'" ); // trailing zero
                     PRINT();
-                    ContDump( n1 << 1 );
                 }
             }
             break;

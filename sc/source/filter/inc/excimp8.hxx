@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-11 12:15:12 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 11:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,9 +251,6 @@ class ImportExcel8 : public ImportExcel
         virtual void            PostDocLoad( void );
 
         virtual FltError        ReadChart8( ScfProgressBar&, const BOOL bOwnTab );
-                                // -> read.cxx
-        void                    InsertHyperlink( const UINT16 nCol, const UINT16 nRow,
-                                                    const String& rURL );
         void                    CreateTmpCtrlStorage( void );
                                     // if possible generate a SvxMSConvertOCXControls compatibel storage
 

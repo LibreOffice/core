@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-11 12:16:50 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 11:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #endif
 #ifndef _SC_XCLIMPHELPER_HXX
 #include "XclImpHelper.hxx"
+#endif
+#ifndef _SC_XCLIMPDOCCONTENT_HXX
+#include "XclImpDocContent.hxx"
 #endif
 #ifndef _SC_XCLIMPEXTERNSHEET_HXX
 #include "XclImpExternsheet.hxx"
@@ -1011,10 +1014,14 @@ void ImportExcel8::Dv()
     aIn >> nFlags;
 
     // messages
-    String aPromptTitle( aIn.ReadUniString() );
-    String aErrorTitle( aIn.ReadUniString() );
-    String aPromptMessage( aIn.ReadUniString() );
-    String aErrorMessage( aIn.ReadUniString() );
+    String aPromptTitle;
+    aIn.AppendUniString( aPromptTitle );
+    String aErrorTitle;
+    aIn.AppendUniString( aErrorTitle );
+    String aPromptMessage;
+    aIn.AppendUniString( aPromptMessage );
+    String aErrorMessage;
+    aIn.AppendUniString( aErrorMessage );
 
     // formula(s)
     if( aIn.GetRecLeft() > 8 )
@@ -1029,10 +1036,11 @@ void ImportExcel8::Dv()
         {
             pFormConv->Reset();
             pFormConv->Convert( pFmla1, nLen, FT_RangeName );
-            // we have to own a copy of the token array
+            // pFormConv owns pFmla1 -> create a copy of the token array
             pFmla1 = pFmla1->Clone();
         }
 
+        // second formula
         const ScTokenArray* pFmla2 = NULL;
         aIn >> nLen;
         aIn.Ignore( 2 );
@@ -1123,6 +1131,7 @@ void ImportExcel8::Dv()
             }
         }
         delete pFmla1;
+        // we do not own pFmla2
     }
 }
 
@@ -1180,131 +1189,10 @@ void ImportExcel8::Labelranges()
 }
 
 
-static void lcl_GetAbs( String& rPath, UINT16 nDl, SfxObjectShell* pDocShell )
+void ImportExcel8::Hlink()
 {
-    String      aTmpStr;
-
-    if( nDl )
-    {
-        while( nDl )
-        {
-            aTmpStr.AppendAscii( "../" );
-            nDl--;
-        }
-    }
-
-    aTmpStr += rPath;
-
-    bool bWasAbs = false;
-    rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
-    // full path as stored in SvxURLField must be encoded
-}
-
-
-void ImportExcel8::Hlink( void )
-{
-    UINT16 nRF, nRL, nCF, nCL;
-    UINT32 nFlags;
-
-    aIn >> nRF >> nRL >> nCF >> nCL;
-    aIn.Ignore( 20 );
-    aIn >> nFlags;
-
-    UINT16  nLevel = 0;             // counter for level to climb down in path
-    String* pLongname = NULL;       // link / file name
-    String* pShortname = NULL;      // 8.3-representation from file name
-    String* pTextmark = NULL;       // text mark
-    UINT32  nStrLen = 0;
-
-    // description (ignore)
-    if( nFlags & EXC_HLINK_DESCR )
-    {
-        aIn >> nStrLen;
-        aIn.IgnoreRawUniString( (UINT16) nStrLen, TRUE );
-    }
-
-    // network path
-    if( nFlags & EXC_HLINK_NET )
-    {
-        aIn >> nStrLen;
-        pLongname = new String( aIn.ReadRawUniString( (UINT16) nStrLen, TRUE ) );
-        lcl_GetAbs( *pLongname, 0, pD->GetDocumentShell() );
-    }
-    // file link or URL
-    else if( nFlags & EXC_HLINK_BODY )
-    {
-        UINT32 nID;
-        aIn >> nID;
-        switch( nID )
-        {
-            case EXC_HLINK_ID_FILE:
-            {
-                aIn.Ignore( 12 );
-                aIn >> nLevel >> nStrLen;
-                pShortname = new String( aIn.ReadRawUniString( (UINT16) nStrLen, FALSE ) );
-                aIn.Ignore( 24 );
-                aIn >> nStrLen;
-                if( nStrLen )
-                {
-                    aIn >> nStrLen;
-                    aIn.Ignore( 2 );
-                    pLongname = new String( aIn.ReadRawUniString( (UINT16)(nStrLen >> 1), TRUE ) );
-                    lcl_GetAbs( *pLongname, nLevel, pD->GetDocumentShell() );
-                }
-                else
-                    lcl_GetAbs( *pShortname, nLevel, pD->GetDocumentShell() );
-            }
-            break;
-            case EXC_HLINK_ID_URL:
-            {
-                aIn.Ignore( 12 );
-                aIn >> nStrLen;
-                pLongname = new String( aIn.ReadRawUniString( (UINT16)(nStrLen >> 1), TRUE ) );
-            }
-            break;
-            default:
-                DBG_ERROR( "ImportExcel8::HLink - unknown content id" );
-        }
-    }
-
-    // text mark
-    if( nFlags & EXC_HLINK_MARK )
-    {
-        aIn >> nStrLen;
-        pTextmark = new String( aIn.ReadRawUniString( (UINT16) nStrLen, TRUE ) );
-    }
-
-    DBG_ASSERT( !aIn.GetRecLeft(), "ImportExcel8::HLink - record size mismatch" );
-
-    if( !pLongname && pShortname )
-    {
-        pLongname = pShortname;
-        pShortname = NULL;
-    }
-    else if( !pLongname && pTextmark )
-        pLongname = new String;
-
-    if( pLongname )
-    {
-        if( pTextmark )
-        {
-            if( !pLongname->Len() )
-                pTextmark->SearchAndReplaceAll( '!', '.' );
-            *pLongname += '#';
-            *pLongname += *pTextmark;
-        }
-
-        for( UINT16 nCol = nCF ; nCol <= nCL ; nCol++ )
-            for( UINT16 nRow = nRF ; nRow <= nRL ; nRow++ )
-                InsertHyperlink( nCol, nRow, *pLongname );
-    }
-
-    if( pLongname )
-        delete pLongname;
-    if( pShortname )
-        delete pShortname;
-    if( pTextmark )
-        delete pTextmark;
+    XclRangeState eRangeState = XclImpHlink::ReadHlink( aIn, *pExcRoot );
+    bTabTruncated |= (eRangeState != xlRangeInside);
 }
 
 
@@ -1615,39 +1503,6 @@ void ImportExcel8::PostDocLoad( void )
     aPivotTabList.Apply();
 }
 
-
-
-void ImportExcel8::InsertHyperlink( const UINT16 nCol, const UINT16 nRow, const String& rURL )
-{
-    ScAddress       aAddr( nCol, nRow, nTab );
-
-    const CellType  e = pD->GetCellType( aAddr );
-
-    if( e == CELLTYPE_FORMULA || e == CELLTYPE_VALUE )
-        return;
-
-    String          aOrgText;
-    pD->GetString( nCol, nRow, nTab, aOrgText );
-    if( !aOrgText.Len() )
-        aOrgText = rURL;
-
-    EditEngine&     rEdEng = GetEdEng();
-    ESelection      aAppSel( 0xFFFF, 0xFFFF );
-
-    rEdEng.SetText( EMPTY_STRING );
-
-    SvxURLField     aUrlField( rURL, aOrgText, SVXURLFORMAT_APPDEFAULT );
-
-    rEdEng.QuickInsertField( SvxFieldItem( aUrlField ), aAppSel );
-
-    EditTextObject* pTextObj = rEdEng.CreateTextObject();
-
-    ScBaseCell*     pCell = new ScEditCell( pTextObj, pD, GetEdEng().GetEditTextObjectPool() );
-
-    delete pTextObj;
-
-    pD->PutCell( aAddr, pCell, ( BOOL ) TRUE );
-}
 
 
 void ImportExcel8::CreateTmpCtrlStorage( void )

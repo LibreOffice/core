@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-18 10:00:20 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 11:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,14 +417,17 @@ const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 
 // (0x01B8) HLINK =============================================================
 
-#define EXC_HLINK_BODY              0x00000001  // contains file link or URL
-#define EXC_HLINK_ABS               0x00000002  // absolute path
-#define EXC_HLINK_DESCR             0x00000014  // description
-#define EXC_HLINK_MARK              0x00000008  // text mark
-#define EXC_HLINK_NET               0x00000100  // network path
+const sal_uInt16 EXC_ID_HLINK               = 0x01B8;
 
-#define EXC_HLINK_ID_FILE           0x00000303
-#define EXC_HLINK_ID_URL            0x79EAC9E0
+const sal_uInt32 EXC_HLINK_BODY             = 0x00000001;   // contains file link or URL
+const sal_uInt32 EXC_HLINK_ABS              = 0x00000002;   // absolute path
+const sal_uInt32 EXC_HLINK_DESCR            = 0x00000014;   // description
+const sal_uInt32 EXC_HLINK_MARK             = 0x00000008;   // text mark
+const sal_uInt32 EXC_HLINK_FRAME            = 0x00000080;   // target frame
+const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   // UNC path
+
+const sal_uInt32 EXC_HLINK_GUID_FILE        = 0x00000303;   // start of file moniker GUID
+const sal_uInt32 EXC_HLINK_GUID_URL         = 0x79EAC9E0;   // start of URL moniker GUID
 
 // (0x007D) COLINFO ===========================================================
 
