@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventmultiplexer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:15:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,10 +90,12 @@
 #include <animationeventhandler.hxx>
 #include <pauseeventhandler.hxx>
 
+#include <layermanager.hxx>
 #include <animationnode.hxx>
 #include <eventqueue.hxx>
 #include <unoview.hxx>
 
+#include <boost/weak_ptr.hpp>
 #include <vector>
 
 
@@ -181,6 +183,31 @@ namespace presentation
                 by setMouseCursor().
              */
             void setVolatileMouseCursor( sal_Int16 );
+
+            /** Set a LayerManager for update() calls.
+
+                A LayerManager set via this method will receive an
+                update() call whenever updateScreen() is called on the
+                EventMultiplexer. This is handy to avoid multiple
+                redraws. Note that every setLayerManager() call will
+                overwrite any previously set.
+             */
+            void setLayerManager( const LayerManagerSharedPtr& rMgr );
+
+            /** Update screen content
+
+                This method updates the screen content, by first
+                updating all layers (if setLayerManager() was called
+                with a valid layer manager previously), and then
+                calling updateScreen() on all registered views.
+
+                @param bForceUpdate
+                Force updateScreen() call, even if layer manager has
+                no updates pending. Set this parameter to true, if you
+                changed screen content or sprites and bypassed the
+                layer manager.
+             */
+            void updateScreenContent( bool bForceUpdate );
 
 
             // Automatic mode methods
@@ -503,6 +530,9 @@ namespace presentation
                 void setMouseCursor( sal_Int16 );
                 void setVolatileMouseCursor( sal_Int16 );
 
+                void setLayerManager( const LayerManagerSharedPtr& rMgr );
+                void updateScreenContent( bool bForceUpdate );
+
                 void setAutomaticMode( bool bIsAuto );
                 bool getAutomaticMode() const;
                 void setAutomaticTimeout( double nTimeout );
@@ -641,28 +671,38 @@ namespace presentation
 
                 void implSetMouseCursor( sal_Int16 ) const;
 
-                EventQueue&             mrEventQueue;
-                UnoViewVector           maViews;
+                EventQueue&                 mrEventQueue;
+                UnoViewVector               maViews;
 
-                ImplEventHandlers       maNextEffectHandlers;
-                ImplEventHandlers       maSlideStartHandlers;
-                ImplEventHandlers       maSlideEndHandlers;
-                ImplAnimationHandlers   maAnimationStartHandlers;
-                ImplAnimationHandlers   maAnimationEndHandlers;
-                ImplEventHandlers       maSlideAnimationsEndHandlers;
-                ImplAnimationHandlers   maAudioStoppedHandlers;
-                ImplPauseHandlers       maPauseHandlers;
-                ImplMouseHandlers       maMouseClickHandlers;
-                ImplMouseHandlers       maMouseDoubleClickHandlers;
-                ImplMouseHandlers       maMouseMoveHandlers;
+                ImplEventHandlers           maNextEffectHandlers;
+                ImplEventHandlers           maSlideStartHandlers;
+                ImplEventHandlers           maSlideEndHandlers;
+                ImplAnimationHandlers       maAnimationStartHandlers;
+                ImplAnimationHandlers       maAnimationEndHandlers;
+                ImplEventHandlers           maSlideAnimationsEndHandlers;
+                ImplAnimationHandlers       maAudioStoppedHandlers;
+                ImplPauseHandlers           maPauseHandlers;
+                ImplMouseHandlers           maMouseClickHandlers;
+                ImplMouseHandlers           maMouseDoubleClickHandlers;
+                ImplMouseHandlers           maMouseMoveHandlers;
 
-                double                  mnTimeout;
+                LayerManagerSharedPtr       mpLayerManager; // for screen updates
 
-                sal_Int16               mnMouseCursor;
-                sal_Int16               mnVolatileMouseCursor;
-                sal_Int16               mnLastVolatileMouseCursor;
+                double                      mnTimeout;
 
-                bool                    mbIsAutoMode;
+                /** Holds ptr to optional tick event weakly
+
+                    When event queue is cleansed, the next
+                    setAutomaticMode(true) call is then able to
+                    regenerate the event.
+                 */
+                ::boost::weak_ptr< Event >  mpTickEvent;
+
+                sal_Int16                   mnMouseCursor;
+                sal_Int16                   mnVolatileMouseCursor;
+                sal_Int16                   mnLastVolatileMouseCursor;
+
+                bool                        mbIsAutoMode;
             };
 
 
