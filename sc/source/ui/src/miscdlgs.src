@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:13:26 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ chinese_traditional ] = "¦V¥ª²Ύ°Κΐx¦s®ζ(~L)";
         Text[ arabic ] = "ΕÒΗΝΙ ΗαΞαΗνΗ Εαμ ΗανΣΗΡ";
         Text[ greek ] = "Μετακίνηση κελιών προς τα αριστερά";
-        Text[ korean ] = "ΌΏ ΏήΒΚΐΈ·Ξ ΉΠ±β(~L)";
+        Text[ korean ] = "ΌΏ ΏήΒΚΐΈ·Ξ ΐΜµΏ(~L)";
         Text[ turkish ] = "Hόcreleri s~ola kaydύr";
         Text[ language_user1 ] = " ";
     };
@@ -217,7 +217,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ chinese_traditional ] = "¦V¤W²Ύ°Κΐx¦s®ζ(~U)";
         Text[ arabic ] = "ΕÒΗΝΙ ΗαΞαΗνΗ Εαμ ΓΪαμ";
         Text[ greek ] = "Μετακίνηση κελιών προς τα πάνω";
-        Text[ korean ] = "ΌΏ ΐ§ΒΚΐΈ·Ξ ΉΠ±β(~U)";
+        Text[ korean ] = "ΌΏ ΐ§ΒΚΐΈ·Ξ ΐΜµΏ(~U)";
         Text[ turkish ] = "Hόcreleri y~ukarύya kaydύr";
         Text[ language_user1 ] = " ";
     };
@@ -386,7 +386,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ chinese_traditional ] = "¦V¥k²Ύ°Κΐx¦s®ζ(~R)";
         Text[ arabic ] = "ΕÒΗΝΙ ΗαΞαΗνΗ Εαμ Ηανγνδ";
         Text[ greek ] = "Μετακίνηση κελιών προς τα δεξιά";
-        Text[ korean ] = "ΌΏ ΏΐΈ¥ΒΚΐΈ·Ξ ΉΠ±β(~R)";
+        Text[ korean ] = "ΌΏ ΏΐΈ¥ΒΚΐΈ·Ξ ΐΜµΏ(~R)";
         Text[ turkish ] = "Hόcreleri s ~aπa kaydύr";
         Text[ language_user1 ] = " ";
     };
@@ -415,7 +415,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ chinese_traditional ] = "¦V¤U²Ύ°Κΐx¦s®ζ(~D)";
         Text[ arabic ] = "ΕÒΗΝΙ ΗαΞαΗνΗ Εαμ ΓΣέα";
         Text[ greek ] = "Μετακίνηση κελιών προς τα κάτω";
-        Text[ korean ] = "ΌΏ ΎΖ·΅·Ξ ΉΠ±β(~D)";
+        Text[ korean ] = "ΌΏ ΎΖ·΅·Ξ ΐΜµΏ(~D)";
         Text[ turkish ] = "Hόcreleri ~aώaπύ kaydύr";
         Text[ language_user1 ] = " ";
     };
@@ -1413,7 +1413,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ arabic ] = "ΕÒΗΝΙ ΗαΞαΗνΗ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Μετακίνηση κελιών";
-        Text[ korean ] = "ΌΏ ΉΠ±β";
+        Text[ korean ] = "ΌΏ ΐΜµΏ";
         Text[ turkish ] = "Hόcreleri kaydύr";
     };
     Text[ chinese_simplified ] = "²εΘλΔΪΘέ";
@@ -3651,7 +3651,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ chinese_traditional ] = "Εά§σ·½Έκ®Ζ°Ο°μ";
     Text[ arabic ] = "ΚΫννΡ δΨΗή ΘνΗδΗΚ ΗαγΥΟΡ";
     Text[ greek ] = "Αλλαγή περιοχής προέλευσης δεδομένων";
-    Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝ ΏµΏª Ί―°ζ";
+    Text[ korean ] = "ΌÒ½Ί µ¥ΐΜΕΝ Ήόΐ§ Ί―°ζ";
     Text[ turkish ] = "Kaynak verileri aralύπύnύ deπiώtir";
     Text[ language_user1 ] = " ";
 };
