@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransliteration.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-02-22 20:15:04 $
+ *  last change: $Author: bustamam $ $Date: 2001-03-09 19:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,75 @@ Collation module present the user with option ignore case*/
  *
  */
 
+enum TransliterationModulesNew
+{
+   UPPERCASE_LOWERCASE = 1,
+   LOWERCASE_UPPERCASE = 2,
+   HALFWIDTH_FULLWIDTH = 3,
+   FULLWIDTH_HALFWIDTH = 4,
+   KATAKANA_HIRAGANA   = 5,
+   HIRAGANA_KATAKANA   = 6,
+   IGNORE_CASE      = 7,
+   IGNORE_KANA      = 8, // ja_JP
+   IGNORE_WIDTH     = 9, // ja_JP
+   ignoreTraditionalKanji_ja_JP = 10,
+   ignoreTraditionalKana_ja_JP  = 11,
+   ignoreMinusSign_ja_JP    = 12,
+   ignoreIterationMark_ja_JP    = 13,
+   ignoreSeparator_ja_JP    = 14,
+   ignoreZiZu_ja_JP = 15,
+   ignoreBaFa_ja_JP = 16,
+   ignoreTiJi_ja_JP = 17,
+   ignoreHyuByu_ja_JP   = 18,
+   ignoreSeZe_ja_JP         = 19,
+   ignoreIandEfollowedByYa_ja_JP    = 20,
+   ignoreKiKuFollowedBySa_ja_JP     = 21,
+   ignoreSize_ja_JP         = 22,
+   ignoreProlongedSoundMark_ja_JP   = 23,
+   ignoreMiddleDot_ja_JP        = 24,
+   ignoreSpace_ja_JP            = 25,
+   smallToLarge_ja_JP           = 26,
+   largeToSmall_ja_JP           = 27,
+   NumToTextLower_zh_CN   = 28,
+   NumToTextUpper_zh_CN   = 29,
+   NumToTextLower_zh_TW   = 30,
+   NumToTextUpper_zh_TW   = 31,
+   NumToTextFormalHangul_ko   = 32,
+   NumToTextFormalLower_ko   = 33,
+   NumToTextFormalUpper_ko   = 34,
+   NumToTextInformalHangul_ko   = 35,
+   NumToTextInformalLower_ko   = 36,
+   NumToTextInformalUpper_ko   = 37,
+   NumToCharLower_zh_CN = 38,
+   NumToCharUpper_zh_CN = 39,
+   NumToCharLower_zh_TW = 40,
+   NumToCharUpper_zh_TW = 41,
+   NumToCharHangul_ko = 42,
+   NumToCharLower_ko = 43,
+   NumToCharUpper_ko = 44,
+   NumToCharFullwidth = 45,
+   NumToCharKanjiShort_ja_JP = 46,
+   TextToNumLower_zh_CN   = 47,
+   TextToNumUpper_zh_CN   = 48,
+   TextToNumLower_zh_TW   = 49,
+   TextToNumUpper_zh_TW   = 50,
+   TextToNumFormalHangul_ko   = 51,
+   TextToNumFormalLower_ko   = 52,
+   TextToNumFormalUpper_ko   = 53,
+   TextToNumInformalHangul_ko   = 54,
+   TextToNumInformalLower_ko   = 55,
+   TextToNumInformalUpper_ko   = 56,
+// 2 Spaces for Japanese TextToNum
+   CharToNumLower_zh_CN = 59,
+   CharToNumUpper_zh_CN = 60,
+   CharToNumLower_zh_TW = 61,
+   CharToNumUpper_zh_TW = 62,
+   CharToNumHangul_ko = 63,
+   CharToNumLower_ko = 64,
+   CharToNumUpper_ko = 65,
+   END_OF_MODULE    = 0
+};                  // Interim
+
 enum TransliterationModules
 {
    UPPERCASE_LOWERCASE = 1,
@@ -243,8 +312,12 @@ interface XTransliteration: com::sun::star::uno::XInterface
      to load upper/lower while installing staroffice (at this moment
      UNO is not available) */
 
-  /* Load instance of predefined module */
+  /* Load instance of predefined module - Will be phase out */
   void    loadModule([in] TransliterationModules modType,
+             [in] ::com::sun::star::lang::Locale rLocale);
+
+  /* Load instance of predefined module - Interim, will replace above method */
+  void    loadModuleNew([in] sequence <TransliterationModulesNew> modType,
              [in] ::com::sun::star::lang::Locale rLocale);
 
   /* Load instance from UNO */
