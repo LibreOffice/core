@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-13 11:59:16 $
+#   last change: $Author: mh $ $Date: 2000-12-03 13:51:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1265,30 +1265,11 @@ CDEFS+=-D_DEBUG
 CDEFS+= -DPRODUCT -DNDEBUG
 HDEFS+= -D:PRODUCT
 RSCDEFS+= -DPRODUCT
-.IF "$(product)" == "demo"
-CDEFS+= -DPRODUCT_DEMO
-HDEFS+= -D:PRODUCT_DEMO
-RSCDEFS+= -DPRODUCT_DEMO
-.ELSE
-.IF "$(product)" == "compact"
-CDEFS+=-DPRODUCT_COMPACT
-HDEFS+=-D:PRODUCT_COMPACT
-.ELSE
 CDEFS+=-DPRODUCT_FULL
 HDEFS+=-D:PRODUCT_FULL
 RSCDEFS+= -DPRODUCT_FULL -DNDEBUG
 .ENDIF
-.ENDIF
-.ENDIF
 
-
-.IF "$(seg)"!=""
-CDEFS+=-DAUTOSEGS
-.ENDIF
-
-.IF "$(siz)"!=""
-CDEFS+= -DFUNCSEGS
-.ENDIF
 
 .IF "$(svx_light)"!=""
 CDEFS+=-DSVX_LIGHT
