@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:21:51 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ protected:
 
 public:
 
-    SwXMLWriter();
+    SwXMLWriter( const String& rBaseURL );
     virtual ~SwXMLWriter();
 
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
