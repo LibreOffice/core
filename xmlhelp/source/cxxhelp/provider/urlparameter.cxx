@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-31 13:08:14 $
+ *  last change: $Author: abi $ $Date: 2002-03-07 11:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,12 +1105,14 @@ int schemehandlergetall( void *userData,
 
     if( xInputStream.is() )
     {
-        Reference< XSeekable > xSeekable( xInputStream,UNO_QUERY );
-
         sal_Int32 size = 0;
+
+        Reference< XSeekable > xSeekable( xInputStream,UNO_QUERY );
 
         if( xSeekable.is() )
             size = sal_Int32( xSeekable->getLength() );
+        else
+            size = sal_Int32( xInputStream->available() );
 
         *buffer = new char[ 1+size ];
         (*buffer)[ size ] = 0;
