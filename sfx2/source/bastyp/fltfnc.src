@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:31:16 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ korean ] = "°¡ÀÔÀº ¼³Á¤¿¡ µû¶ó  ¿ÀÇÁ¶óÀÎ ¸ðµå¿¡¼­ ÀÐ¾î¾ß ÇÕ´Ï´Ù.\n\n%PRODUCTNAME Àº(´Â) ÇöÀç ¿Â¶óÀÎ ¸ðµå¿¡ ÀÖ½À´Ï´Ù. Áö±Ý ¿ÀÇÁ¶óÀÎ ¸ðµå·Î ÀüÈ¯ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu üyelik, çevrimdýþý kipte okunmak üzere ayarlanmýþtýr.\n\n%PRODUCTNAME þu an çevrimiçi kipinde. %PRODUCTNAME, çevrimdýþý kipe geçsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\n%PRODUCTNAME se encuentra sin embargo en modo en línea. ¿Desea cambiar %PRODUCTNAME al modo desconectado?";
 };
 String STR_FILTER_EXTERNAL
 {
@@ -109,6 +110,7 @@ String STR_FILTER_EXTERNAL
     Text[ korean ] = "±âÅ¸ ÀÀ¿ëÇÁ·Î±×·¥";
     Text[ turkish ] = "Diðer uygulama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Otra aplicación";
 };
 
 String STR_FILTER_COMPONENT
@@ -133,6 +135,7 @@ String STR_FILTER_COMPONENT
     Text[ chinese_traditional ] = "%PRODUCTNAME ³¡¥ó";
     Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  %PRODUCTNAME";
     Text[ turkish ] = "%PRODUCTNAME bileþeni";
+    Text[ catalan ] = "%PRODUCTNAME Componentes";
 };
 
 String STR_FILTER_NOT_INSTALLED
@@ -158,6 +161,7 @@ String STR_FILTER_NOT_INSTALLED
     Text[ korean ] = "¼±ÅÃµÈ ÇÊÅÍ $(FILTER)Àº£¨´Â£© ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÁö±Ý ¼³Ä¡ ÇÏ½Ã°Ú½À´Ï±î ?";
     Text[ turkish ] = "Seçilen $(FILTER) filtresi kurulu deðil.\nÞimdi kurmak ister misiniz ?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El filtro seleccionado $(FILTER) no ha sido instalado.\n¿Desea instalarlo?";
 };
 
 String STR_FILTER_CONSULT_SERVICE
@@ -183,4 +187,5 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ korean ] = "¼±ÅÃÇÑ ÇÊÅÍ$(FILTER)Àº£¨´Â£© ÀÌ ¹öÀü¿¡ µé¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÁÖ¹® ½ÅÃ» ¹æ¹ý¿¡ ´ëÇÑ Á¤º¸¸¦ ¾òÀ¸·Á¸é ÀúÈñ È¨ÆäÀÌÁö¸¦ º¸½Ê½Ã¿À.";
     Text[ turkish ] = "Seçilen $(FILTER) filtresi sürümünüzde bulunmuyor.\nSipariþ etmek için gereken bilgileri web sitemizde bulabilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El filtro seleccionado $(FILTER) no está incluido en su edición.\nEn nuestra página de Internet encontrará las informaciones para poder pedirlos.";
 };
