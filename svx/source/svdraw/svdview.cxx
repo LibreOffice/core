@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
+ *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,7 +1148,9 @@ void SdrView::MarkAll()
 {
     if (IsTextEdit()) {
         GetTextEditOutlinerView()->SetSelection(ESelection(0,0,0xFFFF,0xFFFF));
+#ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
     } else if (IsGluePointEditMode()) MarkAllGluePoints();
     else if (HasMarkablePoints()) MarkAllPoints();
     else MarkAllObj();
@@ -1161,7 +1163,9 @@ void SdrView::UnmarkAll()
         eSel.nStartPara=eSel.nEndPara;
         eSel.nStartPos=eSel.nEndPos;
         GetTextEditOutlinerView()->SetSelection(eSel);
+#ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
     } else if (HasMarkedGluePoints()) UnmarkAllGluePoints();
     else if (HasMarkedPoints()) UnmarkAllPoints(); // ! Marked statt Markable !
     else UnmarkAllObj();

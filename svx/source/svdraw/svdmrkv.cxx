@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
+ *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2019,7 +2019,9 @@ void SdrMarkView::MarkListHasChanged()
     aMarkedEdges.Clear();
     bMarkedObjRectDirty=TRUE;
     bMarkedPointsRectsDirty=TRUE;
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
     BOOL bOneEdgeMarked=FALSE;
     if (aMark.GetMarkCount()==1) {
         const SdrObject* pObj=aMark.GetMark(0)->GetObj();

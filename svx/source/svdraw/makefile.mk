@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sj $ $Date: 2000-10-19 09:47:53 $
+#   last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,6 @@ SVXLIGHTOBJFILES=\
          $(OBJ)$/svdglue.obj         \
          $(OBJ)$/svdhdl.obj          \
          $(OBJ)$/svdhlpln.obj        \
-         $(OBJ)$/svdibrow.obj        \
          $(OBJ)$/svdio.obj           \
          $(OBJ)$/svditer.obj         \
          $(OBJ)$/svdlayer.obj        \

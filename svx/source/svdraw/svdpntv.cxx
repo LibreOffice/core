@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-17 15:28:23 $
+ *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,9 @@ void SdrPaintView::ImpClearVars()
 {
     pXOut=NULL;
     bForeignXOut=FALSE;
+#ifndef SVX_LIGHT
     pItemBrowser=NULL;
+#endif
     bLayerSortedRedraw=FALSE;
     bPageVisible=TRUE;
     bBordVisible=TRUE;
@@ -578,9 +580,11 @@ SdrPaintView::~SdrPaintView()
     if (pMasterBmp!=NULL) {
         delete pMasterBmp;
     }
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) {
         delete pItemBrowser;
     }
+#endif
     USHORT nAnz=ImpGetUserMarkerCount();
     for (USHORT nNum=0; nNum<nAnz; nNum++) {
         SdrViewUserMarker* pUM=ImpGetUserMarker(nNum);
@@ -733,7 +737,9 @@ void SdrPaintView::ModelHasChanged()
         SdrPageView* pPV=GetPageHidePvNum(nv);
         pPV->ModelHasChanged();
     }
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1170,7 +1176,9 @@ void SdrPaintView::AddWin(OutputDevice* pWin1)
     for (USHORT i=0; i<GetPageViewCount(); i++) {
         GetPageViewPvNum(i)->AddWin(pWin1);
     }
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->ForceParent();
+#endif
 }
 
 void SdrPaintView::DelWin(OutputDevice* pWin1)
@@ -1182,7 +1190,9 @@ void SdrPaintView::DelWin(OutputDevice* pWin1)
         }
         aWinList.Delete(nPos);
     }
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->ForceParent();
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1741,7 +1751,9 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll)
     if (bReplaceAll) aDefaultAttr.Set(rAttr);
     else aDefaultAttr.Put(rAttr,FALSE); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
     SetNotPersistDefaultAttr(rAttr,bReplaceAll);
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
 }
 
 void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
@@ -1757,7 +1769,9 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRe
             nWhich=aIter.NextWhich();
         }
     }
+#ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
 }
 
 /* new interface src537 */
@@ -1816,6 +1830,7 @@ void SdrPaintView::SetDisabledAttr(const SfxItemSet* pNewDisabledAttr)
 
 void SdrPaintView::ShowItemBrowser(BOOL bShow)
 {
+#ifndef SVX_LIGHT
     if (bShow) {
         if (pItemBrowser==NULL) {
             pItemBrowser=new SdrItemBrowser(*(SdrView*)this);
@@ -1830,6 +1845,7 @@ void SdrPaintView::ShowItemBrowser(BOOL bShow)
             pItemBrowser=NULL;
         }
     }
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

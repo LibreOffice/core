@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:43:42 $
+ *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,9 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             pWin->GrabFocus(); // Damit der Cursor hier auch blinkt
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
+#ifndef SVX_LIGHT
             if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
             pTextEditOutliner->ClearModifyFlag();
             return TRUE; // Gut gelaufen, TextEdit laeuft nun
         } else {
@@ -875,7 +877,9 @@ SdrEndTextEditKind SdrObjEditView::EndTextEdit(BOOL bDontDeleteReally)
         if (eRet==SDRENDTEXTEDIT_UNCHANGED) {
             ShowMarkHdl(NULL); // Handles kommen ansonsten via Broadcast
         } else aMark.SetNameDirty();
+#ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
     }
     return eRet;
 }
@@ -1005,7 +1009,9 @@ BOOL SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
             }
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
+#ifndef SVX_LIGHT
             if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
             ImpMakeTextCursorAreaVisible();
             return TRUE;
         }
@@ -1034,7 +1040,9 @@ BOOL SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonDown(aMEvt)) {
                 if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
+#ifndef SVX_LIGHT
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
                 ImpMakeTextCursorAreaVisible();
                 return TRUE;
             }
@@ -1063,7 +1071,9 @@ BOOL SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonUp(aMEvt)) {
+#ifndef SVX_LIGHT
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
                 ImpMakeTextCursorAreaVisible();
                 return TRUE;
             }
@@ -1093,7 +1103,9 @@ BOOL SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
             MouseEvent aMEvt(aPixPos,rMEvt.GetClicks(),rMEvt.GetMode(),
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseMove(aMEvt) && bSelMode) {
+#ifndef SVX_LIGHT
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
                 ImpMakeTextCursorAreaVisible();
                 return TRUE;
             }
@@ -1129,7 +1141,9 @@ BOOL SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
                 // Command ist an der OutlinerView leider void
                 pTextEditOutlinerView->Command(aCEvt);
                 if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
+#ifndef SVX_LIGHT
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
                 ImpMakeTextCursorAreaVisible();
                 return TRUE;
             }
@@ -1147,7 +1161,9 @@ BOOL SdrObjEditView::Cut(ULONG nFormat)
 {
     if (pTextEditOutliner!=NULL) {
         pTextEditOutlinerView->Cut();
+#ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
         ImpMakeTextCursorAreaVisible();
         return TRUE;
     } else {
@@ -1176,7 +1192,9 @@ BOOL SdrObjEditView::Paste(Window* pWin, ULONG nFormat)
         } else {
             pTextEditOutlinerView->Paste();
         }
+#ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
         ImpMakeTextCursorAreaVisible();
         return TRUE;
     } else {
@@ -1419,7 +1437,9 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
                 pTextEditOutlinerView->RemoveAttribs( TRUE );
             }
             pTextEditOutlinerView->SetAttribs(rSet);
+#ifndef SVX_LIGHT
             if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
             ImpMakeTextCursorAreaVisible();
         }
         bRet=TRUE;
@@ -1464,7 +1484,9 @@ BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveH
             // (Joe M. 27-11-1995)
             pTextEditOutlinerView->SetStyleSheet(pStyleSheet);
         }
+#ifndef SVX_LIGHT
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
+#endif
         ImpMakeTextCursorAreaVisible();
         return TRUE;
     } else {
