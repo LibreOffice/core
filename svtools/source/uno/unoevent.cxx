@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:07:12 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 19:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ OUString SvBaseEventDescriptor::mapEventIDToName(sal_uInt16 nPoolID) const
 
 sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
 {
-    return mapNameToEventID(rName) != 0;
+    return mapNameToEventID(rName);
 }
 
 void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
