@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ namespace dbaccess
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
         // is called when after a moveToInsertRow a movement (next, etc) was called
-        void cancelInsert();
+        void cancelRowModification();
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _xComposer,
@@ -332,6 +332,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.16  2001/11/29 16:35:26  oj
+    #95225# changes for bookmarkable resultset
+
     Revision 1.15  2001/08/24 06:25:57  oj
     #90015# code corrcetions for some speedup's
 

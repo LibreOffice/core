@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-13 06:56:59 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,7 +1001,7 @@ sal_Bool ORowSetCache::moveWindow()
                         {
                             aCacheIter->second.aIterator += nOffSet;
                             OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
-                                    && aCacheIter->second.aIterator <= m_pMatrix->end(),"Iterator out of area!");
+                                    && aCacheIter->second.aIterator < m_pMatrix->end(),"Iterator out of area!");
                         }
                     }
                 }
@@ -1360,7 +1360,7 @@ void SAL_CALL ORowSetCache::refreshRow(  ) throw(SQLException, RuntimeException)
     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
     if ( m_bInserted )
     {
-        cancelInsert();
+        cancelRowModification();
     }
 }
 // -------------------------------------------------------------------------
@@ -1416,7 +1416,7 @@ void SAL_CALL ORowSetCache::insertRow(  ) throw(SQLException, RuntimeException)
 
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::cancelInsert()
+void ORowSetCache::cancelRowModification()
 {
     m_bNew          = sal_False;
     m_bModified     = sal_False;
@@ -1625,7 +1625,7 @@ void ORowSetCache::rotateCacheIterator(sal_Int16 _nDist)
                 {
                     aCacheIter->second.aIterator -= _nDist;
                     OSL_ENSURE(aCacheIter->second.aIterator >= m_pMatrix->begin()
-                            && aCacheIter->second.aIterator <= m_pMatrix->end(),"Iterator out of area!");
+                            && aCacheIter->second.aIterator < m_pMatrix->end(),"Iterator out of area!");
                 }
             }
         }
