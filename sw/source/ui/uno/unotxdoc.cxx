@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 20:09:48 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _DOC_HXX //autogen
-#include <doc.hxx>
 #endif
 #ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
@@ -226,19 +223,6 @@
 #endif
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
-
-#ifndef _FLDUPDE_HXX
-#include <fldupde.hxx>
-#endif
-
-#ifndef _LINKENUM_HXX
-#include <linkenum.hxx>
-#endif
-
-#ifndef _SFX_PRINTER_HXX
-#include <sfx2/printer.hxx>
-#endif
-
 #endif
 #ifndef _SWCONT_HXX
 #include <swcont.hxx>
@@ -246,21 +230,19 @@
 #ifndef _UNODEFAULTS_HXX
 #include <unodefaults.hxx>
 #endif
-
-#ifndef _CHCMPRSE_HXX
-#include <chcmprse.hxx>
+#ifndef _SW_XDOCUMENT_SETTINGS_HXX
+#include <SwXDocumentSettings.hxx>
+#endif
+#ifndef _DOC_HXX //autogen
+#include <doc.hxx>
+#endif
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
 
-#ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
-#endif
-
-#ifndef _DRAWDOC_HXX
-#include <drawdoc.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::i18n;
@@ -284,41 +266,6 @@ using namespace ::rtl;
 #define SW_CREATE_MARKER_TABLE          0x06
 #define SW_CREATE_DRAW_DEFAULTS         0x07
 
-class SwXDocumentPropertyHelper : public cppu::WeakImplHelper1
-<com::sun::star::i18n::XForbiddenCharacters>
-{
-    Reference<XInterface> xDashTable;
-    Reference<XInterface> xGradientTable;
-    Reference<XInterface> xHatchTable;
-    Reference<XInterface> xBitmapTable;
-    Reference<XInterface> xTransGradientTable;
-    Reference<XInterface> xMarkerTable;
-    Reference<XInterface> xDrawDefaults;
-
-    SwDoc*  m_pDoc;
-public:
-    SwXDocumentPropertyHelper(SwDoc& rDoc);
-    ~SwXDocumentPropertyHelper();
-
-    virtual ForbiddenCharacters SAL_CALL getForbiddenCharacters( const Locale& rLocale ) throw(NoSuchElementException, RuntimeException);
-    virtual sal_Bool SAL_CALL hasForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException);
-    virtual void SAL_CALL setForbiddenCharacters( const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters ) throw(RuntimeException);
-    virtual void SAL_CALL removeForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException);
-
-    Reference<XInterface> GetDrawTable(short nWhich);
-
-    void Invalidate()
-        {
-            xDashTable = 0;
-            xGradientTable = 0;
-            xHatchTable = 0;
-            xBitmapTable = 0;
-            xTransGradientTable = 0;
-            xMarkerTable = 0;
-            xDrawDefaults = 0;
-            m_pDoc = 0;
-        }
-};
 
 /******************************************************************************
  *
@@ -500,6 +447,15 @@ SwXTextDocument::~SwXTextDocument()
 /* -----------------18.12.98 12:49-------------------
  *
  * --------------------------------------------------*/
+SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
+{
+    if(!xPropertyHelper.is())
+    {
+        pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
+        xPropertyHelper = (cppu::OWeakObject*)pPropertyHelper;
+    }
+    return pPropertyHelper;
+}
 void SwXTextDocument::GetNumberFormatter()
 {
     if(IsValid())
@@ -1793,23 +1749,22 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                         nTable = SW_CREATE_DRAW_DEFAULTS;
                     if(nTable)
                     {
-                        if(!xPropertyHelper.is())
-                        {
-                            pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
-                            xPropertyHelper = (cppu::OWeakObject*)pPropertyHelper;
-                        }
-                        xRet = pPropertyHelper->GetDrawTable(nTable);
+                        xRet = GetPropertyHelper()->GetDrawTable(nTable);
                     }
                 }
-                if(!xRet.is())
-                {
-                    //hier den Draw - Service suchen
-                    Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
-                    if(bShape)
-                        xRet = *new SwXShape( xTmp );
-                    else
-                        xRet = xTmp;
-                }
+            }
+            else if (sCategory == C2U ("document") )
+            {
+                xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
+            }
+            if(!xRet.is())
+            {
+                //hier den Draw - Service suchen
+                Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
+                if(bShape)
+                    xRet = *new SwXShape( xTmp );
+                else
+                    xRet = xTmp;
             }
         }
         else
@@ -1955,22 +1910,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetRedlineMode( eMode );
         }
         break;
-        case  WID_DOC_CHANGES_PASSWORD:
-        {
-            Sequence <sal_Int8> aNew;
-            if(aValue >>= aNew)
-            {
-                SwDoc* pDoc = pDocShell->GetDoc();
-                pDoc->SetRedlinePasswd(aNew);
-                if(aNew.getLength())
-                {
-                    sal_uInt16 eMode = pDoc->GetRedlineMode();
-                    eMode = eMode|REDLINE_ON;
-                    pDoc->SetRedlineMode( eMode );
-                }
-            }
-        }
-        break;
         case WID_DOC_AUTO_MARK_URL :
         {
             OUString sURL;
@@ -2000,140 +1939,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetRedlineMode(nSet);
         }
         break;
-        case WID_DOC_LINK_UPDATE_MODE:
-        {
-            sal_Int16 nMode;
-            aValue >>= nMode;
-            switch (nMode)
-            {
-                case NEVER:
-                case MANUAL:
-                case AUTOMATIC:
-                case GLOBALSETTING:
-                    break;
-                default:
-                    throw IllegalArgumentException();
-            }
-            pDocShell->GetDoc()->SetLinkUpdMode(nMode);
-        }
-        break;
-        case WID_DOC_FIELD_AUTO_UPDATE:
-        {
-            sal_Bool bUpdateField = *(sal_Bool*)aValue.getValue();
-            sal_Int16 nFlag = pDocShell->GetDoc()->GetFldUpdateFlags();
-            pDocShell->GetDoc()->SetFldUpdateFlags( bUpdateField ?
-                    nFlag == AUTOUPD_FIELD_AND_CHARTS ? AUTOUPD_FIELD_AND_CHARTS
-                    : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
-        }
-        break;
-        case WID_DOC_CHART_AUTO_UPDATE:
-        {
-            sal_Bool bUpdateChart = *(sal_Bool*)aValue.getValue();
-            sal_Int16 nFlag = pDocShell->GetDoc()->GetFldUpdateFlags();
-            pDocShell->GetDoc()->SetFldUpdateFlags ( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS )
-                    ? bUpdateChart ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING:
-        {
-            sal_Bool bParaSpace;
-            aValue >>= bParaSpace;
-            pDocShell->GetDoc()->SetParaSpaceMax( bParaSpace, pDocShell->GetDoc()->IsParaSpaceMaxAtPages());
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
-        {
-            sal_Bool bParaSpacePage;
-            aValue >>= bParaSpacePage;
-            pDocShell->GetDoc()->SetParaSpaceMax( pDocShell->GetDoc()->IsParaSpaceMax(), bParaSpacePage);
-        }
-        break;
-        case WID_DOC_PRINTER_NAME:
-        {
-            SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
-            if (pPrinter)
-            {
-                OUString sPrinterName;
-                if (aValue >>= sPrinterName )
-                {
-                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                    if (pNewPrinter->IsKnown())
-                        pDocShell->GetDoc()->SetPrt ( pNewPrinter );
-                    else
-                        delete pNewPrinter;
-                }
-                else
-                    throw IllegalArgumentException();
-            }
-        }
-        break;
-        case WID_DOC_PRINTER_SETUP:
-        {
-            Sequence < sal_Int8 > aSequence;
-            if ( aValue >>= aSequence )
-            {
-                sal_uInt32 nSize = aSequence.getLength();
-                SvMemoryStream aStream;
-                aStream.Write ( aSequence.getArray(), nSize );
-                aStream.Flush();
-                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                static sal_uInt16 __READONLY_DATA nRange[] =
-                {
-                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                    SID_HTML_MODE,  SID_HTML_MODE,
-                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                    0
-                };
-                SwDoc * pDoc = pDocShell->GetDoc();
-                SfxItemSet *pItemSet = new SfxItemSet( pDoc->GetAttrPool(), nRange );
-                SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
-
-                pDoc->_SetPrt( pPrinter );
-
-                if ( !pPrinter->IsOriginal() )
-                {
-                    pDocShell->UpdateFontList();
-                    SdrModel * pDrawModel = pDoc->GetDrawModel();
-                    if ( pDrawModel )
-                        pDrawModel->SetRefDevice( pPrinter );
-                    pDoc->SetOLEPrtNotifyPending();
-                }
-            }
-            else
-                throw IllegalArgumentException();
-        }
-        break;
-        case WID_DOC_IS_KERN_ASIAN_PUNCTUATION:
-        {
-            sal_Bool bIsKern = *(sal_Bool*)aValue.getValue();
-            SwDoc* pDoc = pDocShell->GetDoc();
-            pDoc->SetKernAsianPunctuation( bIsKern );
-            SwEditShell* pEditSh = pDoc->GetEditShell();
-            if(pEditSh)
-                pEditSh->ChgHyphenation();
-        }
-        break;
-        case WID_DOC_CHARACTER_COMPRESSION_TYPE:
-        {
-            sal_Int16 nMode;
-            aValue >>= nMode;
-            switch (nMode)
-            {
-                case CHARCOMPRESS_NONE:
-                case CHARCOMPRESS_PUNCTUATION:
-                case CHARCOMPRESS_PUNCTUATION_KANA:
-                    break;
-                default:
-                    throw IllegalArgumentException();
-            }
-            SwDoc* pDoc = pDocShell->GetDoc();
-            pDoc->SetCharCompressType(static_cast < SwCharCompressType > (nMode) );
-            SwEditShell* pEditSh = pDoc->GetEditShell();
-            if(pEditSh)
-                pEditSh->ChgHyphenation();
-        }
-        break;
         case WID_DOC_TWO_DIGIT_YEAR:
         {
             sal_Int16 nYear;
@@ -2141,79 +1946,6 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             SfxRequest aRequest ( SID_ATTR_YEAR2000, SFX_CALLMODE_SLOT, pDocShell->GetDoc()->GetAttrPool());
             aRequest.AppendItem(SfxUInt16Item( SID_ATTR_YEAR2000, static_cast < sal_uInt16 > ( nYear ) ) );
             pDocShell->Execute ( aRequest );
-        }
-        break;
-        case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
-        {
-            SwDrawDocument * pDrawDoc;
-            sal_Bool bAuto = *(sal_Bool*)aValue.getValue();
-
-            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                pDrawDoc->SetAutoControlFocus( bAuto );
-            else if (bAuto)
-            {
-                // if setting to true, and we don't have an
-                // SdrModel, then we are changing the default and
-                // must thus create an SdrModel, if we don't have an
-                // SdrModel and we are leaving the default at false,
-                // we don't need to make an SdrModel and can do nothing
-                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
-                pDrawDoc->SetAutoControlFocus ( bAuto );
-            }
-        }
-        break;
-        case WID_DOC_APPLY_FORM_DESIGN_MODE:
-        {
-            SwDrawDocument * pDrawDoc;
-            sal_Bool bMode = *(sal_Bool*)aValue.getValue();
-
-            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                pDrawDoc->SetOpenInDesignMode( bMode );
-            else if (!bMode)
-            {
-                // if setting to false, and we don't have an
-                // SdrModel, then we are changing the default and
-                // must thus create an SdrModel, if we don't have an
-                // SdrModel and we are leaving the default at true,
-                // we don't need to make an SdrModel and can do
-                // nothing
-                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
-                pDrawDoc->SetOpenInDesignMode ( bMode );
-            }
-        }
-        break;
-        case WID_DOC_APPLY_USER_DATA:
-        {
-            SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-            sal_Bool bUseUserData = *(sal_Bool*)aValue.getValue();
-            rInfo.SetUseUserData(bUseUserData);
-        }
-        break;
-        case WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS:
-        {
-            sal_Bool bSaveGlobal = *(sal_Bool*)aValue.getValue();
-            pDocShell->GetDoc()->SetGlblDocSaveLinks( bSaveGlobal );
-        }
-        break;
-        case WID_DOC_CURRENT_DATABASE_DATA_SOURCE:
-        {
-            SwDBData& rData = pDocShell->GetDoc()->GetDBData();
-            if ( aValue >>= rData.sDataSource )
-                pDocShell->GetDoc()->ChgDBData( rData );
-        }
-        break;
-        case WID_DOC_CURRENT_DATABASE_COMMAND:
-        {
-            SwDBData& rData = pDocShell->GetDoc()->GetDBData();
-            if ( aValue >>= rData.sCommand )
-                pDocShell->GetDoc()->ChgDBData( rData );
-        }
-        break;
-        case WID_DOC_CURRENT_DATABASE_COMMAND_TYPE:
-        {
-            SwDBData& rData = pDocShell->GetDoc()->GetDBData();
-            if ( aValue >>= rData.nCommandType )
-                pDocShell->GetDoc()->ChgDBData( rData );
         }
         break;
         default:
@@ -2282,12 +2014,6 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             aAny.setValue(&bSet, ::getBooleanCppuType());
         }
         break;
-        case  WID_DOC_CHANGES_PASSWORD:
-        {
-            SwDoc* pDoc = pDocShell->GetDoc();
-            aAny <<= pDoc->GetRedlinePasswd();
-        }
-        break;
         case WID_DOC_AUTO_MARK_URL :
             aAny <<= OUString(pDocShell->GetDoc()->GetTOIAutoMarkURL());
         break;
@@ -2313,134 +2039,14 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_FORBIDDEN_CHARS:
         {
-            if(!xPropertyHelper.is())
-            {
-                pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
-                xPropertyHelper = (cppu::OWeakObject*)pPropertyHelper;
-            }
+            GetPropertyHelper();
             Reference<XForbiddenCharacters> xRet(xPropertyHelper, UNO_QUERY);
             aAny <<= xRet;
-        }
-        break;
-        case WID_DOC_LINK_UPDATE_MODE:
-        {
-            aAny <<= static_cast < sal_Int16 > ( pDocShell->GetDoc()->GetLinkUpdMode() );
-        }
-        break;
-        case WID_DOC_FIELD_AUTO_UPDATE:
-        {
-            sal_uInt16 nFlags = pDocShell->GetDoc()->GetFldUpdateFlags();
-            BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
-            aAny.setValue(&bFieldUpd, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_CHART_AUTO_UPDATE:
-        {
-            sal_uInt16 nFlags = pDocShell->GetDoc()->GetFldUpdateFlags();
-            BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
-            aAny.setValue(&bChartUpd, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING:
-        {
-            sal_Bool bParaSpace = pDocShell->GetDoc()->IsParaSpaceMax();
-            aAny.setValue(&bParaSpace, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
-        {
-            sal_Bool bParaSpace = pDocShell->GetDoc()->IsParaSpaceMaxAtPages();
-            aAny.setValue(&bParaSpace, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_PRINTER_NAME:
-        {
-            SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
-            aAny <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
-
-        }
-        break;
-        case WID_DOC_IS_KERN_ASIAN_PUNCTUATION:
-        {
-            sal_Bool bParaSpace = pDocShell->GetDoc()->IsKernAsianPunctuation();
-            aAny.setValue(&bParaSpace, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
-        {
-            SwDrawDocument * pDrawDoc;
-            sal_Bool bAuto;
-            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                bAuto = pDrawDoc->GetAutoControlFocus();
-            else
-                bAuto = sal_False;
-            aAny.setValue(&bAuto, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_APPLY_FORM_DESIGN_MODE:
-        {
-            SwDrawDocument * pDrawDoc;
-            sal_Bool bMode;
-            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                bMode = pDrawDoc->GetOpenInDesignMode();
-            else
-                bMode = sal_True;
-            aAny.setValue(&bMode, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_APPLY_USER_DATA:
-        {
-            SfxDocumentInfo &rInfo = pDocShell->GetDocInfo();
-            sal_Bool bUseUserInfo = rInfo.IsUseUserData();
-            aAny.setValue(&bUseUserInfo, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_CHARACTER_COMPRESSION_TYPE:
-        {
-            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetCharCompressType());
         }
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
         {
             aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ( TRUE )->GetYear2000());
-        }
-        break;
-        case WID_DOC_SAVE_GLOBAL_DOCUMENT_LINKS:
-        {
-            sal_Bool bSaveGlobal = pDocShell->GetDoc()->IsGlblDocSaveLinks();
-            aAny.setValue(&bSaveGlobal, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_CURRENT_DATABASE_DATA_SOURCE:
-        {
-            const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
-            aAny <<= rData.sDataSource;
-        }
-        break;
-        case WID_DOC_CURRENT_DATABASE_COMMAND:
-        {
-            const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
-            aAny <<= rData.sCommand;
-        }
-        break;
-        case WID_DOC_CURRENT_DATABASE_COMMAND_TYPE:
-        {
-            const SwDBData& rData = pDocShell->GetDoc()->GetDBDesc();
-            aAny <<= rData.nCommandType;
-        }
-        break;
-        case WID_DOC_PRINTER_SETUP:
-        {
-            SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
-            if (pPrinter)
-            {
-                SvMemoryStream aStream;
-                pPrinter->Store( aStream );
-                sal_uInt32 nSize = aStream.GetSize();
-                Sequence < sal_Int8 > aSequence ( nSize );
-                memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
-                aAny <<= aSequence;
-            }
         }
         break;
         default:
@@ -2571,54 +2177,7 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
     Any aAny;
     switch(pMap->nWID)
     {
-        case WID_DOC_LINK_UPDATE_MODE:
-        {
-            if (pDocShell->GetDoc()->GetLinkUpdMode() == GLOBALSETTING )
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case WID_DOC_FIELD_AUTO_UPDATE:
-        case WID_DOC_CHART_AUTO_UPDATE:
-        {
-            if ( pDocShell->GetDoc()->GetFldUpdateFlags() == AUTOUPD_GLOBALSETTING )
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING:
-        {
-            if (!pDocShell->GetDoc()->IsParaSpaceMax())
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
-        {
-            if (!pDocShell->GetDoc()->IsParaSpaceMaxAtPages())
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
-        {
-            SwDrawDocument * pDrawDoc;
-            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) &&
-                   !pDrawDoc->GetAutoControlFocus())
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case WID_DOC_APPLY_FORM_DESIGN_MODE:
-        {
-            SwDrawDocument * pDrawDoc;
-            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) &&
-                   pDrawDoc->GetOpenInDesignMode())
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-        case WID_DOC_APPLY_USER_DATA:
-        {
-            SfxDocumentInfo &rInfo = pDocShell->GetDocInfo();
-            if (rInfo.IsUseUserData())
-                eRet = PropertyState_DEFAULT_VALUE;
-        }
-        break;
+        case 0:default:break;
     }
     return eRet;
 }
@@ -2647,27 +2206,7 @@ void SAL_CALL SwXTextDocument::setPropertyToDefault( const OUString& rPropertyNa
         throw UnknownPropertyException();
     switch(pMap->nWID)
     {
-        case WID_DOC_LINK_UPDATE_MODE:
-        {
-            pDocShell->GetDoc()->SetLinkUpdMode( GLOBALSETTING );
-        }
-        break;
-        case WID_DOC_FIELD_AUTO_UPDATE:
-        case WID_DOC_CHART_AUTO_UPDATE:
-        {
-            pDocShell->GetDoc()->SetFldUpdateFlags( AUTOUPD_GLOBALSETTING );
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING:
-        {
-            pDocShell->GetDoc()->SetParaSpaceMax( sal_False, pDocShell->GetDoc()->IsParaSpaceMaxAtPages());
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
-        {
-            pDocShell->GetDoc()->SetParaSpaceMax( pDocShell->GetDoc()->IsParaSpaceMax(), sal_False );
-        }
-        break;
+        case 0:default:break;
     }
 }
 Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName )
@@ -2683,25 +2222,7 @@ Any SAL_CALL SwXTextDocument::getPropertyDefault( const OUString& rPropertyName 
     Any aAny;
     switch(pMap->nWID)
     {
-        case WID_DOC_LINK_UPDATE_MODE:
-        {
-            aAny <<= static_cast < sal_Int16  > (GLOBALSETTING);
-        }
-        break;
-        case WID_DOC_FIELD_AUTO_UPDATE:
-        case WID_DOC_CHART_AUTO_UPDATE:
-        {
-            sal_Bool bParaSpacePage = sal_True;
-            aAny.setValue(&bParaSpacePage, ::getBooleanCppuType());
-        }
-        break;
-        case WID_DOC_ADD_PARA_TABLE_SPACING:
-        case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
-        {
-            sal_Bool bParaSpacePage = sal_False;
-            aAny.setValue(&bParaSpacePage, ::getBooleanCppuType());
-        }
-        break;
+        case 0:default:break;
     }
     return aAny;
 }
@@ -3336,8 +2857,9 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
 /* -----------------------------17.01.01 16:06--------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc) :
-        m_pDoc(&rDoc)
+SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc)
+: m_pDoc(&rDoc)
+, SvxUnoForbiddenCharsTable ( rDoc.GetForbiddenCharacterTbl() )
 {
 }
 /* -----------------------------17.01.01 16:06--------------------------------
@@ -3347,57 +2869,6 @@ SwXDocumentPropertyHelper::~SwXDocumentPropertyHelper()
 {
 }
 /* -----------------------------17.01.01 16:06--------------------------------
-
- ---------------------------------------------------------------------------*/
-ForbiddenCharacters SwXDocumentPropertyHelper::getForbiddenCharacters( const Locale& rLocale )
-    throw(NoSuchElementException, RuntimeException)
-{
-    if(!m_pDoc)
-        throw RuntimeException();
-    LanguageType eLang = SvxLocaleToLanguage( rLocale );
-
-    const ForbiddenCharacters* pForbidden = m_pDoc->GetForbiddenCharacters( eLang, FALSE );
-    if(!pForbidden)
-        throw NoSuchElementException();
-    return *pForbidden;
-}
-/* -----------------------------17.01.01 16:06--------------------------------
-
- ---------------------------------------------------------------------------*/
-sal_Bool SwXDocumentPropertyHelper::hasForbiddenCharacters( const Locale& rLocale )
-    throw(RuntimeException)
-{
-    if(!m_pDoc)
-        throw RuntimeException();
-    LanguageType eLang = SvxLocaleToLanguage( rLocale );
-
-    const ForbiddenCharacters* pForbidden = m_pDoc->GetForbiddenCharacters( eLang, FALSE );
-    return 0 != pForbidden;
-}
-/* -----------------------------17.01.01 16:06--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwXDocumentPropertyHelper::setForbiddenCharacters(
-    const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
-        throw(RuntimeException)
-{
-    if(!m_pDoc)
-        throw RuntimeException();
-    LanguageType eLang = SvxLocaleToLanguage( rLocale );
-    m_pDoc->SetForbiddenCharacters( eLang, rForbiddenCharacters );
-}
-/* -----------------------------17.01.01 16:06--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SwXDocumentPropertyHelper::removeForbiddenCharacters( const Locale& rLocale )
-    throw(RuntimeException)
-{
-    if(!m_pDoc)
-        throw RuntimeException();
-    LanguageType eLang = SvxLocaleToLanguage( rLocale );
-    m_pDoc->ClearForbiddenCharacters( eLang );
-}
-/* -----------------------------13.03.01 11:56--------------------------------
 
  ---------------------------------------------------------------------------*/
 Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
@@ -3450,3 +2921,15 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
     return xRet;
 }
 
+void SwXDocumentPropertyHelper::Invalidate()
+{
+    xDashTable = 0;
+    xGradientTable = 0;
+    xHatchTable = 0;
+    xBitmapTable = 0;
+    xTransGradientTable = 0;
+    xMarkerTable = 0;
+    xDrawDefaults = 0;
+    m_pDoc = 0;
+    SvxUnoForbiddenCharsTable::mxForbiddenChars.unbind();
+}
