@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-23 13:56:48 $
+ *  last change: $Author: vg $ $Date: 2002-07-25 11:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,8 +1182,12 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 #ifdef UNX
         mpData->mnEnableATT = 0;
 
+#ifndef REMOTE_APPSERVER
         DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
         if( pIntegrator && pIntegrator->GetDtType() == DtGNOME )
+#else
+        if( 0 )
+#endif
         {
             char buf[16];
             FILE* fp = popen( "gconftool-2 -g /desktop/gnome/interface/accessibility", "r" );
