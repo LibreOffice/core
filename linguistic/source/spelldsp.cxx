@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-21 09:58:21 $
+ *  last change: $Author: tl $ $Date: 2000-12-22 12:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
+#endif
+#ifndef _SVTOOLS_LNGMISC_HXX_
+#include <svtools/lngmisc.hxx>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
