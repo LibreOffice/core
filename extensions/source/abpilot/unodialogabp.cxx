@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-25 14:17:40 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 09:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ namespace abp
         // not interested in the context, not interested in the args
         // -> call the execute method of the XExecutableDialog
 
-        static_cast< XExecutableDialog* >( this )->execute();
+        sal_Bool bSuccess = static_cast< XExecutableDialog* >( this )->execute() ? sal_True : sal_False;
+        return makeAny( bSuccess );
     }
 
 //.........................................................................
@@ -215,6 +216,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/09/25 14:17:40  fs
+ *  #91062# signature of XJob::execute slightly changed
+ *
  *  Revision 1.2  2001/09/14 09:56:05  fs
  *  #91062# support the XJob interface
  *
