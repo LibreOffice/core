@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-25 11:38:46 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:36:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,11 +121,6 @@ SHL1STDLIBS=\
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \
     $(LIB1TARGET)
-
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=$(TARGET)$(UCPFTP_MAJOR)
-.ENDIF
 
 # --- Def-File ---------------------------------------------------------
 
