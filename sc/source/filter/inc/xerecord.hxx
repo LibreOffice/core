@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:43:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,6 @@ public:
     /** Calls Save(XclExpStream&) nCount times. */
     void                SaveRepeated( XclExpStream& rStrm, sal_uInt32 nCount );
 };
-
-typedef ScfRef< XclExpRecordBase > XclExpRecordRef;
 
 // ----------------------------------------------------------------------------
 
