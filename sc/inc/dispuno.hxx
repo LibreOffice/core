@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-13 19:21:34 $
+ *  last change: $Author: nn $ $Date: 2001-07-18 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,33 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #endif
-
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #endif
+
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
+
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
+#endif
+
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"       // ScImportParam
+#endif
+
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDispatchProviderInterception;
 } } } }
 
 class ScTabViewShell;
+
+
+typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XStatusListener >* XStatusListenerPtr;
+SV_DECL_PTRARR_DEL( XStatusListenerArr_Impl, XStatusListenerPtr, 4, 4 );
 
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
@@ -135,9 +149,14 @@ public:
 };
 
 
-class ScDispatch : public cppu::WeakImplHelper1<com::sun::star::frame::XDispatch>
+class ScDispatch : public cppu::WeakImplHelper2<
+                                    com::sun::star::frame::XDispatch,
+                                    com::sun::star::view::XSelectionChangeListener >
 {
-    ScTabViewShell*     pViewShell;
+    ScTabViewShell*         pViewShell;
+    XStatusListenerArr_Impl aDataSourceListeners;
+    ScImportParam           aLastImport;
+    sal_Bool                bListeningToView;
 
 public:
 
@@ -157,6 +176,14 @@ public:
                                     ::com::sun::star::frame::XStatusListener >& xControl,
                                 const ::com::sun::star::util::URL& aURL )
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XSelectionChangeListener
+    virtual void SAL_CALL   selectionChanged( const ::com::sun::star::lang::EventObject& aEvent )
+                                throw (::com::sun::star::uno::RuntimeException);
+
+                            // XEventListener
+    virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source )
+                                throw (::com::sun::star::uno::RuntimeException);
 };
 
 
