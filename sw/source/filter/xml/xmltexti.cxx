@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-10 08:22:43 $
+ *  last change: $Author: mib $ $Date: 2002-11-25 17:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,11 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     if( !pFrmFmt )
         return xPropSet;
 
-    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    xPropSet = pXFrame;
+    if( pDoc->GetDrawModel() )
+        SwXFrame::GetOrCreateSdrObject(
+                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
     if( rTblName.getLength() )
     {
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -552,7 +556,12 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        aAppletImpl.GetApplet(),
                                        &aAppletImpl.GetItemSet());
-    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    xPropSet = pXFrame;
+    if( pDoc->GetDrawModel() )
+        SwXFrame::GetOrCreateSdrObject(
+                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+
     return xPropSet;
 }
 Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
@@ -588,7 +597,12 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        xPlugin,
                                        &aItemSet);
-    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    xPropSet = pXFrame;
+    if( pDoc->GetDrawModel() )
+        SwXFrame::GetOrCreateSdrObject(
+                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+
     return xPropSet;
 }
 Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
@@ -696,7 +710,11 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
     SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
                                        pFrame,
                                        &aItemSet);
-    xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    xPropSet = pXFrame;
+    if( pDoc->GetDrawModel() )
+        SwXFrame::GetOrCreateSdrObject(
+                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
     return xPropSet;
 }
 
