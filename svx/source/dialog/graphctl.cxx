@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: svesik $ $Date: 2001-03-13 21:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #if defined( OS2 ) || defined( WIN ) || defined( UNX ) || defined( WNT )
 #include <stdlib.h>         //wegen fcvt
 #endif
-#ifdef MAC
+#if defined(MAC) || defined(NETBSD)
 char *fcvt(double value, int ndigit, int *decpt, int *sign);
 #endif
 
