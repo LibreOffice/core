@@ -140,8 +140,8 @@ uno::Reference< XTransformation > PiePositionHelper::getTransformationLogicToSce
 
         aMatrix.ScaleZ(FIXED_SIZE_FOR_3D_CHART_VOLUME/m_fDepth);
 
-        if(nDim==2)
-            aMatrix = aMatrix*m_aMatrixScreenToScene;
+//        if(nDim==2)
+            aMatrix = m_aMatrixScreenToScene*aMatrix;
 
         m_xTransformationLogicToScene = new Linear3DTransformation(Matrix4DToHomogenMatrix( aMatrix ));
     }

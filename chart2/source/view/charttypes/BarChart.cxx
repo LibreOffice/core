@@ -137,7 +137,7 @@ uno::Reference< XTransformation > BarPositionHelper::getTransformationLogicToSce
         //aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ/getSlotWidth());
 
         //if(nDim==2)
-            aMatrix = aMatrix*m_aMatrixScreenToScene;
+            aMatrix = m_aMatrixScreenToScene*aMatrix;
 
         m_xTransformationLogicToScene = new Linear3DTransformation(Matrix4DToHomogenMatrix( aMatrix ));
     }
@@ -258,10 +258,6 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
         , Geometry3D eGeometry )
 {
     uno::Reference< drawing::XShape > xShape(NULL);
-    //test @todo remove
-    static sal_Int32 nTest = 0;
-    eGeometry = Geometry3D(nTest%4+1);
-    nTest++;
 
     switch( eGeometry )
     {
@@ -435,7 +431,7 @@ void BarChart::createShapes()
                             xPointGroupShape_Shapes
                             , aTransformedGeom
                             ,(*aSeriesIter)->getPropertiesOfPoint( nCatIndex )
-                            ,GEOMETRY_CUBOID );
+                            , GEOMETRY_CYLINDER );//GEOMETRY_CONE );//GEOMETRY_PYRAMID );//GEOMETRY_CUBOID );//@todo read from model
                     }
                     else //m_nDimension!=3
                     {
