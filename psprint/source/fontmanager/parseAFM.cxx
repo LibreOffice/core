@@ -37,9 +37,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:36 $
+ *  last change: $Author: cp $ $Date: 2001-05-22 16:37:39 $
  *
  ************************************************************************/
 
@@ -270,7 +270,7 @@ static enum parseKey recognize( register char* ident)
  *  parseFile to determine if there is more file to parse.
  */
 
-static bool parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
+static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
 {
     bool cont = true, save = (gfi != NULL);
     int error = ok;
