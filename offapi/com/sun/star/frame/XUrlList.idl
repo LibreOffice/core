@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUrlList.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2002-11-05 09:07:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module frame {
 //=============================================================================
 /** @deprecated
 */
-interface XUrlList: com::sun::star::uno::XInterface
+published interface XUrlList: com::sun::star::uno::XInterface
 {
         /** - */
         [attribute] sequence<string> List;
