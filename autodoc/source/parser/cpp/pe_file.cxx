@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:46:16 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,43 +146,54 @@ PE_File::Setup_StatusFunctions()
                                               &PE_File::On_std_ClassKey,
                                               &PE_File::On_std_ClassKey,
                                               &PE_File::On_std_enum,
+
                                               &PE_File::On_std_typedef,
                                               &PE_File::On_std_template,
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_extern,
+
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_namespace,
                                               &PE_File::On_std_using,
+
                                               &PE_File::On_std_SwBracketRight,
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_DefineName,
                                               &PE_File::On_std_MacroName,
                                               &PE_File::On_std_VarFunc,
+
+                                              &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_VarFunc };
+
     static INT16 stateT_std[] =             { Tid_Identifier,
                                               Tid_class,
                                               Tid_struct,
                                               Tid_union,
                                               Tid_enum,
+
                                               Tid_typedef,
                                               Tid_template,
                                               Tid_const,
                                               Tid_volatile,
                                               Tid_extern,
+
                                               Tid_static,
                                               Tid_register,
                                               Tid_inline,
                                               Tid_namespace,
                                               Tid_using,
+
                                               Tid_SwBracket_Right,
                                               Tid_DoubleColon,
                                               Tid_DefineName,
                                               Tid_MacroName,
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer };
+
+                                              Tid_TypeSpecializer,
+                                              Tid_typename };
 
     static F_Tok stateF_in_extern[] =       { &PE_File::On_in_extern_Constant };
     static INT16 stateT_in_extern[] =       { Tid_Constant };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_class.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:46:06 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,10 @@ PE_Class::Setup_StatusFunctions()
                                               &PE_Class::On_bodyStd_SwBracket_Right,
                                               &PE_Class::On_bodyStd_VarFunc,
                                               &PE_Class::On_bodyStd_VarFunc,
-                                              &PE_Class::On_bodyStd_VarFunc };
+                                              &PE_Class::On_bodyStd_VarFunc,
+
+                                              &PE_Class::On_bodyStd_VarFunc, };
+
     static INT16 stateT_bodyStd[] =         { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
@@ -218,7 +221,9 @@ PE_Class::Setup_StatusFunctions()
                                               Tid_SwBracket_Right,
                                               Tid_DoubleColon,
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer };
+                                              Tid_TypeSpecializer,
+
+                                              Tid_typename };
 
     static F_Tok stateF_inProtection[] =    { &PE_Class::On_inProtection_Colon };
     static INT16 stateT_inProtection[] =    { Tid_Colon };
