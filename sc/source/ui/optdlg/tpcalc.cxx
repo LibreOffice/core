@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:04:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,6 @@
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 
-#ifndef INCLUDED_RTL_MATH_HXX
-#include <rtl/math.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-
 #include "global.hxx"
 #include "globstr.hrc"
 #include "uiitems.hxx"
@@ -131,7 +124,6 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aEdPrec         ( this, ScResId( ED_PREC ) ),
         aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
         aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
-        aDecSep         ( GetScGlobalpLocaleData()->getNumDecimalSep() ),//CHINA001 aDecSep         ( ScGlobal::pLocaleData->getNumDecimalSep() ),
         nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) ),
         pOldOptions     ( new ScDocOptions(
                             ((const ScTpCalcItem&)rCoreAttrs.Get(
@@ -185,9 +177,6 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& rCoreAttrs )
 
     *pLocalOptions  = *pOldOptions;
 
-    String aStrBuf( ::rtl::math::doubleToUString( pLocalOptions->GetIterEps(),
-                rtl_math_StringFormat_G, 6, aDecSep.GetChar(0), TRUE));
-
     aBtnCase   .Check( !pLocalOptions->IsIgnoreCase() );
     aBtnCalc   .Check( pLocalOptions->IsCalcAsShown() );
     aBtnMatch  .Check( pLocalOptions->IsMatchWholeCell() );
@@ -196,7 +185,7 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& rCoreAttrs )
     aBtnIterate.Check( pLocalOptions->IsIter() );
     aEdSteps   .SetValue( pLocalOptions->GetIterCount() );
     aEdPrec    .SetValue( pLocalOptions->GetStdPrecision() );
-    aEdEps     .SetText( aStrBuf );
+    aEdEps     .SetValue( pLocalOptions->GetIterEps(), 6 );
 
     pLocalOptions->GetDate( d, m, y );
 
@@ -223,7 +212,7 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
     pLocalOptions->SetIterCount( (USHORT)aEdSteps.GetValue() );
-    pLocalOptions->SetStdPrecision( aEdPrec.GetValue() );
+    pLocalOptions->SetStdPrecision( (USHORT)aEdPrec.GetValue() );
     pLocalOptions->SetIgnoreCase( !aBtnCase.IsChecked() );
     pLocalOptions->SetCalcAsShown( aBtnCalc.IsChecked() );
     pLocalOptions->SetMatchWholeCell( aBtnMatch.IsChecked() );
@@ -243,7 +232,14 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 
 int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSet )
 {
-    int nReturn = CheckEps() ? LEAVE_PAGE : KEEP_PAGE;
+    int nReturn = KEEP_PAGE;
+
+    double fEps;
+    if( aEdEps.GetValue( fEps ) && (fEps > 0.0) )
+    {
+        pLocalOptions->SetIterEps( fEps );
+        nReturn = LEAVE_PAGE;
+    }
 
     if ( nReturn == KEEP_PAGE )
     {
@@ -258,40 +254,6 @@ int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSet )
         FillItemSet( *pSet );
 
     return nReturn;
-}
-
-//-----------------------------------------------------------------------
-
-BOOL ScTpCalcOptions::GetEps( double& rEps )
-{
-    String aStr( aEdEps.GetText() );
-    aStr.EraseTrailingChars( ' ' );
-    rtl_math_ConversionStatus eStatus;
-    sal_Unicode const * pBegin = aStr.GetBuffer();
-    sal_Unicode const * pEnd;
-    rEps = rtl_math_uStringToDouble( pBegin, pBegin + aStr.Len(),
-        GetScGlobalpLocaleData()->getNumDecimalSep().GetChar(0),//CHINA001 ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
-        GetScGlobalpLocaleData()->getNumThousandSep().GetChar(0),//CHINA001 ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
-        &eStatus, &pEnd );
-    BOOL bOk = ( eStatus == rtl_math_ConversionStatus_Ok && *pEnd == '\0' && rEps > 0.0 );
-
-    if ( bOk )
-        pLocalOptions->SetIterEps( rEps );
-
-    return bOk;
-}
-
-//-----------------------------------------------------------------------
-
-BOOL ScTpCalcOptions::CheckEps()
-{
-    if ( aEdEps.GetText().Len() == 0 )
-        return FALSE;
-    else
-    {
-        double d;
-        return GetEps(d);
-    }
 }
 
 //-----------------------------------------------------------------------
