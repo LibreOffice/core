@@ -2,9 +2,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:43:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,8 +719,14 @@ FASTBOOL SwWrtShell::GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart )
 
 FASTBOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
 {
-    ShellMoveCrsr aTmp( this, TRUE );
-    return SwCrsrShell::SelectTxtAttr( nWhich, FALSE, pAttr );
+    BOOL bRet;
+    {
+        MV_KONTEXT(this);
+        SttSelect();
+        bRet = SwCrsrShell::SelectTxtAttr( nWhich, FALSE, pAttr );
+    }
+    EndSelect();
+    return bRet;
 }
 
 
