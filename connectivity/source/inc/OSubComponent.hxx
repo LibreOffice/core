@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:09:49 $
+ *  last change: $Author: rt $ $Date: 2001-05-08 10:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define _CONNECTIVITY_OSUBCOMPONENT_HXX_
 
 #ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/Weak.hxx>
+#include <cppuhelper/weak.hxx>
 #endif
 
 namespace connectivity
