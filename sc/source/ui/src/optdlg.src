@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:17:43 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,7 +1390,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ chinese_traditional ] = "³ΖµωΌΠ°O(~N)";
         Text[ arabic ] = "γυΘσνψφδ ΗαγαΗΝΩΗΚ";
         Text[ greek ] = "Δείκτης σημειώσεων";
-        Text[ korean ] = "ΈήΈπΕΒ±Χ(~N)";
+        Text[ korean ] = "ΈήΈπ ΕΒ±Χ(~N)";
         Text[ turkish ] = "Not ~etiketi";
         Text[ language_user1 ] = " ";
     };
@@ -2411,7 +2411,7 @@ TabPage RID_SCPAGE_INPUT
         Text[ chinese_traditional ] = "«φΐ»¦^¨®Αδ¦Ϋ°ΚΏο¨ϊ¤U¤@­Σΐx¦s®ζªΊ¤θ¦V(~M)";
         Text[ arabic ] = "ΗΦΫΨ γέΚΗΝ ΗαΕΟΞΗα αδήα ΗαΚΝΟνΟ Εαμ";
         Text[ greek ] = "Πατήστε 'Enter' για τη μετακίνη~ση της επιλογής προς τα";
-        Text[ korean ] = "Ό±ΕΓΐ» ΐΜµΏΗΟ±β ΐ§ΗΨΌ­ Ώ£ΕΝΈ¦ ΄©Έ£½Κ½ΓΏΐ.(~M)";
+        Text[ korean ] = "Ό±ΕΓΐ» ΐΜµΏ½ΓΕ°±β ΐ§ΗΨ Ώ£ΕΝΈ¦ ΄©Έ£½Κ½ΓΏΐ.(~M)";
         Text[ turkish ] = "Enter tuώuna basύldύπύnda seηim taώύnύr";
         Text[ language_user1 ] = " ";
     };
