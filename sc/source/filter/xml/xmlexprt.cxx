@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:39:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                         pCaption->NbcSetOutlinerParaObject( pOPO );
                     }
 
-                    pScNote->InsertObject(pCaption, *pDoc, aCellIter.GetTab());
+                    pScNote->InsertObject(pCaption, *pDoc, aCellIter.GetTab(), sal_False);
 
                     uno::Reference<drawing::XShape> xShape(pCaption->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
@@ -904,9 +904,10 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                 }
                 if (pNoteShapes)
                 {
-                    while (aNoteShapeItr != aNoteShapeEndItr && (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable))
+                    while (aNoteShapeItr != aNoteShapeEndItr && (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) <= nTable))
                     {
-                        GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
+                        if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
+                            GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
                         ++aNoteShapeItr;
                     }
                 }
