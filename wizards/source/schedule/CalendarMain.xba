@@ -92,19 +92,19 @@ Dim iThisMonth as Integer
 		.lstMonth.StringItemList() = cCalShortMonthNames()
 		Select Case sCurLangLocale
 			Case cLANGUAGE_JAPANESE
-				.lstOwnData.FontName = &quot;HG Mincho Light J&quot;
-				.txtEvent.FontName = &quot;HG Mincho Light J&quot;
+				.lstOwnData.FontName = &quot;HG MinochoL&quot;
+				.txtEvent.FontName = &quot;HG MinchoL&quot;
 			Case cLANGUAGE_CHINESE
 				If oDocument.CharLocale.Country = &quot;CN&quot; Then
-					.lstOwnData.FontName = &quot;HG MSung Light SC&quot;
-					.txtEvent.FontName = &quot;HG MSung Light SC&quot;
+					.lstOwnData.FontName = &quot;FZ Song Ti&quot;
+					.txtEvent.FontName = &quot;FZ Song Ti&quot;
 				Else
-					.lstOwnData.FontName = &quot;HG MSung Light TC&quot;
-					.txtEvent.FontName = &quot;HG MSung Light TC&quot;
+					.lstOwnData.FontName = &quot;FZ Ming Ti&quot;
+					.txtEvent.FontName = &quot;FZ Ming Ti&quot;
 				End If
 			Case &quot;ko&quot;
-				.lstOwnData.FontName = &quot;HG MyeongJo Light K&quot;
-				.txtEvent.FontName = &quot;HG MyeongJo Light K&quot;
+				.lstOwnData.FontName = &quot;Sun Gulim&quot;
+				.txtEvent.FontName = &quot;Sun Gulim&quot;
 		End Select
 		.lstOwnEventMonth.StringItemList() = cCalShortMonthNames()
 		.optYear.State = 1
