@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:01:02 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,27 +399,29 @@ XclExpStringPtr XclExpStringHelper::CreateString(
 
 XclExpHFConverter::XclExpHFConverter( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    mrEE( rRoot.GetHFEditEngine() )
+    mrEE( rRoot.GetHFEditEngine() ),
+    mnTotalHeight( 0 )
 {
 }
 
-String XclExpHFConverter::GenerateString(
+void XclExpHFConverter::GenerateString(
         const EditTextObject* pLeftObj,
         const EditTextObject* pCenterObj,
         const EditTextObject* pRightObj )
 {
-    String aHFString;
-    AppendPortion( aHFString, pLeftObj, 'L' );
-    AppendPortion( aHFString, pCenterObj, 'C' );
-    AppendPortion( aHFString, pRightObj, 'R' );
-    return aHFString;
+    maHFString.Erase();
+    mnTotalHeight = 0;
+    AppendPortion( pLeftObj, 'L' );
+    AppendPortion( pCenterObj, 'C' );
+    AppendPortion( pRightObj, 'R' );
 }
 
-void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* pTextObj, sal_Unicode cPortionCode )
+void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unicode cPortionCode )
 {
     if( !pTextObj ) return;
 
     String aText;
+    sal_Int32 nHeight = 0;
     SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
     // edit engine
@@ -450,6 +452,7 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
     {
         ESelection aSel( nPara, 0 );
         String aParaText;
+        sal_Int32 nParaHeight = 0;
         SvUShorts aPosList;
         mrEE.GetPortions( nPara, aPosList );
 
@@ -494,12 +497,13 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
                 // height
                 // is calculated wrong in ScPatternAttr::GetFromEditItemSet, because already in twips and not 100thmm
                 // -> get it directly from edit engine item set
-                aNewData.mnHeight = static_cast< sal_uInt16 >(
-                    static_cast< const SvxFontHeightItem& >( aEditSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() );
+                aNewData.mnHeight = ::ulimit< sal_uInt16 >( GETITEM( aEditSet, SvxFontHeightItem, EE_CHAR_FONTHEIGHT ).GetHeight() );
                 (aNewData.mnHeight += 10) /= 20;
                 bool bFontHtChanged = (aFontData.mnHeight != aNewData.mnHeight);
                 if( bFontHtChanged )
                     aParaText.Append( '&' ).Append( String::CreateFromInt32( aNewData.mnHeight ) );
+                // update maximum paragraph height, convert to twips
+                nParaHeight = ::std::max< sal_Int32 >( nParaHeight, aNewData.mnHeight * 20 );
 
                 // underline
                 aNewData.mnUnderline = EXC_FONTUNDERL_NONE;
@@ -599,12 +603,18 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
         }
 
         ScGlobal::AddToken( aText, aParaText, '\n' );
+        if( nParaHeight == 0 )
+            nParaHeight = aFontData.mnHeight * 20;  // points -> twips
+        nHeight += nParaHeight;
     }
 
     mrEE.SetUpdateMode( bOldUpdateMode );
 
     if( aText.Len() )
-        rHFString.Append( '&' ).Append( cPortionCode ).Append( aText );
+    {
+        maHFString.Append( '&' ).Append( cPortionCode ).Append( aText );
+        mnTotalHeight = ::std::max( mnTotalHeight, nHeight );
+    }
 }
 
 
