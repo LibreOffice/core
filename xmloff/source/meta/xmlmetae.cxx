@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 10:59:49 $
+ *  last change: $Author: nn $ $Date: 2001-02-23 19:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <tools/debug.hxx>
 #include <tools/inetdef.hxx>
 #include <tools/isolang.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "xmlmetae.hxx"
 #include "xmlkywd.hxx"
@@ -267,6 +268,34 @@ void SfxXMLMetaExport::SimpleDateTimeElement(
     }
 }
 
+rtl::OUString lcl_GetProductName()
+{
+    //  get the correct product name from the configuration
+
+    rtl::OUStringBuffer aName;
+    utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
+    if (pMgr)
+    {
+        rtl::OUString aValue;
+        uno::Any aAny = pMgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME);
+        if ( (aAny >>= aValue) && aValue.getLength() )
+            aName.append( aValue ).append( (sal_Unicode)' ' );
+
+        aAny = pMgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTVERSION);
+        if ( (aAny >>= aValue) && aValue.getLength() )
+            aName.append( aValue ).append( (sal_Unicode)' ' );
+
+        aAny = pMgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION);
+        if ( (aAny >>= aValue) && aValue.getLength() )
+            aName.append( aValue ).append( (sal_Unicode)' ' );
+    }
+    aName.append( (sal_Unicode)'(' );
+    aName.appendAscii( TOOLS_INETDEF_OS );
+    aName.append( (sal_Unicode)')' );
+
+    return aName.makeStringAndClear();
+}
+
 void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
 {
     pNamespaceMap = &rNamespaceMap;
@@ -276,7 +305,7 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
     uno::Any aPropVal;
 
     //  generator (exported only)
-    sValue = ::rtl::OUString::createFromAscii(INET_PRODUCTNAME);
+    sValue = lcl_GetProductName();
     sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_META,
                         ::rtl::OUString::createFromAscii(sXML_generator) );
     xHandler->ignorableWhitespace( sWS );
