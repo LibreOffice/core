@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 13:50:51 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "templwin.hxx"
 #include "templdlg.hxx"
 #include "svtdata.hxx"
+#include "pathoptions.hxx"
 
 #include "svtools.hrc"
 #include "templwin.hrc"
@@ -121,7 +122,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/split.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/pathoptions.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;

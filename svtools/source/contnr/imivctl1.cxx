@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #include <limits.h>
 
-#ifndef _SVEDIT_HXX
-#include <svtools/svmedit.hxx>
-#endif
 #ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
 #endif
@@ -92,9 +89,7 @@
 
 #include "ivctrl.hxx"
 #include "imivctl.hxx"
-#ifndef _SVARRAY_HXX
-#include <svtools/svarray.hxx>
-#endif
+#include "svmedit.hxx"
 
 #include <string>
 #include <algorithm>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "fileview.hxx"
 #include "svtdata.hxx"
 #include "imagemgr.hxx"
+#include "headbar.hxx"
+#include "svtabbx.hxx"
 
 #include "svtools.hrc"
 
@@ -101,8 +103,6 @@
 
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/headbar.hxx>
-#include <svtools/svtabbx.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <ucbhelper/content.hxx>

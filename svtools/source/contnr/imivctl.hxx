@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-08 04:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
-#ifndef _SVARRAY_HXX
-#include <svtools/svarray.hxx>
-#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
@@ -84,6 +81,7 @@
 #include <limits.h>
 
 #include "ivctrl.hxx"
+#include "svarray.hxx"
 
 class IcnCursor_Impl;
 class SvtIconChoiceCtrl;
