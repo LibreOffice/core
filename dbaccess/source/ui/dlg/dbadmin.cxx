@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 16:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,7 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         case PAGE_GENERAL:
             static_cast<OGeneralPage&>(_rPage).SetTypeSelectHandler(LINK(this, ODbAdminDialog, OnTypeSelected));
             static_cast<OGeneralPage&>(_rPage).SetNameModifyHandler(LINK(this, ODbAdminDialog, OnNameModified));
+            static_cast<OGeneralPage&>(_rPage).SetNameValidationHandler(LINK(this, ODbAdminDialog, OnValidateName));
             static_cast<OGeneralPage&>(_rPage).setServiceFactory(m_xORB);
             static_cast<OGeneralPage&>(_rPage).SetAdminDialog(this);
             break;
@@ -827,17 +828,25 @@ IMPL_LINK(ODbAdminDialog, OnDatasourceModifed, SfxTabPage*, _pTabPage)
 }
 
 //-------------------------------------------------------------------------
+IMPL_LINK(ODbAdminDialog, OnValidateName, OGeneralPage*, _pTabPage)
+{
+    ::rtl::OUString sNewStringSuggestion = _pTabPage->GetCurrentName();
+
+    // check if there's already a data source with the suggested name
+    ConstStringSetIterator aExistentPos = m_aValidDatasources.find(sNewStringSuggestion);
+        // !! m_aValidDatasources contains _all_ data source names _except_ the currently selected one !!
+
+    sal_Bool bValid = m_aValidDatasources.end() == aExistentPos;
+
+    return bValid ? 1L : 0L;
+}
+
+//-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
 {
     if (!m_bResetting)
     {
-        ::rtl::OUString sNewStringSuggestion = _pTabPage->GetCurrentName();
-
-        // check if there's already a data source with the suggested name
-        ConstStringSetIterator aExistentPos = m_aValidDatasources.find(sNewStringSuggestion);
-            // !! m_aValidDatasources contains _all_ data source names _except_ the currently selected one !!
-
-        sal_Bool bValid = m_aValidDatasources.end() == aExistentPos;
+        sal_Bool bValid = ( 0 != OnValidateName( _pTabPage ) );
 
         // the user is not allowed to leave the current data source (or to commit the dialog) as long
         // as the name is invalid
@@ -2025,6 +2034,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.72  2001/08/27 06:57:23  oj
+ *  #90015# some speedup's
+ *
  *  Revision 1.71  2001/08/23 14:48:13  fs
  *  #88637# corrected error message
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 14:08:55 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 16:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ private:
     DECL_LINK(OnDatasourceSelected, ListBox*);
     DECL_LINK(OnTypeSelected, OGeneralPage*);
     DECL_LINK(OnNameModified, OGeneralPage*);
+    DECL_LINK(OnValidateName, OGeneralPage*);
     DECL_LINK(OnDatasourceModifed, SfxTabPage*);
     DECL_LINK(OnNewDatasource, Window*);
     DECL_LINK(OnDeleteDatasource, Window*);
@@ -365,6 +366,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/08/14 14:08:55  fs
+ *  #86945# +getCurrentDataSource
+ *
  *  Revision 1.22  2001/07/31 15:58:55  fs
  *  #88530# +omSingleEditFixedType
  *
