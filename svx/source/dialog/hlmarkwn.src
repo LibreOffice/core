@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:18:10 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ hebrew ] = "‮יישום‬";
         Text[ hindi ] = "लागू करो";
         Text[ slovak ] = "Použiť";
+        Text[ hungarian ] = "Alkalmaz";
+        Text[ slovenian ] = "Uporabi";
     };
     PushButton BT_CLOSE
     {
@@ -146,6 +148,8 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
         Text[ slovak ] = "Zavrieť";
+        Text[ hungarian ] = "Bezárás";
+        Text[ slovenian ] = "Zapri";
     };
     Control TLB_MARK
     {
@@ -162,7 +166,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ french ] = "Cible dans le document";
     Text[ spanish ] = "Destino en documento";
     Text[ italian ] = "Destinazione nel documento";
-    Text[ danish ] = "M�l i dokumentet";
+    Text[ danish ] = "M�l i dokument";
     Text[ swedish ] = "M�l i dokumentet";
     Text[ polish ] = "Cel w dokumencie";
     Text[ portuguese_brazilian ] = "Destino no documento";
@@ -179,6 +183,8 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Text[ hebrew ] = "‮היעד במסמך‬";
     Text[ hindi ] = "लेखपत्र में लक्ष्य";
     Text[ slovak ] = "Cieľ v dokumente";
+    Text[ hungarian ] = "Cél a dokumentumban";
+    Text[ slovenian ] = "Cilj v dokumentu";
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
@@ -210,6 +216,8 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
     Text[ hebrew ] = "‮אין יעדים במסמך.‬";
     Text[ hindi ] = "लक्ष्य लेखपत्र में अस्तित्व में नहीं है ।";
     Text[ slovak ] = "Ciele v dokumente neexistujú.";
+    Text[ hungarian ] = "A célok nem találhatóak a dokumentumban";
+    Text[ slovenian ] = "V dokumentu ni ciljev";
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
@@ -224,7 +232,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ french ] = "Impossible d'ouvrir le document.";
     Text[ spanish ] = "No se pudo abrir el documento.";
     Text[ italian ] = "Non � stato possibile aprire il documento.";
-    Text[ danish ] = "Det var ikke muligt at �bne dokumentet.";
+    Text[ danish ] = "Kunne ikke �bne dokumentet.";
     Text[ swedish ] = "Dokumentet kunde inte �ppnas.";
     Text[ polish ] = "Nie mo�na otworzy� dokumentu.";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel abrir o documento.";
@@ -241,7 +249,10 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ hebrew ] = "‮לא ניתן לפתוח את המסמך.‬";
     Text[ hindi ] = "लेखपत्र को नहीं खोल सकते है ।";
     Text[ slovak ] = "Nie je možné otvoriť dokument.";
+    Text[ hungarian ] = "Nem sikerült megnyitni a dokumentumot.";
+    Text[ slovenian ] = "Ni mogoče odpreti dokumenta";
 };
+
 
 
 
