@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,8 +248,11 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
         RegisterService(configmgr::getConfigurationRegistryServiceInfo(), xKey);
 
+        RegisterService(configmgr::backend::getUpdateMergerServiceInfo(), xKey);
+
         RegisterService(configmgr::xml::getSchemaParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerParserServiceInfo(), xKey);
+        RegisterService(configmgr::xml::getLayerWriterServiceInfo(), xKey);
         // im/export
 #if 0
         RegisterService(configmgr::getDataExportServiceInfo(), xKey);
@@ -297,6 +300,11 @@ extern "C" void* SAL_CALL component_getFactory(
             ::cppu::createSingleFactory)
         ||
         aReq.CreateService(
+            configmgr::backend::getUpdateMergerServiceInfo(),
+            &configmgr::backend::instantiateUpdateMerger,
+            ::cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
             configmgr::xml::getSchemaParserServiceInfo(),
             &configmgr::xml::instantiateSchemaParser,
             ::cppu::createSingleFactory)
@@ -304,6 +312,11 @@ extern "C" void* SAL_CALL component_getFactory(
         aReq.CreateService(
             configmgr::xml::getLayerParserServiceInfo(),
             &configmgr::xml::instantiateLayerParser,
+            ::cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+            configmgr::xml::getLayerWriterServiceInfo(),
+            &configmgr::xml::instantiateLayerWriter,
             ::cppu::createSingleFactory)
         ||
         false;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confapifactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:59:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,19 @@ namespace configmgr
         ( CreationContext const& rServiceManager );
         uno::Reference< uno::XInterface > SAL_CALL instantiateLayerParser
         ( CreationContext const& rServiceManager );
+        uno::Reference< uno::XInterface > SAL_CALL instantiateLayerWriter
+        ( CreationContext const& rServiceManager );
 
         const ServiceInfo* getSchemaParserServiceInfo();
         const ServiceInfo* getLayerParserServiceInfo();
+        const ServiceInfo* getLayerWriterServiceInfo();
+    }
+    namespace backend
+    {
+        uno::Reference< uno::XInterface > SAL_CALL instantiateUpdateMerger
+        ( CreationContext const& rServiceManager );
+
+        const ServiceInfo* getUpdateMergerServiceInfo();
     }
 } //  namespace configmgr
 
