@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2002-07-09 13:16:44 $
+ *  last change: $Author: hro $ $Date: 2002-08-19 08:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,6 +1120,19 @@ oslFileError SAL_CALL osl_setFileAttributes( rtl_uString *filePath, sal_uInt64 u
 oslFileError SAL_CALL osl_setFileTime( rtl_uString *filePath,   const TimeValue *aCreationTime,
                                                                 const TimeValue *aLastAccessTime,
                                                                 const TimeValue *aLastWriteTime);
+
+
+/** Retrieves the file URL of the system's temporary directory path
+
+    @param pustrTempDirURL[out] On success receives the URL of system's
+        temporary directory path
+
+    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
+    osl_File_E_NOENT        No such file or directory not found<br>
+*/
+
+oslFileError SAL_CALL osl_getTempDirURL( rtl_uString **pustrTempDirURL );
+
 
 #ifdef __cplusplus
 }

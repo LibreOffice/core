@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-22 07:37:13 $
+ *  last change: $Author: hro $ $Date: 2002-08-19 08:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,20 @@ public:
     static inline RC searchFileURL( const ::rtl::OUString& strFileName, const ::rtl::OUString& strSystemSearchPath, ::rtl::OUString& strFileURL )
     {
         return (RC) osl_searchFileURL( strFileName.pData, strSystemSearchPath.pData, &strFileURL.pData );
+    }
+
+    /** Retrieves the file URL of the system's temporary directory path
+
+        @param ustrTempDirURL[out] On success receives the URL of system's
+            temporary directory path
+
+        @return E_None on success otherwise one of the following errorcodes:<p>
+        E_NOENT     No such file or directory not found<br>
+    */
+
+    static inline RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
+    {
+        return (RC) osl_getTempDirURL( &ustrTempDirURL.pData );
     }
 };
 

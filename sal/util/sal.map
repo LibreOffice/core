@@ -441,6 +441,7 @@ UDK_3_0_0 {
         osl_getLocalTimeFromSystemTime;
         osl_getSystemTimeFromLocalTime;
         osl_getAbsoluteFileURL;
+        osl_getTempDirURL;
 
         osl_unmountVolumeDevice;
         osl_automountVolumeDevice;
