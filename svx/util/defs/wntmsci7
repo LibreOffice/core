@@ -21218,3 +21218,6 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?__uninitialized_copy_aux@_STL@@YAPAUShapeTypeDescriptor@accessibility@@PAU23@00U__false_type@@@Z
 ?__uninitialized_fill_n_aux@_STL@@YAPAUShapeTypeDescriptor@accessibility@@PAU23@IABU23@U__false_type@@@Z
 ?deallocate@?$_STL_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@H@_STL@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@@_STL@@QAEXPAU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@I@Z
+?GetFocus@SvxRectCtl@@UAEXXZ
+?LoseFocus@SvxRectCtl@@UAEXXZ
+?SetFocusRectangle@SvxRectCtl@@QAEXXZ
