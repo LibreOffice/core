@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 10
+# count = 12
 T4_GLOBAL = \
     writer_StarWriter_30 \
     writer_StarWriter_40 \
@@ -10,11 +10,15 @@ T4_GLOBAL = \
     writer_StarOffice_XML_Writer \
     writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
     pdf_Portable_Document_Format \
-    writerglobal8
+    writerglobal8 \
+    writer_MS_Word_2003_XML \
+    calc_MS_Excel_2003_XML
 
 # -----------------------------------------------
-# count = 11
+# count = 12
 F4_GLOBAL = \
+    MS_Excel_2003_XML \
+    MS_Word_2003_XML \
     StarWriter_3_0__StarWriter_GlobalDocument_ \
     StarWriter_4_0__StarWriter_GlobalDocument_ \
     StarWriter_4_0_GlobalDocument \
@@ -26,6 +30,8 @@ F4_GLOBAL = \
     writer_globaldocument_pdf_Export \
     writerglobal8 \
     writerglobal8_writer
+
+
 
 # -----------------------------------------------
 # count = 0
