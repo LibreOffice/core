@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:53:11 $
+ *  last change: $Author: kz $ $Date: 2002-05-03 00:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ TabPage TP_CONTENT_OPT
         Text[ arabic ] = "���� ������";
         Text[ finnish ] = "Ohjaimet";
         Text[ catalan ] = "Visual aids";
+        Text[ thai ] = "คำแนะนำ";
     };
     CheckBox CB_CROSS
     {
@@ -136,6 +137,7 @@ TabPage TP_CONTENT_OPT
         Text[ arabic ] = "���� ������ ����� �������";
         Text[ finnish ] = "Ohjaimet ~siirrett�ess�";
         Text[ catalan ] = "Guides while moving";
+        Text[ thai ] = "คำแนะนำ~ขณะย้าย";
     };
     CheckBox CB_HANDLE
     {
@@ -163,6 +165,7 @@ TabPage TP_CONTENT_OPT
         Text[ arabic ] = "����� �����";
         Text[ finnish ] = "~Peruskahvat";
         Text[ catalan ] = "Simple control points";
+        Text[ thai ] = "ควบคุมอย่างง่า~ย";
     };
     CheckBox CB_BIGHANDLE
     {
@@ -190,6 +193,7 @@ TabPage TP_CONTENT_OPT
         Text[ arabic ] = "����� �����";
         Text[ finnish ] = "Isot kahvat";
         Text[ catalan ] = "Large control points";
+        Text[ thai ] = "ควบคุมขนาดใหญ่";
     };
     FixedLine FL_WINDOW
     {
@@ -218,6 +222,7 @@ TabPage TP_CONTENT_OPT
         Text[ arabic ] = "����� �����";
         Text[ finnish ] = "N�yt�";
         Text[ catalan ] = "View";
+        Text[ thai ] = "มุมมอง";
     };
     CheckBox CB_HSCROLL
     {
@@ -246,6 +251,7 @@ TabPage TP_CONTENT_OPT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vaakavierityspalkki";
         Text[ catalan ] = "Barra de desplazamiento ~horizontal";
+        Text[ thai ] = "แถบเลื่อนแนวน~อน";
     };
     CheckBox CB_VSCROLL
     {
@@ -274,6 +280,7 @@ TabPage TP_CONTENT_OPT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Pystyvierityspalkki";
         Text[ catalan ] = "Barra de desplazamiento ~vertical";
+        Text[ thai ] = "แถบเลื่อนแนว~ตั้ง";
     };
     CheckBox CB_HRULER
     {
@@ -303,6 +310,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "Yatay cetvel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Regla  h~orizontal";
+        Text[ thai ] = "ไม้บรรทัดแนวน~อน";
     };
     ListBox LB_HMETRIC
     {
@@ -338,6 +346,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "Dikey cetvel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Regla v~ertical";
+        Text[ thai ] = "ไม้บรรทัดแนวตั้~ง";
     };
     CheckBox CB_VRULER_RIGHT
     {
@@ -399,6 +408,7 @@ TabPage TP_CONTENT_OPT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Tasainen vieritys";
         Text[ catalan ] = "Desplazamiento ~suave";
+        Text[ thai ] = "เลื่อนแบบรา~บรื่น";
     };
     FixedLine FL_DISP
     {
@@ -429,6 +439,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "G�r�nt�le";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar";
+        Text[ thai ] = "แสดงผล";
     };
     CheckBox CB_GRF
     {
@@ -460,6 +471,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "Grafik ve nesneler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Im�genes y objetos";
+        Text[ thai ] = "~กราฟิคและวัตถุ";
     };
     CheckBox CB_TBL
     {
@@ -489,6 +501,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "Tablolar          ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tablas                    ";
+        Text[ thai ] = "~ตาราง ";
     };
     CheckBox CB_DRWFAST
     {
@@ -518,6 +531,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "�izim ve ~komut alanlar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Dibujos y campos de control";
+        Text[ thai ] = "ตัววาด~รูปและตัวควบคุม";
     };
     CheckBox CB_FIELD
     {
@@ -546,6 +560,7 @@ TabPage TP_CONTENT_OPT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kentt�koodit";
         Text[ catalan ] = "~Nombres del campo";
+        Text[ thai ] = "รหัสเ~ขตข้อมูล";
     };
     CheckBox CB_POSTIT
     {
@@ -574,6 +589,7 @@ TabPage TP_CONTENT_OPT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Huomautukset";
         Text[ catalan ] = "~Notas";
+        Text[ thai ] = "~บันทึกย่อ";
     };
     FixedLine FL_SETTINGS
     {
@@ -602,6 +618,7 @@ TabPage TP_CONTENT_OPT
         Hide = TRUE;
         Text[ finnish ] = "Asetukset";
         Text[ catalan ] = "Settings";
+        Text[ thai ] = "กำหนด";
     };
     FixedText FT_METRIC
     {
@@ -632,6 +649,7 @@ TabPage TP_CONTENT_OPT
         Text[ language_user1 ] = " ";
         Hide = TRUE;
         Text[ catalan ] = "Measurement unit";
+        Text[ thai ] = "หน่วยมาตรวัด";
     };
     ListBox LB_METRIC
     {
@@ -681,6 +699,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "��erik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contenido";
+        Text[ thai ] = "เนื้อหา";
     };
     CheckBox CB_PGRF
     {
@@ -712,6 +731,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Im�genes";
+        Text[ thai ] = "~Graphics";
     };
     CheckBox CB_PTAB
     {
@@ -741,6 +761,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tablas";
+        Text[ thai ] = "~Tables";
     };
     CheckBox CB_PDRAW
     {
@@ -749,7 +770,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Zei~chnungen" ;
         Text [ ENGLISH ] = "~Drawings" ;
         Text [ norwegian ] = "~Drawings" ;
-        Text [ italian ] = "~Disegni" ;
+        Text [ italian ] = "Disegni" ;
         Text [ portuguese_brazilian ] = "~Drawings" ;
         Text [ portuguese ] = "~Desenhos" ;
         Text [ finnish ] = "~Piirustukset" ;
@@ -770,6 +791,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "�izim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Dibujos";
+        Text[ thai ] = "Dra~wings";
     };
     CheckBox CB_CTRLFLD
     {
@@ -799,6 +821,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Komut alanlar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Campos de control";
+        Text[ thai ] = "Control~s";
     };
     CheckBox CB_BACKGROUND
     {
@@ -827,6 +850,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Tausta";
         Text[ catalan ] = "~Fondo";
+        Text[ thai ] = "Ba~ckground";
     };
     CheckBox CB_BLACK_FONT
     {
@@ -855,6 +879,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Tulosta mustana";
         Text[ catalan ] = "Imprimir ~en negro";
+        Text[ thai ] = "Print blac~k";
     };
     FixedLine FL_SEP_PRT_LEFT
     {
@@ -891,6 +916,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P�ginas";
+        Text[ thai ] = "หน้า";
     };
     CheckBox CB_LEFTP
     {
@@ -922,6 +948,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Sol sayfalar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P�ginas ~izquierdas";
+        Text[ thai ] = "~Left pages";
     };
     CheckBox CB_RIGHTP
     {
@@ -930,7 +957,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "~Rechte Seiten" ;
         Text [ ENGLISH ] = "~Right pages" ;
         Text [ norwegian ] = "~Right pages" ;
-        Text [ italian ] = "Pagine ~destre" ;
+        Text [ italian ] = "Pagine destre" ;
         Text [ portuguese_brazilian ] = "~P?ginas direitas" ;
         Text [ portuguese ] = "~P�ginas direitas" ;
         Text [ finnish ] = "~Oikeat sivut" ;
@@ -951,6 +978,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Sa� sayfalar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P�ginas derec~has";
+        Text[ thai ] = "~Right pages";
     };
     CheckBox CB_REVERSE
     {
@@ -980,6 +1008,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Ters s�ra";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "In~vertido";
+        Text[ thai ] = "Re~versed";
     };
     CheckBox CB_PROSPECT
     {
@@ -1008,6 +1037,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Esite";
         Text[ catalan ] = "~Prospecto";
+        Text[ thai ] = "Broch~ure";
     };
     RadioButton RB_NO
     {
@@ -1016,7 +1046,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "~Keine" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ norwegian ] = "~Ingen " ;
-        Text [ italian ] = "~Senza" ;
+        Text [ italian ] = "Senza" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
         Text [ finnish ] = "~Ei mit��n" ;
@@ -1039,6 +1069,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sin";
+        Text[ thai ] = "ไ~ม่มี";
     };
     RadioButton RB_ONLY
     {
@@ -1047,7 +1078,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "~Nur Notizen" ;
         Text [ ENGLISH ] = "~Notes only" ;
         Text [ norwegian ] = "~Notes only" ;
-        Text [ italian ] = "~Solo note" ;
+        Text [ italian ] = "Solo note" ;
         Text [ portuguese_brazilian ] = "~Observa??s apenas" ;
         Text [ portuguese ] = "~S� anota��es" ;
         Text [ finnish ] = "~Vain huomautukset" ;
@@ -1068,6 +1099,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "~Yaln�zca not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Solo ~notas";
+        Text[ thai ] = "บันทึกย่อ~อย่างเดียว";
     };
     RadioButton RB_END
     {
@@ -1076,7 +1108,7 @@ TabPage TP_OPTPRINT_PAGE
         Text = "Dokument~ende" ;
         Text [ ENGLISH ] = "End of ~document" ;
         Text [ norwegian ] = "End of ~document" ;
-        Text [ italian ] = "Fine ~documento" ;
+        Text [ italian ] = "Fine documento" ;
         Text [ portuguese_brazilian ] = "Final do ~documento" ;
         Text [ portuguese ] = "Fim de ~documento" ;
         Text [ finnish ] = "~Asiakirjan loppu" ;
@@ -1097,6 +1129,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Belge ~sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fin del documento";
+        Text[ thai ] = "ท้ายเอก~สาร";
     };
     RadioButton RB_PAGEEND
     {
@@ -1126,6 +1159,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "~Sayfa sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fi~n de p�gina";
+        Text[ thai ] = "~ท้ายหน้า";
     };
     FixedLine FL_SEP_PRT_RIGHT
     {
@@ -1162,6 +1196,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Notas";
+        Text[ thai ] = "บันทึกย่อ";
     };
     FixedLine FL_4
     {
@@ -1190,6 +1225,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ arabic ] = "��� ���";
         Text[ finnish ] = "Muu";
         Text[ catalan ] = "Other";
+        Text[ thai ] = "อื่น ๆ";
     };
     CheckBox CB_SINGLEJOBS
     {
@@ -1218,6 +1254,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Bi~reysel yazd�rma i�leri olu�tur";
         Text[ finnish ] = "Luo ~yksitt�iset tulostusty�t";
         Text[ catalan ] = "Crear ~tareas individuales de impresi�n";
+        Text[ thai ] = "สร้างงานพิมพ์เดี~ยว";
     };
     CheckBox CB_PAPERFROMSETUP
     {
@@ -1248,6 +1285,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ finnish ] = "~Paperilokero tulostimen asetuksista";
         Text[ catalan ] = "Bandeja seg�n c~onfiguraci�n de impresora";
         Text[ language_user1 ] = "EM19.3.01: appears to be the continuation of \"Paper tray...\" so NO cap at start.";
+        Text[ thai ] = "ถาด~กระดาษจากการกำหนดเครื่องพิมพ์";
     };
     FixedText FT_FAX
     {
@@ -1276,6 +1314,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ turkish ] = "Faks";
         Text[ finnish ] = "~Faksi";
         Text[ catalan ] = "~Fax";
+        Text[ thai ] = "โ~ทรสาร";
     };
     ListBox LB_FAX
     {
@@ -1310,6 +1349,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ arabic ] = "<None>";
         Text[ finnish ] = "<Ei mit��n>";
         Text[ catalan ] = "<None>";
+        Text[ thai ] = "<ไม่มี>";
     };
 };
 /**************************************************************************/
@@ -1348,6 +1388,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "Standart yaz�tipi";
         Text[ arabic ] = "������ ��������";
         Text[ catalan ] = "Fuentes est�ndar";
+        Text[ thai ] = "ตัวอักษรพื้นฐาน (%1)";
     };
     FixedText FT_STANDARD
     {
@@ -1377,6 +1418,7 @@ TabPage TP_STD_FONT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vakio";
         Text[ catalan ] = "~Predeterminado";
+        Text[ thai ] = "~มาตรฐาน";
     };
     FixedText FT_TITLE
     {
@@ -1407,6 +1449,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "~Ba�l�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Encabezado";
+        Text[ thai ] = "หัว~ข้อ";
     };
     FixedText FT_LIST
     {
@@ -1437,6 +1480,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "~Liste";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Lista";
+        Text[ thai ] = "~รายการ";
     };
     FixedText FT_LABEL
     {
@@ -1467,6 +1511,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "~Resim yaz�s�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~tiqueta";
+        Text[ thai ] = "คำ~บรรยายภาพ";
     };
     FixedText FT_IDX
     {
@@ -1497,6 +1542,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "~Dizin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "�~ndice";
+        Text[ thai ] = "~ดัชนี";
     };
     ComboBox LB_STANDARD
     {
@@ -1565,6 +1611,7 @@ TabPage TP_STD_FONT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vain nykyinen asiakirja";
         Text[ catalan ] = "Solo para el documento ~actual";
+        Text[ thai ] = "เอกสารปั~จจุบันเท่านั้น";
     };
     PushButton PB_STANDARD
     {
@@ -1588,11 +1635,12 @@ TabPage TP_STD_FONT
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
-        Text[ korean ] = "기본 값(~D)";
+        Text[ korean ] = "기본값(~D)";
         Text[ turkish ] = "S~tandart";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Oletusarvo";
         Text[ catalan ] = "~Predeterminado";
+        Text[ thai ] = "~ค่าเริ่มต้น";
     };
     String ST_SCRIPT_ASIAN
     {
@@ -1618,6 +1666,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "Asian";
         Text[ arabic ] = "Asian";
         Text[ catalan ] = "Asian";
+        Text[ thai ] = "แบบเอเชีย";
     };
     String ST_SCRIPT_WESTERN
     {
@@ -1643,6 +1692,7 @@ TabPage TP_STD_FONT
         Text[ turkish ] = "Western";
         Text[ arabic ] = "Western";
         Text[ catalan ] = "Western";
+        Text[ thai ] = "แบบตะวันตก";
     };
 };
 /**************************************************************************/
@@ -1681,6 +1731,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ arabic ] = "�������";
         Text[ finnish ] = "Oletusarvo";
         Text[ catalan ] = "Defaults";
+        Text[ thai ] = "ค่าเริ่มต้น";
     };
     CheckBox CB_HEADER
     {
@@ -1710,6 +1761,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Ba�l�k";
         Text[ finnish ] = "O~tsikko";
         Text[ catalan ] = "~Encabezado";
+        Text[ thai ] = "หั~วข้อ";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -1739,6 +1791,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Ba�l��� her sayfada yinele";
         Text[ finnish ] = "To~ista joka sivulla";
         Text[ catalan ] = "~Repetir en cada p�gina";
+        Text[ thai ] = "ทำ~ซ้ำในแต่ละหน้า";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -1768,6 +1821,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "B�lme";
         Text[ finnish ] = "�l� jaa";
         Text[ catalan ] = "No ~dividir";
+        Text[ thai ] = "ห้ามแยก";
     };
     CheckBox CB_BORDER
     {
@@ -1797,6 +1851,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Kenarl�k";
         Text[ finnish ] = "~Reunus";
         Text[ catalan ] = "~Borde";
+        Text[ thai ] = "เส้~นขอบ";
     };
     FixedLine FL_TABLE_SEPARATOR
     {
@@ -1831,6 +1886,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Tablolara giri�";
         Text[ finnish ] = "Taulukkojen sy�t�t";
         Text[ catalan ] = "Entrada en tablas";
+        Text[ thai ] = "สิ่งที่ใส่ในตาราง";
     };
     CheckBox CB_NUMFORMATTING
     {
@@ -1860,6 +1916,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Say� tan�ma";
         Text[ finnish ] = "Lukujen tunnistus";
         Text[ catalan ] = "~Reconocimiento de n�meros";
+        Text[ thai ] = "จดจำตัวเลข";
     };
     CheckBox CB_NUMFMT_FORMATTING
     {
@@ -1889,6 +1946,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Say� format� tan�ma";
         Text[ finnish ] = "Numeromuodon tunnistus";
         Text[ catalan ] = "Reconocimiento formato ~num�rico";
+        Text[ thai ] = "จดจำรูปแบบตัวเลข";
     };
     CheckBox CB_NUMALIGNMENT
     {
@@ -1918,6 +1976,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Hizalama";
         Text[ finnish ] = "Tasaus";
         Text[ catalan ] = "~Alineaci�n";
+        Text[ thai ] = "จัดตำแหน่ง";
     };
     FixedLine FL_MOVE
     {
@@ -1945,6 +2004,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ arabic ] = "������� ���� ��������";
         Text[ finnish ] = "N�pp�imist�n k�sittely";
         Text[ catalan ] = "Keyboard handling";
+        Text[ thai ] = "ควบคุมแป้นพิมพ์";
     };
     FixedText FT_MOVE
     {
@@ -1972,6 +2032,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Shift and arrow key pressed";
         Text[ arabic ] = "Shift and arrow key pressed";
         Text[ catalan ] = "Shift and arrow key pressed";
+        Text[ thai ] = "ย้ายเซลล์";
     };
     FixedText FT_ROWMOVE
     {
@@ -2000,6 +2061,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Rivi";
         Text[ catalan ] = "~Fila";
+        Text[ thai ] = "แ~ถว";
     };
     MetricField MF_ROWMOVE
     {
@@ -2044,6 +2106,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarake";
         Text[ catalan ] = "~Columna";
+        Text[ thai ] = "~คอลัมน์";
     };
     MetricField MF_COLMOVE
     {
@@ -2087,6 +2150,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Insert";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Insert";
+        Text[ thai ] = "แทรกเซลล์";
     };
     FixedText FT_ROWINSERT
     {
@@ -2115,6 +2179,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Ri~vi";
         Text[ catalan ] = "F~ila";
+        Text[ thai ] = "แถ~ว";
     };
     MetricField MF_ROWINSERT
     {
@@ -2159,6 +2224,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarake";
         Text[ catalan ] = "C~olumna";
+        Text[ thai ] = "คอลัม~น์";
     };
     MetricField MF_COLINSERT
     {
@@ -2202,6 +2268,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ arabic ] = "������ ����� �������";
         Text[ finnish ] = "Rivien ja sarakkeiden toiminta";
         Text[ catalan ] = "Behaviour while moving";
+        Text[ thai ] = "พฤติกรรมของแถว/คอลัมน์";
     };
     RadioButton RB_FIX
     {
@@ -2230,6 +2297,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kiinte�";
         Text[ catalan ] = "Fi~jo";
+        Text[ thai ] = "~คงที่";
     };
     FixedText FT_FIX
     {
@@ -2259,6 +2327,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Sat�r ya da s�tunlar �zerinde yap�lan de�i�iklikler yaln�zca biti�ik birimleri etkiler";
         Text[ arabic ] = "���� ��������� ������� �� �� �� ���� ��� ������� �������� ���";
         Text[ catalan ] = "Las modificaciones en una fila o columna afectan solo a la fila o columna contigua";
+        Text[ thai ] = "การเปลี่ยนแปลงมีผลต่อพื้นที่ที่อยู่ติดกันเท่านั้น";
     };
     RadioButton RB_FIXPROP
     {
@@ -2287,6 +2356,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kiinte�, suhteellinen";
         Text[ catalan ] = "Fijo, ~proporcional";
+        Text[ thai ] = "ค~งที่, สัดส่วน";
     };
     FixedText FT_FIXPROP
     {
@@ -2316,6 +2386,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Sat�r ya da s�tunlar �zerinde yap�lan de�i�iklikler tablonun t�m�n� etkiler";
         Text[ arabic ] = "���� ��������� ������� �� �� �� ���� ��� ������ �����";
         Text[ catalan ] = "Las modificaciones en una fila o columna afectan a toda la tabla";
+        Text[ thai ] = "การเปลี่ยนแปลงมีผลกับทั้งตาราง";
     };
     RadioButton RB_VAR
     {
@@ -2344,6 +2415,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Muuttuja";
         Text[ catalan ] = "~Variable";
+        Text[ thai ] = "~ตัวแปร";
     };
     FixedText FT_VAR
     {
@@ -2373,6 +2445,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ turkish ] = "Sat�r ya da s�tunlar �zerinde yap�lan de�i�iklikler tablo boyutunu etkiler";
         Text[ arabic ] = "���� ��������� ������� �� �� �� ���� ��� ��� ������";
         Text[ catalan ] = "Las modificaciones en una fila o columna afectan el tama�o de la tabla";
+        Text[ thai ] = "การเปลี่ยนแปลงมีผลกับขนาดตาราง";
     };
 };
 /**************************************************************************/
@@ -2414,6 +2487,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "Yazd�r�lmayan karakterler";
         Text[ arabic ] = "���� �� �����";
         Text[ catalan ] = "Caracteres no imprimibles";
+        Text[ thai ] = "แสดงผลของ";
     };
     CheckBox CB_PARA
     {
@@ -2445,6 +2519,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "Paragraf sonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fin de p�rrafo";
+        Text[ thai ] = "จบย่อ~หน้า";
     };
     CheckBox CB_SHYPH
     {
@@ -2474,6 +2549,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "Ay~�rma i�areti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "G~uiones opcionales";
+        Text[ thai ] = "ใช้ยั~ติภังค์เป็นทางเลือก";
     };
     CheckBox CB_SPACE
     {
@@ -2503,6 +2579,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "~Bo�luklar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esp~acios";
+        Text[ thai ] = "ระยะ~ห่าง";
     };
     CheckBox CB_HSPACE
     {
@@ -2532,6 +2609,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "B�l�nemez bo�luklar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espacios proteg~idos";
+        Text[ thai ] = "ไม่แบ่งระ~ยะห่าง";
     };
     CheckBox CB_TAB
     {
@@ -2561,6 +2639,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "Sekmeler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ta~bulaciones";
+        Text[ thai ] = "ระยะกั้น";
     };
     CheckBox CB_BREAK
     {
@@ -2590,6 +2669,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "Kesmeler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Saltos";
+        Text[ thai ] = "ตัวแบ่~ง";
     };
     CheckBox CB_HIDDEN
     {
@@ -2619,6 +2699,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "~Gizli metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Te~xto oculto";
+        Text[ thai ] = "ข้อ~ความที่ซ่อนไว้";
     };
     CheckBox CB_HIDDEN_PARA
     {
@@ -2647,6 +2728,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ turkish ] = "Gizili paragraflar";
         Text[ finnish ] = "~Piilotetut kappaleet";
         Text[ catalan ] = "P�~rrafos ocultos";
+        Text[ thai ] = "ย่~อหน้าที่ซ่อนไว้";
     };
     FixedLine FL_SEPARATOR_SHDW
     {
@@ -2681,6 +2763,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Suora kohdistin";
         Text[ catalan ] = "Cursor directo";
+        Text[ thai ] = "เคอร์เซอร์โดยตรง";
     };
     CheckBox CB_SHDWCRSONOFF
     {
@@ -2711,6 +2794,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Suora kohdistin";
         Text[ catalan ] = "~Cursor directo";
+        Text[ thai ] = "เคอร์เซอร์โ~ดยตรง";
     };
     FixedText FT_SHDWCRSFILLMODE
     {
@@ -2740,6 +2824,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Lis��";
         Text[ catalan ] = "Insertar";
+        Text[ thai ] = "แทรก";
     };
     RadioButton RB_SHDWCRSFILLMARGIN
     {
@@ -2770,6 +2855,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Kappaleen tasaus";
         Text[ catalan ] = "~Alineaci�n de p�rrafo";
+        Text[ thai ] = "จัดตำแหน่งย่อห~น้า";
     };
     RadioButton RB_SHDWCRSFILLINDENT
     {
@@ -2798,6 +2884,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vasen kappalemarginaali";
         Text[ catalan ] = "~Margen izquierdo del p�rrafo";
+        Text[ thai ] = "ระยะขอบของย่อหน้าด้าน~ซ้าย";
     };
     RadioButton RB_SHDWCRSFILLTAB
     {
@@ -2826,6 +2913,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarkaimet";
         Text[ catalan ] = "~Tabulaci�n";
+        Text[ thai ] = "~ระยะกั้น";
     };
     RadioButton RB_SHDWCRSFILLSPACE
     {
@@ -2854,6 +2942,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Sarkaimet ja v�lit";
         Text[ catalan ] = "Tabulaci�n y ~espacios";
+        Text[ thai ] = "ระยะกั้นแ~ละระยะห่าง";
     };
     FixedLine FL_CRSR_OPT
     {
@@ -2881,6 +2970,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ arabic ] = "������ �� ����� �����";
         Text[ finnish ] = "Kohdistin suojatuilla alueilla";
         Text[ catalan ] = "Cursor in protected areas";
+        Text[ thai ] = "เคอร์เซอร์ในพื้นที่ที่ป้องกัน";
     };
     CheckBox CB_ALLOW_IN_PROT
     {
@@ -2911,6 +3001,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ finnish ] = "Ota k�ytt��n";
         Text[ catalan ] = "~Permitir cursor en zonas protegidas";
         Text[ language_user1 ] = " ";
+        Text[ thai ] = "เปิดใช้งาน";
     };
 };
 
