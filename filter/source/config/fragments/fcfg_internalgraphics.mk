@@ -1,3 +1,6 @@
+# do not add internal filter
+#all_fragments+=internalgraphics
+
 # -----------------------------------------------
 # count = 27
 T4_INTERNALGRAPHICS = \
