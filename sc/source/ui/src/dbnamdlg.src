@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:23:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre";
     };
     ComboBox ED_NAME
     {
@@ -144,6 +145,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "¹üÀ§";
         Text[ turkish ] = "Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área";
     };
     Edit ED_DBAREA
     {
@@ -179,6 +181,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     GroupBox GB_OPTIONS
     {
@@ -206,6 +209,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     CheckBox BTN_HEADER
     {
@@ -237,6 +241,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~N)";
         Text[ turkish ] = "Sütun baþlýklarý ~içeriyor";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contiene títulos de ~columnas";
     };
     CheckBox BTN_SIZE
     {
@@ -266,6 +271,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "¼¿ »ðÀÔ£¯»èÁ¦(~C)";
         Text[ turkish ] = "Hücre ~ekle/sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Insertar o eliminar celdas";
     };
     CheckBox BTN_FORMAT
     {
@@ -294,6 +300,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "Æ÷¸ËÆÃ À¯Áö(~F)";
         Text[ turkish ] = "Formatlamayý ~koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Co~nservar formato";
     };
     CheckBox BTN_STRIPDATA
     {
@@ -322,6 +329,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "°¡Á®¿Â µ¥ÀÌÅÍ ÀúÀåÇÏÁö ¾Ê±â(~I)";
         Text[ turkish ] = "~Ýçe aktarýlan verileri kaydetme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~o guardar datos importados";
     };
     FixedText FT_SOURCE
     {
@@ -349,6 +357,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "¼Ò½º:";
         Text[ turkish ] = "Kaynak:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fuente:";
     };
     FixedText FT_OPERATIONS
     {
@@ -376,6 +385,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "ÀÛµ¿:";
         Text[ turkish ] = "Ýþlemler:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Operaciones:";
     };
     OKButton BTN_OK
     {
@@ -419,6 +429,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     PushButton BTN_REMOVE
     {
@@ -449,6 +460,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar";
     };
     HelpButton BTN_HELP
     {
@@ -490,6 +502,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir";
     };
     String STR_MODIFY
     {
@@ -517,6 +530,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "º¯°æ(~O)";
         Text[ turkish ] = "~Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificar";
     };
     String STR_DB_INVALID
     {
@@ -542,6 +556,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¹üÀ§";
         Text[ turkish ] = "Geçersiz aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área no válida";
     };
     Text[ chinese_simplified ] = "¶¨ÒåÊý¾ÝÇøÓò";
     Text[ russian ] = "Óñòàíîâèòü îáëàñòü áàçû äàííûõ";
@@ -553,4 +568,5 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¿µ¿ª Á¤ÀÇ";
     Text[ turkish ] = "Veritabaný aralýðýný belirle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir área de base de datos";
 };
