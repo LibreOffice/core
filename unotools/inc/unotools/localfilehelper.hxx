@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-15 11:52:31 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 11:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #define _UNOTOOLS_LOCALFILEHELPER_HXX
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#include <rtl/ustring.hxx>
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -88,6 +94,8 @@ public:
 
     static sal_Bool IsLocalFile( const String& rName );
 
+    static          ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                            GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder );
 };
 
 };
