@@ -31,7 +31,8 @@ $(WRITERDEMO_OUT)/%.exe: %.vb
 	vbc $(VBC_FLAGS) \
 		-target:exe \
 		-out:$@ \
-		-libpath:"$(OFFICE_PROGRAM_PATH)" \
+		-libpath:"$(OFFICE_PROGRAM_PATH)\assembly" \
+		-reference:cli_basetypes.dll \
 		-reference:cli_types.dll \
 		-reference:cli_ure.dll \
 		-reference:cli_cppuhelper.dll \
