@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hro $ $Date: 2000-12-20 12:22:58 $
+ *  last change: $Author: hro $ $Date: 2001-02-23 12:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,40 @@ FileProvider::compareContentIds(
     rtl::OUString aUrl1 = Id1->getContentIdentifier();
     rtl::OUString aUrl2 = Id2->getContentIdentifier();
 
-    return aUrl1.compareTo( aUrl2 );
+    sal_Int32   iComp = aUrl1.compareTo( aUrl2 );
+
+    if ( 0 != iComp )
+    {
+        rtl::OUString aPath1, aPath2, aPath;
+
+        m_pMyShell->getUnqFromUrl( aUrl1, aPath );
+        m_pMyShell->checkMountPoint( aPath, aPath1 );
+
+        m_pMyShell->getUnqFromUrl( aUrl2, aPath );
+        m_pMyShell->checkMountPoint( aPath, aPath2 );
+
+        osl::FileBase::RC   error;
+        osl::DirectoryItem  aItem1, aItem2;
+
+        error = osl::DirectoryItem::get( aPath1, aItem1 );
+        if ( error == osl::FileBase::E_None )
+            error = osl::DirectoryItem::get( aPath2, aItem2 );
+
+        if ( error != osl::FileBase::E_None )
+            return iComp;
+
+        osl::FileStatus aStatus1( FileStatusMask_FilePath );
+        osl::FileStatus aStatus2( FileStatusMask_FilePath );
+
+        error = aItem1.getFileStatus( aStatus1 );
+        if ( error == osl::FileBase::E_None )
+            error = aItem2.getFileStatus( aStatus2 );
+
+        if ( error != osl::FileBase::E_None )
+            iComp = aStatus1.getFilePath().compareTo( aStatus2.getFilePath() );
+    }
+
+    return iComp;
 }
 
 
