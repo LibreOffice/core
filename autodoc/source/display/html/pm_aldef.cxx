@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_aldef.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ PageMaker_AllDefs::Write_DefinesList()
         << new html::LineBreak
         << new html::LineBreak
         >> *new xml::AnElement("div")
-            << new html::StyleAttr("font-family:Arial; background-color:#ccccff;")
+            << new html::ClassAttr("define")
             >> *new html::Label("defines")
                 >> *new html::Headline(3)
                     << "Defines";
@@ -174,7 +174,7 @@ PageMaker_AllDefs::Write_MacrosList()
         << new html::LineBreak
         << new html::LineBreak
         >> *new xml::AnElement("div")
-            << new html::StyleAttr("font-family:Arial; background-color:#ccccff;")
+            << new html::ClassAttr("define")
             >> *new html::Label("macros")
                 >> *new html::Headline(3)
                     << "Macros";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outfile.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,13 +84,16 @@ class HtmlDocuFile
     // LIFECYCLE
                         HtmlDocuFile();
 
+    /** @param i_depthInOutputTree
+        For files in the output root directory this value must be 0.
+        For each directory level the value increases by 1.
+    */
     void                SetLocation(
                             const csv::ploc::Path &
-                                                i_rFilePath );
+                                                i_rFilePath,
+                            uintt               i_depthInOutputTree );
     void                SetTitle(
                             const char *        i_sTitle );
-    void                SetStyle(
-                            const char *        i_sStyle );
     void                SetBodyAttr(
                             const char *        i_sAttrName,
                             const char *        i_sAttrValue );
@@ -101,12 +104,9 @@ class HtmlDocuFile
     Html::Body &        Body()                  { return aBodyData; }
     bool                CreateFile();
 
-#if 0
-    // INQUIRY
-    const char *        FileName() const        { return sFileName.GetStr(); }
-
-#endif // 0
-
+    static void         WriteCssFile(
+                            const csv::ploc::Path &
+                                                i_rFilePath );
   private:
     void                WriteHeader(
                             csv::File &         io_aFile );
@@ -116,9 +116,8 @@ class HtmlDocuFile
     // DATA
     udmstri             sFilePath;
     udmstri             sTitle;
-    udmstri             sLocation;
-    udmstri             sStyle;
     udmstri             sCopyright;
+    uintt               nDepth;
 
     Html::Body          aBodyData;
 };

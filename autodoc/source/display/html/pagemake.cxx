@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagemake.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ void
 PageDisplay::Create_OverviewFile()
 {
     Env().SetFile_Overview();
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), 0 );
 
     SetupFileOnCurEnv( C_sHFTitle_Overview );
     Make_SpecialPage( new PageMaker_Overview(*this) );
@@ -136,7 +136,7 @@ PageDisplay::Create_AllDefsFile()
 
     Env().MoveDir_2Root();
     Env().SetFile_AllDefs();
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), 0 );
 
     SetupFileOnCurEnv( "Defines and Macros" );
     Make_SpecialPage( new PageMaker_AllDefs(*this) );
@@ -156,7 +156,7 @@ void
 PageDisplay::Create_HelpFile()
 {
     Env().SetFile_Help();
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), 0 );
 
     SetupFileOnCurEnv( C_sHFTitle_Help );
     Make_SpecialPage( new PageMaker_Help(*this) );
@@ -168,7 +168,7 @@ PageDisplay::Create_NamespaceFile()
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_CurNamespace();
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
     if ( Env().CurNamespace()->Owner() != 0 )
     {
         StreamLock sNsp(100);
@@ -192,7 +192,7 @@ PageDisplay::Setup_OperationsFile_for( const ary::cpp::FileGroup & i_rFile )
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_Operations(&i_rFile);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     StreamLock sOpFile(100);
     SetupFileOnCurEnv( sOpFile() << "Global Functions in Namespace "
@@ -230,7 +230,7 @@ PageDisplay::Setup_OperationsFile_for( const ary::cpp::Class & i_rClass )
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_Operations(0);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     StreamLock sOpFile(100);
     SetupFileOnCurEnv( sOpFile() << "Methods of Class "
@@ -254,7 +254,7 @@ PageDisplay::Setup_DataFile_for( const ary::cpp::FileGroup & i_rFile )
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_Data(&i_rFile);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     StreamLock sDataFile(100);
     SetupFileOnCurEnv( sDataFile() << "Global Data in Namespace "
@@ -293,7 +293,7 @@ PageDisplay::Setup_DataFile_for( const ary::cpp::Class & i_rClass )
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_Data(0);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     StreamLock sDataFile(100);
     SetupFileOnCurEnv( sDataFile() << "Data of Class "
@@ -324,7 +324,7 @@ void
 PageDisplay::Display_Class( const ary::cpp::Class & i_rData )
 {
     Env().SetFile_Class(i_rData);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     const char *
             sTypeTitle = i_rData.ClassKey() == ary::cpp::CK_class
@@ -350,7 +350,7 @@ PageDisplay::Display_Enum( const ary::cpp::Enum & i_rData )
         return;
 
     Env().SetFile_Enum(i_rData);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     StreamLock sEnumFile(100);
     SetupFileOnCurEnv( sEnumFile() << C_sHFTypeTitle_Enum
@@ -372,7 +372,7 @@ PageDisplay::Display_Typedef( const ary::cpp::Typedef & i_rData )
         return;
 
     Env().SetFile_Typedef(i_rData);
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
 
     StreamLock sTypedefFile(100);
     SetupFileOnCurEnv( sTypedefFile() << C_sHFTypeTitle_Typedef
@@ -473,21 +473,15 @@ PageDisplay::RecursiveWrite_ClassLink( const ary::cpp::Class * i_pClass,
 
     CurOut()
         >> *new Link( Path2Class(i_nLevelDistance, i_pClass->LocalName()) )
-                << new xml::AnAttribute( "alt", "class")
-                >> *new html::Font
-                        << new html::SizeAttr("0")
-                        << new xml::AnAttribute( "color", "#008800")
-                        << i_pClass->LocalName();
-    CurOut()
-        >> *new html::Font
-                << new html::SizeAttr("0")
-                << " :: ";
+            << new html::ClassAttr("nqclass")
+            << i_pClass->LocalName()
+            << " :: ";
 }
 
 void
 PageDisplay::SetupFileOnCurEnv( const char * i_sTitle )
 {
-    File().SetLocation( Env().CurPath() );
+    File().SetLocation( Env().CurPath(), Env().Depth() );
     File().SetTitle( i_sTitle );
     File().SetCopyright( Env().Layout().CopyrightText() );
     File().EmptyBody();
