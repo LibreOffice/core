@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dic $ $Date: 2001-03-09 18:36:06 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,11 @@ typedef struct
 
 typedef struct _oslPipePacket {
     struct _oslPipePacket* m_Next;
-    DWORD m_Bytes;
+    sal_Int32 m_Bytes;
     BYTE  m_Data[1];
 } oslPipePacket;
 
-typedef struct _oslPipeImpl {
+struct oslPipeImpl {
     oslInterlockedCount  m_Reference;
     HANDLE               m_File;
     HWND                 m_SrcWnd;
@@ -119,17 +119,18 @@ typedef struct _oslPipeImpl {
     HANDLE               m_AcceptEvent;
     rtl_uString*         m_Name;
     rtl_String*          m_NameA;
-    struct _oslPipeImpl* m_Next;
+    oslPipe              m_Next;
     oslMutex             m_Mutex;
     oslThread            m_Thread;
     oslSemaphore         m_Acception;
     oslCondition         m_ThreadStartUpCond;
-    struct _oslPipeImpl* m_Acceptions;
+    oslPipe              m_Acceptions;
     oslSemaphore         m_Packet;
     struct _oslPipePacket* m_Packets;
     oslPipeError         m_Error;
-    sal_Bool             *m_pbAbortAccept;
-} oslPipeImpl;
+    sal_Bool             *m_pbAbortAccept;  // TODO : remove this after osl_closePipe MUST change
+    sal_Bool             m_bClosed;
+};
 
 
 /*****************************************************************************/
@@ -138,17 +139,17 @@ typedef struct _oslPipeImpl {
 
 LRESULT CALLBACK __osl_PipeWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-    sal_Int32 processMessage(oslPipeImpl *, HWND, COPYDATASTRUCT *);
-    void __osl_destroyPipeImpl(oslPipeImpl *);
+    sal_Int32 processMessage(oslPipe, HWND, COPYDATASTRUCT *);
+    void __osl_destroyPipeImpl(oslPipe);
 
     switch (Msg)
     {
         case WM_COPYDATA:
         {
-            oslPipeImpl* pPipeImpl;
+            oslPipe pPipe;
 
-            if (pPipeImpl = (oslPipeImpl*)GetWindowLong(hWnd, 0))
-                return (processMessage(pPipeImpl, (HWND)wParam, (COPYDATASTRUCT *)lParam));
+            if (pPipe = (oslPipe)GetWindowLong(hWnd, 0))
+                return (processMessage(pPipe, (HWND)wParam, (COPYDATASTRUCT *)lParam));
 
             break;
         }
@@ -156,13 +157,13 @@ LRESULT CALLBACK __osl_PipeWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lP
         case WM_CREATE:
         {
             LPCREATESTRUCT lpCS = (LPCREATESTRUCT)lParam;
-            oslPipeImpl* pPipeImpl = (oslPipeImpl*)lpCS->lpCreateParams;
-            SetWindowLong(hWnd, 0, (LONG)pPipeImpl);
+            oslPipe pPipe = (oslPipe)lpCS->lpCreateParams;
+            SetWindowLong(hWnd, 0, (LONG)pPipe);
 
             /* if we are not an accepted pipe, signal creation of window;
                for any accepted pipe start a timer for alive checking */
-            if (pPipeImpl->m_DstWnd == NULL)
-                osl_releaseSemaphore(pPipeImpl->m_Acception);
+            if (pPipe->m_DstWnd == NULL)
+                osl_releaseSemaphore(pPipe->m_Acception);
             else
                 SetTimer(hWnd, WND_PIPE_TIMERID, WND_PIPE_INTERVALL, NULL);
 
@@ -171,24 +172,24 @@ LRESULT CALLBACK __osl_PipeWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lP
 
         case WM_DESTROY:
         {
-            oslPipeImpl* pPipeImpl;
+            oslPipe pPipe;
 
             KillTimer(hWnd, WND_PIPE_TIMERID);
 
-            if (pPipeImpl = (oslPipeImpl*)GetWindowLong(hWnd, 0))
+            if (pPipe = (oslPipe)GetWindowLong(hWnd, 0))
             {
-                osl_acquireMutex(pPipeImpl->m_Mutex);
+                osl_acquireMutex(pPipe->m_Mutex);
 
                 /* release any waiting threads */
                 do
                 {
-                    osl_releaseSemaphore(pPipeImpl->m_Packet);
+                    osl_releaseSemaphore(pPipe->m_Packet);
                 }
-                while (! osl_tryToAcquireSemaphore(pPipeImpl->m_Packet));
+                while (! osl_tryToAcquireSemaphore(pPipe->m_Packet));
 
-                pPipeImpl->m_SrcWnd = NULL;
+                pPipe->m_SrcWnd = NULL;
 
-                osl_releaseMutex(pPipeImpl->m_Mutex);
+                osl_releaseMutex(pPipe->m_Mutex);
             }
 
             PostQuitMessage(0);
@@ -197,11 +198,11 @@ LRESULT CALLBACK __osl_PipeWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lP
 
         case WM_TIMER:
         {
-            oslPipeImpl* pPipeImpl;
+            oslPipe pPipe;
 
             /* check if we have lost our partner */
-            if ((pPipeImpl = (oslPipeImpl*)GetWindowLong(hWnd, 0)) &&
-                (pPipeImpl->m_DstWnd != NULL) && (! IsWindow(pPipeImpl->m_DstWnd)))
+            if ((pPipe = (oslPipe)GetWindowLong(hWnd, 0)) &&
+                (pPipe->m_DstWnd != NULL) && (! IsWindow(pPipe->m_DstWnd)))
             {
                 COPYDATASTRUCT CopyData;
 
@@ -227,18 +228,18 @@ LRESULT CALLBACK __osl_PipeWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lP
 
 static void SAL_CALL PipeThreadProc(void *pData)
 {
-    oslPipeImpl* pPipeImpl = (oslPipeImpl*)pData;
+    oslPipe pPipe = (oslPipe)pData;
 
-    pPipeImpl->m_SrcWnd = CreateWindow(PIPEWINDOWCLASS, pPipeImpl->m_NameA->buffer,
-                                       WS_OVERLAPPEDWINDOW,
-                                       0, 0, 0, 0,
-                                       (HWND)NULL,        /* no parent */
-                                       (HMENU)NULL,       /* use class menu */
-                                       (HANDLE)GetModuleHandle(NULL),
-                                       (LPSTR)pData);
+    pPipe->m_SrcWnd = CreateWindow(PIPEWINDOWCLASS, pPipe->m_NameA->buffer,
+                                   WS_OVERLAPPEDWINDOW,
+                                   0, 0, 0, 0,
+                                   (HWND)NULL,        /* no parent */
+                                   (HMENU)NULL,       /* use class menu */
+                                   (HANDLE)GetModuleHandle(NULL),
+                                   (LPSTR)pData);
 
     /* if we are an accepted pipe, notify creator of new window handle */
-    if ((pPipeImpl->m_DstWnd != NULL) && IsWindow(pPipeImpl->m_DstWnd))
+    if ((pPipe->m_DstWnd != NULL) && IsWindow(pPipe->m_DstWnd))
     {
         COPYDATASTRUCT CopyData;
 
@@ -246,18 +247,18 @@ static void SAL_CALL PipeThreadProc(void *pData)
         CopyData.cbData = 0;
         CopyData.lpData = NULL;
 
-        SendMessage(pPipeImpl->m_DstWnd, WM_COPYDATA,
-                    (WPARAM)pPipeImpl->m_SrcWnd, (LPARAM)&CopyData);
+        SendMessage(pPipe->m_DstWnd, WM_COPYDATA,
+                    (WPARAM)pPipe->m_SrcWnd, (LPARAM)&CopyData);
     }
 
     /* notify pipe client that this thread starts up and source window was created */
-    osl_setCondition(pPipeImpl->m_ThreadStartUpCond);
+    osl_setCondition(pPipe->m_ThreadStartUpCond);
 
-    while (osl_scheduleThread(pPipeImpl->m_Thread))
+    while (osl_scheduleThread(pPipe->m_Thread))
     {
         MSG Msg;
 
-        if (IsWindow(pPipeImpl->m_SrcWnd) && GetMessage(&Msg, pPipeImpl->m_SrcWnd, 0, 0))
+        if (IsWindow(pPipe->m_SrcWnd) && GetMessage(&Msg, pPipe->m_SrcWnd, 0, 0))
         {
             TranslateMessage(&Msg);
             DispatchMessage(&Msg);
@@ -273,17 +274,18 @@ static void SAL_CALL PipeThreadProc(void *pData)
 
 static oslInterlockedCount nPipes = 0;
 
-oslPipeImpl* __osl_createPipeImpl()
+oslPipe __osl_createPipeImpl()
 {
-    oslPipeImpl* pPipeImpl;
+    oslPipe pPipe;
 
-    pPipeImpl = (oslPipeImpl*) rtl_allocateZeroMemory(sizeof(oslPipeImpl));
+    pPipe = (oslPipe) rtl_allocateZeroMemory(sizeof(struct oslPipeImpl));
 
-    pPipeImpl->m_Reference = 0;
-    pPipeImpl->m_Name = NULL;
-    pPipeImpl->m_NameA = NULL;
-    pPipeImpl->m_File = INVALID_HANDLE_VALUE;
-    pPipeImpl->m_pbAbortAccept = 0;
+    pPipe->m_bClosed = sal_False;
+    pPipe->m_Reference = 0;
+    pPipe->m_Name = NULL;
+    pPipe->m_NameA = NULL;
+    pPipe->m_File = INVALID_HANDLE_VALUE;
+    pPipe->m_pbAbortAccept = 0;
 
     if (!IS_NT)
     {
@@ -306,51 +308,51 @@ oslPipeImpl* __osl_createPipeImpl()
         }
     }
 
-    pPipeImpl->m_Mutex = osl_createMutex();
-    pPipeImpl->m_Acception = osl_createSemaphore(0);
-    pPipeImpl->m_Packet = osl_createSemaphore(0);
-    pPipeImpl->m_ThreadStartUpCond = osl_createCondition();
+    pPipe->m_Mutex = osl_createMutex();
+    pPipe->m_Acception = osl_createSemaphore(0);
+    pPipe->m_Packet = osl_createSemaphore(0);
+    pPipe->m_ThreadStartUpCond = osl_createCondition();
 
-    pPipeImpl->m_ReadEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    pPipeImpl->m_WriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-    pPipeImpl->m_AcceptEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    pPipe->m_ReadEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    pPipe->m_WriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+    pPipe->m_AcceptEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-    return (pPipeImpl);
+    return pPipe;
 }
 
-void __osl_destroyPipeImpl(oslPipeImpl *pImpl)
+void __osl_destroyPipeImpl(oslPipe pPipe)
 {
-    if (pImpl != NULL)
+    if (pPipe != NULL)
     {
-        osl_destroyMutex(pImpl->m_Mutex);
+        osl_destroyMutex(pPipe->m_Mutex);
         // terminate the accept
-        osl_releaseSemaphore(pImpl->m_Acception);
-        osl_destroySemaphore(pImpl->m_Acception);
-        osl_destroySemaphore(pImpl->m_Packet);
-        osl_destroyCondition(pImpl->m_ThreadStartUpCond);
+        osl_releaseSemaphore(pPipe->m_Acception);
+        osl_destroySemaphore(pPipe->m_Acception);
+        osl_destroySemaphore(pPipe->m_Packet);
+        osl_destroyCondition(pPipe->m_ThreadStartUpCond);
 
-        if (pImpl->m_Security != NULL)
+        if (pPipe->m_Security != NULL)
         {
-            rtl_freeMemory(pImpl->m_Security->lpSecurityDescriptor);
-            rtl_freeMemory(pImpl->m_Security);
+            rtl_freeMemory(pPipe->m_Security->lpSecurityDescriptor);
+            rtl_freeMemory(pPipe->m_Security);
         }
 
         if (!IS_NT)
         {
-            CloseHandle(pImpl->m_ReadEvent);
-            CloseHandle(pImpl->m_WriteEvent);
-            CloseHandle(pImpl->m_AcceptEvent);
+            CloseHandle(pPipe->m_ReadEvent);
+            CloseHandle(pPipe->m_WriteEvent);
+            CloseHandle(pPipe->m_AcceptEvent);
 
             if (osl_decrementInterlockedCount(&nPipes) == 0)
                 UnregisterClass(PIPEWINDOWCLASS, GetModuleHandle(NULL));
         }
 
-        if (pImpl->m_Name)
-            rtl_uString_release(pImpl->m_Name);
-        if (pImpl->m_NameA)
-            rtl_string_release(pImpl->m_NameA);
+        if (pPipe->m_Name)
+            rtl_uString_release(pPipe->m_Name);
+        if (pPipe->m_NameA)
+            rtl_string_release(pPipe->m_NameA);
 
-        rtl_freeMemory(pImpl);
+        rtl_freeMemory(pPipe);
     }
 }
 
@@ -359,33 +361,33 @@ void __osl_destroyPipeImpl(oslPipeImpl *pImpl)
 /* processMessage */
 /*****************************************************************************/
 
-static sal_Int32 processMessage(oslPipeImpl *pPipeImpl, HWND Sender, COPYDATASTRUCT *pData)
+static sal_Int32 processMessage(oslPipe pPipe, HWND Sender, COPYDATASTRUCT *pData)
 {
     sal_Int32 Result = -1;
 
-    osl_acquireMutex(pPipeImpl->m_Mutex);
+    osl_acquireMutex(pPipe->m_Mutex);
 
     switch (pData->dwData)
     {
         case MSG_SYN:
             /* new connection */
-            if (pPipeImpl->m_DstWnd == NULL)
+            if (pPipe->m_DstWnd == NULL)
             {
-                oslPipeImpl *pAccept;
+                oslPipe pAccept;
 
                 pAccept = __osl_createPipeImpl();
 
-                rtl_string_assign(&( pAccept->m_NameA ) , pPipeImpl->m_NameA );
+                rtl_string_assign(&( pAccept->m_NameA ) , pPipe->m_NameA );
                 pAccept->m_DstWnd = Sender;
 
                 if (pAccept->m_Thread = osl_createSuspendedThread(PipeThreadProc, pAccept))
                     osl_resumeThread(pAccept->m_Thread);
 
-                if (pPipeImpl->m_Acceptions == NULL)
-                    pPipeImpl->m_Acceptions = pAccept;
+                if (pPipe->m_Acceptions == NULL)
+                    pPipe->m_Acceptions = pAccept;
                 else
                 {
-                    oslPipeImpl *pInsert = pPipeImpl->m_Acceptions;
+                    oslPipe pInsert = pPipe->m_Acceptions;
                     while (pInsert->m_Next != NULL)
                         pInsert = pInsert->m_Next;
 
@@ -393,14 +395,14 @@ static sal_Int32 processMessage(oslPipeImpl *pPipeImpl, HWND Sender, COPYDATASTR
                 }
             }
             else
-                pPipeImpl->m_DstWnd = Sender;
+                pPipe->m_DstWnd = Sender;
 
             Result = 0;
-            osl_releaseSemaphore(pPipeImpl->m_Acception);
+            osl_releaseSemaphore(pPipe->m_Acception);
             break;
 
         case MSG_FIN:
-            DestroyWindow(pPipeImpl->m_SrcWnd);
+            DestroyWindow(pPipe->m_SrcWnd);
             Result = 0;
             break;
 
@@ -415,11 +417,11 @@ static sal_Int32 processMessage(oslPipeImpl *pPipeImpl, HWND Sender, COPYDATASTR
                     pPacket->m_Bytes = pData->cbData;
                     rtl_copyMemory(pPacket->m_Data, pData->lpData, pData->cbData);
 
-                    if (pPipeImpl->m_Packets == NULL)
-                        pPipeImpl->m_Packets = pPacket;
+                    if (pPipe->m_Packets == NULL)
+                        pPipe->m_Packets = pPacket;
                     else
                     {
-                        oslPipePacket *pInsert = pPipeImpl->m_Packets;
+                        oslPipePacket *pInsert = pPipe->m_Packets;
 
                         while (pInsert->m_Next != NULL)
                             pInsert = pInsert->m_Next;
@@ -429,7 +431,7 @@ static sal_Int32 processMessage(oslPipeImpl *pPipeImpl, HWND Sender, COPYDATASTR
 
                     Result = pData->cbData;
 
-                    osl_releaseSemaphore(pPipeImpl->m_Packet);
+                    osl_releaseSemaphore(pPipe->m_Packet);
                 }
                 else
                     OSL_TRACE("Failed to allocate pipe data buffer\n");
@@ -441,7 +443,7 @@ static sal_Int32 processMessage(oslPipeImpl *pPipeImpl, HWND Sender, COPYDATASTR
             break;
     }
 
-    osl_releaseMutex(pPipeImpl->m_Mutex);
+    osl_releaseMutex(pPipe->m_Mutex);
 
     return (Result);
 }
@@ -455,7 +457,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     rtl_uString* name = NULL;
     rtl_uString* path = NULL;
     rtl_uString* temp = NULL;
-    oslPipeImpl* pPipeImpl;
+    oslPipe pPipe;
 
        PSECURITY_ATTRIBUTES  pSecAttr = NULL;
 
@@ -499,8 +501,8 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     rtl_uString_newConcat(&name, temp, strPipeName);
 
     /* alloc memory */
-    pPipeImpl= __osl_createPipeImpl();
-    osl_incrementInterlockedCount(&(pPipeImpl->m_Reference));
+    pPipe= __osl_createPipeImpl();
+    osl_incrementInterlockedCount(&(pPipe->m_Reference));
 
     /* build system pipe name */
     rtl_uString_assign(&temp, path);
@@ -510,47 +512,47 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
 
     if (Options & osl_Pipe_CREATE)
     {
-        pPipeImpl->m_Security = pSecAttr;
-        rtl_uString_assign(&pPipeImpl->m_Name, name);
+        pPipe->m_Security = pSecAttr;
+        rtl_uString_assign(&pPipe->m_Name, name);
 
         if (IS_NT)
         {
             /* try to open system pipe */
-            pPipeImpl->m_File = CreateNamedPipeW(
+            pPipe->m_File = CreateNamedPipeW(
                 path->buffer,
                 PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                 PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
                 PIPE_UNLIMITED_INSTANCES,
                 4096, 4096,
                 NMPWAIT_WAIT_FOREVER,
-                pPipeImpl->m_Security);
+                pPipe->m_Security);
 
-            if (pPipeImpl->m_File != INVALID_HANDLE_VALUE)
-                return pPipeImpl;
+            if (pPipe->m_File != INVALID_HANDLE_VALUE)
+                return pPipe;
         }
         else
         {
             rtl_uString2String(
-                &pPipeImpl->m_NameA,
+                &pPipe->m_NameA,
                 name->buffer,
                 name->length,
                 RTL_TEXTENCODING_UTF8,
                 OUSTRING_TO_OSTRING_CVTFLAGS);
 
             /* check if pipe already exists */
-            if (FindWindow(PIPEWINDOWCLASS, pPipeImpl->m_NameA->buffer) == NULL)
+            if (FindWindow(PIPEWINDOWCLASS, pPipe->m_NameA->buffer) == NULL)
             {
-                if (pPipeImpl->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipeImpl))
+                if (pPipe->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipe))
                 {
-                    osl_resumeThread(pPipeImpl->m_Thread);
+                    osl_resumeThread(pPipe->m_Thread);
 
                     /* wait for creation */
-                    osl_acquireSemaphore(pPipeImpl->m_Acception);
+                    osl_acquireSemaphore(pPipe->m_Acception);
 
                     /* wait for thread start ups */
-                    osl_waitCondition(pPipeImpl->m_ThreadStartUpCond, NULL);
+                    osl_waitCondition(pPipe->m_ThreadStartUpCond, NULL);
 
-                    return (pPipeImpl);
+                    return (pPipe);
                 }
                 else
                     OSL_TRACE("osl_createPipe failed to start thread.\n");
@@ -565,7 +567,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
             WaitNamedPipeW(path->buffer, NMPWAIT_WAIT_FOREVER);
 
             /* first try to open system pipe */
-            if ((pPipeImpl->m_File = CreateFileW(
+            if ((pPipe->m_File = CreateFileW(
                     path->buffer,
                     GENERIC_READ|GENERIC_WRITE,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -573,28 +575,28 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
                     NULL)) != INVALID_HANDLE_VALUE)
-                return (pPipeImpl);
+                return (pPipe);
         }
         else
         {
             rtl_uString2String(
-                &pPipeImpl->m_NameA,
+                &pPipe->m_NameA,
                 name->buffer,
                 name->length,
                 RTL_TEXTENCODING_UTF8,
                 OUSTRING_TO_OSTRING_CVTFLAGS);
 
             /* next try window emulation */
-            if ((pPipeImpl->m_DstWnd = FindWindow(PIPEWINDOWCLASS, pPipeImpl->m_NameA->buffer)) != NULL)
+            if ((pPipe->m_DstWnd = FindWindow(PIPEWINDOWCLASS, pPipe->m_NameA->buffer)) != NULL)
             {
-                if (pPipeImpl->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipeImpl))
+                if (pPipe->m_Thread = osl_createSuspendedThread(PipeThreadProc, pPipe))
                 {
-                    osl_resumeThread(pPipeImpl->m_Thread);
+                    osl_resumeThread(pPipe->m_Thread);
 
                     /* wait for creation */
-                    osl_acquireSemaphore(pPipeImpl->m_Acception);
+                    osl_acquireSemaphore(pPipe->m_Acception);
 
-                    return (pPipeImpl);
+                    return (pPipe);
                 }
                 else
                     OSL_TRACE("osl_createPipe failed to start thread.\n");
@@ -603,144 +605,133 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
     }
 
     /* if we reach here something went wrong */
-    __osl_destroyPipeImpl(pPipeImpl);
+    __osl_destroyPipeImpl(pPipe);
 
     return NULL;
 }
 
+void SAL_CALL osl_acquirePipe( oslPipe pPipe )
+{
+    osl_incrementInterlockedCount( &(pPipe->m_Reference) );
+}
+
+void SAL_CALL osl_releasePipe( oslPipe pPipe )
+{
+//      OSL_ASSERT( pPipe );
+
+    if( 0 == pPipe )
+        return;
+
+    if( 0 == osl_decrementInterlockedCount( &(pPipe->m_Reference) ) )
+    {
+        if( ! pPipe->m_bClosed )
+            osl_closePipe( pPipe );
+
+        __osl_destroyPipeImpl( pPipe );
+    }
+}
 /*****************************************************************************/
 /* osl_copyPipe  */
 /*****************************************************************************/
-oslPipe SAL_CALL osl_copyPipe(oslPipe Pipe)
+oslPipe SAL_CALL osl_copyPipe(oslPipe pPipe)
 {
-    oslPipeImpl* pPipeImpl;
-    oslPipeImpl* pParamPipeImpl;
-
-    OSL_ASSERT(Pipe);
-
-    /* alloc memory */
-    pPipeImpl= __osl_createPipeImpl();
-
-    OSL_ASSERT(pPipeImpl);
-
-    if(pPipeImpl==NULL)
-        return NULL;
-
-    pParamPipeImpl= (oslPipeImpl*)Pipe;
-
-    osl_incrementInterlockedCount(&(pPipeImpl->m_Reference));
-
-    return (oslPipe)pPipeImpl;
+    osl_acquirePipe( pPipe );
+    return pPipe;
 }
 
 
 /*****************************************************************************/
 /* osl_destroyPipe  */
 /*****************************************************************************/
-void SAL_CALL osl_destroyPipe(oslPipe Pipe)
+void SAL_CALL osl_destroyPipe(oslPipe pPipe)
 {
-    oslPipeImpl* pPipeImpl, *pAccept;
-    oslPipePacket *pData;
+    osl_releasePipe( pPipe );
+}
 
-    /* socket already invalid */
-    if(Pipe==NULL)
-        return;
-
-    pPipeImpl= (oslPipeImpl*)Pipe;
-
-    if (osl_decrementInterlockedCount(&(pPipeImpl->m_Reference)) == 0)
+void SAL_CALL osl_closePipe( oslPipe pPipe )
+{
+    if( pPipe && ! pPipe->m_bClosed )
     {
+        oslPipe pAccept;
+        oslPipePacket *pData;
+
+        pPipe->m_bClosed = sal_True;
         if (IS_NT)
         {
             /* if we have a system pipe close it */
-            if (pPipeImpl->m_File != INVALID_HANDLE_VALUE)
+            if (pPipe->m_File != INVALID_HANDLE_VALUE)
             {
-                /*          FlushFileBuffers(pPipeImpl->m_File); */
-                DisconnectNamedPipe(pPipeImpl->m_File);
-                CloseHandle(pPipeImpl->m_File);
+                /*          FlushFileBuffers(pPipe->m_File); */
+                DisconnectNamedPipe(pPipe->m_File);
+                CloseHandle(pPipe->m_File);
             }
         }
         else
         {
             /* send finito message outher side */
-            if( pPipeImpl->m_pbAbortAccept )
+            if( pPipe->m_pbAbortAccept )
             {
-                *(pPipeImpl->m_pbAbortAccept) = sal_True;
+                *(pPipe->m_pbAbortAccept) = sal_True;
             }
 
-            if ((pPipeImpl->m_DstWnd != 0) && IsWindow(pPipeImpl->m_DstWnd))
+            if ((pPipe->m_DstWnd != 0) && IsWindow(pPipe->m_DstWnd))
             {
                 COPYDATASTRUCT CopyData;
-                oslPipeImpl*   pPipeImpl;
-
-                OSL_ASSERT(Pipe);
-
-                pPipeImpl= (oslPipeImpl*)Pipe;
 
                 CopyData.dwData = (DWORD)MSG_FIN;
                 CopyData.cbData = 0;
                 CopyData.lpData = NULL;
 
-                SendMessage(pPipeImpl->m_DstWnd, WM_COPYDATA,
-                            (WPARAM)pPipeImpl->m_SrcWnd, (LPARAM)&CopyData);
+                SendMessage(pPipe->m_DstWnd, WM_COPYDATA,
+                            (WPARAM)pPipe->m_SrcWnd, (LPARAM)&CopyData);
             }
 
             /* send finito message himself */
-            if ((pPipeImpl->m_SrcWnd!= 0) && IsWindow(pPipeImpl->m_SrcWnd))
+            if ((pPipe->m_SrcWnd!= 0) && IsWindow(pPipe->m_SrcWnd))
             {
                 COPYDATASTRUCT CopyData;
-                oslPipeImpl*   pPipeImpl;
-
-                OSL_ASSERT(Pipe);
-
-                pPipeImpl= (oslPipeImpl*)Pipe;
 
                 CopyData.dwData = (DWORD)MSG_FIN;
                 CopyData.cbData = 0;
                 CopyData.lpData = NULL;
 
-                SendMessage(pPipeImpl->m_SrcWnd, WM_COPYDATA,
-                        (WPARAM)pPipeImpl->m_SrcWnd, (LPARAM)&CopyData);
+                SendMessage(pPipe->m_SrcWnd, WM_COPYDATA,
+                        (WPARAM)pPipe->m_SrcWnd, (LPARAM)&CopyData);
             }
         }
 
-        osl_acquireMutex(pPipeImpl->m_Mutex);
+        osl_acquireMutex(pPipe->m_Mutex);
 
         /* delete any outstanding packets */
-        while (pData = pPipeImpl->m_Packets)
+        while (pData = pPipe->m_Packets)
         {
-            pPipeImpl->m_Packets = pData->m_Next;
+            pPipe->m_Packets = pData->m_Next;
             rtl_freeMemory(pData);
         }
 
         /* delete any outstanding connections */
-        while (pAccept = pPipeImpl->m_Acceptions)
+        while (pAccept = pPipe->m_Acceptions)
         {
-            pPipeImpl->m_Acceptions = pAccept->m_Next;
+            pPipe->m_Acceptions = pAccept->m_Next;
             osl_destroyPipe(pAccept);
         }
 
-        osl_releaseMutex(pPipeImpl->m_Mutex);
-
-        __osl_destroyPipeImpl(pPipeImpl);
+        osl_releaseMutex(pPipe->m_Mutex);
     }
 }
 
 /*****************************************************************************/
 /* osl_acceptPipe  */
 /*****************************************************************************/
-oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
+oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 {
     DWORD        i;
-    oslPipeImpl* pPipeImpl = NULL;
-    oslPipeImpl* pParamPipeImpl;
+    oslPipe  pAcceptedPipe = NULL;
+
     HANDLE       Event;
     OVERLAPPED   os;
 
-    OSL_ASSERT(Pipe);
-
-    pParamPipeImpl= (oslPipeImpl*)Pipe;
-
+    OSL_ASSERT(pPipe);
 
     if (IS_NT)
     {
@@ -748,18 +739,18 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
         rtl_uString* path = NULL;
         rtl_uString* temp = NULL;
 
-        OSL_ASSERT (pParamPipeImpl->m_File != INVALID_HANDLE_VALUE);
+        OSL_ASSERT (pPipe->m_File != INVALID_HANDLE_VALUE);
 
-        Event = pParamPipeImpl->m_AcceptEvent;
+        Event = pPipe->m_AcceptEvent;
         rtl_zeroMemory(&os, sizeof(OVERLAPPED));
-        os.hEvent = pParamPipeImpl->m_AcceptEvent;
-        ResetEvent(pParamPipeImpl->m_AcceptEvent);
+        os.hEvent = pPipe->m_AcceptEvent;
+        ResetEvent(pPipe->m_AcceptEvent);
 
-        ConnectNamedPipe(pParamPipeImpl->m_File, &os);
+        ConnectNamedPipe(pPipe->m_File, &os);
 
         // blocking call to accept
         if( ! GetOverlappedResult(
-                pParamPipeImpl->m_File,
+                pPipe->m_File,
                 &os,
                 &nBytesTransfered,
                 TRUE ) )
@@ -774,34 +765,35 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
             }
         }
 
-        pPipeImpl= __osl_createPipeImpl();
-        OSL_ASSERT(pPipeImpl);
 
-        osl_incrementInterlockedCount(&(pPipeImpl->m_Reference));
-        rtl_uString_assign(&pPipeImpl->m_Name, pParamPipeImpl->m_Name);
-        pPipeImpl->m_File = pParamPipeImpl->m_File;
+        pAcceptedPipe = __osl_createPipeImpl();
+        OSL_ASSERT(pAcceptedPipe);
+
+        osl_incrementInterlockedCount(&(pAcceptedPipe->m_Reference));
+        rtl_uString_assign(&pAcceptedPipe->m_Name, pPipe->m_Name);
+        pAcceptedPipe->m_File = pPipe->m_File;
 
         rtl_uString_newFromAscii(&temp, PIPESYSTEM);
-        rtl_uString_newConcat(&path, temp, pParamPipeImpl->m_Name);
+        rtl_uString_newConcat(&path, temp, pPipe->m_Name);
         rtl_uString_release(temp);
 
         // prepare for next accept
-        pParamPipeImpl->m_File =
+        pPipe->m_File =
             CreateNamedPipeW(path->buffer,
                 PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
                 PIPE_WAIT | PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
                 PIPE_UNLIMITED_INSTANCES,
                 4096, 4096,
                 NMPWAIT_WAIT_FOREVER,
-                pPipeImpl->m_Security);
-
+                pAcceptedPipe->m_Security);
+        rtl_uString_release( path );
     }
     else
     {
         sal_Bool bAbort = sal_False;
-        Event = (HANDLE)pParamPipeImpl->m_Acception;
+        Event = (HANDLE)pPipe->m_Acception;
 
-        pParamPipeImpl->m_pbAbortAccept = &bAbort;
+        pPipe->m_pbAbortAccept = &bAbort;
         while ((i = MsgWaitForMultipleObjects(1, &Event, FALSE, INFINITE, QS_SENDMESSAGE))
                == (WAIT_OBJECT_0 + 1))
         {
@@ -813,58 +805,55 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe)
                   DispatchMessage(&msg);
                }
         }
-        pParamPipeImpl->m_pbAbortAccept = 0;
+        pPipe->m_pbAbortAccept = 0;
 
         if( bAbort )
         {
             return 0;
         }
 
-        OSL_ASSERT(pParamPipeImpl->m_DstWnd == 0);
+        OSL_ASSERT(pPipe->m_DstWnd == 0);
 
-        osl_acquireMutex(pParamPipeImpl->m_Mutex);
+        osl_acquireMutex(pPipe->m_Mutex);
 
-        if (pParamPipeImpl->m_Acceptions)
+        if (pPipe->m_Acceptions)
         {
-            pPipeImpl = pParamPipeImpl->m_Acceptions;
-            pParamPipeImpl->m_Acceptions = pPipeImpl->m_Next;
+            pAcceptedPipe = pPipe->m_Acceptions;
+            pPipe->m_Acceptions = pAcceptedPipe->m_Next;
 
             /* wait for thread start ups */
-            osl_waitCondition(pPipeImpl->m_ThreadStartUpCond, NULL);
+            osl_waitCondition(pAcceptedPipe->m_ThreadStartUpCond, NULL);
         }
 
-        osl_releaseMutex(pParamPipeImpl->m_Mutex);
+        osl_releaseMutex(pPipe->m_Mutex);
     }
 
-    return (oslPipe)pPipeImpl;
+    return pAcceptedPipe;
 }
 
 /*****************************************************************************/
 /* osl_receivePipe  */
 /*****************************************************************************/
-sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
+sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
-                        sal_uInt32 BytesToRead)
+                        sal_Int32 BytesToRead)
 {
     sal_Int32    nBytes;
-    oslPipeImpl* pPipeImpl;
 
-    OSL_ASSERT(Pipe);
-
-    pPipeImpl= (oslPipeImpl*)Pipe;
+    OSL_ASSERT(pPipe);
 
     /* if we have a system pipe use it */
-    if (pPipeImpl->m_File != INVALID_HANDLE_VALUE)
+    if (pPipe->m_File != INVALID_HANDLE_VALUE)
     {
         OVERLAPPED   os;
         rtl_zeroMemory(&os,sizeof(OVERLAPPED));
-        os.hEvent = pPipeImpl->m_ReadEvent;
+        os.hEvent = pPipe->m_ReadEvent;
 
-        ResetEvent(pPipeImpl->m_ReadEvent);
+        ResetEvent(pPipe->m_ReadEvent);
 
-        if (! ReadFile(pPipeImpl->m_File, pBuffer, BytesToRead, &nBytes, &os) &&
+        if (! ReadFile(pPipe->m_File, pBuffer, BytesToRead, &nBytes, &os) &&
             ((GetLastError() != ERROR_IO_PENDING) ||
-             ! GetOverlappedResult(pPipeImpl->m_File, &os, &nBytes, TRUE)))
+             ! GetOverlappedResult(pPipe->m_File, &os, &nBytes, TRUE)))
         {
             DWORD lastError = GetLastError();
 
@@ -877,25 +866,25 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
                 else
                     nBytes = -1;
 
-                 pPipeImpl->m_Error = osl_Pipe_E_ConnectionAbort;
+                 pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
             }
         }
     }
     else
     {
-        if (osl_tryToAcquireSemaphore(pPipeImpl->m_Packet) ||
-            (IsWindow(pPipeImpl->m_SrcWnd) && IsWindow(pPipeImpl->m_DstWnd) &&
-              osl_acquireSemaphore(pPipeImpl->m_Packet)))
+        if (osl_tryToAcquireSemaphore(pPipe->m_Packet) ||
+            (IsWindow(pPipe->m_SrcWnd) && IsWindow(pPipe->m_DstWnd) &&
+              osl_acquireSemaphore(pPipe->m_Packet)))
         {
-            osl_acquireMutex(pPipeImpl->m_Mutex);
+            osl_acquireMutex(pPipe->m_Mutex);
 
-            if (pPipeImpl->m_Packets != NULL)
+            if (pPipe->m_Packets != NULL)
             {
                 oslPipePacket *pData;
 
-                pData = pPipeImpl->m_Packets;
+                pData = pPipe->m_Packets;
 
-                nBytes = min(BytesToRead, pData->m_Bytes);
+                nBytes = min( BytesToRead, pData->m_Bytes);
 
                 rtl_copyMemory(pBuffer, pData->m_Data, nBytes);
 
@@ -904,18 +893,18 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
                     rtl_copyMemory(pData->m_Data, &pData->m_Data[nBytes], pData->m_Bytes - nBytes);
                     pData->m_Bytes -= nBytes;
 
-                    osl_releaseSemaphore(pPipeImpl->m_Packet);
+                    osl_releaseSemaphore(pPipe->m_Packet);
                 }
                 else
                 {
-                    pPipeImpl->m_Packets = pData->m_Next;
+                    pPipe->m_Packets = pData->m_Next;
                     rtl_freeMemory(pData);
                 }
             }
             else
                 nBytes = 0;
 
-            osl_releaseMutex(pPipeImpl->m_Mutex);
+            osl_releaseMutex(pPipe->m_Mutex);
         }
         else
             nBytes = 0;
@@ -927,34 +916,30 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe,
 /*****************************************************************************/
 /* osl_sendPipe  */
 /*****************************************************************************/
-sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe,
+sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
                        const void* pBuffer,
-                       sal_uInt32 BytesToSend)
+                       sal_Int32 BytesToSend)
 {
     sal_Int32        nBytes = -1;
-    oslPipeImpl*   pPipeImpl;
+    OSL_ASSERT(pPipe);
 
-    OSL_ASSERT(Pipe);
-
-    pPipeImpl= (oslPipeImpl*)Pipe;
-
-    if (pPipeImpl->m_File != INVALID_HANDLE_VALUE)
+    if (pPipe->m_File != INVALID_HANDLE_VALUE)
     {
         OVERLAPPED   os;
         rtl_zeroMemory(&os, sizeof(OVERLAPPED));
-        os.hEvent = pPipeImpl->m_WriteEvent;
-        ResetEvent(pPipeImpl->m_WriteEvent);
+        os.hEvent = pPipe->m_WriteEvent;
+        ResetEvent(pPipe->m_WriteEvent);
 
-        if (! WriteFile(pPipeImpl->m_File, pBuffer, BytesToSend, &nBytes, &os) &&
+        if (! WriteFile(pPipe->m_File, pBuffer, BytesToSend, &nBytes, &os) &&
             ((GetLastError() != ERROR_IO_PENDING) ||
-              ! GetOverlappedResult(pPipeImpl->m_File, &os, &nBytes, TRUE)))
+              ! GetOverlappedResult(pPipe->m_File, &os, &nBytes, TRUE)))
         {
               if (GetLastError() == ERROR_PIPE_NOT_CONNECTED)
                 nBytes = 0;
             else
                 nBytes = -1;
 
-             pPipeImpl->m_Error = osl_Pipe_E_ConnectionAbort;
+             pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
         }
     }
     else
@@ -965,31 +950,80 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe,
         CopyData.cbData = BytesToSend;
         CopyData.lpData = (void *)pBuffer;
 
-        if (IsWindow(pPipeImpl->m_DstWnd))
-            return (SendMessage(pPipeImpl->m_DstWnd, WM_COPYDATA,
-                                (WPARAM)pPipeImpl->m_SrcWnd, (LPARAM)&CopyData));
+        if (IsWindow(pPipe->m_DstWnd))
+            return (SendMessage(pPipe->m_DstWnd, WM_COPYDATA,
+                                (WPARAM)pPipe->m_SrcWnd, (LPARAM)&CopyData));
 
-        pPipeImpl->m_Error = osl_Pipe_E_ConnectionAbort;
+        pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
     }
 
     return (nBytes);
+}
+
+sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
+{
+    /* loop until all desired bytes were send or an error occured */
+    sal_Int32 BytesSend= 0;
+    sal_Int32 BytesToSend= n;
+
+    OSL_ASSERT(pPipe);
+    while (BytesToSend > 0)
+    {
+        sal_Int32 RetVal;
+
+        RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
+
+        /* error occured? */
+        if(RetVal <= 0)
+        {
+            break;
+        }
+
+        BytesToSend -= RetVal;
+        BytesSend += RetVal;
+        pBuffer= (sal_Char*)pBuffer + RetVal;
+    }
+
+    return BytesSend;
+}
+
+sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
+{
+    /* loop until all desired bytes were read or an error occured */
+    sal_Int32 BytesRead= 0;
+    sal_Int32 BytesToRead= n;
+
+    OSL_ASSERT( pPipe );
+    while (BytesToRead > 0)
+    {
+        sal_Int32 RetVal;
+        RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
+
+        /* error occured? */
+        if(RetVal <= 0)
+        {
+            break;
+        }
+
+        BytesToRead -= RetVal;
+        BytesRead += RetVal;
+        pBuffer= (sal_Char*)pBuffer + RetVal;
+    }
+    return BytesRead;
 }
 
 
 /*****************************************************************************/
 /* osl_getLastPipeError  */
 /*****************************************************************************/
-oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe)
+oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
     oslPipeError Error;
-    oslPipeImpl* pPipeImpl;
 
-    pPipeImpl= (oslPipeImpl*)Pipe;
-
-    if (pPipeImpl != NULL)
+    if (pPipe != NULL)
     {
-        Error = pPipeImpl->m_Error;
-        pPipeImpl->m_Error = osl_Pipe_E_None;
+        Error = pPipe->m_Error;
+        pPipe->m_Error = osl_Pipe_E_None;
     }
     else
         Error = osl_Pipe_E_None;

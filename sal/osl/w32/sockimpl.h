@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sockimpl.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:49:52 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define _OSL_SOCKETIMPL_H_
 
 #include <osl/socket.h>
+#include <osl/interlck.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -75,15 +76,22 @@ extern "C" {
 
 typedef void* (SAL_CALL * oslCloseCallback) (void*);
 
-typedef struct _oslSocketImpl {
+struct oslSocketImpl {
+    oslInterlockedCount m_nRefCount;
     SOCKET              m_Socket;
     int                 m_Flags;
     oslCloseCallback    m_CloseCallback;
     void*               m_CallbackArg;
-} oslSocketImpl;
+};
 
-oslSocketImpl* __osl_createSocketImpl(SOCKET Socket);
-void __osl_destroySocketImpl(oslSocketImpl *pImpl);
+struct oslSocketAddrImpl
+{
+    struct sockaddr m_sockaddr;
+    oslInterlockedCount m_nRefCount;
+};
+
+oslSocket __osl_createSocketImpl(SOCKET Socket);
+void __osl_destroySocketImpl(oslSocket pImpl);
 
 /*****************************************************************************/
 /* oslSocketDialupImpl */

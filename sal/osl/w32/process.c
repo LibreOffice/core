@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-20 13:03:22 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,202 +71,9 @@
 #include "secimpl.h"
 #include "dirW9X.h"
 
-#define MAX_ARGS 255
-#define PIPENAMEMASK  "\\\\.\\PIPE\\OSL_PIPE_%u"
-#define SEMNAMEMASK   "OSL_SEM_%u"
-
-typedef enum {
-    MSG_DATA,
-    MSG_END,
-    MSG_ACK,
-    MSG_REL,
-    MSG_UNKNOWN
-} MessageType;
-
-typedef struct {
-    MessageType        m_Type;
-    oslDescriptorFlag m_Flags;
-    oslDescriptorType  m_Data;
-    HANDLE             m_Value;
-} Message;
-
-typedef struct {
-    HANDLE  m_hPipe;
-} Pipe;
-
-typedef struct _oslSocketCallbackArg {
-    HANDLE  m_socket;
-    Pipe*   m_pipe;
-} oslSocketCallbackArg;
-
 LPWSTR *lpArgvW = NULL;
 int nArgnW = 0;
 
-static Pipe* openPipe(DWORD pid)
-{
-    HANDLE hpipe, hsem;
-    Pipe*  ppipe;
-    sal_Char   pipeName[_MAX_PATH];
-    sal_Char   semName[_MAX_PATH];
-
-    sprintf(pipeName, PIPENAMEMASK, pid == 0 ? GetCurrentProcessId() : pid);
-    sprintf(semName,  SEMNAMEMASK,  pid == 0 ? GetCurrentProcessId() : pid);
-
-    if (pid == 0)
-    {
-        hsem = CreateSemaphore(NULL, 0, 1, semName);
-
-        hpipe = CreateNamedPipe(pipeName,
-                                PIPE_ACCESS_DUPLEX,         /* 2 way pipe          */
-                                PIPE_WAIT |                 /* Wait on messages    */
-                                PIPE_TYPE_MESSAGE,
-                                1,                          /* Instance limit      */
-                                sizeof(Message),            /* Buffer sizes        */
-                                sizeof(Message),
-                                NMPWAIT_USE_DEFAULT_WAIT,   /* Specify time out    */
-                                NULL);                      /* Security attributes */
-
-        ReleaseSemaphore(hsem, 1, NULL);
-
-        ConnectNamedPipe(hpipe, NULL);
-
-        CloseHandle(hsem);
-
-        ppipe = malloc(sizeof(Pipe));
-        ppipe->m_hPipe = hpipe;
-    }
-    else
-    {
-        hsem = CreateSemaphore(NULL, 0, 1, semName);
-
-        WaitForSingleObject(hsem, INFINITE);
-
-        CloseHandle(hsem);
-
-        hpipe = CreateFile(pipeName,
-                           GENERIC_WRITE | GENERIC_READ,
-                           FILE_SHARE_READ | FILE_SHARE_WRITE,
-                           NULL,
-                           OPEN_EXISTING,
-                           0,
-                           NULL);
-
-
-        ppipe = malloc(sizeof(Pipe));
-        ppipe->m_hPipe = hpipe;
-    }
-
-    return ppipe;
-}
-
-static void closePipe(Pipe* pipe)
-{
-    if (pipe->m_hPipe != INVALID_HANDLE_VALUE)
-        CloseHandle(pipe->m_hPipe);
-
-    free(pipe);
-}
-
-/* Callback is called when the socket is closed by the owner */
-static void* SAL_CALL socketCloseCallback(void* pArg)
-{
-    if (pArg != NULL)
-    {
-        oslSocketCallbackArg* callbackArg = (oslSocketCallbackArg*) pArg;
-        Message msg;
-        DWORD   nbytes;
-
-        msg.m_Type  = MSG_REL;
-        msg.m_Data  = osl_Process_TypeSocket;
-        msg.m_Flags = 0;
-        msg.m_Value = callbackArg->m_socket;
-        WriteFile(callbackArg->m_pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL);
-
-        if (ReadFile(callbackArg->m_pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL)
-            && (nbytes == sizeof(msg)))
-        {
-            if (msg.m_Type == MSG_END)
-                closePipe(callbackArg->m_pipe);
-        }
-
-        free (callbackArg);
-    }
-
-    return NULL;
-}
-
-
-static sal_Bool sendIOResources(Pipe* pipe, oslIOResource ioRes[], HANDLE hChild)
-{
-    SOCKET                  socket;
-    HANDLE                  handle;
-    DWORD                   nbytes;
-    Message                 msg;
-    oslIOResource*          pIORes = ioRes;
-    oslSocketCallbackArg*   callbackArg;
-
-    while (pIORes->Type != osl_Process_TypeNone)
-    {
-        switch (pIORes->Type)
-        {
-            case osl_Process_TypeSocket:
-                socket = ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_Socket;
-
-                DuplicateHandle(GetCurrentProcess(), (HANDLE)socket, hChild, &handle,
-                                0, FALSE, DUPLICATE_SAME_ACCESS);
-
-                if (pIORes->Flags & osl_Process_DFWAIT)
-                {
-                    callbackArg = malloc(sizeof(oslSocketCallbackArg));
-
-                    callbackArg->m_socket = handle;
-                    callbackArg->m_pipe = pipe;
-
-                    ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_CloseCallback = &socketCloseCallback;
-                    ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_CallbackArg = callbackArg;
-                }
-
-                msg.m_Type  = MSG_DATA;
-                msg.m_Data  = osl_Process_TypeSocket;
-                msg.m_Flags = pIORes->Flags;
-                msg.m_Value = handle;
-                if (! WriteFile( pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL)
-                    || (nbytes != sizeof(msg)))
-                    return sal_False;
-                break;
-
-            default:
-                OSL_TRACE("Not implemented");
-                OSL_ASSERT(sal_False);
-                break;
-        }
-
-        pIORes++;
-    }
-
-    msg.m_Type  = MSG_END;
-    msg.m_Data  = osl_Process_TypeNone;
-    msg.m_Flags = 0;
-    msg.m_Value = 0;
-
-    WriteFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL);
-
-    if (ReadFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL)
-        && (nbytes == sizeof(msg)) &&
-        ((msg.m_Type == MSG_ACK) || (msg.m_Type == MSG_END)))
-    {
-        if (msg.m_Type == MSG_END)
-            closePipe(pipe);
-
-        return sal_True;
-    }
-    else
-    {
-        closePipe(pipe);
-
-        return sal_False;
-    }
-}
 
 
 oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
@@ -282,7 +89,6 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
 {
     sal_uInt32          i, first=0;
     sal_Int32           n;
-    Pipe*               pipe;
     sal_Unicode*        args;
     DWORD               flags;
     BOOL                started;
@@ -420,9 +226,11 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *strImageName,
 
         if (pResources)
         {
-            pipe = openPipe(procinfo.dwProcessId);
+            // not needed anymore
+            OSL_ASSERT( 0 );
+//              pipe = openPipe(procinfo.dwProcessId);
 
-            sendIOResources(pipe, pResources, procinfo.hProcess);
+//              sendIOResources(pipe, pResources, procinfo.hProcess);
         }
 
         pProcImpl = malloc(sizeof(oslProcessImpl));
@@ -607,123 +415,6 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *strVar, rtl_uString **s
     }
 }
 
-oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max)
-{
-    oslProcessError ret = osl_Process_E_Unknown;
-    int             wait = 0;
-    int             i    = 0;
-    Message         msg;
-    DWORD           nbytes;
-    Pipe*           pipe;
-
-    pipe = openPipe(0);
-
-    while ((ReadFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL))
-            && (nbytes == sizeof(msg))
-            && (msg.m_Type != MSG_END))
-    {
-        if (i < (int)Max)
-        {
-            switch (msg.m_Type)
-            {
-                case MSG_DATA:
-                    switch (msg.m_Data)
-                    {
-                        case osl_Process_TypeSocket:
-                        {
-                            oslSocketImpl *pImpl = __osl_createSocketImpl(0);
-
-                            pImpl->m_Socket = (SOCKET)msg.m_Value;
-
-                            Resources[i].Type  = osl_Process_TypeSocket;
-                            Resources[i].Flags = msg.m_Flags;
-                            Resources[i].Descriptor.Socket = (oslSocket)pImpl;
-
-                            if (msg.m_Flags & osl_Process_DFWAIT)
-                                wait++;
-
-                            i++;
-
-                            break;
-                        }
-
-                        default:
-                           OSL_TRACE("Not implemented");
-                           OSL_ASSERT(sal_False);
-                           break;
-                    }
-            }
-        }
-    }
-
-    Resources[i].Type = osl_Process_TypeNone;
-
-    if (msg.m_Type == MSG_END)
-    {
-        if (wait > 0)
-        {
-            msg.m_Type  = MSG_ACK;
-            msg.m_Data  = osl_Process_TypeNone;
-            msg.m_Flags = 0;
-            WriteFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL);
-
-            do
-            {
-                if ((! ReadFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL))
-                    || (nbytes != sizeof(msg))
-                    || (msg.m_Type != MSG_REL))
-                    break;
-
-                switch (msg.m_Data)
-                {
-                    case osl_Process_TypeSocket:
-                    {
-                        for (i = 0; Resources[i].Type != osl_Process_TypeNone; i++)
-                        {
-                            if (((oslSocketImpl *)Resources[i].Descriptor.Socket)->m_Socket
-                                == (SOCKET)msg.m_Value)
-                            {
-                                OSL_ASSERT(Resources[i].Type == msg.m_Data);
-                                OSL_ASSERT(Resources[i].Flags & osl_Process_DFWAIT);
-
-                                Resources[i].Flags &= ~osl_Process_DFWAIT;
-
-                                if (--wait > 0)
-                                {
-                                    msg.m_Type  = MSG_ACK;
-                                    msg.m_Data  = osl_Process_TypeNone;
-                                    msg.m_Flags = 0;
-                                    WriteFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL);
-                                }
-
-                                break;
-                            }
-                        }
-                        break;
-                    }
-
-                    default:
-                       OSL_TRACE("Not implemented");
-                       OSL_ASSERT(sal_False);
-                       break;
-                }
-
-            }
-            while (wait > 0);
-        }
-
-        msg.m_Type  = MSG_END;
-        msg.m_Data  = osl_Process_TypeNone;
-        msg.m_Flags = 0;
-        WriteFile(pipe->m_hPipe, &msg, sizeof(msg), &nbytes, NULL);
-
-        ret = osl_Process_E_None;
-    }
-
-    closePipe(pipe);
-
-    return ret;
-}
 
 sal_uInt32 SAL_CALL osl_getCommandArgCount()
 {
@@ -786,61 +477,60 @@ static sal_Bool WritePipe(oslPipe hPipe,
                (osl_getLastPipeError(hPipe) == osl_Pipe_E_None);
 }
 
-sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket hSocket)
+sal_Bool SAL_CALL osl_sendResourcePipe(oslPipe hPipe, oslSocket pSocket)
 {
     sal_Bool bRet = sal_False;
     sal_Int32 bytes = 0;
-        oslSocketImpl* pSockImpl = (oslSocketImpl*)hSocket;
 
-        /*  duplicate handle on this other side ->
-                receive remote process
-                duplicate handle and send it */
-        DWORD remoteProcessID = 0;
-        HANDLE fd = (HANDLE)pSockImpl->m_Socket;
-        oslDescriptorType code = osl_Process_TypeSocket;
+    /*  duplicate handle on this other side ->
+        receive remote process
+        duplicate handle and send it */
+    DWORD remoteProcessID = 0;
+    HANDLE fd = (HANDLE)pSocket->m_Socket;
+    oslDescriptorType code = osl_Process_TypeSocket;
 
-        OSL_TRACE("osl_sendResourcePipe: enter...");
+    OSL_TRACE("osl_sendResourcePipe: enter...");
 
-        if (ReadPipe(hPipe, &remoteProcessID, sizeof(remoteProcessID), &bytes))
+    if (ReadPipe(hPipe, &remoteProcessID, sizeof(remoteProcessID), &bytes))
+    {
+        HANDLE hRemoteProc = OpenProcess(PROCESS_DUP_HANDLE,
+                                         FALSE,
+                                         remoteProcessID);
+
+        if (hRemoteProc != (HANDLE)NULL)
         {
-                HANDLE hRemoteProc = OpenProcess(PROCESS_DUP_HANDLE,
-                                                 FALSE,
-                                                 remoteProcessID);
+            HANDLE newFd;
 
-                if (hRemoteProc != (HANDLE)NULL)
-                {
-                        HANDLE newFd;
+            if (DuplicateHandle(GetCurrentProcess(),
+                                fd,
+                                hRemoteProc,
+                                &newFd,
+                                0, FALSE, DUPLICATE_SAME_ACCESS))
+            {
+                if (
+                    WritePipe(hPipe, &code, sizeof(code), &bytes) &&
+                    WritePipe(hPipe, &newFd, sizeof(fd), &bytes)
+                    )
+                    bRet = sal_True;
+            }
 
-                        if (DuplicateHandle(GetCurrentProcess(),
-                                            fd,
-                                            hRemoteProc,
-                                            &newFd,
-                                            0, FALSE, DUPLICATE_SAME_ACCESS))
-                        {
-                                if (
-                                        WritePipe(hPipe, &code, sizeof(code), &bytes) &&
-                                        WritePipe(hPipe, &newFd, sizeof(fd), &bytes)
-                                   )
-                                        bRet = sal_True;
-                        }
-
-                        CloseHandle(hRemoteProc);
-                }
+            CloseHandle(hRemoteProc);
         }
+    }
 
     if (bRet)
     {
         sal_Int32 commitCode;
-                OSL_TRACE("osl_sendResourcePipe: handle sent successfully, verify...\n");
+        OSL_TRACE("osl_sendResourcePipe: handle sent successfully, verify...\n");
 
         if (
             !ReadPipe(hPipe, &commitCode, sizeof(commitCode), &bytes) ||
             (commitCode <= 0)
-           )
+            )
             bRet = sal_False;
     }
 
-        OSL_TRACE("osl_sendResourcePipe: exit... %d\n", bRet);
+    OSL_TRACE("osl_sendResourcePipe: exit... %d\n", bRet);
     return(bRet);
 }
 
@@ -850,42 +540,42 @@ oslSocket SAL_CALL osl_receiveResourcePipe(oslPipe hPipe)
     sal_Bool bRet = sal_False;
     sal_Int32 bytes = 0;
     sal_Int32 commitCode;
-        oslSocketImpl* pSockImpl = NULL;
+    oslSocket pSocket = NULL;
 
-        /* duplicate handle on the other side ->
-        send my process id receive duplicated handle */
-        HANDLE fd = INVALID_HANDLE_VALUE;
-        DWORD myProcessID = GetCurrentProcessId();
-        oslDescriptorType code = osl_Process_TypeNone;
+    /* duplicate handle on the other side ->
+       send my process id receive duplicated handle */
+    HANDLE fd = INVALID_HANDLE_VALUE;
+    DWORD myProcessID = GetCurrentProcessId();
+    oslDescriptorType code = osl_Process_TypeNone;
 
-        OSL_TRACE("osl_receiveResourcePipe: enter...\n");
+    OSL_TRACE("osl_receiveResourcePipe: enter...\n");
 
-        if (
-                WritePipe(hPipe, &myProcessID, sizeof(myProcessID), &bytes) &&
-                ReadPipe(hPipe, &code, sizeof(code), &bytes) &&
+    if (
+        WritePipe(hPipe, &myProcessID, sizeof(myProcessID), &bytes) &&
+        ReadPipe(hPipe, &code, sizeof(code), &bytes) &&
                 ReadPipe(hPipe, &fd, sizeof(fd), &bytes)
-           )
+        )
+    {
+        if (code == osl_Process_TypeSocket)
         {
-                if (code == osl_Process_TypeSocket)
-                {
-                        pSockImpl = __osl_createSocketImpl((SOCKET)fd);
-                        bRet = sal_True;
-                }
-                else
-                {
-                        OSL_TRACE("osl_receiveResourcePipe: UKNOWN\n");
-                        bRet = sal_False;
-                }
+            pSocket = __osl_createSocketImpl((SOCKET)fd);
+            bRet = sal_True;
+        }
+        else
+        {
+            OSL_TRACE("osl_receiveResourcePipe: UKNOWN\n");
+            bRet = sal_False;
+        }
         }
 
-        if (bRet)
-                commitCode = 1;
-        else
-                commitCode = 0;
+    if (bRet)
+        commitCode = 1;
+    else
+        commitCode = 0;
 
-        WritePipe(hPipe, &commitCode, sizeof(commitCode), &bytes);
+    WritePipe(hPipe, &commitCode, sizeof(commitCode), &bytes);
 
-        OSL_TRACE("osl_receiveResourcePipe: exit... %d, %p\n", bRet, pSockImpl);
+    OSL_TRACE("osl_receiveResourcePipe: exit... %d, %p\n", bRet, pSocket);
 
-    return (oslSocket)pSockImpl;
+    return pSocket;
 }
