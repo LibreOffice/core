@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-01 12:03:39 $
+ *  last change: $Author: pb $ $Date: 2002-10-22 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,12 +819,15 @@ namespace sfx2
         protected:
             Reference< XFilterManager >         m_xFilterManager;
             FileDialogHelper_Impl*              m_pFileDlgImpl;
+            bool                                m_bAddExtension;
 
         public:
-            AppendFilter( const Reference< XFilterManager >& _rxFilterManager, FileDialogHelper_Impl* _pImpl ) :
+            AppendFilter( const Reference< XFilterManager >& _rxFilterManager,
+                          FileDialogHelper_Impl* _pImpl, bool _bAddExtension ) :
 
                 m_xFilterManager( _rxFilterManager ),
-                m_pFileDlgImpl  ( _pImpl )
+                m_pFileDlgImpl  ( _pImpl ),
+                m_bAddExtension ( _bAddExtension )
 
             {
                 DBG_ASSERT( m_xFilterManager.is(), "AppendFilter::AppendFilter: invalid filter manager!" );
@@ -834,7 +837,9 @@ namespace sfx2
             // operate on a single filter
             void operator() ( const FilterDescriptor& _rFilterEntry )
             {
-                String sDisplayText = addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True, *m_pFileDlgImpl );
+                String sDisplayText = m_bAddExtension
+                    ? addExtension( _rFilterEntry.First, _rFilterEntry.Second, sal_True, *m_pFileDlgImpl )
+                    : _rFilterEntry.First;
                 m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
             }
     };
@@ -925,8 +930,7 @@ namespace sfx2
             DBG_ASSERT( m_pFileDlgImpl, "AppendFilterGroup::AppendFilterGroup: invalid filedlg impl!" );
         }
 
-        // operate on a single filter group
-        void operator() ( const FilterGroup& _rGroup )
+        void appendGroup( const FilterGroup& _rGroup, bool _bAddExtension )
         {
             try
             {
@@ -941,11 +945,13 @@ namespace sfx2
                             _rGroup.end(),
                             aFilters.getArray()
                         );
-                        StringPair* pFilters = aFilters.getArray();
-                        StringPair* pEnd = pFilters + aFilters.getLength();
-                        int i = 0;
-                        for ( ; pFilters != pEnd; ++pFilters )
-                            pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True, *m_pFileDlgImpl );
+                        if ( _bAddExtension )
+                        {
+                            StringPair* pFilters = aFilters.getArray();
+                            StringPair* pEnd = pFilters + aFilters.getLength();
+                            for ( ; pFilters != pEnd; ++pFilters )
+                                pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True, *m_pFileDlgImpl );
+                        }
                         m_xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
                     }
                 }
@@ -954,14 +960,19 @@ namespace sfx2
                     ::std::for_each(
                         _rGroup.begin(),
                         _rGroup.end(),
-                        AppendFilter( m_xFilterManager, m_pFileDlgImpl )
-                    );
+                        AppendFilter( m_xFilterManager, m_pFileDlgImpl, _bAddExtension ) );
                 }
             }
             catch( const Exception& )
             {
                 DBG_ERROR( "AppendFilterGroup::operator(): caught an exception while adding filters!" );
             }
+        }
+
+        // operate on a single filter group
+        void operator() ( const FilterGroup& _rGroup )
+        {
+            appendGroup( _rGroup, true );
         }
     };
 
@@ -1183,15 +1194,22 @@ namespace sfx2
             const FilterGroup& rFirstGroup = *aAllFilters.begin();  // should be the global classes
             if ( !rFirstGroup.empty() )
                 _rFirstNonEmpty = rFirstGroup.begin()->First;
+            // append first group, without extension
+            AppendFilterGroup aGroup( _rxFilterManager, &_rFileDlgImpl );
+            aGroup.appendGroup( rFirstGroup, false );
         }
 
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         // append the filters to the manager
-        ::std::for_each(
-            aAllFilters.begin(),
-            aAllFilters.end(),
-            AppendFilterGroup( _rxFilterManager, &_rFileDlgImpl )
-        );
+        if ( !aAllFilters.empty() )
+        {
+            ::std::list< FilterGroup >::iterator pIter = aAllFilters.begin();
+            ++pIter;
+            ::std::for_each(
+                pIter, // first filter group was handled seperately, see above
+                aAllFilters.end(),
+                AppendFilterGroup( _rxFilterManager, &_rFileDlgImpl ) );
+        }
 #endif
     }
 
@@ -1225,6 +1243,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2002/10/01 12:03:39  pb
+ *  fix: #103741# append methods need FileDialogHelper_Impl
+ *
  *  Revision 1.14  2002/08/29 13:42:35  cd
  *  #102385# Use correct way to create filter groups for export
  *
@@ -1233,18 +1254,6 @@ namespace sfx2
  *
  *  Revision 1.12  2002/08/20 09:22:52  pb
  *  fix: #92788# show extensions of filter
- *
- *  Revision 1.11  2002/06/20 09:43:46  aw
- *  #100545# ++pGlobalClassNames may exceed aGlobalClassNames.end()
- *
- *  Revision 1.10  2002/01/03 11:27:02  rt
- *  #65293# include corrected: don't use sfx2-path here
- *
- *  Revision 1.9  2001/12/07 09:31:46  fs
- *  #95509# sort the groups in the same order as the global classes
- *
- *  Revision 1.8  2001/11/28 17:00:48  mba
- *  #78650#: filter names without module prefixes
  *
  *
  *  Revision 1.0 01.10.01 10:28:28  fs
