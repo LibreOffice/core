@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ TabPage TP_FORMAT_TABLE
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
         Text [ french ] = "~Largeur" ;
-        Text [ swedish ] = "Br~edd" ;
+        Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "~Breedte" ;
         Text [ spanish ] = "A~ncho" ;
         Text [ english_us ] = "W~idth" ;
@@ -627,7 +627,7 @@ TabPage TP_FORMAT_TABLE
         Text [ finnish ] = "~Ylös" ;
         Text [ danish ] = "Foroven" ;
         Text [ french ] = "Vers le ~haut" ;
-        Text [ swedish ] = "Upp" ;
+        Text [ swedish ] = "~Uppe" ;
         Text [ dutch ] = "Naar bo~ven" ;
         Text [ spanish ] = "Hacia ~arriba" ;
         Text [ english_us ] = "~Above" ;
@@ -672,7 +672,7 @@ TabPage TP_FORMAT_TABLE
         Text [ finnish ] = "~Alhaalta" ;
         Text [ danish ] = "Forneden" ;
         Text [ french ] = "Vers le ~bas" ;
-        Text [ swedish ] = "Ner" ;
+        Text [ swedish ] = "N~ere" ;
         Text [ dutch ] = "Naar ~beneden" ;
         Text [ spanish ] = "Hacia a~bajo" ;
         Text [ english_us ] = "~Below" ;
@@ -824,7 +824,7 @@ TabPage TP_TABLE_COLUMN
         Text [ french ] = "Adapter largeur de tableau" ;
         Text [ dutch ] = "Tabelbreedte aanpassen" ;
         Text [ english_us ] = "Fit to table width" ;
-        Text [ swedish ] = "~Anpassa tabelbredd" ;
+        Text [ swedish ] = "Anpassa tabellbredd" ;
         Text [ danish ] = "Tilpas tabelbredde" ;
         Text [ portuguese_brazilian ] = "Tabellenbreite anpassen" ;
         Text [ portuguese ] = "Ajustar largura da tabela" ;
@@ -1320,7 +1320,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ finnish ] = "Käytä ~mallia" ;
         Text [ danish ] = "Med sidetypografi" ;
         Text [ french ] = "Avec le style de page" ;
-        Text [ swedish ] = "med sid~formatmall" ;
+        Text [ swedish ] = "Med sidformatma~ll" ;
         Text [ dutch ] = "~Met pagina-opmaakprofiel" ;
         Text [ spanish ] = "C~on estilo de página" ;
         Text [ english_us ] = "With Page St~yle" ;
