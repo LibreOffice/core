@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filnot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: hro $ $Date: 2001-02-28 19:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace fileaccess {
     {
     private:
         shell* m_pMyShell;
-        BaseContent* m_pCreatorContent;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xOldId;
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
@@ -98,14 +98,14 @@ namespace fileaccess {
 
         ContentEventNotifier(
             shell* pMyShell,
-            BaseContent* pCreatorContent,
+            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             const com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
 
         ContentEventNotifier(
             shell* pMyShell,
-            BaseContent* pCreatorContent,
+            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xOldId,
             const com::sun::star::uno::Sequence<
@@ -122,13 +122,13 @@ namespace fileaccess {
     {
     private:
         shell* m_pMyShell;
-        BaseContent* m_pCreatorContent;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > > m_sListeners;
     public:
         PropertySetInfoChangeNotifier(
             shell* pMyShell,
-            BaseContent* pCreatorContent,
+            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             const com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
@@ -147,13 +147,13 @@ namespace fileaccess {
     {
     private:
         shell* m_pMyShell;
-        BaseContent* m_pCreatorContent;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XContent > m_xCreatorContent;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > m_xCreatorId;
         ListenerMap* m_pListeners;
     public:
         PropertyChangeNotifier(
             shell* pMyShell,
-            BaseContent* pCreatorContent,
+            const com::sun::star::uno::Reference< com::sun::star::ucb::XContent >& xCreatorContent,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
             ListenerMap* pListeners );
 

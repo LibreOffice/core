@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filnot.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: hro $ $Date: 2001-02-28 19:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,11 +88,11 @@ using namespace com::sun::star::ucb;
 
 
 ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
-                                            BaseContent* pCreatorContent,
+                                            const uno::Reference< XContent >& xCreatorContent,
                                             const uno::Reference< XContentIdentifier >& xCreatorId,
                                             const uno::Sequence< uno::Reference< uno::XInterface > >& sListeners )
     : m_pMyShell( pMyShell ),
-      m_pCreatorContent( pCreatorContent ),
+      m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_sListeners( sListeners )
 {
@@ -100,12 +100,12 @@ ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
 
 
 ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
-                                            BaseContent* pCreatorContent,
+                                            const uno::Reference< XContent >& xCreatorContent,
                                             const uno::Reference< XContentIdentifier >& xCreatorId,
                                             const uno::Reference< XContentIdentifier >& xOldId,
                                             const uno::Sequence< uno::Reference< uno::XInterface > >& sListeners )
     : m_pMyShell( pMyShell ),
-      m_pCreatorContent( pCreatorContent ),
+      m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_xOldId( xOldId ),
       m_sListeners( sListeners )
@@ -116,14 +116,12 @@ ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
 
 void ContentEventNotifier::notifyChildInserted( const rtl::OUString& aChildName )
 {
-    uno::Reference< uno::XInterface > shooter( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
-
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,aChildName );
     uno::Reference< XContentIdentifier > xChildId( p );
 
     uno::Reference< XContent > xChildContent = m_pMyShell->m_pProvider->queryContent( xChildId );
 
-    ContentEvent aEvt( shooter,
+    ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::INSERTED,
                        xChildContent,
                        m_xCreatorId );
@@ -138,12 +136,10 @@ void ContentEventNotifier::notifyChildInserted( const rtl::OUString& aChildName 
 
 void ContentEventNotifier::notifyDeleted( void )
 {
-    uno::Reference< uno::XInterface > shooter( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
-    uno::Reference< XContent > xDeletedContent( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
 
-    ContentEvent aEvt( shooter,
+    ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::DELETED,
-                       xDeletedContent,
+                       m_xCreatorContent,
                        m_xCreatorId );
 
 
@@ -159,8 +155,6 @@ void ContentEventNotifier::notifyDeleted( void )
 
 void ContentEventNotifier::notifyRemoved( const rtl::OUString& aChildName )
 {
-    uno::Reference< uno::XInterface > shooter( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
-
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,aChildName );
     uno::Reference< XContentIdentifier > xChildId( p );
 
@@ -173,7 +167,7 @@ void ContentEventNotifier::notifyRemoved( const rtl::OUString& aChildName )
     uno::Reference< XContent > xDeletedContent( pp );
 
 
-    ContentEvent aEvt( shooter,
+    ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::REMOVED,
                        xDeletedContent,
                        m_xCreatorId );
@@ -188,11 +182,9 @@ void ContentEventNotifier::notifyRemoved( const rtl::OUString& aChildName )
 
 void ContentEventNotifier::notifyExchanged()
 {
-    uno::Reference< uno::XInterface > shooter( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
-
-    ContentEvent aEvt( shooter,
+    ContentEvent aEvt( m_xCreatorContent,
                        ContentAction::EXCHANGED,
-                       m_pCreatorContent,
+                       m_xCreatorContent,
                        m_xOldId );
 
     for( sal_Int32 i = 0; i < m_sListeners.getLength(); ++i )
@@ -212,11 +204,11 @@ void ContentEventNotifier::notifyExchanged()
 
 PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
     shell* pMyShell,
-    BaseContent* pCreatorContent,
+    const uno::Reference< XContent >& xCreatorContent,
     const uno::Reference< XContentIdentifier >& xCreatorId,
     const uno::Sequence< uno::Reference< uno::XInterface > >& sListeners )
     : m_pMyShell( pMyShell ),
-      m_pCreatorContent( pCreatorContent ),
+      m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_sListeners( sListeners )
 {
@@ -227,8 +219,7 @@ PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
 void SAL_CALL
 PropertySetInfoChangeNotifier::notifyPropertyAdded( const rtl::OUString & aPropertyName )
 {
-    uno::Reference< uno::XInterface > shooter( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
-    beans::PropertySetInfoChangeEvent aEvt( shooter,
+    beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
                                             aPropertyName,
                                             -1,
                                             beans::PropertySetInfoChange::PROPERTY_INSERTED );
@@ -245,8 +236,7 @@ PropertySetInfoChangeNotifier::notifyPropertyAdded( const rtl::OUString & aPrope
 void SAL_CALL
 PropertySetInfoChangeNotifier::notifyPropertyRemoved( const rtl::OUString & aPropertyName )
 {
-    uno::Reference< uno::XInterface > shooter( static_cast< XContent* >( m_pCreatorContent ),uno::UNO_QUERY );
-    beans::PropertySetInfoChangeEvent aEvt( shooter,
+    beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
                                             aPropertyName,
                                             -1,
                                             beans::PropertySetInfoChange::PROPERTY_REMOVED );
@@ -269,11 +259,11 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const rtl::OUString & aPro
 
 PropertyChangeNotifier::PropertyChangeNotifier(
     shell* pMyShell,
-    BaseContent* pCreatorContent,
+    const com::sun::star::uno::Reference< XContent >& xCreatorContent,
     const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xCreatorId,
     ListenerMap* pListeners )
     : m_pMyShell( pMyShell ),
-      m_pCreatorContent( pCreatorContent ),
+      m_xCreatorContent( xCreatorContent ),
       m_xCreatorId( xCreatorId ),
       m_pListeners( pListeners )
 {
@@ -292,7 +282,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
     sal_Int32 j;
 
     for( j = 0; j < Changes.getLength(); ++j )
-        Changes[j].Source = static_cast< XContent *>( m_pCreatorContent );
+        Changes[j].Source = m_xCreatorContent;
 
     // notify listeners for all Events
 
