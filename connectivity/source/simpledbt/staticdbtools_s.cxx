@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:02:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,9 +254,9 @@ namespace connectivity
     }
 
     // ------------------------------------------------
-    Reference< XConnection > ODataAccessStaticTools::getComponentContextConnection( const Reference< XInterface >& _rxComponent )
+    bool ODataAccessStaticTools::isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
     {
-        return ::dbtools::getActiveConnectionFromParent( _rxComponent );
+        return ::dbtools::isEmbeddedInDatabase( _rxComponent, _rxActualConnection );
     }
 
 //........................................................................
