@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:30:29 $
+ *  last change: $Author: os $ $Date: 2000-12-05 12:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,12 +1189,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
 
     Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
     BOOL bScrollable;
-    //TODO: can be removed with the old interface (textsh2.cxx)
+    //with the drag and drop interface no result set is initially available
+    Reference< sdbc::XStatement > xStatement;
     if(!xRow.is())
     {
         try
         {
-            Reference< sdbc::XStatement > xStatement;
             bScrollable = xConnection->getMetaData()->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
 
             xStatement = xConnection->createStatement();
