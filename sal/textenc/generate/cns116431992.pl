@@ -3,9 +3,9 @@
 #
 #   $RCSfile: cns116431992.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-12 10:00:40 $
+#   last change: $Author: sb $ $Date: 2001-10-17 14:20:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,6 +123,24 @@ sub printStats
                    $used,
                    $space,
                    $used * 100 / $space);
+}
+
+sub printSpaces
+{
+    my $column_width = $_[0];
+    my $columns_per_line = $_[1];
+    my $end = $_[2];
+    $output = "";
+    for ($i = int($end / $columns_per_line) * $columns_per_line;
+         $i < $end;
+         ++$i)
+    {
+        for ($j = 0; $j < $column_width; ++$j)
+        {
+            $output = $output . " ";
+        }
+    }
+    return $output;
 }
 
 $count_Unihan_txt = 0;
@@ -463,8 +481,8 @@ print OUT "\n",
           "#endif\n",
           "\n";
 
-print OUT "static sal_Unicode const aImpl", $id, "ToUnicodeData[] = {\n";
-$cns_data_offset = 0;
+print OUT "static sal_uInt16 const aImpl", $id, "ToUnicodeData[] = {\n";
+$cns_data_index = 0;
 for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
 {
     if (defined($cns_plane_used[$cns_plane]))
@@ -473,56 +491,98 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
         $cns_chars = 0;
         for ($cns_row = 1; $cns_row <= 94; ++$cns_row)
         {
-            $cns_row_used = 0;
+            $cns_row_first = -1;
             for ($cns_column = 1; $cns_column <= 94; ++$cns_column)
             {
                 if (defined($cns_map[$cns_plane][$cns_row][$cns_column]))
                 {
-                    $cns_row_used = 1;
-                    goto found;
+                    if ($cns_row_first == -1)
+                    {
+                        $cns_row_first = $cns_column;
+                    }
+                    $cns_row_last = $cns_column;
                 }
             }
-          found:
-            if ($cns_row_used == 1)
+            if ($cns_row_first != -1)
             {
+                $cns_data_offsets[$cns_plane][$cns_row] = $cns_data_index;
                 ++$cns_rows;
                 print OUT " /* plane ", $cns_plane, ", row ", $cns_row,
-                          " */\n         ";
-                $chars_in_row = 0;
-                $surrogates_in_row = 0;
-                for ($cns_column = 1; $cns_column <= 94; ++$cns_column)
+                          " */\n";
+
+                $cns_row_surrogates_first = -1;
+                $cns_row_chars = 0;
+                $cns_row_surrogates = 0;
+
+                print OUT "  ", $cns_row_first, " | (", $cns_row_last,
+                          " << 8), /* first, last */\n";
+                ++$cns_data_index;
+
+                print OUT "  ", printSpaces(7, 10, $cns_row_first);
+                $bol = 0;
+                for ($cns_column = $cns_row_first;
+                     $cns_column <= $cns_row_last;
+                     ++$cns_column)
                 {
+                    if ($bol == 1)
+                    {
+                        print OUT "  ";
+                        $bol = 0;
+                    }
                     if (defined($cns_map[$cns_plane][$cns_row][$cns_column]))
                     {
                         $utf32 = $cns_map[$cns_plane][$cns_row][$cns_column];
-                        ++$chars_in_row;
+                        ++$cns_row_chars;
                         if ($utf32 <= 0xFFFF)
                         {
                             printf OUT "0x%04X,", $utf32;
                         }
                         else
                         {
+                            ++$cns_row_surrogates;
                             printf OUT "0x%04X,",
                                        (0xD800 | (($utf32 - 0x10000) >> 10));
-                            ++$surrogates_in_row;
+                            if ($cns_row_surrogates_first == -1)
+                            {
+                                $cns_row_surrogates_first = $cns_column;
+                            }
+                            $cns_row_surrogates_last = $cns_column;
                         }
                     }
                     else
                     {
                         printf OUT "0xffff,";
                     }
+                    ++$cns_data_index;
                     if ($cns_column % 10 == 9)
                     {
-                        print OUT "\n  ";
+                        print OUT "\n";
+                        $bol = 1;
                     }
                 }
-                print OUT "\n";
-                $cns_data_offsets[$cns_plane][$cns_row] = $cns_data_offset++;
-                if ($surrogates_in_row > 0)
+                if ($bol == 0)
                 {
-                    print OUT "         ";
-                    for ($cns_column = 1; $cns_column <= 94; ++$cns_column)
+                    print OUT "\n";
+                }
+
+                if ($cns_row_surrogates_first != -1)
+                {
+                    print OUT "  ", $cns_row_surrogates_first,
+                              ", /* first low-surrogate */\n";
+                    ++$cns_data_index;
+
+                    print OUT "  ",
+                              printSpaces(7, 10, $cns_row_surrogates_first);
+                    $bol = 0;
+                    for ($cns_column = $cns_row_surrogates_first;
+                         $cns_column <= $cns_row_surrogates_last;
+                         ++$cns_column)
                     {
+                        if ($bol == 1)
+                        {
+                            print OUT "  ";
+                            $bol = 0;
+                        }
                         $utf32 = 0;
                         if (defined($cns_map[$cns_plane]
                                             [$cns_row]
@@ -541,19 +601,27 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
                                        (0xDC00
                                             | (($utf32 - 0x10000) & 0x3FF));
                         }
+                        ++$cns_data_index;
                         if ($cns_column % 10 == 9)
                         {
-                            print OUT "\n  ";
+                            print OUT "\n";
+                            $bol = 1;
                         }
                     }
-                    print OUT "\n";
-                    ++$cns_data_offset;
+                    if ($bol == 0)
+                    {
+                        print OUT "\n";
+                    }
                 }
-                $cns_chars += $chars_in_row;
+
+                $cns_chars += $cns_row_chars;
                 $cns_data_space[$cns_plane][$cns_row]
-                    = ($surrogates_in_row == 0 ? 94 : 2 * 94) * 2;
+                    = ($cns_data_index
+                           - $cns_data_offsets[$cns_plane][$cns_row]) * 2;
                 $cns_data_used[$cns_plane][$cns_row]
-                    = ($chars_in_row + $surrogates_in_row) * 2;
+                    = (1 + $cns_row_chars
+                           + ($cns_row_surrogates == 0 ?
+                                  0 : 1 + $cns_row_surrogates)) * 2;
             }
             else
             {
@@ -593,7 +661,7 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
             {
                 print OUT "  ",
                           $cns_data_offsets[$cns_plane][$cns_row],
-                          " * 94, /* plane ",
+                          ", /* plane ",
                           $cns_plane,
                           ", row ",
                           $cns_row,
@@ -635,8 +703,8 @@ for ($cns_plane = 1; $cns_plane <= 16; ++$cns_plane)
 }
 print OUT "};\n\n";
 
-print OUT "static sal_uInt32 const aImplUnicodeTo", $id, "Data[] = {\n";
-$uni_data_offset = 0;
+print OUT "static sal_uInt8 const aImplUnicodeTo", $id, "Data[] = {\n";
+$uni_data_index = 0;
 for ($uni_plane = 0; $uni_plane <= 16; ++$uni_plane)
 {
     if (defined($uni_plane_used[$uni_plane]))
@@ -645,37 +713,75 @@ for ($uni_plane = 0; $uni_plane <= 16; ++$uni_plane)
         {
             if (defined($uni_page_used[$uni_plane][$uni_page]))
             {
-                $uni_data_used[$uni_plane][$uni_page] = 0;
+                $uni_data_offsets[$uni_plane][$uni_page] = $uni_data_index;
                 print OUT " /* plane ", $uni_plane, ", page ", $uni_page,
-                          " */\n  ";
+                          " */\n";
+
+                $uni_page_first = -1;
                 for ($uni_index = 0; $uni_index <= 255; ++$uni_index)
                 {
                     if (defined($uni_map[$uni_plane][$uni_page][$uni_index]))
                     {
+                        if ($uni_page_first == -1)
+                        {
+                            $uni_page_first = $uni_index;
+                        }
+                        $uni_page_last = $uni_index;
+                    }
+                }
+
+                $uni_data_used[$uni_plane][$uni_page] = 0;
+
+                print OUT "  ", $uni_page_first, ", ", $uni_page_last,
+                          ", /* first, last */\n";
+                $uni_data_index += 2;
+                $uni_data_used[$uni_plane][$uni_page] += 2;
+
+                print OUT "  ", printSpaces(9, 8, $uni_page_first);
+                $bol = 0;
+                for ($uni_index = $uni_page_first;
+                     $uni_index <= $uni_page_last;
+                     ++$uni_index)
+                {
+                    if ($bol == 1)
+                    {
+                        print OUT "  ";
+                        $bol = 0;
+                    }
+                    if (defined($uni_map[$uni_plane][$uni_page][$uni_index]))
+                    {
                         $cns = $uni_map[$uni_plane][$uni_page][$uni_index];
-                        printf OUT "0x%02X%02X%02X,",
+                        printf OUT "%2d,%2d,%2d,",
                                    $cns >> 16,
-                                   0xA0 + ($cns >> 8 & 0xFF),
-                                   0xA0 + ($cns & 0xFF);
-                        $uni_data_used[$uni_plane][$uni_page] += 4;
+                                   $cns >> 8 & 0xFF,
+                                   $cns & 0xFF;
+                        $uni_data_used[$uni_plane][$uni_page] += 3;
                     }
                     else
                     {
-                        print OUT "       0,";
+                        print OUT " 0, 0, 0,";
                     }
-                    if ($uni_index % 8 == 7 && $uni_index != 255)
+                    $uni_data_index += 3;
+                    if ($uni_index % 8 == 7)
                     {
-                        print OUT "\n  ";
+                        print OUT "\n";
+                        $bol = 1;
                     }
                 }
-                print OUT "\n";
-                $uni_data_offsets[$uni_plane][$uni_page] = $uni_data_offset++;
+                if ($bol == 0)
+                {
+                    print OUT "\n";
+                }
+
+                $uni_data_space[$uni_plane][$uni_page]
+                    = $uni_data_index
+                          - $uni_data_offsets[$uni_plane][$uni_page];
             }
             else
             {
+                $uni_data_offsets[$uni_plane][$uni_page] = -1;
                 print OUT " /* plane ", $uni_plane, ", page ", $uni_page,
                           ": --- */\n";
-                $uni_data_offsets[$uni_plane][$uni_page] = -1;
             }
         }
     }
@@ -709,18 +815,19 @@ for ($uni_plane = 0; $uni_plane <= 16; ++$uni_plane)
             {
                 print OUT "  ",
                           $offset,
-                          " * 256, /* plane ",
+                          ", /* plane ",
                           $uni_plane,
                           ", page ",
                           $uni_page,
                           "; ",
                           printStats($uni_data_used[$uni_plane][$uni_page],
-                                     256 * 4),
+                                     $uni_data_space[$uni_plane][$uni_page]),
                           " */\n";
                 $uni_pageoffsets_used[$uni_plane] += 4;
                 $uni_data_used_sum[$uni_plane]
                     += $uni_data_used[$uni_plane][$uni_page];
-                $uni_data_space_sum[$uni_plane] += 256 * 4;
+                $uni_data_space_sum[$uni_plane]
+                    += $uni_data_space[$uni_plane][$uni_page];
             }
         }
     }
