@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:11:07 $
+ *  last change: $Author: os $ $Date: 2002-08-26 14:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
-
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 
 SV_IMPL_PTRARR(SwGetINetAttrs, SwGetINetAttr*)
 
@@ -1044,7 +1046,7 @@ SwExtTextInput* SwEditShell::CreateExtTextInput()
     return pRet;
 }
 
-void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
+String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
 {
     if( !pDel )
     {
@@ -1059,9 +1061,12 @@ void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
             pDel = GetDoc()->GetExtTextInput();
         }
     }
-
+    String sRet;
     if( pDel )
     {
+        rtl::OUString sTmp;
+        SwXTextCursor::getTextFromPam(*pDel, sTmp);
+        sRet = sTmp;
         SET_CURR_SHELL( this );
         StartAllAction();
         pDel->SetInsText( bInsText );
@@ -1069,6 +1074,7 @@ void SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
         GetDoc()->DeleteExtTextInput( pDel );
         EndAllAction();
     }
+    return sRet;
 }
 
 #ifdef USED
