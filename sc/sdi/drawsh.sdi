@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:28:03 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@ interface TableDraw : Selection
     SID_TEXT_STANDARD       [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
     SID_DRAWTEXT_ATTR_DLG   [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
      // ---- Slot-IDs fuer Objectbar:
+    SID_COLOR_TABLE         [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_GRADIENT_LIST       [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_HATCH_LIST          [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_BITMAP_LIST         [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_DASH_LIST           [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_LINEEND_LIST        [ StateMethod = GetDrawAttrState; Export = FALSE; ]
      // Flaechen-Attribute
     SID_ATTR_FILL_STYLE     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_ATTR_FILL_COLOR     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
