@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:01:29 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,19 +675,26 @@ void OApplicationView::setStatusInformations(const Reference< XPropertySet>& _xD
 
             DATASOURCE_TYPE eType = pCollection->getType(sTemp);
             sDSTypeName = pCollection->getTypeDisplayName(eType);
-            pCollection->extractHostNamePort(sTemp,sDatabaseName,sHostName,nPortNumber);
-            if ( !sDatabaseName.Len() )
-                sDatabaseName = pCollection->cutPrefix(sTemp);
-
-            if ( pCollection->isFileSystemBased(eType) )
+            if ( eType != DST_EMBEDDED )
             {
-                sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
-                if ( sDatabaseName.Len() )
+                pCollection->extractHostNamePort(sTemp,getORB(),sDatabaseName,sHostName,nPortNumber);
+                if ( !sDatabaseName.Len() )
+                    sDatabaseName = pCollection->cutPrefix(sTemp);
+
+                if ( pCollection->isFileSystemBased(eType) )
                 {
-                    ::svt::OFileNotation aFileNotation(sDatabaseName);
-                    // set this decoded URL as text
-                    sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
+                    sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
+                    if ( sDatabaseName.Len() )
+                    {
+                        ::svt::OFileNotation aFileNotation(sDatabaseName);
+                        // set this decoded URL as text
+                        sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
+                    }
                 }
+            }
+            else
+            {
+                sDatabaseName = pCollection->getEmbeddedDatabaseUIName(getORB());
             }
         }
         catch(Exception&)
@@ -711,11 +718,6 @@ void OApplicationView::setStatusInformations(const Reference< XPropertySet>& _xD
         }
         m_aStatusBar.Invalidate();
         Resize();
-//      const PropertyValue* pIter = aAdditionalInfo.getConstArray();
-//      const PropertyValue* pEnd = pIter + aAdditionalInfo.getLength();
-//      for (;pIter != pEnd ; ++pIter)
-//      {
-//      }
     }
 }
 // -----------------------------------------------------------------------------
