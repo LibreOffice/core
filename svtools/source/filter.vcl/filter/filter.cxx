@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-09-21 15:36:55 $
+ *  last change: $Author: sj $ $Date: 2000-09-21 15:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2482,7 +2482,7 @@ BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
     {
         // Import-Filter fuer WMF
     }
-    else if( ( aUpperName.CompareToAscii( IMP_SVSGF ) == COMPARE_EQUAL ) || ( aUpperName.CompareToAscii( IMP_SVSGV ) ) )
+    else if( ( aUpperName.CompareToAscii( IMP_SVSGF ) == COMPARE_EQUAL ) || ( aUpperName.CompareToAscii( IMP_SVSGV ) == COMPARE_EQUAL ) )
     {
         // StarDraw- und StarWriter-Filter
     }
@@ -2504,9 +2504,9 @@ BOOL GraphicFilter::DoImportDialog( Window* pWindow, USHORT nFormat )
             {
                 INetURLObject aFilterPath;
                 aFilterPath.SetSmartURL( UniString( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 ) );
+                aFilterPath.Append( aFilterName );
                 if ( pFilter = aCache.GetFilter( aFilterPath, aFilterName ) )
                 {
-                    aFilterPath.Append( aFilterName );
                     if ( ImplDirEntryHelper::Exists( aFilterPath ) )
                         break;
                 }
