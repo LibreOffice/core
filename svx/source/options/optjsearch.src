@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:38:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Treat as equal";
         Text[ arabic ] = "Treat as equal";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: Group box title. Use only one verb for the whole group box. Instead of saying \"Treat as equal - match...\" (dh gleichwertig behandeln und gleichstellen), just use \"treat as equal\" as title above all and no verb at check boxes (ie diff than English MS Word)";
+        Text[ catalan ] = "Tratar igual";
     };
     CheckBox CB_MATCH_CASE
     {
@@ -122,6 +123,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match case";
         Text[ arabic ] = "«·ﬂ «»… »√Õ—› ﬂ»Ì—… √Ê ’€Ì—…";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "May˙sculas/min˙sculas";
     };
     CheckBox CB_MATCH_FULL_HALF_WIDTH
     {
@@ -148,6 +150,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match full/half width form";
         Text[ arabic ] = "Match full/half width form";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Formas normales/medio anchas";
     };
     CheckBox CB_MATCH_HIRAGANA_KATAKANA
     {
@@ -174,6 +177,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match hiragana/katakana";
         Text[ arabic ] = "ÂÌ—«Ã«‰«/ﬂ« «ﬂ«‰«";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Hiragana/katakana";
     };
     CheckBox CB_MATCH_CONTRACTIONS
     {
@@ -200,6 +204,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match contractions (yo-on, sokuon)";
         Text[ arabic ] = "Match contractions (yo-on, sokuon)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Contracciones (yo-on, sokuon)";
     };
     CheckBox CB_MATCH_MINUS_DASH_CHOON
     {
@@ -226,6 +231,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match minus/dash/cho-on";
         Text[ arabic ] = "Match minus/dash/cho-on";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Menos/GuiÛn/cho-on";
     };
     CheckBox CB_MATCH_REPEAT_CHAR_MARKS
     {
@@ -252,6 +258,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match 'repeat character' marks";
         Text[ arabic ] = "Õ—› «·≈⁄«œ…";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Car·cter de repeticiÛn";
     };
     CheckBox CB_MATCH_VARIANT_FORM_KANJI
     {
@@ -278,6 +285,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match variant-form kanji (itaiji)";
         Text[ arabic ] = "Match variant-form kanji (itaiji)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Variante Kanji (itaiji)";
     };
     CheckBox CB_MATCH_OLD_KANA_FORMS
     {
@@ -304,6 +312,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match old kana forms";
         Text[ arabic ] = "Match old kana forms";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Antiguas formas Kana";
     };
     CheckBox CB_MATCH_DIZI_DUZU
     {
@@ -330,6 +339,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match di/zi, du/zu";
         Text[ arabic ] = "Match di/zi, du/zu";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Di/zi, du/zu";
     };
     CheckBox CB_MATCH_BAVA_HAFA
     {
@@ -356,6 +366,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match ba/va, ha/fa";
         Text[ arabic ] = "Match ba/va, ha/fa";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Ba/va, ha/fa";
     };
     CheckBox CB_MATCH_TSITHICHI_DHIZI
     {
@@ -382,6 +393,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match tsi/thi/chi, dhi/zi";
         Text[ arabic ] = "Match tsi/thi/chi, dhi/zi";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Tsi/thi/chi, dhi/zi";
     };
     CheckBox CB_MATCH_HYUFYU_BYUVYU
     {
@@ -408,6 +420,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match hyu/fyu, byu/vyu";
         Text[ arabic ] = "Match hyu/fyu, byu/vyu";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Match hyu/fyu, byu/vyu";
     };
     CheckBox CB_MATCH_SESHE_ZEJE
     {
@@ -434,6 +447,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match se/she, ze/je";
         Text[ arabic ] = "Match se/she, ze/je";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Se/she, ze/je";
     };
     CheckBox CB_MATCH_IAIYA
     {
@@ -460,6 +474,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match ia/iya (piano/piyano)";
         Text[ arabic ] = "Match ia/iya (piano/piyano)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Ia/iya (piano/piyano)";
     };
     CheckBox CB_MATCH_KIKU
     {
@@ -486,6 +501,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ turkish ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ arabic ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
+        Text[ catalan ] = "Ki/ku (tekisuto/tekusuto)";
     };
     FixedLine FL_IGNORE
     {
@@ -511,6 +527,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "©ø≤§";
         Text[ turkish ] = "Ignore";
         Text[ arabic ] = " Ã«Â·";
+        Text[ catalan ] = "Ignorar";
     };
     CheckBox CB_IGNORE_PUNCTUATION
     {
@@ -523,7 +540,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "«Ì‡ÍË ÔÛÌÍÚÛ‡ˆËË";
         Text[ greek ] = "”ÁÏÂﬂ· ÛÙﬂÓÁÚ";
         Text[ dutch ] = "Interpunctietekens";
-        Text[ french ] = "CaractËres de ponctuation";
+        Text[ french ] = "Signes de ponctuation";
         Text[ spanish ] = "Caracteres de puntuaciÛn";
         Text[ italian ] = "Segni di punteggiatura";
         Text[ danish ] = "Punctuation characters";
@@ -536,6 +553,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "™`≠µ≤≈∏π";
         Text[ turkish ] = "Punctuation characters";
         Text[ arabic ] = "√Õ—› ⁄·«„«  «· ‰ﬁÌÿ";
+        Text[ catalan ] = "Caracteres de puntuaciÛn";
     };
     CheckBox CB_IGNORE_WHITESPACES
     {
@@ -561,6 +579,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "™≈ÆÊ¶r§∏";
         Text[ turkish ] = "Whitespace characters";
         Text[ arabic ] = "√Õ—› «·„”«›« ";
+        Text[ catalan ] = "Car·cter de espacio";
     };
     CheckBox CB_IGNORE_PROLONGED_SOUNDMARK
     {
@@ -586,6 +605,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "§Èªy™∫™¯≠µ";
         Text[ turkish ] = "Prolonged soundmarks (cho-on)";
         Text[ arabic ] = "Prolonged soundmarks (cho-on)";
+        Text[ catalan ] = "Vocales largas (cho-on)";
     };
     CheckBox CB_IGNORE_MIDDLE_DOT
     {
@@ -611,6 +631,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ chinese_traditional ] = "§§∂°¬I";
         Text[ turkish ] = "Middle dots";
         Text[ arabic ] = "‰ﬁÿ… Ê”ÿÌ…";
+        Text[ catalan ] = "Punto centrado";
     };
 };
 // end TabPage
