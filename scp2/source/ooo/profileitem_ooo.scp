@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: rt $ $Date: 2004-11-26 16:18:21 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:54:12 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -516,15 +516,6 @@ ProfileItem gid_Profileitem_Uno_Uno_Java_Component_Path
     Value = "$ORIGIN/classes";
 End
 
-ProfileItem gid_Profileitem_Versions_Staroffice5_2
-    ProfileID = gid_Profile_Sversion_Ini;
-    Section = "Versions";
-    Order = 1;
-    Styles = (INSTALL_INFO);
-    ModuleID = gid_Module_Root;
-    Key = "%PRODUCTNAME %PRODUCTVERSION ${EVAL}";
-    Value = "<workpath_url>";
-End
 
 ProfileItem gid_Profileitem_Jvmfwk_BaseInstallation
     ProfileID = gid_Profile_Jvmfwk_Ini;
