@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:53:02 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                         while( nWhich )
                         {
                             if( SFX_ITEM_ON == rSet.GetItemState( nWhich ) )
-                                pObject->ClearItem( nWhich );
+                                pObject->ClearMergedItem( nWhich );
                             nWhich = aWhichIter.NextWhich();
                         }
 
@@ -598,29 +598,30 @@ void SdDrawView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 
     BOOL bMPCache = FALSE;
 
-    if (pViewSh && pViewSh == (SdViewShell*) SfxViewShell::Current() &&
-        pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
-        pOutDev->GetOutDevType() != OUTDEV_PRINTER)
-    {
-        // Aktive ViewShell
-        bMPCache = TRUE;
-    }
-
-    if( bMPCache )
-    {
-        if( !IsMasterPagePaintCaching() )
-        {
-            SetMasterPagePaintCaching( TRUE );
-        }
-    }
-    else
-    {
-        if( IsMasterPagePaintCaching() )
-        {
-            ReleaseMasterPagePaintCache();
-            SetMasterPagePaintCaching( FALSE );
-        }
-    }
+// #110094#-7
+//  if (pViewSh && pViewSh == (SdViewShell*) SfxViewShell::Current() &&
+//      pViewSh->GetFrameView()->IsMasterPagePaintCaching() &&
+//      pOutDev->GetOutDevType() != OUTDEV_PRINTER)
+//  {
+//      // Aktive ViewShell
+//      bMPCache = TRUE;
+//  }
+//
+//  if( bMPCache )
+//  {
+//      if( !IsMasterPagePaintCaching() )
+//      {
+//          SetMasterPagePaintCaching( TRUE );
+//      }
+//  }
+//  else
+//  {
+//      if( IsMasterPagePaintCaching() )
+//      {
+//          ReleaseMasterPagePaintCache();
+//          SetMasterPagePaintCaching( FALSE );
+//      }
+//  }
 
     if (bPixelMode)
     {
@@ -798,16 +799,17 @@ void SdDrawView::PresPaint(const Region& rRegion)
 
             bLivePresentation = pFuSlideShow->IsLivePresentation();
 
-            if( IsMasterPagePaintCaching() && ( nFuslCacheMode != GetMasterPagePaintCacheMode() ) )
-            {
-                if( nFuslCacheMode == SDR_MASTERPAGECACHE_NONE )
-                {
-                    ReleaseMasterPagePaintCache();
-                    SetMasterPagePaintCaching( FALSE );
-                }
-                else
-                    SetMasterPagePaintCaching( TRUE, nFuslCacheMode );
-            }
+// #110094#-7
+//          if( IsMasterPagePaintCaching() && ( nFuslCacheMode != GetMasterPagePaintCacheMode() ) )
+//          {
+//              if( nFuslCacheMode == SDR_MASTERPAGECACHE_NONE )
+//              {
+//                  ReleaseMasterPagePaintCache();
+//                  SetMasterPagePaintCaching( FALSE );
+//              }
+//              else
+//                  SetMasterPagePaintCaching( TRUE, nFuslCacheMode );
+//          }
         }
 
         if (!bLivePresentation || IsShownXorVisible(pWindow))
@@ -859,7 +861,11 @@ void SdDrawView::PresPaint(const Region& rRegion)
                 pWindow->Push( PUSH_CLIPREGION );
                 pWindow->IntersectClipRegion( pPageView->GetPageRect() );
 
-                pPageView->InitRedraw( (USHORT) 0, rRegion, 0, &aPaintProcLink );
+                OutputDevice* pOut = pPageView->GetView().GetWin(0);
+                if(pOut)
+                {
+                    pPageView->InitRedraw( pOut, rRegion, 0, &aPaintProcLink );
+                }
 
                 pWindow->Pop();
             }
@@ -1051,16 +1057,16 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
                     if( !bLive )
                         pFuSlideShow->PaintDimmedObject(((SdrAttrObj*) pRecord->pObj), pRecord->rOut.GetOutDev(), pInfo->aDimColor, TRUE );
                     else
-                       pRecord->pObj->Paint(pRecord->rOut, pRecord->rInfoRec);
+                       pRecord->pObj->SingleObjectPainter(pRecord->rOut, pRecord->rInfoRec); // #110094#-17
                 }
                 else if( bLive )
-                   pRecord->pObj->Paint(pRecord->rOut, pRecord->rInfoRec);
+                   pRecord->pObj->SingleObjectPainter(pRecord->rOut, pRecord->rInfoRec); // #110094#-17
                 else
                 {
                     // nur das letzte Bild
                     SdrObjList* pObjList = ((SdrObjGroup*)pRecord->pObj)->GetSubList();
                     SdrObject* pLast = (SdrObject*)pObjList->GetObj(pObjList->GetObjCount() - 1);
-                    pLast->Paint(pRecord->rOut, pRecord->rInfoRec);
+                    pLast->SingleObjectPainter(pRecord->rOut, pRecord->rInfoRec); // #110094#-17
                 }
 
                 bDrawn = TRUE;
@@ -1092,16 +1098,14 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
                     SfxItemSet aTempAttr( pDoc->GetPool(), SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIKIND );
                     aTempAttr.InvalidateItem( SDRATTR_TEXT_ANIKIND );
                     aTempAttr.Put( SdrTextAniKindItem() );
-
-//-/                    pClone->NbcSetAttributes( aTempAttr, FALSE );
-                    pClone->SetItemSet(aTempAttr);
+                    pClone->SetMergedItemSet(aTempAttr);
                 }
 
-                pClone->Paint( pRecord->rOut, pRecord->rInfoRec );
+                pClone->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
                 delete pClone;
             }
             else
-                pRecord->pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+                pRecord->pObj->SingleObjectPainter( pRecord->rOut, pRecord->rInfoRec ); // #110094#-17
         }
     }
     // das Hintergrundrechteck gibt sich faelschlicherweise als EmptyPresObj
@@ -1116,7 +1120,7 @@ IMPL_LINK( SdDrawView, PaintProc, SdrPaintProcRec *, pRecord )
         if( ( pPage->GetPresObj(PRESOBJ_BACKGROUND) == pRecord->pObj ) ||
             ( ANIMATIONMODE_PREVIEW == eAnimationMode ) )
         {
-            pRecord->pObj->Paint(pRecord->rOut, pRecord->rInfoRec);
+            pRecord->pObj->SingleObjectPainter(pRecord->rOut, pRecord->rInfoRec); // #110094#-17
         }
     }
 
