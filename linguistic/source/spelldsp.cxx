@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:02:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     aChkWord, nLanguage, TRUE, TRUE ) );
 
             if (xPosEntry.is())
+            {
                 xRes = NULL;    // positive dictionaries have precedence over negative ones
+                eFailureType = -1;  // no failure
+            }
             else
             {
                 Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDicList,
