@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:01:27 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/mnemonic.hxx>
 #include <tools/shl.hxx>
 #include <svtools/taskbar.hxx>
 #include <sfx2/topfrm.hxx>
@@ -869,8 +870,7 @@ void ScAnyRefDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
         SetOutputSizePixel(aNewDlgSize);
 
         // Fenstertitel anpassen
-        sNewDialogText.EraseAllChars('~');
-        SetText(sNewDialogText);
+        SetText( MnemonicGenerator::EraseAllMnemonicChars( sNewDialogText ) );
 
 //        if ( pButton )      // ueber den Button: Enter und Escape abfangen
 //        {
