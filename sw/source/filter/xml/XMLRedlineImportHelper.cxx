@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:30:35 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,7 +737,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
         // set redline mode (without doing the associated book-keeping)
         pDoc->SetRedlineMode_intern(REDLINE_ON);
-        pDoc->AppendRedline(pRedline);
+        pDoc->AppendRedline(pRedline, sal_False);
         pDoc->SetRedlineMode_intern(REDLINE_NONE);
     }
 }
