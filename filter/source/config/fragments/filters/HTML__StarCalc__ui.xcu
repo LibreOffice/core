@@ -1,0 +1,7 @@
+    <node oor:name="HTML (StarCalc)" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">HTML Document (StarOffice Calc)</value>
+            <value xml:lang="de">HTML-Dokument (StarOffice Calc)</value>
+            <value xml:lang="x-translate">HTML Document (StarOffice Calc)</value>
+        </prop>
+    </node>
