@@ -67,6 +67,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
 
     boolean opened = false;
     boolean visible = false;
+    boolean active = false;
 
     java.awt.EventQueue eventQueue = null;
 
@@ -212,6 +213,7 @@ public class Dialog extends java.awt.Dialog implements javax.accessibility.Acces
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
                 case AccessibleStateType.ACTIVE:
+                    active = enable;
                     if (enable) {
                         AccessibleObjectFactory.postWindowActivated(Dialog.this);
                     } else {
