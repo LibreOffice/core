@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,11 +404,21 @@ void SwLinePortion::FormatEOL( SwTxtFormatInfo &rInf )
 void SwLinePortion::Move( SwTxtPaintInfo &rInf )
 {
     BOOL bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
+#ifdef BIDI
+    const BOOL bFrmDir = rInf.GetTxtFrm()->IsRightToLeft();
+    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == rInf.GetDirection() ) ||
+                       (   bFrmDir && DIR_LEFT2RIGHT == rInf.GetDirection() );
+#endif
+
     if ( InSpaceGrp() && rInf.GetSpaceAdd() )
     {
         SwTwips nTmp = PrtWidth() + CalcSpacing( rInf.GetSpaceAdd(), rInf );
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -nTmp : nTmp ) );
+#ifdef BIDI
+        else if ( bCounterDir )
+            rInf.X( rInf.X() - nTmp );
+#endif
         else
             rInf.X( rInf.X() + nTmp );
     }
@@ -422,7 +432,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );
 #ifdef BIDI
-        else if ( DIR_RIGHT2LEFT == rInf.GetDirection() )
+        else if ( bCounterDir )
             rInf.X( rInf.X() - PrtWidth() );
 #endif
         else

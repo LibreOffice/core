@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-27 17:11:31 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
                         }
                         // ruby portions are treated like single line portions
+#ifdef BIDI
+                        else if( ((SwMultiPortion*)pPor)->IsRuby() ||
+                                 ((SwMultiPortion*)pPor)->IsBidi() )
+#else
                         else if( ((SwMultiPortion*)pPor)->IsRuby() )
+#endif
                             GetInfo().SetMulti( sal_False );
 
                         // calculate cursor values
@@ -783,7 +788,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             pOrig->Pos().Y() += aOldPos.Y();
 #ifdef BIDI
                             if ( ((SwMultiPortion*)pPor)->IsBidi() )
-                                pOrig->Pos().X() = nX + pPor->Width() -
+                                pOrig->Pos().X() = nX + pPor->Width() +
+                                                   pPor->CalcSpacing( nSpaceAdd, aInf ) -
                                                    pOrig->Pos().X();
                             else
                                 pOrig->Pos().X() += nX;
@@ -1391,8 +1397,14 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                  ! ((SwMultiPortion*)pPor)->OnTop() )
                 nTmpY = 0;
 
+#ifdef BIDI
+            SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
+                nTmpY, nX, nCurrStart, nSpaceAdd );
+#else
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );
+#endif
+
             if( ((SwMultiPortion*)pPor)->HasRotation() )
             {
                 nTmpY -= nY;
@@ -1402,10 +1414,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nTmpY = 0;
                 nX = (KSHORT)nTmpY;
             }
-#ifdef BIDI
-            else if( ((SwMultiPortion*)pPor)->IsBidi() )
-                nX = pPor->Width() - nX;
-#endif
 
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
             {

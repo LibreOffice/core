@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,13 @@ void SwTmpEndPortion::Paint( const SwTxtPaintInfo &rInf ) const
 /*************************************************************************
  *                      class SwBreakPortion
  *************************************************************************/
-
+#ifdef VERTICAL_LAYOUT
+SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
+    : SwLinePortion( rPortion ), nRestWidth( 0 )
+#else
 SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
     : SwLinePortion( rPortion ), nViewWidth( 0 ), nRestWidth( 0 )
+#endif
 {
     nLineLength = 1;
     SetWhichPor( POR_BRK );
@@ -207,7 +211,12 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && rInf.GetOpt().IsLineBreak() )
     {
+#ifdef VERTICAL_LAYOUT
+        USHORT nViewWidth = ((SwBreakPortion*)this)->CalcViewWidth( rInf );
+#else
         ((SwBreakPortion*)this)->CalcViewWidth( rInf );
+#endif
+
         if( nViewWidth && nViewWidth <= nRestWidth )
             rInf.DrawLineBreak( *this );
     }
@@ -217,7 +226,11 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *                  SwBreakPortion::CalcViewWidth()
  *************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+USHORT SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
+#else
 void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
+#endif
 {
     ASSERT( rInf.GetOpt().IsLineBreak(), "SwBreakPortion::CalcViewWidth: zombie" );
     // Im Mormalfall folgt auf ein Break keine weitere Portion, nur wenn im Blocksatz
@@ -233,6 +246,15 @@ void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
         else
             nRestWidth = GetPortion()->Width();
     }
+#ifdef VERTICAL_LAYOUT
+    USHORT nViewWidth = 0;
+
+    if( rInf.GetWin() && nRestWidth )
+        nViewWidth = LINE_BREAK_WIDTH;
+
+    return nViewWidth;
+
+#else
     if( rInf.GetWin() && nRestWidth )
     {
         if( !nViewWidth )
@@ -240,6 +262,7 @@ void SwBreakPortion::CalcViewWidth( const SwTxtSizeInfo &rInf )
     }
     else
         nViewWidth = 0;
+#endif
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,9 @@ using namespace ::com::sun::star::beans;
 #define CHAR_LEFT_ARROW ((sal_Unicode)0x25C0)
 #define CHAR_RIGHT_ARROW ((sal_Unicode)0x25B6)
 #define CHAR_TAB ((sal_Unicode)0x2192)
+#define CHAR_TAB_RTL ((sal_Unicode)0x2190)
 #define CHAR_LINEBREAK ((sal_Unicode)0x21B5)
+#define CHAR_LINEBREAK_RTL ((sal_Unicode)0x21B3)
 #endif
 
 // steht im number.cxx
@@ -362,6 +364,21 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
         else
             pOut = pNd->GetDoc()->GetPrt(); //Muss es geben (oder sal_True uebergeben?)
     }
+
+#ifdef BIDI
+    // Set default layout mode ( LTR or RTL ). pOut should be the window.
+    if ( pFrm && pFrm->IsRightToLeft() )
+    {
+        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
+        nDirection = DIR_RIGHT2LEFT;
+    }
+    else
+    {
+        pOut->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+        nDirection = DIR_LEFT2RIGHT;
+    }
+#endif
+
     pOpt = pVsh ? pVsh->GetViewOptions() : SW_MOD()->GetViewOption(pNd->GetDoc()->IsHTMLMode());//Options vom Module wg. StarONE
     //Hier auf GetWin() abfragen nicht auf GetOut != PRINTER (SwFlyFrmFmt::MakeGraphic)
     bOnWin = pVsh && ( pVsh->GetWin() ||
@@ -403,7 +420,9 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bStopUnderFlow = bFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
+#ifndef BIDI
     nDirection = DIR_LEFT2RIGHT;
+#endif
 
     SetLen( GetMinLen( *this ) );
 }
@@ -816,7 +835,22 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
         aPoint.B() = pInf->Y() - rPor.GetAscent();
     }
 
+#ifdef BIDI
+    // Adjust x coordinate if we are inside a bidi portion
+    const BOOL bFrmDir = pInf->GetTxtFrm()->IsRightToLeft();
+    BOOL bCounterDir = ( ! bFrmDir && DIR_RIGHT2LEFT == pInf->GetDirection() ) ||
+                       (   bFrmDir && DIR_LEFT2RIGHT == pInf->GetDirection() );
+
+    if ( bCounterDir )
+        aPoint.A() -= rPor.Width();
+#endif
+
     SwRect aRect( aPoint, aSize );
+
+#ifdef BIDI
+    if ( pInf->GetTxtFrm()->IsRightToLeft() )
+        pInf->GetTxtFrm()->SwitchLTRtoRTL( aRect );
+#endif
 
 #ifdef VERTICAL_LAYOUT
     if ( pInf->GetTxtFrm()->IsVertical() )
@@ -846,37 +880,58 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
  *                          lcl_DrawSpecial
  *
  * Draws a special portion, e.g., line break portion, tab portion.
- * The special character is positioned inside the rectangle
+ * rPor - The portion
+ * rRect - The rectangle surrounding the character
+ * pCol     - Specify a color for the character
+ * bCenter  - Draw the character centered, otherwise left aligned
+ * bRotate  - Rotate the character if character rotation is set
  *************************************************************************/
 
 void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
-                      SwRect& rRect, const Color* pCol, sal_Unicode cChar )
+                      SwRect& rRect, const Color* pCol, sal_Unicode cChar,
+                      sal_Bool bCenter, sal_Bool bRotate )
 {
     // rRect is given in absolute coordinates
+#ifdef BIDI
+    if ( rInf.GetTxtFrm()->IsRightToLeft() )
+        rInf.GetTxtFrm()->SwitchRTLtoLTR( rRect );
+#endif
+
     if ( rInf.GetTxtFrm()->IsVertical() )
         rInf.GetTxtFrm()->SwitchVerticalToHorizontal( rRect );
 
     const SwFont* pOldFnt = rInf.GetFont();
-    SwFont* pFnt = new SwFont( *pOldFnt );
+
+    // Font is generated only once:
+    static SwFont* pFnt = 0;
+    if ( ! pFnt )
+    {
+        pFnt = new SwFont( *pOldFnt );
+        pFnt->SetFamily( FAMILY_DONTKNOW, pFnt->GetActual() );
+        pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ), pFnt->GetActual() );
+        pFnt->SetStyleName( aEmptyStr, pFnt->GetActual() );
+        pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pFnt->GetActual() );
+    }
+
+    // Some of the current values are set at the font:
+    if ( ! bRotate )
+        pFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
+    else
+        pFnt->SetVertical( pOldFnt->GetOrientation() );
+
+    if ( pCol )
+        pFnt->SetColor( *pCol );
+    else
+        pFnt->SetColor( pOldFnt->GetColor() );
+
+    Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
+    pFnt->SetSize( aFontSize, pFnt->GetActual() );
 
     ((SwTxtPaintInfo&)rInf).SetFont( pFnt );
 
-    pFnt->SetFamily( FAMILY_DONTKNOW, pOldFnt->GetActual() );
-    pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
-                        pOldFnt->GetActual() );
-    pFnt->SetStyleName( aEmptyStr, pOldFnt->GetActual() );
-    pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pOldFnt->GetActual() );
-    pFnt->SetFixKerning( 0 );
-    if ( pCol )
-        pFnt->SetColor( *pCol );
-
-    const XubString aTmp( cChar );
-
-    Size aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
-
+    // The maximum width depends on the current orientation
     const USHORT nDir = UnMapDirection( pFnt->GetOrientation(),
                                         rInf.GetTxtFrm()->IsVertical() );
-
     SwTwips nMaxWidth;
     switch ( nDir )
     {
@@ -893,6 +948,8 @@ void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
     }
 
     // check if char fits into rectangle
+    const XubString aTmp( cChar );
+    aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
     {
         SwTwips nFactor = ( 100 * aFontSize.Width() ) / nMaxWidth;
@@ -913,33 +970,38 @@ void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
 
     const Point aOldPos( rInf.GetPos() );
 
-    // adjust values so that tab is vertically centered
-    SwTwips nX;
-    SwTwips nY;
+    // adjust values so that tab is vertically and horizontally centered
+    SwTwips nX = rRect.Left();
+    SwTwips nY = rRect.Top();
     switch ( nDir )
     {
     case 0 :
-        nX = rRect.Left() + ( rRect.Width() - aFontSize.Width() ) / 2;
-        nY = rRect.Top() + ( rRect.Height() - aFontSize.Height() ) / 2 +
-             rInf.GetAscent();
+        if ( bCenter )
+            nX += ( rRect.Width() - aFontSize.Width() ) / 2;
+        nY += ( rRect.Height() - aFontSize.Height() ) / 2 + rInf.GetAscent();
         break;
     case 900 :
-        nX = rRect.Left() + ( rRect.Width() - aFontSize.Height() ) / 2 +
-             rInf.GetAscent();
-        nY = rRect.Top() + ( rRect.Height() + aFontSize.Width() ) / 2;
+        if ( bCenter )
+            nX += ( rRect.Width() - aFontSize.Height() ) / 2 + rInf.GetAscent();
+        nY += ( rRect.Height() + aFontSize.Width() ) / 2;
         break;
     case 2700 :
-        nX = rRect.Left() + ( rRect.Width() + aFontSize.Height() ) / 2 -
-             rInf.GetAscent();
-        nY = rRect.Top() + ( rRect.Height() - aFontSize.Width() ) / 2;
+        if ( bCenter )
+            nX += ( rRect.Width() + aFontSize.Height() ) / 2 - rInf.GetAscent();
+        nY += ( rRect.Height() - aFontSize.Width() ) / 2;
         break;
     }
 
     Point aTmpPos( nX, nY );
     ((SwTxtPaintInfo&)rInf).SetPos( aTmpPos );
-
+#ifdef BIDI
+    USHORT nOldWidth = rPor.Width();
+    ((SwLinePortion&)rPor).Width( (USHORT)aFontSize.Width() );
     rInf.DrawText( aTmp, rPor );
-    delete pFnt;
+    ((SwLinePortion&)rPor).Width( nOldWidth );
+#else
+    rInf.DrawText( aTmp, rPor );
+#endif
     ((SwTxtPaintInfo&)rInf).SetFont( (SwFont*)pOldFnt );
     ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
 }
@@ -991,7 +1053,7 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 #endif
 
 #ifdef VERTICAL_LAYOUT
-        lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_TAB );
+        lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_TAB, sal_True, sal_True );
 #else
         pOpt->PaintTab( pWin, aRect );
 #endif
@@ -1007,7 +1069,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         KSHORT nOldWidth = rPor.Width();
-        ((SwLinePortion&)rPor).Width( pOpt->GetLineBreakWidth( pWin ) );
+        ((SwLinePortion&)rPor).Width( ((SwBreakPortion&)rPor).GetRestWidth() ); //pOpt->GetLineBreakWidth( pWin ) );
 
         SwRect aRect;
 
@@ -1015,7 +1077,8 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 
 #ifdef VERTICAL_LAYOUT
         if( aRect.HasArea() )
-            lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_LINEBREAK );
+            lcl_DrawSpecial( *this, rPor, aRect, 0, CHAR_LINEBREAK,
+                             sal_False, sal_False );
 
         ((SwLinePortion&)rPor).Width( nOldWidth );
 #else
@@ -1034,9 +1097,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 
 void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 {
-//    Size aSize( 6, 12 );
-//    aSize = GetOut()->PixelToLogic( aSize );
-    Size aSize( 240, 240 );
+    Size aSize( RED_ARROW_WIDTH, RED_ARROW_WIDTH );
     SwRect aRect( ((SwArrowPortion&)rPor).GetPos(), aSize );
     sal_Unicode cChar;
     if( ((SwArrowPortion&)rPor).IsLeft() )
@@ -1062,7 +1123,7 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     Color aCol( COL_LIGHTRED );
 
     if( aRect.HasArea() )
-        lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar );
+        lcl_DrawSpecial( *this, rPor, aRect, &aCol, cChar, sal_False, sal_False );
 }
 
 #endif

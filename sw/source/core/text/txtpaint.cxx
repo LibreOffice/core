@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-06 09:45:22 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,11 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, sal_Bool bEnlargeRect )
 #ifdef VERTICAL_LAYOUT
     SwRect aOldRect( rRect );
     const sal_Bool bVertical = pFrm && pFrm->IsVertical();
+
+#ifdef BIDI
+    if ( pFrm && pFrm->IsRightToLeft() )
+        pFrm->SwitchLTRtoRTL( (SwRect&)rRect );
+#endif
 
     if ( bVertical )
         pFrm->SwitchHorizontalToVertical( (SwRect&)rRect );

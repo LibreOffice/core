@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-02 13:48:52 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,14 @@ public:
     void DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                        const sal_Bool bUnderSz );
     void PaintDropPortion();
+#ifdef BIDI
+    // if PaintMultiPortion is called recursively, we have to pass the
+    // surrounding SwBidiPortion
+    void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti,
+                            const SwMultiPortion* pEnvPor = 0 );
+#else
     void PaintMultiPortion( const SwRect &rPaint, SwMultiPortion& rMulti );
+#endif
     inline void SetPaintDrop( const sal_Bool bNew ) { bPaintDrop = bNew; }
     inline IsPaintDrop() const { return bPaintDrop; }
     inline SwTxtPaintInfo &GetInfo()

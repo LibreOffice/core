@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-25 17:04:33 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,10 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
             }
             else if( pMulti->IsDouble() )
                 nGluePortion += ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
+#ifdef BIDI
+            else if ( pMulti->IsBidi() )
+                nGluePortion += ((SwBidiPortion*)pMulti)->GetSpaceCnt();
+#endif
         }
 
         if( pPos->InGlueGrp() )

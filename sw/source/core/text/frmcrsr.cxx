@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-04 11:42:33 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,11 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
 #endif
         }
 
+#ifdef BIDI
+        if ( pFrm->IsRightToLeft() )
+            pFrm->SwitchLTRtoRTL( rOrig );
+#endif
+
         bRet = sal_True;
     }
     else
@@ -365,6 +370,10 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                                 : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
             }
 
+#ifdef BIDI
+            if ( pFrm->IsRightToLeft() )
+                pFrm->SwitchLTRtoRTL( rOrig );
+#endif
 #ifdef VERTICAL_LAYOUT
             if ( bVert )
                 pFrm->SwitchHorizontalToVertical( rOrig );
@@ -386,9 +395,20 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         } while ( bGoOn );
 
 #ifdef VERTICAL_LAYOUT
-        if ( bVert )
+        if ( pCMS )
         {
-            if ( pCMS )
+#ifdef BIDI
+            if ( pFrm->IsRightToLeft() )
+            {
+                if( pCMS->b2Lines && pCMS->p2Lines)
+                {
+                    pFrm->SwitchLTRtoRTL( pCMS->p2Lines->aLine );
+                    pFrm->SwitchLTRtoRTL( pCMS->p2Lines->aPortion );
+                }
+            }
+#endif
+
+            if ( bVert )
             {
                 if ( pCMS->bRealHeight )
                 {
@@ -397,8 +417,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                     {
                         // writing direction is from top to bottom
                         pCMS->aRealHeight.X() =  ( rOrig.Width() -
-                                                   pCMS->aRealHeight.X() +
-                                                   pCMS->aRealHeight.Y() );
+                                                    pCMS->aRealHeight.X() +
+                                                    pCMS->aRealHeight.Y() );
                     }
                 }
                 if( pCMS->b2Lines && pCMS->p2Lines)
@@ -407,6 +427,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                     pFrm->SwitchHorizontalToVertical( pCMS->p2Lines->aPortion );
                 }
             }
+
         }
 #endif
     }
@@ -605,6 +626,12 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 
 #ifdef VERTICAL_LAYOUT
     Point aOldPoint( rPoint );
+
+#ifdef BIDI
+    if ( IsRightToLeft() )
+        SwitchRTLtoLTR( (Point&)rPoint );
+#endif
+
     if ( IsVertical() )
     {
         SwitchVerticalToHorizontal( (Point&)rPoint );

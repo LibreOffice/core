@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #include "porlay.hxx"
 #include "porexp.hxx"
 
+#ifdef VERTICAL_LAYOUT
+#define RED_ARROW_WIDTH         240
+#define LINE_BREAK_WIDTH        150
+#define SPECIAL_FONT_HEIGHT     220
+#endif
+
 class SwTxtFormatInfo;
 
 /*************************************************************************
@@ -88,9 +94,16 @@ public:
 
 class SwBreakPortion : public SwLinePortion
 {
+#ifdef VERTICAL_LAYOUT
+    USHORT CalcViewWidth( const SwTxtSizeInfo &rInf );
+#else
     void CalcViewWidth( const SwTxtSizeInfo &rInf );
+#endif
+
 protected:
+#ifndef VERTICAL_LAYOUT
     KSHORT  nViewWidth;
+#endif
     KSHORT  nRestWidth;
 public:
             SwBreakPortion( const SwLinePortion &rPortion );

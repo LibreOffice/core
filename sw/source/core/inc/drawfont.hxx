@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-08 16:08:26 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,12 @@ public:
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
     BYTE ScriptType( const xub_StrLen nPos ) const;
 #ifdef BIDI
-    xub_StrLen NextDirChg( const xub_StrLen nPos ) const;
+    // Returns the position of the next direction level change.
+    // If bLevel is set, the position of the next level which is smaller
+    // than the level at position nPos is returned. This is required to
+    // obtain the end of a SwBidiPortion
+    xub_StrLen NextDirChg( const xub_StrLen nPos,
+                           sal_Bool bLevel = sal_False ) const;
     BYTE DirType( const xub_StrLen nPos ) const;
 #endif
     BYTE CompType( const xub_StrLen nPos ) const;

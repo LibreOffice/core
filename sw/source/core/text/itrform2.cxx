@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-19 08:59:05 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
 #ifdef BIDI
                 if ( SW_MC_BIDI == pCreate->nId )
-                    pTmp = new SwBidiPortion( *pCreate, nEnd );
+                    pTmp = new SwBidiPortion( nEnd, pCreate->nLevel );
                 else if ( SW_MC_RUBY == pCreate->nId )
                 {
 #else

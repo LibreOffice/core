@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-14 14:28:49 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,10 @@ SwRect SwTxtFrm::Paint()
         pRepaint->SetOfst( 0 );
         aRet = *pRepaint;
 
+#ifdef BIDI
+        if ( IsRightToLeft() )
+            SwitchLTRtoRTL( aRet );
+#endif
 #ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
             SwitchHorizontalToVertical( aRet );
@@ -731,6 +735,10 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 
         SWAP_IF_NOT_SWAPPED( this )
 
+#ifdef BIDI
+        if ( IsRightToLeft() )
+            SwitchRTLtoLTR( (SwRect&)rRect );
+#endif
         if ( IsVertical() )
             SwitchVerticalToHorizontal( (SwRect&)rRect );
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,29 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
+
+#ifdef BIDI
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#include <unicode/ubidi.h>
+
+//class TrivialStack
+//{
+//    BYTE aEntries[ 61 ];
+//    BYTE nCounter;
+
+//public:
+//    TrivialStack( BYTE nDefault ) : nCounter( 1 ) { aEntries[ 0 ] = nDefault; }
+//    ~TrivialStack() {}
+
+//    void Push( BYTE nVal ) { aEntries[ nCounter++ ] = nVal; }
+//    void Pop() { if ( nCounter > 1 ) --nCounter; }
+//    BYTE Top() { return aEntries[ nCounter - 1 ]; }
+//};
+
+#endif
+
 
 /*************************************************************************
  *                 SwLineLayout::~SwLineLayout()
@@ -521,8 +544,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     nInvalidityPos = STRING_LEN;
 
     USHORT nCnt = 0;
+#ifdef BIDI
+    USHORT nCntDir = 0;
+#endif
     USHORT nCntComp = 0;
     BYTE nScript;
+#ifdef BIDI
+    BYTE nDir = 0;
+#endif
 
     // compression type
     const String& rTxt = rNode.GetTxt();
@@ -555,6 +584,20 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                     nCntComp++;
             }
         }
+#ifdef BIDI
+// !!! Optimization required !!! For now we always restart calculating embedding
+// levels at position 0
+//        while( nCntDir < CountDirChg() )
+//        {
+//            if ( nChg <= GetDirChg( nCntDir ) )
+//            {
+//                nDir = GetDirType( nCntDir );
+//                break;
+//            }
+//            else
+//                nCntDir++;
+//        }
+#endif
     }
     else
         nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, 0 );
@@ -562,6 +605,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
     aScriptChg.Remove( nCnt, nScriptRemove );
     aScriptType.Remove( nCnt, nScriptRemove );
+
+#ifdef BIDI
+    // check if default direction is != LTR
+    if ( TEXT_LAYOUT_COMPLEX_DISABLED != rOut.GetLayoutMode() )
+        nDir = 1;
+
+    const USHORT nDirRemove = aDirChg.Count(); // - nCntDir;
+    aDirChg.Remove( nCntDir, nDirRemove );
+    aDirType.Remove( nCntDir, nDirRemove );
+#endif
 
     xub_StrLen nGrpStart;
     if ( nCnt )
@@ -573,6 +626,11 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     // declared as an nScript group
     if ( nChg )
         --nChg;
+
+#ifdef BIDI
+    // this value is used later to determine direction changes
+    xub_StrLen nChgDir = 0; //nChg;
+#endif
 
     // we go back in our group until we reach a non-weak character
     while ( nChg > nGrpStart &&
@@ -683,6 +741,122 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     aCompChg.Remove( nCntComp, nCompRemove );
     aCompLen.Remove( nCntComp, nCompRemove );
     aCompType.Remove( nCntComp, nCompRemove );
+
+#ifdef BIDI
+    // one loop for direction changes
+//    const CharClass& rCC = GetAppCharClass();
+//    BYTE nCurrDir = nDir;
+//    // this is the LTR level
+//    BYTE nLTR = nDir ? 2 : 0;
+//    // this is the RTL level
+//    BYTE nRTL = 1;
+//    // Stack for explicit directional settings
+//    TrivialStack aStack( nDir );
+
+    //
+    // Bidi functions from icu 2.0
+    //
+    UErrorCode nError = U_ZERO_ERROR;
+    UBiDi* pBidi = ubidi_openSized( rTxt.Len(), 0, &nError );
+    nError = U_ZERO_ERROR;
+    ubidi_setPara( pBidi, rTxt.GetBuffer(), rTxt.Len(),
+                   nDir ? UBIDI_RTL : UBIDI_LTR, NULL, &nError );
+    nError = U_ZERO_ERROR;
+    long nCount = ubidi_countRuns( pBidi, &nError );
+    UTextOffset nStart = 0;
+    UTextOffset nEnd;
+    UBiDiLevel nCurrDir;
+
+    for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
+    {
+        ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
+        aDirChg.Insert( (USHORT)nEnd, nCntDir );
+        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
+        nStart = nEnd;
+    }
+
+    ubidi_close( pBidi );
+
+//    do
+//    {
+        // for now this must be sufficient
+//        while ( nChgDir < rTxt.Len() )
+//        {
+//            nCurrDir = (BYTE)rCC.getCharacterDirection( rTxt, nChgDir );
+//            nCurrDir = aBidi.getLevelAt( nChgDir );
+
+//            switch ( nCurrDir )
+//            {
+//                // DirectionProperty_LEFT_TO_RIGHT
+//                case 0 :
+//                    nCurrDir = nLTR;
+//                    break;
+//                // DirectionProperty_EUROPEAN_NUMBER
+//                // DirectionProperty_ARABIC_NUMBER
+//                case 2 :
+//                case 5 :
+//                    if ( nDir % 2 )
+//                        nCurrDir = nDir + 1;
+//                    else
+//                        nCurrDir = nLTR;
+//                    break;
+//                // DirectionProperty_RIGHT_TO_LEFT
+//                // DirectionProperty_RIGHT_TO_LEFT_ARABIC
+//                case 1 :
+//                case 13 :
+//                    nCurrDir = nRTL;
+//                    break;
+//                // DirectionProperty_LEFT_TO_RIGHT_EMBEDDING
+//                case 11 :
+//                    nCurrDir = nLTR;
+//                    aStack.Push( nCurrDir );
+//                    nRTL += 2;
+//                    break;
+//                // DirectionProperty_RIGHT_TO_LEFT_EMBEDDING
+//                case 14 :
+//                    nCurrDir = nRTL;
+//                    aStack.Push( nCurrDir );
+//                    nLTR += 2;
+//                    break;
+//                // DirectionProperty_POP_DIRECTIONAL_FORMAT
+//                case 16 :
+//                {
+//                    BYTE nStackDir = aStack.Top();
+//                    aStack.Pop();
+//                    nCurrDir = aStack.Top();
+//                    if ( nStackDir % 2 )
+//                        nLTR -= 2;
+//                    else
+//                        nRTL -= 2;
+//                    break;
+//                }
+//                // Keep direction
+//                default:
+//                    nCurrDir = nDir;
+//                    break;
+//            }
+
+//            if ( nCurrDir != nDir )
+//                break;
+//            else
+//                ++nChgDir;
+//        }
+
+//        if ( nChgDir > rTxt.Len() )
+//            nChgDir = rTxt.Len();
+
+//        aDirChg.Insert( nChgDir, nCntDir );
+//        aDirType.Insert( nDir, nCntDir++ );
+
+//        if ( nChgDir >= rTxt.Len() )
+//            break;
+
+//        ++nChgDir;
+
+//        nDir = nCurrDir;
+////        nDir = (BYTE)pBreakIt->xBreak->getDirectionType( rTxt, nChgDir );
+//    } while ( TRUE );
+#endif
 
     if ( WEAK == nScript )
         // only weak characters in paragraph
@@ -827,6 +1001,37 @@ BYTE SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
     // the default is the application language script
     return (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 }
+
+#ifdef BIDI
+
+xub_StrLen SwScriptInfo::NextDirChg( const xub_StrLen nPos,
+                                     sal_Bool bLevel )  const
+{
+    BYTE nDir = bLevel ? DirType( nPos ) : 62;
+    USHORT nEnd = CountDirChg();
+    for( USHORT nX = 0; nX < nEnd; ++nX )
+    {
+        if( nPos < GetDirChg( nX ) &&
+            ( nX + 1 == nEnd || GetDirType( nX + 1 ) < nDir ) )
+            return GetDirChg( nX );
+    }
+
+    return STRING_LEN;
+}
+
+BYTE SwScriptInfo::DirType( const xub_StrLen nPos ) const
+{
+    USHORT nEnd = CountDirChg();
+    for( USHORT nX = 0; nX < nEnd; ++nX )
+    {
+        if( nPos < GetDirChg( nX ) )
+            return GetDirType( nX );
+    }
+
+    return 0;
+}
+
+#endif
 
 /*************************************************************************
  *                        SwScriptInfo::CompType(..)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 08:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@ class ViewShell;
 class SwTxtFtn;
 class SwAttrIter;
 struct SwMultiCreator;
+
+#ifdef BIDI
+class SwMultiPortion;
+#endif
 
 /* Minimum: Prozentwert fuers kernen */
 #define MINKERNPERCENT 5
@@ -258,7 +262,11 @@ public:
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
     // rPos will set to the end of the multi-line part.
+#ifdef BIDI
+    SwMultiCreator* GetMultiCreator( xub_StrLen &rPos, SwMultiPortion* pM ) const;
+#else
     SwMultiCreator* GetMultiCreator( xub_StrLen &rPos ) const;
+#endif
 
     inline sal_Bool OnWin() const { return bOnWin; }
     inline void SetOnWin( const sal_Bool bNew ) { bOnWin = bNew; }

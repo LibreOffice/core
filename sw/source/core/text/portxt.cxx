@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-19 08:50:38 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     nPos = rInf.GetIdx() + rPor.GetLen();
     if ( nPos < rInf.GetTxt().Len() )
     {
-        BYTE nScript = 0;
+        BYTE nNextScript = 0;
         const SwLinePortion* pPor = rPor.GetPortion();
         if ( pPor && pPor->IsKernPortion() )
             pPor = pPor->GetPortion();
@@ -205,14 +205,14 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
             pPor->GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
-            nScript = (BYTE)pBreakIt->xBreak->getScriptType( aStr, 0 );
+            nNextScript = (BYTE)pBreakIt->xBreak->getScriptType( aStr, 0 );
         }
         else
-            nScript = (BYTE)pBreakIt->xBreak->getScriptType( rInf.GetTxt(), nPos );
+            nNextScript = (BYTE)pBreakIt->xBreak->getScriptType( rInf.GetTxt(), nPos );
 
-        if( ASIAN == nScript &&
+        if( ASIAN == nNextScript &&
             ( LANGUAGE_KOREAN !=
-            rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nScript ) ) )
+            rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nNextScript ) ) )
             ++nCnt;
     }
 

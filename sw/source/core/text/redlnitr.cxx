@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-22 11:01:58 $
+ *  last change: $Author: fme $ $Date: 2002-03-21 09:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,14 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
 
     delete pFnt;
     pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+
+#ifdef BIDI
+    // Set default layout mode ( LTR or RTL ). pOut should be the printer.
+    if ( pFrm && pFrm->IsRightToLeft() )
+        pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
+    else
+        pOut->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
+#endif
 
 #ifdef VERTICAL_LAYOUT
     // set font to vertical if frame layout is vertical
