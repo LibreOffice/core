@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 11:01:09 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,22 +1298,29 @@ void Desktop::Main()
         com::sun::star::uno::getCurrentContext() );
 
     BootstrapError eError = GetBootstrapError();
-    if ( eError == BE_OK )
+    if ( eError != BE_OK )
     {
-        // Detect desktop environment - need to do this as early as possible
-        com::sun::star::uno::setCurrentContext(
-            new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+        HandleBootstrapErrors( eError );
+        return;
+    }
 
-        // Startup screen
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
-        OpenSplashScreen();
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
+    // Detect desktop environment - need to do this as early as possible
+    com::sun::star::uno::setCurrentContext(
+        new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
-        // Use a temporary error handler during user install.
-        ConfigurationErrorHandler aConfigErrHandler;
-        if (!ShouldSuppressUI(GetCommandLineArgs()))
-            aConfigErrHandler.activate();
+    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 
+    // setup configuration error handling
+    ConfigurationErrorHandler aConfigErrHandler;
+    if (!ShouldSuppressUI(pCmdLineArgs))
+        aConfigErrHandler.activate();
+
+    // Startup screen
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
+    OpenSplashScreen();
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
+
+    {
         UserInstall::UserInstallError instErr_lang = UserInstall::configureLanguage();
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_lang != UserInstall::E_None || instErr_fin != UserInstall::E_None)
@@ -1326,13 +1333,7 @@ void Desktop::Main()
         utl::Bootstrap::reloadData();
         SetSplashScreenProgress(10);
     }
-    else
-    {
-        HandleBootstrapErrors( eError );
-        return;
-    }
 
-    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
@@ -1364,16 +1365,6 @@ void Desktop::Main()
             return;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
-
-        com::sun::star::uno::ContextLayer layer(
-            com::sun::star::uno::getCurrentContext() );
-
-        com::sun::star::uno::setCurrentContext(
-            new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
-
-        ConfigurationErrorHandler aConfigErrHandler;
-        if (!ShouldSuppressUI(pCmdLineArgs))
-            aConfigErrHandler.activate();
 
         // check if accessibility is enabled but not working and allow to quit
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
@@ -1669,7 +1660,6 @@ void Desktop::Main()
     Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
     // The configuration error handler currently is only for startup
-    ConfigurationErrorHandler aConfigErrHandler;
     aConfigErrHandler.deactivate();
 
    // Acquire solar mutex just before we enter our message loop
