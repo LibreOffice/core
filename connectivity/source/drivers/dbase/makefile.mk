@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-23 09:13:10 $
+#   last change: $Author: pluby $ $Date: 2001-06-22 04:51:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,6 +154,13 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
+
+
+# [kh] ppc linux gcc compiler problem
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
+NOOPTFILES= \
+    $(SLO)$/DTable.obj
+.ENDIF
 
 
 # --- Targets ----------------------------------
