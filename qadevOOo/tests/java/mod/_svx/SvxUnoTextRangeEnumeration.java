@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextRangeEnumeration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:39:34 $
+ *  last change:$Date: 2003-09-08 12:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,8 @@
 
 package mod._svx;
 
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.drawing.XShape;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.ControlCharacter;
-import com.sun.star.text.XSimpleText;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -78,8 +70,17 @@ import lib.TestParameters;
 import util.DrawTools;
 import util.SOfficeFactory;
 
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.ControlCharacter;
+import com.sun.star.text.XSimpleText;
+import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class SvxUnoTextRangeEnumeration extends TestCase {
 
