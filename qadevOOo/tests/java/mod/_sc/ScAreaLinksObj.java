@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAreaLinksObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:04:09 $
+ *  last change:$Date: 2003-11-18 16:29:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,8 @@ public class ScAreaLinksObj extends TestCase {
         // adding one link into collection (for best testing)
         links = (XAreaLinks) UnoRuntime.queryInterface(XAreaLinks.class, oObj) ;
         CellAddress addr = new CellAddress ((short) 1,2,3) ;
-        links.insertAtPosition (addr, "", "a2:b5", "", "") ;
+        String aSourceArea = util.utils.getFullTestURL("calcshapes.sxc");
+        links.insertAtPosition (addr, aSourceArea, "a2:b5", "", "") ;
 
         // creating test environment
         tEnv = new TestEnvironment(oObj);
