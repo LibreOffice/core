@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyvalueset.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-02-02 10:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ class PropertyValues : public PropertyValuesVector {};
                                                                               \
     m_bWasNull = sal_True;                                                    \
                                                                               \
-    if ( ( columnIndex < 1 ) || ( columnIndex > m_pValues->size() ) )         \
+    if ( ( columnIndex < 1 )                                                  \
+         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )                \
     {                                                                         \
         VOS_ENSURE( sal_False, "PropertyValueSet - index out of range!" );    \
     }                                                                         \
@@ -295,13 +296,41 @@ class PropertyValues : public PropertyValuesVector {};
 //=========================================================================
 //=========================================================================
 
+#define PROPERTYVALUESET_INIT()             \
+  m_xSMgr( rxSMgr ),                        \
+  m_pValues( new PropertyValues ),          \
+  m_bWasNull( sal_False ),                  \
+  m_bTriedToGetTypeConverter( sal_False )
+
+//=========================================================================
 PropertyValueSet::PropertyValueSet(
                     const Reference< XMultiServiceFactory >& rxSMgr )
-: m_xSMgr( rxSMgr ),
-  m_bWasNull( sal_False ),
-  m_bTriedToGetTypeConverter( sal_False )
+: PROPERTYVALUESET_INIT()
 {
-    m_pValues = new PropertyValues;
+}
+
+//=========================================================================
+PropertyValueSet::PropertyValueSet(
+            const Reference< XMultiServiceFactory >& rxSMgr,
+            const Sequence< com::sun::star::beans::PropertyValue >& rValues )
+: PROPERTYVALUESET_INIT()
+{
+    sal_Int32 nCount = rValues.getLength();
+    if ( nCount )
+    {
+        const com::sun::star::beans::PropertyValue* pValues
+            = rValues.getConstArray();
+
+        for ( sal_Int32 n = 0; n < nCount; ++n )
+        {
+            const com::sun::star::beans::PropertyValue& rValue = pValues[ n ];
+            appendObject( Property( rValue.Name,
+                                      rValue.Handle,
+                                      rValue.Value.getValueType(),
+                                      0 ),
+                          rValue.Value );
+        }
+    }
 }
 
 //=========================================================================
@@ -480,7 +509,8 @@ Any SAL_CALL PropertyValueSet::getObject(
 
     m_bWasNull = sal_True;
 
-    if ( ( columnIndex < 1 ) || ( columnIndex > m_pValues->size() ) )
+    if ( ( columnIndex < 1 )
+         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
     {
         VOS_ENSURE( sal_False, "PropertyValueSet - index out of range!" );
     }

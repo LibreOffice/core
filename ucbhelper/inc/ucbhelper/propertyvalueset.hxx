@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyvalueset.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-02-02 10:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace com { namespace sun { namespace star { namespace script {
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
+    struct PropertyValue;
     class XPropertySet;
 } } } }
 
@@ -130,6 +131,11 @@ public:
     PropertyValueSet(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
+    PropertyValueSet(
+            const com::sun::star::uno::Reference<
+                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            const com::sun::star::uno::Sequence<
+                com::sun::star::beans::PropertyValue >& rValues );
     virtual ~PropertyValueSet();
 
     // XInterface
