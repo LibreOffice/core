@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
+ *  last change: $Author: os $ $Date: 2002-03-19 13:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ public:
     const String&   GetNewCrsrPos() const           { return sNewCrsrPos; }
 
     USHORT          GetNewPage() const {return nNewPage;}
-    USHORT          SetNewPage(USHORT nSet)  {nNewPage = nSet;}
+    void            SetNewPage(USHORT nSet)  {nNewPage = nSet;}
 
         // Handler
     void            Execute(SfxRequest&);
