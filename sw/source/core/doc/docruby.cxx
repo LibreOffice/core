@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-15 12:07:49 $
+ *  last change: $Author: jp $ $Date: 2001-06-19 10:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,9 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                 if( pEntry->GetRubyAttr().GetText().Len() &&
                     pEntry->GetText().Len() )
                 {
+                    Insert( aPam, pEntry->GetText() );
                     aPam.SetMark();
-                    Insert( aPam, pEntry->GetText().Len() );
+                    aPam.GetMark()->nContent -= pEntry->GetText().Len();
                     Insert( aPam, pEntry->GetRubyAttr(), SETATTR_DONTEXPAND );
                 }
                 else
