@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-13 09:45:29 $
+ *  last change: $Author: cd $ $Date: 2001-07-18 07:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,11 +1657,11 @@ sal_Bool SfxOrganizeDlg_Impl::GetFactoryURL_Impl( String& rFactoryURL, String& r
     rFileURL = pTemplates->GetPath( nRegion, nIndex );
     if ( rFileURL.Len() > 0 )
     {
-        SvStorage aStorage( rFileURL );
-        if ( !aStorage.GetError() )
+        SvStorageRef aStorage = new SvStorage( rFileURL );
+        if ( !aStorage->GetError() )
         {
             const SfxFilter* pFilter =
-                SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage.GetFormat() );
+                SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage->GetFormat() );
             if ( pFilter )
             {
                 const SfxFactoryFilterContainer* pFilterCont =
