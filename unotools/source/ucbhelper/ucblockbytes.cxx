@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-01 10:11:07 $
+ *  last change: $Author: mba $ $Date: 2000-12-06 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,11 +671,18 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     if (!pStat)
         return ERRCODE_IO_INVALIDPARAMETER;
 
-    Reference<XInputStream> xStream = getInputStream_Impl();
+    Reference <XInputStream> xStream = getInputStream_Impl();
     Reference <XSeekable> xSeekable = getSeekable_Impl();
 
-    if ( !xStream.is() || !xSeekable.is() )
-        return ERRCODE_IO_INVALIDACCESS;
+    if ( !xStream.is() )
+    {
+        if ( m_bTerminated )
+            return ERRCODE_IO_INVALIDACCESS;
+        else
+            return ERRCODE_IO_PENDING;
+    }
+    else if( !xSeekable.is() )
+        return ERRCODE_IO_CANTTELL;
 
     try
     {
@@ -686,10 +693,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
         return ERRCODE_IO_CANTTELL;
     }
 
-    if (!m_bTerminated)
-        return ERRCODE_IO_PENDING;
-    else
-        return ERRCODE_NONE;
+    return ERRCODE_NONE;
 }
 
 //----------------------------------------------------------------------------
