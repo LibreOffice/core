@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:38:15 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+#ifndef _WLDCRD_HXX
+#include <tools/wldcrd.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -526,7 +530,6 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
 
     if ( aRuleSet.size() >= 1 )
     {
-        Wildcard    aPatternMatch;
         sal_Int16   nPrioCurrentRule = aEnvPrioTable[ ET_UNKNOWN ];
         for ( sal_Int32 nIndex = 0; nIndex < (sal_Int32)aRuleSet.size(); nIndex++ )
         {
@@ -546,7 +549,8 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
                         aHostStr = aHostStr.toAsciiLowerCase();
 
                         // Pattern match if domain environment match
-                        sal_Bool bMatch = aPatternMatch.match( aHost, aHostStr );
+                        WildCard aPattern(aHostStr);
+                        sal_Bool bMatch = aPattern.Matches(aHost);
                         if ( bMatch )
                         {
                             aActiveRule         = aRule;
@@ -574,7 +578,8 @@ sal_Bool SubstitutePathVariables_Impl::FilterRuleSet( const SubstituteRuleVector
                             aDomain = GetNTDomainName();
 
                         // Pattern match if domain environment match
-                        sal_Bool bMatch = aPatternMatch.match( aDomain, aDomainStr );
+                        WildCard aPattern(aDomainStr);
+                        sal_Bool bMatch = aPattern.Matches(aDomain);
                         if ( bMatch )
                         {
                             aActiveRule         = aRule;
