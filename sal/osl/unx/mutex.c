@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:20:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,11 +191,7 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
         int nRet = 0;
         nRet = pthread_mutex_trylock(&(pMutex->mutex));
         if ( nRet != 0  )
-        {
-            OSL_TRACE("osl_tryToacquireMutex : mutex trylock failed. Errno: %d; %s\n",
-                      nRet, strerror(nRet));
             return sal_False;
-        }
 
         return sal_True;
     }
