@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,6 +665,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_EXTENDEDHELP:
+        {
+            Help::StartExtHelp();
+            break;
+        }
         case SID_HELPBALLOONS:
         {
             // Parameter auswerten
@@ -862,17 +867,9 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     rSet.Put( SfxBoolItem( SID_HELP_PI, SvtHelpOptions().IsHelpAgentAutoStartMode() ) );
                 }
                 break;
+
                 case SID_EXTENDEDHELP:
                 {
-/*! (pb) what about help?
-                    BOOL bExtHelp = Help::IsExtHelpActive();
-                    // Wenn weder aus Resource noch aus Hilfesystem:
-                    short nHelpMode = ImplGetHelpMode();
-                    if ( ( nHelpMode & HELPTEXTMODE_NORESHELPTEXT ) &&
-                        !( nHelpMode & HELPTEXTMODE_EXTERN ) )
-                        bExtHelp = FALSE;
-                    rSet.Put( SfxBoolItem( SID_EXTENDEDHELP, bExtHelp ) );
-*/
                 }
                 break;
 
