@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-27 12:35:21 $
+ *  last change: $Author: rt $ $Date: 2002-05-28 20:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,13 +239,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ korean ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "외곽선 설정" ; 0; > ;
+        < "왼쪽 외곽선" ; 1; > ;
+        < "오른쪽 외곽선" ; 2; > ;
+        < "위쪽 외곽선" ; 3; > ;
+        < "아래쪽 경계선" ; 4; > ;
+        < "수평 외곽선" ; 5; > ;
+        < "수직 외곽선" ; 6; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -482,13 +482,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ korean ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "외곽선 설정" ; 0; > ;
+        < "왼쪽 외곽선" ; 1; > ;
+        < "오른쪽 외곽선" ; 2; > ;
+        < "위쪽 외곽선" ; 3; > ;
+        < "아래쪽 외곽선" ; 4; > ;
+        < "수평 외곽선" ; 5; > ;
+        < "수직 외곽선" ; 6; > ;
     };
     ItemList [ chinese_simplified ] =
     {
