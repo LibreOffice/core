@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadRunner.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-26 14:53:53 $
+ *  last change:$Date: 2003-06-11 16:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,10 @@
  *
  *
  ************************************************************************/
+
 package basicrunner.basichelper;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XServiceInfo;
@@ -235,17 +237,25 @@ class ToolkitDialogThread extends Thread {
 class DialogFromFileThread extends Thread {
     String url = null;
     SOfficeFactory SOF = null;
+    XMultiServiceFactory myMSF = null;
 
     public DialogFromFileThread(XMultiServiceFactory xMSF, String sUrl) {
     url = sUrl;
     SOF = SOfficeFactory.getFactory(xMSF);
+        myMSF = xMSF;
     }
 
     public void run() {
     try {
+            PropertyValue[] args = new PropertyValue[1];
+            args[0] = new PropertyValue();
+            args[0].Name = "InteractionHandler";
+            args[0].Value = myMSF.createInstance(
+                "com.sun.star.comp.uui.UUIInteractionHandler");
+
         String testUrl= utils.getFullTestURL(url);
         System.out.println("loading "+testUrl);
-        XComponent xDoc = SOF.loadDocument(testUrl);
+        XComponent xDoc = SOF.loadDocument(testUrl, args);
     } catch (com.sun.star.uno.Exception e) {
         System.out.println("Couldn't create document!!!");
         throw new StatusException( "Couldn't create document!!!", e );
@@ -277,8 +287,14 @@ class ExecuteDialogThread extends Thread {
 }
 
 // $Log: not supported by cvs2svn $
-// Revision 1.1  2003/01/27 16:27:27  sw
-// NEW: initial version
+// Revision 1.3.12.2  2003/06/05 10:44:24  cn
+// #109975# CHG: Header
+//
+// Revision 1.3.12.1  2003/06/05 10:29:09  cn
+// #109975# CHG: userinteractionhader for csv files
+//
+// Revision 1.3  2003/06/05 10:27:19  cn
+// CHG: userinteractionhandler for csv files
 //
 // Revision 1.2  2002/10/16 15:11:51  cn
 // CHG: ExecuteDialogThread added
