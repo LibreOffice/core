@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:36:00 $
+ *  last change: $Author: hjs $ $Date: 2000-11-06 19:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+
+#include <string>
+#include <algorithm>
 
 /*-----------------07.02.97 15.37-------------------
 
@@ -2149,7 +2152,7 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
             if(nActNumLvl & nMask)
             {
                 SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-                aNumFmt.SetIncludeUpperLevels((BYTE) min(pBox->GetValue(), i + 1) );
+                aNumFmt.SetIncludeUpperLevels((BYTE) std::min(pBox->GetValue(), (long) (i + 1)) );
                 pActNum->SetLevel(i, aNumFmt);
             }
             nMask <<= 1;
@@ -2834,7 +2837,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
             }
             if(nStart)
                 nStart--;
-            BYTE nEnd = min(nStart + 3, pActNum->GetLevelCount());
+            BYTE nEnd = std::min((USHORT)(nStart + 3), pActNum->GetLevelCount());
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
