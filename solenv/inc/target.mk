@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.132 $
+#   $Revision: 1.133 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:12 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:34:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2166,6 +2166,7 @@ $(SCP_PRODUCT_TYPE):
 .IF "$(UPDATER)"!=""
 COMPVTMP:=$(mktmp iii)
 "$(COMPVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+.IF "$(CCNUMVER)"!=""
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
 .IF "$(COM)"=="GCC"
@@ -2176,6 +2177,9 @@ COMPVTMP:=$(mktmp iii)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(RENAME) $(COMPVTMP) $@
+.ELSE           # "$(CCNUMVER)"!=""
+    @+-$(RM) $@ >& $(NULLDEV)
+.ENDIF          # "$(CCNUMVER)"!=""
     
 .ENDIF			# "$(COMPVERMK)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -2198,8 +2202,8 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     @-+$(MKDIR) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
-    -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
-    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.bmp~
+    -+$(GNUCOPY) -pub $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/* $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
+    +-$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(RES))$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))})$/*.b*~
 .ELSE			# "$(common_build_reslib)"!=""
     @-+$(MKDIR) $(RES)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) >& $(NULLDEV)
     +$(BMP) $(SRS)$/$(@:b:s/_img/ /:1).srs $(BMP_OUT)$/$(langext_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) $(lang_{$(subst,$(@:b:s/_img/ /:1)_img, $(@:b))}) -I $(BMP_IN) -I $(SOLARSRC)$/res -f $@
@@ -2870,21 +2874,24 @@ $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
 $(MISC)$/$(TARGET).dpz $(ZIPDEPPHONY) : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) $(ZIP7TARGETN) $(ZIP8TARGETN) $(ZIP9TARGETN)
 .ENDIF
 
+VERSIONTMP:=$(mktmp iii)
 $(INCCOM)$/_version.h : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-        @+echo "#define" _BUILD \"$(BUILD)\"	> $@
-        @+echo "#define" _UPD \"$(UPD)\"		>> $@
-        @+echo "#define" _LAST_MINOR \"$(LAST_MINOR)\"	>> $@
-        @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $@
-        @+echo "#define" _INPATH \"$(INPATH)\"	>> $@
+    @+echo "#define" _BUILD \"$(BUILD)\"	> $(VERSIONTMP)
+    @+echo "#define" _UPD \"$(UPD)\"		>> $(VERSIONTMP)
+    @+echo "#define" _LAST_MINOR \"$(LAST_MINOR)\"	>> $(VERSIONTMP)
+    @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(VERSIONTMP)
+    @+echo "#define" _INPATH \"$(INPATH)\"	>> $(VERSIONTMP)
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $@
-        @+echo #define _UPD "$(UPD)"		>> $@
-        @+echo #define _LAST_MINOR "$(LAST_MINOR)"	>> $@
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $@
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $@
-        @+echo #define _INPATH "$(INPATH)"	>> $@
+    @+echo #define _BUILD "$(BUILD)"	> $(VERSIONTMP)
+    @+echo #define _UPD "$(UPD)"		>> $(VERSIONTMP)
+    @+echo #define _LAST_MINOR "$(LAST_MINOR)"	>> $(VERSIONTMP)
+    @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(VERSIONTMP)
+    @+echo #define _RSCREVISION "$(RSCREVISION)">> $(VERSIONTMP)
+    @+echo #define _INPATH "$(INPATH)"	>> $(VERSIONTMP)
 .ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
+    @+-$(RENAME) $(VERSIONTMP) $@
 
 .IF "$(MAKEFILERC)"==""
 warn_target_empty:
