@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 09:32:10 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 14:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,6 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
 
 sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 {
-#ifndef SVX_LIGHT
     const SvInPlaceObjectRef& rIPRef = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
 
     if( rIPRef.Is() )
@@ -304,11 +303,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 
     static_cast< SdrOle2Obj* >( pObj )->SetObjRef( aIPObj );
     aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
-
     return bOk;
-#else
-    return sal_False;
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -378,13 +373,12 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    sal_Bool bOwn = sal_False;
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pObj && pModel )
+    if( pMap && pObj && pModel )
     {
-        if(pMap == NULL )
-            throw UnknownPropertyException();
-
         if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
             SvAppletObjectRef xApplet = SvAppletObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
@@ -401,7 +395,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
                         {
                             const String aStrCodeBase( aCodeBase );
                             xApplet->SetCodeBase( aStrCodeBase );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -412,7 +406,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
                         {
                             const String aStrName( aName );
                             xApplet->SetName( aStrName );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -423,7 +417,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
                         {
                             const String aStrCode( aCode );
                             xApplet->SetClass( aStrCode );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -436,7 +430,7 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
                             if( SvxImplFillCommandList( aCommandSequence, aNewCommands ) )
                             {
                                 xApplet->SetCommandList( aNewCommands );
-                                return;
+                                bOwn = sal_True;
                             }
                         }
                     }
@@ -447,17 +441,35 @@ void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, c
                         if( aValue >>= bScript )
                         {
                             xApplet->SetMayScript( bScript );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
             }
 
-            throw IllegalArgumentException();
+            if( !bOwn )
+                throw IllegalArgumentException();
         }
     }
 
-    SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
+    if( !bOwn )
+        SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
+
+    if( pModel )
+    {
+        SvPersist* pPersist = pModel->GetPersist();
+        if( pPersist && !pPersist->IsEnableSetModified() )
+        {
+            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObj );
+            if( pOle && ! pOle->IsEmpty() )
+            {
+                const SvInPlaceObjectRef& rIPRef = pOle->GetObjRef();
+
+                if( rIPRef.Is() )
+                    rIPRef->SetModified( sal_False );
+            }
+        }
+    }
 }
 
 Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -466,11 +478,8 @@ Any SAL_CALL SvxAppletShape::getPropertyValue( const OUString& PropertyName ) th
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pObj && pModel )
+    if( pMap && pObj && pModel )
     {
-        if(pMap == NULL )
-            throw UnknownPropertyException();
-
         if( pMap->nWID >= OWN_ATTR_APPLET_CODEBASE && pMap->nWID <= OWN_ATTR_APPLET_ISSCRIPT )
         {
             SvAppletObjectRef xApplet = SvAppletObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
@@ -531,13 +540,12 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    sal_Bool bOwn = sal_False;
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pObj && pModel )
+    if( pMap && pObj && pModel )
     {
-        if(pMap == NULL )
-            throw UnknownPropertyException();
-
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
             SvPlugInObjectRef xPlugin = SvPlugInObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
@@ -554,7 +562,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
                         {
                             const String aStrMimeType( aMimeType );
                             xPlugin->SetMimeType( aStrMimeType );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -565,7 +573,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
                         {
                             const String aStrURL( aURL );
                             xPlugin->SetURL( aStrURL );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -578,18 +586,36 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
                             if( SvxImplFillCommandList( aCommandSequence, aNewCommands ) )
                             {
                                 xPlugin->SetCommandList( aNewCommands );
-                                return;
+                                bOwn = sal_True;
                             }
                         }
                     }
                     break;
             }
 
-            throw IllegalArgumentException();
+            if( !bOwn )
+                throw IllegalArgumentException();
         }
     }
 
-    SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
+    if( !bOwn )
+        SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
+
+    if( pModel )
+    {
+        SvPersist* pPersist = pModel->GetPersist();
+        if( pPersist && !pPersist->IsEnableSetModified() )
+        {
+            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObj );
+            if( pOle && ! pOle->IsEmpty() )
+            {
+                const SvInPlaceObjectRef& rIPRef = pOle->GetObjRef();
+
+                if( rIPRef.Is() )
+                    rIPRef->SetModified( sal_False );
+            }
+        }
+    }
 }
 
 Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -598,11 +624,8 @@ Any SAL_CALL SvxPluginShape::getPropertyValue( const OUString& PropertyName ) th
 
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pObj && pModel )
+    if( pMap && pObj && pModel )
     {
-        if(pMap == NULL )
-            throw UnknownPropertyException();
-
         if( pMap->nWID >= OWN_ATTR_PLUGIN_MIMETYPE && pMap->nWID <= OWN_ATTR_PLUGIN_COMMANDS )
         {
             SvPlugInObjectRef xPlugin = SvPlugInObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
@@ -665,14 +688,13 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    sal_Bool bOwn = sal_False;
+
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(aPropertyName);
 
     Any aAny;
-    if( pObj && pModel )
+    if( pMap && pObj && pModel )
     {
-        if(pMap == NULL )
-            throw UnknownPropertyException();
-
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
             SfxFrameObjectRef xFrame = SfxFrameObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
@@ -695,7 +717,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                             const String aStrURL( aURL );
                             pDescriptor->SetURL( aStrURL );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -707,7 +729,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                             const String aStrName( aName );
                             pDescriptor->SetName( aStrName );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -718,13 +740,13 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                         {
                             pDescriptor->SetScrollingMode( ScrollingAuto );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                         else if( aValue >>= bScroll )
                         {
                             pDescriptor->SetScrollingMode( bScroll ? ScrollingYes : ScrollingNo );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -735,7 +757,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                         {
                             pDescriptor->SetFrameBorder( bBorder );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -748,7 +770,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                             const Size aNewMargin( nMargin, pDescriptor->GetMargin().Height() );
                             pDescriptor->SetMargin( aNewMargin );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
@@ -760,17 +782,35 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
                             const Size aNewMargin( pDescriptor->GetMargin().Width(), nMargin );
                             pDescriptor->SetMargin( aNewMargin );
                             xFrame->SetFrameDescriptor( pDescriptor );
-                            return;
+                            bOwn = sal_True;
                         }
                     }
                     break;
             }
 
-            throw IllegalArgumentException();
+            if( !bOwn )
+                throw IllegalArgumentException();
         }
     }
 
-    SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
+    if( !bOwn )
+        SvxOle2Shape::setPropertyValue( aPropertyName, aValue );
+
+    if( pModel )
+    {
+        SvPersist* pPersist = pModel->GetPersist();
+        if( pPersist && !pPersist->IsEnableSetModified() )
+        {
+            SdrOle2Obj* pOle = static_cast< SdrOle2Obj* >( pObj );
+            if( pOle && ! pOle->IsEmpty() )
+            {
+                const SvInPlaceObjectRef& rIPRef = pOle->GetObjRef();
+
+                if( rIPRef.Is() )
+                    rIPRef->SetModified( sal_False );
+            }
+        }
+    }
 }
 
 Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -780,11 +820,8 @@ Any SAL_CALL SvxFrameShape::getPropertyValue( const OUString& PropertyName ) thr
     const SfxItemPropertyMap* pMap = aPropSet.getPropertyMapEntry(PropertyName);
 
     Any aAny;
-    if( pObj && pModel )
+    if( pMap && pObj && pModel )
     {
-        if(pMap == NULL )
-            throw UnknownPropertyException();
-
         if( pMap->nWID >= OWN_ATTR_FRAME_URL && pMap->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT )
         {
             SfxFrameObjectRef xFrame = SfxFrameObjectRef( ((SdrOle2Obj*)pObj)->GetObjRef() );
