@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:16:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,9 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
+        static const ::rtl::OUString s_sBindAttribute           = ::rtl::OUString::createFromAscii("bind");
+        static const ::rtl::OUString s_sListBindAttribute       = ::rtl::OUString::createFromAscii("xforms-list-source");
+        static const ::rtl::OUString s_sSubmissionAttribute     = ::rtl::OUString::createFromAscii("submission");
         if ( !m_sControlId.getLength() && _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CONTROL_ID ) ) )
         {   // it's the control id
             m_sControlId = _rValue;
@@ -598,6 +601,18 @@ namespace xmloff
         else if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LINKED_CELL ) ) )
         {   // it's the address of a spreadsheet cell
             m_sBoundCellAddress = _rValue;
+        }
+        else if ( _rLocalName == s_sBindAttribute  &&  _nNamespaceKey == XML_NAMESPACE_XFORMS )
+        {
+            m_sBindingID = _rValue;
+        }
+        else if ( _rLocalName == s_sListBindAttribute  &&  _nNamespaceKey == XML_NAMESPACE_FORM )
+        {
+            m_sListBindingID = _rValue;
+        }
+        else if ( _rLocalName == s_sSubmissionAttribute  &&  _nNamespaceKey == XML_NAMESPACE_XFORMS )
+        {
+            m_sSubmissionID = _rValue;
         }
         else
         {
@@ -854,6 +869,18 @@ namespace xmloff
         // the external cell binding, if applicable
         if ( m_xElement.is() && m_sBoundCellAddress.getLength() )
             doRegisterCellValueBinding( m_sBoundCellAddress );
+
+        // XForms binding, if applicable
+        if ( m_xElement.is() && m_sBindingID.getLength() )
+            doRegisterXFormsValueBinding( m_sBindingID );
+
+        // XForms list binding, if applicable
+        if ( m_xElement.is() && m_sListBindingID.getLength() )
+            doRegisterXFormsListBinding( m_sListBindingID );
+
+        // XForms submission, if applicable
+        if ( m_xElement.is() && m_sSubmissionID.getLength() )
+            doRegisterXFormsSubmission( m_sSubmissionID );
     }
 
     //---------------------------------------------------------------------
@@ -864,6 +891,33 @@ namespace xmloff
             "OControlImport::doRegisterCellValueBinding: invalid address!" );
 
         m_rContext.registerCellValueBinding( m_xElement, _rBoundCellAddress );
+    }
+
+    //---------------------------------------------------------------------
+    void OControlImport::doRegisterXFormsValueBinding( const ::rtl::OUString& _rBindingID )
+    {
+        OSL_PRECOND( m_xElement.is(), "need element" );
+        OSL_PRECOND( _rBindingID.getLength() > 0, "binding ID is not valid" );
+
+        m_rContext.registerXFormsValueBinding( m_xElement, _rBindingID );
+    }
+
+    //---------------------------------------------------------------------
+    void OControlImport::doRegisterXFormsListBinding( const ::rtl::OUString& _rBindingID )
+    {
+        OSL_PRECOND( m_xElement.is(), "need element" );
+        OSL_PRECOND( _rBindingID.getLength() > 0, "binding ID is not valid" );
+
+        m_rContext.registerXFormsListBinding( m_xElement, _rBindingID );
+    }
+
+    //---------------------------------------------------------------------
+    void OControlImport::doRegisterXFormsSubmission( const ::rtl::OUString& _rSubmissionID )
+    {
+        OSL_PRECOND( m_xElement.is(), "need element" );
+        OSL_PRECOND( _rSubmissionID.getLength() > 0, "binding ID is not valid" );
+
+        m_rContext.registerXFormsSubmission( m_xElement, _rSubmissionID );
     }
 
     //---------------------------------------------------------------------
