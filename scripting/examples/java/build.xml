@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-11-04 17:46:48 $
+#   last change: $Author: rt $ $Date: 2004-02-10 16:07:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,24 +139,25 @@
     </delete>
 
     <mkdir dir="${out}/class/examples/java/Highlight"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/Highlight/"
+    <javac srcdir="${prj}/examples/java/Highlight/"
+           destdir="${out}/class/examples/java/Highlight/"
               includes="**/Highlight*.java" classpathref="idlclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+             debug="${debug}" optimize="${optimize}" deprecation="on"/>
     <copy todir="${out}/class/examples/java/Highlight/">
-        <fileset dir="${prj}/examples/java/">
-            <include name="**/Highlight*.java"/>
+        <fileset dir="${prj}/examples/java/Highlight/">
+            <include name="**/*.*"/>
         </fileset>
     </copy>
-    <copy file="${prj}/examples/java/HighlightTextParcel.xml" tofile="${out}/class/examples/java/Highlight/parcel-descriptor.xml"/>
     <jar jarfile="${out}/class/examples/java/Highlight/Highlight.jar"
-        basedir="${out}/class/examples/java/Highlight"
-        includes="**/*.java,**/*.class,**/*.xml"
-        excludes="${out}/class/examples/java/Highlight/Highlight.jar">
-        <manifest>
+         basedir="${out}/class/examples/java/Highlight"
+         includes="**/*.java,**/*.class,**/*.xml"
+         excludes="${out}/class/examples/java/Highlight/Highlight.jar">
+         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="ScriptFramework-Version" value="${sfversion}"/>
-        </manifest>
+         </manifest>
     </jar>
+
     <mkdir dir="${out}/class/examples/java/MemoryUsage"/>
     <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/MemoryUsage/"
               includes="**/MemoryUsage.java" classpathref="idlclasspath"
@@ -166,6 +167,21 @@
     <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
     <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
 
+    <mkdir dir="${out}/class/examples/java/HelloWorld"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/HelloWorld/"
+              includes="**/HelloWorld.java" classpathref="idlclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+    <copy file="${prj}/examples/java/HelloWorld.java" todir="${out}/class/examples/java/HelloWorld/"/>
+    <copy file="${prj}/examples/java/HelloWorldParcel.xml" tofile="${out}/class/examples/java/HelloWorld/parcel-descriptor.xml"/>
+    <jar jarfile="${out}/class/examples/java/HelloWorld/HelloWorld.jar"
+        basedir="${out}/class/examples/java/HelloWorld"
+        includes="**/*.java,**/*.class,**/*.xml"
+        excludes="${out}/class/examples/java/HelloWorld/HelloWorld.jar">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
   </target>
 
   <!-- ====================== Clean Generated Files ===================== -->
