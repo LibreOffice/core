@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
+ *  last change: $Author: mh $ $Date: 2000-11-22 17:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
+#include <app.hxx>
 #endif
 #include <svtools/useroptions.hxx>
 #pragma hdrstop
