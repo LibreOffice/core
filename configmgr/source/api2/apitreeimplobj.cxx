@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:13:03 $
+ *  last change: $Author: jb $ $Date: 2001-02-27 15:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,10 @@
 #include "roottree.hxx"
 #include "noderef.hxx"
 
+#include "tracer.hxx"
+
 #include <cppuhelper/queryinterface.hxx>
+#include <vos/refernce.hxx>
 
 namespace configmgr
 {
@@ -79,8 +82,149 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
+        namespace lang = ::com::sun::star::lang;
+//-----------------------------------------------------------------------------
         class Factory;
         class Notifier;
+//-----------------------------------------------------------------------------
+class ApiTreeImpl::ComponentAdapter : public lang::XEventListener
+{
+    osl::Mutex mutex;
+    vos::ORefCount m_refs;
+
+    ApiTreeImpl* pOwner;
+
+    uno::Reference< lang::XComponent > xProvider;
+    uno::Reference< lang::XComponent > xParent;
+public:
+    ComponentAdapter(ApiTreeImpl& rParent) : pOwner(&rParent) {}
+
+    void clear();
+
+    void setProvider(uno::Reference< lang::XComponent > const& xProvider);
+    void setParent(uno::Reference< lang::XComponent > const& xParent);
+    uno::Reference< lang::XComponent > getProvider() const;
+    uno::Reference< lang::XComponent > getParent() const;
+
+// XEventListener
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+private:
+    void setComponent(uno::Reference< lang::XComponent >& rxSlot,uno::Reference< lang::XComponent > const& xComp);
+    uno::Reference< lang::XComponent > getComponent(uno::Reference< lang::XComponent > const& rxSlot) const;
+
+    virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw();
+    virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
+};
+//-----------------------------------------------------------------------------
+inline
+uno::Reference< lang::XComponent >
+    ApiTreeImpl::ComponentAdapter::getComponent(
+        uno::Reference< lang::XComponent > const& rxSlot
+    ) const
+{
+    return rxSlot;
+}
+//-----------------------------------------------------------------------------
+inline
+void ApiTreeImpl::ComponentAdapter::setComponent(
+        uno::Reference< lang::XComponent >& rxSlot,
+        uno::Reference< lang::XComponent > const& xComp
+    )
+{
+    osl::ClearableMutexGuard aGuard(mutex);
+
+    uno::Reference< lang::XComponent > xOld = rxSlot;
+    if (xOld != xComp)
+    {
+        rxSlot = xComp;
+
+        aGuard.clear();
+
+        if (xOld.is()) xOld->removeEventListener(this);
+        if (xComp.is()) xComp->addEventListener(this);
+    }
+}
+//-----------------------------------------------------------------------------
+uno::Reference< lang::XComponent > ApiTreeImpl::ComponentAdapter::getProvider() const
+{
+    return this->getComponent( this->xProvider );
+}
+uno::Reference< lang::XComponent > ApiTreeImpl::ComponentAdapter::getParent() const
+{
+    return this->getComponent( this->xParent );
+}
+void ApiTreeImpl::ComponentAdapter::setProvider(uno::Reference< lang::XComponent > const& xProvider)
+{
+    this->setComponent( this->xProvider, xProvider);
+}
+void ApiTreeImpl::ComponentAdapter::setParent(uno::Reference< lang::XComponent > const& xParent)
+{
+    this->setComponent( this->xParent, xParent);
+}
+//-----------------------------------------------------------------------------
+
+void SAL_CALL ApiTreeImpl::ComponentAdapter::acquire() throw()
+{
+    ++m_refs;
+}
+//-------------------------------------------------------------------------
+
+void SAL_CALL ApiTreeImpl::ComponentAdapter::release() throw()
+{
+    if (--m_refs == 0)
+        delete this;
+}
+//-------------------------------------------------------------------------
+
+uno::Any SAL_CALL ApiTreeImpl::ComponentAdapter::queryInterface(uno::Type const& rType) throw()
+{
+    return cppu::queryInterface( rType
+                , static_cast< com::sun::star::lang::XEventListener*>(this)
+                , static_cast< uno::XInterface*>(this)
+            );
+}
+//-------------------------------------------------------------------------
+
+void SAL_CALL ApiTreeImpl::ComponentAdapter::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+{
+    osl::ClearableMutexGuard aGuard(mutex);
+    if (this->pOwner != NULL)
+    {
+        CFG_TRACE_INFO("ApiTreeImpl:ComponentAdapter: Providing UNO object is disposed - relaying to my owner");
+        UnoInterfaceRef xKeepAlive( this->pOwner->getUnoInstance() );
+
+        aGuard.clear();
+
+        pOwner->disposing( rEvt );
+
+        osl::MutexGuard aClearGuard(mutex);
+        if (rEvt.Source == this->xParent) this->xParent.clear();
+        if (rEvt.Source == this->xProvider) this->xParent.clear();
+    }
+    else
+        CFG_TRACE_INFO("ApiTreeImpl:ComponentAdapter: Providing UNO object is disposed - but my owner is already gone");
+}
+
+//-------------------------------------------------------------------------
+
+void ApiTreeImpl::ComponentAdapter::clear()
+{
+    osl::ClearableMutexGuard aGuard(mutex);
+
+    this->pOwner = 0;
+
+    uno::Reference< lang::XComponent > xProvider = this->xProvider;
+    uno::Reference< lang::XComponent > xParent  = this->xParent;
+    this->xProvider = 0;
+    this->xParent = 0;
+
+    aGuard.clear();
+
+    if (xParent.is()) xParent->removeEventListener(this);
+    if (xProvider.is()) xProvider->removeEventListener(this);
+}
+
 //-----------------------------------------------------------------------------
 class ApiRootTreeImpl::NodeListener : public INodeListener
 {
@@ -305,6 +449,8 @@ bool ApiRootTreeImpl::enableNotification(bool bEnable)
 
 bool ApiTreeImpl::disposeTree(bool bForce)
 {
+    CFG_TRACE_INFO("ApiTreeImpl: Disposing Tree (may throw if already disposed)");
+
     // ensure our provider stays alive
     UnoInterfaceRef xKeepParentAlive(this->getParentComponent());
     OWriteSynchronized aLocalGuard(getDataLock());
@@ -327,11 +473,19 @@ bool ApiTreeImpl::disposeTree(bool bForce)
 
 bool ApiTreeImpl::disposeTreeNow()
 {
-    return isAlive() && implDisposeTree();
+    CFG_TRACE_INFO("ApiTreeImpl: Disposing Tree Now (unless disposed)");
+    if (isAlive() )
+    {
+        OWriteSynchronized aLocalGuard(getDataLock());
+        return implDisposeTree();
+    }
+    else
+        return false;
 }
 //-------------------------------------------------------------------------
 bool ApiRootTreeImpl::disposeTree()
 {
+    CFG_TRACE_INFO("Api Root TreeImpl: Disposing Tree And Releasing (unless disposed)");
     // ensure our provider stays alive
     UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
@@ -346,7 +500,11 @@ bool ApiRootTreeImpl::disposeTree()
 
     if (bDisposed) releaseData();
 
-    OSL_ENSURE( m_xOptions.isEmpty(), "Options should be cleared along with data" );
+    if (!m_xOptions.isEmpty())
+    {
+        OSL_ENSURE(!bDisposed, "Disposing/Releasing should clear the options");
+        CFG_TRACE_INFO("Api Root TreeImpl: data was not released in disposeTree");
+    }
 
     return bDisposed;
 }
@@ -358,6 +516,7 @@ bool ApiTreeImpl::implDisposeTree()
     NotifierImpl::SpecialContainer& aContainer = m_aNotifier->m_aListeners;
     if (aContainer.beginDisposing())
     {
+        CFG_TRACE_INFO("ApiTreeImpl: Tree is now disposed");
         using configuration::NodeIDList;
         using configuration::NodeID;
         using configuration::getAllContainedNodes;
@@ -375,10 +534,12 @@ bool ApiTreeImpl::implDisposeTree()
             rFactory.revokeElement( *it );
         }
 
+        CFG_TRACE_INFO_NI("ApiTreeImpl: Listeners are now informed");
         aContainer.notifyDisposing();
 
         OSL_ASSERT(!aContainer.isDisposed());
 
+        CFG_TRACE_INFO_NI("ApiTreeImpl: Deinitializing");
         deinit(); // releases the provider and parent
         aContainer.endDisposing();
 
@@ -387,7 +548,10 @@ bool ApiTreeImpl::implDisposeTree()
         return true;
     }
     else
+    {
+        CFG_TRACE_INFO("ApiTreeImpl: Tree was already disposed.");
         return false;
+    }
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
@@ -402,6 +566,7 @@ void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 //-------------------------------------------------------------------------
 void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 {
+    CFG_TRACE_INFO("ApiTreeImpl: Disposing a single node.");
     OSL_ENSURE(aNode.isValid(),"INTERNAL ERROR: Disposing NULL node");
     OSL_ENSURE(m_aTree.isValidNode(aNode),"INTERNAL ERROR: Disposing: node does not match tree");
     OSL_ENSURE( !m_aTree.isRootNode(aNode),"INTERNAL ERROR: Disposing the root node of the tree");
@@ -419,13 +584,10 @@ void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 //-------------------------------------------------------------------------
 void ApiTreeImpl::init(ApiTreeImpl* pParentTree)
 {
-    m_xProvider = getProviderComponent();
-    OSL_ENSURE(m_xProvider.is(),"WARNING: Provider is no Component - Lifetime trouble ahead");
+    m_xProvider = new ComponentAdapter(*this);
+    m_xProvider->setProvider( this->getProviderComponent() );
 
-    if (m_xProvider.is())
-    {
-        m_xProvider->addEventListener(this);
-    }
+    OSL_ENSURE(m_xProvider->getProvider().is(),"WARNING: Provider is no Component - Lifetime trouble ahead");
 
     OSL_ASSERT(m_pParentTree == 0);
     setParentTree(pParentTree);
@@ -435,11 +597,11 @@ void ApiTreeImpl::deinit()
 {
     setParentTree(0);
 
-    if (m_xProvider.is())
-    {
-        m_xProvider->removeEventListener(this);
-        m_xProvider.clear();
-    }
+    ComponentRef xAdapter = m_xProvider;
+    m_xProvider.clear();
+
+    if (xAdapter.is())
+        xAdapter->clear();
 }
 //-------------------------------------------------------------------------
 void ApiTreeImpl::haveNewParent(ApiTreeImpl* pNewParent) // public interface
@@ -479,22 +641,33 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
 
     if (m_pParentTree != pParentTree)
     {
-        uno::Reference<com::sun::star::lang::XComponent> xOld = getParentComponent();
-        if (xOld.is())  xOld->removeEventListener(this);
+        ComponentRef xAdapter = m_xProvider;
 
         m_pParentTree = pParentTree;
 
         uno::Reference<com::sun::star::lang::XComponent> xNew = getParentComponent();
-        if (xNew.is())  xNew->addEventListener(this);
-
-        if (xNew.is())  xNew->acquire();
-        if (xOld.is())  xOld->release();
-
         OSL_ENSURE( xNew.is() == (pParentTree != 0), "WARNING: Parent Tree is no Component");
+
+        if (xAdapter.is())
+            xAdapter->setParent(xNew);
+        else
+            OSL_ENSURE( pParentTree == 0, "ERROR: Setting New Parent at deinitialized ApiTreeImpl");
+
     }
 }
 //-------------------------------------------------------------------------
 
+UnoInterfaceRef ApiTreeImpl::getUnoProviderInstance() const
+{
+    ComponentRef xAdapter = m_xProvider;
+
+    UnoInterfaceRef xReturn;
+    if (xAdapter.is())
+        xReturn = xAdapter->getProvider();
+    return xReturn;
+}
+
+//-------------------------------------------------------------------------
 uno::Reference<com::sun::star::lang::XComponent> ApiTreeImpl::getParentComponent()
 {
     uno::XInterface* pInterface = m_pParentTree ? m_pParentTree->getUnoInstance() : 0;
@@ -507,36 +680,24 @@ uno::Reference<com::sun::star::lang::XComponent> ApiTreeImpl::getProviderCompone
     uno::XInterface* pInterface = m_rProvider.getProviderImpl().getProviderInstance();
     return uno::Reference<com::sun::star::lang::XComponent>::query(pInterface);
 }
+
 //-------------------------------------------------------------------------
 
-void SAL_CALL ApiTreeImpl::acquire() throw()
-{
-    // TODO add debug counting
-}
-//-------------------------------------------------------------------------
-void SAL_CALL ApiTreeImpl::release() throw()
-{
-    // TODO add debug counting
-}
-//-------------------------------------------------------------------------
-uno::Any SAL_CALL ApiTreeImpl::queryInterface(uno::Type const& rType) throw()
-{
-    return cppu::queryInterface( rType
-                , static_cast< com::sun::star::lang::XEventListener*>(this)
-                , static_cast< uno::XInterface*>(this)
-            );
-}
-//-------------------------------------------------------------------------
-
-void SAL_CALL ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
+void ApiTreeImpl::disposing(com::sun::star::lang::EventObject const& rEvt) throw()
 {
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
-    UnoInterfaceRef xKeepAlive( getUnoInstance() );
+    CFG_TRACE_INFO("ApiTreeImpl: Providing UNO object is disposed - disposing the tree");
 
     // Tree write Lock should be set by sender
-    setParentTree(0);
-    implDisposeTree();
 
+    CFG_TRACE_INFO_NI("Clearing parent reference");
+    setParentTree(0);
+
+    CFG_TRACE_INFO_NI("Trying to dispose");
+    //implDisposeTree();
+    disposeTreeNow();
+
+    CFG_TRACE_INFO_NI("Done disposing Tree");
     // uno::Reference<com::sun::star::lang::XComponent> xThis(getUnoInstance(),UNO_QUERY);
     // if (xThis.is()) xThis->dispose();
 }
@@ -589,6 +750,7 @@ void ApiRootTreeImpl::implSetLocation()
 
 void ApiRootTreeImpl::releaseData()
 {
+    CFG_TRACE_INFO("Api Root TreeImpl at %s: releasing the Data",OUSTRING2ASCII(m_aLocationPath));
     Tree aTree( m_aTreeImpl.getTree() );
 
     aTree.disposeData();
@@ -620,6 +782,8 @@ void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
 }
 void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 {
+    CFG_TRACE_INFO("Api Root TreeImpl at %s: Cache data is disposed - dispose and release own data",
+            OUSTRING2ASCII(m_aLocationPath));
         // ensure our provider stays alive
     UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 

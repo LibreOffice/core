@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:13:03 $
+ *  last change: $Author: jb $ $Date: 2001-02-27 15:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@ namespace configmgr
 
         typedef uno::XInterface UnoInterface;
         typedef uno::Reference<UnoInterface> UnoInterfaceRef;
-        typedef uno::Reference<com::sun::star::lang::XComponent> ComponentRef;
         typedef uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
 
 //-----------------------------------------------------------------------------
@@ -131,9 +130,15 @@ namespace configmgr
             TemplateProvider            getTemplateProvider() const;
         };
 
+    //-----------------------------------------------------------------------------
+
     //-------------------------------------------------------------------------
-        class ApiTreeImpl : private com::sun::star::lang::XEventListener, NotCopyable
+        class ApiTreeImpl : NotCopyable
         {
+            class ComponentAdapter;
+            typedef uno::Reference<ComponentAdapter> ComponentRef;
+            typedef uno::Reference<com::sun::star::lang::XComponent> UnoComponent;
+
             typedef configuration::Tree Tree;
             Tree                m_aTree;
             NotifierImplHolder  m_aNotifier;
@@ -169,7 +174,7 @@ namespace configmgr
 
             uno::XInterface*            getUnoInstance() const  { return m_pInstance; }
             ApiProvider&                getProvider()           { return m_rProvider; }
-            UnoInterfaceRef             getUnoProviderInstance() const  { return m_xProvider; }
+            UnoInterfaceRef             getUnoProviderInstance() const; //  { return m_xProvider; }
         // locking support
             ISynchronizedData*          getProviderLock() const { return m_rProvider.getSourceLock(); }
             ISynchronizedData*          getDataLock() const     { return configuration::getRootLock(m_aTree); }
@@ -185,16 +190,18 @@ namespace configmgr
             bool implDisposeTree();
             void implDisposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
-            ComponentRef getParentComponent();
-            ComponentRef getProviderComponent();
+            friend class ComponentAdapter;
+            void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
+            UnoComponent getProviderComponent();
+            UnoComponent getParentComponent();
 
-        // XEventListener
+/*          // XEventListener
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
             virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw();
             virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
             // ---------------------------------------------------------------------------------------------------
-        };
+*/      };
 
     //-----------------------------------------------------------------------------
         class ApiRootTreeImpl
