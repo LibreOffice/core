@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridmerg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,17 @@ void ScGridMerger::Flush()
             else
             {
                 long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
+                if ( nVarDiff < 0 )
+                {
+                    //  nVarDiff is negative in RTL layout mode
+                    //  Change the positions so DrawGrid is called with a positive distance
+                    //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
+
+                    nVarDiff = -nVarDiff;
+                    long nTemp = nVarStart;
+                    nVarStart = nVarEnd;
+                    nVarEnd = nTemp;
+                }
                 pDev->DrawGrid( Rectangle( nVarStart, nFixStart, nVarEnd, nFixEnd ),
                                 Size( nVarDiff, nFixEnd - nFixStart ),
                                 GRID_VERTLINES );
