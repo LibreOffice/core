@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 20:23:33 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #ifndef _SWUNDO_HXX
 #define _SWUNDO_HXX
+
+#include <svtools/svarray.hxx>
 
 // die Ids fuer StdAktionen
 enum SwUndoStdId
@@ -168,12 +170,26 @@ enum SwUndoStdId
 };
 
 
-/* MA: 24. May. 97, zur Zeit nicht verwendet.
-#define INIT_UNDOIDS 2
-#define GROW_UNDOIDS 2
+#define INIT_UNDOIDS 20
+#define GROW_UNDOIDS 32
 // Das Array der verwendeten Undo-Ids
-SV_DECL_VARARR( SwUndoIds, USHORT, INIT_UNDOIDS, GROW_UNDOIDS )
-*/
+class String;
+class SwUndoIdAndName
+{
+    USHORT nUndoId;
+    String* pUndoStr;
+
+public:
+    SwUndoIdAndName() : nUndoId( 0 ), pUndoStr( 0 ) {}
+    SwUndoIdAndName( USHORT nId, const String* pStr = 0 );
+    ~SwUndoIdAndName();
+
+    USHORT GetUndoId() const            { return nUndoId; }
+    const String* GetUndoStr() const    { return pUndoStr; }
+};
+typedef SwUndoIdAndName* SwUndoIdAndNamePtr;
+SV_DECL_PTRARR_DEL( SwUndoIds, SwUndoIdAndNamePtr, INIT_UNDOIDS, GROW_UNDOIDS )
+
 
 // Undo-Ids fuer die UI-Seite
 enum SwUIUndoIds
