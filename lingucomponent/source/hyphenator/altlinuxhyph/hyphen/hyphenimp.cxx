@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:34:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,19 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             dict = aDicts[k].aPtr;
             aEnc = aDicts[k].aEnc;
 
-            OString encWord(OU2ENC(aWord,aEnc));
+            // first convert any smart quotes or apostrophes to normal ones
+        OUStringBuffer rBuf(aWord);
+            sal_Int32 nc = rBuf.getLength();
+            sal_Unicode ch;
+        for (sal_Int32 ix=0; ix < nc; ix++) {
+            ch = rBuf.charAt(ix);
+                if ((ch == 0x201C) || (ch == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+                if ((ch == 0x2018) || (ch == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+            }
+            OUString nWord(rBuf.makeStringAndClear());
+
+            // now convert word to needed encoding
+            OString encWord(OU2ENC(nWord,aEnc));
 
         wordlen = encWord.getLength();
             lcword = new char[wordlen+1];
@@ -424,7 +436,7 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             for (int c = n; c < wordlen; c++) hyphens[c] = '0';
             hyphens[wordlen] = '\0';
 
-            // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
+            //fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
         OUStringBuffer  hyphenatedWordBuffer;
             OUString hyphenatedWord;
         INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
@@ -541,7 +553,19 @@ Reference< XPossibleHyphens > SAL_CALL
       aEnc = aDicts[k].aEnc;
 
 
-      OString encWord(OU2ENC(aWord, aEnc));
+      // first handle smart quotes both single and double
+      OUStringBuffer rBuf(aWord);
+      sal_Int32 nc = rBuf.getLength();
+      sal_Unicode ch;
+      for (sal_Int32 ix=0; ix < nc; ix++) {
+      ch = rBuf.charAt(ix);
+          if ((ch == 0x201C) || (ch == 0x201D)) rBuf.setCharAt(ix,(sal_Unicode)0x0022);
+          if ((ch == 0x2018) || (ch == 0x2019)) rBuf.setCharAt(ix,(sal_Unicode)0x0027);
+      }
+      OUString nWord(rBuf.makeStringAndClear());
+
+      // now convert the string to the proper encoding
+      OString encWord(OU2ENC(nWord, aEnc));
 
       wordlen = encWord.getLength();
       lcword = new char[wordlen+1];
@@ -566,8 +590,9 @@ Reference< XPossibleHyphens > SAL_CALL
       // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
 
       INT16 nHyphCount = 0;
+      INT16 i;
 
-      for (INT16 i = 0; i < encWord.getLength(); i++)
+      for ( i = 0; i < encWord.getLength(); i++)
         if (hyphens[i]&1)
           nHyphCount++;
 
@@ -589,8 +614,8 @@ Reference< XPossibleHyphens > SAL_CALL
       }
 
       hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
-      // fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
-      // fflush(stderr);
+      //fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
+      //fflush(stderr);
 
       xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                 hyphenatedWord, aHyphPos );
