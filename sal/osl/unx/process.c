@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-31 15:24:45 $
+ *  last change: $Author: obo $ $Date: 2000-11-03 14:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 #define PIPEALTERNATEPATH   "/var/tmp"
 #define PIPENAMEMASK        "OSL_IOT_%u"
 
-#ifdef IORESOURCE_TRANSFER_BSD
+#if defined(MACOSX) || defined(IORESOURCE_TRANSFER_BSD)
 #define CONTROLLEN (sizeof(struct cmsghdr) + sizeof(int))
 #endif
 
