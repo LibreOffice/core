@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:10:07 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
         mpViewShell->GetViewData()->GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
-        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos));
+        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, TRUE));
 
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
