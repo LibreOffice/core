@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:30:05 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@
 #endif
 #ifndef _CHARATR_HXX
 #include <charatr.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>     // GetDoc()
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -292,6 +298,83 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
             break;
     }
     return i;
+}
+
+/*************************************************************************
+ *                    SwTxtNode::GetDropSize()
+ *
+ *  If a dropcap is found the return value is true otherwise false. The
+ *  drop cap sizes passed back by reference are font height, drop height
+ *  and drop descent.
+ *************************************************************************/
+bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const
+{
+    SwDropPortion *pRet = 0;
+    rFontHeight = 0;
+    rDropHeight = 0;
+    rDropDescent =0;
+
+    ASSERT( GetDoc() && GetDoc()->GetRootFrm(),
+            "No layout available in GetDropSize(), I'll guess the drop cap size" )
+
+    const SwAttrSet& rSet = GetSwAttrSet();
+    const SwFmtDrop& rDrop = rSet.GetDrop();
+
+    // Return (0,0) if there is no drop cap at this paragraph
+    if( 1 >= rDrop.GetLines() ||
+        ( !rDrop.GetChars() && !rDrop.GetWholeWord() ) )
+    {
+        return false;
+    }
+
+    // get text frame
+    SwClientIter aClientIter( (SwTxtNode&)*this );
+    SwClient* pLast = aClientIter.GoStart();
+
+    while( pLast )
+    {
+        // Only (master-) text frames can have a drop cap.
+        if ( pLast->ISA( SwTxtFrm ) && !((SwTxtFrm*)pLast)->IsFollow() )
+        {
+
+            if( !((SwTxtFrm*)pLast)->HasPara() )
+                ((SwTxtFrm*)pLast)->GetFormatted();
+
+            if ( !((SwTxtFrm*)pLast)->IsEmpty() )
+            {
+                const SwParaPortion* pPara = ((SwTxtFrm*)pLast)->GetPara();
+                ASSERT( pPara, "GetDropSize could not find the ParaPortion, I'll guess the drop cap size" )
+
+                if ( pPara )
+                {
+                    const SwLinePortion* pFirst = pPara->GetFirstPortion();
+                    if ( pFirst->IsDropPortion() )
+                    {
+                        SwFont& rFont = ((SwDropPortion*)pFirst)->GetPart()->GetFont();
+                        rFontHeight = rFont.GetSize(rFont.GetActual()).Height();
+                        rDropHeight = ((SwDropPortion*)pFirst)->GetDropHeight();
+                        rDropDescent = ((SwDropPortion*)pFirst)->GetDropDescent();
+                    }
+                }
+            }
+            break;
+        }
+        pLast = ++aClientIter;
+    }
+
+    if(rFontHeight==0 && rDropHeight==0 && rDropDescent==0)
+    {
+        const USHORT nLines = rDrop.GetLines();
+        const USHORT nChars = rDrop.GetChars() ? rDrop.GetChars() : 1;
+
+        const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE );
+        rFontHeight = rItem.GetHeight();
+        rDropHeight = nLines * rFontHeight;
+        rDropDescent = rFontHeight / 5;
+        return false;
+    }
+
+    return true;
 }
 
 /*************************************************************************
