@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-27 11:09:08 $
+ *  last change: $Author: cl $ $Date: 2002-10-17 14:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,7 +1911,8 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
     // #86163# take into account which type of PageShape needs to
     // be constructed. It's an pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
-    sal_Bool bIsPresentation = isPresentationShape();
+    sal_Bool bIsPresentation = maPresentationClass.getLength() &&
+           GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
     uno::Reference< lang::XServiceInfo > xInfo( mxShapes, uno::UNO_QUERY );
     const sal_Bool bIsOnHandoutPage = xInfo.is() && xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutMasterPage")) );
