@@ -2,7 +2,7 @@
 </title></head><body>
 <h1>Document Converter</h1>
 <p>Converting documents with a remote running OpenOffice.org.</p>
-<form action="http://127.0.0.1:8100/servlet/ConverterServlet" method=post enctype="multipart/form-data">
+<form action="http://localhost:8080/conversion/servlet/ConverterServlet" method=post enctype="multipart/form-data">
   <table width="510" border="0">
     <tr>
       <td>Local document</td>
@@ -30,15 +30,16 @@
     <tr>
       <td>Extension</td>
       <td>
-        <input type=text name=extension>
+        <input type=text name="extension">
       </td>
     </tr>
   </table>
-  <p>The converted document will be returned by the server. If you selected the 
-    target document type &quot;swriter: HTML (StarWriter)&quot; or &quot;scalc: 
-    HTML (StarCalc)&quot;, the document will be shown in the browser. Otherwise, 
-    a dialog will be opened, which allows you to open or save the converted document.</p>
-  <p> 
+  <p>The converted document will be returned by the server. If you selected the
+    target document type &quot;swriter: HTML (StarWriter)&quot; or &quot;scalc:
+    HTML (StarCalc)&quot;, the document will be shown in the browser. If have an application
+    registered in your browser for the selected document type (mime type) the application will be started.
+    Otherwise, a dialog will be opened, which allows you to open or save the converted document.</p>
+  <p>
     <input type=submit value="Convert">
   </p>
 </form>
