@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-24 12:46:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/unoiface.hxx> // InitExtToolkit
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
@@ -90,6 +89,8 @@
 
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XDialog.hpp>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -190,6 +191,10 @@ Reference< XComponentContext > createInitialComponentContext()
                 xContext->getServiceManager()->createInstanceWithContext(
                     OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ), xContext ), UNO_QUERY );
 
+            xReg->registerImplementation(
+                OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+                OUString::createFromAscii("sax.uno" SAL_DLLEXTENSION),
+                Reference< registry::XSimpleRegistry >() );
             reg( xReg, "sax" );
             reg( xReg, "tk", true );
             reg( xReg, "svt", true );
