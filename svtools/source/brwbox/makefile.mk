@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:58:56 $
+#   last change: $Author: mh $ $Date: 2001-05-14 12:35:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,27 +73,12 @@ TARGET=browse
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=   \
-            brwbox1.cxx         \
-            brwbox2.cxx         \
-            brwhead.cxx         \
-            datwin.cxx
-
-.IF "$(GUI)" == "WIN"
-CXXFILES+=   \
-            brwdll.cxx
-.ENDIF
-
 SLOFILES=   \
             $(SLO)$/brwbox1.obj  \
             $(SLO)$/brwbox2.obj  \
             $(SLO)$/brwhead.obj  \
             $(SLO)$/datwin.obj
 
-.IF "$(GUI)" == "WIN"
-SLOFILES+=   \
-            $(SLO)$/brwdll.obj
-.ENDIF
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
