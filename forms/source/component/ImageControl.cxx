@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:48:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 10:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #include <unotools/ucblockbytes.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UI_DIALOGS_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/dialogs/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -652,12 +652,12 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             aInitArguments[0] <<= sInitializer;
             xInit->initialize(aInitArguments);
             xDialog->setTitle(sTitle);
-            xController->setValue(FilePickerElementID::CBX_PREVIEW, ::cppu::bool2any(sal_True));
-            xController->enableControl(FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
+            xController->setValue(0, ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, ::cppu::bool2any(sal_True));
+            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
 
             if (xDialog->execute())
             {
-                Sequence< ::rtl::OUString > aPaths = xDialog->getPath();
+                Sequence< ::rtl::OUString > aPaths = xDialog->getFiles();
                 ::rtl::OUString sSelectedPath;
                 if (aPaths.getLength() > 0)
                 {

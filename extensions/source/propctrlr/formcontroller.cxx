@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:51:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-15 10:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/dialogs/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -2184,11 +2184,11 @@ namespace pcr
             if (xController.is())
             {
                 // do a preview by default
-                xController->setValue(FilePickerElementID::CBX_PREVIEW, ::cppu::bool2any(sal_True));
+                xController->setValue(0, ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, ::cppu::bool2any(sal_True));
 
                 // "as link" is checked, but disabled
-                xController->setValue(FilePickerElementID::CBX_INSERT_AS_LINK, ::cppu::bool2any(sal_True));
-                xController->enableControl(FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
+                xController->setValue(0, ExtendedFilePickerElementIds::CHECKBOX_LINK, ::cppu::bool2any(sal_True));
+                xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
             }
 
             if (_rVal.Len() != 0)
@@ -2519,6 +2519,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/06/15 09:51:11  fs
+ *  #86986# moved css/ui/* to css/ui/dialogs/*
+ *
  *  Revision 1.34  2001/06/11 11:30:29  fs
  *  #86096# moved the functionallity of ChangeFontProperty to the ControlCharacterDialog
  *
