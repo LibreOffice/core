@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 13:55:48 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,13 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Impossibile stabilire il collegamento con il file" ;
         Text [ spanish ] = "No se pudo establecer conexiуn con el archivo." ;
         Text [ french ] = "Impossible d'йtablir un lien avec le fichier." ;
-        Text [ dutch ] = "Er kon geen verbinding met het bestand tot stand worden gebracht." ;
+        Text [ dutch ] = "Er kan geen verbinding met het bestand tot stand worden gebracht." ;
         Text [ swedish ] = "Det gick inte att upprдtta en fцrbindelse till filen." ;
         Text [ danish ] = "Det var ikke muligt at oprette en forbindelse til filen." ;
         Text [ portuguese ] = "Nгo foi possнvel estabelecer ligaзгo com o ficheiro." ;
         Text [ portuguese_brazilian ] = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
         Text[ chinese_simplified ] = "ж— жі•иїћжЋҐиї™дёЄж–‡д»¶гЂ‚";
-        Text[ russian ] = "Невозможно создать связь с этим файлом.";
+        Text[ russian ] = "Невозможно установить соединение с файлом.";
         Text[ polish ] = "Nie moїna byіo utworzyж poі№czenia z plikiem.";
         Text[ japanese ] = "гѓ•г‚Ўг‚¤гѓ«гЃёгЃ®жЋҐз¶љгЃЇгЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•йЂЈзµђйЂ™еЂ‹жЄ”жЎ€гЂ‚";
@@ -103,7 +103,7 @@ Resource RID_ERRHDLSC
         /* ### ACHTUNG: Neuer Text in Resource? Die Datei konnte nicht geцffnet werden. : Die Datei konnte nicht geчffnet werden. */
         Text = "Die Datei konnte nicht geцffnet werden." ;
         Text [ ENGLISH ] = "The file could not be opened." ;
-        Text [ dutch ] = "Het bestand kon niet worden geopend." ;
+        Text [ dutch ] = "Het bestand kan niet worden geopend." ;
         Text [ english_us ] = "File could not be opened." ;
         Text [ italian ] = "Impossibile aprire il file." ;
         Text [ spanish ] = "No se pudo abrir el archivo." ;
@@ -113,7 +113,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Impossнvel abrir o ficheiro." ;
         Text [ portuguese_brazilian ] = "Die Datei konnte nicht ge?fnet werden." ;
         Text[ chinese_simplified ] = "ж— жі•ж‰“ејЂиї™дёЄж–‡д»¶гЂ‚";
-        Text[ russian ] = "Не удается открыть файл.";
+        Text[ russian ] = "Невозможно открыть файл.";
         Text[ polish ] = "Nie moїna byіo otworzyж pliku.";
         Text[ japanese ] = "гѓ•г‚Ўг‚¤гѓ«г‚’й–‹гЃЏгЃ“гЃЁгЃЊгЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•й–‹е•џйЂ™еЂ‹жЄ”жЎ€гЂ‚";
@@ -140,7 +140,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Surgiu um erro desconhecido." ;
         Text [ portuguese_brazilian ] = "Ein unbekannter Fehler ist aufgetreten." ;
         Text[ chinese_simplified ] = "еЏ‘з”џдёЂдёЄдёЌжЋзљ„й”™иЇЇгЂ‚";
-        Text[ russian ] = "Произошла неизвестная ошибка.";
+        Text[ russian ] = "Неизвестная ошибка.";
         Text[ polish ] = "Wyst№piі nieznany bі№d.";
         Text[ japanese ] = "дёЌжЋгЃЄг‚Ёгѓ©гѓјгЃЊз™єз”џгЃ—гЃѕгЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з™јз”џдёЂеЂ‹дёЌжЋзљ„йЊЇиЄ¤гЂ‚";
@@ -184,7 +184,7 @@ Resource RID_ERRHDLSC
     {
         Text = "Unbekanntes Lotus-123-Dateiformat." ;
         Text [ ENGLISH ] = "Unknown Lotus-123 file format." ;
-        Text [ dutch ] = "Onbekend Lotus-123-bestandsformaat." ;
+        Text [ dutch ] = "Onbekende Lotus-123-bestandsindeling." ;
         Text [ english_us ] = "Unknown Lotus1-2-3 file format." ;
         Text [ italian ] = "Formato file Lotus 123 sconosciuto." ;
         Text [ spanish ] = "Formato del archivo Lotus 123 desconocido." ;
@@ -204,7 +204,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Bilinmeyen Lotus-123 dosya formatэ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format de fitxer Lotus1-2-3 desconegut.";
-        Text[ finnish ] = "Tuntematon Lotus1-2-3-tiedostomuoto.";
+        Text[ finnish ] = "Tuntematon Lotus1-2-3-tiedostomuoto";
         Text[ thai ] = "а№„аёЎа№€аёЈаё№а№‰аё€аё±аёЃаёЈаё№аё›а№Ѓаёљаёља№Ѓаёџа№‰аёЎ Lotus1-2-3 ";
     };
     String SCERR_IMPORT_FORMAT & SH_MAX
@@ -221,7 +221,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Erro na estrutura do ficheiro ao importar." ;
         Text [ portuguese_brazilian ] = "Fehler in Dateistruktur beim Importieren." ;
         Text[ chinese_simplified ] = "ењЁиѕ“е…Ґж—¶еЏ‘з”џж–‡д»¶з»“жћ„й”™иЇЇгЂ‚";
-        Text[ russian ] = "Ошибка в структуре файла при импортировании.";
+        Text[ russian ] = "Ошибка структуры файла при импортировании.";
         Text[ polish ] = "Bі№d struktury pliku podczas importowania.";
         Text[ japanese ] = "г‚¤гѓігѓќгѓјгѓ€ж™‚гЃ®гѓ•г‚Ўг‚¤гѓ«ж§‹йЂ гЃ§гЃ®г‚Ёгѓ©гѓјгЂ‚";
         Text[ chinese_traditional ] = "еЊЇе…Ґж™‚з™јз”џжЄ”жЎ€зµђж§‹йЊЇиЄ¤гЂ‚";
@@ -243,14 +243,14 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Per questo tipo di file non и stato implementato nessun filtro" ;
         Text [ spanish ] = "Para este tipo de archivo no hay ningъn filtro implementado." ;
         Text [ french ] = "Aucun filtre disponible pour ce type de fichier." ;
-        Text [ dutch ] = "Voor dit bestandstype staat geen filter ter beschikking." ;
+        Text [ dutch ] = "Voor dit bestandstype is geen filter beschikbaar." ;
         Text [ swedish ] = "Inget filter дr implementerat fцr denna filtyp." ;
         Text [ danish ] = "Der er ikke implementeret et filter til denne filtype." ;
         Text [ portuguese ] = "Nгo hб filtro implementado para este tipo de ficheiro." ;
         Text [ portuguese_brazilian ] = "F? diesen Dateityp ist kein Filter implementiert." ;
         Text[ chinese_simplified ] = "з›®е‰ЌиїдёЌиѓЅдёєиї™дёЄж–‡д»¶з±»ећ‹жЏђдѕ›з­›йЂ‰еЉџиѓЅгЂ‚";
         Text[ language_user1 ] = " ";
-        Text[ russian ] = "Для этого типа файла не имеется фильтра.";
+        Text[ russian ] = "Нет фильтра для этого типа файла.";
         Text[ polish ] = "Dla tego typu pliku nie zaimplementowano filtra.";
         Text[ japanese ] = "гЃ“гЃ®гѓ•г‚Ўг‚¤гѓ«гЃ®зЁ®йЎћгЃ«гЃЇгѓ•г‚Јгѓ«г‚їгЃЊе®џиЈ…гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ›г‚“гЂ‚";
         Text[ chinese_traditional ] = "з›®е‰Ќй‚„дёЌиѓЅз‚єйЂ™еЂ‹жЄ”жЎ€йЎћећ‹жЏђдѕ›зЇ©йЃёеЉџиѓЅгЂ‚";
@@ -259,7 +259,7 @@ Resource RID_ERRHDLSC
         Text[ korean ] = "мќґ нЊЊмќј мњ н•м—ђ л§ћлЉ” н•„н„°к°Ђ м—†мЉµл‹€л‹¤.";
         Text[ turkish ] = "Bu dosya tipi iзin filtre mevcut deрil.";
         Text[ catalan ] = "No hi ha cap filtre disponible per a aquest tipus de fitxer.";
-        Text[ finnish ] = "Tдlle tiedostotyypille ei ole suodatinta.";
+        Text[ finnish ] = "Tдlle tiedostotyypille ei ole suodatusta.";
         Text[ thai ] = "а№„аёЎа№€аёЎаёµаё•аё±аё§аёЃаёЈаё­аё‡аё—аёµа№€а№ѓаёЉа№‰а№„аё”а№‰аёЄаёіаё«аёЈаё±аёљаёЉаё™аёґаё”а№Ѓаёџа№‰аёЎаё™аёµа№‰";
     };
     String SCERR_IMPORT_UNKNOWN_BIFF & SH_MAX
@@ -271,7 +271,7 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Formato file Excel sconosciuto o non supportato" ;
         Text [ spanish ] = "Formato del archivo Excel no soportado o desconocido." ;
         Text [ french ] = "Format de fichier Excel inconnu ou incompatible." ;
-        Text [ dutch ] = "Niet ondersteund of onbekend Excel bestandsformaat." ;
+        Text [ dutch ] = "Niet ondersteund of onbekende Excel-bestandsindeling." ;
         Text [ swedish ] = "Ej understцtt eller obekant Excel-filformat." ;
         Text [ danish ] = "Et ikke understшttet eller ukendt Excel-filformat." ;
         Text [ portuguese ] = "Formato de ficheiro Excel sem suporte ou desconhecido." ;
@@ -287,14 +287,14 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Desteklenmeyen ya da bilinmeyen Excel dosya formatэ.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format de fitxer Excel no permиs o desconegut.";
-        Text[ finnish ] = "Tuntematon tai tukematon Excel-tiedostomuoto.";
+        Text[ finnish ] = "Tuntematon tai tukematon Excel-tiedostomuoto";
         Text[ thai ] = "а№„аёЎа№€аёЈаё№а№‰аё€аё±аёЃаё«аёЈаё·аё­а№„аёЎа№€аёЄаё™аё±аёљаёЄаё™аёёаё™аёЈаё№аё›а№Ѓаёљаёља№Ѓаёџа№‰аёЎ Excel ";
     };
     String SCERR_IMPORT_NI_BIFF & SH_MAX
     {
         Text = "Noch nicht implementiertes Excel-Dateiformat." ;
         Text [ ENGLISH ] = "Not yet implemented Excel file format" ;
-        Text [ dutch ] = "Nog niet geпmplementeerd Excel bestandsformaat." ;
+        Text [ dutch ] = "Nog niet geпmplementeerde Excel-bestandsindeling." ;
         Text [ english_us ] = "Excel file format not yet implemented." ;
         Text [ italian ] = "Formato di file Excel non ancora implementato." ;
         Text [ spanish ] = "Formato del archivo Excel aъn no implementado." ;
@@ -304,7 +304,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Formato de ficheiro Excel ainda nгo implementado." ;
         Text [ portuguese_brazilian ] = "Noch nicht implementiertes Excel-Dateiformat." ;
         Text[ chinese_simplified ] = "иїдёЌеЏ—ж”ЇжЊЃзљ„ Excel ж–‡д»¶ж јејЏгЂ‚";
-        Text[ russian ] = "Формат файла Excel еще нереализован.";
+        Text[ russian ] = "Формат файла Excel еще не реализован.";
         Text[ polish ] = "Jeszcze nie zaimplementowany format pliku Excel.";
         Text[ japanese ] = "гЃѕгЃ е®џиЈ…гЃ•г‚ЊгЃ¦гЃЄгЃ„ Excel гѓ•г‚Ўг‚¤гѓ«ж›ёејЏгЂ‚";
         Text[ chinese_traditional ] = "й‚„дёЌеЏ—ж”ЇжЏґзљ„ Excel жЄ”жЎ€ж јејЏгЂ‚";
@@ -359,7 +359,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Erro de importaзгo interno." ;
         Text [ portuguese_brazilian ] = "Interner Importfehler" ;
         Text[ chinese_simplified ] = "е†…йѓЁиѕ“е…Ґй”™иЇЇгЂ‚";
-        Text[ russian ] = "Внутренняя ошибка импорта";
+        Text[ russian ] = "Ошибка внутреннего импорта.";
         Text[ polish ] = "Wewnкtrzny bі№d importu";
         Text[ japanese ] = "е†…йѓЁгЃ®г‚¤гѓігѓќгѓјгѓ€г‚Ёгѓ©гѓјгЂ‚";
         Text[ chinese_traditional ] = "е…§йѓЁијёе…ҐйЊЇиЄ¤гЂ‚";
@@ -387,7 +387,7 @@ Resource RID_ERRHDLSC
         Text [ french ] = "Le fichier ne peut pas кtre lu car il contient des donnйes au delа de la ligne 8192." ;
         Text [ dutch ] = "In het bestand komen beneden regel 8192 gegevens voor en het kan daarom niet worden gelezen." ;
         Text[ chinese_simplified ] = "иї™дёЄж–‡д»¶еђ«жњ‰иЎЊж•°8192д№‹дё‹зљ„ж•°жЌ®пјЊе› ж­¤ж— жі•иЇ»е‡єгЂ‚";
-        Text[ russian ] = "В файле содержатся данные, находящиеся ниже строки 8192 и поэтому прочитать его не удается.";
+        Text[ russian ] = "Невозможно прочесть файл, так как в нем файле содержатся данные, находящиеся ниже строки 8192.";
         Text[ polish ] = "Plik zawiera znaki poniїej wiersza 8192 i z tego powodu nie moїe zostaж odczytany.";
         Text[ japanese ] = "гѓ•г‚Ўг‚¤гѓ«гЃЇ 8192иЎЊз›®гЃ®дё‹гЃ«гѓ‡гѓјг‚їг‚’еђ«г‚“гЃ§гЃ„г‚‹гЃџг‚ЃгЂЃиЄ­гЃїеЏ–г‚ЉгЃ§гЃЌгЃѕгЃ›г‚“гЂ‚";
         Text[ chinese_traditional ] = "йЂ™еЂ‹жЄ”жЎ€еђ«жњ‰е€—ж•ё8192д№‹дё‹зљ„ж•ёж“љпјЊе› ж­¤з„Ўжі•и®Ђе‡єгЂ‚";
@@ -406,9 +406,9 @@ Resource RID_ERRHDLSC
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiзгo $(ARG2)(linha,coluna)";
-        TEXT[ russian ] = "В файле части документа $(ARG1) в позиции $(ARG2)(строка,колонка) обнаружена ошибка формата.";
+        TEXT[ russian ] = "Ошибка формата файла части документа $(ARG1) в позиции $(ARG2)(строка,столбец).";
         TEXT[ greek ] = "ЕнфпрЯуфзке Энб уцЬлмб мпсцпрпЯзузт фпх бсчеЯпх уфп фмЮмб кеймЭнпх $(ARG1) уфз иЭуз $(ARG2)(гсбммЮ, уфЮлз)";
-        TEXT[ dutch ] = "Formaatfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
+        TEXT[ dutch ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciуn $(ARG2)(fila,columna)";
         TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
@@ -423,8 +423,8 @@ Resource RID_ERRHDLSC
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "Error en el format del subdocument $(ARG1) a $(ARG2)(fila,columna)";
-        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
-        Text[ language_user1 ] = "should be the same text like in the writer";
+        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
+        Text[ language_user1 ] = "shou; should be the same text like in the writer";
         Text[ thai ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
     };
     String SCERR_IMPORT_FORMAT_ROWCOL & SH_MAX
@@ -435,13 +435,13 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "И stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)" ;
         Text [ spanish ] = "Se ha descubierto un error de formato en el archivo en la posiciуn $(ARG1)(fila,columna)" ;
         Text [ french ] = "Erreur de format dans le fichier, position $(ARG1)(ligne,colonne)." ;
-        Text [ dutch ] = "Formaatfout op positie $(ARG1)(cel,kolom)" ;
+        Text [ dutch ] = "Indelingsfout op positie $(ARG1)(cel,kolom)" ;
         Text [ swedish ] = "Formatfel upptдckt i filen vid position $(ARG1)(rad,kolumn)" ;
         Text [ danish ] = "Der er konstateret formatfejl i filen pе position $(ARG1)(linje,kolonne)" ;
         Text [ portuguese ] = "Descoberto erro de formato na posiзгo $(ARG1)(linha, coluna) do ficheiro" ;
         Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
         Text[ chinese_simplified ] = "ењЁж–‡д»¶зљ„ $(ARG1)(иЎЊпјЊе€—)е¤„еЏ‘зЋ°ж јејЏй”™иЇЇ";
-        Text[ russian ] = "В файле в позиции $(ARG1)(строка,столбец) обнаружена ошибка формата.";
+        Text[ russian ] = "Ошибка формата файла в позиции $(ARG1)(строка,столбец).";
         Text[ polish ] = "Wykryto bі№d w formacie pliku na pozycji $(ARG1)(wiersz, kolumna)";
         Text[ japanese ] = "гѓ•г‚Ўг‚¤гѓ«гЃ® $(ARG1)(иЎЊгЂЃе€—)гЃ«ж›ёејЏг‚Ёгѓ©гѓјгЃЊи¦‹гЃ¤гЃ‹г‚ЉгЃѕгЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "жЄ”жЎ€еђ«жњ‰ж јејЏйЊЇиЄ¤пјЊдЅЌзЅ®ењЁ $(ARG1)(иЎЊпјЊж¬„)";
@@ -450,8 +450,8 @@ Resource RID_ERRHDLSC
         Text[ korean ] = "нЊЊмќјмќ $(ARG1)(н–‰,м—ґ)м—ђм„њ н•м‹ќ м¤лҐ л°њкІ¬";
         Text[ turkish ] = "Dosya format hatasэ $(ARG1)(satэr, sьtun) bulundu";
         Text[ catalan ] = "Error en el format del fitxer a la posiciу $(ARG1)(fila,columna)";
-        Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake)";
-        Text[ language_user1 ] = "should be the same text like in the writer";
+        Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake).";
+        Text[ language_user1 ] = "shou; should be the same text like in the writer";
         Text[ thai ] = "File format error found at $(ARG1)(row,col)";
     };
 
@@ -464,13 +464,13 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Impossibile stabilire un collegamento al file." ;
         Text [ spanish ] = "No se pudo establecer conexiуn con el archivo." ;
         Text [ french ] = "Impossible d'йtablir un lien avec le fichier." ;
-        Text [ dutch ] = "Er kon geen verbinding met het bestand tot stand worden gebracht." ;
+        Text [ dutch ] = "Er kan geen verbinding met het bestand tot stand worden gebracht." ;
         Text [ swedish ] = "En fцrbindelse till filen kunde inte etableras." ;
         Text [ danish ] = "Det var ikke muligt at oprette en forbindelse til filen." ;
         Text [ portuguese_brazilian ] = "Es konnte keine Verbindung zu der Datei hergestellt werden." ;
         Text [ portuguese ] = "Nгo foi possнvel estabelecer ligaзгo com o ficheiro." ;
         Text[ chinese_simplified ] = "ж— жі•иїћжЋҐж–‡д»¶гЂ‚";
-        Text[ russian ] = "Не удается создать связь с файлом.";
+        Text[ russian ] = "Невозможно установить соединение с файлом.";
         Text[ polish ] = "Nie moїna byіo ustanowiж poі№czenia z plikiem.";
         Text[ japanese ] = "гѓ•г‚Ўг‚¤гѓ«гЃёгЃ®жЋҐз¶љгЃЇгЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•йЂЈзµђжЄ”жЎ€гЂ‚";
@@ -491,13 +491,13 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Impossibile scrivere i dati." ;
         Text [ spanish ] = "No se pudieron guardar los datos." ;
         Text [ french ] = "Impossible d'йcrire ces donnйes." ;
-        Text [ dutch ] = "De gegevens konden niet worden geschreven." ;
+        Text [ dutch ] = "De gegevens kunnen niet worden geschreven." ;
         Text [ swedish ] = "Data kunde inte skrivas." ;
         Text [ danish ] = "Det var ikke muligt at skrive data." ;
         Text [ portuguese ] = "Nгo foi possнvel gravar os dados." ;
         Text [ portuguese_brazilian ] = "Die Daten konnten nicht geschrieben werden." ;
         Text[ chinese_simplified ] = "ж— жі•е†™е…Ґж•°жЌ®гЂ‚";
-        Text[ russian ] = "Записать данные невозможно.";
+        Text[ russian ] = "Невозможно записать данные.";
         Text[ polish ] = "Plikуw nie moїna byіo zapisaж.";
         Text[ japanese ] = "гѓ‡гѓјг‚їгЃЇж›ёгЃЌиѕјгЃїгЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•еЇ«е…Ґж•ёж“љгЂ‚";
@@ -517,7 +517,7 @@ Resource RID_ERRHDLSC
     {
         Text = "Es wurde nur die aktuelle Tabelle gespeichert." ;
         Text [ ENGLISH ] = "The current table has only been saved." ;
-        Text [ dutch ] = "Alleen de actuele tabel werd opgeslagen." ;
+        Text [ dutch ] = "Alleen de huidige tabel is opgeslagen." ;
         Text [ english_us ] = "Only the active sheet was saved." ;
         Text [ italian ] = "И stata salvata solo la tabella attuale." ;
         Text [ spanish ] = "Sуlo se ha guardado la hoja actual." ;
@@ -527,7 +527,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Sу foi guardada a folha activa." ;
         Text [ portuguese_brazilian ] = "Es wurde nur die aktuelle Tabelle gespeichert." ;
         Text[ chinese_simplified ] = "еЏЄиѓЅе­з›еЅ“е‰Ќзљ„е·ҐдЅњиЎЁгЂ‚";
-        Text[ russian ] = "Сохранен только текущий лист.";
+        Text[ russian ] = "Сохранен только активный лист.";
         Text[ polish ] = "Tylko bieї№cy arkusz zostaі zapisany.";
         Text[ japanese ] = "зЏѕењЁгЃ®иЎЁгЃ®гЃїгЃЊдїќе­гЃ•г‚ЊгЃѕгЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "еЏЄиѓЅе„Іе­з›®е‰Ќзљ„е·ҐдЅњиЎЁгЂ‚";
@@ -537,7 +537,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Yalnэzca yьrьrlьkteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nomйs s'ha desat el full actiu.";
-        Text[ finnish ] = "Vain aktiivinen lomake tallennettiin.";
+        Text[ finnish ] = "Vain aktiivinen taulukko tallennettiin.";
         Text[ thai ] = "аёљаё±аё™аё—аё¶аёЃа№Ѓаёња№€аё™аё‡аёІаё™аё—аёµа№€а№ѓаёЉа№‰аё‡аёІаё™аё­аёўаё№а№€аё­аёўа№€аёІаё‡а№Ђаё”аёµаёўаё§";
     };
     String SCWARN_IMPORT_RANGE_OVERFLOW & SH_MAX
@@ -545,7 +545,7 @@ Resource RID_ERRHDLSC
         /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde ьberschritten. Ьberzдhlige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde іberschritten. љberzхhlige Zeilen wurden nicht mitimportiert! */
         Text = "Die Maximalanzahl von Zeilen wurde ьberschritten. Ьberzдhlige Zeilen wurden nicht mitimportiert!" ;
         Text [ ENGLISH ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
-        Text [ dutch ] = "Het maximale aantal regels werd overschreden. Het teveel aan regels werd niet geпmporteerd!" ;
+        Text [ dutch ] = "Het maximale aantal regels is overschreden. Het teveel aan regels is niet geпmporteerd!" ;
         Text [ english_us ] = "The maximum number of rows has been exceeded. Excess rows were not imported!" ;
         Text [ italian ] = "Il numero massimo di righe и stato superato. le righe in eccesso non sono state importate!" ;
         Text [ spanish ] = "Se ha excedido la cantidad mбxima de filas. ЎLas filas adicionales no se importaron!" ;
@@ -555,7 +555,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "O nъmero mбximo de linhas foi ultrapassado! As linhas em excesso nгo foram importadas!" ;
         Text [ portuguese_brazilian ] = "Die Maximalanzahl von Zeilen wurde ?erschritten. ?erz?hlige Zeilen wurden nicht mitimportiert!" ;
         Text[ chinese_simplified ] = "и¶…иї‡иЎЊж•°жњЂй«й™ђеє¦гЂ‚и¶…иї‡зљ„иЎЊдёЌдјљиў«иѕ“е…ҐпјЃ";
-        Text[ russian ] = "Максимальное число строк превышено.Строки, превышающие заданное число, импортированы не будут!";
+        Text[ russian ] = "Максимальное число строк превышено .Строки, превышающие заданное число, не были импортированы!";
         Text[ polish ] = "Maksymalna liczba wierszy zostaіa przekroczona. Pozostaіe wiersze nie bкd№ importowane!";
         Text[ japanese ] = "иЎЊгЃ®жњЂй«ж•°г‚’и¶…гЃ€гЃ¦гЃ„гЃѕгЃ™гЂ‚йЃЋе‰°гЃ®иЎЊгЃЇг‚¤гѓігѓќгѓјгѓ€гЃ•г‚ЊгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "и¶…йЃЋе€—ж•ёжњЂй«й™ђеє¦гЂ‚и¶…йЃЋзљ„е€—дёЌжњѓиў«еЊЇе…ҐпјЃ";
@@ -573,25 +573,58 @@ Resource RID_ERRHDLSC
         Text = "Die Daten konnten nicht vollstдndig geladen werden, da die maximale Anzahl von Tabellenzeilen ьberschritten wurde." ;
         Text [ ENGLISH ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
         Text [ english_us ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
+        Text[ portuguese ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ russian ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ spanish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ italian ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ swedish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ polish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ portuguese_brazilian ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ japanese ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ korean ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ turkish ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
+        Text[ thai ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded.";
     };
     String SCWARN_IMPORT_COLUMN_OVERFLOW & SH_MAX
     {
         Text = "Die Daten konnten nicht vollstдndig geladen werden, da die maximale Anzahl von Tabellenspalten ьberschritten wurde." ;
         Text [ ENGLISH ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
         Text [ english_us ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
+        Text[ portuguese ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ russian ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ spanish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ italian ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ swedish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ polish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ portuguese_brazilian ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ japanese ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ korean ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ turkish ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
+        Text[ thai ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded.";
     };
     String SCWARN_IMPORT_SHEET_OVERFLOW & SH_MAX
     {
         Text = "Einige Tabellen konnten nicht geladen werden, da die maximale Anzahl von Tabellen ьberschritten wurde." ;
         Text [ ENGLISH ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded." ;
         Text [ english_us ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded." ;
+        Text[ portuguese ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ russian ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ spanish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ italian ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ swedish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ polish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ portuguese_brazilian ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ japanese ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ korean ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ turkish ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
+        Text[ thai ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded.";
     };
     String SCWARN_IMPORT_OPEN_FM3 & SH_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zugehцrige FM3-Datei konnte nicht geцffnet werden. : Zugehчrige FM3-Datei konnte nicht geчffnet werden. */
         Text = "Zugehцrige FM3-Datei konnte nicht geцffnet werden." ;
         Text [ ENGLISH ] = "Related FM3-File could not be opened." ;
-        Text [ dutch ] = "Bijbehorend FM3-bestand kon niet worden geopend." ;
+        Text [ dutch ] = "Bijbehorend FM3-bestand kan niet worden geopend." ;
         Text [ english_us ] = "Corresponding FM3-File could not be opened." ;
         Text [ italian ] = "Impossibile aprire il file relativo FM3." ;
         Text [ spanish ] = "No se pudo abrir el archivo correspondiente FM3." ;
@@ -601,7 +634,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Foi impossнvel abrir o ficheiro FM3 correspondente." ;
         Text [ portuguese_brazilian ] = "Zugeh?ige FM3-Datei konnte nicht ge?fnet werden." ;
         Text[ chinese_simplified ] = "ж— жі•ејЂеђЇд»Ће±ћзљ„ FM3-ж–‡д»¶гЂ‚";
-        Text[ russian ] = "Открыть файл, относящийся к FM3 не удается.";
+        Text[ russian ] = "Невозможно открыть соответствующий файл FM3.";
         Text[ polish ] = "Plik pokrewny FM3 nie mуgі zostaж otworzony.";
         Text[ japanese ] = "еѕ“е±ћгЃ™г‚‹ FM3 гѓ•г‚Ўг‚¤гѓ«г‚’й–‹гЃ‘гЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•й–‹е•џеѕће±¬зљ„ FM3-жЄ”жЎ€гЂ‚";
@@ -629,7 +662,7 @@ Resource RID_ERRHDLSC
         Text [ portuguese ] = "Erro na estrutura do ficheiro FM3 correspondente." ;
         Text [ portuguese_brazilian ] = "Fehler in Dateistruktur der zugeh?igen FM3-Datei." ;
         Text[ chinese_simplified ] = "д»Ће±ћзљ„ FM3-ж–‡д»¶зљ„ж–‡д»¶з»“жћ„еђ«жњ‰й”™иЇЇгЂ‚";
-        Text[ russian ] = "Ошибка в структуре файла, относящегося к FM3.";
+        Text[ russian ] = "Ошибка структуры соответствующего файла FM3.";
         Text[ polish ] = "Bі№d w strukturze pliku pokrewnego FM3.";
         Text[ japanese ] = "еѕ“е±ћгЃ™г‚‹ FM3 гѓ•г‚Ўг‚¤гѓ«гЃ®гѓ•г‚Ўг‚¤гѓ«ж§‹йЂ гЃ§гЃ®г‚Ёгѓ©гѓјгЂ‚";
         Text[ chinese_traditional ] = "еѕће±¬зљ„ FM3-жЄ”жЎ€зљ„жЄ”жЎ€зµђж§‹еђ«жњ‰йЊЇиЄ¤гЂ‚";
@@ -681,11 +714,11 @@ Resource RID_ERRHDLSC
         Text [ swedish ] = "Dokumentet innehеller mer rader дn vad som understцds av utmatningsformatet.\nЦvertaliga rader sparades inte." ;
         Text [ danish ] = "Dokumentet indeholder flere rжkker end output-formatet understшtter.\nDe overtallige rжkker blev ikke gemt." ;
         Text [ italian ] = "Il documento contiene piщ righe di quelle supportate dal formato di uscita.\nLe righe in eccesso non sono state salvate." ;
-        Text [ spanish ] = "El documento contiene mas filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron." ;
+        Text [ spanish ] = "El documento contiene mбs filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron." ;
         Text [ french ] = "Le document comporte plus de lignes que le format n'en supporte.\nLes lignes en surplus n'ont pas йtй enregistrйes." ;
-        Text [ dutch ] = "Het document bevat teveel regels voor dit formaat.\nDit teveel werd niet opgeslagen." ;
+        Text [ dutch ] = "Het document bevat teveel regels voor dit formaat.\nDeze zijn niet opgeslagen." ;
         Text[ chinese_simplified ] = "ж•ґдёЄж–‡жЎЈеђ«жњ‰зљ„иЎЊж•°и¶…иї‡ж‰“еЌ°ж јејЏж”ЇжЊЃзљ„иЊѓе›ґгЂ‚\nи¶…иї‡зљ„иЎЊдёЌдјљиў«е­з›гЂ‚";
-        Text[ russian ] = "Документ содержит больше строк, чем поддерживается форматом вывода.\nСтроки, превышающие заданное число, сохранены не будут.";
+        Text[ russian ] = "Документ содержит больше строк, чем поддерживается выбранным форматом.\nСтроки, превышающие заданное число, не были сохранены.";
         Text[ polish ] = "Dokument zawiera wiкcej wierszy niї jest obsіugiwane przez format wyjњciowy. \nDodatkowe wiersze nie bкd№ obsіugiwane.";
         Text[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃЇгЂЃг‚ўг‚¦гѓ€гѓ—гѓѓгѓ€гЃ™г‚‹еЌ°е€·ж›ёејЏгЃ§ж”ЇжЏґгЃ§гЃЌг‚‹иЎЊж•°г‚’и¶ЉгЃ€гЃ¦гЃ„гЃѕгЃ™гЂ‚\nйЃЋе‰°гЃ®иЎЊгЃЇдїќе­гЃ•г‚ЊгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "йЂ™еЂ‹ж–‡д»¶еђ«жњ‰зљ„е€—ж•ёи¶…йЃЋе€—еЌ°ж јејЏж”ЇжЊЃзљ„зЇ„ењЌгЂ‚\nи¶…йЃЋзљ„е€—дёЌжњѓиў«е„Іе­гЂ‚";
@@ -711,9 +744,9 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Il documento contiene informazioni sconosciute alla versione corrente del programma.\nCon un nuovo salvataggio le informazioni andranno perse!" ;
         Text [ spanish ] = "El documento contiene informaciуn desconocida para la versiуn de este programa.\nЎAl volver a guardar se perderб esta informaciуn!" ;
         Text [ french ] = "Le document contient des informations inconnues de cette version du programme.\nCes informations seront perdues lors d'un nouvel enregistrement !" ;
-        Text [ dutch ] = "Het document bevat gegevens die voor deze programmaversie onbekend zijn.\nAls u opnieuw opslaat gaan deze verloren!" ;
+        Text [ dutch ] = "Het document bevat gegevens die voor deze programmaversie onbekend zijn.\nAls u opnieuw opslaat, gaan deze verloren!" ;
         Text[ chinese_simplified ] = "иї™дёЄзЁ‹еєЏж— жі•е¤„зђ†иї™дёЄж–‡жЎЈдё­дёЌжЋзљ„дїЎжЃЇгЂ‚\nењЁй‡Ќж–°е­з›ж—¶дјљжЌџе¤±иї™дє›дїЎжЃЇпјЃ";
-        Text[ russian ] = "Документ содержит сведения, неизвестные этой версии программы.\nПри повторном сохранении эти сведения будут утеряны!";
+        Text[ russian ] = "Документ содержит сведения, не распознанные этой версии программы.\nПри повторном сохранении эта информация будет утеряна!";
         Text[ polish ] = "Dokument zawiera informacje, ktуre s№ nieznane w tej wersji programu.\nPrzy ponownym zapisie te informacje zostan№ skasowane!";
         Text[ japanese ] = "гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ«гЃЇгЃ“гЃ®гѓ—гѓ­г‚°гѓ©гѓ гЃ®гѓђгѓјг‚ёгѓ§гѓігЃ§гЃЇиЄЌзџҐгЃ§гЃЌгЃЄгЃ„жѓ…е ±гЃЊеђ«гЃѕг‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nдїќе­гЃ—гЃЄгЃЉгЃ™гЃЁгЂЃгЃ“гЃ®жѓ…е ±гЃЇе¤±г‚Џг‚ЊгЃѕгЃ™гЂ‚";
         Text[ chinese_traditional ] = "йЂ™еЂ‹зЁ‹еєЏз„Ўжі•и™•зђ†йЂ™еЂ‹ж–‡д»¶дё­дёЌжЋзљ„иі‡иЁЉгЂ‚\nењЁй‡Ќж–°е„Іе­ж™‚йЂ™дє›иі‡иЁЉжњѓжµЃе¤±пјЃ";
@@ -738,9 +771,9 @@ Resource RID_ERRHDLSC
         Text [ italian ] = "Non и stato possibile salvare tutti i contenuti delle celle nel formato specificato ." ;
         Text [ spanish ] = "No se pudieron guardar todos los contenidos de las celdas en el formato especificado." ;
         Text [ french ] = "Il n'a pas йtй possible d'enregistrer le contenu de toutes les cellules dans le format spйcifiй." ;
-        Text [ dutch ] = "Niet van elke cel kon de inhoud in het aangegeven formaat worden opgeslagen." ;
+        Text [ dutch ] = "Niet van elke cel kan de inhoud in het opgegeven formaat worden opgeslagen." ;
         Text[ chinese_simplified ] = "ж— жі•з”ЁжЊ‡е®љзљ„ж јејЏе­з›е…ЁйѓЁзљ„еЌ•е…ѓж је†…е®№гЂ‚";
-        Text[ russian ] = "Сохранить все содержимое ячейки в заданном формате невозможно.";
+        Text[ russian ] = "Невозможно сохранить все содержимое ячейки в заданном формате.";
         Text[ polish ] = "Nie wszystkie zawartoњci komуrek mogіy zostaж zapisane w wybranym formacie.";
         Text[ japanese ] = "жЊ‡е®љгЃ—гЃџж›ёејЏгЃ§гЂЃгЃ™гЃ№гЃ¦гЃ®г‚»гѓ«гЃ®е†…е®№гЃЇдїќе­гЃ§гЃЌгЃѕгЃ›г‚“гЃ§гЃ—гЃџгЂ‚";
         Text[ chinese_traditional ] = "з„Ўжі•з”ЁжЊ‡е®љзљ„ж јејЏе„Іе­е…ЁйѓЁзљ„е„Іе­ж је…§е®№гЂ‚";
@@ -759,12 +792,12 @@ Resource RID_ERRHDLSC
         Text[ENGLISH] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
         Text[ENGLISH_US] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
         Text[ portuguese ] = "Foi impossнvel converter os seguintes caracteres para o conjunto de caracteres seleccionado;\nestes foram escritos como caracteres polivalentes &#1234:\n\n$(ARG1)";
-        Text[ russian ] = "Преобразовать следующие знаки в выбранный набор знаков невозможно.\nПоэтому они представлены как &#1234:\n\n$(ARG1)";
+        Text[ russian ] = "Невозможно преобразовать следующие символы в выбранную кодировку.\nОни представлены как &#1234:\n\n$(ARG1)";
         Text[ greek ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
-        Text[ dutch ] = "De volgende tekens konden niet worden geconverteerd naar het geselecteerde tekenset\nen werden geschreven als ? vervangende weergave:\n\n$(ARG1)";
+        Text[ dutch ] = "De volgende tekens kunnen niet worden geconverteerd naar de geselecteerde tekenset\nen worden geschreven als ? vervangende weergave:\n\n$(ARG1)";
         Text[ french ] = "Impossible de convertir les caractиres suivants dans le jeu choisi ;\nils ont йtй йcrits comme substitution &#1234; :\n\n$(ARG1)";
         Text[ spanish ] = "No se pudieron convertir los siguientes caracteres en los juegos de caracteres seleccionados,\npor lo que se guardaron en la representaciуn sustitutoria:\n\n$(ARG1)";
-        Text[ finnish ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+        Text[ finnish ] = "Seuraavia merkkejд ei voitu muuntaa valittuun merkistццn,\njoten ne kirjoitettiin &#1234; sijaisiksi:\n\n$(ARG1)";
         Text[ italian ] = "I seguenti caratteri non possono essere convertiti secondo il tipo di caratttere selezionato\ne sono stati scritti come surrogati &#1234; :\n\n$(ARG1)";
         Text[ danish ] = "Fшlgende tegn kunne ikke konverteres til det valgte tegnsжt\nog blev skrevet i &#1234; erstatningsvisning:\n\n$(ARG1)";
         Text[ swedish ] = "Det gick inte att konvertera de fцljande tecknen till den valda teckenuppsдttningen\noch de ersattes med &#1234;:\n\n$(ARG1)";
@@ -785,9 +818,9 @@ Resource RID_ERRHDLSC
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posiзгo(ARG2)(linha,coluna)";
-        TEXT[ russian ] = "В файле в части документа $(ARG1) в позиции $(ARG2)(строка,колонка) обнаружена ошибка формата.";
+        TEXT[ russian ] = "Ошибка формата файла в части документа $(ARG1) в позиции $(ARG2)(строка,столбец).";
         TEXT[ greek ] = "ЕнфпрЯуфзке уцЬлмб мпсцпрпЯзузт уфп бсчеЯп уфп фмЮмб кеймЭнпх $(ARG1) уфз иЭуз $(ARG2)(гсбммЮ,уфЮлз)";
-        TEXT[ dutch ] = "Formaatfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
+        TEXT[ dutch ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1) du fichier, position $(ARG2)(ligne,colonne).";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posiciуn $(ARG2)(fila,columna)";
         TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
@@ -802,8 +835,8 @@ Resource RID_ERRHDLSC
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "Error de format en el document $(ARG1) a $(ARG2)(fila,columna)";
-        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
-        Text[ language_user1 ] = "should be the same text like in the writer";
+        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
+        Text[ language_user1 ] = "shou; should be the same text like in the writer";
         Text[ thai ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
     };
 };
