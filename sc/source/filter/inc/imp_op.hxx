@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:08:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ class SdrObject;
 class ScDocument;
 class ScToken;
 class ScToken2;
-class ScExtDocOptions;
 class _ScRangeListTabs;
 
 class XF_Buffer;
@@ -118,15 +117,12 @@ class ImportTyp
 protected:
     CharSet             eQuellChar;     // Quell-Zeichensatz
     ScDocument*         pD;             // Dokument
-    ScExtDocOptions*    pExtOpt;        // optionale extended Options
 
 public:
                         ImportTyp( ScDocument*, CharSet eSrc );
     virtual             ~ImportTyp();
 
     virtual FltError    Read( void );
-
-    ScExtDocOptions&    GetExtOpt( void );
 };
 
 
@@ -204,7 +200,6 @@ protected:
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
     SCTAB                   nBdshtTab;          // Counter fuer Boundsheet
-    UINT16                  nFirstVisTab;       // index of first visible tab for WINDOW2
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
     BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum
@@ -212,6 +207,7 @@ protected:
 
     // Record-Funktionen
     void                    Dimensions( void );             // 0x00
+    void                    Window1();
     void                    Blank25( void );                // 0x01
     void                    Integer( void );                // 0x02
     void                    Number25( void );               // 0x03
@@ -226,7 +222,6 @@ protected:
     BOOL                    Password( void );               // 0x13
     void                    Externsheet( void );            // 0x17
     void                    Note( void );                   // 0x1C
-    void                    Selection( void );              // 0x1D
     void                    Columndefault( void );          // 0x20
     void                    Array25( void );                // 0x21
     void                    Rec1904( void );                // 0x22
@@ -234,7 +229,6 @@ protected:
     void                    Colwidth( void );               // 0x24
     void                    Defrowheight2( void );          // 0x25
 //      void                Window1( void );                // 0x3D
-    void                    Pane( void );                   // 0x41
     void                    Codepage( void );               // 0x42
     void                    Ixfe( void );                   // 0x44
     void                    DefColWidth( void );            // 0x55
@@ -248,7 +242,6 @@ protected:
     void                    Hideobj( void );                // 0x8D
     void                    Bundleheader( void );           // 0x8F
     void                    Standardwidth( void );          // 0x99
-    void                    Scl( void );                    // 0xA0
     void                    Shrfmla( void );                // 0xBC
     void                    Mulrk( void );                  // 0xBD
     void                    Mulblank( void );               // 0xBE
@@ -267,7 +260,6 @@ protected:
     void                    Externname34( void );           // 0x0223
     void                    Defrowheight345( void );        // 0x0225
     void                    TableOp( void );                // 0x0236
-    void                    Window2_5( void );              // 0x023E
     //void                  Rk( void );                     // 0x027E -> 0x7E
     void                    Formula4( void );               // 0x0406       -> excform.cxx
     void                    Bof4( void );                   // 0x0409
