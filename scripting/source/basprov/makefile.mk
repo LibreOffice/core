@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tbe $ $Date: 2003-09-16 15:23:32 $
+#   last change: $Author: tbe $ $Date: 2003-09-23 10:02:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,10 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/basprov.obj \
-        $(SLO)$/basscript.obj
+        $(SLO)$/basscript.obj \
+        $(SLO)$/baslibnode.obj \
+        $(SLO)$/basmodnode.obj \
+        $(SLO)$/basmethnode.obj
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1IMPLIB=	i$(TARGET)
