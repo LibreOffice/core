@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-11 15:29:34 $
+ *  last change: $Author: ab $ $Date: 2001-06-25 11:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,14 +689,14 @@ BasicManager* SfxApplication::GetBasicManager()
         }
 
         SvStorageRef aStor = new SvStorage( aAppBasic.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYWRITE );
-        SfxBasicManager* pSfxBasicManager;
+        BasicManager* pBasicManager;
         if ( aStor.Is() && 0 == aStor->GetError() )
         {
             SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, Application::GetAppName() );
             String aOldBaseURL = INetURLObject::GetBaseURL();
             INetURLObject::SetBaseURL( aAppBasic.GetMainURL() );
-            pSfxBasicManager = new SfxBasicManager( *aStor, NULL, &aAppBasicDir );
-            pImp->pBasicMgr = pSfxBasicManager;
+            pBasicManager = new BasicManager( *aStor, NULL, &aAppBasicDir );
+            pImp->pBasicMgr = pBasicManager;
             pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
 
             // ggf. nach einem Channel-Update den BasicManager aktualisieren
@@ -735,8 +735,8 @@ BasicManager* SfxApplication::GetBasicManager()
         }
         if ( !aStor.Is() || 0 != aStor->GetError() )
         {
-            pSfxBasicManager = new SfxBasicManager( new StarBASIC, &aAppBasicDir );
-            pImp->pBasicMgr = pSfxBasicManager;
+            pBasicManager = new BasicManager( new StarBASIC, &aAppBasicDir );
+            pImp->pBasicMgr = pBasicManager;
 
             // Als Destination das erste Dir im Pfad:
             String aFileName( aAppBasic.getName() );
@@ -786,28 +786,28 @@ BasicManager* SfxApplication::GetBasicManager()
 
         // Basic container
         SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
-            ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager );
+            ( DEFINE_CONST_UNICODE( "StarBasic" ), pBasicManager );
         pBasicCont->acquire();  // Hold via UNO
+        Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
         pImp->pBasicLibContainer = pBasicCont;
 
         // Dialog container
         SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer();
         pDialogCont->acquire(); // Hold via UNO
+        Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
         pImp->pDialogLibContainer = pDialogCont;
 
         BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
-        pBasMgrImpl->pScriptCont = pBasicCont;
-        pBasMgrImpl->pDialogCont = pDialogCont;
-        pSfxBasicManager->SetImpl( pBasMgrImpl );
+        pBasMgrImpl->xScriptCont = xBasicCont;
+        pBasMgrImpl->xDialogCont = xDialogCont;
+        pBasicManager->SetImpl( pBasMgrImpl );
 
 
-        Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
         Any aBasicCont;
         aBasicCont <<= xBasicCont;
         xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("BasicLibraries"), aBasicCont );
         pBas->Insert( xUnoObj );
 
-        Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
         Any aDialogCont;
         aDialogCont <<= xDialogCont;
         xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("DialogLibraries"), aDialogCont );
