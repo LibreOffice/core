@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,13 +284,13 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pRange = 0;
-        SwXTextCursor* pCursor = 0;
+        OTextCursorHelper* pCursor = 0;
         if(xRangeTunnel.is())
         {
             pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                     SwXTextRange::getUnoTunnelId());
-            pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
         }
 
         if(pRange && pRange->GetDoc()  == GetDoc() ||
@@ -299,7 +299,7 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
             const SwStartNode* pOwnStartNode = GetStartNode();
             if(pCursor)
             {
-                const SwStartNode* pTmp = pCursor->GetCrsr()->GetNode()->FindStartNode();
+                const SwStartNode* pTmp = pCursor->GetPaM()->GetNode()->FindStartNode();
                 while(pTmp && pTmp->IsSectionNode())
                 {
                     pTmp = pTmp->FindStartNode();
@@ -331,7 +331,7 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
                 //hier wird ein PaM angelegt, der vor dem Parameter-PaM liegt, damit der
                 //Text davor eingefuegt wird
                 UnoActionContext aContext(GetDoc());
-                const SwPosition* pPos = pCursor ? pCursor->GetCrsr()->Start() : &pRange->GetBookmark()->GetPos();
+                const SwPosition* pPos = pCursor ? pCursor->GetPaM()->Start() : &pRange->GetBookmark()->GetPos();
                 SwPaM aInsertPam(*pPos);
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
@@ -383,13 +383,13 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
 
                     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
                     SwXTextRange* pRange = 0;
-                    SwXTextCursor* pCursor = 0;
+                    OTextCursorHelper* pCursor = 0;
                     if(xRangeTunnel.is())
                     {
                         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                                 SwXTextRange::getUnoTunnelId());
-                        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                                SwXTextCursor::getUnoTunnelId());
+                        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                                OTextCursorHelper::getUnoTunnelId());
                     }
                     if(pRange)
                     {
@@ -397,7 +397,7 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
                     }
                     else if(pCursor)
                     {
-                        SwUnoCrsr* pCrsr = pCursor->GetCrsr();
+                        SwPaM* pCrsr = pCursor->GetPaM();
                         *pCrsr->GetPoint() = *aTmp.GetPoint();
                         pCrsr->DeleteMark();
                     }
@@ -415,13 +415,13 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
             {
                 uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
                 SwXTextRange* pRange = 0;
-                SwXTextCursor* pCursor = 0;
+                OTextCursorHelper* pCursor = 0;
                 if(xRangeTunnel.is())
                 {
                     pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                             SwXTextRange::getUnoTunnelId());
-                    pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId());
+                    pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId());
                 }
 
                 SwCursor aCrsr(*aTmp.GetPoint());
@@ -432,7 +432,7 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
                     pRange->_CreateNewBookmark(aCrsr);
                 else
                 {
-                    SwUnoCrsr* pUnoCrsr = pCursor->GetCrsr();
+                    SwPaM* pUnoCrsr = pCursor->GetPaM();
                     *pUnoCrsr->GetPoint() = *aCrsr.GetPoint();
                     if(aCrsr.HasMark())
                     {
@@ -472,15 +472,15 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
         {
             uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
             SwXTextRange* pRange = 0;
-            SwXTextCursor* pCursor = 0;
+            OTextCursorHelper* pCursor = 0;
             SwXTextPortion* pPortion = 0;
             SwXText* pText = 0;
             if(xRangeTunnel.is())
             {
                 pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                         SwXTextRange::getUnoTunnelId());
-                pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                        SwXTextCursor::getUnoTunnelId());
+                pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId());
                 pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
                                         SwXTextPortion::getUnoTunnelId());
                 pText = (SwXText*)xRangeTunnel->getSomething(
@@ -490,8 +490,8 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
 
             uno::Reference< XTextCursor >  xOwnCursor = createCursor();
             uno::Reference<lang::XUnoTunnel> xOwnTunnel( xOwnCursor, uno::UNO_QUERY);
-            SwXTextCursor* pOwnCursor = (SwXTextCursor*)xOwnTunnel->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            OTextCursorHelper* pOwnCursor = (OTextCursorHelper*)xOwnTunnel->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
 
             const SwStartNode* pOwnStartNode = GetStartNode();
             SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -507,9 +507,9 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
             }
 
             const SwNode* pSrcNode = 0;
-            if(pCursor && pCursor->GetCrsr())
+            if(pCursor && pCursor->GetPaM())
             {
-                pSrcNode = pCursor->GetCrsr()->GetNode();
+                pSrcNode = pCursor->GetPaM()->GetNode();
             }
             else if (pRange && pRange->GetBookmark())
             {
@@ -525,9 +525,9 @@ void SwXText::insertTextContent(const uno::Reference< XTextRange > & xRange,
                 Reference<XTextCursor> xTextCursor = pText->createCursor();
                 xTextCursor->gotoEnd(sal_True);
                 Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY );
-                pCursor = (SwXTextCursor*)xCrsrTunnel->getSomething(
-                        SwXTextCursor::getUnoTunnelId() );
-                pSrcNode = pCursor->GetCrsr()->GetNode();
+                pCursor = (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                        OTextCursorHelper::getUnoTunnelId() );
+                pSrcNode = pCursor->GetPaM()->GetNode();
             }
             else
                 throw lang::IllegalArgumentException();
@@ -1049,20 +1049,20 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
  ---------------------------------------------------------------------------*/
 sal_Bool    SwXText::CheckForOwnMember(
     const SwXTextRange* pRange,
-    const SwXTextCursor* pCursor)
+    const OTextCursorHelper* pCursor)
         throw(IllegalArgumentException, RuntimeException)
 {
     DBG_ASSERT((!pRange || !pCursor) && (pRange || pCursor), "only one pointer will be checked" )
     Reference<XTextCursor> xOwnCursor = createCursor();
 
     uno::Reference<lang::XUnoTunnel> xTunnel( xOwnCursor, uno::UNO_QUERY);
-    SwXTextCursor* pOwnCursor = 0;
+    OTextCursorHelper* pOwnCursor = 0;
     if(xTunnel.is())
     {
-        pOwnCursor = (SwXTextCursor*)xTunnel->getSomething(SwXTextCursor::getUnoTunnelId());
+        pOwnCursor = (OTextCursorHelper*)xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId());
     }
-    DBG_ASSERT(pOwnCursor, "SwXTextCursor::getUnoTunnelId() ??? ")
-    const SwStartNode* pOwnStartNode = pOwnCursor->GetCrsr()->GetNode()->FindStartNode();
+    DBG_ASSERT(pOwnCursor, "OTextCursorHelper::getUnoTunnelId() ??? ")
+    const SwStartNode* pOwnStartNode = pOwnCursor->GetPaM()->GetNode()->FindStartNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch(eCrsrType)
     {
@@ -1078,7 +1078,7 @@ sal_Bool    SwXText::CheckForOwnMember(
     const SwNode* pSrcNode;
     if(pCursor)
     {
-        pSrcNode = pCursor->GetCrsr()->GetNode();
+        pSrcNode = pCursor->GetPaM()->GetNode();
     }
     else //dann pRange
     {
@@ -1119,23 +1119,23 @@ sal_Int16 SwXText::ComparePositions(
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel1( xPos1, UNO_QUERY);
         SwXTextRange* pRange1 = 0;
-        SwXTextCursor* pCursor1 = 0;
+        OTextCursorHelper* pCursor1 = 0;
         if(xRangeTunnel1.is())
         {
             pRange1 = (SwXTextRange*)xRangeTunnel1->getSomething(
                                     SwXTextRange::getUnoTunnelId());
-            pCursor1 = (SwXTextCursor*)xRangeTunnel1->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            pCursor1 = (OTextCursorHelper*)xRangeTunnel1->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
         }
         uno::Reference<lang::XUnoTunnel> xRangeTunnel2( xPos2, UNO_QUERY);
         SwXTextRange* pRange2 = 0;
-        SwXTextCursor* pCursor2 = 0;
+        OTextCursorHelper* pCursor2 = 0;
         if(xRangeTunnel2.is())
         {
             pRange2 = (SwXTextRange*)xRangeTunnel2->getSomething(
                                     SwXTextRange::getUnoTunnelId());
-            pCursor2 = (SwXTextCursor*)xRangeTunnel2->getSomething(
-                                    SwXTextCursor::getUnoTunnelId());
+            pCursor2 = (OTextCursorHelper*)xRangeTunnel2->getSomething(
+                                    OTextCursorHelper::getUnoTunnelId());
         }
 
         if((pRange1||pCursor1) && (pRange2||pCursor2))
@@ -1753,7 +1753,7 @@ uno::Reference< XTextCursor >  SwXHeadFootText::createTextCursor(void) throw( un
                         bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
         if(!pNewStartNode || pNewStartNode != pOwnStartNode)
         {
-            delete pCrsr;
+            pCrsr = NULL;
             uno::RuntimeException aExcept;
             aExcept.Message = S2U("no text available");
             throw aExcept;
