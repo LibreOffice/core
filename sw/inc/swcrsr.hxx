@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:38:56 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ public:
     // UI versions
     FASTBOOL IsStartWord() const;
     FASTBOOL IsEndWord() const;
+    FASTBOOL IsStartEndSentence( bool bEnd ) const;
     FASTBOOL IsInWord() const;
     FASTBOOL GoStartWord();
     FASTBOOL GoEndWord();
@@ -210,6 +211,8 @@ public:
     FASTBOOL GoSentence(SentenceMoveType eMoveType);
     FASTBOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
     FASTBOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
+    FASTBOOL GoStartSentence(){return GoSentence(START_SENT);}
+    FASTBOOL GoEndSentence(){return GoSentence(END_SENT);}
 
     FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden,
                         BOOL bInsertCrsr );
