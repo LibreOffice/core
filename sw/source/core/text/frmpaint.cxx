@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 12:32:25 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 09:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 {
                     SwAttrHandler aAttrHandler;
                     aAttrHandler.Init( GetTxtNode()->GetSwAttrSet(),
-                                       *GetTxtNode()->GetDoc() );
+                                       *GetTxtNode()->GetDoc(), NULL );
                     SwRedlineItr aRedln( rTxtNode, *pFnt, aAttrHandler, nRedlPos, sal_True );
                 }
             }

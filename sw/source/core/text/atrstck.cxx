@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-07 11:21:55 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 09:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _ATRHNDL_HXX
 #include <atrhndl.hxx>
 #endif
-#ifndef _SWFONT_HXX
-#include <swfont.hxx>
+#ifndef _SFXITEMITER_HXX //autogen
+#include <svtools/itemiter.hxx>
 #endif
 #ifndef _SVX_CMAPITEM_HXX
 #include <svx/cmapitem.hxx>
@@ -137,6 +137,9 @@
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
 #endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
 #endif
@@ -155,8 +158,14 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
-#ifndef _SFXITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>   // ViewShell
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>  // SwViewOptions
+#endif
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
 #endif
 
 #define STACK_INCREMENT 4
@@ -254,6 +263,24 @@ const SfxPoolItem* lcl_GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
 
     return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : 0;
 }
+
+/*************************************************************************
+ *                      lcl_ChgHyperLinkColor
+ * returns if the color attribute has to be changed for hyperlinks
+ *************************************************************************/
+
+sal_Bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
+                                const SfxPoolItem& rItem,
+                                const ViewShell* pShell )
+{
+    return pShell && pShell->GetWin() &&
+           ! pShell->GetViewOptions()->IsPagePreview() &&
+           RES_TXTATR_INETFMT == rAttr.Which() &&
+           RES_CHRATR_COLOR == rItem.Which() &&
+           ( ((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks() ||
+           ! ((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsLinks() );
+}
+
 
 /*************************************************************************
  *                      SwAttrHandler::SwAttrStack::SwAttrStack()
@@ -357,11 +384,8 @@ USHORT SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
  *                      SwAttrHandler::SwAttrHandler()
  *************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
-SwAttrHandler::SwAttrHandler() : pFnt( 0 ), bVertLayout( sal_False )
-#else
-SwAttrHandler::SwAttrHandler() : pFnt( 0 )
-#endif
+SwAttrHandler::SwAttrHandler() : pShell( 0 ), pFnt( 0 ), bVertLayout( sal_False )
+
 {
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
@@ -375,41 +399,33 @@ SwAttrHandler::~SwAttrHandler()
  *                      SwAttrHandler::Init()
  *************************************************************************/
 
-void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc )
+void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc,
+                          const ViewShell* pSh )
 {
     pDoc = &rDoc;
+    pShell = pSh;
 
     for ( USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++ )
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
 }
 
-#ifdef VERTICAL_LAYOUT
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
-                          const SwDoc& rDoc, SwFont& rFnt, sal_Bool bVL )
-#else
-void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
-                          const SwDoc& rDoc, SwFont& rFnt, sal_Bool bAttrSet )
-#endif
+                          const SwDoc& rDoc, const ViewShell* pSh,
+                          SwFont& rFnt, sal_Bool bVL )
 {
     // initialize default array
     memcpy( pDefaultArray, pPoolItem,
             NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 
     pDoc = &rDoc;
+    pShell = pSh;
 
     // do we have to apply additional paragraph attributes?
-#ifdef VERTICAL_LAYOUT
-
     bVertLayout = bVL;
 
     if ( pAS && pAS->Count() )
     {
         SfxItemIter aIter( *pAS );
-#else
-    if ( bAttrSet && rAS.Count() )
-    {
-        SfxItemIter aIter( rAS );
-#endif
         register USHORT nWhich;
         const SfxPoolItem* pItem = aIter.GetCurItem();
         while( TRUE )
@@ -469,8 +485,24 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
             {
                 // we push rAttr onto the appropriate stack
                 if ( Push( rAttr, *pItem , rFnt ) )
+                {
                     // we let pItem change rFnt
-                    FontChg( *pItem, rFnt, sal_True );
+                    if ( lcl_ChgHyperLinkColor( rAttr, *pItem, pShell ) )
+                    {
+                        // for hyperlinks we still have to evaluate
+                        // the appearence settings
+                        Color aColor;
+                        if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
+                            aColor = SwViewOption::GetVisitedLinksColor();
+                        else
+                            aColor = SwViewOption::GetLinksColor();
+
+                        SvxColorItem aItemNext( aColor );
+                        FontChg( aItemNext, rFnt, sal_True );
+                    }
+                    else
+                        FontChg( *pItem, rFnt, sal_True );
+                }
             }
         }
     }
@@ -502,8 +534,11 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, 
     USHORT nStack = StackPos[ rItem.Which() ];
 
     // attributes originating from redlining have highest priority
+    // second priority are hyperlink attributes, which have a color replacement
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
-    if ( !pTopAttr || !pTopAttr->IsPriorityAttr() )
+    if ( ! pTopAttr || rAttr.IsPriorityAttr() ||
+            ( ! pTopAttr->IsPriorityAttr() &&
+              ! lcl_ChgHyperLinkColor( *pTopAttr, rItem, pShell ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return sal_True;
@@ -603,11 +638,27 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
 
             const SfxPoolItem* pItemNext;
             pFmtNext->GetItemState( nAttr, TRUE, &pItemNext );
-            FontChg( *pItemNext, rFnt, sal_False );
+
+            if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, pShell ) )
+            {
+                // for hyperlinks we still have to evaluate
+                // the appearence settings
+                Color aColor;
+                if ( ((SwTxtINetFmt*)pTopAt)->IsVisited() )
+                    aColor = SwViewOption::GetVisitedLinksColor();
+                else
+                    aColor = SwViewOption::GetLinksColor();
+
+                SvxColorItem aItemNext( aColor );
+                FontChg( aItemNext, rFnt, sal_False );
+            }
+            else
+                FontChg( *pItemNext, rFnt, sal_False );
         }
         else
             FontChg( pTopAt->GetAttr(), rFnt, sal_False );
     }
+
     // default value has to be set, we only have default values for char attribs
     else if ( nStackPos < NUM_DEFAULT_VALUES )
         FontChg( *pDefaultArray[ nStackPos ], rFnt, sal_False );
@@ -645,24 +696,14 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
         if ( pRotateAttr )
         {
             pRotateItem = lcl_GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
-#ifdef VERTICAL_LAYOUT
             rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
                                bVertLayout );
-#else
-            rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue() );
-#endif
         }
         else
-#ifdef VERTICAL_LAYOUT
             rFnt.SetVertical(
                 ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue(),
                  bVertLayout
             );
-#else
-            rFnt.SetVertical(
-                ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue()
-            );
-#endif
     }
 }
 
@@ -816,12 +857,8 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                     ((SvxTwoLinesItem*)pDefaultArray[ nTwoLineStack ])->GetValue();
 
             if ( !bTwoLineAct )
-#ifdef VERTICAL_LAYOUT
                 rFnt.SetVertical( ((SvxCharRotateItem&)rItem).GetValue(),
                                    bVertLayout );
-#else
-                rFnt.SetVertical( ((SvxCharRotateItem&)rItem).GetValue() );
-#endif
 
             break;
         }
@@ -838,11 +875,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 
             if ( !bRuby && bTwoLineAct )
             {
-#ifdef VERTICAL_LAYOUT
                 rFnt.SetVertical( 0, bVertLayout );
-#else
-                rFnt.SetVertical( 0 );
-#endif
                 break;
             }
 
@@ -858,34 +891,18 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             if ( pRotateAttr )
             {
                 pRotateItem = lcl_GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
-#ifdef VERTICAL_LAYOUT
                 rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
                                    bVertLayout );
-#else
-                rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue() );
-#endif
             }
             else
-#ifdef VERTICAL_LAYOUT
                 rFnt.SetVertical(
                     ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue(),
                      bVertLayout
                 );
-#else
-                rFnt.SetVertical(
-                    ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue()
-                );
-#endif
-
             break;
         }
         case RES_TXTATR_CJK_RUBY :
-#ifdef VERTICAL_LAYOUT
             rFnt.SetVertical( 0, bVertLayout );
-#else
-            rFnt.SetVertical( 0 );
-#endif
-
             break;
         case RES_TXTATR_REFMARK :
             if ( bPush )

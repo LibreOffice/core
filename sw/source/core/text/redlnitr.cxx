@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-22 12:35:17 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 09:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,11 +161,7 @@ extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
 /*************************************************************************
  *                      SwAttrIter::CtorInit()
  *************************************************************************/
-#ifdef VERTICAL_LAYOUT
 void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
-#else
-void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
-#endif
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
     SwRootFrm *pRootFrm = rTxtNode.GetDoc()->GetRootFrm();
@@ -188,10 +184,6 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     pAttrSet = &rTxtNode.GetSwAttrSet();
     pHints = rTxtNode.GetpSwpHints();
 
-#ifndef VERTICAL_LAYOUT
-    const sal_Bool bAttrSet = rTxtNode.HasSwAttrSet();
-#endif
-
     SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
 
     delete pFnt;
@@ -205,7 +197,6 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
         pOut->SetLayoutMode( TEXT_LAYOUT_COMPLEX_DISABLED );
 #endif
 
-#ifdef VERTICAL_LAYOUT
     // set font to vertical if frame layout is vertical
     sal_Bool bVertLayout = sal_False;
     if ( pFrm && pFrm->IsVertical() )
@@ -213,24 +204,15 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
         bVertLayout = sal_True;
         pFnt->SetVertical( pFnt->GetOrientation(), sal_True );
     }
-#endif
 
     // Initialize the default attribute of the attribute handler
     // based on the attribute array cached together with the font.
     // If any further attributes for the paragraph are given in pAttrSet
     // consider them during construction of the default array, and apply
     // them to the font
-#ifdef VERTICAL_LAYOUT
-    if ( rTxtNode.HasSwAttrSet() )
-        aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
-                           *rTxtNode.GetDoc(), *pFnt, bVertLayout );
-    else
-        aAttrHandler.Init( aFontAccess.Get()->GetDefault(), 0,
-                           *rTxtNode.GetDoc(), *pFnt, bVertLayout );
-#else
-    aAttrHandler.Init( aFontAccess.Get()->GetDefault(), *pAttrSet,
-                       *rTxtNode.GetDoc(), *pFnt, bAttrSet );
-#endif
+    aAttrHandler.Init( aFontAccess.Get()->GetDefault(),
+                       rTxtNode.HasSwAttrSet() ? pAttrSet : 0,
+                       *rTxtNode.GetDoc(), pShell, *pFnt, bVertLayout );
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
 
