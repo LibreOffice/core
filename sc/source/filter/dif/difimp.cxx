@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,7 +758,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
     if( bRet )
     {
         if( bExpOverflow )
-            return NULL;        // ACHTUNG: hier muss noch differenziert werden
+            return sal_False;       // ACHTUNG: hier muss noch differenziert werden
 
         if( bNeg )
             fNewVal *= 1.0;
