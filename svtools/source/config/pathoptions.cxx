@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: as $ $Date: 2000-11-24 15:59:05 $
+ *  last change: $Author: pb $ $Date: 2000-11-28 15:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@ using namespace com::sun::star::uno;
 #define SUBSTITUTE_PATH                 ASCII_STR("$(path)")
 #define SUBSTITUTE_LANG                 ASCII_STR("$(lang)")
 #define SUBSTITUTE_LANGID               ASCII_STR("$(langid)")
-//#define SUBSTITUTE_SYSLANGID            ASCII_STR("$(syslangid)")
 #define SUBSTITUTE_VLANG                ASCII_STR("$(vlang)")
 #define SUBSTITUTE_WORKDIRURL           ASCII_STR("$(workdirurl)")
 
@@ -130,13 +129,13 @@ using namespace com::sun::star::uno;
 #define REPLACELENGTH_INST              7
 #define REPLACELENGTH_PROG              7
 #define REPLACELENGTH_USER              7
+#define REPLACELENGTH_USERPATH          11
 #define REPLACELENGTH_INSTURL           10
 #define REPLACELENGTH_PROGURL           10
 #define REPLACELENGTH_USERURL           10
 #define REPLACELENGTH_PATH              7
 #define REPLACELENGTH_LANG              7
 #define REPLACELENGTH_LANGID            9
-//#define REPLACELENGTH_SYSLANGID         12
 #define REPLACELENGTH_VLANG             8
 #define REPLACELENGTH_WORKDIRURL        13
 
@@ -400,7 +399,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         if ( SUBSTITUTE_USER == aSubString || SUBSTITUTE_USERPATH == aSubString )
         {
             DBG_ASSERT( SUBSTITUTE_USERPATH == aSubString, "don't user $(user) any longer" );
-            nReplaceLength = REPLACELENGTH_USER;
+            nReplaceLength = REPLACELENGTH_USERPATH;
             aReplacement = m_aUserPath;
         }
         else
@@ -460,16 +459,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
                aReplacement = OUString::valueOf( (sal_Int32)m_eLanguageType );
         }
         else
-/*
-        // -------------------------------------------------------------------------------------------------------------------
-        // $(syslangid) - LanguageType of the system as string (for example "1031")
-        if ( SUBSTITUTE_SYSLANGID == aSubString )
-        {
-            nReplaceLength = REPLACELENGTH_SYSLANGID;
-            aReplacement = OUString::valueOf( (sal_uInt16)System::GetLanguage() );
-        }
-        else
-*/
         // -------------------------------------------------------------------------------------------------------------------
         // $(vlang) - language dependent directory with english language name as directory name
         if ( SUBSTITUTE_VLANG == aSubString )
