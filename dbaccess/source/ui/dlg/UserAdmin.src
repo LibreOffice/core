@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:30:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,14 @@ TabPage TAB_PAGE_USERADMIN
         Text[ swedish ] = "Användarurval";
         Text[ polish ] = "Wybór u¿ytkownika";
         Text[ portuguese_brazilian ] = "User choise";
-        Text[ japanese ] = "Õ°»Ş°‘I‘ğ";
+        Text[ japanese ] = "Õ°»Ş°‚Ì‘I‘ğ";
         Text[ korean ] = "»ç¿ëÀÚ ¼±ÅÃ";
         Text[ chinese_simplified ] = "Ê¹ÓÃÕßÑ¡Ôñ";
         Text[ chinese_traditional ] = "¦Û­q¿ï¾Ü";
         Text[ arabic ] = "ÇÎÊíÇÑ ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı seçimi";
+        Text[ finnish ] = "User selection";
+        Text[ catalan ] = "User selection";
     };
 
     FixedText FT_USER
@@ -120,15 +122,17 @@ TabPage TAB_PAGE_USERADMIN
         Text[ spanish ] = "Usuari~o:";
         Text[ italian ] = "Ut~ente:";
         Text[ danish ] = "Bruger:";
-        Text[ swedish ] = "Användare:";
+        Text[ swedish ] = "Användar~e:";
         Text[ polish ] = "U¿ytkownik:";
         Text[ portuguese_brazilian ] = "Us~er:";
-        Text[ japanese ] = "Õ°»Ş°:(~E)";
+        Text[ japanese ] = "Õ°»Ş°(~E):";
         Text[ korean ] = "»ç¿ëÀÚ:(~E)";
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß(~E)£º";
-        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~E)";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~E)¡G";
         Text[ arabic ] = "ÇáãÓÊÎÏã:";
         Text[ turkish ] = "Kullanıcı:";
+        Text[ finnish ] = "Us~er:";
+        Text[ catalan ] = "Us~er:";
     };
 
     ListBox LB_USER
@@ -153,7 +157,26 @@ TabPage TAB_PAGE_USERADMIN
         HelpId              = HID_TAB_PAGE_PBUSER ;
         Text                = "Benutzer ~hinzufügen...";
         Text[ENGLISH]       = "~User add...";
-        Text[ english_us ] = "~User add...";
+        Text[ english_us ] = "~Add User...";
+        Text[ portuguese ] = "~Novo utilizador...";
+        Text[ russian ] = "Íîâûé ïîëüçîâàòåëü...";
+        Text[ greek ] = "Íİïò ÷ñŞóôçò...";
+        Text[ dutch ] = "Gebruiker ~toevoegen...";
+        Text[ french ] = "~Nouvel utilisateur...";
+        Text[ spanish ] = "~Nuevo usuario...";
+        Text[ finnish ] = "~New user...";
+        Text[ italian ] = "~Nuovo utente...";
+        Text[ danish ] = "Ny bruger...";
+        Text[ swedish ] = "Lägg till ~användare...";
+        Text[ polish ] = "Dodaj u¿ytkownika...";
+        Text[ portuguese_brazilian ] = "~New user...";
+        Text[ japanese ] = "Õ°»Ş°‚Ì’Ç‰Á(~N)...";
+        Text[ korean ] = "»õ »ç¿ëÀÚ(~N)...";
+        Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕß(~N)...";
+        Text[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ(~N)...";
+        Text[ turkish ] = "Yeni kullanıcı...";
+        Text[ arabic ] = "ãÓÊÎÏã ÌÏíÏ...";
+        Text[ catalan ] = "~New user...";
     };
 
     PushButton PB_CHANGEPWD
@@ -165,7 +188,7 @@ TabPage TAB_PAGE_USERADMIN
         HelpId              = HID_TAB_PAGE_PBCHGPWD ;
         Text                = "~Passwort ändern...";
         Text[ENGLISH]       = "Change ~password...";
-        Text[ english_us ] = "Change ~password...";
+        Text[ english_us ] = "Change ~Password...";
         Text[ portuguese ] = "~Mudar senha...";
         Text[ russian ] = "Èçìåíèòü ïàğîëü...";
         Text[ greek ] = "ÁëëáãŞ êùäéêïı ğñüóâáóçò...";
@@ -179,10 +202,12 @@ TabPage TAB_PAGE_USERADMIN
         Text[ portuguese_brazilian ] = "Change ~password...";
         Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•ÏX(~P)...";
         Text[ korean ] = "ÆĞ½º¿öµå º¯°æ(~P)...";
-        Text[ chinese_simplified ] = "¸ü¸Ä¿ÚÁî(~P)...";
+        Text[ chinese_simplified ] = "¸ü¸ÄÃÜÂë(~P)...";
         Text[ chinese_traditional ] = "ÅÜ§ó±K½X(~P)...";
         Text[ arabic ] = "ÊÛííÑ ßáãÉ ÇáÓÑ...";
         Text[ turkish ] = "Şifreyi değiştir...";
+        Text[ finnish ] = "Change ~password...";
+        Text[ catalan ] = "Change ~password...";
     };
 
     PushButton PB_DELETEUSER
@@ -194,7 +219,7 @@ TabPage TAB_PAGE_USERADMIN
         HelpId              = HID_TAB_PAGE_PBUSERDELETE ;
         Text                = "Benut~zer löschen...";
         Text[ENGLISH]       = "~Delete user...";
-        Text[ english_us ] = "~Delete user...";
+        Text[ english_us ] = "~Delete User...";
         Text[ portuguese ] = "~Eliminar utilizador...";
         Text[ russian ] = "Óáğàòü ïîëüçîâàòåëÿ...";
         Text[ greek ] = "ÄéáãñáöŞ ÷ñŞóôç...";
@@ -212,6 +237,8 @@ TabPage TAB_PAGE_USERADMIN
         Text[ chinese_traditional ] = "§R°£¨Ï¥ÎªÌ(~D)...";
         Text[ arabic ] = "ÍĞİ ÇáãÓÊÎÏã...";
         Text[ turkish ] = "Kullanıcısyı sil...";
+        Text[ finnish ] = "~Delete user...";
+        Text[ catalan ] = "~Delete user...";
     };
 
     FixedLine FL_TABLE_GRANTS
@@ -220,24 +247,26 @@ TabPage TAB_PAGE_USERADMIN
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
         Text                = "Zugriffsrechte für ausgewählten Benutzer" ;
         Text [ ENGLISH ]    = "Access rights for choosen user" ;
-        Text[ english_us ] = "Access rights for user selected";
+        Text[ english_us ] = "Access rights for selected user";
         Text[ portuguese ] = "Direitos de acesso para utilizador seleccionado";
         Text[ russian ] = "Ïğàâà ïîëüçîâàòåëÿ äëÿ âûáğàííîãî ïîëüçîâàòåëÿ";
         Text[ greek ] = "Äéêáéşìáôá ÷ñŞóôç ãéá ôïí åğéëåãìİíï ÷ñŞóôç";
-        Text[ dutch ] = "Gebruikersrechten voor geselecteerde gebruikers";
+        Text[ dutch ] = "Toegangsrechten voor geselecteerde gebruikers";
         Text[ french ] = "Droits accordés à l'utilisateur sélectionné";
         Text[ spanish ] = "Derechos de usuario para usuarios seleccionados";
         Text[ italian ] = "Diritti utente per utente selezionato";
         Text[ danish ] = "Den valgte brugers brugerrettigheder";
-        Text[ swedish ] = "Användarrättigheter för utvald användare";
-        Text[ polish ] = "Prawa dla wybranego u¿ytkownika";
+        Text[ swedish ] = "Åtkomsträttigheter för utvald användare";
+        Text[ polish ] = "Prawa dostêpu dla wybranego u¿ytkownika";
         Text[ portuguese_brazilian ] = "User rights for choosen user";
-        Text[ japanese ] = "‘I‘ğ‚µ‚½Õ°»Ş°—p‚Ì±¸¾½Œ ";
+        Text[ japanese ] = "‘I‘ğ‚µ‚½Õ°»Ş°‚Ì±¸¾½Œ ";
         Text[ korean ] = "¼±ÅÃµÈ »ç¿ëÀÚÀÇ ¾×¼¼½º ±ÇÇÑ";
-        Text[ chinese_simplified ] = "Ñ¡ÖĞÊ¹ÓÃÕßµÄÊ¹ÓÃÈ¨ÏŞ";
-        Text[ chinese_traditional ] = "¿ï¤¤ªº¨Ï¥ÎªÌªº¨Ï¥ÎÅv­­";
+        Text[ chinese_simplified ] = "ÓÃÓÚÒÑ¾­Ñ¡ÖĞÊ¹ÓÃÕßµÄÊ¹ÓÃÈ¨ÏŞ";
+        Text[ chinese_traditional ] = "¾A¥Î©ó¤w¿ï¨úªº¨Ï¥ÎªÌªº¨Ï¥ÎÅv­­";
         Text[ arabic ] = "ÍŞæŞ ÇáÇÓÊÎÏÇã ááãÓÊÎÏã ÇáãõÎÊÇÑ";
         Text[ turkish ] = "Seçilen kullanıcı için erişim hakları";
+        Text[ finnish ] = "Access rights for user selected";
+        Text[ catalan ] = "Access rights for user selected";
     };
 
     Control CTRL_TABLE_GRANTS
@@ -255,5 +284,26 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Buttons = WB_YES_NO ;
     Message = "Soll der Benutzer wirklich gelöscht werden?" ;
     Message [ English ] = "Do you really want to delete the select user?" ;
+    Message[ english_us ] = "Do you really want to delete the user?";
+    Message[ portuguese ] = "Eliminar utilizador?";
+    Message[ russian ] = "Do you really want to delete the select user?";
+    Message[ greek ] = "Do you really want to delete the select user?";
+    Message[ dutch ] = "Wilt u deze gebruikersnaam werkelijk wissen?";
+    Message[ french ] = "Do you really want to delete the select user?";
+    Message[ spanish ] = "¿Desea realmente eliminar el usuario?";
+    Message[ finnish ] = "Do you really want to delete the select user?";
+    Message[ italian ] = "Volete davvero eliminare l'utente selezionato?";
+    Message[ danish ] = "Do you really want to delete the select user?";
+    Message[ swedish ] = "Vill du verkligen radera användaren?";
+    Message[ polish ] = "Na pewno usun¹æ u¿ytkownika?";
+    Message[ portuguese_brazilian ] = "Do you really want to delete the select user?";
+    Message[ japanese ] = "–{“–‚ÉÕ°»Ş°‚ğíœ‚µ‚Ü‚·‚©B";
+    Message[ korean ] = "Do you really want to delete the select user?";
+    Message[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÊ¹ÓÃÕß£¿";
+    Message[ chinese_traditional ] = "¯uªº­n§R°£³o­Ó¨Ï¥ÎªÌ?";
+    Message[ turkish ] = "Do you really want to delete the select user?";
+    Message[ arabic ] = "Do you really want to delete the select user?";
+    Message[ catalan ] = "Do you really want to delete the select user?";
 };
+
 
