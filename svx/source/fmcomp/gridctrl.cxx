@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 07:56:27 $
+ *  last change: $Author: oj $ $Date: 2001-01-10 15:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1480,6 +1480,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
             }
         }
     }
+
     m_pDataCursor = new CursorWrapper(_xCursor);
 
     // now create a cursor for painting rows
@@ -3609,8 +3610,9 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
 void DbGridControl::disposing(sal_uInt16 _nId, const ::com::sun::star::lang::EventObject& _rEvt)
 {
     if (_nId == 0)
-    {   // the data cursor is beeing disposed
+    {   // the seek cursor is beeing disposed
         ::osl::MutexGuard aGuard(m_aAdjustSafety);
+        setDataSource(NULL,0); // our clone was disposed so we set our datasource to null to avoid later acces to it
         if (m_nAsynAdjustEvent)
         {
             RemoveUserEvent(m_nAsynAdjustEvent);
