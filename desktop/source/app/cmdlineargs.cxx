@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:39:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bForceNewEvent  = sal_False;
     sal_Bool    bDisplaySpec    = sal_False;
 
+    m_nArgumentCount = 0;
     m_bEmpty = (aCmdLineString.getLength()<1);
 
     sal_Int32 nIndex = 0;
@@ -168,6 +169,7 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
 
         if ( aArg.getLength() > 0 )
         {
+            m_nArgumentCount++;
             if ( !InterpretCommandLineParameter( aArg ))
             {
                 if ( aArgStr.GetChar(0) == '-' )
@@ -527,6 +529,7 @@ void CommandLineArgs::ResetParamValues()
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
     m_bEmpty = sal_True;
+    m_nArgumentCount = 0;
 }
 
 sal_Bool CommandLineArgs::GetBoolParam( BoolParam eParam ) const
@@ -848,6 +851,13 @@ sal_Bool CommandLineArgs::IsEmpty() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_bEmpty;
+}
+
+sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+
+    return m_bEmpty || ( ( m_nArgumentCount == 1 ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() ) );
 }
 
 } // namespace desktop
