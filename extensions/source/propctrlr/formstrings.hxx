@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:06:12 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_SCALEIMAGE,             "ScaleImage");
     PCR_CONSTASCII_STRING( PROPERTY_PUSHBUTTONTYPE,         "PushButtonType");
     PCR_CONSTASCII_STRING( PROPERTY_EFFECTIVE_VALUE,        "EffectiveValue");
+    PCR_CONSTASCII_STRING( PROPERTY_SELECTEDITEMS,          "SelectedItems");
 
     PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
     PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
