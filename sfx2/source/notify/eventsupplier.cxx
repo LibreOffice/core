@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-04 11:11:06 $
+ *  last change: $Author: mba $ $Date: 2001-12-12 15:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,19 +452,28 @@ sal_Bool SfxEvents_Impl::Warn_Impl( const String& rMacName )
     if ( eMode == eNEVER_EXECUTE )
         return sal_False;
 
+    String aReferer( mpObjShell->GetMedium()->GetName() );
+    if ( !aReferer.Len() )
+    {
+        // if document was created from template, take the templates' name for the checks
+        String aTempl( mpObjShell->GetDocInfo().GetTemplateFileName() );
+        if ( aTempl.Len() )
+            aReferer = INetURLObject( aTempl ).GetMainURL();
+        else
+            // new documents from scratch are safe
+            return TRUE;
+    }
+
     sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
     sal_Bool bWarn = aOpt.IsWarningEnabled();
-    sal_Bool bSecure = aOpt.IsSecureURL( rMacName, mpObjShell->GetMedium()->GetName() );
-
-    //if ( !mpObjShell->IsSecure() )
-    //    return sal_False;
+    sal_Bool bSecure = aOpt.IsSecureURL( rMacName, aReferer );
     if ( bSecure && bWarn || !bSecure && bConfirm )
     {
         OUSTRING aPrefix = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
         OUSTRING aName = rMacName.Copy( (USHORT) aPrefix.getLength() );
         sal_Int32 nPos = aName.indexOf( '/' );
         aName = aName.copy( nPos+1 );
-        SfxMacroQueryDlg_Impl aBox ( SfxResId( DLG_MACROQUERY ), aName, bSecure );
+        SfxMacroQueryDlg_Impl aBox ( aName, bSecure );
         if ( aBox.Execute() )
             bWarn = sal_False;
     }

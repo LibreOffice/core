@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-30 13:47:48 $
+ *  last change: $Author: mba $ $Date: 2001-12-12 15:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@ TYPEINIT1(SfxEventHint, SfxHint);
 
 // class SfxMacroQueryDlg_Impl -------------------------------------------
 
-SfxMacroQueryDlg_Impl::SfxMacroQueryDlg_Impl( const ResId& rResId, const String& rMacName, BOOL bDefault ) :
-    QueryBox( NULL, rResId )
+SfxMacroQueryDlg_Impl::SfxMacroQueryDlg_Impl( const String& rMacName, BOOL bDefault ) :
+    QueryBox( NULL, SfxResId( DLG_MACROQUERY ) )
 {
     SetButtonText( GetButtonId(0), String( SfxResId(BTN_OK) ) );
     SetButtonText( GetButtonId(1), String( SfxResId(BTN_CANCEL) ) );
