@@ -1,0 +1,196 @@
+/*************************************************************************
+ *
+ *  $RCSfile: salcursors.h,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-02-20 09:03:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "nodrop_curs.h"
+#include "nodrop_mask.h"
+#include "wait_curs.h"
+#include "wait_mask.h"
+#include "hsplit_curs.h"
+#include "hsplit_mask.h"
+#include "vsplit_curs.h"
+#include "vsplit_mask.h"
+#include "neswsize_curs.h"
+#include "neswsize_mask.h"
+#include "nwsesize_curs.h"
+#include "nwsesize_mask.h"
+#include "magnify_curs.h"
+#include "magnify_mask.h"
+#include "rotate_curs.h"
+#include "rotate_mask.h"
+#include "hshear_curs.h"
+#include "hshear_mask.h"
+#include "vshear_curs.h"
+#include "vshear_mask.h"
+#include "drawline_curs.h"
+#include "drawline_mask.h"
+#include "drawrect_curs.h"
+#include "drawrect_mask.h"
+#include "drawpolygon_curs.h"
+#include "drawpolygon_mask.h"
+#include "drawbezier_curs.h"
+#include "drawbezier_mask.h"
+#include "drawarc_curs.h"
+#include "drawarc_mask.h"
+#include "drawpie_curs.h"
+#include "drawpie_mask.h"
+#include "drawcirclecut_curs.h"
+#include "drawcirclecut_mask.h"
+#include "drawellipse_curs.h"
+#include "drawellipse_mask.h"
+#include "drawconnect_curs.h"
+#include "drawconnect_mask.h"
+#include "drawtext_curs.h"
+#include "drawtext_mask.h"
+#include "mirror_curs.h"
+#include "mirror_mask.h"
+#include "crook_curs.h"
+#include "crook_mask.h"
+#include "crop_curs.h"
+#include "crop_mask.h"
+#include "move_curs.h"
+#include "move_mask.h"
+#include "movepoint_curs.h"
+#include "movepoint_mask.h"
+#include "movebezierweight_curs.h"
+#include "movebezierweight_mask.h"
+#include "drawfreehand_curs.h"
+#include "drawfreehand_mask.h"
+#include "drawcaption_curs.h"
+#include "drawcaption_mask.h"
+#include "movedata_curs.h"
+#include "movedata_mask.h"
+#include "copydata_curs.h"
+#include "copydata_mask.h"
+#include "linkdata_curs.h"
+#include "linkdata_mask.h"
+#include "movedlnk_curs.h"
+#include "movedlnk_mask.h"
+#include "copydlnk_curs.h"
+#include "copydlnk_mask.h"
+#include "movefile_curs.h"
+#include "movefile_mask.h"
+#include "copyfile_curs.h"
+#include "copyfile_mask.h"
+#include "linkfile_curs.h"
+#include "linkfile_mask.h"
+#include "moveflnk_curs.h"
+#include "moveflnk_mask.h"
+#include "copyflnk_curs.h"
+#include "copyflnk_mask.h"
+#include "movefiles_curs.h"
+#include "movefiles_mask.h"
+#include "copyfiles_curs.h"
+#include "copyfiles_mask.h"
+
+#include "chart_curs.h"
+#include "chart_mask.h"
+#include "detective_curs.h"
+#include "detective_mask.h"
+#include "pivotcol_curs.h"
+#include "pivotcol_mask.h"
+#include "pivotfld_curs.h"
+#include "pivotfld_mask.h"
+#include "pivotrow_curs.h"
+#include "pivotrow_mask.h"
+#include "pivotdel_curs.h"
+#include "pivotdel_mask.h"
+
+#include "chain_curs.h"
+#include "chain_mask.h"
+#include "chainnot_curs.h"
+#include "chainnot_mask.h"
+
+#include "timemove_curs.h"
+#include "timemove_mask.h"
+#include "timesize_curs.h"
+#include "timesize_mask.h"
+
+#include "ase_curs.h"
+#include "ase_mask.h"
+#include "asn_curs.h"
+#include "asn_mask.h"
+#include "asne_curs.h"
+#include "asne_mask.h"
+#include "asns_curs.h"
+#include "asns_mask.h"
+#include "asnswe_curs.h"
+#include "asnswe_mask.h"
+#include "asnw_curs.h"
+#include "asnw_mask.h"
+#include "ass_curs.h"
+#include "ass_mask.h"
+#include "asse_curs.h"
+#include "asse_mask.h"
+#include "assw_curs.h"
+#include "assw_mask.h"
+#include "asw_curs.h"
+#include "asw_mask.h"
+#include "aswe_curs.h"
+#include "aswe_mask.h"
+#include "null_curs.h"
+#include "null_mask.h"
+
+#include "airbrush_curs.h"
+#include "airbrush_mask.h"
+#include "fill_curs.h"
+#include "fill_mask.h"
+#include "vertcurs_curs.h"
+#include "vertcurs_mask.h"
