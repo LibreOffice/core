@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 17:01:44 $
+ *  last change: $Author: nn $ $Date: 2002-07-04 12:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svx/colorcfg.hxx>
+#include <svx/shaditem.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"
@@ -1461,6 +1462,14 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                                             pNewAttrs->Get( GetPool().GetWhich(nSlot) );
                     aBrushItem.SetColor(rNewBrushItem.GetColor());
                     pTabViewShell->ApplyAttr( aBrushItem );
+                }
+                break;
+
+            case SID_ATTR_BORDER_SHADOW:
+                {
+                    const SvxShadowItem& rNewShadowItem = (const SvxShadowItem&)
+                                            pNewAttrs->Get( ATTR_SHADOW );
+                    pTabViewShell->ApplyAttr( rNewShadowItem );
                 }
                 break;
 
