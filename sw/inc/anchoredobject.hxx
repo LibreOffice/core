@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:36:39 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _ANCHOREDOBJECT_HXX
 #define _ANCHOREDOBJECT_HXX
-
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
@@ -302,7 +301,16 @@ class SwAnchoredObject
 
         // accessors to data of position calculation:
         // frame vertical position is orient at
-        const SwLayoutFrm* GetVertPosOrientFrm() const;
+        inline const SwLayoutFrm* GetVertPosOrientFrm() const
+        {
+            return mpVertPosOrientFrm;
+        }
+        // --> OD 2004-11-29 #115759# - method to clear member <mpVertPosOrientFrm>
+        inline void ClearVertPosOrientFrm()
+        {
+            mpVertPosOrientFrm = 0L;
+        }
+        // <--
 
         /** check anchor character rectangle and top of line
 
