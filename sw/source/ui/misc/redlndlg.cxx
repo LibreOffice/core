@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:34:17 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,13 @@
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
 #endif
+
+// -> #111827#
+#include <comcore.hrc>
+#include <swundo.hxx>
+#include <undobj.hxx>
+#include <SwRewriter.hxx>
+// <- #111827#
 
 #include <vector>
 #include <svx/svxdlg.hxx> //CHINA001
@@ -1162,7 +1169,24 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
 
     SwWait aWait( *pSh->GetView().GetDocShell(), TRUE );
     pSh->StartAction();
-    pSh->StartUndo();
+
+    // #111827#
+    if (aRedlines.size() > 1)
+    {
+        String aTmpStr;
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UNDO_ARG1,
+                              String::CreateFromInt32(aRedlines.size()));
+            aTmpStr = aRewriter.Apply(String(SW_RES(STR_N_REDLINES)));
+        }
+
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, aTmpStr);
+
+        pSh->StartUndo(bAccept? UNDO_ACCEPT_REDLINE : UNDO_REJECT_REDLINE,
+                       &aRewriter);
+    }
 
     // accept/reject the the redlines in aRedlines. The absolute
     // position may change during the process (e.g. when two redlines
@@ -1179,7 +1203,10 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
             (pSh->*FnAccRej)( nPos );
     }
 
-    pSh->EndUndo();
+    // #111827#
+    if (aRedlines.size() > 1)
+        pSh->EndUndo(bAccept? UNDO_ACCEPT_REDLINE : UNDO_REJECT_REDLINE);
+
     pSh->EndAction();
 
     bInhibitActivate = false;
