@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:43:41 $
+ *  last change: $Author: oj $ $Date: 2002-05-03 10:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,13 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
 //      if (nParameter != SQL_NO_PARAMETER)
 //          (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
 //  }
+
+    if ( m_aParameterRow.isValid() && ( m_aParameterRow->size() -1 ) < m_xParamColumns->size() )
+        throw SQLException(::rtl::OUString::createFromAscii("Invalid count of parameters supllied!")
+                            ,*this
+                            ,::rtl::OUString::createFromAscii("S1000")
+                            ,1000
+                            ,Any());
 
     m_pResultSet->OpenImpl();
 
