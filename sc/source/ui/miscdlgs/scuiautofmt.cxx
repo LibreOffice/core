@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuiautofmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:03:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@
 #include "global.hxx"
 #include "globstr.hrc"
 #include "autoform.hxx"
-#include "sclnlnk.hxx"
 #include "strindlg.hxx"
 #include "miscdlgs.hrc"
 #include "scuiautofmt.hxx"
