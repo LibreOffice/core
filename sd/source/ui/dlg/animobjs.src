@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:42:03 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "First Image";
         QuickHelpText[ hindi ] = "पहला चित्र";
         QuickHelpText[ slovak ] = "Prvý obrázok";
+        QuickHelpText[ hungarian ] = "Első kép";
+        QuickHelpText[ slovenian ] = "Prva slika";
     };
     ImageButton BTN_REVERSE
     {
@@ -171,6 +173,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Backwards";
         QuickHelpText[ hindi ] = "पिछली ओर";
         QuickHelpText[ slovak ] = "Späť";
+        QuickHelpText[ hungarian ] = "Visszafelé";
+        QuickHelpText[ slovenian ] = "Nazaj";
     };
     ImageButton BTN_STOP
     {
@@ -207,6 +211,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Stop";
         QuickHelpText[ hindi ] = "रुकावट";
         QuickHelpText[ slovak ] = "Zastaviť";
+        QuickHelpText[ hungarian ] = "Leállítás";
+        QuickHelpText[ slovenian ] = "Ustavi";
     };
     ImageButton BTN_PLAY
     {
@@ -242,6 +248,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Play";
         QuickHelpText[ hindi ] = "प्रारंभ";
         QuickHelpText[ slovak ] = "Prehrať";
+        QuickHelpText[ hungarian ] = "Lejátszás";
+        QuickHelpText[ slovenian ] = "Predvajaj";
     };
     ImageButton BTN_LAST
     {
@@ -277,6 +285,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Last Image";
         QuickHelpText[ hindi ] = "अंतिम चित्र";
         QuickHelpText[ slovak ] = "Posledný obrázok";
+        QuickHelpText[ hungarian ] = "Utolsó kép";
+        QuickHelpText[ slovenian ] = "Zadnja slika";
     };
     NumericField NUM_FLD_BITMAP
     {
@@ -322,6 +332,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Image Number";
         QuickHelpText[ hindi ] = "चित्र संख्या";
         QuickHelpText[ slovak ] = "Číslo obrázku";
+        QuickHelpText[ hungarian ] = "Képszám";
+        QuickHelpText[ slovenian ] = "Številka slike";
     };
     TimeField TIME_FIELD
     {
@@ -371,6 +383,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Duration";
         QuickHelpText[ hindi ] = "कालावधि";
         QuickHelpText[ slovak ] = "Doba trvania";
+        QuickHelpText[ hungarian ] = "Időtartam";
+        QuickHelpText[ slovenian ] = "Trajanje";
     };
     ListBox LB_LOOP_COUNT
     {
@@ -1002,6 +1016,52 @@ DockingWindow FLT_WIN_ANIMATION
         < "1000" ; > ;
         < "Max." ; > ;
     };
+        QuickHelpText[ hungarian ] = "Ismétlések száma";
+        QuickHelpText[ slovenian ] = "Števec zanke";
+    StringList [ hungarian ] =
+    {
+         < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "100" ; > ;
+            < "max." ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+            < "4" ; > ;
+            < "5" ; > ;
+            < "6" ; > ;
+            < "7" ; > ;
+            < "8" ; > ;
+            < "9" ; > ;
+            < "10" ; > ;
+            < "12" ; > ;
+            < "15" ; > ;
+            < "20" ; > ;
+            < "25" ; > ;
+            < "50" ; > ;
+            < "100" ; > ;
+            < "500" ; > ;
+            < "1000" ; > ;
+            < "Maks." ; > ;
+        };
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
@@ -1045,6 +1105,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Apply Object";
         QuickHelpText[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
         QuickHelpText[ slovak ] = "Použiť objekty";
+        QuickHelpText[ hungarian ] = "Objektum elfogadása";
+        QuickHelpText[ slovenian ] = "Uporabi predmet";
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
@@ -1088,6 +1150,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Apply Objects Individually";
         QuickHelpText[ hindi ] = "एक एक वस्तु लागू करो";
         QuickHelpText[ slovak ] = "Použiť objekty individuálne";
+        QuickHelpText[ hungarian ] = "Objektumok egyenkénti alkalmazása";
+        QuickHelpText[ slovenian ] = "Uporabi posamezne predmete";
     };
     ImageButton BTN_REMOVE_BITMAP
     {
@@ -1131,6 +1195,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Delete Current Image";
         QuickHelpText[ hindi ] = "प्रचलित चित्र मिटाओ";
         QuickHelpText[ slovak ] = "Zmazať aktuálny obrázok";
+        QuickHelpText[ hungarian ] = "Aktuális kép törlése";
+        QuickHelpText[ slovenian ] = "Zbriši trenutno sliko";
     };
     ImageButton BTN_REMOVE_ALL
     {
@@ -1174,6 +1240,8 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ thai ] = "Delete All Images";
         QuickHelpText[ hindi ] = "à¤¸à¤¬ à¤šà¤¿à¤¤à¥à¤° à¤®à¤¿à¤Ÿà¤¾à¤“";
         QuickHelpText[ slovak ] = "Zmazať všetky obrázky";
+        QuickHelpText[ hungarian ] = "Összes kép törlése";
+        QuickHelpText[ slovenian ] = "Zbriši vse slike";
     };
     FixedText FT_COUNT
     {
@@ -1208,6 +1276,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "Anzahl";
         Text[ hindi ] = "संख्या";
         Text[ slovak ] = "Číslo";
+        Text[ hungarian ] = "Szám";
+        Text[ slovenian ] = "Število";
     };
     FixedText FI_COUNT
     {
@@ -1249,6 +1319,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "Bild";
         Text[ hindi ] = "Image";
         Text[ slovak ] = "Obrázok";
+        Text[ hungarian ] = "Kép";
+        Text[ slovenian ] = "Podoba";
     };
     RadioButton RBT_GROUP
     {
@@ -1262,7 +1334,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ french ] = "Objet de groupe" ;
         Text [ dutch ] = "Groepsobject" ;
         Text [ swedish ] = "Gruppobjekt" ;
-        Text [ danish ] = "~Gruppeobjekt" ;
+        Text [ danish ] = "Gruppeobjekt" ;
         Text [ portuguese_brazilian ] = "Objeto de grupo" ;
         Text [ portuguese ] = "Objecto de grupo" ;
         Text[ chinese_simplified ] = "分组对象";
@@ -1282,6 +1354,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "Gruppenobjekt";
         Text[ hindi ] = "वस्तु समूह";
         Text[ slovak ] = "Zoskupiť objekty";
+        Text[ hungarian ] = "Csoportobjektum";
+        Text[ slovenian ] = "Skupinski predmet";
     };
     RadioButton RBT_BITMAP
     {
@@ -1295,7 +1369,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ spanish ] = "Objeto mapa de bits" ;
         Text [ french ] = "Objet bitmap" ;
         Text [ swedish ] = "Bitmapobjekt" ;
-        Text [ danish ] = "~Bitmapobjekt" ;
+        Text [ danish ] = "Bitmapobjekt" ;
         Text [ portuguese_brazilian ] = "Objeto de bitmap" ;
         Text [ portuguese ] = "Objecto de bitmap" ;
         Text[ chinese_simplified ] = "位图对象";
@@ -1315,6 +1389,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "Bitmapobjekt";
         Text[ hindi ] = "बिटमॉप् वस्तु";
         Text[ slovak ] = "Objekt bitovej mapy";
+        Text[ hungarian ] = "Bitkép objektum";
+        Text[ slovenian ] = "Predmet bitne slike";
     };
     FixedText FT_ADJUSTMENT
     {
@@ -1329,7 +1405,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ portuguese_brazilian ] = "Alinhamento" ;
         Text [ portuguese ] = "Alinhamento" ;
         Text [ finnish ] = "Kohdistus" ;
-        Text [ danish ] = "Tilpasning" ;
+        Text [ danish ] = "Justering" ;
         Text [ french ] = "Adaptation" ;
         Text [ swedish ] = "Anpassning" ;
         Text [ dutch ] = "Uitlijning" ;
@@ -1351,6 +1427,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "पंक्तिकरण";
         Text[ slovak ] = "Zarovnanie";
+        Text[ hungarian ] = "Igazítás";
+        Text[ slovenian ] = "Poravnava";
     };
     ListBox LB_ADJUSTMENT
     {
@@ -1447,15 +1525,15 @@ DockingWindow FLT_WIN_ANIMATION
         };
         StringList [ danish ] =
         {
-            < "Venstre/�verst" ; Default ; > ;
+            < "�verst til venstre" ; Default ; > ;
             < "Venstre" ; Default ; > ;
-            < "Venstre/nederst" ; Default ; > ;
-            < "�verst" ; Default ; > ;
+            < "Nederst til venstre" ; Default ; > ;
+            < "Top" ; Default ; > ;
             < "Centreret" ; Default ; > ;
-            < "Nederst" ; Default ; > ;
-            < "H�jre/�verst" ; Default ; > ;
+            < "Bund" ; Default ; > ;
+            < "�verst til h�jre" ; Default ; > ;
             < "H�jre" ; Default ; > ;
-            < "H�jre/nederst" ; Default ; > ;
+            < "Nederst til h�jre" ; Default ; > ;
         };
         StringList [ french ] =
         {
@@ -1709,6 +1787,30 @@ DockingWindow FLT_WIN_ANIMATION
         < "Vpravo" ; Default ; > ;
         < "Vpravo dole" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Balra fent" ; Default ; > ;
+        < "Balra" ; Default ; > ;
+        < "Balra lent" ; Default ; > ;
+        < "Felülre" ; Default ; > ;
+        < "Középre igazított" ; Default ; > ;
+        < "Alulra" ; Default ; > ;
+        < "Jobbra fent" ; Default ; > ;
+        < "Jobbra" ; Default ; > ;
+        < "Jobbra lent" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Zgoraj levo" ; Default ; > ;
+        < "Levo" ; Default ; > ;
+        < "Spodaj levo" ; Default ; > ;
+        < "Zgoraj" ; Default ; > ;
+        < "Na sredini" ; Default ; > ;
+        < "Spodaj" ; Default ; > ;
+        < "Zgoraj desno" ; Default ; > ;
+        < "Desno" ; Default ; > ;
+        < "Spodaj desno" ; Default ; > ;
+    };
     };
     PushButton BTN_CREATE_GROUP
     {
@@ -1743,6 +1845,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "Erstellen";
         Text[ hindi ] = "उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť";
+        Text[ hungarian ] = "Létrehozás";
+        Text[ slovenian ] = "Ustvari";
     };
     FixedLine GRP_ANIMATION_GROUP
     {
@@ -1777,6 +1881,8 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ hebrew ] = "Animationsgruppe";
         Text[ hindi ] = "Animation group";
         Text[ slovak ] = "Skupina animácie";
+        Text[ hungarian ] = "Animációcsoport";
+        Text[ slovenian ] = "Animacijska skupina";
     };
     Text[ chinese_simplified ] = "动画";
     Text[ russian ] = "��������";
@@ -1794,7 +1900,15 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ hebrew ] = "Animation";
     Text[ hindi ] = "हूलास";
     Text[ slovak ] = "Animácia";
+    Text[ hungarian ] = "Animáció";
+    Text[ slovenian ] = "Animacija";
 };
+
+
+
+
+
+
 
 
 
