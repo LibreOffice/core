@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:59:21 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,7 @@ TabPage TP_LINENUMBERING
         Text[ chinese_simplified ] = "ÎÄ±¾¿òÄÚµÄĞĞ";
         Text[ russian ] = "Ñòğîêè â òåêñòîâîé ğàìêå";
         Text[ polish ] = "Wi~ersze w ramce tekstowej";
-        Text[ japanese ] = "Ã·½Ä˜g“à‚Ìs";
+        Text[ japanese ] = "Ã·½ÄÎŞ¯¸½“à‚Ìs";
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô¤ºªº¦æ";
         Text[ arabic ] = "ÃÓØÑ İí ßÇÏÑ ÇáäÕ";
         Text[ greek ] = "Ãñáììİò óå ğëáßóéï êåéìİíïõ";
