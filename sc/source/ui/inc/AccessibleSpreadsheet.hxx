@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:47:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class ScMyAddress : public ScAddress
 {
 public:
     ScMyAddress() : ScAddress() {}
-    ScMyAddress(sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nTab) : ScAddress(nCol, nRow, nTab) {}
+    ScMyAddress(SCCOL nCol, SCROW nRow, SCTAB nTab) : ScAddress(nCol, nRow, nTab) {}
     ScMyAddress(const ScAddress& rAddress) : ScAddress(rAddress) {}
 
     sal_Bool operator< ( const ScMyAddress& rAddress ) const
@@ -102,7 +102,7 @@ public:
     ScAccessibleSpreadsheet(
         ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
-        sal_uInt16  nTab,
+        SCTAB   nTab,
         ScSplitPos eSplitPos);
 protected:
     virtual ~ScAccessibleSpreadsheet();
