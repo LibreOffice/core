@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:20:33 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:33:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,14 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     pShell = pRootFrm ? pRootFrm->GetShell() : 0;
 
     pScriptInfo = &rScrInf;
-    pAttrSet = &rTxtNode.GetSwAttrSet();
+
+    // attributes set at the whole paragraph
+    pAttrSet = rTxtNode.GetpSwAttrSet();
+    // attribute array
     pHints = rTxtNode.GetpSwpHints();
 
+    // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
-
     delete pFnt;
     pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
 
@@ -188,8 +191,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     // If any further attributes for the paragraph are given in pAttrSet
     // consider them during construction of the default array, and apply
     // them to the font
-    aAttrHandler.Init( aFontAccess.Get()->GetDefault(),
-                       rTxtNode.HasSwAttrSet() ? pAttrSet : 0,
+    aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
                        *rTxtNode.GetDoc(), pShell, *pFnt, bVertLayout );
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
