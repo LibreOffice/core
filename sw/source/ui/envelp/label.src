@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-15 21:24:56 $
+ *  last change: $Author: vg $ $Date: 2002-02-21 21:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,7 +1005,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Ulica";
         Text[ portuguese_brazilian ] = "Street";
         Text[ japanese ] = "å¸‚ç”ºæ‘åç•ªåœ°(~T)";
-        Text[ korean ] = "ê±°ë¦¬ ë²ˆì§€(~T)";
+        Text[ korean ] = "ì£¼ì†Œ(~T)";
         Text[ chinese_simplified ] = "è¡—é“(~T)";
         Text[ chinese_traditional ] = "è¡—é“(~T)";
         Text[ arabic ] = "ÇáÔÇÑÚ";
@@ -1159,7 +1159,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Telefon/Komórka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
         Text[ japanese ] = "è‡ªå®…é›»è©±/æºå¸¯é›»è©±";
-        Text[ korean ] = "Tel./í•¸ë“œí°";
+        Text[ korean ] = "ì „í™”/í•¸ë“œí°";
         Text[ chinese_simplified ] = "ç”µè¯/æ‰‹æœº";
         Text[ chinese_traditional ] = "é›»è©±/ç§»å‹•é›»è©±";
         Text[ turkish ] = "Phone/Mobile";
@@ -1232,7 +1232,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
         Text[ japanese ] = "ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸/E-mail";
-        Text[ korean ] = "í™ˆí˜ì´ì§€ / E-Mail";
+        Text[ korean ] = "í™ˆí˜ì´ì§€/ì „ì ë©”ì¼";
         Text[ chinese_simplified ] = "ä¸»é¡µ/ç”µå­é‚®ä»¶";
         Text[ chinese_traditional ] = "é¦–é /é›»å­éƒµä»¶";
         Text[ arabic ] = "ãæŞÚ ÇáÅäÊÑäÊ / ÇáÈÑíÏ ÇáÅáßÊÑæäí";
@@ -1628,7 +1628,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
         Text[ japanese ] = "ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸/E-~mail";
-        Text[ korean ] = "í™ˆí˜ì´ì§€ /E-~Mail";
+        Text[ korean ] = "í™ˆí˜ì´ì§€/ì „ì ë©”ì¼(~M)";
         Text[ chinese_simplified ] = "ä¸»é¡µ/ç”µå­é‚®ä»¶(~M)";
         Text[ chinese_traditional ] = "é¦–é /é›»å­éƒµä»¶(~M)";
         Text[ arabic ] = "ãæŞÚ ÇáÅäÊÑäÊ / ÇáÈÑíÏ ÇáÅáßÊÑæäí";
