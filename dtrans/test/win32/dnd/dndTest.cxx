@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 17:12:03 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 13:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ DWORD WINAPI MTAFunc(LPVOID pParams)
     ThreadData data= *( ThreadData*)pParams;
     SetEvent(data.evtThreadReady);
 
-    data.source->executeDrag( DragGestureEvent(),
+    data.source->startDrag( DragGestureEvent(),
             ACTION_LINK|ACTION_MOVE|ACTION_COPY,
             0,
             0,

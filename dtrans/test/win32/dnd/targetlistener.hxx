@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetlistener.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 15:10:21 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 13:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
 
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
@@ -88,7 +89,7 @@ public:
 
     virtual void SAL_CALL drop( const DropTargetDropEvent& dtde )
         throw(RuntimeException);
-    virtual void SAL_CALL dragEnter( const DropTargetDragEvent& dtde )
+    virtual void SAL_CALL dragEnter( const DropTargetDragEnterEvent& dtde )
         throw(RuntimeException);
     virtual void SAL_CALL dragExit( const DropTargetEvent& dte )
         throw(RuntimeException);
