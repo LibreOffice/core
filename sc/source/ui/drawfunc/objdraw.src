@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:31:52 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 18:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,6 +1117,150 @@ ToolBox RID_TEXT_TOOLBOX
         {
             Identifier = SID_PARA_DLG ;
             HelpID = SID_PARA_DLG ;
+        };
+    };
+};
+ //
+ // Graphics toolbox
+ //
+String RID_GRAPHIC_OBJECTBAR
+{
+    Text = "Grafikobjektleiste" ;
+    Text [ ENGLISH ] = "Toolbar for graphic objects" ;
+};
+ToolBox RID_GRAPHIC_OBJECTBAR
+{
+    HelpId = HID_SC_TOOLBOX_GRAPHIC ;
+    LineSpacing = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Scroll = TRUE ;
+    Customize = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 0 , 0 ) ;
+    Align = BOXALIGN_TOP ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_MODE;
+            HelpID = SID_ATTR_GRAF_MODE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_RED;
+            HelpID = SID_ATTR_GRAF_RED;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GREEN;
+            HelpID = SID_ATTR_GRAF_GREEN;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_BLUE;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_LUMINANCE;
+            HelpID = SID_ATTR_GRAF_LUMINANCE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_CONTRAST;
+            HelpID = SID_ATTR_GRAF_CONTRAST;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GAMMA;
+            HelpID = SID_ATTR_GRAF_GAMMA;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_TRANSPARENCE;
+            HelpID = SID_ATTR_GRAF_TRANSPARENCE;
+        };
+
+        // copied from the "normal" drawing toolbar:
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_ANCHOR_TOGGLE ;
+            HelpId = SID_ANCHOR_TOGGLE ;
+        };
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_TOP ;
+            HelpId = SID_FRAME_TO_TOP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FRAME_TO_BOTTOM ;
+            HelpId = SID_FRAME_TO_BOTTOM ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HEAVEN ;
+            HelpID = SID_OBJECT_HEAVEN ;
+
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HELL ;
+            HelpID = SID_OBJECT_HELL ;
+
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_VISIBLE;
+            HelpID = SID_GRID_VISIBLE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GRID_USE;
+            HelpID = SID_GRID_USE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELPLINES_MOVE;
+            HelpID = SID_HELPLINES_MOVE;
+            Hide = TRUE;
+        };
+
+         //---------------------------------------------
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+         //---------------------------------------------
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpId = SID_OBJECT_ALIGN ;
         };
     };
 };
