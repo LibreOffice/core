@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 12:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,16 +214,8 @@ SmSym::SmSym() :
 
 SmSym::SmSym(const SmSym& rSymbol)
 {
-    Name        = rSymbol.Name;
-    Face        = rSymbol.Face;
-    Character   = rSymbol.Character;
-    aSetName    = rSymbol.aSetName;
-    bPredefined = rSymbol.bPredefined;
-    bDocSymbol  = rSymbol.bDocSymbol;
-    aExportName = rSymbol.aExportName;
-
-    pHashNext      = 0;
     pSymSetManager = 0;
+    *this = rSymbol;
 }
 
 
@@ -310,13 +302,8 @@ SmSymSet::SmSymSet() :
 
 SmSymSet::SmSymSet(const SmSymSet& rSymbolSet)
 {
-    Name = rSymbolSet.Name;
-    SymbolList.Clear();
-
     pSymSetManager = 0;
-
-    for (int i = 0; i < rSymbolSet.GetCount(); i++)
-        AddSymbol(new SmSym(rSymbolSet.GetSymbol(i)));
+    *this = rSymbolSet;
 }
 
 SmSymSet::SmSymSet(const String& rName)
@@ -341,7 +328,6 @@ SmSymSet& SmSymSet::operator = (const SmSymSet& rSymbolSet)
 
     Name = rSymbolSet.Name;
     SymbolList.Clear();
-
     for (i = 0; i < rSymbolSet.GetCount(); i++)
         AddSymbol(new SmSym(rSymbolSet.GetSymbol(i)));
 
@@ -455,6 +441,60 @@ SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet)
 
 /**************************************************************************/
 
+SmSymSetManager_Impl::SmSymSetManager_Impl(
+        SmSymSetManager &rMgr, USHORT HashTableSize ) :
+
+    rSymSetMgr    (rMgr)
+{
+    NoSymbolSets    = 0;
+    NoHashEntries   = HashTableSize;
+    HashEntries     = new SmSym *[NoHashEntries];
+    memset( HashEntries, 0, sizeof(SmSym *) * NoHashEntries );
+    Modified        = FALSE;
+}
+
+
+SmSymSetManager_Impl::~SmSymSetManager_Impl()
+{
+    for (USHORT i = 0;  i < NoSymbolSets;  ++i)
+        delete SymbolSets.Get(i);
+    SymbolSets.Clear();
+
+    NoSymbolSets = 0;
+    if (HashEntries)
+    {
+        delete[] HashEntries;
+        HashEntries = 0;
+    }
+    NoHashEntries = 0;
+    Modified = FALSE;
+}
+
+
+SmSymSetManager_Impl & SmSymSetManager_Impl::operator = ( const SmSymSetManager_Impl &rImpl )
+{
+    //! rMySymSetMgr remains unchanged
+
+    NoHashEntries   = rImpl.NoHashEntries;
+    if (HashEntries)
+        delete [] HashEntries;
+    HashEntries = new SmSym *[NoHashEntries];
+    memset( HashEntries, 0, sizeof(SmSym *) * NoHashEntries );
+
+    NoSymbolSets    = 0;
+    SymbolSets.Clear();
+    for (USHORT i = 0;  i < rImpl.NoSymbolSets;  ++i)
+    {
+        rSymSetMgr.AddSymbolSet( new SmSymSet( *rImpl.rSymSetMgr.GetSymbolSet(i) ) );
+    }
+    DBG_ASSERT( NoSymbolSets == rImpl.NoSymbolSets,
+            "incorrect number of symbolsets" );
+
+    Modified        = TRUE;
+    return *this;
+}
+
+/**************************************************************************/
 
 static osl::Mutex & lcl_GetSymSetMgrMutex()
 {
@@ -524,36 +564,28 @@ void SmSymSetManager::Exit()
 
 SmSymSetManager::SmSymSetManager(USHORT HashTableSize)
 {
-    pImpl = new SmSymSetManager_Impl;
-    pImpl->SymbolSets.Clear();
-    pImpl->NoSymbolSets = 0;
-    pImpl->NoHashEntries = HashTableSize;
-    pImpl->HashEntries = new SmSym *[pImpl->NoHashEntries];
-    memset( pImpl->HashEntries, 0, sizeof(SmSym *) * pImpl->NoHashEntries );
-    pImpl->Modified = FALSE;
+    pImpl = new SmSymSetManager_Impl( *this, HashTableSize );
 }
+
 
 SmSymSetManager::SmSymSetManager(const SmSymSetManager& rSymbolSetManager)
 {
+    pImpl = new SmSymSetManager_Impl( *this, rSymbolSetManager.pImpl->NoHashEntries );
+    *pImpl = *rSymbolSetManager.pImpl;
 }
+
 
 SmSymSetManager::~SmSymSetManager()
 {
-    USHORT i;
-    for (i = 0; i< pImpl->NoSymbolSets; i++)
-        delete pImpl->SymbolSets.Get(i);
-    delete pImpl->HashEntries;
-
     delete pImpl;
     pImpl = 0;
 }
 
-
 SmSymSetManager& SmSymSetManager::operator = (const SmSymSetManager& rSymbolSetManager)
 {
+    *pImpl = *rSymbolSetManager.pImpl;
     return *this;
 }
-
 
 USHORT SmSymSetManager::AddSymbolSet(SmSymSet* pSymbolSet)
 {
@@ -706,9 +738,6 @@ void SmSymSetManager::Load()
         if ( pp->GetConfig()->IsNoSymbolsWarning() )
         {
             ErrorBox aErrorBox( NULL, SmResId( RID_READSYMBOLERROR ) );
-            String aString( aErrorBox.GetMessText() );
-            aString.SearchAndReplaceAscii( "%FILE%", pImpl->aStreamName );
-            aErrorBox.SetMessText( aString );
             aErrorBox.Execute();
 
             pImpl->Modified = FALSE;
