@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-12 07:24:46 $
+ *  last change: $Author: jsc $ $Date: 2001-04-12 07:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2243,11 +2243,12 @@ void InterfaceType::dumpCppuAttributes(FileStream& o, sal_uInt32& index)
 void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 {
     sal_uInt32      methodCount = m_reader.getMethodCount();
-    OString         returnType, paramType, paramName;
+    OString         methodName, returnType, paramType, paramName;
     sal_uInt32      paramCount = 0;
     sal_uInt32      excCount = 0;
     RTMethodMode    methodMode = RT_MODE_INVALID;
     RTParamMode     paramMode = RT_PARAM_INVALID;
+    sal_Bool        bWithRuntimeException = sal_True;
 
     sal_uInt32 absoluteIndex = index;
 
@@ -2257,10 +2258,16 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
 
         for (sal_uInt16 i=0; i < methodCount; i++)
         {
+            methodName = m_reader.getMethodName(i);
             returnType = checkRealBaseType(m_reader.getMethodReturnType(i), sal_True);
             paramCount = m_reader.getMethodParamCount(i);
             excCount = m_reader.getMethodExcCount(i);
             methodMode = m_reader.getMethodMode(i);
+
+            if ( methodName.equals("acquire") || methodName.equals("release") )
+            {
+                bWithRuntimeException = sal_False;
+            }
 
             o << indent() << "{\n";
             inc();
@@ -2297,20 +2304,23 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
                     o << indent() << "aParameters[" << j << "].bOut = sal_False;\n";
             }
 
-            o << indent() << "rtl_uString * pExceptions[" << excCount + 1 << "];\n";
-              for (j=0; j < excCount; j++)
+            if ( excCount || bWithRuntimeException )
             {
-                if (!m_reader.getMethodExcType(i, j).equals("com/sun/star/uno/RuntimeException"))
+                o << indent() << "rtl_uString * pExceptions[" << excCount + 1 << "];\n";
+                  for (j=0; j < excCount; j++)
                 {
-                    o << indent() << "::rtl::OUString sExceptionName" << j << "( RTL_CONSTASCII_USTRINGPARAM(\""
-                      << OString(m_reader.getMethodExcType(i, j)).replace('/', '.') << "\") );\n";
-                    o << indent() << "pExceptions[" << j << "] = sExceptionName" << j << ".pData;\n";
+                    if (!m_reader.getMethodExcType(i, j).equals("com/sun/star/uno/RuntimeException"))
+                    {
+                        o << indent() << "::rtl::OUString sExceptionName" << j << "( RTL_CONSTASCII_USTRINGPARAM(\""
+                          << OString(m_reader.getMethodExcType(i, j)).replace('/', '.') << "\") );\n";
+                        o << indent() << "pExceptions[" << j << "] = sExceptionName" << j << ".pData;\n";
+                    }
                 }
-            }
-            o << indent() << "::rtl::OUString sExceptionName" << excCount << "( RTL_CONSTASCII_USTRINGPARAM("
-              << "\"com.sun.star.uno.RuntimeException\") );\n";
+                o << indent() << "::rtl::OUString sExceptionName" << excCount << "( RTL_CONSTASCII_USTRINGPARAM("
+                  << "\"com.sun.star.uno.RuntimeException\") );\n";
 
-            o << indent() << "pExceptions[" << excCount << "] = sExceptionName" << excCount << ".pData;\n";
+                o << indent() << "pExceptions[" << excCount << "] = sExceptionName" << excCount << ".pData;\n";
+            }
 
             o << indent() << "::rtl::OUString sReturnType" << i << "( RTL_CONSTASCII_USTRINGPARAM(\""
               << returnType.replace('/', '.') << "\") );\n";
@@ -2329,7 +2339,13 @@ void InterfaceType::dumpCppuMethods(FileStream& o, sal_uInt32& index)
             else
                 o << indent() << "0, 0,\n";
 
-            o << indent() << excCount + 1 << ", pExceptions );\n";
+            if ( excCount || bWithRuntimeException )
+            {
+                o << indent() << excCount + 1 << ", pExceptions );\n";
+            } else
+            {
+                o << indent() << "0, 0 );\n";
+            }
             dec();
             o << indent() << "typelib_typedescription_register( (typelib_TypeDescription**)&pMethod );\n";
 
