@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-21 12:56:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,11 @@ protected:
     void GetPropertyValues( const ::rtl::OUString *pPropertyNames,
                                    ::com::sun::star::uno::Any *pValues,
                                       sal_Int32 nLength );
+    virtual ~SwXTextPortion();
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent, SwTextPortionType    eType   );
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > & rParent, SwFrmFmt& rFmt );
-    virtual ~SwXTextPortion();
+
 
     //XTextRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >  SAL_CALL getText(void) throw( ::com::sun::star::uno::RuntimeException );
