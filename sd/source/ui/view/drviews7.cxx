@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:32:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,12 +170,6 @@
 #endif
 #include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
 #endif
