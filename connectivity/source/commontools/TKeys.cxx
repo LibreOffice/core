@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:52:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,9 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
 {
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > OKeysHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeysHelper::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
 
     if(_rName.getLength())
     {
@@ -342,14 +342,12 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OKeysHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
+sdbcx::ObjectType OKeysHelper::cloneObject(const Reference< XPropertySet >& _xDescriptor)
 {
-    Reference< XNamed > xName;
+    sdbcx::ObjectType xName;
     if(!m_pTable->isNew())
     {
-        xName = Reference< XNamed >(_xDescriptor,UNO_QUERY);
-        OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-        xName = xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
+        xName = OKeys_BASE::cloneObject(_xDescriptor);
     }
     else
     {
@@ -362,11 +360,10 @@ Reference< XNamed > OKeysHelper::cloneObject(const Reference< XPropertySet >& _x
         sal_Int32 nCount = xIndex->getCount();
         for(sal_Int32 i=0;i< nCount;++i)
         {
-            Reference<XPropertySet> xColProp;
-            xIndex->getByIndex(i) >>= xColProp;
+            Reference<XPropertySet> xColProp(xIndex->getByIndex(i),UNO_QUERY);
             xAppend->appendByDescriptor(xColProp);
         }
-        xName = Reference< XNamed >(xProp,UNO_QUERY);
+        xName = xProp;
     }
     return xName;
 }
