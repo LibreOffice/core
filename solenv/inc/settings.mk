@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-03 16:00:24 $
+#   last change: $Author: hjs $ $Date: 2001-05-07 12:00:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1032,16 +1032,6 @@ CDEFS+=-DTF_UCB
 #to be removed soon!!!
 .IF "$(ENABLEUNICODE)" != ""
 CDEFS+=-DENABLEUNICODE
-.ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_SDBAPI)" != ""
-CDEFS+=-DTF_SDBAPI
-.ENDIF
-
-#to be removed soon!!!
-.IF "$(TF_CFG)" != ""
-CDEFS+=-DTF_CFG
 .ENDIF
 
 #to be removed soon!!!
