@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-15 14:02:15 $
+#   last change: $Author: hjs $ $Date: 2002-07-09 11:57:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,13 @@ TARGET=so_stlport
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COMEX)"!="8"
 TARFILE_NAME=STLport-4.0
 PATCH_FILE_NAME=STLport-4.0.patch
+.ELSE           # "$(COMEX)"!="8"
+TARFILE_NAME=STLport-5.0-0409
+#PATCH_FILE_NAME=STLport-4.5.3.patch
+.ENDIF          # "$(COMEX)"!="8"
 .ELSE
 TARFILE_NAME=STLport-4.5.3
 PATCH_FILE_NAME=STLport-4.5.3.patch
@@ -93,7 +98,11 @@ BUILD_DIR=src
 
 .IF "$(COM)"=="MSC"
 BUILD_ACTION=nmake
+.IF "$(COMEX)"!="8"
 BUILD_FLAGS=-f vc6.mak
+.ELSE           # "$(COMEX)"!="8"
+BUILD_FLAGS=-f vc7.mak
+.ENDIF          # "$(COMEX)"!="8"
 .ENDIF
 
 .IF "$(COM)"=="GCC"
