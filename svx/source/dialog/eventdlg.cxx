@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:33:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,20 +150,12 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
     if ( xSupplier.is() )
     {
         xEvents_app = xSupplier->getEvents();
-        if(!xEvents_app.is())
-        {
-            OSL_TRACE("==============globalevents impl xNameReplace broken :-(");
-        }
         OUString label;
         utl::ConfigManager::GetDirectConfigProperty(
             utl::ConfigManager::PRODUCTNAME ) >>= label;
         nPos = aSaveInListBox.InsertEntry( label );
         aSaveInListBox.SetEntryData( nPos, new bool(true) );
         aSaveInListBox.SelectEntryPos( nPos, TRUE );
-    }
-    else
-    {
-        OSL_TRACE("==============globalevents impl broken :-(");
     }
 
     uno::Reference< frame::XFramesSupplier > xFramesSupplier(
@@ -243,7 +235,6 @@ SvxEventConfigPage::~SvxEventConfigPage()
 
 IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 {
-    OSL_TRACE("In SvxEventConfigPage::SelectHdl");
     bool* bApp = (bool*) aSaveInListBox.GetEntryData(
             aSaveInListBox.GetSelectEntryPos());
 
@@ -291,7 +282,6 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 
 BOOL SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {
-    OSL_TRACE("EventConfigPage:FillItemSet");
     return _SvxMacroTabPage::FillItemSet( rSet );
 }
 
@@ -299,7 +289,6 @@ BOOL SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxEventConfigPage::Reset( const SfxItemSet& rSet )
 {
-    OSL_TRACE("SvxEventConfigPage::Reset");
     _SvxMacroTabPage::Reset();
 }
 
