@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-19 12:21:22 $
+ *  last change: $Author: ka $ $Date: 2001-10-31 17:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,11 +229,12 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
     }
     catch( const ContentCreationException& )
     {
-        DBG_ERROR( "ContentCreationException" );
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        DBG_ERROR( "RuntimeException" );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
     }
 }
 

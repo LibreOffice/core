@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-25 10:32:00 $
+ *  last change: $Author: ka $ $Date: 2001-10-31 17:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,11 +341,12 @@ BOOL FileExists( const INetURLObject& rURL )
         }
         catch( const ContentCreationException& )
         {
-            DBG_ERROR( "ContentCreationException" );
         }
         catch( const ::com::sun::star::uno::RuntimeException& )
         {
-            DBG_ERROR( "RuntimeException" );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
         }
     }
 
@@ -377,11 +378,12 @@ BOOL CreateDir( const INetURLObject& rURL )
         }
         catch( const ContentCreationException& )
         {
-            DBG_ERROR( "ContentCreationException" );
         }
         catch( const ::com::sun::star::uno::RuntimeException& )
         {
-            DBG_ERROR( "RuntimeException" );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
         }
     }
 
@@ -405,11 +407,12 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
     }
     catch( const ContentCreationException& )
     {
-        DBG_ERROR( "ContentCreationException" );
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        DBG_ERROR( "RuntimeException" );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     return bRet;
@@ -431,12 +434,14 @@ BOOL KillFile( const INetURLObject& rURL )
         catch( const ContentCreationException& )
         {
             bRet = FALSE;
-            DBG_ERROR( "ContentCreationException" );
         }
         catch( const ::com::sun::star::uno::RuntimeException& )
         {
             bRet = FALSE;
-            DBG_ERROR( "RuntimeException" );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+            bRet = FALSE;
         }
     }
 
