@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:04:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //_______________________________________________
 // namespace
@@ -86,7 +89,7 @@ namespace comphelper{
             - converting it from/to ISO formated string values (like e.g. "en-US")
             - provide some predefined (static) Locale objects
  */
-class Locale
+class COMPHELPER_DLLPUBLIC Locale
 {
     //-------------------------------------------
     // const
