@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #ifndef SC_DPTABSRC_HXX
 #define SC_DPTABSRC_HXX
 
+#include <vector>
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -98,6 +100,21 @@
 #ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDAUTOSHOWINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
 #endif
@@ -130,7 +147,8 @@ class ScDPResultData;
 struct ScDPItemData;
 class ScDPTableData;
 
-// --------------------------------------------------------------------
+// ------------------------------------------------------------------------
+
 
 //  should be dynamic!
 #define SC_DAPI_MAXFIELDS   256
@@ -224,6 +242,8 @@ public:
                             GetMemberResults( ScDPLevel* pLevel );
 
     ScDPDimensions*         GetDimensionsObject();
+
+    void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
 
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
@@ -366,6 +386,8 @@ private:
     USHORT              nFunction;          // enum GeneralFunction
     String              aName;              // if empty, take from source
     long                nSourceDim;         // >=0 if dup'ed
+    ::com::sun::star::sheet::DataPilotFieldReference
+                        aReferenceValue;    // settings for "show data as" / "displayed value"
     BOOL                bHasSelectedPage;
     String              aSelectedPage;
     ScDPItemData*       pSelectedData;      // internal, temporary, created from aSelectedPage
@@ -451,6 +473,8 @@ public:
     virtual long                getUsedHierarchy() const;
     virtual void                setUsedHierarchy(long nNew);
     virtual BOOL                isDuplicated() const;
+
+    const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
     BOOL                        IsValidPage( const ScDPItemData& rData );
 };
@@ -588,6 +612,14 @@ private:
     ScDPMembers*                pMembers;
     com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> aSubTotals;
     BOOL                        bShowEmpty;
+    ::com::sun::star::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
+    ::com::sun::star::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
+    ::com::sun::star::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
+                                                    // valid only from result calculation:
+    ::std::vector<sal_Int32>    aGlobalOrder;       // result of sorting by name or position
+    long                        nSortMeasure;       // measure (index of data dimension) to sort by
+    long                        nAutoMeasure;       // measure (index of data dimension) for AutoShow
+    BOOL                        bEnableLayout;      // enabled only for row fields, not for the innermost one
 
 public:
                             ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL );
@@ -662,6 +694,29 @@ public:
                                             com::sun::star::sheet::GeneralFunction>& rNew);
     virtual BOOL            getShowEmpty() const;
     virtual void            setShowEmpty(BOOL bSet);
+
+    const ::com::sun::star::sheet::DataPilotFieldSortInfo& GetSortInfo() const      { return aSortInfo; }
+    const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo& GetAutoShow() const  { return aAutoShowInfo; }
+
+    void                    EvaluateSortOrder();
+    void                    SetEnableLayout( BOOL bSet );
+
+    const ::std::vector<sal_Int32>& GetGlobalOrder() const      { return aGlobalOrder; }
+    ::std::vector<sal_Int32>&  GetGlobalOrder()                 { return aGlobalOrder; }
+    long                    GetSortMeasure() const              { return nSortMeasure; }
+    long                    GetAutoMeasure() const              { return nAutoMeasure; }
+
+    BOOL                    IsOutlineLayout() const
+                            { return bEnableLayout &&
+                               aLayoutInfo.LayoutMode !=
+                                ::com::sun::star::sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT; }
+
+    BOOL                    IsSubtotalsAtTop() const
+                            { return bEnableLayout &&
+                               aLayoutInfo.LayoutMode ==
+                                ::com::sun::star::sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP; }
+
+    BOOL                    IsAddEmpty() const          { return bEnableLayout && aLayoutInfo.AddEmptyLines; }
 
     //! number format (for data fields and date fields)
 };
@@ -738,6 +793,8 @@ public:
     BOOL                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
+
+    sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
