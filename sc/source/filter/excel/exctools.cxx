@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:33:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ RootData::RootData( void )
     pExtNameBuff = NULL;
     pFmlaConverter = NULL;
     pCharset = NULL;
-    pExtDocOpt = NULL;
 
     bCellCut = FALSE;
     bBreakSharedFormula = TRUE;
@@ -177,9 +176,6 @@ RootData::~RootData()
 
     if( pLastHlink )
         delete pLastHlink;
-
-    if( pExtDocOpt )
-        delete pExtDocOpt;
 
 //  if( pCtrlStorage )
 //      delete pCtrlStorage;
@@ -428,7 +424,7 @@ void ExcScenarioCell::SetValue( const String& r )
 #define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
 
 
-ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetScTab() )
+ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetCurrScTab() )
 {
     UINT16          nCref;
     UINT8           nName, nComment;
@@ -507,7 +503,8 @@ void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
         return;
 
     r.SetScenario( nNewTab, TRUE );
-    r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, SC_SCENARIO_SHOWFRAME|SC_SCENARIO_COPYALL );
+    // #112621# do not show scenario frames
+    r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL );
 
     while( p )
     {
