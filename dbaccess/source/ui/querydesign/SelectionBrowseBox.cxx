@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 10:56:40 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,6 @@ const String g_strZero = String::CreateFromAscii("0");
 #define DEFAULT_SIZE    GetTextWidth(g_strZero) * 30
 #define CHECKBOX_SIZE   10
 #define HANDLE_ID   0
-#define REGISTERID() (Exchange::RegisterFormatName( String::CreateFromAscii(SBA_JOIN_EXCHANGE_FORMAT) ))
 
 DBG_NAME(OSelectionBrowseBox);
 //------------------------------------------------------------------------------
@@ -1064,13 +1063,6 @@ void OSelectionBrowseBox::PaintStatusCell(OutputDevice& rDev, const Rectangle& r
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OSelectionBrowseBox::QueryDrop(const BrowserDropEvent& rEvt)
-{
-    DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    return rEvt.GetColumnId() > 0 && rEvt.GetRow() >= 0 && DragServer::HasFormat(0, REGISTERID());
-}
-
-//------------------------------------------------------------------------------
 void OSelectionBrowseBox::RemoveColumn(sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
@@ -1201,20 +1193,40 @@ void OSelectionBrowseBox::KeyInput( const KeyEvent& rEvt )
 
 
 //------------------------------------------------------------------------------
-sal_Bool OSelectionBrowseBox::Drop( const BrowserDropEvent& rEvt )
+sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OTableFieldDesc aInfo;
-    if (DragServer::HasFormat(0,REGISTERID()))
+    if  (   (rEvt.GetColumnId() >= 0)
+        &&  (rEvt.GetRow() >= -1)
+#if SUPD>627 || FS_PRIV_DEBUG
+        &&  OJoinExchObj::isFormatAvailable(GetDataFlavors())
+#else
+        &&  sal_False
+#endif
+        )
+        return DND_ACTION_LINK;
+
+    return DND_ACTION_NONE;
+}
+
+//------------------------------------------------------------------------------
+sal_Int8 OSelectionBrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& _rEvt )
+{
+    DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+
+    TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
+    if (!OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
     {
-        // Einfuegen des Feldes an der gewuenschten Position
-/*      SvDataObjectRef xDataObj = SvDataObject::PasteDragServer(rEvt);
-        OJoinExchObj* xJoinExchObj = (OJoinExchObj*)&xDataObj;
-        OJoinExchangeData jxdSource = xJoinExchObj->GetSourceDescription();
-        InsertField(jxdSource);
-*/
+        DBG_ERROR("OSelectionBrowseBox::ExecuteDrop: this should never have passed AcceptDrop!");
+        return DND_ACTION_NONE;
     }
-    return sal_False;
+
+    OTableFieldDesc aInfo;
+    // Einfuegen des Feldes an der gewuenschten Position
+    OJoinExchangeData jxdSource = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
+    InsertField(jxdSource);
+
+    return DND_ACTION_LINK;
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:07:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,27 @@
 #include <svtools/svtreebx.hxx>
 #endif
 
+#if SUPD<627
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+#endif
+#ifndef _DBACCESS_UI_CALLBACKS_HXX_
+#include "callbacks.hxx"
+#endif
+
+struct AcceptDropEvent;
+struct ExecuteDropEvent;
 namespace dbaui
 {
     class OTableWindow;
-    class OTableWindowListBox : public SvTreeListBox
+    class OTableWindowListBox
+            :public SvTreeListBox
+            ,public IDragTransferableListener
+#if SUPD<627
+            ,public DragSourceHelper
+            ,public DropTargetHelper
+#endif
     {
         DECL_LINK( DoubleClickHdl, SvTreeListBox* );
         DECL_LINK( ScrollUpHdl, SvTreeListBox* );
@@ -83,7 +100,6 @@ namespace dbaui
         BOOL            m_bDragSource : 1;
 
     protected:
-        virtual void Command(const CommandEvent& rEvt);
         virtual void LoseFocus();
         virtual void GetFocus();
         virtual void NotifyScrolled();
@@ -91,13 +107,18 @@ namespace dbaui
 
         virtual long PreNotify(NotifyEvent& rNEvt);
 
+        virtual void        dragFinished( );
+
     public:
         OTableWindowListBox(OTableWindow* pParent, const String& rDatabaseName, const String& rTableName);
         virtual ~OTableWindowListBox();
 
+        // DnD stuff
+        virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
+        virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+
         OTableWindow* GetTabWin(){ return m_pTabWin; }
-        virtual BOOL QueryDrop( DropEvent& rDEvt );
-        virtual BOOL Drop( const DropEvent& rDEvt );
         SvLBoxEntry* GetEntryFromText( const String& rEntryText );
     };
 }

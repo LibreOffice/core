@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:34:33 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
 
 namespace dbaui
@@ -172,8 +175,10 @@ namespace dbaui
         virtual void                PaintCell(OutputDevice& rDev, const Rectangle& rRect,
                                               sal_uInt16 nColumnId ) const;
 
-        virtual sal_Bool            QueryDrop(const BrowserDropEvent& rEvt);
-        virtual sal_Bool            Drop(const BrowserDropEvent& rEvt);
+        virtual sal_Int8            AcceptDrop( const BrowserAcceptDropEvent& rEvt );
+        virtual sal_Int8            ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
+//      virtual sal_Bool            QueryDrop(const BrowserDropEvent& rEvt);
+//      virtual sal_Bool            Drop(const BrowserDropEvent& rEvt);
         virtual void                MouseButtonDown( const BrowserMouseEvent& rEvt );
         virtual void                MouseButtonUp( const BrowserMouseEvent& rEvt );
         virtual void                KeyInput( const KeyEvent& rEvt );

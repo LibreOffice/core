@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:04:37 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,24 +70,144 @@
 #ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _SOT_FORMATS_HXX
+#include <sot/formats.hxx>
+#endif
 
-using namespace dbaui;
-String OJoinExchObj::m_sJoinFormat;
-//==================================================================
-// class OJoinExchObj
-//==================================================================
-
-
-//------------------------------------------------------------------------
-OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource)
-    :m_jxdSourceDescription(jxdSource)
+namespace dbaui
 {
-    // Verfuegbare Typen in Liste einfuegen
-}
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::datatransfer;
 
-//------------------------------------------------------------------------
-OJoinExchObj::~OJoinExchObj()
-{
-}
+    String OJoinExchObj::m_sJoinFormat;
+    //==================================================================
+    // class OJoinExchObj
+    //==================================================================
+    //------------------------------------------------------------------------
+    OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource)
+        :m_jxdSourceDescription(jxdSource)
+        ,m_pDragListener(NULL)
+    {
+        // Verfuegbare Typen in Liste einfuegen
+    }
+
+    //------------------------------------------------------------------------
+    OJoinExchObj::~OJoinExchObj()
+    {
+    }
+
+    //------------------------------------------------------------------------
+    void OJoinExchObj::StartDrag( Window* _pWindow, sal_Int8 _nDragSourceActions, IDragTransferableListener* _pListener )
+    {
+        m_pDragListener = _pListener;
+        TransferableHelper::StartDrag(_pWindow, _nDragSourceActions);
+    }
+
+    //------------------------------------------------------------------------
+    void OJoinExchObj::DragFinished( sal_Int8 nDropAction )
+    {
+        if (m_pDragListener)
+            m_pDragListener->dragFinished();
+        m_pDragListener = NULL;
+    }
+
+    //------------------------------------------------------------------------
+    sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats )
+    {
+        for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
+                aCheck != _rFormats.end();
+                ++aCheck
+            )
+        {
+            if (SOT_FORMATSTR_ID_SBA_JOIN == aCheck->mnSotId)
+                return sal_True;
+        }
+        return sal_False;
+    }
+
+    //------------------------------------------------------------------------
+    OJoinExchangeData OJoinExchObj::GetSourceDescription(const Reference< XTransferable >& _rxObject)
+    {
+        OJoinExchangeData aReturn;
+        Reference< XUnoTunnel > xTunnel(_rxObject, UNO_QUERY);
+        if (xTunnel.is())
+        {
+            OJoinExchObj* pImplementation = reinterpret_cast<OJoinExchObj*>(xTunnel->getSomething(getUnoTunnelImplementationId()));
+            if (pImplementation)
+                aReturn = pImplementation->m_jxdSourceDescription;
+        }
+        return aReturn;
+    }
+
+    //------------------------------------------------------------------------
+    Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelImplementationId()
+    {
+        static ::cppu::OImplementationId * pId = 0;
+        if (! pId)
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if (! pId)
+            {
+                static ::cppu::OImplementationId aId;
+                pId = &aId;
+            }
+        }
+        return pId->getImplementationId();
+    }
+
+    //------------------------------------------------------------------------
+    sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
+    {
+        if (_rIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
+            return reinterpret_cast<sal_Int64>(this);
+
+        return 0;
+    }
+
+    //------------------------------------------------------------------------
+    void OJoinExchObj::AddSupportedFormats()
+    {
+        AddFormat( SOT_FORMATSTR_ID_SBA_JOIN );
+    }
+
+    //------------------------------------------------------------------------
+    sal_Bool OJoinExchObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    {
+        sal_uInt32 nFormat = SotExchange::GetFormat(rFlavor);
+        if ( SOT_FORMATSTR_ID_SBA_JOIN == nFormat )
+            // this is a HACK
+            // we don't really copy our data, the instances using us have to call GetSourceDescription ....
+            // if, one day, we have a _lot_ of time, this hack should be removed ....
+            return sal_True;
+
+        return sal_False;
+    }
+
+    //------------------------------------------------------------------------
+    Any SAL_CALL OJoinExchObj::queryInterface( const Type& _rType ) throw(RuntimeException)
+    {
+        Any aReturn = TransferableHelper::queryInterface(_rType);
+        if (!aReturn.hasValue())
+            aReturn = OJoinExchObj_Base::queryInterface(_rType);
+        return aReturn;
+    }
+
+    //------------------------------------------------------------------------
+    void SAL_CALL OJoinExchObj::acquire(  ) throw()
+    {
+        TransferableHelper::acquire( );
+    }
+
+    //------------------------------------------------------------------------
+    void SAL_CALL OJoinExchObj::release(  ) throw()
+    {
+        TransferableHelper::release( );
+    }
 
 
+}   // namespace dbaui

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:05:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,16 @@
 #include "TableWindowListBox.hxx"
 #endif
 
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 namespace dbaui
 {
     struct OJoinExchangeData
@@ -77,6 +87,7 @@ namespace dbaui
         SvLBoxEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
 
         OJoinExchangeData(OTableWindowListBox* pBox) : pListBox(pBox), pEntry(pBox->FirstSelected()) { }
+        OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }
     };
 
     //==================================================================
@@ -84,17 +95,40 @@ namespace dbaui
     // Zusaetzliche Daten fuer das Erzeugen von Joins in der JoinShell
     //==================================================================
 
+    typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XUnoTunnel > OJoinExchObj_Base;
     class OJoinExchObj
+                    :public TransferableHelper
+                    ,public OJoinExchObj_Base
     {
         static String           m_sJoinFormat;
+
     protected:
-        OJoinExchangeData       m_jxdSourceDescription;
+        OJoinExchangeData           m_jxdSourceDescription;
+        IDragTransferableListener*  m_pDragListener;
 
     public:
         OJoinExchObj(const OJoinExchangeData& jxdSource);
         ~OJoinExchObj();
 
-        OJoinExchangeData GetSourceDescription() const { return m_jxdSourceDescription; }
+        // XInterface
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire(  ) throw();
+        virtual void SAL_CALL release(  ) throw();
+
+        // XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+        void StartDrag( Window* pWindow, sal_Int8 nDragSourceActions, IDragTransferableListener* _pListener );
+
+        static OJoinExchangeData    GetSourceDescription(const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& _rxObject);
+        static sal_Bool             isFormatAvailable( const DataFlavorExVector& _rFormats );
+
+    protected:
+        virtual void                AddSupportedFormats();
+        virtual sal_Bool            GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void                DragFinished( sal_Int8 nDropAction );
+
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
     };
 }
 #endif // DBAUI_JOINEXCHANGE_HXX

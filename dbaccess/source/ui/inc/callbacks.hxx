@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:52:50 $
+ *  last change: $Author: fs $ $Date: 2001-03-30 13:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,16 @@ namespace dbaui
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) = 0;
     };
 
+    //====================================================================
+    //= IDragTransferableListener
+    //====================================================================
+    class IDragTransferableListener
+    {
+    public:
+        /// called when a drag operation done with a Transferable has been finished
+        virtual void        dragFinished( ) = 0;
+    };
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................
@@ -109,6 +119,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/23 10:52:50  fs
+ *  new DnD implementations
+ *
  *  Revision 1.1  2001/03/22 10:40:44  fs
  *  initial checkin - callbacks
  *
