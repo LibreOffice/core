@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-09 16:26:13 $
+#   last change: $Author: mav $ $Date: 2002-07-24 14:06:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,8 @@ SHL1STDLIBS+=\
         $(UCBHELPERLIB) \
         $(COMPHELPERLIB) \
         $(XMLOFFLIB) \
-        $(XMLSCRIPTLIB)
+        $(XMLSCRIPTLIB) \
+        $(SYSSHELLLIB)
 
 .IF "$(SOLAR_JAVA)" != ""
 SHL1STDLIBS+=\
