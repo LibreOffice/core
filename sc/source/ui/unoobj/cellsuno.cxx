@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-18 08:00:55 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 08:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4377,12 +4377,10 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
 //  ColumnCount / RowCount sind weggefallen
 //! werden im Writer fuer Tabellen noch gebraucht ???
 
-uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
+uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
                                         sal_Int32 nColumn, sal_Int32 nRow )
                                                 throw(uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-
     if ( nColumn >= 0 && nRow >= 0 )
     {
         ScDocShell* pDocSh = GetDocShell();
@@ -4398,6 +4396,15 @@ uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
 
     throw uno::RuntimeException();
     return NULL;
+}
+
+uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
+                                        sal_Int32 nColumn, sal_Int32 nRow )
+                                                throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    return GetCellByPosition_Impl(nColumn, nRow);
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPosition(
@@ -5530,7 +5537,10 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
                 if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                 {
                     double fDummy;
-                    if ( pDoc->GetEnglishFormatTable()->IsNumberFormat(aVal, nNumFmt, fDummy) )
+                    sal_Bool bIsNumberFormat(bEnglish ?
+                        pDoc->GetEnglishFormatTable()->IsNumberFormat(aVal, nNumFmt, fDummy) :
+                        pDoc->GetFormatTable()->IsNumberFormat(aVal, nNumFmt, fDummy));
+                    if ( bIsNumberFormat )
                         aVal.Insert('\'',0);
                     else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
                     {
@@ -6339,7 +6349,7 @@ uno::Reference<table::XCell> SAL_CALL ScTableSheetObj::getCellByPosition(
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return ScCellRangeObj::getCellByPosition(nColumn, nRow);
+    return ScCellRangeObj::GetCellByPosition_Impl(nColumn, nRow);
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScTableSheetObj::getCellRangeByPosition(
