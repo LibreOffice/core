@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-11-14 12:09:00 $
+ *  last change: $Author: os $ $Date: 2002-11-15 10:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,9 +413,12 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
         const SfxItemSet& rSet = *rReq.GetArgs();
         const SfxPoolItem* pItem;
 
+        //ask for the ViewFrame here - "this" may not be valid any longer!
+        SfxViewFrame* pVFrame = GetView().GetViewFrame();
         if ( pDrView->IsTextEdit() )
         {
             pDrView->EndTextEdit( TRUE );
+            //this removes the current shell from the dispatcher stack!!
             GetView().AttrChangedNotify(&rSh);
         }
 
@@ -425,9 +428,8 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
         {
 
             const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
-
-            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(GetView().GetViewFrame()->
-                                        GetChildWindow(nId)->GetWindow());
+            SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(
+                    pVFrame->GetChildWindow(nId)->GetWindow());
 
             pDlg->CreateStdFormObj(*pDrView, *pDrView->GetPageViewPvNum(0),
                                     rSet, *rMarkList.GetMark(0)->GetObj(),
