@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:36:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@ public:
 
     // pure virtual-Methiden von SfxEnumItem
     virtual USHORT          GetValueCount() const;
-    virtual USHORT          GetVersion( USHORT nFFVer ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer ) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -161,7 +158,6 @@ public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT              GetVersion( USHORT nFileVersion ) const;
 };
 
 class SwRotationGrf : public SfxUInt16Item
@@ -177,9 +173,6 @@ public:
 
     // pure virtual-Methiden from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT       GetVersion( USHORT nFFVer ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer ) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -204,7 +197,6 @@ public:
 
     // pure virtual-Methiden from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT       GetVersion( USHORT nFFVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -221,7 +213,6 @@ public:
 
     // pure virtual-Methiden from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT       GetVersion( USHORT nFFVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -238,7 +229,6 @@ protected:
 
 public:
     // pure virtual-Methiden from SfxInt16Item
-    virtual USHORT          GetVersion( USHORT nFFVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -291,9 +281,6 @@ public:
 
     // pure virtual-Methiden von SfxEnumItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT          GetVersion( USHORT nFFVer ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer ) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -320,7 +307,6 @@ public:
 
     // pure virtual-Methiden from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT       GetVersion( USHORT nFFVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -337,7 +323,6 @@ public:
 
     // pure virtual-Methiden from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
-    virtual USHORT       GetVersion( USHORT nFFVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -361,7 +346,6 @@ public:
 
     // pure virtual-Methiden von SfxEnumItem
     virtual USHORT          GetValueCount() const;
-    virtual USHORT          GetVersion( USHORT nFFVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
