@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:14:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,9 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
             addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADVANCED, ODriversSettings::CreateAdabas);
             break;
 
-        case DST_LDAP       : addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);break;       /// LDAP
+        case DST_LDAP:
+            addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
+            break;
         case DST_USERDEFINE1:   /// first user defined driver
         case DST_USERDEFINE2:
         case DST_USERDEFINE3:
