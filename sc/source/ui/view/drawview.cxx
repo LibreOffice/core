@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:05:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ void ScDrawView::AddCustomHdl()
         {
             const INT32 nDelta = 1;
 
-            Point aPos = pObj->GetBoundRect().TopLeft();
+            Point aPos = pObj->GetCurrentBoundRect().TopLeft();
             long nPosX = (long) (aPos.X() / HMM_PER_TWIPS) + nDelta;
             long nPosY = (long) (aPos.Y() / HMM_PER_TWIPS) + nDelta;
 
@@ -335,7 +335,7 @@ void ScDrawView::DrawMarks( OutputDevice* pOut ) const
     USHORT nWinNum = ((ScDrawView*)this)->FindWin(pOut);        //! DrawMarks nicht-const
     if (nWinNum!=SDRVIEWWIN_NOTFOUND)
     {
-        ((ScDrawView*)this)->AfterInitRedraw(nWinNum);          //! DrawMarks nicht-const
+        // ((ScDrawView*)this)->AfterInitRedraw(nWinNum);           //! DrawMarks nicht-const
 
         if (IsShownXorVisibleWinNum(nWinNum))
             ((ScDrawView*)this)->ToggleShownXor(pOut,NULL);     //! DrawMarks nicht-const
@@ -460,12 +460,13 @@ void ScDrawView::RecalcScale()
                             aScaleX,aScaleY );
 }
 
-void ScDrawView::PaintObject( SdrObject* pObject, OutputDevice* pDev ) const
-{
-    pXOut->SetOutDev( pDev );
-    SdrPaintInfoRec aInfoRec;
-    pObject->Paint( *pXOut, aInfoRec );
-}
+// #110094#-17 Not used
+//void ScDrawView::PaintObject( SdrObject* pObject, OutputDevice* pDev ) const
+//{
+//  pXOut->SetOutDev( pDev );
+//  SdrPaintInfoRec aInfoRec;
+//  pObject->Paint( *pXOut, aInfoRec );
+//}
 
 void __EXPORT ScDrawView::MarkListHasChanged()
 {
