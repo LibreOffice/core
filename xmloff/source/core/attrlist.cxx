@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:32:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #include <rtl/memory.h>
 
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 
