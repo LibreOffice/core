@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:12:11 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1653,7 +1653,7 @@ String S_NO_SAX_PARSER
     Text[ polish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ portuguese_brazilian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ japanese ] = "($Arg1)には SAX Parser がありません。最初に 'SAXReadFile' で初期化します。";
-    Text[ korean ] = "($Arg1)를 사용하는 SAX 파서는 없으며 먼저 'SAXReadFile'로 초기화됩니다.";
+    Text[ korean ] = "($Arg1)에서는 SAX 파서(parser)가 없음. 먼저 'SAXReadFile'로 초기화하시오.";
     Text[ chinese_simplified ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ chinese_traditional ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
     Text[ turkish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
