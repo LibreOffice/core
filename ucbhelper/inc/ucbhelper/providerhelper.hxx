@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 15:14:35 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 13:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _UCBHELPER_PROVIDERHELPER_HXX
 
 #ifndef __LIST__
-#include <stl/list>
+#include <list>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
