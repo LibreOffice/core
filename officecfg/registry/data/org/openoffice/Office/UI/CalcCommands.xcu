@@ -32,8 +32,8 @@
             </node>
             <node oor:name=".uno:ResetAttributes" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zelle zurücksetzen</value>
-                    <value xml:lang="en-US">Reset Cell</value>
+                    <value xml:lang="de">Standard~formatierung</value>
+                    <value xml:lang="en-US">~Default Formatting</value>
                 </prop>
             </node>
             <node oor:name=".uno:ClearArrowPrecedents" oor:op="replace">
@@ -422,8 +422,8 @@
             </node>
             <node oor:name=".uno:ConditionalFormatDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Bedingte Formatierung</value>
-                    <value xml:lang="en-US">Conditional Formatting</value>
+                    <value xml:lang="de">~Bedingte Formatierung...</value>
+                    <value xml:lang="en-US">C~onditional Formatting...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Deselect" oor:op="replace">
@@ -933,20 +933,20 @@
             </node>
             <node oor:name=".uno:FormatCellDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zelle formatieren</value>
-                    <value xml:lang="en-US">Format Cell</value>
+                    <value xml:lang="de">~Zellen...</value>
+                    <value xml:lang="en-US">~Cells...</value>
                 </prop>
             </node>
             <node oor:name=".uno:RowHeight" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zeilenhöhe ändern</value>
-                    <value xml:lang="en-US">Modify Row Height</value>
+                    <value xml:lang="de">~Höhe...</value>
+                    <value xml:lang="en-US">~Height...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetOptimalRowHeight" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Optimale Zeilenhöhe</value>
-                    <value xml:lang="en-US">Optimal Row Height</value>
+                    <value xml:lang="de">~Optimale Höhe...</value>
+                    <value xml:lang="en-US">~Optimal Height...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -954,26 +954,26 @@
             </node>
             <node oor:name=".uno:HideRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zeilen ausblenden</value>
-                    <value xml:lang="en-US">Hide Rows</value>
+                    <value xml:lang="de">~Ausblenden</value>
+                    <value xml:lang="en-US">H~ide</value>
                 </prop>
             </node>
             <node oor:name=".uno:ShowRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zeile einblenden</value>
-                    <value xml:lang="en-US">Show Row</value>
+                    <value xml:lang="de">~Einblenden</value>
+                    <value xml:lang="en-US">~Show</value>
                 </prop>
             </node>
             <node oor:name=".uno:ColumnWidth" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Spaltenbreite</value>
-                    <value xml:lang="en-US">Column Width</value>
+                    <value xml:lang="de">~Breite...</value>
+                    <value xml:lang="en-US">~Width...</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetOptimalColumnWidth" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Optimale Spaltenbreite</value>
-                    <value xml:lang="en-US">Optimal Column Width</value>
+                    <value xml:lang="de">~Optimale Breite...</value>
+                    <value xml:lang="en-US">~Optimal Width...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -981,26 +981,26 @@
             </node>
             <node oor:name=".uno:HideColumn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Spalte ausblenden</value>
-                    <value xml:lang="en-US">Hide Column</value>
+                    <value xml:lang="de">~Ausblenden</value>
+                    <value xml:lang="en-US">~Hide</value>
                 </prop>
             </node>
             <node oor:name=".uno:ShowColumn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Spalte einblenden</value>
-                    <value xml:lang="en-US">Show Column</value>
+                    <value xml:lang="de">~Einblenden</value>
+                    <value xml:lang="en-US">~Show</value>
                 </prop>
             </node>
             <node oor:name=".uno:Hide" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabelle ausblenden</value>
-                    <value xml:lang="en-US">Hide Sheet</value>
+                    <value xml:lang="de">~Ausblenden</value>
+                    <value xml:lang="en-US">~Hide</value>
                 </prop>
             </node>
             <node oor:name=".uno:Show" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabelle einblenden</value>
-                    <value xml:lang="en-US">Show Sheet</value>
+                    <value xml:lang="de">~Einblenden...</value>
+                    <value xml:lang="en-US">~Show...</value>
                 </prop>
             </node>
             <node oor:name=".uno:MergeCells" oor:op="replace">
@@ -1023,8 +1023,8 @@
             </node>
             <node oor:name=".uno:ToggleMergeCells" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zellen verbinden</value>
-                    <value xml:lang="en-US">Merge Cells</value>
+                    <value xml:lang="de">Zellen ~verbinden</value>
+                    <value xml:lang="en-US">M~erge Cells</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -1032,8 +1032,8 @@
             </node>
             <node oor:name=".uno:PageFormatDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Seitenformat</value>
-                    <value xml:lang="en-US">Page Format</value>
+                    <value xml:lang="de">Se~ite...</value>
+                    <value xml:lang="en-US">~Page...</value>
                 </prop>
             </node>
             <node oor:name=".uno:StandardTextAttributes" oor:op="replace">
@@ -1224,8 +1224,8 @@
             </node>
             <node oor:name=".uno:RenameTable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabelle umbenennen</value>
-                    <value xml:lang="en-US">Rename Sheet</value>
+                    <value xml:lang="de">~Umbenennen...</value>
+                    <value xml:lang="en-US">~Rename...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Name" oor:op="replace">
@@ -1425,8 +1425,8 @@
             </node>
             <node oor:name=".uno:SheetRightToLeft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Tabelle rechts-nach-links</value>
-                    <value xml:lang="en-US">Sheet right-to-left</value>
+                    <value xml:lang="de">~Rechts-nach-links</value>
+                    <value xml:lang="en-US">R~ight-To-Left</value>
                 </prop>
             </node>
             <node oor:name=".uno:SetAnchorToPage" oor:op="replace">
@@ -1494,7 +1494,7 @@
             <node oor:name=".uno:EditSheetMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Tabelle</value>
-                    <value xml:lang="en-US">Shee~t</value>
+                    <value xml:lang="en-US">~Sheet</value>
                 </prop>
             </node>
             <node oor:name=".uno:FilterMenu" oor:op="replace">
@@ -1523,14 +1523,14 @@
             </node>
             <node oor:name=".uno:RowMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Zeile</value>
+                    <value xml:lang="de">Z~eile</value>
                     <value xml:lang="en-US">~Row</value>
                 </prop>
             </node>
             <node oor:name=".uno:ColumnMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Spalte</value>
-                    <value xml:lang="en-US">~Column</value>
+                    <value xml:lang="de">~Spalte</value>
+                    <value xml:lang="en-US">Colu~mn</value>
                 </prop>
             </node>
             <node oor:name=".uno:SheetMenu" oor:op="replace">
