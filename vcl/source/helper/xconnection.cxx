@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xconnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-01 14:08:05 $
+ *  last change: $Author: kz $ $Date: 2001-02-05 16:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
 #include <xconnection.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
