@@ -1,5 +1,7 @@
 "ScDataPilotFieldObj";"com::sun::star::sheet::DataPilotField";"Orientation"
 "ScDataPilotFieldObj";"com::sun::star::sheet::DataPilotField";"Function"
+"ScDataPilotFieldObj";"com::sun::star::sheet::DataPilotField";"SelectedPage#optional"
+"ScDataPilotFieldObj";"com::sun::star::sheet::DataPilotField";"UseSelectedPage#optional"
 "ScDataPilotFieldObj";"com::sun::star::container::XNamed";"getName()"
 "ScDataPilotFieldObj";"com::sun::star::container::XNamed";"setName()"
 "ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
@@ -9,3 +11,4 @@
 "ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScDataPilotFieldObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
+"ScDataPilotFieldObj";"com::sun::star::sheet::XDataPilotField#optional";"getItems()"
