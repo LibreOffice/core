@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-10-31 17:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ BOOL ScDocument::Solver(USHORT nFCol, USHORT nFRow, USHORT nFTab,
             {
                 pCell->Interpret();
                 USHORT nErrCode = pCell->GetErrCode();
-                nX = pCell->GetValue();
+                nX = pCell->GetValueAlways();
                 if (nErrCode == 0)                  // kein fehler beim Rechnen
                     bRet = TRUE;
                 delete pCell;
