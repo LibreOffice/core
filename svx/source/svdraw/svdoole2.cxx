@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:54:47 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,7 @@ UINT16 SdrOle2Obj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrOle2Obj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     sal_Bool bOk(sal_True);
 
@@ -762,7 +762,7 @@ sal_Bool SdrOle2Obj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec&
     return bOk;
 }
 
-void SdrOle2Obj::PaintGraphic_Impl( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec, sal_Bool bActive ) const
+void SdrOle2Obj::PaintGraphic_Impl( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec, sal_Bool bActive ) const
 {
     Graphic* pGr = GetGraphic();
     OutputDevice* pOutDev=rOut.GetOutDev();
@@ -1125,91 +1125,99 @@ void SdrOle2Obj::GetNewReplacement()
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::WriteData(SvStream& rOut) const
-{
-    SdrRectObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrOle2Obj");
-#endif
-
-    // UNICODE: rOut<<mpImpl->aPersistName;
-    rOut.WriteByteString(mpImpl->aPersistName);
-
-    // UNICODE: rOut<<aProgName;
-    rOut.WriteByteString(aProgName);
-
-    ( (SdrOle2Obj*) this)->GetObjRef_Impl();
-    BOOL bObjRefValid = xObjRef.is();
-    rOut << bObjRefValid;
-    BOOL bPreview = FALSE;
-    if( !IsEmptyPresObj() && pModel && pModel->IsSaveOLEPreview() )
-        bPreview = TRUE;
-
-    if( bPreview )
-        GetGraphic();
-
-    BOOL bHasGraphic=GetGraphic()!=NULL;
-    rOut<<bHasGraphic;
-    if (bHasGraphic)
-    {
-        SdrDownCompat aGrafCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
-#ifdef DBG_UTIL
-        aGrafCompat.SetID("SdrOle2Obj(Graphic)");
-#endif
-        rOut<<*GetGraphic();
-    }
-
-    if( bPreview )
-        ( (SdrOle2Obj*) this )->SetGraphic_Impl( NULL );     // remove preview graphic
-}
+//BFS01void SdrOle2Obj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrRectObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrOle2Obj");
+//BFS01#endif
+//BFS01
+//BFS01 // UNICODE: rOut<<mpImpl->aPersistName;
+//BFS01 rOut.WriteByteString(mpImpl->aPersistName);
+//BFS01
+//BFS01 // UNICODE: rOut<<aProgName;
+//BFS01 rOut.WriteByteString(aProgName);
+//BFS01
+//BFS01 GetObjRef();
+//BFS01 BOOL bObjRefValid=ppObjRef->Is();
+//BFS01 rOut<<bObjRefValid;
+//BFS01 BOOL bPreview = FALSE;
+//BFS01 if( !IsEmptyPresObj() && pModel && pModel->IsSaveOLEPreview() )
+//BFS01     bPreview = TRUE;
+//BFS01
+//BFS01 if( bPreview )
+//BFS01 {
+//BFS01     // set preview graphic (not for empty presentation objects)
+//BFS01     GetGDIMetaFile();
+//BFS01     if( mpImpl->pMetaFile )
+//BFS01     {
+//BFS01         Graphic aNewGraphic( *mpImpl->pMetaFile );
+//BFS01         ( (SdrOle2Obj*) this )->SetGraphic( &aNewGraphic );
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 BOOL bHasGraphic=pGraphic!=NULL;
+//BFS01 rOut<<bHasGraphic;
+//BFS01 if (bHasGraphic)
+//BFS01 {
+//BFS01     SdrDownCompat aGrafCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
+//BFS01#ifdef DBG_UTIL
+//BFS01     aGrafCompat.SetID("SdrOle2Obj(Graphic)");
+//BFS01#endif
+//BFS01     rOut<<*pGraphic;
+//BFS01 }
+//BFS01
+//BFS01 if( bPreview )
+//BFS01     ( (SdrOle2Obj*) this )->SetGraphic( NULL );     // remove preview graphic
+//BFS01}
 
 // -----------------------------------------------------------------------------
 
-void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    rIn.SetError( 0 );
-
-    if (rIn.GetError()!=0) return;
-    SdrRectObj::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrOle2Obj");
-#endif
-
-    // UNICODE: rIn >> mpImpl->aPersistName;
-    rIn.ReadByteString(mpImpl->aPersistName);
-
-    // UNICODE: rIn >> aProgName;
-    rIn.ReadByteString(aProgName);
-
-    BOOL bObjRefValid;
-    rIn>>bObjRefValid;
-
-    BOOL bHasGraphic;
-    rIn>>bHasGraphic;
-    if (bHasGraphic)
-    {
-        if(pGraphic==NULL)
-            pGraphic=new Graphic;
-
-        if(rHead.GetVersion()>=11)
-        { // ab V11 eingepackt
-            SdrDownCompat aGrafCompat(rIn,STREAM_READ);
-#ifdef DBG_UTIL
-            aGrafCompat.SetID("SdrOle2Obj(Graphic)");
-#endif
-            rIn>>*pGraphic;
-        }
-        else
-            rIn>>*pGraphic;
-
-        if( mpImpl->pGraphicObject )
-            delete mpImpl->pGraphicObject;
-
-        mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
-    }
-}
+//BFS01void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 rIn.SetError( 0 );
+//BFS01
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrRectObj::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrOle2Obj");
+//BFS01#endif
+//BFS01
+//BFS01 // UNICODE: rIn >> mpImpl->aPersistName;
+//BFS01 rIn.ReadByteString(mpImpl->aPersistName);
+//BFS01
+//BFS01 // UNICODE: rIn >> aProgName;
+//BFS01 rIn.ReadByteString(aProgName);
+//BFS01
+//BFS01 BOOL bObjRefValid;
+//BFS01 rIn>>bObjRefValid;
+//BFS01
+//BFS01 BOOL bHasGraphic;
+//BFS01 rIn>>bHasGraphic;
+//BFS01 if (bHasGraphic)
+//BFS01 {
+//BFS01     if(pGraphic==NULL)
+//BFS01         pGraphic=new Graphic;
+//BFS01
+//BFS01     if(rHead.GetVersion()>=11)
+//BFS01     { // ab V11 eingepackt
+//BFS01         SdrDownCompat aGrafCompat(rIn,STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01         aGrafCompat.SetID("SdrOle2Obj(Graphic)");
+//BFS01#endif
+//BFS01         rIn>>*pGraphic;
+//BFS01     }
+//BFS01     else
+//BFS01         rIn>>*pGraphic;
+//BFS01
+//BFS01     if( mpImpl->pGraphicObject )
+//BFS01         delete mpImpl->pGraphicObject;
+//BFS01
+//BFS01     mpImpl->pGraphicObject = new GraphicObject( *pGraphic );
+//BFS01 }
+//BFS01}
 
 // -----------------------------------------------------------------------------
 
