@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:25:46 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 15:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,7 +947,13 @@ void SvxXMLListStyleContext::FillUnoNumRule(
                     pLevelStyle->GetProperties( pI18NMap );
                 Any aAny;
                 aAny <<= aProps;
-                rNumRule->replaceByIndex( nLevel, aAny );
+                try
+                {
+                    rNumRule->replaceByIndex( nLevel, aAny );
+                }
+                catch(...)
+                {
+                }
             }
         }
     }
