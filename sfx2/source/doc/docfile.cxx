@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:15:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1551,18 +1551,15 @@ void SfxMedium::Transfer_Impl()
 }
 
 //------------------------------------------------------------------
-void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent )
+void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
+                                       const String& aPrefix,
+                                       const String& aExtension,
+                                       const String& aDestDir )
 {
-    ::rtl::OUString aFileName =  GetURLObject().getName( INetURLObject::LAST_SEGMENT,
-                                                        true,
-                                                        INetURLObject::NO_DECODE );
+    if ( pImp->m_aBackupURL.getLength() )
+        return; // the backup was done already
 
-    sal_Int32 nPrefixLen = aFileName.lastIndexOf( '.' );
-    String aPrefix = ( nPrefixLen == -1 ) ? aFileName : aFileName.copy( 0, nPrefixLen );
-    String aExtension = ( nPrefixLen == -1 ) ? String() : String(aFileName.copy( nPrefixLen ));
-       String aBakDir = SvtPathOptions().GetBackupPath();
-
-    ::utl::TempFile aTransactTemp( aPrefix, &aExtension, &aBakDir );
+    ::utl::TempFile aTransactTemp( aPrefix, &aExtension, &aDestDir );
     aTransactTemp.EnableKillingFile( sal_False );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
@@ -1570,7 +1567,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent )
 
     Reference < ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     ::ucb::Content aBackupCont;
-    if( ::ucb::Content::create( aBakDir, xDummyEnv, aBackupCont ) )
+    if( ::ucb::Content::create( aDestDir, xDummyEnv, aBackupCont ) )
     {
         try
         {
@@ -1585,6 +1582,41 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent )
         }
         catch( Exception& )
         {}
+    }
+
+    if ( !pImp->m_aBackupURL.getLength() )
+        aTransactTemp.EnableKillingFile( sal_True );
+}
+
+//------------------------------------------------------------------
+void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent )
+{
+    if ( pImp->m_aBackupURL.getLength() )
+        return; // the backup was done already
+
+    ::rtl::OUString aFileName =  GetURLObject().getName( INetURLObject::LAST_SEGMENT,
+                                                        true,
+                                                        INetURLObject::NO_DECODE );
+
+    sal_Int32 nPrefixLen = aFileName.lastIndexOf( '.' );
+    String aPrefix = ( nPrefixLen == -1 ) ? aFileName : aFileName.copy( 0, nPrefixLen );
+    String aExtension = ( nPrefixLen == -1 ) ? String() : String(aFileName.copy( nPrefixLen ));
+       String aBakDir = SvtPathOptions().GetBackupPath();
+
+    DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aBakDir );
+
+    if ( !pImp->m_aBackupURL.getLength() )
+    {
+        // the copiing to the backup catalog failed ( for example because
+        // of using an encrypted partition as target catalog )
+        // since the user did not specify to make backup explicitly
+        // office should try to make backup in another place,
+        // target catalog does not look bad for this case ( and looks
+        // to be the only way for encrypted partitions )
+
+        INetURLObject aDest = GetURLObject();
+        if ( aDest.removeSegment() )
+            DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aDest.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 }
 
