@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:26:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,9 @@ BOOL ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
             aCnt.InsertEmbeddedObject( xObj, aName );
         else
             aName = aCnt.GetEmbeddedObjectName( xObj );
+
+        // working with visual area needs running state
+        svt::EmbeddedObjectRef::TryRunningState( xObj );
 
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         MapUnit aMapObj = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
