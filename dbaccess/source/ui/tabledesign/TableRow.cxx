@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 10:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType )
         if( !m_pActFieldDescr )
         {
             m_pActFieldDescr = new OFieldDescription();
+            m_bOwnsDescriptions = sal_True;
             switch(_pType->nType)
             {
                 case DataType::CHAR:
