@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:18:14 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ protected:
     static USHORT nMaxTypeKeysDelay;
     static BOOL bDoTypeKeysDelay;
 
-    static Window* pFirstDocWin;
+    static Window* pFirstDocFrame;
 
 public:
     static BOOL IsInReschedule() { return bIsInReschedule; }
@@ -313,12 +313,14 @@ public:
 
     BOOL CheckWindowWait();         //True heisst, dass Window noch existiert
                                     //False -> Window weg;
-    static void SetFirstDocWin( Window* pWin );
-    static Window* GetFirstDocWin();
-    static BOOL IsFirstDocWin( Window* pWin );
+    static void SetFirstDocFrame( Window* pWin );
+    static Window* GetFirstDocFrame();
+    static BOOL IsFirstDocFrame( Window* pWin );
     static BOOL IsDocWin( Window* pWin );
     static BOOL IsIMEWin( Window* pWin );    // Input Window for CJK under Solaris
-
+    static BOOL IsDocFrame( Window* pWin );
+    static MenuBar* GetDocFrameMenuBar( Window* pWin );
+    static USHORT GetDocFrameCount();
 
 #if OSL_DEBUG_LEVEL > 1
     static EditWindow *m_pDbgWin;
