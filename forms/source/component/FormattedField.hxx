@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:31 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,8 @@ namespace frm
     class OFormattedModel
                     :public OEditBaseModel
                     ,public OErrorBroadcaster
-                    ,public OPropertyChangeListener
                     ,public ::comphelper::OAggregationArrayUsageHelper< OFormattedModel >
     {
-        OPropertyChangeMultiplexer*         m_pPropertyMultiplexer;
-
         // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
         // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
@@ -105,16 +102,12 @@ namespace frm
         sal_Int32                           m_nFieldType;
         sal_Int16                           m_nKeyType;
         sal_Bool                            m_bOriginalNumeric      : 1,
-                                            m_bNumeric              : 1,    // analog fuer TreatAsNumeric-Property
-                                            m_bAggregateListening   : 1;
+                                            m_bNumeric              : 1;    // analog fuer TreatAsNumeric-Property
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >   s_xDefaultFormatter;
-        static sal_Int32                        nValueHandle;
             // falls ich wirklich mal einen selber benutzen muss, wird der zwischen allen Instanzen geteilt
 
     protected:
-        virtual void _onValueChanged();
-
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
@@ -125,13 +118,6 @@ namespace frm
 
         friend InterfaceRef SAL_CALL OFormattedModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
         friend class OFormattedFieldWrapper;
-
-        /// starts multiplexing the aggregate's property changes
-        void startAggregateListening();
-        /// stops multiplexing the aggregate's property changes
-        void stopAggregateListening();
-        /// release the aggregate listener
-        void releaseAggregateListener();
 
     protected:
     // XInterface
@@ -150,9 +136,6 @@ namespace frm
         IMPLEMENTATION_NAME(OFormattedModel);
         virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // XBoundComponent
-        virtual sal_Bool _commit();
-
     // XPersistObject
         virtual void SAL_CALL write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -170,11 +153,6 @@ namespace frm
 
     // XLoadListener
         virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException);
-        virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
-        virtual void _unloaded();
-
-    // XReset
-        virtual void _reset( void );
 
     // XPropertyState
         void setPropertyToDefaultByHandle(sal_Int32 nHandle);
@@ -196,6 +174,21 @@ namespace frm
     protected:
         virtual sal_Int16 getPersistenceFlags() const;
             // as we have an own version handling for persistence
+
+        // OBoundControlModel overridables
+        virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+        virtual ::com::sun::star::uno::Any
+                            translateExternalValueToControlValue( );
+        virtual sal_Bool    commitControlValueToDbColumn( bool _bPostReset );
+
+        virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
+
+        virtual void        onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+        virtual void        onDisconnectedDbColumn();
+
+        virtual sal_Bool    approveValueBinding( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::form::XValueBinding >& _rxBinding );
 
     protected:
         DECLARE_XCLONEABLE();
