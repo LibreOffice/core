@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:42:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,6 +616,8 @@ void ScTransferObj::InitDocShell()
         ScDocument* pDestDoc = pDocSh->GetDocument();
         ScMarkData aDestMark;
         aDestMark.SelectTable( 0, TRUE );
+
+        pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
         String aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
