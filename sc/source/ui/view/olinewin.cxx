@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewDa
     mrViewData( *pViewData ),
     meWhich( eWhich ),
     mbHoriz( eMode == SC_OUTLINE_HOR ),
-    mbAppRTL( !!Application::GetSettings().GetLayoutRTL() ),
     mpSymbols( NULL ),
     maLineColor( COL_BLACK ),
     mnHeaderSize( 0 ),
@@ -111,7 +110,7 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eMode, ScViewDa
     mbDontDrawFocus( false )
 {
     EnableRTL( !mbHoriz ); // #107809# do not mirror (horizontal) column outline window
-    mbMirrorHdr = mbHoriz && mbAppRTL;
+    mbMirrorHdr = mbHoriz && Application::GetSettings().GetLayoutRTL();
 
     InitSettings();
     maFocusRect.SetEmpty();
@@ -1012,10 +1011,6 @@ void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
     sal_uInt16 nCode = rKCode.GetCode();
     bool bUpDownKey = (nCode == KEY_UP) || (nCode == KEY_DOWN);
     bool bLeftRightKey = (nCode == KEY_LEFT) || (nCode == KEY_RIGHT);
-
-    // revert wrong cursor direction (left/right) in RTL windows
-    if( bLeftRightKey && mbAppRTL && IsRTLEnabled() )
-        nCode = (nCode == KEY_LEFT) ? KEY_RIGHT : KEY_LEFT;
 
     // TAB key
     if ( (nCode == KEY_TAB) && (bNoMod || bShift) )
