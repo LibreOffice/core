@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-20 12:00:20 $
+ *  last change: $Author: os $ $Date: 2002-08-21 13:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4652,7 +4652,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 			</prop>
 			<prop oor:name="IsForPagePreviews" oor:type="xs:boolean">
 				<!-- Responsible: OS-->
-				<value>false</value>
+                <value>true</value>
 				<info>
 					<desc xml:lang="en-US">This option enables the use of high contrast colors, instead of displaying the normal/original WYSIWYG colors (like the document will be printed).</desc>
 					<label xml:lang="en-US">For page previews</label>
