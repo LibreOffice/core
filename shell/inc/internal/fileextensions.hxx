@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileextensions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:52:14 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 07:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ std::string get_file_name_extension(const std::string& file_name);
 /** Return the type of a file
 */
 
-enum File_Type_t { UNKNOWN, WRITER, CALC, DRAW, IMPRESS, MATH };
+enum File_Type_t { UNKNOWN, WRITER, CALC, DRAW, IMPRESS, MATH, WEB, DATABASE };
 
 File_Type_t get_file_type(const std::string& file_name);
 
