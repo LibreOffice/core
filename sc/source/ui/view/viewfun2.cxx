@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ void ScViewFunc::SetPrintZoom(USHORT nScale, USHORT nPages)
 void ScViewFunc::AdjustPrintZoom()
 {
     ScRange aRange;
-    if ( !GetViewData()->GetSimpleArea( aRange, TRUE ) )
+    if ( !GetViewData()->GetSimpleArea( aRange ) )
         GetViewData()->GetMarkData().GetMultiMarkArea( aRange );
     GetViewData()->GetDocShell()->AdjustPrintZoom( aRange );
 }
@@ -699,7 +699,7 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
             }
             else        //  use selection (print range is always set)
             {
-                if ( GetViewData()->GetSimpleArea( aRange, TRUE ) )
+                if ( GetViewData()->GetSimpleArea( aRange ) )
                 {
                     pDoc->SetPrintRangeCount( nTab, nAdd + 1 );
                     pDoc->SetPrintRange( nTab, nAdd, aRange );
