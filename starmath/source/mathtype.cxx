@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:51:22 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,10 +949,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 APPEND(rRet," \\ldline ");
                             break;
                         case 0x6:
-                            if (nVariation==0)
-                                APPEND(rRet," lfloor ");
+                            if (nVariation == 0 || nVariation == 1)
+                                APPEND(rRet," left lfloor ");
                             else if (nVariation==1)
-                                APPEND(rRet," \\lfloor ");
+                                APPEND(rRet," left none ");
                             break;
                         case 0x7:
                             if (nVariation==0)
@@ -1510,10 +1510,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 APPEND(rRet," \\rdline ");
                             break;
                         case 0x6:
-                            if (nVariation==0)
-                                APPEND(rRet," rfloor ");
+                            if (nVariation == 0 || nVariation == 2)
+                                APPEND(rRet," right rfloor ");
                             else if (nVariation==2)
-                                APPEND(rRet," \\rfloor ");
+                                APPEND(rRet," right none ");
                             break;
                         case 0x7:
                             if (nVariation==0)
@@ -2571,6 +2571,11 @@ void MathType::HandleBrace(SmNode *pNode,int nLevel)
                 *pS << sal_uInt8(0x00); //options
                 nBSpec+=3;
                 break;
+            case TLFLOOR:
+                *pS << sal_uInt8(tmFLOOR); //selector
+                *pS << sal_uInt8(0x00); //variation
+                *pS << sal_uInt8(0x00); //options
+                break;
             case TLLINE:
                 *pS << sal_uInt8(tmBAR); //selector
                 *pS << sal_uInt8(0x00); //variation
@@ -3313,6 +3318,10 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
             *pS << sal_uInt16(0xEC09);
         else if (nArse == 0xE421)
             *pS << sal_uInt16(0x2265);
+        else if (nArse == 0x230A)
+            *pS << sal_uInt16(0xF8F0);
+        else if (nArse == 0x230B)
+            *pS << sal_uInt16(0xF8FB);
         else if (nArse == 0xE425)
             *pS << sal_uInt16(0x2264);
         else if (nArse == 0x226A)
