@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:42:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,8 @@ static const String sWindowState    = String::CreateFromAscii( "WindowState" );
 static const String sUCBContent     = String::CreateFromAscii( "UCBContent" );
 static const String sRepairPackage  = String::CreateFromAscii( "RepairPackage" );
 static const String sDocumentTitle  = String::CreateFromAscii( "DocumentTitle" );
+static const String sComponentData  = String::CreateFromAscii( "ComponentData" );
+static const String sComponentContext = String::CreateFromAscii( "ComponentContext" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -548,250 +550,258 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 String aName = rProp.Name;
                 if ( aName == sModel )
                     rSet.Put( SfxUnoAnyItem( SID_DOCUMENT, rProp.Value ) );
+                else if ( aName == sComponentData )
+                {
+                    rSet.Put( SfxUnoAnyItem( SID_COMPONENTDATA, rProp.Value ) );
+                }
+                else if ( aName == sComponentContext )
+                {
+                    rSet.Put( SfxUnoAnyItem( SID_COMPONENTCONTEXT, rProp.Value ) );
+                }
                 else if ( aName == sStatusInd )
-                     {
-                        Reference< ::com::sun::star::task::XStatusIndicator > xVal;
-                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                        DBG_ASSERT( bOK, "invalid type for StatusIndicator" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
-                     }
+                {
+                    Reference< ::com::sun::star::task::XStatusIndicator > xVal;
+                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    DBG_ASSERT( bOK, "invalid type for StatusIndicator" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
+                }
                 else if ( aName == sInteractionHdl )
-                     {
-                        Reference< ::com::sun::star::task::XInteractionHandler > xVal;
-                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                        DBG_ASSERT( bOK, "invalid type for InteractionHandler" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
-                     }
+                {
+                    Reference< ::com::sun::star::task::XInteractionHandler > xVal;
+                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    DBG_ASSERT( bOK, "invalid type for InteractionHandler" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, rProp.Value ) );
+                }
                 else if ( aName == sViewData )
                     rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
                 else if ( aName == sFilterData )
                     rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
                 else if ( aName == sInputStream )
-                     {
-                        Reference< XInputStream > xVal;
-                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                        DBG_ASSERT( bOK, "invalid type for InputStream" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
-                     }
+                {
+                    Reference< XInputStream > xVal;
+                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    DBG_ASSERT( bOK, "invalid type for InputStream" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
+                }
                 else if ( aName == sUCBContent )
-                     {
-                        Reference< XContent > xVal;
-                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                        DBG_ASSERT( bOK, "invalid type for UCBContent" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
-                     }
+                {
+                    Reference< XContent > xVal;
+                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    DBG_ASSERT( bOK, "invalid type for UCBContent" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_CONTENT, rProp.Value ) );
+                }
                 else if ( aName == sOutputStream )
-                     {
-                        Reference< XOutputStream > xVal;
-                        sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
-                        DBG_ASSERT( bOK, "invalid type for OutputStream" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_OUTPUTSTREAM, rProp.Value ) );
-                     }
+                {
+                    Reference< XOutputStream > xVal;
+                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    DBG_ASSERT( bOK, "invalid type for OutputStream" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_OUTPUTSTREAM, rProp.Value ) );
+                }
                 else if ( aName == sPostData )
-                     {
-                        Reference< XInputStream > xVal;
-                        sal_Bool bOK = (rProp.Value >>= xVal);
-                        DBG_ASSERT( bOK, "invalid type for PostData" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
-                     }
+                {
+                    Reference< XInputStream > xVal;
+                    sal_Bool bOK = (rProp.Value >>= xVal);
+                    DBG_ASSERT( bOK, "invalid type for PostData" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
+                }
                 else if ( aName == sAsTemplate )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for AsTemplate" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_TEMPLATE, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for AsTemplate" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_TEMPLATE, bVal ) );
+                }
                 else if ( aName == sOpenNewView )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for OpenNewView" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for OpenNewView" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, bVal ) );
+                }
                 else if ( aName == sViewId )
-                     {
-                        sal_Int16 nVal = -1;
-                        sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                        DBG_ASSERT( bOK, "invalid type for ViewId" )
-                        if (bOK)
-                            rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
-                     }
+                {
+                    sal_Int16 nVal = -1;
+                    sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
+                    DBG_ASSERT( bOK, "invalid type for ViewId" )
+                    if (bOK)
+                        rSet.Put( SfxUInt16Item( SID_VIEW_ID, nVal ) );
+                }
                 else if ( aName == sPluginMode )
-                     {
-                        sal_Int16 nVal = -1;
-                        sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
-                        DBG_ASSERT( bOK, "invalid type for PluginMode" )
-                        if (bOK)
-                            rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
-                     }
+                {
+                    sal_Int16 nVal = -1;
+                    sal_Bool bOK = ((rProp.Value >>= nVal) && (nVal != -1));
+                    DBG_ASSERT( bOK, "invalid type for PluginMode" )
+                    if (bOK)
+                        rSet.Put( SfxUInt16Item( SID_PLUGIN_MODE, nVal ) );
+                }
                 else if ( aName == sReadOnly )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for ReadOnly" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for ReadOnly" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_DOC_READONLY, bVal ) );
+                }
                 else if ( aName == sStartPresentation )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for StartPresentation" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for StartPresentation" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_DOC_STARTPRESENTATION, bVal ) );
+                }
                 else if ( aName == sSelectionOnly )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for SelectionOnly" )
-                        if (bOK)
-                           rSet.Put( SfxBoolItem( SID_SELECTION, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for SelectionOnly" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_SELECTION, bVal ) );
+                }
                 else if ( aName == sHidden )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for Hidden" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for Hidden" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_HIDDEN, bVal ) );
+                }
                 else if ( aName == sMinimized )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for Minimized" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for Minimized" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_MINIMIZED, bVal ) );
+                }
                 else if ( aName == sSilent )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for Silent" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_SILENT, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for Silent" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_SILENT, bVal ) );
+                }
                 else if ( aName == sPreview )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for Preview" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for Preview" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_PREVIEW, bVal ) );
+                }
                 else if ( aName == sViewOnly )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for ViewOnly" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_VIEWONLY, bVal ) );
+                }
                 else if ( aName == sDontEdit )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for ViewOnly" )
-                        if (bOK)
-                            rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
+                }
                 else if ( aName == sFileName )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for FileName" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for FileName" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_FILE_NAME, sVal ) );
+                }
                 else if ( aName == sOrigURL )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for OrigURL" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_ORIGURL, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for OrigURL" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_ORIGURL, sVal ) );
+                }
                 else if ( aName == sSalvageURL )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = (rProp.Value >>= sVal);
-                        DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = (rProp.Value >>= sVal);
+                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
+                }
                 else if ( aName == sFrameName )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = (rProp.Value >>= sVal);
-                        DBG_ASSERT( bOK, "invalid type for FrameName" )
-                        if (bOK && sVal.getLength())
-                            rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = (rProp.Value >>= sVal);
+                    DBG_ASSERT( bOK, "invalid type for FrameName" )
+                    if (bOK && sVal.getLength())
+                        rSet.Put( SfxStringItem( SID_TARGETNAME, sVal ) );
+                }
                 else if ( aName == sMediaType )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for MediaType" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for MediaType" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
+                }
                 else if ( aName == sWindowState )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for WindowState" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for WindowState" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
+                }
                 else if ( aName == sTemplateName )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for TemplateName" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for TemplateName" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_TEMPLATE_NAME, sVal ) );
+                }
                 else if ( aName == sTemplateRegionName )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for TemplateRegionName" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_TEMPLATE_REGIONNAME, sVal ) );
+                }
                 else if ( aName == sJumpMark )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for JumpMark" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for JumpMark" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_JUMPMARK, sVal ) );
+                }
                 else if ( aName == sCharacterSet )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for CharacterSet" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for CharacterSet" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_CHARSET, sVal ) );
+                }
                 else if ( aName == sFilterFlags )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for FilterFlags" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
-                     }
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for FilterFlags" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sVal ) );
+                }
                 else if ( aName == sMacroExecMode )
                 {
                     sal_Int16 nVal =-1;
@@ -809,22 +819,21 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         rSet.Put( SfxUInt16Item( SID_UPDATEDOCMODE, nVal ) );
                 }
                 else if ( aName == sRepairPackage )
-                     {
-                        sal_Bool bVal = sal_False;
-                        sal_Bool bOK = (rProp.Value >>= bVal);
-                        DBG_ASSERT( bOK, "invalid type for RepairPackage" )
-                        if (bOK)
-                           rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
-                     }
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for RepairPackage" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, bVal ) );
+                }
                 else if ( aName == sDocumentTitle )
-                     {
-                        ::rtl::OUString sVal;
-                        sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                        DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" )
-                        if (bOK)
-                            rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
-                     }
-
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for DocumentTitle" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
+                }
             }
         }
 #ifdef DB_UTIL
@@ -992,6 +1001,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOCINFO_TITLE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_COMPONENTDATA ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_COMPONENTCONTEXT ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1106,6 +1119,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_DOCINFO_TITLE )
                         continue;
+                    if ( nId == SID_COMPONENTDATA )
+                        continue;
+                    if ( nId == SID_COMPONENTCONTEXT )
+                        continue;
 
                     // used only internally
                     if ( nId == SID_SAVETO )
@@ -1128,7 +1145,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     // convert every item into a property
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aSequ( nProps );
     ::com::sun::star::beans::PropertyValue *pValue = aSequ.getArray();
-    nProps = 0;
+
+    sal_Int32 nActProp=0;
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
@@ -1141,8 +1159,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( !nSubCount )
             {
                 //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-                pValue[nProps].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
-                if ( !pItem->QueryValue( pValue[nProps].Value ) )
+                pValue[nActProp].Name = String( String::CreateFromAscii( pSlot->pUnoName ) ) ;
+                if ( !pItem->QueryValue( pValue[nActProp].Value ) )
                 {
                     ByteString aStr( "Item not convertable: ");
                     aStr += ByteString::CreateFromInt32(nSlotId);
@@ -1163,8 +1181,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                     aName += '.';
                     aName += String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
-                    pValue[nProps].Name = aName;
-                    if ( !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
+                    pValue[nActProp].Name = aName;
+                    if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                     {
                         ByteString aStr( "Sub item ");
                         aStr += ByteString::CreateFromInt32( pType->aAttrib[n-1].nAID );
@@ -1192,8 +1210,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( !nSubCount )
                 {
                     //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-                    pValue[nProps].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
-                    if ( !pItem->QueryValue( pValue[nProps++].Value ) )
+                    pValue[nActProp].Name = String( String::CreateFromAscii( rArg.pName ) ) ;
+                    if ( !pItem->QueryValue( pValue[nActProp++].Value ) )
                     {
                         ByteString aStr( "Item not convertable: ");
                         aStr += ByteString::CreateFromInt32(rArg.nSlotId);
@@ -1214,8 +1232,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         String aName( String::CreateFromAscii( rArg.pName ) ) ;
                         aName += '.';
                         aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
-                        pValue[nProps].Name = aName;
-                        if ( !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
+                        pValue[nActProp].Name = aName;
+                        if ( !pItem->QueryValue( pValue[nActProp++].Value, nSubId ) )
                         {
                             ByteString aStr( "Sub item ");
                             aStr += ByteString::CreateFromInt32( rArg.pType->aAttrib[n-1].nAID );
@@ -1232,155 +1250,165 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
              nSlotId == SID_SAVETO || nSlotId == SID_EXPORTDOCASPDF || nSlotId == SID_DIRECTEXPORTDOCASPDF )
         {
             const SfxPoolItem *pItem=0;
+            if ( rSet.GetItemState( SID_COMPONENTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sComponentData;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
+            if ( rSet.GetItemState( SID_COMPONENTCONTEXT, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sComponentContext;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
             if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sStatusInd;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sStatusInd;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_INTERACTIONHANDLER, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sInteractionHdl;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sInteractionHdl;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_VIEW_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sViewData;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sViewData;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_FILTER_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sFilterData;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sFilterData;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_DOCUMENT, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sModel;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sModel;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_CONTENT, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sUCBContent;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sUCBContent;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sInputStream;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sInputStream;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_OUTPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sOutputStream;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sOutputStream;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_POSTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sPostData;
-                pValue[nProps++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sPostData;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sAsTemplate;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sAsTemplate;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_OPEN_NEW_VIEW, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sOpenNewView;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sOpenNewView;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_VIEW_ID, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sViewId;
-                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+                pValue[nActProp].Name = sViewId;
+                pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_PLUGIN_MODE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sPluginMode;
-                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+                pValue[nActProp].Name = sPluginMode;
+                pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_DOC_READONLY, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sReadOnly;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sReadOnly;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sStartPresentation;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sStartPresentation;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_SELECTION, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sSelectionOnly;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sSelectionOnly;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_HIDDEN, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sHidden;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sHidden;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_MINIMIZED, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sMinimized;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sMinimized;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_SILENT, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sSilent;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sSilent;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_PREVIEW, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sPreview;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sPreview;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_VIEWONLY, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sViewOnly;
-                pValue[nProps++].Value <<= (sal_Bool) (( ((SfxBoolItem*)pItem)->GetValue() ));
+                pValue[nActProp].Name = sViewOnly;
+                pValue[nActProp++].Value <<= (sal_Bool) (( ((SfxBoolItem*)pItem)->GetValue() ));
             }
             if ( rSet.GetItemState( SID_EDITDOC, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sDontEdit;
-                pValue[nProps++].Value <<= (sal_Bool) (!( ((SfxBoolItem*)pItem)->GetValue() ));
+                pValue[nActProp].Name = sDontEdit;
+                pValue[nActProp++].Value <<= (sal_Bool) (!( ((SfxBoolItem*)pItem)->GetValue() ));
             }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sFrameName;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+                pValue[nActProp].Name = sFrameName;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_ORIGURL, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sOrigURL;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+                pValue[nActProp].Name = sOrigURL;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sSalvageURL;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+                pValue[nActProp].Name = sSalvageURL;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_CONTENTTYPE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sMediaType;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+                pValue[nActProp].Name = sMediaType;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_WIN_POSSIZE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sWindowState;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+                pValue[nActProp].Name = sWindowState;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sTemplateName;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+                pValue[nActProp].Name = sTemplateName;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sTemplateRegionName;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+                pValue[nActProp].Name = sTemplateRegionName;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_JUMPMARK, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sJumpMark;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+                pValue[nActProp].Name = sJumpMark;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
 
             SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
@@ -1391,28 +1419,28 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
             if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sCharacterSet;
-                pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+                pValue[nActProp].Name = sCharacterSet;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
             if ( rSet.GetItemState( SID_MACROEXECMODE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sMacroExecMode;
-                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+                pValue[nActProp].Name = sMacroExecMode;
+                pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_UPDATEDOCMODE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sUpdateDocMode;
-                pValue[nProps++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
+                pValue[nActProp].Name = sUpdateDocMode;
+                pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_REPAIRPACKAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sRepairPackage;
-                pValue[nProps++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
+                pValue[nActProp].Name = sRepairPackage;
+                pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
             }
             if ( rSet.GetItemState( SID_DOCINFO_TITLE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
-                pValue[nProps].Name = sDocumentTitle;
-                pValue[nProps++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+                pValue[nActProp].Name = sDocumentTitle;
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
         }
     }
@@ -1785,7 +1813,13 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::
 Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
                         throw( RuntimeException )
 {
-    return Sequence< Reference < XDispatch > >();
+    sal_Int32 nCount = seqDescriptor.getLength();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > lDispatcher(nCount);
+    for( sal_Int32 i=0; i<nCount; ++i )
+        lDispatcher[i] = this->queryDispatch( seqDescriptor[i].FeatureURL,
+                                              seqDescriptor[i].FrameName,
+                                              seqDescriptor[i].SearchFlags );
+    return lDispatcher;
 }
 #ifdef TEST_HANDLERS
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
