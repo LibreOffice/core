@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-28 11:28:12 $
+ *  last change: $Author: jp $ $Date: 2000-11-30 20:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,6 +1980,9 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
             }
         }
 
+        xStg = 0;
+        aMedium.Commit();
+
         // Zeitstempel noch setzen
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                         &aModifiedDate, &aModifiedTime );
@@ -2270,6 +2273,9 @@ void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const String& rName )
         {
             xStg->Remove( rName );
             xStg->Commit();
+
+            xStg = 0;
+            aMedium.Commit();
         }
     }
 }
@@ -2289,6 +2295,8 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         {
             xSrcStg->CopyTo( &xDstStg );
             sShareAutoCorrFile = sUserAutoCorrFile;
+            xDstStg = 0;
+            aDstMedium.Commit();
         }
     }
 }
@@ -2390,7 +2398,11 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
         }
 
         if( pAutocorr_List->Insert( pNew ) )
+        {
             bRet = MakeBlocklist_Imp( *xStg );
+            xStg = 0;
+            aMedium.Commit();
+        }
         else
         {
             delete pNew;
@@ -2429,7 +2441,11 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     {
         SvxAutocorrWord* pNew = new SvxAutocorrWord( rShort, sLong, FALSE );
         if( pAutocorr_List->Insert( pNew ) )
+        {
             MakeBlocklist_Imp( *xStg );
+            xStg = 0;
+            aMedium.Commit();
+        }
         else
             delete pNew;
     }
@@ -2470,6 +2486,8 @@ BOOL SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
             // die Wortliste aktualisieren
             pAutocorr_List->DeleteAndDestroy( nPos );
             MakeBlocklist_Imp( *xStg );
+            xStg = 0;
+            aMedium.Commit();
         }
         else
             bRet = FALSE;
