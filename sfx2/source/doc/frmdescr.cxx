@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:24:32 $
+ *  last change: $Author: pl $ $Date: 2001-10-25 14:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,14 +893,6 @@ BOOL SfxFrameDescriptor::HasFrameBorder() const
 
 long SfxFrameDescriptor::GetSize() const
 {
-#if !defined ( VCL ) && ( defined (WIN) || defined (WNT) )
-    long nSize = nWidth;
-    if ( nSize && eSizeSelector == SIZE_ABS && System::GetGUIVersion() < 400 && HasFrameBorder() )
-        // SV zeichnet dann den Border um das Fenster herum
-        nSize += 1L;
-    return nSize;
-#endif
-
     return nWidth;
 }
 
