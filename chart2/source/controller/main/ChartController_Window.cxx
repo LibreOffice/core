@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 20:12:43 $
+ *  last change: $Author: iha $ $Date: 2004-01-06 19:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,9 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
     Point   aMPos   = pWindow->PixelToLogic(rMEvt.GetPosPixel());
+
+    if( !pDrawViewWrapper )
+        return;
 
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
