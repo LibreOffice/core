@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 08:16:20 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,3 +1174,18 @@ String STR_CONNECTING_DATASOURCE
     Text [ english ] = "connecting to \"$name$\" ...";
     Text [ english_us ] = "connecting to \"$name$\" ...";
 };
+
+String STR_LOADING_QUERY
+{
+    Text = "lade Abfrage $name$ ...";
+    Text [ english ] = "loading query $name$ ...";
+    Text [ english_us ] = "loading query $name$ ...";
+};
+
+String STR_LOADING_TABLE
+{
+    Text = "lade Tabelle $name$ ...";
+    Text [ english ] = "loading table $name$ ...";
+    Text [ english_us ] = "loading table $name$ ...";
+};
+
