@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ParagraphProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:08:24 $
+ *  last change:$Date: 2003-11-18 16:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,18 @@
  ************************************************************************/
 package ifc.style;
 
-import lib.MultiPropertyTest;
-import util.utils;
-
 import com.sun.star.container.XNameContainer;
+import com.sun.star.table.BorderLine;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.xml.AttributeData;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import lib.MultiPropertyTest;
+
+
+import util.utils;
 
 
 /**
@@ -208,6 +213,22 @@ public class _ParagraphProperties extends MultiPropertyTest {
     };
 
     /**
+     * Custom tester for properties which have <code>boolean</code> type
+     * and can be void, so if they have void value, the new value must
+     * be specified. Switches between true and false.
+     */
+    protected PropertyTester BooleanTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            if ((oldValue != null) &&
+                    (oldValue.equals(new Boolean((boolean) false)))) {
+                return new Boolean((boolean) true);
+            } else {
+                return new Boolean((boolean) false);
+            }
+        }
+    };
+
+    /**
      * Custom tester for properties which contains image URLs.
      * Switches between two JPG images' URLs.
      */
@@ -342,6 +363,15 @@ public class _ParagraphProperties extends MultiPropertyTest {
     }
 
     /**
+     * Tested with custom property tester. <p>
+     */
+    public void _ParaIsConnectBorder() {
+
+        log.println("Testing with custom Property tester");
+        testProperty("ParaIsConnectBorder", BooleanTester);
+    }
+
+    /**
      * Tested with custom property tester.
      */
     public void _ParaVertAlignment() {
@@ -367,10 +397,14 @@ public class _ParagraphProperties extends MultiPropertyTest {
         boolean res = false;
 
         try {
-            uda = (XNameContainer) AnyConverter.toObject(
+            try{
+                uda = (XNameContainer) AnyConverter.toObject(
                           new Type(XNameContainer.class),
                           oObj.getPropertyValue("ParaUserDefinedAttributes"));
-
+            } catch (com.sun.star.lang.IllegalArgumentException e){
+                log.println("ParaUserDefinedAttributes is empty.");
+                uda = new _ParagraphProperties.OwnUserDefinedAttributes();
+            }
             AttributeData attr = new AttributeData();
             attr.Namespace = "http://www.sun.com/staroffice/apitest/Cellprop";
             attr.Type = "CDATA";
@@ -391,24 +425,75 @@ public class _ParagraphProperties extends MultiPropertyTest {
                 log.println("Property is optional and not supported");
                 res = true;
             } else {
-                log.println("Don't know the Property 'UserDefinedAttributes'");
+                log.println("Don't know the Property 'ParaUserDefinedAttributes'");
             }
         } catch (com.sun.star.lang.WrappedTargetException wte) {
             log.println(
-                    "WrappedTargetException while getting Property 'UserDefinedAttributes'");
+                    "WrappedTargetException while getting Property 'ParaUserDefinedAttributes'");
         } catch (com.sun.star.container.NoSuchElementException nee) {
             log.println("added Element isn't part of the NameContainer");
         } catch (com.sun.star.lang.IllegalArgumentException iae) {
             log.println(
-                    "IllegalArgumentException while getting Property 'UserDefinedAttributes'");
+                    "IllegalArgumentException while getting Property 'ParaUserDefinedAttributes'");
         } catch (com.sun.star.beans.PropertyVetoException pve) {
             log.println(
-                    "PropertyVetoException while getting Property 'UserDefinedAttributes'");
+                    "PropertyVetoException while getting Property 'ParaUserDefinedAttributes'");
         } catch (com.sun.star.container.ElementExistException eee) {
             log.println(
-                    "ElementExistException while getting Property 'UserDefinedAttributes'");
+                    "ElementExistException while getting Property 'ParaUserDefinedAttributes'");
         }
 
         tRes.tested("ParaUserDefinedAttributes", res);
+    }
+
+    private class OwnUserDefinedAttributes implements XNameContainer{
+        Hashtable members = null;
+
+
+        public OwnUserDefinedAttributes() {
+            members = new Hashtable();
+        }
+
+        public Object getByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
+            return members.get(str);
+        }
+
+        public String[] getElementNames() {
+            Enumeration enum = members.keys();
+            int count = members.size();
+            String[] res = new String[count];
+            int i=0;
+            while(enum.hasMoreElements())
+                res[i] = (String)enum.nextElement();
+            return res;
+        }
+
+        public com.sun.star.uno.Type getElementType() {
+            Enumeration enum = members.keys();
+            String key = (String)enum.nextElement();
+            Object o = members.get(key);
+            return new Type(o.getClass());
+        }
+
+        public boolean hasByName(String str) {
+            return members.get(str) != null;
+        }
+
+        public boolean hasElements() {
+            return members.size() > 0;
+        }
+
+        public void insertByName(String str, Object obj) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.ElementExistException, com.sun.star.lang.WrappedTargetException {
+            members.put(str, obj);
+        }
+
+        public void removeByName(String str) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
+            members.remove(str);
+        }
+
+        public void replaceByName(String str, Object obj) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException {
+            members.put(str, obj);
+        }
+
     }
 } // finish class _ParagraphProperties
