@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-09-17 15:10:32 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:47:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=com_sun_star_comp_bridge
 # ------------------------------------------------------------------
 
 
-JARFILES 		= sandbox.jar ridl.jar jurt.jar juh.jar
+JARFILES 		= ridl.jar jurt.jar juh.jar
 
 
 JAVACLASSFILES= \
