@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:39:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,61 @@
 #include "sfxtypes.hxx"
 #include "request.hxx"
 #include "docfac.hxx"
+
+#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
+#include <svtools/acceleratorexecute.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
+#include <com/sun/star/form/XReset.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
+#include <com/sun/star/awt/KeyModifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+
+#ifdef css
+    #error "ambigous praeprozessor directive for css ..."
+#else
+    namespace css = ::com::sun::star;
+#endif
+
+#ifdef dcss
+    #error "ambigous praeprozessor directive for dcss ..."
+#else
+    namespace dcss = ::drafts::com::sun::star;
+#endif
 
 //static const char __FAR_DATA pUnknownStr[]    = "???";
 static USHORT __FAR_DATA aCodeArr[] =
@@ -299,7 +354,7 @@ static long nAccCfgTabs[] =
 {
         2,                              // Number of Tabs
         0,
-        90                             // Function
+        120                             // Function
 };
 
 #define ACC_CODEARRSIZE   ( sizeof( aCodeArr ) / sizeof( aCodeArr[ 0 ] ) )
@@ -318,6 +373,59 @@ public:
 
     virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
 };
+
+void impl_initAccCfg(const SfxTabDialog*                                               pTabDlg   ,
+                     const css::uno::Reference< css::lang::XMultiServiceFactory >&     xSMGR     ,
+                           css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xGlobalAcc,
+                           css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xModuleAcc)
+                           //css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xDocAcc   )
+{
+    ::rtl::OUString sShortName = ::rtl::OUString::createFromAscii(pTabDlg->GetViewFrame()->GetObjectShell()->GetFactory().GetShortName());
+
+    try
+    {
+        // get global configuration
+        xGlobalAcc = css::uno::Reference< dcss::ui::XAcceleratorConfiguration >(
+                        xSMGR->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.GlobalAcceleratorConfiguration")),
+                        css::uno::UNO_QUERY_THROW);
+
+        // get module configuration
+        css::uno::Reference< css::frame::XFrame > xFrame(
+            pTabDlg->GetViewFrame()->GetFrame()->GetFrameInterface(),
+            css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< dcss::frame::XModuleManager > xModuleManager(
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager")),
+            css::uno::UNO_QUERY_THROW);
+
+        ::rtl::OUString sModule = xModuleManager->identify(xFrame);
+
+        css::uno::Reference< dcss::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
+            css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< dcss::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(sModule);
+        xModuleAcc = css::uno::Reference< dcss::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+/*TODO_ACC
+        // get document configuration
+        css::uno::Reference< css::frame::XModel >      xModel      ;
+        css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+        if (xController.is())
+            xModel = xController->getModel();
+
+        if (xModel.is())
+        {
+            css::uno::Reference< dcss::ui::XUIConfigurationManagerSupplier > xDocCfgSupplier(xModel, css::uno::UNO_QUERY_THROW);
+            xUICfgManager = xDocCfgSupplier->getUIConfigurationManager();
+            xDocAcc       = css::uno::Reference< dcss::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+        }
+*/
+    }
+    catch(const css::uno::RuntimeException& exRuntime)
+        { throw exRuntime; }
+    catch(const css::uno::Exception&)
+        {}
+}
 
 SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 {
@@ -382,12 +490,6 @@ void SfxAccCfgTabListBox_Impl::KeyInput( const KeyEvent &rKEvt )
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
-    if ( pModule && pModule->pChanged )
-        delete pModule->pChanged;
-    if ( pGlobal && pGlobal->pChanged )
-        delete pGlobal->pChanged;
-    delete pGlobal;
-    delete pModule;
 }
 
 // SfxAcceleratorConfigPage::Ctor() ************************************************
@@ -415,7 +517,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     pAct( 0 ),
     pModule( 0 ),
     pGlobal( 0 ),
-    m_pMacroInfoItem( 0 )
+    m_pMacroInfoItem( 0 ),
+    m_bStylesInfoInitialized(sal_False)
 {
     FreeResource();
 
@@ -465,6 +568,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window *pParent, const SfxIt
     aEntriesBox.SetSpaceBetweenEntries( 0 );
     aEntriesBox.SetDragDropMode(0);
     aGroupLBox.SetFunctionListBox( &aFunctionBox );
+
 }
 
 void SfxAcceleratorConfigPage::CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 )
@@ -479,8 +583,87 @@ void SfxAcceleratorConfigPage::CreateCustomItems( SvLBoxEntry* pEntry, const Str
     pEntry->ReplaceItem( pStrItem, 2 );
 }
 
-void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
+USHORT SfxAcceleratorConfigPage::impl_Command2ID(const ::rtl::OUString& sCommand, SfxSlotPool* pSlotPool)
 {
+    static ::rtl::OUString URL_SCHEMA_UNO   = ::rtl::OUString::createFromAscii(".uno:" );
+    static ::rtl::OUString URL_SCHEMA_SLOT  = ::rtl::OUString::createFromAscii("slot:" );
+    static ::rtl::OUString URL_SCHEMA_MACRO = ::rtl::OUString::createFromAscii("macro:");
+
+    USHORT nId = USHRT_MAX;
+
+    // Styles?
+    // are handled outside!!!
+
+    // macro?! TODO
+    if (sCommand.indexOf(URL_SCHEMA_MACRO)>-1)
+    {
+    }
+    else
+    // uno
+    if (sCommand.indexOf(URL_SCHEMA_UNO)>-1)
+    {
+        const SfxSlot* pSlot = pSlotPool->GetUnoSlot(sCommand);
+        DBG_ASSERT(pSlot, "ACC TAB PAGE: Found no slot for given command ... ");
+        if (pSlot)
+             nId = pSlot->GetSlotId();
+    }
+    else
+    // slot
+    if (sCommand.indexOf(URL_SCHEMA_SLOT)>-1)
+    {
+        nId = (USHORT)(sCommand.copy(5).toInt32());
+    }
+
+    return nId;
+}
+
+::rtl::OUString SfxAcceleratorConfigPage::impl_ID2Command(USHORT nId, SfxSlotPool* pSlotPool)
+{
+    ::rtl::OUString sCommand;
+
+    // Styles?
+    if (nId >= SfxStylesInfo_Impl::START_ID_STYLES)
+    {
+        ::rtl::OUString sCommand = m_aStylesInfo.getStyle(nId);
+        return sCommand;
+    }
+
+    // Macros?
+    if ( SfxMacroConfig::IsMacroSlot( nId ) )
+    {
+        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo( nId );
+        if (pInfo)
+        {
+            sCommand = pInfo->GetURL();
+            return sCommand;
+        }
+    }
+
+    // slot, uno?
+    const SfxSlot* pSlot = pSlotPool->GetSlot(nId);
+    if (pSlot && pSlot->pUnoName)
+    {
+        sCommand  = ::rtl::OUString::createFromAscii(".uno:");
+        sCommand += ::rtl::OUString::createFromAscii(pSlot->GetUnoName());
+
+        return sCommand;
+    }
+
+    // ???
+    DBG_ASSERT(sCommand.getLength(), "Found no command for ID.");
+    return ::rtl::OUString();
+}
+
+void SfxAcceleratorConfigPage::Init(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& pAccMgr)
+{
+    if (!m_bStylesInfoInitialized)
+    {
+        m_aStylesInfo.setModel(GetTabDialog()->GetViewFrame()->GetObjectShell()->GetModel());
+        aFunctionBox.SetStylesInfo(&m_aStylesInfo);
+        aGroupLBox.SetStylesInfo(&m_aStylesInfo);
+        m_bStylesInfoInitialized = sal_True;
+    }
+
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
@@ -493,14 +676,26 @@ void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
         aEntriesBox.EntryInserted( pLBEntry );
     }
 
-    SfxSlotPool* pSlotPool = &( pAct == pModule ? SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ) : SFX_APP()->GetAppSlotPool_Impl() );
-    const SfxAcceleratorItemList& rItems = pAccMgr->GetItems();
-    std::vector< SfxAcceleratorConfigItem>::const_iterator p;
-    for ( p = rItems.begin(); p != rItems.end(); p++ )
+    SfxSlotPool* pSlotPool = &(SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ));
+//TODO global slot pool doesnt know ALL global commands! Dont use it yet ...    pSlotPool = &(SFX_APP()->GetAppSlotPool_Impl());
+
+    css::uno::Sequence< css::awt::KeyEvent > lKeys = pAccMgr->getAllKeyEvents();
+    sal_Int32 c = lKeys.getLength();
+    sal_Int32 y = 0;
+
+    for (y=0; y<c; ++y)
     {
-        SfxAcceleratorConfigItem aItem( *p );
-        USHORT  nId = aItem.nId;
-        KeyCode aKeyCode = aItem.nCode ? KeyCode( aItem.nCode, aItem.nModifier ) : KeyCode( aItem.nModifier);
+        const css::awt::KeyEvent& aAWTKey  = lKeys[y];
+              ::rtl::OUString     sCommand = pAccMgr->getCommandByKeyEvent(aAWTKey);
+              KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
+
+        USHORT            nId = USHRT_MAX;
+        SfxStyleInfo_Impl aStyle;
+        sal_Bool          bStyle = m_aStylesInfo.parseStyleCommand(sCommand, aStyle);
+        if (bStyle)
+            nId = aStyle.nId;
+        else
+            nId = impl_Command2ID(sCommand, pSlotPool);
 
         // init full accelerator array
         USHORT nPos = KeyCodeToPos_All( aKeyCode );
@@ -513,7 +708,10 @@ void SfxAcceleratorConfigPage::Init( SfxAcceleratorManager* pAccMgr )
         {
             USHORT nCol = aEntriesBox.TabCount() - 1;
             String aText ('[');
-            aText += pSlotPool->GetSlotName_Impl( nId );
+            if (bStyle)
+                aText += String(aStyle.sLabel);
+            else
+                aText += pSlotPool->GetSlotName_Impl( nId );
             aText += ']';
             aEntriesBox.SetEntryText( aText, nPos, nCol );
             SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
@@ -571,14 +769,39 @@ void SfxAcceleratorConfigPage::ResetConfig()
         aConfigAccelArr[i] = 0;
 }
 
-void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDefault )
+void SfxAcceleratorConfigPage::impl_appendItem(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& pAccMgr  ,
+                                                     USHORT                                                      nId      ,
+                                               const KeyCode&                                                    aVCLKey  ,
+                                                     SfxSlotPool*                                                pSlotPool)
 {
+    css::awt::KeyEvent aAWTKey  = ::svt::AcceleratorExecute::st_VCLKey2AWTKey(aVCLKey);
+    ::rtl::OUString    sCommand ;
+    if (nId>0 && nId!=USHRT_MAX)
+        sCommand = impl_ID2Command(nId, pSlotPool);
+
+    try
+    {
+        if (sCommand.getLength())
+            pAccMgr->setKeyEvent(aAWTKey, sCommand);
+        else
+            pAccMgr->removeKeyEvent(aAWTKey);
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+}
+
+void SfxAcceleratorConfigPage::Apply(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr, BOOL bIsDefault )
+{
+    /* TODO_ACC
     if ( bIsDefault )
     {
         pAccMgr->UseDefault();
         pAccMgr->SetDefault(TRUE);
         return;
     }
+    */
 
     SvUShorts aListOfIds;
 
@@ -591,12 +814,21 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
             ++nCount;
     }
 
-    const SfxAcceleratorItemList& rItems = pAccMgr->GetItems();
-    std::vector< SfxAcceleratorConfigItem>::const_iterator p;
-    for ( p = rItems.begin(); p != rItems.end(); p++ )
+    SfxSlotPool* pSlotPool = &(SFX_APP()->GetSlotPool( GetTabDialog()->GetViewFrame() ));
+
+    css::uno::Sequence< css::awt::KeyEvent > lKeys = pAccMgr->getAllKeyEvents();
+    sal_Int32 c = lKeys.getLength();
+    sal_Int32 y = 0;
+    for (y=0; y<c; ++y)
     {
-        SfxAcceleratorConfigItem aItem( *p );
-        USHORT nId = aItem.nId;
+        const css::awt::KeyEvent& aAWTKey  = lKeys[y];
+              ::rtl::OUString     sCommand = pAccMgr->getCommandByKeyEvent(aAWTKey);
+              SfxStyleInfo_Impl   aStyle   ;
+              USHORT              nId      ;
+              if (m_aStylesInfo.parseStyleCommand(sCommand, aStyle))
+                  nId = aStyle.nId;
+              else
+                  nId  = impl_Command2ID(sCommand, pSlotPool);
 
         // Macro-Eintraege referenzieren, da sie sonst beim Clear eventuell
         // entfernt werden koennten !
@@ -607,7 +839,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
         }
     }
 
-    pAccMgr->Reset(nCount);
+//TODO_ACC  pAccMgr->Reset(nCount);
 
     // Liste von hinten durchgehen, damit logische Acceleratoren Vorrang
     // vor physikalischen haben.
@@ -627,15 +859,18 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
                     SFX_APP()->GetMacroConfig()->RegisterSlotId(aAccelArr[i-1]);
             }
 
-            pAccMgr->AppendItem( aAccelArr[i-1], PosToKeyCode_All( i-1 ) );
+            impl_appendItem(pAccMgr, aAccelArr[i-1], PosToKeyCode_All( i-1 ), pSlotPool);
         }
+        else
+            // HACK: remove item explicitly ... not implicitly!
+            impl_appendItem(pAccMgr, 0, PosToKeyCode_All( i-1 ), pSlotPool);
     }
 
     // Apply the not editable accelerators to the accelerator manager,
     // otherwise we would lose them.
     std::vector< AccelBackup >::const_iterator pBackup;
     for ( pBackup = m_aAccelBackup.begin(); pBackup != m_aAccelBackup.end(); pBackup++ )
-        pAccMgr->AppendItem( pBackup->nId, pBackup->aKeyCode );
+        impl_appendItem(pAccMgr, pBackup->nId, pBackup->aKeyCode, pSlotPool );
 
     for (i=0; i<aListOfIds.Count(); i++)
     {
@@ -644,7 +879,7 @@ void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDe
             SFX_APP()->GetMacroConfig()->ReleaseSlotId(aListOfIds[i]);
     }
 
-    pAccMgr->SetDefault(FALSE);
+// TODO_ACC pAccMgr->SetDefault(FALSE);
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, Load, Button *, pButton )
@@ -656,58 +891,88 @@ IMPL_LINK( SfxAcceleratorConfigPage, Load, Button *, pButton )
         GetTabDialog()->EnterWait();
         BOOL bCreated = FALSE;
         SfxObjectShellRef xDoc;
+        css::uno::Reference< dcss::ui::XUIConfigurationManager > xCfgMgr;
+        css::uno::Reference< css::embed::XStorage > xRootStorage;
 
-        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
-        if ( pCfgMgr->GetURL() != aCfgName )
+        // it was not the global configuration manager
+        // first check if URL points to a document already loaded
+        xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+        if ( xDoc.Is() )
         {
-            // it was not the global configuration manager
-            // first check if URL points to a document already loaded
-            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
-            if ( !xDoc.Is() )
-                // try to load a document from the URL
-                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
-            if ( xDoc.Is() )
+            // Get ui config manager. There should always be one at the model.
+            css::uno::Reference< css::frame::XModel > xModel = xDoc->GetModel();
+            if ( xModel.is() )
             {
-                // get config manager, force creation if there was none before
-                pCfgMgr = xDoc->GetConfigManager( TRUE );
+                css::uno::Reference< dcss::ui::XUIConfigurationManagerSupplier > xCfgSupplier( xModel, css::uno::UNO_QUERY_THROW );
+                xCfgMgr = xCfgSupplier->getUIConfigurationManager();
             }
-            else
+        }
+        else
+        {
+            // URL doesn't point to a loaded document, try to access it as a single storage
+            bCreated = TRUE;
+
+            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( pSMGR->createInstance(
+                                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ))),
+                                                                css::uno::UNO_QUERY_THROW );
+            css::uno::Sequence< css::uno::Any > aArgs( 2 );
+            aArgs[0] <<= ::rtl::OUString( aCfgName );
+            aArgs[1] <<= css::embed::ElementModes::READ;
+
+            ::rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+            xRootStorage = css::uno::Reference< css::embed::XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::embed::XStorage > xCfgStorage = xRootStorage->openStorageElement( aUIConfigFolderName, css::embed::ElementModes::READ );
+            if ( xCfgStorage.is() )
             {
-                // URL doesn't point to a document, must be a single storage
-                bCreated = TRUE;
-                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_READ );
-                if ( xStor->GetError() == ERRCODE_NONE )
-                    pCfgMgr = new SfxConfigManager( xStor );
-                else
-                    pCfgMgr = NULL;
+                xCfgMgr = css::uno::Reference< dcss::ui::XUIConfigurationManager >( pSMGR->createInstance(
+                                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.ui.UIConfigurationManager" ))),
+                                                                css::uno::UNO_QUERY_THROW );
+                css::uno::Reference< dcss::ui::XUIConfigurationStorage > xCfgStore( xCfgMgr, css::uno::UNO_QUERY_THROW );
+                xCfgStore->setStorage( xCfgStorage );
             }
         }
 
-        if ( pCfgMgr )
+        if ( xCfgMgr.is() )
         {
-            // create new AcceleratorManager and read configuration
-            // constructing with a SfxConfigManager reads in configuration
-            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pAct->pMgr, pCfgMgr );
+            css::uno::Reference< dcss::ui::XAcceleratorConfiguration > pAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
-            // put new configuration into TabPage
             aEntriesBox.SetUpdateMode( FALSE );
             ResetConfig();
-            Init( pAccMgr );
+            Init(pAccMgr);
             aEntriesBox.SetUpdateMode( TRUE );
             aEntriesBox.Invalidate();
             aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
-            pAct->bDefault = FALSE;
-            pAct->bModified = TRUE;
 
-            delete pAccMgr;
             if ( bCreated )
-                delete pCfgMgr;
+            {
+                css::uno::Reference< css::lang::XComponent > xComponent;
+                xComponent = css::uno::Reference< css::lang::XComponent >( xCfgMgr, css::uno::UNO_QUERY );
+                if ( xComponent.is() )
+                    xComponent->dispose();
+                xComponent = css::uno::Reference< css::lang::XComponent >( xRootStorage, css::uno::UNO_QUERY );
+                if ( xComponent.is() )
+                    xComponent->dispose();
+            }
         }
 
         GetTabDialog()->LeaveWait();
     }
 
     return 0;
+}
+
+void impl_copySource2Target(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xSourceAccMgr,
+                            const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xTargetAccMgr)
+{
+    const css::uno::Sequence< css::awt::KeyEvent > lKeys = xSourceAccMgr->getAllKeyEvents();
+          sal_Int32                                c     = lKeys.getLength();
+          sal_Int32                                i     = 0;
+    for (i=0; i<c; ++i)
+    {
+        const css::awt::KeyEvent& rKey     = lKeys[i];
+              ::rtl::OUString     sCommand = xSourceAccMgr->getCommandByKeyEvent(rKey);
+        xTargetAccMgr->setKeyEvent(rKey, sCommand);
+    }
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
@@ -720,65 +985,96 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
         BOOL bCreated = FALSE;
         BOOL bLoadedDocument = FALSE;
         SfxObjectShellRef xDoc;
+        css::uno::Reference< dcss::ui::XUIConfigurationManager > xCfgMgr;
+        css::uno::Reference< css::embed::XStorage > xRootStorage;
 
-        SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
-        if ( pCfgMgr->GetURL() != aCfgName )
+        // it was not the global configuration manager
+        // first check if URL points to a document already loaded
+        xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
+        if ( xDoc.Is() )
         {
-            // it was not the global configuration manager
-            // first check if URL points to a document already loaded
-            xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
-            if ( xDoc.Is() )
-                bLoadedDocument = TRUE;
-            else
-                // try to load a document from the URL
-                xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
-            if ( xDoc.Is() )
+            // get config manager, force creation if there was none before
+            bLoadedDocument = TRUE;
+            css::uno::Reference< css::frame::XModel > xModel = xDoc->GetModel();
+            if ( xModel.is() )
             {
-                // get config manager, force creation if there was none before
-                pCfgMgr = xDoc->GetConfigManager( TRUE );
+                css::uno::Reference< dcss::ui::XUIConfigurationManagerSupplier > xCfgSupplier( xModel, css::uno::UNO_QUERY_THROW );
+                xCfgMgr = xCfgSupplier->getUIConfigurationManager();
             }
-            else
+        }
+        else
+        {
+            // URL doesn't point to a loaded document, try to access it as a single storage
+            bCreated = TRUE;
+
+            css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory( pSMGR->createInstance(
+                                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" ))),
+                                                                css::uno::UNO_QUERY_THROW );
+            css::uno::Sequence< css::uno::Any > aArgs( 2 );
+            aArgs[0] <<= ::rtl::OUString( aCfgName );
+            aArgs[1] <<= css::embed::ElementModes::WRITE;
+
+            ::rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+            xRootStorage = css::uno::Reference< css::embed::XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::embed::XStorage > xCfgStorage = xRootStorage->openStorageElement( aUIConfigFolderName, css::embed::ElementModes::WRITE );
+            if ( xCfgStorage.is() )
             {
-                // URL doesn't point to a document, must be a single storage
-                bCreated = TRUE;
-                SvStorageRef xStor = new SvStorage( aCfgName, STREAM_STD_WRITE, STORAGE_TRANSACTED );
-                if ( xStor->GetError() == ERRCODE_NONE )
-                    pCfgMgr = new SfxConfigManager( xStor );
-                else
-                    pCfgMgr = NULL;
+                ::rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
+                ::rtl::OUString aUIConfigMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ));
+                ::rtl::OUString aMediaType;
+
+                css::uno::Reference< css::beans::XPropertySet > xPropSet( xCfgStorage, css::uno::UNO_QUERY_THROW );
+                css::uno::Any a = xPropSet->getPropertyValue( aMediaTypeProp );
+                if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
+                {
+                    a <<= aUIConfigMediaType;
+                    xPropSet->setPropertyValue( aMediaTypeProp, a );
+                }
+
+                xCfgMgr = css::uno::Reference< dcss::ui::XUIConfigurationManager >( pSMGR->createInstance(
+                                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.ui.UIConfigurationManager" ))),
+                                                                css::uno::UNO_QUERY_THROW );
+                css::uno::Reference< dcss::ui::XUIConfigurationStorage > xCfgStore( xCfgMgr, css::uno::UNO_QUERY_THROW );
+                xCfgStore->setStorage( xCfgStorage );
             }
         }
 
-        if ( pCfgMgr )
+        if ( xCfgMgr.is() )
         {
-            // create new AcceleratorManager and apply changes
-            SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pAct->pMgr, pCfgMgr );
-            Apply( pAccMgr, FALSE );
-            pCfgMgr->StoreConfigItem( *pAccMgr );
+            // get target accelerator manager ...
+            // and source accelerator manager.
+            css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xTargetAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xSourceAccMgr(pAct                         , css::uno::UNO_QUERY_THROW);
+
+            // copy the whole configuration set from source to target!
+            impl_copySource2Target(xSourceAccMgr, xTargetAccMgr);
+
+            // commit (order is important!)
+            css::uno::Reference< dcss::ui::XUIConfigurationPersistence > xCommit1(xTargetAccMgr, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< dcss::ui::XUIConfigurationPersistence > xCommit2(xCfgMgr, css::uno::UNO_QUERY_THROW);
+            xCommit1->store();
+            xCommit2->store();
+
             if ( bLoadedDocument )
             {
                 SfxRequest aReq( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON, xDoc->GetPool() );
                 xDoc->ExecuteSlot( aReq );
             }
-            else
-                pCfgMgr->StoreConfiguration();
-            delete pAccMgr;
-            if ( bCreated )
-                delete pCfgMgr;
-            else
-                pCfgMgr->ReInitialize( pAct->pMgr->GetType() );
-
-            // perhaps the document must get a new accelerator manager ! This will automatically be created
-            // when GetAccMgr_Impl() is called on a document that has a configuration in its storage
-            if ( bLoadedDocument )
+            else if ( xRootStorage.is() )
             {
-                if ( xDoc->GetAccMgr_Impl()->GetConfigManager() != pCfgMgr )
-                    // config item has global configuration until now, must be changed
-                    // is impossible in the current implementation !
-                    xDoc->GetAccMgr_Impl()->GetConfigManager()->ReConnect( pAct->pMgr->GetType(), pCfgMgr );
+                // Commit root storage
+                css::uno::Reference< css::embed::XTransactedObject > xCommit3(xRootStorage, css::uno::UNO_QUERY_THROW);
+                xCommit3->commit();
+
+                css::uno::Reference< css::lang::XComponent > xComponent;
+                xComponent = css::uno::Reference< css::lang::XComponent >(xCfgMgr, css::uno::UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->dispose();
+                xComponent = css::uno::Reference< css::lang::XComponent >(xRootStorage, css::uno::UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->dispose();
             }
         }
-
         GetTabDialog()->LeaveWait();
     }
 
@@ -787,34 +1083,43 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
 
 IMPL_LINK( SfxAcceleratorConfigPage, Default, PushButton *, pPushButton )
 {
-    // creating a ConfigItem without ConfigManager forces it to use its default
-    SfxAcceleratorManager aMgr( *pAct->pMgr, NULL );
-    pAct->bDefault = TRUE;
-    pAct->bModified = !pAct->pMgr->IsDefault();
+    css::uno::Reference< css::form::XReset > xReset(pAct, css::uno::UNO_QUERY_THROW);
+    xReset->reset();
+
     aEntriesBox.SetUpdateMode(FALSE);
     ResetConfig();
-    Init( &aMgr );
+    Init( pAct );
     aEntriesBox.SetUpdateMode(TRUE);
     aEntriesBox.Invalidate();
     aEntriesBox.Select( aEntriesBox.GetEntry( 0, 0 ) );
+
     return 0;
 }
 
 IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button *, pButton )
 {
-    pAct->bDefault = FALSE;
-    pAct->bModified = TRUE;
-
     // Selektierter Eintrag und selektierte Funktion
     USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     USHORT nId  = aFunctionBox.GetCurId();
-
     String aStr;
+
+    // Styles?
+    if (nId >= SfxStylesInfo_Impl::START_ID_STYLES)
+    {
+        USHORT nStylePos = (USHORT) aFunctionBox.GetModel()->GetRelPos( aFunctionBox.FirstSelected() );
+        SfxGroupInfo_Impl* pInfo  = (SfxGroupInfo_Impl*)aFunctionBox.GetEntry( 0, nStylePos )->GetUserData();
+        SfxStyleInfo_Impl* pStyle = (SfxStyleInfo_Impl*)pInfo->pObject;
+        if (pStyle)
+            aStr = pStyle->sLabel;
+    }
+    else
+    // Macros?
     if ( SfxMacroConfig::IsMacroSlot( nId ) )
     {
         // Es ist ein Macro selektiert, f"ur das schon eine SlotId reserviert wurde
         aStr = SFX_APP()->GetMacroConfig()->GetMacroInfo(nId)->GetMacroName();
     }
+    // slot, uno?
     else
     {
         // Eine normale Funktion ist selektiert
@@ -847,9 +1152,6 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button *, pButton )
 
 IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, pButton )
 {
-    pAct->bDefault = FALSE;
-    pAct->bModified = TRUE;
-
     // Selektierter Eintrag
     USHORT nPos = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     SfxMenuConfigEntry *pEntry = (SfxMenuConfigEntry*) aEntriesBox.GetEntry( 0, nPos )->GetUserData();
@@ -1039,31 +1341,31 @@ void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     BOOL bRet = FALSE;
-    AccelInfo_Impl* pOther = pAct == pGlobal ? pModule : pGlobal;
-    if ( pAct->bModified )
+
+    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > pOther = pAct == pGlobal ? pModule : pGlobal;
+//  if ( pAct->bModified )
     {
-        Apply( pAct->pMgr, pAct->bDefault );
-        pAct->bModified = FALSE;
-        pAct->pMgr->StoreConfig();
-        DELETEZ( pAct->pChanged );
+        Apply( pAct, /*pAct->bDefault*/FALSE );
+        //pAct->bModified = FALSE;
+        pAct->store();
+        //DELETEZ( pAct->pChanged );
         bRet = TRUE;
     }
-
-    if ( pOther && pOther->pChanged )
+return bRet; // TODO
+    if ( pOther.is() )
     {
         aEntriesBox.SetUpdateMode( FALSE );
         ResetConfig();
-        Init( pOther->pChanged );
-        Apply( pOther->pMgr, pOther->bDefault );
-        pOther->bModified = FALSE;
-        pOther->pMgr->StoreConfig();
-        DELETEZ( pOther->pChanged );
+        Init( pOther );
+        Apply( pOther, /*pOther->bDefault*/FALSE );
+        //pOther->bModified = FALSE;
+        pOther->store();
+        //DELETEZ( pOther->pChanged );
         bRet = TRUE;
         ResetConfig();
-        Init( pAct->pMgr );
+        Init( pAct );
         aEntriesBox.SetUpdateMode( TRUE );
     }
-
     return bRet;
 }
 
@@ -1073,38 +1375,22 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
     String aText = aModuleButton.GetText();
     aText.SearchAndReplace(String::CreateFromAscii("$(MODULE)"), aModName );
     aModuleButton.SetText( aText );
-    if ( !pAct )
+
+    if (!pSMGR.is())
+        pSMGR = ::comphelper::getProcessServiceFactory();
+    pGlobal.clear();
+    pModule.clear();
+    pAct.clear();
+    impl_initAccCfg(GetTabDialog(), pSMGR, pGlobal, pModule);
+
+    if (pModule.is())
+        aModuleButton.Check();
+    else
     {
-        SfxAcceleratorManager* pAppMgr = SFX_APP()->GetAppAccel_Impl();
-        if ( pAppMgr )
-        {
-            pGlobal = new AccelInfo_Impl;
-            pGlobal->pMgr = pAppMgr;
-            pGlobal->pChanged = NULL;
-            pGlobal->bDefault = pAppMgr->IsDefault();
-            pGlobal->bModified = FALSE;
-        }
-
-        SfxAcceleratorManager* pMgr = GetTabDialog()->GetViewFrame()->GetViewShell()->GetAccMgr_Impl();
-        if ( pMgr && pMgr != pAppMgr )
-        {
-            pModule = new AccelInfo_Impl;
-            pModule->pMgr = pMgr;
-            pModule->pChanged = NULL;
-            pModule->bDefault = pMgr->IsDefault();
-            pModule->bModified = FALSE;
-        }
-
-        if ( pModule )
-            aModuleButton.Check();
-        else
-        {
-            aModuleButton.Hide();
-            aOfficeButton.Check();
-        }
-
-        RadioHdl(0);
+        aModuleButton.Hide();
+        aOfficeButton.Check();
     }
+    RadioHdl(0);
 
     if ( m_pMacroInfoItem )
         aGroupLBox.SelectMacro( m_pMacroInfoItem );
@@ -1112,34 +1398,19 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
 
 IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )
 {
-    AccelInfo_Impl *pOld = pAct;
-    if ( aOfficeButton.IsChecked() && pAct != pGlobal )
-    {
+    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > pOld = pAct;
+    if ( aOfficeButton.IsChecked())
         pAct = pGlobal;
-    }
-    else if ( aModuleButton.IsChecked() && pAct != pModule )
-    {
+    else if ( aModuleButton.IsChecked())
         pAct = pModule;
-    }
-    else
-        return 0;
 
-    if ( pOld )
-    {
-        if ( pOld->bModified )
-        {
-            if ( !pOld->pChanged )
-                pOld->pChanged = new SfxAcceleratorManager ( *pOld->pMgr, NULL );
-            Apply( pOld->pChanged, pOld->bDefault );
-        }
-    }
+    // nothing changed? => do nothing!
+    if (pOld == pAct)
+        return 0;
 
     aEntriesBox.SetUpdateMode( FALSE );
     ResetConfig();
-    if ( pAct->pChanged )
-        Init( pAct->pChanged );
-    else
-        Init( pAct->pMgr );
+    Init( pAct );
     aEntriesBox.SetUpdateMode( TRUE );
     aEntriesBox.Invalidate();
 
