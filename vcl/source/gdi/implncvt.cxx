@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implncvt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:18:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,10 @@ const Polygon* ImplLineConverter::ImplGetNext()
                             // Stumpferwinkel : Schnittpunkt wird berechnet
                             mnFloat0Points = 5;
                             ImplFloatPoint aSourcePoint;
-                            double fX, fY, fBDest, fBSource;
+                            double fX = 0;
+                            double fY;
+                            double fBDest = 0;
+                            double fBSource;
                             aSourcePoint = mpFloat0[ 1 + nFirst ];
 
                             int nValid = 0;
