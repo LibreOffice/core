@@ -1,6 +1,4 @@
 mkdir: %_DEST%\bin%_EXT%\remote
-mkdir: %_DEST%\idl%_EXT%\stardiv\remote
-mkdir: %_DEST%\idl%_EXT%\stardiv\system
 mkdir: %_DEST%\inc%_EXT%\sv
 mkdir: %_DEST%\inc%_EXT%\tools
 mkdir: %_DEST%\inc%_EXT%\uno
