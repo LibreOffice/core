@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-02 16:48:41 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-03 15:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,71 +242,10 @@ void SwAccessiblePortionData::Special(
     switch( nType )
     {
         case POR_POSTITS:
-        {
-            // get field, and if it's a Post-It, generate the replacement text
-            // (e.g. script fields also use Post-It portions, so we need
-            //  to check)
-            SwTxtAttr* pAttr = pTxtNode->GetTxtAttr(
-                static_cast<USHORT>( nModelPosition ), RES_TXTATR_FIELD );
-            DBG_ASSERT( pAttr != NULL, "Frank hat mich angelogen!" );
-
-            const SwField* pField = pAttr->GetFld().GetFld();
-            DBG_ASSERT( pField != NULL, "A field without field? Frank?!?" );
-            if( pField->Which() == RES_POSTITFLD )
-            {
-                // We have a real Post-It portion, so we can now
-                // construct the replacement text
-                OUString sPostItText = OUString(
-                    static_cast<const SwPostItField*>(pField)->GetTxt() );
-                sDisplay = SwAccessibleContext::GetResource(
-                    STR_ACCESS_REPLACEMENT_POSTIT, &sPostItText );
-            }
-            else
-                sDisplay = rText;   // for non-Post-It
-        }
-        break;
         case POR_FLYCNT:
-        {
-            // fly-frame: text-box, graphic or OLE frame, form controls...
-            // Retrieve the Graphic/OLE-Node (as SwNoTxtNode) and ask
-            // for the its description. If it's no SwNoTxtNode, or the
-            // description is empty, use the SwFrmFmt name instead.
-            SwTxtAttr* pAttr = pTxtNode->GetTxtAttr(
-                static_cast<USHORT>( nModelPosition ), RES_TXTATR_FLYCNT );
-            DBG_ASSERT( pAttr != NULL, "Fly expected!" );
-
-            const SwFrmFmt* rFrameFmt = pAttr->GetFlyCnt().GetFrmFmt();
-            const SfxPoolItem& rItem = rFrameFmt->GetAttr( RES_CNTNT, FALSE );
-            const SwNodeIndex* pFlyCntntIndex =
-                static_cast<const SwFmtCntnt&>( rItem ).GetCntntIdx();
-            if( pFlyCntntIndex != NULL )
-            {
-                SwNodeIndex aIndex = *pFlyCntntIndex;
-
-                aIndex++;
-                SwNoTxtNode* pNoTxtNode = aIndex.GetNode().GetNoTxtNode();
-
-                // get the description or format name
-                OUString sDescription;
-                if( pNoTxtNode != NULL )
-                    sDescription = OUString( pNoTxtNode->GetAlternateText() );
-                if( sDescription.getLength() == 0 )
-                    sDescription = OUString( rFrameFmt->GetName() );
-
-                sDisplay = SwAccessibleContext::GetResource(
-                     STR_ACCESS_REPLACEMENT_FRAME, &sDescription );
-            }
-            else
-            {
-                // a character-bound fly-frame without content node:
-                // form controls, etc.  No replacement text as of yet.
-                sDisplay = rText;
-            }
-        }
-        break;
         case POR_GRFNUM:
-            sDisplay = SwAccessibleContext::GetResource(
-                STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS );
+            sDisplay = String(sal_Unicode(0xfffc));
+
             break;
         case POR_NUMBER:
         {
