@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MServices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:29:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,12 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _COM_SUN_STAR_MOZILLA_XMOZILLABOOTSTRAP_HPP_
+#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#endif
+#ifndef CONNECTIVITY_SMOZILLABOOTSTRAP_HXX
+#include "bootstrap/MMozillaBootstrap.hxx"
+#endif
 
 using namespace connectivity::mozab;
 using ::rtl::OUString;
@@ -74,6 +80,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::mozilla::XMozillaBootstrap;
 
 typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
         (
@@ -168,9 +175,16 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     {
         Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
 
+
         REGISTER_PROVIDER(
             MozabDriver::getImplementationName_Static(),
             MozabDriver::getSupportedServiceNames_Static(), xKey);
+
+        Sequence< ::rtl::OUString > aSNS( 1 );
+        aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
+        REGISTER_PROVIDER(
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap")),
+             aSNS, xKey);
 
         return sal_True;
     }
@@ -181,7 +195,33 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
     return sal_False;
 }
+typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+{
+        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
 
+        // load the dbtools library
+        oslModule s_hModule = osl_loadModule(sModuleName.pData, 0);
+        OSL_ENSURE(NULL != s_hModule, "MozabDriver::registerClient: could not load the dbtools library!");
+        if (NULL != s_hModule)
+        {
+
+            // get the symbol for the method creating the factory
+            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OMozillaBootstrap_CreateInstance"));
+            // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
+            OMozillaBootstrap_CreateInstanceFunction s_pCreationFunc = (OMozillaBootstrap_CreateInstanceFunction)(osl_getSymbol(s_hModule, sFactoryCreationFunc.pData));
+
+            if (NULL == s_pCreationFunc)
+            {   // did not find the symbol
+                OSL_ENSURE(sal_False, "MozabDriver::registerClient: could not find the symbol for creating the factory!");
+                osl_unloadModule(s_hModule);
+                s_hModule = NULL;
+            }
+            MozillaBootstrap * pBootstrap = reinterpret_cast<MozillaBootstrap*>((*s_pCreationFunc)(_rxFactory));
+            return *pBootstrap;
+        }
+        return NULL;
+}
 //---------------------------------------------------------------------------------------
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
@@ -191,17 +231,26 @@ extern "C" void* SAL_CALL component_getFactory(
     void* pRet = 0;
     if (pServiceManager)
     {
+        OUString aImplName( OUString::createFromAscii( pImplementationName ) );
         ProviderRequest aReq(pServiceManager,pImplementationName);
-
-        aReq.CREATE_PROVIDER(
-            MozabDriver::getImplementationName_Static(),
-            MozabDriver::getSupportedServiceNames_Static(),
-            MozabDriver_CreateInstance, ::cppu::createSingleFactory)
-        ;
-
+        if (aImplName.equals(  MozabDriver::getImplementationName_Static()  ))
+        {
+            aReq.CREATE_PROVIDER(
+                MozabDriver::getImplementationName_Static(),
+                MozabDriver::getSupportedServiceNames_Static(),
+                MozabDriver_CreateInstance, ::cppu::createSingleFactory);
+        }
+        else if (aImplName.equals(  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.mozilla.MozillaBootstrap"))  ))
+        {
+            Sequence< ::rtl::OUString > aSNS( 1 );
+            aSNS[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap"));
+            aReq.CREATE_PROVIDER(
+                aImplName,
+                aSNS,
+                createMozillaBootstrap, ::cppu::createSingleFactory);
+        }
         if(aReq.xRet.is())
             aReq.xRet->acquire();
-
         pRet = aReq.getProvider();
     }
 
