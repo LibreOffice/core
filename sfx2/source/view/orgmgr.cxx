@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 14:59:54 $
+ *  last change: $Author: dv $ $Date: 2000-12-12 07:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,9 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
         if( nIdx == USHRT_MAX )
             nIdx = 0;
         else nIdx++;
-        SvLBoxEntry *pEntry = pCaller->InsertEntry(rName,
+
+        INetURLObject aURL( rName );
+        SvLBoxEntry *pEntry = pCaller->InsertEntry( aURL.GetName(),
                                                     pCaller->GetOpenedBmp(1),
                                                     pCaller->GetClosedBmp(1),
                                                     pParent, TRUE, nIdx);
