@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2000-11-29 20:14:01 $
+ *  last change: $Author: th $ $Date: 2000-12-07 16:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3829,6 +3829,28 @@ Window::~Window()
                 aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
             }
             pTempWin = pTempWin->mpNextOverlap;
+        }
+        if ( bError )
+        {
+            ByteString aTempStr( "Window (" );
+            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
+            aTempStr += ") with living SystemWindow(s) destroyed: ";
+            aTempStr += aErrorStr;
+            DBG_ERROR( aTempStr.GetBuffer() );
+        }
+
+        bError = FALSE;
+        pTempWin = pSVData->maWinData.mpFirstFrame;
+        while ( pTempWin )
+        {
+            if ( ImplIsRealParentPath( pTempWin ) )
+            {
+                bError = TRUE;
+                if ( aErrorStr.Len() )
+                    aErrorStr += "; ";
+                aErrorStr += ByteString( pTempWin->GetText(), RTL_TEXTENCODING_UTF8 );
+            }
+            pTempWin = pTempWin->mpFrameData->mpNextFrame;
         }
         if ( bError )
         {
