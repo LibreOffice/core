@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:51:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,7 +1421,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
 
     if( bAfterEffect && rSet.hasProperty( DFF_ANIM_MASTERREL ) )
     {
-        sal_Int32 nMasterRel = 0;
+        sal_Int32 nMasterRel = 2;
         if( rSet.getProperty( DFF_ANIM_MASTERREL ) >>= nMasterRel )
         {
             sal_Int32 nSize = aUserData.getLength();
