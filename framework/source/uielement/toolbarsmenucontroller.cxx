@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:35:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
+#endif
 //#include <tools/solar.hrc>
 
 //_________________________________________________________________________________________________________________
@@ -244,8 +247,12 @@ void ToolbarsMenuController::addCommand( Reference< css::awt::XPopupMenu >& rPop
         m_xPopupMenu->enableItem( nItemId, sal_False );
 
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    Image                aImage;
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    Image aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetMenuColor().IsDark() );
+
+    if ( SvtMenuOptions().IsMenuIconsEnabled() )
+        aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetMenuColor().IsDark() );
 
     VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
     if ( pPopupMenu )
