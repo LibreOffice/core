@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewTable.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-01-05 18:46:14 $
+ *  last change:$Date: 2004-07-23 10:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ public class ScAccessiblePreviewTable extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), xModel);
+        XWindow xWindow = at.getCurrentContainerWindow((XMultiServiceFactory)Param.getMSF(), xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE);
