@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:50:09 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage TP_FLD_DOKINF
         Text [ italian ] = "~Tipo di campo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~Fälttyp" ;
@@ -117,7 +117,7 @@ TabPage TP_FLD_DOKINF
         Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Seleção" ;
         Text [ portuguese ] = "~Selecção" ;
-        Text [ finnish ] = "Valinta" ;
+        Text [ finnish ] = "~Valitse" ;
         Text [ danish ] = "Udvalg" ;
         Text [ french ] = "~Sélection" ;
         Text [ swedish ] = "~Urval" ;
@@ -290,6 +290,13 @@ TabPage TP_FLD_DOKINF
         < "Fecha" ; > ;
         < "Fecha Hora Autor" ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Laatija" ; > ;
+        < "Aika" ; > ;
+        < "Päivämäärä" ; > ;
+        < "Päivämäärä Aika Laatija" ; > ;
+    };
     };
     FixedText FT_DOKINFFORMAT
     {
@@ -318,6 +325,7 @@ TabPage TP_FLD_DOKINF
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
+        Text[ finnish ] = "~Muotoile";
     };
     ListBox LB_DOKINFFORMAT
     {
@@ -354,6 +362,7 @@ TabPage TP_FLD_DOKINF
         Text[ turkish ] = "Ýçeriði sabitle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fijar contenido";
+        Text[ finnish ] = "~Kiinteä sisältö";
     };
     Bitmap BMP_DOKINFROOT_OPENED
     {
@@ -387,6 +396,7 @@ TabPage TP_FLD_DOKINF
         Text[ turkish ] = "Bilgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Información";
+        Text[ finnish ] = "Tietoja";
     };
     Text [ english_us ] = "DocInformation" ;
     Text [ portuguese_brazilian ] = "Dokumentinfo" ;
@@ -408,4 +418,5 @@ TabPage TP_FLD_DOKINF
     Text[ turkish ] = "Belge bilgileri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Información del documento";
+    Text[ finnish ] = "Asiakirjatiedot";
 };
