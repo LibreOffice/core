@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-16 09:20:11 $
+ *  last change: $Author: tl $ $Date: 2002-04-18 11:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,8 +204,10 @@ SmFormat::SmFormat()
 
     for ( USHORT i = FNT_BEGIN;  i <= FNT_END;  i++ )
     {
-        vFont[i].SetTransparent(TRUE);
-        vFont[i].SetAlign(ALIGN_BASELINE);
+        SmFace &rFace = vFont[i];
+        rFace.SetTransparent( TRUE );
+        rFace.SetAlign( ALIGN_BASELINE );
+        rFace.SetColor( COL_AUTO );
         bDefaultFont[i] = FALSE;
     }
 }

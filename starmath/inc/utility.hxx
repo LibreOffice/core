@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-08 11:22:18 $
+ *  last change: $Author: tl $ $Date: 2002-04-18 11:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,18 +194,20 @@ class SmFace : public Font
 {
     long    nBorderWidth;
 
+    void    Impl_Init();
+
 public:
     SmFace() :
-        Font(), nBorderWidth(-1) {}
+        Font(), nBorderWidth(-1) { Impl_Init(); }
     SmFace(const Font& rFont) :
-        Font(rFont), nBorderWidth(-1) { SetSize(GetSize()); }
+        Font(rFont), nBorderWidth(-1) { Impl_Init(); }
     SmFace(const String& rName, const Size& rSize) :
-        Font(rName, rSize), nBorderWidth(-1) { SetSize(GetSize()); }
+        Font(rName, rSize), nBorderWidth(-1) { Impl_Init(); }
     SmFace( FontFamily eFamily, const Size& rSize) :
-        Font(eFamily, rSize), nBorderWidth(-1) { SetSize(GetSize()); }
+        Font(eFamily, rSize), nBorderWidth(-1) { Impl_Init(); }
 
     SmFace(const SmFace &rFace) :
-        Font(rFace), nBorderWidth(-1) { SetSize(GetSize()); }
+        Font(rFace), nBorderWidth(-1) { Impl_Init(); }
 
     // overloaded version in order to supply a min value
     // for font size (height). (Also used in ctor's to do so.)

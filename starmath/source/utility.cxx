@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-21 09:05:59 $
+ *  last change: $Author: tl $ $Date: 2002-04-18 11:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,13 @@ void SmFontPickListBox::Remove(const Font &rFont)
 
 ////////////////////////////////////////
 
+void SmFace::Impl_Init()
+{
+    SetSize( GetSize() );
+    SetTransparent( TRUE );
+    SetAlign( ALIGN_BASELINE );
+    SetColor( COL_AUTO );
+}
 
 void SmFace::SetSize(const Size& rSize)
 {
