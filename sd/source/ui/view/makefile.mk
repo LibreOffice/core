@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-07 15:54:46 $
+#   last change: $Author: obo $ $Date: 2004-06-03 11:59:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,6 +151,7 @@ SLOFILES =	\
         $(SLO)$/Outliner.obj					\
         $(SLO)$/OutlinerIterator.obj			\
         $(SLO)$/OutlineViewShellBase.obj		\
+        $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
         $(SLO)$/PrintManager.obj				\
         $(SLO)$/SubShellManager.obj				\
