@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:10:12 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,8 +1273,18 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rChildFrmOrObj.GetSdrObject(),
                                                   this, sal_True );
-                ScrolledInShape( rChildFrmOrObj.GetSdrObject(),
-                                 xAccImpl.getBodyPtr() );
+                // --> OD 2004-11-29 #i37790#
+                if ( xAccImpl.isValid() )
+                {
+                    ScrolledInShape( rChildFrmOrObj.GetSdrObject(),
+                                     xAccImpl.getBodyPtr() );
+                }
+                else
+                {
+                    ASSERT( false ,
+                            "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
+                }
+                // <--
             }
         }
     }
