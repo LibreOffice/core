@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include <osl/module.h>
 using namespace rtl;
 
-#include <X11/Xlib.h>
 #include <gcach_xpeer.hxx>
 #include <stdio.h>
 #include <stdlib.h>
