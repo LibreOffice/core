@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 08:27:06 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 13:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,16 +82,29 @@
 #define PB_OPEN_SEARCH                          15
 #define CB_SCOPE                                16
 
-// Favourite TabPage
-#define FT_FAVOURITE                            10
-#define LB_FAVOURITE                            11
-#define PB_FAVOURITE                            12
+// Bookmarks TabPage
+#define FT_BOOKMARKS                            10
+#define LB_BOOKMARKS                            11
+#define PB_BOOKMARKS                            12
+
+// Add to bookmarks dialog
+#define FT_BOOKMARK_TITLE                       10
+#define ED_BOOKMARK_TITLE                       11
+#define PB_BOOKMARK_OK                          12
+#define PB_BOOKMARK_CANCEL                      13
+#define PB_BOOKMARK_HELP                        14
+#define STR_BOOKMARK_RENAME                     15
 
 // Index Window: Id's of the tabpages
 #define HELP_INDEX_PAGE_CONTENTS                1
 #define HELP_INDEX_PAGE_INDEX                   2
 #define HELP_INDEX_PAGE_SEARCH                  3
-#define HELP_INDEX_PAGE_FAVOURITE               4
+#define HELP_INDEX_PAGE_BOOKMARKS               4
+
+// context menu ids
+#define MID_OPEN                                1
+#define MID_RENAME                              2
+#define MID_DELETE                              3
 
 #endif // #ifndef _SFX_NEWHELP_HRC
 
