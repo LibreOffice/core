@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 17:27:32 $
+#   last change: $Author: kz $ $Date: 2005-03-01 12:34:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,10 +80,8 @@ LIBSALCPPRT=$(0)
 APP1TARGET	= 	checkdll
 APP1OBJS	=	$(OBJ)$/checkdll.obj
 DEPOBJFILES	=	$(APP1OBJS) 
-.IF "$(OS)"!="FREEBSD"
-.IF "$(OS)"!="MACOSX"
+.IF "$(OS)"!="FREEBSD" && "$(OS)"!="MACOSX" && "$(OS)"!="NETBSD"
 STDLIB += -ldl
-.ENDIF
 .ENDIF
 .IF "$(OS)"=="NETBSD"
 APP1STDLIBS	+= -Wl,--whole-archive -lgcc -Wl,--no-whole-archive
