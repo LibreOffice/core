@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-09 13:34:24 $
+#   last change: $Author: rt $ $Date: 2004-08-23 11:27:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -404,6 +404,16 @@ sub get_public_flag
 }
 
 #### public class methods ####
+
+# Check if milestone exists
+sub is_milestone
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    return $self->is_milestone_registered_with_eis($master, $milestone);
+}
 
 # Query master milestone combination for being used by an
 # active CWS
@@ -1038,6 +1048,24 @@ sub get_current_milestone_from_eis
     return $result;
 }
 
+sub is_milestone_registered_with_eis
+{
+    my $self      = shift;
+    my $master    = shift;
+    my $milestone = shift;
+
+    $master    = Eis::to_string($master);
+    $milestone = Eis::to_string($milestone);
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->isMilestoneValid($master, $milestone) };
+    if ( $@ ) {
+        carp("ERROR: is_milestone(): EIS database transaction failed. Reason:\n$@\n");
+    }
+    return $result;
+}
+
 sub get_is_milestone_used_from_eis
 {
     my $self      = shift;
@@ -1051,7 +1079,7 @@ sub get_is_milestone_used_from_eis
     my $result;
     eval { $result = $eis->isMilestoneInUse($master, $milestone) };
     if ( $@ ) {
-        carp("ERROR: is_milestone(): EIS database transaction failed. Reason:\n$@\n");
+        carp("ERROR: is_milestone_used(): EIS database transaction failed. Reason:\n$@\n");
     }
     return $result;
 }
