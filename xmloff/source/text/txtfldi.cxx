@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-08 14:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2039,7 +2039,7 @@ XMLHiddenTextImportContext::XMLHiddenTextImportContext(
         XMLTextFieldImportContext(rImport, rHlp, sAPI_hidden_text,
                                   nPrfx, sLocalName),
         sPropertyCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_condition)),
-        sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_true_content)),
+        sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
         sCondition(),
         sString(),
         bConditionOK(sal_False),
@@ -2075,7 +2075,7 @@ void XMLHiddenTextImportContext::PrepareField(
     xPropertySet->setPropertyValue(sPropertyCondition, aAny);
 
     aAny <<= sString;
-    xPropertySet->setPropertyValue(sPropertyTrueContent, aAny);
+    xPropertySet->setPropertyValue(sPropertyContent, aAny);
 }
 
 
@@ -2716,10 +2716,10 @@ enum DdeFieldDeclAttrs
 static __FAR_DATA SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_DDEFIELD_NAME },
-    { XML_NAMESPACE_TEXT, sXML_dde_application, XML_TOK_DDEFIELD_APPLICATION },
-    { XML_NAMESPACE_TEXT, sXML_dde_topic, XML_TOK_DDEFIELD_TOPIC },
-    { XML_NAMESPACE_TEXT, sXML_dde_item, XML_TOK_DDEFIELD_ITEM },
-    { XML_NAMESPACE_TEXT, sXML_automatic_update, XML_TOK_DDEFIELD_UPDATE },
+    { XML_NAMESPACE_OFFICE, sXML_dde_application, XML_TOK_DDEFIELD_APPLICATION },
+    { XML_NAMESPACE_OFFICE, sXML_dde_topic, XML_TOK_DDEFIELD_TOPIC },
+    { XML_NAMESPACE_OFFICE, sXML_dde_item, XML_TOK_DDEFIELD_ITEM },
+    { XML_NAMESPACE_OFFICE, sXML_automatic_update, XML_TOK_DDEFIELD_UPDATE },
     XML_TOKEN_MAP_END
 };
 
@@ -2855,10 +2855,10 @@ void XMLDdeFieldDeclImportContext::StartElement(
                     aAny <<= sName;
                     xPropSet->setPropertyValue(sPropertyName, aAny);
 
-                    aAny <<= sCommandTopic;
+                    aAny <<= sCommandApplication;
                     xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
 
-                    aAny <<= sCommandApplication;
+                    aAny <<= sCommandTopic;
                     xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
 
                     aAny <<= sCommandItem;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-08 14:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1283,7 +1283,7 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         ProcessString(sXML_condition,
                       GetStringProperty(sPropertyCondition, xPropSet));
         ProcessString(sXML_string_value,
-                      GetStringProperty(sPropertyTrueContent, xPropSet));
+                      GetStringProperty(sPropertyContent, xPropSet));
         ExportElement(sXML_hidden_text, sPresentation);
         break;
 
@@ -1682,18 +1682,31 @@ void XMLTextFieldExport::ExportFieldDeclarations()
             Any aAny = xFieldMasterNameAccess->getByName(sName);
             aAny >>= xPropSet;
 
-            // export element
             ProcessString(sXML_name,
                           GetStringProperty(sPropertyName, xPropSet));
-            ProcessString(sXML_dde_topic,
-                      GetStringProperty(sPropertyDDECommandType, xPropSet));
-            ProcessString(sXML_dde_application,
-                      GetStringProperty(sPropertyDDECommandFile, xPropSet));
-            ProcessString(sXML_dde_item,
-                      GetStringProperty(sPropertyDDECommandElement, xPropSet));
-            ProcessBoolean(sXML_automatic_update,
-                       GetBoolProperty(sPropertyIsAutomaticUpdate, xPropSet),
-                       sal_False);
+
+            // export elements; can't use ProcessString because
+            // elements are in office namespace
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                     sXML_dde_application,
+                                     GetStringProperty(sPropertyDDECommandType,
+                                                       xPropSet));
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                     sXML_dde_topic,
+                                     GetStringProperty(sPropertyDDECommandFile,
+                                                       xPropSet));
+            GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
+                                     sXML_dde_item,
+                                  GetStringProperty(sPropertyDDECommandElement,
+                                                    xPropSet));
+            sal_Bool bIsAutomaticUpdate = GetBoolProperty(
+                sPropertyIsAutomaticUpdate, xPropSet);
+            if (bIsAutomaticUpdate)
+            {
+                GetExport().AddAttributeASCII(XML_NAMESPACE_OFFICE,
+                                              sXML_automatic_update,
+                                              sXML_true);
+            }
 
             ExportElement(sXML_dde_connection_decl, sal_True);
         }

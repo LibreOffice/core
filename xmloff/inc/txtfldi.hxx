@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
+ *  last change: $Author: dvo $ $Date: 2000-11-08 14:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,7 +834,7 @@ protected:
 class XMLHiddenTextImportContext : public XMLTextFieldImportContext
 {
     const ::rtl::OUString sPropertyCondition;
-    const ::rtl::OUString sPropertyTrueContent;
+    const ::rtl::OUString sPropertyContent;
 
     ::rtl::OUString sCondition;
     ::rtl::OUString sString;
