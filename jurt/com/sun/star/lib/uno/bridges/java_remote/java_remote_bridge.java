@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:44:34 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 
+import com.sun.star.lib.sandbox.generic.DispatcherAdapterBase;
+
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 
@@ -123,7 +125,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-09-28 11:44:34 $
+ * @version     $Revision: 1.3 $ $ $Date: 2000-09-28 11:47:06 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -494,16 +496,52 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     public Object mapInterfaceFrom(Object oId, Class zInterface) throws MappingException    {
         if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").mapInterfaceFrom - is disposed");
 
-        String oid[] = new String[]{(String)oId};
+        // see if we already have object with zInterface of given oid
+        Object object = _java_environment.getRegisteredInterface((String)oId, zInterface);
+        if(object != null) {
+            if(object instanceof DispatcherAdapterBase) {
+                DispatcherAdapterBase dispatcherAdapterBase = (DispatcherAdapterBase)object;
 
-        Object proxy = Proxy.create(this, oid[0], zInterface, false); // this proxy sends a release, when finalized
-        Object object = _java_environment.registerInterface(proxy, oid, zInterface);
-        acquire();
+                if(dispatcherAdapterBase.getObject() instanceof DispatcherAdapterBase) {
+                    dispatcherAdapterBase = (DispatcherAdapterBase)dispatcherAdapterBase.getObject();
 
-          if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceFrom:" + oId + " interface:" + zInterface + " "  + object + " " + proxy);
+                    if(!(dispatcherAdapterBase.getObject() instanceof String)) { // is it not my object?
+                        try {
+                            sendRequest(oId, new Type(zInterface), "release", null, null);
+                        }
+                        catch(Exception exception) {
+                            throw new MappingException(exception.getMessage());
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            String oid[] = new String[]{(String)oId};
+
+            Object proxy = Proxy.create(this, oid[0], zInterface, false); // this proxy sends a release, when finalized
+            object = _java_environment.registerInterface(proxy, oid, zInterface);
+            acquire();
+        }
+
+          if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceFrom:" + oId + " interface:" + zInterface + " "  + object);
 
         return object;
     }
+
+//      public Object mapInterfaceFrom(Object oId, Class zInterface) throws MappingException    {
+//          if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").mapInterfaceFrom - is disposed");
+
+//          String oid[] = new String[]{(String)oId};
+
+//          Object proxy = Proxy.create(this, oid[0], zInterface, false); // this proxy sends a release, when finalized
+//          Object object = _java_environment.registerInterface(proxy, oid, zInterface);
+//          acquire();
+
+//          if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceFrom:" + oId + " interface:" + zInterface + " "  + object + " " + proxy);
+
+//          return object;
+//      }
 
     /**
      * Gives the source environment.
