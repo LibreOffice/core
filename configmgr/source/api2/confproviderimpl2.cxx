@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 15:01:54 $
+ *  last change: $Author: dg $ $Date: 2001-01-29 08:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,19 +99,6 @@ namespace configmgr
     using configuration::RootTree;
 
     //=============================================================================
-
-    // special handling while we don't get proper notification: don't cache user 'nobody'
-    static void implHack_nobodyNotCached(OOptions& _rOptions)
-    {
-        static OUString c_aNobody = OUString::createFromAscii("nobody");
-
-        if (_rOptions.getUser() == c_aNobody)
-        {
-            CFG_TRACE_INFO_NI("config provider: User is 'nobody' -> disabling cache");
-            _rOptions.setNoCache();
-        }
-    }
-    //=============================================================================
     //= OConfigurationProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------------
@@ -137,9 +124,6 @@ namespace configmgr
 
         if (sUser.getLength())
         {
-    //      xOptions->setUser(sUser);
-    //      if (!xOptions->hasDefaultUser()) throw IllegalArgumentException(...);
-
             if (xOptions->getDefaultUser() == sUser)
             {
                 OSL_ASSERT(xOptions->hasDefaultUser());
@@ -163,13 +147,12 @@ namespace configmgr
         }
 
         xOptions->setLocale(sLocale);
-        xOptions->setNoCache(bNoCache);
+        if (bNoCache) xOptions->setNoCache(bNoCache);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
-        if (bNoCache) CFG_TRACE_INFO_NI("config provider: extracted from the args: Ignore cache for request");
+        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
 
-        implHack_nobodyNotCached(*xOptions);
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         try
@@ -218,13 +201,10 @@ namespace configmgr
         }
         bLazyWrite = true;
 #endif
-        vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
 
+        vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
         if (sUser.getLength())
         {
-    //      xOptions->setUser(sUser);
-    //      if (!xOptions->hasDefaultUser()) throw IllegalArgumentException(...);
-
             if (xOptions->getDefaultUser() == sUser)
             {
                 OSL_ASSERT(xOptions->hasDefaultUser());
@@ -253,9 +233,8 @@ namespace configmgr
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
-        if (bNoCache) CFG_TRACE_INFO_NI("config provider: extracted from the args: Ignore cache for request");
+        if (!xOptions->canUseCache()) CFG_TRACE_INFO_NI("config provider: Ignoring cache for request");
 
-        implHack_nobodyNotCached(*xOptions);
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         try

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 15:01:54 $
+ *  last change: $Author: dg $ $Date: 2001-01-29 08:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@ namespace configmgr
                   ,m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
     {
+        // this is a hack asking the session if caching should be supported or not
+        // at the time we have complete notification support this hack isn't necessary anymore
+        if (!_pSession->allowsCachingHack())
+            m_xDefaultOptions->setNoCache(sal_True);
 
         m_pTreeMgr = new TreeManager(_pSession, new OOptions(_rModule.getConverter()));
         m_pTreeMgr->acquire();
