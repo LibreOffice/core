@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-18 15:10:14 $
+ *  last change: $Author: dl $ $Date: 2001-11-14 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ FuPresentationLayout::FuPresentationLayout(SdViewShell* pViewSh,
             }
             else
             {
-                pSelectedPage->SetAutoLayout(pSelectedPage->GetAutoLayout(), TRUE);
+                pSelectedPage->SetAutoLayout(pSelectedPage->GetAutoLayout());
             }
         }
 
