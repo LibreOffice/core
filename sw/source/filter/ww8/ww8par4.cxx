@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 15:38:21 $
+ *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,12 +419,17 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                 nY = (INT16) aSizeTwip.Height();
                 bOleOk = FALSE;         // PICT: kein WMF da -> Grafik statt OLE
             }
-#if 0
+//#if 0
 //JP 23.06.99 - if the OLE-Storage does not contained the streams META
 //              or PICT, then import the grafic from the escher.
 //              But the Question is, is the OLE-Storage then a valid
 //              OLE-Object and is the user be able to activate it. So it's
 //              better to import it as grafic.
+
+
+//cmc 21 May 2001 - If we have an inline equation editor ole object we have no
+//META or PICT streams, so unless we import the graph associated with it, we
+//will not convert them to StarMath Formulas through CreateSdrOLEFromStorage
 
             else
             {
@@ -441,8 +446,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                         SwNodeIndex aIdx( *pCntIdx, 1 );
                         if( aIdx.GetNode().IsGrfNode() )
                         {
-                            // get the grafic of the node and delete it
-                            // then complete, because its become a OLE-Object
+                            // get the grafic of the node and delete it then
+                            // complete, because its become a OLE-Object
                             rGraph = aIdx.GetNode().GetGrfNode()->GetGrf();
                             Size aSz( aIdx.GetNode().GetGrfNode()->GetTwipSize() );
                             nX = (INT16) aSz.Width();
@@ -452,11 +457,10 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
                             pGrfFmt = 0;
                         }
                     }
-                    pFmt = pGrfFmt;
                 }
                 nObjLocFc = nOldObjLocFc;
             }
-#endif
+//#endif
         }       // StorageStreams wieder zu
 
         SvStorageRef xSrc1 = xSrc0->OpenStorage( aSrcStgName,
@@ -675,11 +679,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.8 2001-05-03 15:38:21 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.9 2001-05-21 15:45:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/05/03 15:38:21  jp
+      don't insert empty graphics
+
       Revision 1.7  2001/04/27 13:22:26  jp
       correct asking of NO_OLE flag
 

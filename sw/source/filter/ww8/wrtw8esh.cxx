@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 10:51:44 $
+ *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,6 +1211,7 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
             nVIndex = 0x11000000;
             break;
         case FLY_AUTO_CNTNT:
+            nHIndex = 0x01000000;
             nVIndex = 0x12000000;
             break;
         case FLY_IN_CNTNT:
@@ -2338,11 +2339,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.15 2001-04-20 10:51:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.16 2001-05-21 15:45:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/04/20 10:51:44  cmc
+      escher graphic mode is 32bit not 16
+
       Revision 1.14  2001/03/29 13:24:44  cmc
       set hiword and loword bits in escher graphic drawmode
 

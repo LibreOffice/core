@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 10:22:09 $
+ *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1793,7 +1793,14 @@ void SwWW8Writer::OutWW8FlyFrmsInCntnt( const SwTxtNode& rNd )
 void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
                                 const Point& rNdTopLeft )
 {
-    if( !bWrtWW8 )
+    const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
+
+    /*
+    ##897##
+    Note that something anchored as a character must be
+    exported using the older WW6 mechanism
+    */
+    if( !bWrtWW8 || (FLY_IN_CNTNT == rAnch.GetAnchorId()) )
     {
         if( RES_DRAWFRMFMT == rFrmFmt.Which() )
         {
@@ -1817,8 +1824,6 @@ void SwWW8Writer::OutWW8FlyFrm( const SwFrmFmt& rFrmFmt,
 
         if( nStt >= nEnd )      // kein Bereich, also kein gueltiger Node
             return;
-
-        const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();
 
         if( !bIsInTable && (FLY_IN_CNTNT == rAnch.GetAnchorId()) )
         {
@@ -2005,11 +2010,14 @@ SwNodeFnTab aWW8NodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.5 2001-03-14 10:22:09 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8nds.cxx,v 1.6 2001-05-21 15:45:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/03/14 10:22:09  jp
+      Bug #75804#: W95 export - set graphics/ole-objects in tables always as character
+
       Revision 1.4  2001/02/23 09:55:06  cmc
       CJK MSWord Ruby Export
 

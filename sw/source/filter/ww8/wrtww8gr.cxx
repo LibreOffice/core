@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 10:22:09 $
+ *  last change: $Author: cmc $ $Date: 2001-05-21 15:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,62 +157,96 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     if( !(rWW8Wrt.GetIniFlags() & WWFL_NO_OLE ) )
     {
-        if( rWW8Wrt.bWrtWW8 )
-        {
-            static BYTE aSpecOLE[] = {
-                0x03, 0x6a, 0, 0, 0, 0,         // sprmCPicLocation
-                0x0a, 0x08, 1,                  // sprmCFOLE2
-                0x56, 0x08, 1                   // sprmCFObj
+        BYTE *pSpecOLE;
+        BYTE *pDataAdr;
+        short nSize;
+        static BYTE aSpecOLE_WW8[] = {
+                0x03, 0x6a, 0, 0, 0, 0, // sprmCPicLocation
+                0x0a, 0x08, 1,          // sprmCFOLE2
+                0x56, 0x08, 1           // sprmCFObj
+            };
+        static BYTE aSpecOLE_WW6[] = {
+                68, 4, 0, 0, 0, 0,      // sprmCPicLocation (len is 4)
+                75, 1,                  // sprmCFOLE2
+                118, 1                  // sprmCFObj
             };
 
-            const SwOLENode& rOLENd = (SwOLENode&)rNode;
-            UINT32 nPictureId = (long)&rOLENd;
-            BYTE* pDataAdr = aSpecOLE + 2;
-            Set_UInt32( pDataAdr, nPictureId );
+        if( rWW8Wrt.bWrtWW8 )
+        {
+            pSpecOLE = aSpecOLE_WW8;
+            nSize = sizeof( aSpecOLE_WW8 );
+        }
+        else
+        {
+            pSpecOLE = aSpecOLE_WW6;
+            nSize = sizeof( aSpecOLE_WW6 );
+        }
+        pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
+        const SwOLENode& rOLENd = (SwOLENode&)rNode;
+        UINT32 nPictureId = (long)&rOLENd;
+        Set_UInt32( pDataAdr, nPictureId );
 
-            SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenStorage(
-                            String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( "ObjectPool" )),
-                                    STREAM_READWRITE| STREAM_SHARE_DENYALL );
-            if( xObjStg.Is()  )
+        SvStorageRef xObjStg = rWW8Wrt.GetStorage().OpenStorage(
+                        String::CreateFromAscii(
+                            RTL_CONSTASCII_STRINGPARAM( "ObjectPool" )),
+                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+        if( xObjStg.Is()  )
+        {
+            String sStorageName( '_' );
+            sStorageName += String::CreateFromInt32( nPictureId );
+            SvStorageRef xOleStg = xObjStg->OpenStorage( sStorageName,
+                                STREAM_READWRITE| STREAM_SHARE_DENYALL );
+            if( xOleStg.Is() )
             {
-                String sStorageName( '_' );
-                sStorageName += String::CreateFromInt32( nPictureId );
-                SvStorageRef xOleStg = xObjStg->OpenStorage( sStorageName,
-                                    STREAM_READWRITE| STREAM_SHARE_DENYALL );
-                if( xOleStg.Is() )
+                SvInPlaceObjectRef xObj( ((SwOLENode&)rOLENd).
+                                            GetOLEObj().GetOleRef() );
+                if( xObj.Is() )
                 {
-                    SvInPlaceObjectRef xObj( ((SwOLENode&)rOLENd).
-                                                GetOLEObj().GetOleRef() );
-                    if( xObj.Is() )
+                    rWW8Wrt.GetOLEExp().ExportOLEObject( *xObj, *xOleStg );
+
+                    // write as embedded field - the other things will
+                    // be done in the escher export
+                    String sServer( String::CreateFromAscii(
+                            RTL_CONSTASCII_STRINGPARAM( " EINBETTEN " )));
+                    ( sServer += xOleStg->GetUserName() ) += ' ';
+
+                    rWW8Wrt.OutField( 0, 58, sServer,
+                                            WRITEFIELD_START |
+                                            WRITEFIELD_CMD_START |
+                                            WRITEFIELD_CMD_END );
+
+                    rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+                                    nSize, pSpecOLE );
+
+                    BOOL bEndCR = TRUE;
+                    if (rWW8Wrt.pFlyFmt)
                     {
-                        rWW8Wrt.GetOLEExp().ExportOLEObject( *xObj, *xOleStg );
-
-                        // write as embedded field - the other things will
-                        // be done in the escher export
-                        String sServer( String::CreateFromAscii(
-                                RTL_CONSTASCII_STRINGPARAM( " EINBETTEN " )));
-                        ( sServer += xOleStg->GetUserName() ) += ' ';
-
-                        rWW8Wrt.OutField( 0, 58, sServer,
-                                                WRITEFIELD_START |
-                                                WRITEFIELD_CMD_START |
-                                                WRITEFIELD_CMD_END );
-
-                        rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                                        sizeof( aSpecOLE ), aSpecOLE );
-
+                        /*
+                        ##897##
+                        We need to insert the graphic representation of
+                        this object for the inline case, otherwise word
+                        has no place to find the dimensions of the ole
+                        object, and will not be able to draw it
+                        */
+                        rWW8Wrt.OutGrf( rNode.GetOLENode() );
+                        if (rWW8Wrt.pFlyFmt->GetAttrSet().GetAnchor( FALSE ).
+                            GetAnchorId() == FLY_IN_CNTNT)
+                        {
+                            bEndCR = FALSE;
+                        }
+                    }
+                    else
                         rWW8Wrt.WriteChar( 0x1 );
 
-                        rWW8Wrt.OutField( 0, 58, aEmptyStr,
-                                                WRITEFIELD_END |
-                                                WRITEFIELD_CLOSE );
+                    rWW8Wrt.OutField( 0, 58, aEmptyStr,
+                                            WRITEFIELD_END |
+                                            WRITEFIELD_CLOSE );
+                    if (bEndCR) //No newline of inline case
                         rWW8Wrt.WriteCR();              // CR danach
-                    }
                 }
             }
         }
-        else
+        else    //Only for the case that ole objects are not to be exported
             rWW8Wrt.OutGrf( rNode.GetOLENode() );
     }
     return rWrt;
@@ -622,11 +656,14 @@ void SwWW8WrGrf::Write()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.4 2001-03-14 10:22:09 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8gr.cxx,v 1.5 2001-05-21 15:45:50 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/03/14 10:22:09  jp
+      Bug #75804#: W95 export - set graphics/ole-objects in tables always as character
+
       Revision 1.3  2001/03/09 13:50:44  jp
       use instead of SvData the GetGDIMetaFile from the SvInPlaceObject
 
