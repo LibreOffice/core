@@ -115,6 +115,8 @@ Dim iThisMonth as Integer
 	DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(0,True)
 	DlgCalModel.cmdGoOn.DefaultButton = True
 	ToggleWindow(True)
+	DlgCalendar.GetControl(&quot;lblHolidays&quot;).Visible = sCurLangLocale  = cLANGUAGE_GERMAN
+	DlgCalendar.GetControl(&quot;lstHolidays&quot;).Visible = sCurLangLocale  = cLANGUAGE_GERMAN	
 	fHeightCorrFactor = DlgCalendar.GetControl(&quot;imgCountry&quot;).Size.Height/198
 	fWidthCorrFactor = DlgCalendar.GetControl(&quot;imgCountry&quot;).Size.Width/166
 	DlgCalendar.Execute()

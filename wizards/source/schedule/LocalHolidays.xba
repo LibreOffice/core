@@ -285,12 +285,6 @@ Dim lElectDate as Long
 	CalInsertBankholiday(DateSerial(YearInt, 12, 7), &quot;Pearl Harbor Remembrance Day&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 12, 24), &quot;Christmas Eve&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 12, 25), &quot;Christmas Day&quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 12, 26), &quot;Kwanzaa&quot;, cHolidayType_Half)
-	CalInsertBankholiday(DateSerial(YearInt, 12, 27), &quot;Kwanzaa&quot;, cHolidayType_Half)
-	CalInsertBankholiday(DateSerial(YearInt, 12, 28), &quot;Kwanzaa&quot;, cHolidayType_Half)
-	CalInsertBankholiday(DateSerial(YearInt, 12, 29), &quot;Kwanzaa&quot;, cHolidayType_Half)
-	CalInsertBankholiday(DateSerial(YearInt, 12, 30), &quot;Kwanzaa&quot;, cHolidayType_Half)
-	CalInsertBankholiday(DateSerial(YearInt, 12, 31), &quot;Kwanzaa&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 12, 31), &quot;New Year&apos;s Eve&quot;, cHolidayType_Half)
 	
 	CalInsertBankholiday(CalEasterTable(YearInt), &quot;Easter Sunday&quot;, cHolidayType_Half)
@@ -491,7 +485,6 @@ Dim lDate as Long
 End Sub
 
 
-&apos; Todo: Was passiert mit den Jahren vor 1980?
 Function CalculateJapaneseSpringDay(iSelYear as Integer)
 	If (iSelYear &gt; 1979) And (iSelYear &lt; 2100) Then
 		CalculateJapaneseSpringDay() = Int(20.8431 + 0.242194)* (iSelYear-1980) - (Int((iSelYear-1980)/4))

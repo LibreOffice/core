@@ -23,9 +23,6 @@ Dim i as Integer
 Const dlgMonth = 1200
 &apos; Abreviated months start 1225
 Const dlgShortMonth = 1225
-	DlgCalendar.GetControl(&quot;lblHolidays&quot;).Visible = LangLocale  = cLANGUAGE_GERMAN
-	DlgCalendar.GetControl(&quot;lstHolidays&quot;).Visible = LangLocale  = cLANGUAGE_GERMAN
-
 	If InitResources(&quot;schedule&quot;, &quot;cal&quot;) Then
 		If LangLocale  = cLANGUAGE_GERMAN Then
 

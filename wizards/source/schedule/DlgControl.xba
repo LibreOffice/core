@@ -8,7 +8,6 @@ Public fHeightCorrFactor as Double
 Public fWidthCorrFactor as Double
 
 
-&apos; Todo: Adjustmentlistener an der Scrollbar anmelden
 
 Sub Main()
 	Call CalAutopilotTable()

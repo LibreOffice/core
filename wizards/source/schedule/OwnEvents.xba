@@ -117,7 +117,6 @@ Dim CurEvDay as Integer
 			CurEvMonth = CalGetMonthOfEvent(i)
 			CurEvDay = CalGetDayOfEvent(i)
 			If DateSerial(CurEvYear, CurEvMonth, CurEvDay) = NewDate Then
-				&apos; Todo: Abchecken wie das ist mit &apos;Ereignis einmalig&apos; oder nicht
 				DlgCalendar.GetControl(&quot;lstOwnData&quot;).RemoveItems(i,1)
 				DlgCalendar.GetControl(&quot;lstOwnData&quot;).AddItem(DateStr, i)
 				bInserted = True
