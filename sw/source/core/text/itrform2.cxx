@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-17 14:20:49 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
 #include <com/sun/star/text/ScriptType.hdl>
+#endif
+#ifndef _TXATBASE_HXX //autogen
+#include <txatbase.hxx>
 #endif
 #ifndef _LAYFRM_HXX
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
@@ -1239,9 +1242,15 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         if( !pMulti )
         {   // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
-            xub_StrLen nEndOfMulti = rInf.EndOfMulti( rInf.GetIdx() );
-            if( nEndOfMulti )
-                return new SwMultiPortion( nEndOfMulti);
+            const SwTxtAttr* pTwoLines = rInf.GetTwoLines( rInf.GetIdx() );
+            if( pTwoLines )
+            {
+                SwMultiPortion* pTmp = new SwMultiPortion(*pTwoLines->GetEnd());
+#ifdef DEBUG
+                pTmp->SetBrackets( '(', ')' );
+#endif
+                return pTmp;
+            }
         }
         // 5010: Tabs und Felder
         xub_Unicode cChar = rInf.GetHookChar();

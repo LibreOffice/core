@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-23 10:18:00 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             Next();
                         bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
                         pOrig->Pos().X() += nX;
+                        if( ((SwMultiPortion*)pPor)->HasBrackets() )
+                            pOrig->Pos().X() +=
+                                ((SwMultiPortion*)pPor)->PreWidth();
                         pCurr = pOldCurr;
                         nStart = nOldStart;
                         return bRet;
@@ -893,6 +896,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             // In a multi-portion we use GetCrsrOfst()-funtion rekursively
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 rPoint.Y(), nCurrStart );
+            if( ((SwMultiPortion*)pPor)->HasBrackets() )
+                nX -= ((SwMultiPortion*)pPor)->PreWidth();
             return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),
                                 nChgNode, pCMS );
         }

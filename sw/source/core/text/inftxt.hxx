@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:17:20 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ public:
 
     // EndOfMulti returns the end of the multi-line part of the text,
     // but zero, if nPos is not inside any multi-line part.
-    xub_StrLen EndOfMulti( const xub_StrLen nPos ) const;
+    const SwTxtAttr* GetTwoLines( const xub_StrLen nPos ) const;
 
     inline sal_Bool OnWin() const { return bOnWin; }
     inline void SetOnWin( const sal_Bool bNew ) { bOnWin = bNew; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-23 10:19:54 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,29 @@
 #define _PORMULTI_HXX
 
 #include "porlay.hxx"
+#include "porexp.hxx"
 
 class SwTxtFormatInfo;
 class SwFldPortion;
 class SwTxtCursor;
 class SwLineLayout;
+class SwBlankPortion;
+class SwTxtPaintInfo;
+
+/*-----------------25.10.00 16:19-------------------
+ * A two-line-portion (SwMultiPortion) could have surrounding brackets,
+ * in this case the structur SwBracket will be used.
+ * --------------------------------------------------*/
+
+struct SwBracket
+{
+    KSHORT nAscent;         // Ascent of the brackets
+    KSHORT nHeight;         // Height of them
+    KSHORT nPreWidth;       // Width of the opening bracket
+    KSHORT nPostWidth;      // Width of the closing bracket
+    sal_Unicode cPre;       // Opening character, e.g. '('
+    sal_Unicode cPost;      // Closing character, e.g. ')'
+};
 
 /*-----------------16.10.00 12:45-------------------
  * The SwMultiPortion is line portion inside a line portion
@@ -78,16 +96,28 @@ class SwMultiPortion : public SwLinePortion
 {
     SwLineLayout aRoot;     // One or more lines
     SwFldPortion *pFldRest; // a field rest from the previous line
+    SwBracket* pBracket;    // Surrounding brackets
+    SwTwips nLineDiff;      // Difference of the width of the both lines
 public:
-    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( NULL )
+    SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), pBracket( 0 )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     ~SwMultiPortion();
 
     const SwLineLayout& GetRoot() const { return aRoot; }
     SwLineLayout& GetRoot() { return aRoot; }
-
     SwFldPortion* GetFldRest() { return pFldRest; }
     void SetFldRest( SwFldPortion* pNew ) { pFldRest = pNew; }
+
+    inline sal_Bool HasBrackets() const { return 0 != pBracket; }
+    void SetBrackets( sal_Unicode cPre, sal_Unicode cPost );
+    inline void SetBrackets( const SwMultiPortion& rMulti )
+        { SetBrackets( rMulti.pBracket->cPre, rMulti.pBracket->cPost ); }
+    void PaintBracket( const SwTxtPaintInfo& rInf, sal_Bool bOpen ) const;
+    void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
+    inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
+    inline KSHORT PostWidth() const { return pBracket->nPostWidth; }
+    inline void ClearBrackets(){ pBracket->nPreWidth = pBracket->nPostWidth=0; }
+    inline KSHORT BracketWidth(){ return PreWidth() + PostWidth(); }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 

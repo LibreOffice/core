@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-23 10:19:21 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 SwMultiPortion::~SwMultiPortion()
 {
     delete pFldRest;
+    delete pBracket;
 }
 
 void SwMultiPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -129,35 +130,130 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine )
     } while ( pLay );
 }
 
+/*-----------------25.10.00 09:51-------------------
+ * SwMultiPortion::PaintBracket paints the wished bracket,
+ * if the multiportion has surrounding brackets.
+ * The X-position of the SwTxtPaintInfo will be modified:
+ * the open bracket sets position behind itself,
+ * the close bracket in front of itself.
+ * --------------------------------------------------*/
+
+void SwMultiPortion::PaintBracket( const SwTxtPaintInfo &rInf,
+    sal_Bool bOpen ) const
+{
+    sal_Unicode cCh = bOpen ? pBracket->cPre : pBracket->cPost;
+    if( !cCh )
+        return;
+    KSHORT nChWidth = bOpen ? PreWidth() : PostWidth();
+    if( !nChWidth )
+        return;
+    SwBlankPortion aBlank( cCh, sal_True );
+    aBlank.SetAscent( pBracket->nAscent );
+    aBlank.Width( nChWidth );
+    aBlank.Height( pBracket->nHeight );
+    SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+    pTmpFnt->SetProportion( 100 );
+    SwFontSave aSave( rInf, pTmpFnt );
+    aBlank.Paint( rInf );
+}
+
+/*-----------------25.10.00 16:26-------------------
+ * SwMultiPortion::SetBrackets creates the bracket-structur
+ * and fills it, if not both characters are 0x00.
+ * --------------------------------------------------*/
+
+void SwMultiPortion::SetBrackets( sal_Unicode cPre, sal_Unicode cPost )
+{
+    if( cPre || cPost )
+    {
+        pBracket = new SwBracket;
+        pBracket->cPre = cPre;
+        pBracket->cPost = cPost;
+    }
+}
+
+/*-----------------25.10.00 16:29-------------------
+ * SwMultiPortion::FormatBrackets
+ * calculates the size of the brackets => pBracket,
+ * reduces the nMaxWidth-parameter ( minus bracket-width )
+ * and moves the rInf-x-position behind the opening bracket.
+ * --------------------------------------------------*/
+
+void SwMultiPortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth )
+{
+    nMaxWidth -= rInf.X();
+    SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+    pTmpFnt->SetProportion( 100 );
+    SwFontSave aSave( rInf, pTmpFnt );
+    pBracket->nAscent = rInf.GetAscent();
+    if( pBracket->cPre )
+    {
+        String aStr( pBracket->cPre );
+        SwPosSize aSize = rInf.GetTxtSize( aStr );
+        pBracket->nHeight = aSize.Height();
+        if( nMaxWidth > aSize.Width() )
+        {
+            pBracket->nPreWidth = aSize.Width();
+            nMaxWidth -= aSize.Width();
+            rInf.X( rInf.X() + aSize.Width() );
+        }
+        else
+        {
+            pBracket->nPreWidth = 0;
+            nMaxWidth = 0;
+        }
+    }
+    else
+        pBracket->nPreWidth = 0;
+    if( pBracket->cPost )
+    {
+        String aStr( pBracket->cPost );
+        SwPosSize aSize = rInf.GetTxtSize( aStr );
+        pBracket->nHeight = aSize.Height();
+        if( nMaxWidth > aSize.Width() )
+        {
+            pBracket->nPostWidth = aSize.Width();
+            nMaxWidth -= aSize.Width();
+        }
+        else
+        {
+            pBracket->nPostWidth = 0;
+            nMaxWidth = 0;
+        }
+    }
+    else
+        pBracket->nPostWidth = 0;
+    nMaxWidth += rInf.X();
+}
+
 /*-----------------13.10.00 16:22-------------------
- * If we're inside a double-line-attribute, the result
- * will be the end of the attribute,
+ * If we're inside a two-line-attribute,
+ * the attribute will be returned,
  * otherwise the function returns zero.
  * --------------------------------------------------*/
 
-xub_StrLen SwTxtSizeInfo::EndOfMulti( const xub_StrLen nPos ) const
+const SwTxtAttr* SwTxtSizeInfo::GetTwoLines( const xub_StrLen nPos ) const
 {
-    xub_StrLen nRet = 0;
     const SwpHints *pHints = pFrm->GetTxtNode()->GetpSwpHints();
     if( !pHints )
-        return sal_False;
+        return NULL;
     for( MSHORT i = 0; i < pHints->Count(); ++i )
     {
-        const SwTxtAttr *pPos = (*pHints)[i];
-        xub_StrLen nStart = *pPos->GetStart();
+        const SwTxtAttr *pRet = (*pHints)[i];
+        xub_StrLen nStart = *pRet->GetStart();
         if( nPos < nStart )
             break;
+        if( RES_TXTATR_TWO_LINES == pRet->Which()
 #ifdef FOR_YOUR_OWN_RISK
-        if( RES_CHRATR_UNDERLINE == pPos->Which() )
-        {
-            nRet = *pPos->GetEnd();
-            if( nPos == nStart || nRet > nPos )
-                break;
-            nRet = 0;
-        }
+            || RES_CHRATR_UNDERLINE == pRet->Which()
 #endif
+            )
+        {
+            if( nPos == nStart || *pRet->GetEnd() > nPos )
+                return pRet;
+        }
     }
-    return nRet;
+    return NULL;
 }
 
 /*-----------------13.10.00 16:24-------------------
@@ -176,6 +272,14 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     xub_StrLen nOldIdx = GetInfo().GetIdx();
     SvShorts *pOldSpaceAdd = GetInfo().GetpSpaceAdd();
     GetInfo().SetSpaceAdd( NULL );
+    if( rMulti.HasBrackets() )
+    {
+        SeekAndChg( GetInfo() );
+        rMulti.PaintBracket( GetInfo(), sal_True );
+        GetInfo().X( GetInfo().X() + rMulti.PreWidth() );
+    }
+
+    KSHORT nTmpX = GetInfo().X();
 
     SwLineLayout* pLay = &rMulti.GetRoot();// the first line of the multiportion
     SwLinePortion* pPor = pLay->GetFirstPortion();//first portion of these line
@@ -232,23 +336,30 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pLay = pLay->GetNext();
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
-            GetInfo().X( nOldX );
+            GetInfo().X( nTmpX );
             // We switch to the baseline of the next inner line
             GetInfo().Y( GetInfo().Y() + rMulti.GetRoot().Height()
                 - rMulti.GetRoot().GetAscent() + pLay->GetAscent() );
         }
     } while( pPor );
 
-    // Restore the saved values
-    GetInfo().SetLen( nOldLen );
     GetInfo().SetIdx( nOldIdx );
-    GetInfo().X( nOldX );
     GetInfo().Y( nOldY );
+
+    if( rMulti.HasBrackets() )
+    {
+        SeekAndChg( GetInfo() );
+        GetInfo().X( nOldX + rMulti.Width() - rMulti.PostWidth() );
+        rMulti.PaintBracket( GetInfo(), sal_False );
+    }
+    // Restore the saved values
+    GetInfo().X( nOldX );
+    GetInfo().SetLen( nOldLen );
     GetInfo().SetSpaceAdd( pOldSpaceAdd );
 }
 
 /*-----------------13.10.00 16:46-------------------
- * SwTxtPainter::PaintMultiPortion manages the formatting of a SwMultiPortion.
+ * SwTxtFormatter::BuildMultiPortion manages the formatting of a SwMultiPortion.
  * External, for the calling function, it seems to be a normal Format-function,
  * internal it is like a SwTxtFrm::_Format with multiple BuildPortions
  * --------------------------------------------------*/
@@ -256,11 +367,17 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
+    SwTwips nMaxWidth = rInf.Width();
+    SeekAndChg( rInf );
+    if( rMulti.HasBrackets() )
+        rMulti.FormatBrackets( rInf, nMaxWidth );
+
+    SwTwips nTmpX = rInf.X();
+
     pMulti = &rMulti;
     SwLineLayout *pOldCurr = pCurr;
     xub_StrLen nOldStart = GetStart();
-    SwTwips nMinWidth = rInf.X() + 1;
-    SwTwips nMaxWidth = rInf.Width();
+    SwTwips nMinWidth = nTmpX + 1;
     SwTwips nActWidth = nMaxWidth;
     SwTxtFormatInfo aInf( rInf, rMulti.GetRoot(), nActWidth );
     xub_StrLen nStartIdx = aInf.GetIdx();
@@ -273,7 +390,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         nStart = nStartIdx;
         bRet = FALSE;
         FormatReset( aInf );
-        aInf.X( rInf.X() );
+        aInf.X( nTmpX );
         aInf.Width( nActWidth );
         if( rMulti.GetFldRest() )
         {
@@ -291,7 +408,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             pCurr->SetNext( new SwLineLayout() );
             pCurr = pCurr->GetNext();
             nStart = aInf.GetIdx();
-            aInf.X( rInf.X() );
+            aInf.X( nTmpX );
             SwTxtFormatInfo aTmp( aInf, *pCurr, nActWidth );
             aTmp.SetRest( aInf.GetRest() );
             aInf.SetRest( NULL );
@@ -311,8 +428,8 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         else
         {
-            if( nActWidth > rInf.X() + rMulti.Width() + 1 )
-                nActWidth = rInf.X() + rMulti.Width() + 1;
+            if( nActWidth > nTmpX + rMulti.Width() + 1)
+                nActWidth = nTmpX + rMulti.Width() + 1;
             nMaxWidth = nActWidth;
             nActWidth = ( 3 * nMaxWidth + nMinWidth + 3 ) / 4;
             if( nActWidth >= nMaxWidth )
@@ -326,9 +443,23 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     nStart = nOldStart;
     rMulti.SetLen( rMulti.GetRoot().GetLen() + ( rMulti.GetRoot().GetNext() ?
         rMulti.GetRoot().GetNext()->GetLen() : 0 ) );
+    if( rMulti.HasBrackets() )
+        rMulti.Width( rMulti.Width() + rMulti.PreWidth() + rMulti.PostWidth() );
     if( bRet )
     {
         SwMultiPortion *pTmp = new SwMultiPortion( nMultiLen + rInf.GetIdx() );
+        if( rMulti.HasBrackets() )
+        {
+            pTmp->SetBrackets( rMulti );
+            // An empty multiportion needs no brackets.
+            // Notice: GetLen() might be zero, if the multiportion contains
+            // the second part of a field and the width might be zero, if
+            // it contains a note only. In this cases the brackets are okay.
+            // But if the length and the width are both zero, the multiportion
+            // is really empty.
+            if( !rMulti.GetLen() && rMulti.Width() == rMulti.BracketWidth() )
+                rMulti.ClearBrackets();
+        }
         ASSERT( !pRest || pRest->InFldGrp(),
             "BuildMultiPortion: Surprising restportion, field exspected" );
         pTmp->SetFldRest( (SwFldPortion*) pRest );

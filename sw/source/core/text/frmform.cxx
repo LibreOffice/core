@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:11:59 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,12 +1324,17 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
             if( pFld )
             {
                 pRest->TakeNextOffset( pFld );
-                xub_StrLen nEndOf;
+                const SwTxtAttr* pTwoLines;
                 // If we get a field portion rest in a multi-line part of the
                 // text, we have to create the surrounding multi-portion, too.
-                if( GetOfst() && 0 < (nEndOf = rInf.EndOfMulti( GetOfst()-1) ) )
+                if( GetOfst() &&
+                    0 != (pTwoLines = rInf.GetTwoLines( GetOfst()-1) ) )
                 {
-                    SwMultiPortion* pTmp = new SwMultiPortion( nEndOf );
+                    SwMultiPortion* pTmp =
+                        new SwMultiPortion( *pTwoLines->GetEnd() );
+#ifdef DEBUG
+                    pTmp->SetBrackets( 0, ']' );
+#endif
                     pTmp->SetFldRest( pRest );
                     rInf.SetRest( pTmp );
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-19 13:51:28 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,8 @@ sal_Bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    rInf.DrawViewOpt( *this, POR_BLANK );
+    if( !bMulti ) // No gray background for multiportion brackets
+        rInf.DrawViewOpt( *this, POR_BLANK );
     SwExpandPortion::Paint( rInf );
 }
 

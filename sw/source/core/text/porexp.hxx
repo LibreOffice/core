@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porexp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 07:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,15 @@ public:
 class SwBlankPortion : public SwExpandPortion
 {
     xub_Unicode cChar;
+    BOOL bMulti;        // For multiportion brackets
 public:
-    inline  SwBlankPortion( xub_Unicode cCh )
-    { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
+    inline  SwBlankPortion( xub_Unicode cCh, BOOL bMult = sal_False )
+        : cChar( cCh ), bMulti( bMult )
+        { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
+
+    BOOL IsMulti() const { return bMulti; }
+    void SetMulti( BOOL bNew ) { bMulti = bNew; }
+
     virtual SwLinePortion *Compress();
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
