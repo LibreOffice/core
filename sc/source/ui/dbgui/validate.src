@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:29:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ korean ] = "°ª";
                 Text[ turkish ] = "Deðerler";
                 Text[ catalan ] = "Valores";
+                Text[ finnish ] = "Arvot";
             };
             PageItem
             {
@@ -129,6 +130,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ korean ] = "ÀÔ·Â¡¡µµ¿ò¸»";
                 Text[ turkish ] = "Giriþ yardýmý";
                 Text[ catalan ] = "Ayuda de entrada";
+                Text[ finnish ] = "Syöttöohje";
             };
             PageItem
             {
@@ -155,6 +157,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ korean ] = "¿À·ù ¸Þ½ÃÁö";
                 Text[ turkish ] = "Hata iletisi";
                 Text[ catalan ] = "Mensaje de error";
+                Text[ finnish ] = "Virhehälytys";
             };
         };
     };
@@ -177,6 +180,7 @@ TabDialog TAB_DLG_VALIDATION
     Text[ korean ] = "À¯È¿¼º";
     Text[ turkish ] = "Geçerlilik";
     Text[ catalan ] = "Validez";
+    Text[ finnish ] = "Kelpoisuus";
 };
 
 TabPage TP_VALIDATION_VALUES
@@ -211,6 +215,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ korean ] = "Çã¿ë(~A)";
         Text[ turkish ] = "~Geçerli";
         Text[ catalan ] = "Per~mitir";
+        Text[ finnish ] = "~Salli";
     };
     ListBox LB_ALLOW
     {
@@ -419,6 +424,15 @@ TabPage TP_VALIDATION_VALUES
         < "Hora" ; Default ; > ;
         < "Longitud del texto" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Kaikki arvot" ; Default ; > ;
+        < "Kokonaiset luvut" ; Default ; > ;
+        < "Desimaali" ; Default ; > ;
+        < "Päivämäärä" ; Default ; > ;
+        < "Aika" ; Default ; > ;
+        < "Tekstin pituus" ; Default ; > ;
+    };
     };
     FixedText FT_VALUE
     {
@@ -445,6 +459,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ korean ] = "µ¥ÀÌÅÍ(~D)";
         Text[ turkish ] = "~Veriler";
         Text[ catalan ] = "~Datos";
+        Text[ finnish ] = "~Tiedot";
     };
     ListBox LB_VALUE
     {
@@ -698,6 +713,17 @@ TabPage TP_VALIDATION_VALUES
         < "entre" ; Default ; > ;
         < "no entre" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "yhtäsuuri" ; Default ; > ;
+        < "vähemmän kuin" ; Default ; > ;
+        < "suurempi kuin" ; Default ; > ;
+        < "pienempi tai yhtäsuuri" ; Default ; > ;
+        < "suurempi tai yhtäsuuri" ; Default ; > ;
+        < "ei yhtäsuuri" ; Default ; > ;
+        < "Välissä" ; Default ; > ;
+        < "ei välissä" ; Default ; > ;
+    };
     };
     FixedText FT_MIN
     {
@@ -724,6 +750,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ korean ] = "ÃÖ¼Ò(~M)";
         Text[ turkish ] = "A~sgari";
         Text[ catalan ] = "~Mínimo";
+        Text[ finnish ] = "~Vähintään";
     };
     Edit EDT_MIN
     {
@@ -757,6 +784,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ korean ] = "ÃÖ´ë(~X)";
         Text[ turkish ] = "A~zami";
         Text[ catalan ] = "M~áximo";
+        Text[ finnish ] = "~Enintään";
     };
     Edit EDT_MAX
     {
@@ -791,6 +819,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ korean ] = "ºó¡¡¼¿¡¡Çã¿ë(~B)";
         Text[ turkish ] = "~Boþ hücre geçerli";
         Text[ catalan ] = "~Permitir celdas vacías";
+        Text[ finnish ] = "~Salli tyhjät merkit";
     };
     GroupBox GRP_VALUES
     {
@@ -818,6 +847,7 @@ TabPage TP_VALIDATION_VALUES
         Text[ korean ] = "À¯È¿¼º ±âÁØ";
         Text[ turkish ] = "Geçerlilik ölçütleri";
         Text[ catalan ] = "Criterios de validez";
+        Text[ finnish ] = "Kelpoisuusehdot";
     };
     Text [ dutch ] = "Waarden" ;
     Text [ english_us ] = "Values" ;
@@ -838,6 +868,7 @@ TabPage TP_VALIDATION_VALUES
     Text[ korean ] = "°ª";
     Text[ turkish ] = "Deðerler";
     Text[ catalan ] = "Valores";
+    Text[ finnish ] = "Arvot";
 };
 
 TabPage TP_VALIDATION_INPUTHELP
@@ -872,6 +903,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ korean ] = "¼¿ ¼±ÅÃ½Ã¿¡ ÀÔ·Âµµ¿ò¸» Á¦°ø(~S)";
         Text[ turkish ] = "Hücre se~çildiðinde giriþ yardýmý öner";
         Text[ catalan ] = "~Mostrar Ayuda de entrada al seleccionar una celda";
+        Text[ finnish ] = "~Näytä syöttöohje, kun solu on valittuna";
     };
     GroupBox GRP_CONTENT
     {
@@ -898,6 +930,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ korean ] = "³»¿ë";
         Text[ turkish ] = "Ýçerik";
         Text[ catalan ] = "Contenido";
+        Text[ finnish ] = "Sisältö";
     };
     FixedText FT_TITLE
     {
@@ -924,6 +957,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ korean ] = "Á¦¸ñ(~T)";
         Text[ turkish ] = "~Baþlýk";
         Text[ catalan ] = "~Título";
+        Text[ finnish ] = "~Otsikko";
     };
     FixedText FT_INPUTHELP
     {
@@ -950,6 +984,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text[ korean ] = "ÀÔ·Â¡¡µµ¿ò¸»(~I)";
         Text[ turkish ] = "~Giriþ yardýmý";
         Text[ catalan ] = "Ayuda de ~entrada";
+        Text[ finnish ] = "~Syöttöohje";
     };
     Edit EDT_TITLE
     {
@@ -1001,6 +1036,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ korean ] = "³»¿ë";
         Text[ turkish ] = "Ýçerik";
         Text[ catalan ] = "Contenido";
+        Text[ finnish ] = "Sisältö";
     };
     TriStateBox TSB_SHOW
     {
@@ -1029,6 +1065,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ª ÀÔ·Â½Ã ¿À·ù ¸Þ½ÃÁö ³ªÅ¸³»±â(~M)";
         Text[ turkish ] = "~Geçersiz deðer girildiðinde hata iletisi görüntüle";
         Text[ catalan ] = "Mostrar mensaje de ~error al entrar valores incorrectos";
+        Text[ finnish ] = "~Näytä virhesanoma, kun virheellisiä arvoja syötetään";
     };
     MultiLineEdit EDT_ERROR
     {
@@ -1071,6 +1108,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ korean ] = "¿À·ù ¸Þ½ÃÁö(~E)";
         Text[ turkish ] = "~Hata iletisi";
         Text[ catalan ] = "~Mensaje de error";
+        Text[ finnish ] = "~Virhesanoma";
     };
     FixedText FT_TITLE
     {
@@ -1097,6 +1135,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ korean ] = "Á¦¸ñ(~T)";
         Text[ turkish ] = "~Baþlýk";
         Text[ catalan ] = "~Título";
+        Text[ finnish ] = "~Otsikko";
     };
     FixedText FT_ACTION
     {
@@ -1123,6 +1162,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ korean ] = "µ¿ÀÛ(~A)";
         Text[ turkish ] = "~Ýþlem";
         Text[ catalan ] = "~Acción";
+        Text[ finnish ] = "~Toiminto";
     };
     ListBox LB_ACTION
     {
@@ -1286,6 +1326,13 @@ TabPage TP_VALIDATION_ERROR
         < "Información" ; Default ; > ;
         < "Macro" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Seis" ; Default ; > ;
+        < "Varoitus" ; Default ; > ;
+        < "Tiedot" ; Default ; > ;
+        < "Macro" ; Default ; > ;
+    };
     };
     PushButton BTN_SEARCH
     {
@@ -1313,6 +1360,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ korean ] = "Ã£¾Æº¸±â(~B)...";
         Text[ turkish ] = "~Tara...";
         Text[ catalan ] = "E~xaminar...";
+        Text[ finnish ] = "~Selaa";
     };
     Text [ dutch ] = "Foutmelding" ;
     Text [ english_us ] = "Error Alert" ;
@@ -1333,5 +1381,6 @@ TabPage TP_VALIDATION_ERROR
     Text[ korean ] = "¿À·ù ¸Þ½ÃÁö";
     Text[ turkish ] = "Hata iletisi";
     Text[ catalan ] = "Mensaje de error";
+    Text[ finnish ] = "Virhehälytys";
 };
 
