@@ -1,4 +1,4 @@
-    <node oor:name="HTML (StarWriter)" oor:op="replace">
+    <node oor:name="HTML (StarWriter)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_web_HTML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
@@ -12,11 +12,11 @@
             <value xml:lang="ja">HTML ドキュメント (%productname% Writer)</value>
             <value xml:lang="es">Documento HTML (%productname% Writer)</value>
             <value xml:lang="tr">HTML Belgesi (%productname% Writer)</value>
-            <value xml:lang="ru">Web-страница (%productname% Writer)</value>
+            <value xml:lang="ru">Web-�?траница (%productname% Writer)</value>
             <value xml:lang="th">HTML Document (%productname% Writer)</value>
             <value xml:lang="x-comment">HTML-Document (%productname% Writer)</value>
             <value xml:lang="ca">HTML Document (%productname% Writer)</value>
-            <value xml:lang="el">Έγγραφο HTML (%productname% Writer)</value>
+            <value xml:lang="el">Έγγ�?αφο HTML (%productname% Writer)</value>
             <value xml:lang="zh-CN">HTML 文档(%productname% Writer)</value>
             <value xml:lang="pt">Página Web (%productname% Writer)</value>
             <value xml:lang="cs">HTML dokument (%productname% Writer)</value>

@@ -1,4 +1,4 @@
-    <node oor:name="HTML (StarCalc)" oor:op="replace">
+    <node oor:name="HTML (StarCalc)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_web_HTML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
@@ -12,11 +12,11 @@
             <value xml:lang="ja">HTML ドキュメント (%productname% Calc)</value>
             <value xml:lang="es">Documento HTML (%productname% Calc)</value>
             <value xml:lang="tr">HTML Belgesi (%productname% Calc)</value>
-            <value xml:lang="ru">Web-страница (%productname% Calc)</value>
+            <value xml:lang="ru">Web-�?траница (%productname% Calc)</value>
             <value xml:lang="th">HTML Document (%productname% Calc)</value>
             <value xml:lang="x-comment">HTML-Document (%productname% Calc)</value>
             <value xml:lang="ca">HTML Document (%productname% Calc)</value>
-            <value xml:lang="el">Έγγραφο HTML (%productname% Calc)</value>
+            <value xml:lang="el">Έγγ�?αφο HTML (%productname% Calc)</value>
             <value xml:lang="zh-CN">HTML 文档 (%productname% Calc)</value>
             <value xml:lang="pt">Página Web (%productname% Calc)</value>
             <value xml:lang="cs">HTML dokument (%productname% Calc)</value>
