@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:21:48 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,15 +384,8 @@ void ImportExcel::ChartSelection( void )
                     nCol2 &= 0x3FFF;
                 }
 
-                const XclImpXti* pXti = pExcRoot->pIR->GetLinkManager().GetXti( nIxti );
-                const XclImpSupbook* pSupbook = pExcRoot->pIR->GetLinkManager().GetSupbook( nIxti );
-
-                if( pXti && pSupbook /*&& pSupbook->IsSameSheet()*/ )
-                {// in aktuellem Workbook
-                    nTab1 = pXti->mnFirst;
-                    nTab2 = pXti->mnLast;
+                if( pExcRoot->pIR->GetLinkManager().GetScTabRange( nTab1, nTab2, nIxti ) )
                     bValues = TRUE;
-                }
             }
         }   // Ende Biff8
 
