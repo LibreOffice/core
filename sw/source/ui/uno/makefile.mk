@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:46 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:48:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=unoidl
+ENABLE_EXCEPTIONS=TRUE
+LIBTARGET=no
 
 # --- Settings -----------------------------------------------------
 
@@ -73,7 +75,7 @@ TARGET=unoidl
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =  \
+SLO1FILES =  \
         $(SLO)$/unodefaults.obj\
         $(SLO)$/unodispatch.obj\
         $(SLO)$/unotxdoc.obj\
@@ -87,22 +89,23 @@ SLOFILES =  \
         $(SLO)$/SwXPrintPreviewSettings.obj \
         $(SLO)$/SwXFilterOptions.obj\
         $(SLO)$/RefreshListenerContainer.obj \
+        $(SLO)$/unomodule.obj \
         $(SLO)$/unodoc.obj
 
-EXCEPTIONSFILES= \
-        $(SLO)$/unodispatch.obj\
-        $(SLO)$/dlelstnr.obj \
-        $(SLO)$/unotxdoc.obj \
-        $(SLO)$/unoatxt.obj \
-        $(SLO)$/unomailmerge.obj \
-        $(SLO)$/unomod.obj \
-        $(SLO)$/unotxvw.obj \
-        $(SLO)$/unofreg.obj \
-        $(SLO)$/SwXPrintPreviewSettings.obj \
-        $(SLO)$/SwXFilterOptions.obj\
-        $(SLO)$/SwXDocumentSettings.obj \
-        $(SLO)$/unodoc.obj
+SLO2FILES = \
+    $(SLO)$/swdetect.obj		\
+    $(SLO)$/swdet2.obj		\
+    $(SLO)$/detreg.obj
 
+SLOFILES = \
+    $(SLO1FILES) \
+    $(SLO2FILES)
+
+LIB1TARGET = \
+    $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES = \
+    $(SLO1FILES)
 
 # --- Targets -------------------------------------------------------
 
