@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:22:09 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,13 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out ? (starsdbc::SQLException)java_sql_SQLException(java_sql_SQLException_BASE(t.pEnv,out),0) : starsdbc::SQLException();
+    if( out )
+    {
+        java_sql_SQLException_BASE  warn_base(t.pEnv,out);
+        return (starsdbc::SQLException)java_sql_SQLException(warn_base,0);
+    }
+
+    return starsdbc::SQLException();
 }
 
 ::rtl::OUString java_sql_SQLException_BASE::getSQLState() const
