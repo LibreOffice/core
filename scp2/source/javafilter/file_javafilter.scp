@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_javafilter.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:17:24 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ File gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Filters_Xcu
 End
 
 #ifdef SOLAR_JAVA
+#ifndef GCJ
 
 STD_JAR_FILE( gid_File_Jar_Aportisdoc, aportisdoc )
 STD_JAR_FILE( gid_File_Jar_Docbook, docbook )
@@ -136,4 +137,5 @@ UNO_JAR_FILE( gid_File_Jar_Xflatxml, XFlatXml )
 STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
 UNO_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
 
+#endif
 #endif
