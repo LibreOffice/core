@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:23:35 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ finnish ] = "Kokoonpano- ja postihakemistot on m??ritett?v? eri hakemistoiksi.\nValitse uusi polku.";
 };
  // ******************************************************************* EOF
+
 
 
 
