@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 18:24:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,19 @@
 #ifndef _UNTOOLS_UCBLOCKBYTES_HXX
 #include <unotools/ucblockbytes.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XPOPUPMENU_HPP_
+#include <com/sun/star/awt/XPopupMenu.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_POPUPMENUDIRECTION_HPP_
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
+#endif
 
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
@@ -133,6 +145,9 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+
+#define ID_OPEN_GRAPHICS            1
+#define ID_CLEAR_GRAPHICS           2
 
 //.........................................................................
 namespace frm
@@ -611,6 +626,51 @@ void SAL_CALL OImageControlControl::createPeer(const Reference<XToolkit>& _rxToo
     xImageProducer->startProduction();
 }
 
+//------------------------------------------------------------------------------
+void OImageControlControl::implClearGraphics()
+{
+    Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
+    if ( xSet.is() )
+        xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString() ) );
+}
+
+//------------------------------------------------------------------------------
+void OImageControlControl::implInsertGraphics()
+{
+    Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
+    if ( !xSet.is() )
+        return;
+
+    ::rtl::OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
+    // build some arguments for the upcoming dialog
+    try
+    {
+        ::sfx2::FileDialogHelper aDialog( FILEOPEN_LINK_PREVIEW, SFXWB_GRAPHIC );
+        aDialog.SetTitle( sTitle );
+
+        Reference< XFilePickerControlAccess > xController(aDialog.GetFilePicker(), UNO_QUERY);
+        DBG_ASSERT( xController.is(), "OImageControlControl::implInsertGraphics: invalid file picker!" );
+        if ( xController.is() )
+        {
+            xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
+            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
+        }
+
+        if ( ERRCODE_NONE == aDialog.Execute() )
+        {
+            // reset the url property in case it already has the value we're about to set - in this case
+            // our propertyChanged would not get called without this.
+            implClearGraphics();
+
+            xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );
+        }
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("OImageControlControl::implInsertGraphics: caught an exception while attempting to execute the FilePicker!");
+    }
+}
+
 // MouseListener
 //------------------------------------------------------------------------------
 void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent& e)
@@ -620,72 +680,74 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     if (e.Buttons != MouseButton::LEFT)
         return;
 
-    //////////////////////////////////////////////////////////////////////
-    // Doppelclick
-    if (e.ClickCount == 2)
+    // is this a request for a context menu?
+    if ( e.PopupTrigger )
     {
+        Reference< XPopupMenu > xMenu( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
+        DBG_ASSERT( xMenu.is(), "OImageControlControl::mousePressed: could not create a popup menu!" );
 
-        Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
-        if (!xSet.is())
-            return;
+        Reference< XWindowPeer > xWindowPeer = getPeer();
+        DBG_ASSERT( xWindowPeer.is(), "OImageControlControl::mousePressed: no window!" );
 
-        // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
-        // versanden wuerde)
-        // FS - #64946# - 19.04.99
-        Reference<XPropertySet> xBoundField;
-        if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
-            ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
-        if (!xBoundField.is())
+        if ( xMenu.is() && xWindowPeer.is() )
         {
-            // but only if our IMAGE_URL property is handled as if it is transient, which is equivalent to
-            // an empty control source
-            if (!hasProperty(PROPERTY_CONTROLSOURCE, xSet) || (::comphelper::getString(xSet->getPropertyValue(PROPERTY_CONTROLSOURCE)).getLength() != 0))
-                return;
-        }
+            xMenu->insertItem( ID_OPEN_GRAPHICS, FRM_RES_STRING( RID_STR_OPEN_GRAPHICS ), 0, 0 );
+            xMenu->insertItem( ID_CLEAR_GRAPHICS, FRM_RES_STRING( RID_STR_CLEAR_GRAPHICS ), 0, 1 );
 
-        sal_Bool bReadOnly;
-        xSet->getPropertyValue(PROPERTY_READONLY) >>= bReadOnly;
-        if (bReadOnly)
-            return;
+            // check if the ImageURL is empty
+            ::rtl::OUString sCurrentURL;
+            Reference< XPropertySet > xSet( getModel(), UNO_QUERY );
+            if ( xSet.is() )
+                xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sCurrentURL;
+            if ( 0 == sCurrentURL.getLength() )
+                xMenu->enableItem( ID_CLEAR_GRAPHICS, sal_False );
 
-        ::rtl::OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
-        // build some arguments for the upcoming dialog
-        try
-        {
-            const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
-            const ::rtl::OUString sInitializer = ::rtl::OUString::createFromAscii("FileOpen_LinkPreviewBox");
+            ::com::sun::star::awt::Rectangle aRect( e.X, e.Y, 0, 0 );
+            const sal_Int16 nResult = xMenu->execute( xWindowPeer, aRect, PopupMenuDirection::EXECUTE_DEFAULT );
 
-            Reference< XFilePicker > xDialog(m_xServiceFactory->createInstance(sServiceName), UNO_QUERY);
-            Reference< XFilePickerControlAccess > xController(xDialog, UNO_QUERY);
-            Reference< XInitialization > xInit(xController, UNO_QUERY);
-            if (!xInit.is())
+            switch ( nResult )
             {
-                DBG_ERROR("OImageControlControl::mousePressed: coult not instantiate the file picker!");
-                return;
-            }
+            case ID_OPEN_GRAPHICS:
+                implInsertGraphics();
+                break;
 
-            Sequence< Any > aInitArguments(1);
-            aInitArguments[0] <<= sInitializer;
-            xInit->initialize(aInitArguments);
-            xDialog->setTitle(sTitle);
-            xController->setValue(0, ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, ::cppu::bool2any(sal_True));
-            xController->enableControl(ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
-
-            if (xDialog->execute())
-            {
-                Sequence< ::rtl::OUString > aPaths = xDialog->getFiles();
-                ::rtl::OUString sSelectedPath;
-                if (aPaths.getLength() > 0)
-                {
-                    xSet->setPropertyValue(PROPERTY_IMAGE_URL, ::com::sun::star::uno::makeAny(::rtl::OUString()));
-                        // reset the url property in case it already has the value we're about to set - in this case
-                        // our propertyChanged would not get called without this.
-                    xSet->setPropertyValue(PROPERTY_IMAGE_URL, makeAny(aPaths[0]));
-                }
+            case ID_CLEAR_GRAPHICS:
+                implClearGraphics();
+                break;
             }
         }
-        catch(Exception&)
+    }
+    else
+    {
+        //////////////////////////////////////////////////////////////////////
+        // Doppelclick
+        if (e.ClickCount == 2)
         {
+
+            Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
+            if (!xSet.is())
+                return;
+
+            // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
+            // versanden wuerde)
+            // FS - #64946# - 19.04.99
+            Reference<XPropertySet> xBoundField;
+            if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
+                ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));
+            if (!xBoundField.is())
+            {
+                // but only if our IMAGE_URL property is handled as if it is transient, which is equivalent to
+                // an empty control source
+                if (!hasProperty(PROPERTY_CONTROLSOURCE, xSet) || (::comphelper::getString(xSet->getPropertyValue(PROPERTY_CONTROLSOURCE)).getLength() != 0))
+                    return;
+            }
+
+            sal_Bool bReadOnly;
+            xSet->getPropertyValue(PROPERTY_READONLY) >>= bReadOnly;
+            if (bReadOnly)
+                return;
+
+            implInsertGraphics();
         }
     }
 }
