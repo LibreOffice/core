@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-24 09:55:36 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,15 @@
  */
 package com.sun.star.wizards.report;
 
-import java.beans.PropertyChangeEvent;
 import java.util.Vector;
 
 import com.sun.star.awt.TextEvent;
-import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.awt.XReschedule;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
@@ -366,8 +358,8 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                     if ((nReportMode == Finalizer.SOCREATETEMPLATE) || (nReportMode == Finalizer.SOUSETEMPLATE)) {
                         bdisposeDialog = false;
                         CurReportDocument.CurDBMetaData.addReportDocument(CurReportDocument.xComponent, true);
-                        boolean bOpenReadOnly = (nReportMode == Finalizer.SOCREATETEMPLATE);
-                        CurDBMetaData.openReportDocument(sReportName, true, bOpenReadOnly);
+                        boolean bOpenInDesign = (nReportMode == Finalizer.SOCREATETEMPLATE);
+                        CurDBMetaData.openReportDocument(sReportName, true, bOpenInDesign);
                     }
                     else {
                         bdisposeDialog = false;
@@ -375,7 +367,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                         CurDataimport.CurReportDocument = CurReportDocument;
                         CurDataimport.showProgressDisplay(xMSF, false);
                         importReportData(xMSF, CurDataimport);
-                        CurDBMetaData.openReportDocument(sReportName, false, true);
+                        CurDBMetaData.openReportDocument(sReportName, false, false);
                     }
                     return;
                 case 1:
