@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-07 10:12:29 $
+ *  last change: $Author: dv $ $Date: 2000-12-07 13:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ using namespace ucb;
 #define TYPE_FSYS_FOLDER        "application/vnd.sun.staroffice.fsys-folder"
 
 #define TARGET_DIR_URL          "TargetDirURL"
-#define PARENT_DIR_URL          "ParentDirURL"
 #define COMMAND_DELETE          "delete"
 #define COMMAND_TRANSFER        "transfer"
 
@@ -2515,11 +2514,10 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     Reference< XResultSet > xResultSet;
-    Sequence< OUString > aProps(3);
+    Sequence< OUString > aProps(2);
     OUString* pProps = aProps.getArray();
     pProps[0] = OUString::createFromAscii( TITLE );
     pProps[1] = OUString::createFromAscii( TARGET_DIR_URL );
-    pProps[2] = OUString::createFromAscii( PARENT_DIR_URL );
 
     try
     {
@@ -2544,7 +2542,6 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
             {
                 OUString aTitle( xRow->getString( 1 ) );
                 OUString aTargetDir( xRow->getString( 2 ) );
-                OUString aParentDir( xRow->getString( 3 ) );
 
                 OUString aId = xContentAccess->queryContentIdentifierString();
                 Content  aContent = Content( aId, aCmdEnv );
@@ -2705,10 +2702,9 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
         pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
 
-        Sequence< OUString > aAdditionalProps(2);
+        Sequence< OUString > aAdditionalProps(1);
         pNames = aAdditionalProps.getArray();
         pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
 
         Sequence< Any > aValues(2);
         Any* pValues = aValues.getArray();
@@ -2762,8 +2758,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                                     {
                                         xFolderProp->addProperty( pNames[0], PropertyAttribute::MAYBEVOID,
                                                                   makeAny( aId ) );
-                                        xFolderProp->addProperty( pNames[1], PropertyAttribute::MAYBEVOID,
-                                                                  makeAny( aId ) );
                                     }
                                     catch( PropertyExistException& ) {}
                                     catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
@@ -2771,11 +2765,10 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                                 }
                             }
 
-                            Sequence< Any > aPropValues(2);
+                            Sequence< Any > aPropValues(1);
                             Any* pPropValues = aPropValues.getArray();
 
                             pPropValues[0] = makeAny( aId );
-                            pPropValues[1] = makeAny( aFolderURL );
 
                             aFolder.setPropertyValues( aAdditionalProps, aPropValues );
                         }
@@ -2843,10 +2836,9 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
         pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
         pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
 
-        Sequence< OUString > aAdditionalProps(2);
+        Sequence< OUString > aAdditionalProps(1);
         pNames = aAdditionalProps.getArray();
         pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-        pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
 
         Sequence< Any > aValues(2);
         Any* pValues = aValues.getArray();
@@ -2871,10 +2863,6 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
                         {
                             xFolderProp->addProperty( pNames[0], PropertyAttribute::MAYBEVOID,
                                                       makeAny( aFolderURL ) );
-                            xFolderProp->addProperty( pNames[1], PropertyAttribute::MAYBEVOID,
-                                                      makeAny( aFolderURL ) );
-                            xFolderProp->addProperty( pNames[2], PropertyAttribute::MAYBEVOID,
-                                                      makeAny( aTitle ) );
                         }
                         catch( PropertyExistException& ) {}
                         catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
@@ -2882,12 +2870,10 @@ void SfxDocTemplate_Impl::AddToStandard( Content& rRoot,
                     }
                 }
 
-                Sequence< Any > aPropValues(3);
+                Sequence< Any > aPropValues(1);
                 Any* pPropValues = aPropValues.getArray();
 
                 pPropValues[0] = makeAny( aFolderURL );
-                pPropValues[1] = makeAny( aFolderURL );
-                pPropValues[2] = makeAny( aTitle );
 
                 aFolder.setPropertyValues( aAdditionalProps, aPropValues );
             }
@@ -3107,10 +3093,9 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
     pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( IS_FOLDER ) );
 
-    Sequence< OUString > aAdditionalProps(2);
+    Sequence< OUString > aAdditionalProps(1);
     pNames = aAdditionalProps.getArray();
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
-    pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( PARENT_DIR_URL ) );
 
     OUString aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
 
@@ -3149,8 +3134,6 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
                         {
                             xFolderProp->addProperty( pNames[0], PropertyAttribute::MAYBEVOID,
                                                       makeAny( rTargetURL ) );
-                            xFolderProp->addProperty( pNames[1], PropertyAttribute::MAYBEVOID,
-                                                      makeAny( aFolderURL ) );
                         }
                         catch( PropertyExistException& ) {}
                         catch( IllegalTypeException& ) { DBG_ERRORFILE( "IllegalTypeException" ); }
@@ -3158,11 +3141,10 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
                     }
                 }
 
-                Sequence< Any > aPropValues(2);
+                Sequence< Any > aPropValues(1);
                 Any* pPropValues = aPropValues.getArray();
 
                 pPropValues[0] = makeAny( rTargetURL );
-                pPropValues[1] = makeAny( aFolderURL );
 
                 aFolder.setPropertyValues( aAdditionalProps, aPropValues );
             }
