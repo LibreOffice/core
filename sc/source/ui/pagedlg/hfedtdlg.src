@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:36:19 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
     Text [ italian ] = "Intestazione/piè di pagina" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho/Rodap?" ; \
     Text [ portuguese ] = "Cabeçalhos/Rodapés" ; \
-    Text [ finnish ] = "Yläotsikot/alaselitteet" ; \
+    Text [ finnish ] = "Ylä-/alatunnisteet" ; \
     Text [ danish ] = "Sidehoved/Sidefod" ; \
     Text [ french ] = "En-tête/Pied de page" ; \
     Text [ swedish ] = "Sidhuvud/sidfot" ; \
@@ -97,7 +97,7 @@
     Text [ italian ] = "Riga d'intestazione" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho" ; \
     Text [ portuguese ] = "Cabeçalho" ; \
-    Text [ finnish ] = "Yläotsikko" ; \
+    Text [ finnish ] = "Ylätunniste" ; \
     Text [ danish ] = "Sidehoved" ; \
     Text [ french ] = "En-tête" ; \
     Text [ swedish ] = "Sidhuvud" ; \
@@ -126,7 +126,7 @@
     Text [ italian ] = "Piè di pagina" ; \
     Text [ portuguese_brazilian ] = "Rodap?" ; \
     Text [ portuguese ] = "Rodapé" ; \
-    Text [ finnish ] = "Alaselite" ; \
+    Text [ finnish ] = "Alatunniste" ; \
     Text [ danish ] = "Sidefod" ; \
     Text [ french ] = "Pied de page" ; \
     Text [ swedish ] = "Sidfot" ; \
@@ -155,7 +155,7 @@
     Text [ italian ] = "Riga d'intestazione (destra)" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho (direito)" ; \
     Text [ portuguese ] = "Cabeçalho (direito)" ; \
-    Text [ finnish ] = "Yläotsikko (oikea)" ; \
+    Text [ finnish ] = "Ylätunniste (oikea)" ; \
     Text [ danish ] = "Sidehoved (højre)" ; \
     Text [ french ] = "En-tête (droit)" ; \
     Text [ swedish ] = "Sidhuvud (höger)" ; \
@@ -184,7 +184,7 @@
     Text [ italian ] = "Riga d'intestazione (sinistra)" ; \
     Text [ portuguese_brazilian ] = "Cabe?alho (esquerdo)" ; \
     Text [ portuguese ] = "Cabeçalho (esquerdo)" ; \
-    Text [ finnish ] = "Yläotsikko (vasen)" ; \
+    Text [ finnish ] = "Ylätunniste (vasen)" ; \
     Text [ danish ] = "Sidehoved (venstre)" ; \
     Text [ french ] = "En-tête (à gauche)" ; \
     Text [ swedish ] = "Sidhuvud (vänster)" ; \
@@ -213,7 +213,7 @@
     Text [ italian ] = "Piè di pagina (destra)" ; \
     Text [ portuguese_brazilian ] = "Rodap? (direito)" ; \
     Text [ portuguese ] = "Rodapé (direito)" ; \
-    Text [ finnish ] = "Alaselite (oikea)" ; \
+    Text [ finnish ] = "Alatunniste (oikea)" ; \
     Text [ danish ] = "Sidefod (højre)" ; \
     Text [ french ] = "Pied de page (droit)" ; \
     Text [ swedish ] = "Sidfot (höger)" ; \
@@ -242,7 +242,7 @@
     Text [ italian ] = "Piè di pagina (sinistra)" ; \
     Text [ portuguese_brazilian ] = "Rodap? (esquerdo)" ; \
     Text [ portuguese ] = "Rodapé (esquerdo)" ; \
-    Text [ finnish ] = "Alaselite (vasen)" ; \
+    Text [ finnish ] = "Alatunniste (vasen)" ; \
     Text [ danish ] = "Sidefod (venstre)" ; \
     Text [ french ] = "Pied de page (gauche)" ; \
     Text [ swedish ] = "Sidfot (vänster)" ; \
@@ -278,7 +278,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text [ italian ] = "Intestazioni" ;
     Text [ portuguese_brazilian ] = "Cabe?alho" ;
     Text [ portuguese ] = "Cabeçalhos" ;
-    Text [ finnish ] = "Yläotsikot" ;
+    Text [ finnish ] = "Ylätunnisteet" ;
     Text [ danish ] = "Sidehoveder" ;
     Text [ french ] = "En-têtes" ;
     Text [ swedish ] = "Sidhuvuden" ;
@@ -335,7 +335,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text [ italian ] = "Piè di pagina" ;
     Text [ portuguese_brazilian ] = "Rodap?" ;
     Text [ portuguese ] = "Rodapé" ;
-    Text [ finnish ] = "Alaselitteet" ;
+    Text [ finnish ] = "Alatunnisteet" ;
     Text [ danish ] = "Sidefødder" ;
     Text [ french ] = "Pieds de pages" ;
     Text [ swedish ] = "Sidfötter" ;
@@ -717,7 +717,7 @@ TabPage RID_HFBASE
         Text [ danish ] = "Venstre område" ;
         Text [ french ] = "~Plage gauche" ;
         Text [ swedish ] = "~Vänster område" ;
-        Text [ dutch ] = "~Linker bereik" ;
+        Text [ dutch ] = "~Linkerbereik" ;
         Text [ spanish ] = "Área ~izquierda" ;
         Text [ english_us ] = "~Left area" ;
         Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
@@ -726,7 +726,7 @@ TabPage RID_HFBASE
         Text[ japanese ] = "å·¦ã®ç¯„å›²(~L)";
         Text[ chinese_traditional ] = "å·¦å€åŸŸ(~L)";
         Text[ arabic ] = "ãäØŞÉ íÓÑì";
-        Text[ dutch ] = "~Linker bereik";
+        Text[ dutch ] = "~Linkerbereik";
         Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
         Text[ greek ] = "ÁñéóôåñŞ ğåñéï÷Ş";
         Text[ korean ] = "ì™¼ìª½ ì˜ì—­(~L)";
@@ -796,10 +796,10 @@ TabPage RID_HFBASE
         Text [ portuguese_brazilian ] = "~?rea Direita" ;
         Text [ portuguese ] = "~Área direita" ;
         Text [ finnish ] = "~Oikea alue" ;
-        Text [ danish ] = "Højre område" ;
+        Text [ danish ] = "Hø~jre område" ;
         Text [ french ] = "Plage droite" ;
         Text [ swedish ] = "Höge~r område" ;
-        Text [ dutch ] = "~Rechter bereik" ;
+        Text [ dutch ] = "~Rechterbereik" ;
         Text [ spanish ] = "Área ~derecha" ;
         Text [ english_us ] = "R~ight area" ;
         Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
@@ -808,7 +808,7 @@ TabPage RID_HFBASE
         Text[ japanese ] = "å³ã®ç¯„å›²(~I)";
         Text[ chinese_traditional ] = "å³å€åŸŸ(~I)";
         Text[ arabic ] = "ãäØŞÉ íãäì";
-        Text[ dutch ] = "~Rechter bereik";
+        Text[ dutch ] = "~Rechterbereik";
         Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
         Text[ korean ] = "ì˜¤ë¥¸ìª½ ì˜ì—­(~I)";
@@ -999,7 +999,7 @@ TabPage RID_HFBASE
                 Text[ spanish ] = "Ruta/Nombre de archivo";
                 Text[ english_us ] = "Path/File Name";
     Text[ chinese_simplified ] = "è·¯å¾„/æ–‡ä»¶å";
-                Text[ russian ] = "Èìÿ ïóòè/ôàéëà";
+                Text[ russian ] = "Ïóòü/èìÿ ôàéëà";
                 Text[ polish ] = "Œcie¿ka/Nazwa pliku";
                 Text[ japanese ] = "ãƒ‘ã‚¹/ãƒ•ã‚¡ã‚¤ãƒ«å";
                 Text[ chinese_traditional ] = "è·¯å¾‘/æª”æ¡ˆåç¨±";
@@ -1256,7 +1256,7 @@ TabPage RID_HFBASE
         Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc." ;
         Text [ english_us ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
         Text[ chinese_simplified ] = "è¯·ç‚¹å‡»æŒ‰é’®ï¼Œæ›´æ”¹å­—ä½“æˆ–æ’å…¥æ—¥æœŸï¼Œæ—¶é—´ç­‰åŒºåŸŸæŒ‡ä»¤ã€‚";
-        Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
+        Text[ russian ] = "Èñïîëüçóéòå êíîïêè äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ, êàê äàòà, âğåìÿ è ò.ä.";
         Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
         Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®å¤‰æ›´ã¾ãŸã¯æ—¥ä»˜ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚„æ™‚åˆ»ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãªã©ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã¯ã€å¤‰æ›´ãƒœã‚¿ãƒ³ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹é€™å€‹æŒ‰éˆ•ä¾†è®Šæ›´å­—å‹æˆ–æ’å…¥æ—¥æœŸã€æ™‚é–“ç­‰å€åŸŸæŒ‡ä»¤ã€‚";
@@ -1280,7 +1280,7 @@ TabPage RID_HFBASE
         Text [ italian ] = "Nota" ;
         Text [ portuguese_brazilian ] = "Dica" ;
         Text [ portuguese ] = "Observação" ;
-        Text [ finnish ] = "Huomautus:" ;
+        Text [ finnish ] = "Huomautus" ;
         Text [ danish ] = "Bemærk!" ;
         Text [ french ] = "Remarque" ;
         Text [ swedish ] = "Tips" ;
@@ -1288,7 +1288,7 @@ TabPage RID_HFBASE
         Text [ spanish ] = "Indicación" ;
         Text [ english_us ] = "Note" ;
         Text[ chinese_simplified ] = "æç¤º";
-        Text[ russian ] = "Óêàçàíèå";
+        Text[ russian ] = "Ïğèìå÷àíèå";
         Text[ polish ] = "Wskazówka";
         Text[ japanese ] = "æŒ‡ç¤º";
         Text[ chinese_traditional ] = "æç¤º";
