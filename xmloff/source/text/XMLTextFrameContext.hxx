@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:01:30 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 13:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     ::rtl::OUString sDesc;
     ::rtl::OUString sFilterService;
     ::rtl::OUString sBase64CharsLeft;
+    ::rtl::OUString sTblName;
 
     ParamMap aParamMap;
 

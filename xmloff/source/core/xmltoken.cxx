@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 14:52:52 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 13:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2011,6 +2011,7 @@ namespace xmloff { namespace token {
         TOKEN( "roll-from-top" ),             // XML_ROLL_FROM_TOP
 
         TOKEN( "binary-data" ),                // XML_BINARY_DATA
+        TOKEN( "notify-on-update-of-table" ),  // XML_NOTIFY_ON_UPDATE_OF_TABLE
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

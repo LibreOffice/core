@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-20 08:40:44 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 13:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,7 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
                     xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOLEObject( GetImport(), sURL,
                                                         sStyleName,
+                                                        sTblName,
                                                         nWidth, nHeight );
             }
             else
@@ -409,6 +410,7 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
                 xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOLEObject( GetImport(), sURL,
                                                         sStyleName,
+                                                        sTblName,
                                                         nWidth, nHeight );
 
             }
@@ -859,6 +861,9 @@ XMLTextFrameContext::XMLTextFrameContext(
             break;
         case XML_TOK_TEXT_FRAME_MIME_TYPE:
             sMimeType = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_NOTIFY_ON_UPDATE:
+            sTblName = rValue;
             break;
         }
     }
