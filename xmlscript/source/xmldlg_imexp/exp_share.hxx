@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:48:29 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,11 @@ public:
 
     void readAlignAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readVerticalAlignAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readImageAlignAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readImagePositionAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readDateFormatAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
@@ -182,6 +186,8 @@ public:
     void readOrientationAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readButtonTypeAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readLineEndFormatAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     //
     inline void addBoolAttr(
